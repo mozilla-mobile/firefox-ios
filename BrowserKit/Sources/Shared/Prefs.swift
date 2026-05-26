@@ -50,6 +50,7 @@ public struct PrefsKeys {
     public static let ShowClipboardBar = "showClipboardBar"
     public static let ShowRelayMaskSuggestions = "showRelayMaskSuggestions"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
+    public static let BlockAds = "blockAds"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
@@ -113,6 +114,11 @@ public struct PrefsKeys {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
+        /// Tracks whether we've performed the one-time transition from World
+        /// Cup milestone 1 to milestone 2. When the milestone 2 date is first
+        /// reached we force-enable the homepage section once, then respect the
+        /// user preference on subsequent reads.
+        public static let WorldCupMilestone2Transitioned = "WorldCupMilestone2TransitionedUserPrefsKey"
         /// Override for the merino WCS base host
         public static let WorldCupBaseHost = "worldCupBaseHostKey"
         /// Dev-only override for the World Cup `/matches` and `/live` polling
@@ -153,6 +159,7 @@ public struct PrefsKeys {
 
     public struct MLPASettings {
         public static let mlpaEndpointEnvironment = "mlpaEndpointEnvironment"
+        public static let lastUsedEnvironment = "mlpaLastUsedEnvironment"
     }
 
     public struct UserFeatureFlagPrefs {

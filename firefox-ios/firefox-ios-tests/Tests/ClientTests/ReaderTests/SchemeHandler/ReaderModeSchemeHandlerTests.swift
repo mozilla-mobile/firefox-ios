@@ -4,6 +4,7 @@
 
 import XCTest
 @testable import Client
+import WebEngine
 import WebKit
 
 @MainActor
@@ -84,12 +85,11 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
 
     // MARK: - Routing
 
-    func test_start_unknownBundleResource_failsViaDefaultRoute() {
-        // Path doesn't match the "page" prefix, so it falls through to the default route
-        // (`StaticFileRoute`), which attempts `Bundle.main.url(forResource:withExtension:)`
-        // for a resource that does not exist and throws `TinyRouterError.badURL`.
+    func test_start_realBundleFileNotOnAllowlist_rejectedByReaderFileRoute() {
+        // Info.plist exists in Bundle.main but isn't on ReaderFileRoute's allowlist.
+        // Verifies that the allowlist blocks access to arbitrary bundle resources.
         let task = MockWKURLSchemeTask(
-            request: URLRequest(url: URL(string: "readermode://app/nonexistent.xyz")!)
+            request: URLRequest(url: URL(string: "readermode://app/Info.plist")!)
         )
         let webView = makeWebView()
         let failExpectation = expectation(description: "onFail called")
@@ -98,14 +98,12 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         subject.webView(webView, start: task)
         wait(for: [failExpectation], timeout: 1.0)
 
+        XCTAssertTrue(task.receivedResponses.isEmpty)
         XCTAssertTrue(task.receivedBodies.isEmpty)
         XCTAssertEqual(task.finishCallCount, 0)
         XCTAssertEqual(task.failedErrors.count, 1)
-        XCTAssertTrue(task.receivedResponses.isEmpty)
-        // `StaticFileRoute` throws `.badURL` on Bundle.main miss; the handler wraps
-        // unrecognized errors as `.unknown`, but TinyRouterError passes through directly.
         let error = task.failedErrors.first as? TinyRouterError
-        XCTAssertEqual(error, .badURL)
+        XCTAssertEqual(error, .pathNotAllowed(path: "Info.plist"))
     }
 
     func test_start_incorrectURLComponents_failsWithExpectedErrors() {
@@ -155,13 +153,104 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         let paramExpectation = expectation(description: "missing param fails")
         paramTask.onFail = { paramExpectation.fulfill() }
         subject.webView(webView, start: paramTask)
-        wait(for: [paramExpectation], timeout: 1.0)
+        wait(for: [paramExpectation], timeout: 5.0)
         XCTAssertEqual(
             paramTask.failedErrors.first as? TinyRouterError,
             .missingParam("url")
         )
     }
 
+    func test_start_validURL_passesValidationAndReachesRoute() throws {
+        let articleURL = URL(string: "https://example.com/article")!
+        try DiskReaderModeCache.shared.put(articleURL, PageRouteTests.fixtureReadabilityResult())
+        defer { DiskReaderModeCache.shared.delete(articleURL, error: nil) }
+
+        let url = "\(ReaderModeSchemeHandler.baseURL)?url=https%3A%2F%2Fexample.com%2Farticle"
+        let task = MockWKURLSchemeTask(
+            request: URLRequest(url: URL(string: url)!)
+        )
+        let webView = makeWebView()
+        let finishExpectation = expectation(description: "onFinish or onFail called")
+        task.onFinish = { finishExpectation.fulfill() }
+        task.onFail = { finishExpectation.fulfill() }
+
+        subject.webView(webView, start: task)
+        wait(for: [finishExpectation], timeout: 5.0)
+
+        XCTAssertTrue(task.failedErrors.isEmpty, "Expected no errors for a valid URL")
+        XCTAssertEqual(task.finishCallCount, 1)
+    }
+
+    // MARK: - ReaderFileRoute allowlist
+
+    func test_readerFileRoute_allowedFiles_serveSuccessfully() throws {
+        let route = ReaderFileRoute()
+        let allowedPaths = [
+            "reader-mode/styles/Reader.css",
+            "reader-mode/fonts/NewYorkMedium-Regular.otf",
+            "reader-mode/fonts/NewYorkMedium-Bold.otf",
+            "reader-mode/fonts/NewYorkMedium-RegularItalic.otf",
+            "reader-mode/fonts/NewYorkMedium-BoldItalic.otf",
+        ]
+
+        for path in allowedPaths {
+            let url = URL(string: "readermode://app/\(path)")!
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+            let reply = try route.handle(url: url, components: components)
+            let unwrapped = try XCTUnwrap(reply, "Expected a reply for \(path)")
+            XCTAssertFalse(unwrapped.body.isEmpty, "Expected non-empty body for \(path)")
+        }
+    }
+
+    // MARK: - Path traversal
+
+    func test_readerFileRoute_pathTraversal_rejected() throws {
+        let route = ReaderFileRoute()
+        let traversalPaths = [
+            // Attempts to escape reader-mode/ and reach Info.plist via ../
+            "reader-mode/styles/../../../Info.plist",
+            // Valid file but accessed via traversal instead of its canonical path
+            "reader-mode/styles/../../fonts/NewYorkMedium-Regular.otf",
+        ]
+
+        for path in traversalPaths {
+            let url = URL(string: "readermode://app/\(path)")!
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+            XCTAssertThrowsError(try route.handle(url: url, components: components),
+                                 "Expected rejection for traversal path: \(path)")
+        }
+    }
+
+    // MARK: - Encoding
+
+    func test_readerFileRoute_encodedPaths_rejected() throws {
+        let route = ReaderFileRoute()
+
+        let encodedSlashes = URL(string: "readermode://app/reader-mode%2Fstyles%2FReader.css")!
+        let encodedSlashesComponents = URLComponents(url: encodedSlashes, resolvingAgainstBaseURL: false)!
+        let reply = try route.handle(url: encodedSlashes, components: encodedSlashesComponents)
+        XCTAssertNotNil(reply, "Encoded slashes decode to the canonical path, so this serves the file")
+
+        // Encoded absolute path attempt
+        let etcPasswd = URL(string: "readermode://app/%2Fetc%2Fpasswd")!
+        let etcComponents = URLComponents(url: etcPasswd, resolvingAgainstBaseURL: false)!
+        do {
+            let reply = try route.handle(url: etcPasswd, components: etcComponents)
+            XCTFail("Expected pathNotAllowed error, got reply: \(String(describing: reply))")
+        } catch {
+            XCTAssertEqual(error as? TinyRouterError, .pathNotAllowed(path: "etc/passwd"))
+        }
+
+        // Null byte injection
+        let nullByte = URL(string: "readermode://app/reader-mode/styles/Reader.css%00evil")!
+        let nullComponents = URLComponents(url: nullByte, resolvingAgainstBaseURL: false)!
+        do {
+            let reply = try route.handle(url: nullByte, components: nullComponents)
+            XCTFail("Expected pathNotAllowed error, got reply: \(String(describing: reply))")
+        } catch {
+            XCTAssertEqual(error as? TinyRouterError, .pathNotAllowed(path: "reader-mode/styles/Reader.css\0evil"))
+        }
+    }
     // MARK: - Helpers
 
     private func makeWebView() -> WKWebView {

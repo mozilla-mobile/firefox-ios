@@ -146,11 +146,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return handleDidSetTabScreenshotAction(state: state, action: action)
 
         // Translation related actions
-        case ToolbarActionType.didStartTranslatingPage,
-            ToolbarActionType.translationCompleted,
-            ToolbarActionType.receivedTranslationLanguage,
-            ToolbarActionType.didReceiveErrorTranslating,
-            ToolbarActionType.didTranslationSettingsChange:
+        case TranslationsActionType.didStartTranslatingPage,
+            TranslationsActionType.translationCompleted,
+            TranslationsActionType.receivedTranslationLanguage,
+            TranslationsActionType.didReceiveErrorTranslating,
+            TranslationsActionType.didTranslationSettingsChange:
             return handleLeadingPageChangedAction(state: state, action: action)
 
         case ToolbarActionType.didSummarizeSettingsChange:
@@ -315,14 +315,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleLeadingPageChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else {
+        guard let translationsAction = action as? TranslationsAction else {
             return defaultState(from: state)
         }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            leadingPageActions: leadingPageActions(action: toolbarAction,
+            leadingPageActions: leadingPageActions(action: translationsAction,
                                                    addressBarState: state,
                                                    isEditing: state.isEditing),
             trailingPageActions: state.trailingPageActions,
@@ -340,7 +340,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
-            translationConfiguration: toolbarAction.translationConfiguration,
+            translationConfiguration: translationsAction.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -1104,22 +1104,34 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func leadingPageActions(
-        action: ToolbarAction,
+        action: Action,
         addressBarState: AddressBarState,
         isEditing: Bool = false
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
+        guard action is ToolbarAction || action is TranslationsAction else { return actions }
+
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
               !isEditing
         else { return actions }
 
-        let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        let toolbarAction = action as? ToolbarAction
+        let actionTranslationConfiguration = TranslationConfiguration(from: action)
+        let isShowingNavigationToolbar = toolbarAction?.isShowingNavigationToolbar
+            ?? toolbarState.isShowingNavigationToolbar
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
+        let isHomepage = (isURLDidChangeAction ? toolbarAction?.url : toolbarState.addressToolbar.url) == nil
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
-        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
-        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
+        let isLoading = isLoadingChangeAction ? toolbarAction?.isLoading : addressBarState.isLoading
+        let hasAlternativeLocationColor: Bool
+        if let toolbarAction {
+            hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction)
+        } else {
+            hasAlternativeLocationColor = toolbarState.toolbarPosition == .top
+                && !toolbarState.isShowingTopTabs
+                && toolbarState.isShowingNavigationToolbar
+        }
 
         if !isHomepage, !isShowingNavigationToolbar {
             let shareAction = shareAction(enabled: isLoading == false,
@@ -1127,7 +1139,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actions.append(shareAction)
 
             if let translationAction = configureTranslationIcon(
-                for: action,
+                actionTranslationConfiguration: actionTranslationConfiguration,
                 addressBarState: addressBarState,
                 isLoading: isLoading,
                 hasAlternativeLocationColor: hasAlternativeLocationColor
@@ -1140,7 +1152,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actions.append(shareAction)
 
             if let translationAction = configureTranslationIcon(
-                for: action,
+                actionTranslationConfiguration: actionTranslationConfiguration,
                 addressBarState: addressBarState,
                 isLoading: isLoading,
                 hasAlternativeLocationColor: hasAlternativeLocationColor
@@ -1155,7 +1167,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     // Checks whether we should show the translation icon based on the translation configuration
     // state and setups up the configuration for the translation icon on the toolbar (for iPad and iPhone)
     private static func configureTranslationIcon(
-        for action: ToolbarAction,
+        actionTranslationConfiguration: TranslationConfiguration?,
         addressBarState: AddressBarState,
         isLoading: Bool?,
         hasAlternativeLocationColor: Bool
@@ -1167,13 +1179,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // When the action explicitly provides a config, use it as the authority (e.g. settings toggle).
         // Only fall back to state when the action carries no config.
         let shouldShowTranslationIcon: Bool
-        if let actionConfig = action.translationConfiguration {
+        if let actionConfig = actionTranslationConfiguration {
             shouldShowTranslationIcon = actionConfig.isTranslationFeatureEnabled
         } else {
             shouldShowTranslationIcon = addressBarState.translationConfiguration?.isTranslationFeatureEnabled ?? false
         }
         guard shouldShowTranslationIcon else { return nil }
-        let iconState = action.translationConfiguration?.state ?? addressBarState.translationConfiguration?.state
+        let iconState = actionTranslationConfiguration?.state ?? addressBarState.translationConfiguration?.state
         guard let iconState else { return nil }
         return translateAction(
             enabled: isLoading == false,

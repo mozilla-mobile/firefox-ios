@@ -270,7 +270,7 @@ struct WorldCupMatchesTests {
     }
 
     @Test
-    func test_flattened_defaultIndex_pointsAtToday() {
+    func test_flattened_defaultIndex_isAlwaysZero() {
         let response = WorldCupMatchesResponse(
             previous: [makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")],
             current: [makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-12T18:00:00+00:00")],
@@ -283,47 +283,7 @@ struct WorldCupMatchesTests {
             calendar: utcCalendar()
         )
 
-        #expect(result.defaultIndex == 1)
-    }
-
-    @Test
-    func test_flattened_defaultIndex_pointsAtNextFutureDay_whenTodayHasNoMatches() {
-        let response = WorldCupMatchesResponse(
-            previous: [makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")],
-            current: nil,
-            next: [
-                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-13T18:00:00+00:00"),
-                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-06-14T18:00:00+00:00")
-            ]
-        )
-
-        let result = WorldCupMatches.flattened(
-            response: response,
-            now: parse("2026-06-11T09:00:00+00:00"),
-            calendar: utcCalendar()
-        )
-
-        #expect(result.defaultIndex == 1)
-    }
-
-    @Test
-    func test_flattened_defaultIndex_fallsBackToLastCard_whenEverythingIsInThePast() {
-        let response = WorldCupMatchesResponse(
-            previous: [
-                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00"),
-                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-11T18:00:00+00:00")
-            ],
-            current: nil,
-            next: nil
-        )
-
-        let result = WorldCupMatches.flattened(
-            response: response,
-            now: parse("2026-07-01T09:00:00+00:00"),
-            calendar: utcCalendar()
-        )
-
-        #expect(result.defaultIndex == 1)
+        #expect(result.defaultIndex == 0)
     }
 
     @Test
@@ -370,27 +330,6 @@ struct WorldCupMatchesTests {
 
         #expect(result.cards[0].featuredMatch.map(\.homeCode) == ["ARG", "ENG"])
         #expect(result.cards[0].upcomingMatches.isEmpty)
-    }
-
-    @Test
-    func test_flattened_defaultIndex_prefersLiveCardOverToday() {
-        let response = WorldCupMatchesResponse(
-            previous: nil,
-            current: nil,
-            next: [
-                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-12T18:00:00+00:00"),
-                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-13T18:00:00+00:00")
-            ]
-        )
-
-        let result = WorldCupMatches.flattened(
-            response: response,
-            liveIDs: [2],
-            now: parse("2026-06-12T09:00:00+00:00"),
-            calendar: utcCalendar()
-        )
-
-        #expect(result.defaultIndex == 1)
     }
 
     @Test
@@ -460,6 +399,44 @@ struct WorldCupMatchesTests {
         #expect(match.score == nil)
     }
 
+    // MARK: - missing team fallbacks
+
+    @Test
+    func test_match_init_nilHomeTeam_fallsBackToPlaceholderCodeAndFlag() {
+        let match = WorldCupMatch(
+            makeMatch(id: 0, home: nil, away: "USA")
+        )
+
+        #expect(match.homeCode == WorldCupMatch.missingTeamPlaceholder)
+        #expect(match.homeFlagAssetName == WorldCupMatch.missingTeamFlagAssetPlaceholder)
+        #expect(match.awayCode == "USA")
+        #expect(match.awayFlagAssetName == "USA")
+    }
+
+    @Test
+    func test_match_init_nilAwayTeam_fallsBackToPlaceholderCodeAndFlag() {
+        let match = WorldCupMatch(
+            makeMatch(id: 0, home: "ENG", away: nil)
+        )
+
+        #expect(match.awayCode == WorldCupMatch.missingTeamPlaceholder)
+        #expect(match.awayFlagAssetName == WorldCupMatch.missingTeamFlagAssetPlaceholder)
+        #expect(match.homeCode == "ENG")
+        #expect(match.homeFlagAssetName == "ENG")
+    }
+
+    @Test
+    func test_match_init_bothTeamsNil_fallsBackToPlaceholdersForBoth() {
+        let match = WorldCupMatch(
+            makeMatch(id: 0, home: nil, away: nil)
+        )
+
+        #expect(match.homeCode == WorldCupMatch.missingTeamPlaceholder)
+        #expect(match.awayCode == WorldCupMatch.missingTeamPlaceholder)
+        #expect(match.homeFlagAssetName == WorldCupMatch.missingTeamFlagAssetPlaceholder)
+        #expect(match.awayFlagAssetName == WorldCupMatch.missingTeamFlagAssetPlaceholder)
+    }
+
     // MARK: - phaseTitle
 
     @Test
@@ -511,8 +488,8 @@ struct WorldCupMatchesTests {
     // MARK: - Helpers
 
     private func makeMatch(id: Int,
-                           home: String,
-                           away: String,
+                           home: String?,
+                           away: String?,
                            date: String = "2026-05-01T15:00:00+00:00",
                            homeScore: Int? = nil,
                            awayScore: Int? = nil,
@@ -523,20 +500,24 @@ struct WorldCupMatchesTests {
                            clock: String? = nil,
                            group: String? = nil,
                            stage: String? = "Group Stage") -> WorldCupMatchesResponse.Match {
-        let homeTeam = WorldCupMatchesResponse.Team(
-            key: home,
-            name: home,
-            iconUrl: nil,
-            group: group,
-            eliminated: false
-        )
-        let awayTeam = WorldCupMatchesResponse.Team(
-            key: away,
-            name: away,
-            iconUrl: nil,
-            group: group,
-            eliminated: false
-        )
+        let homeTeam = home.map {
+            WorldCupMatchesResponse.Team(
+                key: $0,
+                name: $0,
+                iconUrl: nil,
+                group: group,
+                eliminated: false
+            )
+        }
+        let awayTeam = away.map {
+            WorldCupMatchesResponse.Team(
+                key: $0,
+                name: $0,
+                iconUrl: nil,
+                group: group,
+                eliminated: false
+            )
+        }
         return WorldCupMatchesResponse.Match(
             date: date,
             globalEventId: id,

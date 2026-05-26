@@ -84,13 +84,11 @@ final class PageRoute: TinyRoute {
     }
 
     // MARK: - URL parsing
-
-    func extractArticleURL(from components: URLComponents) throws -> URL {
+    private func extractArticleURL(from components: URLComponents) throws -> URL {
         guard let raw = components.queryItems?.first(where: { $0.name == "url" })?.value else {
             throw TinyRouterError.missingParam("url")
         }
-
-        guard let parsed = URL(string: raw), parsed.isWebPage() else {
+        guard let parsed = URL(string: raw), parsed.isWebPage(includeDataURIs: false) else {
             throw TinyRouterError.invalidParam("url", raw)
         }
 

@@ -150,23 +150,6 @@ class HomePageSettingViewController: SettingsTableViewController,
             }
             sectionItems.append(jumpBackInSetting)
 
-            let bookmarksSetting = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
-                titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
-            ) { value in
-                store.dispatch(
-                    BookmarksAction(
-                        isEnabled: value,
-                        windowUUID: self.windowUUID,
-                        actionType: BookmarksActionType.toggleShowSectionSetting
-                    )
-                )
-            }
-            sectionItems.append(bookmarksSetting)
-
             if worldCupStore.isFeatureEnabled {
                 let windowUUID = self.windowUUID
                 let worldCupSetting = BoolSetting(
@@ -185,6 +168,23 @@ class HomePageSettingViewController: SettingsTableViewController,
                 }
                 sectionItems.append(worldCupSetting)
             }
+
+            let bookmarksSetting = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
+                defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
+                titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
+            ) { value in
+                store.dispatch(
+                    BookmarksAction(
+                        isEnabled: value,
+                        windowUUID: self.windowUUID,
+                        actionType: BookmarksActionType.toggleShowSectionSetting
+                    )
+                )
+            }
+            sectionItems.append(bookmarksSetting)
         }
 
         // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143

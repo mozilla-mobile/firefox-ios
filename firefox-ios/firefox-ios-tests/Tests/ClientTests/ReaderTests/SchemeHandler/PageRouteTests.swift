@@ -26,22 +26,28 @@ final class PageRouteTests: XCTestCase {
 
     // MARK: - URL parameter validation
 
-    func test_extractArticleURL_missingParam_throwsMissingParam() {
+    func test_handle_missingURLParam_throwsMissingParam() async {
         let subject = makeSubject(extractor: noOpExtractor)
         let request = URL(string: ReaderModeSchemeHandler.baseURL)!
         let components = URLComponents(url: request, resolvingAgainstBaseURL: false)!
 
-        XCTAssertThrowsError(try subject.extractArticleURL(from: components)) { error in
+        do {
+            _ = try await subject.handle(url: request, components: components)
+            XCTFail("Expected missingParam error")
+        } catch {
             XCTAssertEqual(error as? TinyRouterError, .missingParam("url"))
         }
     }
 
-    func test_extractArticleURL_invalidParam_throwsInvalidParam() {
+    func test_handle_invalidURLParam_throwsInvalidParam() async {
         let subject = makeSubject(extractor: noOpExtractor)
         let request = URL(string: "\(ReaderModeSchemeHandler.baseURL)?url=ftp%3A%2F%2Fnope")!
         let components = URLComponents(url: request, resolvingAgainstBaseURL: false)!
 
-        XCTAssertThrowsError(try subject.extractArticleURL(from: components)) { error in
+        do {
+            _ = try await subject.handle(url: request, components: components)
+            XCTFail("Expected invalidParam error")
+        } catch {
             if case .invalidParam(let name, _) = error as? TinyRouterError {
                 XCTAssertEqual(name, "url")
             } else {
@@ -50,12 +56,16 @@ final class PageRouteTests: XCTestCase {
         }
     }
 
-    func test_extractArticleURL_validParam_returnsURL() throws {
-        let subject = makeSubject(extractor: noOpExtractor)
+    func test_handle_validURLParam_passesCorrectURLToExtractor() async throws {
+        let expectedArticleURL = articleURL
+        let extractor: PageRoute.Extractor = { url, _, _ in
+            XCTAssertEqual(url, expectedArticleURL)
+            return await Self.fixtureReadabilityResult()
+        }
+        let subject = makeSubject(extractor: extractor)
         let components = URLComponents(url: requestURL, resolvingAgainstBaseURL: false)!
 
-        let result = try subject.extractArticleURL(from: components)
-        XCTAssertEqual(result, articleURL)
+        _ = try await subject.handle(url: requestURL, components: components)
     }
 
     // MARK: - Cache hit

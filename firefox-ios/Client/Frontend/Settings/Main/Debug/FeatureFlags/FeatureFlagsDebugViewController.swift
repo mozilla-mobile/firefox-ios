@@ -32,6 +32,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         // order by titleText
         let children: [Setting] =  [
             FeatureFlagsBoolSetting(
+                with: .adBlocker,
+                titleText: format(string: "Ad Blocker"),
+                statusText: format(string: "Toggle to show the Ad Blocker feature.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
                 statusText: format(string: "Toggle to enable the rust ads client")
@@ -91,6 +98,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .trackingProtectionRefactor,
                 titleText: format(string: "Enhanced Tracking Protection"),
                 statusText: format(string: "Toggle to use enhanced tracking protection")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepageAddShortcutTile,
+                titleText: format(string: "Homepage Add Shortcut"),
+                statusText: format(string: "Toggle to enable the homepage add shortcut tile")
             ) { [weak self] _ in
                 self?.reloadView()
             },

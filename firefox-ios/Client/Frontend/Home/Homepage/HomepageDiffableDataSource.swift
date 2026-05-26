@@ -43,10 +43,11 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
     }
 
     enum HomeItem: Hashable, Sendable {
-        case header(HeaderState)
+        case header(HeaderState, TextColor?)
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
+        case addShortcutTile(TextColor?)
         case topSiteEmpty
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
@@ -95,27 +96,32 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 return nil
             }
         }
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .addShortcutTile:
+                return false
+            default:
+                return true
+            }
+        }
     }
 
     func updateSnapshot(
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
-        reconfigureHeader: Bool = false,
         animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
-        let headerItem = HomeItem.header(state.headerState)
+        let headerItem = HomeItem.header(state.headerState,
+                                         state.wallpaperState.wallpaperConfiguration.logoTextColor)
 
         snapshot.appendSections([.header])
         snapshot.appendItems([headerItem], toSection: .header)
-
-        if reconfigureHeader {
-            snapshot.reconfigureItems([headerItem])
-        }
 
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
@@ -183,14 +189,22 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         and textColor: TextColor?
     ) -> TopSitesSnapshotData? {
         guard topSitesState.shouldShowSection else { return nil }
-        let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
-            topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        let maxVisibleItemCount = topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        guard maxVisibleItemCount > 0 else { return nil }
+
+        let topSitesItems: [HomeItem] = topSitesState.topSitesData.prefix(
+            maxVisibleItemCount
         ).compactMap {
             .topSite($0, textColor)
         }
-        guard !topSites.isEmpty else { return nil }
+        let allItems = topSitesState.shouldShowAddShortcutTile
+            ? topSitesItems + [.addShortcutTile(textColor)]
+            : topSitesItems
+        let visibleItems = Array(allItems.prefix(maxVisibleItemCount))
+        guard !visibleItems.isEmpty else { return nil }
+
         return TopSitesSnapshotData(
-            items: topSites,
+            items: visibleItems,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
             shouldShowSectionHeader: topSitesState.shouldShowSectionHeader
         )

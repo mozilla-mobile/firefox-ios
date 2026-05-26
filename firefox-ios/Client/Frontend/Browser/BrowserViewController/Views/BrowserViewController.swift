@@ -101,7 +101,7 @@ class BrowserViewController: UIViewController,
     var searchController: SearchViewController?
     var searchSessionState: SearchSessionState?
     var searchLoader: SearchLoader?
-    var findInPageBar: FindInPageBar?
+    var iOS15FindInPageBar: FindInPageBar? /* TODO: Remove once we drop iOS 15 support */
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
@@ -1484,6 +1484,13 @@ class BrowserViewController: UIViewController,
         coordinator.animate(alongsideTransition: { [self] context in
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
+            if !isSnapKitRemovalEnabled {
+                updateViewConstraints()
+            } else {
+                updateConstraintsForKeyboard()
+                updateBottomContentStackViewConstraints()
+            }
+            searchController?.view.layoutIfNeeded()
         }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
@@ -1629,6 +1636,9 @@ class BrowserViewController: UIViewController,
                 : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
                    bottomContentStackView, bottomContainer, overKeyboardContainer]
             frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+            if let searchView = searchController?.view, searchView.superview === view {
+                view.bringSubviewToFront(searchView)
+            }
         }
 
         guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
@@ -4434,7 +4444,7 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
         updateFindInPageVisibility(isVisible: true, withSearchText: selection)
-        findInPageBar?.text = selection
+        iOS15FindInPageBar?.text = selection
     }
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
@@ -4974,7 +4984,12 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
+    private var isModalPresentedOverBrowser: Bool {
+        presentedViewController != nil || navigationController?.presentedViewController != nil
+    }
+
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
 
         if !isSnapKitRemovalEnabled {
@@ -5004,6 +5019,15 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
+        guard !isEditingBottomAddressBar else { return }
+
+        // Give the toolbar a chance to undo any prior minimization (FXIOS-15910). Called
+        // here — once per keyboard transition — rather than from adjustBottomSearchBarForKeyboard,
+        // which fires on every layout pass and would dispatch stray shouldShowKeyboard updates
+        // mid-edit.
+        _ = addressToolbarContainer.offsetForKeyboardAccessory(hasAccessoryView: false)
+
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5026,6 +5050,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
@@ -5038,12 +5063,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
-                                              doesFindInPageBarExist: findInPageBar != nil)
+                                              doesFindInPageBarExist: iOS15FindInPageBar != nil)
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5054,6 +5080,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5075,6 +5102,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
         guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
+    }
+
+    private var isEditingBottomAddressBar: Bool {
+        guard searchBarPosition == .bottom else { return false }
+        return store.state
+            .componentState(ToolbarState.self, for: .toolbar, window: windowUUID)?
+            .addressToolbar.isEditing ?? false
     }
 
     private var shouldCancelEditing: Bool {

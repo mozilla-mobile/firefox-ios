@@ -253,8 +253,8 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
     }
 
     private func navigateToSERP(for match: WorldCupMatch) {
-        let homeTeamName = WorldCupCountry.localizedName(forID: match.homeCode)
-        let awayTeamName = WorldCupCountry.localizedName(forID: match.awayCode)
+        guard let homeTeamName = WorldCupCountry.localizedName(forID: match.homeCode),
+              let awayTeamName = WorldCupCountry.localizedName(forID: match.awayCode) else { return }
         let query = "\(homeTeamName) vs \(awayTeamName) \(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) 2026"
         telemetry.matchClicked(match: "\(match.homeCode)/\(match.awayCode)")
         store.dispatch(
@@ -479,8 +479,10 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
 
         homeColumn.codeLabel.textColor = theme.colors.textPrimary
         homeColumn.flagView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        homeColumn.flagView.backgroundColor = theme.colors.borderSecondary
         awayColumn.codeLabel.textColor = theme.colors.textPrimary
         awayColumn.flagView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        awayColumn.flagView.backgroundColor = theme.colors.borderSecondary
     }
 }
 
@@ -620,6 +622,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         awayCodeLabel.textColor = theme.colors.textPrimary
         infoLabel.textColor = theme.colors.textSecondary
         homeFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
+        homeFlagView.backgroundColor = theme.colors.borderSecondary
         awayFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
+        awayFlagView.backgroundColor = theme.colors.borderSecondary
     }
 }

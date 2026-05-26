@@ -394,9 +394,10 @@ class SearchViewController: SiteTableViewController,
         super.viewWillTransition(to: size, with: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
         coordinator.animate(alongsideTransition: { [self] _ in
-            tableView.reloadData()
             layoutSearchEngineScrollViewContent()
-        }, completion: nil)
+        }, completion: { [weak self] _ in
+            self?.tableView.reloadData()
+        })
     }
 
     private func getCachedTabs() {

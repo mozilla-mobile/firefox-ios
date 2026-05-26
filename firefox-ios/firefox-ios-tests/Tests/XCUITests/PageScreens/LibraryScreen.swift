@@ -45,7 +45,7 @@ final class LibraryScreen {
         XCTAssertEqual(bookmarksTable.cells.count, numberOfEntries)
     }
 
-    func swipeBookmarkEntry(entryName: String) {
+    func swipeBookmarkListEntry(entryName: String) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
         bookmarksTable.cells.staticTexts[entryName].swipeLeft()
     }
@@ -55,7 +55,7 @@ final class LibraryScreen {
     }
 
     func swipeAndDeleteBookmark(entryName: String) {
-        swipeBookmarkEntry(entryName: entryName)
+        swipeBookmarkListEntry(entryName: entryName)
         tapDeleteBookmarkButton()
     }
 
@@ -133,6 +133,22 @@ final class LibraryScreen {
         BaseTestCase().mozWaitForElementToExist(doneButton)
         BaseTestCase().mozWaitForElementToExist(bottmLeftButton)
         BaseTestCase().mozWaitForElementToExist(app.staticTexts[folderName])
+    }
+
+    func assertFolderNameDisplayedOnSingleLine(folderName: String) {
+        let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(bookmarksTable)
+        let folderLabel = bookmarksTable.staticTexts[folderName]
+        BaseTestCase().mozWaitForElementToExist(folderLabel)
+        // A truncated label fits within one line of system body text (~20pt). A 2-line wrap
+        // would roughly double the rendered height, so this bound catches multi-line display.
+        let singleLineMaxHeight: CGFloat = 30
+        XCTAssertLessThanOrEqual(
+            folderLabel.frame.height,
+            singleLineMaxHeight,
+            "Folder label height (\(folderLabel.frame.height)) exceeds single-line bound " +
+            "(\(singleLineMaxHeight)); name was not trimmed to a single line"
+        )
     }
 
     func tapOnFolder(folderName: String) {

@@ -65,13 +65,13 @@ struct WorldCupMatchesResponseTests {
         #expect(response.next?.count == 1)
 
         let live = try #require(response.current?.first)
-        #expect(live.homeTeam.key == "ENG")
-        #expect(live.awayTeam.key == "USA")
+        #expect(live.homeTeam?.key == "ENG")
+        #expect(live.awayTeam?.key == "USA")
         #expect(live.homeScore == 1)
         #expect(live.awayScore == 0)
         #expect(live.clock == "67")
         #expect(live.statusType == "live")
-        #expect(live.homeTeam.iconUrl == "https://example.com/eng.png")
+        #expect(live.homeTeam?.iconUrl == "https://example.com/eng.png")
     }
 
     @Test
@@ -84,7 +84,7 @@ struct WorldCupMatchesResponseTests {
         #expect(scheduled.homePenalty == nil)
         #expect(scheduled.awayPenalty == nil)
         #expect(scheduled.statusType == "scheduled")
-        #expect(scheduled.awayTeam.iconUrl == nil)
+        #expect(scheduled.awayTeam?.iconUrl == nil)
     }
 
     @Test
@@ -122,8 +122,8 @@ struct WorldCupMatchesResponseTests {
         #expect(past.awayPenalty == 4)
         #expect(past.period == "FT(P)")
         #expect(past.statusType == "past")
-        #expect(past.homeTeam.group == "Group A")
-        #expect(past.awayTeam.eliminated == false)
+        #expect(past.homeTeam?.group == "Group A")
+        #expect(past.awayTeam?.eliminated == false)
     }
 
     @Test

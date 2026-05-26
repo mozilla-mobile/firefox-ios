@@ -16,6 +16,7 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
         tabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
         profile = MockProfile()
+        setupNimbusHomepagePinnedHeaderTesting(isEnabled: false)
     }
 
     override func tearDown() async throws {
@@ -49,6 +50,15 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     func setupNimbusSnapKitRemovalTesting(isEnabled: Bool) {
         FxNimbus.shared.features.snapkitRemovalRefactor.with { _, _ in
             return SnapkitRemovalRefactor(enabled: isEnabled)
+        }
+    }
+
+    func setupNimbusHomepagePinnedHeaderTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(
+                categoriesEnabled: isEnabled,
+                pinnedHeaderEnabled: isEnabled
+            )
         }
     }
 

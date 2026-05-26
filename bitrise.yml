@@ -969,7 +969,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-26.5.x
+        stack: osx-xcode-26.5.x-edge
         machine_type_id: g2.mac.4large
   L10nBuild:
     steps:
@@ -1945,7 +1945,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.4large
+        machine_type_id: g2.mac.large
 
   # Firefox_Unit_Tests_iOS_Versions ensures all unit tests pass on the supported iOS versions.
   # This workflow runs weekly on Tuesday.
@@ -2012,7 +2012,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -e
-            
+
             # Get Xcode version and build version
             XCODE_VER=$(xcodebuild -version | head -n 1 | sed 's/Xcode //g')
             BUILD_VER=$(xcodebuild -version | grep "Build version" | sed 's/Build version //g')
@@ -2800,6 +2800,9 @@ workflows:
             #!/usr/bin/env bash
             python3 -m pip install --upgrade pip pyjwt cryptography requests
             python3 scripts/nightly_testflight_add_group.py
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
 
   release_promotion_push:
     before_run:

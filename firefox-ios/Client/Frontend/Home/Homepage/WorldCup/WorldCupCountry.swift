@@ -15,16 +15,16 @@ struct WorldCupCountry: Identifiable, Hashable {
     /// Returns the country name localized for the current locale, looked up
     /// from the FIFA-style team code. ENG/SCO have no ISO alpha-2 of their
     /// own (they're subdivisions of GB) — for those we use explicit
-    /// localized strings. Returns `id` for unknown codes.
-    static func localizedName(forID id: String, localeProvider: LocaleProvider = SystemLocaleProvider()) -> String {
+    /// localized strings. Returns `nil` for unknown codes.
+    static func localizedName(forID id: String, localeProvider: LocaleProvider = SystemLocaleProvider()) -> String? {
         switch id {
         case "ENG":
             return .WorldCup.CountryPicker.CountryName.England
         case "SCO":
             return .WorldCup.CountryPicker.CountryName.Scotland
         default:
-            guard let isoCode = teamRegions[id] else { return id }
-            return localeProvider.current.localizedString(forRegionCode: isoCode) ?? id
+            guard let isoCode = teamRegions[id] else { return nil }
+            return localeProvider.current.localizedString(forRegionCode: isoCode)
         }
     }
 

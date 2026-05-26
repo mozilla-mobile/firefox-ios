@@ -17,12 +17,14 @@ struct TopSitesAction: Action {
     let topSites: [TopSiteConfiguration]?
     let numberOfRows: Int?
     let isEnabled: Bool?
+    let shouldShowAddShortcutTile: Bool?
     let telemetryConfig: TopSitesTelemetryConfig?
 
     init(
         topSites: [TopSiteConfiguration]? = nil,
         numberOfRows: Int? = nil,
         isEnabled: Bool? = nil,
+        shouldShowAddShortcutTile: Bool? = nil,
         telemetryConfig: TopSitesTelemetryConfig? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
@@ -30,6 +32,7 @@ struct TopSitesAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isEnabled = isEnabled
+        self.shouldShowAddShortcutTile = shouldShowAddShortcutTile
         self.topSites = topSites
         self.numberOfRows = numberOfRows
         self.telemetryConfig = telemetryConfig
