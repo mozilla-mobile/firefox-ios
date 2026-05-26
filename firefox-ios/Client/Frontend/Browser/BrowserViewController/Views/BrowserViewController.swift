@@ -1484,12 +1484,6 @@ class BrowserViewController: UIViewController,
         coordinator.animate(alongsideTransition: { [self] context in
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
-            if !isSnapKitRemovalEnabled {
-                updateViewConstraints()
-            } else {
-                updateConstraintsForKeyboard()
-                updateBottomContentStackViewConstraints()
-            }
             searchController?.view.layoutIfNeeded()
         }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
@@ -1736,14 +1730,14 @@ class BrowserViewController: UIViewController,
     private func updateSnapKitOverKeyboardContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        let existingOffset = overKeyboardContainerConstraint?.layoutConstraint?.constant ?? 0
-
         overKeyboardContainer.snp.remakeConstraints { make in
-            // Apply same constraints update we do in native path we 
-            let constraint = make.bottom.equalTo(bottomContainer.snp.top).offset(existingOffset).constraint
-            let reference = ConstraintReference(snapKit: constraint)
-            overKeyboardContainerConstraint = reference
-            (scrollController as? LegacyTabScrollProvider)?.overKeyboardContainerConstraint = reference
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                scrollController.overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
+            } else {
+                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
+            }
 
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
@@ -1758,13 +1752,15 @@ class BrowserViewController: UIViewController,
     private func updateSnapKitBottomContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        let existingOffset = bottomContainerConstraint?.layoutConstraint?.constant ?? 0
-
         bottomContainer.snp.remakeConstraints { make in
-            let constraint = make.bottom.equalTo(view.snp.bottom).offset(existingOffset).constraint
-            let reference = ConstraintReference(snapKit: constraint)
-            bottomContainerConstraint = reference
-            (scrollController as? LegacyTabScrollProvider)?.bottomContainerConstraint = reference
+            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
+            let constraintReference = ConstraintReference(snapKit: constraint)
+
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.bottomContainerConstraint = constraintReference
+            } else {
+                bottomContainerConstraint = constraintReference
+            }
             make.leading.trailing.equalTo(view)
         }
     }
@@ -1784,7 +1780,9 @@ class BrowserViewController: UIViewController,
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        if tabManager.selectedTab?.isFindInPageMode == false {
+        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
+            scrollController.hideToolbars(animated: false)
+        } else {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -4984,12 +4982,7 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
-    private var isModalPresentedOverBrowser: Bool {
-        presentedViewController != nil || navigationController?.presentedViewController != nil
-    }
-
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
 
         if !isSnapKitRemovalEnabled {
@@ -5019,15 +5012,15 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        guard !isModalPresentedOverBrowser else { return }
-        guard !isEditingBottomAddressBar else { return }
-
-        // Give the toolbar a chance to undo any prior minimization (FXIOS-15910). Called
-        // here — once per keyboard transition — rather than from adjustBottomSearchBarForKeyboard,
-        // which fires on every layout pass and would dispatch stray shouldShowKeyboard updates
-        // mid-edit.
-        _ = addressToolbarContainer.offsetForKeyboardAccessory(hasAccessoryView: false)
-
+        if #available(iOS 26.0, *), isBottomSearchBar {
+            store.dispatch(
+                ToolbarAction(
+                    scrollAlpha: 1,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+                )
+            )
+        }
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5050,7 +5043,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        guard !isModalPresentedOverBrowser else { return }
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
@@ -5069,7 +5061,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
-        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5080,7 +5071,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
-        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5102,13 +5092,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
         guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
-    }
-
-    private var isEditingBottomAddressBar: Bool {
-        guard searchBarPosition == .bottom else { return false }
-        return store.state
-            .componentState(ToolbarState.self, for: .toolbar, window: windowUUID)?
-            .addressToolbar.isEditing ?? false
     }
 
     private var shouldCancelEditing: Bool {

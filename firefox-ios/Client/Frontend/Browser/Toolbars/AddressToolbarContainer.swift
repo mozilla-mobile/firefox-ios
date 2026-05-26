@@ -226,30 +226,6 @@ final class AddressToolbarContainer: UIView,
 
         let accessoryViewOffset = shouldAdjustForAccessory ? UX.keyboardAccessoryViewOffset : 0
 
-        // Keep the gradient frame matched to current bounds on every call where the accessory
-        // is active. Required after rotation so the gradient stays full-width.
-        if shouldAdjustForAccessory {
-            let height = frame.height + UX.accessoryViewGradientOffset
-            accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
-        }
-
-        // Undo a previous accessory-driven minimization. Gated on shouldShowKeyboard so we
-        // don't undo legitimate scroll-hides, and on !isEditingAddress so we don't dispatch
-        // while the user is mid-edit
-        if !hasAccessoryView,
-           !isEditingAddress,
-           shouldShowKeyboard == true,
-           state?.scrollAlpha == 0 {
-            accessoryViewGradient.opacity = 0
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: 1,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
-        }
-
         /// We want to check here if the keyboard accessory view state has changed
         /// To avoid spamming redux actions.
         guard hasAccessoryView != shouldShowKeyboard else { return accessoryViewOffset }
@@ -262,6 +238,8 @@ final class AddressToolbarContainer: UIView,
         )
 
         if shouldAdjustForAccessory {
+            let height = frame.height + UX.accessoryViewGradientOffset
+            accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
             store.dispatch(
                 ToolbarAction(
