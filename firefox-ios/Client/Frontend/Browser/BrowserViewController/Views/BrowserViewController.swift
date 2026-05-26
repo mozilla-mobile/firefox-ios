@@ -1484,12 +1484,6 @@ class BrowserViewController: UIViewController,
         coordinator.animate(alongsideTransition: { [self] context in
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
-            if !isSnapKitRemovalEnabled {
-                updateViewConstraints()
-            } else {
-                updateConstraintsForKeyboard()
-                updateBottomContentStackViewConstraints()
-            }
             searchController?.view.layoutIfNeeded()
         }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
@@ -5014,7 +5008,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        guard !isEditingBottomAddressBar else { return }
 
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
@@ -5087,13 +5080,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
         guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
-    }
-
-    private var isEditingBottomAddressBar: Bool {
-        guard searchBarPosition == .bottom else { return false }
-        return store.state
-            .componentState(ToolbarState.self, for: .toolbar, window: windowUUID)?
-            .addressToolbar.isEditing ?? false
     }
 
     private var shouldCancelEditing: Bool {
