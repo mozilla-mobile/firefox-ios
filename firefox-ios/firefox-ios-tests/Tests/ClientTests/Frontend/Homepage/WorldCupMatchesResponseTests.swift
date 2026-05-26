@@ -135,8 +135,8 @@ struct WorldCupMatchesResponseTests {
             ("Group Stage", .groupStage),
             ("Round of 32", .roundOf32),
             ("Round of 16", .roundOf16),
-            ("Quarter-Finals", .quarterFinals),
-            ("Semi-Finals", .semiFinals),
+            ("Quarter-finals", .quarterFinals),
+            ("Semi-finals", .semiFinals),
             ("3rd Place", .thirdPlace),
             ("Final", .final)
         ]

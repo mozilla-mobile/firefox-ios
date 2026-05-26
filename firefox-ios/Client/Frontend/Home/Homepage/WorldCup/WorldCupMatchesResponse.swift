@@ -128,8 +128,8 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
                 case "Group Stage": self = .groupStage
                 case "Round of 32": self = .roundOf32
                 case "Round of 16": self = .roundOf16
-                case "Quarter-Finals": self = .quarterFinals
-                case "Semi-Finals": self = .semiFinals
+                case "Quarter-finals": self = .quarterFinals
+                case "Semi-finals": self = .semiFinals
                 case "3rd Place": self = .thirdPlace
                 case "Final": self = .final
                 default: self = .unknown(raw)
