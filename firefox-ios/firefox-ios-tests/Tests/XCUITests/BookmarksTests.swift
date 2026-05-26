@@ -18,6 +18,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private var homepageSettingsScreen: HomepageSettingsScreen!
     private var firefoxHomeScreen: FirefoxHomePageScreen!
     private var settingsScreen: SettingScreen!
+    private var mainMenu: MainMenuScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -28,6 +29,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         homepageSettingsScreen = HomepageSettingsScreen(app: app)
         firefoxHomeScreen = FirefoxHomePageScreen(app: app)
         settingsScreen = SettingScreen(app: app)
+        mainMenu = MainMenuScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -53,9 +55,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Go to a webpage, and add to bookmarks, check it's added
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
-        waitForTabsButton()
+        toolbarScreen.assertTabsButtonExists()
         bookmark()
-        waitForTabsButton()
+        toolbarScreen.assertTabsButtonExists()
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
@@ -66,7 +68,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
 
         navigator.nowAt(BrowserTab)
-        waitForTabsButton()
+        toolbarScreen.assertTabsButtonExists()
         checkUnbookmarked()
 
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
@@ -76,13 +78,12 @@ class BookmarksTests: FeatureFlaggedTestBase {
         XCTAssertEqual(app.cells[identifier].label, "Example Domain")
         app.cells[identifier].waitAndTap()
         navigator.nowAt(BrowserTab)
-        waitForTabsButton()
+        toolbarScreen.assertTabsButtonExists()
         checkBookmarked()
 
         // Open it, then unbookmark it, and check it's no longer on bookmarks home panel
         unbookmark(url: urlLabelExample_3)
-        waitForTabsButton()
-        checkUnbookmarked()
+        toolbarScreen.assertTabsButtonExists()
     }
 
     private func checkEmptyBookmarkList() {
@@ -127,11 +128,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Add a bookmark
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         bookmark()
         // There should be a bookmark
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         checkItemInBookmarkList(oneItemBookmarked: true)
     }
 
@@ -178,8 +178,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3168587
     func testAddNewFolder() {
         app.launch()
-        navigator.goto(LibraryPanel_Bookmarks)
-        navigator.nowAt(MobileBookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: "Test Folder")
         libraryScreen.assertNewFreshFolderCreated(folderName: "Test Folder")
     }
@@ -187,8 +187,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3168596
     func testDeleteEmptyFolderInEditMode() {
         app.launch()
-        navigator.goto(LibraryPanel_Bookmarks)
-        navigator.nowAt(MobileBookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: "Test Folder")
         libraryScreen.tapDoneButton()
         libraryScreen.tapEditButton()
@@ -196,11 +196,35 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.assertBookmarkListLabel(label: "Empty list")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3168597
+    func testDeleteEmptyFolderViaContextMenu() {
+        app.launch()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.tapDoneButton()
+        libraryScreen.longPressAndSelectContextMenuOption(option: "Delete Folder")
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168598
+    func testDeleteEmptyFolderBySwipe() {
+        app.launch()
+        let folderName = "Test Folder"
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: folderName)
+        libraryScreen.tapDoneButton()
+        libraryScreen.swipeBookmarkListEntry(entryName: folderName)
+        libraryScreen.tapDeleteBookmarkButton()
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3168588
     func testEditModeExitsOnlyWithDoneButton() {
         app.launch()
-        navigator.goto(LibraryPanel_Bookmarks)
-        navigator.nowAt(MobileBookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.tapEditButton()
         libraryScreen.assertNewFolderButtonExists()
         libraryScreen.tapDoneButton()
@@ -214,24 +238,23 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3168649
     func testDeleteBookmarkContextMenu() {
         app.launch()
-        navigator.nowAt(NewTabScreen)
         toolbarScreen.assertTabsButtonExists()
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         // There is only one row in the bookmarks panel, which is the desktop folder
         libraryScreen.assertBookmarkListLabel(label: "Empty list")
 
         // Add a bookmark
-        navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-
+        libraryScreen.tapDoneButton()
+        browserScreen.tapOnAddressBar()
         navigator.openURL(url_3)
+        waitUntilPageLoad()
         toolbarScreen.assertTabsButtonExists()
-        navigator.nowAt(BrowserTab)
         bookmark()
 
         // Check that it appears in Bookmarks panel
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkList()
         // Remove by long press and select option from context menu
         libraryScreen.longPressAndSelectContextMenuOption(option: "Remove Bookmark")
@@ -250,22 +273,21 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // Smoketest
     func testBookmarkLibraryAddDeleteBookmark() {
         app.launch()
-        navigator.nowAt(NewTabScreen)
         toolbarScreen.assertTabsButtonExists()
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
 
         // Add a bookmark
-        navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        libraryScreen.tapDoneButton()
+        browserScreen.tapOnAddressBar()
         navigator.openURL(url_3)
         waitUntilPageLoad()
         toolbarScreen.assertTabsButtonExists()
-        navigator.nowAt(BrowserTab)
         bookmark()
 
         // Check that it appears in Bookmarks panel
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkList()
         libraryScreen.assertBookmarkListCount(numberOfEntries: 1)
 
@@ -282,19 +304,19 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testRecentlyBookmarked() {
         app.launch()
         navigator.openURL(path(forTestPage: url_2["url"]!))
-        waitForTabsButton()
-        navigator.nowAt(BrowserTab)
+        toolbarScreen.assertTabsButtonExists()
         bookmark()
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         checkItemInBookmarkList(oneItemBookmarked: true)
-        navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        libraryScreen.tapDoneButton()
+        browserScreen.tapOnAddressBar()
+        browserScreen.clearURL()
         navigator.openURL(path(forTestPage: url_1))
-        waitForTabsButton()
-        navigator.nowAt(BrowserTab)
+        toolbarScreen.assertTabsButtonExists()
         bookmark()
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         checkItemInBookmarkList(oneItemBookmarked: false)
     }
 
@@ -305,17 +327,16 @@ class BookmarksTests: FeatureFlaggedTestBase {
         let rootFolder = "Bookmarks"
 
         // Precondition: create "Test folder" so it becomes the latest "Save in" location
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: testFolder)
         libraryScreen.tapDoneButton()
-        navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(HomePanelsScreen)
+        libraryScreen.tapDoneButton()
         navigator.goto(URLBarOpen)
 
         // Bookmark a page — it is saved by default in "Test folder"
         navigator.openURL(path(forTestPage: url_2["url"]!))
         toolbarScreen.assertTabsButtonExists()
-        navigator.nowAt(BrowserTab)
 
         // Step 1: open the bookmark in edit mode
         bookmarkPageAndTapEdit()
@@ -329,8 +350,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
         // The bookmark is correctly saved in the new location (root Bookmarks),
         // and is no longer inside "Test folder".
-        navigator.nowAt(BrowserTab)
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.assertSelectedFolderOpens(folderName: rootFolder)
         libraryScreen.assertBookmarkExists(named: url_2["bookmarkLabel"]!)
 
@@ -360,8 +381,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testBookmark() {
         app.launch()
         navigator.openURL(url_3)
-        waitForTabsButton()
-        navigator.nowAt(BrowserTab)
+        toolbarScreen.assertTabsButtonExists()
         bookmark()
         mozWaitForElementToExist(app.staticTexts["Saved in “Bookmarks”"])
         unbookmark(url: urlLabelExample_3)
@@ -411,8 +431,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3168583
     func testNoFoldersInBookmarks() {
         app.launch()
-        navigator.goto(LibraryPanel_Bookmarks)
-        navigator.nowAt(MobileBookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkList()
         libraryScreen.assertBookmarkListCount(numberOfEntries: 0)
     }
@@ -420,16 +440,18 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3168584
     func testCheckDonebutton() {
         app.launch()
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkEmptyStateTextExists()
-        navigator.goto(HomePanelsScreen)
+        libraryScreen.tapDoneButton()
         libraryScreen.assertBookmarkEmptyStateTextExists(shouldExist: false)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168589
     func testEditModeRemainsActive() {
         app.launch()
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkEmptyStateTextExists()
         libraryScreen.tapEditButton()
         // Close the Bookmark panel without tapping "Done" (using swipe)
@@ -437,8 +459,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // The Bookmark panel closes
         topSitesScreen.assertVisible()
         // Navigate to Hamburger menu → Bookmarks, check the screen
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         // Edit mode remains active
         libraryScreen.assertNewFolderButtonExists()
         // Tap to add a new folder
@@ -449,8 +471,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // The Bookmark panel closes
         topSitesScreen.assertVisible()
         // Navigate to Hamburger menu → Bookmarks, check the screen
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         // Edit mode remains active
         libraryScreen.assertNewFolderButtonExists()
     }
@@ -458,16 +480,30 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3168628
     func testVerifyFolderSpecialCharacters() {
         app.launch()
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: "!@#$%^&*()_+")
         libraryScreen.assertNewFreshFolderCreated(folderName: "!@#$%^&*()_+")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168627
+    func testCreateFolderWithVeryLongName() {
+        app.launch()
+        let longFolderName = "A very long folder name used to verify that the title field " +
+                             "imposes no length limit and the name is trimmed to one line"
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: longFolderName)
+        libraryScreen.assertNewFreshFolderCreated(folderName: longFolderName)
+        libraryScreen.assertFolderNameDisplayedOnSingleLine(folderName: longFolderName)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168629
     func testDuplicateFoldersNames() {
         app.launch()
         let folderName = "Sample Folder."
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: folderName)
         libraryScreen.assertNewFreshFolderCreated(folderName: folderName)
         libraryScreen.tapDoneButton()
@@ -481,7 +517,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.launch()
         let secondFolder = "Folder2"
         // Make sure you already have a structure of bookmarks folders created
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: "Folder1")
         libraryScreen.tapDoneButton()
         libraryScreen.addFreshNewFolder(text: secondFolder)
@@ -490,28 +527,28 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.tapOnFolder(folderName: secondFolder)
         // Close the Bookmark Panel using Done button and reopen it
         libraryScreen.tapDoneButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         // User is redirected to the specific folder
         libraryScreen.assertSelectedFolderOpens(folderName: secondFolder)
         // Close the Bookmark Panel by swiping it down and reopen it
         app.swipeDown()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         // User is redirected to the specific folder
         libraryScreen.assertSelectedFolderOpens(folderName: secondFolder)
         // Switch to edit mode and close the panel by swiping it down and reopen it
         libraryScreen.tapEditButton()
         app.swipeDown()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         // User is redirected to the specific folder
         libraryScreen.assertSelectedFolderOpens(folderName: secondFolder)
         // Choose to add a new folder and close the panel by swiping it down and reopen it
         libraryScreen.tapBottomLeftButton()
         app.swipeDown()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         // Panel opens with the folder creation screen
         libraryScreen.assertSelectedFolderOpens(folderName: "New Folder")
         // Tapping back button user is redirected the to specific folder
@@ -525,7 +562,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         let parentFolder = "Parent Folder"
         let subFolder1 = "Subfolder1"
         let subFolder2 = "Subfolder2"
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: parentFolder)
         addNewFolderUnderParentFolder(parentFolder: parentFolder, subFolder: subFolder1)
         addNewFolderUnderParentFolder(parentFolder: subFolder1, subFolder: subFolder2)

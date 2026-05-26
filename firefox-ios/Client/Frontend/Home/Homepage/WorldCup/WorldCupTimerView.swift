@@ -15,7 +15,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
         static let actionButtonSize = CGSize(width: 24, height: 24)
-        static let heroImageWidth: CGFloat = 160
+        static let heroImageWidth: CGFloat = 80.0
         static let heroImageHeight: CGFloat = 140.0
         static let heroImageTrailingPadding: CGFloat = 12.0
         static let heroGifName = "kitHeroGif"
@@ -38,7 +38,8 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
 
     private lazy var heroImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = false
+        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
         guard let gifImage = UIImage.gifFromBundle(named: UX.heroGifName,
                                                    frameDuration: UX.heroFrameDuration,
                                                    maxPixelSize: UX.heroImageWidth * UIScreen.main.scale),
@@ -61,7 +62,17 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         label.text = String.WorldCup.HomepageWidget.CountDown.Title
         label.textAlignment = .natural
         label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.setContentHuggingPriority(.required, for: .vertical)
+    }
+
+    private lazy var subtitleLabel: UILabel = .build { label in
+        label.numberOfLines = 0
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.text = String.WorldCup.HomepageWidget.FollowTeamCard.Description
+        label.isHidden = true
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private lazy var timerContainer: UIView = .build { view in
@@ -143,6 +154,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         timerContainer.addSubview(timerStack)
         leftContentStack.addArrangedSubview(titleLabel)
         leftContentStack.addArrangedSubview(timerContainer)
+        leftContentStack.addArrangedSubview(subtitleLabel)
         leftContentStack.addArrangedSubview(ctaButton)
 
         addSubviews(leftContentStack, heroImageView, actionButton)
@@ -153,10 +165,10 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
                 equalTo: actionButton.leadingAnchor,
                 constant: -UX.heroImageTrailingPadding
             ),
-            heroImageView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
+            heroImageView.widthAnchor.constraint(equalToConstant: UX.heroImageWidth),
             heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageHeight),
-            heroImageView.topAnchor.constraint(equalTo: topAnchor).priority(.defaultLow),
-            heroImageView.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultLow),
+            heroImageView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
+            heroImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
 
             actionButton.topAnchor.constraint(equalTo: topAnchor),
             actionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
@@ -256,6 +268,18 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         } else {
             configureMilestone1Actions()
         }
+        applyStartedState(state.hasWorldCupStarted)
+    }
+
+    private func applyStartedState(_ hasStarted: Bool) {
+        timerContainer.isHidden = hasStarted
+        subtitleLabel.isHidden = !hasStarted
+        if hasStarted {
+            titleLabel.text = .WorldCup.HomepageWidget.FollowTeamCard.Title
+            countdownModel?.stop()
+        } else {
+            titleLabel.text = .WorldCup.HomepageWidget.CountDown.Title
+        }
     }
 
     private func configureMilestone2Actions() {
@@ -329,8 +353,20 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         model.onCountdownUpdated = { [weak self] countdown in
             self?.apply(countdown: countdown)
         }
+        model.onWorldCupStarted = { [weak self] in
+            self?.notifyWorldCupStarted()
+        }
         model.start()
         countdownModel = model
+    }
+
+    private func notifyWorldCupStarted() {
+        store.dispatch(
+            WorldCupAction(
+                windowUUID: windowUUID,
+                actionType: WorldCupActionType.worldCupDidStart
+            )
+        )
     }
 
     private func apply(countdown: WorldCupCountdown) {
@@ -420,6 +456,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
+        subtitleLabel.textColor = theme.colors.textSecondary
         [dayValueLabel, hourValueLabel, minuteValueLabel].forEach {
             $0.textColor = theme.colors.textPrimary
         }

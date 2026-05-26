@@ -6,9 +6,10 @@ import Foundation
 import Redux
 import Common
 import Shared
+import UIKit
 
 @MainActor
-final class TranslationsMiddleware: FeatureFlaggable {
+final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -16,6 +17,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private let translationsTelemetry: TranslationsTelemetryProtocol
     private let manager: PreferredTranslationLanguagesManager
     private let localeProvider: LocaleProvider
+    private let notificationCenter: NotificationProtocol
 
     /// Multiple windows can be open simultaneously, so we track IDs in a map.
     /// On iPhone, only a single window exists, so this will contain at most one entry.
@@ -34,6 +36,9 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// the active translation is discarded, tryAutoTranslate picks this up and translates to the
     /// requested language instead of the user's top preferred language.
     private var pendingLanguageSwitchTargets: [WindowUUID: String] = [:]
+    private var translationTasks: [WindowUUID: Task<Void, Never>] = [:]
+    var backgroundTimestamp: Date?
+    private static let backgroundRecoveryThreshold: TimeInterval = 3
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
@@ -41,7 +46,8 @@ final class TranslationsMiddleware: FeatureFlaggable {
          translationsService: TranslationsServiceProtocol = TranslationsService(),
          translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
          manager: PreferredTranslationLanguagesManager? = nil,
-         localeProvider: LocaleProvider = SystemLocaleProvider()
+         localeProvider: LocaleProvider = SystemLocaleProvider(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.profile = profile
         self.logger = logger
@@ -50,6 +56,30 @@ final class TranslationsMiddleware: FeatureFlaggable {
         self.translationsTelemetry = translationsTelemetry
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.localeProvider = localeProvider
+        self.notificationCenter = notificationCenter
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                UIApplication.didEnterBackgroundNotification,
+                UIApplication.willEnterForegroundNotification
+            ]
+        )
+    }
+
+    nonisolated func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+        ensureMainThread {
+            switch notificationName {
+            case UIApplication.didEnterBackgroundNotification:
+                self.backgroundTimestamp = Date()
+                self.cancelInFlightTranslations()
+            case UIApplication.willEnterForegroundNotification:
+                self.recoverInterruptedTranslations()
+            default:
+                break
+            }
+        }
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -524,7 +554,8 @@ final class TranslationsMiddleware: FeatureFlaggable {
         autoTranslate: Bool = false,
         on tab: Tab? = nil
     ) {
-        Task {
+        translationTasks[windowUUID]?.cancel()
+        translationTasks[windowUUID] = Task {
             await self.performTranslation(
                 windowUUID: windowUUID,
                 targetLanguage: targetLanguage,
@@ -532,6 +563,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 autoTranslate: autoTranslate,
                 on: tab
             )
+            self.translationTasks[windowUUID] = nil
         }
     }
 
@@ -564,6 +596,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 }
             )
             try await translationsService.firstResponseReceived(for: windowUUID)
+            guard !Task.isCancelled else { return }
             dispatchAction(
                 for: TranslationsActionType.translationCompleted,
                 with: .active,
@@ -574,6 +607,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
             )
             maybeShowAutoTranslatePrompt(windowUUID: windowUUID)
         } catch {
+            guard !Task.isCancelled else { return }
             let serviceError = TranslationsServiceError.fromUnknown(error)
             translationsTelemetry.translationFailed(
                 translationFlowId: flowId(for: windowUUID),
@@ -598,6 +632,45 @@ final class TranslationsMiddleware: FeatureFlaggable {
         store.dispatch(reloadAction)
         translationsTelemetry.webpageRestored(translationFlowId: flowId(for: action.windowUUID))
         clearFlowId(for: action)
+    }
+
+    private func cancelInFlightTranslations() {
+        for (windowUUID, task) in translationTasks {
+            task.cancel()
+            translationTasks[windowUUID] = nil
+            guard let targetLanguage = selectedTargetLanguages[windowUUID] else { continue }
+            let tab = selectedTab(for: windowUUID)
+            pendingLanguageSwitchTargets[windowUUID] = targetLanguage
+            handleUpdatingTranslationIcon(windowUUID: windowUUID, with: .loading, on: tab)
+            store.dispatch(GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.reloadWebsite
+            ))
+        }
+    }
+
+    private func recoverInterruptedTranslations() {
+        guard let timestamp = backgroundTimestamp,
+              Date().timeIntervalSince(timestamp) > Self.backgroundRecoveryThreshold else { return }
+        backgroundTimestamp = nil
+
+        for uuid in translationFlowIds.keys {
+            let translationState = store.state.componentState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: uuid
+            )?.addressToolbar.translationConfiguration?.state
+            guard translationState == .active else { continue }
+            guard let targetLanguage = selectedTargetLanguages[uuid] else { continue }
+
+            let tab = selectedTab(for: uuid)
+            pendingLanguageSwitchTargets[uuid] = targetLanguage
+            handleUpdatingTranslationIcon(windowUUID: uuid, with: .loading, on: tab)
+            store.dispatch(GeneralBrowserAction(
+                windowUUID: uuid,
+                actionType: GeneralBrowserActionType.reloadWebsite
+            ))
+        }
     }
 
     private func handleErrorFromTranslatingPage(windowUUID: WindowUUID, on tab: Tab? = nil) {

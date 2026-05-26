@@ -12,6 +12,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var shouldShowSection: Bool
     var isMilestone2: Bool
+    var hasWorldCupStarted: Bool
+    var selectedCountryId: String?
     var matches: [WorldCupMatches]
     var apiError: WorldCupLoadError?
     /// Index into `matches` of the card that should be visible first. Used by
@@ -23,6 +25,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         self.windowUUID = windowUUID
         self.shouldShowSection = false
         self.isMilestone2 = false
+        self.hasWorldCupStarted = false
+        self.selectedCountryId = nil
         self.matches = []
         self.apiError = nil
         self.defaultMatchIndex = 0
@@ -32,6 +36,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         windowUUID: WindowUUID,
         shouldShowSection: Bool,
         isMilestone2: Bool,
+        hasWorldCupStarted: Bool,
+        selectedCountryId: String?,
         matches: [WorldCupMatches],
         apiError: WorldCupLoadError?,
         defaultMatchIndex: Int
@@ -39,6 +45,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
         self.isMilestone2 = isMilestone2
+        self.hasWorldCupStarted = hasWorldCupStarted
+        self.selectedCountryId = selectedCountryId
         self.matches = matches
         self.apiError = apiError
         self.defaultMatchIndex = defaultMatchIndex
@@ -54,6 +62,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
                 windowUUID: action.windowUUID,
                 shouldShowSection: action.shouldShowHomepageWorldCupSection,
                 isMilestone2: action.shouldShowMilestone2,
+                hasWorldCupStarted: action.hasWorldCupStarted,
+                selectedCountryId: action.selectedCountryId,
                 matches: action.matches,
                 apiError: action.apiError,
                 defaultMatchIndex: action.defaultMatchIndex

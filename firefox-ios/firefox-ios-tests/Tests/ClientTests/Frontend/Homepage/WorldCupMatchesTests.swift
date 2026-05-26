@@ -270,7 +270,7 @@ struct WorldCupMatchesTests {
     }
 
     @Test
-    func test_flattened_defaultIndex_pointsAtToday() {
+    func test_flattened_defaultIndex_isAlwaysZero() {
         let response = WorldCupMatchesResponse(
             previous: [makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")],
             current: [makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-12T18:00:00+00:00")],
@@ -283,47 +283,7 @@ struct WorldCupMatchesTests {
             calendar: utcCalendar()
         )
 
-        #expect(result.defaultIndex == 1)
-    }
-
-    @Test
-    func test_flattened_defaultIndex_pointsAtNextFutureDay_whenTodayHasNoMatches() {
-        let response = WorldCupMatchesResponse(
-            previous: [makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")],
-            current: nil,
-            next: [
-                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-13T18:00:00+00:00"),
-                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-06-14T18:00:00+00:00")
-            ]
-        )
-
-        let result = WorldCupMatches.flattened(
-            response: response,
-            now: parse("2026-06-11T09:00:00+00:00"),
-            calendar: utcCalendar()
-        )
-
-        #expect(result.defaultIndex == 1)
-    }
-
-    @Test
-    func test_flattened_defaultIndex_fallsBackToLastCard_whenEverythingIsInThePast() {
-        let response = WorldCupMatchesResponse(
-            previous: [
-                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00"),
-                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-11T18:00:00+00:00")
-            ],
-            current: nil,
-            next: nil
-        )
-
-        let result = WorldCupMatches.flattened(
-            response: response,
-            now: parse("2026-07-01T09:00:00+00:00"),
-            calendar: utcCalendar()
-        )
-
-        #expect(result.defaultIndex == 1)
+        #expect(result.defaultIndex == 0)
     }
 
     @Test
@@ -370,27 +330,6 @@ struct WorldCupMatchesTests {
 
         #expect(result.cards[0].featuredMatch.map(\.homeCode) == ["ARG", "ENG"])
         #expect(result.cards[0].upcomingMatches.isEmpty)
-    }
-
-    @Test
-    func test_flattened_defaultIndex_prefersLiveCardOverToday() {
-        let response = WorldCupMatchesResponse(
-            previous: nil,
-            current: nil,
-            next: [
-                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-12T18:00:00+00:00"),
-                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-13T18:00:00+00:00")
-            ]
-        )
-
-        let result = WorldCupMatches.flattened(
-            response: response,
-            liveIDs: [2],
-            now: parse("2026-06-12T09:00:00+00:00"),
-            calendar: utcCalendar()
-        )
-
-        #expect(result.defaultIndex == 1)
     }
 
     @Test

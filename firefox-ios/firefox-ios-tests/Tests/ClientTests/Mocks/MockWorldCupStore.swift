@@ -11,6 +11,7 @@ final class MockWorldCupStore: WorldCupStoreProtocol {
     var isHomepageSectionEnabled = true
     var selectedTeam: String?
     var isMilestone2 = false
+    var hasWorldCupStarted = false
 
     var setIsHomepageSectionEnabledCalled = 0
     var lastSetIsHomepageSectionEnabledValue: Bool?

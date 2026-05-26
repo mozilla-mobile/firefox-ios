@@ -633,6 +633,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             containerWidth: containerWidth,
             isLandscape: UIDevice.current.orientation.isLandscape,
             shouldShowSection: topSitesState.shouldShowSection,
+            shouldShowAddShortcutTile: topSitesState.shouldShowAddShortcutTile,
             contentSizeCategory: contentSizeCategory
         )
 
@@ -655,7 +656,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let cellsData = topSitesState.topSitesData.prefix(maxCells)
-        guard !cellsData.isEmpty else {
+        guard !cellsData.isEmpty || topSitesState.shouldShowAddShortcutTile else {
             measurementsCache.setHeight(0, for: measurementKey)
             return 0
         }
@@ -669,11 +670,17 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         // Build array of configured cells for the data being displayed on the homepage
-        let allCells = cellsData.map { data in
+        var allCells = cellsData.map { data in
             let cell = TopSiteCell()
             cell.configure(data, position: 0, theme: LightTheme(), textColor: .black)
             return cell
         }
+        if topSitesState.shouldShowAddShortcutTile {
+            let cell = TopSiteCell()
+            cell.configureAddShortcutTile(theme: LightTheme(), textColor: .black)
+            allCells.append(cell)
+        }
+        allCells = Array(allCells.prefix(maxCells))
 
         // Group into rows and compute each rows max height
         let rowHeights = stride(from: 0, to: allCells.count, by: cols).map { start in

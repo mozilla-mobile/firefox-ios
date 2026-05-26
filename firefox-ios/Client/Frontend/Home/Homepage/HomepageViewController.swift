@@ -431,11 +431,9 @@ final class HomepageViewController: UIViewController,
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
             let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
-            let shouldReconfigureHeader = shouldReconfigureHomepageHeader(for: state)
             self.homepageState = state
 
             refreshHomepageDataSourceSnapshot(
-                reconfigureHeader: shouldReconfigureHeader,
                 animatingDifferences: animatingDifferences
             ) { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
@@ -618,9 +616,9 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header(let state):
+        case .header(let state, let logoTextColor):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state) { [weak self] in
+                cell.configure(headerState: state, logoTextColor: logoTextColor) { [weak self] in
                     self?.dispatchNavigationBrowserAction(
                         with: NavigationDestination(.quickAnswers),
                         actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
@@ -639,6 +637,10 @@ final class HomepageViewController: UIViewController,
         case .topSite(let site, let textColor):
             return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
                 cell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
+            }
+        case .addShortcutTile(let textColor):
+            return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
+                cell.configureAddShortcutTile(theme: currentTheme, textColor: textColor)
             }
         case .topSiteEmpty:
             return configuredCell(cellType: EmptyTopSiteCell.self, at: indexPath) { cell in
@@ -685,8 +687,9 @@ final class HomepageViewController: UIViewController,
     }
 
     private func relayoutForCellHeightChange() {
-        guard let collectionView else { return }
-        collectionView.collectionViewLayout.invalidateLayout()
+        DispatchQueue.main.async {
+            self.refreshHomepageDataSourceSnapshot()
+        }
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
@@ -1001,7 +1004,7 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
-        if section.canHandleLongPress {
+        if section.canHandleLongPress && item.canHandleLongPress {
             navigateToContextMenu(for: item, sourceView: sourceView)
         }
     }
@@ -1148,23 +1151,16 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func refreshHomepageDataSourceSnapshot(reconfigureHeader: Bool = false,
-                                                   animatingDifferences: Bool = true,
+    private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true,
                                                    completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
-            reconfigureHeader: reconfigureHeader,
             animatingDifferences: animatingDifferences
         ) {
             completion?()
         }
-    }
-
-    private func shouldReconfigureHomepageHeader(for state: HomepageState) -> Bool {
-        return state.wallpaperState.wallpaperConfiguration.logoTextColor !=
-            homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
     }
 
     /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.
@@ -1264,9 +1260,9 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
-        dispatchDidSelectCardItemAction(with: item)
         switch item {
         case .topSite(let config, _):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: config.site.url.asURL,
@@ -1280,11 +1276,13 @@ final class HomepageViewController: UIViewController,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         case .searchBar:
+            dispatchDidSelectCardItemAction(with: item)
             dispatchNavigationBrowserAction(
                 with: NavigationDestination(.homepageZeroSearch),
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
+            dispatchDidSelectCardItemAction(with: item)
             store.dispatch(
                 JumpBackInAction(
                     tab: config.tab,
@@ -1293,6 +1291,7 @@ final class HomepageViewController: UIViewController,
                 )
             )
         case .bookmark(let config):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: URIFixup.getURL(config.site.url),
@@ -1301,6 +1300,7 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .merino(let story, _):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: story.url,

@@ -1,5 +1,5 @@
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Thêm lối tắt %@ vào màn hình chính của bạn. Sau khi thêm tiện ích, hãy nhấn và giữ để chỉnh sửa tiện ích và chọn một lối tắt khác.";
+"TodayWidget.QuickActionGalleryDescription" = "Thêm lối tắt %@ vào màn hình chính của bạn. Sau khi thêm tiện ích, hãy chạm và giữ để chỉnh sửa widget và chọn một lối tắt khác.";
 
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescriptionV2" = "Bắt đầu tìm kiếm riêng tư trong %@ bằng công cụ tìm kiếm mặc định của bạn.";

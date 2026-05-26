@@ -545,13 +545,13 @@
 "ShowMeHowOnboarding.SubtitleStepOne.V2" = "Nhấn và giữ biểu tượng ứng dụng đến khi nó rung rinh.";
 
 /* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Tìm kiếm %@. Sau đó chọn tiện ích hiển thị.";
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Tìm kiếm %@. Sau đó chọn widget.";
 
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Nhấn vào nút dấu cộng.";
 
 /* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"ShowMeHowOnboarding.Title.V2" = "Hiển thị thêm %@";
+"ShowMeHowOnboarding.Title.V2" = "Thêm widget %@";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Thêm";
@@ -704,7 +704,7 @@
 "WidgetOnboardingCard.ActionButton" = "Hướng dẫn tôi";
 
 /* Subtitle shown on card view explaining the app has a widget option. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"WidgetOnboardingCard.Subtitle" = "Chúng tôi sẽ để bạn ở chế độ duyệt web riêng tư, nhưng hãy bắt đầu nhanh hơn vào lần sau với tiện ích %@ trên màn hình chính của bạn.";
+"WidgetOnboardingCard.Subtitle" = "Chúng tôi sẽ để bạn ở chế độ duyệt web riêng tư, nhưng hãy bắt đầu nhanh hơn vào lần sau với widget %@ trên màn hình chính của bạn.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Đã xóa lịch sử duyệt web! 🎉";

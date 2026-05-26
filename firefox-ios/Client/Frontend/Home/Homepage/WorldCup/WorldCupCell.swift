@@ -248,17 +248,12 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         goToPage(initialPage(for: state, pageCount: pages.count))
     }
 
-    /// Resolves which page the swipe view should display first. With no team
-    /// selected we land on the closest upcoming match (provided by the
-    /// middleware via `state.defaultMatchIndex`) rather than the
-    /// chronologically latest card. Page 0 is the timer view, so match cards
-    /// are offset by one.
+    /// Resolves which page the swipe view should display first. The middleware
+    /// hands us the page index directly via `state.defaultMatchIndex`; we just
+    /// clamp it into the valid page range.
     private func initialPage(for state: WorldCupSectionState, pageCount: Int) -> Int {
-        guard state.isMilestone2, !state.matches.isEmpty, pageCount > 1 else {
-            return pageCount - 1
-        }
-        let target = 1 + state.defaultMatchIndex
-        return min(max(target, 0), pageCount - 1)
+        guard pageCount > 0 else { return 0 }
+        return min(max(state.defaultMatchIndex, 0), pageCount - 1)
     }
 
     private func makePages(for state: WorldCupSectionState) -> [PageContainer] {
