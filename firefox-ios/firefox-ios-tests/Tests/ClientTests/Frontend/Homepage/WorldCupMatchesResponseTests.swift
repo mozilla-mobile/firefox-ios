@@ -244,8 +244,12 @@ struct WorldCupMatchesResponseTests {
 
     @Test
     func test_filteredToTeam_preservesNowField() {
-        let response = WorldCupMatchesResponse(now: "2026-06-12T12:00:00Z",
-                                                previous: nil, current: nil, next: nil)
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-12T12:00:00Z",
+            previous: nil,
+            current: nil,
+            next: nil
+        )
         #expect(response.filtered(toTeam: "BRA").now == "2026-06-12T12:00:00Z")
     }
 

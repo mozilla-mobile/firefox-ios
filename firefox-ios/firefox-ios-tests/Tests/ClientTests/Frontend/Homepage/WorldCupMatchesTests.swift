@@ -221,10 +221,8 @@ struct WorldCupMatchesTests {
             previous: nil,
             current: nil,
             next: [
-                makeMatch(id: 1, home: "CAN", away: "BIH",
-                          date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
-                makeMatch(id: 2, home: "CAN", away: "QAT",
-                          date: "2026-06-18T22:00:00+00:00", stage: .groupStage)
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "QAT", date: "2026-06-18T22:00:00+00:00", stage: .groupStage)
             ]
         )
 
@@ -247,17 +245,13 @@ struct WorldCupMatchesTests {
         // Default lands on the latest stage (R32).
         let response = WorldCupMatchesResponse(
             previous: [
-                makeMatch(id: 1, home: "CAN", away: "BIH",
-                          date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
-                makeMatch(id: 2, home: "CAN", away: "QAT",
-                          date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
-                makeMatch(id: 3, home: "CHE", away: "CAN",
-                          date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "QAT", date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 3, home: "CHE", away: "CAN", date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
             ],
             current: nil,
             next: [
-                makeMatch(id: 4, home: "MEX", away: "CAN",
-                          date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+                makeMatch(id: 4, home: "MEX", away: "CAN", date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
             ]
         )
 
@@ -280,15 +274,12 @@ struct WorldCupMatchesTests {
         // fixture. Three cards; default lands on R16.
         let response = WorldCupMatchesResponse(
             previous: [
-                makeMatch(id: 1, home: "CAN", away: "BIH",
-                          date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
-                makeMatch(id: 2, home: "CAN", away: "MEX",
-                          date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "MEX", date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
             ],
             current: nil,
             next: [
-                makeMatch(id: 3, home: "CAN", away: "BRA",
-                          date: "2026-07-04T18:00:00+00:00", stage: .roundOf16)
+                makeMatch(id: 3, home: "CAN", away: "BRA", date: "2026-07-04T18:00:00+00:00", stage: .roundOf16)
             ]
         )
 
@@ -481,10 +472,8 @@ struct WorldCupMatchesTests {
             previous: nil,
             current: nil,
             next: [
-                makeMatch(id: 1, home: "ARG", away: "BRA",
-                          date: "2026-06-30T18:00:00+00:00", stage: .roundOf16),
-                makeMatch(id: 2, home: "ENG", away: "USA",
-                          date: "2026-07-04T18:00:00+00:00", stage: .quarterFinals)
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-30T18:00:00+00:00", stage: .roundOf16),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-07-04T18:00:00+00:00", stage: .quarterFinals)
             ]
         )
 
@@ -505,14 +494,10 @@ struct WorldCupMatchesTests {
             previous: nil,
             current: nil,
             next: [
-                makeMatch(id: 1, home: "ARG", away: "BRA",
-                          date: "2026-06-15T18:00:00+00:00", stage: .groupStage),
-                makeMatch(id: 2, home: "ENG", away: "USA",
-                          date: "2026-06-30T18:00:00+00:00", stage: .roundOf16),
-                makeMatch(id: 3, home: "FRA", away: "GER",
-                          date: "2026-07-04T18:00:00+00:00", stage: .quarterFinals),
-                makeMatch(id: 4, home: "ESP", away: "ITA",
-                          date: "2026-07-15T18:00:00+00:00", stage: .final)
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-15T18:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-30T18:00:00+00:00", stage: .roundOf16),
+                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-07-04T18:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 4, home: "ESP", away: "ITA", date: "2026-07-15T18:00:00+00:00", stage: .final)
             ]
         )
 
@@ -540,14 +525,10 @@ struct WorldCupMatchesTests {
             previous: nil,
             current: nil,
             next: [
-                makeMatch(id: 1, home: "FRA", away: "UZB",
-                          date: "2026-07-09T13:00:00+00:00", stage: .quarterFinals),
-                makeMatch(id: 2, home: "GER", away: "IRQ",
-                          date: "2026-07-09T16:00:00+00:00", stage: .quarterFinals),
-                makeMatch(id: 3, home: "BRA", away: "ENG",
-                          date: "2026-07-10T13:00:00+00:00", stage: .quarterFinals),
-                makeMatch(id: 4, home: "ARG", away: "ESP",
-                          date: "2026-07-10T16:00:00+00:00", stage: .quarterFinals)
+                makeMatch(id: 1, home: "FRA", away: "UZB", date: "2026-07-09T13:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 2, home: "GER", away: "IRQ", date: "2026-07-09T16:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 3, home: "BRA", away: "ENG", date: "2026-07-10T13:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 4, home: "ARG", away: "ESP", date: "2026-07-10T16:00:00+00:00", stage: .quarterFinals)
             ]
         )
 
@@ -573,16 +554,11 @@ struct WorldCupMatchesTests {
             previous: nil,
             current: nil,
             next: [
-                makeMatch(id: 1, home: "ARG", away: "BRA",
-                          date: "2026-07-04T18:00:00+00:00", stage: .roundOf16),
-                makeMatch(id: 2, home: "ENG", away: "USA",
-                          date: "2026-07-05T18:00:00+00:00", stage: .roundOf16),
-                makeMatch(id: 3, home: "FRA", away: "GER",
-                          date: "2026-07-09T18:00:00+00:00", stage: .quarterFinals),
-                makeMatch(id: 4, home: "ESP", away: "ITA",
-                          date: "2026-07-14T18:00:00+00:00", stage: .semiFinals),
-                makeMatch(id: 5, home: "NLD", away: "JPN",
-                          date: "2026-07-19T18:00:00+00:00", stage: .final)
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-07-04T18:00:00+00:00", stage: .roundOf16),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-07-05T18:00:00+00:00", stage: .roundOf16),
+                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-07-09T18:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 4, home: "ESP", away: "ITA", date: "2026-07-14T18:00:00+00:00", stage: .semiFinals),
+                makeMatch(id: 5, home: "NLD", away: "JPN", date: "2026-07-19T18:00:00+00:00", stage: .final)
             ]
         )
 
@@ -608,7 +584,9 @@ struct WorldCupMatchesTests {
             previous: nil,
             current: nil,
             next: [
-                makeMatch(id: 1, home: "ARG", away: "BRA",
+                makeMatch(id: 1,
+                          home: "ARG",
+                          away: "BRA",
                           date: "2026-06-30T18:00:00+00:00",
                           stage: .unknown("Galactic Quarterfinals"))
             ]
@@ -732,7 +710,10 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_unknownStage_fallsBackToUpcoming() {
-        let match = makeMatch(id: 0, home: "BRA", away: "ARG", group: nil,
+        let match = makeMatch(id: 0,
+                              home: "BRA",
+                              away: "ARG",
+                              group: nil,
                               stage: .unknown("Galactic Quarterfinals"))
 
         #expect(WorldCupMatches.phaseTitle(from: match)

@@ -101,8 +101,13 @@ struct WorldCupMatches: Equatable, Hashable {
             WorldCupMatch.parseDate(match.date).map { ($0, match) }
         }
         guard !dated.isEmpty else {
-            let empty = WorldCupMatches(response: response, liveIDs: liveIDs, now: now,
-                                         calendar: calendar, localeProvider: localeProvider)
+            let empty = WorldCupMatches(
+                response: response,
+                liveIDs: liveIDs,
+                now: now,
+                calendar: calendar,
+                localeProvider: localeProvider
+            )
             return ([empty], 0)
         }
         let byStage = Dictionary(grouping: dated, by: { $0.match.stage })
@@ -121,8 +126,13 @@ struct WorldCupMatches: Equatable, Hashable {
                 current: nil,
                 next: entries.map(\.match)
             )
-            return WorldCupMatches(response: stageResponse, liveIDs: liveIDs, now: now,
-                                    calendar: calendar, localeProvider: localeProvider)
+            return WorldCupMatches(
+                response: stageResponse,
+                liveIDs: liveIDs,
+                now: now,
+                calendar: calendar,
+                localeProvider: localeProvider
+            )
         }
         return (cards, max(cards.count - 1, 0))
     }

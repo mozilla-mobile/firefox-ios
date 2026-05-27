@@ -513,17 +513,13 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.selectedTeam = "CAN"
         let response = WorldCupMatchesResponse(
             previous: [
-                makeMatch(id: 1, home: "CAN", away: "BIH",
-                          date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
-                makeMatch(id: 2, home: "CAN", away: "QAT",
-                          date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
-                makeMatch(id: 3, home: "CHE", away: "CAN",
-                          date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "QAT", date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 3, home: "CHE", away: "CAN", date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
             ],
             current: nil,
             next: [
-                makeMatch(id: 4, home: "MEX", away: "CAN",
-                          date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+                makeMatch(id: 4, home: "MEX", away: "CAN", date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
             ]
         )
         let apiClient = MockWorldCupAPIClient(
@@ -560,10 +556,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             previous: nil,
             current: nil,
             next: [
-                makeMatch(id: 1, home: "ARG", away: "ENG", date: "2026-06-30T18:00:00+00:00",
-                          stage: .roundOf16),
-                makeMatch(id: 2, home: "FRA", away: "GER", date: "2026-07-04T18:00:00+00:00",
-                          stage: .quarterFinals)
+                makeMatch(id: 1, home: "ARG", away: "ENG", date: "2026-06-30T18:00:00+00:00", stage: .roundOf16),
+                makeMatch(id: 2, home: "FRA", away: "GER", date: "2026-07-04T18:00:00+00:00", stage: .quarterFinals)
             ]
         )
         let apiClient = MockWorldCupAPIClient(

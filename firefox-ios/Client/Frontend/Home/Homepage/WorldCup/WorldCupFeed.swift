@@ -186,9 +186,11 @@ final class WorldCupFeed {
                             defaultMatchIndex: perStage.defaultIndex,
                             apiError: nil)
         }
-        let flattened = WorldCupMatches.flattened(response: response,
-                                                   liveIDs: cachedLiveIDs,
-                                                   now: now)
+        let flattened = WorldCupMatches.flattened(
+            response: response,
+            liveIDs: cachedLiveIDs,
+            now: now
+        )
         return Snapshot(matches: flattened.cards,
                         defaultMatchIndex: flattened.defaultIndex,
                         apiError: nil)
