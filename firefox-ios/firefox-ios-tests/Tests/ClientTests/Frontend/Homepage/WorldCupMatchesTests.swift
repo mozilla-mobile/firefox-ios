@@ -516,11 +516,10 @@ struct WorldCupMatchesTests {
     }
 
     @Test
-    func test_flattened_knockoutStage_collapsesAllMatchesIntoOneCard_acrossDays() {
-        // QF runs across two days in the real bracket. The flattened view
-        // should collapse all 4 QF matches onto a single "Quarter-Finals"
-        // card instead of splitting by day, so the user doesn't see "2 of
-        // 4 quarter-finals" on each of two cards.
+    func test_flattened_knockoutStage_splitsAcrossDaysWithStageInTitle() {
+        // QF runs across two days in the real bracket. Each day gets its own
+        // card titled with the stage; the date is carried in `dateLabel`
+        // (the UI renders them together, e.g. "QUARTER-FINALS · Jul 10").
         let response = WorldCupMatchesResponse(
             previous: nil,
             current: nil,
@@ -538,27 +537,73 @@ struct WorldCupMatchesTests {
             calendar: utcCalendar()
         )
 
-        #expect(result.cards.count == 1)
-        #expect(result.cards[0].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel)
-        // All four matches live on the one card. Date label is nil
-        // because the matches span two days.
-        #expect(result.cards[0].upcomingMatches.count == 4)
-        #expect(result.cards[0].dateLabel == nil)
+        #expect(result.cards.count == 2)
+        #expect(result.cards.map(\.phaseTitle) == [
+            String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel,
+            String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel
+        ])
+        // Each day's QF card carries that day's date in `dateLabel`.
+        #expect(result.cards[0].dateLabel != nil)
+        #expect(result.cards[1].dateLabel != nil)
+        #expect(result.cards[0].dateLabel != result.cards[1].dateLabel)
+        #expect(result.cards[0].upcomingMatches.count == 2)
+        #expect(result.cards[1].upcomingMatches.count == 2)
     }
 
     @Test
-    func test_flattened_separatesKnockoutStagesIntoOneCardEach() {
-        // Multi-stage scenario: R16 + QF + SF + Final all in the response.
-        // Each stage becomes its own card, ordered by tournament progression.
+    func test_flattened_transitionDay_splitsGroupAndKnockoutIntoSeparateCards() {
+        // Real-bracket scenario: Jun 28 holds the last group games in the
+        // morning UTC (COL-PRT 01:30, CDR-UZB 01:30, ALG-AUT 04:00,
+        // JOR-ARG 04:00) and the first R32 fixtures in the afternoon
+        // (CZE-TBD 15:00, CAN-TBD 18:00, MAR-TBD 21:00). A single
+        // "Group Stage · Jun 28" card containing the R32 fixtures (because
+        // group is the dominant count) is wrong — those R32 entries must
+        // surface under their own "Round of 32 · Jun 28" card.
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "COL", away: "PRT", date: "2026-06-28T01:30:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CDR", away: "UZB", date: "2026-06-28T01:30:00+00:00", stage: .groupStage),
+                makeMatch(id: 3, home: "ALG", away: "AUT", date: "2026-06-28T04:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 4, home: "JOR", away: "ARG", date: "2026-06-28T04:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 5, home: "CZE", away: nil, date: "2026-06-28T15:00:00+00:00", stage: .roundOf32),
+                makeMatch(id: 6, home: "CAN", away: nil, date: "2026-06-28T18:00:00+00:00", stage: .roundOf32),
+                makeMatch(id: 7, home: "MAR", away: nil, date: "2026-06-28T21:00:00+00:00", stage: .roundOf32)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-28T00:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        // Two cards for Jun 28: one Group Stage (4 matches), one
+        // Round of 32 (3 matches), in that order (morning before afternoon).
+        #expect(result.cards.count == 2)
+        #expect(result.cards[0].phaseTitle == String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel)
+        #expect(result.cards[0].upcomingMatches.count == 4)
+        #expect(result.cards[1].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
+        #expect(result.cards[1].upcomingMatches.count == 3)
+        // Both cards carry the Jun 28 dateLabel.
+        #expect(result.cards[0].dateLabel != nil)
+        #expect(result.cards[0].dateLabel == result.cards[1].dateLabel)
+    }
+
+    @Test
+    func test_flattened_perDayTitle_reflectsThatDaysStage() {
+        // Multi-stage scenario: each day's card is titled by that day's
+        // dominant stage. With one match per day, the dominant stage is
+        // simply that match's stage.
         let response = WorldCupMatchesResponse(
             previous: nil,
             current: nil,
             next: [
                 makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-07-04T18:00:00+00:00", stage: .roundOf16),
-                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-07-05T18:00:00+00:00", stage: .roundOf16),
-                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-07-09T18:00:00+00:00", stage: .quarterFinals),
-                makeMatch(id: 4, home: "ESP", away: "ITA", date: "2026-07-14T18:00:00+00:00", stage: .semiFinals),
-                makeMatch(id: 5, home: "NLD", away: "JPN", date: "2026-07-19T18:00:00+00:00", stage: .final)
+                makeMatch(id: 2, home: "FRA", away: "GER", date: "2026-07-09T18:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 3, home: "ESP", away: "ITA", date: "2026-07-14T18:00:00+00:00", stage: .semiFinals),
+                makeMatch(id: 4, home: "NLD", away: "JPN", date: "2026-07-19T18:00:00+00:00", stage: .final)
             ]
         )
 
@@ -575,7 +620,8 @@ struct WorldCupMatchesTests {
             String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel,
             String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
         ])
-        #expect(result.cards[0].upcomingMatches.count == 2)
+        // Every card carries the day's date label.
+        #expect(result.cards.allSatisfy { $0.dateLabel != nil })
     }
 
     @Test
