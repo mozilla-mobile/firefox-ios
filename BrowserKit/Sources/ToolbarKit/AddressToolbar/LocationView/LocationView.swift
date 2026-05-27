@@ -454,6 +454,9 @@ final class LocationView: UIView,
                 let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
                     .translatedBy(x: 0, y: yOffset)
                 self.transform = scaledTransformation
+            }, completion: { [unowned self] _ in
+                urlTextField.isUserInteractionEnabled = false
+                isUserInteractionEnabled = false
             })
     }
 
@@ -464,6 +467,9 @@ final class LocationView: UIView,
             options: [.curveEaseInOut],
             animations: { [unowned self] in
                 transform = .identity
+            }, completion: { [unowned self] _ in
+                urlTextField.isUserInteractionEnabled = true
+                isUserInteractionEnabled = true
             })
     }
 
