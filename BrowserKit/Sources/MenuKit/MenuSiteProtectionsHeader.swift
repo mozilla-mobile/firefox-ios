@@ -53,15 +53,10 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
     private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
-        #if canImport(FoundationModels)
         if #unavailable(iOS 26.0) {
             let imageName = StandardImageIdentifiers.Medium.cross
             button.setImage(UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate) ?? UIImage(), for: .normal)
         }
-        #else
-        let imageName = StandardImageIdentifiers.Medium.cross
-        button.setImage(UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate) ?? UIImage(), for: .normal)
-        #endif
     }
 
     private lazy var siteProtectionsContent: UIStackView = .build { [weak self] stack in
@@ -213,13 +208,9 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
         closeButton.tintColor = theme.colors.iconSecondary
-        #if canImport(FoundationModels)
         if #unavailable(iOS 26.0) {
             closeButton.backgroundColor = theme.colors.actionCloseButton.withAlphaComponent(mainMenuHelper.backgroundAlpha())
         }
-        #else
-        closeButton.backgroundColor = theme.colors.actionCloseButton.withAlphaComponent(mainMenuHelper.backgroundAlpha())
-        #endif
         siteProtectionsLabel.textColor = theme.colors.textSecondary
         siteProtectionsContent.layer.borderColor = theme.colors.actionSecondaryHover.cgColor
         if #available(iOS 26.0, *) {

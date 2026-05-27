@@ -143,19 +143,12 @@ public final class NavigationHeaderView: UIView {
     // MARK: ThemeApplicable
     public func applyTheme(theme: Theme) {
         closeButton.tintColor = theme.colors.iconSecondary
-        #if canImport(FoundationModels)
         if #unavailable(iOS 26.0) {
             let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
                 .withTintColor(theme.colors.iconSecondary)
             closeButton.setImage(buttonImage, for: .normal)
             closeButton.backgroundColor = theme.colors.layer2
         }
-        #else
-        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .withTintColor(theme.colors.iconSecondary)
-        closeButton.setImage(buttonImage, for: .normal)
-        closeButton.backgroundColor = theme.colors.layer2
-        #endif
         backButton.tintColor = theme.colors.iconAccent
         backButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary

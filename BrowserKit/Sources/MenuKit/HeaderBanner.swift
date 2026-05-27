@@ -64,13 +64,9 @@ public final class HeaderBanner: UIView, ThemeApplicable {
 
     private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
-        #if canImport(FoundationModels)
         if #unavailable(iOS 26.0) {
             button.setImage(UIImage(named: UX.crossLarge)?.withRenderingMode(.alwaysTemplate), for: .normal)
         }
-        #else
-        button.setImage(UIImage(named: UX.crossLarge)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        #endif
     }
 
     init() {
@@ -155,12 +151,8 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
         closeButton.tintColor = theme.colors.iconSecondary
-        #if canImport(FoundationModels)
         if #unavailable(iOS 26.0) {
             closeButton.backgroundColor = .clear
         }
-        #else
-        closeButton.backgroundColor = .clear
-        #endif
     }
 }

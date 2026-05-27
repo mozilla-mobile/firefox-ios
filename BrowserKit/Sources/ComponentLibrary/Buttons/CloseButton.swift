@@ -32,7 +32,6 @@ public class CloseButton: UIButton,
         adjustsImageSizeForAccessibilityContentSizeCategory = true
         setupConstraints()
 
-        #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
             var glassConfiguration = UIButton.Configuration.glass()
             glassConfiguration.image = UIImage(named: UX.glassCrossImage)?.withRenderingMode(.alwaysTemplate)
@@ -40,9 +39,6 @@ public class CloseButton: UIButton,
         } else {
             setImage(UIImage(named: UX.legacyCrossCircleImage), for: .normal)
         }
-        #else
-        setImage(UIImage(named: UX.legacyCrossCircleImage), for: .normal)
-        #endif
     }
 
     required init?(coder aDecoder: NSCoder) {
