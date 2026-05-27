@@ -89,15 +89,15 @@ enum ConversionEvent {
         case .firstAdClick:
             return .init(fine: 35, coarse: .medium, lockWindow: false)
         case .thirdActivityFirstWeek:
-            return .init(fine: 0, coarse: .medium, lockWindow: false)
+            return .init(fine: 15, coarse: .medium, lockWindow: false)
         case .activeLastThreeWeek1:
-            return .init(fine: 0, coarse: .medium, lockWindow: false)
+            return .init(fine: 20, coarse: .medium, lockWindow: false)
         case .activeTwoOfFourAndThreeWeek1:
-            return .init(fine: 0, coarse: .medium, lockWindow: false)
+            return .init(fine: 30, coarse: .medium, lockWindow: false)
         case .activated:
-            return .init(fine: 0, coarse: .high, lockWindow: false)
+            return .init(fine: 45, coarse: .high, lockWindow: false)
         case .dailyActiveWeek1DefaultFirst4:
-            return .init(fine: 0, coarse: .high, lockWindow: false)
+            return .init(fine: 55, coarse: .high, lockWindow: false)
         case .setAsDefault:
             return .init(fine: 60, coarse: .high, lockWindow: true)
         }
