@@ -644,6 +644,25 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen.assertWebViewLinkTextExists(text: "Legal")
     }
 
+    func testLongTapFirefoxIconAppIcon() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        waitForTabsButton()
+        springBoardScreen.pressHomeButton()
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
+        springBoardScreen.assertAppIconButtonExists()
+        springBoardScreen.tapAppIconButton()
+        mozWaitForElementToExist(app.navigationBars["App Icon"])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/edit/3408300
     func testLongTapFirefoxIconOpenLastBookmark() throws {
         guard #available(iOS 18, *) else {

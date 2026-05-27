@@ -10,6 +10,7 @@ protocol SpringboardSelectorsSet {
     var NEW_TAB_BUTTON: Selector { get }
     var NEW_PRIVATE_TAB_BUTTON: Selector { get }
     var OPEN_LAST_BOOKMARK_BUTTON: Selector { get }
+    var APP_ICON_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -20,6 +21,7 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         static let newTabButton = "New Tab"
         static let newPrivateTabButton = "New Private Tab"
         static let openLastBookmarkButton = "org.mozilla.ios.Fennec.OpenLastBookmark"
+        static let appIconButton = "App Icon"
     }
 
     let FENNEC_ICONS = Selector(
@@ -58,13 +60,20 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         groups: ["springboard", "context-menu"]
     )
 
+    let APP_ICON_BUTTON = Selector.buttonId(
+        IDs.appIconButton,
+        description: "App Icon button in springboard context menu",
+        groups: ["springboard", "context-menu"]
+    )
+
     var all: [Selector] {
         [
             FENNEC_ICONS,
             FIREFOX_ICON,
             NEW_TAB_BUTTON,
             NEW_PRIVATE_TAB_BUTTON,
-            OPEN_LAST_BOOKMARK_BUTTON
+            OPEN_LAST_BOOKMARK_BUTTON,
+            APP_ICON_BUTTON
         ]
     }
 }
