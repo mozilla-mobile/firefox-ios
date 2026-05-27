@@ -47,7 +47,7 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
-            
+
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature()
 

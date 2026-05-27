@@ -324,12 +324,12 @@ final class URLExtensionTests: XCTestCase {
         let url = URL(string: "http://localhost:\(webServerPort)/reader-mode/page")!
         XCTAssertTrue(url.isReaderModeURL)
     }
-    
+
     func testIsReaderModeURLGivenCustomSchemeURLThenTrue() {
         let url = URL(string: "readermode://app/page")!
         XCTAssertTrue(url.isReaderModeURL)
     }
-    
+
     func testIsReaderModeURLGivenCustomSchemeWrongHostThenFalse() {
         let url = URL(string: "readermode://other/page")!
         XCTAssertFalse(url.isReaderModeURL)
