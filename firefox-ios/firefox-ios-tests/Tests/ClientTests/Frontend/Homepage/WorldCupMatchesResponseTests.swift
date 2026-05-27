@@ -127,6 +127,51 @@ struct WorldCupMatchesResponseTests {
     }
 
     @Test
+    func test_decodesStageValues_intoTypedEnumCases() throws {
+        let mappings: [(String, WorldCupMatchesResponse.Match.Stage)] = [
+            ("Group Stage", .groupStage),
+            ("Round of 32", .roundOf32),
+            ("Round of 16", .roundOf16),
+            ("Quarter-finals", .quarterFinals),
+            ("Semi-finals", .semiFinals),
+            ("3rd Place", .thirdPlace),
+            ("Final", .final)
+        ]
+        for (raw, expected) in mappings {
+            let response = try decode(stageJSON(raw: "\"\(raw)\""))
+            #expect(response.current?.first?.stage == expected)
+        }
+    }
+
+    @Test
+    func test_decodesUnknownStage_intoUnknownCase_preservingRawValue() throws {
+        let response = try decode(stageJSON(raw: "\"Galactic Quarterfinals\""))
+        #expect(response.current?.first?.stage == .unknown("Galactic Quarterfinals"))
+    }
+
+    @Test
+    func test_decodesNullStage_asNil() throws {
+        let response = try decode(stageJSON(raw: "null"))
+        #expect(response.current?.first?.stage == nil)
+    }
+
+    private func stageJSON(raw: String) -> String {
+        """
+        {
+          "current": [{
+            "date": "2026-04-30T14:00:00+00:00",
+            "global_event_id": 1,
+            "home_team": { "key": "ENG", "name": "England", "icon_url": null,
+                           "group": "Group C", "eliminated": false },
+            "away_team": { "key": "USA", "name": "USA", "icon_url": null,
+                           "group": "Group C", "eliminated": false },
+            "stage": \(raw)
+          }]
+        }
+        """
+    }
+
+    @Test
     func test_decodesEmptyTopLevelObject() throws {
         let response = try decode("{}")
         #expect(response.previous == nil)
@@ -160,6 +205,61 @@ struct WorldCupMatchesResponseTests {
         let responseA = WorldCupMatchesResponse(previous: nil, current: nil, next: nil)
         let responseB = WorldCupMatchesResponse(previous: nil, current: [], next: nil)
         #expect(responseA != responseB)
+    }
+
+    @Test
+    func test_filteredToTeam_keepsOnlyMatchesInvolvingTeam_inEachBucket() {
+        let team = WorldCupMatchesResponse.Team(
+            key: "BRA", name: "Brazil", iconUrl: nil, group: "Group A", eliminated: false
+        )
+        let other = WorldCupMatchesResponse.Team(
+            key: "ENG", name: "England", iconUrl: nil, group: "Group C", eliminated: false
+        )
+        let third = WorldCupMatchesResponse.Team(
+            key: "ARG", name: "Argentina", iconUrl: nil, group: "Group A", eliminated: false
+        )
+
+        func match(_ id: Int, home: WorldCupMatchesResponse.Team, away: WorldCupMatchesResponse.Team)
+        -> WorldCupMatchesResponse.Match {
+            WorldCupMatchesResponse.Match(
+                date: "2026-06-12T18:00:00+00:00",
+                globalEventId: id,
+                homeTeam: home,
+                awayTeam: away
+            )
+        }
+
+        let response = WorldCupMatchesResponse(
+            previous: [match(1, home: team, away: other), match(2, home: other, away: third)],
+            current: [match(3, home: third, away: team)],
+            next: [match(4, home: other, away: third)]
+        )
+
+        let filtered = response.filtered(toTeam: "BRA")
+
+        #expect(filtered.previous?.map(\.globalEventId) == [1])
+        #expect(filtered.current?.map(\.globalEventId) == [3])
+        #expect(filtered.next?.isEmpty == true)
+    }
+
+    @Test
+    func test_filteredToTeam_preservesNowField() {
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-12T12:00:00Z",
+            previous: nil,
+            current: nil,
+            next: nil
+        )
+        #expect(response.filtered(toTeam: "BRA").now == "2026-06-12T12:00:00Z")
+    }
+
+    @Test
+    func test_filteredToTeam_nilBuckets_stayNil() {
+        let response = WorldCupMatchesResponse(previous: nil, current: nil, next: nil)
+        let filtered = response.filtered(toTeam: "BRA")
+        #expect(filtered.previous == nil)
+        #expect(filtered.current == nil)
+        #expect(filtered.next == nil)
     }
 
     @Test

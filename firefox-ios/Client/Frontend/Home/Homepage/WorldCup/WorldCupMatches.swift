@@ -87,13 +87,58 @@ struct WorldCupMatches: Equatable, Hashable {
         self.upcomingMatches = upcoming.map { WorldCupMatch($0, localeProvider: localeProvider) }
     }
 
-    /// Multi-card view used when no team is selected: groups every match in
-    /// the response by calendar day (in `calendar`'s timezone) so each card
-    /// holds all matches on the same date. Each day's matches render in the
-    /// compact `upcomingMatches` row — `featuredMatch` is left empty so a
-    /// crowded day doesn't blow the card up vertically. Cards are ordered
-    /// chronologically (earliest day first); `defaultIndex` is the page the
-    /// swipe view should land on first, with page 0 reserved for the timer.
+    /// Single-team multi-card view: one card per stage the team is in (group history + one per knockout
+    /// round). Each card built by `WorldCupMatches.init`; `defaultIndex` lands on the latest stage.
+    static func perStage(
+        response: WorldCupMatchesResponse,
+        liveIDs: Set<Int> = [],
+        now: Date = Date(),
+        calendar: Calendar = .current,
+        localeProvider: LocaleProvider = SystemLocaleProvider()
+    ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
+        let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        let dated: [(date: Date, match: WorldCupMatchesResponse.Match)] = allMatches.compactMap { match in
+            WorldCupMatch.parseDate(match.date).map { ($0, match) }
+        }
+        guard !dated.isEmpty else {
+            let empty = WorldCupMatches(
+                response: response,
+                liveIDs: liveIDs,
+                now: now,
+                calendar: calendar,
+                localeProvider: localeProvider
+            )
+            return ([empty], 0)
+        }
+        let byStage = Dictionary(grouping: dated, by: { $0.match.stage })
+        let sortedStages = byStage.sorted { lhs, rhs in
+            let lhsDate = lhs.value.map(\.date).min() ?? .distantPast
+            let rhsDate = rhs.value.map(\.date).min() ?? .distantPast
+            return lhsDate < rhsDate
+        }
+        let cards = sortedStages.map { _, entries -> WorldCupMatches in
+            // Each stage's matches are fed back through `init` as a fresh
+            // response. Bucket placement (previous/current/next) doesn't
+            // matter — `init` re-buckets by date against `now`.
+            let stageResponse = WorldCupMatchesResponse(
+                now: response.now,
+                previous: nil,
+                current: nil,
+                next: entries.map(\.match)
+            )
+            return WorldCupMatches(
+                response: stageResponse,
+                liveIDs: liveIDs,
+                now: now,
+                calendar: calendar,
+                localeProvider: localeProvider
+            )
+        }
+        return (cards, max(cards.count - 1, 0))
+    }
+
+    /// No-team / eliminated-team multi-card view: group-stage matches go to per-day cards
+    /// (M2 behavior); knockout matches collapse into one card per round.
     static func flattened(
         response: WorldCupMatchesResponse,
         liveIDs: Set<Int> = [],
@@ -101,25 +146,75 @@ struct WorldCupMatches: Equatable, Hashable {
         calendar: Calendar = .current,
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
-        let allMatches = ((response.previous ?? []) + (response.current ?? []) + (response.next ?? []))
-            .filter { $0.stage == "Group Stage" }
-        let groups = groupedByDay(allMatches, calendar: calendar)
-        let title = String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
-        let cards = groups.map { group -> WorldCupMatches in
-            let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
-            let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
-            return WorldCupMatches(
-                phaseTitle: title,
-                // Day shown once at top; rows render time-only.
-                dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
-                isLive: !liveMatches.isEmpty,
-                featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
-                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
-            )
+        let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        let (groupMatches, knockoutByStage) = partition(allMatches)
+
+        // Group stage: per-day cards. Title comes from the day's dominant
+        // stage so unknown/nil-stage entries (the fallback bucket) read as
+        // "Upcoming" rather than mis-labeling them "Group Stage".
+        let groupCards = groupedByDay(groupMatches, calendar: calendar).map { group -> WorldCupMatches in
+            let stageCounts = Dictionary(grouping: group.matches.compactMap(\.stage), by: { $0 })
+                .mapValues(\.count)
+            let dominantStage = stageCounts.max(by: { $0.value < $1.value })?.key
+            return buildCard(matches: group.matches,
+                             phaseTitle: label(for: dominantStage),
+                             dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
+                             liveIDs: liveIDs,
+                             localeProvider: localeProvider)
         }
-        // The timer view always sits at page 0 when there's no selected team,
-        // and that's where the swipe view should land first.
-        return (cards, 0)
+
+        // Knockouts: per-stage cards in tournament order. Stages with no
+        // matches in the response are skipped.
+        let stageOrder: [WorldCupMatchesResponse.Match.Stage] = [
+            .roundOf32, .roundOf16, .quarterFinals, .semiFinals, .thirdPlace, .final
+        ]
+        let knockoutCards = stageOrder.compactMap { stage -> WorldCupMatches? in
+            guard let matches = knockoutByStage[stage], !matches.isEmpty else { return nil }
+            return buildCard(matches: matches,
+                             phaseTitle: label(for: stage),
+                             dateLabel: nil,
+                             liveIDs: liveIDs,
+                             localeProvider: localeProvider)
+        }
+
+        return (groupCards + knockoutCards, 0)
+    }
+
+    /// Splits matches into group-stage entries and knockout entries
+    /// keyed by stage.
+    private static func partition(
+        _ matches: [WorldCupMatchesResponse.Match]
+    ) -> (group: [WorldCupMatchesResponse.Match],
+          knockoutByStage: [WorldCupMatchesResponse.Match.Stage: [WorldCupMatchesResponse.Match]]) {
+        var group: [WorldCupMatchesResponse.Match] = []
+        var knockout: [WorldCupMatchesResponse.Match.Stage: [WorldCupMatchesResponse.Match]] = [:]
+        for match in matches {
+            switch match.stage {
+            case .roundOf32, .roundOf16, .quarterFinals, .semiFinals, .thirdPlace, .final:
+                knockout[match.stage!, default: []].append(match)
+            case .groupStage, .unknown, .none:
+                group.append(match)
+            }
+        }
+        return (group, knockout)
+    }
+
+    private static func buildCard(
+        matches: [WorldCupMatchesResponse.Match],
+        phaseTitle: String,
+        dateLabel: String?,
+        liveIDs: Set<Int>,
+        localeProvider: LocaleProvider
+    ) -> WorldCupMatches {
+        let liveMatches = matches.filter { liveIDs.contains($0.globalEventId) }
+        let nonLive = matches.filter { !liveIDs.contains($0.globalEventId) }
+        return WorldCupMatches(
+            phaseTitle: phaseTitle,
+            dateLabel: dateLabel,
+            isLive: !liveMatches.isEmpty,
+            featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
+            upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
+        )
     }
 
     private static func dayLabel(for day: Date, locale: Locale) -> String {
@@ -131,32 +226,32 @@ struct WorldCupMatches: Equatable, Hashable {
 
     /// Maps a featured match to a localized phase label. For group-stage
     /// matches we surface the group letter (e.g. "Group A") since both teams
-    /// in a group-stage fixture share a group. For knockout matches we use
-    /// the round label. Unknown or absent stages fall back to the generic
-    /// "Upcoming" label so a new merino stage string doesn't blank the title.
+    /// in a group-stage fixture share a group; for everything else we
+    /// delegate to the stage-only `label(for:)`. A nil match falls back to
+    /// the generic group-stage label so an empty featured slot doesn't
+    /// blank the title.
     static func phaseTitle(from match: WorldCupMatchesResponse.Match?) -> String {
         guard let match else {
             return String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
         }
-        switch match.stage {
-        case "Group Stage":
+        if case .groupStage = match.stage {
             let group = match.homeTeam?.group ?? match.awayTeam?.group
             return Self.groupLabel(for: group)
                 ?? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
-        case "Round of 32":
-            return String.WorldCup.HomepageWidget.RoundPhase.Round32Label
-        case "Round of 16":
-            return String.WorldCup.HomepageWidget.RoundPhase.Round16Label
-        case "Quarterfinals":
-            return String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel
-        case "Semifinals":
-            return String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel
-        case "Third Place":
-            return String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
-        case "Final":
-            return String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
-        default:
-            return String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
+        }
+        return label(for: match.stage)
+    }
+
+    private static func label(for stage: WorldCupMatchesResponse.Match.Stage?) -> String {
+        switch stage {
+        case .groupStage: return String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        case .roundOf32: return String.WorldCup.HomepageWidget.RoundPhase.Round32Label
+        case .roundOf16: return String.WorldCup.HomepageWidget.RoundPhase.Round16Label
+        case .quarterFinals: return String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel
+        case .semiFinals: return String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel
+        case .thirdPlace: return String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
+        case .final: return String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
+        case .unknown, .none: return String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
         }
     }
 
