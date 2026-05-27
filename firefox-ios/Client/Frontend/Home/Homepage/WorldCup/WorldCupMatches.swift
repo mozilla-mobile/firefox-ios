@@ -11,6 +11,17 @@ struct WorldCupMatches: Equatable, Hashable {
     let isLive: Bool
     let featuredMatch: [WorldCupMatch]
     let upcomingMatches: [WorldCupMatch]
+    /// Returns the team key and the label for the winner of the Bronze Final or Final match.
+    var winnerThirdPlaceOrFinal: (teamKey: String, winnerLabel: String)? {
+        guard phaseTitle == .WorldCup.HomepageWidget.RoundPhase.FinalLabel ||
+                phaseTitle == .WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel else { return nil }
+        let winner = (featuredMatch + upcomingMatches).compactMap { $0.winnerKey }.first
+        let label: String = phaseTitle == .WorldCup.HomepageWidget.RoundPhase.FinalLabel ?
+            .WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel :
+            .WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
+        guard let winner else { return nil }
+        return (winner, label)
+    }
 
     init(phaseTitle: String,
          dateLabel: String? = nil,
@@ -249,7 +260,7 @@ struct WorldCupMatches: Equatable, Hashable {
         case .roundOf16: return String.WorldCup.HomepageWidget.RoundPhase.Round16Label
         case .quarterFinals: return String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel
         case .semiFinals: return String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel
-        case .thirdPlace: return String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
+        case .thirdPlace: return String.WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel
         case .final: return String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
         case .unknown, .none: return String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
         }

@@ -190,21 +190,9 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         liveLabelContainer.isHidden = !model.isLive
     }
 
-    func finalThirdFinalWinner() -> (fifaKey: String, phaseTitle: String)? {
+    func getWinnerThirdPlaceOrFinal() -> (teamKey: String, winnerLabel: String)? {
         guard let model else { return nil }
-        let finalPhase = String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
-        let winnerKey: String? = model.featuredMatch.compactMap { match in
-            return match.winnerKey
-        }.first
-        guard let winnerKey else { return nil }
-        if model.phaseTitle == finalPhase {
-            return (winnerKey, finalPhase)
-        }
-        let thirdPlace = String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
-        if model.phaseTitle == thirdPlace {
-            return (winnerKey, thirdPlace)
-        }
-        return nil
+        return model.winnerThirdPlaceOrFinal
     }
 
     private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {

@@ -10,7 +10,7 @@ import UIKit
 /// won. Holds the celebration artwork, the winning team's flag and the
 /// supporting team name and subtitle (e.g. "Third place", "World Cup
 /// Champions"). It is laid out behind `WorldCupMatchCardView` inside the cell.
-final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
+final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable, Blurrable {
     private struct UX {
         static let backgroundImageViewCornerRadius: CGFloat = 16.0
         static let flagSize = CGSize(width: 90, height: 60)
@@ -45,16 +45,14 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
-        label.numberOfLines = 1
-        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
     }
 
     private let subtitleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
-        label.numberOfLines = 1
-        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
     }
 
     private let contentBackgroundView: UIView = .build { view in
@@ -146,10 +144,19 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        contentBackgroundView.backgroundColor = theme.colors.layer5
         teamNameLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textPrimary
         flagView.layer.borderColor = theme.colors.borderSecondary.cgColor
         flagView.backgroundColor = theme.colors.borderSecondary
+        adjustBlur(theme: theme)
+    }
+    
+    func adjustBlur(theme: Theme) {
+        if shouldApplyWallpaperBlur {
+            contentBackgroundView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentBackgroundView.removeVisualEffectView()
+            contentBackgroundView.backgroundColor = theme.colors.layer5
+        }
     }
 }

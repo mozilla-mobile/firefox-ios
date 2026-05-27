@@ -188,7 +188,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         rootContainerTrailingConstraint = rootTrailingConstraint
 
         let rootBottomConstraint = rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-            .priority(.defaultHigh)
         rootContainerBottomConstraint = rootBottomConstraint
 
         NSLayoutConstraint.activate([
@@ -236,7 +235,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         // If the content view has changed width (i.e during rotation) then we need to sync the scrollView content offset
         // to the proper location, otherwise it will look of centered.
         // We get the width on the content view because the scrollView width is the same and it gets updated
-        // in delay.
+        // in delay, unless the background view is visible add an offset since the background view insets the root container.
         guard lastScrollViewWidth != contentView.frame.width else { return }
         lastScrollViewWidth = contentView.frame.width
         let offset = winnerBackgroundView.alpha == 1.0 ? UX.rootContainerWinnerViewInset * 2.0 : 0.0
@@ -360,6 +359,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
                 )
             },
             completion: { [weak self] _ in
+                if let theme = self?.theme {
+                    self?.adjustBlur(theme: theme)
+                }
                 guard let container = self?.pagesStack.arrangedSubviews[safe: page] as? PageContainer else { return }
                 UIView.animate(
                     withDuration: UX.contentFadeInDuration,
@@ -406,17 +408,19 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             + UX.rootContainerWinnerViewInset
     }
 
-    /// Queries from the current card the winner status (Only final or third place are going to be shown the winner background view)
-    /// return a tuple containing a boolean indicating whether the background view is going to be shown and a closure to apply the constraints changes
+    /// Queries from the current card the winner status
+    /// (Only final or third place are going to be shown the winner background view)
+    /// return a tuple containing a boolean indicating whether the background view
+    /// is going to be shown and a closure to apply the constraints changes
     private func getWinnerStatusForCurrentPage() -> (isShowing: Bool, applyChanges: () -> Void) {
         let current = pageControl.currentPage
         let container = pagesStack.arrangedSubviews[safe: current] as? PageContainer
         let card = container?.content as? WorldCupMatchCardView
-        let winner = card?.finalThirdFinalWinner()
+        let winner = card?.getWinnerThirdPlaceOrFinal()
         let shouldShowWinner = winner != nil
 
         if let winner {
-            winnerBackgroundView.configure(teamName: winner.fifaKey, subtitle: winner.phaseTitle)
+            winnerBackgroundView.configure(teamName: winner.teamKey, subtitle: winner.winnerLabel)
         }
     
         let applyChanges = { [weak self] in
@@ -429,8 +433,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
                 rootContainerTrailingConstraint?.constant = -UX.rootContainerWinnerViewInset
                 rootContainerBottomConstraint?.constant = -UX.rootContainerWinnerViewInset
             } else {
-                rootContainerTopConstraint = rootContainer.topAnchor
-                    .constraint(equalTo: contentView.topAnchor)
+                rootContainerTopConstraint = rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor)
                 rootContainerLeadingConstraint?.constant = 0
                 rootContainerTrailingConstraint?.constant = 0
                 rootContainerBottomConstraint?.constant = 0
@@ -450,8 +453,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     }
 
     // MARK: - ThemeApplicable
-
+    
+    var theme: Theme?
+    
     func applyTheme(theme: Theme) {
+        self.theme = theme
         contentView.backgroundColor = .clear
         pageControl.currentPageIndicatorTintColor = theme.colors.iconPrimary
         pageControl.pageIndicatorTintColor = theme.colors.iconSecondary
@@ -465,6 +471,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     // MARK: - Blurrable
 
     func adjustBlur(theme: Theme) {
+        if winnerBackgroundView.alpha == 1.0 {
+            rootContainer.removeVisualEffectView()
+            rootContainer.backgroundColor = .clear
+            return
+        }
         if shouldApplyWallpaperBlur {
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
