@@ -97,12 +97,12 @@ final class PageRoute: TinyRoute {
     // MARK: - Response builders
 
     func buildSuccessReply(url: URL, body: Data) throws -> TinyHTTPReply {
-        // Single-line CSP intentionally — HTTPURLResponse silently drops multi-line header values.
+        // Single-line CSP since HTTPURLResponse drops multi-line header values.
         let origin = "\(ReaderModeSchemeHandler.scheme)://\(ReaderModeSchemeHandler.host)"
-        let csp = "default-src 'none'; img-src *; "
+        let csp = "default-src 'none'; "
+            + "img-src *; "
             + "style-src 'unsafe-inline' \(origin); "
-            + "font-src \(origin); "
-            + "script-src 'unsafe-inline' \(origin)"
+            + "font-src \(origin)"
         guard let response = HTTPURLResponse(
             url: url,
             statusCode: 200,
