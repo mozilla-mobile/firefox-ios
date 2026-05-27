@@ -12,7 +12,7 @@ final class PageRoute: TinyRoute {
     // MARK: - Test-only
     // ReadabilityService().extract() creates a Tab, attaches a ReaderMode content script,
     // loads the URL in a hidden WKWebView, and waits for Readability.js to send a result.
-    // None of that would work in the unit test runner (no app delegate, no WindowManager).
+    // None of that would work in the unit test runner.
     // This closure lets tests provide a fake extraction result or throw a controlled error.
     typealias Extractor = @Sendable (URL, ReaderModeCache, Profile) async throws -> ReadabilityResult
 

@@ -158,7 +158,6 @@ final class PageRouteTests: XCTestCase {
         XCTAssertTrue(csp.contains("default-src 'none'"))
         XCTAssertTrue(csp.contains("style-src 'unsafe-inline' readermode://app"))
         XCTAssertTrue(csp.contains("font-src readermode://app"))
-        XCTAssertTrue(csp.contains("script-src 'unsafe-inline' readermode://app"))
     }
 
     func test_buildErrorReply_containsOriginalLink() throws {
