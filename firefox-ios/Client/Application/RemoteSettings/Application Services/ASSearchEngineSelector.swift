@@ -56,7 +56,7 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
             let remoteSettingsEnvironmentKey =
                 profile.prefs.stringForKey(PrefsKeys.RemoteSettings.remoteSettingsEnvironment) ?? ""
             let remoteSettingsEnv = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
-            let isProd = remoteSettingsEnv == .prod
+            let isProd = remoteSettingsEnv == .prod || remoteSettingsEnv == .prodV2
             if !isProd {
                 _ = try? profile.remoteSettingsService.sync()
             }
