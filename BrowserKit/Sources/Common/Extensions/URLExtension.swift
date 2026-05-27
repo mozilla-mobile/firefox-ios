@@ -322,9 +322,9 @@ extension URL {
     public var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
         // Accept both the localhost form and the new custom-scheme form
-        let isLegacy = scheme == "http" && host == "localhost" && path == "/reader-mode/page"
-        let isNewScheme = scheme == "readermode" && host == "app" && path == "/page"
-        return isLegacy || isNewScheme
+        let isLocalhost = scheme == "http" && host == "localhost" && path == "/reader-mode/page"
+        let isReadermode = scheme == "readermode" && host == "app" && path == "/page"
+        return isLocalhost || isReadermode
     }
 
     public var decodeReaderModeURL: URL? {
