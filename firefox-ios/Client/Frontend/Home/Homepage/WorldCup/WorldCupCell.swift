@@ -96,7 +96,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         static let pageControlTopPadding: CGFloat = 16.0
         static let contentConstraintsChangeAnimationDuration: TimeInterval = 0.1
         static let contentFadeInDuration: TimeInterval = 0.05
-        static let initialScrollViewHeight: CGFloat = 0
+        static let initialScrollViewHeight: CGFloat = 100
         static let animationDelay: TimeInterval = 0.0
         static let rootContainerWinnerViewInset: CGFloat = 8.0
     }
@@ -339,13 +339,14 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         let (isShowingWinnerView, applyWinnerChanges) = getWinnerStatusForCurrentPage()
         let offset = isShowingWinnerView ? UX.rootContainerWinnerViewInset * 2.0 : 0.0
         let (scrollViewHeight, contentViewHeight) = getContentsHeight(for: page, isShowingWinnerView: isShowingWinnerView)
+        applyWinnerChanges()
+        scrollViewHeightConstraint?.constant = scrollViewHeight
         UIView.animate(
             withDuration: UX.contentConstraintsChangeAnimationDuration,
             delay: UX.animationDelay,
             options: [.allowUserInteraction],
             animations: {
-                applyWinnerChanges()
-                self.scrollViewHeightConstraint?.constant = scrollViewHeight
+                self.winnerBackgroundView.alpha = isShowingWinnerView ? 1.0 : 0.0
                 self.onHeightChange?(contentViewHeight)
                 self.contentView.layoutIfNeeded()
                 self.scrollView.setContentOffset(
@@ -381,8 +382,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             return (scrollView.frame.height, contentView.frame.height)
         }
 
+        let fittingWidth = isShowingWinnerView
+            ? bounds.width - UX.rootContainerWinnerViewInset * 2
+            : bounds.width
         let scrollViewHeight = view.systemLayoutSizeFitting(
-            CGSize(width: bounds.width,
+            CGSize(width: fittingWidth,
                    height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
@@ -434,7 +438,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
                 rootContainerBottomConstraint?.constant = 0
             }
             rootContainerTopConstraint?.isActive = true
-            winnerBackgroundView.alpha = shouldShowWinner ? 1.0 : 0.0
         }
 
         return (shouldShowWinner, applyChanges)
