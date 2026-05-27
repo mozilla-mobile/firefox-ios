@@ -151,11 +151,6 @@ final class WorldCupFeed {
         emit(buildSnapshot(from: last))
     }
 
-    /// `/teams` failure is swallowed: matches data is the primary view and
-    /// the optimistic default ("team not yet known → not eliminated") keeps
-    /// the single-team card rendering. On success we re-emit only when the
-    /// roster's effect on the selected team's elimination state actually
-    /// flipped — that's the only thing the snapshot branches on.
     private func handleTeamsResult(_ result: Result<WorldCupTeamsResponse?, WorldCupLoadError>) {
         guard case .success(let response) = result, let response else { return }
         let wasEliminated = isSelectedTeamEliminated(in: cachedTeamsResponse)
@@ -180,14 +175,6 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
-        // Two routes depending on team selection and elimination:
-        //
-        // - Team picked AND still alive → `perStage`: one card per stage
-        //   (group history + one card per knockout round the team is in).
-        //   This preserves the M2 group-stage single-card layout and adds
-        //   per-knockout-round cards on top.
-        // - Team eliminated, or no team picked → `flattened`: per-day cards
-        //   across every team's matches, same as M2's no-team path.
         if let team = selectedTeamProvider(),
            !isSelectedTeamEliminated(in: cachedTeamsResponse) {
             let perStage = WorldCupMatches.perStage(
@@ -208,10 +195,7 @@ final class WorldCupFeed {
     }
 
     /// True when a team is selected AND that team appears in the roster
-    /// with `eliminated == true`. Returns `false` when no team is selected,
-    /// when the roster hasn't loaded yet, or when the selected team isn't
-    /// found — i.e. defaults optimistically to "still in" so the
-    /// single-team card renders without waiting on `/teams`.
+    /// with `eliminated == true`.
     private func isSelectedTeamEliminated(in roster: WorldCupTeamsResponse?) -> Bool {
         guard let team = selectedTeamProvider(), let roster else { return false }
         return roster.teams.first(where: { $0.key == team })?.eliminated == true

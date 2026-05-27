@@ -24,11 +24,7 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     private let liveStrategy: WorldCupFetchStrategyProtocol
     private let teamsStrategy: WorldCupFetchStrategyProtocol
     /// When true, the API client omits the `date` query parameter so the
-    /// (mock) server picks its own "today" — which is how the dev mock
-    /// advances its simulated tournament clock past the real device date.
-    /// In prod this is `false` and we pin the query date to
-    /// `queryDateFloor` so pre-tournament queries still surface the group
-    /// stage in the ±10-day merino response window.
+    /// mock server picks its own "today".
     private let usesDevServerTimeline: Bool
 
     init(config: WorldCupConfig = WorldCupAPIClient.emptyConfig,
@@ -49,11 +45,6 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     /// Convenience init that points the FFI at a custom host. Pass `nil` or
     /// an empty string to use the default merino host. Intended for local
     /// dev/beta testing against a non-production merino instance.
-    ///
-    /// `usesDevServerTimeline` is derived from the host being non-empty —
-    /// a custom host means we're talking to the dev mock, which has its
-    /// own simulated clock. Real merino (host == nil) keeps the prod
-    /// behavior of pinning the query date to `queryDateFloor`.
     convenience init(baseHost: String?,
                      matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
                      liveStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
@@ -122,11 +113,7 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
 
     private func options(forTeam team: String?) -> WorldCupOptions {
         // Dev mode: omit `date` so the mock uses its own simulated clock as
-        // "today". Pinning to a real-clock-based floor here would lock the
-        // ±10-day response window to whatever Jun 18 looks like, even when
-        // the mock's tournament timer has advanced into knockouts.
-        // Prod mode: keep the floor so pre-tournament queries still surface
-        // group-stage data inside the ±10-day window.
+        // "today".
         let date = usesDevServerTimeline
             ? nil
             : Self.queryDateFormatter.string(from: max(Date(), Self.queryDateFloor))

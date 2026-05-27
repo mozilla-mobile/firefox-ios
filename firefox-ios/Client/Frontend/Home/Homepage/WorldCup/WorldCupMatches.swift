@@ -87,26 +87,8 @@ struct WorldCupMatches: Equatable, Hashable {
         self.upcomingMatches = upcoming.map { WorldCupMatch($0, localeProvider: localeProvider) }
     }
 
-    /// M3 single-team multi-card view used when a team is picked and is
-    /// still alive in the tournament. Splits the team's matches into one
-    /// card per stage:
-    ///
-    /// - One **group-stage card** built by `WorldCupMatches.init` over all
-    ///   the team's group matches (M2 layout: hero match in the featured
-    ///   slot, the other group games in the compact row).
-    /// - One **knockout card per round** the team is in (R32, R16, …),
-    ///   each built by `WorldCupMatches.init` over that round's single
-    ///   match — same builder, so the lone match lands in the featured
-    ///   slot exactly like an M2 group card would.
-    ///
-    /// Cards are ordered chronologically by the earliest match in each
-    /// stage; `defaultIndex` points at the latest stage so the user lands
-    /// on the team's current focus (group while in groups, R32 once
-    /// drawn, etc.) and can swipe back for past-stage context.
-    ///
-    /// Returns one empty placeholder card when the response is empty
-    /// (e.g. pre-tournament, before the team's fixtures land in merino's
-    /// ±10-day window) so the homepage section still renders.
+    /// Single-team multi-card view: one card per stage the team is in (group history + one per knockout
+    /// round). Each card built by `WorldCupMatches.init`; `defaultIndex` lands on the latest stage.
     static func perStage(
         response: WorldCupMatchesResponse,
         liveIDs: Set<Int> = [],
@@ -145,23 +127,8 @@ struct WorldCupMatches: Equatable, Hashable {
         return (cards, max(cards.count - 1, 0))
     }
 
-    /// Multi-card view used for the no-team-selected and eliminated-team
-    /// paths. Hybrid grouping:
-    ///
-    /// - **Group-stage matches**: one card per calendar day (M2 behavior).
-    ///   The group stage has ~48 matches across many days, so per-day
-    ///   grouping keeps each card a reasonable size.
-    /// - **Knockout matches**: one card per stage. Each round only has
-    ///   2-4 matches, so collapsing R32/R16/QF/SF/Third/Final into a
-    ///   single card per stage matches user expectation ("show me all
-    ///   the quarter-finals on one card").
-    ///
-    /// Group-stage cards carry the day's date in `dateLabel`; knockout
-    /// cards span multiple days so `dateLabel` is left nil. `featuredMatch`
-    /// holds live matches, `upcomingMatches` holds the rest. Cards are
-    /// ordered chronologically — group days first, then knockout stages
-    /// in tournament order. `defaultIndex = 0` because the swipe view
-    /// reserves page 0 for the countdown timer in this path.
+    /// No-team / eliminated-team multi-card view: group-stage matches go to per-day cards
+    /// (M2 behavior); knockout matches collapse into one card per round.
     static func flattened(
         response: WorldCupMatchesResponse,
         liveIDs: Set<Int> = [],
@@ -204,10 +171,7 @@ struct WorldCupMatches: Equatable, Hashable {
     }
 
     /// Splits matches into group-stage entries and knockout entries
-    /// keyed by stage. Matches with nil or `.unknown(...)` stages bucket
-    /// into the group-stage list so they still surface in per-day cards
-    /// (the only reasonable fallback — we don't know which knockout
-    /// round to put them under).
+    /// keyed by stage.
     private static func partition(
         _ matches: [WorldCupMatchesResponse.Match]
     ) -> (group: [WorldCupMatchesResponse.Match],

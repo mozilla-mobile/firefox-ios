@@ -128,9 +128,6 @@ struct WorldCupMatchesResponseTests {
 
     @Test
     func test_decodesStageValues_intoTypedEnumCases() throws {
-        // Locks in the exact strings the merino /wcs endpoint emits (confirmed
-        // with the backend team). If merino renames a stage, this test breaks
-        // before the widget silently falls back to "Upcoming" in prod.
         let mappings: [(String, WorldCupMatchesResponse.Match.Stage)] = [
             ("Group Stage", .groupStage),
             ("Round of 32", .roundOf32),

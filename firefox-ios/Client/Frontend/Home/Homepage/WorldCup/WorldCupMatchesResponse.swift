@@ -106,12 +106,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             self.stage = stage
         }
 
-        /// Closed set of tournament stages emitted by merino's `stage` field.
-        /// Raw values mirror the exact strings the API returns (confirmed with
-        /// the merino team) — keep these in sync if the backend renames a
-        /// stage. Unknown strings decode into `.unknown(raw)` rather than
-        /// failing the whole response so a new merino value can't blank the
-        /// widget; the raw label is retained for logging.
+        /// Closed set of tournament stages emitted by merino's `stage` field..
         enum Stage: Decodable, Hashable, Sendable {
             case groupStage
             case roundOf32
