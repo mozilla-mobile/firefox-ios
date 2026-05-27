@@ -241,14 +241,20 @@ struct WorldCupMatches: Equatable, Hashable {
         return order.sorted().map { ($0, byDay[$0]!) }
     }
 
-    /// Returned groups are ordered by day, then by
-    /// the earliest kickoff within the day (so on a group→knockout
-    /// transition day, the morning group games come first and the
-    /// afternoon knockout fixtures come second)
+    /// Returned groups are ordered by day, then by the earliest kickoff
+    /// within the day (so on a group→knockout transition day, the morning
+    /// group games come first and the afternoon knockout fixtures come
+    /// second).
+    private struct DayStageGroup {
+        let day: Date
+        let stage: WorldCupMatchesResponse.Match.Stage?
+        let matches: [WorldCupMatchesResponse.Match]
+    }
+
     private static func groupedByDayAndStage(
         _ matches: [WorldCupMatchesResponse.Match],
         calendar: Calendar
-    ) -> [(day: Date, stage: WorldCupMatchesResponse.Match.Stage?, matches: [WorldCupMatchesResponse.Match])] {
+    ) -> [DayStageGroup] {
         struct Key: Hashable {
             let day: Date
             let stage: WorldCupMatchesResponse.Match.Stage?
@@ -268,6 +274,6 @@ struct WorldCupMatches: Equatable, Hashable {
                 let rhsFirst = byKey[rhs]?.map(\.date).min() ?? .distantPast
                 return lhsFirst < rhsFirst
             }
-            .map { ($0.day, $0.stage, byKey[$0]!.map(\.match)) }
+            .map { DayStageGroup(day: $0.day, stage: $0.stage, matches: byKey[$0]!.map(\.match)) }
     }
 }
