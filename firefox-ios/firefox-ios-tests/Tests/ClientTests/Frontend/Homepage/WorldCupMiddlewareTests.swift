@@ -485,11 +485,13 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.initialize
         )
 
-        let expectation = expectationForMatchesDispatch()
+        let matchesExpectation = expectationForMatchesDispatch()
+        let teamsExpectation = expectation(description: "loadTeams called")
+        apiClient.loadTeamsCalled = teamsExpectation
 
         subject.worldCupProvider(appState, action)
 
-        wait(for: [expectation])
+        wait(for: [matchesExpectation, teamsExpectation])
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 1)
