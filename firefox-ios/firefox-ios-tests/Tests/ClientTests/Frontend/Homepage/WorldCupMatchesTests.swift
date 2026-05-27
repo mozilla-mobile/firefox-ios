@@ -745,7 +745,7 @@ struct WorldCupMatchesTests {
             (.roundOf16, String.WorldCup.HomepageWidget.RoundPhase.Round16Label),
             (.quarterFinals, String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel),
             (.semiFinals, String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel),
-            (.thirdPlace, String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel),
+            (.thirdPlace, String.WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel),
             (.final, String.WorldCup.HomepageWidget.RoundPhase.FinalLabel)
         ]
         for (stage, expected) in mappings {
@@ -772,7 +772,112 @@ struct WorldCupMatchesTests {
                 == String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel)
     }
 
+    // MARK: - winnerThirdPlaceOrFinal
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsNil_forNonFinalPhase() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: []
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal == nil)
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsWinWorldCupLabel_forFinalPhase() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.FinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: []
+        )
+
+        let winner = model.winnerThirdPlaceOrFinal
+        #expect(winner?.teamKey == "BRA")
+        #expect(winner?.winnerLabel == String.WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel)
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsThirdPlaceLabel_forBronzeFinalPhase() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "FRA", away: "GER", winnerKey: "FRA")],
+            upcomingMatches: []
+        )
+
+        let winner = model.winnerThirdPlaceOrFinal
+        #expect(winner?.teamKey == "FRA")
+        #expect(winner?.winnerLabel == String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel)
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsNil_whenNoMatchHasAWinnerKey() {
+        // Final hasn't been played yet — neither match has a winnerKey.
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.FinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: nil)],
+            upcomingMatches: []
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal == nil)
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_pullsWinnerFromFeaturedMatchFirst() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.FinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: [makeViewMatch(home: "FRA", away: "GER", winnerKey: "FRA")]
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal?.teamKey == "BRA")
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_fallsBackToUpcomingMatch_whenFeaturedHasNoWinner() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.FinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: nil)],
+            upcomingMatches: [makeViewMatch(home: "FRA", away: "GER", winnerKey: "GER")]
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal?.teamKey == "GER")
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsNil_forGroupStagePhase() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: []
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal == nil)
+    }
+
     // MARK: - Helpers
+
+    private func makeViewMatch(home: String,
+                               away: String,
+                               winnerKey: String? = nil) -> WorldCupMatch {
+        WorldCupMatch(
+            homeFlagAssetName: home,
+            homeCode: home,
+            awayFlagAssetName: away,
+            awayCode: away,
+            date: "2026-07-19T18:00:00+00:00",
+            score: nil,
+            winnerKey: winnerKey
+        )
+    }
 
     private func makeMatch(id: Int,
                            home: String?,

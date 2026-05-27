@@ -306,6 +306,131 @@ struct WorldCupMatchesResponseTests {
         #expect(matchA != matchC)
     }
 
+    // MARK: - Match.winnerTeam
+
+    @Test
+    func test_match_winnerTeam_returnsHomeTeam_whenHomeScoreHigher() {
+        let match = makeMatch(homeKey: "BRA", awayKey: "ARG", homeScore: 2, awayScore: 1)
+        #expect(match.winnerTeam?.key == "BRA")
+    }
+
+    @Test
+    func test_match_winnerTeam_returnsAwayTeam_whenAwayScoreHigher() {
+        let match = makeMatch(homeKey: "BRA", awayKey: "ARG", homeScore: 0, awayScore: 3)
+        #expect(match.winnerTeam?.key == "ARG")
+    }
+
+    @Test
+    func test_match_winnerTeam_returnsNil_whenScoresAreEqual_andNoPenalties() {
+        let match = makeMatch(homeKey: "BRA", awayKey: "ARG", homeScore: 1, awayScore: 1)
+        #expect(match.winnerTeam == nil)
+    }
+
+    @Test
+    func test_match_winnerTeam_factorsInExtraTimeGoals() {
+        // 1-1 in regulation, but home scored an extra-time goal — home wins.
+        let match = makeMatch(
+            homeKey: "BRA",
+            awayKey: "ARG",
+            homeScore: 1,
+            awayScore: 1,
+            homeExtra: 1,
+            awayExtra: 0
+        )
+        #expect(match.winnerTeam?.key == "BRA")
+    }
+
+    @Test
+    func test_match_winnerTeam_penaltyShootoutDecidesWinner_overEqualRegulationScore() {
+        let match = makeMatch(
+            homeKey: "GER",
+            awayKey: "FRA",
+            homeScore: 1,
+            awayScore: 1,
+            homePenalty: 5,
+            awayPenalty: 4
+        )
+        #expect(match.winnerTeam?.key == "GER")
+    }
+
+    @Test
+    func test_match_winnerTeam_penaltyTakesPrecedenceOverRegulation() {
+        // Regulation 2-1 home, but the API somehow also includes penalties —
+        // shootout is authoritative.
+        let match = makeMatch(
+            homeKey: "GER",
+            awayKey: "FRA",
+            homeScore: 2,
+            awayScore: 1,
+            homePenalty: 3,
+            awayPenalty: 5
+        )
+        #expect(match.winnerTeam?.key == "FRA")
+    }
+
+    @Test
+    func test_match_winnerTeam_returnsNil_whenPenaltiesAreTied() {
+        let match = makeMatch(
+            homeKey: "GER",
+            awayKey: "FRA",
+            homeScore: 1,
+            awayScore: 1,
+            homePenalty: 4,
+            awayPenalty: 4
+        )
+        #expect(match.winnerTeam == nil)
+    }
+
+    @Test
+    func test_match_winnerTeam_returnsNil_whenScoresAreMissing() {
+        let match = makeMatch(homeKey: "BRA", awayKey: "ARG", homeScore: nil, awayScore: nil)
+        #expect(match.winnerTeam == nil)
+    }
+
+    @Test
+    func test_match_winnerTeam_returnsNil_whenHomeTeamIsMissing() {
+        let away = WorldCupMatchesResponse.Team(
+            key: "ARG", name: "Argentina", iconUrl: nil, group: nil, eliminated: false
+        )
+        let match = WorldCupMatchesResponse.Match(
+            date: "2026-07-19T18:00:00+00:00",
+            globalEventId: 1,
+            homeTeam: nil,
+            awayTeam: away,
+            homeScore: 0,
+            awayScore: 2,
+            statusType: "past"
+        )
+        #expect(match.winnerTeam == nil)
+    }
+
+    private func makeMatch(homeKey: String,
+                           awayKey: String,
+                           homeScore: Int? = nil,
+                           awayScore: Int? = nil,
+                           homeExtra: Int? = nil,
+                           awayExtra: Int? = nil,
+                           homePenalty: Int? = nil,
+                           awayPenalty: Int? = nil) -> WorldCupMatchesResponse.Match {
+        WorldCupMatchesResponse.Match(
+            date: "2026-07-19T18:00:00+00:00",
+            globalEventId: 1,
+            homeTeam: WorldCupMatchesResponse.Team(
+                key: homeKey, name: homeKey, iconUrl: nil, group: nil, eliminated: false
+            ),
+            awayTeam: WorldCupMatchesResponse.Team(
+                key: awayKey, name: awayKey, iconUrl: nil, group: nil, eliminated: false
+            ),
+            homeScore: homeScore,
+            awayScore: awayScore,
+            homeExtra: homeExtra,
+            awayExtra: awayExtra,
+            homePenalty: homePenalty,
+            awayPenalty: awayPenalty,
+            statusType: "past"
+        )
+    }
+
     private func decode(_ json: String) throws -> WorldCupMatchesResponse {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase

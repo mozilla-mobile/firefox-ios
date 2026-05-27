@@ -18,19 +18,24 @@ struct WorldCupMatch: Equatable, Hashable {
     let awayCode: String
     let date: String
     let score: Score?
+    /// FIFA Key of the winning team for this match, or `nil` if there is no winner
+    /// (draw, in-progress, or missing teams).
+    let winnerKey: String?
 
     init(homeFlagAssetName: String,
          homeCode: String,
          awayFlagAssetName: String,
          awayCode: String,
          date: String,
-         score: Score?) {
+         score: Score?,
+         winnerKey: String? = nil) {
         self.homeFlagAssetName = homeFlagAssetName
         self.homeCode = homeCode
         self.awayFlagAssetName = awayFlagAssetName
         self.awayCode = awayCode
         self.date = date
         self.score = score
+        self.winnerKey = winnerKey
     }
 
     init(_ match: WorldCupMatchesResponse.Match,
@@ -42,6 +47,7 @@ struct WorldCupMatch: Equatable, Hashable {
         self.awayFlagAssetName = match.awayTeam?.key ?? Self.missingTeamFlagAssetPlaceholder
         self.date = Self.formattedDate(match.date, locale: localeProvider.current, timeOnly: timeOnly)
         self.score = Self.score(from: match)
+        self.winnerKey = match.winnerTeam?.key
     }
 
     static let missingTeamPlaceholder = "--"

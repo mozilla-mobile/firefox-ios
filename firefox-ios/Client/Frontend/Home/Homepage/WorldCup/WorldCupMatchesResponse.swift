@@ -106,6 +106,27 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             self.stage = stage
         }
 
+        /// The team that won this match, if a winner can be determined.
+        /// Resolves a penalty shootout first (when both penalty scores are
+        /// present), otherwise compares the regulation score plus any
+        /// extra-time goals. Returns `nil` for draws, scoreless/in-progress
+        /// matches, or matches missing either team.
+        var winnerTeam: Team? {
+            guard statusType == "past" else { return nil }
+            guard let homeTeam, let awayTeam,
+                  let homeScore, let awayScore else { return nil }
+            if let homePenalty, let awayPenalty {
+                if homePenalty > awayPenalty { return homeTeam }
+                if awayPenalty > homePenalty { return awayTeam }
+                return nil
+            }
+            let homeTotal = homeScore + (homeExtra ?? 0)
+            let awayTotal = awayScore + (awayExtra ?? 0)
+            if homeTotal > awayTotal { return homeTeam }
+            if awayTotal > homeTotal { return awayTeam }
+            return nil
+        }
+
         /// Closed set of tournament stages emitted by merino's `stage` field..
         enum Stage: Decodable, Hashable, Sendable {
             case groupStage
