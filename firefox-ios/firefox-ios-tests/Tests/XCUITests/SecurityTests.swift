@@ -42,8 +42,8 @@ class SecurityTests: BaseTestCase {
         static let fakeHomePageText = "Fake Google Homepage!"
         static let fakeContentText = "Fake Content!!"
         static let inputAppleIdText = "Please input your Apple ID here:"
-        static let usernameField = "username"
-        static let passwordField2 = "password"
+        static let usernameField = "Username:"
+        static let passwordField2 = "Password:"
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395565
