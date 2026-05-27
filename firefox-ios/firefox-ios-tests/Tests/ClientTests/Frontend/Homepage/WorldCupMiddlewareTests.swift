@@ -457,6 +457,9 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - M3 elimination branching
 
     func test_homepageInitialize_whenSelectedTeamNotEliminated_dispatchesSingleTeamCard() throws {
+        // M2-preserved behavior: when a team is picked and the only matches
+        // in the response are group-stage, perStage produces one card
+        // (the group card) with the M2 featured + upcoming-row layout.
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
@@ -465,13 +468,9 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             previous: nil,
             current: nil,
             next: [
-                // BRA fixtures across two days — would split into two cards if
-                // the snapshot were flattened, but for a non-eliminated team
-                // we collapse them into one team card via the featured/upcoming
-                // bucketing.
                 makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-12T18:00:00+00:00"),
                 makeMatch(id: 2, home: "ENG", away: "BRA", date: "2026-06-15T21:00:00+00:00"),
-                // Unrelated match — should be filtered out by `filtered(toTeam:)`.
+                // Unrelated match — dropped by `filtered(toTeam:)`.
                 makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-06-12T15:00:00+00:00")
             ]
         )
@@ -494,7 +493,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 1)
-        // FRA-vs-GER was filtered out; only the two BRA fixtures remain.
+        // Both BRA fixtures live in this group card (one in featured slot,
+        // the other in the upcoming row). FRA-GER was filtered out.
         let allShown = dispatched.matches[0].featuredMatch + dispatched.matches[0].upcomingMatches
         XCTAssertEqual(allShown.count, 2)
         XCTAssertEqual(apiClient.fetchTeamsCount, 1)
@@ -503,7 +503,55 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
-    func test_homepageInitialize_whenSelectedTeamEliminated_fallsBackToFlattenedPerDay() throws {
+    func test_homepageInitialize_whenSelectedTeamAdvancesToKnockouts_addsKnockoutCard() throws {
+        // M3 spec: once the team has a knockout fixture in the response,
+        // we get a second card for it on top of the group-history card.
+        // Default index lands on the latest stage (the R32 card).
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "CAN"
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1, home: "CAN", away: "BIH",
+                          date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "QAT",
+                          date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 3, home: "CHE", away: "CAN",
+                          date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
+            ],
+            current: nil,
+            next: [
+                makeMatch(id: 4, home: "MEX", away: "CAN",
+                          date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+            ]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: [])),
+            teamsResult: .success(makeTeamsResponse())
+        )
+        let subject = createSubject(apiClient: apiClient)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = expectationForMatchCardCount(2)
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertEqual(dispatched.matches.count, 2)
+        XCTAssertEqual(dispatched.matches[1].phaseTitle,
+                       String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
+        XCTAssertEqual(dispatched.defaultMatchIndex, 1)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_homepageInitialize_whenSelectedTeamEliminated_fallsBackToFlattenedAllTeams() throws {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true

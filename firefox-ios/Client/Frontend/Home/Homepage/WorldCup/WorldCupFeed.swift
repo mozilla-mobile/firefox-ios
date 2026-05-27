@@ -180,14 +180,28 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
+        // Two routes depending on team selection and elimination:
+        //
+        // - Team picked AND still alive → `perStage`: one card per stage
+        //   (group history + one card per knockout round the team is in).
+        //   This preserves the M2 group-stage single-card layout and adds
+        //   per-knockout-round cards on top.
+        // - Team eliminated, or no team picked → `flattened`: per-day cards
+        //   across every team's matches, same as M2's no-team path.
         if let team = selectedTeamProvider(),
            !isSelectedTeamEliminated(in: cachedTeamsResponse) {
-            let card = WorldCupMatches(response: response.filtered(toTeam: team),
-                                       liveIDs: cachedLiveIDs,
-                                       now: now)
-            return Snapshot(matches: [card], defaultMatchIndex: 0, apiError: nil)
+            let perStage = WorldCupMatches.perStage(
+                response: response.filtered(toTeam: team),
+                liveIDs: cachedLiveIDs,
+                now: now
+            )
+            return Snapshot(matches: perStage.cards,
+                            defaultMatchIndex: perStage.defaultIndex,
+                            apiError: nil)
         }
-        let flattened = WorldCupMatches.flattened(response: response, liveIDs: cachedLiveIDs, now: now)
+        let flattened = WorldCupMatches.flattened(response: response,
+                                                   liveIDs: cachedLiveIDs,
+                                                   now: now)
         return Snapshot(matches: flattened.cards,
                         defaultMatchIndex: flattened.defaultIndex,
                         apiError: nil)
