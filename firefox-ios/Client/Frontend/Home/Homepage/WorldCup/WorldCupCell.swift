@@ -94,17 +94,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         static let padding: CGFloat = 16
         static let pageControlHeight: CGFloat = 6.0
         static let pageControlTopPadding: CGFloat = 16.0
-        static let heightChangeAnimationDuration: TimeInterval = 0.1
+        static let contentConstraintsChangeAnimationDuration: TimeInterval = 0.1
         static let contentFadeInDuration: TimeInterval = 0.05
         static let initialScrollViewHeight: CGFloat = 0
         static let animationDelay: TimeInterval = 0.0
-        /// Vertical offset between the celebration backdrop and the white match
-        /// card, so the winner flag can sit half above / half over the card.
-        static let winnerTopInset: CGFloat = 47
         static let rootContainerWinnerViewInset: CGFloat = 8.0
-        static let winnerFadeDuration: TimeInterval = 0.3
-        static let winnerHiddenAlpha: CGFloat = 0.0
-        static let winnerVisibleAlpha: CGFloat = 1.0
     }
 
     // MARK: - UI Elements
@@ -152,6 +146,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var currentState: WorldCupSectionState?
     private var onHeightChange: ((CGFloat) -> Void)?
     private var lastScrollViewWidth: CGFloat = 0
+    private var theme: Theme?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -345,7 +340,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         let offset = isShowingWinnerView ? UX.rootContainerWinnerViewInset * 2.0 : 0.0
         let (scrollViewHeight, contentViewHeight) = getContentsHeight(for: page, isShowingWinnerView: isShowingWinnerView)
         UIView.animate(
-            withDuration: UX.heightChangeAnimationDuration,
+            withDuration: UX.contentConstraintsChangeAnimationDuration,
             delay: UX.animationDelay,
             options: [.allowUserInteraction],
             animations: {
@@ -453,8 +448,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     }
 
     // MARK: - ThemeApplicable
-    
-    var theme: Theme?
     
     func applyTheme(theme: Theme) {
         self.theme = theme

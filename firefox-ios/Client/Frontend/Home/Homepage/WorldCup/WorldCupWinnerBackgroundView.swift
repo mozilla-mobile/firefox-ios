@@ -16,10 +16,12 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable, Blurrable {
         static let flagSize = CGSize(width: 90, height: 60)
         static let flagCornerRadius: CGFloat = 9
         static let flagBorderWidth: CGFloat = 1
-        static let flagTopPadding: CGFloat = 19
+        static let flagTopPadding: CGFloat = 60
         static let flagToTextSpacing: CGFloat = 8
         static let textSpacing: CGFloat = 4
         static let horizontalPadding: CGFloat = 16
+        static let contentBackgroundViewPadding: CGFloat = 8.0
+        static let contentBackgroundViewCornerRadius: CGFloat = 16.0
         static let backgroundImage = "winnerBackground"
     }
 
@@ -56,7 +58,7 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable, Blurrable {
     }
 
     private let contentBackgroundView: UIView = .build { view in
-        view.layer.cornerRadius = 16.0
+        view.layer.cornerRadius = UX.contentBackgroundViewCornerRadius
     }
 
     var contentViewBottomAnchor: NSLayoutYAxisAnchor {
@@ -87,9 +89,12 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable, Blurrable {
             backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             contentBackgroundView.topAnchor.constraint(equalTo: flagView.centerYAnchor),
-            contentBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
-            contentBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
-            contentBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8.0),
+            contentBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                           constant: UX.contentBackgroundViewPadding),
+            contentBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                            constant: -UX.contentBackgroundViewPadding),
+            contentBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor,
+                                                          constant: -UX.contentBackgroundViewPadding),
 
             flagView.topAnchor.constraint(equalTo: topAnchor, constant: UX.flagTopPadding),
             flagView.centerXAnchor.constraint(equalTo: centerXAnchor),
