@@ -38,9 +38,11 @@ final class WorldCupFeed {
 
     private var matchesTask: Task<Void, Never>?
     private var liveTask: Task<Void, Never>?
+    private var teamsTask: Task<Void, Never>?
 
     private var lastMatchesResponse: WorldCupMatchesResponse?
     private var cachedLiveIDs: Set<Int> = []
+    private var cachedTeamsResponse: WorldCupTeamsResponse?
     private(set) var latestSnapshot: Snapshot = .empty
 
     var onUpdate: ((Snapshot) -> Void)?
@@ -56,6 +58,7 @@ final class WorldCupFeed {
     deinit {
         matchesTask?.cancel()
         liveTask?.cancel()
+        teamsTask?.cancel()
     }
 
     /// (Re)starts the `/matches` stream. The `/live` stream is opened
@@ -65,18 +68,20 @@ final class WorldCupFeed {
         stop()
         cachedLiveIDs = []
         lastMatchesResponse = nil
-        let team = selectedTeamProvider()
-        let stream = apiClient.matchesStream(team: team)
+        cachedTeamsResponse = nil
+        let stream = apiClient.matchesStream(team: nil)
         matchesTask = Task { @MainActor [weak self] in
             for await result in stream {
                 guard let self else { break }
                 self.handleMatchesResult(result)
             }
         }
+        startTeams()
     }
 
     func stop() {
         matchesTask?.cancel(); matchesTask = nil
+        teamsTask?.cancel(); teamsTask = nil
         stopLive()
     }
 
@@ -84,13 +89,24 @@ final class WorldCupFeed {
         liveTask?.cancel(); liveTask = nil
     }
 
-    private func startLive(team: String?) {
-        let stream = apiClient.liveStream(team: team)
+    private func startLive() {
+        let stream = apiClient.liveStream(team: nil)
         liveTask = Task { @MainActor [weak self] in
             for await result in stream {
                 guard let self else { break }
                 self.handleLiveResult(result)
             }
+        }
+    }
+
+    /// One-shot `/teams` fetch. Elimination only flips after a knockout
+    /// result, so we don't need to poll: `start()` is invoked again on
+    /// foreground/retry, which refreshes the roster.
+    private func startTeams() {
+        teamsTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            let result = await self.apiClient.loadTeams(team: nil)
+            self.handleTeamsResult(result)
         }
     }
 
@@ -135,10 +151,19 @@ final class WorldCupFeed {
         emit(buildSnapshot(from: last))
     }
 
+    private func handleTeamsResult(_ result: Result<WorldCupTeamsResponse?, WorldCupLoadError>) {
+        guard case .success(let response) = result, let response else { return }
+        let wasEliminated = isSelectedTeamEliminated(in: cachedTeamsResponse)
+        cachedTeamsResponse = response
+        let nowEliminated = isSelectedTeamEliminated(in: response)
+        guard wasEliminated != nowEliminated, let last = lastMatchesResponse else { return }
+        emit(buildSnapshot(from: last))
+    }
+
     private func reconcileLivePolling(against response: WorldCupMatchesResponse) {
         let now = effectiveNow(from: response) ?? Date()
         if WorldCupPollingFetchStrategy.shouldPollLive(matches: response, now: now) {
-            if liveTask == nil { startLive(team: selectedTeamProvider()) }
+            if liveTask == nil { startLive() }
         } else {
             stopLive()
             if !cachedLiveIDs.isEmpty {
@@ -150,14 +175,32 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
-        if selectedTeamProvider() != nil {
-            let card = WorldCupMatches(response: response, liveIDs: cachedLiveIDs, now: now)
-            return Snapshot(matches: [card], defaultMatchIndex: 0, apiError: nil)
+        if let team = selectedTeamProvider(),
+           !isSelectedTeamEliminated(in: cachedTeamsResponse) {
+            let perStage = WorldCupMatches.perStage(
+                response: response.filtered(toTeam: team),
+                liveIDs: cachedLiveIDs,
+                now: now
+            )
+            return Snapshot(matches: perStage.cards,
+                            defaultMatchIndex: perStage.defaultIndex,
+                            apiError: nil)
         }
-        let flattened = WorldCupMatches.flattened(response: response, liveIDs: cachedLiveIDs, now: now)
+        let flattened = WorldCupMatches.flattened(
+            response: response,
+            liveIDs: cachedLiveIDs,
+            now: now
+        )
         return Snapshot(matches: flattened.cards,
                         defaultMatchIndex: flattened.defaultIndex,
                         apiError: nil)
+    }
+
+    /// True when a team is selected AND that team appears in the roster
+    /// with `eliminated == true`.
+    private func isSelectedTeamEliminated(in roster: WorldCupTeamsResponse?) -> Bool {
+        guard let team = selectedTeamProvider(), let roster else { return false }
+        return roster.teams.first(where: { $0.key == team })?.eliminated == true
     }
 
     /// Returns the response's `now` only when the dev pref is set and the
