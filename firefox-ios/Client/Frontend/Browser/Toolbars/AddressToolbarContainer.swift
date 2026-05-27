@@ -263,7 +263,7 @@ final class AddressToolbarContainer: UIView,
         }
 
         if leftSkeletonAddressBar.superview == nil {
-            setupBottomToolbar()
+            applyBottomLayoutConstraints()
             setupSkeletonAddressBarsLayout(isBottomSearchBar: true)
         }
 
@@ -278,7 +278,7 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.isHidden = forwardTab == nil
     }
 
-    private func setupBottomToolbar() {
+    private func applyBottomLayoutConstraints() {
         insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
         insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
 
@@ -292,7 +292,7 @@ final class AddressToolbarContainer: UIView,
         toolbarTrailingConstraint?.isActive = true
     }
 
-    private func setupTopToolbar() {
+    private func applyTopLayoutConstraints() {
         leftSkeletonAddressBar.removeFromSuperview()
         rightSkeletonAddressBar.removeFromSuperview()
 
@@ -460,9 +460,9 @@ final class AddressToolbarContainer: UIView,
     private func setupToolbarConstraints(isBottomSearchBar: Bool) {
         addSubview(toolbar)
         if toolbarHelper.isSwipingTabsEnabled && isBottomSearchBar {
-            setupBottomToolbar()
+            applyBottomLayoutConstraints()
         } else {
-            setupTopToolbar()
+            applyTopLayoutConstraints()
         }
 
         NSLayoutConstraint.activate([
