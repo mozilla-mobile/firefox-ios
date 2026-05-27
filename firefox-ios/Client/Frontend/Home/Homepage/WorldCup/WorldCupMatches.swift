@@ -137,8 +137,13 @@ struct WorldCupMatches: Equatable, Hashable {
         return (cards, max(cards.count - 1, 0))
     }
 
-    /// No-team / eliminated-team multi-card view: group-stage matches go to per-day cards
-    /// (M2 behavior); knockout matches collapse into one card per round.
+    /// No-team / eliminated-team multi-card view: one card per
+    /// (calendar day, stage) pair. `phaseTitle` is the card's stage,
+    /// `dateLabel` is the day. Splitting on stage as well as day means
+    /// the group-to-knockout transition day (last group games in the
+    /// morning UTC, first R32 fixtures in the afternoon) produces two
+    /// separate cards instead of mis-labeling R32 fixtures as group
+    /// stage on a single mixed card.
     static func flattened(
         response: WorldCupMatchesResponse,
         liveIDs: Set<Int> = [],
@@ -147,74 +152,18 @@ struct WorldCupMatches: Equatable, Hashable {
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
         let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
-        let (groupMatches, knockoutByStage) = partition(allMatches)
-
-        // Group stage: per-day cards. Title comes from the day's dominant
-        // stage so unknown/nil-stage entries (the fallback bucket) read as
-        // "Upcoming" rather than mis-labeling them "Group Stage".
-        let groupCards = groupedByDay(groupMatches, calendar: calendar).map { group -> WorldCupMatches in
-            let stageCounts = Dictionary(grouping: group.matches.compactMap(\.stage), by: { $0 })
-                .mapValues(\.count)
-            let dominantStage = stageCounts.max(by: { $0.value < $1.value })?.key
-            return buildCard(matches: group.matches,
-                             phaseTitle: label(for: dominantStage),
-                             dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
-                             liveIDs: liveIDs,
-                             localeProvider: localeProvider)
+        let cards = groupedByDayAndStage(allMatches, calendar: calendar).map { group -> WorldCupMatches in
+            let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
+            let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
+            return WorldCupMatches(
+                phaseTitle: label(for: group.stage),
+                dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
+                isLive: !liveMatches.isEmpty,
+                featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
+                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
+            )
         }
-
-        // Knockouts: per-stage cards in tournament order. Stages with no
-        // matches in the response are skipped.
-        let stageOrder: [WorldCupMatchesResponse.Match.Stage] = [
-            .roundOf32, .roundOf16, .quarterFinals, .semiFinals, .thirdPlace, .final
-        ]
-        let knockoutCards = stageOrder.compactMap { stage -> WorldCupMatches? in
-            guard let matches = knockoutByStage[stage], !matches.isEmpty else { return nil }
-            return buildCard(matches: matches,
-                             phaseTitle: label(for: stage),
-                             dateLabel: nil,
-                             liveIDs: liveIDs,
-                             localeProvider: localeProvider)
-        }
-
-        return (groupCards + knockoutCards, 0)
-    }
-
-    /// Splits matches into group-stage entries and knockout entries
-    /// keyed by stage.
-    private static func partition(
-        _ matches: [WorldCupMatchesResponse.Match]
-    ) -> (group: [WorldCupMatchesResponse.Match],
-          knockoutByStage: [WorldCupMatchesResponse.Match.Stage: [WorldCupMatchesResponse.Match]]) {
-        var group: [WorldCupMatchesResponse.Match] = []
-        var knockout: [WorldCupMatchesResponse.Match.Stage: [WorldCupMatchesResponse.Match]] = [:]
-        for match in matches {
-            switch match.stage {
-            case .roundOf32, .roundOf16, .quarterFinals, .semiFinals, .thirdPlace, .final:
-                knockout[match.stage!, default: []].append(match)
-            case .groupStage, .unknown, .none:
-                group.append(match)
-            }
-        }
-        return (group, knockout)
-    }
-
-    private static func buildCard(
-        matches: [WorldCupMatchesResponse.Match],
-        phaseTitle: String,
-        dateLabel: String?,
-        liveIDs: Set<Int>,
-        localeProvider: LocaleProvider
-    ) -> WorldCupMatches {
-        let liveMatches = matches.filter { liveIDs.contains($0.globalEventId) }
-        let nonLive = matches.filter { !liveIDs.contains($0.globalEventId) }
-        return WorldCupMatches(
-            phaseTitle: phaseTitle,
-            dateLabel: dateLabel,
-            isLive: !liveMatches.isEmpty,
-            featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
-            upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
-        )
+        return (cards, 0)
     }
 
     private static func dayLabel(for day: Date, locale: Locale) -> String {
@@ -290,5 +239,41 @@ struct WorldCupMatches: Equatable, Hashable {
             byDay[day, default: []].append(match)
         }
         return order.sorted().map { ($0, byDay[$0]!) }
+    }
+
+    /// Returned groups are ordered by day, then by the earliest kickoff
+    /// within the day (so on a group→knockout transition day, the morning
+    /// group games come first and the afternoon knockout fixtures come
+    /// second).
+    private struct DayStageGroup {
+        let day: Date
+        let stage: WorldCupMatchesResponse.Match.Stage?
+        let matches: [WorldCupMatchesResponse.Match]
+    }
+
+    private static func groupedByDayAndStage(
+        _ matches: [WorldCupMatchesResponse.Match],
+        calendar: Calendar
+    ) -> [DayStageGroup] {
+        struct Key: Hashable {
+            let day: Date
+            let stage: WorldCupMatchesResponse.Match.Stage?
+        }
+        var byKey: [Key: [(date: Date, match: WorldCupMatchesResponse.Match)]] = [:]
+        var order: [Key] = []
+        for match in matches {
+            guard let parsed = WorldCupMatch.parseDate(match.date) else { continue }
+            let key = Key(day: calendar.startOfDay(for: parsed), stage: match.stage)
+            if byKey[key] == nil { order.append(key) }
+            byKey[key, default: []].append((parsed, match))
+        }
+        return order
+            .sorted { lhs, rhs in
+                if lhs.day != rhs.day { return lhs.day < rhs.day }
+                let lhsFirst = byKey[lhs]?.map(\.date).min() ?? .distantPast
+                let rhsFirst = byKey[rhs]?.map(\.date).min() ?? .distantPast
+                return lhsFirst < rhsFirst
+            }
+            .map { DayStageGroup(day: $0.day, stage: $0.stage, matches: byKey[$0]!.map(\.match)) }
     }
 }
