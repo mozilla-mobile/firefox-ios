@@ -699,7 +699,7 @@ struct WorldCupMatchesTests {
             (.roundOf16, String.WorldCup.HomepageWidget.RoundPhase.Round16Label),
             (.quarterFinals, String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel),
             (.semiFinals, String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel),
-            (.thirdPlace, String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel),
+            (.thirdPlace, String.WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel),
             (.final, String.WorldCup.HomepageWidget.RoundPhase.FinalLabel)
         ]
         for (stage, expected) in mappings {

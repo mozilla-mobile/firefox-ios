@@ -398,7 +398,8 @@ struct WorldCupMatchesResponseTests {
             homeTeam: nil,
             awayTeam: away,
             homeScore: 0,
-            awayScore: 2
+            awayScore: 2,
+            statusType: "past"
         )
         #expect(match.winnerTeam == nil)
     }
@@ -425,7 +426,8 @@ struct WorldCupMatchesResponseTests {
             homeExtra: homeExtra,
             awayExtra: awayExtra,
             homePenalty: homePenalty,
-            awayPenalty: awayPenalty
+            awayPenalty: awayPenalty,
+            statusType: "past"
         )
     }
 
