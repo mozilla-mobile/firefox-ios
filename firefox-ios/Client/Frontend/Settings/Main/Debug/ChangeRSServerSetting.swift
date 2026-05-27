@@ -23,8 +23,6 @@ class ChangeRSServerSetting: HiddenSetting {
         Current: \(currentEnvRaw.capitalized)
 
         Changes take effect on the next app launch.
-
-        To switch to Staging and reset ordering prefs for Consolidated Search, choose the SEC Reset option.
         """
         let alert = UIAlertController(title: "Remote Settings Server",
                                       message: message,
@@ -38,12 +36,6 @@ class ChangeRSServerSetting: HiddenSetting {
             guard let self else { return }
             self.prefs.setString(RemoteSettingsEnvironment.stageV2.rawValue, forKey: self.prefsKey)
         }))
-        alert.addAction(UIAlertAction(title: "Staging V2 + SEC Reset", style: .default, handler: { [weak self] _ in
-            guard let self else { return }
-            self.prefs.setString(RemoteSettingsEnvironment.stageV2.rawValue, forKey: self.prefsKey)
-            let searchManager: SearchEnginesManager = AppContainer.shared.resolve()
-            searchManager.resetPrefs()
-        }))
         alert.addAction(UIAlertAction(title: "Dev V2", style: .default, handler: { [weak self] _ in
             guard let self else { return }
             self.prefs.setString(RemoteSettingsEnvironment.devV2.rawValue, forKey: self.prefsKey)
@@ -55,12 +47,6 @@ class ChangeRSServerSetting: HiddenSetting {
         alert.addAction(UIAlertAction(title: "Staging", style: .default, handler: { [weak self] _ in
             guard let self else { return }
             self.prefs.setString(RemoteSettingsEnvironment.stage.rawValue, forKey: self.prefsKey)
-        }))
-        alert.addAction(UIAlertAction(title: "Staging + SEC Reset", style: .default, handler: { [weak self] _ in
-            guard let self else { return }
-            self.prefs.setString(RemoteSettingsEnvironment.stage.rawValue, forKey: self.prefsKey)
-            let searchManager: SearchEnginesManager = AppContainer.shared.resolve()
-            searchManager.resetPrefs()
         }))
         alert.addAction(UIAlertAction(title: "Dev", style: .default, handler: { [weak self] _ in
             guard let self else { return }
