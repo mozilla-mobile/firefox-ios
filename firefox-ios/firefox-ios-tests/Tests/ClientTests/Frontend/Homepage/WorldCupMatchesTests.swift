@@ -833,7 +833,6 @@ struct WorldCupMatchesTests {
         )
     }
 
-
     private func makeMatch(id: Int,
                            home: String?,
                            away: String?,

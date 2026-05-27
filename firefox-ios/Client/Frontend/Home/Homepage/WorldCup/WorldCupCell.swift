@@ -372,7 +372,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             }
         )
     }
-    
+
     private func getContentsHeight(
         for page: Int,
         isShowingWinnerView: Bool = false,
@@ -417,7 +417,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         if let winner {
             winnerBackgroundView.configure(teamName: winner.teamKey, subtitle: winner.winnerLabel)
         }
-    
+
         let applyChanges = { [weak self] in
             guard let self else { return }
             rootContainerTopConstraint?.isActive = false
@@ -448,7 +448,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     }
 
     // MARK: - ThemeApplicable
-    
+
     func applyTheme(theme: Theme) {
         self.theme = theme
         contentView.backgroundColor = .clear

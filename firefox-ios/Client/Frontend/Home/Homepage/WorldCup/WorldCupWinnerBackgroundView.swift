@@ -155,7 +155,7 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable, Blurrable {
         flagView.backgroundColor = theme.colors.borderSecondary
         adjustBlur(theme: theme)
     }
-    
+
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             contentBackgroundView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)

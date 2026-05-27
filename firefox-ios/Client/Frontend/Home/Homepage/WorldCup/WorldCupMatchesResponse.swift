@@ -126,7 +126,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             if awayTotal > homeTotal { return awayTeam }
             return nil
         }
-        
+
         /// Closed set of tournament stages emitted by merino's `stage` field..
         enum Stage: Decodable, Hashable, Sendable {
             case groupStage
