@@ -822,6 +822,9 @@ extension RemoteSettingsEnvironment {
         case .prod: return .prod
         case .stage: return .stage
         case .dev: return .dev
+        case .prodV2: return .prodV2
+        case .stageV2: return .stageV2
+        case .devV2: return .devV2
         }
     }
 }
