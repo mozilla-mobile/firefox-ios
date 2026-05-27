@@ -11,12 +11,6 @@ import UIKit
 /// supporting team name and subtitle (e.g. "Third place", "World Cup
 /// Champions"). It is laid out behind `WorldCupMatchCardView` inside the cell.
 final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
-    struct Configuration: Equatable {
-        let flagAssetName: String
-        let teamName: String
-        let subtitle: String
-    }
-
     private struct UX {
         static let backgroundImageViewCornerRadius: CGFloat = 16.0
         static let flagSize = CGSize(width: 90, height: 60)
@@ -143,12 +137,10 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
 
     // MARK: - Configuration
 
-    func configure(with configuration: Configuration) {
-        flagView.image = UIImage(named: configuration.flagAssetName)
-        teamNameLabel.text = configuration.teamName
-        teamNameLabel.accessibilityLabel = configuration.teamName
-        subtitleLabel.text = configuration.subtitle
-        subtitleLabel.accessibilityLabel = configuration.subtitle
+    func configure(teamName: String, subtitle: String) {
+        flagView.image = UIImage(named: teamName)
+        teamNameLabel.text = teamName
+        subtitleLabel.text = subtitle
     }
 
     // MARK: - ThemeApplicable

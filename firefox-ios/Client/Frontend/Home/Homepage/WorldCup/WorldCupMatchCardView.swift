@@ -190,12 +190,21 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         liveLabelContainer.isHidden = !model.isLive
     }
 
-    /// Hardcoded test hook for the winner backdrop: returns `true` whenever any
-    /// featured match involves the USA, so we can preview the winner UI without
-    /// real data.
-    func hasWinner() -> Bool {
-        guard let model else { return false }
-        return model.upcomingMatches.contains { $0.homeCode == "USA" || $0.awayCode == "USA" }
+    func finalThirdFinalWinner() -> (fifaKey: String, phaseTitle: String)? {
+        guard let model else { return nil }
+        let finalPhase = String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
+        let winnerKey: String? = model.featuredMatch.compactMap { match in
+            return match.winnerKey
+        }.first
+        guard let winnerKey else { return nil }
+        if model.phaseTitle == finalPhase {
+            return (winnerKey, finalPhase)
+        }
+        let thirdPlace = String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
+        if model.phaseTitle == thirdPlace {
+            return (winnerKey, thirdPlace)
+        }
+        return nil
     }
 
     private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {

@@ -137,7 +137,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         control.semanticContentAttribute = .forceLeftToRight
     }
 
-    private let winnerBackgroundView: WorldCupWinnerBackgroundView = .build()
+    private let winnerBackgroundView: WorldCupWinnerBackgroundView = .build {
+        $0.alpha = 0.0
+    }
 
     private var pageConstraints: [NSLayoutConstraint] = []
     private var scrollViewHeightConstraint: NSLayoutConstraint?
@@ -147,11 +149,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var rootContainerLeadingConstraint: NSLayoutConstraint?
     private var rootContainerTrailingConstraint: NSLayoutConstraint?
     private var rootContainerBottomConstraint: NSLayoutConstraint?
-    private var isWinnerVisible = false
     private var currentState: WorldCupSectionState?
     private var onHeightChange: ((CGFloat) -> Void)?
     private var lastScrollViewWidth: CGFloat = 0
-    private var currentTheme: Theme?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -167,7 +167,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private func setupLayout() {
         scrollView.addSubview(pagesStack)
         rootContainer.addSubviews(scrollView, pageControl)
-        winnerBackgroundView.isHidden = true
         contentView.addSubview(winnerBackgroundView)
         contentView.addSubview(rootContainer)
 
@@ -229,7 +228,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateScrollViewHeight(for: pageControl.currentPage, animated: true)
+        goToPage(pageControl.currentPage)
     }
 
     override func layoutSubviews() {
@@ -240,8 +239,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         // in delay.
         guard lastScrollViewWidth != contentView.frame.width else { return }
         lastScrollViewWidth = contentView.frame.width
+        let offset = winnerBackgroundView.alpha == 1.0 ? UX.rootContainerWinnerViewInset * 2.0 : 0.0
         scrollView.setContentOffset(
-            CGPoint(x: CGFloat(pageControl.currentPage) * lastScrollViewWidth, y: 0.0),
+            CGPoint(x: CGFloat(pageControl.currentPage) * (lastScrollViewWidth - offset), y: 0.0),
             animated: false
         )
     }
@@ -252,63 +252,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         onHeightChange: @escaping (CGFloat) -> Void
     ) {
         self.onHeightChange = onHeightChange
-        self.currentTheme = theme
         if currentState != state {
             currentState = state
             rebuildPages(for: state)
         }
         applyTheme(theme: theme)
-    }
-
-    private func applyWinner(_ winner: WorldCupWinnerBackgroundView.Configuration?) {
-        let shouldShowWinner = winner != nil
-        let visibilityChanged = shouldShowWinner != isWinnerVisible
-        isWinnerVisible = shouldShowWinner
-
-        rootContainerTopConstraint?.isActive = false
-        if let winner {
-            winnerBackgroundView.configure(with: winner)
-            rootContainerTopConstraint = rootContainer.topAnchor.constraint(equalTo: winnerBackgroundView.contentViewBottomAnchor)
-            rootContainerLeadingConstraint?.constant = UX.rootContainerWinnerViewInset
-            rootContainerTrailingConstraint?.constant = -UX.rootContainerWinnerViewInset
-            rootContainerBottomConstraint?.constant = -UX.rootContainerWinnerViewInset
-        } else {
-            rootContainerTopConstraint = rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor)
-            rootContainerLeadingConstraint?.constant = 0
-            rootContainerTrailingConstraint?.constant = 0
-            rootContainerBottomConstraint?.constant = 0
-        }
-        rootContainerTopConstraint?.isActive = true
-
-        animateWinnerVisibility(showing: shouldShowWinner, animated: visibilityChanged)
-    }
-
-    private func animateWinnerVisibility(showing: Bool, animated: Bool) {
-        guard animated else {
-            winnerBackgroundView.isHidden = !showing
-            winnerBackgroundView.alpha = showing ? UX.winnerVisibleAlpha : UX.winnerHiddenAlpha
-            return
-        }
-
-        if showing {
-            winnerBackgroundView.alpha = UX.winnerHiddenAlpha
-            winnerBackgroundView.isHidden = false
-        }
-        let targetAlpha = showing ? UX.winnerVisibleAlpha : UX.winnerHiddenAlpha
-        UIView.animate(
-            withDuration: UX.winnerFadeDuration,
-            delay: UX.animationDelay,
-            options: [.allowUserInteraction],
-            animations: {
-                self.winnerBackgroundView.alpha = targetAlpha
-            },
-            completion: { [weak self] _ in
-                guard let self else { return }
-                if !showing {
-                    self.winnerBackgroundView.isHidden = true
-                }
-            }
-        )
     }
 
     private func rebuildPages(for state: WorldCupSectionState) {
@@ -343,53 +291,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private func makePages(for state: WorldCupSectionState) -> [PageContainer] {
         let views = WorldCupCellFactory.makePages(from: state)
         return views.map { PageContainer(content: $0) }
-    }
-
-    private func updateScrollViewHeight(for page: Int, animated: Bool, completion: (() -> Void)? = nil) {
-        guard let view = pagesStack.arrangedSubviews[safe: page] else {
-            completion?()
-            return
-        }
-
-        let targetHeight = view.systemLayoutSizeFitting(
-            CGSize(width: bounds.width,
-                   height: UIView.layoutFittingCompressedSize.height),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        ).height
-        let pageControlSpacing = pageControlTopConstraint?.constant ?? 0
-        let pageControlHeight = pageControlHeightConstraint?.constant ?? 0
-        let winnerContribution = winnerHeightContribution()
-        let contentHeight = winnerContribution
-            + UX.padding + targetHeight + pageControlSpacing + pageControlHeight + UX.padding
-
-        guard scrollViewHeightConstraint?.constant != targetHeight else {
-            // The scroll view itself hasn't changed, but the surrounding winner
-            // backdrop may have toggled, so still propagate the new cell height.
-            onHeightChange?(contentHeight)
-            completion?()
-            return
-        }
-
-        if animated {
-            UIView.animate(
-                withDuration: UX.heightChangeAnimationDuration,
-                delay: UX.animationDelay,
-                options: [.allowUserInteraction],
-                animations: {
-                    self.scrollViewHeightConstraint?.constant = targetHeight
-                    self.contentView.layoutIfNeeded()
-                    self.onHeightChange?(contentHeight)
-                },
-                completion: { _ in
-                    completion?()
-                }
-            )
-        } else {
-            scrollViewHeightConstraint?.constant = targetHeight
-            onHeightChange?(contentHeight)
-            completion?()
-        }
     }
 
     private func removePageViews() {
@@ -440,44 +341,105 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
     private func goToPage(_ page: Int) {
         pageControl.currentPage = page
-        updateWinnerForCurrentPage()
         updatePageAccessibility()
-        // it is safe to use bounds.width cause the scrollView has the same width of the parent view
-        // the bounds gets updated before the subviews so with this we can avoid relayout of the scrollView.
-        let offset = (rootContainerLeadingConstraint?.constant ?? 0) * 2.0
-        scrollView.setContentOffset(CGPoint(x: CGFloat(page) * (bounds.width - offset), y: 0), animated: false)
-        updateScrollViewHeight(for: page, animated: true) { [weak self] in
-            guard let container = self?.pagesStack.arrangedSubviews[safe: page] as? PageContainer else { return }
-            UIView.animate(
-                withDuration: UX.contentFadeInDuration,
-                delay: UX.animationDelay,
-                options: [.allowUserInteraction],
-                animations: {
-                    container.setContentVisibility(true)
-                },
-                completion: { _ in
-                    UIAccessibility.post(notification: .screenChanged, argument: container)
-                }
-            )
+        let (isShowingWinnerView, applyWinnerChanges) = getWinnerStatusForCurrentPage()
+        let offset = isShowingWinnerView ? UX.rootContainerWinnerViewInset * 2.0 : 0.0
+        let (scrollViewHeight, contentViewHeight) = getContentsHeight(for: page, isShowingWinnerView: isShowingWinnerView)
+        UIView.animate(
+            withDuration: UX.heightChangeAnimationDuration,
+            delay: UX.animationDelay,
+            options: [.allowUserInteraction],
+            animations: {
+                applyWinnerChanges()
+                self.scrollViewHeightConstraint?.constant = scrollViewHeight
+                self.onHeightChange?(contentViewHeight)
+                self.contentView.layoutIfNeeded()
+                self.scrollView.setContentOffset(
+                    CGPoint(x: CGFloat(page) * (self.bounds.width - offset), y: 0),
+                    animated: false
+                )
+            },
+            completion: { [weak self] _ in
+                guard let container = self?.pagesStack.arrangedSubviews[safe: page] as? PageContainer else { return }
+                UIView.animate(
+                    withDuration: UX.contentFadeInDuration,
+                    delay: UX.animationDelay,
+                    options: [.allowUserInteraction],
+                    animations: {
+                        container.setContentVisibility(true)
+                    },
+                    completion: { _ in
+                        UIAccessibility.post(notification: .screenChanged, argument: container)
+                    }
+                )
+            }
+        )
+    }
+    
+    private func getContentsHeight(
+        for page: Int,
+        isShowingWinnerView: Bool = false,
+    ) -> (scrollViewHeight: CGFloat, contentViewHeight: CGFloat) {
+        guard let view = pagesStack.arrangedSubviews[safe: page] else {
+            return (scrollView.frame.height, contentView.frame.height)
         }
+
+        let scrollViewHeight = view.systemLayoutSizeFitting(
+            CGSize(width: bounds.width,
+                   height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        let pageControlSpacing = pageControlTopConstraint?.constant ?? 0
+        let pageControlHeight = pageControlHeightConstraint?.constant ?? 0
+        let winnerContribution = winnerHeightContribution(isShowingWinnerView: isShowingWinnerView)
+        let contentHeight = winnerContribution
+            + UX.padding + scrollViewHeight + pageControlSpacing + pageControlHeight + UX.padding
+
+        return (scrollViewHeight, contentHeight)
     }
 
-    private func winnerHeightContribution() -> CGFloat {
-        guard !winnerBackgroundView.isHidden else { return 0 }
+    private func winnerHeightContribution(isShowingWinnerView: Bool) -> CGFloat {
+        guard isShowingWinnerView else { return 0 }
         let width = bounds.width > 0 ? bounds.width : contentView.bounds.width
         return winnerBackgroundView.contentBottomOffset(fittingWidth: width)
             + UX.rootContainerWinnerViewInset
     }
 
-    private func updateWinnerForCurrentPage() {
+    /// Queries from the current card the winner status (Only final or third place are going to be shown the winner background view)
+    /// return a tuple containing a boolean indicating whether the background view is going to be shown and a closure to apply the constraints changes
+    private func getWinnerStatusForCurrentPage() -> (isShowing: Bool, applyChanges: () -> Void) {
         let current = pageControl.currentPage
         let container = pagesStack.arrangedSubviews[safe: current] as? PageContainer
         let card = container?.content as? WorldCupMatchCardView
-        if card?.hasWinner() == true {
-            applyWinner(.init(flagAssetName: "USA", teamName: "USA", subtitle: "Winner"))
-        } else {
-            applyWinner(nil)
+        let winner = card?.finalThirdFinalWinner()
+        let shouldShowWinner = winner != nil
+
+        if let winner {
+            winnerBackgroundView.configure(teamName: winner.fifaKey, subtitle: winner.phaseTitle)
         }
+    
+        let applyChanges = { [weak self] in
+            guard let self else { return }
+            rootContainerTopConstraint?.isActive = false
+            if shouldShowWinner {
+                rootContainerTopConstraint = rootContainer.topAnchor
+                    .constraint(equalTo: winnerBackgroundView.contentViewBottomAnchor)
+                rootContainerLeadingConstraint?.constant = UX.rootContainerWinnerViewInset
+                rootContainerTrailingConstraint?.constant = -UX.rootContainerWinnerViewInset
+                rootContainerBottomConstraint?.constant = -UX.rootContainerWinnerViewInset
+            } else {
+                rootContainerTopConstraint = rootContainer.topAnchor
+                    .constraint(equalTo: contentView.topAnchor)
+                rootContainerLeadingConstraint?.constant = 0
+                rootContainerTrailingConstraint?.constant = 0
+                rootContainerBottomConstraint?.constant = 0
+            }
+            rootContainerTopConstraint?.isActive = true
+            winnerBackgroundView.alpha = shouldShowWinner ? 1.0 : 0.0
+        }
+
+        return (shouldShowWinner, applyChanges)
     }
 
     private func updatePageAccessibility() {
