@@ -9,10 +9,9 @@ import Shared
 /// Storage for user activity information used for conversion funnelling
 struct ConversionDataManager: Sendable {
     private struct Keys {
-        static let installTimestamp = "skan.conversion.installTimestamp"
-        static let activeDayIndices = "skan.conversion.activeDayIndices"
-        static let searchedDayIndices = "skan.conversion.searchedDayIndices"
-        static let defaultBrowserDayIndices = "skan.conversion.defaultBrowserDayIndices"
+        static let firstDayAfterInstallTimestamp = "com.moz.conversion.firstDayAfterInstallTimestamp"
+        static let activeDayIndices = "com.moz.conversion.activeDayIndices"
+        static let searchedDayIndices = "com.moz.conversion.searchedDayIndices"
     }
 
     private let defaults: UserDefaultsInterface
@@ -21,13 +20,13 @@ struct ConversionDataManager: Sendable {
         self.defaults = defaults
     }
 
-    var installTimestamp: Timestamp? {
-        get { defaults.object(forKey: Keys.installTimestamp) as? Timestamp }
+    var firstDayAfterInstallTimestamp: Timestamp? {
+        get { defaults.object(forKey: Keys.firstDayAfterInstallTimestamp) as? Timestamp }
         set {
             if let newValue {
-                defaults.set(newValue, forKey: Keys.installTimestamp)
+                defaults.set(newValue, forKey: Keys.firstDayAfterInstallTimestamp)
             } else {
-                defaults.removeObject(forKey: Keys.installTimestamp)
+                defaults.removeObject(forKey: Keys.firstDayAfterInstallTimestamp)
             }
         }
     }
@@ -40,10 +39,5 @@ struct ConversionDataManager: Sendable {
     var searchedDayIndices: Set<Int> {
         get { Set(defaults.array(forKey: Keys.searchedDayIndices) as? [Int] ?? []) }
         set { defaults.set(Array(newValue), forKey: Keys.searchedDayIndices) }
-    }
-
-    var defaultBrowserDayIndices: Set<Int> {
-        get { Set(defaults.array(forKey: Keys.defaultBrowserDayIndices) as? [Int] ?? []) }
-        set { defaults.set(Array(newValue), forKey: Keys.defaultBrowserDayIndices) }
     }
 }

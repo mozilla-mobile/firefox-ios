@@ -28,19 +28,12 @@ final class ConversionActivityLogger {
         dataManager.searchedDayIndices = indices
     }
 
-    func recordDefaultBrowserToday(isDefault: Bool, now: Timestamp = Date.now()) {
-        guard isDefault, let dayIndex = dayIndex(at: now) else { return }
-        var indices = dataManager.defaultBrowserDayIndices
-        indices.insert(dayIndex)
-        dataManager.defaultBrowserDayIndices = indices
-    }
-
-    func recordInstallTimestampIfNeeded(now: Timestamp = Date.now()) {
-        if dataManager.installTimestamp == nil { dataManager.installTimestamp = now }
+    func recordFirstDayAfterInstallTimestampIfNeeded(now: Timestamp = Date.now()) {
+        if dataManager.firstDayAfterInstallTimestamp == nil { dataManager.firstDayAfterInstallTimestamp = now }
     }
 
     private func dayIndex(at now: Timestamp) -> Int? {
-        guard let install = dataManager.installTimestamp else { return nil }
+        guard let install = dataManager.firstDayAfterInstallTimestamp else { return nil }
         return now.daysSince(timestamp: install)
     }
 }

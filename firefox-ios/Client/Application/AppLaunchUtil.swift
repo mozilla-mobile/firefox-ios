@@ -72,9 +72,8 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
 
         // Logs conversion activity and records any conversion events
         let conversionActivityLogger = ConversionActivityLogger()
-        conversionActivityLogger.recordInstallTimestampIfNeeded()
+        conversionActivityLogger.recordFirstDayAfterInstallTimestampIfNeeded()
         conversionActivityLogger.recordActiveToday()
-        conversionActivityLogger.recordDefaultBrowserToday(isDefault: DefaultBrowserUtility().isDefaultBrowser)
         ConversionEventTracker().recordActivityEvents()
 
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.

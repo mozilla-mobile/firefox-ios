@@ -18,14 +18,14 @@ struct ConversionEventTracker {
     }
 
     func recordURILoadConversionEvent(now: Timestamp = Date.now()) {
-        guard let install = dataManager.installTimestamp else { return }
+        guard let install = dataManager.firstDayAfterInstallTimestamp else { return }
         let dayIndex = Date.now().daysSince(timestamp: install)
         guard dayIndex >= 1, dayIndex <= 28 else { return }
         ConversionEventTracker().record(.uriLoadDay2Plus)
     }
 
     func recordActivityEvents(now: Timestamp = Date.now()) {
-        guard let install = dataManager.installTimestamp else { return }
+        guard let install = dataManager.firstDayAfterInstallTimestamp else { return }
         let dayIndex = now.daysSince(timestamp: install)
         guard dayIndex <= ConversionEventTracker.attributionHorizonDays else { return }
 
@@ -37,7 +37,6 @@ struct ConversionEventTracker {
 
         let active = dataManager.activeDayIndices
         let searched = dataManager.searchedDayIndices
-        let defaulted = dataManager.defaultBrowserDayIndices
 
         let week1Active = active.intersection(0...6)
         let firstFourActive = active.intersection(0...3)
@@ -52,8 +51,8 @@ struct ConversionEventTracker {
         if firstFourActive.count >= 2 && lastThreeActive.count >= 2 {
             record(.activeTwoOfFourAndThreeWeek1)
         }
-        if Set(0...6).isSubset(of: active) && defaulted.intersection(0...3).count == 4 {
-            record(.dailyActiveWeek1DefaultFirst4)
+        if Set(0...6).isSubset(of: active) {
+            record(.dailyActiveFirstWeek)
         }
         if week1Active.count >= 3 && !searched.intersection(3...6).isEmpty {
             record(.activated)
@@ -68,20 +67,23 @@ struct ConversionEventTracker {
 
 enum ConversionEvent {
     case activeFirstDay
+    case setAsDefault
     case appOpenDay2Plus
     case uriLoadDay2Plus
+    // TODO: FXIOS-15945 implement this conversion value for SERP ad click
     case firstAdClick
     case thirdActivityFirstWeek
     case activeLastThreeWeek1
     case activeTwoOfFourAndThreeWeek1
     case activated
-    case dailyActiveWeek1DefaultFirst4
-    case setAsDefault
+    case dailyActiveFirstWeek
 
     var conversionValue: ConversionValue {
         switch self {
         case .activeFirstDay:
             return .init(fine: 5, coarse: .low, lockWindow: false)
+        case .setAsDefault:
+            return .init(fine: 10, coarse: .high, lockWindow: false)
         case .appOpenDay2Plus:
             return .init(fine: 15, coarse: .medium, lockWindow: false)
         case .uriLoadDay2Plus:
@@ -96,10 +98,8 @@ enum ConversionEvent {
             return .init(fine: 30, coarse: .medium, lockWindow: false)
         case .activated:
             return .init(fine: 45, coarse: .high, lockWindow: false)
-        case .dailyActiveWeek1DefaultFirst4:
+        case .dailyActiveFirstWeek:
             return .init(fine: 55, coarse: .high, lockWindow: false)
-        case .setAsDefault:
-            return .init(fine: 60, coarse: .high, lockWindow: true)
         }
     }
 }
