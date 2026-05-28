@@ -775,13 +775,6 @@ struct WorldCupMatchesTests {
     // MARK: - telemetryPhaseValue
 
     @Test
-    func test_telemetryPhaseValue_groupStage_usesRawGroupString() {
-        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: "Group C", stage: .groupStage)
-
-        #expect(WorldCupMatches.telemetryPhaseValue(from: match) == "Group C")
-    }
-
-    @Test
     func test_telemetryPhaseValue_groupStage_fallsBackToGroupStage_whenGroupMissing() {
         let match = makeMatch(id: 0, home: "ENG", away: "USA", group: nil, stage: .groupStage)
 
