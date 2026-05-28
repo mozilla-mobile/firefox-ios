@@ -35,6 +35,7 @@ final class WorldCupFeed {
     /// action that updates the store before calling `start` is the only
     /// thing the middleware needs to coordinate.
     private let selectedTeamProvider: () -> String?
+    private let store: WorldCupStoreProtocol
 
     private var matchesTask: Task<Void, Never>?
     private var liveTask: Task<Void, Never>?
@@ -48,11 +49,13 @@ final class WorldCupFeed {
     var onUpdate: ((Snapshot) -> Void)?
 
     init(apiClient: WorldCupAPIClientProtocol,
+         store: WorldCupStoreProtocol = WorldCupStore(),
          usesDevServerTimeline: Bool,
          selectedTeamProvider: @escaping () -> String?) {
         self.apiClient = apiClient
         self.usesDevServerTimeline = usesDevServerTimeline
         self.selectedTeamProvider = selectedTeamProvider
+        self.store = store
     }
 
     deinit {
@@ -175,6 +178,7 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
+        let hasSelectedTeam = selectedTeamProvider() != nil
         if let team = selectedTeamProvider(),
            !isSelectedTeamEliminated(in: cachedTeamsResponse) {
             let perStage = WorldCupMatches.perStage(
@@ -183,17 +187,28 @@ final class WorldCupFeed {
                 now: now
             )
             return Snapshot(matches: perStage.cards,
-                            defaultMatchIndex: perStage.defaultIndex,
+                            defaultMatchIndex: liveMatchIndex(in: perStage.cards,
+                                                              hasSelectedTeam: hasSelectedTeam),
                             apiError: nil)
         }
+        store.setSelectedTeam(countryId: nil)
         let flattened = WorldCupMatches.flattened(
             response: response,
             liveIDs: cachedLiveIDs,
             now: now
         )
         return Snapshot(matches: flattened.cards,
-                        defaultMatchIndex: flattened.defaultIndex,
+                        defaultMatchIndex: liveMatchIndex(in: flattened.cards,
+                                                          hasSelectedTeam: false),
                         apiError: nil)
+    }
+
+    private func liveMatchIndex(in cards: [WorldCupMatches],
+                                hasSelectedTeam: Bool) -> Int {
+        guard !cards.isEmpty else { return 0 }
+        let liveIndex = cards.firstIndex(where: { $0.isLive }) ?? -1
+        let adjusted = hasSelectedTeam ? liveIndex : liveIndex + 1
+        return adjusted
     }
 
     /// True when a team is selected AND that team appears in the roster
