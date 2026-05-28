@@ -14,6 +14,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         static let horizontalPadding: CGFloat = 16.0
 
         static let featuredMatchesStackHorizontalPadding: CGFloat = 41.0
+        static let featuredMatchesMinStackHorizontalPadding: CGFloat = 16.0
         static let featuredMatchesSpacing: CGFloat = 16
 
         static let dividerHeight: CGFloat = 1
@@ -150,10 +151,17 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
             headerStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
 
             featuredMatchesTopConstraint,
-            featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                          constant: UX.featuredMatchesStackHorizontalPadding),
             featuredMatchesStack.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                           constant: -UX.featuredMatchesStackHorizontalPadding),
+                                                           constant: -UX.featuredMatchesStackHorizontalPadding)
+                                                            .priority(.defaultHigh),
+            featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesStackHorizontalPadding)
+                                                            .priority(.defaultHigh),
+            featuredMatchesStack.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesMinStackHorizontalPadding),
+            featuredMatchesStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor,
+                                                           constant: -UX.featuredMatchesMinStackHorizontalPadding),
+            featuredMatchesStack.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             upcomingMatchesTopConstraint,
             upcomingStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
@@ -335,10 +343,15 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
 
     private lazy var scoreLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title2.scaledFont()
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.4
     }
 
-    private lazy var scoreContainer: UIView = .build()
+    private lazy var scoreContainer: UIView = .build { container in
+        container.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
 
     private lazy var clockLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()

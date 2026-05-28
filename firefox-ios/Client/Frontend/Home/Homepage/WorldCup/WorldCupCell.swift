@@ -28,6 +28,7 @@ private final class PageContainer: UIView, ThemeApplicable {
 
     init(content: UIView) {
         self.content = content
+        self.content.isHidden = true
         super.init(frame: .zero)
         setupLayout()
     }
@@ -56,7 +57,7 @@ private final class PageContainer: UIView, ThemeApplicable {
 
     /// Sets the Content visibility and hides the loading image in case the `isVisible` is set to true.
     func setContentVisibility(_ isVisible: Bool) {
-        content.alpha = isVisible ? UX.visibleAlpha : UX.hiddenAlpha
+        content.isHidden = !isVisible
         loadingImageView.isHidden = isVisible
         if isVisible {
             stopSpinning()
@@ -270,7 +271,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         }
         NSLayoutConstraint.activate(constraints)
         pageConstraints = constraints
-
+        
         goToPage(initialPage(for: state, pageCount: pages.count))
     }
 
