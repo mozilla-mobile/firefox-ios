@@ -545,7 +545,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.matches.count, 2)
         XCTAssertEqual(dispatched.matches[1].phaseTitle,
                        String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
-        XCTAssertEqual(dispatched.defaultMatchIndex, 1)
+        XCTAssertEqual(dispatched.defaultMatchIndex, -1)
         subject.worldCupProvider = { _, _ in }
     }
 
