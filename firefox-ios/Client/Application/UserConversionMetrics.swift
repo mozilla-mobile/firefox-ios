@@ -19,7 +19,7 @@ struct UserConversionMetrics {
             case .newTab:
                 return .medium
             case .search:
-                return .low
+                return .high
             }
         }
     }
