@@ -7,6 +7,10 @@ import Shared
 
 struct WorldCupMatches: Equatable, Hashable {
     let phaseTitle: String
+    /// English, untranslated identifier for the card's phase, used as a stable
+    /// telemetry value (e.g. "Group A", "Round of 16", "Final"). Mirrors
+    /// `phaseTitle` but bypasses the localized string table.
+    let telemetryPhaseValue: String
     let dateLabel: String?
     let isLive: Bool
     let featuredMatch: [WorldCupMatch]
@@ -24,11 +28,13 @@ struct WorldCupMatches: Equatable, Hashable {
     }
 
     init(phaseTitle: String,
+         telemetryPhaseValue: String,
          dateLabel: String? = nil,
          isLive: Bool,
          featuredMatch: [WorldCupMatch],
          upcomingMatches: [WorldCupMatch]) {
         self.phaseTitle = phaseTitle
+        self.telemetryPhaseValue = telemetryPhaseValue
         self.dateLabel = dateLabel
         self.isLive = isLive
         self.featuredMatch = featuredMatch
@@ -92,6 +98,7 @@ struct WorldCupMatches: Equatable, Hashable {
 
         let allIDs = allMatches.map(\.globalEventId)
         self.phaseTitle = Self.phaseTitle(from: featured.first)
+        self.telemetryPhaseValue = Self.telemetryPhaseValue(from: featured.first)
         self.dateLabel = nil
         self.isLive = allIDs.contains(where: { liveIDs.contains($0) })
         self.featuredMatch = featured.map { WorldCupMatch($0, localeProvider: localeProvider) }
@@ -168,6 +175,7 @@ struct WorldCupMatches: Equatable, Hashable {
             let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
             return WorldCupMatches(
                 phaseTitle: label(for: group.stage),
+                telemetryPhaseValue: group.stage?.rawValue ?? WorldCupMatchesResponse.Match.Stage.groupStage.rawValue,
                 dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
                 isLive: !liveMatches.isEmpty,
                 featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
@@ -200,6 +208,11 @@ struct WorldCupMatches: Equatable, Hashable {
                 ?? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
         }
         return label(for: match.stage)
+    }
+
+    static func telemetryPhaseValue(from match: WorldCupMatchesResponse.Match?) -> String {
+        guard let match else { return WorldCupMatchesResponse.Match.Stage.groupStage.rawValue }
+        return match.stage?.rawValue ?? WorldCupMatchesResponse.Match.Stage.groupStage.rawValue
     }
 
     private static func label(for stage: WorldCupMatchesResponse.Match.Stage?) -> String {

@@ -111,3 +111,29 @@ world_cup_widget:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
+  card_swiped:
+    type: event
+    description: |
+      Records when the user swipes between cards in the WorldCup widget.
+    extra_keys:
+      view:
+        description: |
+          String identifier of the view the user has scrolled to. For match
+          cards this is the untranslated phase value (e.g. "Group Stage",
+          "Round of 16", "Final"); for the timer view it is "countdown"
+          before the tournament starts and "follow_your_team" after.
+          For the error view just return "error".
+        type: string
+      is_impression:
+        description: |
+          True for the first card recorded after the WorldCup section is
+          built in the current homepage session — i.e. the section's initial
+          impression. False for every subsequent swipe within that session.
+        type: boolean
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15933
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34046
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"

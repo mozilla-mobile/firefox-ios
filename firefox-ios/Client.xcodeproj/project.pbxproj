@@ -1565,6 +1565,7 @@
 		C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */; };
 		C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */; };
 		C22C00C32FC44A2100951BF6 /* WorldCupWinnerBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22C00C22FC44A2100951BF6 /* WorldCupWinnerBackgroundView.swift */; };
+		C22C0D772FC832BC00951BF6 /* WorldCupPagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22C0D762FC832BC00951BF6 /* WorldCupPagerView.swift */; };
 		C234BFC02EBB8321004BF5A8 /* SettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BFBF2EBB82E1004BF5A8 /* SettingsNavigationController.swift */; };
 		C234BFC22EBB8356004BF5A8 /* ModalSettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BFC12EBB8352004BF5A8 /* ModalSettingsNavigationController.swift */; };
 		C23889DF2A4EFCE500429673 /* ShareSheetCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889DE2A4EFCE500429673 /* ShareSheetCoordinator.swift */; };
@@ -10413,6 +10414,7 @@
 		C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewModel.swift; sourceTree = "<group>"; };
 		C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntensityVisualEffectView.swift; sourceTree = "<group>"; };
 		C22C00C22FC44A2100951BF6 /* WorldCupWinnerBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupWinnerBackgroundView.swift; sourceTree = "<group>"; };
+		C22C0D762FC832BC00951BF6 /* WorldCupPagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupPagerView.swift; sourceTree = "<group>"; };
 		C234BFBF2EBB82E1004BF5A8 /* SettingsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationController.swift; sourceTree = "<group>"; };
 		C234BFC12EBB8352004BF5A8 /* ModalSettingsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalSettingsNavigationController.swift; sourceTree = "<group>"; };
 		C23889DE2A4EFCE500429673 /* ShareSheetCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetCoordinator.swift; sourceTree = "<group>"; };
@@ -15296,6 +15298,7 @@
 				C27AB7062F9B85A50085439A /* WorldCupCountry.swift */,
 				C27AB7072F9B85A50085439A /* WorldCupCountryPickerView.swift */,
 				C22C00C22FC44A2100951BF6 /* WorldCupWinnerBackgroundView.swift */,
+				C22C0D762FC832BC00951BF6 /* WorldCupPagerView.swift */,
 			);
 			path = WorldCup;
 			sourceTree = "<group>";
@@ -19839,6 +19842,7 @@
 				81020C942BB5B026007B8481 /* OnboardingMultipleChoiceButtonViewModel.swift in Sources */,
 				8A5A24C12FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift in Sources */,
 				E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */,
+				C22C0D772FC832BC00951BF6 /* WorldCupPagerView.swift in Sources */,
 				0A7693692C81F2A300103A6D /* TrackingProtectionConnectionDetailsView.swift in Sources */,
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
 				BA4BB99A2D7F374C006BD137 /* AppearanceSettingsView.swift in Sources */,
