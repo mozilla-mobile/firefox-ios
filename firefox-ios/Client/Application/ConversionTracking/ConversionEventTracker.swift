@@ -83,7 +83,7 @@ enum ConversionEvent {
         case .activeFirstDay:
             return .init(fine: 5, coarse: .low, lockWindow: false)
         case .setAsDefault:
-            return .init(fine: 10, coarse: .high, lockWindow: false)
+            return .init(fine: 10, coarse: .low, lockWindow: false)
         case .appOpenDay2Plus:
             return .init(fine: 15, coarse: .medium, lockWindow: false)
         case .uriLoadDay2Plus:
