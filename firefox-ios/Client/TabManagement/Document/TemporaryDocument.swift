@@ -121,7 +121,7 @@ final class DefaultTemporaryDocument: NSObject,
     /// Returns a modified request with Cookies header field
     private static func applyCookiesToRequest(_ request: URLRequest, cookies: [HTTPCookie]) -> URLRequest {
         var rawHeaderCookies = cookies.reduce("") { partialResult, cookie in
-            if let domain = request.url?.baseDomain, cookie.domain.contains(domain) {
+            if let url = request.url, cookieDomainMatches(cookie, url: url) {
                 return partialResult.appending("\(cookie.name)=\(cookie.value); ")
             }
             return partialResult
@@ -136,6 +136,18 @@ final class DefaultTemporaryDocument: NSObject,
         request.allHTTPHeaderFields = headers
 
         return request
+    }
+
+    /// Cookies match when request host is identical to domain (host-only cookie) or is a subdomain.
+    static func cookieDomainMatches(_ cookie: HTTPCookie, url: URL) -> Bool {
+        guard let host = url.host?.lowercased() else { return false }
+        var cookieDomain = cookie.domain.lowercased()
+        // Domain can be stored with leading dot, strip it
+        if cookieDomain.hasPrefix(".") {
+            cookieDomain.removeFirst()
+        }
+        guard !cookieDomain.isEmpty else { return false }
+        return host == cookieDomain || host.hasSuffix("." + cookieDomain)
     }
 
     func canDownload(request: URLRequest) -> Bool {

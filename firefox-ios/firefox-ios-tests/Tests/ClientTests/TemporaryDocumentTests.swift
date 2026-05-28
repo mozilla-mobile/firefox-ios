@@ -64,6 +64,36 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         subject = nil
     }
 
+    // MARK: - Cookie Domain Tests
+
+    func testCookieDomainMatches_exactDomain_matches() {
+        let cookie = makeCookie(domain: "example.com")
+        XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://example.com")!))
+    }
+
+    func testCookieDomainMatches_subdomainOfDomainCookie_matches() {
+        // ".example.com" should match a subdomain request.
+        let cookie = makeCookie(domain: ".example.com")
+        XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://www.example.com")!))
+    }
+
+    func testCookieDomainMatches_substringDomain_doesNotMatch() {
+        // Request to azon.com should not match amazon.com's cookie, even though
+        // "azon.com" is a substring of "amazon.com".
+        let cookie = makeCookie(domain: "amazon.com")
+        XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://azon.com")!))
+    }
+
+    func testCookieDomainMatches_unrelatedDomain_doesNotMatch() {
+        let cookie = makeCookie(domain: "example.com")
+        XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://othersite.com")!))
+    }
+
+    func testCookieDomainMatches_isCaseInsensitive() {
+        let cookie = makeCookie(domain: "Example.COM")
+        XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://EXAMPLE.com")!))
+    }
+
     func testInit_passCorrectName_fromResponse() async {
         let response = MockURLResponse(filename: filename, url: request.url!)
         subject = await createSubject(response: response, request: request, session: mockURLSession)
@@ -206,5 +236,14 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         )
         await trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func makeCookie(domain: String) -> HTTPCookie {
+        return HTTPCookie(properties: [
+            .domain: domain,
+            .path: "/",
+            .name: "key",
+            .value: "session=123"
+        ])!
     }
 }
