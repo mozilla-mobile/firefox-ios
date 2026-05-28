@@ -385,7 +385,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             }
         )
     }
-    
+
     private func recordSwipeTelemetry(forPage page: Int) {
         guard let container = pagesStack.arrangedSubviews[safe: page] as? PageContainer,
               let viewName = container.content.telemetryValue else { return }
