@@ -30,6 +30,7 @@ struct ConversionEventTracker {
         if dayIndex == 0 {
             record(.activeFirstDay)
         } else if dayIndex >= 1 && dayIndex <= 28 {
+            // Days index starts at 0 so day 2 is index 1
             record(.appOpenDay2Plus)
         }
 

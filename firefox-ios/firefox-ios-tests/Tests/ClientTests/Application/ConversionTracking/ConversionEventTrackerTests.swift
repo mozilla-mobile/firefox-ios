@@ -195,6 +195,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
     func testRecordActivityEvents_dayZero_firesActiveFirstDayOnly() {
         dataManager.firstDayAfterInstallTimestamp = installTimestamp
+        // Day 0 is the first day
         dataManager.activeDayIndices = [0]
         let subject = createSubject()
 
@@ -206,6 +207,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
     func testRecordActivityEvents_dayThree_firesAppOpenDay2Plus() {
         dataManager.firstDayAfterInstallTimestamp = installTimestamp
+        // Day 0 is the first day
         dataManager.activeDayIndices = [0, 3]
         let subject = createSubject()
 
@@ -217,6 +219,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
     func testRecordActivityEvents_dayThirty_doesNotFireAppOpenDay2Plus() {
         dataManager.firstDayAfterInstallTimestamp = installTimestamp
+        // Day 0 is the first day
         dataManager.activeDayIndices = [0]
         let subject = createSubject()
 
@@ -228,6 +231,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
     func testThirdActivityFirstWeek_firesWhenThreeWeek1Days() {
         dataManager.firstDayAfterInstallTimestamp = installTimestamp
+        // Day 0 is the first day
         dataManager.activeDayIndices = [0, 2, 5]
         let subject = createSubject()
 
@@ -238,6 +242,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
     func testThirdActivityFirstWeek_doesNotFireWithOnlyTwoDays() {
         dataManager.firstDayAfterInstallTimestamp = installTimestamp
+        // Day 0 is the first day
         dataManager.activeDayIndices = [0, 2]
         let subject = createSubject()
 
