@@ -34,6 +34,9 @@ final class ConversionActivityLogger {
 
     private func dayIndex(at now: Timestamp) -> Int? {
         guard let install = dataManager.firstDayAfterInstallTimestamp else { return nil }
-        return now.daysSince(timestamp: install)
+        let dayIndex = now.daysSince(timestamp: install)
+        // Conversion windows only span 35 days. No need to log after that
+        guard dayIndex <= 35 else { return nil }
+        return dayIndex
     }
 }

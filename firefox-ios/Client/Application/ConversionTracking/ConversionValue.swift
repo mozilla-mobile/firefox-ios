@@ -15,10 +15,10 @@ struct ConversionValue {
     //               current conversion window, allowing the postback to be scheduled sooner.
 
     var fine: Int
-    var coarse: CoarseCoversionValue
+    var coarse: CoarseConversionValue
     var lockWindow = false
 
-    enum CoarseCoversionValue {
+    enum CoarseConversionValue {
         case low
         case medium
         case high

@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 struct ConversionEventTracker {
-    static let attributionHorizonDays = 35
+    static let conversionWindowTotalDays = 35
 
     let dataManager: ConversionDataManager
     let conversionValueUpdater: ConversionValueUpdater
@@ -18,16 +18,14 @@ struct ConversionEventTracker {
     }
 
     func recordURILoadConversionEvent(now: Timestamp = Date.now()) {
-        guard let install = dataManager.firstDayAfterInstallTimestamp else { return }
-        let dayIndex = now.daysSince(timestamp: install)
-        guard dayIndex >= 1, dayIndex <= 28 else { return }
+        guard let dayIndex = currentDayIndex(from: now),
+            dayIndex >= 1, dayIndex <= 28 else { return }
         record(.uriLoadDay2Plus)
     }
 
     func recordActivityEvents(now: Timestamp = Date.now()) {
-        guard let install = dataManager.firstDayAfterInstallTimestamp else { return }
-        let dayIndex = now.daysSince(timestamp: install)
-        guard dayIndex <= ConversionEventTracker.attributionHorizonDays else { return }
+        guard let dayIndex = currentDayIndex(from: now),
+            dayIndex <= ConversionEventTracker.conversionWindowTotalDays else { return }
 
         if dayIndex == 0 {
             record(.activeFirstDay)
@@ -62,6 +60,11 @@ struct ConversionEventTracker {
     func record(_ event: ConversionEvent) {
         let cv = event.conversionValue
         conversionValueUpdater.update(conversionValue: cv)
+    }
+
+    private func currentDayIndex(from now: Timestamp) -> Int? {
+        guard let install = dataManager.firstDayAfterInstallTimestamp else { return nil }
+        return now.daysSince(timestamp: install)
     }
 }
 
