@@ -16,7 +16,6 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
 
     func test_keyboardWillShow_withSnapKit_BottomToolbar_viewsHaveRightHeight() {
         let subject = createSubject()
-        selectTabWithFindInPage()
         let state = createKeyboardState()
         let keyboardHelper = createKeyboardHelper()
         XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
@@ -65,7 +64,6 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
 
     func test_keyboardDidShow_withSnapkit_BottomToolbar_viewsHaveRightHeight() {
         let subject = createSubject()
-        selectTabWithFindInPage()
         let state = createKeyboardState()
         let keyboardHelper = createKeyboardHelper()
         XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
@@ -111,7 +109,6 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
 
     func test_keyboardWillHide_withSnapKit_BottomToolbar_viewsHaveRightHeight() {
         let subject = createSubject()
-        selectTabWithFindInPage()
         let keyboardHelper = createKeyboardHelper()
 
         // Show keyboard first
@@ -177,7 +174,6 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
 
     func test_keyboardWillChange_withSnapKit_BottomToolbar_viewsHaveRightHeight() {
         let subject = createSubject()
-        selectTabWithFindInPage()
         let keyboardHelper = createKeyboardHelper()
 
         // Show keyboard first

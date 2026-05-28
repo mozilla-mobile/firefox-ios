@@ -470,8 +470,7 @@ final class LocationView: UIView,
             }, completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = true
                 isUserInteractionEnabled = true
-            }
-        )
+            })
     }
 
     private func removeGlassEffectImmediately() {

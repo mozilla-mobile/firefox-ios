@@ -1,24 +1,71 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
+import Common
+import DeviceCheck
 import Shared
 import MLPAKit
 
 public protocol LiteLLMCreating {
-    func createAppAttestLiteLLM(using prefs: Prefs, serviceType: MLPAServiceType) -> LiteLLMClientProtocol?
+    func createAppAttestLiteLLM(
+        using prefs: Prefs,
+        serviceType: MLPAServiceType
+    ) -> LiteLLMClientProtocol?
 }
 
 public struct LiteLLMCreator: LiteLLMCreating {
-    public init() { }
+    private let keyStore: AppAttestKeyIDStore
+    private let appAttestService: AppAttestServiceProtocol
+    private let bundleIdentifier: String
 
-    public func createAppAttestLiteLLM(using prefs: Prefs, serviceType: MLPAServiceType) -> LiteLLMClientProtocol? {
+    public init(
+        keyStore: AppAttestKeyIDStore = KeychainAppAttestKeyIDStore(),
+        appAttestService: AppAttestServiceProtocol = DCAppAttestService.shared,
+        bundleIdentifier: String = AppInfo.bundleIdentifier
+    ) {
+        self.keyStore = keyStore
+        self.appAttestService = appAttestService
+        self.bundleIdentifier = bundleIdentifier
+    }
+
+    public func createAppAttestLiteLLM(
+        using prefs: Prefs,
+        serviceType: MLPAServiceType
+    ) -> LiteLLMClientProtocol? {
         let mlpaEnvironmentKey = prefs.stringForKey(PrefsKeys.MLPASettings.mlpaEndpointEnvironment) ?? ""
         let mlpaEnvironment = MLPAEnvironment(rawValue: mlpaEnvironmentKey) ?? .prod
+
+        // Reset attestation key if environment has changed
+        resetKeyIfEnvironmentChanged(prefs: prefs, currentEnvironment: mlpaEnvironment)
+
         guard let endPoint = MLPAConstants.completionsEndpoint(with: mlpaEnvironment),
-              let client = try? AppAttestClient(remoteServer: MLPAAppAttestServer(with: mlpaEnvironment)) else {
+              let client = try? AppAttestClient(
+                appAttestService: appAttestService,
+                remoteServer: MLPAAppAttestServer(with: mlpaEnvironment, bundleIdentifier: bundleIdentifier),
+                keyStore: keyStore
+              ) else {
             return nil
         }
-        let authenticator = AppAttestRequestAuth(appAttestClient: client, serviceType: serviceType)
+        let authenticator = AppAttestRequestAuth(
+            appAttestClient: client,
+            bundleIdentifier: bundleIdentifier,
+            serviceType: serviceType
+        )
         return LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
+    }
+
+    /// Resets the App Attest key if the MLPA environment has changed since last use.
+    ///
+    /// This ensures that when switching between environments (prod/staging/dev),
+    /// the app will re-attest with the correct server.
+    private func resetKeyIfEnvironmentChanged(prefs: Prefs, currentEnvironment: MLPAEnvironment) {
+        let lastUsedEnvironment = prefs.stringForKey(PrefsKeys.MLPASettings.lastUsedEnvironment)
+        let currentEnvironmentValue = currentEnvironment.rawValue
+
+        if let lastUsedEnvironment, lastUsedEnvironment != currentEnvironmentValue {
+            try? keyStore.clearKeyID()
+        }
+
+        prefs.setString(currentEnvironmentValue, forKey: PrefsKeys.MLPASettings.lastUsedEnvironment)
     }
 }

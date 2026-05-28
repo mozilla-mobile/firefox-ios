@@ -210,7 +210,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
         let containerWidth = environment.container.contentSize.width
-        let itemHeight = UX.MessageCardConstants.height
+        let itemHeight = lastKnownWorldCupCellHeight ?? UX.MessageCardConstants.height
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(itemHeight))

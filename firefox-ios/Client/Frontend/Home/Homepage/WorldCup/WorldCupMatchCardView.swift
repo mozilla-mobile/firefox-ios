@@ -190,6 +190,11 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         liveLabelContainer.isHidden = !model.isLive
     }
 
+    func getWinnerThirdPlaceOrFinal() -> (teamKey: String, winnerLabel: String)? {
+        guard let model else { return nil }
+        return model.winnerThirdPlaceOrFinal
+    }
+
     private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {
         featuredMatchesStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         featuredDividers.forEach { $0.removeFromSuperview() }

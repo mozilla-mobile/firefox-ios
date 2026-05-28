@@ -196,6 +196,30 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.assertBookmarkListLabel(label: "Empty list")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3168597
+    func testDeleteEmptyFolderViaContextMenu() {
+        app.launch()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.tapDoneButton()
+        libraryScreen.longPressAndSelectContextMenuOption(option: "Delete Folder")
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168598
+    func testDeleteEmptyFolderBySwipe() {
+        app.launch()
+        let folderName = "Test Folder"
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: folderName)
+        libraryScreen.tapDoneButton()
+        libraryScreen.swipeBookmarkListEntry(entryName: folderName)
+        libraryScreen.tapDeleteBookmarkButton()
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3168588
     func testEditModeExitsOnlyWithDoneButton() {
         app.launch()
@@ -460,6 +484,18 @@ class BookmarksTests: FeatureFlaggedTestBase {
         mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: "!@#$%^&*()_+")
         libraryScreen.assertNewFreshFolderCreated(folderName: "!@#$%^&*()_+")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168627
+    func testCreateFolderWithVeryLongName() {
+        app.launch()
+        let longFolderName = "A very long folder name used to verify that the title field " +
+                             "imposes no length limit and the name is trimmed to one line"
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: longFolderName)
+        libraryScreen.assertNewFreshFolderCreated(folderName: longFolderName)
+        libraryScreen.assertFolderNameDisplayedOnSingleLine(folderName: longFolderName)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168629

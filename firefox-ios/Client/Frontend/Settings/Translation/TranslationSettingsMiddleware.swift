@@ -74,16 +74,11 @@ final class TranslationSettingsMiddleware {
                     from: "\(current)"
                 )
             }
-            store.dispatch(ToolbarAction(
+            store.dispatch(TranslationsAction(
                 isTranslationsEnabled: newValue,
                 translationConfiguration: TranslationConfiguration(prefs: prefs, isUserSettingEnabled: newValue),
                 windowUUID: action.windowUUID,
-                actionType: ToolbarActionType.didTranslationSettingsChange
-            ))
-            store.dispatch(TranslationSettingsMiddlewareAction(
-                isTranslationsEnabled: newValue,
-                windowUUID: action.windowUUID,
-                actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
+                actionType: TranslationsActionType.didTranslationSettingsChange
             ))
             if !newValue {
                 resetStorageTask?.cancel()
@@ -105,10 +100,10 @@ final class TranslationSettingsMiddleware {
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
             if newValue {
-                store.dispatch(ToolbarAction(
+                store.dispatch(TranslationsAction(
                     translationConfiguration: TranslationConfiguration(prefs: prefs),
                     windowUUID: action.windowUUID,
-                    actionType: ToolbarActionType.didTranslationSettingsChange
+                    actionType: TranslationsActionType.didTranslationSettingsChange
                 ))
             }
 

@@ -210,6 +210,105 @@ struct WorldCupMatchesTests {
         #expect(model.upcomingMatches.isEmpty)
     }
 
+    // MARK: - perStage (single-team multi-card)
+
+    @Test
+    func test_perStage_groupOnly_yieldsSingleGroupCardWithM2Layout() {
+        // M2-preserved: when the team only has group-stage matches in the
+        // response, perStage emits one card with the M2 featured/upcoming
+        // layout (next/live match featured, others in the row).
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "QAT", date: "2026-06-18T22:00:00+00:00", stage: .groupStage)
+            ]
+        )
+
+        let result = WorldCupMatches.perStage(
+            response: response,
+            now: parse("2026-06-10T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 1)
+        let card = result.cards[0]
+        #expect(!card.featuredMatch.isEmpty)
+        #expect(card.featuredMatch.count + card.upcomingMatches.count == 2)
+        #expect(result.defaultIndex == 0)
+    }
+
+    @Test
+    func test_perStage_groupPlusKnockout_yieldsTwoCards_landingOnKnockout() {
+        // M3 spec: group history on one card, R32 fixture on its own card.
+        // Default lands on the latest stage (R32).
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "QAT", date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 3, home: "CHE", away: "CAN", date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
+            ],
+            current: nil,
+            next: [
+                makeMatch(id: 4, home: "MEX", away: "CAN", date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+            ]
+        )
+
+        let result = WorldCupMatches.perStage(
+            response: response,
+            now: parse("2026-06-26T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 2)
+        #expect(result.cards[1].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
+        #expect(result.cards[1].featuredMatch.count == 1)
+        #expect(result.cards[1].upcomingMatches.isEmpty)
+        #expect(result.defaultIndex == 1)
+    }
+
+    @Test
+    func test_perStage_threeStages_landsOnLatest() {
+        // Team has progressed through group + R32 and now has an R16
+        // fixture. Three cards; default lands on R16.
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "MEX", date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+            ],
+            current: nil,
+            next: [
+                makeMatch(id: 3, home: "CAN", away: "BRA", date: "2026-07-04T18:00:00+00:00", stage: .roundOf16)
+            ]
+        )
+
+        let result = WorldCupMatches.perStage(
+            response: response,
+            now: parse("2026-06-30T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 3)
+        #expect(result.cards[1].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
+        #expect(result.cards[2].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.Round16Label)
+        #expect(result.defaultIndex == 2)
+    }
+
+    @Test
+    func test_perStage_emptyResponse_returnsSingleEmptyPlaceholderCard() {
+        // Pre-tournament: response window has nothing for the team yet.
+        // Still surface a placeholder card so the homepage section renders.
+        let response = WorldCupMatchesResponse(previous: nil, current: nil, next: nil)
+
+        let result = WorldCupMatches.perStage(response: response, calendar: utcCalendar())
+
+        #expect(result.cards.count == 1)
+        #expect(result.cards[0].featuredMatch.isEmpty)
+        #expect(result.cards[0].upcomingMatches.isEmpty)
+        #expect(result.defaultIndex == 0)
+    }
+
     // MARK: - flattened (grouped-by-day)
 
     @Test
@@ -364,6 +463,190 @@ struct WorldCupMatchesTests {
         #expect(result.defaultIndex == 0)
     }
 
+    @Test
+    func test_flattened_includesKnockoutMatches_notJustGroupStage() {
+        // Pre-M3 the per-day view dropped anything non-group-stage; M3 needs
+        // knockouts in the same flattened cards so the elimination fallback
+        // works end-to-end.
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-30T18:00:00+00:00", stage: .roundOf16),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-07-04T18:00:00+00:00", stage: .quarterFinals)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-29T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 2)
+        #expect(result.cards[0].upcomingMatches.map(\.homeCode) == ["ARG"])
+        #expect(result.cards[1].upcomingMatches.map(\.homeCode) == ["ENG"])
+    }
+
+    @Test
+    func test_flattened_titleReflectsStageOfThatDaysMatches() {
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-15T18:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-30T18:00:00+00:00", stage: .roundOf16),
+                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-07-04T18:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 4, home: "ESP", away: "ITA", date: "2026-07-15T18:00:00+00:00", stage: .final)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-10T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.map(\.phaseTitle) == [
+            String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel,
+            String.WorldCup.HomepageWidget.RoundPhase.Round16Label,
+            String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel,
+            String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
+        ])
+    }
+
+    @Test
+    func test_flattened_knockoutStage_splitsAcrossDaysWithStageInTitle() {
+        // QF runs across two days in the real bracket. Each day gets its own
+        // card titled with the stage; the date is carried in `dateLabel`
+        // (the UI renders them together, e.g. "QUARTER-FINALS · Jul 10").
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "FRA", away: "UZB", date: "2026-07-09T13:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 2, home: "GER", away: "IRQ", date: "2026-07-09T16:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 3, home: "BRA", away: "ENG", date: "2026-07-10T13:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 4, home: "ARG", away: "ESP", date: "2026-07-10T16:00:00+00:00", stage: .quarterFinals)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-07-08T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 2)
+        #expect(result.cards.map(\.phaseTitle) == [
+            String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel,
+            String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel
+        ])
+        // Each day's QF card carries that day's date in `dateLabel`.
+        #expect(result.cards[0].dateLabel != nil)
+        #expect(result.cards[1].dateLabel != nil)
+        #expect(result.cards[0].dateLabel != result.cards[1].dateLabel)
+        #expect(result.cards[0].upcomingMatches.count == 2)
+        #expect(result.cards[1].upcomingMatches.count == 2)
+    }
+
+    @Test
+    func test_flattened_transitionDay_splitsGroupAndKnockoutIntoSeparateCards() {
+        // Real-bracket scenario: Jun 28 holds the last group games in the
+        // morning UTC (COL-PRT 01:30, CDR-UZB 01:30, ALG-AUT 04:00,
+        // JOR-ARG 04:00) and the first R32 fixtures in the afternoon
+        // (CZE-TBD 15:00, CAN-TBD 18:00, MAR-TBD 21:00). A single
+        // "Group Stage · Jun 28" card containing the R32 fixtures (because
+        // group is the dominant count) is wrong — those R32 entries must
+        // surface under their own "Round of 32 · Jun 28" card.
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "COL", away: "PRT", date: "2026-06-28T01:30:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CDR", away: "UZB", date: "2026-06-28T01:30:00+00:00", stage: .groupStage),
+                makeMatch(id: 3, home: "ALG", away: "AUT", date: "2026-06-28T04:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 4, home: "JOR", away: "ARG", date: "2026-06-28T04:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 5, home: "CZE", away: nil, date: "2026-06-28T15:00:00+00:00", stage: .roundOf32),
+                makeMatch(id: 6, home: "CAN", away: nil, date: "2026-06-28T18:00:00+00:00", stage: .roundOf32),
+                makeMatch(id: 7, home: "MAR", away: nil, date: "2026-06-28T21:00:00+00:00", stage: .roundOf32)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-28T00:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        // Two cards for Jun 28: one Group Stage (4 matches), one
+        // Round of 32 (3 matches), in that order (morning before afternoon).
+        #expect(result.cards.count == 2)
+        #expect(result.cards[0].phaseTitle == String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel)
+        #expect(result.cards[0].upcomingMatches.count == 4)
+        #expect(result.cards[1].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
+        #expect(result.cards[1].upcomingMatches.count == 3)
+        // Both cards carry the Jun 28 dateLabel.
+        #expect(result.cards[0].dateLabel != nil)
+        #expect(result.cards[0].dateLabel == result.cards[1].dateLabel)
+    }
+
+    @Test
+    func test_flattened_perDayTitle_reflectsThatDaysStage() {
+        // Multi-stage scenario: each day's card is titled by that day's
+        // dominant stage. With one match per day, the dominant stage is
+        // simply that match's stage.
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-07-04T18:00:00+00:00", stage: .roundOf16),
+                makeMatch(id: 2, home: "FRA", away: "GER", date: "2026-07-09T18:00:00+00:00", stage: .quarterFinals),
+                makeMatch(id: 3, home: "ESP", away: "ITA", date: "2026-07-14T18:00:00+00:00", stage: .semiFinals),
+                makeMatch(id: 4, home: "NLD", away: "JPN", date: "2026-07-19T18:00:00+00:00", stage: .final)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-07-03T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 4)
+        #expect(result.cards.map(\.phaseTitle) == [
+            String.WorldCup.HomepageWidget.RoundPhase.Round16Label,
+            String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel,
+            String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel,
+            String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
+        ])
+        // Every card carries the day's date label.
+        #expect(result.cards.allSatisfy { $0.dateLabel != nil })
+    }
+
+    @Test
+    func test_flattened_unknownStage_titleFallsBackToUpcoming() {
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1,
+                          home: "ARG",
+                          away: "BRA",
+                          date: "2026-06-30T18:00:00+00:00",
+                          stage: .unknown("Galactic Quarterfinals"))
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-29T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards[0].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel)
+    }
+
     // MARK: - score formatting
 
     @Test
@@ -441,7 +724,7 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_groupStage_usesGroupLetter() {
-        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: "Group C", stage: "Group Stage")
+        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: "Group C", stage: .groupStage)
 
         #expect(WorldCupMatches.phaseTitle(from: match)
                 == String.WorldCup.HomepageWidget.GroupPhase.GroupC)
@@ -449,7 +732,7 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_groupStage_fallsBackToGenericLabel_whenGroupMissing() {
-        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: nil, stage: "Group Stage")
+        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: nil, stage: .groupStage)
 
         #expect(WorldCupMatches.phaseTitle(from: match)
                 == String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel)
@@ -457,13 +740,13 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_knockoutStages_mapToLocalizedLabels() {
-        let mappings: [(String, String)] = [
-            ("Round of 32", String.WorldCup.HomepageWidget.RoundPhase.Round32Label),
-            ("Round of 16", String.WorldCup.HomepageWidget.RoundPhase.Round16Label),
-            ("Quarterfinals", String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel),
-            ("Semifinals", String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel),
-            ("Third Place", String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel),
-            ("Final", String.WorldCup.HomepageWidget.RoundPhase.FinalLabel)
+        let mappings: [(WorldCupMatchesResponse.Match.Stage, String)] = [
+            (.roundOf32, String.WorldCup.HomepageWidget.RoundPhase.Round32Label),
+            (.roundOf16, String.WorldCup.HomepageWidget.RoundPhase.Round16Label),
+            (.quarterFinals, String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel),
+            (.semiFinals, String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel),
+            (.thirdPlace, String.WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel),
+            (.final, String.WorldCup.HomepageWidget.RoundPhase.FinalLabel)
         ]
         for (stage, expected) in mappings {
             let match = makeMatch(id: 0, home: "BRA", away: "ARG", group: nil, stage: stage)
@@ -473,7 +756,11 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_unknownStage_fallsBackToUpcoming() {
-        let match = makeMatch(id: 0, home: "BRA", away: "ARG", group: nil, stage: "Galactic Quarterfinals")
+        let match = makeMatch(id: 0,
+                              home: "BRA",
+                              away: "ARG",
+                              group: nil,
+                              stage: .unknown("Galactic Quarterfinals"))
 
         #expect(WorldCupMatches.phaseTitle(from: match)
                 == String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel)
@@ -485,7 +772,112 @@ struct WorldCupMatchesTests {
                 == String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel)
     }
 
+    // MARK: - winnerThirdPlaceOrFinal
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsNil_forNonFinalPhase() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: []
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal == nil)
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsWinWorldCupLabel_forFinalPhase() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.FinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: []
+        )
+
+        let winner = model.winnerThirdPlaceOrFinal
+        #expect(winner?.teamKey == "BRA")
+        #expect(winner?.winnerLabel == String.WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel)
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsThirdPlaceLabel_forBronzeFinalPhase() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "FRA", away: "GER", winnerKey: "FRA")],
+            upcomingMatches: []
+        )
+
+        let winner = model.winnerThirdPlaceOrFinal
+        #expect(winner?.teamKey == "FRA")
+        #expect(winner?.winnerLabel == String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel)
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsNil_whenNoMatchHasAWinnerKey() {
+        // Final hasn't been played yet — neither match has a winnerKey.
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.FinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: nil)],
+            upcomingMatches: []
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal == nil)
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_pullsWinnerFromFeaturedMatchFirst() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.FinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: [makeViewMatch(home: "FRA", away: "GER", winnerKey: "FRA")]
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal?.teamKey == "BRA")
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_fallsBackToUpcomingMatch_whenFeaturedHasNoWinner() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.RoundPhase.FinalLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: nil)],
+            upcomingMatches: [makeViewMatch(home: "FRA", away: "GER", winnerKey: "GER")]
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal?.teamKey == "GER")
+    }
+
+    @Test
+    func test_winnerThirdPlaceOrFinal_returnsNil_forGroupStagePhase() {
+        let model = WorldCupMatches(
+            phaseTitle: String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel,
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: []
+        )
+
+        #expect(model.winnerThirdPlaceOrFinal == nil)
+    }
+
     // MARK: - Helpers
+
+    private func makeViewMatch(home: String,
+                               away: String,
+                               winnerKey: String? = nil) -> WorldCupMatch {
+        WorldCupMatch(
+            homeFlagAssetName: home,
+            homeCode: home,
+            awayFlagAssetName: away,
+            awayCode: away,
+            date: "2026-07-19T18:00:00+00:00",
+            score: nil,
+            winnerKey: winnerKey
+        )
+    }
 
     private func makeMatch(id: Int,
                            home: String?,
@@ -499,7 +891,8 @@ struct WorldCupMatchesTests {
                            awayPenalty: Int? = nil,
                            clock: String? = nil,
                            group: String? = nil,
-                           stage: String? = "Group Stage") -> WorldCupMatchesResponse.Match {
+                           stage: WorldCupMatchesResponse.Match.Stage? = .groupStage)
+    -> WorldCupMatchesResponse.Match {
         let homeTeam = home.map {
             WorldCupMatchesResponse.Team(
                 key: $0,

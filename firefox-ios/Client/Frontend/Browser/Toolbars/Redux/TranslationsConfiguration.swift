@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Common
+import Redux
 import Shared
 
 // Holds the configuration / state of the translation button on the toolbar
@@ -74,6 +75,18 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
         self.state = state
         self.translatedToLanguage = translatedToLanguage
         self.sourceLanguage = sourceLanguage
+    }
+
+    init?(from action: Action) {
+        if let config = (action as? ToolbarAction)?.translationConfiguration {
+            self = config
+            return
+        }
+        if let config = (action as? TranslationsAction)?.translationConfiguration {
+            self = config
+            return
+        }
+        return nil
     }
 
     var isMultiLanguageFlow: Bool {

@@ -27,9 +27,7 @@ struct WorldCupCellFactory {
             return view
         }
 
-        // If the WorldCup has started and the user selected a team, we don't display
-        // anymore the timer view
-        if state.hasWorldCupStarted && state.selectedCountryId != nil {
+        if state.selectedCountryId != nil {
             return matchesViews
         }
         let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
