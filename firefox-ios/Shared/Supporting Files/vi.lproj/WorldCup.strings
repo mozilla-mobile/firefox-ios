@@ -107,7 +107,7 @@
 "WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Hãy chọn một đội khác để theo dõi World Cup.";
 
 /* The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Xoá tiện ích World Cup";
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Xoá widget World Cup";
 
 /* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Xoá";

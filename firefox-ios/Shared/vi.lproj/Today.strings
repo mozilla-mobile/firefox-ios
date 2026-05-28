@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Tìm kiếm riêng tư";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Thêm lối tắt Firefox vào màn hình chính của bạn. Sau khi thêm tiện ích, hãy chạm và giữ để chỉnh sửa tiện ích và chọn một phím tắt khác.";
+"TodayWidget.QuickActionGalleryDescription" = "Thêm lối tắt Firefox vào màn hình chính của bạn. Sau khi thêm widget, hãy chạm và giữ để chỉnh sửa widget và chọn một lối tắt khác.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Hành động nhanh";

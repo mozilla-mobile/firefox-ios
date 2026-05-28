@@ -115,8 +115,14 @@
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Baru di %@";
 
+/* On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting. */
+"MainMenu.SiteProtection.AdBlocker.Title.v153" = "Pemblokir Iklan";
+
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
 "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "Sambungan tidak aman";
+
+/* On the main menu, at the top, title for a badge that opens site protection settings. */
+"MainMenu.SiteProtection.Protections.Title.v153" = "Proteksi";
 
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
 "MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "Perlindungan NONAKTIF";
@@ -349,6 +355,9 @@
 /* On the main menu, the accessibility label for the action that will open the page zoom tool. */
 "MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "Pembesaran Laman";
 
+/* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "Tampilan Baca";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Simpan";
 
@@ -391,6 +400,12 @@
 /* On the main menu, the title for the action that will show the reader view for the webpage. */
 "MainMenu.ToolsSection.ReaderView.Title.v149" = "Tampilan Pembaca";
 
+/* On the main menu, the label for the action that indicates that Reader view is turned off. */
+"MainMenu.ToolsSection.ReaderViewOff.Title.v150" = "Mati";
+
+/* On the main menu, the label for the action that indicates that Reader view is turned on. */
+"MainMenu.ToolsSection.ReaderViewOn.Title.v150" = "Nyala";
+
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Simpan";
 
@@ -412,11 +427,20 @@
 /* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
 "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "Diterjemahkan ke %@";
 
+/* On the main menu, the badge shown on the Translate Page item when translation is inactive. */
+"MainMenu.ToolsSection.Translation.Off.v151" = "Mati";
+
 /* On the main menu, the title for the action that will translate the content of the webpage. */
 "MainMenu.ToolsSection.Translation.Title.v145" = "Terjemahkan Laman";
 
+/* On the main menu, in the multi-language translation flow, the title for the action that will open a language picker to choose a language and translate the content of the webpage. The ellipsis indicates that a language picker will open. */
+"MainMenu.ToolsSection.Translation.Title.v151" = "Terjemahkan Laman…";
+
 /* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
 "MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Diterjemahkan";
+
+/* On the main menu, in the multi-language translation flow, the title for the action that shows the content of the webpage has been translated. Tapping opens a language picker to change the language. The ellipsis indicates that a language picker will open. */
+"MainMenu.ToolsSection.Translation.Translated.Title.v151" = "Diterjemahkan…";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
 "MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Mati";

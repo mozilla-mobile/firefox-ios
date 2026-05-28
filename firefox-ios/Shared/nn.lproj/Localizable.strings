@@ -839,7 +839,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Kryptoutvinnarar brukar i hemmelegheit datakrafta til systemet for å utvinne digitale pengar. Kryptoutvinningsskript tappar batteriet, gjer datamaskina tregare og kan auke straumrekninga.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Innstillingane i nettlesaren og datamaskina er unike. Fingerprinters samlar ei rekkje av desse unike innstillingane for å opprette ein profil av deg som kan brukast til å spore deg når du surfar.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Innstillingane i nettlesaren og datamaskina er unike. Nettlesaravtrykk samlar ei rekkje av desse unike innstillingane for å opprette ein profil av deg som kan brukast til å spore deg når du surfar.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sosiale nettverk plasserer sporarar på andre nettstadar for å byggje ein meir fullstendig og målretta profil av deg. Blokkering av desse sporarane reduserer kor mykje sosiale media-selskap kan sjå kva du gjer på nettet.";
