@@ -1,4 +1,7 @@
 import json
+import os
+
+device_key = os.environ.get("DEVICE_KEY")
 
 PERFHERDER_DATA = {"framework": {"name":"mozperftest"},
                    "application": {"name": "fennec"},
@@ -10,6 +13,8 @@ with open('test.json') as json_file:
     for p in data:
         suite = {}
         suite["name"] = p["testName"]
+        if device_key:
+            suite["extraOptions"] = [device_key]
         suite["subtests"] = []
         for key, value in p.items():
             if key != "testName":
