@@ -325,7 +325,6 @@ extension IntroViewController: OnboardingCardDelegate {
             )
         case .setDefaultBrowser:
             introViewModel.chosenOptions.insert(.setAsDefaultBrowser)
-            // TODO: does this actually indicate that they set this as the default browser?
             introViewModel.updateOnboardingUserActivationEvent()
             registerForNotification()
             viewModel.telemetryUtility.sendGoToSettingsButtonTappedTelemetry()

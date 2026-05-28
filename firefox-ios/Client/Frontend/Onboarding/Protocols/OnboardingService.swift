@@ -196,7 +196,6 @@ final class OnboardingService: UserFeaturePreferenceProvider {
 
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
-        // TODO: does this actually indicate that they set this as the default browser?
         activityEventHelper.updateOnboardingUserActivationEvent()
         registerForNotification()
         telemetryUtility?.sendGoToSettingsButtonTappedTelemetry()
