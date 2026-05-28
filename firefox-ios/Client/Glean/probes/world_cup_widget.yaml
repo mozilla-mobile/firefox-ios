@@ -122,6 +122,7 @@ world_cup_widget:
           cards this is the untranslated phase value (e.g. "Group Stage",
           "Round of 16", "Final"); for the timer view it is "countdown"
           before the tournament starts and "follow_your_team" after.
+          For the error view just return "error".
         type: string
       is_impression:
         description: |
