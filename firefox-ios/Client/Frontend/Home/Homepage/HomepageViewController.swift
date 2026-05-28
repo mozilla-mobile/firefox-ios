@@ -672,7 +672,7 @@ final class HomepageViewController: UIViewController,
                         self?.relayoutForCellHeightChange()
                     },
                     isCardImpression: { [weak self] in
-                        return self?.alreadyTrackedSections.contains(.worldcup) ?? false
+                        return !(self?.alreadyTrackedSections.contains(.worldcup) ?? true)
                     }
                 )
             }

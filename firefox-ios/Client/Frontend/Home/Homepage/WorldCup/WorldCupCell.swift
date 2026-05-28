@@ -227,7 +227,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        goToPage(pageControl.currentPage)
+        goToPage(pageControl.currentPage, recordTelemetry: false)
     }
 
     override func layoutSubviews() {
@@ -342,7 +342,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         return true
     }
 
-    private func goToPage(_ page: Int) {
+    private func goToPage(_ page: Int, recordTelemetry: Bool = true) {
         pageControl.currentPage = page
         updatePageAccessibility()
         let (isShowingWinnerView, applyWinnerChanges) = getWinnerStatusForCurrentPage()
@@ -350,7 +350,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         let (scrollViewHeight, contentViewHeight) = getContentsHeight(for: page, isShowingWinnerView: isShowingWinnerView)
         applyWinnerChanges()
         scrollViewHeightConstraint?.constant = scrollViewHeight
-        recordSwipeTelemetry(forPage: page)
+        if recordTelemetry {
+            recordSwipeTelemetry(forPage: page)
+        }
         UIView.animate(
             withDuration: UX.contentConstraintsChangeAnimationDuration,
             delay: UX.animationDelay,
