@@ -664,10 +664,17 @@ final class HomepageViewController: UIViewController,
             return configureMerinoCell(story, at: indexPath)
         case .worldcupCard:
             return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(with: homepageState.worldcupState, theme: currentTheme) { [weak self] height in
-                    self?.sectionProvider.setWorldCupCellHeight(height)
-                    self?.relayoutForCellHeightChange()
-                }
+                cell.configure(
+                    with: homepageState.worldcupState,
+                    theme: currentTheme,
+                    onHeightChange: { [weak self] height in
+                        self?.sectionProvider.setWorldCupCellHeight(height)
+                        self?.relayoutForCellHeightChange()
+                    },
+                    isCardImpression: { [weak self] in
+                        return self?.alreadyTrackedSections.contains(.worldcup) ?? false
+                    }
+                )
             }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }

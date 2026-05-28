@@ -7,7 +7,7 @@ import ComponentLibrary
 import Shared
 import UIKit
 
-final class WorldCupTimerView: UIView, ThemeApplicable {
+final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
     private struct UX {
         static let horizontalPadding: CGFloat = 16.0
         static let leftContentStackSpacing: CGFloat = 16.0
@@ -30,6 +30,10 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     private let profile: Profile
     private var countdownModel: WorldCupCountdownModel?
     private let telemetry = WorldCupTelemetry()
+    private var hasWorldCupStarted = false
+    var telemetryValue: String? {
+        return hasWorldCupStarted ? "follow_your_team" : "countdown"
+    }
 
     private var heroVisibleConstraints: [NSLayoutConstraint] = []
     private var heroHiddenConstraints: [NSLayoutConstraint] = []
@@ -272,6 +276,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     }
 
     private func applyStartedState(_ hasStarted: Bool) {
+        hasWorldCupStarted = hasStarted
         timerContainer.isHidden = hasStarted
         subtitleLabel.isHidden = !hasStarted
         if hasStarted {
