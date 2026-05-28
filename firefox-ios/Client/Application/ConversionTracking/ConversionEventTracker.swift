@@ -19,9 +19,9 @@ struct ConversionEventTracker {
 
     func recordURILoadConversionEvent(now: Timestamp = Date.now()) {
         guard let install = dataManager.firstDayAfterInstallTimestamp else { return }
-        let dayIndex = Date.now().daysSince(timestamp: install)
+        let dayIndex = now.daysSince(timestamp: install)
         guard dayIndex >= 1, dayIndex <= 28 else { return }
-        ConversionEventTracker().record(.uriLoadDay2Plus)
+        record(.uriLoadDay2Plus)
     }
 
     func recordActivityEvents(now: Timestamp = Date.now()) {
