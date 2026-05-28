@@ -251,8 +251,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         onHeightChange: @escaping (CGFloat) -> Void,
         isCardImpression: @escaping () -> Bool
     ) {
-        // apply the blur suddenly to avoid any lags when showing the cell on the background blur
-        adjustBlur(theme: theme)
         self.onHeightChange = onHeightChange
         self.isCardImpression = isCardImpression
         if currentState != state {
