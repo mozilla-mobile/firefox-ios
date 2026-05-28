@@ -119,7 +119,7 @@ world_cup_widget:
       view:
         description: |
           String identifier of the view the user has scrolled to. For match
-          cards this is the untranslated phase value (e.g. "Group A",
+          cards this is the untranslated phase value (e.g. "Group Stage",
           "Round of 16", "Final"); for the timer view it is "countdown"
           before the tournament starts and "follow_your_team" after.
         type: string
@@ -130,9 +130,9 @@ world_cup_widget:
           impression. False for every subsequent swipe within that session.
         type: boolean
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15933
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34046
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
