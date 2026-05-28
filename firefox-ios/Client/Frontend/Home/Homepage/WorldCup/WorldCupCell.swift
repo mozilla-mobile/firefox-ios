@@ -271,7 +271,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         }
         NSLayoutConstraint.activate(constraints)
         pageConstraints = constraints
-        
+
         goToPage(initialPage(for: state, pageCount: pages.count))
     }
 
