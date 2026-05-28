@@ -2934,3 +2934,47 @@ nimbus_system:
       - nimbus-targeting-context
     lifetime: application
 
+remote_settings:
+  uptake_remotesettings:
+    type: event
+    disabled: true # To be controlled by server knobs due to expected high volume
+    description: >
+      Was the remote content successfully pulled? This uptake telemetry
+      allows to monitor the behaviour of our clients when it comes to
+      fetching data from remote servers.
+    extra_keys:
+      value:
+        description: The synchronization status (success, up_to_date, sync_error, ...)
+        type: string
+      source:
+        description: >
+          A label to distinguish what is being pulled or updated in the component (eg. settings collection name, ...).
+        type: string
+      duration:
+        description: The duration of the synchronization process in milliseconds.
+        type: string
+      errorName:
+        description: An optional string with the error name attribute in case of failure.
+        type: string
+      trigger:
+        description: >
+          A label to distinguish what triggered the polling/fetching of remote content (eg. "broadcast", "timer", "forced", "manual")
+        type: string
+      age:
+        description: >
+          The age of pulled data in seconds (ie. difference between publication time and fetch time).
+        type: string
+      timestamp:
+        description: >
+          The current timestamp, received during synchronization.
+        type: string
+    bugs: &uptake_remotecontent_result_uptake_bugs
+      - https://bugzil.la/1517469
+      - https://bugzil.la/1617133
+    data_reviews: *uptake_remotecontent_result_uptake_bugs
+    notification_emails: &uptake_remotecontent_result_uptake_emails
+      - mleplatre@mozilla.com
+      - acottner@mozilla.com
+    data_sensitivity:
+      - technical
+    expires: never

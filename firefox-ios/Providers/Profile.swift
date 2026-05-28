@@ -254,10 +254,16 @@ open class BrowserProfile: Profile,
      * A SentTabDelegate can be provided in this initializer, or once the profile is initialized.
      * However, if we provide it here, it's assumed that we're initializing it from the application.
      */
+    typealias RemoteSettingsServiceFactory = (String, RemoteSettingsConfig) -> RemoteSettingsService
+    private let remoteSettingsServiceFactory: RemoteSettingsServiceFactory
+
     init(localName: String,
          fxaCommandsDelegate: FxACommandsDelegate? = nil,
          clear: Bool = false,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         remoteSettingsServiceFactory: @escaping RemoteSettingsServiceFactory = { storageDir, config in
+            RemoteSettingsService(storageDir: storageDir, config: config)
+         }) {
         logger.log("Initing profile \(localName) on thread \(Thread.current).",
                    level: .debug,
                    category: .setup)
@@ -266,6 +272,7 @@ open class BrowserProfile: Profile,
         self.keychain = KeychainManager.shared
         self.logger = logger
         self.fxaCommandsDelegate = fxaCommandsDelegate
+        self.remoteSettingsServiceFactory = remoteSettingsServiceFactory
 
         if clear {
             do {
@@ -667,7 +674,8 @@ open class BrowserProfile: Profile,
         if !FileManager.default.fileExists(atPath: path) {
             try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         }
-        let service = RemoteSettingsService(storageDir: path, config: config)
+        let service = remoteSettingsServiceFactory(path, config)
+        service.setTelemetry(telemetry: RemoteSettingsGleanTelemetry())
         #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
         serviceSyncCoordinator = RemoteSettingsServiceSyncCoordinator(service: service, prefs: prefs)
         #endif
