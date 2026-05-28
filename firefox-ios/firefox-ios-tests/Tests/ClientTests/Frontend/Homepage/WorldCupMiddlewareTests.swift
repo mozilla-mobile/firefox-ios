@@ -870,6 +870,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let feed = apiClient.map { client in
             WorldCupFeed(
                 apiClient: client,
+                store: store,
                 usesDevServerTimeline: usesDevServerTimeline,
                 selectedTeamProvider: { store.selectedTeam }
             )
