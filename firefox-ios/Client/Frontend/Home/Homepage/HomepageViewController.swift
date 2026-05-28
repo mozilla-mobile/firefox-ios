@@ -1268,6 +1268,8 @@ final class HomepageViewController: UIViewController,
             return
         }
         switch item {
+        case .addShortcutTile:
+            presentAddShortcutAlert()
         case .topSite(let config, _):
             dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
@@ -1318,6 +1320,11 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    private func presentAddShortcutAlert() {
+        let alert = UIAlertController.addShortcutAlert()
+        present(alert, animated: true)
     }
 
     /// Sends telemetry data associated with tapping on a card item. The jump back in synced card item
