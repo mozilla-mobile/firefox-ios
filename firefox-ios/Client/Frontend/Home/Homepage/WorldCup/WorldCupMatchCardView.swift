@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-final class WorldCupMatchCardView: UIView, ThemeApplicable {
+final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
     private struct UX {
         static let sectionSpacing: CGFloat = 16
         static let headerSpacing: CGFloat = 6
@@ -193,6 +193,12 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
     func getWinnerThirdPlaceOrFinal() -> (teamKey: String, winnerLabel: String)? {
         guard let model else { return nil }
         return model.winnerThirdPlaceOrFinal
+    }
+
+    /// Untranslated phase identifier for this card, surfaced through the
+    /// enclosing cell when emitting swipe telemetry.
+    var telemetryValue: String? {
+        return model?.telemetryPhaseValue
     }
 
     private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {

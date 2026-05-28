@@ -18,7 +18,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         static let hiddenAlpha: CGFloat = 0.0
     }
 
-    let content: UIView
+    let content: WorldCupPagerView
     private let loadingImageView: UIImageView = .build { image in
         image.image = UIImage(named: UX.loadingImage)
         image.isAccessibilityElement = false
@@ -26,7 +26,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         image.isHidden = true
     }
 
-    init(content: UIView) {
+    init(content: WorldCupPagerView) {
         self.content = content
         super.init(frame: .zero)
         setupLayout()
@@ -145,8 +145,13 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var rootContainerBottomConstraint: NSLayoutConstraint?
     private var currentState: WorldCupSectionState?
     private var onHeightChange: ((CGFloat) -> Void)?
+    /// Called the first time a card is shown after the cell is configured.
+    /// The closure should record the section-level impression as a side effect
+    /// and return `true` only the first time it's called per homepage session.
+    private var isCardImpression: (() -> Bool)?
     private var lastScrollViewWidth: CGFloat = 0
     private var theme: Theme?
+    private let telemetry = WorldCupTelemetry()
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -222,7 +227,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        goToPage(pageControl.currentPage)
+        goToPage(pageControl.currentPage, recordTelemetry: false)
     }
 
     override func layoutSubviews() {
@@ -243,9 +248,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     func configure(
         with state: WorldCupSectionState,
         theme: Theme,
-        onHeightChange: @escaping (CGFloat) -> Void
+        onHeightChange: @escaping (CGFloat) -> Void,
+        isCardImpression: @escaping () -> Bool
     ) {
         self.onHeightChange = onHeightChange
+        self.isCardImpression = isCardImpression
         if currentState != state {
             currentState = state
             rebuildPages(for: state)
@@ -333,7 +340,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         return true
     }
 
-    private func goToPage(_ page: Int) {
+    private func goToPage(_ page: Int, recordTelemetry: Bool = true) {
         pageControl.currentPage = page
         updatePageAccessibility()
         let (isShowingWinnerView, applyWinnerChanges) = getWinnerStatusForCurrentPage()
@@ -341,6 +348,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         let (scrollViewHeight, contentViewHeight) = getContentsHeight(for: page, isShowingWinnerView: isShowingWinnerView)
         applyWinnerChanges()
         scrollViewHeightConstraint?.constant = scrollViewHeight
+        if recordTelemetry {
+            recordSwipeTelemetry(forPage: page)
+        }
         UIView.animate(
             withDuration: UX.contentConstraintsChangeAnimationDuration,
             delay: UX.animationDelay,
@@ -372,6 +382,13 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
                 )
             }
         )
+    }
+
+    private func recordSwipeTelemetry(forPage page: Int) {
+        guard let container = pagesStack.arrangedSubviews[safe: page] as? PageContainer,
+              let viewName = container.content.telemetryValue else { return }
+        let isImpression = isCardImpression?() ?? false
+        telemetry.cardSwiped(view: viewName, isImpression: isImpression)
     }
 
     private func getContentsHeight(

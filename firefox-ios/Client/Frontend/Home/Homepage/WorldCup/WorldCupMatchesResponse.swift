@@ -127,7 +127,10 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             return nil
         }
 
-        /// Closed set of tournament stages emitted by merino's `stage` field..
+        /// Closed set of tournament stages emitted by merino's `stage` field.
+        /// `rawValue` round-trips the original server string — including the
+        /// `.unknown` case — which makes it suitable both for decoding and as
+        /// a stable, untranslated telemetry identifier.
         enum Stage: Decodable, Hashable, Sendable {
             case groupStage
             case roundOf32
@@ -137,6 +140,19 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             case thirdPlace
             case final
             case unknown(String)
+
+            var rawValue: String {
+                switch self {
+                case .groupStage: return "Group Stage"
+                case .roundOf32: return "Round of 32"
+                case .roundOf16: return "Round of 16"
+                case .quarterFinals: return "Quarter-finals"
+                case .semiFinals: return "Semi-finals"
+                case .thirdPlace: return "3rd Place"
+                case .final: return "Final"
+                case .unknown(let raw): return raw
+                }
+            }
 
             init(from decoder: Decoder) throws {
                 let raw = try decoder.singleValueContainer().decode(String.self)
