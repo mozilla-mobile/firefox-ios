@@ -25,6 +25,9 @@ public struct LocationViewConfiguration {
     public let didStartTyping: Bool
     public let shouldShowKeyboard: Bool
     public let shouldSelectSearchTerm: Bool
+    /// When true, the address field always shows the placeholder (even with a page
+    /// loaded) to signal AI Agent mode.
+    public let isAIAgentMode: Bool
     public var onTapLockIcon: (@MainActor (UIButton) -> Void)?
     public var onLongPress: (@MainActor () -> Void)?
 
@@ -46,6 +49,7 @@ public struct LocationViewConfiguration {
         didStartTyping: Bool,
         shouldShowKeyboard: Bool,
         shouldSelectSearchTerm: Bool,
+        isAIAgentMode: Bool = false,
         onTapLockIcon: (@MainActor (UIButton) -> Void)? = nil,
         onLongPress: (@MainActor () -> Void)? = nil
     ) {
@@ -66,6 +70,7 @@ public struct LocationViewConfiguration {
         self.didStartTyping = didStartTyping
         self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
+        self.isAIAgentMode = isAIAgentMode
         self.onTapLockIcon = onTapLockIcon
         self.onLongPress = onLongPress
     }

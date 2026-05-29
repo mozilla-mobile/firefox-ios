@@ -110,6 +110,7 @@ struct AccessibilityIdentifiers {
         static let history = "MainMenu.History"
         static let downloads = "MainMenu.Downloads"
         static let passwords = "MainMenu.Passwords"
+        static let aiAgent = "MainMenu.AIAgent"
         static let getHelp = "MainMenu.GetHelp"
         static let settings = "MainMenu.Settings"
         static let whatsNew = "MainMenu.WhatsNew"

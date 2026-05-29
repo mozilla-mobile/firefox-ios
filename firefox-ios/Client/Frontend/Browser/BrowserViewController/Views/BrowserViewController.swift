@@ -2690,6 +2690,13 @@ class BrowserViewController: UIViewController,
     func didSubmitSearchText(_ text: String) {
         guard let currentTab = tabManager.selectedTab else { return }
 
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        if toolbarState?.isAIAgentMode == true, !text.isEmpty {
+            overlayManager.cancelEditing(shouldCancelLoading: false)
+            presentAIAgentThoughts(prompt: text)
+            return
+        }
+
         if let fixupURL = URIFixup.getURL(text) {
             // The user entered a URL, so use it.
             finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
@@ -2697,6 +2704,43 @@ class BrowserViewController: UIViewController,
         }
 
         submitSearchText(text, forTab: currentTab)
+    }
+
+    /// Shows the AI agent "thought process" panel over the current page, reusing the
+    /// shake-to-summarize visual: a snapshot of the page slides down to reveal the
+    /// thoughts above it. Added as a child view controller so it owns the snapshot while
+    /// the real page stays in place behind. Thoughts are mocked for now; this is the entry
+    /// point for the real agent loop later.
+    private func presentAIAgentThoughts(prompt: String) {
+        // Capture + crop the page snapshot to the content area (mirrors SummarizeCoordinator).
+        let browserFrame = view.frame
+        var snapshot = view.snapshot
+        if let cropped = snapshot.cgImage?.cropping(
+            to: CGRect(
+                x: contentContainer.frame.origin.x * snapshot.scale,
+                y: contentContainer.frame.origin.y * snapshot.scale,
+                width: contentContainer.frame.width * snapshot.scale,
+                height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * snapshot.scale
+            )) {
+            snapshot = UIImage(cgImage: cropped, scale: UIScreen.main.scale, orientation: .up)
+        }
+
+        let panel = AIAgentThoughtsViewController(prompt: prompt,
+                                                  snapshot: snapshot,
+                                                  snapshotTopOffset: contentContainer.frame.origin.y,
+                                                  windowUUID: windowUUID)
+        addChild(panel)
+        panel.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(panel.view)
+        NSLayoutConstraint.activate([
+            panel.view.topAnchor.constraint(equalTo: view.topAnchor),
+            panel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            panel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        panel.didMove(toParent: self)
+        view.layoutIfNeeded()
+        panel.animateIn()
     }
 
     // MARK: - Handle navigation

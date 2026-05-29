@@ -153,6 +153,25 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 }
             ),
             MenuElement(
+                title: .MainMenu.PanelLinkSection.AIAgent,
+                iconName: Icons.summarizer,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.AIAgent,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.aiAgent,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.aiAgent),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
                 title: .MainMenu.PanelLinkSection.Passwords,
                 iconName: Icons.passwords,
                 isEnabled: true,

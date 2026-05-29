@@ -25,6 +25,7 @@ struct ToolbarState: ScreenState, Sendable {
     var shouldAnimate: Bool
     var isTranslucent: Bool
     var isTranslationsEnabled: Bool
+    var isAIAgentMode: Bool
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
 
@@ -56,6 +57,7 @@ struct ToolbarState: ScreenState, Sendable {
                   shouldAnimate: toolbarState.shouldAnimate,
                   isTranslucent: toolbarState.isTranslucent,
                   isTranslationsEnabled: toolbarState.isTranslationsEnabled,
+                  isAIAgentMode: toolbarState.isAIAgentMode,
                   previousTabScreenshot: toolbarState.previousTabScreenshot,
                   nextTabScreenshot: toolbarState.nextTabScreenshot
         )
@@ -81,6 +83,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: true,
             isTranslucent: false,
             isTranslationsEnabled: true,
+            isAIAgentMode: false,
             previousTabScreenshot: nil,
             nextTabScreenshot: nil
         )
@@ -105,6 +108,7 @@ struct ToolbarState: ScreenState, Sendable {
         shouldAnimate: Bool,
         isTranslucent: Bool,
         isTranslationsEnabled: Bool = true,
+        isAIAgentMode: Bool = false,
         previousTabScreenshot: UIImage?,
         nextTabScreenshot: UIImage?
     ) {
@@ -126,6 +130,7 @@ struct ToolbarState: ScreenState, Sendable {
         self.shouldAnimate = shouldAnimate
         self.isTranslucent = isTranslucent
         self.isTranslationsEnabled = isTranslationsEnabled
+        self.isAIAgentMode = isAIAgentMode
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
     }
@@ -189,6 +194,9 @@ struct ToolbarState: ScreenState, Sendable {
         case ToolbarActionType.navigationHintFinishedPresenting:
             return handleNavigationHintFinishedPresenting(state: state, action: action)
 
+        case ToolbarActionType.toggleAIAgentMode:
+            return handleToggleAIAgentMode(state: state, action: action)
+
         case SearchEngineSelectionActionType.didTapSearchEngine,
             SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleSearchEngineSelectionAction(state: state, action: action)
@@ -227,6 +235,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: isTranslucent,
             isTranslationsEnabled: toolbarAction.isTranslationsEnabled ?? state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -255,6 +264,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
             isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent,
             isTranslationsEnabled: toolbarAction.isTranslationsEnabled ?? state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -282,6 +292,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -309,6 +320,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -336,6 +348,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: toolbarAction.previousTabScreenshot,
             nextTabScreenshot: toolbarAction.nextTabScreenshot
         )
@@ -368,6 +381,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -395,6 +409,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -422,6 +437,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -449,6 +465,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -476,6 +493,34 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
+        )
+    }
+
+    @MainActor
+    private static func handleToggleAIAgentMode(state: Self, action: Action) -> ToolbarState {
+        return ToolbarState(
+            windowUUID: state.windowUUID,
+            toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
+            isPrivateMode: state.isPrivateMode,
+            addressToolbar: state.addressToolbar,
+            navigationToolbar: state.navigationToolbar,
+            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+            isShowingTopTabs: state.isShowingTopTabs,
+            canGoBack: state.canGoBack,
+            canGoForward: state.canGoForward,
+            numberOfTabs: state.numberOfTabs,
+            scrollAlpha: state.scrollAlpha,
+            showMenuWarningBadge: state.showMenuWarningBadge,
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: !state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -506,6 +551,7 @@ struct ToolbarState: ScreenState, Sendable {
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAIAgentMode: state.isAIAgentMode,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -538,6 +584,7 @@ struct ToolbarState: ScreenState, Sendable {
                             shouldAnimate: state.shouldAnimate,
                             isTranslucent: state.isTranslucent,
                             isTranslationsEnabled: state.isTranslationsEnabled,
+                            isAIAgentMode: state.isAIAgentMode,
                             previousTabScreenshot: state.previousTabScreenshot,
                             nextTabScreenshot: state.nextTabScreenshot)
     }

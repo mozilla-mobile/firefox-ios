@@ -532,7 +532,14 @@ final class LocationView: UIView,
         // setting the autocomplete suggestions which is done using a delegate method.
         guard !config.didStartTyping else { return }
         let shouldShowSearchTerm = (config.searchTerm != nil) && configurationIsEditing
-        let text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
+        // In AI Agent mode (and not editing) keep the field empty so the "Ask AI Agent…"
+        // placeholder shows instead of the page URL.
+        let text: String?
+        if config.isAIAgentMode && !configurationIsEditing {
+            text = nil
+        } else {
+            text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
+        }
         urlTextField.text = text
 
         DispatchQueue.main.async { [unowned self] in
@@ -546,7 +553,7 @@ final class LocationView: UIView,
 
     private func configureURLPlaceholder(basedOn config: LocationViewConfiguration) {
         isEditing = config.isEditing
-        if !isEditing && config.url != nil {
+        if !isEditing && config.url != nil && !config.isAIAgentMode {
             // allow proper centering of the urlTextField removing placeholder size.
             urlTextField.placeholder = nil
         } else {

@@ -109,6 +109,12 @@ class MainMenuCoordinator: BaseCoordinator {
 
     private func handleDestination(_ destination: MenuNavigationDestination) {
         switch destination.destination {
+        case .aiAgent:
+            store.dispatch(ToolbarAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.toggleAIAgentMode
+            ))
+
         case .bookmarks:
             navigationHandler?.showLibraryPanel(.bookmarks)
 

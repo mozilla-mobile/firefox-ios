@@ -147,6 +147,8 @@ enum ToolbarActionType: ActionType {
     case receivedTranslationLanguage
     case didReceiveErrorTranslating
     case didTranslationSettingsChange
+
+    case toggleAIAgentMode
 }
 
 struct ToolbarMiddlewareAction: Action {

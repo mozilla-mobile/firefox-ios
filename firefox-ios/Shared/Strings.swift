@@ -6189,6 +6189,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Passwords",
                 comment: "On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen.")
+            public static let AIAgent = MZLocalizedString(
+                key: "MainMenu.PanelLinkSection.AIAgent.Title.v140",
+                tableName: "MainMenu",
+                value: "AI Agent",
+                comment: "On the main menu, the title for the action that toggles AI Agent mode in the address bar.")
 
             public struct AccessibilityLabels {
                 public static let Bookmarks = MZLocalizedString(
@@ -6211,6 +6216,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Passwords",
                     comment: "On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen.")
+                public static let AIAgent = MZLocalizedString(
+                    key: "MainMenu.PanelLinkSection.AccessibilityLabels.AIAgent.v140",
+                    tableName: "MainMenu",
+                    value: "AI Agent",
+                    comment: "On the main menu, the accessibility label for the action that toggles AI Agent mode in the address bar.")
             }
         }
 
@@ -7964,6 +7974,12 @@ extension String {
             tableName: "AddressToolbar",
             value: "Search or enter address",
             comment: "Placeholder for the address field in the address toolbar.")
+
+        public static let AIAgentPlaceholder = MZLocalizedString(
+            key: "AddressToolbar.Location.AIAgentPlaceholder.v140",
+            tableName: "AddressToolbar",
+            value: "Ask AI Agent…",
+            comment: "Placeholder shown in the address field when AI Agent mode is on.")
 
         public static let SearchEngineA11yLabel = MZLocalizedString(
             key: "AddressToolbar.SearchEngine.A11y.Label.v128",

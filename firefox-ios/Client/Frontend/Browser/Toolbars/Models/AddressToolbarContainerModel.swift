@@ -36,6 +36,7 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldAnimate: Bool
     let scrollAlpha: Float
     let hasAlternativeLocationColor: Bool
+    let isAIAgentMode: Bool
 
     let windowUUID: UUID
 
@@ -63,7 +64,8 @@ final class AddressToolbarContainerModel: Equatable {
             ),
             lockIconButtonA11yId: lockIconButtonA11yId,
             lockIconButtonA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
-            urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
+            urlTextFieldPlaceholder: isAIAgentMode ? .AddressToolbar.AIAgentPlaceholder
+                                                   : .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             searchEngineImage: searchEngineImage,
             lockIconImageName: lockIconImageName,
@@ -76,6 +78,7 @@ final class AddressToolbarContainerModel: Equatable {
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
+            isAIAgentMode: isAIAgentMode,
             onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      buttonTapped: button,
@@ -166,7 +169,8 @@ final class AddressToolbarContainerModel: Equatable {
             searchEngineImageViewA11yLabel: "",
             lockIconButtonA11yId: nil,
             lockIconButtonA11yLabel: "",
-            urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
+            urlTextFieldPlaceholder: isAIAgentMode ? .AddressToolbar.AIAgentPlaceholder
+                                                   : .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: "",
             searchEngineImage: nil,
             lockIconImageName: lockIconImageName,
@@ -247,6 +251,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldAnimate = state.shouldAnimate
         self.scrollAlpha = state.scrollAlpha
         self.hasAlternativeLocationColor = hasAlternativeLocationColor
+        self.isAIAgentMode = state.isAIAgentMode
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
     }
@@ -360,6 +365,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.shouldAnimate == rhs.shouldAnimate &&
         lhs.scrollAlpha == rhs.scrollAlpha &&
         lhs.hasAlternativeLocationColor == rhs.hasAlternativeLocationColor &&
+        lhs.isAIAgentMode == rhs.isAIAgentMode &&
 
         lhs.windowUUID == rhs.windowUUID
     }
