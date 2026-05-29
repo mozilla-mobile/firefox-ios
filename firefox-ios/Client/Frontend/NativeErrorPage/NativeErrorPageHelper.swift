@@ -63,6 +63,36 @@ class NativeErrorPageHelper {
 
     // MARK: - Static Helpers
 
+    /// Returns whether the given NSURLError code represents a certificate error.
+    private static func isCertificateErrorCode(_ code: Int) -> Bool {
+        return CertErrors.contains(code)
+    }
+
+    /// Extracts the CFStream certificate error code embedded in the underlying NSError, if present.
+    private static func certStreamErrorCode(from error: NSError) -> Int? {
+        guard
+            let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
+            let certErrorCode = underlyingError.userInfo[Constants.cfStreamErrorCodeKey] as? Int
+        else { return nil }
+        return certErrorCode
+    }
+
+    /// Returns true when the error is a certificate error caused by a
+    /// hostname mismatch (SSL_ERROR_BAD_CERT_DOMAIN / -9843). Other certificate
+    /// failures return false so they fall back to the legacy HTML error page
+    private static func isBadCertDomainError(_ error: NSError) -> Bool {
+        guard isCertificateErrorCode(error.code) else { return false }
+        return certStreamErrorCode(from: error) == Constants.sslErrorBadCertDomainCode
+    }
+
+    /// Centralized predicate for whether we should show the native UI for a wrong-host certificate error.
+    static func shouldShowNativeBadCertDomainErrorPage(
+        for error: NSError,
+        isOtherErrorPagesEnabled: Bool
+    ) -> Bool {
+        return isOtherErrorPagesEnabled && isBadCertDomainError(error)
+    }
+
     /// Builds the full set of URL query items for an error page, including
     /// certificate-specific items when the error is a certificate error.
     static func buildErrorPageQueryItems(for error: NSError, url: URL) -> [URLQueryItem] {
@@ -71,24 +101,28 @@ class NativeErrorPageHelper {
             URLQueryItem(name: Constants.codeQueryParam, value: String(error.code))
         ]
 
-        if CertErrors.contains(error.code) {
+        if isCertificateErrorCode(error.code) {
             queryItems.append(contentsOf: buildCertificateQueryItems(for: error))
         }
 
         return queryItems
     }
 
-    /// Checks whether a given error page URL encodes a certificate error by
-    /// inspecting the `code` query parameter against known certificate error codes.
-    static func isCertificateErrorURL(_ url: URL) -> Bool {
+    /// Checks whether a given error page URL encodes a bad-cert-domain error.
+    /// Other certificate errors return false and use the legacy HTML error page.
+    static func isBadCertDomainErrorURL(_ url: URL) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let codeString = components.queryItems?.first(where: {
                   $0.name == Constants.codeQueryParam
               })?.value,
-              let errCode = Int(codeString)
+              let errCode = Int(codeString),
+              isCertificateErrorCode(errCode)
         else { return false }
 
-        return CertErrors.contains(errCode)
+        let certError = components.queryItems?.first(where: {
+            $0.name == Constants.certErrorQueryParam
+        })?.value
+        return certError == Constants.defaultBadCertDomainError
     }
 
     /// Logs diagnostic details for a certificate error to aid debugging.
@@ -182,25 +216,12 @@ class NativeErrorPageHelper {
     private static func buildCertificateQueryItems(for error: NSError) -> [URLQueryItem] {
         var queryItems = [URLQueryItem]()
 
-        if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
-           let certErrorCode = underlyingError.userInfo[Constants.cfStreamErrorCodeKey] as? Int,
+        if let certErrorCode = certStreamErrorCode(from: error),
            let certErrorString = CertErrorCodes[certErrorCode] {
             queryItems.append(URLQueryItem(
                 name: Constants.certErrorQueryParam,
                 value: certErrorString
             ))
-        } else {
-            let desc = error.localizedDescription.lowercased()
-            if let failingURL = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL,
-               let host = failingURL.host,
-               host.contains(Constants.wrongHostMarker) || host.contains(Constants.badSSLHostMarker)
-               || desc.contains(Constants.domainDescriptionMarker)
-               || desc.contains(Constants.hostnameDescriptionMarker) {
-                queryItems.append(URLQueryItem(
-                    name: Constants.certErrorQueryParam,
-                    value: Constants.defaultBadCertDomainError
-                ))
-            }
         }
 
         if let certChain = error.userInfo[Constants.peerCertificateChainKey] as? [SecCertificate],
@@ -234,9 +255,7 @@ class NativeErrorPageHelper {
 
         // TODO: FXIOS-14569 — Investigate using SecTrustEvaluateWithError to evaluate TLS trust
         // errors instead of private APIs.
-        if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
-           let certErrorCode = underlyingError.userInfo[Constants.cfStreamErrorCodeKey] as? Int,
-           certErrorCode == Constants.sslErrorBadCertDomainCode {
+        if certStreamErrorCode(from: error) == Constants.sslErrorBadCertDomainCode {
             let appName = AppName.shortName.description
             let securityInfo = String.NativeErrorPage.BadCertDomain.AdvancedSecurityInfo
             let certificateInfo = String(

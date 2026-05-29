@@ -580,7 +580,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - updateInContentHomePanel
 
-    func testUpdateInContentHomePanel_withCertificateErrorURL_showsNativeErrorPage() {
+    // NSURLErrorServerCertificateUntrusted alone is not enough to trigger the native
+    // error page — it also needs certerror=SSL_ERROR_BAD_CERT_DOMAIN in the URL.
+    func testUpdateInContentHomePanel_withNonBadCertDomainCertError_doesNotShowNativeErrorPage() {
         setupNimbusNativeErrorPageTesting(
             isEnabled: true,
             noInternetConnectionErrorIsEnabled: true,
@@ -591,6 +593,25 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let errorPageURL = URL(
             string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
             + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
+        )!
+
+        subject.updateInContentHomePanel(errorPageURL)
+
+        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
+    // A bad-cert-domain URL has both code=<cert error> AND certerror=SSL_ERROR_BAD_CERT_DOMAIN
+    func testUpdateInContentHomePanel_withBadCertDomainErrorURL_showsNativeErrorPage() {
+        setupNimbusNativeErrorPageTesting(
+            isEnabled: true,
+            noInternetConnectionErrorIsEnabled: true,
+            badCertDomainErrorPageIsEnabled: true
+        )
+        let subject = createSubject()
+        let certErrorCode = NSURLErrorServerCertificateUntrusted
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)&certerror=SSL_ERROR_BAD_CERT_DOMAIN"
         )!
 
         subject.updateInContentHomePanel(errorPageURL)
