@@ -647,6 +647,88 @@ struct WorldCupMatchesTests {
         #expect(result.cards[0].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel)
     }
 
+    @Test
+    func test_flattened_groupStage_prependsLocalizedGroupLabelToUpcomingMatchDate() {
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1,
+                          home: "ARG",
+                          away: "BRA",
+                          date: "2026-06-12T18:00:00+00:00",
+                          group: "Group A",
+                          stage: .groupStage)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-10T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        let date = result.cards[0].upcomingMatches.first?.date
+        #expect(date?.hasPrefix(String.WorldCup.HomepageWidget.GroupPhase.GroupA + " • ") == true)
+    }
+
+    @Test
+    func test_flattened_groupStage_doesNotPrefixDate_whenGroupIsNil() {
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1,
+                          home: "ARG",
+                          away: "BRA",
+                          date: "2026-06-12T18:00:00+00:00",
+                          group: nil,
+                          stage: .groupStage)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-10T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        let date = result.cards[0].upcomingMatches.first?.date ?? ""
+        let groupLabels = [
+            String.WorldCup.HomepageWidget.GroupPhase.GroupA,
+            String.WorldCup.HomepageWidget.GroupPhase.GroupB,
+            String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        ]
+        #expect(!groupLabels.contains(where: { date.hasPrefix($0 + " • ") }))
+    }
+
+    @Test
+    func test_flattened_knockoutStage_doesNotPrefixDate_evenWhenGroupSet() {
+        // Knockout matches never carry a group prefix, even if the upstream
+        // payload still has a `group` value populated.
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1,
+                          home: "ARG",
+                          away: "BRA",
+                          date: "2026-06-30T18:00:00+00:00",
+                          group: "Group A",
+                          stage: .roundOf16)
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-29T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        let date = result.cards[0].upcomingMatches.first?.date ?? ""
+        #expect(!date.hasPrefix(String.WorldCup.HomepageWidget.GroupPhase.GroupA + " • "))
+    }
+
     // MARK: - score formatting
 
     @Test
