@@ -48,6 +48,23 @@ struct WorldCupMatches: Equatable, Hashable {
     /// occupying the hero spot when an upcoming match is closer in time.
     private static let featuredWindow: TimeInterval = 2 * 60 * 60
 
+    /// Grace period after a card's last match is estimated to be over during
+    /// which the card stays selected, so a just-finished result lingers briefly
+    /// before we advance to the next fixture. A live match still wins.
+    private static let resultLingerWindow: TimeInterval = 30 * 60
+
+    static func defaultIndex(in cards: [WorldCupMatches],
+                             latestKickoffs: [Date],
+                             now: Date) -> Int {
+        guard !cards.isEmpty else { return 0 }
+        if let live = cards.firstIndex(where: \.isLive) { return live }
+        let window = featuredWindow + resultLingerWindow
+        if let active = latestKickoffs.firstIndex(where: { now < $0.addingTimeInterval(window) }) {
+            return active
+        }
+        return cards.count - 1
+    }
+
     /// Single-card view used when a team is selected: the merino response is
     /// already scoped to that team. We don't trust the server's
     /// `previous/current/next` labels for the featured/upcoming split — those
@@ -134,6 +151,7 @@ struct WorldCupMatches: Equatable, Hashable {
             let rhsDate = rhs.value.map(\.date).min() ?? .distantPast
             return lhsDate < rhsDate
         }
+        let latestKickoffs = sortedStages.map { _, entries in entries.map(\.date).max() ?? .distantPast }
         let cards = sortedStages.map { _, entries -> WorldCupMatches in
             // Each stage's matches are fed back through `init` as a fresh
             // response. Bucket placement (previous/current/next) doesn't
@@ -152,7 +170,7 @@ struct WorldCupMatches: Equatable, Hashable {
                 localeProvider: localeProvider
             )
         }
-        return (cards, max(cards.count - 1, 0))
+        return (cards, defaultIndex(in: cards, latestKickoffs: latestKickoffs, now: now))
     }
 
     /// No-team / eliminated-team multi-card view: one card per
@@ -170,7 +188,8 @@ struct WorldCupMatches: Equatable, Hashable {
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
         let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
-        let cards = groupedByDayAndStage(allMatches, calendar: calendar).map { group -> WorldCupMatches in
+        let groups = groupedByDayAndStage(allMatches, calendar: calendar)
+        let cards = groups.map { group -> WorldCupMatches in
             let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
             let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
             let isGroupStage = group.stage == .groupStage
@@ -187,7 +206,10 @@ struct WorldCupMatches: Equatable, Hashable {
                 }
             )
         }
-        return (cards, 0)
+        let latestKickoffs = groups.map { group in
+            group.matches.compactMap { WorldCupMatch.parseDate($0.date) }.max() ?? .distantPast
+        }
+        return (cards, defaultIndex(in: cards, latestKickoffs: latestKickoffs, now: now))
     }
 
     private static func dayLabel(for day: Date, locale: Locale) -> String {

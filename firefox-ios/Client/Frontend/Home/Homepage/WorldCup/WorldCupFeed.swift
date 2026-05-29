@@ -211,7 +211,7 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
-        let hasSelectedTeam = selectedTeamProvider() != nil
+        let beforeStart = isBeforeFirstMatch(now: now, in: response)
         if let team = selectedTeamProvider(),
            !isSelectedTeamEliminated(in: cachedTeamsResponse) {
             let perStage = WorldCupMatches.perStage(
@@ -220,8 +220,7 @@ final class WorldCupFeed {
                 now: now
             )
             return Snapshot(matches: perStage.cards,
-                            defaultMatchIndex: liveMatchIndex(in: perStage.cards,
-                                                              hasSelectedTeam: hasSelectedTeam),
+                            defaultMatchIndex: beforeStart ? 0 : perStage.defaultIndex,
                             apiError: nil)
         }
         store.setSelectedTeam(countryId: nil)
@@ -230,18 +229,22 @@ final class WorldCupFeed {
             liveIDs: cachedLiveIDs,
             now: now
         )
+        // No team selected → the timer card sits at page 0, so shift the
+        // chosen card index past it (and stay on the timer before kickoff).
         return Snapshot(matches: flattened.cards,
-                        defaultMatchIndex: liveMatchIndex(in: flattened.cards,
-                                                          hasSelectedTeam: false),
+                        defaultMatchIndex: beforeStart ? 0 : flattened.defaultIndex + 1,
                         apiError: nil)
     }
 
-    private func liveMatchIndex(in cards: [WorldCupMatches],
-                                hasSelectedTeam: Bool) -> Int {
-        guard !cards.isEmpty else { return 0 }
-        let liveIndex = cards.firstIndex(where: { $0.isLive }) ?? -1
-        let adjusted = hasSelectedTeam ? liveIndex : liveIndex + 1
-        return adjusted
+    /// True until the tournament's first match has kicked off. Uses the
+    /// (dev-timeline-aware) `now` so advancing the mock clock past the first
+    /// kickoff lifts the "stay on the first card" rule.
+    private func isBeforeFirstMatch(now: Date, in response: WorldCupMatchesResponse) -> Bool {
+        let all = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        guard let earliest = all.compactMap({ WorldCupMatch.parseDate($0.date) }).min() else {
+            return false
+        }
+        return now < earliest
     }
 
     /// True when a team is selected AND that team appears in the roster
