@@ -89,7 +89,7 @@ final class ConversionEventTrackerTests: XCTestCase {
         subject.record(.thirdActivityFirstWeek)
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 15)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 22)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .medium)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
