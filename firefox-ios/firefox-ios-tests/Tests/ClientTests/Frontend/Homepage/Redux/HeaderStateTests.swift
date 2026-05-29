@@ -8,6 +8,18 @@ import XCTest
 @testable import Client
 
 final class HeaderStateTests: XCTestCase {
+    private var mockWorldCupStore: MockWorldCupStore!
+
+    override func setUp() {
+        super.setUp()
+        mockWorldCupStore = MockWorldCupStore()
+    }
+
+    override func tearDown() {
+        mockWorldCupStore = nil
+        super.tearDown()
+    }
+
     func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
@@ -109,59 +121,49 @@ final class HeaderStateTests: XCTestCase {
     }
 
     func test_init_worldCupFeatureAndSectionEnabled_setsWorldCupFlagTrue() {
-        let store = MockWorldCupStore()
-        store.isFeatureEnabled = true
-        store.isHomepageSectionEnabled = true
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
 
-        let state = HeaderState(windowUUID: .XCTestDefaultUUID, worldCupStore: store)
+        let state = createSubject()
 
         XCTAssertTrue(state.isWorldCupSectionEnabled)
     }
 
     func test_init_worldCupFeatureDisabled_setsWorldCupFlagFalse() {
-        let store = MockWorldCupStore()
-        store.isFeatureEnabled = false
-        store.isHomepageSectionEnabled = true
+        mockWorldCupStore.isFeatureEnabled = false
+        mockWorldCupStore.isHomepageSectionEnabled = true
 
-        let state = HeaderState(windowUUID: .XCTestDefaultUUID, worldCupStore: store)
+        let state = createSubject()
 
         XCTAssertFalse(state.isWorldCupSectionEnabled)
     }
 
     func test_init_worldCupSectionDisabled_setsWorldCupFlagFalse() {
-        let store = MockWorldCupStore()
-        store.isFeatureEnabled = true
-        store.isHomepageSectionEnabled = false
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = false
 
-        let state = HeaderState(windowUUID: .XCTestDefaultUUID, worldCupStore: store)
+        let state = createSubject()
 
         XCTAssertFalse(state.isWorldCupSectionEnabled)
     }
 
     func test_init_privateMode_forcesWorldCupFlagFalse_evenWhenStoreEnabled() {
-        let store = MockWorldCupStore()
-        store.isFeatureEnabled = true
-        store.isHomepageSectionEnabled = true
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
 
-        let state = HeaderState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivate: true,
-            worldCupStore: store
-        )
+        let state = createSubject(isPrivate: true)
 
         XCTAssertTrue(state.isPrivate)
         XCTAssertFalse(state.isWorldCupSectionEnabled)
     }
 
     // MARK: - Private
-    private func createSubject(worldCupStore: WorldCupStoreProtocol? = nil) -> HeaderState {
-        let store = worldCupStore ?? {
-            let mock = MockWorldCupStore()
-            mock.isFeatureEnabled = false
-            mock.isHomepageSectionEnabled = false
-            return mock
-        }()
-        return HeaderState(windowUUID: .XCTestDefaultUUID, worldCupStore: store)
+    private func createSubject(isPrivate: Bool = false) -> HeaderState {
+        return HeaderState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivate: isPrivate,
+            worldCupStore: mockWorldCupStore
+        )
     }
 
     private func headerReducer() -> Reducer<HeaderState> {
