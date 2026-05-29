@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSAdvertisingAttributionReportEndpoint</key>
+	<string>https://adjust-skadnetwork.com</string>
 	<key>LiteLLMAPIKey</key>
 	<string>$(LITE_LLM_API_KEY)</string>
 	<key>LiteLLMAPIEndpoint</key>
