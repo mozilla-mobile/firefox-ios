@@ -140,13 +140,13 @@
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "გუნდის მიყოლა";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTLabel.v151" = "(დასრულებული)";
+"WorldCup.HomepageWidget.FTLabel.v151" = "(დასრულდა)";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "დასრულებული";
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "დასრულდა";
 
 /* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
-"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "დასრულებული • თერთმეტმეტრიანები (%@)";
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "დასრულდა • თერთმეტმეტრიანები (%@)";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "მიიღეთ სასურველი ფონი";
@@ -185,7 +185,7 @@
 "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "ᲤᲘᲜᲐᲚᲘ";
 
 /* The label indicating the displaying match has ended after penalties. */
-"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "დასრულებული • თერთმეტმეტრიანები";
+"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "დასრულდა • თერთმეტმეტრიანები";
 
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "ᲛᲔᲝᲗᲮᲔᲓᲤᲘᲜᲐᲚᲘ";
