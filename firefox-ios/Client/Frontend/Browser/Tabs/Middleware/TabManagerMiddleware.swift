@@ -205,7 +205,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         case TabPanelViewActionType.addNewTab:
             let isPrivateMode = action.panelType == .privateTabs
             tabsPanelTelemetry.newTabButtonTapped(mode: action.panelType?.modeForTelemetry ?? .normal)
-            UserConversionMetrics().didOpenNewTab()
             addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
             dispatchRecentlyAccessedTabs(action: action)
         case TabPanelViewActionType.moveTab:

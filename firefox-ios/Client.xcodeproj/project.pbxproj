@@ -754,8 +754,12 @@
 		6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B110267B6EE100F59F6B /* CredentialWelcomeViewController.swift */; };
 		602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455880A027B42F720078DEBB /* FxNimbus.swift */; };
-		602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */; };
+		602B3D6729B0E1DB0066DEF8 /* ConversionValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B3D6629B0E1DB0066DEF8 /* ConversionValue.swift */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
+		610216542FBFA7100091151F /* ConversionEventTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216532FBFA7100091151F /* ConversionEventTracker.swift */; };
+		610216552FBFA7100091151F /* ConversionValueUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216512FBFA7100091151F /* ConversionValueUpdater.swift */; };
+		610216562FBFA7100091151F /* ConversionActivityLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216502FBFA7100091151F /* ConversionActivityLogger.swift */; };
+		610216572FBFA7100091151F /* ConversionDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216522FBFA7100091151F /* ConversionDataManager.swift */; };
 		612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */; };
 		612194E62CE50A93001664BB /* WallpaperAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E52CE50A93001664BB /* WallpaperAction.swift */; };
 		612194E82CE50A9B001664BB /* WallpaperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E72CE50A9B001664BB /* WallpaperState.swift */; };
@@ -764,6 +768,10 @@
 		614985482F6B0B6500BC5ACA /* AIControlsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614985472F6B0B6200BC5ACA /* AIControlsModel.swift */; };
 		614987AF2F6B37E300BC5ACA /* AIControlsModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614987AE2F6B37E300BC5ACA /* AIControlsModelTests.swift */; };
 		615532D42D7AA5F30046347F /* ScreenshotHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */; };
+		617D8ABD2FC8D27300E1C7A5 /* ConversionDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617D8AB92FC8D27300E1C7A5 /* ConversionDataManagerTests.swift */; };
+		617D8ABF2FC8D27300E1C7A5 /* ConversionEventTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617D8ABA2FC8D27300E1C7A5 /* ConversionEventTrackerTests.swift */; };
+		617D8AC02FC8D27300E1C7A5 /* ConversionActivityLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617D8AB82FC8D27300E1C7A5 /* ConversionActivityLoggerTests.swift */; };
+		617D8AC22FC8D5B700E1C7A5 /* MockConversionValueUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617D8AC12FC8D5B700E1C7A5 /* MockConversionValueUpdater.swift */; };
 		619FE8932CE6595B004F83E2 /* WallpaperMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619FE8922CE6595B004F83E2 /* WallpaperMiddleware.swift */; };
 		61A164492CE7BE84001D6058 /* WallpaperStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A164452CE7BE1A001D6058 /* WallpaperStateTests.swift */; };
 		61A1644A2CE7BE8A001D6058 /* WallpaperMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A164472CE7BE3D001D6058 /* WallpaperMiddlewareTests.swift */; };
@@ -1462,7 +1470,6 @@
 		AB4FB4DC2C89FB10005EF0CC /* BlockedTrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */; };
 		AB4FB4DD2C89FB10005EF0CC /* BlockedTrackersTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */; };
 		AB4FB4E12C90491F005EF0CC /* BlockedTrackersTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4DF2C9048D1005EF0CC /* BlockedTrackersTableViewControllerTests.swift */; };
-		AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */; };
 		AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */; };
 		AB8EE2D32C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8EE2D22C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift */; };
 		AB936A692C05F2B100600F82 /* TrackingProtectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */; };
@@ -8946,7 +8953,7 @@
 		6025B108267B6BB300F59F6B /* SelectPasswordCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPasswordCell.swift; sourceTree = "<group>"; };
 		6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRecordExtension.swift; sourceTree = "<group>"; };
 		6025B110267B6EE100F59F6B /* CredentialWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialWelcomeViewController.swift; sourceTree = "<group>"; };
-		602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValueUtil.swift; sourceTree = "<group>"; };
+		602B3D6629B0E1DB0066DEF8 /* ConversionValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValue.swift; sourceTree = "<group>"; };
 		604B4E078B7907FA2595345D /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Shared.strings; sourceTree = "<group>"; };
 		605D466193C1DA0CDACFA4AC /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Intro.strings; sourceTree = "<group>"; };
 		6075454195BAE1F144470192 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Search.strings; sourceTree = "<group>"; };
@@ -8958,6 +8965,10 @@
 		60BF40268A4375D6D3A80517 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		60CE80C02667780C004026C7 /* CredentialListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialListPresenter.swift; sourceTree = "<group>"; };
 		60E04CE89D47E52E0A886EAD /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Search.strings"; sourceTree = "<group>"; };
+		610216502FBFA7100091151F /* ConversionActivityLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionActivityLogger.swift; sourceTree = "<group>"; };
+		610216512FBFA7100091151F /* ConversionValueUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValueUpdater.swift; sourceTree = "<group>"; };
+		610216522FBFA7100091151F /* ConversionDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionDataManager.swift; sourceTree = "<group>"; };
+		610216532FBFA7100091151F /* ConversionEventTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionEventTracker.swift; sourceTree = "<group>"; };
 		612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBackgroundView.swift; sourceTree = "<group>"; };
 		612194E52CE50A93001664BB /* WallpaperAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperAction.swift; sourceTree = "<group>"; };
 		612194E72CE50A9B001664BB /* WallpaperState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperState.swift; sourceTree = "<group>"; };
@@ -8966,6 +8977,10 @@
 		614985472F6B0B6200BC5ACA /* AIControlsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsModel.swift; sourceTree = "<group>"; };
 		614987AE2F6B37E300BC5ACA /* AIControlsModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsModelTests.swift; sourceTree = "<group>"; };
 		615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotHelperTests.swift; sourceTree = "<group>"; };
+		617D8AB82FC8D27300E1C7A5 /* ConversionActivityLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionActivityLoggerTests.swift; sourceTree = "<group>"; };
+		617D8AB92FC8D27300E1C7A5 /* ConversionDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionDataManagerTests.swift; sourceTree = "<group>"; };
+		617D8ABA2FC8D27300E1C7A5 /* ConversionEventTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionEventTrackerTests.swift; sourceTree = "<group>"; };
+		617D8AC12FC8D5B700E1C7A5 /* MockConversionValueUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConversionValueUpdater.swift; sourceTree = "<group>"; };
 		619FE8922CE6595B004F83E2 /* WallpaperMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMiddleware.swift; sourceTree = "<group>"; };
 		61A164452CE7BE1A001D6058 /* WallpaperStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperStateTests.swift; sourceTree = "<group>"; };
 		61A164472CE7BE3D001D6058 /* WallpaperMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMiddlewareTests.swift; sourceTree = "<group>"; };
@@ -10161,7 +10176,6 @@
 		AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackerCell.swift; sourceTree = "<group>"; };
 		AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackersTableView.swift; sourceTree = "<group>"; };
 		AB4FB4DF2C9048D1005EF0CC /* BlockedTrackersTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersTableViewControllerTests.swift; sourceTree = "<group>"; };
-		AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversionMetrics.swift; sourceTree = "<group>"; };
 		AB7C4D658AB44D577390B61F /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Menu.strings; sourceTree = "<group>"; };
 		AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgentTests.swift"; sourceTree = "<group>"; };
 		AB8EE2D22C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionVerifiedByView.swift; sourceTree = "<group>"; };
@@ -13436,6 +13450,28 @@
 			path = "AI Controls";
 			sourceTree = "<group>";
 		};
+		617D8ABC2FC8D27300E1C7A5 /* ConversionTracking */ = {
+			isa = PBXGroup;
+			children = (
+				617D8AB82FC8D27300E1C7A5 /* ConversionActivityLoggerTests.swift */,
+				617D8AB92FC8D27300E1C7A5 /* ConversionDataManagerTests.swift */,
+				617D8ABA2FC8D27300E1C7A5 /* ConversionEventTrackerTests.swift */,
+			);
+			path = ConversionTracking;
+			sourceTree = "<group>";
+		};
+		619C60052FBFBA2F00FE5E9F /* ConversionTracking */ = {
+			isa = PBXGroup;
+			children = (
+				610216502FBFA7100091151F /* ConversionActivityLogger.swift */,
+				610216512FBFA7100091151F /* ConversionValueUpdater.swift */,
+				610216522FBFA7100091151F /* ConversionDataManager.swift */,
+				610216532FBFA7100091151F /* ConversionEventTracker.swift */,
+				602B3D6629B0E1DB0066DEF8 /* ConversionValue.swift */,
+			);
+			path = ConversionTracking;
+			sourceTree = "<group>";
+		};
 		61A164442CE7BDEF001D6058 /* Wallpaper */ = {
 			isa = PBXGroup;
 			children = (
@@ -13718,6 +13754,7 @@
 		8A171A6029F82AD90085770E /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				617D8ABC2FC8D27300E1C7A5 /* ConversionTracking */,
 				0A80C4232F3CD3EB00DB85AE /* AppAuthenticatorTests.swift */,
 				8A1C0B8E2E723EDC0030DCC8 /* AppLaunchUtilTests.swift */,
 				BC0723512E33D7A2005BAC05 /* AppleIntelligenceUtilTests.swift */,
@@ -15604,6 +15641,7 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				617D8AC12FC8D5B700E1C7A5 /* MockConversionValueUpdater.swift */,
 				C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */,
 				0A80C4252F3CD45400DB85AE /* MockLAContext.swift */,
 				214703442F32821C003FFAD9 /* MockToolbarHelper.swift */,
@@ -17130,6 +17168,7 @@
 		F84B21E41A0910F600AAB793 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				619C60052FBFBA2F00FE5E9F /* ConversionTracking */,
 				5AD3B6732CF625A300AFA1FE /* DefaultBrowserUtility.swift */,
 				BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */,
 				8A46F5AA2C9E4389005B6422 /* RemoteSettings */,
@@ -17140,7 +17179,6 @@
 				E1FE133229C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift */,
 				5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */,
 				D81E377D2242FF61006AC72D /* Client-Bridging-Header.h */,
-				602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */,
 				E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */,
 				E652F6F91BF66A79007FFDD6 /* Delegates */,
 				96C11E972864BA1700840E7C /* DependencyInjection */,
@@ -17149,7 +17187,6 @@
 				D3BE7B251B054D4400641031 /* main.swift */,
 				7BEFC67F1BFF68C30059C952 /* QuickActions.swift */,
 				E6639F171BF11E17002D0853 /* Settings.bundle */,
-				AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */,
 				5A271ABB2860B0BD00471CE4 /* WebServer */,
 				1DA6F6502B48B42900BB5AD6 /* WindowEventCoordinator.swift */,
 				1DC372012B23C80F000F96C8 /* WindowManager.swift */,
@@ -19299,7 +19336,7 @@
 				8AAAB0592C1B7240008830B3 /* MockRustFirefoxSuggest.swift in Sources */,
 				0BDDB33F2CA6B1F000D501DF /* EditFolderViewModel.swift in Sources */,
 				8A2F21CB2DEDC2AB00C9F4DE /* StartAtHomeAction.swift in Sources */,
-				602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */,
+				602B3D6729B0E1DB0066DEF8 /* ConversionValue.swift in Sources */,
 				7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */,
 				C283EED02E4D4FE7008EB540 /* SummarizerConfigProvider.swift in Sources */,
 				4346FF08295BA6A300F4D220 /* CreditCardSettingsViewController.swift in Sources */,
@@ -19574,7 +19611,6 @@
 				8AF347E02CADD1C300624036 /* HomepageAction.swift in Sources */,
 				96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */,
 				8A4490922BF3BC2700E7E682 /* MicrosurveyPromptView.swift in Sources */,
-				AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */,
 				EDDF340A2CDD159F008BB6A4 /* SearchEngineModel.swift in Sources */,
 				C2CD38EA2EE6D6AE0085F045 /* PrivateModeButton.swift in Sources */,
 				219935EC2B07110900E5966F /* TabTrayModel.swift in Sources */,
@@ -20127,6 +20163,10 @@
 				61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */,
 				AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */,
 				21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */,
+				610216542FBFA7100091151F /* ConversionEventTracker.swift in Sources */,
+				610216552FBFA7100091151F /* ConversionValueUpdater.swift in Sources */,
+				610216562FBFA7100091151F /* ConversionActivityLogger.swift in Sources */,
+				610216572FBFA7100091151F /* ConversionDataManager.swift in Sources */,
 				8ADC2A1F2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift in Sources */,
 				21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */,
 				8A7835332D50FEFF0052E328 /* BookmarksMiddleware.swift in Sources */,
@@ -20628,6 +20668,7 @@
 				C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */,
 				BC0723522E33D7A6005BAC05 /* AppleIntelligenceUtilTests.swift in Sources */,
 				39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */,
+				617D8AC22FC8D5B700E1C7A5 /* MockConversionValueUpdater.swift in Sources */,
 				630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */,
 				8AAEB9FE2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift in Sources */,
 				C8E531CC29E72A2F00E03FEF /* ShortcutRouteTests.swift in Sources */,
@@ -20696,6 +20737,9 @@
 				8AF6D4DF2A856A9000B0474B /* MockUnifiedTileNetworking.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				21FB441A2E7B3AE500A8818D /* MockRecordVisitObservationManager.swift in Sources */,
+				617D8ABD2FC8D27300E1C7A5 /* ConversionDataManagerTests.swift in Sources */,
+				617D8ABF2FC8D27300E1C7A5 /* ConversionEventTrackerTests.swift in Sources */,
+				617D8AC02FC8D27300E1C7A5 /* ConversionActivityLoggerTests.swift in Sources */,
 				0A5A3A142F9B776E0040C7B8 /* TabCellCustomImageViewTests.swift in Sources */,
 				C89C91AD2A1FE9E900BE57B1 /* OnboardingTelemetryDelegationTests.swift in Sources */,
 				8A36BE2C29EDE16C00AC1C5C /* ContentContainerTests.swift in Sources */,
