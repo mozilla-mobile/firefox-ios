@@ -173,13 +173,18 @@ struct WorldCupMatches: Equatable, Hashable {
         let cards = groupedByDayAndStage(allMatches, calendar: calendar).map { group -> WorldCupMatches in
             let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
             let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
+            let isGroupStage = group.stage == .groupStage
             return WorldCupMatches(
                 phaseTitle: label(for: group.stage),
                 telemetryPhaseValue: group.stage?.rawValue ?? WorldCupMatchesResponse.Match.Stage.groupStage.rawValue,
                 dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
                 isLive: !liveMatches.isEmpty,
                 featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
-                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
+                upcomingMatches: nonLive.map { match in
+                    let groupName = isGroupStage ? (match.homeTeam?.group ?? match.awayTeam?.group) : nil
+                    let prefix = groupName.flatMap { groupLabel(for: $0) }
+                    return WorldCupMatch(match, localeProvider: localeProvider, timeOnly: true, datePrefix: prefix)
+                }
             )
         }
         return (cards, 0)
