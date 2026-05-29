@@ -26,7 +26,7 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(initialState.isPrivate)
         XCTAssertFalse(initialState.showiPadSetup)
-        XCTAssertFalse(initialState.isWorldCupSectionEnabled)
+        XCTAssertTrue(initialState.isWorldCupSectionEnabled)
     }
 
     @MainActor
