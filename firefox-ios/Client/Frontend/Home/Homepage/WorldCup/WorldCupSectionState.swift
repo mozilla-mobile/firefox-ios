@@ -21,14 +21,17 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     /// Single source of truth for which card the swipe view should land on the
     /// first time the section is rendered. The timer card is the default only
     /// before the World Cup starts AND when no team is selected — once either
-    /// changes, we pick a match card. `WorldCupCellFactory` controls whether
-    /// the timer is even part of the pages array, and `WorldCupCell` maps this
-    /// value onto that array.
+    /// changes, we pick a match card. Before kickoff (any date pre-tournament)
+    /// we always land on the first card; only once the tournament has started
+    /// do we honor the feed's `bestMatchIndex`. `WorldCupCellFactory` controls
+    /// whether the timer is even part of the pages array, and `WorldCupCell`
+    /// maps this value onto that array.
     var defaultCard: WorldCupDefaultCard {
         if selectedCountryId == nil && !hasWorldCupStarted {
             return .timer
         }
         guard !matches.isEmpty else { return .timer }
+        guard hasWorldCupStarted else { return .match(0) }
         let index = min(max(bestMatchIndex, 0), matches.count - 1)
         return .match(index)
     }

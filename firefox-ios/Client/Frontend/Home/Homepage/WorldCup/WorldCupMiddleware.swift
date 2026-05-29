@@ -18,8 +18,12 @@ final class WorldCupMiddleware {
     private var lastWindowUUID: WindowUUID?
 
     convenience init() {
-        let store = WorldCupStore()
-        let feed = WorldCupMiddleware.makeDefaultFeed(store: store)
+        let timelineDateProvider = WorldCupTimelineDateProvider()
+        let store = WorldCupStore(dateProvider: timelineDateProvider)
+        let feed = WorldCupMiddleware.makeDefaultFeed(
+            store: store,
+            timelineDateProvider: timelineDateProvider
+        )
         self.init(worldCupStore: store, feed: feed)
     }
 
@@ -80,13 +84,18 @@ final class WorldCupMiddleware {
         )
     }
 
-    private static func makeDefaultFeed(store: WorldCupStoreProtocol) -> WorldCupFeed? {
+    private static func makeDefaultFeed(
+        store: WorldCupStoreProtocol,
+        timelineDateProvider: WorldCupTimelineDateProvider
+    ) -> WorldCupFeed? {
         guard let apiClient = WorldCupAPIClient.makeDefault() else { return nil }
         let prefs = (AppContainer.shared.resolve() as Profile).prefs
         let usesDevServerTimeline = prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost) != nil
         return WorldCupFeed(
             apiClient: apiClient,
+            store: store,
             usesDevServerTimeline: usesDevServerTimeline,
+            timelineDateProvider: timelineDateProvider,
             selectedTeamProvider: { store.selectedTeam }
         )
     }

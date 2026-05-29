@@ -269,6 +269,88 @@ struct WorldCupMatchesTests {
     }
 
     @Test
+    func test_perStage_bestMatchIndex_staysOnStageCard_whenEarlierMatchPlayedButLaterStillUpcoming() {
+        // The group-stage card bundles three fixtures (Jun 12 / 18 / 24) and
+        // there's a later R32 card. `now` is Jun 20 — two group games are done
+        // and nothing is live, but the Jun 24 group game hasn't kicked off.
+        // We must stay on the group card (index 0) rather than skipping to the
+        // R32 card whose fixture is even further out.
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CAN", away: "QAT", date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 3, home: "CHE", away: "CAN", date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
+            ],
+            current: nil,
+            next: [
+                makeMatch(id: 4, home: "MEX", away: "CAN", date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+            ]
+        )
+
+        let result = WorldCupMatches.perStage(
+            response: response,
+            now: parse("2026-06-20T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 2)
+        #expect(result.bestMatchIndex == 0)
+    }
+
+    @Test
+    func test_perStage_bestMatchIndex_lingersOnFinishedCard_beforeAdvancing() {
+        // Group card's last game kicked off Jun 24 19:00 (estimated over ~21:00)
+        // and the next R32 fixture is days away. `now` is 21:15 — within the
+        // ~30 min linger after the match is over — so we keep the just-finished
+        // group card (index 0) on screen instead of jumping straight to R32.
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CHE", away: "CAN", date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
+            ],
+            current: nil,
+            next: [
+                makeMatch(id: 3, home: "MEX", away: "CAN", date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+            ]
+        )
+
+        let result = WorldCupMatches.perStage(
+            response: response,
+            now: parse("2026-06-24T21:15:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 2)
+        #expect(result.bestMatchIndex == 0)
+    }
+
+    @Test
+    func test_perStage_bestMatchIndex_advancesAfterLingerWindowExpires() {
+        // Same fixtures as the linger test, but `now` is 22:00 — past the
+        // estimated-over time (~21:00) plus the ~30 min linger — so the group
+        // card is released and we advance to the upcoming R32 card (index 1).
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "CHE", away: "CAN", date: "2026-06-24T19:00:00+00:00", stage: .groupStage)
+            ],
+            current: nil,
+            next: [
+                makeMatch(id: 3, home: "MEX", away: "CAN", date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+            ]
+        )
+
+        let result = WorldCupMatches.perStage(
+            response: response,
+            now: parse("2026-06-24T22:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 2)
+        #expect(result.bestMatchIndex == 1)
+    }
+
+    @Test
     func test_perStage_threeStages_landsOnLatest() {
         // Team has progressed through group + R32 and now has an R16
         // fixture. Three cards; default lands on R16.
@@ -389,6 +471,33 @@ struct WorldCupMatchesTests {
     }
 
     @Test
+    func test_flattened_bestMatchIndex_staysOnDayCard_whenEarlierMatchPlayedButLaterStillUpcoming() {
+        // One card groups two matches on Jun 12 (15:00 and 21:00). `now` is
+        // 18:00 — the 15:00 game has finished and nothing is live, but the
+        // 21:00 game on the same card hasn't kicked off. We must stay on the
+        // Jun 12 card (index 0), not jump ahead to Jun 14, because the next
+        // upcoming match lives on this card.
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: [
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-12T15:00:00+00:00"),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-12T21:00:00+00:00")
+            ],
+            next: [makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-06-14T18:00:00+00:00")]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-06-12T18:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 2)
+        #expect(result.cards[0].upcomingMatches.map(\.homeCode) == ["ARG", "ENG"])
+        #expect(result.bestMatchIndex == 0)
+    }
+
+    @Test
     func test_flattened_bestMatchIndex_landsOnLastCard_whenAllInPast() {
         // All matches are in the past relative to `now`. With no live match
         // either, we fall back to the most recent card so the section still
@@ -411,6 +520,35 @@ struct WorldCupMatchesTests {
 
         #expect(result.cards.count == 3)
         #expect(result.bestMatchIndex == 2)
+    }
+
+    @Test
+    func test_bestMatchIndex_liveCardTakesPrecedenceOverLingeringCard() {
+        // Jun 12 has a group card (13:00, estimated over ~15:00 → still within
+        // its ~30 min linger at `now` 15:15) and a separate R16 card (14:00)
+        // that is currently live. A live match anywhere wins, so we land on the
+        // live R16 card (index 1) rather than lingering on the finished group
+        // card.
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: [
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-12T13:00:00+00:00", stage: .groupStage),
+                makeMatch(id: 2, home: "FRA", away: "GER", date: "2026-06-12T14:00:00+00:00", stage: .roundOf16)
+            ],
+            next: nil
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            liveIDs: [2],
+            now: parse("2026-06-12T15:15:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 2)
+        #expect(!result.cards[0].isLive)
+        #expect(result.cards[1].isLive)
+        #expect(result.bestMatchIndex == 1)
     }
 
     @Test
@@ -923,6 +1061,144 @@ struct WorldCupMatchesTests {
         #expect(WorldCupMatches.telemetryPhaseValue(from: nil) == "Group Stage")
     }
 
+    // MARK: - resolvedCardIndex (preserve user's card across refreshes)
+
+    @Test
+    func test_resolvedCardIndex_firstRender_honorsBestMatchIndex() {
+        let current = [card("groupStage"), card("roundOf32"), card("roundOf16")]
+
+        let index = WorldCupMatches.resolvedCardIndex(
+            previous: nil,
+            current: current,
+            currentCardIndex: nil,
+            bestMatchIndex: 2
+        )
+
+        #expect(index == 2)
+    }
+
+    @Test
+    func test_resolvedCardIndex_noLive_followsBestMatchIndex() {
+        // Nothing is live. We follow the feed so the card keeps tracking the
+        // tournament — e.g. once a finished card's result grace expires,
+        // bestMatchIndex advances and we move with it instead of staying stuck.
+        let previous = [card("groupStage"), card("roundOf32"), card("roundOf16")]
+        let current = previous
+
+        let index = WorldCupMatches.resolvedCardIndex(
+            previous: previous,
+            current: current,
+            currentCardIndex: 0,
+            bestMatchIndex: 2
+        )
+
+        #expect(index == 2)
+    }
+
+    @Test
+    func test_resolvedCardIndex_afterGraceExpires_advancesOffFinishedCard() {
+        // The user is passively sitting on the just-finished card (index 0).
+        // Nothing is live, and the feed has advanced bestMatchIndex to the next
+        // fixture (index 1) now that the result grace has passed → we advance.
+        let previous = [card("roundOf16"), card("quarterFinals")]
+        let current = previous
+
+        let index = WorldCupMatches.resolvedCardIndex(
+            previous: previous,
+            current: current,
+            currentCardIndex: 0,
+            bestMatchIndex: 1
+        )
+
+        #expect(index == 1)
+    }
+
+    @Test
+    func test_resolvedCardIndex_matchJustKickedOff_pullsUserToLiveCard() {
+        // Card 1 flips from not-live to live between snapshots → pull the user in.
+        let previous = [card("groupStage", isLive: false), card("roundOf32", isLive: false)]
+        let current = [card("groupStage", isLive: false), card("roundOf32", isLive: true)]
+
+        let index = WorldCupMatches.resolvedCardIndex(
+            previous: previous,
+            current: current,
+            currentCardIndex: 0,
+            bestMatchIndex: 0
+        )
+
+        #expect(index == 1)
+    }
+
+    @Test
+    func test_resolvedCardIndex_alreadyLiveCard_doesNotYankUser() {
+        // Card 0 was already live in the previous snapshot, so it isn't "newly"
+        // live. The user is reading card 1 → keep them there.
+        let previous = [card("groupStage", isLive: true), card("roundOf32", isLive: false)]
+        let current = previous
+
+        let index = WorldCupMatches.resolvedCardIndex(
+            previous: previous,
+            current: current,
+            currentCardIndex: 1,
+            bestMatchIndex: 0
+        )
+
+        #expect(index == 1)
+    }
+
+    @Test
+    func test_resolvedCardIndex_userWatchingLiveMatch_doesNotChaseNewKickoff() {
+        // The user is on a live card (0). Card 1 kicks off, but we don't drag
+        // them off the match they're watching to chase the new one.
+        let previous = [card("groupStage", isLive: true), card("roundOf32", isLive: false)]
+        let current = [card("groupStage", isLive: true), card("roundOf32", isLive: true)]
+
+        let index = WorldCupMatches.resolvedCardIndex(
+            previous: previous,
+            current: current,
+            currentCardIndex: 0,
+            bestMatchIndex: 0
+        )
+
+        #expect(index == 0)
+    }
+
+    @Test
+    func test_resolvedCardIndex_doesNotDragUserBackToAJustEndedMatch() {
+        // The user was watching live card 0, then swiped ahead to the upcoming
+        // card 1. Card 0's match ends, so bestMatchIndex points back to it (it's
+        // in the result grace). We must NOT drag the user backward onto the
+        // just-ended match — they swiped ahead on purpose.
+        let previous = [card("roundOf16", isLive: true), card("quarterFinals")]
+        let current = [card("roundOf16", isLive: false), card("quarterFinals")]
+
+        let index = WorldCupMatches.resolvedCardIndex(
+            previous: previous,
+            current: current,
+            currentCardIndex: 1,
+            bestMatchIndex: 0
+        )
+
+        #expect(index == 1)
+    }
+
+    @Test
+    func test_resolvedCardIndex_cardSetChanged_noLive_followsBestMatchIndex() {
+        // The card set shifted (e.g. the day rolled over) and nothing is live →
+        // follow bestMatchIndex.
+        let previous = [card("groupStage"), card("roundOf32")]
+        let current = [card("roundOf32"), card("roundOf16")]
+
+        let index = WorldCupMatches.resolvedCardIndex(
+            previous: previous,
+            current: current,
+            currentCardIndex: 0,
+            bestMatchIndex: 1
+        )
+
+        #expect(index == 1)
+    }
+
     // MARK: - winnerThirdPlaceOrFinal
 
     @Test
@@ -1084,6 +1360,19 @@ struct WorldCupMatchesTests {
             clock: clock,
             statusType: nil,
             stage: stage
+        )
+    }
+
+    /// Minimal card whose `identityKey` is driven by `stage` (+ optional `day`),
+    /// for exercising `resolvedCardIndex` without building full responses.
+    private func card(_ stage: String, isLive: Bool = false, day: String? = nil) -> WorldCupMatches {
+        WorldCupMatches(
+            phaseTitle: stage,
+            telemetryPhaseValue: stage,
+            dateLabel: day,
+            isLive: isLive,
+            featuredMatch: [],
+            upcomingMatches: []
         )
     }
 

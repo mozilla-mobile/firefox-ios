@@ -861,7 +861,72 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
+    func test_initialize_whenDevTimelineEnabled_advancesTimelineDateProvider() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "BRA"
+        let match = makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-15T18:00:00+00:00")
+        let serverNow = "2026-06-12T00:00:00+00:00"
+        let response = WorldCupMatchesResponse(now: serverNow, previous: nil, current: nil, next: [match])
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let timelineDateProvider = WorldCupTimelineDateProvider(
+            systemDateProvider: MockDateProvider(fixedDate: iso8601Date("2026-05-01T00:00:00Z"))
+        )
+        let subject = createSubject(
+            apiClient: apiClient,
+            usesDevServerTimeline: true,
+            timelineDateProvider: timelineDateProvider
+        )
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+        let expectation = expectationForMatchesDispatch()
+
+        subject.worldCupProvider(appState, action)
+        wait(for: [expectation])
+
+        XCTAssertEqual(timelineDateProvider.now(), iso8601Date(serverNow))
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_initialize_whenDevTimelineDisabled_leavesTimelineDateProviderOnSystemClock() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "BRA"
+        let match = makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-15T18:00:00+00:00")
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-12T00:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [match]
+        )
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let systemNow = iso8601Date("2026-05-01T00:00:00Z")
+        let timelineDateProvider = WorldCupTimelineDateProvider(
+            systemDateProvider: MockDateProvider(fixedDate: systemNow)
+        )
+        let subject = createSubject(
+            apiClient: apiClient,
+            usesDevServerTimeline: false,
+            timelineDateProvider: timelineDateProvider
+        )
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+        let expectation = expectationForMatchesDispatch()
+
+        subject.worldCupProvider(appState, action)
+        wait(for: [expectation])
+
+        XCTAssertEqual(timelineDateProvider.now(), systemNow)
+        subject.worldCupProvider = { _, _ in }
+    }
+
     // MARK: - Helpers
+
+    private func iso8601Date(_ string: String) -> Date {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter.date(from: string)!
+    }
 
     /// Builds a feed around the mock client (when provided) and hands both
     /// to the middleware. The mock's streams emit each result once and
@@ -869,7 +934,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     /// per restart — no polling cadence to control here.
     private func createSubject(
         apiClient: WorldCupAPIClientProtocol?,
-        usesDevServerTimeline: Bool = false
+        usesDevServerTimeline: Bool = false,
+        timelineDateProvider: WorldCupTimelineDateProvider? = nil
     ) -> WorldCupMiddleware {
         let store: MockWorldCupStore = mockWorldCupStore
         let feed = apiClient.map { client in
@@ -877,6 +943,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
                 apiClient: client,
                 store: store,
                 usesDevServerTimeline: usesDevServerTimeline,
+                timelineDateProvider: timelineDateProvider,
                 selectedTeamProvider: { store.selectedTeam }
             )
         }

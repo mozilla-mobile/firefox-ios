@@ -106,3 +106,24 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
         profile.prefs.setObject(countryId, forKey: PrefsKeys.Homepage.WorldCupSelectedCountry)
     }
 }
+
+final class WorldCupTimelineDateProvider: DateProvider {
+    private let systemDateProvider: DateProvider
+    private var timelineNow: Date?
+
+    init(systemDateProvider: DateProvider = SystemDateProvider()) {
+        self.systemDateProvider = systemDateProvider
+    }
+
+    func now() -> Date {
+        return timelineNow ?? systemDateProvider.now()
+    }
+
+    /// Records the latest timeline `now` reported by the feed. A `nil` value is
+    /// ignored so a non-timeline response never clears a previously observed
+    /// value or overrides the system clock.
+    func update(timelineNow: Date?) {
+        guard let timelineNow else { return }
+        self.timelineNow = timelineNow
+    }
+}

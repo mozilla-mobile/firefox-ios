@@ -36,6 +36,10 @@ final class WorldCupFeed {
     /// thing the middleware needs to coordinate.
     private let selectedTeamProvider: () -> String?
     private let store: WorldCupStoreProtocol
+    /// Shared with the store so its time-gated logic advances with the
+    /// dev-server timeline. Updated from each `/matches` response. `nil` in
+    /// contexts that don't need timeline-aware store reads (e.g. tests).
+    private let timelineDateProvider: WorldCupTimelineDateProvider?
 
     private var matchesTask: Task<Void, Never>?
     private var liveTask: Task<Void, Never>?
@@ -51,9 +55,11 @@ final class WorldCupFeed {
     init(apiClient: WorldCupAPIClientProtocol,
          store: WorldCupStoreProtocol = WorldCupStore(),
          usesDevServerTimeline: Bool,
+         timelineDateProvider: WorldCupTimelineDateProvider? = nil,
          selectedTeamProvider: @escaping () -> String?) {
         self.apiClient = apiClient
         self.usesDevServerTimeline = usesDevServerTimeline
+        self.timelineDateProvider = timelineDateProvider
         self.selectedTeamProvider = selectedTeamProvider
         self.store = store
     }
@@ -122,6 +128,7 @@ final class WorldCupFeed {
         case .success(let response):
             guard let response else { return }
             lastMatchesResponse = response
+            timelineDateProvider?.update(timelineNow: effectiveNow(from: response))
             // Reconcile first so the live stream is opened before the
             // matches snapshot is emitted. This keeps `liveFetchCount` and
             // dispatch ordering deterministic for tests.

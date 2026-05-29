@@ -43,16 +43,15 @@ final class WorldCupDefaultCardTests: XCTestCase {
 
     // MARK: - Before the World Cup starts (team selected)
 
-    func test_beforeWorldCupStarts_teamSelected_landsOnBestMatch() {
-        // A team selection means the user has already opted out of the
-        // "discovery" entry point. Selecting a team removes the timer from
-        // the swipe view (see WorldCupCellFactory), so we land on whichever
-        // card the feed flagged as best — typically the team's first group
-        // fixture pre-tournament.
+    func test_beforeWorldCupStarts_teamSelected_landsOnFirstCard() {
+        // Selecting a team removes the timer from the swipe view (see
+        // WorldCupCellFactory), but before kickoff we still pin to the first
+        // card regardless of what the feed computed for bestMatchIndex — e.g.
+        // a stray past warm-up fixture must not push us off card 0.
         let state = makeState(hasWorldCupStarted: false,
                               selectedCountryId: "BRA",
-                              matches: [makeMatchesCard()],
-                              bestMatchIndex: 0)
+                              matches: [makeMatchesCard(), makeMatchesCard()],
+                              bestMatchIndex: 1)
 
         XCTAssertEqual(state.defaultCard, .match(0))
     }

@@ -48,6 +48,12 @@ struct WorldCupMatches: Equatable, Hashable {
     /// occupying the hero spot when an upcoming match is closer in time.
     private static let featuredWindow: TimeInterval = 2 * 60 * 60
 
+    /// Grace period after a card's last match is estimated to be over during
+    /// which the card stays selected, so a just-finished result lingers on
+    /// screen before the section advances to the next fixture. A live match
+    /// anywhere still takes precedence (see `bestMatchIndex`).
+    private static let resultLingerWindow: TimeInterval = 30 * 60
+
     /// Single-card view used when a team is selected: the merino response is
     /// already scoped to that team. We don't trust the server's
     /// `previous/current/next` labels for the featured/upcoming split — those
@@ -135,8 +141,8 @@ struct WorldCupMatches: Equatable, Hashable {
             let rhsDate = rhs.value.map(\.date).min() ?? .distantPast
             return lhsDate < rhsDate
         }
-        let earliest = sortedStages.map { _, entries in
-            entries.map(\.date).min() ?? .distantPast
+        let latest = sortedStages.map { _, entries in
+            entries.map(\.date).max() ?? .distantPast
         }
         let cards = sortedStages.map { _, entries -> WorldCupMatches in
             // Each stage's matches are fed back through `init` as a fresh
@@ -156,7 +162,7 @@ struct WorldCupMatches: Equatable, Hashable {
                 localeProvider: localeProvider
             )
         }
-        return (cards, bestMatchIndex(in: cards, earliestKickoffs: earliest, now: now))
+        return (cards, bestMatchIndex(in: cards, latestKickoffs: latest, now: now))
     }
 
     /// No-team / eliminated-team multi-card view: one card per
@@ -192,21 +198,59 @@ struct WorldCupMatches: Equatable, Hashable {
                 }
             )
         }
-        return (cards, bestMatchIndex(in: cards, earliestKickoffs: groups.map(\.earliestKickoff), now: now))
+        return (cards, bestMatchIndex(in: cards, latestKickoffs: groups.map(\.latestKickoff), now: now))
     }
 
-    /// Picks the card to land on: a live card wins, otherwise the first card
-    /// whose earliest kickoff is still in the future, otherwise the last card.
-    /// `earliestKickoffs[i]` is the earliest kickoff among the matches that
-    /// make up `cards[i]`. Returns 0 for an empty array — callers should treat
-    /// "no cards" as "show the timer" via `WorldCupSectionState.defaultCard`.
     static func bestMatchIndex(in cards: [WorldCupMatches],
-                               earliestKickoffs: [Date],
+                               latestKickoffs: [Date],
                                now: Date) -> Int {
         guard !cards.isEmpty else { return 0 }
         if let live = cards.firstIndex(where: \.isLive) { return live }
-        if let upcoming = earliestKickoffs.firstIndex(where: { $0 > now }) { return upcoming }
+        let lingerWindow = featuredWindow + resultLingerWindow
+        if let active = latestKickoffs.firstIndex(where: {
+            now < $0.addingTimeInterval(lingerWindow)
+        }) { return active }
         return cards.count - 1
+    }
+
+    /// Stable identity for a card across data refreshes: its stage plus, for
+    /// the per-day view, its day. Live state and scores don't affect it, so it
+    /// can match "the same card" between two snapshots even as scores tick.
+    var identityKey: String {
+        return "\(telemetryPhaseValue)|\(dateLabel ?? "")"
+    }
+
+
+    static func resolvedCardIndex(
+        previous: [WorldCupMatches]?,
+        current: [WorldCupMatches],
+        currentCardIndex: Int?,
+        bestMatchIndex: Int
+    ) -> Int {
+        guard !current.isEmpty else { return 0 }
+        let clampedBest = min(max(bestMatchIndex, 0), current.count - 1)
+        guard let previous else { return clampedBest }
+
+        let onValidCard = currentCardIndex.map { current.indices.contains($0) } ?? false
+        let userOnLiveCard = currentCardIndex.flatMap { previous[safe: $0]?.isLive } ?? false
+        if userOnLiveCard, let currentCardIndex, onValidCard {
+            return currentCardIndex
+        }
+
+        let previouslyLive = Set(previous.filter(\.isLive).map(\.identityKey))
+        if let newlyLive = current.firstIndex(where: {
+            $0.isLive && !previouslyLive.contains($0.identityKey)
+        }) { return newlyLive }
+
+        if current[clampedBest].isLive, let currentCardIndex, onValidCard {
+            return currentCardIndex
+        }
+
+        if let currentCardIndex, onValidCard, clampedBest < currentCardIndex {
+            return currentCardIndex
+        }
+
+        return clampedBest
     }
 
     private static func dayLabel(for day: Date, locale: Locale) -> String {
@@ -297,7 +341,9 @@ struct WorldCupMatches: Equatable, Hashable {
         let day: Date
         let stage: WorldCupMatchesResponse.Match.Stage?
         let matches: [WorldCupMatchesResponse.Match]
-        let earliestKickoff: Date
+        /// Latest kickoff in the group. Used by `bestMatchIndex` to keep the
+        /// card selected until its last match has started.
+        let latestKickoff: Date
     }
 
     private static func groupedByDayAndStage(
@@ -329,7 +375,7 @@ struct WorldCupMatches: Equatable, Hashable {
                     day: key.day,
                     stage: key.stage,
                     matches: entries.map(\.match),
-                    earliestKickoff: entries.map(\.date).min() ?? .distantPast
+                    latestKickoff: entries.map(\.date).max() ?? .distantPast
                 )
             }
     }
