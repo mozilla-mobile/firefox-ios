@@ -102,10 +102,12 @@ final class WorldCupFeed {
         }
     }
 
-    /// One-shot `/teams` fetch. Elimination only flips after a knockout
-    /// result, so we don't need to poll: `start()` is invoked again on
-    /// foreground/retry, which refreshes the roster.
+    /// `/teams` fetch. Elimination only flips after a knockout result, so
+    /// we don't poll on a timer: `start()` re-fetches on foreground/retry,
+    /// and `handleLiveResult` re-fetches when a knockout involving the
+    /// selected team leaves the live set.
     private func startTeams() {
+        teamsTask?.cancel()
         teamsTask = Task { @MainActor [weak self] in
             guard let self else { return }
             let result = await self.apiClient.loadTeams(team: nil)
@@ -143,15 +145,46 @@ final class WorldCupFeed {
         // result tile can show alongside live ones. Filter on
         // `statusType == "live"` so the badge only sticks for genuinely
         // in-progress matches.
+        let allMatches = response?.matches ?? []
         let newLiveIDs = Set(
-            response?.matches?
+            allMatches
                 .filter { $0.statusType == "live" }
-                .map(\.globalEventId) ?? []
+                .map(\.globalEventId)
+        )
+        refetchTeamsIfSelectedTeamKnockoutEnded(
+            endedIDs: cachedLiveIDs.subtracting(newLiveIDs),
+            matches: allMatches
         )
         guard newLiveIDs != cachedLiveIDs else { return }
         cachedLiveIDs = newLiveIDs
         guard let last = lastMatchesResponse else { return }
         emit(buildSnapshot(from: last))
+    }
+
+    /// When a knockout fixture involving the selected team transitions out
+    /// of the live set, refetch `/teams` so the roster's `eliminated` flag
+    /// for that team reflects the just-finished result.
+    private func refetchTeamsIfSelectedTeamKnockoutEnded(
+        endedIDs: Set<Int>,
+        matches: [WorldCupMatchesResponse.Match]
+    ) {
+        guard !endedIDs.isEmpty, let team = selectedTeamProvider() else { return }
+        let involvesSelectedKnockout = matches.contains { match in
+            endedIDs.contains(match.globalEventId)
+            && Self.isKnockout(match.stage)
+            && (match.homeTeam?.key == team || match.awayTeam?.key == team)
+        }
+        guard involvesSelectedKnockout else { return }
+        startTeams()
+    }
+
+    private static func isKnockout(_ stage: WorldCupMatchesResponse.Match.Stage?) -> Bool {
+        switch stage {
+        case .roundOf32, .roundOf16, .quarterFinals, .semiFinals, .thirdPlace, .final:
+            return true
+        case .groupStage, .unknown, .none:
+            return false
+        }
     }
 
     private func handleTeamsResult(_ result: Result<WorldCupTeamsResponse?, WorldCupLoadError>) {
