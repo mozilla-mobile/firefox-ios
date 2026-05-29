@@ -65,11 +65,6 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         smartDashesType = .no
         returnKeyType = .go
         tintAdjustmentMode = .normal
-
-        // Setting the content type to a field that is not related to AutoFill functionality
-        // like email and password, should disable the Operating system to load those content,
-        // hence having a faster keyboard start up the first time
-        textContentType = .URL
         delegate = self
 
         // Disable dragging urls on iPhones because it conflicts with editing the text
