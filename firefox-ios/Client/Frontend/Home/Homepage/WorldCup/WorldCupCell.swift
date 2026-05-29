@@ -287,7 +287,13 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     /// clamp it into the valid page range.
     private func initialPage(for state: WorldCupSectionState, pageCount: Int) -> Int {
         guard pageCount > 0 else { return 0 }
-        return min(max(state.defaultMatchIndex, 0), pageCount - 1)
+        switch state.defaultCard {
+        case .timer:
+            return 0
+        case .match(let index):
+            let timerOffset = state.selectedCountryId == nil ? 1 : 0
+            return min(timerOffset + index, pageCount - 1)
+        }
     }
 
     private func makePages(for state: WorldCupSectionState) -> [PageContainer] {

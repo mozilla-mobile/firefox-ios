@@ -545,7 +545,6 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.matches.count, 2)
         XCTAssertEqual(dispatched.matches[1].phaseTitle,
                        String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
-        XCTAssertEqual(dispatched.defaultMatchIndex, -1)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -852,7 +851,13 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 2)
-        XCTAssertEqual(dispatched.defaultMatchIndex, 0)
+        // No team selected and the world cup hasn't started yet → the swipe
+        // view must land on the timer regardless of which match is "best".
+        let resolved = WorldCupSectionState.reducer(
+            WorldCupSectionState(windowUUID: .XCTestDefaultUUID),
+            dispatched
+        )
+        XCTAssertEqual(resolved.defaultCard, .timer)
         subject.worldCupProvider = { _, _ in }
     }
 

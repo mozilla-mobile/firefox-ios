@@ -16,10 +16,22 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     var selectedCountryId: String?
     var matches: [WorldCupMatches]
     var apiError: WorldCupLoadError?
-    /// Index into `matches` of the card that should be visible first. Used by
-    /// the swipe view so that with no team selected we land on the closest
-    /// upcoming match rather than the chronologically latest one.
-    var defaultMatchIndex: Int
+    var bestMatchIndex: Int
+
+    /// Single source of truth for which card the swipe view should land on the
+    /// first time the section is rendered. The timer card is the default only
+    /// before the World Cup starts AND when no team is selected — once either
+    /// changes, we pick a match card. `WorldCupCellFactory` controls whether
+    /// the timer is even part of the pages array, and `WorldCupCell` maps this
+    /// value onto that array.
+    var defaultCard: WorldCupDefaultCard {
+        if selectedCountryId == nil && !hasWorldCupStarted {
+            return .timer
+        }
+        guard !matches.isEmpty else { return .timer }
+        let index = min(max(bestMatchIndex, 0), matches.count - 1)
+        return .match(index)
+    }
 
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
@@ -29,7 +41,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         self.selectedCountryId = nil
         self.matches = []
         self.apiError = nil
-        self.defaultMatchIndex = 0
+        self.bestMatchIndex = 0
     }
 
     private init(
@@ -40,7 +52,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         selectedCountryId: String?,
         matches: [WorldCupMatches],
         apiError: WorldCupLoadError?,
-        defaultMatchIndex: Int
+        bestMatchIndex: Int
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
@@ -49,7 +61,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         self.selectedCountryId = selectedCountryId
         self.matches = matches
         self.apiError = apiError
-        self.defaultMatchIndex = defaultMatchIndex
+        self.bestMatchIndex = bestMatchIndex
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -66,7 +78,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
                 selectedCountryId: action.selectedCountryId,
                 matches: action.matches,
                 apiError: action.apiError,
-                defaultMatchIndex: action.defaultMatchIndex
+                bestMatchIndex: action.bestMatchIndex
             )
         default:
             return state

@@ -106,14 +106,15 @@ struct WorldCupMatches: Equatable, Hashable {
     }
 
     /// Single-team multi-card view: one card per stage the team is in (group history + one per knockout
-    /// round). Each card built by `WorldCupMatches.init`; `defaultIndex` lands on the latest stage.
+    /// round). Each card built by `WorldCupMatches.init`; `bestMatchIndex` follows the live →
+    /// next-upcoming → latest rule (see `bestMatchIndex(in:earliestKickoffs:now:)`).
     static func perStage(
         response: WorldCupMatchesResponse,
         liveIDs: Set<Int> = [],
         now: Date = Date(),
         calendar: Calendar = .current,
         localeProvider: LocaleProvider = SystemLocaleProvider()
-    ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
+    ) -> (cards: [WorldCupMatches], bestMatchIndex: Int) {
         let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
         let dated: [(date: Date, match: WorldCupMatchesResponse.Match)] = allMatches.compactMap { match in
             WorldCupMatch.parseDate(match.date).map { ($0, match) }
@@ -134,6 +135,9 @@ struct WorldCupMatches: Equatable, Hashable {
             let rhsDate = rhs.value.map(\.date).min() ?? .distantPast
             return lhsDate < rhsDate
         }
+        let earliest = sortedStages.map { _, entries in
+            entries.map(\.date).min() ?? .distantPast
+        }
         let cards = sortedStages.map { _, entries -> WorldCupMatches in
             // Each stage's matches are fed back through `init` as a fresh
             // response. Bucket placement (previous/current/next) doesn't
@@ -152,7 +156,7 @@ struct WorldCupMatches: Equatable, Hashable {
                 localeProvider: localeProvider
             )
         }
-        return (cards, max(cards.count - 1, 0))
+        return (cards, bestMatchIndex(in: cards, earliestKickoffs: earliest, now: now))
     }
 
     /// No-team / eliminated-team multi-card view: one card per
@@ -168,9 +172,10 @@ struct WorldCupMatches: Equatable, Hashable {
         now: Date = Date(),
         calendar: Calendar = .current,
         localeProvider: LocaleProvider = SystemLocaleProvider()
-    ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
+    ) -> (cards: [WorldCupMatches], bestMatchIndex: Int) {
         let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
-        let cards = groupedByDayAndStage(allMatches, calendar: calendar).map { group -> WorldCupMatches in
+        let groups = groupedByDayAndStage(allMatches, calendar: calendar)
+        let cards = groups.map { group -> WorldCupMatches in
             let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
             let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
             let isGroupStage = group.stage == .groupStage
@@ -187,7 +192,21 @@ struct WorldCupMatches: Equatable, Hashable {
                 }
             )
         }
-        return (cards, 0)
+        return (cards, bestMatchIndex(in: cards, earliestKickoffs: groups.map(\.earliestKickoff), now: now))
+    }
+
+    /// Picks the card to land on: a live card wins, otherwise the first card
+    /// whose earliest kickoff is still in the future, otherwise the last card.
+    /// `earliestKickoffs[i]` is the earliest kickoff among the matches that
+    /// make up `cards[i]`. Returns 0 for an empty array — callers should treat
+    /// "no cards" as "show the timer" via `WorldCupSectionState.defaultCard`.
+    static func bestMatchIndex(in cards: [WorldCupMatches],
+                               earliestKickoffs: [Date],
+                               now: Date) -> Int {
+        guard !cards.isEmpty else { return 0 }
+        if let live = cards.firstIndex(where: \.isLive) { return live }
+        if let upcoming = earliestKickoffs.firstIndex(where: { $0 > now }) { return upcoming }
+        return cards.count - 1
     }
 
     private static func dayLabel(for day: Date, locale: Locale) -> String {
@@ -278,6 +297,7 @@ struct WorldCupMatches: Equatable, Hashable {
         let day: Date
         let stage: WorldCupMatchesResponse.Match.Stage?
         let matches: [WorldCupMatchesResponse.Match]
+        let earliestKickoff: Date
     }
 
     private static func groupedByDayAndStage(
@@ -303,6 +323,14 @@ struct WorldCupMatches: Equatable, Hashable {
                 let rhsFirst = byKey[rhs]?.map(\.date).min() ?? .distantPast
                 return lhsFirst < rhsFirst
             }
-            .map { DayStageGroup(day: $0.day, stage: $0.stage, matches: byKey[$0]!.map(\.match)) }
+            .map { key in
+                let entries = byKey[key]!
+                return DayStageGroup(
+                    day: key.day,
+                    stage: key.stage,
+                    matches: entries.map(\.match),
+                    earliestKickoff: entries.map(\.date).min() ?? .distantPast
+                )
+            }
     }
 }

@@ -236,7 +236,7 @@ struct WorldCupMatchesTests {
         let card = result.cards[0]
         #expect(!card.featuredMatch.isEmpty)
         #expect(card.featuredMatch.count + card.upcomingMatches.count == 2)
-        #expect(result.defaultIndex == 0)
+        #expect(result.bestMatchIndex == 0)
     }
 
     @Test
@@ -265,7 +265,7 @@ struct WorldCupMatchesTests {
         #expect(result.cards[1].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
         #expect(result.cards[1].featuredMatch.count == 1)
         #expect(result.cards[1].upcomingMatches.isEmpty)
-        #expect(result.defaultIndex == 1)
+        #expect(result.bestMatchIndex == 1)
     }
 
     @Test
@@ -292,7 +292,7 @@ struct WorldCupMatchesTests {
         #expect(result.cards.count == 3)
         #expect(result.cards[1].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
         #expect(result.cards[2].phaseTitle == String.WorldCup.HomepageWidget.RoundPhase.Round16Label)
-        #expect(result.defaultIndex == 2)
+        #expect(result.bestMatchIndex == 2)
     }
 
     @Test
@@ -306,7 +306,7 @@ struct WorldCupMatchesTests {
         #expect(result.cards.count == 1)
         #expect(result.cards[0].featuredMatch.isEmpty)
         #expect(result.cards[0].upcomingMatches.isEmpty)
-        #expect(result.defaultIndex == 0)
+        #expect(result.bestMatchIndex == 0)
     }
 
     // MARK: - flattened (grouped-by-day)
@@ -369,7 +369,10 @@ struct WorldCupMatchesTests {
     }
 
     @Test
-    func test_flattened_defaultIndex_isAlwaysZero() {
+    func test_flattened_bestMatchIndex_landsOnFirstUpcomingDayCard() {
+        // now = Jun 12 09:00. Cards are Jun 10 (past), Jun 12 (kickoff 18:00,
+        // still upcoming relative to now), Jun 14. No live → we expect the
+        // first upcoming card, not the chronologically first one.
         let response = WorldCupMatchesResponse(
             previous: [makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")],
             current: [makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-12T18:00:00+00:00")],
@@ -382,7 +385,32 @@ struct WorldCupMatchesTests {
             calendar: utcCalendar()
         )
 
-        #expect(result.defaultIndex == 0)
+        #expect(result.bestMatchIndex == 1)
+    }
+
+    @Test
+    func test_flattened_bestMatchIndex_landsOnLastCard_whenAllInPast() {
+        // All matches are in the past relative to `now`. With no live match
+        // either, we fall back to the most recent card so the section still
+        // shows a result rather than something the user can't act on.
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00"),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-12T18:00:00+00:00"),
+                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-06-14T18:00:00+00:00")
+            ],
+            current: nil,
+            next: nil
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            now: parse("2026-07-01T00:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards.count == 3)
+        #expect(result.bestMatchIndex == 2)
     }
 
     @Test
@@ -405,7 +433,7 @@ struct WorldCupMatchesTests {
 
         #expect(result.cards[0].featuredMatch.map(\.homeCode) == ["ENG"])
         #expect(result.cards[0].upcomingMatches.map(\.homeCode) == ["ARG"])
-        #expect(result.defaultIndex == 0)
+        #expect(result.bestMatchIndex == 0)
     }
 
     @Test
@@ -460,7 +488,7 @@ struct WorldCupMatchesTests {
         let result = WorldCupMatches.flattened(response: response, calendar: utcCalendar())
 
         #expect(result.cards.isEmpty)
-        #expect(result.defaultIndex == 0)
+        #expect(result.bestMatchIndex == 0)
     }
 
     @Test

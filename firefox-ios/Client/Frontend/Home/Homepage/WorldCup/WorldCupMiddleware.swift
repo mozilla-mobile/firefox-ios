@@ -75,7 +75,7 @@ final class WorldCupMiddleware {
                 selectedCountryId: worldCupStore.selectedTeam,
                 matches: snapshot.matches,
                 apiError: snapshot.apiError,
-                defaultMatchIndex: snapshot.defaultMatchIndex
+                bestMatchIndex: snapshot.bestMatchIndex
             )
         )
     }

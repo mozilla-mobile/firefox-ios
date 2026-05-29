@@ -18,7 +18,7 @@ struct WorldCupAction: Action {
     /// Index into `matches` of the card the swipe view should land on by
     /// default (closest upcoming match). 0 when irrelevant (single card or
     /// empty).
-    let defaultMatchIndex: Int
+    let bestMatchIndex: Int
 
     init(
         windowUUID: WindowUUID,
@@ -29,7 +29,7 @@ struct WorldCupAction: Action {
         selectedCountryId: String? = nil,
         matches: [WorldCupMatches] = [],
         apiError: WorldCupLoadError? = nil,
-        defaultMatchIndex: Int = 0
+        bestMatchIndex: Int = 0
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
@@ -39,7 +39,7 @@ struct WorldCupAction: Action {
         self.selectedCountryId = selectedCountryId
         self.matches = matches
         self.apiError = apiError
-        self.defaultMatchIndex = defaultMatchIndex
+        self.bestMatchIndex = bestMatchIndex
     }
 }
 

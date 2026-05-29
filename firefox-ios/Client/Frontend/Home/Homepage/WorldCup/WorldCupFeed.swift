@@ -19,10 +19,10 @@ import Common
 final class WorldCupFeed {
     struct Snapshot: Equatable {
         let matches: [WorldCupMatches]
-        let defaultMatchIndex: Int
+        let bestMatchIndex: Int
         let apiError: WorldCupLoadError?
 
-        static let empty = Snapshot(matches: [], defaultMatchIndex: 0, apiError: nil)
+        static let empty = Snapshot(matches: [], bestMatchIndex: 0, apiError: nil)
     }
 
     private let apiClient: WorldCupAPIClientProtocol
@@ -129,7 +129,7 @@ final class WorldCupFeed {
             emit(buildSnapshot(from: response))
         case .failure(let error):
             emit(Snapshot(matches: latestSnapshot.matches,
-                          defaultMatchIndex: latestSnapshot.defaultMatchIndex,
+                          bestMatchIndex: latestSnapshot.bestMatchIndex,
                           apiError: error))
         }
     }
@@ -178,7 +178,6 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
-        let hasSelectedTeam = selectedTeamProvider() != nil
         if let team = selectedTeamProvider(),
            !isSelectedTeamEliminated(in: cachedTeamsResponse) {
             let perStage = WorldCupMatches.perStage(
@@ -187,8 +186,7 @@ final class WorldCupFeed {
                 now: now
             )
             return Snapshot(matches: perStage.cards,
-                            defaultMatchIndex: liveMatchIndex(in: perStage.cards,
-                                                              hasSelectedTeam: hasSelectedTeam),
+                            bestMatchIndex: perStage.bestMatchIndex,
                             apiError: nil)
         }
         store.setSelectedTeam(countryId: nil)
@@ -198,17 +196,8 @@ final class WorldCupFeed {
             now: now
         )
         return Snapshot(matches: flattened.cards,
-                        defaultMatchIndex: liveMatchIndex(in: flattened.cards,
-                                                          hasSelectedTeam: false),
+                        bestMatchIndex: flattened.bestMatchIndex,
                         apiError: nil)
-    }
-
-    private func liveMatchIndex(in cards: [WorldCupMatches],
-                                hasSelectedTeam: Bool) -> Int {
-        guard !cards.isEmpty else { return 0 }
-        let liveIndex = cards.firstIndex(where: { $0.isLive }) ?? -1
-        let adjusted = hasSelectedTeam ? liveIndex : liveIndex + 1
-        return adjusted
     }
 
     /// True when a team is selected AND that team appears in the roster
