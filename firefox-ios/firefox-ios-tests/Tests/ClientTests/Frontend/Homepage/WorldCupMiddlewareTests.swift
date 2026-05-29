@@ -513,7 +513,10 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
         mockWorldCupStore.selectedTeam = "CAN"
+        // `now` pinned (dev timeline) after the group stage and before the R32
+        // fixture so the result is deterministic and past the first kickoff.
         let response = WorldCupMatchesResponse(
+            now: "2026-06-26T12:00:00+00:00",
             previous: [
                 makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
                 makeMatch(id: 2, home: "CAN", away: "QAT", date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
@@ -529,7 +532,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             liveResult: .success(WorldCupLiveResponse(matches: [])),
             teamsResult: .success(makeTeamsResponse())
         )
-        let subject = createSubject(apiClient: apiClient)
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.initialize
@@ -545,7 +548,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.matches.count, 2)
         XCTAssertEqual(dispatched.matches[1].phaseTitle,
                        String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
-        XCTAssertEqual(dispatched.defaultMatchIndex, -1)
+        // Lands on the latest stage (R32, index 1), not the group card.
+        XCTAssertEqual(dispatched.defaultMatchIndex, 1)
         subject.worldCupProvider = { _, _ in }
     }
 

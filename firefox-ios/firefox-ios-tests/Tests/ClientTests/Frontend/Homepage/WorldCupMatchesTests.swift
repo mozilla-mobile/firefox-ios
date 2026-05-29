@@ -369,7 +369,10 @@ struct WorldCupMatchesTests {
     }
 
     @Test
-    func test_flattened_defaultIndex_isAlwaysZero() {
+    func test_flattened_defaultIndex_landsOnCurrentDayCard() {
+        // now = Jun 12 09:00. Cards: Jun 10 (past), Jun 12 (today, within its
+        // viewing window), Jun 14. No live → land on the first card still within
+        // its window (Jun 12, index 1), not the earliest past card.
         let response = WorldCupMatchesResponse(
             previous: [makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")],
             current: [makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-12T18:00:00+00:00")],
@@ -382,7 +385,7 @@ struct WorldCupMatchesTests {
             calendar: utcCalendar()
         )
 
-        #expect(result.defaultIndex == 0)
+        #expect(result.defaultIndex == 1)
     }
 
     @Test
