@@ -545,6 +545,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.matches.count, 2)
         XCTAssertEqual(dispatched.matches[1].phaseTitle,
                        String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
+        XCTAssertEqual(dispatched.defaultMatchIndex, -1)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -828,10 +829,11 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
         mockWorldCupStore.selectedTeam = nil
+        // `now` is before the first match kicks off → stay on the timer (page 0).
         let match1 = makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")
         let match2 = makeMatch(id: 2, home: "BRA", away: "GER", date: "2026-06-15T18:00:00+00:00")
         let response = WorldCupMatchesResponse(
-            now: "2026-06-12T00:00:00+00:00",
+            now: "2026-06-05T00:00:00+00:00",
             previous: nil,
             current: nil,
             next: [match1, match2]
@@ -851,82 +853,11 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 2)
-        // No team selected and the world cup hasn't started yet → the swipe
-        // view must land on the timer regardless of which match is "best".
-        let resolved = WorldCupSectionState.reducer(
-            WorldCupSectionState(windowUUID: .XCTestDefaultUUID),
-            dispatched
-        )
-        XCTAssertEqual(resolved.defaultCard, .timer)
-        subject.worldCupProvider = { _, _ in }
-    }
-
-    func test_initialize_whenDevTimelineEnabled_advancesTimelineDateProvider() throws {
-        mockWorldCupStore.isFeatureEnabled = true
-        mockWorldCupStore.isHomepageSectionEnabled = true
-        mockWorldCupStore.isMilestone2 = true
-        mockWorldCupStore.selectedTeam = "BRA"
-        let match = makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-15T18:00:00+00:00")
-        let serverNow = "2026-06-12T00:00:00+00:00"
-        let response = WorldCupMatchesResponse(now: serverNow, previous: nil, current: nil, next: [match])
-        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
-        let timelineDateProvider = WorldCupTimelineDateProvider(
-            systemDateProvider: MockDateProvider(fixedDate: iso8601Date("2026-05-01T00:00:00Z"))
-        )
-        let subject = createSubject(
-            apiClient: apiClient,
-            usesDevServerTimeline: true,
-            timelineDateProvider: timelineDateProvider
-        )
-        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
-        let expectation = expectationForMatchesDispatch()
-
-        subject.worldCupProvider(appState, action)
-        wait(for: [expectation])
-
-        XCTAssertEqual(timelineDateProvider.now(), iso8601Date(serverNow))
-        subject.worldCupProvider = { _, _ in }
-    }
-
-    func test_initialize_whenDevTimelineDisabled_leavesTimelineDateProviderOnSystemClock() throws {
-        mockWorldCupStore.isFeatureEnabled = true
-        mockWorldCupStore.isHomepageSectionEnabled = true
-        mockWorldCupStore.isMilestone2 = true
-        mockWorldCupStore.selectedTeam = "BRA"
-        let match = makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-15T18:00:00+00:00")
-        let response = WorldCupMatchesResponse(
-            now: "2026-06-12T00:00:00+00:00",
-            previous: nil,
-            current: nil,
-            next: [match]
-        )
-        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
-        let systemNow = iso8601Date("2026-05-01T00:00:00Z")
-        let timelineDateProvider = WorldCupTimelineDateProvider(
-            systemDateProvider: MockDateProvider(fixedDate: systemNow)
-        )
-        let subject = createSubject(
-            apiClient: apiClient,
-            usesDevServerTimeline: false,
-            timelineDateProvider: timelineDateProvider
-        )
-        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
-        let expectation = expectationForMatchesDispatch()
-
-        subject.worldCupProvider(appState, action)
-        wait(for: [expectation])
-
-        XCTAssertEqual(timelineDateProvider.now(), systemNow)
+        XCTAssertEqual(dispatched.defaultMatchIndex, 0)
         subject.worldCupProvider = { _, _ in }
     }
 
     // MARK: - Helpers
-
-    private func iso8601Date(_ string: String) -> Date {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        return formatter.date(from: string)!
-    }
 
     /// Builds a feed around the mock client (when provided) and hands both
     /// to the middleware. The mock's streams emit each result once and
@@ -934,8 +865,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     /// per restart — no polling cadence to control here.
     private func createSubject(
         apiClient: WorldCupAPIClientProtocol?,
-        usesDevServerTimeline: Bool = false,
-        timelineDateProvider: WorldCupTimelineDateProvider? = nil
+        usesDevServerTimeline: Bool = false
     ) -> WorldCupMiddleware {
         let store: MockWorldCupStore = mockWorldCupStore
         let feed = apiClient.map { client in
@@ -943,7 +873,6 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
                 apiClient: client,
                 store: store,
                 usesDevServerTimeline: usesDevServerTimeline,
-                timelineDateProvider: timelineDateProvider,
                 selectedTeamProvider: { store.selectedTeam }
             )
         }

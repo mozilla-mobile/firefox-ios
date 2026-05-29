@@ -19,10 +19,10 @@ import Common
 final class WorldCupFeed {
     struct Snapshot: Equatable {
         let matches: [WorldCupMatches]
-        let bestMatchIndex: Int
+        let defaultMatchIndex: Int
         let apiError: WorldCupLoadError?
 
-        static let empty = Snapshot(matches: [], bestMatchIndex: 0, apiError: nil)
+        static let empty = Snapshot(matches: [], defaultMatchIndex: 0, apiError: nil)
     }
 
     private let apiClient: WorldCupAPIClientProtocol
@@ -36,10 +36,6 @@ final class WorldCupFeed {
     /// thing the middleware needs to coordinate.
     private let selectedTeamProvider: () -> String?
     private let store: WorldCupStoreProtocol
-    /// Shared with the store so its time-gated logic advances with the
-    /// dev-server timeline. Updated from each `/matches` response. `nil` in
-    /// contexts that don't need timeline-aware store reads (e.g. tests).
-    private let timelineDateProvider: WorldCupTimelineDateProvider?
 
     private var matchesTask: Task<Void, Never>?
     private var liveTask: Task<Void, Never>?
@@ -55,11 +51,9 @@ final class WorldCupFeed {
     init(apiClient: WorldCupAPIClientProtocol,
          store: WorldCupStoreProtocol = WorldCupStore(),
          usesDevServerTimeline: Bool,
-         timelineDateProvider: WorldCupTimelineDateProvider? = nil,
          selectedTeamProvider: @escaping () -> String?) {
         self.apiClient = apiClient
         self.usesDevServerTimeline = usesDevServerTimeline
-        self.timelineDateProvider = timelineDateProvider
         self.selectedTeamProvider = selectedTeamProvider
         self.store = store
     }
@@ -128,7 +122,6 @@ final class WorldCupFeed {
         case .success(let response):
             guard let response else { return }
             lastMatchesResponse = response
-            timelineDateProvider?.update(timelineNow: effectiveNow(from: response))
             // Reconcile first so the live stream is opened before the
             // matches snapshot is emitted. This keeps `liveFetchCount` and
             // dispatch ordering deterministic for tests.
@@ -136,7 +129,7 @@ final class WorldCupFeed {
             emit(buildSnapshot(from: response))
         case .failure(let error):
             emit(Snapshot(matches: latestSnapshot.matches,
-                          bestMatchIndex: latestSnapshot.bestMatchIndex,
+                          defaultMatchIndex: latestSnapshot.defaultMatchIndex,
                           apiError: error))
         }
     }
@@ -185,6 +178,7 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
+        let beforeStart = isBeforeFirstMatch(now: now, in: response)
         if let team = selectedTeamProvider(),
            !isSelectedTeamEliminated(in: cachedTeamsResponse) {
             let perStage = WorldCupMatches.perStage(
@@ -193,7 +187,7 @@ final class WorldCupFeed {
                 now: now
             )
             return Snapshot(matches: perStage.cards,
-                            bestMatchIndex: perStage.bestMatchIndex,
+                            defaultMatchIndex: beforeStart ? 0 : perStage.defaultIndex,
                             apiError: nil)
         }
         store.setSelectedTeam(countryId: nil)
@@ -202,9 +196,22 @@ final class WorldCupFeed {
             liveIDs: cachedLiveIDs,
             now: now
         )
+        // No team selected → the timer card sits at page 0, so shift the
+        // chosen card index past it (and stay on the timer before kickoff).
         return Snapshot(matches: flattened.cards,
-                        bestMatchIndex: flattened.bestMatchIndex,
+                        defaultMatchIndex: beforeStart ? 0 : flattened.defaultIndex + 1,
                         apiError: nil)
+    }
+
+    /// True until the tournament's first match has kicked off. Uses the
+    /// (dev-timeline-aware) `now` so advancing the mock clock past the first
+    /// kickoff lifts the "stay on the first card" rule.
+    private func isBeforeFirstMatch(now: Date, in response: WorldCupMatchesResponse) -> Bool {
+        let all = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        guard let earliest = all.compactMap({ WorldCupMatch.parseDate($0.date) }).min() else {
+            return false
+        }
+        return now < earliest
     }
 
     /// True when a team is selected AND that team appears in the roster

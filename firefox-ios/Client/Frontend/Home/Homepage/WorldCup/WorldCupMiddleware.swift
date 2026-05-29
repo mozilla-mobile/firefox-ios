@@ -18,12 +18,8 @@ final class WorldCupMiddleware {
     private var lastWindowUUID: WindowUUID?
 
     convenience init() {
-        let timelineDateProvider = WorldCupTimelineDateProvider()
-        let store = WorldCupStore(dateProvider: timelineDateProvider)
-        let feed = WorldCupMiddleware.makeDefaultFeed(
-            store: store,
-            timelineDateProvider: timelineDateProvider
-        )
+        let store = WorldCupStore()
+        let feed = WorldCupMiddleware.makeDefaultFeed(store: store)
         self.init(worldCupStore: store, feed: feed)
     }
 
@@ -79,23 +75,18 @@ final class WorldCupMiddleware {
                 selectedCountryId: worldCupStore.selectedTeam,
                 matches: snapshot.matches,
                 apiError: snapshot.apiError,
-                bestMatchIndex: snapshot.bestMatchIndex
+                defaultMatchIndex: snapshot.defaultMatchIndex
             )
         )
     }
 
-    private static func makeDefaultFeed(
-        store: WorldCupStoreProtocol,
-        timelineDateProvider: WorldCupTimelineDateProvider
-    ) -> WorldCupFeed? {
+    private static func makeDefaultFeed(store: WorldCupStoreProtocol) -> WorldCupFeed? {
         guard let apiClient = WorldCupAPIClient.makeDefault() else { return nil }
         let prefs = (AppContainer.shared.resolve() as Profile).prefs
         let usesDevServerTimeline = prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost) != nil
         return WorldCupFeed(
             apiClient: apiClient,
-            store: store,
             usesDevServerTimeline: usesDevServerTimeline,
-            timelineDateProvider: timelineDateProvider,
             selectedTeamProvider: { store.selectedTeam }
         )
     }

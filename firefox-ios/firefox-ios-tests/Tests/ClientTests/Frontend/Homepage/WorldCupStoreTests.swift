@@ -189,64 +189,6 @@ final class WorldCupStoreTests: XCTestCase {
         XCTAssertFalse(subject.hasWorldCupStarted)
     }
 
-    func test_hasWorldCupStarted_whenTimelineNowIsAfterStartDate_returnsTrue_evenIfSystemIsBefore() {
-        setNimbusFeature(countdownTargetDate: "2026-06-11T19:00:00Z")
-        let timelineProvider = WorldCupTimelineDateProvider(
-            systemDateProvider: MockDateProvider(fixedDate: iso8601Date("2026-06-11T18:59:59Z"))
-        )
-        let subject = createSubject(dateProvider: timelineProvider)
-        XCTAssertFalse(subject.hasWorldCupStarted)
-
-        timelineProvider.update(timelineNow: iso8601Date("2026-06-12T00:00:00Z"))
-
-        XCTAssertTrue(subject.hasWorldCupStarted)
-    }
-
-    func test_hasWorldCupStarted_whenNoTimelineNowObserved_fallsBackToSystemClock() {
-        setNimbusFeature(countdownTargetDate: "2026-06-11T19:00:00Z")
-        let timelineProvider = WorldCupTimelineDateProvider(
-            systemDateProvider: MockDateProvider(fixedDate: iso8601Date("2026-06-12T00:00:00Z"))
-        )
-        let subject = createSubject(dateProvider: timelineProvider)
-
-        XCTAssertTrue(subject.hasWorldCupStarted)
-    }
-
-    // MARK: - WorldCupTimelineDateProvider
-
-    func test_timelineDateProvider_beforeUpdate_returnsSystemNow() {
-        let systemNow = iso8601Date("2026-05-01T00:00:00Z")
-        let provider = WorldCupTimelineDateProvider(
-            systemDateProvider: MockDateProvider(fixedDate: systemNow)
-        )
-
-        XCTAssertEqual(provider.now(), systemNow)
-    }
-
-    func test_timelineDateProvider_afterUpdate_returnsTimelineNow() {
-        let provider = WorldCupTimelineDateProvider(
-            systemDateProvider: MockDateProvider(fixedDate: iso8601Date("2026-05-01T00:00:00Z"))
-        )
-        let timelineNow = iso8601Date("2026-06-12T00:00:00Z")
-
-        provider.update(timelineNow: timelineNow)
-
-        XCTAssertEqual(provider.now(), timelineNow)
-    }
-
-    func test_timelineDateProvider_ignoresNilUpdate() {
-        let systemNow = iso8601Date("2026-05-01T00:00:00Z")
-        let provider = WorldCupTimelineDateProvider(
-            systemDateProvider: MockDateProvider(fixedDate: systemNow)
-        )
-        let timelineNow = iso8601Date("2026-06-12T00:00:00Z")
-        provider.update(timelineNow: timelineNow)
-
-        provider.update(timelineNow: nil)
-
-        XCTAssertEqual(provider.now(), timelineNow)
-    }
-
     // MARK: - setIsHomepageSectionEnabled
 
     func test_setIsHomepageSectionEnabled_writesToPrefs() {

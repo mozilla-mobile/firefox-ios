@@ -255,76 +255,13 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         self.onHeightChange = onHeightChange
         self.isCardImpression = isCardImpression
         if currentState != state {
-            let previousState = currentState
             currentState = state
-            if let previousState, pageSignature(for: previousState) == pageSignature(for: state) {
-                refreshPagesInPlace(for: state, previousState: previousState)
-            } else {
-                rebuildPages(for: state, previousState: previousState)
-            }
+            rebuildPages(for: state)
         }
         applyTheme(theme: theme)
     }
 
-    /// The shape of the pages array — page kinds plus per-card identity,
-    /// independent of live state and scores. When this is unchanged between two
-    /// states the same cards are on screen, so we can refresh their content in
-    /// place rather than tearing the pager down. That keeps a routine
-    /// score/`/live` poll from visibly re-rendering the card the user is reading.
-    private func pageSignature(for state: WorldCupSectionState) -> [String] {
-        guard state.isMilestone2 else { return ["timer"] }
-        if state.apiError != nil { return ["error"] }
-        let prefix = state.selectedCountryId == nil ? ["timer"] : []
-        return prefix + state.matches.map(\.identityKey)
-    }
-
-    /// Re-applies changed card models onto the existing page views without
-    /// rebuilding the stack, preserving the user's scroll position and skipping
-    /// the spinner/fade entrance animation. We navigate only when `targetPage`
-    /// asks for a different page (e.g. a match just kicked off); otherwise we
-    /// just refresh the visible card's height in case its content grew.
-    private func refreshPagesInPlace(for state: WorldCupSectionState,
-                                     previousState: WorldCupSectionState) {
-        let timerOffset = state.selectedCountryId == nil ? 1 : 0
-        for (index, match) in state.matches.enumerated()
-        where previousState.matches[safe: index] != match {
-            let container = pagesStack.arrangedSubviews[safe: timerOffset + index] as? PageContainer
-            (container?.content as? WorldCupMatchCardView)?.configure(with: match)
-        }
-
-        let target = targetPage(for: state,
-                                previousState: previousState,
-                                pageCount: pagesStack.arrangedSubviews.count)
-        if target != pageControl.currentPage {
-            goToPage(target)
-        } else {
-            refreshCurrentPageHeight()
-        }
-    }
-
-    /// Updates the current page's height (e.g. a score row appeared) without
-    /// toggling content visibility, so the visible card resizes smoothly
-    /// instead of flickering through the loading state.
-    private func refreshCurrentPageHeight() {
-        let page = pageControl.currentPage
-        let (isShowingWinnerView, applyWinnerChanges) = getWinnerStatusForCurrentPage()
-        let (scrollViewHeight, contentViewHeight) = getContentsHeight(for: page,
-                                                                      isShowingWinnerView: isShowingWinnerView)
-        applyWinnerChanges()
-        scrollViewHeightConstraint?.constant = scrollViewHeight
-        UIView.animate(
-            withDuration: UX.contentConstraintsChangeAnimationDuration,
-            delay: UX.animationDelay,
-            options: [.allowUserInteraction],
-            animations: {
-                self.winnerBackgroundView.alpha = isShowingWinnerView ? 1.0 : 0.0
-                self.onHeightChange?(contentViewHeight)
-                self.contentView.layoutIfNeeded()
-            }
-        )
-    }
-
-    private func rebuildPages(for state: WorldCupSectionState, previousState: WorldCupSectionState?) {
+    private func rebuildPages(for state: WorldCupSectionState) {
         removePageViews()
 
         let pages = makePages(for: state)
@@ -342,31 +279,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         NSLayoutConstraint.activate(constraints)
         pageConstraints = constraints
 
-        goToPage(targetPage(for: state, previousState: previousState, pageCount: pages.count))
-    }
-
-    /// Resolves which page to display after rebuilding. On first render
-    /// (`previousState == nil`) and for the single-page timer/error states we
-    /// honor `bestMatchIndex` via `initialPage`. On a data refresh we defer to
-    /// `WorldCupMatches.resolvedCardIndex`, which keeps the user on the card
-    /// they're reading unless a match just kicked off.
-    private func targetPage(for state: WorldCupSectionState,
-                            previousState: WorldCupSectionState?,
-                            pageCount: Int) -> Int {
-        guard pageCount > 0 else { return 0 }
-        // Before kickoff we always pin to the first card, on every refresh.
-        guard let previousState, !state.matches.isEmpty, state.hasWorldCupStarted else {
-            return initialPage(for: state, pageCount: pageCount)
-        }
-        let previousTimerOffset = previousState.selectedCountryId == nil ? 1 : 0
-        let cardIndex = WorldCupMatches.resolvedCardIndex(
-            previous: previousState.matches,
-            current: state.matches,
-            currentCardIndex: pageControl.currentPage - previousTimerOffset,
-            bestMatchIndex: state.bestMatchIndex
-        )
-        let timerOffset = state.selectedCountryId == nil ? 1 : 0
-        return min(timerOffset + cardIndex, pageCount - 1)
+        goToPage(initialPage(for: state, pageCount: pages.count))
     }
 
     /// Resolves which page the swipe view should display first. The middleware
@@ -374,13 +287,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     /// clamp it into the valid page range.
     private func initialPage(for state: WorldCupSectionState, pageCount: Int) -> Int {
         guard pageCount > 0 else { return 0 }
-        switch state.defaultCard {
-        case .timer:
-            return 0
-        case .match(let index):
-            let timerOffset = state.selectedCountryId == nil ? 1 : 0
-            return min(timerOffset + index, pageCount - 1)
-        }
+        return min(max(state.defaultMatchIndex, 0), pageCount - 1)
     }
 
     private func makePages(for state: WorldCupSectionState) -> [PageContainer] {
