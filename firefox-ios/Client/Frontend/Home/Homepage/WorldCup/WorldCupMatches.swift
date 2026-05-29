@@ -53,7 +53,6 @@ struct WorldCupMatches: Equatable, Hashable {
     /// before we advance to the next fixture. A live match still wins.
     private static let resultLingerWindow: TimeInterval = 30 * 60
 
-
     static func defaultIndex(in cards: [WorldCupMatches],
                              latestKickoffs: [Date],
                              now: Date) -> Int {
