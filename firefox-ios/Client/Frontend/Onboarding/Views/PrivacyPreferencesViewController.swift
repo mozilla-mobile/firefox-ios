@@ -308,13 +308,9 @@ final class PrivacyPreferencesViewController: UIViewController,
 
         let effectView = UIVisualEffectView()
 
-        #if canImport(FoundationModels)
         let glassEffect = UIGlassEffect()
         glassEffect.isInteractive = true
         effectView.effect = glassEffect
-        #else
-        effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-        #endif
 
         effectView.clipsToBounds = true
         effectView.translatesAutoresizingMaskIntoConstraints = false
