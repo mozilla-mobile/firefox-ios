@@ -5,6 +5,13 @@
 - Limit the amount of comments you put in the code to a strict minimum. You should almost never add comments, except sometimes on non-trivial code, function definitions if the arguments aren't self-explanatory, and class definitions and their members.
 - Do not remove existing comments unless they are directly related to what you are changing.
 
+## Working Principles
+
+1. Ask, don't assume. If something's unclear, ask before writing a line of code, minimizing silent guesses about intent, architecture, or requirements.
+2. Provide the simplest solution first, and implement the minimum amount of code change for that to work. No abstractions or refactors that haven't been requested.
+3. Don't touch unrelated code, and if a file isn't part of the current task, leave it.
+4. Flag uncertainty explicitly or if you're not confident, say so before proceeding as confidence without certainty causes more damage than admitting a gap.
+
 ## Repository Structure
 
 This is a monorepo containing three main projects:
@@ -38,7 +45,7 @@ SwiftLint also runs whenever code is pushed to the remote, using hooks.
 
 ### Pull requests
 
-Pull requests needs to be opened with the provided `PULL_REQUEST_TEMPLATE`. Update relevant section. 
+Pull requests needs to be opened with the provided `PULL_REQUEST_TEMPLATE`. Update relevant section.
 GitHub ticket number can be found at the bottom of the JIRA ticket.
 
 ## Runbooks
