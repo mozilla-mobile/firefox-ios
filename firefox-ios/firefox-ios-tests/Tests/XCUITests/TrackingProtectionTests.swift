@@ -6,7 +6,7 @@ import XCTest
 
 // Urls
 let websiteWithBlockedElements = "twitter.com"
-let differentWebsite = path(forTestPage: "test-example.html")
+let differentWebsite = path(forTestPage: TestPages.exampleHTML)
 let trackingProtectionTestUrl = "https://senglehardt.com/test/trackingprotection/test_pages/"
 
 // Selectors

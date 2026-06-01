@@ -61,7 +61,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
             navigator.nowAt(NewTabScreen)
         }
         navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: "localhost")
@@ -302,7 +302,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         navigator.performAction(Action.AcceptClearPrivateData)
 
         navigator.goto(HomePanelsScreen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         app.buttons[optionSelected].waitAndTap()
@@ -533,7 +533,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         closeFromAppSwitcherAndRelaunch()
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         app.links[website_2["link"]!].waitAndTap()
         waitUntilPageLoad()
@@ -689,7 +689,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
     private func openContextMenuForArticleLink() {
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))

@@ -9,7 +9,7 @@ import Shared
 let websiteUrl1 = "www.mozilla.org"
 let websiteUrl2 = "developer.mozilla.org"
 let invalidUrl = "1-2-3"
-let exampleUrl = "test-example.html"
+let exampleUrl = TestPages.exampleHTML
 let urlExampleLabel = "Example Domain"
 let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
