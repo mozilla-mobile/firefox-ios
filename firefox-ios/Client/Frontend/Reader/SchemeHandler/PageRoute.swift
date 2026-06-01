@@ -15,11 +15,11 @@ final class PageRoute: TinyRoute {
     // None of that would work in the unit test runner.
     // This closure lets tests provide a fake extraction result or throw a controlled error.
     typealias Extractor = @Sendable (URL, ReaderModeCache, Profile) async throws -> ReadabilityResult
-    
+
     private let cache: ReaderModeCache
     private let profile: Profile
     private let extractor: Extractor
-    
+
     init(cache: ReaderModeCache,
          profile: Profile,
          extractor: @escaping Extractor = { url, cache, profile in
@@ -29,11 +29,11 @@ final class PageRoute: TinyRoute {
         self.profile = profile
         self.extractor = extractor
     }
-    
+
     // needed to conform to TinyRoute
     func handle(url: URL, components: URLComponents) async throws -> TinyHTTPReply? {
         let articleURL = try extractArticleURL(from: components)
-        
+
         do {
             let result = try await fetchOrExtract(articleURL: articleURL)
             return try await renderReaderPage(url: url, result: result)
@@ -41,18 +41,18 @@ final class PageRoute: TinyRoute {
             return try buildErrorReply(url: url)
         }
     }
-    
+
     // MARK: - Result acquisition
-    
+
     private func fetchOrExtract(articleURL: URL) async throws -> ReadabilityResult {
         if let cached = try? cache.get(articleURL) {
             return cached
         }
         return try await extractor(articleURL, cache, profile)
     }
-    
+
     // MARK: - Rendering
-    
+
     private func renderReaderPage(url: URL, result: ReadabilityResult) async throws -> TinyHTTPReply {
         let html = try await MainActor.run { [profile] () throws -> String in
             let style = Self.readerModeStyle(from: profile.prefs)
@@ -64,13 +64,13 @@ final class PageRoute: TinyRoute {
             }
             return rendered
         }
-        
+
         guard let body = html.data(using: .utf8) else {
             throw TinyRouterError.badResponse
         }
         return try buildSuccessReply(url: url, body: body)
     }
-    
+
     @MainActor
     private static func readerModeStyle(from prefs: Prefs) -> ReaderModeStyle {
         if let dict = prefs.dictionaryForKey(PrefsKeys.ReaderModeProfileKeyStyle),
@@ -81,7 +81,7 @@ final class PageRoute: TinyRoute {
         style.theme = ReaderModeTheme.preferredTheme(window: nil)
         return style
     }
-    
+
     // MARK: - URL parsing
     private func extractArticleURL(from components: URLComponents) throws -> URL {
         guard let raw = components.queryItems?.first(where: { $0.name == "url" })?.value else {
@@ -90,12 +90,12 @@ final class PageRoute: TinyRoute {
         guard let parsed = URL(string: raw), parsed.isWebPage(includeDataURIs: false) else {
             throw TinyRouterError.invalidParam("url", raw)
         }
-        
+
         return parsed
     }
-    
+
     // MARK: - Response builders
-    
+
     func buildSuccessReply(url: URL, body: Data) throws -> TinyHTTPReply {
         // Single-line CSP since HTTPURLResponse drops multi-line header values.
         let origin = "\(ReaderModeSchemeHandler.scheme)://\(ReaderModeSchemeHandler.host)"
@@ -116,7 +116,7 @@ final class PageRoute: TinyRoute {
         }
         return TinyHTTPReply(httpResponse: response, body: body)
     }
-    
+
     // It would be nice to have a standard way of displaying error pages, but it seems that
     // mobile Firefox does not have this yet (?)
     func buildErrorReply(url: URL) throws -> TinyHTTPReply {

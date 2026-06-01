@@ -61,7 +61,7 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
         // Two routers so private-mode tabs use the memory cache, not disk.
         self.normalRouter = ReaderModeSchemeHandler.makeRouter(
             cache: DiskReaderModeCache.shared, profile: profile)
-        
+
         self.privateRouter = ReaderModeSchemeHandler.makeRouter(
             cache: MemoryReaderModeCache.shared, profile: profile)
 
@@ -131,7 +131,7 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
 
         return url
     }
-    
+
     // MARK: - Helpers
     private static func makeRouter(cache: ReaderModeCache, profile: Profile) -> TinyRouter {
         return TinyRouter()
