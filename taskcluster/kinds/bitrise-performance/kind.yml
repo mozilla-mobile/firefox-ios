@@ -10,36 +10,16 @@ transforms:
 
 
 tasks:
-    iphone16-ios186:
-        description: Run Performance Tests on iPhone 16 / iOS 18.6 in Bitrise
+    tests:
+        description: Run Performance Tests on iOS Simulator in Bitrise
         run-on-tasks-for: []
         treeherder:
             symbol: bitrise-perf
             kind: test
-            platform: ios-simulator-iphone16-18-6/opt
+            platform: ios-simulator-iphone14-16-4/opt
             tier: 1
         worker-type: bitrise
         bitrise:
             artifact_prefix: public
             workflows:
-                - Bitrise_Performance_Test:
-                    - DEVICE_NAME: "iPhone 16"
-                    - IOS_VERSION: "18.6"
-                    - DEVICE_KEY: "iphone16-18-6"
-
-    iphone17-ios265:
-        description: Run Performance Tests on iPhone 17 / iOS 26.5 in Bitrise
-        run-on-tasks-for: []
-        treeherder:
-            symbol: bitrise-perf
-            kind: test
-            platform: ios-simulator-iphone17-26-5/opt
-            tier: 1
-        worker-type: bitrise
-        bitrise:
-            artifact_prefix: public
-            workflows:
-                - Bitrise_Performance_Test:
-                    - DEVICE_NAME: "iPhone 17"
-                    - IOS_VERSION: "26.5"
-                    - DEVICE_KEY: "iphone17-26-5"
+                - Bitrise_Performance_Test
