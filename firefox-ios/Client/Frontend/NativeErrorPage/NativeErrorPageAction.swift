@@ -9,12 +9,10 @@ struct NativeErrorPageAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let networkError: NSError?
-    let errorType: NativeErrorPageHelper.NetworkErrorType?
     let nativePageErrorModel: ErrorPageModel?
 
     init(
         networkError: NSError? = nil,
-        errorType: NativeErrorPageHelper.NetworkErrorType? = nil,
         nativePageErrorModel: ErrorPageModel? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
@@ -22,7 +20,6 @@ struct NativeErrorPageAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.networkError = networkError
-        self.errorType = errorType
         self.nativePageErrorModel = nativePageErrorModel
     }
 }
