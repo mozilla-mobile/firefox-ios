@@ -120,6 +120,21 @@ final class PageRoute: TinyRoute {
     // It would be nice to have a standard way of displaying error pages, but it seems that
     // mobile Firefox does not have this yet (?)
     func buildErrorReply(url: URL, originalURL: URL) throws -> TinyHTTPReply {
+        let errorString: String = .ReaderModeHandlerError 
+        guard let body = errorString.data(using: .utf8) else {
+            throw TinyRouterError.badResponse
+        }
+        guard let response = HTTPURLResponse(
+            url: url,
+            statusCode: 200,
+            httpVersion: "HTTP/1.1",
+            headerFields: ["Content-Type": "text/html; charset=utf-8"]
+        ) else {
+            throw TinyRouterError.badResponse
+        }
+        return TinyHTTPReply(httpResponse: response, body: body)
+    // mobile Firefox does not have this yet (?)
+    func buildErrorReply(url: URL, originalURL: URL) throws -> TinyHTTPReply {
         let safeHref = Self.htmlEscape(originalURL.absoluteString)
         let failureMessage = Self.htmlEscape(String.ReaderModeHandlerPageCantDisplay)
         let loadOriginalLabel = Self.htmlEscape(String.ReaderModeHandlerLoadOriginalPage)
