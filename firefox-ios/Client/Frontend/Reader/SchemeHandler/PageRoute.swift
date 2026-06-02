@@ -99,6 +99,8 @@ final class PageRoute: TinyRoute {
     func buildSuccessReply(url: URL, body: Data) throws -> TinyHTTPReply {
         // Single-line CSP since HTTPURLResponse drops multi-line header values.
         let origin = "\(ReaderModeSchemeHandler.scheme)://\(ReaderModeSchemeHandler.host)"
+        /// TODO(FXIOS-15965): This is the exact csp we have in `ReaderModeHandlers`,
+        /// `WKReaderModeHandlers` and now here. Ideally, we should have one source of truth for this string.
         let csp = "default-src 'none'; "
         + "img-src *; "
         + "style-src 'unsafe-inline' \(origin); "
