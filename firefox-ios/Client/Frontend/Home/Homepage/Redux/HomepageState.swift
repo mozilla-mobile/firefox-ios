@@ -3,10 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Redux
 
-@CopyWithUpdates
+@Copyable
 struct HomepageState: ScreenState, Equatable {
     var windowUUID: WindowUUID
 
@@ -57,7 +57,23 @@ struct HomepageState: ScreenState, Equatable {
             return
         }
 
-        self = homepageState.copyWithUpdates()
+        self.init(
+            windowUUID: homepageState.windowUUID,
+            headerState: homepageState.headerState,
+            messageState: homepageState.messageState,
+            topSitesState: homepageState.topSitesState,
+            searchState: homepageState.searchState,
+            jumpBackInState: homepageState.jumpBackInState,
+            bookmarkState: homepageState.bookmarkState,
+            worldcupState: homepageState.worldcupState,
+            merinoState: homepageState.merinoState,
+            wallpaperState: homepageState.wallpaperState,
+            isZeroSearch: homepageState.isZeroSearch,
+            shouldTriggerImpression: homepageState.shouldTriggerImpression,
+            shouldShowPrivacyNotice: homepageState.shouldShowPrivacyNotice,
+            availableContentHeight: homepageState.availableContentHeight,
+            availableWallpaperHeight: homepageState.availableWallpaperHeight
+        )
     }
 
     init(windowUUID: WindowUUID) {
@@ -144,37 +160,35 @@ struct HomepageState: ScreenState, Equatable {
 
     @MainActor
     private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
-        return state.copyWithUpdates(
-            headerState: HeaderState.reducer(state.headerState, action),
-            messageState: MessageCardState.reducer(state.messageState, action),
-            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-            searchState: SearchBarState.reducer(state.searchState, action),
-            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
-            merinoState: MerinoState.reducer(state.merinoState, action),
-            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            shouldTriggerImpression: false
-        )
+        return state
+            .copy(headerState: HeaderState.reducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(shouldTriggerImpression: false)
     }
 
     @MainActor
     private static func handleEmbeddedHomepageAction(state: HomepageState,
                                                      action: Action,
                                                      isZeroSearch: Bool) -> HomepageState {
-        return state.copyWithUpdates(
-            headerState: HeaderState.reducer(state.headerState, action),
-            messageState: MessageCardState.reducer(state.messageState, action),
-            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-            searchState: SearchBarState.reducer(state.searchState, action),
-            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
-            merinoState: MerinoState.reducer(state.merinoState, action),
-            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            isZeroSearch: isZeroSearch,
-            shouldTriggerImpression: false
-        )
+        return state
+            .copy(headerState: HeaderState.reducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(isZeroSearch: isZeroSearch)
+            .copy(shouldTriggerImpression: false)
     }
 
     @MainActor
@@ -187,99 +201,93 @@ struct HomepageState: ScreenState, Equatable {
         let availableContentHeight = homepageAction.availableContentHeight ?? state.availableContentHeight
         let availableWallpaperHeight = homepageAction.availableWallpaperHeight ?? state.availableWallpaperHeight
 
-         return state.copyWithUpdates(
-            headerState: HeaderState.reducer(state.headerState, action),
-            messageState: MessageCardState.reducer(state.messageState, action),
-            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-            searchState: SearchBarState.reducer(state.searchState, action),
-            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
-            merinoState: MerinoState.reducer(state.merinoState, action),
-            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            shouldTriggerImpression: false,
-            availableContentHeight: availableContentHeight,
-            availableWallpaperHeight: availableWallpaperHeight
-        )
+        return state
+            .copy(headerState: HeaderState.reducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(shouldTriggerImpression: false)
+            .copy(availableContentHeight: availableContentHeight)
+            .copy(availableWallpaperHeight: availableWallpaperHeight)
     }
 
     @MainActor
     private static func handlePrivacyNoticeCloseButtonTappedAction(state: HomepageState, action: Action) -> HomepageState {
-        return state.copyWithUpdates(
-            headerState: HeaderState.reducer(state.headerState, action),
-            messageState: MessageCardState.reducer(state.messageState, action),
-            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-            searchState: SearchBarState.reducer(state.searchState, action),
-            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
-            merinoState: MerinoState.reducer(state.merinoState, action),
-            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: false
-        )
+        return state
+            .copy(headerState: HeaderState.reducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(shouldTriggerImpression: false)
+            .copy(shouldShowPrivacyNotice: false)
     }
 
     @MainActor
     private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
-        return state.copyWithUpdates(
-            headerState: HeaderState.reducer(state.headerState, action),
-            messageState: MessageCardState.reducer(state.messageState, action),
-            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-            searchState: SearchBarState.reducer(state.searchState, action),
-            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
-            merinoState: MerinoState.reducer(state.merinoState, action),
-            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            shouldTriggerImpression: true
-        )
+        return state
+            .copy(headerState: HeaderState.reducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(shouldTriggerImpression: true)
     }
 
     @MainActor
     private static func handlePrivacyNoticeInitialization(action: Action, state: Self) -> HomepageState {
-        return state.copyWithUpdates(
-            headerState: HeaderState.reducer(state.headerState, action),
-            messageState: MessageCardState.reducer(state.messageState, action),
-            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-            searchState: SearchBarState.reducer(state.searchState, action),
-            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
-            merinoState: MerinoState.reducer(state.merinoState, action),
-            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: true
-        )
+        return state
+            .copy(headerState: HeaderState.reducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(shouldTriggerImpression: false)
+            .copy(shouldShowPrivacyNotice: true)
     }
 
     @MainActor
     private static func passthroughState(from state: HomepageState, action: Action) -> HomepageState {
-        return state.copyWithUpdates(
-            headerState: HeaderState.reducer(state.headerState, action),
-            messageState: MessageCardState.reducer(state.messageState, action),
-            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-            searchState: SearchBarState.reducer(state.searchState, action),
-            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
-            merinoState: MerinoState.reducer(state.merinoState, action),
-            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            shouldTriggerImpression: false
-        )
+        return state
+            .copy(headerState: HeaderState.reducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(shouldTriggerImpression: false)
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
-        return state.copyWithUpdates(
-            messageState: MessageCardState.defaultState(from: state.messageState),
-            topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState),
-            searchState: SearchBarState.defaultState(from: state.searchState),
-            jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState),
-            bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState),
-            worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState),
-            merinoState: MerinoState.defaultState(from: state.merinoState),
-            wallpaperState: WallpaperState.defaultState(from: state.wallpaperState),
-            shouldTriggerImpression: false
-        )
+        return state
+            .copy(messageState: MessageCardState.defaultState(from: state.messageState))
+            .copy(topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState))
+            .copy(searchState: SearchBarState.defaultState(from: state.searchState))
+            .copy(jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState))
+            .copy(bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState))
+            .copy(worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState))
+            .copy(merinoState: MerinoState.defaultState(from: state.merinoState))
+            .copy(wallpaperState: WallpaperState.defaultState(from: state.wallpaperState))
+            .copy(shouldTriggerImpression: false)
     }
 }
