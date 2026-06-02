@@ -97,7 +97,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
         case let action as TranslationsAction
             where action.actionType as? TranslationsActionType == .didTranslationSettingsChange:
-            return state.copyWithUpdates(
+            return state.copy(
                 isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled
             )
 
