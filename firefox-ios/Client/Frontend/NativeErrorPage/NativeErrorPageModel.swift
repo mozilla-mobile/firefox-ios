@@ -4,6 +4,19 @@
 
 import Foundation
 
+enum ErrorPageType: Equatable {
+    case internetConnection
+    case badCertDomain
+    case generic
+
+    var isRegularUI: Bool {
+        switch self {
+        case .internetConnection, .generic: return true
+        case .badCertDomain: return false
+        }
+    }
+}
+
 struct ErrorPageModel: Equatable {
     let errorTitle: String
     let errorDescription: String
@@ -11,6 +24,7 @@ struct ErrorPageModel: Equatable {
     let url: URL?
     let advancedSection: AdvancedSectionConfig?
     let showGoBackButton: Bool
+    let type: ErrorPageType
 
     struct AdvancedSectionConfig: Equatable {
         let buttonText: String

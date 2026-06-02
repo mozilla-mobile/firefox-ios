@@ -182,11 +182,10 @@ final class NativeErrorPageViewController: UIViewController,
         nativeErrorPageState = state
         guard !state.title.isEmpty else { return }
 
-        let isBadCert = state.advancedSection != nil && state.showGoBackButton
-        if isBadCert {
-            showBadCertUI()
-        } else {
+        if state.type.isRegularUI {
             showRegularUI()
+        } else {
+            showBadCertUI()
         }
     }
 
