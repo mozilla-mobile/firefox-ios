@@ -35,6 +35,7 @@ final class WorldCupFeed {
     /// action that updates the store before calling `start` is the only
     /// thing the middleware needs to coordinate.
     private let selectedTeamProvider: () -> String?
+    private let store: WorldCupStoreProtocol
 
     private var matchesTask: Task<Void, Never>?
     private var liveTask: Task<Void, Never>?
@@ -48,11 +49,13 @@ final class WorldCupFeed {
     var onUpdate: ((Snapshot) -> Void)?
 
     init(apiClient: WorldCupAPIClientProtocol,
+         store: WorldCupStoreProtocol = WorldCupStore(),
          usesDevServerTimeline: Bool,
          selectedTeamProvider: @escaping () -> String?) {
         self.apiClient = apiClient
         self.usesDevServerTimeline = usesDevServerTimeline
         self.selectedTeamProvider = selectedTeamProvider
+        self.store = store
     }
 
     deinit {
@@ -99,10 +102,12 @@ final class WorldCupFeed {
         }
     }
 
-    /// One-shot `/teams` fetch. Elimination only flips after a knockout
-    /// result, so we don't need to poll: `start()` is invoked again on
-    /// foreground/retry, which refreshes the roster.
+    /// `/teams` fetch. Elimination only flips after a knockout result, so
+    /// we don't poll on a timer: `start()` re-fetches on foreground/retry,
+    /// and `handleLiveResult` re-fetches when a knockout involving the
+    /// selected team leaves the live set.
     private func startTeams() {
+        teamsTask?.cancel()
         teamsTask = Task { @MainActor [weak self] in
             guard let self else { return }
             let result = await self.apiClient.loadTeams(team: nil)
@@ -140,15 +145,46 @@ final class WorldCupFeed {
         // result tile can show alongside live ones. Filter on
         // `statusType == "live"` so the badge only sticks for genuinely
         // in-progress matches.
+        let allMatches = response?.matches ?? []
         let newLiveIDs = Set(
-            response?.matches?
+            allMatches
                 .filter { $0.statusType == "live" }
-                .map(\.globalEventId) ?? []
+                .map(\.globalEventId)
+        )
+        refetchTeamsIfSelectedTeamKnockoutEnded(
+            endedIDs: cachedLiveIDs.subtracting(newLiveIDs),
+            matches: allMatches
         )
         guard newLiveIDs != cachedLiveIDs else { return }
         cachedLiveIDs = newLiveIDs
         guard let last = lastMatchesResponse else { return }
         emit(buildSnapshot(from: last))
+    }
+
+    /// When a knockout fixture involving the selected team transitions out
+    /// of the live set, refetch `/teams` so the roster's `eliminated` flag
+    /// for that team reflects the just-finished result.
+    private func refetchTeamsIfSelectedTeamKnockoutEnded(
+        endedIDs: Set<Int>,
+        matches: [WorldCupMatchesResponse.Match]
+    ) {
+        guard !endedIDs.isEmpty, let team = selectedTeamProvider() else { return }
+        let involvesSelectedKnockout = matches.contains { match in
+            endedIDs.contains(match.globalEventId)
+            && Self.isKnockout(match.stage)
+            && (match.homeTeam?.key == team || match.awayTeam?.key == team)
+        }
+        guard involvesSelectedKnockout else { return }
+        startTeams()
+    }
+
+    private static func isKnockout(_ stage: WorldCupMatchesResponse.Match.Stage?) -> Bool {
+        switch stage {
+        case .roundOf32, .roundOf16, .quarterFinals, .semiFinals, .thirdPlace, .final:
+            return true
+        case .groupStage, .unknown, .none:
+            return false
+        }
     }
 
     private func handleTeamsResult(_ result: Result<WorldCupTeamsResponse?, WorldCupLoadError>) {
@@ -175,6 +211,7 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
+        let beforeStart = isBeforeFirstMatch(now: now, in: response)
         if let team = selectedTeamProvider(),
            !isSelectedTeamEliminated(in: cachedTeamsResponse) {
             let perStage = WorldCupMatches.perStage(
@@ -183,17 +220,31 @@ final class WorldCupFeed {
                 now: now
             )
             return Snapshot(matches: perStage.cards,
-                            defaultMatchIndex: perStage.defaultIndex,
+                            defaultMatchIndex: beforeStart ? 0 : perStage.defaultIndex,
                             apiError: nil)
         }
+        store.setSelectedTeam(countryId: nil)
         let flattened = WorldCupMatches.flattened(
             response: response,
             liveIDs: cachedLiveIDs,
             now: now
         )
+        // No team selected → the timer card sits at page 0, so shift the
+        // chosen card index past it (and stay on the timer before kickoff).
         return Snapshot(matches: flattened.cards,
-                        defaultMatchIndex: flattened.defaultIndex,
+                        defaultMatchIndex: beforeStart ? 0 : flattened.defaultIndex + 1,
                         apiError: nil)
+    }
+
+    /// True until the tournament's first match has kicked off. Uses the
+    /// (dev-timeline-aware) `now` so advancing the mock clock past the first
+    /// kickoff lifts the "stay on the first card" rule.
+    private func isBeforeFirstMatch(now: Date, in response: WorldCupMatchesResponse) -> Bool {
+        let all = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        guard let earliest = all.compactMap({ WorldCupMatch.parseDate($0.date) }).min() else {
+            return false
+        }
+        return now < earliest
     }
 
     /// True when a team is selected AND that team appears in the roster

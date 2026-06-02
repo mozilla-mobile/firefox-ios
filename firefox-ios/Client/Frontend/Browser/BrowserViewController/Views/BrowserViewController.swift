@@ -1133,7 +1133,8 @@ class BrowserViewController: UIViewController,
         let windowUUID = notification.windowUUID
         let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel
         // swiftlint:disable:next closure_body_length
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
+            guard let self else { return }
             switch notificationName {
             case UIApplication.willTerminateNotification:
                 applicationWillTerminate()
@@ -2168,7 +2169,7 @@ class BrowserViewController: UIViewController,
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
-        let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
+        let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isBadCertDomainErrorURL(url)
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
@@ -2284,6 +2285,8 @@ class BrowserViewController: UIViewController,
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         overlayManager.finishEditing(shouldCancelLoading: false)
+
+        ConversionEventTracker().recordURILoadConversionEvent()
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -3317,8 +3320,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let conversionMetrics = UserConversionMetrics()
-        conversionMetrics.didPerformSearch()
+        ConversionActivityLogger().recordSearchedToday()
 
         Experiments.events.recordEvent(BehavioralTargetingEvent.performedSearch)
 

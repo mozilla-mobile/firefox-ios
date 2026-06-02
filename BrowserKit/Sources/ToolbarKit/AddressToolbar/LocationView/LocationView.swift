@@ -439,6 +439,9 @@ final class LocationView: UIView,
 
     // MARK: - LocationView Scaling
     private func shrinkLocationView(barPosition: AddressToolbarPosition) {
+        urlTextField.isUserInteractionEnabled = false
+        isUserInteractionEnabled = false
+
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let bottomAddressBarYoffset = if #available(iOS 26.0, *) {
             UX.bottomAddressBarYoffset
@@ -454,22 +457,18 @@ final class LocationView: UIView,
                 let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
                     .translatedBy(x: 0, y: yOffset)
                 self.transform = scaledTransformation
-            }, completion: { [unowned self] _ in
-                urlTextField.isUserInteractionEnabled = false
-                isUserInteractionEnabled = false
             })
     }
 
     private func restoreLocationViewSize() {
+        urlTextField.isUserInteractionEnabled = true
+        isUserInteractionEnabled = true
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
             delay: 0,
             options: [.curveEaseInOut],
             animations: { [unowned self] in
                 transform = .identity
-            }, completion: { [unowned self] _ in
-                urlTextField.isUserInteractionEnabled = true
-                isUserInteractionEnabled = true
             })
     }
 

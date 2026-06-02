@@ -7,6 +7,10 @@ import Shared
 
 struct WorldCupMatches: Equatable, Hashable {
     let phaseTitle: String
+    /// English, untranslated identifier for the card's phase, used as a stable
+    /// telemetry value (e.g. "Group A", "Round of 16", "Final"). Mirrors
+    /// `phaseTitle` but bypasses the localized string table.
+    let telemetryPhaseValue: String
     let dateLabel: String?
     let isLive: Bool
     let featuredMatch: [WorldCupMatch]
@@ -24,11 +28,13 @@ struct WorldCupMatches: Equatable, Hashable {
     }
 
     init(phaseTitle: String,
+         telemetryPhaseValue: String,
          dateLabel: String? = nil,
          isLive: Bool,
          featuredMatch: [WorldCupMatch],
          upcomingMatches: [WorldCupMatch]) {
         self.phaseTitle = phaseTitle
+        self.telemetryPhaseValue = telemetryPhaseValue
         self.dateLabel = dateLabel
         self.isLive = isLive
         self.featuredMatch = featuredMatch
@@ -41,6 +47,23 @@ struct WorldCupMatches: Equatable, Hashable {
     /// vanish the second it ends, but doesn't keep an hours-old result
     /// occupying the hero spot when an upcoming match is closer in time.
     private static let featuredWindow: TimeInterval = 2 * 60 * 60
+
+    /// Grace period after a card's last match is estimated to be over during
+    /// which the card stays selected, so a just-finished result lingers briefly
+    /// before we advance to the next fixture. A live match still wins.
+    private static let resultLingerWindow: TimeInterval = 30 * 60
+
+    static func defaultIndex(in cards: [WorldCupMatches],
+                             latestKickoffs: [Date],
+                             now: Date) -> Int {
+        guard !cards.isEmpty else { return 0 }
+        if let live = cards.firstIndex(where: \.isLive) { return live }
+        let window = featuredWindow + resultLingerWindow
+        if let active = latestKickoffs.firstIndex(where: { now < $0.addingTimeInterval(window) }) {
+            return active
+        }
+        return cards.count - 1
+    }
 
     /// Single-card view used when a team is selected: the merino response is
     /// already scoped to that team. We don't trust the server's
@@ -92,6 +115,7 @@ struct WorldCupMatches: Equatable, Hashable {
 
         let allIDs = allMatches.map(\.globalEventId)
         self.phaseTitle = Self.phaseTitle(from: featured.first)
+        self.telemetryPhaseValue = Self.telemetryPhaseValue(from: featured.first)
         self.dateLabel = nil
         self.isLive = allIDs.contains(where: { liveIDs.contains($0) })
         self.featuredMatch = featured.map { WorldCupMatch($0, localeProvider: localeProvider) }
@@ -127,6 +151,7 @@ struct WorldCupMatches: Equatable, Hashable {
             let rhsDate = rhs.value.map(\.date).min() ?? .distantPast
             return lhsDate < rhsDate
         }
+        let latestKickoffs = sortedStages.map { _, entries in entries.map(\.date).max() ?? .distantPast }
         let cards = sortedStages.map { _, entries -> WorldCupMatches in
             // Each stage's matches are fed back through `init` as a fresh
             // response. Bucket placement (previous/current/next) doesn't
@@ -145,7 +170,7 @@ struct WorldCupMatches: Equatable, Hashable {
                 localeProvider: localeProvider
             )
         }
-        return (cards, max(cards.count - 1, 0))
+        return (cards, defaultIndex(in: cards, latestKickoffs: latestKickoffs, now: now))
     }
 
     /// No-team / eliminated-team multi-card view: one card per
@@ -163,18 +188,28 @@ struct WorldCupMatches: Equatable, Hashable {
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
         let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
-        let cards = groupedByDayAndStage(allMatches, calendar: calendar).map { group -> WorldCupMatches in
+        let groups = groupedByDayAndStage(allMatches, calendar: calendar)
+        let cards = groups.map { group -> WorldCupMatches in
             let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
             let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
+            let isGroupStage = group.stage == .groupStage
             return WorldCupMatches(
                 phaseTitle: label(for: group.stage),
+                telemetryPhaseValue: group.stage?.rawValue ?? WorldCupMatchesResponse.Match.Stage.groupStage.rawValue,
                 dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
                 isLive: !liveMatches.isEmpty,
                 featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
-                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
+                upcomingMatches: nonLive.map { match in
+                    let groupName = isGroupStage ? (match.homeTeam?.group ?? match.awayTeam?.group) : nil
+                    let prefix = groupName.flatMap { groupLabel(for: $0) }
+                    return WorldCupMatch(match, localeProvider: localeProvider, timeOnly: true, datePrefix: prefix)
+                }
             )
         }
-        return (cards, 0)
+        let latestKickoffs = groups.map { group in
+            group.matches.compactMap { WorldCupMatch.parseDate($0.date) }.max() ?? .distantPast
+        }
+        return (cards, defaultIndex(in: cards, latestKickoffs: latestKickoffs, now: now))
     }
 
     private static func dayLabel(for day: Date, locale: Locale) -> String {
@@ -200,6 +235,11 @@ struct WorldCupMatches: Equatable, Hashable {
                 ?? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
         }
         return label(for: match.stage)
+    }
+
+    static func telemetryPhaseValue(from match: WorldCupMatchesResponse.Match?) -> String {
+        guard let match else { return WorldCupMatchesResponse.Match.Stage.groupStage.rawValue }
+        return match.stage?.rawValue ?? WorldCupMatchesResponse.Match.Stage.groupStage.rawValue
     }
 
     private static func label(for stage: WorldCupMatchesResponse.Match.Stage?) -> String {

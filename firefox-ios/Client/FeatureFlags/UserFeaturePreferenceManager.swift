@@ -71,7 +71,7 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
            let position = SearchBarPosition(rawValue: raw) {
             return position
         }
-        return .top
+        return .bottom
     }
 
     var startAtHomeSetting: StartAtHome {

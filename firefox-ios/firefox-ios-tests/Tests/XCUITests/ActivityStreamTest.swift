@@ -62,10 +62,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     func testDefaultSites() throws {
         app.launch()
 
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
-
         topSites.assertVisible()
         topSites.assertTopSitesCount(5)
         topSites.assertDefaultTopSites()
@@ -201,9 +197,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         app.launch()
 
         // Assert that the Top Sites are visible upon launch
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
+        topSites.assertVisible()
 
         // Wait for the toolbar to exist, which includes the settings menu button
         toolbar.assertSettingsButtonExists()
@@ -231,9 +225,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
+        topSites.assertVisible()
         toolbar.assertSettingsButtonExists()
         navigator.nowAt(NewTabScreen)
 
@@ -309,9 +301,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2861436
     func testShortcutsToggle() {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT_LONG)
-        }
+        mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         //  Go to customize homepage
         navigator.nowAt(NewTabScreen)
@@ -357,9 +347,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2861432
     func testHomepageHeader() {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
+        topSites.assertVisible()
         // "Firefox" text is displayed in the header
         homePage.validateHomePageLogo(isPrivate: false)
         // Validate step 1 in private browsing

@@ -46,6 +46,21 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Cari atau masukkan alamat";
 
+/* The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153" = "Batal";
+
+/* The error message shown when a user enters an invalid website URL in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.InvalidURLErrorMessage.v153" = "Masukkan URL yang valid";
+
+/* The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153" = "Simpan";
+
+/* The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut. */
+"FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153" = "Tambahkan Pintasan";
+
+/* The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153" = "URL Situs Web";
+
 /* This is the navigation title for the Shortcuts Library view */
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "Pintasan";
 
@@ -54,6 +69,9 @@
 
 /* This is the section title for the Shortcuts section on Firefox Homepage. */
 "FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Pintasan";
+
+/* On the homepage, in the category selection bar, in the stories section, this will be the title of the button indicating that all story categories are currently selected. */
+"FirefoxHomepage.Stories.AllStoryCategories.v151" = "Semua";
 
 /* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
 "FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ dari %2$@";

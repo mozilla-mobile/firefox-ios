@@ -361,6 +361,11 @@ class ShortcutsLibraryViewController: UIViewController,
             return
         }
 
+        if case .addShortcutTile = item {
+            presentAddShortcutAlert()
+            return
+        }
+
         guard case let .shortcut(config) = item else { return }
         let destination = NavigationDestination(
             .link,
@@ -384,6 +389,11 @@ class ShortcutsLibraryViewController: UIViewController,
                 actionType: ShortcutsLibraryActionType.tapOnShortcutCell
             )
         )
+    }
+
+    private func presentAddShortcutAlert() {
+        let alert = UIAlertController.addShortcutAlert()
+        present(alert, animated: true)
     }
 
     // MARK: - DismissalNotifiable

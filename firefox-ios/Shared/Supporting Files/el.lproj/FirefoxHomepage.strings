@@ -46,6 +46,27 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Αναζήτηση ή εισαγωγή διεύθυνσης";
 
+/* The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2" = "Εισαγάγετε το URL για τον ιστότοπο.";
+
+/* The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2" = "Προσθήκη συντόμευσης";
+
+/* The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153" = "Ακύρωση";
+
+/* The error message shown when a user enters an invalid website URL in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.InvalidURLErrorMessage.v153" = "Εισαγάγετε ένα έγκυρο URL";
+
+/* The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153" = "Αποθήκευση";
+
+/* The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut. */
+"FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153" = "Προσθήκη συντόμευσης";
+
+/* The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153" = "URL ιστοτόπου";
+
 /* This is the navigation title for the Shortcuts Library view */
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "Συντομεύσεις";
 

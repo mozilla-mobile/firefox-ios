@@ -513,7 +513,10 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
         mockWorldCupStore.selectedTeam = "CAN"
+        // `now` pinned (dev timeline) after the group stage and before the R32
+        // fixture so the result is deterministic and past the first kickoff.
         let response = WorldCupMatchesResponse(
+            now: "2026-06-26T12:00:00+00:00",
             previous: [
                 makeMatch(id: 1, home: "CAN", away: "BIH", date: "2026-06-12T19:00:00+00:00", stage: .groupStage),
                 makeMatch(id: 2, home: "CAN", away: "QAT", date: "2026-06-18T22:00:00+00:00", stage: .groupStage),
@@ -529,7 +532,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             liveResult: .success(WorldCupLiveResponse(matches: [])),
             teamsResult: .success(makeTeamsResponse())
         )
-        let subject = createSubject(apiClient: apiClient)
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.initialize
@@ -545,6 +548,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.matches.count, 2)
         XCTAssertEqual(dispatched.matches[1].phaseTitle,
                        String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
+        // Lands on the latest stage (R32, index 1), not the group card.
         XCTAssertEqual(dispatched.defaultMatchIndex, 1)
         subject.worldCupProvider = { _, _ in }
     }
@@ -829,10 +833,11 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
         mockWorldCupStore.selectedTeam = nil
+        // `now` is before the first match kicks off → stay on the timer (page 0).
         let match1 = makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")
         let match2 = makeMatch(id: 2, home: "BRA", away: "GER", date: "2026-06-15T18:00:00+00:00")
         let response = WorldCupMatchesResponse(
-            now: "2026-06-12T00:00:00+00:00",
+            now: "2026-06-05T00:00:00+00:00",
             previous: nil,
             current: nil,
             next: [match1, match2]
@@ -870,6 +875,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let feed = apiClient.map { client in
             WorldCupFeed(
                 apiClient: client,
+                store: store,
                 usesDevServerTimeline: usesDevServerTimeline,
                 selectedTeamProvider: { store.selectedTeam }
             )

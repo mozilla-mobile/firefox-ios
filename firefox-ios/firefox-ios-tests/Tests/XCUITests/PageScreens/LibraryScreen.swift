@@ -17,6 +17,7 @@ final class LibraryScreen {
     private var editButton: XCUIElement { sel.EDIT_BUTTON.element(in: app) }
     private var doneButton: XCUIElement { sel.DONE_BUTTON.element(in: app) }
     private var bottmLeftButton: XCUIElement { sel.BOTTOM_LEFT_BUTTON.element(in: app) }
+    private var bottomSearchButton: XCUIElement { sel.BOTTOM_SEARCH_BUTTON.element(in: app) }
     private var titleTextField: XCUIElement { sel.TITLE_TEXT_FIELD.element(in: app) }
     private var saveButton: XCUIElement { sel.SAVE_BUTTON.element(in: app) }
     private var bookmarkFolderCell: XCUIElement { sel.BOOKMARKS_FOLDER.element(in: app) }
@@ -24,6 +25,8 @@ final class LibraryScreen {
     private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app) }
     private var backButtoniOS18: XCUIElement { sel.BACK_BUTTON_iOS18.element(in: app) }
     private var generalBackButton: XCUIElement { sel.GENERAL_BACK_BUTTON.element(in: app) }
+    private var contextMenu: XCUIElement { app.tables["Context Menu"] }
+    private var bookmarksNavigationBar: XCUIElement { sel.BOOKMARK_BACK_BUTTON.element(in: app) }
 
     func assertBookmarkExists(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
@@ -97,6 +100,48 @@ final class LibraryScreen {
         bottmLeftButton.waitAndTap()
     }
 
+    func tapBottomSearchButton() {
+        bottomSearchButton.waitAndTap()
+    }
+
+    func tapBookmarksNavigationBar() {
+        bookmarksNavigationBar.waitAndTap()
+    }
+
+    func searchInBookmarksPanel(text: String) {
+        let searchField = app.searchFields.firstMatch
+        BaseTestCase().mozWaitForElementToExist(searchField)
+        searchField.waitAndTap()
+        searchField.typeText(text)
+    }
+
+    func closeBookmarksSearch() {
+        app.buttons["Clear text"].waitAndTap()
+    }
+
+    func longPressBookmarkInList(name: String) {
+        let cell = app.tables.cells.staticTexts[name]
+        BaseTestCase().mozWaitForElementToExist(cell)
+        cell.press(forDuration: 1)
+    }
+
+    func tapContextMenuOption(option: String) {
+        contextMenu.cells.buttons[option].waitAndTap()
+    }
+
+    func tapBookmarkDisclosureButton(at index: Int = 0) {
+        let id = "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(index)" +
+                 AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCellDisclosureButton
+        app.buttons[id].waitAndTap()
+    }
+
+    func assertContextMenuOptions(_ options: [String]) {
+        BaseTestCase().mozWaitForElementToExist(contextMenu)
+        for option in options {
+            BaseTestCase().mozWaitForElementToExist(contextMenu.cells.buttons[option])
+        }
+    }
+
     func assertEditButtonExists() {
         BaseTestCase().mozWaitForElementToExist(editButton)
     }
@@ -106,6 +151,14 @@ final class LibraryScreen {
             BaseTestCase().mozWaitForElementToExist(bottmLeftButton)
         } else {
             BaseTestCase().mozWaitForElementToNotExist(bottmLeftButton)
+        }
+    }
+
+    func assertBottomSearchButtonExists(shouldExist: Bool = true) {
+        if shouldExist {
+            BaseTestCase().mozWaitForElementToExist(bottomSearchButton)
+        } else {
+            BaseTestCase().mozWaitForElementToNotExist(bottomSearchButton)
         }
     }
 
@@ -190,9 +243,8 @@ final class LibraryScreen {
     }
 
     func longPressAndSelectContextMenuOption(option: String) {
-        let tableContextMenu = app.tables["Context Menu"]
         app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
-        BaseTestCase().mozWaitForElementToExist(tableContextMenu)
-        tableContextMenu.cells.buttons[option].waitAndTap()
+        BaseTestCase().mozWaitForElementToExist(contextMenu)
+        contextMenu.cells.buttons[option].waitAndTap()
     }
 }
