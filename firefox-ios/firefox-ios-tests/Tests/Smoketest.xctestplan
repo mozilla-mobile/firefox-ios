@@ -164,6 +164,7 @@
         "BookmarksTests\/testNewFolderLocationInParentFolder()",
         "BookmarksTests\/testNoFoldersInBookmarks()",
         "BookmarksTests\/testRecentlyBookmarked()",
+        "BookmarksTests\/testSearchBookmarkIconDisplay()",
         "BookmarksTests\/testUserRedirectToMostRecentlyAccessedFolder()",
         "BookmarksTests\/testValidateBookmarksOptions()",
         "BookmarksTests\/testVerifyFolderSpecialCharacters()",
