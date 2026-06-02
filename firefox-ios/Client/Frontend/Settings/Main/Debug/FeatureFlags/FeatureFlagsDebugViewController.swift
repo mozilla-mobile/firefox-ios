@@ -102,6 +102,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .hntTrackerBlockerModule,
+                titleText: format(string: "Hnt Tracker Blocker Module"),
+                statusText: format(string: "Toggle Hnt Tracker Blocker Module")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageAddShortcutTile,
                 titleText: format(string: "Homepage Add Shortcut"),
                 statusText: format(string: "Toggle to enable the homepage add shortcut tile")

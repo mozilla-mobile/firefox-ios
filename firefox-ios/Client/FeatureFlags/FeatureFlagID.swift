@@ -20,6 +20,7 @@ enum FeatureFlagID: String, CaseIterable {
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
+    case hntTrackerBlockerModule
     case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
@@ -73,6 +74,7 @@ enum FeatureFlagID: String, CaseIterable {
         switch self {
         case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
         case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .hntTrackerBlockerModule: return HomepageKeys.TrackerBlockerHNTModule
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
         case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
@@ -96,6 +98,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
+                .hntTrackerBlockerModule,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageSearchBar,

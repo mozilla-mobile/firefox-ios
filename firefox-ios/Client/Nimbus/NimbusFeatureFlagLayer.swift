@@ -60,6 +60,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature()
 
+
+        case .hntTrackerBlockerModule:
+            return checkHntTrackerBlockerModuleFeature()
         case .homepageAddShortcutTile:
             return checkHomepageAddShortcutTile()
 
@@ -453,5 +456,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     func checkStartAtHomeConfiguration() -> StartAtHome {
         return nimbus.features.startAtHomeFeature.value().setting
+    }
+
+    private func checkHntTrackerBlockerModuleFeature() -> Bool {
+        return nimbus.features.hntTrackerBlockerModuleFeature.value().enabled
     }
 }

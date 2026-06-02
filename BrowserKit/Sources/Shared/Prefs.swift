@@ -113,6 +113,7 @@ public struct PrefsKeys {
     public struct HomepageSettings {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let TrackerBlockerSection = "TrackerBlockerUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
         /// Tracks whether we've performed the one-time transition from World
         /// Cup milestone 1 to milestone 2. When the milestone 2 date is first
