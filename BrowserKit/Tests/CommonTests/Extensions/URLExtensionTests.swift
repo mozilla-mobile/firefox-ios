@@ -508,89 +508,89 @@ final class URLExtensionTests: XCTestCase {
 
     // MARK: isDomain
 
-    func testIsDomainBasicMatch() {
-        XCTAssertTrue(URL(string: "https://www.google.com")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://google.com")!.isDomain("google"))
+    func testIsDomainBasicMatch() throws {
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://www.google.com")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.com")).isDomain("google"))
     }
 
-    func testIsDomainSubdomains() {
-        XCTAssertTrue(URL(string: "https://mail.google.com")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://accounts.google.com")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://a.b.c.google.com")!.isDomain("google"))
+    func testIsDomainSubdomains() throws {
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://mail.google.com")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://accounts.google.com")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://a.b.c.google.com")).isDomain("google"))
     }
 
-    func testIsDomainVariousTLDs() {
-        XCTAssertTrue(URL(string: "https://google.de")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://google.co.uk")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://google.com.au")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://google.co.jp")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://google.fr")!.isDomain("google"))
+    func testIsDomainVariousTLDs() throws {
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.de")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.co.uk")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.com.au")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.co.jp")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.fr")).isDomain("google"))
     }
 
-    func testIsDomainPathQueryFragment() {
-        XCTAssertTrue(URL(string: "https://google.com/search?q=test")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://google.com#anchor")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://google.com:443/path")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://user:pass@google.com/path")!.isDomain("google"))
+    func testIsDomainPathQueryFragment() throws {
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.com/search?q=test")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.com#anchor")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://google.com:443/path")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://user:pass@google.com/path")).isDomain("google"))
     }
 
-    func testIsDomainSchemeAgnostic() {
-        XCTAssertTrue(URL(string: "http://google.com")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "ftp://google.com")!.isDomain("google"))
+    func testIsDomainSchemeAgnostic() throws {
+        XCTAssertTrue(try XCTUnwrap(URL(string: "http://google.com")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "ftp://google.com")).isDomain("google"))
     }
 
-    func testIsDomainEvilLookalikes() {
-        XCTAssertFalse(URL(string: "https://notgoogle.com")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://evil-google.com")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://mygoogle.com")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://gooogle.com")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://goog1e.com")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://xn--googl-fsa.com")!.isDomain("google"))
+    func testIsDomainEvilLookalikes() throws {
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://notgoogle.com")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://evil-google.com")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://mygoogle.com")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://gooogle.com")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://goog1e.com")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://xn--googl-fsa.com")).isDomain("google"))
     }
 
-    func testIsDomainSubdomainSpoofing() {
-        XCTAssertFalse(URL(string: "https://google.evil.com")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://google.com.evil.com")!.isDomain("google"))
+    func testIsDomainSubdomainSpoofing() throws {
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://google.evil.com")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://google.com.evil.com")).isDomain("google"))
     }
 
-    func testIsDomainDifferentDomain() {
-        XCTAssertFalse(URL(string: "https://facebook.com")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://mail.facebook.com")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://mail.facebook.com")!.isDomain("facebook"))
+    func testIsDomainDifferentDomain() throws {
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://facebook.com")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://mail.facebook.com")).isDomain("google"))
+        XCTAssertTrue(try XCTUnwrap(URL(string: "https://mail.facebook.com")).isDomain("facebook"))
     }
 
-    func testIsDomainIPAddresses() {
-        XCTAssertFalse(URL(string: "https://1.2.3.4")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "http://[::1]")!.isDomain("google"))
+    func testIsDomainIPAddresses() throws {
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://1.2.3.4")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "http://[::1]")).isDomain("google"))
     }
 
-    func testIsDomainNonWebSchemes() {
-        XCTAssertFalse(URL(string: "about:blank")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "javascript:void(0)")!.isDomain("google"))
+    func testIsDomainNonWebSchemes() throws {
+        XCTAssertFalse(try XCTUnwrap(URL(string: "about:blank")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "javascript:void(0)")).isDomain("google"))
     }
 
-    func testIsDomainEmptyInput() {
-        XCTAssertFalse(URL(string: "https://google.com")!.isDomain(""))
-        XCTAssertFalse(URL(string: "https://")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://.")!.isDomain("google"))
+    func testIsDomainEmptyInput() throws {
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://google.com")).isDomain(""))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://.")).isDomain("google"))
     }
 
-    func testIsDomainGoogleTLD() {
+    func testIsDomainGoogleTLD() throws {
         // .google TLD is not in the bundled PSL snapshot, baseDomain returns nil
-        XCTAssertFalse(URL(string: "https://mail.google")!.isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://mail.google")).isDomain("google"))
     }
 
-    func testIsDomainCaseInsensitive() {
+    func testIsDomainCaseInsensitive() throws {
         // URLComponents lowercases hosts per RFC — uppercase inputs don't occur in practice
-        XCTAssertFalse(URL(string: "https://GOOGLE.COM")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://Google.com")!.isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://GOOGLE.COM")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://Google.com")).isDomain("google"))
     }
 
-    func testIsDomainUnknownTLDs() {
+    func testIsDomainUnknownTLDs() throws {
         // TLDs not in the PSL snapshot cause baseDomain to return nil,
         // so isDomain correctly returns false — fine for our use case.
-        XCTAssertFalse(URL(string: "https://google.local")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://google.internal")!.isDomain("google"))
-        XCTAssertFalse(URL(string: "https://google.corp")!.isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://google.local")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://google.internal")).isDomain("google"))
+        XCTAssertFalse(try XCTUnwrap(URL(string: "https://google.corp")).isDomain("google"))
     }
 }
