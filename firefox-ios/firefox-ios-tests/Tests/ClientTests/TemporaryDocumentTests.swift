@@ -71,10 +71,15 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://example.com")!))
     }
 
-    func testCookieDomainMatches_subdomainOfDomainCookie_matches() {
-        // ".example.com" should match a subdomain request.
-        let cookie = makeCookie(domain: ".example.com")
-        XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://www.example.com")!))
+    func testCookieDomainMatches_hostOnlyCookie_doesNotMatchSubdomain() {
+        // RFC 6265 Section 5.4 specifies that host-only-flag=true requires identical host, not subdomain match
+        // https://www.rfc-editor.org/rfc/rfc6265#section-5.4
+        // no leading dot = host-only (no Domain attribute). This means it must NOT match subdomain
+        let hostOnlyCookie = makeCookie(domain: "example.com")
+        XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(hostOnlyCookie, url: URL(string: "https://evil.example.com")!))
+        // leading dot = domain-scoped (explicit Domain attribute). This means subdomain match IS expected
+        let domainScopedCookie = makeCookie(domain: ".example.com")
+        XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(domainScopedCookie, url: URL(string: "https://evil.example.com")!))
     }
 
     func testCookieDomainMatches_substringDomain_doesNotMatch() {

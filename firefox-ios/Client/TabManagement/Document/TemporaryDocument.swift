@@ -138,16 +138,20 @@ final class DefaultTemporaryDocument: NSObject,
         return request
     }
 
-    /// Cookies match when request host is identical to domain (host-only cookie) or is a subdomain.
+    /// Cookies match when request host is identical to domain (host-only cookie) or is a subdomain (domain-scoped cookie).
     static func cookieDomainMatches(_ cookie: HTTPCookie, url: URL) -> Bool {
         guard let host = url.host?.lowercased() else { return false }
-        var cookieDomain = cookie.domain.lowercased()
-        // Domain can be stored with leading dot, strip it
+        let cookieDomain = cookie.domain.lowercased()
         if cookieDomain.hasPrefix(".") {
-            cookieDomain.removeFirst()
+            // Domain-scoped cookie (explicit Domain attribute) then subdomain matching allowed
+            let domain = String(cookieDomain.dropFirst())
+            guard !domain.isEmpty else { return false }
+            return host == domain || host.hasSuffix("." + domain)
         }
-        guard !cookieDomain.isEmpty else { return false }
-        return host == cookieDomain || host.hasSuffix("." + cookieDomain)
+        // If Host-only cookie (no Domain attribute, no leading dot)
+        // then according to RFC 6265 Section 5.4: identical match only
+        // See: https://www.rfc-editor.org/info/rfc6265/#section-5.4
+        return host == cookieDomain
     }
 
     func canDownload(request: URLRequest) -> Bool {
