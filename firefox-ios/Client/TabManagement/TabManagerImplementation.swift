@@ -82,7 +82,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     private(set) var selectedIndex: Int = -1
 
     private lazy var tabConfigurationProvider = {
-        return TabConfigurationProvider(profile: profile)
+        return TabConfigurationProvider(profile: profile, tabManager: self)
     }()
 
     private var selectedTabUUID: UUID? {

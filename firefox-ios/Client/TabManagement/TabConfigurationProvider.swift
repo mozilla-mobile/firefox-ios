@@ -20,9 +20,11 @@ class TabConfigurationProvider {
 
     private let configurationProvider = DefaultWKEngineConfigurationProvider()
     private let profile: Profile
+    private weak let tabManager: TabManager?
 
-    init(profile: Profile) {
+    init(profile: Profile, tabManager: TabManager?) {
         self.profile = profile
+        self.tabManager = tabManager
     }
 
     func configuration(isPrivate: Bool) -> WKEngineConfiguration {
@@ -55,11 +57,11 @@ class TabConfigurationProvider {
         let engineConfiguration =  configurationProvider.createConfiguration(parameters: parameters)
 
         // register the reader mode scheme handler alongside the internal:// one
-        // there is, yet again, probably a better place to do this
+        // there is probably a better place to do this
         let webViewConfig = engineConfiguration.webViewConfiguration
         if webViewConfig.urlSchemeHandler(forURLScheme: ReaderModeSchemeHandler.scheme) == nil {
             webViewConfig.setURLSchemeHandler(
-                ReaderModeSchemeHandler(profile: profile),
+                ReaderModeSchemeHandler(profile: profile, tabManager: self.tabManager ?? nil),
                 forURLScheme: ReaderModeSchemeHandler.scheme
             )
         }

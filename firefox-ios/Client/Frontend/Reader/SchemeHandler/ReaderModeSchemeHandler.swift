@@ -57,12 +57,14 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     private let normalRouter: TinyRouter
     private let privateRouter: TinyRouter
     private let logger: Logger
-    private let tabManager: TabManager
     private var requestTasks = [ObjectIdentifier: Task<Void, Never>]()
+
+    // Weak to prevent circular reference
+    private weak let tabManager: TabManager?
 
     init(profile: Profile,
          logger: Logger = DefaultLogger.shared,
-         tabManager: TabManager) {
+         tabManager: TabManager?) {
         // Two routers so private-mode tabs use the memory cache, not disk.
         self.normalRouter = ReaderModeSchemeHandler.makeRouter(
             cache: DiskReaderModeCache.shared, profile: profile)
@@ -78,7 +80,7 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         let id = ObjectIdentifier(urlSchemeTask)
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? true
+        let isPrivate = tabManager?.selectedTab?.isPrivate ?? true
         let router = isPrivate ? privateRouter : normalRouter
         let requestTask = Task { // Closure gets implicit @MainActor since WKURLSchemeTask is annotated as such (cool!)
             defer { requestTasks[id] = nil }
