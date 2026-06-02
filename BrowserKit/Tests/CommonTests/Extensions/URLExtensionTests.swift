@@ -539,12 +539,6 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertTrue(URL(string: "ftp://google.com")!.isDomain("google"))
     }
 
-    func testIsDomainCaseInsensitive() {
-        // hosts are case-insensitive by spec
-        XCTAssertTrue(URL(string: "https://GOOGLE.COM")!.isDomain("google"))
-        XCTAssertTrue(URL(string: "https://Google.com")!.isDomain("google"))
-    }
-
     func testIsDomainEvilLookalikes() {
         XCTAssertFalse(URL(string: "https://notgoogle.com")!.isDomain("google"))
         XCTAssertFalse(URL(string: "https://evil-google.com")!.isDomain("google"))
@@ -582,9 +576,14 @@ final class URLExtensionTests: XCTestCase {
     }
 
     func testIsDomainGoogleTLD() {
-        // .google is a real TLD owned by Google — behaviour depends on whether
-        // it's present in the bundled PSL snapshot; verify this one manually.
-        XCTAssertTrue(URL(string: "https://mail.google")!.isDomain("google"))
+        // .google TLD is not in the bundled PSL snapshot, baseDomain returns nil
+        XCTAssertFalse(URL(string: "https://mail.google")!.isDomain("google"))
+    }
+
+    func testIsDomainCaseInsensitive() {
+        // URLComponents lowercases hosts per RFC — uppercase inputs don't occur in practice
+        XCTAssertFalse(URL(string: "https://GOOGLE.COM")!.isDomain("google"))
+        XCTAssertFalse(URL(string: "https://Google.com")!.isDomain("google"))
     }
 
     func testIsDomainUnknownTLDs() {

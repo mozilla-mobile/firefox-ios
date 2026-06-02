@@ -42,7 +42,7 @@ extension URL {
     /// regardless of subdomain or TLD (e.g. "google" matches google.com, google.de, mail.google.com)
     public func isDomain(_ domain: String) -> Bool {
         guard let base = baseDomain else { return false }
-        return base.split(separator: ".").first == domain
+        return base.split(separator: ".").first == domain[...]
     }
 
     /// Returns the base domain from a given hostname. The base domain name is defined as the public domain suffix
