@@ -4,20 +4,24 @@
 
 import XCTest
 @testable import Client
+import WebEngine
 import WebKit
 
 @MainActor
 final class ReaderModeSchemeHandlerTests: XCTestCase {
     private var subject: ReaderModeSchemeHandler!
+    private var tabManager: MockTabManager!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        subject = ReaderModeSchemeHandler(profile: MockProfile())
+        tabManager = MockTabManager()
+        subject = ReaderModeSchemeHandler(profile: MockProfile(), tabManager: tabManager)
     }
 
     override func tearDown() async throws {
         subject = nil
+        tabManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -159,26 +163,28 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         )
     }
 
-    func test_start_validURL_passesValidationAndReachesRoute() {
+    func test_start_validURL_passesValidationAndReachesRoute() throws {
+        // A non-private selected tab routes the request through the disk cache.
+        tabManager.selectedTab = Tab(profile: MockProfile(), windowUUID: tabManager.windowUUID)
+
+        let articleURL = URL(string: "https://example.com/article")!
+        try DiskReaderModeCache.shared.put(articleURL, PageRouteTests.fixtureReadabilityResult())
+        defer { DiskReaderModeCache.shared.delete(articleURL, error: nil) }
+
         let url = "\(ReaderModeSchemeHandler.baseURL)?url=https%3A%2F%2Fexample.com%2Farticle"
         let task = MockWKURLSchemeTask(
             request: URLRequest(url: URL(string: url)!)
         )
         let webView = makeWebView()
-        let failExpectation = expectation(description: "onFail called")
-        task.onFail = { failExpectation.fulfill() }
+        let finishExpectation = expectation(description: "onFinish or onFail called")
+        task.onFinish = { finishExpectation.fulfill() }
+        task.onFail = { finishExpectation.fulfill() }
 
         subject.webView(webView, start: task)
-        wait(for: [failExpectation], timeout: 1.0)
+        wait(for: [finishExpectation], timeout: 5.0)
 
-        // PageRoute always throws an error in this PR,
-        // but if the request passed scheme/host validation then it wasn't rejected as
-        // unsupportedScheme, unsupportedHost, or badURL
-        // TODO: FXIOS-15783 Update this test once PageRoute is properly implemented
-        let error = task.failedErrors.first as? TinyRouterError
-        XCTAssertNotEqual(error, .unsupportedScheme(expected: ReaderModeSchemeHandler.scheme, found: "readermode"))
-        XCTAssertNotEqual(error, .unsupportedHost(expected: ReaderModeSchemeHandler.host, found: "app"))
-        XCTAssertNotEqual(error, .badURL)
+        XCTAssertTrue(task.failedErrors.isEmpty, "Expected no errors for a valid URL")
+        XCTAssertEqual(task.finishCallCount, 1)
     }
 
     // MARK: - ReaderFileRoute allowlist
@@ -251,7 +257,6 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
             XCTAssertEqual(error as? TinyRouterError, .pathNotAllowed(path: "reader-mode/styles/Reader.css\0evil"))
         }
     }
-
     // MARK: - Helpers
 
     private func makeWebView() -> WKWebView {

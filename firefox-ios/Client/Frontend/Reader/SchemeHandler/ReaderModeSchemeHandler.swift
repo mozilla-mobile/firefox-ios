@@ -35,9 +35,8 @@ import WebKit
 /// 7. WebKit renders the response in the tab.
 final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     // These are plain string constants and need to be readable from non-MainActor contexts
-    // (e.g. `PageRoute.buildReply`, which constructs the CSP off the main actor). The class
-    // itself is @MainActor by virtue of conforming to `WKURLSchemeHandler`, which would
-    // otherwise propagate isolation to these statics.
+    // (e.g. `PageRoute.buildSuccessReply`, which constructs the CSP off the main actor).
+    // The class itself is @MainActor by virtue of conforming to `WKURLSchemeHandler`
 
     /// The custom scheme this handler is responsible for.
     nonisolated static let scheme = "readermode"
@@ -50,22 +49,32 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     /// `WebServer.sharedInstance.baseReaderModeURL()`.
     nonisolated static let baseURL = "readermode://app/page"
 
-    private let router: TinyRouter
+    private let normalRouter: TinyRouter
+    private let privateRouter: TinyRouter
     private let logger: Logger
+    private let tabManager: TabManager
     private var requestTasks = [ObjectIdentifier: Task<Void, Never>]()
 
     init(profile: Profile,
-         logger: Logger = DefaultLogger.shared) {
-        self.router = TinyRouter()
-            .register("page", PageRoute(profile: profile))
-            .setDefault(ReaderFileRoute())
+         logger: Logger = DefaultLogger.shared,
+         tabManager: TabManager) {
+        // Two routers so private-mode tabs use the memory cache, not disk.
+        self.normalRouter = ReaderModeSchemeHandler.makeRouter(
+            cache: DiskReaderModeCache.shared, profile: profile)
+
+        self.privateRouter = ReaderModeSchemeHandler.makeRouter(
+            cache: MemoryReaderModeCache.shared, profile: profile)
+
         self.logger = logger
+        self.tabManager = tabManager
         super.init()
     }
 
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         let id = ObjectIdentifier(urlSchemeTask)
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? true
+        let router = isPrivate ? privateRouter : normalRouter
         let requestTask = Task { // Closure gets implicit @MainActor since WKURLSchemeTask is annotated as such (cool!)
             defer { requestTasks[id] = nil }
             do {
@@ -121,5 +130,12 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
         }
 
         return url
+    }
+
+    // MARK: - Helpers
+    private static func makeRouter(cache: ReaderModeCache, profile: Profile) -> TinyRouter {
+        return TinyRouter()
+            .register("page", PageRoute(cache: cache, profile: profile))
+            .setDefault(ReaderFileRoute())
     }
 }

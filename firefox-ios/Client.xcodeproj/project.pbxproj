@@ -2276,6 +2276,8 @@
 		EEB965112FBCCDFC00D6C232 /* PageRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9650E2FBCCDFC00D6C232 /* PageRoute.swift */; };
 		EEB965122FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9650F2FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift */; };
 		EEB965162FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB965132FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift */; };
+		EEB965192FBCFD2B00D6C232 /* MockReaderModeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB965172FBCFD2B00D6C232 /* MockReaderModeCache.swift */; };
+		EEB9651A2FBCFD2B00D6C232 /* PageRouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB965182FBCFD2B00D6C232 /* PageRouteTests.swift */; };
 		EEB96A222FBF4B8300D6C232 /* ReaderFileRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB96A212FBF4B8300D6C232 /* ReaderFileRoute.swift */; };
 		EEB971C32FC48C4800D6C232 /* Reader.css in Resources */ = {isa = PBXBuildFile; fileRef = E4CD9F5A1A71506C00318571 /* Reader.css */; };
 		EEB971C42FC48C5100D6C232 /* NewYorkMedium-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA766251A99E300A014BF /* NewYorkMedium-Bold.otf */; };
@@ -11689,6 +11691,8 @@
 		EEB9650E2FBCCDFC00D6C232 /* PageRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRoute.swift; sourceTree = "<group>"; };
 		EEB9650F2FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSchemeHandler.swift; sourceTree = "<group>"; };
 		EEB965132FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSchemeHandlerTests.swift; sourceTree = "<group>"; };
+		EEB965172FBCFD2B00D6C232 /* MockReaderModeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReaderModeCache.swift; sourceTree = "<group>"; };
+		EEB965182FBCFD2B00D6C232 /* PageRouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRouteTests.swift; sourceTree = "<group>"; };
 		EEB96A212FBF4B8300D6C232 /* ReaderFileRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderFileRoute.swift; sourceTree = "<group>"; };
 		EEE8476797612D908D23E6BC /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEF342E5A045117853806115 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -16925,6 +16929,8 @@
 		EEB965142FBCCE7B00D6C232 /* SchemeHandler */ = {
 			isa = PBXGroup;
 			children = (
+				EEB965172FBCFD2B00D6C232 /* MockReaderModeCache.swift */,
+				EEB965182FBCFD2B00D6C232 /* PageRouteTests.swift */,
 				EEB965132FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift */,
 			);
 			path = SchemeHandler;
@@ -20555,6 +20561,8 @@
 				8A9D31682D135A1300171502 /* MockBookmarksSaver.swift in Sources */,
 				F00CA4022F00000000000007 /* MockWorldCupAPIClient.swift in Sources */,
 				F00CA4022F0000000000000B /* MockWorldCupFetchStrategy.swift in Sources */,
+				EEB965192FBCFD2B00D6C232 /* MockReaderModeCache.swift in Sources */,
+				EEB9651A2FBCFD2B00D6C232 /* PageRouteTests.swift in Sources */,
 				F00CA4022F00000000000009 /* WorldCupAPIClientTests.swift in Sources */,
 				C2886BB22EC4AB58007AE6C3 /* TinyRouterTests.swift in Sources */,
 				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
