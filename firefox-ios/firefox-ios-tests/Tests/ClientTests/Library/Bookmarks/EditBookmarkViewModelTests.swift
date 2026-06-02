@@ -207,16 +207,16 @@ class EditBookmarkViewModelTests: XCTestCase {
     }
 
     func testSaveBookmarkIfNeeded_whenIsSaveTappedIsTrue_executesSaveBookmark() async throws {
-            let subject = createSubject(folder: folderBookmarkItemData, parentFolder: parentFolder)
-            let expectation = expectation(description: "onBookmarkSaved should be called")
-            subject.onBookmarkSaved = {
-                expectation.fulfill()
-            }
-            subject.setUpdatedTitle("Hello test")
-            subject.isSaveTapped = true
-            subject.saveBookmarkIfNeeded()
-            await fulfillment(of: [expectation], timeout: 0.1)
-            XCTAssertEqual(bookmarksSaver.saveCalled, 1)
+        let subject = createSubject(folder: folderBookmarkItemData, parentFolder: parentFolder)
+        let expectation = expectation(description: "onBookmarkSaved should be called")
+        subject.onBookmarkSaved = {
+            expectation.fulfill()
+        }
+        subject.setUpdatedTitle("Hello test")
+        subject.isSaveTapped = true
+        subject.saveBookmarkIfNeeded()
+        await fulfillment(of: [expectation], timeout: 0.1)
+        XCTAssertEqual(bookmarksSaver.saveCalled, 1)
     }
 
     // MARK: Helper function
