@@ -73,7 +73,7 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
             cache: MemoryReaderModeCache.shared, profile: profile)
 
         self.logger = logger
-        self.tabManager = tabManager
+        self.tabManager = tabManager ?? nil
         super.init()
     }
 

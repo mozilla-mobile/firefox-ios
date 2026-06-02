@@ -22,7 +22,7 @@ class TabConfigurationProvider {
     private let profile: Profile
     private weak let tabManager: TabManager?
 
-    init(profile: Profile, tabManager: TabManager?) {
+    init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
     }
