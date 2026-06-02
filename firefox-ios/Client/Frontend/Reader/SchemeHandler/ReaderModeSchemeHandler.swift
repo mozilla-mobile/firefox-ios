@@ -53,7 +53,7 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
         let provider: FeatureFlagProviding = AppContainer.shared.resolve()
         return provider.isEnabled(.customReaderModeScheme) ? baseURL : WebServer.sharedInstance.baseReaderModeURL()
     }
-    
+
     private let normalRouter: TinyRouter
     private let privateRouter: TinyRouter
     private let logger: Logger

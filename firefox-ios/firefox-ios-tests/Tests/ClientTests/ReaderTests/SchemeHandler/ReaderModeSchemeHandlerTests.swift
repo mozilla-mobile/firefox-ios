@@ -166,7 +166,7 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
     func test_start_validURL_passesValidationAndReachesRoute() throws {
         // A non-private selected tab routes the request through the disk cache.
         tabManager.selectedTab = Tab(profile: MockProfile(), windowUUID: tabManager.windowUUID)
-        
+
         let articleURL = URL(string: "https://example.com/article")!
         try DiskReaderModeCache.shared.put(articleURL, PageRouteTests.fixtureReadabilityResult())
         defer { DiskReaderModeCache.shared.delete(articleURL, error: nil) }
