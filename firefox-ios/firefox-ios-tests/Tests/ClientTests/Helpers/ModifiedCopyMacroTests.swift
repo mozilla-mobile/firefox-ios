@@ -14,119 +14,6 @@ import Common
 /// macro in the past, these seem like a reasonable thing to include now.
 @MainActor
 final class ModifiedCopyMacroTests: XCTestCase {
-    // Fake Redux state reducer under test
-    @Copyable
-    fileprivate struct PersonReduxState: ScreenState {
-        var windowUUID: WindowUUID
-
-        let firstName: String
-        let lastName: String
-        let age: Int
-        var favoriteColor: String?
-
-        static let genus = "Homo Sapien"
-
-        var fullName: String {
-            "\(firstName) \(lastName)"
-        }
-
-        init(appState: AppState, uuid: WindowUUID) {
-            self.init(windowUUID: UUID())
-        }
-
-        init(windowUUID: WindowUUID) {
-            self.init(
-                windowUUID: windowUUID,
-                firstName: "Jane",
-                lastName: "Doe",
-                age: 33,
-                favoriteColor: nil
-            )
-        }
-
-        init(
-            windowUUID: WindowUUID,
-            firstName: String,
-            lastName: String,
-            age: Int,
-            favoriteColor: String?
-        ) {
-            self.windowUUID = windowUUID
-            self.firstName = firstName
-            self.lastName = lastName
-            self.age = age
-            self.favoriteColor = favoriteColor
-        }
-
-        static let reducer: Reducer<Self> = { state, action in
-            // Handles only PersonReduxActions
-            guard let action = action as? PersonReduxAction,
-                  let actionType = action.actionType as? PersonReduxActionType else {
-                return defaultState(from: state)
-            }
-
-            switch actionType {
-            case .didSetName:
-                guard let firstName = action.firstName,
-                      let lastName = action.lastName
-                else {
-                    return defaultState(from: state)
-                }
-
-                return state
-                    .copy(firstName: firstName)
-                    .copy(lastName: lastName)
-
-            case .didSetFavoriteColor:
-                return state
-                    .copy(favoriteColor: action.favoriteColor)
-            }
-        }
-
-        static func defaultState(from state: PersonReduxState) -> PersonReduxState {
-            return PersonReduxState(
-                windowUUID: state.windowUUID,
-                firstName: state.firstName,
-                lastName: state.lastName,
-                age: state.age,
-                favoriteColor: state.favoriteColor
-            )
-        }
-    }
-
-    // Test actions
-    fileprivate enum PersonReduxActionType: ActionType {
-        case didSetName
-        case didSetFavoriteColor
-    }
-
-    // Test action payload
-    fileprivate struct PersonReduxAction: Action {
-        let windowUUID: WindowUUID
-        let actionType: ActionType
-
-        let firstName: String?
-        let lastName: String?
-        let age: Int?
-        let favoriteColor: String?
-
-        init(
-            windowUUID: WindowUUID,
-            actionType: ActionType,
-            firstName: String? = nil,
-            lastName: String? = nil,
-            age: Int? = nil,
-            favoriteColor: String? = nil
-        ) {
-            self.windowUUID = windowUUID
-            self.actionType = actionType
-            self.firstName = firstName
-            self.lastName = lastName
-            self.age = age
-            self.favoriteColor = favoriteColor
-        }
-    }
-
     func testMacroIntegration_settingNonOptionalProperties() {
         let testWindowUUID = UUID()
         let testFirstName = "Haley"
@@ -216,5 +103,121 @@ final class ModifiedCopyMacroTests: XCTestCase {
         XCTAssertEqual(newState.lastName, testLastName)
         XCTAssertEqual(newState.age, testAge)
         XCTAssertEqual(newState.favoriteColor, nil)
+    }
+}
+
+// MARK: Fileprivate mock Redux state type and associated update actions for `@Copyable` macro integration tests.
+fileprivate extension ModifiedCopyMacroTests {
+    // Fake Redux state reducer under test
+    @Copyable
+    struct PersonReduxState: ScreenState {
+        var windowUUID: WindowUUID
+
+        let firstName: String
+        let lastName: String
+        let age: Int
+        var favoriteColor: String?
+
+        static let genus = "Homo Sapien"
+
+        var fullName: String {
+            "\(firstName) \(lastName)"
+        }
+
+        init(appState: AppState, uuid: WindowUUID) {
+            self.init(windowUUID: UUID())
+        }
+
+        init(windowUUID: WindowUUID) {
+            self.init(
+                windowUUID: windowUUID,
+                firstName: "Jane",
+                lastName: "Doe",
+                age: 33,
+                favoriteColor: nil
+            )
+        }
+
+        init(
+            windowUUID: WindowUUID,
+            firstName: String,
+            lastName: String,
+            age: Int,
+            favoriteColor: String?
+        ) {
+            self.windowUUID = windowUUID
+            self.firstName = firstName
+            self.lastName = lastName
+            self.age = age
+            self.favoriteColor = favoriteColor
+        }
+
+        static let reducer: Reducer<Self> = { state, action in
+            // Handles only PersonReduxActions
+            guard let action = action as? PersonReduxAction,
+                  let actionType = action.actionType as? PersonReduxActionType else {
+                return defaultState(from: state)
+            }
+
+            switch actionType {
+            case .didSetName:
+                guard let firstName = action.firstName,
+                      let lastName = action.lastName
+                else {
+                    return defaultState(from: state)
+                }
+
+                return state
+                    .copy(firstName: firstName)
+                    .copy(lastName: lastName)
+
+            case .didSetFavoriteColor:
+                return state
+                    .copy(favoriteColor: action.favoriteColor)
+            }
+        }
+
+        static func defaultState(from state: PersonReduxState) -> PersonReduxState {
+            return PersonReduxState(
+                windowUUID: state.windowUUID,
+                firstName: state.firstName,
+                lastName: state.lastName,
+                age: state.age,
+                favoriteColor: state.favoriteColor
+            )
+        }
+    }
+
+    // Test actions
+    enum PersonReduxActionType: ActionType {
+        case didSetName
+        case didSetFavoriteColor
+    }
+
+    // Test action payload
+    struct PersonReduxAction: Action {
+        let windowUUID: WindowUUID
+        let actionType: ActionType
+
+        let firstName: String?
+        let lastName: String?
+        let age: Int?
+        let favoriteColor: String?
+
+        init(
+            windowUUID: WindowUUID,
+            actionType: ActionType,
+            firstName: String? = nil,
+            lastName: String? = nil,
+            age: Int? = nil,
+            favoriteColor: String? = nil
+        ) {
+            self.windowUUID = windowUUID
+            self.actionType = actionType
+            self.firstName = firstName
+            self.lastName = lastName
+            self.age = age
+            self.favoriteColor = favoriteColor
+        }
     }
 }
