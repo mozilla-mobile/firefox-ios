@@ -46,11 +46,6 @@ class NativeErrorPageHelper {
         let cert: SecCertificate
     }
 
-    enum NetworkErrorType {
-        case noInternetConnection
-        case badCertDomain
-    }
-
     var error: NSError
 
     var errorDescriptionItem: String {
