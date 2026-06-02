@@ -76,6 +76,37 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
     }
 
     @MainActor
+    func testInitializeGroqAPIKey() {
+        let apiKey = "test-groq-api-key"
+        mockPrefs.setString(apiKey, forKey: PrefsKeys.Settings.groqAPIKey)
+
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+
+        XCTAssertEqual(aiControlsModel.groqAPIKey, apiKey)
+    }
+
+    @MainActor
+    func testShowGroqAPIKeySettings() {
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+#if DEBUG
+        XCTAssertTrue(aiControlsModel.showGroqAPIKeySettings)
+#else
+        XCTAssertFalse(aiControlsModel.showGroqAPIKeySettings)
+#endif
+    }
+
+    @MainActor
+    func testSetGroqAPIKey() throws {
+        let apiKey = "updated-groq-api-key"
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+
+        aiControlsModel.setGroqAPIKey(apiKey)
+
+        XCTAssertEqual(aiControlsModel.groqAPIKey, apiKey)
+        XCTAssertEqual(mockPrefs.stringForKey(PrefsKeys.Settings.groqAPIKey), apiKey)
+    }
+
+    @MainActor
     func testInitializeWithTranslationFeatureFlagDisabled() {
         setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
         let aiControlsModel = createSubject(prefs: mockPrefs)

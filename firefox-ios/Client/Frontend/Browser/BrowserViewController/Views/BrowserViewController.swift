@@ -109,6 +109,7 @@ class BrowserViewController: UIViewController,
     // TODO: FXIOS-14347 Remove this property as part of cleaning up the toolbar performance
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
+    private weak var aiAgentPanel: AIAgentThoughtsViewController?
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
@@ -2706,29 +2707,40 @@ class BrowserViewController: UIViewController,
         submitSearchText(text, forTab: currentTab)
     }
 
-    /// Shows the AI agent "thought process" panel over the current page, reusing the
-    /// shake-to-summarize visual: a snapshot of the page slides down to reveal the
-    /// thoughts above it. Added as a child view controller so it owns the snapshot while
-    /// the real page stays in place behind. Thoughts are mocked for now; this is the entry
-    /// point for the real agent loop later.
-    private func presentAIAgentThoughts(prompt: String) {
-        // Capture + crop the page snapshot to the content area (mirrors SummarizeCoordinator).
-        let browserFrame = view.frame
-        var snapshot = view.snapshot
-        if let cropped = snapshot.cgImage?.cropping(
-            to: CGRect(
-                x: contentContainer.frame.origin.x * snapshot.scale,
-                y: contentContainer.frame.origin.y * snapshot.scale,
-                width: contentContainer.frame.width * snapshot.scale,
-                height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * snapshot.scale
-            )) {
-            snapshot = UIImage(cgImage: cropped, scale: UIScreen.main.scale, orientation: .up)
-        }
+    private struct AIAgentRunContext {
+        let prompt: String
+        let tab: Tab
+        let webView: WKWebView
+        let groqAPIKey: String
+    }
 
-        let panel = AIAgentThoughtsViewController(prompt: prompt,
+    private func presentAIAgentThoughts(prompt: String) {
+        guard let context = makeAIAgentContext(prompt: prompt) else { return }
+        let panel = presentAIAgentPanel(context: context)
+        runAIAgent(context: context, panel: panel)
+    }
+
+    private func makeAIAgentContext(prompt: String) -> AIAgentRunContext? {
+        if aiAgentPanel != nil {
+            logger.log("AI agent panel already visible", level: .info, category: .webview)
+            return nil
+        }
+        guard let tab = tabManager.selectedTab, let webView = tab.webView else {
+            logger.log("AI agent missing web view on selected tab", level: .warning, category: .webview)
+            return nil
+        }
+        let groqKey = profile.prefs.stringForKey(PrefsKeys.Settings.groqAPIKey) ?? ""
+        return AIAgentRunContext(prompt: prompt, tab: tab, webView: webView, groqAPIKey: groqKey)
+    }
+
+    @discardableResult
+    private func presentAIAgentPanel(context: AIAgentRunContext) -> AIAgentThoughtsViewController {
+        let snapshot = captureAIAgentSnapshot()
+        let panel = AIAgentThoughtsViewController(prompt: context.prompt,
                                                   snapshot: snapshot,
                                                   snapshotTopOffset: contentContainer.frame.origin.y,
                                                   windowUUID: windowUUID)
+        aiAgentPanel = panel
         addChild(panel)
         panel.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(panel.view)
@@ -2741,6 +2753,60 @@ class BrowserViewController: UIViewController,
         panel.didMove(toParent: self)
         view.layoutIfNeeded()
         panel.animateIn()
+        return panel
+    }
+
+    private func captureAIAgentSnapshot() -> UIImage {
+        let browserFrame = view.frame
+        var snapshot = view.snapshot
+        if let cropped = snapshot.cgImage?.cropping(
+            to: CGRect(
+                x: contentContainer.frame.origin.x * snapshot.scale,
+                y: contentContainer.frame.origin.y * snapshot.scale,
+                width: contentContainer.frame.width * snapshot.scale,
+                height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * snapshot.scale
+            )) {
+            snapshot = UIImage(cgImage: cropped, scale: UIScreen.main.scale, orientation: .up)
+        }
+        return snapshot
+    }
+
+    private func runAIAgent(context: AIAgentRunContext, panel: AIAgentThoughtsViewController) {
+        let tab = context.tab
+        let webView = context.webView
+        let isWebPage = AIAgentService.isWebPage(webView.url)
+        Task { @MainActor [weak panel, weak self] in
+            do {
+                if isWebPage {
+                    let map = try await WebAgentPerception().extract(on: webView)
+                    panel?.update(with: map)
+                }
+
+                let service = AIAgentService(groqAPIKey: context.groqAPIKey)
+                service.onNavigate = { [weak self] url in
+                    guard let self else { return }
+                    self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
+                }
+                service.onSearch = { [weak self] query in
+                    guard let self else { return }
+                    self.submitSearchText(query, forTab: tab)
+                }
+                service.onStep = { [weak panel] result in
+                    panel?.revealLivePage()
+                    panel?.update(with: result)
+                    guard let webView = tab.webView else { return }
+                    webView.takeSnapshot(with: WKSnapshotConfiguration()) { image, _ in
+                        if let image { panel?.updateSnapshot(image) }
+                    }
+                }
+
+                let final = try await service.run(goal: context.prompt, on: webView)
+                panel?.finish(with: final)
+            } catch {
+                self?.logger.log("AI agent run failed", level: .warning, category: .webview)
+                panel?.update(error: error)
+            }
+        }
     }
 
     // MARK: - Handle navigation

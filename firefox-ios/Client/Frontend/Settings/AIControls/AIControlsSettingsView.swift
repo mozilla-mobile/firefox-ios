@@ -54,6 +54,10 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                 if aiControlsModel.hasVisibleAIFeatures {
                     aiFeaturesControlsStatusDescription
                 }
+                if aiControlsModel.showGroqAPIKeySettings {
+                    Spacer(minLength: UX.cardSpacing)
+                    groqAPIKeyCard
+                }
             }.padding(.horizontal, UX.padding)
         }
         .background(themeColors.layer1.color)
@@ -63,6 +67,31 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == aiControlsModel.windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: aiControlsModel.windowUUID))
+        }
+    }
+
+    var groqAPIKeyCard: some View {
+        RoundedCard(
+            background: themeColors.layer5.color,
+            cornerRadius: UX.cornerRadius,
+            padding: UX.padding
+        ) {
+            VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
+                Text(verbatim: "AI Agent — Groq API Key (BYOK)")
+                    .font(FXFontStyles.Bold.body.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textPrimary.color)
+                Text(verbatim: "Used by the AI Agent to read pages and plan actions. Stored on this device only.")
+                    .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textSecondary.color)
+                SecureField("gsk_…", text: Binding(
+                    get: { aiControlsModel.groqAPIKey },
+                    set: { aiControlsModel.setGroqAPIKey($0) }
+                ))
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                .foregroundStyle(themeColors.textPrimary.color)
+            }
         }
     }
 

@@ -193,6 +193,7 @@ public struct PrefsKeys {
         public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
         public static let quickAnswersFeature = "settings.quickAnswersFeature"
+        public static let groqAPIKey = "settings.ai.groqAPIKey"
     }
 
     // Activity Stream

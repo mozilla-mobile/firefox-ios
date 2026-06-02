@@ -14,6 +14,16 @@ class AIControlsModel: ObservableObject,
     @Published var pageSummariesEnabled: Bool
     @Published var translationsVisible = false
     @Published var pageSummariesVisible: Bool
+    /// Prototype BYOK storage in prefs for simplication
+    @Published var groqAPIKey: String
+
+    var showGroqAPIKeySettings: Bool {
+#if DEBUG
+        return true
+#else
+        return false
+#endif
+    }
 
     let headerLinkInfo = LinkInfo(
         label: .Settings.AIControls.HeaderCard.Link,
@@ -85,13 +95,29 @@ class AIControlsModel: ObservableObject,
         self.settingsTelemetry = settingsTelemetry
         self.logger = logger
 
-        translationEnabled = self.translationConfiguration.isTranslationFeatureEnabled
-        pageSummariesEnabled = self.summarizerConfiguration.isSummarizeFeatureToggledOn
+        _translationEnabled = Published(
+            initialValue: self.translationConfiguration.isTranslationFeatureEnabled
+        )
+        _pageSummariesEnabled = Published(
+            initialValue: self.summarizerConfiguration.isSummarizeFeatureToggledOn
+        )
 
-        pageSummariesVisible = self.summarizerConfiguration.isSummarizeFeatureEnabled
+        _pageSummariesVisible = Published(
+            initialValue: self.summarizerConfiguration.isSummarizeFeatureEnabled
+        )
+        _groqAPIKey = Published(
+            initialValue: prefs.stringForKey(PrefsKeys.Settings.groqAPIKey) ?? ""
+        )
+
         translationsVisible = featureFlagsProvider.isEnabled(.translation)
+        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch)
+            && userPreferences.getPreferenceFor(.aiKillSwitch)
+    }
 
-        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.getPreferenceFor(.aiKillSwitch)
+    @MainActor
+    func setGroqAPIKey(_ value: String) {
+        groqAPIKey = value
+        prefs.setString(value, forKey: PrefsKeys.Settings.groqAPIKey)
     }
 
     @MainActor
