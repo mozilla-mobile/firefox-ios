@@ -236,6 +236,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             }
         } else if translationConfiguration.state == .active {
             let originatingTab = selectedTab(for: action.windowUUID)
+            // Tapping the active icon restores the original page: the user is opting out of
+            // translation for this history item. Drop its cached config so back/forward navigation
+            // doesn't re-apply the translation they just dismissed.
             if let tabUUID = originatingTab?.tabUUID,
                let currentItem = originatingTab?.webView?.backForwardList.currentItem {
                 navigationCache.clearTranslation(for: currentItem, tabUUID: tabUUID)
