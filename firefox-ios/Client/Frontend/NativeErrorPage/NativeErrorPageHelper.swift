@@ -7,22 +7,6 @@ import Shared
 import Common
 import Security
 
-// Error codes copied from Gecko. The ints corresponding to these codes were determined
-// by inspecting the NSError in each of these cases.
-// This replaces the legacy CertErrorCodes in ErrorPageHelper.swift.
-let CertErrorCodes: [Int: String] = [
-    -9813: "SEC_ERROR_UNKNOWN_ISSUER",
-    -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
-    -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
-]
-
-let CertErrors: [Int] = [
-    NSURLErrorServerCertificateUntrusted,
-    NSURLErrorServerCertificateHasBadDate,
-    NSURLErrorServerCertificateHasUnknownRoot,
-    NSURLErrorServerCertificateNotYetValid
-]
-
 class NativeErrorPageHelper {
     private enum Constants {
         static let certErrorQueryParam = "certerror"
@@ -30,13 +14,42 @@ class NativeErrorPageHelper {
         static let codeQueryParam = "code"
         static let cfStreamErrorCodeKey = "_kCFStreamErrorCodeKey"
         static let peerCertificateChainKey = "NSErrorPeerCertificateChainKey"
-        static let defaultBadCertDomainError = "SSL_ERROR_BAD_CERT_DOMAIN"
-        static let sslErrorBadCertDomainCode = -9843
         static let wrongHostMarker = "wrong.host"
         static let badSSLHostMarker = "badssl"
         static let domainDescriptionMarker = "domain"
         static let hostnameDescriptionMarker = "hostname"
     }
+
+    // Error codes copied from Gecko. The ints corresponding to these codes were determined
+    // by inspecting the NSError in each of these cases.
+    enum GeckoCode: Int {
+        case unknownIssuer = -9813
+        case expiredCertificate = -9814
+        case badCertDomain = -9843
+
+        var description: String {
+            switch self {
+            case .unknownIssuer: return "SEC_ERROR_UNKNOWN_ISSUER"
+            case .expiredCertificate: return "SEC_ERROR_EXPIRED_CERTIFICATE"
+            case .badCertDomain: return "SSL_ERROR_BAD_CERT_DOMAIN"
+            }
+        }
+    }
+
+    // Cert errors may be reported inconsistently across iOS versions.
+    private static let certErrors = [
+        NSURLErrorServerCertificateUntrusted,
+        NSURLErrorServerCertificateHasBadDate,
+        NSURLErrorServerCertificateHasUnknownRoot,
+        NSURLErrorServerCertificateNotYetValid
+    ]
+
+    private static let errorMapping: [Int: GeckoCode] = [
+        NSURLErrorServerCertificateUntrusted: .unknownIssuer,
+        NSURLErrorServerCertificateHasUnknownRoot: .unknownIssuer,
+        NSURLErrorServerCertificateHasBadDate: .expiredCertificate,
+        NSURLErrorServerCertificateNotYetValid: .expiredCertificate
+    ]
 
     /// Holds the parsed certificate details extracted from an NSError.
     struct CertDetails {
@@ -60,7 +73,7 @@ class NativeErrorPageHelper {
 
     /// Returns whether the given NSURLError code represents a certificate error.
     private static func isCertificateErrorCode(_ code: Int) -> Bool {
-        return CertErrors.contains(code)
+        return certErrors.contains(code)
     }
 
     /// Extracts the CFStream certificate error code embedded in the underlying NSError, if present.
@@ -77,7 +90,7 @@ class NativeErrorPageHelper {
     /// failures return false so they fall back to the legacy HTML error page
     private static func isBadCertDomainError(_ error: NSError) -> Bool {
         guard isCertificateErrorCode(error.code) else { return false }
-        return certStreamErrorCode(from: error) == Constants.sslErrorBadCertDomainCode
+        return certStreamErrorCode(from: error) == GeckoCode.badCertDomain.rawValue
     }
 
     /// Centralized predicate for whether we should show the native UI for a wrong-host certificate error.
@@ -117,7 +130,7 @@ class NativeErrorPageHelper {
         let certError = components.queryItems?.first(where: {
             $0.name == Constants.certErrorQueryParam
         })?.value
-        return certError == Constants.defaultBadCertDomainError
+        return certError == GeckoCode.badCertDomain.description
     }
 
     /// Logs diagnostic details for a certificate error to aid debugging.
@@ -211,12 +224,14 @@ class NativeErrorPageHelper {
     private static func buildCertificateQueryItems(for error: NSError) -> [URLQueryItem] {
         var queryItems = [URLQueryItem]()
 
-        if let certErrorCode = certStreamErrorCode(from: error),
-           let certErrorString = CertErrorCodes[certErrorCode] {
-            queryItems.append(URLQueryItem(
-                name: Constants.certErrorQueryParam,
-                value: certErrorString
-            ))
+        let certErrorDescription: String?
+        if let cfStreamCode = certStreamErrorCode(from: error) {
+            certErrorDescription = GeckoCode(rawValue: cfStreamCode)?.description
+        } else {
+            certErrorDescription = errorMapping[error.code]?.description
+        }
+        if let desc = certErrorDescription {
+            queryItems.append(URLQueryItem(name: Constants.certErrorQueryParam, value: desc))
         }
 
         if let certChain = error.userInfo[Constants.peerCertificateChainKey] as? [SecCertificate],
@@ -250,7 +265,7 @@ class NativeErrorPageHelper {
 
         // TODO: FXIOS-14569 — Investigate using SecTrustEvaluateWithError to evaluate TLS trust
         // errors instead of private APIs.
-        if certStreamErrorCode(from: error) == Constants.sslErrorBadCertDomainCode {
+        if certStreamErrorCode(from: error) == GeckoCode.badCertDomain.rawValue {
             let appName = AppName.shortName.description
             let securityInfo = String.NativeErrorPage.BadCertDomain.AdvancedSecurityInfo
             let certificateInfo = String(
@@ -268,7 +283,7 @@ class NativeErrorPageHelper {
                 buttonText: String.NativeErrorPage.BadCertDomain.AdvancedButton,
                 infoText: advancedInfo,
                 warningText: warningText,
-                certificateErrorCode: CertErrorCodes[Constants.sslErrorBadCertDomainCode]!,
+                certificateErrorCode: GeckoCode.badCertDomain.description,
                 showProceedButton: true
             )
 
