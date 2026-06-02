@@ -92,7 +92,7 @@ struct HeaderState: StateType, Equatable, Hashable {
         guard let worldCupAction = action as? WorldCupAction else {
             return defaultState(from: state)
         }
-        return state.copyWithUpdates(
+        return state.copy(
             isWorldCupSectionEnabled: worldCupAction.shouldShowHomepageWorldCupSection
         )
     }
@@ -113,7 +113,8 @@ struct HeaderState: StateType, Equatable, Hashable {
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
             showiPadSetup: state.showiPadSetup,
-            showQuickAnswersButton: state.showQuickAnswersButton
+            showQuickAnswersButton: state.showQuickAnswersButton,
+            isWorldCupSectionEnabled: state.isWorldCupSectionEnabled
         )
     }
 }
