@@ -247,32 +247,36 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
     }
 
-    /// urlDidChange with `.active` skips eligibility re-check.
-    func test_urlDidChangeAction_withActiveState_skipsEligibilityRecheck() throws {
+    /// urlDidChange where the engine reports the document is translated dispatches `.active`
+    /// with the source/target languages, regardless of any state carried on the action.
+    func test_urlDidChangeAction_whenEngineReportsTranslated_dispatchesActive() throws {
         setTranslationsFeatureEnabled(enabled: true)
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        mockTabManager.selectedTab = tab
         let mockTranslationService = MockTranslationsService(
-            shouldOfferTranslationResult: .success(true)
+            currentTranslationStateResult: .success(.translated(from: "fr", to: "en"))
         )
         let subject = createSubject(translationsService: mockTranslationService)
         let action = ToolbarAction(
             url: URL(string: "https://www.example.com"),
-            translationConfiguration: TranslationConfiguration(
-                prefs: mockProfile.prefs,
-                state: .active,
-                translatedToLanguage: "fr"
-            ),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
         )
 
-        let expectation = XCTestExpectation(description: "no dispatch should occur for tab-switch round-trip")
-        expectation.isInverted = true
+        let expectation = XCTestExpectation(description: "translationCompleted .active dispatched")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationsAction)
+        XCTAssertEqual(dispatched.actionType as? TranslationsActionType, .translationCompleted)
+        XCTAssertEqual(dispatched.translationConfiguration?.state, .active)
+        XCTAssertEqual(dispatched.translationConfiguration?.translatedToLanguage, "en")
+        XCTAssertEqual(dispatched.translationConfiguration?.sourceLanguage, "fr")
+        XCTAssertEqual(tab.translationConfiguration?.state, .active)
     }
 
     /// urlDidChange with `.loading` skips eligibility re-check.
@@ -1669,12 +1673,15 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(completedAction.translationConfiguration?.sourceLanguage, "en")
     }
 
-    // MARK: - Eligibility does not clobber active state
+    // MARK: - Engine ground truth overrides stale tab state
 
-    func test_urlDidChangeAction_eligibilityDoesNotClobberActiveConfig() throws {
+    /// A tab carrying a stale `.active` config that the engine reports as NOT translated
+    /// (e.g. the page was reloaded fresh) is corrected — the engine is the source of truth.
+    func test_urlDidChangeAction_whenEngineReportsNotTranslated_clearsStaleActive() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let mockTranslationService = MockTranslationsService(
-            shouldOfferTranslationResult: .success(true)
+            shouldOfferTranslationResult: .success(true),
+            currentTranslationStateResult: .success(.notTranslated)
         )
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
@@ -1693,14 +1700,14 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             actionType: ToolbarActionType.urlDidChange
         )
 
-        let expectation = XCTestExpectation(description: "no dispatch should occur when active config is preserved")
-        expectation.isInverted = true
+        let expectation = XCTestExpectation(description: "stale active replaced by eligibility offer")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
-        XCTAssertEqual(tab.translationConfiguration?.state, .active)
+        // Engine says not translated, so the stale `.active` is replaced by the eligibility offer.
+        XCTAssertEqual(tab.translationConfiguration?.state, .inactive)
     }
 
     // MARK: - Background cancellation tests
@@ -1931,4 +1938,6 @@ private final class StallingTranslationsService: TranslationsServiceProtocol {
     func fetchSupportedTargetLanguages() async -> [String] { [] }
 
     func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String { "en" }
+
+    func currentTranslationState(for windowUUID: WindowUUID) async throws -> PageTranslationState { .notTranslated }
 }

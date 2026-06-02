@@ -517,24 +517,6 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // On back/forward navigation WKWebView restores the page DOM but not our injected translation.
-        // Re-apply the translation state previously saved for the target history item on next commit,
-        // or clear the icon if that page was never translated.
-        if navigationAction.navigationType == .backForward,
-           let currentItem = webView.backForwardList.currentItem {
-            let navigationCache: TranslationNavigationCaching = AppContainer.shared.resolve()
-            let savedConfig = navigationCache.savedTranslation(for: currentItem, tabUUID: tab.tabUUID)
-
-            if let savedConfig {
-                tab.onNextCommit = { [weak tab] in
-                    tab?.translationConfiguration = savedConfig
-                }
-            } else {
-                tab.translationConfiguration = nil
-                tab.onNextCommit = {}
-            }
-        }
-
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {

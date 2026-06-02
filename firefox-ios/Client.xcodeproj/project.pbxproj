@@ -1335,7 +1335,6 @@
 		8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */; };
 		8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */; };
 		8C196D512F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C196D502F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift */; };
-		4C4717A4ED53927C65865D2D /* TranslationNavigationCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4717A4ED53927C65865D2C /* TranslationNavigationCacheTests.swift */; };
 		8C1C2E452C32D1470087846C /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */; };
 		8C2447E82DFADF3D00BD2C91 /* ActivityEventHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447E72DFADF3D00BD2C91 /* ActivityEventHelper.swift */; };
 		8C2447EA2DFADF6300BD2C91 /* OnboardingServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447E92DFADF6300BD2C91 /* OnboardingServiceDelegate.swift */; };
@@ -1446,7 +1445,6 @@
 		AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */; };
 		AA5001492F912F610065A279 /* ChangeMLPAEndpointSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */; };
 		AA5E81472EB12BDC00919E60 /* TranslationsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */; };
-		BBBB00022EB1000000000002 /* TranslationNavigationCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBB00012EB1000000000001 /* TranslationNavigationCache.swift */; };
 		AA5E81482EF5000000000001 /* PreferredTranslationLanguagesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */; };
 		AA62FA6A2EF2F49A009785D9 /* LocaleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67B2CF65DE300AFA1FE /* LocaleProvider.swift */; };
 		AA62FA6B2EF2F49A009785D9 /* LocaleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67B2CF65DE300AFA1FE /* LocaleProvider.swift */; };
@@ -9903,7 +9901,6 @@
 		8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillFooterView.swift; sourceTree = "<group>"; };
 		8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHeaderView.swift; sourceTree = "<group>"; };
 		8C196D502F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoTranslatePromptStateTests.swift; sourceTree = "<group>"; };
-		4C4717A4ED53927C65865D2C /* TranslationNavigationCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationNavigationCacheTests.swift; sourceTree = "<group>"; };
 		8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveAddressButton.swift; sourceTree = "<group>"; };
 		8C2447E72DFADF3D00BD2C91 /* ActivityEventHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityEventHelper.swift; sourceTree = "<group>"; };
 		8C2447E92DFADF6300BD2C91 /* OnboardingServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingServiceDelegate.swift; sourceTree = "<group>"; };
@@ -10255,7 +10252,6 @@
 		AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentSearchProvider.swift; sourceTree = "<group>"; };
 		AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMLPAEndpointSetting.swift; sourceTree = "<group>"; };
 		AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsMiddleware.swift; sourceTree = "<group>"; };
-		BBBB00012EB1000000000001 /* TranslationNavigationCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationNavigationCache.swift; sourceTree = "<group>"; };
 		AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredTranslationLanguagesManager.swift; sourceTree = "<group>"; };
 		AA6A6F372EF57EB800D1912D /* SystemLocaleProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemLocaleProviderTests.swift; sourceTree = "<group>"; };
 		AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMicrosurveyTelemetry.swift; sourceTree = "<group>"; };
@@ -15108,7 +15104,6 @@
 				47E805FFBBD74D9BA77BD057 /* AutoTranslatePromptState.swift */,
 				AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */,
 								AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */,
-				BBBB00012EB1000000000001 /* TranslationNavigationCache.swift */,
 				AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */,
 			);
 			path = Translations;
@@ -15173,7 +15168,6 @@
 				AAD9D64A2EB25B3200BFECAF /* TranslationsMiddlewareTests.swift */,
 				8C50DD742F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift */,
 				8C196D502F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift */,
-				4C4717A4ED53927C65865D2C /* TranslationNavigationCacheTests.swift */,
 			);
 			path = TranslationsTests;
 			sourceTree = "<group>";
@@ -19516,7 +19510,6 @@
 				C80E1A102A0943640025B9E1 /* UIFont+Extension.swift in Sources */,
 				C8680C5728BFDF7F00BC902A /* WallpaperThumbnailUtility.swift in Sources */,
 				AA5E81472EB12BDC00919E60 /* TranslationsMiddleware.swift in Sources */,
-				BBBB00022EB1000000000002 /* TranslationNavigationCache.swift in Sources */,
 				AA5E81482EF5000000000001 /* PreferredTranslationLanguagesManager.swift in Sources */,
 				C23889DF2A4EFCE500429673 /* ShareSheetCoordinator.swift in Sources */,
 				E153FBAA2DD47C9B0040CE37 /* SearchBarLocationSaver.swift in Sources */,
@@ -20657,7 +20650,6 @@
 				E1EAA5F32D4A705500D3039C /* ToolbarMiddlewareTests.swift in Sources */,
 				8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */,
 				8C196D512F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift in Sources */,
-				4C4717A4ED53927C65865D2D /* TranslationNavigationCacheTests.swift in Sources */,
 				E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */,
 				C27484E02F558C2800920313 /* MockSummarizerLanguageProvider.swift in Sources */,
 				C2B31ECD2EDCEB1B00D53FF5 /* TranslationsVersionHelperTests.swift in Sources */,

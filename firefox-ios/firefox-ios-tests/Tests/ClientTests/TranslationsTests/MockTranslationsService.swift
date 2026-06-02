@@ -14,6 +14,7 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     private let firstResponseReceivedResult: Result<Void, Error>
     private let discardResult: Result<Void, Error>
     private let detectPageLanguageResult: Result<String, Error>
+    private let currentTranslationStateResult: Result<PageTranslationState, Error>
 
     // MARK: - Init
     init(
@@ -21,13 +22,15 @@ final class MockTranslationsService: TranslationsServiceProtocol {
         translateResult: Result<Void, Error> = .success(()),
         firstResponseReceivedResult: Result<Void, Error> = .success(()),
         discardResult: Result<Void, Error> = .success(()),
-        detectPageLanguageResult: Result<String, Error> = .success("en")
+        detectPageLanguageResult: Result<String, Error> = .success("en"),
+        currentTranslationStateResult: Result<PageTranslationState, Error> = .success(.notTranslated)
     ) {
         self.shouldOfferTranslationResult = shouldOfferTranslationResult
         self.translateResult = translateResult
         self.firstResponseReceivedResult = firstResponseReceivedResult
         self.discardResult = discardResult
         self.detectPageLanguageResult = detectPageLanguageResult
+        self.currentTranslationStateResult = currentTranslationStateResult
     }
 
     // MARK: - TranslationsServiceProtocol
@@ -59,5 +62,9 @@ final class MockTranslationsService: TranslationsServiceProtocol {
 
     func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
         return try detectPageLanguageResult.get()
+    }
+
+    func currentTranslationState(for windowUUID: WindowUUID) async throws -> PageTranslationState {
+        return try currentTranslationStateResult.get()
     }
 }

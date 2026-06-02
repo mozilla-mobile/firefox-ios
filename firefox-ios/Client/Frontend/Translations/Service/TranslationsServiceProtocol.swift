@@ -4,6 +4,14 @@
 
 import Common
 
+/// Snapshot of the displayed document's translation state as reported by the in-page engine.
+/// Modeled as an enum so the source/target languages only exist when the page is actually
+/// translated — illegal combinations like "translated with no languages" are unrepresentable.
+enum PageTranslationState: Equatable, Sendable {
+    case notTranslated
+    case translated(from: String, to: String)
+}
+
 /// A service responsible for coordinating in-page translations.
 @MainActor
 protocol TranslationsServiceProtocol {
@@ -34,4 +42,8 @@ protocol TranslationsServiceProtocol {
     func fetchSupportedTargetLanguages() async -> [String]
     /// Returns the BCP-47 language code of the currently displayed page (e.g. "ja", "en").
     func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String
+    /// Returns the in-page engine's ground-truth translation state for the currently displayed
+    /// document. Survives back/forward cache restores and resets on a fresh load, so it is the
+    /// authoritative source for deriving the toolbar translation state on navigation.
+    func currentTranslationState(for windowUUID: WindowUUID) async throws -> PageTranslationState
 }

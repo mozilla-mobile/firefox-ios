@@ -56,9 +56,15 @@ port1.onmessage = (message) => {
 };
 
 
+/// Authoritative per-document translation state. Lives in the page, so it rides the WKWebView
+/// back/forward cache alongside the translated DOM. Set when translation starts, cleared when
+/// discarded. Used by `getTranslationState` to expose the ground truth to Swift.
+let currentTranslation = null;
+
 /// NOTE: This should be called to start the translation process for this document.
 /// This creates the TranslationsDocument instance that manages the translation lifecycle.
 const startTranslations = ({from, to}) => {
+    currentTranslation = { from, to };
     resetIsDone();
     const languagePair = {sourceLanguage: from, targetLanguage: to}
     const translationsCache = new LRUCache(languagePair);
@@ -85,9 +91,16 @@ const startTranslations = ({from, to}) => {
 
 /// NOTE: This should be called when we teardown the translations for this document.
 const discardTranslations = ({from, to}) => {
+    currentTranslation = null;
     resetIsDone();
     sendToEngine({ type: "DiscardTranslations", innerWindowId })
 };
+
+/// Read-only ground truth for whether THIS document is currently translated.
+/// Returns { translated, from, to }. Survives bfcache restores; resets on a fresh document load.
+const getTranslationState = () => currentTranslation
+    ? { translated: true, from: currentTranslation.from, to: currentTranslation.to }
+    : { translated: false };
 
 /// NOTE: This returns a promise that resolves when the translation process is "done".
 /// This is used mainly to turn the translations button to the active state in the UI.
@@ -113,5 +126,5 @@ Object.defineProperty(window.__firefox__, "Translations", {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: Object.freeze({ getLanguageSampleWhenReady, startTranslations, isDone, discardTranslations })
+    value: Object.freeze({ getLanguageSampleWhenReady, startTranslations, isDone, discardTranslations, getTranslationState })
 });

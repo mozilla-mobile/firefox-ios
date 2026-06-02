@@ -113,6 +113,24 @@ final class TranslationsService: TranslationsServiceProtocol {
         }
     }
 
+    /// Reads the in-page engine's ground-truth translation state for the current document.
+    /// Returns `translated == false` when the Translations API is not yet present (fresh load).
+    func currentTranslationState(for windowUUID: WindowUUID) async throws -> PageTranslationState {
+        let webView = try currentWebView(for: windowUUID)
+        let js = """
+        return (window.__firefox__ && window.__firefox__.Translations)
+            ? window.__firefox__.Translations.getTranslationState()
+            : { translated: false }
+        """
+        let result = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
+        guard let dict = result as? [String: Any] else { return .notTranslated }
+        let translated = (dict["translated"] as? NSNumber)?.boolValue ?? (dict["translated"] as? Bool) ?? false
+        guard translated, let from = dict["from"] as? String, let to = dict["to"] as? String else {
+            return .notTranslated
+        }
+        return .translated(from: from, to: to)
+    }
+
     /// Starts translations by calling into the JS bridge.
     private func startTranslationsJS(on webView: WKWebView,
                                      from: String,

@@ -18,7 +18,6 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     private let manager: PreferredTranslationLanguagesManager
     private let localeProvider: LocaleProvider
     private let notificationCenter: NotificationProtocol
-    private let navigationCache: TranslationNavigationCaching
 
     /// Multiple windows can be open simultaneously, so we track IDs in a map.
     /// On iPhone, only a single window exists, so this will contain at most one entry.
@@ -48,8 +47,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
          translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
          manager: PreferredTranslationLanguagesManager? = nil,
          localeProvider: LocaleProvider = SystemLocaleProvider(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default,
-         navigationCache: TranslationNavigationCaching = AppContainer.shared.resolve()
+         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.profile = profile
         self.logger = logger
@@ -59,7 +57,6 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.localeProvider = localeProvider
         self.notificationCenter = notificationCenter
-        self.navigationCache = navigationCache
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
@@ -146,13 +143,36 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     private func handleUrlDidChange(action: ToolbarAction, windowUUID: WindowUUID) {
         guard action.url?.isWebPage() == true else { return }
 
-        let persistedState = action.translationConfiguration?.state
-        if persistedState == .active || persistedState == .loading { return }
+        // Skip while a translation is in-flight: the `.loading` spinner reflects an active flow we'd
+        // otherwise clobber. The action carries `.loading` on tab-tray round-trips mid-translation;
+        // `translationTasks` covers the in-window case.
+        if action.translationConfiguration?.state == .loading || translationTasks[windowUUID] != nil { return }
 
-        translationTasks[windowUUID]?.cancel()
-        translationTasks[windowUUID] = nil
         clearFlowId(for: action)
-        checkTranslationsAreEligible(for: action)
+
+        // Derive the toolbar state from the engine's ground truth for the just-committed document.
+        // The translation state lives in the page, so it is correct after both back/forward cache
+        // restores (translated DOM survives) and fresh reloads (untranslated) — unlike a cached
+        // guess, which cannot tell the two apart.
+        let originatingTab = selectedTab(for: action.windowUUID)
+        Task {
+            switch try? await self.translationsService.currentTranslationState(for: windowUUID) {
+            case .translated(let from, let to):
+                self.dispatchAction(
+                    for: TranslationsActionType.translationCompleted,
+                    with: .active,
+                    translatedToLanguage: to,
+                    sourceLanguage: from,
+                    and: windowUUID,
+                    on: originatingTab
+                )
+            case .notTranslated, nil:
+                // Not translated: reset any stale `.active` so the eligibility check isn't
+                // short-circuited, then re-offer or clear as appropriate.
+                self.persistTranslationConfig(nil, on: originatingTab)
+                self.checkTranslationsAreEligible(for: action, on: originatingTab)
+            }
+        }
     }
 
     private func handleTappingOnTranslateButton(for action: ToolbarMiddlewareAction, and state: AppState) {
@@ -236,13 +256,6 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             }
         } else if translationConfiguration.state == .active {
             let originatingTab = selectedTab(for: action.windowUUID)
-            // Tapping the active icon restores the original page: the user is opting out of
-            // translation for this history item. Drop its cached config so back/forward navigation
-            // doesn't re-apply the translation they just dismissed.
-            if let tabUUID = originatingTab?.tabUUID,
-               let currentItem = originatingTab?.webView?.backForwardList.currentItem {
-                navigationCache.clearTranslation(for: currentItem, tabUUID: tabUUID)
-            }
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
                 actionType: .willRestore,
@@ -252,7 +265,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             restoringWindows.insert(action.windowUUID)
             // Mark the next same-URL reload as a restore-flow reload so `webView(_:didCommit:)`
             // keeps the just-dispatched `.inactive` (FXIOS-15227). Manual reloads, with this
-            // flag unset, will clear the cache and re-run eligibility.
+            // flag unset, re-run eligibility via the `urlDidChange` reconcile.
             markPendingRestoreReload(on: originatingTab)
             self.reloadPage(for: action)
         }
@@ -394,11 +407,6 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     /// mid-flight does not stomp the new active tab's state.
     private func persistTranslationConfig(_ config: TranslationConfiguration?, on tab: Tab?) {
         tab?.translationConfiguration = config
-        if let config, config.state == .active,
-           let tabUUID = tab?.tabUUID,
-           let currentItem = tab?.webView?.backForwardList.currentItem {
-            navigationCache.saveTranslation(config, for: currentItem, tabUUID: tabUUID)
-        }
     }
 
     private func selectedTab(for windowUUID: WindowUUID) -> Tab? {
@@ -486,9 +494,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
 
     /// Checks whether the current page in the active tab is eligible for translation,
     /// and if so, dispatches a translation action to update the translation state.
-    private func checkTranslationsAreEligible(for action: Action) {
+    private func checkTranslationsAreEligible(for action: Action, on tab: Tab? = nil) {
         // Pre-capture the tab so a tab switch mid-flight doesn't stomp the new active tab's state.
-        let originatingTab = selectedTab(for: action.windowUUID)
+        let originatingTab = tab ?? selectedTab(for: action.windowUUID)
         // The action's `isTranslationsEnabled` carries the explicit new value for settings-change
         // actions (where store.state hasn't been updated yet). For `urlDidChange` it is nil, so we
         // fall back to ToolbarState which is always up-to-date by the time `urlDidChange` fires.

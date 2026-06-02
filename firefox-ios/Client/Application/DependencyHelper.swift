@@ -59,9 +59,6 @@ class DependencyHelper {
         let userFeaturePreferenceManager = UserFeaturePreferenceManager(prefs: profile.prefs)
         AppContainer.shared.register(service: userFeaturePreferenceManager as UserFeaturePreferring)
 
-        let translationNavigationCache: TranslationNavigationCaching = TranslationNavigationCache()
-        AppContainer.shared.register(service: translationNavigationCache as TranslationNavigationCaching)
-
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }
