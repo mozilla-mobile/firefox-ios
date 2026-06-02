@@ -1118,6 +1118,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let toolbarAction = action as? ToolbarAction
         let actionTranslationConfiguration = TranslationConfiguration(from: action)
+        // For TranslationsAction the action's config is the sole authority — nil means "clear the icon".
+        // For ToolbarAction we fall back to state so the icon persists across unrelated toolbar updates.
+        let resolvedTranslationConfiguration: TranslationConfiguration? = action is TranslationsAction
+            ? actionTranslationConfiguration
+            : actionTranslationConfiguration ?? addressBarState.translationConfiguration
         let isShowingNavigationToolbar = toolbarAction?.isShowingNavigationToolbar
             ?? toolbarState.isShowingNavigationToolbar
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
@@ -1139,8 +1144,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actions.append(shareAction)
 
             if let translationAction = configureTranslationIcon(
-                actionTranslationConfiguration: actionTranslationConfiguration,
-                addressBarState: addressBarState,
+                translationConfiguration: resolvedTranslationConfiguration,
                 isLoading: isLoading,
                 hasAlternativeLocationColor: hasAlternativeLocationColor
             ) {
@@ -1152,8 +1156,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actions.append(shareAction)
 
             if let translationAction = configureTranslationIcon(
-                actionTranslationConfiguration: actionTranslationConfiguration,
-                addressBarState: addressBarState,
+                translationConfiguration: resolvedTranslationConfiguration,
                 isLoading: isLoading,
                 hasAlternativeLocationColor: hasAlternativeLocationColor
             ) {
@@ -1167,26 +1170,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
     // Checks whether we should show the translation icon based on the translation configuration
     // state and setups up the configuration for the translation icon on the toolbar (for iPad and iPhone)
     private static func configureTranslationIcon(
-        actionTranslationConfiguration: TranslationConfiguration?,
-        addressBarState: AddressBarState,
+        translationConfiguration: TranslationConfiguration?,
         isLoading: Bool?,
         hasAlternativeLocationColor: Bool
     ) -> ToolbarActionConfiguration? {
-        // Check if action has an updated configuration, otherwise default to state.
-        // We need to do this check because of existing architecture
-        // in which the state is updated after
-        // we configure the button, so we need to check action too.
-        // When the action explicitly provides a config, use it as the authority (e.g. settings toggle).
-        // Only fall back to state when the action carries no config.
-        let shouldShowTranslationIcon: Bool
-        if let actionConfig = actionTranslationConfiguration {
-            shouldShowTranslationIcon = actionConfig.isTranslationFeatureEnabled
-        } else {
-            shouldShowTranslationIcon = addressBarState.translationConfiguration?.isTranslationFeatureEnabled ?? false
-        }
-        guard shouldShowTranslationIcon else { return nil }
-        let iconState = actionTranslationConfiguration?.state ?? addressBarState.translationConfiguration?.state
-        guard let iconState else { return nil }
+        guard let config = translationConfiguration, config.isTranslationFeatureEnabled else { return nil }
+        guard let iconState = config.state else { return nil }
         return translateAction(
             enabled: isLoading == false,
             state: iconState,
