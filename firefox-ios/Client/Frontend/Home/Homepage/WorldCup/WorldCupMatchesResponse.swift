@@ -30,6 +30,22 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
         self.next = next
     }
 
+    /// Returns a copy of this response with each bucket restricted to
+    /// matches that involve `team` (by 3-letter FIFA key) as home or away.
+    /// Used to derive the single-team card from the now-unfiltered
+    /// `/matches` payload — see `WorldCupFeed.buildSnapshot`.
+    func filtered(toTeam team: String) -> WorldCupMatchesResponse {
+        func involvesTeam(_ match: Match) -> Bool {
+            match.homeTeam?.key == team || match.awayTeam?.key == team
+        }
+        return WorldCupMatchesResponse(
+            now: now,
+            previous: previous?.filter(involvesTeam),
+            current: current?.filter(involvesTeam),
+            next: next?.filter(involvesTeam)
+        )
+    }
+
     struct Match: Decodable, Equatable, Sendable {
         let date: String
         let globalEventId: Int
@@ -52,12 +68,11 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
         /// Not typing this since we don't want to couple the client too tightly to the API's exact status values,
         /// in case of future additions or changes.
         let statusType: String?
-        /// Tournament stage, e.g. "Group Stage", "Round of 32", "Round of 16",
-        /// "Quarterfinals", "Semifinals", "Third Place", "Final". Mapped to a
-        /// localized phase label by `WorldCupMatches.phaseTitle`. Untyped on
-        /// purpose so a new merino value doesn't fail decode — unknown values
-        /// fall back to a generic label.
-        let stage: String?
+        /// Tournament stage. Decoded from the merino `stage` string into a
+        /// closed set of known values; unrecognized strings fall through to
+        /// `.unknown(raw)` so a new merino value doesn't fail decode and the
+        /// raw label is still available for logging.
+        let stage: Stage?
 
         init(date: String,
              globalEventId: Int,
@@ -73,7 +88,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
              clock: String? = nil,
              updated: Int? = nil,
              statusType: String? = nil,
-             stage: String? = nil) {
+             stage: Stage? = nil) {
             self.date = date
             self.globalEventId = globalEventId
             self.homeTeam = homeTeam
@@ -89,6 +104,69 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             self.updated = updated
             self.statusType = statusType
             self.stage = stage
+        }
+
+        /// The team that won this match, if a winner can be determined.
+        /// Resolves a penalty shootout first (when both penalty scores are
+        /// present), otherwise compares the regulation score plus any
+        /// extra-time goals. Returns `nil` for draws, scoreless/in-progress
+        /// matches, or matches missing either team.
+        var winnerTeam: Team? {
+            guard statusType == "past" else { return nil }
+            guard let homeTeam, let awayTeam,
+                  let homeScore, let awayScore else { return nil }
+            if let homePenalty, let awayPenalty {
+                if homePenalty > awayPenalty { return homeTeam }
+                if awayPenalty > homePenalty { return awayTeam }
+                return nil
+            }
+            let homeTotal = homeScore + (homeExtra ?? 0)
+            let awayTotal = awayScore + (awayExtra ?? 0)
+            if homeTotal > awayTotal { return homeTeam }
+            if awayTotal > homeTotal { return awayTeam }
+            return nil
+        }
+
+        /// Closed set of tournament stages emitted by merino's `stage` field.
+        /// `rawValue` round-trips the original server string — including the
+        /// `.unknown` case — which makes it suitable both for decoding and as
+        /// a stable, untranslated telemetry identifier.
+        enum Stage: Decodable, Hashable, Sendable {
+            case groupStage
+            case roundOf32
+            case roundOf16
+            case quarterFinals
+            case semiFinals
+            case thirdPlace
+            case final
+            case unknown(String)
+
+            var rawValue: String {
+                switch self {
+                case .groupStage: return "Group Stage"
+                case .roundOf32: return "Round of 32"
+                case .roundOf16: return "Round of 16"
+                case .quarterFinals: return "Quarter-finals"
+                case .semiFinals: return "Semi-finals"
+                case .thirdPlace: return "3rd Place"
+                case .final: return "Final"
+                case .unknown(let raw): return raw
+                }
+            }
+
+            init(from decoder: Decoder) throws {
+                let raw = try decoder.singleValueContainer().decode(String.self)
+                switch raw {
+                case "Group Stage": self = .groupStage
+                case "Round of 32": self = .roundOf32
+                case "Round of 16": self = .roundOf16
+                case "Quarter-finals": self = .quarterFinals
+                case "Semi-finals": self = .semiFinals
+                case "3rd Place": self = .thirdPlace
+                case "Final": self = .final
+                default: self = .unknown(raw)
+                }
+            }
         }
     }
 

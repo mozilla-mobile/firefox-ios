@@ -120,6 +120,9 @@ final class AddressToolbarContainer: UIView,
     private var addNewTabTopConstraint: NSLayoutConstraint?
     private var addNewTabBottomConstraint: NSLayoutConstraint?
 
+    private var toolbarLeadingConstraint: NSLayoutConstraint?
+    private var toolbarTrailingConstraint: NSLayoutConstraint?
+
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
@@ -226,30 +229,6 @@ final class AddressToolbarContainer: UIView,
 
         let accessoryViewOffset = shouldAdjustForAccessory ? UX.keyboardAccessoryViewOffset : 0
 
-        // Keep the gradient frame matched to current bounds on every call where the accessory
-        // is active. Required after rotation so the gradient stays full-width.
-        if shouldAdjustForAccessory {
-            let height = frame.height + UX.accessoryViewGradientOffset
-            accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
-        }
-
-        // Undo a previous accessory-driven minimization. Gated on shouldShowKeyboard so we
-        // don't undo legitimate scroll-hides, and on !isEditingAddress so we don't dispatch
-        // while the user is mid-edit
-        if !hasAccessoryView,
-           !isEditingAddress,
-           shouldShowKeyboard == true,
-           state?.scrollAlpha == 0 {
-            accessoryViewGradient.opacity = 0
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: 1,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
-        }
-
         /// We want to check here if the keyboard accessory view state has changed
         /// To avoid spamming redux actions.
         guard hasAccessoryView != shouldShowKeyboard else { return accessoryViewOffset }
@@ -262,6 +241,8 @@ final class AddressToolbarContainer: UIView,
         )
 
         if shouldAdjustForAccessory {
+            let height = frame.height + UX.accessoryViewGradientOffset
+            accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
             store.dispatch(
                 ToolbarAction(
@@ -281,6 +262,11 @@ final class AddressToolbarContainer: UIView,
             return
         }
 
+        if leftSkeletonAddressBar.superview == nil {
+            applyBottomLayoutConstraints()
+            setupSkeletonAddressBarsLayout(isBottomSearchBar: true)
+        }
+
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
@@ -290,6 +276,34 @@ final class AddressToolbarContainer: UIView,
         configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
         leftSkeletonAddressBar.isHidden = previousTab == nil
         rightSkeletonAddressBar.isHidden = forwardTab == nil
+    }
+
+    private func applyBottomLayoutConstraints() {
+        insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
+        insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
+
+        toolbarLeadingConstraint?.isActive = false
+        toolbarTrailingConstraint?.isActive = false
+
+        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor)
+        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor)
+
+        toolbarLeadingConstraint?.isActive = true
+        toolbarTrailingConstraint?.isActive = true
+    }
+
+    private func applyTopLayoutConstraints() {
+        leftSkeletonAddressBar.removeFromSuperview()
+        rightSkeletonAddressBar.removeFromSuperview()
+
+        toolbarLeadingConstraint?.isActive = false
+        toolbarTrailingConstraint?.isActive = false
+
+        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(equalTo: leadingAnchor)
+        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
+
+        toolbarLeadingConstraint?.isActive = true
+        toolbarTrailingConstraint?.isActive = true
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -446,14 +460,9 @@ final class AddressToolbarContainer: UIView,
     private func setupToolbarConstraints(isBottomSearchBar: Bool) {
         addSubview(toolbar)
         if toolbarHelper.isSwipingTabsEnabled && isBottomSearchBar {
-            insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
-            insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
-
-            toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor).isActive = true
-            toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor).isActive = true
+            applyBottomLayoutConstraints()
         } else {
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+            applyTopLayoutConstraints()
         }
 
         NSLayoutConstraint.activate([

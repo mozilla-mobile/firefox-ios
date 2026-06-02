@@ -38,7 +38,7 @@ final class PageRoute: TinyRoute {
             let result = try await fetchOrExtract(articleURL: articleURL)
             return try await renderReaderPage(url: url, result: result)
         } catch {
-            return try buildErrorReply(url: url, originalURL: articleURL)
+            return try buildErrorReply(url: url)
         }
     }
 
@@ -99,12 +99,12 @@ final class PageRoute: TinyRoute {
     func buildSuccessReply(url: URL, body: Data) throws -> TinyHTTPReply {
         // Single-line CSP since HTTPURLResponse drops multi-line header values.
         let origin = "\(ReaderModeSchemeHandler.scheme)://\(ReaderModeSchemeHandler.host)"
-
+        /// TODO(FXIOS-15965): This is the exact csp we have in `ReaderModeHandlers`,
+        /// `WKReaderModeHandlers` and now here. Ideally, we should have one source of truth for this string.
         let csp = "default-src 'none'; "
-            + "img-src *; "
-            + "style-src 'unsafe-inline' \(origin); "
-            + "font-src \(origin)"
-
+        + "img-src *; "
+        + "style-src 'unsafe-inline' \(origin); "
+        + "font-src \(origin)"
         guard let response = HTTPURLResponse(
             url: url,
             statusCode: 200,
@@ -121,36 +121,9 @@ final class PageRoute: TinyRoute {
 
     // It would be nice to have a standard way of displaying error pages, but it seems that
     // mobile Firefox does not have this yet (?)
-    func buildErrorReply(url: URL, originalURL: URL) throws -> TinyHTTPReply {
-        let safeHref = Self.htmlEscape(originalURL.absoluteString)
-        let failureMessage = Self.htmlEscape(String.ReaderModeHandlerPageCantDisplay)
-        let loadOriginalLabel = Self.htmlEscape(String.ReaderModeHandlerLoadOriginalPage)
-        // swiftlint:disable line_length
-        let html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>\(failureMessage)</title>
-          <style>
-            body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 16px; color: #333; line-height: 1.5; }
-            @media (prefers-color-scheme: dark) {
-              body { background: #1a1a1a; color: #e8e8e8; }
-              a { color: #6fb3ff; }
-            }
-            h2 { font-weight: 600; }
-            a { color: #0066cc; }
-          </style>
-        </head>
-        <body>
-          <h2>\(failureMessage)</h2>
-          <p><a href="\(safeHref)">\(loadOriginalLabel)</a></p>
-        </body>
-        </html>
-        """
-        // swiftlint:enable line_length
-        guard let body = html.data(using: .utf8) else {
+    func buildErrorReply(url: URL) throws -> TinyHTTPReply {
+        let errorString: String = .ReaderModeHandlerError
+        guard let body = errorString.data(using: .utf8) else {
             throw TinyRouterError.badResponse
         }
         guard let response = HTTPURLResponse(
@@ -162,14 +135,5 @@ final class PageRoute: TinyRoute {
             throw TinyRouterError.badResponse
         }
         return TinyHTTPReply(httpResponse: response, body: body)
-    }
-
-    private static func htmlEscape(_ s: String) -> String {
-        return s
-            .replacingOccurrences(of: "&", with: "&amp;")
-            .replacingOccurrences(of: "<", with: "&lt;")
-            .replacingOccurrences(of: ">", with: "&gt;")
-            .replacingOccurrences(of: "\"", with: "&quot;")
-            .replacingOccurrences(of: "'", with: "&#39;")
     }
 }

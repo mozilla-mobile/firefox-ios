@@ -46,7 +46,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     private lazy var logoImage: UIImageView = .build { imageView in
-        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -108,6 +107,11 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         }
 
         logoStackView.spacing = UX.interImageSpacing
+
+        let logoAsset = headerState.isWorldCupSectionEnabled
+            ? ImageIdentifiers.firefoxLogoSoccer
+            : ImageIdentifiers.homeHeaderLogoBall
+        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
         setupConstraints()
         setupLogoConstraints()

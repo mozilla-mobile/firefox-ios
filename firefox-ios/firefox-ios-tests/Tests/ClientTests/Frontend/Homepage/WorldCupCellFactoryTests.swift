@@ -105,6 +105,7 @@ final class WorldCupCellFactoryTests: XCTestCase {
     private func makeMatches() -> WorldCupMatches {
         return WorldCupMatches(
             phaseTitle: "Group Stage",
+            telemetryPhaseValue: "Group Stage",
             isLive: false,
             featuredMatch: [],
             upcomingMatches: []

@@ -244,7 +244,7 @@ class AppDelegate: UIResponder,
         logger.log("Received memory warning", level: .info, category: .lifecycle)
         Task {
             for uuid in windowManager.allWindowUUIDs(includingReserved: false) {
-                await windowManager.tabManager(for: uuid).offloadBackgroundWebViews()
+                await windowManager.tabManager(for: uuid)?.offloadBackgroundWebViews()
             }
         }
     }

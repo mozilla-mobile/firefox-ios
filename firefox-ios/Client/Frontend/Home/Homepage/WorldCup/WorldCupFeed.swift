@@ -35,27 +35,33 @@ final class WorldCupFeed {
     /// action that updates the store before calling `start` is the only
     /// thing the middleware needs to coordinate.
     private let selectedTeamProvider: () -> String?
+    private let store: WorldCupStoreProtocol
 
     private var matchesTask: Task<Void, Never>?
     private var liveTask: Task<Void, Never>?
+    private var teamsTask: Task<Void, Never>?
 
     private var lastMatchesResponse: WorldCupMatchesResponse?
     private var cachedLiveIDs: Set<Int> = []
+    private var cachedTeamsResponse: WorldCupTeamsResponse?
     private(set) var latestSnapshot: Snapshot = .empty
 
     var onUpdate: ((Snapshot) -> Void)?
 
     init(apiClient: WorldCupAPIClientProtocol,
+         store: WorldCupStoreProtocol = WorldCupStore(),
          usesDevServerTimeline: Bool,
          selectedTeamProvider: @escaping () -> String?) {
         self.apiClient = apiClient
         self.usesDevServerTimeline = usesDevServerTimeline
         self.selectedTeamProvider = selectedTeamProvider
+        self.store = store
     }
 
     deinit {
         matchesTask?.cancel()
         liveTask?.cancel()
+        teamsTask?.cancel()
     }
 
     /// (Re)starts the `/matches` stream. The `/live` stream is opened
@@ -65,18 +71,20 @@ final class WorldCupFeed {
         stop()
         cachedLiveIDs = []
         lastMatchesResponse = nil
-        let team = selectedTeamProvider()
-        let stream = apiClient.matchesStream(team: team)
+        cachedTeamsResponse = nil
+        let stream = apiClient.matchesStream(team: nil)
         matchesTask = Task { @MainActor [weak self] in
             for await result in stream {
                 guard let self else { break }
                 self.handleMatchesResult(result)
             }
         }
+        startTeams()
     }
 
     func stop() {
         matchesTask?.cancel(); matchesTask = nil
+        teamsTask?.cancel(); teamsTask = nil
         stopLive()
     }
 
@@ -84,13 +92,26 @@ final class WorldCupFeed {
         liveTask?.cancel(); liveTask = nil
     }
 
-    private func startLive(team: String?) {
-        let stream = apiClient.liveStream(team: team)
+    private func startLive() {
+        let stream = apiClient.liveStream(team: nil)
         liveTask = Task { @MainActor [weak self] in
             for await result in stream {
                 guard let self else { break }
                 self.handleLiveResult(result)
             }
+        }
+    }
+
+    /// `/teams` fetch. Elimination only flips after a knockout result, so
+    /// we don't poll on a timer: `start()` re-fetches on foreground/retry,
+    /// and `handleLiveResult` re-fetches when a knockout involving the
+    /// selected team leaves the live set.
+    private func startTeams() {
+        teamsTask?.cancel()
+        teamsTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            let result = await self.apiClient.loadTeams(team: nil)
+            self.handleTeamsResult(result)
         }
     }
 
@@ -124,10 +145,15 @@ final class WorldCupFeed {
         // result tile can show alongside live ones. Filter on
         // `statusType == "live"` so the badge only sticks for genuinely
         // in-progress matches.
+        let allMatches = response?.matches ?? []
         let newLiveIDs = Set(
-            response?.matches?
+            allMatches
                 .filter { $0.statusType == "live" }
-                .map(\.globalEventId) ?? []
+                .map(\.globalEventId)
+        )
+        refetchTeamsIfSelectedTeamKnockoutEnded(
+            endedIDs: cachedLiveIDs.subtracting(newLiveIDs),
+            matches: allMatches
         )
         guard newLiveIDs != cachedLiveIDs else { return }
         cachedLiveIDs = newLiveIDs
@@ -135,10 +161,45 @@ final class WorldCupFeed {
         emit(buildSnapshot(from: last))
     }
 
+    /// When a knockout fixture involving the selected team transitions out
+    /// of the live set, refetch `/teams` so the roster's `eliminated` flag
+    /// for that team reflects the just-finished result.
+    private func refetchTeamsIfSelectedTeamKnockoutEnded(
+        endedIDs: Set<Int>,
+        matches: [WorldCupMatchesResponse.Match]
+    ) {
+        guard !endedIDs.isEmpty, let team = selectedTeamProvider() else { return }
+        let involvesSelectedKnockout = matches.contains { match in
+            endedIDs.contains(match.globalEventId)
+            && Self.isKnockout(match.stage)
+            && (match.homeTeam?.key == team || match.awayTeam?.key == team)
+        }
+        guard involvesSelectedKnockout else { return }
+        startTeams()
+    }
+
+    private static func isKnockout(_ stage: WorldCupMatchesResponse.Match.Stage?) -> Bool {
+        switch stage {
+        case .roundOf32, .roundOf16, .quarterFinals, .semiFinals, .thirdPlace, .final:
+            return true
+        case .groupStage, .unknown, .none:
+            return false
+        }
+    }
+
+    private func handleTeamsResult(_ result: Result<WorldCupTeamsResponse?, WorldCupLoadError>) {
+        guard case .success(let response) = result, let response else { return }
+        let wasEliminated = isSelectedTeamEliminated(in: cachedTeamsResponse)
+        cachedTeamsResponse = response
+        let nowEliminated = isSelectedTeamEliminated(in: response)
+        guard wasEliminated != nowEliminated, let last = lastMatchesResponse else { return }
+        emit(buildSnapshot(from: last))
+    }
+
     private func reconcileLivePolling(against response: WorldCupMatchesResponse) {
         let now = effectiveNow(from: response) ?? Date()
         if WorldCupPollingFetchStrategy.shouldPollLive(matches: response, now: now) {
-            if liveTask == nil { startLive(team: selectedTeamProvider()) }
+            if liveTask == nil { startLive() }
         } else {
             stopLive()
             if !cachedLiveIDs.isEmpty {
@@ -150,14 +211,47 @@ final class WorldCupFeed {
 
     private func buildSnapshot(from response: WorldCupMatchesResponse) -> Snapshot {
         let now = effectiveNow(from: response) ?? Date()
-        if selectedTeamProvider() != nil {
-            let card = WorldCupMatches(response: response, liveIDs: cachedLiveIDs, now: now)
-            return Snapshot(matches: [card], defaultMatchIndex: 0, apiError: nil)
+        let beforeStart = isBeforeFirstMatch(now: now, in: response)
+        if let team = selectedTeamProvider(),
+           !isSelectedTeamEliminated(in: cachedTeamsResponse) {
+            let perStage = WorldCupMatches.perStage(
+                response: response.filtered(toTeam: team),
+                liveIDs: cachedLiveIDs,
+                now: now
+            )
+            return Snapshot(matches: perStage.cards,
+                            defaultMatchIndex: beforeStart ? 0 : perStage.defaultIndex,
+                            apiError: nil)
         }
-        let flattened = WorldCupMatches.flattened(response: response, liveIDs: cachedLiveIDs, now: now)
+        store.setSelectedTeam(countryId: nil)
+        let flattened = WorldCupMatches.flattened(
+            response: response,
+            liveIDs: cachedLiveIDs,
+            now: now
+        )
+        // No team selected → the timer card sits at page 0, so shift the
+        // chosen card index past it (and stay on the timer before kickoff).
         return Snapshot(matches: flattened.cards,
-                        defaultMatchIndex: flattened.defaultIndex,
+                        defaultMatchIndex: beforeStart ? 0 : flattened.defaultIndex + 1,
                         apiError: nil)
+    }
+
+    /// True until the tournament's first match has kicked off. Uses the
+    /// (dev-timeline-aware) `now` so advancing the mock clock past the first
+    /// kickoff lifts the "stay on the first card" rule.
+    private func isBeforeFirstMatch(now: Date, in response: WorldCupMatchesResponse) -> Bool {
+        let all = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        guard let earliest = all.compactMap({ WorldCupMatch.parseDate($0.date) }).min() else {
+            return false
+        }
+        return now < earliest
+    }
+
+    /// True when a team is selected AND that team appears in the roster
+    /// with `eliminated == true`.
+    private func isSelectedTeamEliminated(in roster: WorldCupTeamsResponse?) -> Bool {
+        guard let team = selectedTeamProvider(), let roster else { return false }
+        return roster.teams.first(where: { $0.key == team })?.eliminated == true
     }
 
     /// Returns the response's `now` only when the dev pref is set and the

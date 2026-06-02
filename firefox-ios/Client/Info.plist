@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AttributionCopyEndpoint</key>
+	<string>https://adjust-skadnetwork.com</string>
+	<key>NSAdvertisingAttributionReportEndpoint</key>
+	<string>https://adjust-skadnetwork.com</string>
 	<key>LiteLLMAPIKey</key>
 	<string>$(LITE_LLM_API_KEY)</string>
 	<key>LiteLLMAPIEndpoint</key>
@@ -10,6 +14,10 @@
 	<string>$(LITE_LLM_API_MODEL)</string>
 	<key>SKAdNetworkItems</key>
 	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>5v9n6f5x93.skadnetwork</string>
+		</dict>
 		<dict>
 			<key>SKAdNetworkIdentifier</key>
 			<string>su67r6k2v3.skadnetwork</string>
@@ -31,8 +39,6 @@
 			<string>cstr6suwn9.skadnetwork</string>
 		</dict>
 	</array>
-	<key>AdjustAppToken</key>
-	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>

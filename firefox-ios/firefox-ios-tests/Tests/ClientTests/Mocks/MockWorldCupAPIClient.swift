@@ -5,6 +5,7 @@
 @testable import Client
 
 import Foundation
+import XCTest
 
 enum MockWorldCupClientError: Error {
     case network
@@ -20,6 +21,7 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
     private(set) var lastMatchesTeam: String?
     private(set) var lastLiveTeam: String?
     private(set) var lastTeamsTeam: String?
+    var loadTeamsCalled: XCTestExpectation?
 
     init(matchesResult: Result<WorldCupMatchesResponse?, Error>,
          liveResult: Result<WorldCupLiveResponse?, Error> = .success(nil),
@@ -76,7 +78,9 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
     }
 
     func loadTeams(team: String?) async -> Result<WorldCupTeamsResponse?, WorldCupLoadError> {
+        fetchTeamsCount += 1
         lastTeamsTeam = team
+        loadTeamsCalled?.fulfill()
         switch teamsResult {
         case .success(let response): return .success(response)
         case .failure(let error):    return .failure(WorldCupLoadError.from(error))

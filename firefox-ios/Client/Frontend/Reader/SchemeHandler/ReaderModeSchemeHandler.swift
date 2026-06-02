@@ -53,31 +53,32 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
         let provider: FeatureFlagProviding = AppContainer.shared.resolve()
         return provider.isEnabled(.customReaderModeScheme) ? baseURL : WebServer.sharedInstance.baseReaderModeURL()
     }
-
+    
     private let normalRouter: TinyRouter
     private let privateRouter: TinyRouter
     private let logger: Logger
+    private let tabManager: TabManager
     private var requestTasks = [ObjectIdentifier: Task<Void, Never>]()
 
     init(profile: Profile,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         tabManager: TabManager) {
         // Two routers so private-mode tabs use the memory cache, not disk.
-        self.normalRouter = TinyRouter()
-            .register("page", PageRoute(cache: DiskReaderModeCache.shared, profile: profile))
-            .setDefault(ReaderFileRoute())
+        self.normalRouter = ReaderModeSchemeHandler.makeRouter(
+            cache: DiskReaderModeCache.shared, profile: profile)
 
-        self.privateRouter = TinyRouter()
-            .register("page", PageRoute(cache: MemoryReaderModeCache.shared, profile: profile))
-            .setDefault(ReaderFileRoute())
+        self.privateRouter = ReaderModeSchemeHandler.makeRouter(
+            cache: MemoryReaderModeCache.shared, profile: profile)
 
         self.logger = logger
+        self.tabManager = tabManager
         super.init()
     }
 
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         let id = ObjectIdentifier(urlSchemeTask)
-        let isPrivate = !webView.configuration.websiteDataStore.isPersistent
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         let router = isPrivate ? privateRouter : normalRouter
         let requestTask = Task { // Closure gets implicit @MainActor since WKURLSchemeTask is annotated as such (cool!)
             defer { requestTasks[id] = nil }
@@ -134,5 +135,12 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
         }
 
         return url
+    }
+
+    // MARK: - Helpers
+    private static func makeRouter(cache: ReaderModeCache, profile: Profile) -> TinyRouter {
+        return TinyRouter()
+            .register("page", PageRoute(cache: cache, profile: profile))
+            .setDefault(ReaderFileRoute())
     }
 }

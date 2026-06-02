@@ -121,7 +121,7 @@ final class PageRouteTests: XCTestCase {
 
     // MARK: - Extraction failure
 
-    func test_handle_extractorFails_returnsErrorPageWithLoadOriginalLink() async throws {
+    func test_handle_extractorFails_returnsErrorPage() async throws {
         let cache = MockReaderModeCache()
         let extractor: PageRoute.Extractor = { _, _, _ in
             throw ReadabilityServiceError.timeout
@@ -137,10 +137,7 @@ final class PageRouteTests: XCTestCase {
         XCTAssertEqual(http.value(forHTTPHeaderField: "Content-Type"), "text/html; charset=utf-8")
 
         let bodyString = try XCTUnwrap(String(data: unwrapped.body, encoding: .utf8))
-        XCTAssertTrue(
-            bodyString.contains("href=\"https://example.com/article\""),
-            "Expected original-article link in body, got: \(bodyString)"
-        )
+        XCTAssertEqual(bodyString, String.ReaderModeHandlerError)
     }
 
     // MARK: - Response builders
@@ -160,16 +157,16 @@ final class PageRouteTests: XCTestCase {
         XCTAssertTrue(csp.contains("font-src readermode://app"))
     }
 
-    func test_buildErrorReply_containsOriginalLink() throws {
+    func test_buildErrorReply_containsErrorMessage() throws {
         let subject = makeSubject(extractor: noOpExtractor)
-        let reply = try subject.buildErrorReply(url: requestURL, originalURL: articleURL)
+        let reply = try subject.buildErrorReply(url: requestURL)
         let http = try XCTUnwrap(reply.httpResponse)
 
         XCTAssertEqual(http.statusCode, 200)
         XCTAssertEqual(http.value(forHTTPHeaderField: "Content-Type"), "text/html; charset=utf-8")
 
         let bodyString = try XCTUnwrap(String(data: reply.body, encoding: .utf8))
-        XCTAssertTrue(bodyString.contains("href=\"https://example.com/article\""))
+        XCTAssertEqual(bodyString, String.ReaderModeHandlerError)
     }
 
     // MARK: - Helpers

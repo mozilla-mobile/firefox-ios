@@ -44,4 +44,9 @@ struct WorldCupTelemetry {
     func countrySelectorDisplayed() {
         gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.countrySelectorDisplayed)
     }
+
+    func cardSwiped(view: String, isImpression: Bool) {
+        let extra = GleanMetrics.WorldCupWidget.CardSwipedExtra(isImpression: isImpression, view: view)
+        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.cardSwiped, extras: extra)
+    }
 }
