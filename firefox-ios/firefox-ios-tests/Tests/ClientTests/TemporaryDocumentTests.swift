@@ -94,6 +94,11 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://EXAMPLE.com")!))
     }
 
+    func testCookieDomainMatches_siblingSubdomain_doesNotMatch() {
+        let cookie = makeCookie(domain: "subdomain1.example.com")
+        XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://subdomain2.example.com")!))
+    }
+
     func testInit_passCorrectName_fromResponse() async {
         let response = MockURLResponse(filename: filename, url: request.url!)
         subject = await createSubject(response: response, request: request, session: mockURLSession)
