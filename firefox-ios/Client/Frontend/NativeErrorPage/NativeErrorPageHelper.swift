@@ -199,8 +199,8 @@ class NativeErrorPageHelper {
         } else {
             certErrorDescription = certErrorsMapping.errorMapping[error.code]?.description
         }
-        if let desc = certErrorDescription {
-            queryItems.append(URLQueryItem(name: Constants.certErrorQueryParam, value: desc))
+        if let certErrorDescription {
+            queryItems.append(URLQueryItem(name: Constants.certErrorQueryParam, value: certErrorDescription))
         }
 
         if let certChain = error.userInfo[Constants.peerCertificateChainKey] as? [SecCertificate],
