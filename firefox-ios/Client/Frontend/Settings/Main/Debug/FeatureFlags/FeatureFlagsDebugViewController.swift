@@ -130,6 +130,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageTrackerBlockerModule,
+                titleText: format(string: "Homepage Tracker Blocker Module"),
+                statusText: format(string: "Toggle homepage Tracker Blocker module")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .hostedSummarizer,
                 titleText: format(string: "Hosted Summarizer Feature"),
                 statusText: format(string: "Toggle to enable the hosted summarizer feature")

@@ -1,0 +1,18 @@
+# The configuration for the homepageTrackerBlockerModuleFeature feature
+features:
+  homepage-tracker-blocker-module-feature:
+    description: >
+      Controls the Tracker Blocker module feature
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true
