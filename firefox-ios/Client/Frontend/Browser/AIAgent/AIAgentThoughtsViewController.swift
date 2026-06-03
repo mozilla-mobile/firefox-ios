@@ -63,6 +63,10 @@ final class AIAgentThoughtsViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     let currentWindowUUID: WindowUUID?
 
+    /// Called when the user dismisses the panel (close button or swipe) so the
+    /// owner can cancel the running agent task.
+    var onUserDismiss: (() -> Void)?
+
     private let prompt: String
     private let snapshot: UIImage
     private let snapshotTopOffset: CGFloat
@@ -119,7 +123,7 @@ final class AIAgentThoughtsViewController: UIViewController, Themeable {
             UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
             for: .normal
         )
-        button.addAction(UIAction(handler: { _ in self?.dismissPanel() }), for: .touchUpInside)
+        button.addAction(UIAction(handler: { _ in self?.userDismiss() }), for: .touchUpInside)
     }
 
     init(prompt: String,
@@ -306,6 +310,14 @@ final class AIAgentThoughtsViewController: UIViewController, Themeable {
         snapshotImageView.image = image
     }
 
+    /// User-initiated dismissal (close button / swipe). Notifies the owner to
+    /// cancel the agent, then animates the panel away.
+    private func userDismiss() {
+        onUserDismiss?()
+        onUserDismiss = nil
+        dismissPanel()
+    }
+
     func dismissPanel() {
         thoughtLabel.stopShimmering()
         snapshotTopConstraint?.constant = snapshotTopOffset
@@ -332,7 +344,7 @@ final class AIAgentThoughtsViewController: UIViewController, Themeable {
         case .ended, .cancelled:
             let velocity = gesture.velocity(in: view).y
             if translation < -UX.dismissTranslationThreshold || velocity < -UX.dismissVelocityThreshold {
-                dismissPanel()
+                userDismiss()
             } else {
                 animateIn()
             }

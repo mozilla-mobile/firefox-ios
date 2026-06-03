@@ -110,6 +110,9 @@ class BrowserViewController: UIViewController,
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     private weak var aiAgentPanel: AIAgentThoughtsViewController?
+    private var aiAgentTask: Task<Void, Never>?
+    private var aiAgentInterceptors: [UIGestureRecognizer] = []
+    private weak var aiAgentInterceptedScrollView: UIScrollView?
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
@@ -2741,6 +2744,7 @@ class BrowserViewController: UIViewController,
                                                   snapshotTopOffset: contentContainer.frame.origin.y,
                                                   windowUUID: windowUUID)
         aiAgentPanel = panel
+        panel.onUserDismiss = { [weak self] in self?.cancelAIAgent() }
         addChild(panel)
         panel.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(panel.view)
@@ -2775,7 +2779,9 @@ class BrowserViewController: UIViewController,
         let tab = context.tab
         let webView = context.webView
         let isWebPage = AIAgentService.isWebPage(webView.url)
-        Task { @MainActor [weak panel, weak self] in
+        installAIAgentInterceptors(on: webView.scrollView)
+        aiAgentTask = Task { @MainActor [weak panel, weak self] in
+            defer { self?.aiAgentTask = nil; self?.removeAIAgentInterceptors() }
             do {
                 if isWebPage {
                     let map = try await WebAgentPerception().extract(on: webView)
@@ -2802,10 +2808,56 @@ class BrowserViewController: UIViewController,
 
                 let final = try await service.run(goal: context.prompt, on: webView)
                 panel?.finish(with: final)
+            } catch is CancellationError {
+                // User interrupted the agent; panel is already being dismissed.
             } catch {
                 self?.logger.log("AI agent run failed", level: .warning, category: .webview)
                 panel?.update(error: error)
             }
+        }
+    }
+
+    /// Cancels a running AI agent (if any) and dismisses its panel. Invoked when
+    /// the user taps/scrolls the page or dismisses the panel.
+    private func cancelAIAgent() {
+        guard aiAgentTask != nil || aiAgentPanel != nil else { return }
+        aiAgentTask?.cancel()
+        aiAgentTask = nil
+        removeAIAgentInterceptors()
+        aiAgentPanel?.dismissPanel()
+        aiAgentPanel = nil
+    }
+
+    private func installAIAgentInterceptors(on scrollView: UIScrollView) {
+        removeAIAgentInterceptors()
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleAIAgentInterrupt))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleAIAgentInterrupt))
+        for recognizer in [pan, tap] as [UIGestureRecognizer] {
+            recognizer.cancelsTouchesInView = false
+            recognizer.delegate = self
+            scrollView.addGestureRecognizer(recognizer)
+            aiAgentInterceptors.append(recognizer)
+        }
+        aiAgentInterceptedScrollView = scrollView
+    }
+
+    private func removeAIAgentInterceptors() {
+        for recognizer in aiAgentInterceptors {
+            aiAgentInterceptedScrollView?.removeGestureRecognizer(recognizer)
+        }
+        aiAgentInterceptors.removeAll()
+        aiAgentInterceptedScrollView = nil
+    }
+
+    @objc
+    private func handleAIAgentInterrupt(_ gesture: UIGestureRecognizer) {
+        guard aiAgentTask != nil else { return }
+        switch gesture {
+        case is UITapGestureRecognizer where gesture.state == .ended,
+             is UIPanGestureRecognizer where gesture.state == .began:
+            cancelAIAgent()
+        default:
+            break
         }
     }
 
@@ -5048,6 +5100,17 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
         _ popoverPresentationController: UIPopoverPresentationController
     ) {
         displayedPopoverController = nil
+    }
+}
+
+extension BrowserViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        // Allow the AI agent interrupt recognizers to coexist with the webview's
+        // own scroll/tap handling so normal browsing keeps working.
+        return aiAgentInterceptors.contains(gestureRecognizer)
     }
 }
 

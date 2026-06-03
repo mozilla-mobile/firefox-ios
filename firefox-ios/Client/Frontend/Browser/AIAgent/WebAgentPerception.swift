@@ -37,7 +37,15 @@ final class WebAgentPerception {
                     continue
                 }
                 let data = try JSONSerialization.data(withJSONObject: raw)
-                return try JSONDecoder().decode(AgentPageMap.self, from: data)
+                let map = try JSONDecoder().decode(AgentPageMap.self, from: data)
+                // A valid-but-empty map usually means the page hasn't rendered
+                // its content yet (slow load / client-side render). Retry rather
+                // than feed the model a blank page.
+                if map.summary.total == 0 && attempt < maxAttempts - 1 {
+                    lastError = WebAgentError.invalidResult
+                    continue
+                }
+                return map
             } catch let error as DecodingError {
                 logger.log("WebAgent perception decode failed", level: .warning, category: .webview)
                 throw WebAgentError.decodingFailed(error)

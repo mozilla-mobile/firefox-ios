@@ -67,7 +67,9 @@ final class AddressToolbarContainerModel: Equatable {
             urlTextFieldPlaceholder: isAIAgentMode ? .AddressToolbar.AIAgentPlaceholder
                                                    : .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
-            searchEngineImage: searchEngineImage,
+            searchEngineImage: isAIAgentMode
+                ? (UIImage(named: StandardImageIdentifiers.Large.summarizer) ?? searchEngineImage)
+                : searchEngineImage,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,

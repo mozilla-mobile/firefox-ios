@@ -107,7 +107,7 @@ func parseDecision(_ raw: String) -> AgentDecision? {
 
 struct GroqClient: AgentLLM, Sendable {
     let apiKey: String
-    let model: String = "llama-3.3-70b-versatile"
+    let model: String = "meta-llama/llama-4-scout-17b-16e-instruct"
     private let logger: Logger
 
     init(apiKey: String, logger: Logger = DefaultLogger.shared) {

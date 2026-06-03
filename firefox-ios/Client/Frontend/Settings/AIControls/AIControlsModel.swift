@@ -18,11 +18,7 @@ class AIControlsModel: ObservableObject,
     @Published var groqAPIKey: String
 
     var showGroqAPIKeySettings: Bool {
-#if DEBUG
         return true
-#else
-        return false
-#endif
     }
 
     let headerLinkInfo = LinkInfo(

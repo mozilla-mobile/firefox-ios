@@ -44,6 +44,7 @@ final class AIAgentService {
         var skipPerception = !AIAgentService.isWebPage(webView.url)
 
         for stepIndex in 0..<maxSteps {
+            try Task.checkCancellation()
             let pageText: String
             let map: AgentPageMap
             let currentURL = webView.url?.absoluteString ?? "(none)"
@@ -71,6 +72,7 @@ final class AIAgentService {
 
             guard let d = decision else { break }
 
+            try Task.checkCancellation()
             let actionLog = try await perform(d, on: webView)
 
             history.append(AgentStepEntry(stepIndex: stepIndex, url: currentURL,
@@ -102,18 +104,35 @@ final class AIAgentService {
                 return "navigate: bad url"
             }
             onNavigate?(url)
-            try? await Task.sleep(nanoseconds: 800_000_000)
+            await waitForPageReady(webView)
             return "navigating to \(urlString)"
         case "search":
             guard let query = d.text, !query.isEmpty else { return "search: no query" }
             onSearch?(query)
-            try? await Task.sleep(nanoseconds: 800_000_000)
+            await waitForPageReady(webView)
             return "searching"
         case "done":
             return "done: \(d.answer ?? "")"
         default:
             return (try? await actor.execute(d, on: webView)) ?? "action failed"
         }
+    }
+
+    /// Waits until the page has actually finished loading (load state + DOM
+    /// readyState) before the next perception, with a hard cap so a never-idle
+    /// page (ads/trackers) can't stall the agent. A short settle delay lets
+    /// client-rendered (SPA) content paint after readyState reports complete.
+    private func waitForPageReady(_ webView: WKWebView,
+                                  timeout: TimeInterval = 8,
+                                  settle: UInt64 = 400_000_000) async {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if Task.isCancelled { return }
+            let readyState = (try? await webView.evaluateJavaScript("document.readyState")) as? String
+            if !webView.isLoading && readyState == "complete" { break }
+            try? await Task.sleep(nanoseconds: 200_000_000)
+        }
+        try? await Task.sleep(nanoseconds: settle)
     }
 
     private func actionDetail(_ d: AgentDecision) -> String {
