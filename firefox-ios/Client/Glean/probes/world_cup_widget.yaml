@@ -117,9 +117,9 @@ world_cup_widget:
       Records when the user taps the "Get custom wallpaper" option in the
       WorldCup widget's more options menu.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15991
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34128
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -129,9 +129,9 @@ world_cup_widget:
       Records when the user taps the "Share" option in the WorldCup widget's
       more options menu to share the schedule.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15991
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34128
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
