@@ -54,8 +54,8 @@ class SceneCoordinator: BaseCoordinator,
         router.setRootViewController(sceneContainer, hideBar: true)
 
         let launchScreenVC: UIViewController
-        if introManager.isModernOnboardingEnabled && introManager.shouldShowIntroScreen {
-            // Show modern launch screen only for first-time users when modern onboarding is enabled
+        if introManager.shouldShowIntroScreen {
+            // Show the launch screen for first-time users
             let onboardingKitVariant = introManager.onboardingKitVariant
             launchScreenVC = ModernLaunchScreenViewController(
                 windowUUID: windowUUID,
@@ -63,7 +63,7 @@ class SceneCoordinator: BaseCoordinator,
                 variant: onboardingKitVariant
             )
         } else {
-            // Use legacy launch screen for returning users or when modern onboarding is disabled
+            // Use the standard launch screen for returning users
             launchScreenVC = LaunchScreenViewController(windowUUID: windowUUID, coordinator: self)
         }
         launchScreenViewController = launchScreenVC
