@@ -63,8 +63,13 @@ final class AIAgentService {
             if decision == nil {
                 (raw, decision) = try await llm.decide(goal: goal, history: history, pageText: pageText)
                 if decision == nil {
-                    let result = AgentStepResult(map: map, raw: raw, decision: nil,
-                                                 actionLog: "parse failed", stepIndex: stepIndex)
+                    let result = AgentStepResult(
+                        map: map,
+                        raw: raw,
+                        decision: nil,
+                        actionLog: "parse failed",
+                        stepIndex: stepIndex
+                    )
                     onStep?(result)
                     return result
                 }
@@ -75,11 +80,21 @@ final class AIAgentService {
             try Task.checkCancellation()
             let actionLog = try await perform(d, on: webView)
 
-            history.append(AgentStepEntry(stepIndex: stepIndex, url: currentURL,
-                                          action: d.action, detail: actionDetail(d), result: actionLog))
+            history.append(AgentStepEntry(
+                stepIndex: stepIndex,
+                url: currentURL,
+                action: d.action,
+                detail: actionDetail(d),
+                result: actionLog
+            ))
 
-            let result = AgentStepResult(map: map, raw: raw, decision: d,
-                                         actionLog: actionLog, stepIndex: stepIndex)
+            let result = AgentStepResult(
+                map: map,
+                raw: raw,
+                decision: d,
+                actionLog: actionLog,
+                stepIndex: stepIndex
+            )
             onStep?(result)
             last = result
 
@@ -154,9 +169,19 @@ final class AIAgentService {
 
     static func emptyPageMap(for url: URL?) -> AgentPageMap {
         let urlStr = url?.absoluteString ?? "(none)"
-        let summary = PageSummary(url: urlStr, title: "Firefox Home", total: 0, visible: 0,
-                                  typeable: 0, clickable: 0, selectable: 0,
-                                  scrollY: 0, atTop: true, atBottom: true, belowFoldCount: 0)
+        let summary = PageSummary(
+            url: urlStr,
+            title: "Firefox Home",
+            total: 0,
+            visible: 0,
+            typeable: 0,
+            clickable: 0,
+            selectable: 0,
+            scrollY: 0,
+            atTop: true,
+            atBottom: true,
+            belowFoldCount: 0
+        )
         return AgentPageMap(pageText: AgentPrompt.emptyPageText, summary: summary, elements: [])
     }
 }

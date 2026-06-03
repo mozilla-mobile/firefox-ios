@@ -16,7 +16,11 @@ final class MockAgentLLM: AgentLLM, @unchecked Sendable {
         self.responses = responses
     }
 
-    func decide(goal: String, history: [AgentStepEntry], pageText: String) async throws -> (raw: String, decision: AgentDecision?) {
+    func decide(
+        goal: String,
+        history: [AgentStepEntry],
+        pageText: String
+    ) async throws -> (raw: String, decision: AgentDecision?) {
         lock.lock()
         defer { lock.unlock() }
         recordedHistories.append(history)
@@ -54,8 +58,15 @@ final class AIAgentServiceTests: XCTestCase {
     }
 
     func testRun_stopsOnGoalComplete() async throws {
-        let done = AgentDecision(thought: "done", action: "done", index: nil, text: nil,
-                                 url: nil, answer: "ok", goalComplete: true)
+        let done = AgentDecision(
+            thought: "done",
+            action: "done",
+            index: nil,
+            text: nil,
+            url: nil,
+            answer: "ok",
+            goalComplete: true
+        )
         let mock = MockAgentLLM(responses: [(raw: "{}", decision: done)])
         let service = AIAgentService(groqAPIKey: "test", maxSteps: 5, llm: mock)
         let webView = WKWebView()
@@ -69,10 +80,24 @@ final class AIAgentServiceTests: XCTestCase {
     }
 
     func testRun_passesHistoryToNextLLMCall() async throws {
-        let step0 = AgentDecision(thought: "search", action: "search", index: nil, text: "cats",
-                                  url: nil, answer: nil, goalComplete: false)
-        let step1 = AgentDecision(thought: "finish", action: "done", index: nil, text: nil,
-                                  url: nil, answer: "done", goalComplete: true)
+        let step0 = AgentDecision(
+            thought: "search",
+            action: "search",
+            index: nil,
+            text: "cats",
+            url: nil,
+            answer: nil,
+            goalComplete: false
+        )
+        let step1 = AgentDecision(
+            thought: "finish",
+            action: "done",
+            index: nil,
+            text: nil,
+            url: nil,
+            answer: "done",
+            goalComplete: true
+        )
         let mock = MockAgentLLM(responses: [
             (raw: "{}", decision: step0),
             (raw: "{}", decision: step1)

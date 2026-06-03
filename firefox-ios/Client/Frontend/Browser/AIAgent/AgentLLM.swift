@@ -6,7 +6,11 @@ import Foundation
 import Common
 
 protocol AgentLLM: Sendable {
-    func decide(goal: String, history: [AgentStepEntry], pageText: String) async throws -> (raw: String, decision: AgentDecision?)
+    func decide(
+        goal: String,
+        history: [AgentStepEntry],
+        pageText: String
+    ) async throws -> (raw: String, decision: AgentDecision?)
 }
 
 enum AgentLLMError: LocalizedError {
@@ -107,7 +111,7 @@ func parseDecision(_ raw: String) -> AgentDecision? {
 
 struct GroqClient: AgentLLM, Sendable {
     let apiKey: String
-    let model: String = "meta-llama/llama-4-scout-17b-16e-instruct"
+    let model = "meta-llama/llama-4-scout-17b-16e-instruct"
     private let logger: Logger
 
     init(apiKey: String, logger: Logger = DefaultLogger.shared) {
@@ -115,7 +119,11 @@ struct GroqClient: AgentLLM, Sendable {
         self.logger = logger
     }
 
-    func decide(goal: String, history: [AgentStepEntry], pageText: String) async throws -> (raw: String, decision: AgentDecision?) {
+    func decide(
+        goal: String,
+        history: [AgentStepEntry],
+        pageText: String
+    ) async throws -> (raw: String, decision: AgentDecision?) {
         guard !apiKey.isEmpty else { throw AgentLLMError.noKey }
 
         let userContent = AgentPrompt.user(goal: goal, history: history, pageText: pageText)
