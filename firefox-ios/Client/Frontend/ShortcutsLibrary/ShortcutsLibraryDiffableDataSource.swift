@@ -45,7 +45,7 @@ final class ShortcutsLibraryDiffableDataSource:
             snapshot.appendItems(shortcuts, toSection: .shortcuts)
         }
 
-        apply(snapshot, animatingDifferences: false)
+        apply(snapshot, animatingDifferences: true)
     }
 
     private func getShortcuts(with state: ShortcutsLibraryState) -> [ShortcutsLibraryDiffableDataSource.Item]? {
