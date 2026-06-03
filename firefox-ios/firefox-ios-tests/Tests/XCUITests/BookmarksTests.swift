@@ -253,6 +253,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
             newTabsScreen.assertSwitchButtonExists()
         }
         toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.assertNewTabButtonExist()
         tabTrayScreen.assertTabCount(2)
         // The selected website is opened in the new tab
         if #available(iOS 26, *) {
@@ -274,6 +275,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // The selected website is opened in a new private tab
         toolbarScreen.tapOnTabsButton()
         tabTrayScreen.switchToPrivateMode()
+        tabTrayScreen.assertNewTabButtonExist()
         tabTrayScreen.assertTabCount(1)
         if #available(iOS 26, *) {
             // To avoid flakiness, this validation will be performed only on iOS 26 and above
