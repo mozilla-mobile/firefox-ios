@@ -47,7 +47,7 @@ final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unche
         task: URLSessionTask,
         willPerformHTTPRedirection response: HTTPURLResponse,
         newRequest request: URLRequest,
-        completionHandler: @escaping (URLRequest?) -> Void
+        completionHandler: @escaping @Sendable (URLRequest?) -> Void
     ) {
         guard let delegate else {
             completionHandler(request)
@@ -269,7 +269,7 @@ final class DefaultTemporaryDocument: NSObject,
         task: URLSessionTask,
         willPerformHTTPRedirection response: HTTPURLResponse,
         newRequest request: URLRequest,
-        completionHandler: @escaping (URLRequest?) -> Void
+        completionHandler: @escaping @Sendable (URLRequest?) -> Void
     ) {
         guard !cookies.isEmpty else {
             completionHandler(request)
