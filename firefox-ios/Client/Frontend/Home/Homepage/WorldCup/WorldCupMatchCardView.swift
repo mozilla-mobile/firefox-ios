@@ -49,6 +49,13 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
                 self?.navigateToTeamSelection()
             }
         )
+        let wallpaperAction = UIAction(
+            title: .WorldCup.HomepageWidget.GetCustomWallpaperLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.image),
+            handler: { [weak self] _ in
+                self?.navigateToWallpaperSettings()
+            }
+        )
         let removeAction = UIAction(
             title: .WorldCup.HomepageWidget.RemoveLabel,
             image: UIImage.templateImageNamed(
@@ -59,7 +66,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
                 self?.dismiss()
             }
         )
-        let menu = UIMenu(children: [changeTeamAction, removeAction])
+        let menu = UIMenu(children: [changeTeamAction, wallpaperAction, removeAction])
         button.menu = menu
         button.showsMenuAsPrimaryAction = true
         button.setImage(
@@ -267,6 +274,16 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
                 navigationDestination: NavigationDestination(.worldCupCountryPicker),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
+
+    func navigateToWallpaperSettings() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.settings(.wallpaper)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnSettingsSection
             )
         )
     }
