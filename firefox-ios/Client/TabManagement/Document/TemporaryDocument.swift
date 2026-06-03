@@ -44,6 +44,26 @@ final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unche
 
     func urlSession(
         _ session: URLSession,
+        task: URLSessionTask,
+        willPerformHTTPRedirection response: HTTPURLResponse,
+        newRequest request: URLRequest,
+        completionHandler: @escaping (URLRequest?) -> Void
+    ) {
+        guard let delegate else {
+            completionHandler(request)
+            return
+        }
+        delegate.urlSession?(
+            session,
+            task: task,
+            willPerformHTTPRedirection: response,
+            newRequest: request,
+            completionHandler: completionHandler
+        )
+    }
+
+    func urlSession(
+        _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
         didWriteData bytesWritten: Int64,
         totalBytesWritten: Int64,
@@ -66,6 +86,7 @@ final class DefaultTemporaryDocument: NSObject,
                                       @unchecked Sendable {
     private let session: URLSession
     private let request: URLRequest
+    private let cookies: [HTTPCookie]
     private var currentDownloadTask: URLSessionDownloadTask?
 
     private var onDownload: ((URL?) -> Void)?
@@ -94,6 +115,7 @@ final class DefaultTemporaryDocument: NSObject,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
+        self.cookies = cookies
         self.filename = filename ?? "unknown"
         self.mimeType = mimeType
         self.session = session
@@ -110,6 +132,7 @@ final class DefaultTemporaryDocument: NSObject,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = request
+        self.cookies = []
         self.filename = preflightResponse.suggestedFilename ?? "unknown"
         self.mimeType = mimeType
         self.session = session
@@ -237,6 +260,24 @@ final class DefaultTemporaryDocument: NSObject,
     deinit {
         guard !shouldRetainTempFile(), let localFileURL else { return }
         try? FileManager.default.removeItem(at: localFileURL)
+    }
+
+    // MARK: - URLSessionTaskDelegate
+
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        willPerformHTTPRedirection response: HTTPURLResponse,
+        newRequest request: URLRequest,
+        completionHandler: @escaping (URLRequest?) -> Void
+    ) {
+        guard !cookies.isEmpty else {
+            completionHandler(request)
+            return
+        }
+        // Re-evaluates cookies against the redirect destination so the `Cookie` header
+        // originally constructed is not forwarded incorrectly for a cross-origin redirect
+        completionHandler(Self.applyCookiesToRequest(request, cookies: cookies))
     }
 
     // MARK: - URLSessionDownloadDelegate
