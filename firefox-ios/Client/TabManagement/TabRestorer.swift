@@ -31,14 +31,14 @@ final class DefaultTabRestorer: TabRestorer {
         delegate: TabRestorerDelegate,
         tabDataStore: TabDataStore,
         shouldClearPrivateTabs: Bool,
-        uuid: ReservedWindowUUID,
+        windowIsNew: Bool,
         logger: Logger = DefaultLogger.shared
     ) {
         self.delegate = delegate
         self.tabDataStore = tabDataStore
         self.shouldClearPrivateTabs = shouldClearPrivateTabs
         self.logger = logger
-        self.windowIsNew = uuid.isNew
+        self.windowIsNew = windowIsNew
     }
 
     func restoreTabs(for windowUUID: WindowUUID) async -> TabRestorationResult {

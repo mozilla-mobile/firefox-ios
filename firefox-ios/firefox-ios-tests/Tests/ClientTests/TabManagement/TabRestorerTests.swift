@@ -168,7 +168,7 @@ final class TabRestorerTests: XCTestCase {
             delegate: mockDelegate,
             tabDataStore: mockDataStore,
             shouldClearPrivateTabs: shouldClearPrivateTabs,
-            uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: isNew)
+            windowIsNew: isNew
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
