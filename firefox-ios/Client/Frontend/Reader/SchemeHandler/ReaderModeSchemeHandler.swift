@@ -54,12 +54,16 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
         return provider.isEnabled(.customReaderModeScheme) ? baseURL : WebServer.sharedInstance.baseReaderModeURL()
     }
 
+    @MainActor static var isCustomSchemeEnabled: Bool {
+        let provider: FeatureFlagProviding = AppContainer.shared.resolve()
+        return provider.isEnabled(.customReaderModeScheme)
+    }
+
     private let normalRouter: TinyRouter
     private let privateRouter: TinyRouter
     private let logger: Logger
     private var requestTasks = [ObjectIdentifier: Task<Void, Never>]()
 
-    // Weak to prevent circular reference
     private weak let tabManager: TabManager?
 
     init(profile: Profile,

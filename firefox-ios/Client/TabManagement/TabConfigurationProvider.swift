@@ -57,13 +57,14 @@ class TabConfigurationProvider {
         let engineConfiguration =  configurationProvider.createConfiguration(parameters: parameters)
 
         // register the reader mode scheme handler alongside the internal:// one
-        // there is probably a better place to do this
-        let webViewConfig = engineConfiguration.webViewConfiguration
-        if webViewConfig.urlSchemeHandler(forURLScheme: ReaderModeSchemeHandler.scheme) == nil {
-            webViewConfig.setURLSchemeHandler(
-                ReaderModeSchemeHandler(profile: profile, tabManager: self.tabManager ?? nil),
-                forURLScheme: ReaderModeSchemeHandler.scheme
-            )
+        if ReaderModeSchemeHandler.isCustomSchemeEnabled {
+            let webViewConfig = engineConfiguration.webViewConfiguration
+            if webViewConfig.urlSchemeHandler(forURLScheme: ReaderModeSchemeHandler.scheme) == nil {
+                webViewConfig.setURLSchemeHandler(
+                    ReaderModeSchemeHandler(profile: profile, tabManager: self.tabManager ?? nil),
+                    forURLScheme: ReaderModeSchemeHandler.scheme
+                )
+            }
         }
         return engineConfiguration
     }
