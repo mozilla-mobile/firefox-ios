@@ -25,21 +25,25 @@ final class DefaultTabRestorer: TabRestorer {
     private let tabDataStore: TabDataStore
     private let shouldClearPrivateTabs: Bool
     private let logger: Logger
+    private let windowIsNew: Bool
 
     init(
         delegate: TabRestorerDelegate,
         tabDataStore: TabDataStore,
         shouldClearPrivateTabs: Bool,
+        uuid: ReservedWindowUUID,
         logger: Logger = DefaultLogger.shared
     ) {
         self.delegate = delegate
         self.tabDataStore = tabDataStore
         self.shouldClearPrivateTabs = shouldClearPrivateTabs
         self.logger = logger
+        self.windowIsNew = uuid.isNew
     }
 
     func restoreTabs(for windowUUID: WindowUUID) async -> TabRestorationResult {
-        let windowData = await tabDataStore.fetchWindowData(uuid: windowUUID)
+        // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
+        let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
         return buildResult(from: windowData, windowUUID: windowUUID)
     }
 
@@ -67,8 +71,13 @@ final class DefaultTabRestorer: TabRestorer {
             if windowData.activeTabId == tabData.id {
                 selectedTabUUID = tab.tabUUID
             }
-            delegate?.restoreScreenshot(for: tab)
+            // TODO: FXIOS-15981 - Implement TabRestorer logic for screenshots
+            // delegate?.restoreScreenshot(for: tab)
         }
+
+        logger.log("There was \(filteredTabData.count) tabs restored",
+                   level: .debug,
+                   category: .tabs)
 
         return TabRestorationResult(
             restoredTabs: restoredTabs,

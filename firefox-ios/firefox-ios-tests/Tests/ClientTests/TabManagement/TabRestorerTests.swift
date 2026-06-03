@@ -83,19 +83,6 @@ final class TabRestorerTests: XCTestCase {
         XCTAssertEqual(result.selectedTabUUID, activeTabId.uuidString)
     }
 
-    func testRestoreTabs_callsRestoreScreenshot_forEachRestoredTab() async {
-        mockDataStore.fetchTabWindowData = WindowData(
-            id: UUID(),
-            activeTabId: UUID(),
-            tabData: [makeTabData(), makeTabData()]
-        )
-        let subject = createSubject()
-
-        await subject.restoreTabs(for: .XCTestDefaultUUID)
-
-        XCTAssertEqual(mockDelegate.screenshotRestoredTabs.count, 2)
-    }
-
     func testRestoreTabs_keepsPrivateTabs_whenClearPrivateTabsIsDisabled() async {
         mockDataStore.fetchTabWindowData = WindowData(
             id: UUID(),
@@ -109,15 +96,47 @@ final class TabRestorerTests: XCTestCase {
         XCTAssertEqual(result.restoredTabs.count, 3)
     }
 
+    func testRestoreTabs_skipsDataStoreFetch_whenWindowIsNew() async {
+        mockDataStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: UUID(),
+            tabData: [makeTabData(), makeTabData()]
+        )
+        let subject = createSubject(isNew: true)
+
+        let result = await subject.restoreTabs(for: .XCTestDefaultUUID)
+
+        XCTAssertEqual(mockDataStore.fetchWindowDataCalledCount, 0)
+        XCTAssertTrue(result.restoredTabs.isEmpty)
+        XCTAssertNil(result.selectedTabUUID)
+        XCTAssertEqual(result.windowUUID, WindowUUID.XCTestDefaultUUID)
+    }
+
+    func testRestoreTabs_fetchesFromDataStore_whenWindowIsNotNew() async {
+        mockDataStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: UUID(),
+            tabData: [makeTabData()]
+        )
+        let subject = createSubject(isNew: false)
+
+        let result = await subject.restoreTabs(for: .XCTestDefaultUUID)
+
+        XCTAssertEqual(mockDataStore.fetchWindowDataCalledCount, 1)
+        XCTAssertEqual(result.restoredTabs.count, 1)
+    }
+
     // MARK: - Helpers
 
     private func createSubject(shouldClearPrivateTabs: Bool = true,
+                               isNew: Bool = false,
                                file: StaticString = #filePath,
                                line: UInt = #line) -> DefaultTabRestorer {
         let subject = DefaultTabRestorer(
             delegate: mockDelegate,
             tabDataStore: mockDataStore,
-            shouldClearPrivateTabs: shouldClearPrivateTabs
+            shouldClearPrivateTabs: shouldClearPrivateTabs,
+            uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: isNew)
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
@@ -132,7 +151,7 @@ final class TabRestorerTests: XCTestCase {
             isPrivate: isPrivate,
             lastUsedTime: Date(),
             createdAtTime: Date(),
-            temporaryDocumentSession: nil
+            temporaryDocumentSession: [:]
         )
     }
 }
