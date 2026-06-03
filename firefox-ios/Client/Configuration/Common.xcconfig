@@ -34,3 +34,6 @@ DYLIB_COMPATIBILITY_VERSION = 1;
 DYLIB_CURRENT_VERSION = 1;
 DYLIB_INSTALL_NAME_BASE = @rpath
 PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.$(PRODUCT_NAME)
+// Disable macro validation (so we can use SPM to add macro packages). Explicitly enable each macro.
+MACRO_VALIDATION_ENABLED = NO
+ENABLED_MACROS = ModifiedCopyMacros
