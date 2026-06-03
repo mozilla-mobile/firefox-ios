@@ -42,6 +42,19 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
     }
 
     private lazy var moreOptionsButton: UIButton = .build { button in
+        button.menu = self.makeMoreOptionsMenu()
+        button.showsMenuAsPrimaryAction = true
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.moreHorizontalRound)?
+                .withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        button.accessibilityLabel = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
+        button.largeContentTitle = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    private func makeMoreOptionsMenu() -> UIMenu {
         let changeTeamAction = UIAction(
             title: .WorldCup.HomepageWidget.ChangeTeamLabel,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.soccerBall),
@@ -65,25 +78,13 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
         )
         let removeAction = UIAction(
             title: .WorldCup.HomepageWidget.RemoveLabel,
-            image: UIImage.templateImageNamed(
-                StandardImageIdentifiers.Large.cross
-            ),
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
             attributes: .destructive,
             handler: { [weak self] _ in
                 self?.dismiss()
             }
         )
-        let menu = UIMenu(children: [changeTeamAction, wallpaperAction, shareAction, removeAction])
-        button.menu = menu
-        button.showsMenuAsPrimaryAction = true
-        button.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.moreHorizontalRound)?
-                .withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
-        button.accessibilityLabel = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
-        button.largeContentTitle = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
-        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return UIMenu(children: [changeTeamAction, wallpaperAction, shareAction, removeAction])
     }
 
     private lazy var liveLabel: UILabel = .build { label in
@@ -321,9 +322,10 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
     func shareSchedule() {
         let query = "\(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) schedule"
         guard let url = searchEnginesManager.defaultEngine?.searchURLForQuery(query) else { return }
+        let shareTitle = "\(String.WorldCup.HomepageWidget.FollowTeamCard.Title) 🦊⚽️"
         let configuration = ShareSheetConfiguration(
             shareType: .site(url: url),
-            shareMessage: nil,
+            shareMessage: ShareMessage(message: shareTitle, subtitle: nil),
             sourceView: moreOptionsButton,
             sourceRect: nil,
             toastContainer: self,
