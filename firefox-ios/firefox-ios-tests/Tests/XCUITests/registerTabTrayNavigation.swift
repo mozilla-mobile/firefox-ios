@@ -92,9 +92,7 @@ func registerTabTrayNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
 
         screenState.onEnter { userState in
             let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
-            let exists = NSPredicate(format: "exists == true")
-            let expectation = XCTNSPredicateExpectation(predicate: exists, object: app.otherElements[tabsTray])
-            let _ = XCTWaiter().wait(for: [expectation], timeout: 5) // swiftlint:disable:this redundant_discardable_let
+            app.otherElements[tabsTray].mozWaitForElementToExist(timeout: 5, failOnTimeout: false)
             userState.numTabs = Int(app.otherElements[tabsTray].cells.count)
         }
     }

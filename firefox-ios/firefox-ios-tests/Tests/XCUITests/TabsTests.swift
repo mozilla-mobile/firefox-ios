@@ -510,7 +510,7 @@ fileprivate extension BaseTestCase {
 
     func closeExperimentTabTrayView(goBackToBrowserTab: String) {
         let tabCell = app.cells.containing(NSPredicate(format: "label CONTAINS %@", goBackToBrowserTab)).firstMatch
-        XCTAssertTrue(tabCell.waitForExistence(timeout: 5))
+        XCTAssertTrue(tabCell.mozWaitForElementToExist(timeout: 5, failOnTimeout: false))
         tabCell.tap()
         navigator.nowAt(BrowserTab)
     }
