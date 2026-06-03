@@ -540,112 +540,137 @@ struct NovaElementStageView: View {
 
     var body: some View {
         Form {
-            Section {
-                ElementStageRepresentable(element: element, config: config)
-                    .frame(height: 340)
-                    .listRowInsets(EdgeInsets())
-            } footer: {
-                Text(verbatim: "Drag isn't needed — tweak below and watch this element only. Switch backdrops to see the tint over different content.")
-            }
-
-            Section {
-                Picker("Appearance", selection: $appearance) {
-                    Text(verbatim: "Light").tag(ThemeType.light)
-                    Text(verbatim: "Dark").tag(ThemeType.dark)
-                }
-                .pickerStyle(.segmented)
-                Picker("Backdrop", selection: $backdrop) {
-                    ForEach(NovaBackdrop.allCases) { Text($0.rawValue).tag($0) }
-                }
-                if backdrop == .solid {
-                    novaColorRow("Solid color", $solidColor)
-                }
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(verbatim: "Nova gradients")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 10) {
-                            ForEach(NovaGradients.all) { spec in
-                                gradientSwatch(spec)
-                            }
-                        }
-                        .padding(.vertical, 2)
-                    }
-                }
-            } header: {
-                Text(verbatim: "Context")
-            } footer: {
-                Text(verbatim: "Tap a gradient to use it as the backdrop behind the glass (a glass tint itself is a single color, not a gradient).")
-            }
-
-            Section {
-                NavigationLink {
-                    NovaTintPickerView(tintToken: $tintToken, customColor: $customColor, appearance: appearance)
-                } label: {
-                    HStack {
-                        Text(verbatim: "Tint")
-                        Spacer()
-                        Text(verbatim: tintToken == Self.customTintKey ? "Custom" : tintToken)
-                            .font(.system(.footnote, design: .monospaced))
-                            .foregroundColor(.secondary)
-                        Circle()
-                            .fill(Color(uiColor: baseTint))
-                            .frame(width: 26, height: 26)
-                            .overlay(Circle().stroke(Color.secondary.opacity(0.3), lineWidth: 1))
-                    }
-                }
-                HStack {
-                    Text(verbatim: "Resolved")
-                    Spacer()
-                    Text(verbatim: NovaColor.hexString(resolvedTint))
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundColor(.secondary)
-                        .textSelection(.enabled)
-                }
-                VStack(alignment: .leading) {
-                    Text(verbatim: "Tint strength: \(String(format: "%.2f", strength))")
-                    Slider(value: $strength, in: 0...1)
-                }
-                Picker("Style", selection: $clearGlass) {
-                    Text(verbatim: "Regular").tag(false)
-                    Text(verbatim: "Clear").tag(true)
-                }
-                .pickerStyle(.segmented)
-                Toggle("Interactive", isOn: $interactive)
-                Button("Reset to Nova default") {
-                    tintToken = element.defaultTintToken
-                    strength = 0.5
-                    clearGlass = false
-                    contentColorEnabled = false
-                }
-                Button(didCopy ? "Copied ✓" : "Copy config") {
-                    UIPasteboard.general.string = configSummary()
-                    didCopy = true
-                    Task {
-                        try? await Task.sleep(nanoseconds: 1_500_000_000)
-                        didCopy = false
-                    }
-                }
-            } header: {
-                Text(verbatim: "Glass tint")
-            } footer: {
-                Text(verbatim: "Pick a Nova token as the tint (appearance-aware), or Custom for any color. Strength is the alpha of the wash — the real toolbar uses layer1 at ~50%.")
-            }
-
-            Section {
-                Toggle("Override content color", isOn: $contentColorEnabled)
-                if contentColorEnabled {
-                    novaColorRow("Content color", $contentColor)
-                }
-            } header: {
-                Text(verbatim: "Content (icon / text)")
-            } footer: {
-                Text(verbatim: "Forces the icon / label color on this element so you can check glyph contrast against the glass tint. Off = the Nova default for the appearance.")
-            }
+            previewSection
+            contextSection
+            glassTintSection
+            contentColorSection
         }
         .navigationTitle(element.rawValue)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder private var previewSection: some View {
+        Section {
+            ElementStageRepresentable(element: element, config: config)
+                .frame(height: 340)
+                .listRowInsets(EdgeInsets())
+        } footer: {
+            Text(verbatim: "Drag isn't needed — tweak below and watch this element only. Switch backdrops to see the tint over different content.")
+        }
+    }
+
+    @ViewBuilder private var contextSection: some View {
+        Section {
+            Picker("Appearance", selection: $appearance) {
+                Text(verbatim: "Light").tag(ThemeType.light)
+                Text(verbatim: "Dark").tag(ThemeType.dark)
+            }
+            .pickerStyle(.segmented)
+            Picker("Backdrop", selection: $backdrop) {
+                ForEach(NovaBackdrop.allCases) { Text($0.rawValue).tag($0) }
+            }
+            if backdrop == .solid {
+                novaColorRow("Solid color", $solidColor)
+            }
+            VStack(alignment: .leading, spacing: 6) {
+                Text(verbatim: "Nova gradients")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(NovaGradients.all) { spec in
+                            gradientSwatch(spec)
+                        }
+                    }
+                    .padding(.vertical, 2)
+                }
+            }
+        } header: {
+            Text(verbatim: "Context")
+        } footer: {
+            Text(verbatim: "Tap a gradient to use it as the backdrop behind the glass (a glass tint itself is a single color, not a gradient).")
+        }
+    }
+
+    @ViewBuilder private var glassTintSection: some View {
+        Section {
+            tintLinkRow
+            HStack {
+                Text(verbatim: "Resolved")
+                Spacer()
+                Text(verbatim: NovaColor.hexString(resolvedTint))
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundColor(.secondary)
+                    .textSelection(.enabled)
+            }
+            VStack(alignment: .leading) {
+                Text(verbatim: "Tint strength: \(String(format: "%.2f", strength))")
+                Slider(value: $strength, in: 0...1)
+            }
+            Picker("Style", selection: $clearGlass) {
+                Text(verbatim: "Regular").tag(false)
+                Text(verbatim: "Clear").tag(true)
+            }
+            .pickerStyle(.segmented)
+            Toggle("Interactive", isOn: $interactive)
+            resetButton
+            copyButton
+        } header: {
+            Text(verbatim: "Glass tint")
+        } footer: {
+            Text(verbatim: "Pick a Nova token as the tint (appearance-aware), or Custom for any color. Strength is the alpha of the wash — the real toolbar uses layer1 at ~50%.")
+        }
+    }
+
+    @ViewBuilder private var tintLinkRow: some View {
+        NavigationLink {
+            NovaTintPickerView(tintToken: $tintToken, customColor: $customColor, appearance: appearance)
+        } label: {
+            HStack {
+                Text(verbatim: "Tint")
+                Spacer()
+                Text(verbatim: tintToken == Self.customTintKey ? "Custom" : tintToken)
+                    .font(.system(.footnote, design: .monospaced))
+                    .foregroundColor(.secondary)
+                Circle()
+                    .fill(Color(uiColor: baseTint))
+                    .frame(width: 26, height: 26)
+                    .overlay(Circle().stroke(Color.secondary.opacity(0.3), lineWidth: 1))
+            }
+        }
+    }
+
+    private var resetButton: some View {
+        Button("Reset to Nova default") {
+            tintToken = element.defaultTintToken
+            strength = 0.5
+            clearGlass = false
+            contentColorEnabled = false
+        }
+    }
+
+    private var copyButton: some View {
+        Button(didCopy ? "Copied ✓" : "Copy config") {
+            UIPasteboard.general.string = configSummary()
+            didCopy = true
+            Task {
+                try? await Task.sleep(nanoseconds: 1_500_000_000)
+                didCopy = false
+            }
+        }
+    }
+
+    @ViewBuilder private var contentColorSection: some View {
+        Section {
+            Toggle("Override content color", isOn: $contentColorEnabled)
+            if contentColorEnabled {
+                novaColorRow("Content color", $contentColor)
+            }
+        } header: {
+            Text(verbatim: "Content (icon / text)")
+        } footer: {
+            Text(verbatim: "Forces the icon / label color on this element so you can check glyph contrast against the glass tint. Off = the Nova default for the appearance.")
+        }
     }
 }
 
@@ -681,44 +706,56 @@ struct NovaTintPickerView: View {
             .pickerStyle(.segmented)
 
             if mode == .nova {
-                Section {
-                    LazyVGrid(columns: columns, spacing: 14) {
-                        ForEach(NovaElementStageView.tintTokenOptions, id: \.self) { key in
-                            Button {
-                                tintToken = key
-                                dismiss()
-                            } label: {
-                                VStack(spacing: 4) {
-                                    Circle()
-                                        .fill(Color(uiColor: NovaPalette.tokens(for: appearance)[key] ?? .clear))
-                                        .frame(width: 46, height: 46)
-                                        .overlay(Circle().stroke(tintToken == key ? Color.accentColor : Color.secondary.opacity(0.3),
-                                                                 lineWidth: tintToken == key ? 3 : 1))
-                                    Text(verbatim: key)
-                                        .font(.caption2)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.6)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.vertical, 8)
-                } footer: {
-                    Text(verbatim: "Nova tokens shown for the \(appearance == .dark ? "dark" : "light") appearance.")
-                }
+                novaSection
             } else {
-                Section {
-                    ColorPicker("Custom color", selection: Binding(
-                        get: { customColor },
-                        set: { customColor = $0; tintToken = NovaElementStageView.customTintKey }
-                    ), supportsOpacity: false)
-                }
+                customSection
             }
         }
         .navigationTitle("Glass tint")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder private var novaSection: some View {
+        Section {
+            LazyVGrid(columns: columns, spacing: 14) {
+                ForEach(NovaElementStageView.tintTokenOptions, id: \.self) { key in
+                    tokenButton(key)
+                }
+            }
+            .padding(.vertical, 8)
+        } footer: {
+            Text(verbatim: "Nova tokens shown for the \(appearance == .dark ? "dark" : "light") appearance.")
+        }
+    }
+
+    private func tokenButton(_ key: String) -> some View {
+        Button {
+            tintToken = key
+            dismiss()
+        } label: {
+            VStack(spacing: 4) {
+                Circle()
+                    .fill(Color(uiColor: NovaPalette.tokens(for: appearance)[key] ?? .clear))
+                    .frame(width: 46, height: 46)
+                    .overlay(Circle().stroke(tintToken == key ? Color.accentColor : Color.secondary.opacity(0.3),
+                                             lineWidth: tintToken == key ? 3 : 1))
+                Text(verbatim: key)
+                    .font(.caption2)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    @ViewBuilder private var customSection: some View {
+        Section {
+            ColorPicker("Custom color", selection: Binding(
+                get: { customColor },
+                set: { customColor = $0; tintToken = NovaElementStageView.customTintKey }
+            ), supportsOpacity: false)
+        }
     }
 }
 
@@ -747,40 +784,52 @@ struct NovaColorChooserView: View {
             .pickerStyle(.segmented)
 
             if mode == .nova {
-                Section {
-                    LazyVGrid(columns: columns, spacing: 14) {
-                        ForEach(NovaElementStageView.tintTokenOptions, id: \.self) { key in
-                            Button {
-                                if let color = NovaPalette.tokens(for: appearance)[key] {
-                                    selection = Color(uiColor: color)
-                                }
-                                dismiss()
-                            } label: {
-                                VStack(spacing: 4) {
-                                    Circle()
-                                        .fill(Color(uiColor: NovaPalette.tokens(for: appearance)[key] ?? .clear))
-                                        .frame(width: 46, height: 46)
-                                        .overlay(Circle().stroke(Color.secondary.opacity(0.3), lineWidth: 1))
-                                    Text(verbatim: key)
-                                        .font(.caption2)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.6)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.vertical, 8)
-                }
+                novaSection
             } else {
-                Section {
-                    ColorPicker("Custom color", selection: $selection, supportsOpacity: false)
-                }
+                customSection
             }
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder private var novaSection: some View {
+        Section {
+            LazyVGrid(columns: columns, spacing: 14) {
+                ForEach(NovaElementStageView.tintTokenOptions, id: \.self) { key in
+                    tokenButton(key)
+                }
+            }
+            .padding(.vertical, 8)
+        }
+    }
+
+    private func tokenButton(_ key: String) -> some View {
+        Button {
+            if let color = NovaPalette.tokens(for: appearance)[key] {
+                selection = Color(uiColor: color)
+            }
+            dismiss()
+        } label: {
+            VStack(spacing: 4) {
+                Circle()
+                    .fill(Color(uiColor: NovaPalette.tokens(for: appearance)[key] ?? .clear))
+                    .frame(width: 46, height: 46)
+                    .overlay(Circle().stroke(Color.secondary.opacity(0.3), lineWidth: 1))
+                Text(verbatim: key)
+                    .font(.caption2)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    @ViewBuilder private var customSection: some View {
+        Section {
+            ColorPicker("Custom color", selection: $selection, supportsOpacity: false)
+        }
     }
 }
 
