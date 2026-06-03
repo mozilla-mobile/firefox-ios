@@ -1772,7 +1772,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if tabManager.selectedTab?.isFindInPageMode == false {
+        if tabManager.selectedTab?.isFindInPageMode != true {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -1781,7 +1781,7 @@ class BrowserViewController: UIViewController,
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        if tabManager.selectedTab?.isFindInPageMode == false {
+        if tabManager.selectedTab?.isFindInPageMode != true {
             adjustBottomSearchBarForKeyboard()
         }
     }
