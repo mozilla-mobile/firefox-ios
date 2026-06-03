@@ -1781,9 +1781,7 @@ class BrowserViewController: UIViewController,
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: false)
-        } else {
+        if tabManager.selectedTab?.isFindInPageMode == false {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -5045,6 +5043,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        keyboardState = nil
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
@@ -5064,9 +5063,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        if !isSnapKitRemovalEnabled {
-            updateViewConstraints()
-        } else {
+        // keyboard frame changes that don't fire willShow/willHide like (find-in-page
+        // dismissal, accessory view toggle, interactive scroll-to-dismiss). Removing the calls to update layout
+        // leaves the keyboard spacer stale and combined with a stale scrollAlpha == 0 leaves the toolbar with extra space
+        if isSnapKitRemovalEnabled {
             updateConstraintsForKeyboard()
             updateBottomContentStackViewConstraints()
         }
