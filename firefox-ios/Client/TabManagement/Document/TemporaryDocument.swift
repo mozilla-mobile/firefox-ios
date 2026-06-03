@@ -121,7 +121,7 @@ final class DefaultTemporaryDocument: NSObject,
     /// Returns a modified request with Cookies header field
     private static func applyCookiesToRequest(_ request: URLRequest, cookies: [HTTPCookie]) -> URLRequest {
         var rawHeaderCookies = cookies.reduce("") { partialResult, cookie in
-            if let domain = request.url?.baseDomain, cookie.domain.contains(domain) {
+            if let url = request.url, cookieDomainMatches(cookie, url: url) {
                 return partialResult.appending("\(cookie.name)=\(cookie.value); ")
             }
             return partialResult
@@ -136,6 +136,22 @@ final class DefaultTemporaryDocument: NSObject,
         request.allHTTPHeaderFields = headers
 
         return request
+    }
+
+    /// Cookies match when request host is identical to domain (host-only cookie) or is a subdomain (domain-scoped cookie).
+    static func cookieDomainMatches(_ cookie: HTTPCookie, url: URL) -> Bool {
+        guard let host = url.host?.lowercased() else { return false }
+        let cookieDomain = cookie.domain.lowercased()
+        if cookieDomain.hasPrefix(".") {
+            // Domain-scoped cookie (explicit Domain attribute) then subdomain matching allowed
+            let domain = String(cookieDomain.dropFirst())
+            guard !domain.isEmpty else { return false }
+            return host == domain || host.hasSuffix("." + domain)
+        }
+        // If Host-only cookie (no Domain attribute, no leading dot)
+        // then according to RFC 6265 Section 5.4: identical match only
+        // See: https://www.rfc-editor.org/info/rfc6265/#section-5.4
+        return host == cookieDomain
     }
 
     func canDownload(request: URLRequest) -> Bool {
