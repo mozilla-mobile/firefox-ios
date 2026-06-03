@@ -20,6 +20,7 @@ class NativeErrorPageHelper {
         static let hostnameDescriptionMarker = "hostname"
     }
     private static let certErrorsMapping = CertErrorsMapping()
+    typealias NativeGeckoCode = CertErrorsMapping.GeckoCode
     /// Holds the parsed certificate details extracted from an NSError.
     struct CertDetails {
         let failingURL: URL
@@ -187,7 +188,6 @@ class NativeErrorPageHelper {
     }
 
     // MARK: - Private
-    typealias NativeGeckoCode = CertErrorsMapping.GeckoCode
     /// Builds certificate-specific query items (cert error name and encoded certificate)
     /// from the given NSError for inclusion in an error page URL.
     private static func buildCertificateQueryItems(for error: NSError) -> [URLQueryItem] {
