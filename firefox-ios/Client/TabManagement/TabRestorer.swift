@@ -75,7 +75,7 @@ final class DefaultTabRestorer: TabRestorer {
             // delegate?.restoreScreenshot(for: tab)
         }
 
-        logger.log("There was \(filteredTabData.count) tabs restored",
+        logger.log("There were \(filteredTabData.count) tabs restored",
                    level: .debug,
                    category: .tabs)
 
