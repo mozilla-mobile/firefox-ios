@@ -798,9 +798,6 @@ workflows:
 
             # Skip validation for Swift macros
             defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
-
-            # Skip validation for Swift Package plugins
-            defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
   Detect_warnings:
     steps:
     - script@1:
