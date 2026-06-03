@@ -14,16 +14,20 @@ struct HeaderState: StateType, Equatable, Hashable {
     var isPrivate: Bool
     var showiPadSetup: Bool
     var showQuickAnswersButton: Bool
+    var isWorldCupSectionEnabled: Bool
 
     init(
         windowUUID: WindowUUID,
         isPrivate: Bool = false,
+        worldCupStore: WorldCupStoreProtocol = WorldCupStore()
     ) {
+        let isWorldCupSectionEnabled = isPrivate ? false : worldCupStore.isFeatureEnabledAndSectionEnabled
         self.init(
             windowUUID: windowUUID,
             isPrivate: isPrivate,
             showiPadSetup: false,
-            showQuickAnswersButton: false
+            showQuickAnswersButton: false,
+            isWorldCupSectionEnabled: isWorldCupSectionEnabled
         )
     }
 
@@ -31,12 +35,14 @@ struct HeaderState: StateType, Equatable, Hashable {
         windowUUID: WindowUUID,
         isPrivate: Bool,
         showiPadSetup: Bool,
-        showQuickAnswersButton: Bool
+        showQuickAnswersButton: Bool,
+        isWorldCupSectionEnabled: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
         self.showiPadSetup = showiPadSetup
         self.showQuickAnswersButton = showQuickAnswersButton
+        self.isWorldCupSectionEnabled = isWorldCupSectionEnabled
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -53,6 +59,8 @@ struct HeaderState: StateType, Equatable, Hashable {
         case HomepageActionType.traitCollectionDidChange,
              HomepageActionType.viewWillAppear:
             return handleTraitCollectionDidChangeAction(for: state, with: action)
+        case WorldCupMiddlewareActionType.didUpdate:
+            return handleWorldCupAction(for: state, with: action)
         default:
             return defaultState(from: state)
         }
@@ -78,6 +86,15 @@ struct HeaderState: StateType, Equatable, Hashable {
         }
         return state.copyWithUpdates(
             showQuickAnswersButton: showQuickAnswers,
+        )
+    }
+
+    private static func handleWorldCupAction(for state: HeaderState, with action: Action) -> HeaderState {
+        guard let worldCupAction = action as? WorldCupAction else {
+            return defaultState(from: state)
+        }
+        return state.copyWithUpdates(
+            isWorldCupSectionEnabled: worldCupAction.shouldShowHomepageWorldCupSection
         )
     }
 

@@ -118,6 +118,9 @@
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
 "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "Spojení není zabezpečené";
 
+/* On the main menu, at the top, title for a badge that opens site protection settings. */
+"MainMenu.SiteProtection.Protections.Title.v153" = "Ochrany";
+
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
 "MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "Ochrana je VYPNUTA";
 

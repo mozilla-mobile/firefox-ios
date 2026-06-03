@@ -51,6 +51,10 @@ final class NewTabsScreen {
         sel.SWITCH_BUTTON.element(in: app).waitAndTap()
     }
 
+    func assertSwitchButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.SWITCH_BUTTON.element(in: app), timeout: timeout)
+    }
+
     func assertIconsExistInCells(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(
             sel.ICON_PLUS_IN_CELLS.element(in: app),

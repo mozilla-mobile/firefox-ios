@@ -46,6 +46,15 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Zadejte hledání nebo adresu";
 
+/* The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153" = "Uložit";
+
+/* The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut. */
+"FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153" = "Přidat zkratku";
+
+/* The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153" = "Adresa webové stránky";
+
 /* This is the navigation title for the Shortcuts Library view */
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "Zkratky";
 

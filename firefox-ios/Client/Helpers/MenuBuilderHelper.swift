@@ -32,7 +32,7 @@ class MenuBuilderHelper {
                     title: .AppSettingsTitle,
                     action: #selector(BrowserViewController.openSettingsKeyCommand),
                     input: ",",
-                    modifierFlags: .command,
+                    modifierFlags: [.command, .alternate],
                     discoverabilityTitle: .AppSettingsTitle
                 )
             ]

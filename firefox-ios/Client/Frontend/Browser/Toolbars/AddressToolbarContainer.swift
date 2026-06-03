@@ -120,6 +120,9 @@ final class AddressToolbarContainer: UIView,
     private var addNewTabTopConstraint: NSLayoutConstraint?
     private var addNewTabBottomConstraint: NSLayoutConstraint?
 
+    private var toolbarLeadingConstraint: NSLayoutConstraint?
+    private var toolbarTrailingConstraint: NSLayoutConstraint?
+
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
@@ -259,6 +262,11 @@ final class AddressToolbarContainer: UIView,
             return
         }
 
+        if leftSkeletonAddressBar.superview == nil {
+            applyBottomLayoutConstraints()
+            setupSkeletonAddressBarsLayout(isBottomSearchBar: true)
+        }
+
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
@@ -268,6 +276,34 @@ final class AddressToolbarContainer: UIView,
         configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
         leftSkeletonAddressBar.isHidden = previousTab == nil
         rightSkeletonAddressBar.isHidden = forwardTab == nil
+    }
+
+    private func applyBottomLayoutConstraints() {
+        insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
+        insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
+
+        toolbarLeadingConstraint?.isActive = false
+        toolbarTrailingConstraint?.isActive = false
+
+        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor)
+        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor)
+
+        toolbarLeadingConstraint?.isActive = true
+        toolbarTrailingConstraint?.isActive = true
+    }
+
+    private func applyTopLayoutConstraints() {
+        leftSkeletonAddressBar.removeFromSuperview()
+        rightSkeletonAddressBar.removeFromSuperview()
+
+        toolbarLeadingConstraint?.isActive = false
+        toolbarTrailingConstraint?.isActive = false
+
+        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(equalTo: leadingAnchor)
+        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
+
+        toolbarLeadingConstraint?.isActive = true
+        toolbarTrailingConstraint?.isActive = true
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -424,14 +460,9 @@ final class AddressToolbarContainer: UIView,
     private func setupToolbarConstraints(isBottomSearchBar: Bool) {
         addSubview(toolbar)
         if toolbarHelper.isSwipingTabsEnabled && isBottomSearchBar {
-            insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
-            insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
-
-            toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor).isActive = true
-            toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor).isActive = true
+            applyBottomLayoutConstraints()
         } else {
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+            applyTopLayoutConstraints()
         }
 
         NSLayoutConstraint.activate([

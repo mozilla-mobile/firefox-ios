@@ -17,7 +17,7 @@
 "About" = "Névjegy";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "Hozzáadás a Parancsokhoz";
+"ActivityStream.ContextMenu.AddToShortcuts" = "Hozzáadás az indítóikonokhoz";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Rögzítés";
@@ -710,7 +710,7 @@
 "Menu.AddBookmark.Label.v99" = "Hozzáadás";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"Menu.AddPin.Confirm2" = "Hozzáadva a Parancsokhoz";
+"Menu.AddPin.Confirm2" = "Hozzáadva az indítóikonokhoz";
 
 /* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
 "Menu.AddReadingList.Label.v99" = "Hozzáadás";
@@ -719,7 +719,7 @@
 "Menu.AddToReadingList.Confirm" = "Hozzáadva az olvasási listához";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
-"Menu.AddToShortcuts.v99" = "Hozzáadás a Parancsokhoz";
+"Menu.AddToShortcuts.v99" = "Hozzáadás az indítóikonokhoz";
 
 /* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Könyvjelzők";
@@ -785,10 +785,10 @@
 "Menu.RemoveBookmark.Label.v99" = "Eltávolítás";
 
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
-"Menu.RemovedFromShortcuts.v99" = "Eltávolítás a Parancsokból";
+"Menu.RemovedFromShortcuts.v99" = "Eltávolítás az indítóikonok közül";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2.v99" = "Eltávolítva a Parancsokból";
+"Menu.RemovePin.Confirm2.v99" = "Eltávolítva az indítóikonok közül";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
 "Menu.RemoveReadingList.Confirm.v99" = "Eltávolítva az olvasási listáról";
@@ -1283,7 +1283,7 @@
 "Settings.Home.Option.RecentlyVisited" = "Nemrég felkeresett";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
-"Settings.Home.Option.Shortcuts" = "Parancsok";
+"Settings.Home.Option.Shortcuts" = "Indítóikonok";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "Kezdőlap négy óra tétlenség után";
@@ -1367,13 +1367,13 @@
 "Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Sorok";
 
 /* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
-"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Parancsok";
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Indítóikonok";
 
 /* This string is the title of the toggle to disable the shortcuts section in the settings page. */
-"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Parancsok";
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Indítóikonok";
 
 /* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
-"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Szponzorált parancsok";
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Szponzorált indítóikonok";
 
 /* Toggled OFF to hide the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOff.v100" = "Ki";

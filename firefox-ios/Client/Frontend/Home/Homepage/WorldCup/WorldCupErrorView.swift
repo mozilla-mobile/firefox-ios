@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-final class WorldCupErrorView: UIView, ThemeApplicable {
+final class WorldCupErrorView: UIView, ThemeApplicable, WorldCupPagerView {
     private struct UX {
         static let horizontalPadding: CGFloat = 16
         static let titleLabelLeadingPadding: CGFloat = 12.0
@@ -25,6 +25,9 @@ final class WorldCupErrorView: UIView, ThemeApplicable {
 
     private let windowUUID: WindowUUID
     private let telemetry = WorldCupTelemetry()
+    var telemetryValue: String? {
+        return "error"
+    }
 
     // MARK: - UI
 

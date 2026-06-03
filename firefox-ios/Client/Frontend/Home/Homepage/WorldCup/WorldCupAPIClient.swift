@@ -23,8 +23,12 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     private let matchesStrategy: WorldCupFetchStrategyProtocol
     private let liveStrategy: WorldCupFetchStrategyProtocol
     private let teamsStrategy: WorldCupFetchStrategyProtocol
+    /// When true, the API client omits the `date` query parameter so the
+    /// mock server picks its own "today".
+    private let usesDevServerTimeline: Bool
 
     init(config: WorldCupConfig = WorldCupAPIClient.emptyConfig,
+         usesDevServerTimeline: Bool = false,
          matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
          liveStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
          teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy()) throws {
@@ -35,6 +39,7 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         self.matchesStrategy = matchesStrategy
         self.liveStrategy = liveStrategy
         self.teamsStrategy = teamsStrategy
+        self.usesDevServerTimeline = usesDevServerTimeline
     }
 
     /// Convenience init that points the FFI at a custom host. Pass `nil` or
@@ -47,6 +52,7 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         let trimmed = baseHost?.trimmingCharacters(in: .whitespacesAndNewlines)
         let host = (trimmed?.isEmpty == false) ? trimmed : nil
         try self.init(config: WorldCupConfig(baseHost: host),
+                      usesDevServerTimeline: host != nil,
                       matchesStrategy: matchesStrategy,
                       liveStrategy: liveStrategy,
                       teamsStrategy: teamsStrategy)
@@ -55,21 +61,21 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     /// Low-level sync matches fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
     func fetchMatches(team: String? = nil) throws -> WorldCupMatchesResponse? {
-        let json = try client.getMatches(options: Self.options(forTeam: team))
+        let json = try client.getMatches(options: options(forTeam: team))
         return try decode(json, as: WorldCupMatchesResponse.self)
     }
 
     /// Low-level sync live fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
     func fetchLive(team: String? = nil) throws -> WorldCupLiveResponse? {
-        let json = try client.getLive(options: Self.options(forTeam: team))
+        let json = try client.getLive(options: options(forTeam: team))
         return try decode(json, as: WorldCupLiveResponse.self)
     }
 
     /// Low-level sync teams fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to scope the roster response.
     func fetchTeams(team: String? = nil) throws -> WorldCupTeamsResponse? {
-        let json = try client.getTeams(options: Self.options(forTeam: team))
+        let json = try client.getTeams(options: options(forTeam: team))
         return try decode(json, as: WorldCupTeamsResponse.self)
     }
 
@@ -105,12 +111,17 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         return formatter
     }
 
-    private static func options(forTeam team: String?) -> WorldCupOptions {
-        WorldCupOptions(
+    private func options(forTeam team: String?) -> WorldCupOptions {
+        // Dev mode: omit `date` so the mock uses its own simulated clock as
+        // "today".
+        let date = usesDevServerTimeline
+            ? nil
+            : Self.queryDateFormatter.string(from: max(Date(), Self.queryDateFloor))
+        return WorldCupOptions(
             limit: nil,
             teams: team.map { [$0] },
             acceptLanguage: nil,
-            date: queryDateFormatter.string(from: max(Date(), queryDateFloor))
+            date: date
         )
     }
 

@@ -268,6 +268,11 @@ struct AccessibilityIdentifiers {
 
         struct TopSites {
             static let itemCell = "TopSitesCell"
+
+            struct AddShortcutAlert {
+                static let view = "TopSites.AddShortcutAlert"
+                static let urlTextField = "TopSites.AddShortcutAlert.URLTextField"
+            }
         }
 
         struct SearchBar {

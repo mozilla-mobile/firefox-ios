@@ -261,7 +261,6 @@ final class OnboardingServiceTests: XCTestCase {
         // Then
         XCTAssertTrue(mockNotificationManager.requestAuthorizationCalled)
         XCTAssertTrue(activityEventHelper.chosenOptions.contains(.askForNotificationPermission))
-        XCTAssertTrue(activityEventHelper.updateOnboardingUserActivationEventCalled)
 
         wait(for: [expectation], timeout: 1.0)
     }
@@ -434,7 +433,6 @@ final class OnboardingServiceTests: XCTestCase {
 
         // Then
         XCTAssertTrue(activityEventHelper.chosenOptions.contains(.syncSignIn))
-        XCTAssertTrue(activityEventHelper.updateOnboardingUserActivationEventCalled)
         XCTAssertTrue(mockDelegate.presentCalled)
         XCTAssertNotNil(mockDelegate.presentedViewController)
         XCTAssertEqual(mockDelegate.animatedValue, true)

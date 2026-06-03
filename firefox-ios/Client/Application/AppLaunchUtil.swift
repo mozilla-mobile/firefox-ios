@@ -70,10 +70,11 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
 
         setMenuItems()
 
-        // Initialize conversion value by specifying fineValue and coarseValue.
-        // Call update postback conversion value for install event.
-        let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
-        conversionValue.adNetworkAttributionUpdateConversionEvent()
+        // Logs conversion activity and records any conversion events
+        let conversionActivityLogger = ConversionActivityLogger()
+        conversionActivityLogger.recordFirstDayAfterInstallTimestampIfNeeded()
+        conversionActivityLogger.recordActiveToday()
+        ConversionEventTracker().recordActivityEvents()
 
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()

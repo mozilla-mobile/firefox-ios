@@ -175,7 +175,6 @@ final class OnboardingService: UserFeaturePreferenceProvider {
 
     private func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
-        activityEventHelper.updateOnboardingUserActivationEvent()
         askForNotificationPermission(from: cardName)
     }
 
@@ -186,8 +185,6 @@ final class OnboardingService: UserFeaturePreferenceProvider {
         completion: @escaping () -> Void
     ) {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
-        activityEventHelper.updateOnboardingUserActivationEvent()
-
         let fxaParams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
         presentSignToSync(
             with: fxaParams,

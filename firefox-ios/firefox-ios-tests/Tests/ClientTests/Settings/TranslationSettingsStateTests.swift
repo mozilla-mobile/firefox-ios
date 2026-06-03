@@ -280,6 +280,30 @@ final class TranslationSettingsStateTests: XCTestCase {
         XCTAssertEqual(newState.supportedLanguages, ["en", "fr", "de"])
     }
 
+    // MARK: - Reducer Tests - TranslationsAction.didTranslationSettingsChange
+
+    /// FXIOS-15120: the settings reducer reacts to the same `TranslationsAction` the toolbar listens
+    /// to, so the toggle flow only needs a single dispatch.
+    func test_didTranslationSettingsChange_updatesTranslationsEnabledFromAction() {
+        let initialState = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: false,
+            preferredLanguages: [],
+            supportedLanguages: []
+        )
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationsAction(
+            isTranslationsEnabled: true,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationsActionType.didTranslationSettingsChange
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.isTranslationsEnabled)
+    }
+
     // MARK: - Equality Tests
 
     func test_equality_sameValues_returnsTrue() {

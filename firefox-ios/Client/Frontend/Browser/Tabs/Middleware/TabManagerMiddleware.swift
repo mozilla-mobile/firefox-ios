@@ -78,7 +78,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private func resolveShortcutsLibraryActions(action: ShortcutsLibraryAction, state: AppState) {
         switch action.actionType {
         case ShortcutsLibraryActionType.switchTabToastButtonTapped:
-            tabManager(for: action.windowUUID).selectTab(action.tab)
+            tabManager(for: action.windowUUID)?.selectTab(action.tab)
         default:
             break
         }
@@ -91,8 +91,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             return
         }
 
-        let manager = tabManager(for: action.windowUUID)
-        manager.tabDidSetScreenshot(action.tab)
+        tabManager(for: action.windowUUID)?.tabDidSetScreenshot(action.tab)
 
         guard let tabsState = state.componentState(TabsPanelState.self,
                                                    for: .tabsPanel,
@@ -148,7 +147,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         // Short-term fix to avoid potential crashes where actions are processed
         // after the window scene has been torn down [FXIOS-13809]
         let windowManager: WindowManager = AppContainer.shared.resolve()
-        guard windowManager.windowExists(uuid: action.windowUUID) else {
+        guard windowManager.windows.keys.contains(action.windowUUID) else {
             logger.log("Window does not exist (\(action.windowUUID.uuidString.prefix(4))) for resolveTabTrayActions()",
                        level: .warning,
                        category: .tabs)
@@ -206,7 +205,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         case TabPanelViewActionType.addNewTab:
             let isPrivateMode = action.panelType == .privateTabs
             tabsPanelTelemetry.newTabButtonTapped(mode: action.panelType?.modeForTelemetry ?? .normal)
-            UserConversionMetrics().didOpenNewTab()
             addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
             dispatchRecentlyAccessedTabs(action: action)
         case TabPanelViewActionType.moveTab:
@@ -251,8 +249,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     }
 
     private func tabTrayDidLoad(for windowUUID: WindowUUID, panelType: TabTrayPanelType?) {
-        let tabManager = tabManager(for: windowUUID)
-        let isPrivateModeActive = tabManager.selectedTab?.isPrivate ?? false
+        let isPrivateModeActive = tabManager(for: windowUUID)?.selectedTab?.isPrivate ?? false
 
         // If no panelType is provided then fallback to whichever tab is currently selected
         let panelType = panelType ?? (isPrivateModeActive ? .privateTabs : .tabs)
@@ -264,20 +261,20 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     }
 
     private func normalTabsCountText(for windowUUID: WindowUUID) -> String {
-        let tabManager = tabManager(for: windowUUID)
+        guard let tabManager = tabManager(for: windowUUID) else { return "" }
         return (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
     }
 
     private func normalTabsCountTextForTabTray(for windowUUID: WindowUUID) -> String {
-        return tabManager(for: windowUUID).normalTabs.count.description
+        return tabManager(for: windowUUID)?.normalTabs.count.description ?? ""
     }
 
     private func privateTabsCountTextForTabTray(for windowUUID: WindowUUID) -> String {
-        return tabManager(for: windowUUID).privateTabs.count.description
+        return tabManager(for: windowUUID)?.privateTabs.count.description ?? ""
     }
 
     private func shouldEnableDeleteTabsButton(for windowUUID: WindowUUID, isPrivateMode: Bool) -> Bool {
-        let tabManager = tabManager(for: windowUUID)
+        guard let tabManager = tabManager(for: windowUUID) else { return false }
         let tabsCount = !isPrivateMode ? tabManager.normalTabs.count : tabManager.privateTabs.count
         return tabsCount > 0 ? true : false
     }
@@ -334,7 +331,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     /// - Returns: Array of TabModel used to configure collection view
     private func refreshTabs(for isPrivateMode: Bool, uuid: WindowUUID) -> [TabModel] {
         var tabs = [TabModel]()
-        let tabManager = tabManager(for: uuid)
+        guard let tabManager = tabManager(for: uuid) else { return [] }
         let selectedTab = tabManager.selectedTab
         let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
         tabManagerTabs.forEach { tab in
@@ -361,7 +358,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         MainActor.assertIsolated("Expected to be called only on main actor.")
         // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled,
         // check if change is still needed
-        let tabManager = tabManager(for: uuid)
+        guard let tabManager = tabManager(for: uuid) else { return }
         let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
         tabManager.selectTab(tab)
 
@@ -390,9 +387,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                      method: .drop,
                                      object: .tab,
                                      value: .tabTray)
-        tabManager.reorderTabs(isPrivate: moveTabData.isPrivate,
-                               fromIndex: moveTabData.originIndex,
-                               toIndex: moveTabData.destinationIndex)
+        tabManager?.reorderTabs(isPrivate: moveTabData.isPrivate,
+                                fromIndex: moveTabData.originIndex,
+                                toIndex: moveTabData.destinationIndex)
 
         let model = getTabsDisplayModel(for: moveTabData.isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
@@ -409,7 +406,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
     private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) -> Bool {
         tabsPanelTelemetry.tabClosed(mode: isPrivate ? .private : .normal)
-        let tabManager = tabManager(for: uuid)
+        guard let tabManager = tabManager(for: uuid) else { return false }
         // In non-private mode, if:
         //      A) the last normal active tab is closed, or
         //      B) the last of ALL normal tabs are closed (i.e. all tabs are inactive and closed at once),
@@ -424,10 +421,11 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     /// Close tab and trigger refresh
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
+        guard let tabManager = tabManager(for: uuid) else { return }
         let shouldDismiss = closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
         triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
-        if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
+        if isPrivate && tabManager.privateTabs.isEmpty {
             let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
                                                    windowUUID: uuid,
                                                    actionType: TabPanelViewActionType.tabPanelDidLoad)
@@ -472,7 +470,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
-        tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
+        tabManager?.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
         triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
 
@@ -487,7 +485,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private func deleteNormalTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
         tabsPanelTelemetry.deleteNormalTabsSheetOptionSelected(period: period)
         let tabManager = tabManager(for: uuid)
-        tabManager.removeNormalTabsOlderThan(period: period, currentDate: .now)
+        tabManager?.removeNormalTabsOlderThan(period: period, currentDate: .now)
 
         // We are not closing the tab tray, so we need to refresh the tabs on screen
         let model = getTabsDisplayModel(for: false, uuid: uuid)
@@ -502,8 +500,8 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     /// - Parameter uuid: The window identifier.
     private func addNewNormalTabIfSelectedIsPrivate(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
-            tabManager.addTab(nil, isPrivate: false)
+        if let selectedTab = tabManager?.selectedTab, selectedTab.isPrivate {
+            tabManager?.addTab(nil, isPrivate: false)
         }
     }
 
@@ -518,9 +516,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         selectedTabIndex: Int?
     ) {
         let tabManager = tabManager(for: uuid)
-        guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
+        guard let tab = tabManager?.getTabForUUID(uuid: tabUUID) else { return }
 
-        tabManager.selectTab(tab)
+        tabManager?.selectTab(tab)
 
         tabsPanelTelemetry.tabSelected(at: selectedTabIndex, mode: panelType.modeForTelemetry)
 
@@ -529,21 +527,21 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         store.dispatch(action)
     }
 
-    private func tabManager(for uuid: WindowUUID) -> TabManager {
-        guard uuid != .unavailable else {
+    private func tabManager(for uuid: WindowUUID) -> TabManager? {
+        guard uuid != .unavailable, let tabManager = windowManager.tabManager(for: uuid)  else {
             assertionFailure()
             logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
-            return windowManager.allWindowTabManagers().first!
+            return nil
         }
 
-        return windowManager.tabManager(for: uuid)
+        return tabManager
     }
 
     // MARK: - Tab Peek
 
     private func didLoadTabPeek(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        let tab = tabManager.getTabForUUID(uuid: tabID)
+        let tab = tabManager?.getTabForUUID(uuid: tabID)
         let urlString = tab?.url?.absoluteString ?? ""
 
         getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
@@ -583,7 +581,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        UIPasteboard.general.url = tabManager.getTabForUUID(uuid: tabID)?.canonicalURL
+        UIPasteboard.general.url = tabManager?.getTabForUUID(uuid: tabID)?.canonicalURL
     }
 
     private func tabPeekCloseTab(with tabID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
@@ -635,7 +633,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     }
 
     private func changeUserAgent(forWindow windowUUID: WindowUUID) {
-        guard let selectedTab = tabManager(for: windowUUID).selectedTab else { return }
+        guard let selectedTab = tabManager(for: windowUUID)?.selectedTab else { return }
 
         if let url = selectedTab.url {
             // When the user changes user agent do the new request using the original URL
@@ -657,7 +655,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     }
 
     private func provideTabInfo(forWindow windowUUID: WindowUUID, accountData: AccountData) {
-        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
+        guard let selectedTab = tabManager(for: windowUUID)?.selectedTab else {
             logger.log(
                 "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
                 level: .fatal,
@@ -901,7 +899,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     }
 
     private func provideTabInfoForSiteProtectionsHeader(forWindow windowUUID: WindowUUID) {
-        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
+        guard let selectedTab = tabManager(for: windowUUID)?.selectedTab else {
             logger.log(
                 "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
                 level: .fatal,
@@ -949,7 +947,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         case JumpBackInActionType.tapOnCell:
             guard let jumpBackInAction = action as? JumpBackInAction,
                   let tab = jumpBackInAction.tab else { return }
-            tabManager(for: action.windowUUID).selectTab(tab)
+            tabManager(for: action.windowUUID)?.selectTab(tab)
         default:
             break
         }
@@ -958,7 +956,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     // MARK: - Tab Manager Helper functions
     private func createShareItem(with tabID: TabUUID, and uuid: WindowUUID) -> ShareItem? {
         let tabManager = tabManager(for: uuid)
-        guard let tab = tabManager.getTabForUUID(uuid: tabID),
+        guard let tab = tabManager?.getTabForUUID(uuid: tabID),
               let url = tab.url?.absoluteString, !url.isEmpty
         else { return nil }
 
@@ -987,7 +985,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
     func removeBookmark(with tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        guard let tab = tabManager.getTabForUUID(uuid: tabID),
+        guard let tab = tabManager?.getTabForUUID(uuid: tabID),
               let url = tab.url?.absoluteString, !url.isEmpty
         else { return }
 
@@ -1004,7 +1002,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private func addToShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         guard let tabID = tabID,
-              let tab = tabManager.getTabForUUID(uuid: tabID),
+              let tab = tabManager?.getTabForUUID(uuid: tabID),
               let url = tab.url?.displayURL?.absoluteString
         else { return }
 
@@ -1016,7 +1014,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private func removeFromShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         guard let tabID = tabID,
-              let tab = tabManager.getTabForUUID(uuid: tabID),
+              let tab = tabManager?.getTabForUUID(uuid: tabID),
               let url = tab.url?.displayURL?.absoluteString
         else { return }
 
@@ -1026,13 +1024,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     }
 
     private func preserveTabs(uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        tabManager.preserveTabs()
+        tabManager(for: uuid)?.preserveTabs()
     }
 
     /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
     private func dispatchRecentlyAccessedTabs(action: Action) {
-        let recentTabs = self.tabManager(for: action.windowUUID).recentlyAccessedNormalTabs
+        guard let tabManager = tabManager(for: action.windowUUID) else { return }
+        let recentTabs = tabManager.recentlyAccessedNormalTabs
         store.dispatch(
             TabManagerAction(
                 recentTabs: recentTabs,

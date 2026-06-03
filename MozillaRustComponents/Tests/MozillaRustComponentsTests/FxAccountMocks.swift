@@ -59,7 +59,7 @@ class MockFxAccount: PersistedFirefoxAccount {
             return info.active ? .connected : .authIssues
         case .disconnect:
             return .disconnected
-        case .callGetProfile:
+        case .callGetProfile, .webChannelPasswordChange:
             return .connected
         }
     }

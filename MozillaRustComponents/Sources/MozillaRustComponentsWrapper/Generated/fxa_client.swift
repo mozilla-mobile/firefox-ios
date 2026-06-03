@@ -3839,6 +3839,8 @@ public enum FxaEvent: Equatable, Hashable {
     )
     case cancelOAuthFlow
     case checkAuthorizationStatus
+    case webChannelPasswordChange(jsonPayload: String
+    )
     case disconnect
     case callGetProfile
 
@@ -3878,9 +3880,12 @@ public struct FfiConverterTypeFxaEvent: FfiConverterRustBuffer {
         
         case 6: return .checkAuthorizationStatus
         
-        case 7: return .disconnect
+        case 7: return .webChannelPasswordChange(jsonPayload: try FfiConverterString.read(from: &buf)
+        )
         
-        case 8: return .callGetProfile
+        case 8: return .disconnect
+        
+        case 9: return .callGetProfile
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -3924,12 +3929,17 @@ public struct FfiConverterTypeFxaEvent: FfiConverterRustBuffer {
             writeInt(&buf, Int32(6))
         
         
-        case .disconnect:
+        case let .webChannelPasswordChange(jsonPayload):
             writeInt(&buf, Int32(7))
+            FfiConverterString.write(jsonPayload, into: &buf)
+            
+        
+        case .disconnect:
+            writeInt(&buf, Int32(8))
         
         
         case .callGetProfile:
-            writeInt(&buf, Int32(8))
+            writeInt(&buf, Int32(9))
         
         }
     }

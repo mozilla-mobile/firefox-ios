@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-final class WorldCupMatchCardView: UIView, ThemeApplicable {
+final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
     private struct UX {
         static let sectionSpacing: CGFloat = 16
         static let headerSpacing: CGFloat = 6
@@ -14,6 +14,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         static let horizontalPadding: CGFloat = 16.0
 
         static let featuredMatchesStackHorizontalPadding: CGFloat = 41.0
+        static let featuredMatchesMinStackHorizontalPadding: CGFloat = 16.0
         static let featuredMatchesSpacing: CGFloat = 16
 
         static let dividerHeight: CGFloat = 1
@@ -41,25 +42,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
     }
 
     private lazy var moreOptionsButton: UIButton = .build { button in
-        let changeTeamAction = UIAction(
-            title: .WorldCup.HomepageWidget.ChangeTeamLabel,
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.soccerBall),
-            handler: { [weak self] _ in
-                self?.navigateToTeamSelection()
-            }
-        )
-        let removeAction = UIAction(
-            title: .WorldCup.HomepageWidget.RemoveLabel,
-            image: UIImage.templateImageNamed(
-                StandardImageIdentifiers.Large.cross
-            ),
-            attributes: .destructive,
-            handler: { [weak self] _ in
-                self?.dismiss()
-            }
-        )
-        let menu = UIMenu(children: [changeTeamAction, removeAction])
-        button.menu = menu
+        button.menu = self.makeMoreOptionsMenu()
         button.showsMenuAsPrimaryAction = true
         button.setImage(
             UIImage(named: StandardImageIdentifiers.Large.moreHorizontalRound)?
@@ -69,6 +52,31 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         button.accessibilityLabel = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
         button.largeContentTitle = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    private func makeMoreOptionsMenu() -> UIMenu {
+        let changeTeamAction = UIAction(
+            title: .WorldCup.HomepageWidget.ChangeTeamLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.soccerBall),
+            handler: { [weak self] _ in self?.navigateToTeamSelection() }
+        )
+        let wallpaperAction = UIAction(
+            title: .WorldCup.HomepageWidget.GetCustomWallpaperLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.image),
+            handler: { [weak self] _ in self?.navigateToWallpaperSettings() }
+        )
+        let shareAction = UIAction(
+            title: .WorldCup.HomepageWidget.ShareLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
+            handler: { [weak self] _ in self?.shareSchedule() }
+        )
+        let removeAction = UIAction(
+            title: .WorldCup.HomepageWidget.RemoveLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
+            attributes: .destructive,
+            handler: { [weak self] _ in self?.dismiss() }
+        )
+        return UIMenu(children: [changeTeamAction, wallpaperAction, shareAction, removeAction])
     }
 
     private lazy var liveLabel: UILabel = .build { label in
@@ -108,13 +116,16 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
     private let telemetry = WorldCupTelemetry()
     private let windowUUID: WindowUUID
+    private let searchEnginesManager: SearchEnginesManagerProvider
     private var model: WorldCupMatches?
     private var featuredDividers: [UIView] = []
 
     // MARK: - Init
 
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID,
+         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self)) {
         self.windowUUID = windowUUID
+        self.searchEnginesManager = searchEnginesManager
         super.init(frame: .zero)
         shouldGroupAccessibilityChildren = true
         setupLayout()
@@ -150,10 +161,17 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
             headerStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
 
             featuredMatchesTopConstraint,
-            featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                          constant: UX.featuredMatchesStackHorizontalPadding),
             featuredMatchesStack.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                           constant: -UX.featuredMatchesStackHorizontalPadding),
+                                                           constant: -UX.featuredMatchesStackHorizontalPadding)
+                                                            .priority(.defaultHigh),
+            featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesStackHorizontalPadding)
+                                                            .priority(.defaultHigh),
+            featuredMatchesStack.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesMinStackHorizontalPadding),
+            featuredMatchesStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor,
+                                                           constant: -UX.featuredMatchesMinStackHorizontalPadding),
+            featuredMatchesStack.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             upcomingMatchesTopConstraint,
             upcomingStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
@@ -188,6 +206,17 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         dateLabel.text = model.dateLabel.map { "\(UX.liveLabelDotText) \($0)" }
         dateLabel.isHidden = model.isLive
         liveLabelContainer.isHidden = !model.isLive
+    }
+
+    func getWinnerThirdPlaceOrFinal() -> (teamKey: String, winnerLabel: String)? {
+        guard let model else { return nil }
+        return model.winnerThirdPlaceOrFinal
+    }
+
+    /// Untranslated phase identifier for this card, surfaced through the
+    /// enclosing cell when emitting swipe telemetry.
+    var telemetryValue: String? {
+        return model?.telemetryPhaseValue
     }
 
     private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {
@@ -252,6 +281,17 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         )
     }
 
+    func navigateToWallpaperSettings() {
+        telemetry.wallpaperButtonTapped()
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.settings(.wallpaper)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnSettingsSection
+            )
+        )
+    }
+
     private func navigateToSERP(for match: WorldCupMatch) {
         guard let homeTeamName = WorldCupCountry.localizedName(forID: match.homeCode),
               let awayTeamName = WorldCupCountry.localizedName(forID: match.awayCode) else { return }
@@ -265,6 +305,31 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
                 ),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell,
+            )
+        )
+    }
+
+    /// Shares a link to the World Cup 2026 schedule, resolved through the user's
+    /// default search engine. We use an english query here same as the SERP navigation, 
+    /// since the search engine localizes the results based on the user's location and language preferences.
+    func shareSchedule() {
+        let query = "\(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) schedule"
+        guard let url = searchEnginesManager.defaultEngine?.searchURLForQuery(query) else { return }
+        telemetry.shareButtonTapped()
+        let shareTitle = "\(String.WorldCup.HomepageWidget.FollowTeamCard.Title) 🦊⚽️"
+        let configuration = ShareSheetConfiguration(
+            shareType: .site(url: url),
+            shareMessage: ShareMessage(message: shareTitle, subtitle: nil),
+            sourceView: moreOptionsButton,
+            sourceRect: nil,
+            toastContainer: self,
+            popoverArrowDirection: [.up, .down, .left]
+        )
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.shareSheet(configuration)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShareSheet
             )
         )
     }
@@ -330,10 +395,15 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
 
     private lazy var scoreLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title2.scaledFont()
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.4
     }
 
-    private lazy var scoreContainer: UIView = .build()
+    private lazy var scoreContainer: UIView = .build { container in
+        container.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
 
     private lazy var clockLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()

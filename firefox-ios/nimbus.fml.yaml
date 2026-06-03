@@ -13,8 +13,6 @@ channels:
   - beta
   - release
 include:
-
-
   - nimbus-features/adBlockerFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/adsClient.yaml
@@ -27,6 +25,7 @@ include:
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/hntSponsoredShortcutsFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
+  - nimbus-features/homepageTrackerBlockerModuleFeature.yaml
   - nimbus-features/hostedSummarizerFeature.yaml
   - nimbus-features/httpsUpgradeFeature.yaml
   - nimbus-features/improvedAppStoreReviewTriggerFeature.yaml
@@ -58,3 +57,4 @@ include:
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
   - nimbus-features/worldCupWidgetFeature.yaml
+
