@@ -26,8 +26,6 @@ class EditFolderViewModel: @unchecked Sendable {
     var onBookmarkSaved: VoidReturnCallback?
     weak var parentFolderSelector: ParentFolderSelector?
 
-    var isSaveTapped = false
-
     var controllerTitle: String {
         return isNewFolderView ? .BookmarksNewFolder : .BookmarksEditFolder
     }
@@ -95,11 +93,6 @@ class EditFolderViewModel: @unchecked Sendable {
                                         childGUIDs: [],
                                         children: nil)
         }
-    }
-
-    func saveFolderIfNeeded() {
-        guard isSaveTapped else { return }
-        save()
     }
 
     @discardableResult

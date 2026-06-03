@@ -31,8 +31,6 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
     private(set) var folderStructures: [Folder] = []
     private(set) var selectedFolder: Folder?
 
-    var isSaveTapped = false
-
     var bookmarkTitle: String {
         return node?.title ?? ""
     }
@@ -115,11 +113,6 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
 
     func setUpdatedURL(_ url: String) {
         node = node?.copy(with: bookmarkTitle, url: url)
-    }
-
-    func saveBookmarkIfNeeded() {
-        guard isSaveTapped else { return }
-        saveBookmark()
     }
 
     @discardableResult
