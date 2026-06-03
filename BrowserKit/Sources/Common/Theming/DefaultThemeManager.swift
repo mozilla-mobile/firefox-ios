@@ -27,6 +27,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private var windows: [WindowUUID: UIWindow] = [:]
     private var privateBrowsingState: [WindowUUID: Bool] = [:]
+
+    /// Optional transform applied to every resolved theme. Defaults to `nil` (no-op) so production behavior is
+    /// unchanged. Used by developer tooling to overlay runtime color tokens onto the live app.
+    private var themeDecorator: ((Theme) -> Theme)?
     private var allWindowUUIDs: [WindowUUID] { return Array(windows.keys) }
     public let notificationCenter: NotificationProtocol
 
@@ -96,7 +100,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return DarkTheme()
         }
 
-        return getThemeFrom(type: determineThemeType(for: window))
+        let theme = getThemeFrom(type: determineThemeType(for: window))
+        return themeDecorator?(theme) ?? theme
+    }
+
+    /// Installs (or clears, when passed `nil`) a transform applied to every resolved theme, then re-themes all
+    /// windows. Intended for developer tooling only.
+    public func setThemeDecorator(_ decorator: ((Theme) -> Theme)?) {
+        themeDecorator = decorator
+        applyThemeUpdatesToWindows()
     }
 
     public func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme {

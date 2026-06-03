@@ -552,6 +552,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
+        hiddenDebugOptions.append(NovaDesignToolsSetting(settings: self))
         #endif
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
