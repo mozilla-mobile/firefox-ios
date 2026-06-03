@@ -290,7 +290,8 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
 
     private func performRedirect(on subject: DefaultTemporaryDocument, to newRequest: URLRequest) -> URLRequest? {
         let response = HTTPURLResponse(url: request.url!, statusCode: 307, httpVersion: nil, headerFields: nil)!
-        var result: URLRequest?
+        // Handler calls completion synchronously, so this capture is safe
+        nonisolated(unsafe) var result: URLRequest?
         subject.urlSession(
             mockURLSession,
             task: mockURLSession.downloadTask(with: newRequest),
