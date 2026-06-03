@@ -11,18 +11,18 @@ import OnboardingKit
 class OnboardingKitCardInfoModelTests: XCTestCase {
     private var mockUserPreferences: MockUserFeaturePreferences!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockUserPreferences = MockUserFeaturePreferences()
         DependencyHelperMock().bootstrapDependencies(injectedUserFeaturePreferences: mockUserPreferences)
         clearSavedTheme()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         clearSavedTheme()
         DependencyHelperMock().reset()
         mockUserPreferences = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testDefaultSelectedButton_emptyButtons_returnsNil() {
