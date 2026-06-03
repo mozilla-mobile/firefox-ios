@@ -6,6 +6,3 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 SWIFT_ACTIVE_COMPILATION_CONDITIONS = TESTING;
-// Disable macro validation (so we can use SPM to add macro packages). Explicitly enable each macro.
-MACRO_VALIDATION_ENABLED = NO
-ENABLED_MACROS = ModifiedCopyMacros

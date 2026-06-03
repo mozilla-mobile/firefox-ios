@@ -8,6 +8,3 @@ SWIFT_OPTIMIZATION_LEVEL = -Owholemodule
 ONLY_ACTIVE_ARCH = NO
 VALIDATE_PRODUCT = YES
 CODE_SIGN_IDENTITY = iPhone Distribution
-// Disable macro validation (so we can use SPM to add macro packages). Explicitly enable each macro.
-MACRO_VALIDATION_ENABLED = NO
-ENABLED_MACROS = ModifiedCopyMacros
