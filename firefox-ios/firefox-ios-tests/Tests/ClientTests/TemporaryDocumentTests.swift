@@ -104,6 +104,46 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://subdomain2.example.com")!))
     }
 
+    // MARK: - Redirect Cookie Tests
+
+    func testWillPerformHTTPRedirection_crossOrigin_stripsCookies() async {
+        let cookie = makeCookie(domain: "example.com")
+        subject = await createSubject(
+            filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF, cookies: [cookie]
+        )
+        var redirect = URLRequest(url: URL(string: "https://evil.com/x.pdf")!)
+        redirect.setValue("key=session=123", forHTTPHeaderField: "Cookie")
+
+        let result = performRedirect(on: subject, to: redirect)
+
+        XCTAssertEqual(result?.allHTTPHeaderFields?["Cookie"], "")
+        subject = nil
+    }
+
+    func testWillPerformHTTPRedirection_sameHost_keepsCookies() async {
+        let cookie = makeCookie(domain: "example.com")
+        subject = await createSubject(
+            filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF, cookies: [cookie]
+        )
+        let redirect = URLRequest(url: URL(string: "https://example.com/x.pdf")!)
+
+        let result = performRedirect(on: subject, to: redirect)
+
+        XCTAssertEqual(result?.allHTTPHeaderFields?["Cookie"], "key=session=123")
+        subject = nil
+    }
+
+    func testWillPerformHTTPRedirection_noCookies_passesRequestThrough() async {
+        subject = await createSubject(filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF)
+        var redirect = URLRequest(url: URL(string: "https://evil.com/x.pdf")!)
+        redirect.setValue("injected=value", forHTTPHeaderField: "Cookie")
+
+        let result = performRedirect(on: subject, to: redirect)
+
+        XCTAssertEqual(result?.allHTTPHeaderFields?["Cookie"], "injected=value")
+        subject = nil
+    }
+
     func testInit_passCorrectName_fromResponse() async {
         let response = MockURLResponse(filename: filename, url: request.url!)
         subject = await createSubject(response: response, request: request, session: mockURLSession)
@@ -246,6 +286,18 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         )
         await trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func performRedirect(on subject: DefaultTemporaryDocument, to newRequest: URLRequest) -> URLRequest? {
+        let response = HTTPURLResponse(url: request.url!, statusCode: 307, httpVersion: nil, headerFields: nil)!
+        var result: URLRequest?
+        subject.urlSession(
+            mockURLSession,
+            task: mockURLSession.downloadTask(with: newRequest),
+            willPerformHTTPRedirection: response,
+            newRequest: newRequest
+        ) { result = $0 }
+        return result
     }
 
     private func makeCookie(domain: String) -> HTTPCookie {
