@@ -126,6 +126,38 @@ final class TabRestorerTests: XCTestCase {
         XCTAssertEqual(result.restoredTabs.count, 1)
     }
 
+    func testRestoreTabs_selectedTabUUIDIsNil_whenActiveTabFilteredOut() async {
+        let activeTabId = UUID()
+        mockDataStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: activeTabId,
+            tabData: [makeTabData(id: activeTabId, isPrivate: true), makeTabData(), makeTabData()]
+        )
+        let subject = createSubject(shouldClearPrivateTabs: true)
+
+        let result = await subject.restoreTabs(for: .XCTestDefaultUUID)
+
+        XCTAssertEqual(result.restoredTabs.count, 2)
+        XCTAssertNil(result.selectedTabUUID)
+    }
+
+    func testRestoreTabs_preservesOrderOfPersistedTabs() async {
+        let firstId = UUID()
+        let secondId = UUID()
+        let thirdId = UUID()
+        mockDataStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: UUID(),
+            tabData: [makeTabData(id: firstId), makeTabData(id: secondId), makeTabData(id: thirdId)]
+        )
+        let subject = createSubject()
+
+        let result = await subject.restoreTabs(for: .XCTestDefaultUUID)
+
+        XCTAssertEqual(result.restoredTabs.map { $0.tabUUID },
+                       [firstId.uuidString, secondId.uuidString, thirdId.uuidString])
+    }
+
     // MARK: - Helpers
 
     private func createSubject(shouldClearPrivateTabs: Bool = true,
