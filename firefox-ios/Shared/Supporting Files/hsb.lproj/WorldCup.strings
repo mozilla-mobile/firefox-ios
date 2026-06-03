@@ -38,7 +38,7 @@
 "WorldCup.CountryPicker.SkipButton.Title.v151" = "Přeskočić";
 
 /* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.Title.v151" = "Wašemu teamej slědować";
+"WorldCup.CountryPicker.Title.v151" = "Wašemu mustwu slědować";
 
 /* The title of the Group A group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupA.Title.v151" = "Skupina A";
@@ -80,7 +80,7 @@
 "WorldCup.GroupPhase.GroupStageLabel.v151" = "Skupinska faza";
 
 /* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
-"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Team změnić";
+"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Mustwo změnić";
 
 /* D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
 "WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "D";
@@ -101,10 +101,10 @@
 "WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Zdźělenki znjemóžnić";
 
 /* The label for the button in the eliminated section that takes the user back to the team selection screen. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Team wubrać";
+"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Mustwo wubrać";
 
 /* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Wubjerće druhi team, zo byšće wo swětowym mišterstwje na běžnym wostał.";
+"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Wubjerće druhe mustwo, zo byšće wo swětowym mišterstwje na běžnym wostał.";
 
 /* The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Asistent swětoweho mišterstwa wotstronić";
@@ -128,7 +128,7 @@
 "WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Aktualizacija swětoweho mišterstwa schować";
 
 /* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Wašemu teamej slědować";
+"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Wašemu mustwu slědować";
 
 /* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "Dóstańće aktualizacije live a wjace.";
@@ -137,7 +137,7 @@
 "WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Wobchowajće swětowe mišterstwo we wóčku";
 
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
-"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Teamej slědować";
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Mustwu slědować";
 
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(Wšón čas)";

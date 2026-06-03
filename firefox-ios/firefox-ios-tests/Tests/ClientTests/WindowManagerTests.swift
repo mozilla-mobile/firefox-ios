@@ -379,6 +379,24 @@ class WindowManagerTests: XCTestCase {
         XCTAssertEqual(result2_1, result2_2)
     }
 
+    // MARK: - Tab Manager Access Tests
+
+    func test_windowManagerTabManager_returnsNonNilForValidWindowUUID() {
+        let subject = createSubject()
+        let uuid = WindowUUID.XCTestDefaultUUID
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: uuid)
+        let tabManager = subject.tabManager(for: uuid)
+
+        XCTAssertNotNil(tabManager)
+    }
+
+    func test_windowManagerTabManager_returnsNilForInvalidWindowUUID() {
+        let subject = createSubject()
+        let tabManager = subject.tabManager(for: .unavailable)
+
+        XCTAssertNil(tabManager)
+    }
+
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {

@@ -29,7 +29,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
-        case worldcup(TextColor?)
+        case worldcup
         case spacer
 
         var canHandleLongPress: Bool {
@@ -144,10 +144,10 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         }
 
         if state.worldcupState.shouldShowSection {
-            snapshot.appendSections([.worldcup(textColor)])
+            snapshot.appendSections([.worldcup])
             snapshot.appendItems(
                 [.worldcupCard],
-                toSection: .worldcup(textColor)
+                toSection: .worldcup
             )
             snapshot.reconfigureItems([.worldcupCard])
         }

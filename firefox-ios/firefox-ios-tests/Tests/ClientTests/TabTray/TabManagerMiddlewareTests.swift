@@ -283,7 +283,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [expectation])
 
-        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID).selectedTab
+        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
         XCTAssertEqual(selectedTab?.displayTitle, "www.mozilla.org")
         XCTAssertEqual(selectedTab?.url?.absoluteString, "www.mozilla.org")
     }
@@ -451,7 +451,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         subject.tabsPanelProvider(appState, action)
-        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID).selectedTab
+        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
 
         XCTAssertEqual(selectedTab, tab)
     }
@@ -466,7 +466,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         subject.tabsPanelProvider(appState, action)
-        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID).selectedTab
+        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
 
         XCTAssertNotEqual(selectedTab, tab)
     }

@@ -115,6 +115,9 @@
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Novo v %@u";
 
+/* On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting. */
+"MainMenu.SiteProtection.AdBlocker.Title.v153" = "Blokiranje oglasov";
+
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
 "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "Povezava ni varna";
 

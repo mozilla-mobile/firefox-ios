@@ -296,7 +296,6 @@ extension IntroViewController: OnboardingCardDelegate {
         switch action {
         case .requestNotifications:
             introViewModel.chosenOptions.insert(.askForNotificationPermission)
-            introViewModel.updateOnboardingUserActivationEvent()
             askForNotificationPermission(from: cardName)
         case .forwardOneCard:
             advance(numberOfPages: 1, from: cardName) {
@@ -312,7 +311,6 @@ extension IntroViewController: OnboardingCardDelegate {
             }
         case .syncSignIn:
             introViewModel.chosenOptions.insert(.syncSignIn)
-            introViewModel.updateOnboardingUserActivationEvent()
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
                 windowUUID: windowUUID,
@@ -335,7 +333,6 @@ extension IntroViewController: OnboardingCardDelegate {
             /// Setting default browser card action opens an instruction pop up instead of
             /// setting a default browser action. TBD if the above code even still fires.
             introViewModel.chosenOptions.insert(.setAsDefaultBrowser)
-            introViewModel.updateOnboardingUserActivationEvent()
             presentDefaultBrowserPopup(
                 windowUUID: windowUUID,
                 from: cardName,

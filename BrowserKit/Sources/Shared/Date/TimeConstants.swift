@@ -49,6 +49,13 @@ extension Timestamp {
     public static func uptimeInMilliseconds() -> Timestamp {
         return Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000
     }
+
+    /// The number of whole days between `timestamp` and `self`.
+    /// Returns 0 if `self` is before `timestamp`.
+    public func daysSince(timestamp: Timestamp) -> Int {
+        guard self >= timestamp else { return 0 }
+        return Int((self - timestamp) / Timestamp(OneDayInMilliseconds))
+    }
 }
 
 extension Date {

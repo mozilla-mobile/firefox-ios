@@ -45,7 +45,7 @@ final class StartAtHomeMiddleware {
     /// - Returns: `true` if a homepage tab was selected and displayed, `false` otherwise.
     @MainActor
     private func startAtHomeCheck(windowUUID: WindowUUID) -> Bool {
-        let tabManager = windowManager.tabManager(for: windowUUID)
+        guard let tabManager = windowManager.tabManager(for: windowUUID) else { return false }
         let startAtHomeManager = StartAtHomeHelper(
             prefs: prefs,
             isRestoringTabs: !tabManager.tabRestoreHasFinished

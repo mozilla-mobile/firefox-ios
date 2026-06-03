@@ -20,10 +20,10 @@ metrics_files:
   - firefox-ios/Client/Glean/probes/library.bookmarks_panel.yaml
   - firefox-ios/Client/Glean/probes/library.downloads_panel.yaml
   - firefox-ios/Client/Glean/probes/library.history_panel.yaml
-  - firefox-ios/Client/Glean/probes/library.reading_list_panel.yaml
   - firefox-ios/Client/Glean/probes/metrics.yaml
   - firefox-ios/Client/Glean/probes/microsurvey.yaml
   - firefox-ios/Client/Glean/probes/onboarding.yaml
+  - firefox-ios/Client/Glean/probes/reading_list.yaml
   - firefox-ios/Client/Glean/probes/search.yaml
   - firefox-ios/Client/Glean/probes/settings.yaml
   - firefox-ios/Client/Glean/probes/share_sheet.yaml

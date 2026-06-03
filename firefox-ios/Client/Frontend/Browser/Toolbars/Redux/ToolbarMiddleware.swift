@@ -298,7 +298,7 @@ final class ToolbarMiddleware {
 
         case .summarizer:
             Task { @MainActor in
-                guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
+                guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView else { return }
                 let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
                 let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
                                                   summarizerTrigger: .toolbarIcon,
@@ -362,7 +362,7 @@ final class ToolbarMiddleware {
             store.dispatch(action)
         case .readerModeWithSummarizer:
             Task {
-                guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
+                guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView else { return }
                 let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
                 let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
                                                   summarizerTrigger: .toolbarIcon,
@@ -470,7 +470,7 @@ final class ToolbarMiddleware {
 
     @MainActor
     private func checkPageCanSummarize(action: ToolbarMiddlewareAction) {
-        guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView,
+        guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView,
               isSummarizerOn
         else { return }
 
@@ -490,7 +490,7 @@ final class ToolbarMiddleware {
     // MARK: - Helper
     @MainActor
     private func cancelEditMode(windowUUID: WindowUUID) {
-        var url = tabManager(for: windowUUID).selectedTab?.url
+        var url = tabManager(for: windowUUID)?.selectedTab?.url
         if let currentURL = url {
             url = (currentURL.isWebPage() && !currentURL.isReaderModeURL) ? url : nil
         }
@@ -531,7 +531,7 @@ final class ToolbarMiddleware {
         toolbarTelemetry.readerModeButtonTapped(isPrivate: toolbarState.isPrivateMode, isEnabled: isReaderModeEnabled)
     }
 
-    private func tabManager(for uuid: WindowUUID) -> TabManager {
+    private func tabManager(for uuid: WindowUUID) -> TabManager? {
         return windowManager.tabManager(for: uuid)
     }
 }

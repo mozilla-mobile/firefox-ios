@@ -46,6 +46,21 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Zadajte adresu alebo výraz vyhľadávania";
 
+/* The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153" = "Zrušiť";
+
+/* The error message shown when a user enters an invalid website URL in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.InvalidURLErrorMessage.v153" = "Zadajte platnú adresu";
+
+/* The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153" = "Uložiť";
+
+/* The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut. */
+"FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153" = "Pridať skratku";
+
+/* The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153" = "URL adresa webovej stránky";
+
 /* This is the navigation title for the Shortcuts Library view */
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "Skratky";
 

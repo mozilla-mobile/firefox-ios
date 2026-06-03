@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-final class WorldCupMatchCardView: UIView, ThemeApplicable {
+final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
     private struct UX {
         static let sectionSpacing: CGFloat = 16
         static let headerSpacing: CGFloat = 6
@@ -14,6 +14,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         static let horizontalPadding: CGFloat = 16.0
 
         static let featuredMatchesStackHorizontalPadding: CGFloat = 41.0
+        static let featuredMatchesMinStackHorizontalPadding: CGFloat = 16.0
         static let featuredMatchesSpacing: CGFloat = 16
 
         static let dividerHeight: CGFloat = 1
@@ -150,10 +151,17 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
             headerStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
 
             featuredMatchesTopConstraint,
-            featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                          constant: UX.featuredMatchesStackHorizontalPadding),
             featuredMatchesStack.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                           constant: -UX.featuredMatchesStackHorizontalPadding),
+                                                           constant: -UX.featuredMatchesStackHorizontalPadding)
+                                                            .priority(.defaultHigh),
+            featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesStackHorizontalPadding)
+                                                            .priority(.defaultHigh),
+            featuredMatchesStack.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesMinStackHorizontalPadding),
+            featuredMatchesStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor,
+                                                           constant: -UX.featuredMatchesMinStackHorizontalPadding),
+            featuredMatchesStack.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             upcomingMatchesTopConstraint,
             upcomingStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
@@ -188,6 +196,17 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         dateLabel.text = model.dateLabel.map { "\(UX.liveLabelDotText) \($0)" }
         dateLabel.isHidden = model.isLive
         liveLabelContainer.isHidden = !model.isLive
+    }
+
+    func getWinnerThirdPlaceOrFinal() -> (teamKey: String, winnerLabel: String)? {
+        guard let model else { return nil }
+        return model.winnerThirdPlaceOrFinal
+    }
+
+    /// Untranslated phase identifier for this card, surfaced through the
+    /// enclosing cell when emitting swipe telemetry.
+    var telemetryValue: String? {
+        return model?.telemetryPhaseValue
     }
 
     private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {
@@ -330,10 +349,15 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
 
     private lazy var scoreLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title2.scaledFont()
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.4
     }
 
-    private lazy var scoreContainer: UIView = .build()
+    private lazy var scoreContainer: UIView = .build { container in
+        container.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
 
     private lazy var clockLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()

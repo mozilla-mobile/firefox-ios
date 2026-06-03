@@ -19,8 +19,29 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private var firefoxHomeScreen: FirefoxHomePageScreen!
     private var settingsScreen: SettingScreen!
     private var mainMenu: MainMenuScreen!
+    private var newTabsScreen: NewTabsScreen!
+    private var tabTrayScreen: TabTrayScreen!
+
+    // Tests that launch with a pre-populated bookmarks/history database fixture.
+    private let testsWithBookmarksFixture: Set<String> = [
+        "testBookmarkSearchResultContextMenu",
+        "testBookmarkSearchResultDisclosureContextMenu",
+        "testBookmarkSearchResultOpenInNewTab",
+        "testBookmarkSearchResultOpenInNewPrivateTab"
+    ]
+    private let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample-places.db"
 
     override func setUp() async throws {
+        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
+        let key = parts.count > 1 ? String(parts[1]) : ""
+        if testsWithBookmarksFixture.contains(key) {
+            launchArguments = [LaunchArguments.SkipIntro,
+                               LaunchArguments.SkipWhatsNew,
+                               LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.LoadDatabasePrefix + historyAndBookmarksDB,
+                               LaunchArguments.SkipContextualHints,
+                               LaunchArguments.DisableAnimations]
+        }
         try await super.setUp()
         topSitesScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
@@ -30,6 +51,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         firefoxHomeScreen = FirefoxHomePageScreen(app: app)
         settingsScreen = SettingScreen(app: app)
         mainMenu = MainMenuScreen(app: app)
+        newTabsScreen = NewTabsScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -175,6 +198,157 @@ class BookmarksTests: FeatureFlaggedTestBase {
         browserScreen.assertSuggestedLinesNotEmpty()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3936976
+    func testSearchBookmarkIconDisplay() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "bookmarks-search-feature")
+        app.launch()
+        // Step 1: Open Bookmarks panel — empty list, search icon is not displayed
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.assertBookmarkEmptyStateTextExists()
+        libraryScreen.assertBottomSearchButtonExists(shouldExist: false)
+
+        // Step 2: Create a new folder — search icon is displayed
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.assertNewFreshFolderCreated(folderName: "Test Folder")
+        libraryScreen.tapDoneButton()
+        libraryScreen.assertBottomSearchButtonExists(shouldExist: true)
+
+        // Step 3: Bookmark a webpage and reopen the panel — search icon is displayed
+        libraryScreen.tapDoneButton()
+        browserScreen.tapOnAddressBar()
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
+        bookmark()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.assertBottomSearchButtonExists(shouldExist: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3936981
+    func testBookmarkSearchResultContextMenu() {
+        launchWithBookmarksSearchEnabledAndOpenSearch()
+        // Long-tap a searched bookmark — context menu shows expected options
+        libraryScreen.longPressBookmarkInList(name: urlLabelExample_3)
+        assertBookmarkSearchContextMenuOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3937449
+    func testBookmarkSearchResultDisclosureContextMenu() {
+        launchWithBookmarksSearchEnabledAndOpenSearch()
+        // Tap the three-dot button on the search result — context menu shows expected options
+        libraryScreen.tapBookmarkDisclosureButton()
+        assertBookmarkSearchContextMenuOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3936982
+    func testBookmarkSearchResultOpenInNewTab() {
+        launchWithBookmarksSearchEnabledAndOpenSearch()
+        // Long-tap a searched bookmark and select "Open in New Tab"
+        libraryScreen.longPressBookmarkInList(name: urlLabelExample_3)
+        libraryScreen.tapContextMenuOption(option: "Open in New Tab")
+        // The "New Tab" toaster appears with a Switch button, and the bookmark opens in a new tab
+        if !iPad() {
+            newTabsScreen.assertSwitchButtonExists()
+        }
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.assertTabCount(2)
+        // The selected website is opened in the new tab
+        if #available(iOS 26, *) {
+            // To avoid flakiness, this validation will be performed only on iOS 26 and above
+            tabTrayScreen.assertCellExists(named: urlLabelExample_3)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3936983
+    func testBookmarkSearchResultOpenInNewPrivateTab() {
+        launchWithBookmarksSearchEnabledAndOpenSearch()
+        // Long-tap a searched bookmark and select "Open in a Private Tab"
+        libraryScreen.longPressBookmarkInList(name: urlLabelExample_3)
+        libraryScreen.tapContextMenuOption(option: "Open in a Private Tab")
+        // The "New Private Tab" toaster appears on iPhone only (not shown on iPad)
+        if !iPad() {
+            newTabsScreen.assertSwitchButtonExists()
+        }
+        // The selected website is opened in a new private tab
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.switchToPrivateMode()
+        tabTrayScreen.assertTabCount(1)
+        if #available(iOS 26, *) {
+            // To avoid flakiness, this validation will be performed only on iOS 26 and above
+            tabTrayScreen.assertCellExists(named: urlLabelExample_3)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3967271
+    func testFolderIsUpdatedAfterDeletingBookmarkViaSearch() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "bookmarks-search-feature")
+        app.launch()
+        let folderName = "Test Folder"
+        let bookmarkLabel = url_2["bookmarkLabel"]!
+
+        // Create "Test Folder" so the next bookmark is saved there, then add exactly one bookmark
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: folderName)
+        libraryScreen.tapDoneButton()
+        libraryScreen.tapDoneButton()
+        browserScreen.tapOnAddressBar()
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
+        bookmark()
+
+        // Open Bookmarks, search for the bookmark, delete it via the search result context menu
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.tapBottomSearchButton()
+        libraryScreen.searchInBookmarksPanel(text: "Internet")
+        libraryScreen.assertBookmarkExists(named: bookmarkLabel)
+        libraryScreen.longPressBookmarkInList(name: bookmarkLabel)
+        libraryScreen.tapContextMenuOption(option: "Remove Bookmark")
+
+        // Clear search, open the folder — it is empty
+        libraryScreen.closeBookmarksSearch()
+        libraryScreen.tapOnFolder(folderName: folderName)
+        libraryScreen.assertSelectedFolderOpens(folderName: folderName)
+        libraryScreen.assertBookmarkEmptyStateTextExists()
+
+        // Back out and delete the now-empty folder — no "Folder is not empty" prompt appears
+        libraryScreen.tapBookmarksNavigationBar()
+        libraryScreen.swipeBookmarkListEntry(entryName: folderName)
+        libraryScreen.tapDeleteBookmarkButton()
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
+
+    private func launchWithBookmarksSearchEnabledAndOpenSearch() {
+        // Precondition: bookmarks are pre-populated via the test-fixtures places.db loaded in setUp
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "bookmarks-search-feature")
+        app.launch()
+
+        // Open Bookmarks panel — search icon is displayed
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.assertBottomSearchButtonExists(shouldExist: true)
+
+        // Tap the search icon and search — matching bookmark is shown
+        libraryScreen.tapBottomSearchButton()
+        libraryScreen.searchInBookmarksPanel(text: "Example")
+        libraryScreen.assertBookmarkExists(named: urlLabelExample_3)
+    }
+
+    private func assertBookmarkSearchContextMenuOptions() {
+        libraryScreen.assertContextMenuOptions([
+            "Open in New Tab",
+            "Open in a Private Tab",
+            "Edit Bookmark",
+            "Add to Shortcuts",
+            "Remove Bookmark",
+            "Share"
+        ])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3168587
     func testAddNewFolder() {
         app.launch()
@@ -193,6 +367,30 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.tapDoneButton()
         libraryScreen.tapEditButton()
         libraryScreen.deleteFolder(folderName: "Test Folder")
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168597
+    func testDeleteEmptyFolderViaContextMenu() {
+        app.launch()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.tapDoneButton()
+        libraryScreen.longPressAndSelectContextMenuOption(option: "Delete Folder")
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168598
+    func testDeleteEmptyFolderBySwipe() {
+        app.launch()
+        let folderName = "Test Folder"
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: folderName)
+        libraryScreen.tapDoneButton()
+        libraryScreen.swipeBookmarkListEntry(entryName: folderName)
+        libraryScreen.tapDeleteBookmarkButton()
         libraryScreen.assertBookmarkListLabel(label: "Empty list")
     }
 
@@ -460,6 +658,18 @@ class BookmarksTests: FeatureFlaggedTestBase {
         mainMenu.tapBookmarks()
         libraryScreen.addFreshNewFolder(text: "!@#$%^&*()_+")
         libraryScreen.assertNewFreshFolderCreated(folderName: "!@#$%^&*()_+")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168627
+    func testCreateFolderWithVeryLongName() {
+        app.launch()
+        let longFolderName = "A very long folder name used to verify that the title field " +
+                             "imposes no length limit and the name is trimmed to one line"
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: longFolderName)
+        libraryScreen.assertNewFreshFolderCreated(folderName: longFolderName)
+        libraryScreen.assertFolderNameDisplayedOnSingleLine(folderName: longFolderName)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168629

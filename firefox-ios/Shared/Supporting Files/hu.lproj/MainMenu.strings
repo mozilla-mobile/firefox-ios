@@ -115,8 +115,14 @@
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "A %@ újdonságai";
 
+/* On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting. */
+"MainMenu.SiteProtection.AdBlocker.Title.v153" = "Reklámblokkoló";
+
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
 "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "A kapcsolat nem biztonságos";
+
+/* On the main menu, at the top, title for a badge that opens site protection settings. */
+"MainMenu.SiteProtection.Protections.Title.v153" = "Védelmek";
 
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
 "MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "A védelem KI van kapcsolva";
@@ -173,7 +179,7 @@
 "MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Indítóikon";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Hozzáadás a Parancsokhoz";
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Hozzáadás az indítóikonokhoz";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
 "MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Könyvjelző hozzáadása";
@@ -188,7 +194,7 @@
 "MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "Eltávolítás az olvasási listáról";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Eltávolítás a Parancsokból";
+"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Eltávolítás az indítóikonok közül";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
 "MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "PDF";
