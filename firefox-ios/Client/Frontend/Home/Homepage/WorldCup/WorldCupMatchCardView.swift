@@ -56,6 +56,13 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
                 self?.navigateToWallpaperSettings()
             }
         )
+        let shareAction = UIAction(
+            title: .WorldCup.HomepageWidget.ShareLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
+            handler: { [weak self] _ in
+                self?.shareSchedule()
+            }
+        )
         let removeAction = UIAction(
             title: .WorldCup.HomepageWidget.RemoveLabel,
             image: UIImage.templateImageNamed(
@@ -66,7 +73,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
                 self?.dismiss()
             }
         )
-        let menu = UIMenu(children: [changeTeamAction, wallpaperAction, removeAction])
+        let menu = UIMenu(children: [changeTeamAction, wallpaperAction, shareAction, removeAction])
         button.menu = menu
         button.showsMenuAsPrimaryAction = true
         button.setImage(
@@ -116,13 +123,16 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
 
     private let telemetry = WorldCupTelemetry()
     private let windowUUID: WindowUUID
+    private let searchEnginesManager: SearchEnginesManagerProvider
     private var model: WorldCupMatches?
     private var featuredDividers: [UIView] = []
 
     // MARK: - Init
 
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID,
+         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self)) {
         self.windowUUID = windowUUID
+        self.searchEnginesManager = searchEnginesManager
         super.init(frame: .zero)
         shouldGroupAccessibilityChildren = true
         setupLayout()
@@ -301,6 +311,29 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
                 ),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell,
+            )
+        )
+    }
+
+    /// Shares a link to the World Cup 2026 schedule, resolved through the user's
+    /// default search engine. We use an english query here same as the SERP navigation, 
+    /// since the search engine localizes the results based on the user's location and language preferences.
+    func shareSchedule() {
+        let query = "\(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) schedule"
+        guard let url = searchEnginesManager.defaultEngine?.searchURLForQuery(query) else { return }
+        let configuration = ShareSheetConfiguration(
+            shareType: .site(url: url),
+            shareMessage: nil,
+            sourceView: moreOptionsButton,
+            sourceRect: nil,
+            toastContainer: self,
+            popoverArrowDirection: [.up, .down, .left]
+        )
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.shareSheet(configuration)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShareSheet
             )
         )
     }
