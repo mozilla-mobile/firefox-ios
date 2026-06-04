@@ -5,7 +5,7 @@
 import Common
 import XCTest
 
-let url_1 = "test-example.html"
+let url_1 = TestPages.exampleHTML
 let url_2 = ["url": "test-mozilla-org.html", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
 let urlLabelExample_3 = "Example Domain"
 let url_3 = "localhost:\(serverPort)/test-fixture/test-example.html"
