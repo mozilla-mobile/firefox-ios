@@ -12,7 +12,7 @@ import SiteImageView
 
 class TopSitesHelperTests: XCTestCase {
     private let faviconResource: SiteResource = .remoteURL(url: URL(string: "https://mozilla.org/favicon.ico")!)
-    private let defaultSuggestedSitesCount = 4
+    private static let defaultSuggestedSitesCount = 4
     private var profile: MockProfile!
 
     private func deleteDatabases() {
@@ -70,7 +70,7 @@ class TopSitesHelperTests: XCTestCase {
                 XCTFail("Has no sites")
                 return
             }
-            XCTAssertEqual(sites.count, defaultSuggestedSitesCount, "Contains default sites")
+            XCTAssertEqual(sites.count, Self.defaultSuggestedSitesCount, "Contains default sites")
             expectation.fulfill()
         }
 
@@ -89,7 +89,7 @@ class TopSitesHelperTests: XCTestCase {
             }
             XCTAssertEqual(
                 sites.count,
-                defaultSuggestedSitesCount + 2,
+                Self.defaultSuggestedSitesCount + 2,
                 "Contains default sites and two pinned sites"
             )
             expectation.fulfill()
@@ -113,7 +113,7 @@ class TopSitesHelperTests: XCTestCase {
             }
             XCTAssertEqual(
                 sites.count,
-                defaultSuggestedSitesCount + 2,
+                Self.defaultSuggestedSitesCount + 2,
                 "Contains default sites and 2 frecency sites"
             )
             expectation.fulfill()
@@ -138,7 +138,7 @@ class TopSitesHelperTests: XCTestCase {
             }
             XCTAssertEqual(
                 sites.count,
-                defaultSuggestedSitesCount + 2,
+                Self.defaultSuggestedSitesCount + 2,
                 "Contains default sites and 2 frecency sites, no sponsored urls"
             )
             expectation.fulfill()
@@ -161,7 +161,7 @@ class TopSitesHelperTests: XCTestCase {
             }
             XCTAssertEqual(
                 sites.count,
-                defaultSuggestedSitesCount + 2,
+                Self.defaultSuggestedSitesCount + 2,
                 "Contains default sites and 2 frecency sites, no frecency duplicates"
             )
             expectation.fulfill()
@@ -183,7 +183,7 @@ class TopSitesHelperTests: XCTestCase {
             }
             XCTAssertEqual(
                 sites.count,
-                defaultSuggestedSitesCount,
+                Self.defaultSuggestedSitesCount,
                 "Contains only default sites, no duplicates of defaults sites"
             )
             expectation.fulfill()
@@ -209,7 +209,7 @@ class TopSitesHelperTests: XCTestCase {
             }
             XCTAssertEqual(
                 sites.count,
-                defaultSuggestedSitesCount,
+                Self.defaultSuggestedSitesCount,
                 "Contains default sites, and one pinned site that replaced the default site"
             )
             expectation.fulfill()
