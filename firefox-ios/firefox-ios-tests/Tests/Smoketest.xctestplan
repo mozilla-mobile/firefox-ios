@@ -403,6 +403,7 @@
         "NavigationTest\/testPopUpBlocker_TAE()",
         "NavigationTest\/testPopUpBlocker_tabTrayExperimentOff()",
         "NavigationTest\/testPopUpBlocker_tabTrayExperimentOn()",
+        "NavigationTest\/testSSL()",
         "NavigationTest\/testSSL_TAE()",
         "NavigationTest\/testScrollingBehaviorInAWebPage()",
         "NavigationTest\/testScrollsToTopWithMultipleTabs()",
