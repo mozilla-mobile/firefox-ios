@@ -21,9 +21,8 @@ private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
 struct CertErrorsMapping {
     // Error codes copied from Gecko. The ints corresponding to these codes were determined
     // by inspecting the NSError in each of these cases.
-    // TODO: This impacts the NativeErrorPageHelper too, once ErrorPageHelper is fully replaced,
-    // we should move this code over there
-    // in NativeErrorPageHelper.swift once ErrorPageHelper is fully replaced.
+    // TODO: FXIOS-15970 This impacts the NativeErrorPageHelper too, once ErrorPageHelper is fully replaced,
+    // we should move this code over there.
     enum GeckoCode: Int {
         case unknownIssuer = -9813
         case expiredCertificate = -9814
