@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "ᱟᱲᱟᱝ ᱥᱮᱸᱫᱽᱨᱟ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱟᱲᱟᱝ ᱚᱱᱚᱞ ᱨᱮ ᱵᱚᱫᱚᱞ ᱞᱟᱹᱜᱤᱫ Firefox ᱟᱲᱟᱝ ᱚᱨᱚᱢ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱮᱫᱟᱭ ᱾";
+
 /* (No Comment) */
 "Scan QR Code" = "Scan QR ᱠᱚᱰ ᱥᱠᱟᱱ ᱢᱮ";
 

@@ -46,6 +46,12 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Zadajte adresu alebo výraz vyhľadávania";
 
+/* The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2" = "Zadajte URL adresu webovej stránky.";
+
+/* The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2" = "Pridať skratku";
+
 /* The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section. */
 "FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153" = "Zrušiť";
 
