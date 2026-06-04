@@ -745,6 +745,22 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
     }
 
+    // MARK: - Tab manager restore
+
+    @MainActor
+    func testTabManagerDidRestoreTabs_withDeeplinkFlagEnabled_assignsTabDelegateForAllTabs() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let subject = createSubject()
+        let tab1 = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let tab2 = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tabManager.tabs = [tab1, tab2]
+
+        subject.tabManagerDidRestoreTabs(tabManager)
+
+        XCTAssertTrue(tab1.tabDelegate === subject)
+        XCTAssertTrue(tab2.tabDelegate === subject)
+    }
+
     // MARK: - Private
 
     private func createSubject(file: StaticString = #filePath,
@@ -777,6 +793,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature()
+        }
+    }
+
+    private func setIsDeeplinkOptimizationRefactorEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
         }
     }
 

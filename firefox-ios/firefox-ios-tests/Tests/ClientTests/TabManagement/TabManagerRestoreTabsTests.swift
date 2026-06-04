@@ -114,19 +114,18 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
 
         let activeId = UUID()
-        let tabData = getMockTabData(count: 3)
-        var taggedTabData = tabData
-        taggedTabData[1] = TabData(id: activeId,
-                                   title: tabData[1].title,
-                                   siteUrl: tabData[1].siteUrl,
-                                   faviconURL: tabData[1].faviconURL,
-                                   isPrivate: false,
-                                   lastUsedTime: tabData[1].lastUsedTime,
-                                   createdAtTime: tabData[1].createdAtTime,
-                                   temporaryDocumentSession: tabData[1].temporaryDocumentSession)
+        var tabData = getMockTabData(count: 3)
+        tabData[1] = TabData(id: activeId,
+                             title: tabData[1].title,
+                             siteUrl: tabData[1].siteUrl,
+                             faviconURL: tabData[1].faviconURL,
+                             isPrivate: false,
+                             lastUsedTime: tabData[1].lastUsedTime,
+                             createdAtTime: tabData[1].createdAtTime,
+                             temporaryDocumentSession: [:])
         mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
                                                      activeTabId: activeId,
-                                                     tabData: taggedTabData)
+                                                     tabData: tabData)
 
         subject.restoreTabs()
 
@@ -154,6 +153,66 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
             ensureMainThread {
                 XCTAssertEqual(subject.tabs.count, 1, "Should fall back to creating a fresh tab")
                 XCTAssertNotNil(subject.selectedTab)
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation])
+    }
+
+    @MainActor
+    func testRestoreTabs_withDeeplinkFlagEnabled_preservesDeeplinkWhenRestorationResultIsEmpty() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let testUUID = UUID()
+        let deeplinkTabs = generateTabs(ofType: .normal, count: 1)
+        let subject = createSubject(tabs: deeplinkTabs, windowUUID: testUUID)
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        // No persisted window data — restoration result will be empty, but deeplink must survive.
+        mockTabStore.fetchTabWindowData = nil
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            ensureMainThread {
+                XCTAssertEqual(subject.tabs.count, 1, "Deeplink should be preserved; no extra empty tab created")
+                XCTAssertIdentical(subject.tabs.first, deeplinkTabs.first)
+                XCTAssertIdentical(subject.selectedTab, deeplinkTabs.first, "Deeplink should be selected")
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation])
+    }
+
+    @MainActor
+    func testRestoreTabs_withDeeplinkFlagEnabled_selectsActiveRestoredTabOverDeeplink() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let testUUID = UUID()
+        let deeplinkTabs = generateTabs(ofType: .normal, count: 1)
+        let subject = createSubject(tabs: deeplinkTabs, windowUUID: testUUID)
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+
+        let activeId = UUID()
+        var tabData = getMockTabData(count: 3)
+        tabData[1] = TabData(id: activeId,
+                             title: tabData[1].title,
+                             siteUrl: tabData[1].siteUrl,
+                             faviconURL: tabData[1].faviconURL,
+                             isPrivate: false,
+                             lastUsedTime: tabData[1].lastUsedTime,
+                             createdAtTime: tabData[1].createdAtTime,
+                             temporaryDocumentSession: [:])
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     activeTabId: activeId,
+                                                     tabData: tabData)
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            ensureMainThread {
+                XCTAssertEqual(subject.tabs.count, 4, "3 restored + 1 pre-restore deeplink tab")
+                XCTAssertEqual(subject.selectedTab?.tabUUID,
+                               activeId.uuidString,
+                               "Active restored tab should win over deeplink")
+                XCTAssertIdentical(subject.tabs.last, deeplinkTabs.first, "Deeplink should still land at the end")
                 expectation.fulfill()
             }
         }
