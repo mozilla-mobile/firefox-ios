@@ -199,7 +199,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936976
-    func testSearchBookmarkIconDisplay() {
+    func testSearchBookmarkIconDisplay() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because bookmark search bar is off on Firefox")
+        }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "bookmarks-search-feature")
         app.launch()
         // Step 1: Open Bookmarks panel — empty list, search icon is not displayed
@@ -227,24 +230,24 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936981
-    func testBookmarkSearchResultContextMenu() {
-        launchWithBookmarksSearchEnabledAndOpenSearch()
+    func testBookmarkSearchResultContextMenu() throws {
+        try launchWithBookmarksSearchEnabledAndOpenSearch()
         // Long-tap a searched bookmark — context menu shows expected options
         libraryScreen.longPressBookmarkInList(name: urlLabelExample_3)
         assertBookmarkSearchContextMenuOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3937449
-    func testBookmarkSearchResultDisclosureContextMenu() {
-        launchWithBookmarksSearchEnabledAndOpenSearch()
+    func testBookmarkSearchResultDisclosureContextMenu() throws {
+        try launchWithBookmarksSearchEnabledAndOpenSearch()
         // Tap the three-dot button on the search result — context menu shows expected options
         libraryScreen.tapBookmarkDisclosureButton()
         assertBookmarkSearchContextMenuOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936982
-    func testBookmarkSearchResultOpenInNewTab() {
-        launchWithBookmarksSearchEnabledAndOpenSearch()
+    func testBookmarkSearchResultOpenInNewTab() throws {
+        try launchWithBookmarksSearchEnabledAndOpenSearch()
         // Long-tap a searched bookmark and select "Open in New Tab"
         libraryScreen.longPressBookmarkInList(name: urlLabelExample_3)
         libraryScreen.tapContextMenuOption(option: "Open in New Tab")
@@ -263,8 +266,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936983
-    func testBookmarkSearchResultOpenInNewPrivateTab() {
-        launchWithBookmarksSearchEnabledAndOpenSearch()
+    func testBookmarkSearchResultOpenInNewPrivateTab() throws {
+        try launchWithBookmarksSearchEnabledAndOpenSearch()
         // Long-tap a searched bookmark and select "Open in a Private Tab"
         libraryScreen.longPressBookmarkInList(name: urlLabelExample_3)
         libraryScreen.tapContextMenuOption(option: "Open in a Private Tab")
@@ -284,7 +287,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3967271
-    func testFolderIsUpdatedAfterDeletingBookmarkViaSearch() {
+    func testFolderIsUpdatedAfterDeletingBookmarkViaSearch() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because bookmark search bar is off on Firefox")
+        }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "bookmarks-search-feature")
         app.launch()
         let folderName = "Test Folder"
@@ -324,7 +330,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.assertBookmarkListLabel(label: "Empty list")
     }
 
-    private func launchWithBookmarksSearchEnabledAndOpenSearch() {
+    private func launchWithBookmarksSearchEnabledAndOpenSearch() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because bookmark search bar is off on Firefox")
+        }
         // Precondition: bookmarks are pre-populated via the test-fixtures places.db loaded in setUp
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "bookmarks-search-feature")
         app.launch()
