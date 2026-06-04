@@ -10,7 +10,7 @@ import XCTest
 @MainActor
 final class UIAlertControllerExtensionTests: XCTestCase {
     func testAddShortcutAlertEnablesSaveButtonForValidURL() throws {
-        let alert = UIAlertController.addShortcutAlert()
+        let alert = UIAlertController.addShortcutAlert { _ in }
 
         let saveAction = try XCTUnwrap(alert.actions.last)
         let textField = try XCTUnwrap(alert.textFields?.first)
@@ -24,7 +24,7 @@ final class UIAlertControllerExtensionTests: XCTestCase {
     }
 
     func testAddShortcutAlertDisablesSaveButtonForInvalidURL() throws {
-        let alert = UIAlertController.addShortcutAlert()
+        let alert = UIAlertController.addShortcutAlert { _ in }
 
         let saveAction = try XCTUnwrap(alert.actions.last)
         let textField = try XCTUnwrap(alert.textFields?.first)
