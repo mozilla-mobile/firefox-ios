@@ -561,7 +561,7 @@ final class TabManagerImplementation: NSObject,
         guard let windowData = window else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            generateEmptyTab()
+            legacyGenerateEmptyTab()
             logger.log("Not restoring tabs because there is no window data.",
                        level: .warning,
                        category: .tabs)
@@ -572,7 +572,7 @@ final class TabManagerImplementation: NSObject,
               !nonPrivateTabs.isEmpty else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            generateEmptyTab()
+            legacyGenerateEmptyTab()
             logger.log("Not restoring tabs because there is no tab data on the window data.",
                        level: .warning,
                        category: .tabs)
@@ -592,8 +592,8 @@ final class TabManagerImplementation: NSObject,
     private func legacyGenerateTabs(from windowData: WindowData) {
         // Clear in memory tabs for tab restore
         tabs = [Tab]()
-        let filteredTabs = filterPrivateTabs(from: windowData,
-                                             clearPrivateTabs: shouldClearPrivateTabs)
+        let filteredTabs = legacyFilterPrivateTabs(from: windowData,
+                                                   clearPrivateTabs: shouldClearPrivateTabs)
         var tabToSelect: Tab?
 
         for tabData in filteredTabs {
@@ -619,10 +619,6 @@ final class TabManagerImplementation: NSObject,
             tabRestoreHasFinished = true
             AppEventQueue.completed(.tabRestoration(windowUUID))
         }
-
-        // TODO: generateEmptyTab() ?
-        // generateEmptyTab() on the no-window / no-non-private-tabs paths
-        // when result is empty
 
         tabs = result.restoredTabs + preRestoreTabs
 
@@ -708,19 +704,21 @@ final class TabManagerImplementation: NSObject,
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
 
         if tab.url == nil {
-            logger.log("Tab restored has empty URL",
-                       level: .debug,
-                       category: .tabs,
-                       extra: [
-                        "tabID": tabData.id.uuidString,
-                        "lastUsedTime": tabData.lastUsedTime.description
-                       ])
+            logger.log(
+                "Tab restored has empty URL",
+                level: .debug,
+                category: .tabs,
+                extra: [
+                    "tabID": tabData.id.uuidString,
+                    "lastUsedTime": tabData.lastUsedTime.description
+                ]
+            )
         }
 
         return tab
     }
 
-    private func filterPrivateTabs(from windowData: WindowData, clearPrivateTabs: Bool) -> [TabData] {
+    private func legacyFilterPrivateTabs(from windowData: WindowData, clearPrivateTabs: Bool) -> [TabData] {
         var savedTabs = windowData.tabData
         if clearPrivateTabs {
             savedTabs = windowData.tabData.filter { !$0.isPrivate }
@@ -729,7 +727,7 @@ final class TabManagerImplementation: NSObject,
     }
 
     /// Creates the webview so needs to live on the main thread
-    private func generateEmptyTab() {
+    private func legacyGenerateEmptyTab() {
         let newTab = addTab()
         selectTab(newTab)
     }
@@ -747,6 +745,8 @@ final class TabManagerImplementation: NSObject,
             await MainActor.run { [weak self] in self?.dispatchDidSetScreenshotAction(for: tab) }
         }
     }
+
+    // MARK: - Configuration
 
     private func blockPopUpDidChange() {
         assert(Thread.isMainThread)
