@@ -134,7 +134,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertTrue(items.contains(where: { $0.name == "code" }))
     }
 
-    func testBuildErrorPageQueryItems_certErrorWithoutCFStreamCode_doesNotIncludeCertErrorItem() {
+    func testBuildErrorPageQueryItems_certErrorWithoutCFStreamCode_fallsBackToErrorMapping() {
         let url = URL(string: "https://example.com")!
         let error = NSError(
             domain: NSURLErrorDomain,
@@ -144,7 +144,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         let items = NativeErrorPageHelper.buildErrorPageQueryItems(for: error, url: url)
 
-        XCTAssertFalse(items.contains(where: { $0.name == "certerror" }))
+        XCTAssertTrue(items.contains(where: { $0.name == "certerror" && $0.value == "SEC_ERROR_UNKNOWN_ISSUER" }))
     }
 
     // MARK: - parseErrorDetails
