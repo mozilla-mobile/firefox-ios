@@ -32,13 +32,13 @@ private static func handleAvailableContentHeightChangeAction(
         searchState: SearchBarState.reducer(state.searchState, action),
         jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
         bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-        pocketState: MerinoState.reducer(state.merinoState, action),
+        merinoState: MerinoState.reducer(state.merinoState, action),
         wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
         isZeroSearch: state.isZeroSearch,
         shouldTriggerImpression: false,
         shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
-        shouldShowSpacer: state.shouldShowSpacer,
-        availableContentHeight: availableContentHeight
+        availableContentHeight: availableContentHeight,
+        availableWallpaperHeight: state.availableWallpaperHeight
     )
 }
 ```
