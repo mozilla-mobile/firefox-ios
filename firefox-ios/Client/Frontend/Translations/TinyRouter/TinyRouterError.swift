@@ -9,6 +9,8 @@ import Foundation
 public enum TinyRouterError: Error, Equatable {
     /// No route matched the request and no default route produced a reply
     case notFound
+    /// The route is not permitted to serve the request
+    case notAllowed
     /// URL couldn't be parsed into URLComponents
     case badURL
     /// URL scheme didn't match the handler's expected scheme

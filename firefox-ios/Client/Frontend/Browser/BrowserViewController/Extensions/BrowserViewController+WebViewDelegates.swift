@@ -534,6 +534,11 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        if url.scheme == ReaderModeSchemeHandler.scheme {
+            decisionHandler(.allow)
+            return
+        }
+
         // Disabled due to https://bugzilla.mozilla.org/show_bug.cgi?id=1588928
 //                if url.scheme == "javascript", navigationAction.request.isPrivileged {
 //                    decisionHandler(.cancel)

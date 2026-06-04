@@ -83,6 +83,10 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
 
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
+        guard Self.isCustomSchemeEnabled else {
+            urlSchemeTask.didFailWithError(TinyRouterError.notAllowed)
+            return
+        }
         let id = ObjectIdentifier(urlSchemeTask)
         let isPrivate = tabManager?.selectedTab?.isPrivate ?? true
         let router = isPrivate ? privateRouter : normalRouter

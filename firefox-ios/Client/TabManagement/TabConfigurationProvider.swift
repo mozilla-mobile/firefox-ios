@@ -54,7 +54,7 @@ class TabConfigurationProvider {
             autoPlay: autoPlay,
             schemeHandler: InternalSchemeHandler()
         )
-        let engineConfiguration =  configurationProvider.createConfiguration(parameters: parameters)
+        let engineConfiguration = configurationProvider.createConfiguration(parameters: parameters)
 
         // register the reader mode scheme handler alongside the internal:// one
         if ReaderModeSchemeHandler.isCustomSchemeEnabled {
