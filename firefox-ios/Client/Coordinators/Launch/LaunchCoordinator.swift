@@ -51,8 +51,6 @@ final class LaunchCoordinator: BaseCoordinator,
             presentTermsOfUse(with: manager, isFullScreen: isFullScreen)
         case .intro(let manager):
             presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
-        case .update(let viewModel):
-            presentUpdateOnboarding(with: viewModel, isFullScreen: isFullScreen)
         case .defaultBrowser:
             presentDefaultBrowserOnboarding()
         case .survey(let manager):
@@ -271,32 +269,6 @@ final class LaunchCoordinator: BaseCoordinator,
 
         router.present(hostingController, animated: true)
         telemetryUtility.sendOnboardingShownTelemetry()
-    }
-
-    // MARK: - Update
-    private func presentUpdateOnboarding(with updateViewModel: UpdateViewModel,
-                                         isFullScreen: Bool) {
-        let updateViewController = UpdateViewController(viewModel: updateViewModel, windowUUID: windowUUID)
-        updateViewController.qrCodeNavigationHandler = self
-        updateViewController.didFinishFlow = { [weak self] in
-            guard let self = self else { return }
-            self.parentCoordinator?.didFinishLaunch(from: self)
-        }
-
-        if isFullScreen {
-            updateViewController.modalPresentationStyle = .fullScreen
-            router.present(updateViewController, animated: false)
-        } else {
-            updateViewController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
-                height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
-            updateViewController.modalPresentationStyle = .formSheet
-            // Nimbus's configuration
-            if !updateViewModel.isDismissible {
-                updateViewController.isModalInPresentation = true
-            }
-            router.present(updateViewController)
-        }
     }
 
     // MARK: - Default Browser

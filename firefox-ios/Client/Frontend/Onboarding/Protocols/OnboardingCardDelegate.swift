@@ -8,8 +8,8 @@ import OnboardingKit
 import Foundation
 
 /// The ``OnboardingCardDelegate`` is responsible for handling a variety of
-/// functions relating to onboarding actions taken by the user in
-/// ``UpdateViewController``.
+/// functions relating to onboarding actions taken by the user in a
+/// card-based onboarding view controller.
 ///
 /// The function has default implementations for all these actions, with the
 /// exception of ``OnboardingCardDelegate/handleButtonPress(for:from:)``, which
