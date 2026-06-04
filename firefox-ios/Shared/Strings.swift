@@ -1404,6 +1404,19 @@ extension String {
                 comment: "Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section.")
         }
 
+        public struct TrackerBlocker {
+            public static let TrackersBlocked = MZLocalizedString(
+                key: "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153",
+                tableName: "FirefoxHomepage",
+                value: "%d Trackers Blocked",
+                comment: "The numbers of trackers we've blocked since we started tracking. The %d placeholder is the actual number of trackers blocked.")
+            public static let NoTrackersBlocked = MZLocalizedString(
+                key: "FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153",
+                tableName: "FirefoxHomepage",
+                value: "You’re Protected",
+                comment: "The text shown when we turn on the Tracker Blocker feature on the homepage, and the number of trackers blocked is zero.")
+        }
+
         public struct Pocket {
             public static let NewsSectionTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.NewsSectionTitle.v149",
@@ -3208,6 +3221,11 @@ extension String {
                     tableName: nil,
                     value: "Jump Back In",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off")
+                public static let PrivacyReport = MZLocalizedString(
+                    key: "Settings.CustomizeFirefoxHome.PrivacyReport.v153",
+                    tableName: "CustomizeFirefoxHome",
+                    value: "Privacy Report",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Tracker Blocker Module on the homepage on or off.")
                 public static let RecentlySaved = MZLocalizedString(
                     key: "Settings.Home.Option.RecentlySaved",
                     tableName: nil,
