@@ -33,6 +33,10 @@ const sendToEngine = (message) => {
 /// For "done" messages, it resolves the isDone promise.
 window.receive = (message) => {
     if (message.type === "TranslationsPort:TranslationResponse" && isDoneResolve) {
+        // Promote intent to ground truth only once the DOM has actually been translated.
+        // Setting this at translation start would report `translated` for a page whose
+        // translation was merely requested but never rendered (e.g. navigated away mid-spin).
+        currentTranslation = pendingTranslation;
         isDoneResolve(true);
         isDoneResolve = null;
         isDoneReject = null;
@@ -57,14 +61,19 @@ port1.onmessage = (message) => {
 
 
 /// Authoritative per-document translation state. Lives in the page, so it rides the WKWebView
-/// back/forward cache alongside the translated DOM. Set when translation starts, cleared when
-/// discarded. Used by `getTranslationState` to expose the ground truth to Swift.
+/// back/forward cache alongside the translated DOM. Set only once the first translation response
+/// arrives (the DOM is actually translated), cleared when discarded. Used by `getTranslationState`
+/// to expose the ground truth to Swift.
 let currentTranslation = null;
+
+/// Languages requested by the in-flight translation, promoted to `currentTranslation` once the
+/// first response confirms the DOM was translated.
+let pendingTranslation = null;
 
 /// NOTE: This should be called to start the translation process for this document.
 /// This creates the TranslationsDocument instance that manages the translation lifecycle.
 const startTranslations = ({from, to}) => {
-    currentTranslation = { from, to };
+    pendingTranslation = { from, to };
     resetIsDone();
     const languagePair = {sourceLanguage: from, targetLanguage: to}
     const translationsCache = new LRUCache(languagePair);
@@ -92,6 +101,7 @@ const startTranslations = ({from, to}) => {
 /// NOTE: This should be called when we teardown the translations for this document.
 const discardTranslations = ({from, to}) => {
     currentTranslation = null;
+    pendingTranslation = null;
     resetIsDone();
     sendToEngine({ type: "DiscardTranslations", innerWindowId })
 };

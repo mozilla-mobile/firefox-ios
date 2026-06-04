@@ -279,6 +279,73 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(tab.translationConfiguration?.state, .active)
     }
 
+    /// Regression: tapping translate flips the icon to `.active` the instant the request is sent, so a
+    /// navigation that races the spinner can carry a stale `.active` for a page the engine never finished
+    /// translating. The engine's ground truth (`.notTranslated`) must win — clearing the stale state and
+    /// re-offering — rather than stranding a blue icon over an untranslated page.
+    func test_urlDidChangeAction_whenActionCarriesStaleActive_butEngineReportsNotTranslated_clearsAndReoffers() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .active)
+        mockTabManager.selectedTab = tab
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true),
+            currentTranslationStateResult: .success(.notTranslated)
+        )
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .active),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "eligibility re-offer dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationsAction)
+        XCTAssertEqual(dispatched.actionType as? TranslationsActionType, .receivedTranslationLanguage)
+        XCTAssertNotEqual(dispatched.translationConfiguration?.state, .active)
+        XCTAssertNotEqual(tab.translationConfiguration?.state, .active)
+    }
+
+    /// An unreadable engine state must not strand a stale `.active`: it falls back to untranslated and
+    /// re-runs eligibility rather than dispatching `.active`.
+    func test_urlDidChangeAction_whenEngineStateThrows_fallsBackToUntranslated() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        enum TestError: Error { case example }
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .active)
+        mockTabManager.selectedTab = tab
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true),
+            currentTranslationStateResult: .failure(TestError.example)
+        )
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .active),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "eligibility re-offer dispatched after engine error")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationsAction)
+        XCTAssertEqual(dispatched.actionType as? TranslationsActionType, .receivedTranslationLanguage)
+        XCTAssertNotEqual(dispatched.translationConfiguration?.state, .active)
+        XCTAssertNotEqual(tab.translationConfiguration?.state, .active)
+    }
+
     /// urlDidChange with `.loading` skips eligibility re-check.
     func test_urlDidChangeAction_withLoadingState_skipsEligibilityRecheck() throws {
         setTranslationsFeatureEnabled(enabled: true)

@@ -36,7 +36,14 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     /// the active translation is discarded, tryAutoTranslate picks this up and translates to the
     /// requested language instead of the user's top preferred language.
     private var pendingLanguageSwitchTargets: [WindowUUID: String] = [:]
-    private var translationTasks: [WindowUUID: Task<Void, Never>] = [:]
+    /// An in-flight translation for a window. Bundles the task with the URL it was started on so the
+    /// same-page `urlDidChange` that fires right after tapping translate (must not clobber the spinner)
+    /// can be told from a genuine navigation to another page (must cancel the orphaned task and re-offer).
+    private struct InFlightTranslation {
+        let url: URL?
+        let task: Task<Void, Never>
+    }
+    private var translationTasks: [WindowUUID: InFlightTranslation] = [:]
     var backgroundTimestamp: Date?
     private static let backgroundRecoveryThreshold: TimeInterval = 3
 
@@ -132,7 +139,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         // rather than acting on cached flow data from before the settings change.
         selectedTargetLanguages[windowUUID] = nil
         translationFlowIds[windowUUID] = nil
-        translationTasks[windowUUID]?.cancel()
+        translationTasks[windowUUID]?.task.cancel()
         translationTasks[windowUUID] = nil
         restoringWindows.remove(windowUUID)
         guard featureFlagsProvider.isEnabled(.translation),
@@ -143,10 +150,21 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     private func handleUrlDidChange(action: ToolbarAction, windowUUID: WindowUUID) {
         guard action.url?.isWebPage() == true else { return }
 
-        // Skip while a translation is in-flight: the `.loading` spinner reflects an active flow we'd
-        // otherwise clobber. The action carries `.loading` on tab-tray round-trips mid-translation;
-        // `translationTasks` covers the in-window case.
-        if action.translationConfiguration?.state == .loading || translationTasks[windowUUID] != nil { return }
+        // A tab-tray round-trip mid-translation re-delivers `.loading` for the same page; don't clobber it.
+        if action.translationConfiguration?.state == .loading { return }
+
+        // A translation is in flight for this window.
+        if let inFlight = translationTasks[windowUUID] {
+            // Same page as the in-flight translation: this is the reload `urlDidChange` that fires right
+            // after tapping translate, before the DOM swaps. Let the translation finish.
+            if inFlight.url == action.url { return }
+
+            // Navigated to a different page while translating: cancel the now-orphaned task so it can't
+            // finish on the wrong page and throw a spurious error toast, then fall through to re-offer
+            // translation for the page we just landed on.
+            inFlight.task.cancel()
+            translationTasks[windowUUID] = nil
+        }
 
         clearFlowId(for: action)
 
@@ -156,7 +174,23 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         // guess, which cannot tell the two apart.
         let originatingTab = selectedTab(for: action.windowUUID)
         Task {
-            switch try? await self.translationsService.currentTranslationState(for: windowUUID) {
+            let pageState: PageTranslationState
+            do {
+                pageState = try await self.translationsService.currentTranslationState(for: windowUUID)
+            } catch {
+                self.logger.log(
+                    "Failed to read in-page translation state on navigation; treating page as untranslated.",
+                    level: .warning,
+                    category: .translations,
+                    description: error.localizedDescription
+                )
+                // An unreadable engine state must not strand a stale `.active`: fall back to untranslated.
+                self.persistTranslationConfig(nil, on: originatingTab)
+                self.checkTranslationsAreEligible(for: action, on: originatingTab)
+                return
+            }
+
+            switch pageState {
             case .translated(let from, let to):
                 self.dispatchAction(
                     for: TranslationsActionType.translationCompleted,
@@ -166,7 +200,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                     and: windowUUID,
                     on: originatingTab
                 )
-            case .notTranslated, nil:
+            case .notTranslated:
                 // Not translated: reset any stale `.active` so the eligibility check isn't
                 // short-circuited, then re-offer or clear as appropriate.
                 self.persistTranslationConfig(nil, on: originatingTab)
@@ -583,8 +617,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         autoTranslate: Bool = false,
         on tab: Tab? = nil
     ) {
-        translationTasks[windowUUID]?.cancel()
-        translationTasks[windowUUID] = Task {
+        translationTasks[windowUUID]?.task.cancel()
+        let startedURL = tab?.url ?? selectedTab(for: windowUUID)?.url
+        translationTasks[windowUUID] = InFlightTranslation(url: startedURL, task: Task {
             await self.performTranslation(
                 windowUUID: windowUUID,
                 targetLanguage: targetLanguage,
@@ -593,7 +628,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                 on: tab
             )
             self.translationTasks[windowUUID] = nil
-        }
+        })
     }
 
     private func performTranslation(
@@ -664,8 +699,8 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func cancelInFlightTranslations() {
-        for (windowUUID, task) in translationTasks {
-            task.cancel()
+        for (windowUUID, inFlight) in translationTasks {
+            inFlight.task.cancel()
             translationTasks[windowUUID] = nil
             guard let targetLanguage = selectedTargetLanguages[windowUUID] else { continue }
             let tab = selectedTab(for: windowUUID)

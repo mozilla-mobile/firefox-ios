@@ -15103,7 +15103,7 @@
 				137DDFADC6034016BE36E02B /* AutoTranslatePromptView.swift */,
 				47E805FFBBD74D9BA77BD057 /* AutoTranslatePromptState.swift */,
 				AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */,
-								AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */,
+				AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */,
 				AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */,
 			);
 			path = Translations;
