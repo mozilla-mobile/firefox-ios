@@ -49,12 +49,12 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     /// `WebServer.sharedInstance.baseReaderModeURL()`.
     nonisolated static let baseURL = "readermode://app/page"
 
-    @MainActor static var currentBaseURL: String {
+    static var currentBaseURL: String {
         let provider: FeatureFlagProviding = AppContainer.shared.resolve()
         return provider.isEnabled(.customReaderModeScheme) ? baseURL : WebServer.sharedInstance.baseReaderModeURL()
     }
 
-    @MainActor static var isCustomSchemeEnabled: Bool {
+    static var isCustomSchemeEnabled: Bool {
         let provider: FeatureFlagProviding = AppContainer.shared.resolve()
         return provider.isEnabled(.customReaderModeScheme)
     }
