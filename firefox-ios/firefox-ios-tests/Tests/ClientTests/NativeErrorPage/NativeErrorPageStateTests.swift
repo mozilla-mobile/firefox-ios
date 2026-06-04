@@ -16,7 +16,7 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertEqual(initialState.foxImage, "")
         XCTAssertNil(initialState.url)
         XCTAssertNil(initialState.advancedSection)
-        XCTAssertFalse(initialState.showGoBackButton)
+        XCTAssertEqual(initialState.type, .generic)
     }
 
     @MainActor
@@ -32,7 +32,8 @@ final class NativeErrorPageStateTests: XCTestCase {
                 string: "url.com"
             ),
             advancedSection: nil,
-            showGoBackButton: false
+            showGoBackButton: false,
+            type: .internetConnection
         )
 
         let action = getAction(model: mockModel, for: .initialize)
@@ -43,7 +44,8 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
         XCTAssertEqual(newState.url, mockModel.url)
         XCTAssertNil(newState.advancedSection)
-        XCTAssertFalse(newState.showGoBackButton)
+        XCTAssertEqual(newState.type, .internetConnection)
+        XCTAssertTrue(newState.type.isRegularUI)
     }
 
     @MainActor
@@ -68,7 +70,8 @@ If you’re on a corporate network, your support team might have more info.
             foxImageName: "securityError",
             url: URL(string: "https://example.com"),
             advancedSection: advancedSection,
-            showGoBackButton: true
+            showGoBackButton: true,
+            type: .badCertDomain
         )
 
         let action = getAction(model: mockModel, for: .initialize)
@@ -78,7 +81,8 @@ If you’re on a corporate network, your support team might have more info.
         XCTAssertEqual(newState.description, mockModel.errorDescription)
         XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
         XCTAssertEqual(newState.url, mockModel.url)
-        XCTAssertTrue(newState.showGoBackButton)
+        XCTAssertEqual(newState.type, .badCertDomain)
+        XCTAssertFalse(newState.type.isRegularUI)
         XCTAssertNotNil(newState.advancedSection)
         XCTAssertEqual(newState.advancedSection?.buttonText, advancedSection.buttonText)
         XCTAssertEqual(newState.advancedSection?.infoText, advancedSection.infoText)

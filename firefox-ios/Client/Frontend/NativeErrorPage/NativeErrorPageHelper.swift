@@ -139,7 +139,8 @@ class NativeErrorPageHelper {
                     foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
                     url: nil,
                     advancedSection: nil,
-                    showGoBackButton: false
+                    showGoBackButton: false,
+                    type: .internetConnection
                 )
             case NSURLErrorServerCertificateUntrusted,
                  NSURLErrorServerCertificateHasBadDate,
@@ -153,7 +154,8 @@ class NativeErrorPageHelper {
                     foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
                     url: url,
                     advancedSection: nil,
-                    showGoBackButton: false
+                    showGoBackButton: false,
+                    type: .generic
                 )
             }
         } else {
@@ -163,7 +165,8 @@ class NativeErrorPageHelper {
                 foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
                 url: nil,
                 advancedSection: nil,
-                showGoBackButton: false
+                showGoBackButton: false,
+                type: .internetConnection
             )
         }
         return model
@@ -228,7 +231,8 @@ class NativeErrorPageHelper {
                 foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
                 url: url,
                 advancedSection: nil,
-                showGoBackButton: false
+                showGoBackButton: false,
+                type: .generic
             )
         }
 
@@ -262,7 +266,8 @@ class NativeErrorPageHelper {
                 foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
                 url: url,
                 advancedSection: advancedSection,
-                showGoBackButton: true
+                showGoBackButton: true,
+                type: .badCertDomain
             )
         } else {
             return ErrorPageModel(
@@ -271,7 +276,8 @@ class NativeErrorPageHelper {
                 foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
                 url: url,
                 advancedSection: nil,
-                showGoBackButton: false
+                showGoBackButton: false,
+                type: .generic
             )
         }
     }
