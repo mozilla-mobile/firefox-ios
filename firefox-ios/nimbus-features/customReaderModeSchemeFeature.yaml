@@ -2,7 +2,7 @@
 features:
   custom-reader-mode-scheme-feature:
     description: >
-      Feature description
+      Use a custom WKURLSchemeHandler for reader mode
     variables:
       enabled:
         description: >
