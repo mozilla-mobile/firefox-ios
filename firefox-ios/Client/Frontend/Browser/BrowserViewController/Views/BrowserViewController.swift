@@ -2524,6 +2524,8 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        (webView as? TabWebView)?.isUserOverrideCert = false
+
         if let url, !url.isFxHomeUrl {
             updateToolbarAnimationStateIfNeeded()
         }
