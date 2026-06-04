@@ -496,6 +496,7 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
     }
 
     // MARK: Private
+    // TODO: FXIOS-16025 Consolidate these onto the modern telemetry helper and remove the legacy `.legacy` usage
     private func createTelemetryUtility(
         for onboardingType: Client.OnboardingType,
         onboardingReason: OnboardingReason = .newUser,
@@ -508,6 +509,7 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
 
         let telemetryUtility = OnboardingTelemetryUtility(
             with: model,
+            onboardingVariant: .legacy,
             onboardingReason: onboardingReason,
             gleanWrapper: mockGleanWrapper
         )
