@@ -267,7 +267,7 @@ public final class HeaderView: UIView, ThemeApplicable {
         subtitleLabel.textColor = theme.colors.textSecondary
         titleLabel.textColor = theme.colors.textPrimary
         self.tintColor = theme.colors.layer2
-        closeButton.tintColor = theme.colors.iconSecondary
+        closeButton.applyTheme(tintColor: theme.colors.iconSecondary)
         if #unavailable(iOS 26.0) {
             let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
                 .withTintColor(theme.colors.iconSecondary)

@@ -207,7 +207,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
-        closeButton.tintColor = theme.colors.iconSecondary
+        closeButton.applyTheme(tintColor: theme.colors.iconSecondary)
         if #unavailable(iOS 26.0) {
             closeButton.backgroundColor = theme.colors.actionCloseButton.withAlphaComponent(mainMenuHelper.backgroundAlpha())
         }

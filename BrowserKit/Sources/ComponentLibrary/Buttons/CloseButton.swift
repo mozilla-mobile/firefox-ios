@@ -54,6 +54,13 @@ public class CloseButton: UIButton,
         updateButtonSizeForDynamicFont()
     }
 
+    public func applyTheme(tintColor: UIColor) {
+        self.tintColor = tintColor
+        if #available(iOS 26.0, *) {
+            configuration?.baseForegroundColor = tintColor
+        }
+    }
+
     public func configure(viewModel: CloseButtonViewModel,
                           notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.notificationCenter = notificationCenter

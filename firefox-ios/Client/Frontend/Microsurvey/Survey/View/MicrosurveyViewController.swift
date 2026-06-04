@@ -301,7 +301,7 @@ final class MicrosurveyViewController: UIViewController,
         view.backgroundColor = theme.colors.layer3
 
         headerLabel.textColor = theme.colors.textPrimary
-        closeButton.tintColor = theme.colors.textSecondary
+        closeButton.applyTheme(tintColor: theme.colors.textSecondary)
         tableView.backgroundColor = theme.colors.layer2
         tableView.layer.borderColor = theme.colors.borderPrimary.cgColor
         tableView.separatorColor = theme.colors.borderPrimary

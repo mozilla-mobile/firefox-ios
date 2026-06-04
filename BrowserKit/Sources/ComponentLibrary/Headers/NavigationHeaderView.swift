@@ -142,7 +142,7 @@ public final class NavigationHeaderView: UIView {
 
     // MARK: ThemeApplicable
     public func applyTheme(theme: Theme) {
-        closeButton.tintColor = theme.colors.iconSecondary
+        closeButton.applyTheme(tintColor: theme.colors.iconSecondary)
         if #unavailable(iOS 26.0) {
             let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
                 .withTintColor(theme.colors.iconSecondary)
