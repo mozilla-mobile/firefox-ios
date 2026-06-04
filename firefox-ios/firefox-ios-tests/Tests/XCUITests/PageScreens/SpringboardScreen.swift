@@ -116,10 +116,10 @@ final class SpringboardScreen {
     }
 
     func assertAllContextMenuOptionsExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(appIconButton, timeout: timeout)
         BaseTestCase().mozWaitForElementToExist(newTabButton, timeout: timeout)
         BaseTestCase().mozWaitForElementToExist(newPrivateButton, timeout: timeout)
         BaseTestCase().mozWaitForElementToExist(openLastBookmarkButton, timeout: timeout)
-        BaseTestCase().mozWaitForElementToExist(appIconButton, timeout: timeout)
     }
 
     func fennecIconsCount() -> Int {

@@ -70,10 +70,10 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         [
             FENNEC_ICONS,
             FIREFOX_ICON,
+            APP_ICON_BUTTON,
             NEW_TAB_BUTTON,
             NEW_PRIVATE_TAB_BUTTON,
-            OPEN_LAST_BOOKMARK_BUTTON,
-            APP_ICON_BUTTON
+            OPEN_LAST_BOOKMARK_BUTTON
         ]
     }
 }
