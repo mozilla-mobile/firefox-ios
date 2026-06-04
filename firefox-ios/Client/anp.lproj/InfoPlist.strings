@@ -5,16 +5,22 @@
 "New Tab" = "नया टैब";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "इ सेॅ तोय आपनो फोटो ले आरू अपलोड कैर सके छौ";
+"NSCameraUsageDescription" = "इ से तोय आपनो विडियो ले आरू अपलोड कैर सकै छै.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "फायरफॉक्स तोहर पासवर्ड और भुगतान देखे खातिर फेस आईडी चाहे.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "आपनो द्वारा देखलोॅ गेल वेबसाइटें तोहरो लोकेशन मांगी रहलो छै";
+"NSLocationWhenInUseUsageDescription" = "आपनो द्वारा देखलोॅ गेल वेबसाइटें तोहरो लोकेशन मांगी रहलो छै.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "इ सेॅ तोय आपनो विडियो ले आरू अपलोड कैर सके छौ";
+"NSMicrophoneUsageDescription" = "इ सेॅ तोय आपनो विडियो ले आरू अपलोड कैर सके छौ.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "इ सेॅ तोय आपनो फोटों सहेज सके छौ";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "फायरफॉक्स तोहर आवाज के टेक्स्ट में बदलै छै वॉयस सर्च खातिर.";
 
 /* (No Comment) */
 "Scan QR Code" = "QR कोड स्कैन करोॅ";

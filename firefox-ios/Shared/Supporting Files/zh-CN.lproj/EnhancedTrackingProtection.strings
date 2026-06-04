@@ -110,7 +110,7 @@
 "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "您的连接不安全。";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
-"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "请谨慎浏览此网站";
+"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "谨慎使用此网站";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ 正在防护";
