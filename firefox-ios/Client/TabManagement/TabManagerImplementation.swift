@@ -642,32 +642,34 @@ final class TabManagerImplementation: NSObject,
     }
 
     private func legacyConfigureNewTab(with tabData: TabData) -> Tab? {
-        let newTab: Tab
-        newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
-        newTab.url = URL(string: tabData.siteUrl)
-        newTab.lastTitle = tabData.title
-        newTab.tabUUID = tabData.id.uuidString
-        newTab.screenshotUUID = tabData.id
-        newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
-        newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
+        let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
+        populateTab(newTab, from: tabData)
+        restoreScreenshot(for: newTab)
+        return newTab
+    }
+
+    /// Copies persisted `TabData` onto a `Tab`. Shared by the legacy restore path (after `addTab`)
+    /// and the deeplink-optimization restore path (after a bare `Tab` init in `createTab`).
+    private func populateTab(_ tab: Tab, from tabData: TabData) {
+        tab.url = URL(string: tabData.siteUrl)
+        tab.lastTitle = tabData.title
+        tab.tabUUID = tabData.id.uuidString
+        tab.screenshotUUID = tabData.id
+        tab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
+        tab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
         if let documentSession = tabData.temporaryDocumentSession {
-            newTab.restoreTemporaryDocumentSession(documentSession)
+            tab.restoreTemporaryDocumentSession(documentSession)
         }
 
-        if newTab.url == nil {
+        if tab.url == nil {
             logger.log("Tab restored has empty URL",
                        level: .debug,
                        category: .tabs,
                        extra: [
                         "tabID": tabData.id.uuidString,
                         "lastUsedTime": tabData.lastUsedTime.description
-                       ]
-            )
+                       ])
         }
-
-        // Restore screenshot
-        restoreScreenshot(for: newTab)
-        return newTab
     }
 
     private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
@@ -690,31 +692,12 @@ final class TabManagerImplementation: NSObject,
     /// the returned tabs are collected into a `TabRestorationResult` and applied via `applyRestorationResult`.
     func createTab(with tabData: TabData) -> Tab {
         let tab = Tab(profile: profile, isPrivate: tabData.isPrivate, windowUUID: windowUUID)
-        tab.url = URL(string: tabData.siteUrl)
-        tab.lastTitle = tabData.title
-        tab.tabUUID = tabData.id.uuidString
-        tab.screenshotUUID = tabData.id
-        tab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
-        tab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
-        if let documentSession = tabData.temporaryDocumentSession {
-            tab.restoreTemporaryDocumentSession(documentSession)
-        }
+        populateTab(tab, from: tabData)
+        // Setting those here since `configureTab` applies those on the legacy path. Inlined here because the
+        // deeplink-optimization path intentionally bypasses `addTab` / `configureTab`.
         tab.navigationDelegate = navigationDelegate
         tab.nightMode = NightModeHelper.isActivated()
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
-
-        if tab.url == nil {
-            logger.log(
-                "Tab restored has empty URL",
-                level: .debug,
-                category: .tabs,
-                extra: [
-                    "tabID": tabData.id.uuidString,
-                    "lastUsedTime": tabData.lastUsedTime.description
-                ]
-            )
-        }
-
         return tab
     }
 
