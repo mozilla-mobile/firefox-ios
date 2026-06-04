@@ -24,7 +24,7 @@ class UrlBarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306888
     func testNewTabUrlBar() {
         // Visit any website and select the URL bar
-        browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
         browserScreen.tapOnAddressBar()
         // The keyboard is brought up.

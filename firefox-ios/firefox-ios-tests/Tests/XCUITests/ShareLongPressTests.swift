@@ -128,7 +128,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
             waitForElementsToExist(
                 [
                     app.navigationBars["Reminders"],
-                    app.links.elementContainingText("test-mozilla-book.html")
+                    app.links.elementContainingText(TestPages.mozillaBook)
                 ]
             )
         }
@@ -158,7 +158,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         app.launch()
         longPressReadingListAndReachShareOptions(option: "Copy")
         app.buttons["Done"].waitAndTap()
-        openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
+        openNewTabAndValidateURLisPaste(url: TestPages.mozillaBook)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864476
@@ -198,7 +198,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressReadingListAndReachShareOptions(option: String) {
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])

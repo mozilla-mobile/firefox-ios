@@ -39,7 +39,7 @@ class HomeButtonTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306883
     func testSwitchHomepageKeyboardRaisedUp() {
         // Open a new tab and load a web page
-        browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
 
         // Switch to Homepage by taping the home button

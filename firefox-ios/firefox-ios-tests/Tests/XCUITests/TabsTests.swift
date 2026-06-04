@@ -361,7 +361,7 @@ class TabsTests: BaseTestCase {
         tabTrayScreen = TabTrayScreen(app: app)
 
         toolBarScreen.assertTabsButtonExists()
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
 
         waitForTabsButton()
@@ -384,7 +384,7 @@ class TabsTests: BaseTestCase {
         tabTrayScreen = TabTrayScreen(app: app)
 
         toolBarScreen.assertTabsButtonExists()
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
 
         waitForTabsButton()
@@ -400,7 +400,7 @@ class TabsTests: BaseTestCase {
         /*
          // Open a few tabs
          waitForTabsButton()
-         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+         navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
          waitUntilPageLoad()
          navigator.createNewTab()
          navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-example.html")

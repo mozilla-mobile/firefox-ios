@@ -20,9 +20,9 @@ let emptyRecentlyClosedMesg = "Websites you’ve visited recently will show up h
 // This is part of the info the user will see in recent closed tabs once the default
 // visited website (https://www.mozilla.org/en-US/book/) is closed
 let bookOfMozilla = [
-    "file": "test-mozilla-book.html",
+    "file": TestPages.mozillaBook,
     "title": "The Book of Mozilla",
-    "label": "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"
+    "label": "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)"
 ]
 
 class HistoryTests: BaseTestCase {

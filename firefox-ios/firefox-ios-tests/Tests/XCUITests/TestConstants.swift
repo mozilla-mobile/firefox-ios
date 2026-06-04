@@ -7,6 +7,9 @@ import Foundation
 enum TestPages {
     static let exampleHTML = "test-example.html"
     static let mozillaOrg = "test-mozilla-org.html"
+    static let findInPage = "find-in-page-test.html"
+    static let mozillaBook = "test-mozilla-book.html"
+    static let cookieStore = "test-cookie-store.html"
 }
 
 enum TestLabels {
