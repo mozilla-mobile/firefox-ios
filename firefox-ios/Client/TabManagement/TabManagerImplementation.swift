@@ -97,6 +97,11 @@ final class TabManagerImplementation: NSObject,
         return uuid
     }
 
+    private var shouldClearPrivateTabs: Bool {
+        // FXIOS-9519: By default if no bool value is set we close the private tabs and mark it true
+        return profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? true
+    }
+
     init(profile: Profile,
          imageStore: DiskImageStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
@@ -406,13 +411,13 @@ final class TabManagerImplementation: NSObject,
         assert(Thread.isMainThread)
 
         if isDeeplinkOptimizationRefactorEnabled {
-            restoreTabsUsingRestorer()
+            startRestoreTabs()
         } else {
-            restoreTabsLegacy()
+            legacyRestoreTabs()
         }
     }
 
-    private func restoreTabsLegacy() {
+    private func legacyRestoreTabs() {
         guard !isRestoringTabs, tabs.isEmpty else {
             logger.log("No restore tabs running",
                        level: .debug,
@@ -437,15 +442,15 @@ final class TabManagerImplementation: NSObject,
         isRestoringTabs = true
         AppEventQueue.started(.tabRestoration(windowUUID))
 
-        startRestoreTabsTask()
+        startLegacyRestoreTabsTask()
     }
 
     /// Snapshot-and-merge restore path used when the deeplink-optimization refactor is enabled.
     /// Captures any pre-existing tabs (e.g. a deeplink tab added before restore ran), delegates
-    /// the actual restoration to `TabRestorer`, then merges the snapshot back at the end of the
+    /// the actual restoration to `TabRestorer`, then merges the snapshot back into the
     /// `tabs` array so deeplink tabs always land last. Guarded by `isRestoringTabs` to prevent
     /// concurrent re-entry while a restore is in flight.
-    private func restoreTabsUsingRestorer() {
+    private func startRestoreTabs() {
         guard !isRestoringTabs else {
             logger.log("Tab restore already in progress",
                        level: .debug,
@@ -471,12 +476,11 @@ final class TabManagerImplementation: NSObject,
         AppEventQueue.started(.tabRestoration(windowUUID))
 
         let preRestoreTabs = tabs
-//        tabs = [] // Laurie
         let restorer = DefaultTabRestorer(
             delegate: self,
             tabDataStore: tabDataStore,
-            shouldClearPrivateTabs: shouldClearPrivateTabs(),
-            uuid: ReservedWindowUUID(uuid: windowUUID, isNew: windowIsNew),
+            shouldClearPrivateTabs: shouldClearPrivateTabs,
+            windowIsNew: windowIsNew,
             logger: logger
         )
 
@@ -534,38 +538,18 @@ final class TabManagerImplementation: NSObject,
         }
     }
 
-    private func startRestoreTabsTask() {
+    private func startLegacyRestoreTabsTask() {
         Task { @MainActor in
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
-            buildTabRestore(window: windowData)
+            legacyBuildTabRestore(window: windowData)
             TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 
-    private func blockPopUpDidChange() {
-        assert(Thread.isMainThread)
-        let allowPopups = !(profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true)
-        // Each tab may have its own configuration, so we should tell each of them in turn.
-        for tab in tabs {
-            tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-        }
-        // The default tab configurations also need to change.
-        tabConfigurationProvider.updateAllowsPopups(allowPopups)
-    }
-
-    private func autoPlayDidChange() {
-        assert(Thread.isMainThread)
-        let mediaType = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(profile.prefs)
-        // https://developer.apple.com/documentation/webkit/wkwebviewconfiguration
-        // The web view incorporates our configuration settings only at creation time; we cannot change
-        //  those settings dynamically later. So this change will apply to new webviews only.
-        tabConfigurationProvider.updateMediaTypesRequiringUserActionForPlayback(mediaType)
-    }
-
-    private func buildTabRestore(window: WindowData?) {
+    private func legacyBuildTabRestore(window: WindowData?) {
         defer {
             isRestoringTabs = false
             tabRestoreHasFinished = true
@@ -595,13 +579,34 @@ final class TabManagerImplementation: NSObject,
             return
         }
 
-        generateTabs(from: windowData)
+        legacyGenerateTabs(from: windowData)
         cleanUpUnusedScreenshots()
         cleanUpTabSessionData()
 
         for delegate in delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
+    }
+
+    /// Creates the webview so needs to live on the main thread
+    private func legacyGenerateTabs(from windowData: WindowData) {
+        // Clear in memory tabs for tab restore
+        tabs = [Tab]()
+        let filteredTabs = filterPrivateTabs(from: windowData,
+                                             clearPrivateTabs: shouldClearPrivateTabs)
+        var tabToSelect: Tab?
+
+        for tabData in filteredTabs {
+            let newTab = legacyConfigureNewTab(with: tabData)
+            if windowData.activeTabId == tabData.id {
+                tabToSelect = newTab
+            }
+        }
+
+        logger.log("There was \(filteredTabs.count) tabs restored",
+                   level: .debug,
+                   category: .tabs)
+        handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
     }
 
     /// Applies the output of `TabRestorer` to this manager's state, merging `preRestoreTabs`
@@ -615,9 +620,14 @@ final class TabManagerImplementation: NSObject,
             AppEventQueue.completed(.tabRestoration(windowUUID))
         }
 
+        // TODO: generateEmptyTab() ?
+        // generateEmptyTab() on the no-window / no-non-private-tabs paths
+        // when result is empty
+
         tabs = result.restoredTabs + preRestoreTabs
 
         // TODO: FXIOS-15981 - Move screenshot restoration into TabRestorer
+        // This is here just for testing purposes so the feature flag is kind of in a working state
         for tab in result.restoredTabs {
             restoreScreenshot(for: tab)
         }
@@ -635,33 +645,7 @@ final class TabManagerImplementation: NSObject,
         }
     }
 
-    private func shouldClearPrivateTabs() -> Bool {
-        // FXIOS-9519: By default if no bool value is set we close the private tabs and mark it true
-        return profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? true
-    }
-
-    /// Creates the webview so needs to live on the main thread
-    private func generateTabs(from windowData: WindowData) {
-        // Clear in memory tabs for tab restore
-        tabs = [Tab]()
-        let filteredTabs = filterPrivateTabs(from: windowData,
-                                             clearPrivateTabs: shouldClearPrivateTabs())
-        var tabToSelect: Tab?
-
-        for tabData in filteredTabs {
-            let newTab = configureNewTab(with: tabData)
-            if windowData.activeTabId == tabData.id {
-                tabToSelect = newTab
-            }
-        }
-
-        logger.log("There was \(filteredTabs.count) tabs restored",
-                   level: .debug,
-                   category: .tabs)
-        handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
-    }
-
-    private func configureNewTab(with tabData: TabData) -> Tab? {
+    private func legacyConfigureNewTab(with tabData: TabData) -> Tab? {
         let newTab: Tab
         newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
         newTab.url = URL(string: tabData.siteUrl)
@@ -764,6 +748,26 @@ final class TabManagerImplementation: NSObject,
         }
     }
 
+    private func blockPopUpDidChange() {
+        assert(Thread.isMainThread)
+        let allowPopups = !(profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true)
+        // Each tab may have its own configuration, so we should tell each of them in turn.
+        for tab in tabs {
+            tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+        }
+        // The default tab configurations also need to change.
+        tabConfigurationProvider.updateAllowsPopups(allowPopups)
+    }
+
+    private func autoPlayDidChange() {
+        assert(Thread.isMainThread)
+        let mediaType = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(profile.prefs)
+        // https://developer.apple.com/documentation/webkit/wkwebviewconfiguration
+        // The web view incorporates our configuration settings only at creation time; we cannot change
+        //  those settings dynamically later. So this change will apply to new webviews only.
+        tabConfigurationProvider.updateMediaTypesRequiringUserActionForPlayback(mediaType)
+    }
+
     // MARK: - Redux
     @MainActor
     private func dispatchDidSetScreenshotAction(for tab: Tab) {
@@ -808,7 +812,7 @@ final class TabManagerImplementation: NSObject,
 
     private func generateTabDataForSaving() -> [TabData] {
         var tabsToSave = tabs
-        if shouldClearPrivateTabs() {
+        if shouldClearPrivateTabs {
             tabsToSave = normalTabs
         }
 
@@ -900,7 +904,7 @@ final class TabManagerImplementation: NSObject,
         willSelectTab(url)
 
         // Make sure to wipe the private tabs if the user has the pref turned on and there are private tabs to remove
-        if shouldClearPrivateTabs(), !tab.isPrivate && !privateTabs.isEmpty {
+        if shouldClearPrivateTabs, !tab.isPrivate && !privateTabs.isEmpty {
             removeAllPrivateTabs()
         }
 
