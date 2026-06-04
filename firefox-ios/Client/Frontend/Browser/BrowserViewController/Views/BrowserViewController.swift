@@ -4861,6 +4861,13 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        // The deeplink-optimization restore path no longer fires `TabManagerDelegate.didAddTab` per restored tab,
+        // so `tab.tabDelegate` is never assigned during restoration otherwise.
+        if isDeeplinkOptimizationRefactorEnabled {
+            for tab in tabManager.tabs {
+                tab.tabDelegate = self
+            }
+        }
         updateTabCountUsingTabManager(tabManager)
     }
 
