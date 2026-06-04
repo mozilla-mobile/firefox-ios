@@ -134,7 +134,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertTrue(items.contains(where: { $0.name == "code" }))
     }
 
-    func testBuildErrorPageQueryItems_certErrorWithoutCFStreamCode_doesNotIncludeCertErrorItem() {
+    func testBuildErrorPageQueryItems_certErrorWithoutCFStreamCode_fallsBackToErrorMapping() {
         let url = URL(string: "https://example.com")!
         let error = NSError(
             domain: NSURLErrorDomain,
@@ -144,7 +144,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         let items = NativeErrorPageHelper.buildErrorPageQueryItems(for: error, url: url)
 
-        XCTAssertFalse(items.contains(where: { $0.name == "certerror" }))
+        XCTAssertTrue(items.contains(where: { $0.name == "certerror" && $0.value == "SEC_ERROR_UNKNOWN_ISSUER" }))
     }
 
     // MARK: - parseErrorDetails
@@ -161,6 +161,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
+        XCTAssertEqual(model.type, .internetConnection)
+        XCTAssertTrue(model.type.isRegularUI)
     }
 
     func testParseErrorDetails_noFailingURL_returnsNoInternetModel() {
@@ -172,6 +174,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
+        XCTAssertEqual(model.type, .internetConnection)
     }
 
     func testParseErrorDetails_certError_withURL_returnsSecurityModel() {
@@ -186,6 +189,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = helper.parseErrorDetails()
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.type, .generic)
+        XCTAssertTrue(model.type.isRegularUI)
     }
 
     func testParseErrorDetails_certErrorBadCertDomain_returnsAdvancedSection() {
@@ -208,6 +213,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertNotNil(model.advancedSection)
         XCTAssertTrue(model.showGoBackButton)
+        XCTAssertEqual(model.type, .badCertDomain)
+        XCTAssertFalse(model.type.isRegularUI)
     }
 
     func testParseErrorDetails_genericError_withURL_returnsGenericModel() {
@@ -221,6 +228,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertNil(model.advancedSection)
+        XCTAssertEqual(model.type, .generic)
+        XCTAssertTrue(model.type.isRegularUI)
     }
 
     // MARK: - getCertDetails
@@ -257,5 +266,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertNil(model.advancedSection)
+        XCTAssertEqual(model.type, .generic)
     }
 }

@@ -2649,14 +2649,16 @@ public struct EnrollmentChangeEvent: Equatable, Hashable {
     public var branchSlug: String
     public var reason: String?
     public var change: EnrollmentChangeEventType
+    public var featureIds: [String]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(experimentSlug: String, branchSlug: String, reason: String?, change: EnrollmentChangeEventType) {
+    public init(experimentSlug: String, branchSlug: String, reason: String?, change: EnrollmentChangeEventType, featureIds: [String]) {
         self.experimentSlug = experimentSlug
         self.branchSlug = branchSlug
         self.reason = reason
         self.change = change
+        self.featureIds = featureIds
     }
 
     
@@ -2678,7 +2680,8 @@ public struct FfiConverterTypeEnrollmentChangeEvent: FfiConverterRustBuffer {
                 experimentSlug: FfiConverterString.read(from: &buf), 
                 branchSlug: FfiConverterString.read(from: &buf), 
                 reason: FfiConverterOptionString.read(from: &buf), 
-                change: FfiConverterTypeEnrollmentChangeEventType.read(from: &buf)
+                change: FfiConverterTypeEnrollmentChangeEventType.read(from: &buf), 
+                featureIds: FfiConverterSequenceString.read(from: &buf)
         )
     }
 
@@ -2687,6 +2690,7 @@ public struct FfiConverterTypeEnrollmentChangeEvent: FfiConverterRustBuffer {
         FfiConverterString.write(value.branchSlug, into: &buf)
         FfiConverterOptionString.write(value.reason, into: &buf)
         FfiConverterTypeEnrollmentChangeEventType.write(value.change, into: &buf)
+        FfiConverterSequenceString.write(value.featureIds, into: &buf)
     }
 }
 
