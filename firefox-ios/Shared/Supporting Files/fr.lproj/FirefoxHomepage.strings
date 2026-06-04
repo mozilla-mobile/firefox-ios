@@ -47,7 +47,7 @@
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Recherche ou adresse";
 
 /* The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
-"FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2" = "Saisissez l’URL du site web.";
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2" = "Saisissez l’adresse du site web.";
 
 /* The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
 "FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2" = "Ajouter un raccourci";

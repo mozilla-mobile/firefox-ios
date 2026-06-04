@@ -81,6 +81,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .homepageStoryCategories:
             return checkHomepageStoriesCaterogiesFeature()
 
+        case .homepageTrackerBlockerModule:
+            return checkHomepageTrackerBlockerModuleFeature()
         case .hostedSummarizer:
             return checkHostedSummarizerFeature()
 
@@ -460,5 +462,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkCustomReaderModeSchemeFeature() -> Bool {
         return nimbus.features.customReaderModeSchemeFeature.value().enabled
+    }
+
+    private func checkHomepageTrackerBlockerModuleFeature() -> Bool {
+        return nimbus.features.homepageTrackerBlockerModuleFeature.value().enabled
     }
 }

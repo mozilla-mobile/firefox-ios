@@ -27,6 +27,7 @@ enum FeatureFlagID: String, CaseIterable {
     case homepagePinnedHeader
     case homepageSearchBar
     case homepageStoryCategories
+    case homepageTrackerBlockerModule
     case hostedSummarizer
     case hostedSummarizerShakeGesture
     case hostedSummarizerToolbarEntrypoint
@@ -74,9 +75,10 @@ enum FeatureFlagID: String, CaseIterable {
         switch self {
         case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
         case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
-        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
+        case .homepageTrackerBlockerModule: return HomepageKeys.TrackerBlockerSection
         case .sentFromFirefox: return FlagKeys.SentFromFirefox
         case .startAtHome: return FlagKeys.StartAtHome
         case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
@@ -102,6 +104,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .homepagePinnedHeader,
                 .homepageSearchBar,
                 .homepageStoryCategories,
+                .homepageTrackerBlockerModule,
                 .hostedSummarizer,
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
