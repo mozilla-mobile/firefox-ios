@@ -1126,17 +1126,11 @@ extension BrowserViewController: WKNavigationDelegate {
                 return defaultHandling
             }
 
-            let result = await handleServerTrust(
+            return await handleServerTrust(
                 serverTrust: serverTrust,
                 challengeHost: challenge.protectionSpace.host,
                 challengePort: challenge.protectionSpace.port
             )
-
-            if result.0 == .useCredential {
-                tabManager[webView]?.webView?.isUserOverrideCert = true
-            }
-
-            return result
         } else if authenticationMethod == NSURLAuthenticationMethodHTTPBasic
                     || authenticationMethod == NSURLAuthenticationMethodHTTPDigest
                     || authenticationMethod == NSURLAuthenticationMethodNTLM {

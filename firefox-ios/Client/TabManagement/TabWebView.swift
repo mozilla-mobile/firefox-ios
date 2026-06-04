@@ -28,8 +28,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private var theme: Theme?
     private var uiTestLeakView: UIView? // Used for automation
 
-    var isUserOverrideCert = false
-
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
         guard Thread.isMainThread else {
@@ -50,7 +48,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         if let url, url.isFileURL, url.lastPathComponent.hasSuffix(".pdf") {
             return true
         }
-        if isUserOverrideCert { return false }
         return super.hasOnlySecureContent
     }
 
