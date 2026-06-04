@@ -892,11 +892,12 @@
         },
         "webob": {
             "hashes": [
-                "sha256:45e34c58ed0c7e2ecd238ffd34432487ff13d9ad459ddfd77895e67abba7c1f9",
-                "sha256:ad6078e2edb6766d1334ec3dee072ac6a7f95b1e32ce10def8ff7f0f02d56589"
+                "sha256:1c963a11f307bc3f624fbab9dde737701eae255f32981b7a5486a88db1767c2b",
+                "sha256:e68ad87fda378191081965ab02a185391c26e4e926adec855c3b0286a8369d49"
             ],
+            "index": "pypi",
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
-            "version": "==1.8.9"
+            "version": "==1.8.10"
         },
         "websocket-client": {
             "hashes": [
