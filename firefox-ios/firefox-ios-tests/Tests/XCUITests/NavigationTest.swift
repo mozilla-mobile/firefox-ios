@@ -69,7 +69,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: "localhost")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
@@ -451,7 +451,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
         navigator.goto(HomePanelsScreen)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         mozWaitForElementToExist(app.links["link-created-by-parent"])
@@ -483,7 +483,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // A new tab loading the article page should open
         waitForTabsButton()
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
+        mozWaitForElementToExist(app.cells.elementContainingText(TestLabels.exampleDomain))
         let numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))

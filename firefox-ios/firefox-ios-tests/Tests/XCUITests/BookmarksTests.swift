@@ -6,8 +6,8 @@ import Common
 import XCTest
 
 let url_1 = TestPages.exampleHTML
-let url_2 = ["url": "test-mozilla-org.html", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
-let urlLabelExample_3 = "Example Domain"
+let url_2 = ["url": TestPages.mozillaOrg, "bookmarkLabel": "Internet for people, not profit — Mozilla"]
+let urlLabelExample_3 = TestLabels.exampleDomain
 let url_3 = "localhost:\(serverPort)/test-fixture/test-example.html"
 
 class BookmarksTests: FeatureFlaggedTestBase {
@@ -98,7 +98,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.goto(TabTray)
         let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_0"
-        XCTAssertEqual(app.cells[identifier].label, "Example Domain")
+        XCTAssertEqual(app.cells[identifier].label, TestLabels.exampleDomain)
         app.cells[identifier].waitAndTap()
         navigator.nowAt(BrowserTab)
         toolbarScreen.assertTabsButtonExists()

@@ -6,7 +6,7 @@ import Common
 import XCTest
 
 let firstWebsite = (
-    url: path(forTestPage: "test-mozilla-org.html"),
+    url: path(forTestPage: TestPages.mozillaOrg),
     tabName: "Internet for people, not profit — Mozilla",
     browserTabName: "http://localhost:7777/test-fixture/test-mozilla-book.html. Currently selected tab."
 )

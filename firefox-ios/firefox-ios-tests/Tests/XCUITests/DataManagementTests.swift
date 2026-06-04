@@ -30,7 +30,7 @@ class DataManagementTests: BaseTestCase {
     func testWebSiteDataOptions() {
         cleanAllData()
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         navigator.nowAt(NewTabScreen)
@@ -85,7 +85,7 @@ class DataManagementTests: BaseTestCase {
     func testFilterWebsiteData() {
         cleanAllData()
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         navigator.nowAt(NewTabScreen)

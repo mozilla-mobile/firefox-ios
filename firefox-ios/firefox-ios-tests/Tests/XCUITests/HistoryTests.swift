@@ -14,7 +14,7 @@ let webpage = [
 let oldHistoryEntries: [String] = [
     "Internet for people, not profit — Mozilla (US)",
     "Explore / Twitter",
-    "Example Domain"
+    TestLabels.exampleDomain
 ]
 let emptyRecentlyClosedMesg = "Websites you’ve visited recently will show up here."
 // This is part of the info the user will see in recent closed tabs once the default
@@ -381,7 +381,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: bookOfMozilla["file"]!))
         waitUntilPageLoad()
-        navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
+        navigator.openNewURL(urlString: path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
 
         // Close the private tab "Book of Mozilla" by tapping 'x' button
@@ -460,7 +460,7 @@ class HistoryTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.tables[HistoryPanelA11y.tableView],
-                app.tables.cells.staticTexts["Example Domain"]
+                app.tables.cells.staticTexts[TestLabels.exampleDomain]
             ]
         )
     }

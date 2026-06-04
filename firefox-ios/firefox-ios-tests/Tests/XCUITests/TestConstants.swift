@@ -6,4 +6,9 @@ import Foundation
 
 enum TestPages {
     static let exampleHTML = "test-example.html"
+    static let mozillaOrg = "test-mozilla-org.html"
+}
+
+enum TestLabels {
+    static let exampleDomain = "Example Domain"
 }
