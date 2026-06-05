@@ -18,12 +18,13 @@ class MockOnboardingCardDelegateController: UIViewController,
     // Protocol conformance
     var pageController = UIPageViewController()
     var pageControl = UIPageControl()
-    var viewModel: OnboardingViewModelProtocol = IntroViewModel(
+    var viewModel: OnboardingViewModelProtocol = UpdateViewModel(
         profile: MockProfile(),
         model: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall),
         telemetryUtility: OnboardingTelemetryUtility(
             with: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall),
-            onboardingReason: .newUser))
+            onboardingReason: .newUser),
+        windowUUID: .XCTestDefaultUUID)
     var didFinishFlow: (() -> Void)?
     var themeManager: ThemeManager = AppContainer.shared.resolve()
     var themeListenerCancellable: Any?

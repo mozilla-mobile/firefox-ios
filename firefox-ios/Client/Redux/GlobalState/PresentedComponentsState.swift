@@ -11,7 +11,6 @@ enum ComponentState: Sendable, Equatable {
     case homepage(HomepageState)
     case mainMenu(MainMenuState)
     case microsurvey(MicrosurveyState)
-    case onboardingViewController(OnboardingViewControllerState)
     case remoteTabsPanel(RemoteTabsPanelState)
     case tabsPanel(TabsPanelState)
     case tabPeek(TabPeekState)
@@ -33,8 +32,6 @@ enum ComponentState: Sendable, Equatable {
         case .homepage(let state): return .homepage(HomepageState.reducer(state, action))
         case .mainMenu(let state): return .mainMenu(MainMenuState.reducer(state, action))
         case .microsurvey(let state): return .microsurvey(MicrosurveyState.reducer(state, action))
-        case .onboardingViewController(let state):
-            return .onboardingViewController(OnboardingViewControllerState.reducer(state, action))
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         case .tabPeek(let state): return .tabPeek(TabPeekState.reducer(state, action))
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
@@ -60,7 +57,6 @@ enum ComponentState: Sendable, Equatable {
         case .homepage: return .homepage
         case .mainMenu: return .mainMenu
         case .microsurvey: return .microsurvey
-        case .onboardingViewController: return .onboardingViewController
         case .remoteTabsPanel: return .remoteTabsPanel
         case .tabsPanel: return .tabsPanel
         case .tabPeek: return .tabPeek
@@ -83,7 +79,6 @@ enum ComponentState: Sendable, Equatable {
         case .homepage(let state): return state.windowUUID
         case .mainMenu(let state): return state.windowUUID
         case .microsurvey(let state): return state.windowUUID
-        case .onboardingViewController(let state): return state.windowUUID
         case .remoteTabsPanel(let state): return state.windowUUID
         case .tabsPanel(let state): return state.windowUUID
         case .tabPeek(let state): return state.windowUUID
@@ -143,8 +138,6 @@ struct PresentedComponentsState: Sendable, Equatable {
                 components.append(.mainMenu(MainMenuState(windowUUID: uuid)))
             case .microsurvey:
                 components.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
-            case .onboardingViewController:
-                components.append(.onboardingViewController(OnboardingViewControllerState(windowUUID: uuid)))
             case .remoteTabsPanel:
                 components.append(.remoteTabsPanel(RemoteTabsPanelState(windowUUID: uuid)))
             case .tabsTray:
