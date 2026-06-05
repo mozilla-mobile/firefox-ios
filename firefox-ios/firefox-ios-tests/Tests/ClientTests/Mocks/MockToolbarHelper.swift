@@ -42,17 +42,6 @@ class MockToolbarHelper: ToolbarHelperInterface {
     }
 
     func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
-        let lockIconImageName = hasOnlySecureContent ?
-        StandardImageIdentifiers.Small.shieldCheckmarkFill :
-        StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-        let lockIconButtonA11yId = hasOnlySecureContent ?
-        AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
-        AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
-
-        return LockIconState(
-            imageName: isWebsiteMode ? lockIconImageName : nil,
-            a11yId: lockIconButtonA11yId,
-            needsTheming: hasOnlySecureContent
-        )
+        return ToolbarHelper.computeLockIconState(hasOnlySecureContent: hasOnlySecureContent, isWebsiteMode: isWebsiteMode)
     }
 }

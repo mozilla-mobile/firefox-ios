@@ -75,7 +75,7 @@ final class ToolbarHelper: ToolbarHelperInterface {
         self.userInterfaceIdiom = userInterfaceIdiom
     }
 
-    func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
+    static func computeLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
         let lockIconImageName = hasOnlySecureContent ?
             StandardImageIdentifiers.Small.shieldCheckmarkFill :
             StandardImageIdentifiers.Small.shieldSlashFillMulticolor
@@ -88,5 +88,9 @@ final class ToolbarHelper: ToolbarHelperInterface {
             a11yId: lockIconButtonA11yId,
             needsTheming: hasOnlySecureContent
         )
+    }
+
+    func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
+        return Self.computeLockIconState(hasOnlySecureContent: hasOnlySecureContent, isWebsiteMode: isWebsiteMode)
     }
 }
