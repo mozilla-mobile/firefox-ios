@@ -101,7 +101,8 @@ If no reference person is assigned, or you have not received a response to your 
 
 # Building the code
 - Fork and clone the project from the [repository](https://github.com/mozilla-mobile/firefox-ios).
-- Use the provided build instructions in the [Readme](https://github.com/mozilla-mobile/firefox-ios/blob/main/README.md) of the repository to build the project. 
+- Use the setup instructions in the root [README](https://github.com/mozilla-mobile/firefox-ios/blob/main/README.md). It is the single source of truth for automatic setup, manual setup, and links to product-specific build guides.
+- If you are running on a device with a free personal Apple developer account, also follow the signing steps in [firefox-ios/README.md](https://github.com/mozilla-mobile/firefox-ios/blob/main/firefox-ios/README.md#run-on-a-device-with-a-free-developer-account).
 
 ## Run on a Device with a Free Developer Account
 

@@ -23,6 +23,10 @@ This is a monolithic-repository, containing both the Firefox and Focus iOS proje
 
 As this is an iOS project, it is required to have Xcode on your system, and you should check that `xcode-select -p` points to `/Applications/Xcode.app/Contents/Developer` (or however you've named your `Xcode.app`).
 
+### Single Setup Guide
+
+Use this README as the main setup reference. It links out to the product-specific steps and the signing notes for free developer accounts, while `CONTRIBUTING.md` stays focused on workflow and review expectations.
+
 ### Automatic Installation
 
 The recommended way of setting up the repo is through the [fxios](https://github.com/mozilla-mobile/fxios-ctl) tool. This tool provides multiple helpful commands to help manage the repo. Check out its documentation, or the repo, if you'd like to find out more. Setup allows cloning from an https or an ssh url.
@@ -48,6 +52,7 @@ Please note, this is a decently sized repo, so downloading might take a while de
 
 1. Open the `Client.xcodeproj`, under the `firefox-ios/firefox-ios` folder, in Xcode.
 1. Make sure to select the `Fennec` scheme in Xcode.
+1. If you are using a free personal Apple developer account, follow the signing overrides in [firefox-ios/README.md#run-on-a-device-with-a-free-developer-account](./firefox-ios/README.md#run-on-a-device-with-a-free-developer-account).
 
 ⚠️ Important: In case you have dependencies issues with SPM, please try the following:
 
@@ -65,6 +70,8 @@ Please note, this is a decently sized repo, so downloading might take a while de
 
 - [Firefox for iOS](./firefox-ios/README.md)
 - [Focus iOS](./focus-ios/README.md)
+
+`CONTRIBUTING.md` intentionally points back here for setup so these install and signing steps stay in one place.
 
 ## Getting involved
 
