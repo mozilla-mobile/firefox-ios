@@ -164,11 +164,6 @@ class SceneDelegate: UIResponder,
         handle(route: route)
     }
 
-    @available(iOS 26.0, *)
-    func preferredWindowingControlStyle(for _: UIWindowScene) -> UIWindowScene.WindowingControlStyle {
-        return .unified
-    }
-
     func handleOpenURL(_ url: URL) {
         routeBuilder.configure(
             isPrivate: UserDefaults.standard.bool(
