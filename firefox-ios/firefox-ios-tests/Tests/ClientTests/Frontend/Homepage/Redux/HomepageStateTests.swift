@@ -8,14 +8,27 @@ import XCTest
 @testable import Client
 
 final class HomepageStateTests: XCTestCase {
+    private var profile: MockProfile!
+    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
+
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
-        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: false)
+        profile = MockProfile()
+        mockNimbusLayer = MockNimbusFeatureFlagLayer()
+        let featureFlagProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+        let userFeaturePreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+
+        await DependencyHelperMock().bootstrapDependencies(
+            injectedProfile: profile,
+            injectedFeatureFlagProvider: featureFlagProvider,
+            injectedUserFeaturePreferences: userFeaturePreferences
+        )
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        profile = nil
+        mockNimbusLayer = nil
         try await super.tearDown()
     }
 
@@ -176,7 +189,7 @@ final class HomepageStateTests: XCTestCase {
 
     @MainActor
     func test_trackerBlockerModuleToggleAction_withToggleOn_returnsExpectedState() {
-        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let initialState = createSubject()
         let reducer = homepageReducer()
 
@@ -193,9 +206,11 @@ final class HomepageStateTests: XCTestCase {
     }
 
     func test_trackerBlockerModuleState_withFeatureDisabledAndPreferenceEnabled_returnsExpectedState() {
-        let userPreferences = MockUserFeaturePreferences()
+        let profile = MockProfile()
+        let mockNimbusLayer = MockNimbusFeatureFlagLayer()
+        let userPreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
         userPreferences.setPreferenceFor(.homepageTrackerBlockerModule, to: true)
-        let featureFlagsProvider = MockNimbusFeatureFlags()
+        let featureFlagsProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
 
         let state = TrackerBlockerModuleState(
             userPreferences: userPreferences,
@@ -208,7 +223,7 @@ final class HomepageStateTests: XCTestCase {
 
     @MainActor
     func test_trackerBlockerModuleToggleAction_withToggleOff_returnsExpectedState() {
-        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let initialState = createSubject()
         let reducer = homepageReducer()
 
@@ -233,9 +248,11 @@ final class HomepageStateTests: XCTestCase {
         return HomepageState.reducer
     }
 
-    private func setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageTrackerBlockerModuleFeature.with { _, _ in
-            return HomepageTrackerBlockerModuleFeature(enabled: isEnabled)
+    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
+        if isEnabled {
+            mockNimbusLayer.enabledFlags.insert(flag)
+        } else {
+            mockNimbusLayer.enabledFlags.remove(flag)
         }
     }
 }

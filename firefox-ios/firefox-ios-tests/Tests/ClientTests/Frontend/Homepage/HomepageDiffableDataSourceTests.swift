@@ -12,9 +12,22 @@ import MozillaAppServices
 final class HomepageDiffableDataSourceTests: XCTestCase {
     var collectionView: UICollectionView?
     var diffableDataSource: HomepageDiffableDataSource?
+    private var profile: MockProfile!
+    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
     override func setUp() async throws {
         try await super.setUp()
+        profile = MockProfile()
+        mockNimbusLayer = MockNimbusFeatureFlagLayer()
+        let featureFlagProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+        let userFeaturePreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+
+        DependencyHelperMock().bootstrapDependencies(
+            injectedProfile: profile,
+            injectedFeatureFlagProvider: featureFlagProvider,
+            injectedUserFeaturePreferences: userFeaturePreferences
+        )
+
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         let collectionView = try XCTUnwrap(collectionView)
         diffableDataSource = HomepageDiffableDataSource(
@@ -22,13 +35,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
             return UICollectionViewCell()
         }
-        DependencyHelperMock().bootstrapDependencies()
-        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: false)
     }
 
     override func tearDown() async throws {
         diffableDataSource = nil
         collectionView = nil
+        profile = nil
+        mockNimbusLayer = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -499,7 +512,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
     @MainActor
     func test_updateSnapshot_withTrackerBlockerModuleEnabled_returnTrackerBlockerModuleSection() throws {
-        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -526,7 +539,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
     @MainActor
     func test_updateSnapshot_withShortcutsWorldCupTrackerBlockerAndJumpBackIn_ordersTrackerBlockerAfterWorldCup() throws {
-        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         var state = HomepageState.reducer(
@@ -684,9 +697,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
     }
 
-    private func setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageTrackerBlockerModuleFeature.with { _, _ in
-            return HomepageTrackerBlockerModuleFeature(enabled: isEnabled)
+    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
+        if isEnabled {
+            mockNimbusLayer.enabledFlags.insert(flag)
+        } else {
+            mockNimbusLayer.enabledFlags.remove(flag)
         }
     }
 

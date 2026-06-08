@@ -12,22 +12,31 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     private var profile: MockProfile!
     private var wallpaperManager: WallpaperManagerMock!
     private var delegate: MockSettingsDelegate!
+    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
-        setIsWorldCupFeatureFlagEnabled(false)
-        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: false)
-        DependencyHelperMock().bootstrapDependencies()
-        self.profile = MockProfile()
-        self.delegate = MockSettingsDelegate()
-        self.wallpaperManager = WallpaperManagerMock()
+        mockNimbusLayer = MockNimbusFeatureFlagLayer()
+        let featureFlagProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+        let userFeaturePreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+
+        DependencyHelperMock().bootstrapDependencies(
+            injectedProfile: profile,
+            injectedFeatureFlagProvider: featureFlagProvider,
+            injectedUserFeaturePreferences: userFeaturePreferences
+        )
+
+        delegate = MockSettingsDelegate()
+        wallpaperManager = WallpaperManagerMock()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        self.profile = nil
-        self.delegate = nil
+        profile = nil
+        delegate = nil
+        wallpaperManager = nil
+        mockNimbusLayer = nil
 
         try await super.tearDown()
     }
@@ -99,7 +108,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     }
 
     func testHomepageSettings_generateSettings_trackerBlockerModule_whenFeatureEnabledDefaultValue_isTrue() throws {
-        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let subject = createSubject()
         subject.profile = profile
 
@@ -121,9 +130,9 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     }
 
     func testHomepageSettings_generateSettings_worldCupSectionDefaultValue_whenFFEnabled_isTrue() throws {
+        setFeatureFlag(.worldCupWidget, isEnabled: true)
         let subject = createSubject()
         subject.profile = profile
-        setIsWorldCupFeatureFlagEnabled(true)
 
         let settingsList = subject.generateSettings()
 
@@ -143,15 +152,11 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     }
 
     // MARK: - Helper
-    private func setIsWorldCupFeatureFlagEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.worldCupWidgetFeature.with { _, _ in
-            return WorldCupWidgetFeature(enabled: isEnabled)
-        }
-    }
-
-    private func setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageTrackerBlockerModuleFeature.with { _, _ in
-            return HomepageTrackerBlockerModuleFeature(enabled: isEnabled)
+    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
+        if isEnabled {
+            mockNimbusLayer.enabledFlags.insert(flag)
+        } else {
+            mockNimbusLayer.enabledFlags.remove(flag)
         }
     }
 
