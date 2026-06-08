@@ -174,6 +174,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             cell.configure(
                 title: .Settings.Translation.ToggleTitle,
                 isOn: state.isTranslationsEnabled,
+                accessibilityIdentifier: AccessibilityIdentifiers.Settings.Translation.toggleSwitch,
                 target: self,
                 action: #selector(didToggleTranslations(_:)),
                 theme: themeManager.getCurrentTheme(for: windowUUID)
@@ -187,6 +188,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             cell.configure(
                 title: .Settings.Translation.AutoTranslate.Title,
                 isOn: state.isAutoTranslateEnabled,
+                accessibilityIdentifier: AccessibilityIdentifiers.Settings.Translation.autoTranslateSwitch,
                 target: self,
                 action: #selector(didToggleAutoTranslate(_:)),
                 theme: themeManager.getCurrentTheme(for: windowUUID)

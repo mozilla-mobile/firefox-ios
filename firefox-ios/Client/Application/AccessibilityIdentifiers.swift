@@ -779,6 +779,7 @@ struct AccessibilityIdentifiers {
             static let title = "Settings.Translation.Title"
             // This is based on `PrefsKeys.Settings.translationsFeature`
             static let toggleSwitch = "settings.translationFeature"
+            static let autoTranslateSwitch = "settings.translationAutoTranslate"
             static let navigationBar = "Settings.Translation.navigationBar"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"
