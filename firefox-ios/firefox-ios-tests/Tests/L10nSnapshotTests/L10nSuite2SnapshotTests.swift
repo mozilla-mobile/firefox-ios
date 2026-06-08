@@ -141,9 +141,11 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
             app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].waitAndTap()
         }
 
+        // Use a numeric passcode so entry is keyboard-layout independent (non-Latin keyboards
+        // can't type Latin characters, which previously broke authentication on RTL/non-Latin locales).
         let passcodeInput = springboard.secureTextFields.firstMatch
         mozWaitForElementToExist(passcodeInput)
-        passcodeInput.tapAndTypeText("foo\n")
+        passcodeInput.tapAndTypeText("1234\n")
         mozWaitForElementToNotExist(passcodeInput)
 
         mozWaitForElementToExist(app.tables["Login List"], timeout: 25)
@@ -169,7 +171,9 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToNotExist(app.sheets.firstMatch)
         snapshot("CreatedLoginView")
 
-        app.tables["Login List"].cells.staticTexts["p"].waitAndTap()
+        // Tap the saved login (row 0 is the "Save passwords" toggle; the entry is the next row).
+        // Selecting by index is keyboard/URL independent, unlike matching the website text.
+        app.tables["Login List"].cells.element(boundBy: 1).waitAndTap()
         snapshot("CreatedLoginDetailedView")
 
         app.tables["Login Detail List"].cells.element(boundBy: 4).waitAndTap()
