@@ -734,10 +734,11 @@ top_sites:
         type: string
         description: |
           Source that initiated the pinned shortcut.
+          Options are listed in the HomepageTelemetry.TopSitesShortcutPinnedSource enumeration.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-15861
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34183
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -750,10 +751,11 @@ top_sites:
         type: string
         description: |
           Source that initiated the unpinned shortcut.
+          Options are listed in the HomepageTelemetry.TopSitesShortcutUnpinnedSource enumeration.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-15861
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34183
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
