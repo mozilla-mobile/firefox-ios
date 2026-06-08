@@ -19,8 +19,8 @@ struct TopSitesAction: Action {
     let isEnabled: Bool?
     let shouldShowAddShortcutTile: Bool?
     let telemetryConfig: TopSitesTelemetryConfig?
-    let shortcutPinnedSource: TopSitesShortcutPinnedSource?
-    let shortcutUnpinnedSource: TopSitesShortcutUnpinnedSource?
+    let shortcutPinnedSource: HomepageTelemetry.TopSitesShortcutPinnedSource?
+    let shortcutUnpinnedSource: HomepageTelemetry.TopSitesShortcutUnpinnedSource?
 
     init(
         topSites: [TopSiteConfiguration]? = nil,
@@ -28,8 +28,8 @@ struct TopSitesAction: Action {
         isEnabled: Bool? = nil,
         shouldShowAddShortcutTile: Bool? = nil,
         telemetryConfig: TopSitesTelemetryConfig? = nil,
-        shortcutPinnedSource: TopSitesShortcutPinnedSource? = nil,
-        shortcutUnpinnedSource: TopSitesShortcutUnpinnedSource? = nil,
+        shortcutPinnedSource: HomepageTelemetry.TopSitesShortcutPinnedSource? = nil,
+        shortcutUnpinnedSource: HomepageTelemetry.TopSitesShortcutUnpinnedSource? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
