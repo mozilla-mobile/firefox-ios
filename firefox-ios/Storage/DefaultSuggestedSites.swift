@@ -75,15 +75,6 @@ open class DefaultSuggestedSites {
                     name: "wikipedia",
                     forRemoteResource: URL(string: "https://www.wikipedia.org/static/apple-touch/wikipedia.png")!
                 )
-            ),
-            Site.createSuggestedSite(
-                url: "https://x.com/",
-                title: .DefaultSuggestedX,
-                trackingId: 628,
-                faviconResource: .bundleAsset(
-                    name: "x",
-                    forRemoteResource: URL(string: "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png")!
-                )
             )
         ],
         "zh_CN": [ // FXIOS-11064 Do we still want this as a special case localization? Android doesn't compile this anymore
@@ -165,15 +156,6 @@ open class DefaultSuggestedSites {
                 faviconResource: .bundleAsset(
                     name: "ameblo",
                     forRemoteResource: URL(string: "https://stat100.ameba.jp/common_style/img/sp/apple-touch-icon.png")!
-                )
-            ),
-            Site.createSuggestedSite(
-                url: "https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8",
-                title: "ウィキペディア",
-                trackingId: 803,
-                faviconResource: .bundleAsset(
-                    name: "wikipedia",
-                    forRemoteResource: URL(string: "https://www.wikipedia.org/static/apple-touch/wikipedia.png")!
                 )
             )
          ],
