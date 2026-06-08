@@ -279,8 +279,8 @@ final class PrivacyPreferencesViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
 
-        // Only set background color if glass effect is not active
-        if #available(iOS 26.0, *), glassEffectView != nil {
+        if #available(iOS 26.0, *) {
+        // The bottom sheet presentation already contains the glass effect
             view.backgroundColor = .clear
         } else {
             view.backgroundColor = theme.colors.layer3
@@ -302,6 +302,10 @@ final class PrivacyPreferencesViewController: UIViewController,
     private func setupGlassEffect() {
         // Only add glass effect if it doesn't already exist
         guard glassEffectView == nil else { return }
+
+        // Skip when presented as a sheet because
+        // UISheetPresentationController already provides glass
+        guard sheetPresentationController == nil else { return }
 
         let effectView = UIVisualEffectView()
 
