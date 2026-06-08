@@ -79,8 +79,16 @@ final class SettingsCoordinator: BaseCoordinator,
         // We might already know the sub-settings page we want to show, but in some case we don't and
         // the flow decision needs to be figured out by the view controller
         if let viewController = getSettingsViewController(settingsSection: settingsSection) {
-            router.push(viewController)
+            if let root = router.rootViewController,
+               router.navigationController.viewControllers.count > 1 {
+                router.navigationController.setViewControllers([root, viewController], animated: false)
+            } else {
+                router.push(viewController)
+            }
         } else {
+            if let root = router.rootViewController {
+                router.popToViewController(root, reason: .deeplink, animated: false)
+            }
             assert(settingsViewController != nil)
             settingsViewController?.handle(route: settingsSection)
         }
