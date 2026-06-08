@@ -325,6 +325,12 @@ extension CertificatesViewController {
 
         certificatesTableView.backgroundColor = theme.colors.layer3
         certificatesTableView.separatorColor = theme.colors.borderPrimary
-        certificatesTableView.reloadData()
+
+        for case let cell as CertificatesCell in certificatesTableView.visibleCells {
+            cell.applyTheme(theme: theme)
+        }
+        for section in 0..<certificatesTableView.numberOfSections {
+            (certificatesTableView.headerView(forSection: section) as? CertificatesHeaderView)?.applyTheme(theme: theme)
+        }
     }
 }
