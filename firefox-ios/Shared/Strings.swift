@@ -1406,9 +1406,9 @@ extension String {
 
         public struct TrackerBlocker {
             public static let TrackersBlocked = MZLocalizedString(
-                key: "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153",
+                key: "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b",
                 tableName: "FirefoxHomepage",
-                value: "%d Trackers Blocked",
+                value: "Trackers Blocked: %d",
                 comment: "The numbers of trackers we've blocked since we started tracking. The %d placeholder is the actual number of trackers blocked.")
             public static let NoTrackersBlocked = MZLocalizedString(
                 key: "FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153",
