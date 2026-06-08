@@ -23,6 +23,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             return UICollectionViewCell()
         }
         DependencyHelperMock().bootstrapDependencies()
+        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: false)
     }
 
     override func tearDown() async throws {
@@ -497,6 +498,92 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     @MainActor
+    func test_updateSnapshot_withTrackerBlockerModuleEnabled_returnTrackerBlockerModuleSection() throws {
+        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TrackerBlockerModuleAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .trackerBlockerModule), 1)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .trackerBlockerModule).first, .trackerBlockerModule)
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .trackerBlockerModule,
+            .spacer
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    @MainActor
+    func test_updateSnapshot_withShortcutsWorldCupTrackerBlockerAndJumpBackIn_ordersTrackerBlockerAfterWorldCup() throws {
+        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        var state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                topSites: createSites(),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+        state = HomepageState.reducer(
+            state,
+            TrackerBlockerModuleAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+            )
+        )
+        state = HomepageState.reducer(
+            state,
+            TabManagerAction(
+                recentTabs: [createTab(urlString: "www.mozilla.org")],
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+            )
+        )
+        state = HomepageState.reducer(
+            state,
+            JumpBackInAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: JumpBackInActionType.toggleShowSectionSetting
+            )
+        )
+        state = HomepageState.reducer(
+            state,
+            WorldCupAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WorldCupMiddlewareActionType.didUpdate,
+                shouldShowHomepageWorldCupSection: true
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .topSites(nil, state.topSitesState.numberOfTilesPerRow, true),
+            .worldcup,
+            .trackerBlockerModule,
+            .jumpBackIn(nil, mockSectionConfig),
+            .spacer
+        ]
+        XCTAssertEqual(dataSource.snapshot().sectionIdentifiers, expectedSections)
+    }
+
+    @MainActor
     func test_updateSnapshot_withValidState_returnsPrivacyNoticeSection() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
@@ -595,6 +682,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             layoutType: .compact,
             hasSyncedTab: false
         )
+    }
+
+    private func setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageTrackerBlockerModuleFeature.with { _, _ in
+            return HomepageTrackerBlockerModuleFeature(enabled: isEnabled)
+        }
     }
 
     @MainActor

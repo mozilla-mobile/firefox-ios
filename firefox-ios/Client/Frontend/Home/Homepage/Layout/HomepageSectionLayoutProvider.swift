@@ -102,6 +102,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             }
         }
 
+        struct TrackerBlockerModuleConstants {
+            static let height: CGFloat = 50
+        }
+
         struct BookmarksConstants {
             static let cellWidth: CGFloat = 134
         }
@@ -166,6 +170,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 for: traitCollection,
                 config: configuration
             )
+        case .trackerBlockerModule:
+            return createTrackerBlockerModuleSectionLayout(for: traitCollection)
         case .pocket:
             return createStoriesSectionLayout(for: environment)
         case .bookmarks:
@@ -486,6 +492,28 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
+    private func createTrackerBlockerModuleSectionLayout(
+        for traitCollection: UITraitCollection
+    ) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(UX.TrackerBlockerModuleConstants.height)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, subitem: item, count: 1)
+        let section = NSCollectionLayoutSection(group: group)
+
+        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: leadingInset,
+            bottom: UX.spacingBetweenSections,
+            trailing: leadingInset
+        )
+
+        return section
+    }
+
     private func createBookmarksSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let cellWidth = UX.BookmarksConstants.cellWidth
 
@@ -795,6 +823,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return bookmarksMeasurement.totalHeight
     }
 
+    private func getTrackerBlockerModuleSectionHeight() -> CGFloat {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
+              state.trackerBlockerModuleState.shouldShowSection else { return 0 }
+
+        return UX.TrackerBlockerModuleConstants.height + UX.spacingBetweenSections
+    }
+
     /// Creates a "dummy" search bar section and returns its height
     private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
@@ -904,6 +939,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let worldcupHeight = getWorldcupSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
+        let trackerBlockerModuleHeight = getTrackerBlockerModuleSectionHeight()
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
@@ -913,6 +949,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             - topSitesHeight
             - worldcupHeight
             - jumpBackInHeight
+            - trackerBlockerModuleHeight
             - bookmarksHeight
             - searchBarHeight
     }

@@ -17,6 +17,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         try await super.setUp()
         profile = MockProfile()
         setIsWorldCupFeatureFlagEnabled(false)
+        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: false)
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         self.delegate = MockSettingsDelegate()
@@ -70,12 +71,53 @@ final class HomePageSettingViewControllerTests: XCTestCase {
 
         let bookmarksSectionSetting = customizeFirefoxHomeSettingsList?.children.first(
             where: {
-                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.JumpBackInSection
+                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.BookmarksSection
             }) as? BoolSetting
 
         let bookmarksSectionSettingValue = try XCTUnwrap(bookmarksSectionSetting?.getDefaultValue())
 
         XCTAssertFalse(bookmarksSectionSettingValue)
+    }
+
+    func testHomepageSettings_generateSettings_trackerBlockerModule_whenFeatureDisabled_isHidden() throws {
+        let subject = createSubject()
+        subject.profile = profile
+
+        let settingsList = subject.generateSettings()
+
+        let customizeFirefoxHomeSettingsList = settingsList.first(
+            where: {
+                $0.title?.string == .Settings.Homepage.CustomizeFirefoxHome.Title
+            })
+
+        let trackerBlockerModuleSetting = customizeFirefoxHomeSettingsList?.children.first(
+            where: {
+                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.TrackerBlockerSection
+            }) as? BoolSetting
+
+        XCTAssertNil(trackerBlockerModuleSetting)
+    }
+
+    func testHomepageSettings_generateSettings_trackerBlockerModule_whenFeatureEnabledDefaultValue_isTrue() throws {
+        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.profile = profile
+
+        let settingsList = subject.generateSettings()
+
+        let customizeFirefoxHomeSettingsList = settingsList.first(
+            where: {
+                $0.title?.string == .Settings.Homepage.CustomizeFirefoxHome.Title
+            })
+
+        let trackerBlockerModuleSetting = customizeFirefoxHomeSettingsList?.children.first(
+            where: {
+                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.TrackerBlockerSection
+            }) as? BoolSetting
+
+        let trackerBlockerModuleSettingValue = try XCTUnwrap(trackerBlockerModuleSetting?.getDefaultValue())
+
+        XCTAssertTrue(trackerBlockerModuleSettingValue)
     }
 
     func testHomepageSettings_generateSettings_worldCupSectionDefaultValue_whenFFEnabled_isTrue() throws {
@@ -104,6 +146,12 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     private func setIsWorldCupFeatureFlagEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.worldCupWidgetFeature.with { _, _ in
             return WorldCupWidgetFeature(enabled: isEnabled)
+        }
+    }
+
+    private func setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageTrackerBlockerModuleFeature.with { _, _ in
+            return HomepageTrackerBlockerModuleFeature(enabled: isEnabled)
         }
     }
 

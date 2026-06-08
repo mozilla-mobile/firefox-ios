@@ -11,6 +11,7 @@ final class HomepageStateTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
+        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: false)
     }
 
     override func tearDown() async throws {
@@ -25,6 +26,7 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertFalse(initialState.headerState.isPrivate)
         XCTAssertFalse(initialState.headerState.showiPadSetup)
+        XCTAssertFalse(initialState.trackerBlockerModuleState.shouldShowSection)
         XCTAssertFalse(initialState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
         XCTAssertEqual(initialState.availableContentHeight, 0)
@@ -172,6 +174,56 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
     }
 
+    @MainActor
+    func test_trackerBlockerModuleToggleAction_withToggleOn_returnsExpectedState() {
+        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            TrackerBlockerModuleAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertTrue(newState.trackerBlockerModuleState.shouldShowSection)
+    }
+
+    func test_trackerBlockerModuleState_withFeatureDisabledAndPreferenceEnabled_returnsExpectedState() {
+        let userPreferences = MockUserFeaturePreferences()
+        userPreferences.setPreferenceFor(.homepageTrackerBlockerModule, to: true)
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+
+        let state = TrackerBlockerModuleState(
+            userPreferences: userPreferences,
+            featureFlagsProvider: featureFlagsProvider,
+            windowUUID: .XCTestDefaultUUID
+        )
+
+        XCTAssertFalse(state.shouldShowSection)
+    }
+
+    @MainActor
+    func test_trackerBlockerModuleToggleAction_withToggleOff_returnsExpectedState() {
+        setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: true)
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            TrackerBlockerModuleAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertFalse(newState.trackerBlockerModuleState.shouldShowSection)
+    }
+
     // MARK: - Private
     private func createSubject() -> HomepageState {
         return HomepageState(windowUUID: .XCTestDefaultUUID)
@@ -179,5 +231,11 @@ final class HomepageStateTests: XCTestCase {
 
     private func homepageReducer() -> Reducer<HomepageState> {
         return HomepageState.reducer
+    }
+
+    private func setupNimbusHomepageTrackerBlockerModuleTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageTrackerBlockerModuleFeature.with { _, _ in
+            return HomepageTrackerBlockerModuleFeature(enabled: isEnabled)
+        }
     }
 }
