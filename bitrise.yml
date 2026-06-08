@@ -76,7 +76,7 @@ workflows:
 
             xcrun simctl list
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec_Testing" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 17,OS=26.5" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec_Testing" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 17,OS=26.5" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" -skipMacroValidation | xcpretty | tee xcodebuild_fennec.log
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
@@ -158,7 +158,7 @@ workflows:
         - scheme: Fennec
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates -skipMacroValidation DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
     - script@1:
         title: Detect number of warnings
@@ -355,7 +355,7 @@ workflows:
         - scheme: Firefox
         - configuration: Firefox
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID EXCLUDED_SOURCE_FILE_NAMES=""'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates -skipMacroValidation DEVELOPMENT_TEAM=$APPLE_TEAM_ID EXCLUDED_SOURCE_FILE_NAMES=""'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
     - script@1:
         title: Find Smoketest xctestrun file
@@ -454,7 +454,7 @@ workflows:
         - scheme: FirefoxBeta
         - configuration: FirefoxBeta
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID EXCLUDED_SOURCE_FILE_NAMES=""'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates -skipMacroValidation DEVELOPMENT_TEAM=$APPLE_TEAM_ID EXCLUDED_SOURCE_FILE_NAMES=""'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
     - script@1:
         title: Find Smoketest xctestrun file
@@ -967,7 +967,7 @@ workflows:
     - xcode-build-for-simulator@3:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - xcodebuild_options: -skipMacroValidation CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
         - simulator_device: iPhone 17
     - xcode-test@6:
@@ -1796,6 +1796,7 @@ workflows:
                 -sdk "$SDK$IOS_VERSION" \
                 -destination "$DESTINATION" \
                 -derivedDataPath "${DERIVED_DATA_DIR}" \
+                -skipMacroValidation
                 ENABLE_DEBUG_DYLIB=NO
 
             echo "-- verify build artifacts --"
