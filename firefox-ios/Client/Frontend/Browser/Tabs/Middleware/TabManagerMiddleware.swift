@@ -1009,6 +1009,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
         profile.pinnedSites.addPinnedTopSite(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutPinnedSource: .appMenu,
+                windowUUID: uuid,
+                actionType: TopSitesActionType.shortcutPinned
+            )
+        )
     }
 
     private func removeFromShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
@@ -1021,6 +1028,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
         profile.pinnedSites.removeFromPinnedTopSites(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutUnpinnedSource: .appMenu,
+                windowUUID: uuid,
+                actionType: TopSitesActionType.shortcutUnpinned
+            )
+        )
     }
 
     private func preserveTabs(uuid: WindowUUID) {

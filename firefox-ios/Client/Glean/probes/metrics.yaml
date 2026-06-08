@@ -530,6 +530,7 @@ usage:
   os:
     type: string
     lifetime: application
+
     send_in_pings:
       - usage-reporting
     description: |
@@ -724,6 +725,38 @@ key_commands:
 
 # Top Site
 top_sites:
+  shortcut_pinned:
+    type: event
+    description: |
+      Records an event when a user pins a shortcut to top sites.
+    extra_keys:
+      source:
+        type: string
+        description: |
+          Source that initiated the pinned shortcut.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15861
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  shortcut_unpinned:
+    type: event
+    description: |
+      Records an event when a user unpins a shortcut from top sites.
+    extra_keys:
+      source:
+        type: string
+        description: |
+          Source that initiated the unpinned shortcut.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15861
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
   tile_pressed:
     type: event
     description: |
@@ -2933,4 +2966,3 @@ nimbus_system:
       - nimbus
       - nimbus-targeting-context
     lifetime: application
-
