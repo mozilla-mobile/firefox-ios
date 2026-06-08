@@ -163,12 +163,18 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).waitAndTap(timeout: 5)
 
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
-        mozWaitForElementToExist(app.sheets.firstMatch)
-        mozWaitForElementToExist(app.sheets.firstMatch.staticTexts.firstMatch)
-        mozWaitForElementToExist(app.sheets.firstMatch.buttons.firstMatch)
-        mozWaitForElementToExist(app.sheets.firstMatch.buttons.element(boundBy: 1))
-        app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
-        mozWaitForElementToNotExist(app.sheets.firstMatch)
+        // The "Save password?" sheet ([Not Now / Save]) can be tapped before it finishes animating
+        // in, so the tap is ignored and the sheet lingers, timing out the test. Wait until the
+        // dismiss button is actually hittable before tapping it.
+        let saveSheet = app.sheets.firstMatch
+        mozWaitForElementToExist(saveSheet)
+        let dismissButton = saveSheet.buttons.firstMatch
+        mozWaitForElementToExist(dismissButton)
+        let hittable = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hittable == true"),
+                                                 object: dismissButton)
+        _ = XCTWaiter().wait(for: [hittable], timeout: TIMEOUT)
+        dismissButton.tap()
+        mozWaitForElementToNotExist(saveSheet)
         snapshot("CreatedLoginView")
 
         // Tap the saved login (row 0 is the "Save passwords" toggle; the entry is the next row).
