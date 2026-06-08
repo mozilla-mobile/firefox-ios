@@ -619,8 +619,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         }
         springBoardScreen.tapNewPrivateButton()
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
-        onboardingScreen.closeTourIfNeeded()
+        onboardingScreen.closeTour()
         browserScreen.assertPrivateModeMessageCardExists()
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
@@ -663,8 +662,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
         // Close onboarding if it appears
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
-        onboardingScreen.closeTourIfNeeded()
+        onboardingScreen.closeTour()
 
         // Verify the bookmarked page opens
         waitUntilPageLoad()

@@ -217,6 +217,22 @@ class BaseTestCase: XCTestCase {
         }
     }
 
+    /// Polls `condition` until it returns true or `timeout` elapses, sleeping briefly between checks.
+    /// Useful when a screen keeps updating after its first element appears (e.g. a collection view
+    /// still populating cells). Unlike the `mozWaitFor*` helpers, it does not assert on timeout;
+    /// it returns whether the condition was met so the caller can decide how to react.
+    @discardableResult
+    func waitForCondition(timeout: TimeInterval = TIMEOUT, _ condition: () -> Bool) -> Bool {
+        let startTime = Date()
+        while !condition() {
+            if Date().timeIntervalSince(startTime) > timeout {
+                return false
+            }
+            usleep(10000) // waits for 0.01 seconds
+        }
+        return true
+    }
+
     func waitForValueContains(_ element: XCUIElement, value: String, file: String = #filePath, line: UInt = #line) {
         waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
     }

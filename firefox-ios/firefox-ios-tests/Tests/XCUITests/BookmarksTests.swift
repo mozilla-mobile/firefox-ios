@@ -199,6 +199,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936976
+    // Smoketest
     func testSearchBookmarkIconDisplay() throws {
         if !isFennec {
             throw XCTSkip("Skipping test because bookmark search bar is off on Firefox")
