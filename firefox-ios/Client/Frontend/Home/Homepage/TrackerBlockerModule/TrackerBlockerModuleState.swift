@@ -3,11 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Redux
 import Shared
 
-@CopyWithUpdates
+@Copyable
 struct TrackerBlockerModuleState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     let shouldShowSection: Bool
@@ -52,7 +52,7 @@ struct TrackerBlockerModuleState: StateType, Equatable, Hashable {
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()
     ) -> TrackerBlockerModuleState {
         guard featureFlagsProvider.isEnabled(.homepageTrackerBlockerModule) else {
-            return state.copyWithUpdates(shouldShowSection: false)
+            return state.copy(shouldShowSection: false)
         }
 
         guard let trackerBlockerModuleAction = action as? TrackerBlockerModuleAction,
@@ -61,12 +61,10 @@ struct TrackerBlockerModuleState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
-            shouldShowSection: isEnabled
-        )
+        return state.copy(shouldShowSection: isEnabled)
     }
 
     static func defaultState(from state: TrackerBlockerModuleState) -> TrackerBlockerModuleState {
-        return state.copyWithUpdates()
+        return state
     }
 }
