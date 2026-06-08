@@ -392,14 +392,12 @@ final class URLBar: UIView {
             }
         }
 
-        NSLayoutConstraint.activate([
-            backButton.leadingAnchor.constraint(
-                equalTo: windowControlAdjustedLayoutGuide.leadingAnchor,
-                constant: windowControlAdjustedLayoutInset
-            ),
-            backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            backButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: toolsetButtonWidthMultiplier),
-        ])
+        backButton.snp.makeConstraints { make in
+            make.leading.equalTo(windowControlAdjustedLayoutGuide.snp.leading)
+                .offset(windowControlAdjustedLayoutInset)
+            make.centerY.equalTo(self)
+            make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier)
+        }
     }
 
     private func addForwardButtonConstraints() {
