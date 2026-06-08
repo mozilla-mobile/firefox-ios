@@ -303,8 +303,7 @@ final class PrivacyPreferencesViewController: UIViewController,
         // Only add glass effect if it doesn't already exist
         guard glassEffectView == nil else { return }
 
-        // Skip when presented as a sheet because
-        // UISheetPresentationController already provides glass
+        // UISheetPresentationController already applies glass effect
         guard sheetPresentationController == nil else { return }
 
         let effectView = UIVisualEffectView()
