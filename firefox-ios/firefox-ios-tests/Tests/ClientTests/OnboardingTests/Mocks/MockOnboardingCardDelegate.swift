@@ -18,13 +18,7 @@ class MockOnboardingCardDelegateController: UIViewController,
     // Protocol conformance
     var pageController = UIPageViewController()
     var pageControl = UIPageControl()
-    var viewModel: OnboardingViewModelProtocol = UpdateViewModel(
-        profile: MockProfile(),
-        model: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall),
-        telemetryUtility: OnboardingTelemetryUtility(
-            with: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall),
-            onboardingReason: .newUser),
-        windowUUID: .XCTestDefaultUUID)
+    var viewModel: OnboardingViewModelProtocol = MockOnboardingViewModel()
     var didFinishFlow: (() -> Void)?
     var themeManager: ThemeManager = AppContainer.shared.resolve()
     var themeListenerCancellable: Any?
@@ -122,4 +116,16 @@ class MockOnboardingCardDelegateController: UIViewController,
     }
 
     func pageChanged(from cardName: String) { }
+}
+
+private class MockOnboardingViewModel: OnboardingViewModelProtocol {
+    var availableCards: [OnboardingCardViewController<OnboardingKitCardInfoModel>] = []
+    var isDismissible = false
+    var profile: Profile = MockProfile()
+    var telemetryUtility: OnboardingTelemetryProtocol = OnboardingTelemetryUtility(
+        with: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall),
+        onboardingReason: .newUser)
+
+    @MainActor
+    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID) { }
 }
