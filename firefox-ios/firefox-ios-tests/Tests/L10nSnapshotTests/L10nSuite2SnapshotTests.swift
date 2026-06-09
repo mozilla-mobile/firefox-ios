@@ -118,20 +118,20 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
-    func tapKeyboardKey(_ key: Int) {
-        let key = app.keyboards.keys.element(boundBy: key)
-        if app.buttons["Continue"].isHittable {
-            // Attempt to find and tap the Continue button
-            // of the keyboard onboarding screen.
-            app.buttons.staticTexts["Continue"].waitAndTap()
-            app.tables["Add Credential"].cells.element(boundBy: 1).waitAndTap()
-        }
-        key.waitAndTap(timeout: 5)
+    @MainActor
+    private func pasteText(_ text: String, intoCellAt index: Int) {
+        UIPasteboard.general.string = text
+        let cell = app.tables["Add Credential"].cells.element(boundBy: index)
+        cell.waitAndTap(timeout: 15)
+        cell.press(forDuration: 1.0)
+        // The system edit-menu items expose no accessibility identifiers and have localized labels,
+        // but "Paste" is consistently the first item when the clipboard has content, so tap by
+        // position to stay locale-independent.
+        app.menuItems.element(boundBy: 0).waitAndTap(timeout: 5)
     }
 
     @MainActor
     func testLoginDetails() {
-        let key = 15
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         navigator.goto(LoginsSettings)
@@ -153,13 +153,17 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         snapshot("CreateLogin")
         app.buttons["addCredentialButton"].waitAndTap()
 
+        // Paste explicit, valid credentials (keyboard-independent). Typing is unreliable here: these
+        // cells aggregate accessibility (typeText finds no focus), and on non-ASCII .URL keyboards a
+        // positional key tap yields an invalid hostname (FXIOS-16021).
         app.tables["Add Credential"].cells.element(boundBy: 0).waitAndTap(timeout: 15)
-        tapKeyboardKey(key)
-
-        app.tables["Add Credential"].cells.element(boundBy: 1).waitAndTap(timeout: 15)
-        tapKeyboardKey(key)
-        app.tables["Add Credential"].cells.element(boundBy: 2).waitAndTap(timeout: 5)
-        tapKeyboardKey(key)
+        // Dismiss the one-time keyboard onboarding overlay if shown.
+        if app.buttons["Continue"].isHittable {
+            app.buttons.staticTexts["Continue"].waitAndTap()
+        }
+        pasteText("https://mozilla.org", intoCellAt: 0)
+        pasteText("firefox", intoCellAt: 1)
+        pasteText("challenge-the-default", intoCellAt: 2)
         app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).waitAndTap(timeout: 5)
 
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
