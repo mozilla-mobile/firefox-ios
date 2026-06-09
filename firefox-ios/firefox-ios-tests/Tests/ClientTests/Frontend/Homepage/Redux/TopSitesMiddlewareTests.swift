@@ -235,7 +235,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: Context Menu
 
-    func test_tappedOnPinTopSite_withSite_callsPinTopSite() throws {
+    func test_tappedOnPinTopSite_withSite_sendsPinTelemetryEvents() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let site = Site.createBasicSite(url: "www.example.com", title: "Pinned Top Site")
         let action = ContextMenuAction(
@@ -311,7 +311,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(pinnedExtras.source, "context_menu")
     }
 
-    func test_tappedOnUnpinTopSite_withSite_callsUnpinTopSite() throws {
+    func test_tappedOnUnpinTopSite_withSite_sendsUnpinTelemetryEvents() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let site = Site.createBasicSite(url: "www.example.com", title: "Pinned Top Site")
         let action = ContextMenuAction(
