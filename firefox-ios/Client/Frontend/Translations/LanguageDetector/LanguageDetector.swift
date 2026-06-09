@@ -11,6 +11,27 @@ protocol LanguageDetectorProvider: Sendable {
     func detectLanguage(from source: LanguageSampleSource) async throws -> String?
 }
 
+/// Identifies the dominant natural language of a text sample and how confident that identification is.
+/// Wrapping the detection backend lets callers (and tests) substitute a deterministic implementation.
+protocol LanguageRecognizing: Sendable {
+    /// Returns the dominant language's BCP-47 code and a confidence in the range `0...1`,
+    /// or `nil` if no dominant language could be determined.
+    func dominantLanguage(in text: String) -> (languageCode: String, confidence: Double)?
+}
+
+/// Default `LanguageRecognizing` backed by Apple's `NLLanguageRecognizer`.
+struct NaturalLanguageRecognizer: LanguageRecognizing {
+    func dominantLanguage(in text: String) -> (languageCode: String, confidence: Double)? {
+        let recognizer = NLLanguageRecognizer()
+        recognizer.processString(text)
+        guard let dominant = recognizer.dominantLanguage,
+              let confidence = recognizer.languageHypotheses(withMaximum: 1)[dominant] else {
+            return nil
+        }
+        return (dominant.rawValue, confidence)
+    }
+}
+
 final class LanguageDetector: LanguageDetectorProvider {
     /// JS function that is called to get a page sample back. The function is implemented in `Summarizer.js`.
     private let languageSampleScript =
@@ -18,14 +39,16 @@ final class LanguageDetector: LanguageDetectorProvider {
 
     private let htmlLangScript = "return document.documentElement.lang || null"
 
-    /// Minimum confidence from `NLLanguageRecognizer` for a text-sample identification to be trusted.
-    /// The recognizer's own confidence reliably separates clean text (scores ~0.9+, even on short or
-    /// non-Latin samples) from code, markup, and mixed-language content (well below), so it is a better
-    /// gate than an input-length threshold and is calibrated against the recognizer we actually ship.
-    private let confidenceThreshold: Double
+    /// Minimum confidence for a text-sample identification to be trusted. The recognizer's own
+    /// confidence reliably separates clean text (scores ~0.9+, even on short or non-Latin samples)
+    /// from code, markup, and mixed-language content (well below), so it is a better gate than an
+    /// input-length threshold and is calibrated against the recognizer we actually ship.
+    private static let confidenceThreshold = 0.85
 
-    init(confidenceThreshold: Double = 0.85) {
-        self.confidenceThreshold = confidenceThreshold
+    private let recognizer: LanguageRecognizing
+
+    init(recognizer: LanguageRecognizing = NaturalLanguageRecognizer()) {
+        self.recognizer = recognizer
     }
 
     /// Detects the page language from two signals. A confident text-sample identification is the
@@ -38,7 +61,7 @@ final class LanguageDetector: LanguageDetectorProvider {
         return confidentLanguage ?? htmlTagLanguage
     }
 
-    /// Identifies the page language from an extracted text sample, but only when `NLLanguageRecognizer`
+    /// Identifies the page language from an extracted text sample, but only when the recognizer
     /// reports a confidence at or above `confidenceThreshold`. A low-confidence result (typical of
     /// code, markup, or mixed-language samples) is discarded rather than used to override the HTML tag
     /// or stand on its own. Returns `nil` for empty or unrecognized samples.
@@ -48,14 +71,11 @@ final class LanguageDetector: LanguageDetectorProvider {
         let trimmed = sample.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
 
-        let recognizer = NLLanguageRecognizer()
-        recognizer.processString(trimmed)
-        guard let dominant = recognizer.dominantLanguage,
-              let confidence = recognizer.languageHypotheses(withMaximum: 1)[dominant],
-              confidence >= confidenceThreshold else {
+        guard let identified = recognizer.dominantLanguage(in: trimmed),
+              identified.confidence >= Self.confidenceThreshold else {
             return nil
         }
-        return dominant.rawValue
+        return identified.languageCode
     }
 
     /// Reads the `lang` attribute from the page's `<html>` element.
