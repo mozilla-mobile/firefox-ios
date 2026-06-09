@@ -106,11 +106,7 @@ class ReaderMode: TabContentScript {
     @MainActor
     lazy var style = ReaderModeStyle.defaultStyle(for: tab?.windowUUID) {
         didSet {
-            // Make sure to only inject if URL matches reader mode pattern
-            guard tab?.url?.absoluteString.range(
-                of: #"^http://localhost:\d+/reader-mode/page"#,
-                options: .regularExpression
-            ) != nil else {
+            guard tab?.url?.absoluteString.hasPrefix(ReaderModeSchemeHandler.currentBaseURL) == true else {
                 return
             }
             if state == ReaderModeState.active {
