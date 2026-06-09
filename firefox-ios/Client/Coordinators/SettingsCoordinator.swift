@@ -79,6 +79,7 @@ final class SettingsCoordinator: BaseCoordinator,
         // We might already know the sub-settings page we want to show, but in some case we don't and
         // the flow decision needs to be figured out by the view controller
         if let viewController = getSettingsViewController(settingsSection: settingsSection) {
+            // If the user is currently viewing a sub-setting page, reset back to the root and navigate to this new route
             if let root = router.rootViewController,
                router.navigationController.viewControllers.count > 1 {
                 router.navigationController.setViewControllers([root, viewController], animated: false)

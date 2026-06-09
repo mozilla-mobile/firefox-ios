@@ -201,6 +201,23 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.viewControllers.last is UIHostingController<AppIconSelectionView>)
     }
 
+    func testAppIconSettingsRoute_whenAlreadyOnAppIcon_doesNotPushDuplicate() throws {
+        let subject = createSubject()
+        let root = try XCTUnwrap(mockRouter.rootViewController)
+        let navigationController = try XCTUnwrap(mockRouter.navigationController as? MockNavigationController)
+        let existingAppIcon = UIHostingController(
+            rootView: AppIconSelectionView(windowUUID: .XCTestDefaultUUID)
+        )
+        navigationController.viewControllers = [root, existingAppIcon]
+
+        subject.start(with: .appIcon)
+
+        XCTAssertEqual(mockRouter.pushCalled, 0)
+        XCTAssertEqual(navigationController.viewControllers.count, 2)
+        XCTAssertTrue(navigationController.viewControllers.first === root)
+        XCTAssertTrue(navigationController.viewControllers.last is UIHostingController<AppIconSelectionView>)
+    }
+
     func testGeneralSettingsRoute_whenStackIsDeep_popsToRoot() throws {
         let subject = createSubject()
         let root = try XCTUnwrap(mockRouter.rootViewController)
