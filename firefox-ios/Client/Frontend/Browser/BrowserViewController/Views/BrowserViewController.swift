@@ -1582,7 +1582,7 @@ class BrowserViewController: UIViewController,
                 webPagePreview.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
         }
-        
+
         if true {
             swipeUpTabWebViewPreview.pinToSuperview()
         }
