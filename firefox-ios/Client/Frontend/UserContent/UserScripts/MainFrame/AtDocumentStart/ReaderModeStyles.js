@@ -1,5 +1,4 @@
 import { enable as enableDarkReader, setFetchMethod } from "darkreader";
-import { readerModeURL } from "./ReaderMode.js";
 
 // Needed in order for dark reader to handle CORS properly
 // This tells dark reader to use the global window.fetch.
@@ -50,10 +49,6 @@ const applyFontConfig = (style) => {
 };
 
 export const setStyle = (style) => {
-  // Make sure we only apply style changes on reader mode pages because the script is injected in all pages.
-  if (!document.location.href.match(readerModeURL)) {
-    return;
-  }
   // Remove all theme classes
   THEME_CLASSES.forEach((theme) => {
     document.body.classList.toggle(theme, theme === style?.theme);
