@@ -530,7 +530,6 @@ usage:
   os:
     type: string
     lifetime: application
-
     send_in_pings:
       - usage-reporting
     description: |
