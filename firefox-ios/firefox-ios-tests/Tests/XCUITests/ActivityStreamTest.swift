@@ -12,7 +12,7 @@ let newTopSite = [
     "topSiteLabel": "Mozilla",
     "bookmarkLabel": "Mozilla - Internet for people, not profit (US)"
 ]
-let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
+let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia"]
 let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
 
 class ActivityStreamTest: FeatureFlaggedTestBase {
@@ -71,7 +71,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     func testTopSites2Add() {
         app.launch()
         if iPad() {
-            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
+            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 10)
         } else {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }
@@ -83,7 +83,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         waitForExistence(app.links.staticTexts["Internet for people, not profit — Mozilla (US)"], timeout: TIMEOUT_LONG)
         // A new site has been added to the top sites
         if iPad() {
-            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
+            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 11)
         } else {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }
@@ -96,7 +96,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             navigator.nowAt(ClearPrivateDataSettings)
             navigator.goto(BrowserTab)
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
         mozWaitForElementToNotExist(app.cells.staticTexts[newTopSite["bookmarkLabel"]!])
     }
 
@@ -132,7 +132,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         } else {
             waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         if #available(iOS 16, *) {
             topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
         } else {
@@ -155,7 +155,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         } else {
             waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2272514
@@ -177,7 +177,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         }
         mozWaitForElementToExist(allTopSites.staticTexts[topSiteSecondCell])
         mozWaitForElementToNotExist(allTopSites.staticTexts[topSiteFirstCell])
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 3)
         // Check top site in first cell now
         let updatedAllTopSites = app.collectionViews.links.matching(identifier: "TopSitesCell")
         waitForExistence(updatedAllTopSites.element(boundBy: 0))
