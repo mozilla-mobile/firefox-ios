@@ -13,7 +13,7 @@ struct FakeReduxState: StateType, Equatable {
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
     static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
-     // Does not handle any modern actions
+        // Does not handle any modern actions
         return defaultState(from: state)
     }
 
