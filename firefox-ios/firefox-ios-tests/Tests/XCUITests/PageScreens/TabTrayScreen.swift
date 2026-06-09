@@ -49,10 +49,10 @@ final class TabTrayScreen {
 
     func assertTabCount(_ expected: Int, file: StaticString = #filePath, line: UInt = #line) {
         let cells = collectionView.cells
-        BaseTestCase().mozWaitForElementToExist(cells.firstMatch)
-        // The tab tray may still be populating after the first cell appears, so poll
-        // until the expected number of cells is rendered (bounded by TIMEOUT) before asserting.
-        BaseTestCase().waitForCondition { cells.count == expected }
+        // The tab tray may still be populating after the first cell appears, so wait until the
+        // expected cell is rendered (bounded by TIMEOUT) before asserting. failOnTimeout is false
+        // so the XCTAssertEqual below produces the single, descriptive failure.
+        BaseTestCase().mozWaitForElementToExist(cells.element(boundBy: expected - 1), failOnTimeout: false)
         XCTAssertEqual(cells.count, expected, "The number of tabs is not correct", file: file, line: line)
     }
 

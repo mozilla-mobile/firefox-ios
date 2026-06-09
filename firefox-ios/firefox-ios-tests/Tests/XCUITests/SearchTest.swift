@@ -152,7 +152,7 @@ class SearchTests: FeatureFlaggedTestBase {
         } else {
             urlBarAddress.press(forDuration: 1)
         }
-        if !app.menuItems["Select All"].waitForExistence(timeout: 3) {
+        if !app.menuItems["Select All"].mozWaitForElementToExist(timeout: 3, failOnTimeout: false) {
             urlBarAddress.waitAndTap()
         }
         app.menuItems["Select All"].waitAndTap()
@@ -424,7 +424,7 @@ class SearchTests: FeatureFlaggedTestBase {
         app.tables.cells.buttons.firstMatch.waitAndTap()
 
         // The search suggestion fills the URL bar but does not conduct the search
-        waitForValueContains(urlBarAddress, value: "g")
+        mozWaitForValueContains(urlBarAddress, value: "g")
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
         // Delete the text and type "g"
@@ -437,7 +437,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
         // The search is conducted through the default search engine
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        waitForValueContains(urlBar, value: "google.com")
+        mozWaitForValueContains(urlBar, value: "google.com")
 
         // Disable "Show search suggestions" from Settings and type text in a new tab
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)

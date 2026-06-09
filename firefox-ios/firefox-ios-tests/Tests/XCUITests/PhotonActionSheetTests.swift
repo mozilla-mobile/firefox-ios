@@ -79,7 +79,7 @@ class PhotonActionSheetTests: BaseTestCase {
         let sendToDeviceButton = app.staticTexts["Send to Device"]
         while sendToDeviceButton.isVisible() && attempts > 0 {
             sendToDeviceButton.waitAndTap()
-            waitForNoExistence(sendToDeviceButton)
+            mozWaitForElementToNotExist(sendToDeviceButton)
             attempts -= 1
         }
         waitForElementsToExist(

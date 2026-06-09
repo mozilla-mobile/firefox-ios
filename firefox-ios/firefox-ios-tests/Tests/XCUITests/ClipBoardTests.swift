@@ -43,7 +43,7 @@ class ClipBoardTests: BaseTestCase {
             if let myString = UIPasteboard.general.string {
                 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
                 let allowBtn = springboard.buttons["Allow Paste"]
-                if allowBtn.waitForExistence(timeout: TIMEOUT) {
+                if allowBtn.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
                     allowBtn.waitAndTap()
                 }
 
