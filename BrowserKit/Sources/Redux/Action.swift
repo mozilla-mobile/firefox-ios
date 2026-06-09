@@ -24,3 +24,38 @@ extension Action {
 }
 
 public protocol ActionType: Sendable {}
+
+
+/// Used to describe an action that can be dispatched by the redux store
+public protocol ModernAction: Sendable {
+    var description: String { get }
+}
+
+extension ModernAction {
+    // A generic extension to automatically generate a debug description of enumerated actions.
+    var description: String {
+        let mirror = Mirror(reflecting: self)
+
+        guard let caseName = mirror.children.first?.label,
+              let associatedValue = mirror.children.first?.value else {
+            // Enum without an associated value
+            return ".\(self)"
+        }
+
+        // Print the associated value(s) if possible
+        let associatedValueMirror = Mirror(reflecting: associatedValue)
+        if associatedValueMirror.children.isEmpty {
+            return ".\(caseName)"
+        }
+
+        // Pretty print the Action's payload, one item per line, in curly brackets
+        let indentValue = "\n   "
+        let values = indentValue + associatedValueMirror.children.map { child in
+            let label = child.label ?? ""
+            let value = child.value
+            return label.isEmpty ? "\(value)" : "\(label): \(value)"
+        }.joined(separator: indentValue)
+
+        return ".\(caseName) {\(values)\n}"
+    }
+}

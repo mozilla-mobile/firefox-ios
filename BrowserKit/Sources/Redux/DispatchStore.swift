@@ -3,28 +3,25 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 /// Protocol that allows to subscribe to the store and receive dispatched actions to modify the store state
+@MainActor
 public protocol DispatchStore {
-    @MainActor
     func dispatch(_ action: Action)
+    func dispatch(_ action: ModernAction, forWindowUUID windowUUID: WindowUUID)
 }
 
 public protocol DefaultDispatchStore<State>: DispatchStore where State: StateType {
     associatedtype State
 
-    @MainActor
     var state: State { get }
 
-    @MainActor
     func subscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State
-    @MainActor
     func subscribe<SubState, S: StoreSubscriber>(
         _ subscriber: S,
         transform: ((Subscription<State>) -> Subscription<SubState>)?
     ) where S.SubscriberStateType == SubState
-    @MainActor
     func unsubscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State
-    @MainActor
     func unsubscribe(_ subscriber: any StoreSubscriber)
 }

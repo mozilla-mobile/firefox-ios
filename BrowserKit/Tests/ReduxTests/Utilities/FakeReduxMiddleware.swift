@@ -10,7 +10,13 @@ import Foundation
 class FakeReduxMiddleware {
     var generateInitialCountValue: (() -> Int)?
 
-    lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
+    lazy var fakeProvider: Middleware<FakeReduxState> = (legacyFakeProvider, modernFakeProvider)
+
+    lazy var modernFakeProvider: MiddlewareMethod<FakeReduxState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyFakeProvider: LegacyMiddlewareMethod<FakeReduxState> = { [self] state, action in
         switch action.actionType {
         case FakeReduxActionType.requestInitialValue:
             let initialValue = self.generateInitialCountValue?() ?? 0
