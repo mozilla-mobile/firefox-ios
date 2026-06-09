@@ -1,0 +1,18 @@
+/* Label for button in the address toolbar, that cancels editing the address field when tapped. */
+"AddressToolbar.CancelEdit.Label.v138" = "បោះបង់";
+
+/* Accessibility label for the address field in the address toolbar. */
+"AddressToolbar.Location.A11y.Label.v128" = "ស្វែងរក ឬ​បញ្ចូល​អាសយដ្ឋាន";
+
+/* Placeholder for the address field in the address toolbar. */
+"AddressToolbar.Location.Placeholder.v128" = "ស្វែងរក ឬ​បញ្ចូល​អាសយដ្ឋាន";
+
+/* Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings. */
+"AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "ការកំណត់ភាពឯកជន និងសុវត្ថិភាព";
+
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does. */
+"AddressToolbar.SearchEngine.A11y.Hint.v133" = "បើកការជ្រើសរើសម៉ាស៊ីនស្វែងរក";
+
+/* Accessibility label for the search engine icon in the address bar. %@ is the name of the search engine (e.g. Google). */
+"AddressToolbar.SearchEngine.A11y.Label.v128" = "ម៉ាស៊ីនស្វែងរក៖ %@";
+

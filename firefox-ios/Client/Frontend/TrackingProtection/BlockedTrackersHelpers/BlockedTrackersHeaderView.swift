@@ -6,7 +6,8 @@ import Foundation
 import Common
 
 class BlockedTrackersHeaderView: UITableViewHeaderFooterView,
-                                 ReusableCell {
+                                 ReusableCell,
+                                 ThemeApplicable {
     let totalTrackersBlockedLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .left
@@ -17,7 +18,9 @@ class BlockedTrackersHeaderView: UITableViewHeaderFooterView,
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers.headerView
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers
+        accessibilityIdentifier = A11y.headerView
+        totalTrackersBlockedLabel.accessibilityIdentifier = A11y.totalTrackersBlockedLabel
         setupView()
     }
 

@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import MozillaAppServices
+
 /// Unified tiles are a type of tiles belonging in the Top sites section on the Firefox home page.
 /// See UnifiedAdsProvider and the resource endpoint there for context.
 struct UnifiedTile: Decodable {
@@ -11,6 +13,20 @@ struct UnifiedTile: Decodable {
     let imageUrl: String
     let name: String
     let blockKey: String
+
+    static func from(name: String, mozAdsTile: MozAdsTile) -> UnifiedTile {
+        return UnifiedTile(
+            format: mozAdsTile.format,
+            url: mozAdsTile.url,
+            callbacks: UnifiedTileCallback(
+                click: mozAdsTile.callbacks.click,
+                impression: mozAdsTile.callbacks.impression
+            ),
+            imageUrl: mozAdsTile.imageUrl,
+            name: mozAdsTile.name,
+            blockKey: mozAdsTile.blockKey
+        )
+    }
 }
 
 // Callbacks for telemetry events

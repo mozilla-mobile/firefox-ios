@@ -19,7 +19,7 @@ final class URLBar: UIView {
         let button = UIButton()
         button.isHidden = true
         button.alpha = 0
-        button.setImage(.cancel, for: .normal)
+        button.setImage(.cancel.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         button.accessibilityIdentifier = "URLBar.cancelButton"
@@ -460,9 +460,9 @@ final class URLBar: UIView {
 
     private func addStopReloadButtonConstraints() {
         stopReloadButton.snp.makeConstraints { make in
-            make.trailing.equalTo(urlBarBorderView)
-            make.leading.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize)
-            make.center.equalToSuperview()
+            make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarIconInset)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(UIConstants.layout.urlBarButtonTargetSize)
         }
     }
 
@@ -474,7 +474,7 @@ final class URLBar: UIView {
             showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
 
             hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
-            showPageActionsConstraints.append(make.trailing.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize).constraint)
+            showPageActionsConstraints.append(make.trailing.equalTo(stopReloadButton.snp.leading).constraint)
         }
     }
 
@@ -1254,11 +1254,22 @@ private final class URLTextField: AutocompleteTextField {
             clearButtonWidth = clearButton.bounds.width + CGFloat(5)
         }
 
+        if effectiveUserInterfaceLayoutDirection == .rightToLeft {
+            return CGRect(x: inset.origin.x + clearButtonWidth, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
+        }
         return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
     }
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
+    }
+
+    override fileprivate func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+        if effectiveUserInterfaceLayoutDirection == .rightToLeft, let rv = rightView {
+            let size = rv.bounds.size
+            return CGRect(x: UIConstants.layout.urlBarWidthInset, y: (bounds.height - size.height) / 2, width: size.width, height: size.height)
+        }
+        return super.leftViewRect(forBounds: bounds)
     }
 
     private func textFieldDidEndEditing(_ textField: UITextField) {

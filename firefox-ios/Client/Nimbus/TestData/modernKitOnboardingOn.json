@@ -1,0 +1,6 @@
+{
+    "enable-modern-ui": true,
+    "should-use-japan-configuration": false,
+    "should-use-brand-refresh-configuration": true,
+    "dismissable": true
+}

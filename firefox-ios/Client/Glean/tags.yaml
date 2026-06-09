@@ -78,6 +78,9 @@ PasswordGenerator:
 ReaderMode:
   description: Corresponds to the reading mode viewer for webpages.
 
+ReadingList:
+  description: Corresponds to the internal data store of reading list within the app. Not to be confused with `ReadingListPanel`, which refers to the Reading List screen in the library.
+
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
@@ -101,9 +104,6 @@ ShareSheet:
 
 ShortcutsLibrary:
   description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
-
-StoriesFeed:
-  description: Corresponds to the stories feed screen where the user can interact with an expanded list of stories.
 
 Summarizer:
   description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
@@ -136,6 +136,9 @@ TrendingSearches:
 
 User:
   description: Corresponds to user properties and settings.
+
+WorldCupWidget:
+  description: Corresponds to the World Cup widget shown on the homepage.
 
 ZoomBar:
   description: Corresponds to any event around zoom bar. Shown from the app menu.

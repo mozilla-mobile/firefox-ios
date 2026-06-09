@@ -7,7 +7,7 @@ import Common
 import Shared
 
 /// The main view displaying the settings for the address bar position menu.
-struct AddressBarSettingsView: View, FeatureFlaggable {
+struct AddressBarSettingsView: View, UserFeaturePreferenceProvider {
     let windowUUID: WindowUUID
     /// NOTE: To avoid duplication, the old view model is reused in the new address bar setting menu.
     /// TODO(FXIOS-12000): Once the experiment is done, we can remove the old viewmodel and move it to here.
@@ -20,10 +20,6 @@ struct AddressBarSettingsView: View, FeatureFlaggable {
 
     @State private var currentTheme: Theme?
 
-    var shouldShowNavigationBarConfig: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMiddleButtonCustomization, checking: .buildOnly)
-    }
-
     var selectedMiddleButtonType: NavigationBarMiddleButtonType {
         if let rawValue = prefs.stringForKey(PrefsKeys.Settings.navigationToolbarMiddleButton),
            let selectedButton = NavigationBarMiddleButtonType(rawValue: rawValue) {
@@ -34,7 +30,7 @@ struct AddressBarSettingsView: View, FeatureFlaggable {
     }
 
     private var addressBarPosition: SearchBarPosition {
-        LegacyFeatureFlagsManager.shared.getCustomState(for: .searchBarPosition) ?? .bottom
+        userPreferences.searchBarPosition
     }
 
     private var viewBackground: Color {
@@ -58,12 +54,10 @@ struct AddressBarSettingsView: View, FeatureFlaggable {
                 .modifier(SectionStyle(theme: currentTheme, cornerRadius: UX.cornerRadius))
             }
 
-            if shouldShowNavigationBarConfig {
-                NavigationToolbarSection(theme: currentTheme,
-                                         selectedOption: selectedMiddleButtonType,
-                                         onChange: updateMiddleNavigationToolbarButton,
-                                         cornerRadius: UX.cornerRadius)
-            }
+            NavigationToolbarSection(theme: currentTheme,
+                                     selectedOption: selectedMiddleButtonType,
+                                     onChange: updateMiddleNavigationToolbarButton,
+                                     cornerRadius: UX.cornerRadius)
             Spacer()
         }
         .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))

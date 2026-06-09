@@ -51,6 +51,7 @@ import:
                 title: Microsurvey/Microsurvey.Prompt.TitleLabel.v127
                 text: "How satisfied are you with your Firefox homepage?" # Should not show this message if this is nil
                 button-label: Microsurvey/Microsurvey.Prompt.Button.v127
+                should-randomize-options: false
                 microsurveyConfig:
                   utm-content: homepage
                   icon: homeLarge
@@ -73,6 +74,7 @@ import:
                   - NEVER
                 text: ResearchSurface/Body.Text.v112
                 button-label: ResearchSurface/PrimaryButton.Label.v112
+                should-randomize-options: false
                 action: OPEN_URL
                 action-params:
                   url: https://www.macrumors.com

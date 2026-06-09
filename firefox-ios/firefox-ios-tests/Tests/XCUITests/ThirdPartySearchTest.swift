@@ -96,10 +96,7 @@ class ThirdPartySearchTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.AddCustomSearchEngine)
         app.buttons["customEngineSaveButton"].waitAndTap()
-        if #unavailable(iOS 16) {
-            // Wait for "Fennec pasted from XCUITests-Runner" banner to disappear
-            sleep(2)
-        }
+        mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2444333

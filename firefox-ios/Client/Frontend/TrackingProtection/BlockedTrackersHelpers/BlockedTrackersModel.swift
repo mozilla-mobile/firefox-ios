@@ -6,6 +6,7 @@ import Foundation
 import Common
 
 struct BlockedTrackersTableModel {
+    let userDefaults: UserDefaultsInterface?
     let topLevelDomain: String
     let title: String
     let URL: String
@@ -40,22 +41,32 @@ struct BlockedTrackersTableModel {
             imageLiteralResourceName: StandardImageIdentifiers.Large.image
         ).withRenderingMode(.alwaysTemplate)
 
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers
+
         return [
             BlockedTrackerItem(
                 title: crossSiteText,
-                image: crossSiteImage
+                image: crossSiteImage,
+                titleIdentifier: A11y.crossSiteTitle,
+                imageIdentifier: A11y.crossSiteImage
             ),
             BlockedTrackerItem(
                 title: fingerprintersText,
-                image: fingerprintersImage
+                image: fingerprintersImage,
+                titleIdentifier: A11y.fingerPrintersTitle,
+                imageIdentifier: A11y.fingerPrintersImage
             ),
             BlockedTrackerItem(
                 title: trackingContentText,
-                image: trackingContentImage
+                image: trackingContentImage,
+                titleIdentifier: A11y.trackingContentTitle,
+                imageIdentifier: A11y.trackingContentImage
             ),
             BlockedTrackerItem(
                 title: socialMediaText,
-                image: socialMediaImage
+                image: socialMediaImage,
+                titleIdentifier: A11y.socialMediaTitle,
+                imageIdentifier: A11y.socialMediaImage
             )
         ]
     }
@@ -65,5 +76,21 @@ struct BlockedTrackersTableModel {
         let trackersText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel,
                                   totalTrackerBlocked)
         return trackersText.uppercased()
+    }
+
+    func getTrackersBlockedModeText() -> String {
+        let strengthKey = ProfilePrefsReader.prefix + ContentBlockingConfig.Prefs.StrengthKey
+        let isStrictMode = userDefaults?.string(forKey: strengthKey) == BlockingStrength.strict.rawValue
+        if isStrictMode {
+            return String(
+                format: .Menu.EnhancedTrackingProtection.trackersBlockedStrictModeFooterText,
+                String.Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink
+            )
+        } else {
+            return String(
+                format: .Menu.EnhancedTrackingProtection.trackersBlockedStandardModeFooterText,
+                String.Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink
+            )
+        }
     }
 }

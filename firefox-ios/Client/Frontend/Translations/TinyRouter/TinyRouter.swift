@@ -34,32 +34,34 @@ public final class TinyRouter {
 
     /// Routes a URL to the appropriate handler and returns the response.
     /// Throws an error if no route can handle the request, including the default.
-    public func route(_ url: URL) throws -> TinyHTTPReply {
+    @MainActor
+    public func route(_ url: URL) async throws -> TinyHTTPReply {
         guard let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             throw TinyRouterError.badURL
         }
         let path = url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
 
         // Check all registered routes for exact or prefix matches
-        if let reply = try handleRegisteredRoutes(for: path, url: url, components: comps) {
+        if let reply = try await handleRegisteredRoutes(for: path, url: url, components: comps) {
             return reply
         }
 
         // Try the default route if no registered route handled the request
-        if let reply = try defaultRoute?.handle(url: url, components: comps) {
+        if let reply = try await defaultRoute?.handle(url: url, components: comps) {
             return reply
         }
 
         throw TinyRouterError.notFound
     }
 
+    @MainActor
     private func handleRegisteredRoutes(
         for path: String,
         url: URL,
         components: URLComponents
-    ) throws -> TinyHTTPReply? {
+    ) async throws -> TinyHTTPReply? {
         for entry in entries where path == entry.prefix || path.hasPrefix(entry.prefix + "/") {
-            if let reply = try entry.route.handle(url: url, components: components) {
+            if let reply = try await entry.route.handle(url: url, components: components) {
                 return reply
             }
         }

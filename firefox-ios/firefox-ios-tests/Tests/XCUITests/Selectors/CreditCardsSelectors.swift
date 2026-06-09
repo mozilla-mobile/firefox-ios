@@ -20,6 +20,7 @@ protocol CreditCardsSelectorsSet {
     var ADD_CREDIT_CARD_EXPIRATION: Selector { get }
     var ADD_CREDIT_CARD_CLOSE: Selector { get }
     var ADD_CREDIT_CARD_SAVE: Selector { get }
+    var CARD_NUMBER_TEXT_FIELD: Selector { get }
     func savedCardButton(containing text: String) -> Selector
     var all: [Selector] { get }
 }
@@ -124,9 +125,16 @@ struct CreditCardsSelectors: CreditCardsSelectorsSet {
         description: "Close option on Credit Card Page",
         groups: ["creditcards"]
     )
+
     let ADD_CREDIT_CARD_SAVE = Selector.buttonId(
         IDs.addCreditCardSave,
         description: "Save option on Credit Card Page",
+        groups: ["creditcards"]
+    )
+
+    let CARD_NUMBER_TEXT_FIELD = Selector.textFieldId(
+        IDs.cardNumber,
+        description: "Fallback text field for Card Number field ",
         groups: ["creditcards"]
     )
 
@@ -142,5 +150,5 @@ struct CreditCardsSelectors: CreditCardsSelectorsSet {
                            CARD_NUMBER_STATIC_TEXT, USE_SAVED_CARD_BUTTON, DONE_KEYBOARD_BUTTON,
                            EXPIRATION_MONTH_FIELD, EXPIRATION_YEAR_FIELD, ADD_CREDIT_CARD, ADD_CREDIT_CARD_NAME_ON_CARD,
                            ADD_CREDIT_CARD_CARD_NUMBER, ADD_CREDIT_CARD_EXPIRATION, ADD_CREDIT_CARD_CLOSE,
-                           ADD_CREDIT_CARD_SAVE] }
+                           ADD_CREDIT_CARD_SAVE, CARD_NUMBER_TEXT_FIELD] }
 }

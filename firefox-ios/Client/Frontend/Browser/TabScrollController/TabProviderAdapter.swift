@@ -43,6 +43,6 @@ final class TabProviderAdapter: TabProviderProtocol {
     }
 
     func reloadPage() {
-        tab.reloadPage()
+        tab.reload()
     }
 }

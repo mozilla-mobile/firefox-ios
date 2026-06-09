@@ -75,8 +75,8 @@ public enum LoggerCategory: String {
     /// Related to storage (keychain, SQL database, store of different types, etc).
     case storage
 
-    /// Related to the stories feed
-    case storiesFeed
+    /// Related to speech (microphone, audio).
+    case speech
 
     /// Related to sync accounts, sync management, application services.
     case sync

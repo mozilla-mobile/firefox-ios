@@ -42,13 +42,17 @@ final class MainMenuStateTests: XCTestCase {
             isDefaultUserAgentDesktop: true,
             hasChangedUserAgent: true,
             zoomLevel: 1.0,
-            readerModeIsAvailable: false,
+            readerModeConfiguration: ReaderModeConfiguration(
+                isAvailable: false,
+                isActive: false,
+            ),
             summaryIsAvailable: false,
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,
-            accountData: accountData
+            accountData: accountData,
+            translationConfiguration: nil
         )
 
         XCTAssertNil(initialState.currentTabInfo)
@@ -83,7 +87,7 @@ final class MainMenuStateTests: XCTestCase {
             )
 
             guard let currentDestination = newState.navigationDestination?.destination else {
-                return XCTFail("Execting to find a destination, but it was nil")
+                return XCTFail("Expecting to find a destination, but it was nil")
             }
 
             XCTAssertEqual(currentDestination, destination)

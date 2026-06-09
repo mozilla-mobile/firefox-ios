@@ -20,7 +20,11 @@ final class TermsOfUseMiddleware {
     }
 
     lazy var termsOfUseProvider: Middleware<AppState> = { _, action in
-        self.handleTermsOfUseAction(action)
+        if let action = action as? TermsOfUseAction {
+            self.handleTermsOfUseAction(action)
+        } else if let action = action as? HomepageAction {
+            self.handleHomepageAction(action)
+        }
     }
 
     private func handleTermsOfUseAction(_ action: Action) {
@@ -33,11 +37,13 @@ final class TermsOfUseMiddleware {
         case TermsOfUseActionType.termsAccepted:
             self.recordAcceptance()
         case TermsOfUseActionType.remindMeLaterTapped:
+            self.prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
             self.incrementRemindersCount()
             self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
             self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseRemindMeLaterTapDate)
             self.telemetry.termsOfUseRemindMeLaterButtonTapped()
         case TermsOfUseActionType.gestureDismiss:
+            self.prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
             self.incrementRemindersCount()
             self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
             self.telemetry.termsOfUseDismissed()
@@ -53,10 +59,22 @@ final class TermsOfUseMiddleware {
         }
     }
 
+    private func handleHomepageAction(_ action: Action) {
+        guard let action = action as? HomepageAction else { return }
+
+        switch action.actionType {
+        case HomepageActionType.privacyNoticeCloseButtonTapped:
+            self.telemetry.termsOfUseDismissed(surface: .privacyNotice)
+        case HomepageMiddlewareActionType.configuredPrivacyNotice:
+            self.telemetry.termsOfUseDisplayed(surface: .privacyNotice)
+        default:
+            break
+        }
+    }
+
     private func recordAcceptance() {
         let acceptedDate = Date()
         self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        self.prefs.setString(String(telemetry.termsOfUseVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
         self.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         // Record telemetry for ToU acceptance
@@ -64,10 +82,20 @@ final class TermsOfUseMiddleware {
     }
 
     private func recordImpression() {
-        self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+        let hasShownFirstTime = self.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
+        guard hasShownFirstTime else {
+            self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+            self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseShownRecorded)
+            self.telemetry.termsOfUseDisplayed()
+            return
+        }
 
-        // Record telemetry for ToU impression
-        telemetry.termsOfUseDisplayed()
+        let hasBeenDismissedBefore = self.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil
+        let hasSeenTermsOfUse = self.prefs.boolForKey(PrefsKeys.TermsOfUseShownRecorded) ?? false
+        if hasBeenDismissedBefore, !hasSeenTermsOfUse {
+            self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseShownRecorded)
+            self.telemetry.termsOfUseDisplayed()
+        }
     }
 
     private func incrementRemindersCount() {

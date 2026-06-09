@@ -176,7 +176,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
             combinedString.append(paragraphString)
 
             if index < attributedParagraphs.count - 1 {
-                // Add paragragh separator charachter
+                // Add paragraph separator character
                 combinedString.append(NSAttributedString(string: "\u{2029}"))
             }
         }

@@ -15,7 +15,7 @@ class ShareMenuTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2863631
     func testShareNormalWebsiteTabViaReminders() {
-        // Coudn't find a way to tap on reminders on iOS 16
+        // Couldn't find a way to tap on reminders on iOS 16
         if #available(iOS 17, *) {
             reachShareMenuLayoutAndSelectOption(option: "Reminders")
             // The URL of the website is added in a new reminder

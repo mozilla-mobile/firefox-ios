@@ -12,8 +12,8 @@ public struct MenuElement: Equatable, Sendable {
     let needsReAuth: Bool?
     let isEnabled: Bool
     let isActive: Bool
-    let a11yLabel: String?
-    let a11yHint: String?
+    public let a11yLabel: String?
+    public let a11yHint: String?
     let a11yId: String
     let isOptional: Bool
     let infoTitle: String?

@@ -63,4 +63,8 @@ class RootNavigationController: UINavigationController {
     override var childForStatusBarHidden: UIViewController? {
         return topViewController
     }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return topViewController?.supportedInterfaceOrientations ?? .allButUpsideDown
+    }
 }

@@ -1,5 +1,5 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
-"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "Šířit informace o aplikaci %1$@ pokaždé, když sdílíte odkaz na síti %2$@.";
+"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "Šiřte informace o aplikaci %1$@ pokaždé, když sdílíte odkaz na síti %2$@.";
 
 /* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
 "SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "Zahrnout odkaz na stažení aplikace %1$@ při sdílení na síti %2$@";

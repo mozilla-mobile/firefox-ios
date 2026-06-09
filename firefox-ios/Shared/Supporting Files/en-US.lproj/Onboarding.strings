@@ -352,6 +352,9 @@
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Open your links with built-in privacy";
 
+/* Title for the welcome card in the v149 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Open all your links with built-in privacy";
+
 /* Description for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "We protect your data and automatically block companies from spying on your clicks.";
 

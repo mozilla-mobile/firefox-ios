@@ -72,6 +72,5 @@ enum DeeplinkInput {
         case newTab = "NewTab"
         case newPrivateTab = "NewPrivateTab"
         case openLastBookmark = "OpenLastBookmark"
-        case qrCode = "QRCode"
     }
 }

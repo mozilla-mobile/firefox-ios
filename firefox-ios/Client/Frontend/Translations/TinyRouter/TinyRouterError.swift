@@ -9,6 +9,8 @@ import Foundation
 public enum TinyRouterError: Error, Equatable {
     /// No route matched the request and no default route produced a reply
     case notFound
+    /// The route is not permitted to serve the request
+    case notAllowed
     /// URL couldn't be parsed into URLComponents
     case badURL
     /// URL scheme didn't match the handler's expected scheme
@@ -21,7 +23,19 @@ public enum TinyRouterError: Error, Equatable {
     case invalidParam(_ name: String, _ value: String)
     /// The handler built an invalid response
     case badResponse
+    /// A requested resource was rejected
+    case pathNotAllowed(path: String)
+    /// A requested resource was not found
+    case resourceNotFound(path: String)
     /// A catch-all wrapper for unexpected errors, storing a textual description
     /// for logging and debugging while keeping this enum Equatable.
     case unknown(_ description: String)
+
+    /// Normalizes any thrown `Error` into a `TinyRouterError`
+    public static func mapError(_ error: Error) -> TinyRouterError {
+        if let tinyError = error as? TinyRouterError {
+            return tinyError
+        }
+        return .unknown(String(describing: error))
+    }
 }

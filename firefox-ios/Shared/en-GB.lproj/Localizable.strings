@@ -830,7 +830,7 @@
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominers";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Web sites may load outside ads, videos, and other content that contains hidden trackers. Blocking this can make web sites load faster, but some buttons, forms, and login fields, might not work.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Web sites may load outside ads, videos and other content that contains hidden trackers. Blocking this can make web sites load faster, but some buttons, forms and login fields, might not work.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "These cookies follow you from site to site to gather data about what you do online. They are set by third parties such as advertisers and analytics companies.";

@@ -7,28 +7,40 @@ import Redux
 import Common
 import WebKit
 
+struct PasswordGeneratorFrameContext: Equatable {
+    let origin: String?
+    let host: String
+    let scriptEvaluator: PasswordGeneratorScriptEvaluator
+    let frameInfo: WKFrameInfo?
+
+    static func == (lhs: PasswordGeneratorFrameContext, rhs: PasswordGeneratorFrameContext) -> Bool {
+        lhs.origin == rhs.origin &&
+        lhs.host == rhs.host &&
+        lhs.frameInfo === rhs.frameInfo
+    }
+}
+
 struct PasswordGeneratorAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
 
-    // Used in the middlwares
-    let currentFrame: WKFrameInfo?
+    // Used in the middlewares
+    let frameContext: PasswordGeneratorFrameContext?
 
     // Used in some reducers
     let password: String?
-
-    let origin: String?
+    let loginEntryOrigin: String?
 
     init(windowUUID: WindowUUID,
          actionType: any ActionType,
-         currentFrame: WKFrameInfo? = nil,
          password: String? = nil,
-         origin: String? = nil) {
+         frameContext: PasswordGeneratorFrameContext? = nil,
+         loginEntryOrigin: String? = nil) {
         self.windowUUID = windowUUID
         self.actionType = actionType
-        self.currentFrame = currentFrame
         self.password = password
-        self.origin = origin
+        self.frameContext = frameContext
+        self.loginEntryOrigin = loginEntryOrigin
     }
 }
 

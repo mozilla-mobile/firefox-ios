@@ -3,36 +3,31 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ModifiedCopy
 import Redux
 import Shared
 
 /// State for the bookmark section that is used in the homepage view
+@Copyable
 struct BookmarksSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var bookmarks: [BookmarkConfiguration]
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderConfiguration(
-        title: .BookmarksSectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.bookmarks,
-        isButtonHidden: false,
-        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks,
-        buttonTitle: .BookmarksSavedShowAllText
-    )
+    struct Constants {
+        static let sectionHeaderConfiguration = SectionHeaderConfiguration(
+            title: .BookmarksSectionTitle,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.bookmarks,
+            isButtonHidden: false,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks,
+            buttonTitle: .BookmarksSavedShowAllText
+        )
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
-        let isStoriesRedesignEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesign,
-                                                                                         checking: .buildOnly)
-        let isStoriesRedesignV2Enabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesignV2,
-                                                                                           checking: .buildOnly)
-
-        // Bookmarks section default value without nimbus is true
-        let bookmarksSectionDefaultValue = !isStoriesRedesignV2Enabled
-        let isBookmarksSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection)
-                                            ?? bookmarksSectionDefaultValue
-
-        let shouldShowSection = isStoriesRedesignEnabled ? false : isBookmarksSectionPrefEnabled
-
+        // TODO: FXIOS-11412 - Move profile dependency
+        let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        let shouldShowSection = userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault)
         self.init(
             windowUUID: windowUUID,
             bookmarks: [],
@@ -75,10 +70,8 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return BookmarksSectionState(
-            windowUUID: state.windowUUID,
-            bookmarks: bookmarks,
-            shouldShowSection: state.shouldShowSection
+        return state.copy(
+            bookmarks: bookmarks
         )
     }
 
@@ -89,9 +82,7 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return BookmarksSectionState(
-            windowUUID: state.windowUUID,
-            bookmarks: state.bookmarks,
+        return state.copy(
             shouldShowSection: isEnabled
         )
     }

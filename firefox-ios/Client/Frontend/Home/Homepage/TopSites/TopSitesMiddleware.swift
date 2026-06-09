@@ -9,11 +9,12 @@ import Storage
 
 /// Middleware to handle top sites related actions, if this gets too big, should split out the telemetry.
 @MainActor
-final class TopSitesMiddleware: FeatureFlaggable {
+final class TopSitesMiddleware {
     private let topSitesManager: TopSitesManagerInterface
     private let homepageTelemetry: HomepageTelemetry
     private let bookmarksTelemetry: BookmarksTelemetry
     private let unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry
+    private let featureFlagsProvider: FeatureFlagProviding
     private let logger: Logger
     private let profile: Profile
 
@@ -23,6 +24,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
         homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
         bookmarksTelemetry: BookmarksTelemetry = BookmarksTelemetry(),
         unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry = DefaultUnifiedAdsCallbackTelemetry(),
+        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared
     ) {
@@ -37,6 +39,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
         self.homepageTelemetry = homepageTelemetry
         self.bookmarksTelemetry = bookmarksTelemetry
         self.unifiedAdsTelemetry = unifiedAdsTelemetry
+        self.featureFlagsProvider = featureFlagsProvider
         self.logger = logger
         self.profile = profile
     }
@@ -120,6 +123,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
         store.dispatch(
             TopSitesAction(
                 topSites: topSites,
+                shouldShowAddShortcutTile: featureFlagsProvider.isEnabled(.homepageAddShortcutTile),
                 windowUUID: windowUUID,
                 actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
             )

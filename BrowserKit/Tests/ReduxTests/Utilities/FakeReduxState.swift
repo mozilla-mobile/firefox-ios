@@ -19,6 +19,7 @@ struct FakeReduxState: StateType, Equatable {
             FakeReduxActionType.counterDecreased:
             return FakeReduxState(counter: action.counterValue ?? state.counter,
                                   isInPrivateMode: state.isInPrivateMode)
+
         case FakeReduxActionType.setPrivateModeTo:
             return FakeReduxState(counter: state.counter,
                                   isInPrivateMode: action.privateMode ?? state.isInPrivateMode)

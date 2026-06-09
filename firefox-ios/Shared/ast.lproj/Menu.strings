@@ -26,7 +26,7 @@
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Llista de Llectura";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
-"Menu.OpenSettingsAction.Title" = "Axustes";
+"Menu.OpenSettingsAction.Title" = "Configuración";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Llingüetes sincronizaes";

@@ -10,7 +10,7 @@ import ComponentLibrary
 import OnboardingKit
 
 @MainActor
-final class OnboardingService: FeatureFlaggable {
+final class OnboardingService: UserFeaturePreferenceProvider {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
     private weak var navigationDelegate: OnboardingNavigationDelegate?
@@ -153,11 +153,11 @@ final class OnboardingService: FeatureFlaggable {
         case .themeSystemDefault:
             themeManager.setSystemTheme(isOn: true)
         case .toolbarBottom:
-            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+            userPreferences.setSearchBarPosition(.bottom)
             let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.bottom]
             notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         case .toolbarTop:
-            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
+            userPreferences.setSearchBarPosition(.top)
             let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.top]
             notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         }
@@ -175,7 +175,6 @@ final class OnboardingService: FeatureFlaggable {
 
     private func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
-        activityEventHelper.updateOnboardingUserActivationEvent()
         askForNotificationPermission(from: cardName)
     }
 
@@ -186,8 +185,6 @@ final class OnboardingService: FeatureFlaggable {
         completion: @escaping () -> Void
     ) {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
-        activityEventHelper.updateOnboardingUserActivationEvent()
-
         let fxaParams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
         presentSignToSync(
             with: fxaParams,

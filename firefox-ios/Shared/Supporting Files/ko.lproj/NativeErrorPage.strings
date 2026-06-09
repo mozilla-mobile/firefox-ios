@@ -1,3 +1,39 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "고급";
+
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "발견된 인증서가 %2$@에 대해 유효하지 않기 때문에 %1$@가 이 사이트를 신뢰하지 않습니다.";
+
+/* On certificate error page, this is the security information shown in the advanced section. */
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "이 사이트는 안전하지 않은 연결을 허용하지 않습니다.";
+
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Wi-Fi 네트워크에 로그인해야 하거나 VPN 설정을 확인해야 합니다.";
+
+/* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "회사 네트워크를 사용하고 있다면 지원 팀에 더 많은 정보가 있을 수 있습니다.";
+
+/* On certificate error page, this is the description explaining the security risk. */
+"NativeErrorPage.BadCertDomain.Description.v149" = "누군가 사이트를 사칭하여 개인 정보를 훔질 수 있습니다. 연결 설정이 잘못되었을 수도 있습니다.";
+
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "오류 코드: %@";
+
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "고급 숨기기";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "더 알아보기";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "%@로 진행 (위험)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "조심하세요. 뭔가 문제가 있습니다.";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "사이트의 인증서 보기";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "새로 고침";
 
@@ -6,6 +42,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "조심하세요. 뭔가 이상해 보여요.";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "뒤로 (권장)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "다른 기기에 연결해 보세요. 모뎀이나 라우터를 확인하세요. Wi-Fi 연결을 끊었다가 다시 연결하세요.";

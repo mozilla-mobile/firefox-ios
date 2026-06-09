@@ -22,7 +22,9 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
 
     let throttler: ConcurrencyThrottlerProtocol = ConcurrencyThrottler(seconds: UX.updateCooldown)
 
-    var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
+    // `Activity` manages its own internal synchronization; nonisolated(unsafe) suppresses
+    // the false-positive Sendable warning when passing it across the MainActor boundary.
+    nonisolated(unsafe) var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 
     var downloadProgressManager: DownloadProgressManager
 

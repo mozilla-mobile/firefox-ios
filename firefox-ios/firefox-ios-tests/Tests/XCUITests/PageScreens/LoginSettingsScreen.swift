@@ -26,6 +26,10 @@ final class LoginSettingsScreen {
         XCTAssertEqual(count, expected, "Expected \(expected) rows in login list but found \(count)")
     }
 
+    func tapSaveButtonIfExists() {
+        sel.SAVE_BUTTON_CELL.element(in: app).tapIfExists()
+    }
+
     func assertDomainVisible(_ domain: String) {
         let domainText = sel.domainLabel(domain).element(in: app)
         BaseTestCase().mozWaitForElementToExist(domainText)
@@ -138,5 +142,10 @@ final class LoginSettingsScreen {
         BaseTestCase().mozWaitForElementToExist(passcode)
         passcode.tapAndTypeText(passcodeValue)
         BaseTestCase().mozWaitForElementToNotExist(passcode)
+    }
+
+    func assertLoginCreatedFirstMatch() {
+        let firstStaticText = sel.LOGIN_LIST.element(in: app).staticTexts.firstMatch
+        BaseTestCase().mozWaitForElementToExist(firstStaticText)
     }
 }

@@ -18,7 +18,7 @@ final class TranslationsService: TranslationsServiceProtocol {
     init(
         windowManager: WindowManager = AppContainer.shared.resolve(),
         languageDetector: LanguageDetectorProvider = LanguageDetector(),
-        modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher(),
+        modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher.shared,
         translationsEngine: TranslationsEngine = TranslationsEngine(),
         logger: Logger = DefaultLogger.shared
     ) {
@@ -29,41 +29,50 @@ final class TranslationsService: TranslationsServiceProtocol {
         self.logger = logger
     }
 
-    /// Determines whether translation should be offered to the user based on
-    /// the detected page language and the device locale.
-    func shouldOfferTranslation(for windowUUID: WindowUUID) async throws -> Bool {
-        // Throwing here to capture this case in telemetry. It shouldn't happen in practice.
-        guard let deviceLanguage = deviceLanguageCode() else {
-            throw TranslationsServiceError.deviceLanguageUnavailable
-        }
+    /// Determines whether translation should be offered by checking the detected page language
+    /// against the given preferred target languages. Returns `true` if:
+    /// - The page language is already one of the user's preferred languages and there is at
+    ///   least one other preferred language to translate to (language-picker flow), OR
+    /// - The page language is not in the preferred list and at least one preferred language
+    ///   has an available model pair.
+    /// NOTE: `fetchModels` inspects Remote Settings metadata and returns JSON data
+    /// describing the pipeline, it does not fetch large model attachments.
+    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
+        guard !preferredLanguages.isEmpty else { return false }
         let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        // Do not offer translations if device language is the same as detected page language.
-        guard pageLanguage != deviceLanguage else { return false }
-        // Only offer translation if we have a model pair (direct or via pivot).
-        // NOTE: `fetchModels` inspects Remote Settings metadata and returns JSON data
-        // describing the pipeline, it does not fetch large model attachments.
-        guard modelsFetcher.fetchModels(from: pageLanguage, to: deviceLanguage) != nil else { return false }
-        return true
+
+        // If the page is already in one of the user's preferred languages, offer the
+        // translation picker as long as there is at least one other language to translate to.
+        if preferredLanguages.contains(pageLanguage) {
+            return preferredLanguages.count > 1
+        }
+
+        for language in preferredLanguages where await modelsFetcher.fetchModels(from: pageLanguage, to: language) != nil {
+            return true
+        }
+        return false
     }
 
-    /// Initiates translation of the current page.
+    /// Initiates translation of the current page to the specified target language.
     func translateCurrentPage(
         for windowUUID: WindowUUID,
+        from sourceLanguage: String? = nil,
+        to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
-        // This shouldn't happen since `shouldOfferTranslation` is called first.
-        // This is just a safeguard.
-        guard let deviceLanguage = deviceLanguageCode() else {
-            throw TranslationsServiceError.deviceLanguageUnavailable
+        let pageLanguage: String
+        if let sourceLanguage {
+            pageLanguage = sourceLanguage
+        } else {
+            pageLanguage = try await detectPageLanguage(for: windowUUID)
         }
-        let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        onLanguageIdentified?(pageLanguage, deviceLanguage)
+        onLanguageIdentified?(pageLanguage, targetLanguage)
         let webView = try currentWebView(for: windowUUID)
         // Prewarm resources prior to calling the JS translation API.
-        modelsFetcher.prewarmResources(for: pageLanguage, to: deviceLanguage)
+        await modelsFetcher.prewarmResources(for: pageLanguage, to: targetLanguage)
         // Create a bridge to the translations engine.
         _ = translationsEngine.bridge(to: webView)
-        try await startTranslationsJS(on: webView, from: pageLanguage, to: deviceLanguage)
+        try await startTranslationsJS(on: webView, from: pageLanguage, to: targetLanguage)
     }
 
     /// Checks whether initial translation output has been produced.
@@ -79,7 +88,8 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Tells the engine to discard translations for a document.
     func discardTranslations(for windowUUID: WindowUUID) async throws {
         let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        guard let deviceLanguage = deviceLanguageCode() else {
+        let supported = await fetchSupportedTargetLanguages()
+        guard let deviceLanguage = deviceLanguageCode(supportedTargetLanguages: supported) else {
             throw TranslationsServiceError.deviceLanguageUnavailable
         }
 
@@ -90,7 +100,7 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Attempts to detect the language of the currently displayed page.
     /// Returns a BCP-47 language tag (e.g. "en", "fr") on success.
     /// Otherwise throws a typed `TranslationsServiceError`.
-    private func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
+    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
         let webView = try currentWebView(for: windowUUID)
         let source = WebViewLanguageSampleSource(webView: webView)
         do {
@@ -147,15 +157,31 @@ final class TranslationsService: TranslationsServiceProtocol {
 
     /// Returns the current WebView for a given window, or throws if it is unavailable.
     private func currentWebView(for windowUUID: WindowUUID) throws -> WKWebView {
-        guard let tab = windowManager.tabManager(for: windowUUID).selectedTab,
+        guard let tab = windowManager.tabManager(for: windowUUID)?.selectedTab,
               let webView = tab.webView else {
             throw TranslationsServiceError.missingWebView
         }
         return webView
     }
 
-    /// Returns the device language code for a given locale, if available.
-    private func deviceLanguageCode(using locale: Locale = .current) -> String? {
-        return locale.languageCode
+    /// Returns the unique set of languages that can be used as translation targets.
+    func fetchSupportedTargetLanguages() async -> [String] {
+        return await modelsFetcher.fetchSupportedTargetLanguages()
+    }
+
+    /// Returns the best device-language code present in `supportedTargetLanguages`.
+    /// Walks `Locale.preferredLanguages` so script subtags (e.g. `zh-Hans`) are preserved
+    /// when they appear in the supported set.
+    private func deviceLanguageCode(supportedTargetLanguages: [String]) -> String? {
+        let supportedSet = Set(supportedTargetLanguages)
+        for tag in Locale.preferredLanguages {
+            if let match = PreferredTranslationLanguagesManager.matchingSupportedCode(
+                for: tag,
+                in: supportedSet
+            ) {
+                return match
+            }
+        }
+        return nil
     }
 }

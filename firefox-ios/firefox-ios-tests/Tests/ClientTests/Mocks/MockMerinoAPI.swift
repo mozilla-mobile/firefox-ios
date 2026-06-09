@@ -8,16 +8,16 @@ import MozillaAppServices
 @testable import Client
 
 final class MockMerinoAPI: MerinoStoriesProviding {
-    init(result: Result<[RecommendationDataItem], Error>) {
+    init(result: Result<CuratedRecommendationsResponse, Error>) {
         self.result = result
     }
 
-    let result: Result<[RecommendationDataItem], Error>
+    let result: Result<CuratedRecommendationsResponse, Error>
 
-    func fetchStories(_ itemCount: Int) async throws -> [RecommendationDataItem] {
+    func fetchContent() async throws -> CuratedRecommendationsResponse {
         switch result {
         case .success(let value):
-            return Array(value.prefix(itemCount))
+            return value
         case .failure(let error):
             throw error
         }

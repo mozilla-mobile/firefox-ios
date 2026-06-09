@@ -7,14 +7,13 @@ import Foundation
 import Shared
 import SiteImageView
 
-class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
+class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         // MARK: - Favicon and Title Constants
         static let faviconSize: CGFloat = 20
         static let faviconCornerRadius: CGFloat = 2
         static let tabTitlePadding: CGFloat = 10
         static let tabTitlePaddingVersion: CGFloat = 14
-        static let tabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
 
         // MARK: - Tab Appearance Constants
         static let tabCornerRadius: CGFloat = 8
@@ -54,7 +53,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         label.lineBreakMode = .byCharWrapping
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.semanticContentAttribute = .forceLeftToRight
-        label.isAccessibilityElement = false
     }
 
     let favicon: FaviconImageView = .build { _ in }
@@ -85,7 +83,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         accessibilityLabel = getA11yTitleLabel(tab: tab)
         showsLargeContentViewer = true
         largeContentTitle = tab.getTabTrayTitle()
-        isAccessibilityElement = true
 
         closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel,
                                                 self.titleText.text ?? "")
@@ -101,8 +98,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
         closeButton.isHidden = hideCloseButton
 
-        favicon.manuallySetImage(
-            UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
+        favicon.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
+
         favicon.backgroundColor = .clear
 
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
@@ -168,7 +165,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
                 cellBackground.centerXAnchor.constraint(equalTo: centerXAnchor),
                 cellBackground.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-                favicon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
+                favicon.centerYAnchor.constraint(equalTo: centerYAnchor),
                 favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize),
                 favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize),
                 favicon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.tabTitlePadding),
@@ -184,9 +181,9 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
                     constant: UX.tabTitlePadding
                 ),
 
-                closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
+                closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
                 closeButton.widthAnchor.constraint(equalTo: heightAnchor, constant: -UX.tabTitlePadding),
-                closeButton.heightAnchor.constraint(equalTo: heightAnchor),
+                closeButton.heightAnchor.constraint(equalTo: heightAnchor, constant: -UX.tabTitlePadding),
                 closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
         )

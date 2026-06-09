@@ -7,7 +7,7 @@ import UIKit
 class SearchEnginePicker: ThemedTableViewController {
     weak var delegate: SearchEnginePickerDelegate?
     var engines: [OpenSearchEngine] = []
-    var selectedSearchEngineName: String?
+    var selectedSearchEngineID: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +33,7 @@ class SearchEnginePicker: ThemedTableViewController {
         let size = CGSize(width: OpenSearchEngine.UX.preferredIconSize,
                           height: OpenSearchEngine.UX.preferredIconSize)
         cell.imageView?.image = engine.image.createScaled(size)
-        if engine.shortName == selectedSearchEngineName {
+        if engine.engineID == selectedSearchEngineID {
             cell.accessoryType = .checkmark
         }
         return cell

@@ -80,6 +80,15 @@ class CreditCardInputViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.rightBarBtn.title, .CreditCard.EditCard.EditNavBarButtonLabel)
     }
 
+    func testRightBarButtonEnabledView() {
+        viewModel.state = .view
+        viewModel.nameOnCard = "Kenny Champion"
+        viewModel.expirationDate = "123"
+        viewModel.cardNumber = "41110000"
+        viewModel.updateRightButtonState()
+        XCTAssertTrue(viewModel.isRightBarButtonEnabled)
+    }
+
     func testRightBarButtonNotEnabledEdit() {
         viewModel.state = .edit
         viewModel.nameOnCard = "Kenny Champion"
@@ -95,7 +104,7 @@ class CreditCardInputViewModelTests: XCTestCase {
         viewModel.cardNumber = "4871007782167426"
         // Original State
         XCTAssertFalse(viewModel.isRightBarButtonEnabled)
-        // Minic the behaviour of onChange
+        // Mimic the behaviour of onChange
         // in credit card input field, as the
         // state changes based on validity of the input variables
         viewModel.updateRightButtonState()
@@ -117,7 +126,7 @@ class CreditCardInputViewModelTests: XCTestCase {
         viewModel.cardNumber = "4717219604213696"
         // Original State
         XCTAssertFalse(viewModel.isRightBarButtonEnabled)
-        // Minic the behaviour of onChange
+        // Mimic the behaviour of onChange
         // in credit card input field, as the
         // state changes based on validity of the input variables
         viewModel.updateRightButtonState()

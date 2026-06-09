@@ -38,7 +38,6 @@ class MockBrowserViewController: BrowserViewController {
     var presentSignInReferringPage: ReferringPage?
     var presentSignInCount = 0
 
-    var qrCodeCount = 0
     var closePrivateTabsWidgetAction = 0
 
     var embedContentCalled = 0
@@ -57,6 +56,9 @@ class MockBrowserViewController: BrowserViewController {
     var mockContentContainer = MockContentContainer()
 
     var viewControllerToPresent: UIViewController?
+
+    // Mock control for frame navigation
+    var mockIsMainFrameNavigation = true
 
     var createWebViewCalled = 0
     var runJavaScriptAlertPanelCalled = 0
@@ -99,7 +101,7 @@ class MockBrowserViewController: BrowserViewController {
         openBlankNewTabCount += 1
     }
 
-    override func handle(query: String, isPrivate: Bool) {
+    override func handle(query: String, isPrivate: Bool, shouldOpenNewTab: Bool = true) {
         handleQueryCalled = true
         handleQuery = query
         handleQueryCount += 1
@@ -117,10 +119,6 @@ class MockBrowserViewController: BrowserViewController {
         openURLInNewTabIsPrivate = isPrivate
         openURLInNewTabCount += 1
         return Tab(profile: MockProfile(), windowUUID: windowUUID)
-    }
-
-    override func handleQRCode() {
-        qrCodeCount += 1
     }
 
     override func closeAllPrivateTabs() {
@@ -170,6 +168,10 @@ class MockBrowserViewController: BrowserViewController {
     }
 
     override func willNavigateAway(from tab: Tab?) {}
+
+    override func isMainFrameNavigation(_ navigationAction: WKNavigationAction) -> Bool {
+        return mockIsMainFrameNavigation
+    }
 }
 
 class MockContentContainer: ContentContainer {

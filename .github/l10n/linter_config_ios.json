@@ -45,6 +45,7 @@
             "firefox-ios.xliff:NSCameraUsageDescription",
             "firefox-ios.xliff:NSFaceIDUsageDescription",
             "firefox-ios.xliff:NSMicrophoneUsageDescription",
+	        "firefox-ios.xliff:NSSpeechRecognitionUsageDescription",
             "firefox-ios.xliff:Oops! Firefox crashed",
             "firefox-ios.xliff:Open Firefox",
             "firefox-ios.xliff:OpenURL.Error.Message",

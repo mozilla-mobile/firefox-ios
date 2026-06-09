@@ -1415,7 +1415,7 @@
 "Settings.NewTab.TopSectionName" = "Показати";
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "Оберіть, що завантажувати при відкритті нової вкладки";
+"Settings.NewTab.TopSectionNameFooter" = "Оберіть, що завантажувати під час відкриття нової вкладки";
 
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
 "Settings.NoImageModeBlockImages.Label.v99" = "Блокувати зображення";

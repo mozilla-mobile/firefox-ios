@@ -62,8 +62,9 @@ class DefaultRouter: NSObject, Router {
         navigationController.pushViewController(viewController, animated: animated)
     }
 
-    func popViewController(animated: Bool = true) {
+    func popViewController(reason: DismissalReason = .user, animated: Bool = true) {
         if let controller = navigationController.popViewController(animated: animated) {
+            (controller as? DismissalNotifiable)?.willBeDismissed(reason: reason)
             runCompletion(for: controller)
         }
     }
@@ -71,6 +72,14 @@ class DefaultRouter: NSObject, Router {
     func popToViewController(_ viewController: UIViewController,
                              reason: DismissalReason = .user,
                              animated: Bool = true) -> [UIViewController]? {
+        guard let currentViewController = navigationController.topViewController else { return nil }
+
+        // Do not dismiss the presented view controller if of type `PreventsDismissal`
+        if let presented = navigationController.presentedViewController,
+           !(presented is PreventsDismissal) {
+            currentViewController.dismiss(animated: true, completion: nil)
+        }
+
         if let controllers = navigationController.popToViewController(viewController, animated: animated) {
             for controller in controllers {
                 (controller as? DismissalNotifiable)?.willBeDismissed(reason: reason)

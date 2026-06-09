@@ -50,7 +50,7 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
             app.cells["HomeAsCustomURL"].waitAndTap()
         }
 
-        screenState.gesture(forAction: Action.TogglePocketInNewTab) { userState in
+        screenState.gesture(forAction: Action.ToggleStoriesInNewTab) { userState in
             userState.pocketInNewTab = !userState.pocketInNewTab
             app.tables.cells.switches["Stories"].waitAndTap()
         }
@@ -63,6 +63,10 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
             app.tables.cells.switches["Bookmarks"].waitAndTap()
+        }
+
+        screenState.gesture(forAction: Action.ToggleJumpBackIn) { userState in
+            app.tables.cells.switches["Jump Back In"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.SelectShortcuts) { userState in

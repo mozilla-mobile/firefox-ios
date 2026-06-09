@@ -7,7 +7,7 @@ import WebKit
 import Shared
 import Common
 
-class NightModeHelper: TabContentScript, FeatureFlaggable {
+class NightModeHelper: TabContentScript {
     private enum NightModeKeys {
         static let Status = "profile.NightModeStatus"
         static let DarkThemeEnabled = "NightModeEnabledDarkTheme"

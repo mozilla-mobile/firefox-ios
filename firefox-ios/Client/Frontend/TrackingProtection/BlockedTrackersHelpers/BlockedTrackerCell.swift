@@ -6,7 +6,8 @@ import Foundation
 import Common
 
 class BlockedTrackerCell: UITableViewCell,
-                          ReusableCell {
+                          ReusableCell,
+                          ThemeApplicable {
     private struct UX {
         static let imageMargins: CGFloat = 10
         static let textVerticalDistance: CGFloat = 11
@@ -79,7 +80,9 @@ class BlockedTrackerCell: UITableViewCell,
 
     func configure(with item: BlockedTrackerItem, hideDivider: Bool) {
         trackerImageView.image = item.image
+        trackerImageView.accessibilityIdentifier = item.imageIdentifier
         trackerLabel.text = item.title
+        trackerLabel.accessibilityIdentifier = item.titleIdentifier
         dividerView.isHidden = hideDivider
 
         let iconSize = TPMenuUX.UX.iconSize

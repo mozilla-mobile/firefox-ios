@@ -23,21 +23,18 @@ final class CreditCardSettingsViewModel: @unchecked Sendable {
     var autofill: RustAutofill?
     var profile: Profile
     let windowUUID: WindowUUID
-    var appAuthenticator: AppAuthenticationProtocol?
 
     lazy var cardInputViewModel = CreditCardInputViewModel(profile: profile, creditCardProvider: profile.autofill)
     lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
     var tableViewModel = CreditCardTableViewModel()
 
     public init(profile: Profile,
-                windowUUID: WindowUUID,
-                appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
+                windowUUID: WindowUUID
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
         guard let profile = profile as? BrowserProfile else { return }
         self.autofill = profile.autofill
-        self.appAuthenticator = appAuthenticator
 
         tableViewModel.toggleModel = toggleModel
     }

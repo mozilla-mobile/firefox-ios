@@ -14,13 +14,20 @@ features:
           If true, enables translucency for tab tray actions at the bottom.
         type: Boolean
         default: false
+      iPad_update_enabled:
+        description: >
+          If true, enables the tab tray UI experiments on iPad.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: true
           translucency: false
+          iPad_update_enabled: false
       - channel: developer
         value:
           enabled: true
           translucency: true
+          iPad_update_enabled: false
 

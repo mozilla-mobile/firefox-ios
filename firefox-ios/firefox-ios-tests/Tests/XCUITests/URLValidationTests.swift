@@ -8,7 +8,6 @@ class URLValidationTests: BaseTestCase {
     let urlTypes = ["www.mozilla.org", "www.mozilla.org/", "https://www.mozilla.org", "www.mozilla.org/en", "www.mozilla.org/en-",
                     "www.mozilla.org/en-US", "https://www.mozilla.org/", "https://www.mozilla.org/en", "https://www.mozilla.org/en-US"]
     let urlHttpTypes = ["http://example.com", "http://example.com/"]
-    let urlField = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
     var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
@@ -16,8 +15,11 @@ class URLValidationTests: BaseTestCase {
         continueAfterFailure = true
         navigator.goto(SearchSettings)
         app.tables.switches["Show Search Suggestions"].waitAndTap()
-        scrollToElement(app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"])
-        app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].waitAndTap()
+        // Skip FirefoxSuggest setting for FirefoxBeta and Firefox
+        if isFennec {
+            scrollToElement(app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"])
+            app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].waitAndTap()
+        }
         navigator.goto(NewTabScreen)
         browserScreen = BrowserScreen(app: app)
     }
@@ -26,50 +28,22 @@ class URLValidationTests: BaseTestCase {
     // Smoketest
     func testDifferentURLTypes() {
         for url in urlTypes {
-            navigator.openURL(url)
-            waitUntilPageLoad()
-            mozWaitForElementToExist(app.buttons["Menu"])
-            XCTAssertTrue(app.otherElements.staticTexts.elementContainingText("Mozilla").exists)
-            mozWaitForValueContains(urlField, value: "mozilla.org")
+            browserScreen.navigateToURL(url)
+            browserScreen.assertWebViewHasContent()
+            browserScreen.assertAddressBarContains(value: "mozilla.org")
             clearURL()
         }
 
         for url in urlHttpTypes {
-            navigator.openURL(url)
-            waitUntilPageLoad()
-            mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
-            mozWaitForValueContains(urlField, value: "example.com")
+            browserScreen.navigateToURL(url)
+            browserScreen.assertWebViewHasContent()
+            browserScreen.assertAddressBarContains(value: "example.com")
             clearURL()
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2460854
-    // Smoketest TAE
-    func testDifferentURLTypes_TAE() {
-        for url in urlTypes {
-            navigator.openURL(url)
-            waitUntilPageLoad()
-            browserScreen.assertMozillaPageLoaded(urlField: urlField)
-            clearURL_TAE()
-        }
-
-        for url in urlHttpTypes {
-            navigator.openURL(url)
-            waitUntilPageLoad()
-            browserScreen.assertExampleDomainLoaded(urlField: urlField)
-            clearURL_TAE()
         }
     }
 
     private func clearURL() {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
-        app.buttons["Clear text"].waitAndTap()
-    }
-
-    private func clearURL_TAE() {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
+        browserScreen.tapOnAddressBar()
         browserScreen.clearURL()
     }
 }

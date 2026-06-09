@@ -1,3 +1,39 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Të mëtejshme";
+
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ s’i zë besë këtij sajti, ngaqë dëshmia e gjetur s’është e vlefshme për %2$@.";
+
+/* On certificate error page, this is the security information shown in the advanced section. */
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Ky sajt s’lejon lidhje që s’janë të siguruara.";
+
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Mund t’ju duhet të bëni hyrjen në rrjetin tuaj Wi-Fi, ose të shihni rregullimet për VPN-në tuaj.";
+
+/* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Nëse gjendeni në një rrjet korporate, ekipi juaj i asistencës mund të ketë më tepër hollësi.";
+
+/* On certificate error page, this is the description explaining the security risk. */
+"NativeErrorPage.BadCertDomain.Description.v149" = "Dikush që pretendon të jetë sajti, mund të provojë të vjedhë informacion tuajin personal. Mundet edhe që rregullimet tuaja të lidhjes të jenë ujdisur jo saktë.";
+
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Kod gabimi: %@";
+
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Fshihi të mëtejshmet";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Mësoni më tepër";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Vazhdo te %@ (E rrezikshme)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Hapni sytë. Diçka s’duket siç duhet.";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Shihni dëshminë e sajtit";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Ringarkoje";
 
@@ -6,6 +42,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Hapni sytë. Diçka s’duket siç duhet.";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "Shko Mbrapsht (E këshilluar)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "Provoni të lidheni që nga një pajisje tjetër. Shihni modemin ose rrugëzuesin tuaj. Shkëputuni dhe rilidhuni me Wi-Fi-n.";

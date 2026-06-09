@@ -18,8 +18,7 @@ class StartAtHomeHelperTests: XCTestCase {
         profile = MockProfile()
         tabManager = MockTabManager()
 
-        await DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
     override func tearDown() async throws {

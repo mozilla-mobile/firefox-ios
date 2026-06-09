@@ -14,24 +14,10 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(NewTabSettings)
-        waitForElementsToExist(
-            [
-                app.navigationBars["New Tab"],
-                app.tables.cells["Firefox Home"],
-                app.tables.cells["Blank Page"],
-                app.tables.cells["NewTabAsCustomURL"]
-            ]
-        )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307026
-    // Smoketest TAE
-    func testCheckNewTabSettingsByDefault_TAE() {
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
 
+        toolbarScreen.assertSettingsButtonExists()
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertDefaultOptionsAreVisible()
@@ -40,35 +26,12 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(NewTabSettings)
-        mozWaitForElementToExist(app.navigationBars["New Tab"])
-
-        navigator.performAction(Action.SelectNewTabAsBlankPage)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        // Keyboard is not focused with the experiment ON on iPhone
-        // For iPad the keyboard is shown
-        if iPad() {
-            XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-            let keyboardCount = app.keyboards.count
-            XCTAssertEqual(keyboardCount, 1, "The keyboard should be shown on iPad")
-        } else {
-            XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-            let keyboardCount = app.keyboards.count
-            XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
-        }
-        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        mozWaitForElementToNotExist(app.links.staticTexts["YouTube"])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307027
-    // Smoketest TAE
-    func testChangeNewTabSettingsShowBlankPage_TAE() {
         topSiteScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+
+        toolbarScreen.assertSettingsButtonExists()
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
@@ -113,33 +76,6 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307029
     // Smoketest
     func testChangeNewTabSettingsShowCustomURL() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(NewTabSettings)
-        mozWaitForElementToExist(app.navigationBars["New Tab"])
-        // Check the placeholder value
-        mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "Custom URL")
-        navigator.performAction(Action.SelectNewTabAsCustomURL)
-        // Check the value typed
-        app.textFields["NewTabAsCustomURLTextField"].typeText("mozilla.org")
-        guard let valueTyped = app.textFields["NewTabAsCustomURLTextField"].value as? String else {
-            XCTFail("Failed to retreive the value from 'NewTabAsCustomURLTextField' text field")
-            return
-        }
-        mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
-        XCTAssertEqual(valueTyped, "mozilla.org")
-        // Open new page and check that the custom url is used
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        navigator.nowAt(NewTabScreen)
-        // Check that website is open
-        mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "mozilla")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307029
-    // Smoketest TAE
-    func testChangeNewTabSettingsShowCustomURL_TAE() {
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         let targetURL = "mozilla.org"
@@ -158,6 +94,7 @@ class NewTabSettingsTest: BaseTestCase {
 
         navigator.nowAt(NewTabScreen)
         // Check that website is open
+        browserScreen.assertWebViewLoaded(timeout: TIMEOUT)
         browserScreen.assertAddressBarContains(value: "mozilla", timeout: TIMEOUT)
     }
 
@@ -188,31 +125,10 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306877
     // Smoketest
     func testKeyboardNotRaisedWhenTabOpenedFromTabTray() {
-        // Add New tab and set it as Blank
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(NewTabSettings)
-        mozWaitForElementToExist(app.navigationBars["New Tab"])
-        navigator.performAction(Action.SelectNewTabAsBlankPage)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        validateKeyboardIsRaised()
-
-        // Switch to Private Browsing
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        validateKeyboardIsRaised()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306877
-    // Smoketest TAE
-    func testKeyboardNotRaisedWhenTabOpenedFromTabTray_TAE() {
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
-        toolbarScreen.assertSettingsButtonExists()
+
         // Add New tab and set it as Blank
         toolbarScreen.assertSettingsButtonExists()
         navigator.nowAt(NewTabScreen)
@@ -234,27 +150,6 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
-        // Set a custom URL
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(NewTabSettings)
-        navigator.performAction(Action.SelectNewTabAsCustomURL)
-        // Check the value typed
-        app.textFields["NewTabAsCustomURLTextField"].typeText("mozilla.org")
-        mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
-        // Open new page and check that the custom url is used and he keyboard is not raised up
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitUntilPageLoad()
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: "mozilla")
-        XCTAssertFalse(url.isSelected, "The URL has the focus")
-        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306875
-    // Smoketest TAE
-    func testNewTabCustomURLKeyboardNotRaised_TAE() {
         toolbarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         newTabSettingsScreen = NewTabSettingsScreen(app: app)

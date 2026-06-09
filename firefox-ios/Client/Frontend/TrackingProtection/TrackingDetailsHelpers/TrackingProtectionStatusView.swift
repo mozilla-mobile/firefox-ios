@@ -81,6 +81,16 @@ class TrackingProtectionStatusView: UIView {
         connectionStatusLabel.text = statusText
     }
 
+    func setupAccessibilityIdentifiers(
+        connectionImageA11yId: String,
+        connectionStatusLabelA11yId: String,
+        dividerViewA11yId: String
+    ) {
+        connectionImage.accessibilityIdentifier = connectionImageA11yId
+        connectionStatusLabel.accessibilityIdentifier = connectionStatusLabelA11yId
+        dividerView.accessibilityIdentifier = dividerViewA11yId
+    }
+
     // MARK: ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2

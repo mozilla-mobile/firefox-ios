@@ -18,7 +18,9 @@ protocol SearchViewDelegate: AnyObject {
 }
 
 @MainActor
-class SearchViewModel: FeatureFlaggable, LoaderListener {
+class SearchViewModel: FeatureFlaggable,
+                       UserFeaturePreferenceProvider,
+                       LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
     private var suggestClient: SearchSuggestClient?
@@ -56,7 +58,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private let maxNumOfFirefoxSuggestions: Int32 = 1
     weak var delegate: SearchViewDelegate?
     private let isPrivate: Bool
-    let isBottomSearchBar: Bool
+    public private(set) var isBottomSearchBar: Bool
     var savedQuery = ""
     @MainActor
     var searchQuery = "" {
@@ -188,7 +190,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     // Show list of recent searches if user puts focus in the address bar but does not enter any text.
     @MainActor
     var shouldShowRecentSearches: Bool {
-        let isFeatureOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isFeatureOn = featureFlagsProvider.isEnabled(.recentSearches)
         let isSettingsToggleOn = model.shouldShowRecentSearches
         return isFeatureOn && isSettingsToggleOn && isZeroSearchState
     }
@@ -196,7 +198,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     // Show list of trending searches if user puts focus in the address bar but does not enter any text.
     @MainActor
     var shouldShowTrendingSearches: Bool {
-        let isFeatureOn = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isFeatureOn = featureFlagsProvider.isEnabled(.trendingSearches)
         let isSettingsToggleOn = model.shouldShowTrendingSearches
         return isFeatureOn && isSettingsToggleOn && isZeroSearchState
     }
@@ -222,6 +224,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         self.logger = logger
         self.searchFeature = featureConfig
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
+    }
+
+    func updateBottomSearchBarState(isBottomSearchBar: Bool) {
+        self.isBottomSearchBar = isBottomSearchBar
     }
 
     @MainActor
@@ -297,7 +303,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
         let includeSponsored = shouldShowSponsoredSuggestions
 
-        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+                && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
                 && (includeNonSponsored || includeSponsored) else {
             if !firefoxSuggestions.isEmpty {
                 firefoxSuggestions = []

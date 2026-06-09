@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Fotoğraf kaydetmenize olanak sağlar.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox, sesli arama için sesinizi metne dönüştürmek amacıyla konuşma tanıma özelliğini kullanır.";
+
 /* (No Comment) */
 "Scan QR Code" = "QR kodu tara";
 

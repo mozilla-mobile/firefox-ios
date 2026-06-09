@@ -77,4 +77,8 @@ enum QuickLink: Int {
             return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
         }
     }
+
+    public var tintedBackgroundColor: Color {
+        return Color("WidgetBackground")
+    }
 }

@@ -887,7 +887,7 @@
 "Oops! Firefox crashed" = "Oops! Firefox đã gặp sự cố";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Mở bài viết trong chế độ đọc sách bằng cách nhấn vào biểu tượng sách khi nó xuất hiện trên thanh tiêu đề.";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Mở bài viết trong chế độ đọc bằng cách nhấn vào biểu tượng sách khi nó xuất hiện trên thanh tiêu đề.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Mở Cài đặt";
@@ -935,7 +935,7 @@
 "read" = "đọc";
 
 /* Accessibility label for the Reader View button */
-"Reader View" = "Chế độ đọc sách";
+"Reader View" = "Chế độ đọc";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Chế độ đọc sách có sẵn";
@@ -983,7 +983,7 @@
 "Sans-serif" = "Sans-serif";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Nhấp vào biểu tượng cộng với sách trong công cụ chế độ đọc sách để lưu trang vào danh sách đọc.";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Lưu các trang vào danh sách đọc của bạn bằng cách nhấn vào biểu tượng dấu cộng hình cuốn sách trong phần điều khiển Chế độ đọc.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "OK";
@@ -1703,7 +1703,7 @@
 "TabTrayButtons.Accessibility.ShowTabs.v106" = "Hiển thị thẻ";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"The page could not be displayed in Reader View." = "Trang này không thể hiển thị trong chế độ đọc sách.";
+"The page could not be displayed in Reader View." = "Trang này không thể hiển thị trong chế độ đọc.";
 
 /* Error message in the remote tabs panel */
 "There was a problem accessing tabs from your other devices. Try again in a few moments." = "Đã xảy ra sự cố khi truy cập các thẻ từ các thiết bị khác của bạn. Hãy thử một lần nữa trong chốc lát.";

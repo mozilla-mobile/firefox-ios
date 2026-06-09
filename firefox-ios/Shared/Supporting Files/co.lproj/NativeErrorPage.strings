@@ -1,3 +1,39 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Espertu";
+
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ ùn face micca cunfidenza à stu situ perchè u certificatu trovu ùn hè micca accettevule per %2$@.";
+
+/* On certificate error page, this is the security information shown in the advanced section. */
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Stu situ ùn permette micca e cunnessioni chì ùn sò micca sicurizate.";
+
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Forse duverete cunnettesi à a vostra reta Wi-Fi o verificà i vostri parametri VPN.";
+
+/* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "S’è vo impiegate una reta d’impresa, a vostra squadra d’assistenza puderia avè d’altre infurmazioni.";
+
+/* On certificate error page, this is the description explaining the security risk. */
+"NativeErrorPage.BadCertDomain.Description.v149" = "Qualchissia pritendendu esse u situ puderia circà à arrubà e vostre infurmazioni persunale. Si puderia dinù chì i vostri parametri di cunnessione ùn sianu micca definiti bè.";
+
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Codice di sbagliu : %@";
+
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Piattà";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Sapene di più";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Cuntinuà versu %@ (risicatu)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Fate casu. Pare ch’ella ci sia un prublema.";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Affissà u certificatu di u situ";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Attualizà";
 
@@ -6,6 +42,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Fate casu. Pare ch’ella ci sia un prublema.";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "Ritornu (ricumandatu)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "Pruvate di cunnettevi nant’à un altru apparechju. Verificate u vostru modem o « router ». Discunnittitevi è ricunnittitevi à u Wi-Fi.";

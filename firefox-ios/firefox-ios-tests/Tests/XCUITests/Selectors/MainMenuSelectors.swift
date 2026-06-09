@@ -10,7 +10,9 @@ protocol MainMenuSelectorSet {
     var HISTORY_BUTTON: Selector { get }
     var DOWNLOADS_BUTTON: Selector { get }
     var PASSWORDS_BUTTON: Selector { get }
+	var SIGN_IN_CELL: Selector { get }
     var SETTINGS_CELL: Selector { get }
+    var BOOKMARK_PAGE: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -21,7 +23,9 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         static let history   = AccessibilityIdentifiers.MainMenu.history
         static let downloads = AccessibilityIdentifiers.MainMenu.downloads
         static let passwords = AccessibilityIdentifiers.MainMenu.passwords
+        static let signIn = AccessibilityIdentifiers.MainMenu.signIn
         static let settings  = AccessibilityIdentifiers.MainMenu.settings
+        static let bookmarkPage = AccessibilityIdentifiers.MainMenu.bookmarkPage
     }
 
     let DESKTOP_SITE = Selector.cellById(
@@ -30,29 +34,34 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
-    let BOOKMARKS_BUTTON = Selector.buttonId(
+    let BOOKMARKS_BUTTON = Selector.tableCellButtonById(
         IDs.bookmarks,
         description: "Bookmarks button in Main Menu",
         groups: ["MainMenu"]
     )
 
-    let HISTORY_BUTTON = Selector.buttonId(
+    let HISTORY_BUTTON = Selector.tableCellButtonById(
         IDs.history,
         description: "History button in Main Menu",
         groups: ["MainMenu"]
     )
 
-    let DOWNLOADS_BUTTON = Selector.buttonId(
+    let DOWNLOADS_BUTTON = Selector.tableCellButtonById(
         IDs.downloads,
         description: "Downloads button in Main Menu",
         groups: ["MainMenu"]
     )
 
-    let PASSWORDS_BUTTON = Selector.buttonId(
+    let PASSWORDS_BUTTON = Selector.tableCellButtonById(
         IDs.passwords,
         description: "Passwords button in Main Menu",
         groups: ["MainMenu"]
     )
+
+	let SIGN_IN_CELL = Selector.cellById(
+		IDs.signIn,
+		description: "Sign In"
+	)
 
     let SETTINGS_CELL = Selector.tableCellById(
         IDs.settings,
@@ -60,6 +69,12 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
+    let BOOKMARK_PAGE = Selector.tableCellById(
+        IDs.bookmarkPage,
+        description: "Bookmark page in Main Menu",
+        groups: ["MainMenu"]
+    )
+
     var all: [Selector] { [DESKTOP_SITE, BOOKMARKS_BUTTON, HISTORY_BUTTON, DOWNLOADS_BUTTON,
-                           PASSWORDS_BUTTON, SETTINGS_CELL] }
+                           PASSWORDS_BUTTON, SIGN_IN_CELL, SETTINGS_CELL, BOOKMARK_PAGE] }
 }

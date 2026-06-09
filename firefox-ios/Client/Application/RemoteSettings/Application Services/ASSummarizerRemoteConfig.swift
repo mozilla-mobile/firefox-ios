@@ -18,15 +18,29 @@ final class ASSummarizerRemoteConfig: Sendable {
     private let service: RemoteSettingsService
     private let rsClient: RemoteSettingsClient?
     private let profile: Profile
+    private static let localizedTag = "localized"
 
-    init?(profile: Profile = AppContainer.shared.resolve()) {
+    init?(
+        profile: Profile = AppContainer.shared.resolve(),
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+    ) {
         self.profile = profile
         self.service = profile.remoteSettingsService
         self.rsClient = ASRemoteSettingsCollection.summarizerModelsConfig.makeClient()
     }
 
-    func fetchSummarizerConfig(_ model: SummarizerModel, for contentType: SummarizationContentType) -> SummarizerConfig? {
-        let recordName = "\(model.rawValue)-\(contentType.rawValue)"
+    /// Fetches the summarizer configuration from Remote Settings for the given `model` and `contentType`.
+    /// The `useLocalized` parameter, when set to `true`, selects the record that supports localized instructions.
+    func fetchSummarizerConfig(
+        _ model: SummarizerModel,
+        for contentType: SummarizationContentType,
+        useLocalized: Bool
+    ) -> SummarizerConfig? {
+        let recordName: String = if useLocalized {
+            "\(model.rawValue)-\(contentType.rawValue)-\(Self.localizedTag)"
+        } else {
+            "\(model.rawValue)-\(contentType.rawValue)"
+        }
         let records = getRecords()
         guard let record = records.first(where: { $0.name == recordName }) else { return nil }
         return SummarizerConfig(

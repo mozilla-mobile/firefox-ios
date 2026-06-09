@@ -27,7 +27,8 @@ class RemoteTabsPanel: UIViewController,
                        RemoteTabsEmptyViewDelegate,
                        StoreSubscriber,
                        FeatureFlaggable,
-                       TabTrayThemeable {
+                       TabTrayThemeable,
+                       Notifiable {
     typealias SubscriberStateType = RemoteTabsPanelState
 
     // MARK: - Properties
@@ -41,7 +42,7 @@ class RemoteTabsPanel: UIViewController,
     var notificationCenter: NotificationProtocol
     private let windowUUID: WindowUUID
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 
@@ -62,6 +63,15 @@ class RemoteTabsPanel: UIViewController,
         super.init(nibName: nil, bundle: nil)
 
         self.tabsDisplayViewController.remoteTabsPanel = self
+
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                .ProfileDidStartSyncing,
+                .ProfileDidFinishSyncing
+            ]
+        )
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -153,7 +163,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        return true
     }
 
     var shouldBeInPrivateTheme: Bool {
@@ -180,10 +190,11 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        let showScreenAction = ScreenAction(windowUUID: windowUUID,
-                                            actionType: ScreenActionType.showScreen,
-                                            screen: .remoteTabsPanel)
-        store.dispatch(showScreenAction)
+        store.dispatch(ComponentAction(
+            windowUUID: windowUUID,
+            actionType: ComponentActionType.addComponent,
+            component: .remoteTabsPanel
+        ))
 
         let didAppearAction = RemoteTabsPanelAction(windowUUID: windowUUID,
                                                     actionType: RemoteTabsPanelActionType.panelDidAppear)
@@ -197,9 +208,9 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .remoteTabsPanel)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .remoteTabsPanel)
         store.dispatch(action)
     }
 
@@ -219,10 +230,6 @@ class RemoteTabsPanel: UIViewController,
 
     func remoteTabsClientAndTabsDataSourceDidCloseURL(deviceId: String, url: URL) {
         handleCloseRemoteTab(deviceId, url: url)
-    }
-
-    func remoteTabsClientAndTabsDataSourceDidUndo(deviceId: String, url: URL) {
-        handleUndoCloseTab(deviceId, url: url)
     }
 
     func remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: String) {
@@ -260,16 +267,6 @@ class RemoteTabsPanel: UIViewController,
         refreshTabs(useCache: true)
     }
 
-    private func handleUndoCloseTab(_ deviceId: String, url: URL) {
-        let action = RemoteTabsPanelAction(url: url,
-                                           targetDeviceId: deviceId,
-                                           windowUUID: windowUUID,
-                                           actionType: RemoteTabsPanelActionType.undoCloseSelectedRemoteURL)
-        store.dispatch(action)
-
-        refreshTabs(useCache: true)
-    }
-
     private func handleTabCommandsFlush(_ deviceId: String) {
         let action = RemoteTabsPanelAction(targetDeviceId: deviceId,
                                            windowUUID: windowUUID,
@@ -277,5 +274,26 @@ class RemoteTabsPanel: UIViewController,
         store.dispatch(action)
 
         refreshTabs(useCache: true)
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .ProfileDidStartSyncing:
+            ensureMainThread {
+                if self.state.refreshState == .idle {
+                    let action = RemoteTabsPanelAction(clientAndTabs: [],
+                                                       devices: nil,
+                                                       windowUUID: self.windowUUID,
+                                                       actionType: RemoteTabsPanelActionType.syncDidBegin)
+                    store.dispatch(action)
+                }
+            }
+        case .ProfileDidFinishSyncing:
+            ensureMainThread {
+                self.refreshTabs()
+            }
+        default: return
+        }
     }
 }

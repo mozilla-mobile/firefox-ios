@@ -33,9 +33,7 @@ class SponsoredTileGleanTelemetryTests: XCTestCase {
         let subject = createSubject()
         subject.sendImpressionTelemetry(tileSite: topSite, position: 2)
 
-        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
-        XCTAssertEqual(gleanWrapper.recordUrlCalled, 1)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
         guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
@@ -43,7 +41,7 @@ class SponsoredTileGleanTelemetryTests: XCTestCase {
             return
         }
         XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
-        XCTAssertEqual(gleanWrapper.savedEvents.count, 4)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
     }
 
     // MARK: Click
@@ -56,9 +54,7 @@ class SponsoredTileGleanTelemetryTests: XCTestCase {
         let subject = createSubject()
         subject.sendClickTelemetry(tileSite: topSite, position: 3)
 
-        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
-        XCTAssertEqual(gleanWrapper.recordUrlCalled, 1)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
         guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
@@ -66,7 +62,7 @@ class SponsoredTileGleanTelemetryTests: XCTestCase {
             return
         }
         XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
-        XCTAssertEqual(gleanWrapper.savedEvents.count, 4)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
     }
 
     // MARK: Helper methods

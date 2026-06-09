@@ -16,6 +16,9 @@ protocol LibraryPanelDelegate: AnyObject {
 
     @MainActor
     var libraryPanelWindowUUID: WindowUUID { get }
+
+    @MainActor
+    func showToast(message: String)
 }
 
 protocol LibraryPanel: UIViewController {
@@ -24,6 +27,10 @@ protocol LibraryPanel: UIViewController {
 
     @MainActor
     var state: LibraryPanelMainState { get set }
+
+    /// Used to indicate when the panel is animating after the top nav `<` back button has been tapped
+    @MainActor
+    var isTransitioning: Bool { get }
 
     @MainActor
     var bottomToolbarItems: [UIBarButtonItem] { get }
@@ -52,14 +59,17 @@ extension LibraryPanel {
         return true
     }
 
-    func handleLeftTopButton() {
-        // no implementation needed
-    }
+    // no implementation needed
+    func handleLeftTopButton() { }
 
-    func handleRightTopButton() {
-        // no implementation needed
-    }
+    // no implementation needed
+    func handleRightTopButton() { }
 }
+
+extension LibraryPanelDelegate {
+    // no implementation needed
+    func showToast(message: String) { }
+  }
 
 enum LibraryPanelType: Int, CaseIterable {
     case bookmarks = 0
@@ -97,6 +107,7 @@ class LibraryPanelHelper {
         self.profile = profile
     }
 
+    @MainActor
     lazy var enabledPanels: [LibraryPanelDescriptor] = {
         let bookmarksViewModel = BookmarksPanelViewModel(profile: profile, bookmarksHandler: profile.places)
 

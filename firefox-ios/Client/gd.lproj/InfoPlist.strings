@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Bheir seo comas dhut dealbhan a shàbhaladh.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Cleachdaidh Firefox gleus aithneachadh cainnte airson teacsa a dhèanamh dhen ghuth agad airson lorg gutha a dhèanamh.";
+
 /* (No Comment) */
 "Scan QR Code" = "Sganaich còd QR";
 

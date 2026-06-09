@@ -1,0 +1,6 @@
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Сцягванні";
+
+/* On the main menu, the title for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.Downloads.Title.v131" = "Сцягванні";
+

@@ -4,9 +4,9 @@
 
 import XCTest
 
-class LibraryTestsIpad: IpadOnlyTestCase {
-    func testLibraryShortcut() throws {
-        if skipPlatform {return}
+class LibraryTests: BaseTestCase {
+    // https://mozilla.testrail.io/index.php?/cases/view/2306889
+    func testLibraryShortcut() {
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
         // The Bookmark panel is displayed

@@ -5,7 +5,7 @@
 import Foundation
 import ToolbarKit
 
-struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
+struct ToolbarActionConfiguration: Equatable {
     enum ActionType {
         case back
         case forward
@@ -14,16 +14,15 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
         case search
         case tabs
         case menu
-        case qrCode
         case share
         case reload
         case stopLoading
         case trackingProtection
         case locationView
         case readerMode
+        case readerModeWithSummarizer
         case summarizer
         case translate
-        case dataClearance
         case cancelEdit
     }
 
@@ -31,6 +30,8 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var actionLabel: String?
     var iconName: String?
     var badgeImageName: String?
+    /// The image for the bottom badge in a `ToolbarButton`.
+    var bottomBadgeImage: UIImage?
     var maskImageName: String?
     var templateModeForImage = true
     var loadingConfig: LoadingConfig?
@@ -42,9 +43,12 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var hasHighlightedColor = true
     var largeContentTitle: String?
     var contextualHintType: String?
+    var previousTabScreenshot: UIImage?
+    var nextTabScreenshot: UIImage?
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String
+    var cacheId: String?
     var a11yCustomActionName: String?
 
     func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {
@@ -53,7 +57,9 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
                actionType == .reload ||
                actionType == .newTab ||
                actionType == .readerMode ||
+               actionType == .readerModeWithSummarizer ||
                actionType == .summarizer ||
+               actionType == .translate ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }

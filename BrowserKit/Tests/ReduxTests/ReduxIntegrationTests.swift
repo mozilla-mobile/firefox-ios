@@ -6,110 +6,70 @@ import XCTest
 
 @testable import Redux
 
+// Global state used in FakeReduxViewController.
 @MainActor
-let store = Store(state: FakeReduxState(),
-                  reducer: FakeReduxState.reducer,
-                  middlewares: [FakeReduxMiddleware().fakeProvider])
+var store: Store<FakeReduxState>!
 
 @MainActor
 final class ReduxIntegrationTests: XCTestCase {
-    var fakeViewController: FakeReduxViewController!
-    var expectedIntValue: Int!
+    let initialCountValue = 8
+
+    var fakeReduxViewController: FakeReduxViewController!
+    var mockState: FakeReduxState!
+    var mockMiddleware: FakeReduxMiddleware!
 
     override func setUp() async throws {
         try await super.setUp()
-        fakeViewController = FakeReduxViewController()
-        fakeViewController.view.setNeedsLayout()
+
+        mockState = FakeReduxState()
+        mockMiddleware = FakeReduxMiddleware()
+        mockMiddleware.generateInitialCountValue = {
+            return self.initialCountValue
+        }
+
+        store = Store(state: mockState,
+                      reducer: FakeReduxState.reducer,
+                      middlewares: [mockMiddleware.fakeProvider])
+
+        // Initialize the VC after store and middleware are set up
+        fakeReduxViewController = createAndLoadViewController()
     }
 
-    override func tearDown() async throws {
-        fakeViewController = nil
-        try await super.tearDown()
-    }
-
+    // This test will fail if actions are not completely processed before the next action is fired (i.e. action queuing).
     func testDispatchStore_IncreaseCounter() {
-        getExpectedValue(shouldIncrease: true)
-        fakeViewController.increaseCounter()
+        fakeReduxViewController.increaseCounter()
 
-        // Needed to wait for Redux action handled async in main thread
-        let expectation = self.expectation(description: "Redux integration test")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            expectation.fulfill()
-            let intValue = Int(self.fakeViewController.label.text ?? "0")
-            XCTAssertEqual(intValue, self.expectedIntValue)
-        }
-        waitForExpectations(timeout: 1)
+        XCTAssertEqual(fakeReduxViewController.receivedStateCounterValue, initialCountValue + 1)
     }
 
+    // This test will fail if actions are not completely processed before the next action is fired (i.e. action queuing).
     func testDispatchStore_DecreaseCounter() {
-        getExpectedValue(shouldIncrease: false)
-        fakeViewController.decreaseCounter()
+        fakeReduxViewController.decreaseCounter()
 
-        // Needed to wait for Redux action handled async in main thread
-        let expectation = self.expectation(description: "Redux integration test")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            expectation.fulfill()
-            let intValue = Int(self.fakeViewController.label.text ?? "0")
-            XCTAssertEqual(intValue, self.expectedIntValue)
-        }
-        waitForExpectations(timeout: 1)
+        XCTAssertEqual(fakeReduxViewController.receivedStateCounterValue, initialCountValue - 1)
     }
 
-    func testDispatchStore_InitialPrivateValue() {
-        let expectedResult = false
-
-        // Needed to wait for Redux action handled async in main thread
-        let expectation = self.expectation(description: "Redux integration test")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            expectation.fulfill()
-            let result = self.fakeViewController.isInPrivateMode
-            XCTAssertEqual(result, expectedResult)
-        }
-        waitForExpectations(timeout: 1)
-    }
-
-    func testDispatchStore_SetPrivateToTrue() {
+    func testDispatchStore_SetPrivateMode() {
         let expectedResult = true
-        fakeViewController.setPrivateMode(to: expectedResult)
+        fakeReduxViewController.setPrivateMode(to: expectedResult)
 
-        // Needed to wait for Redux action handled async in main thread
-        let expectation = self.expectation(description: "Redux integration test")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            expectation.fulfill()
-            let result = self.fakeViewController.isInPrivateMode
-            XCTAssertEqual(result, expectedResult)
-        }
-        waitForExpectations(timeout: 1)
+        XCTAssertEqual(fakeReduxViewController.isInPrivateMode, expectedResult)
     }
 
-    func testDispatchStore_SetPrivateToFalse() {
+    func testDispatchStore_TogglePrivateMode() {
         let expectedResult = false
-        fakeViewController.setPrivateMode(to: true)
-        fakeViewController.setPrivateMode(to: expectedResult)
+        fakeReduxViewController.setPrivateMode(to: true)
+        fakeReduxViewController.setPrivateMode(to: expectedResult)
 
-        // Needed to wait for Redux action handled async in main thread
-        let expectation = self.expectation(description: "Redux integration test")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            expectation.fulfill()
-            let result = self.fakeViewController.isInPrivateMode
-            XCTAssertEqual(result, expectedResult)
-        }
-        waitForExpectations(timeout: 1)
+        XCTAssertEqual(fakeReduxViewController.isInPrivateMode, expectedResult)
     }
 
     // MARK: - Helper functions
-    private func getExpectedValue(shouldIncrease: Bool) {
-        // Needed to wait for Redux action handled async in main thread
-        let expectation = self.expectation(description: "Redux integration test")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            expectation.fulfill()
-            self.expectedIntValue = store.state.counter
-            if shouldIncrease {
-                self.expectedIntValue += 1
-            } else {
-                self.expectedIntValue -= 1
-            }
-        }
-        waitForExpectations(timeout: 1)
+
+    private func createAndLoadViewController() -> FakeReduxViewController {
+        let fakeViewController = FakeReduxViewController()
+        fakeViewController.view.setNeedsLayout()
+
+        return fakeViewController
     }
 }

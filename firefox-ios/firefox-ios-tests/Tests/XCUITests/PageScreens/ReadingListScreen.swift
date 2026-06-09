@@ -25,6 +25,7 @@ final class ReadingListScreen {
     func tapOnReaderView() {
         BaseTestCase().mozWaitForElementToExist(readerViewButton)
         readerViewButton.tapOnApp()
+        BaseTestCase().waitUntilPageLoad()
     }
 
     func tapOnDoneButton() {

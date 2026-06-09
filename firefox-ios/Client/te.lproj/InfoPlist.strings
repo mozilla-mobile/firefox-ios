@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "ఇది మీకు ఫోటోలను తీసుకొని అప్లోడ్ చేయడానికి అనుమతిస్తుంది.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "మీరు భద్రపరచిన సంకేతపదాలను, చెల్లింపు పద్ధతులను చూడడానికి Firefoxకి ఫేస్ ID అవసరం.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "మీరు సందర్శించే వెబ్ సైట్లు మీ స్థానాన్ని అభ్యర్థించవచ్చు.";
 

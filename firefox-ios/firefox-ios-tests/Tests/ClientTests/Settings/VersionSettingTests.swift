@@ -14,7 +14,6 @@ class VersionSettingTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
         delegate = MockDebugSettingsDelegate()
     }

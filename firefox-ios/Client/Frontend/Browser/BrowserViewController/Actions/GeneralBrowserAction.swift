@@ -17,16 +17,24 @@ struct GeneralBrowserAction: Action {
     let showOverlay: Bool?
     let buttonTapped: UIButton?
     let isNativeErrorPage: Bool?
-    let frame: WKFrameInfo?
+    let frameContext: PasswordGeneratorFrameContext?
     let summarizerConfig: SummarizerConfig?
+    let summarizerTrigger: SummarizerTrigger
+    let translationLanguages: [String]?
+    let isPageTranslated: Bool
+    let translatedToLanguage: String?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
          buttonTapped: UIButton? = nil,
          isNativeErrorPage: Bool? = nil,
-         frame: WKFrameInfo? = nil,
+         frameContext: PasswordGeneratorFrameContext? = nil,
          summarizerConfig: SummarizerConfig? = nil,
+         summarizerTrigger: SummarizerTrigger = .shakeGesture,
+         translationLanguages: [String]? = nil,
+         isPageTranslated: Bool = false,
+         translatedToLanguage: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -37,8 +45,12 @@ struct GeneralBrowserAction: Action {
         self.buttonTapped = buttonTapped
         self.showOverlay = showOverlay
         self.isNativeErrorPage = isNativeErrorPage
-        self.frame = frame
+        self.frameContext = frameContext
         self.summarizerConfig = summarizerConfig
+        self.summarizerTrigger = summarizerTrigger
+        self.translationLanguages = translationLanguages
+        self.isPageTranslated = isPageTranslated
+        self.translatedToLanguage = translatedToLanguage
     }
 }
 
@@ -51,7 +63,6 @@ enum GeneralBrowserActionType: ActionType {
     case navigateBack
     case navigateForward
     case showTabTray
-    case showQRcodeReader
     case showBackForwardList
     case showTrackingProtectionDetails
     case showTabsLongPressActions
@@ -68,13 +79,14 @@ enum GeneralBrowserActionType: ActionType {
     case addNewTab
     case showNewTabLongPressActions
     case addToReadingListLongPressAction
-    case clearData
     case showPasswordGenerator
     case didSelectedTabChangeToHomepage
     case enteredZeroSearchScreen
     case didUnhideToolbar
     case didCloseTabFromToolbar
+    case didTapReaderModeBarSummarizerButton
     case shakeMotionEnded
+    case showTranslationLanguagePicker
 }
 
 struct GeneralBrowserMiddlewareAction: Action {

@@ -11,9 +11,11 @@ struct NativeErrorPageState: ScreenState {
     var description: String
     var foxImage: String
     var url: URL?
+    var advancedSection: ErrorPageModel.AdvancedSectionConfig?
+    var type: ErrorPageType
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let nativeErrorPageState = appState.screenState(
+        guard let nativeErrorPageState = appState.componentState(
             NativeErrorPageState.self,
             for: .nativeErrorPage,
             window: uuid
@@ -27,7 +29,9 @@ struct NativeErrorPageState: ScreenState {
             title: nativeErrorPageState.title,
             description: nativeErrorPageState.description,
             foxImage: nativeErrorPageState.foxImage,
-            url: nativeErrorPageState.url
+            url: nativeErrorPageState.url,
+            advancedSection: nativeErrorPageState.advancedSection,
+            type: nativeErrorPageState.type
         )
     }
 
@@ -36,13 +40,17 @@ struct NativeErrorPageState: ScreenState {
         title: String = "",
         description: String = "",
         foxImage: String = "",
-        url: URL? = nil
+        url: URL? = nil,
+        advancedSection: ErrorPageModel.AdvancedSectionConfig? = nil,
+        type: ErrorPageType = .generic
     ) {
         self.windowUUID = windowUUID
         self.title = title
         self.description = description
         self.foxImage = foxImage
         self.url = url
+        self.advancedSection = advancedSection
+        self.type = type
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -60,7 +68,9 @@ struct NativeErrorPageState: ScreenState {
                 title: model.errorTitle,
                 description: model.errorDescription,
                 foxImage: model.foxImageName,
-                url: model.url
+                url: model.url,
+                advancedSection: model.advancedSection,
+                type: model.type
             )
         default:
             return defaultState(from: state)
@@ -73,7 +83,9 @@ struct NativeErrorPageState: ScreenState {
             title: state.title,
             description: state.description,
             foxImage: state.foxImage,
-            url: state.url
+            url: state.url,
+            advancedSection: state.advancedSection,
+            type: state.type
         )
     }
 }

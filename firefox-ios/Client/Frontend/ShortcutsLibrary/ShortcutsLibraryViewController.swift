@@ -5,10 +5,10 @@
 import Common
 import Foundation
 import Redux
+import Storage
 
 class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
-                                      FeatureFlaggable,
                                       StoreSubscriber,
                                       Themeable,
                                       DismissalNotifiable {
@@ -27,6 +27,7 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     // MARK: - Private constants
+    private let profile: Profile
     private let logger: Logger
 
     // MARK: - Private variables
@@ -43,11 +44,13 @@ class ShortcutsLibraryViewController: UIViewController,
 
     // MARK: Initializers
     init(windowUUID: WindowUUID,
+         profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
+        self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
@@ -127,10 +130,10 @@ class ShortcutsLibraryViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        let action = ScreenAction(
+        let action = ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.showScreen,
-            screen: .shortcutsLibrary
+            actionType: ComponentActionType.addComponent,
+            component: .shortcutsLibrary
         )
         store.dispatch(action)
 
@@ -152,10 +155,10 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(
+        let action = ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.closeScreen,
-            screen: .shortcutsLibrary
+            actionType: ComponentActionType.removeComponent,
+            component: .shortcutsLibrary
         )
         store.dispatch(action)
     }
@@ -208,7 +211,7 @@ class ShortcutsLibraryViewController: UIViewController,
         let layout = UICollectionViewCompositionalLayout { [weak self ](sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let self else { return nil }
-            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
             let numberOfTilesPerRow = homepageState?.topSitesState.numberOfTilesPerRow ?? 4
             let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(
                 for: environment.traitCollection,
@@ -251,6 +254,19 @@ class ShortcutsLibraryViewController: UIViewController,
 
             if let topSiteCell = topSiteCell as? TopSiteCell {
                 topSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: nil)
+                return topSiteCell
+            }
+
+            return UICollectionViewCell()
+        case .addShortcutTile:
+            let cellType: ReusableCell.Type = TopSiteCell.self
+
+            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
+                return UICollectionViewCell()
+            }
+
+            if let topSiteCell = topSiteCell as? TopSiteCell {
+                topSiteCell.configureAddShortcutTile(theme: currentTheme, textColor: nil)
                 return topSiteCell
             }
 
@@ -334,6 +350,7 @@ class ShortcutsLibraryViewController: UIViewController,
             return
         }
 
+        guard item.canHandleLongPress else { return }
         navigateToContextMenu(for: item, sourceView: sourceView)
     }
 
@@ -345,6 +362,11 @@ class ShortcutsLibraryViewController: UIViewController,
                 level: .debug,
                 category: .shortcutsLibrary
             )
+            return
+        }
+
+        if case .addShortcutTile = item {
+            presentAddShortcutAlert()
             return
         }
 
@@ -371,6 +393,21 @@ class ShortcutsLibraryViewController: UIViewController,
                 actionType: ShortcutsLibraryActionType.tapOnShortcutCell
             )
         )
+    }
+
+    private func presentAddShortcutAlert() {
+        let alert = UIAlertController.addShortcutAlert { [weak self] url in
+            self?.addPinnedShortcut(url: url)
+        }
+        present(alert, animated: true)
+    }
+
+    private func addPinnedShortcut(url: URL) {
+        let site = Site.createBasicSite(
+            url: url.absoluteString,
+            title: url.shortDisplayString.capitalized
+        )
+        profile.pinnedSites.addPinnedTopSite(site)
     }
 
     // MARK: - DismissalNotifiable

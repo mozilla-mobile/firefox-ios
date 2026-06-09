@@ -79,7 +79,7 @@ tabs_panel:
       selected_tab_index:
         type: quantity
         description: |
-          The index of the selectd tab (indicies start at 0).
+          The index of the selected tab (indices start at 0).
       mode:
         type: string
         description: |

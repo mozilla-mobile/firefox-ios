@@ -20,6 +20,8 @@ import struct MozillaAppServices.SyncResult
 import struct MozillaAppServices.Device
 import struct MozillaAppServices.ScopedKey
 import struct MozillaAppServices.AccessTokenInfo
+import class MozillaAppServices.FxAccountManager
+import struct MozillaAppServices.DeviceConfig
 
 // Extends NSObject so we can use timers.
 // TODO: FXIOS-14225 - RustSyncManager shouldn't be @unchecked Sendable
@@ -592,9 +594,9 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
 
         logger.log("Syncing \(engines)", level: .info, category: .sync)
         if let accountManager = RustFirefoxAccounts.shared.accountManager {
-            guard let device = accountManager.deviceConstellation()?
-                .state()?
-                .localDevice else {
+            // Prefer accountState over deviceConstellation for the current
+            // device ID to avoid a possible server round-trip.
+            guard case .success(let deviceId) = accountManager.getCurrentDeviceId() else {
                 self.logger.log("Device Id could not be retrieved",
                                 level: .warning,
                                 category: .sync)
@@ -629,7 +631,9 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                             persistedState:
                                 self.prefs
                                     .stringForKey(PrefsKeys.RustSyncManagerPersistedState),
-                            deviceSettings: self.createDeviceSettings(device: device))
+                            deviceSettings: self.createDeviceSettings(
+                                deviceId: deviceId,
+                                accountManager: accountManager))
 
                         self.doSync(params: params) { syncResult in
                             deferred.fill(Maybe(success: syncResult))
@@ -651,11 +655,11 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
             tokenserverUrl: tokenServerEndpointURL.absoluteString)
     }
 
-    private func createDeviceSettings(device: Device) -> DeviceSettings {
+    private func createDeviceSettings(deviceId: String, accountManager: FxAccountManager) -> DeviceSettings {
         return DeviceSettings(
-            fxaDeviceId: device.id,
-            name: device.displayName,
-            kind: device.deviceType)
+            fxaDeviceId: deviceId,
+            name: accountManager.deviceConfig.name,
+            kind: accountManager.deviceConfig.deviceType)
     }
 
     @discardableResult

@@ -11,7 +11,7 @@ final class ContextMenuPreviewViewController: UIViewController {
 
     private var hasSetPreferredContentSize = false
 
-    // Allows the view controller to resize once it knows it's current size1111
+    // Allows the view controller to resize once it knows it's current size
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 

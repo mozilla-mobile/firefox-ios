@@ -13,3 +13,6 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Top Stories recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.TopStories.v143" = "რჩეული ამბები";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the World Cup Widget on the Firefox homepage on or off */
+"Settings.Home.Option.WorldCup.v151" = "მსოფლიო თასი";
+

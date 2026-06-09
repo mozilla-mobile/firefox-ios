@@ -1,0 +1,6 @@
+/* Title for the cancel button in the remove address alert. */
+"Addresses.EditAddress.Alert.CancelButton.v129" = "Скасаваць";
+
+/* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
+"Addresses.EditAddress.AutofillCancelButton.v129" = "Скасаваць";
+

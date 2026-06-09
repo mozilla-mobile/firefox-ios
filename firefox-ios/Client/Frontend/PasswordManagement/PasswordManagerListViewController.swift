@@ -39,11 +39,6 @@ class PasswordManagerListViewController: SensitiveViewController,
         button.addTarget(self, action: #selector(self.tappedSelectionButton), for: .touchUpInside)
     }
 
-    static func shouldShowAppMenuShortcut(forPrefs prefs: Prefs) -> Bool {
-        // default to on
-        return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
-    }
-
     init(profile: Profile,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -370,10 +365,10 @@ private extension PasswordManagerListViewController {
                         }
 
                         self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete) { _ in
-                            DispatchQueue.main.async {
-                                self.cancelSelection()
-                                self.loadLogins()
-                                self.sendLoginsDeletedTelemetry()
+                            DispatchQueue.main.async { [weak self] in
+                                self?.cancelSelection()
+                                self?.loadLogins()
+                                self?.sendLoginsDeletedTelemetry()
                             }
                         }
                     }, hasSyncedLogins: yes.successValue ?? true)

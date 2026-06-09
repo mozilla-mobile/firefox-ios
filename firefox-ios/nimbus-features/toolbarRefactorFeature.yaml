@@ -4,89 +4,33 @@ features:
     description: >
       This feature is for managing the roll out of the Toolbar refactor feature
     variables:
-      enabled:
-        description: >
-          Enables the feature
-        type: Boolean
-        default: true
-      one_tap_new_tab:
-        description: >
-          If true, enables the one tap new tab feature for users.
-        type: Boolean
-        default: true
-      navigation_hint:
-        description: >
-          If true, enables the navigation contextual hint.
-        type: Boolean
-        default: true
-      toolbar_update_hint:
-        description: >
-          If true, enables the toolbar update contextual hint.
-        type: Boolean
-        default: false
       unified_search:
         description: >
           Enables the unified search feature.
         type: Boolean
         default: false
-      swiping_tabs:
-        description: >
-          Enables swipe gestures to switch between browser tabs.
-        type: Boolean
-        default: true
-      translucency:
-        description: >
-          Enables translucency for toolbars.
-        type: Boolean
-        default: true
-      translucency-refactor:
-        description: >
-          Enables translucency refactor for toolbars.
-        type: Boolean
-        default: false
-      minimal_address_bar:
-        description: >
-          Enables minimal address bar mode on scroll to ensure the url is always visible.
-        type: Boolean
-        default: true
-      middle_button_customization:
-        description: >
-          Enables the middle button customization for navigation toolbar.
-        type: Boolean
-        default: true
       layout:
         description: >
           The type of layout of the toolbars.
         type: Option<ToolbarLayoutType>
         default: version1
-        
+      tab_tray_button_type:
+        description: >
+          The style of the tab tray button in the toolbar.
+        type: TabTrayButtonType
+        default: number
+
     defaults:
       - channel: beta
         value:
-          enabled: true
           unified_search: false
-          one_tap_new_tab: true
-          navigation_hint: true
-          toolbar_update_hint: false
-          swiping_tabs: true
-          translucency: true
-          translucency-refactor: false
-          minimal_address_bar: true
-          middle_button_customization: true
           layout: version1
+          tab_tray_button_type: number
       - channel: developer
         value:
-          enabled: true
           unified_search: false
-          one_tap_new_tab: true
-          navigation_hint: true
-          toolbar_update_hint: false
-          swiping_tabs: true
-          translucency: true
-          translucency-refactor: false
-          minimal_address_bar: true
-          middle_button_customization: true
           layout: version1
+          tab_tray_button_type: number
 
 enums:
   ToolbarLayoutType:
@@ -96,3 +40,11 @@ enums:
         description: Shows the add new tab, menu and tabs button in the navigation toolbar. The share button is displayed in the address toolbar.
       version2:
         description: Like version1 but the menu and tabs buttons are inverted.
+
+  TabTrayButtonType:
+    description: The style of the tab tray button in the toolbar.
+    variants:
+      number:
+        description: The original tab tray button style that show the icon with the number of tabs.
+      screenshot:
+        description: The new tab tray button style that shows two images stacked with the previous and next tab.

@@ -112,10 +112,11 @@ struct CustomUserAgentConstant {
     ]
 
     static let customDesktopUAForDomain = [
-        // TODO: FXIOS-8027, FXIOS-11230, FXIOS-13891 PayPal buttons open blank tabs
-        "paypal.com": defaultMobileUA,
         // FXIOS-10251: Do not appear as desktop/Safari for firefox.com/pair
-        "firefox.com": defaultMobileUA
+        "firefox.com": defaultMobileUA,
+        // TODO: FXIOS-15483 [webcompat] Docusign forms broken using desktop UA
+        "docusign.com": defaultMobileUA,
+        "docusign.net": defaultMobileUA
     ]
 }
 
@@ -170,9 +171,11 @@ public struct UserAgentBuilder {
     }
 
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
+        let device = UIDeviceDetails.model
+        let system = device == "iPad" ? "CPU" : "CPU iPhone"
         return UserAgentBuilder(
             product: UserAgent.product,
-            systemInfo: "(\(UIDeviceDetails.model); CPU iPhone OS 18_7 like Mac OS X)",
+            systemInfo: "(\(device); \(system) OS 18_7 like Mac OS X)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
             extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")

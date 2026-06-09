@@ -34,7 +34,7 @@ struct LoginItem: Codable {
 }
 
 // TODO: FXIOS-13180 Make LoginsHelper actually sendable
-class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
+class LoginsHelper: @unchecked Sendable, TabContentScript {
     private weak var tab: Tab?
     private let profile: Profile
     private let theme: Theme
@@ -148,6 +148,11 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
         if type == "clearAccessoryView" {
             tab?.webView?.accessoryView.reloadViewFor(.standard)
         }
+        let scriptEvaluator = WebKitPasswordGeneratorScriptEvaluator(webView: message.frameInfo.webView)
+        let frameContext = PasswordGeneratorFrameContext(origin: message.frameInfo.webView?.url?.origin,
+                                                         host: message.frameInfo.securityOrigin.host,
+                                                         scriptEvaluator: scriptEvaluator,
+                                                         frameInfo: message.frameInfo)
 
         if type == "generatePassword",
             let tab = self.tab,
@@ -156,7 +161,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
             let userDefaults = UserDefaults.standard
             let showPasswordGeneratorClosure = {
                 let newAction = GeneralBrowserAction(
-                    frame: message.frameInfo,
+                    frameContext: frameContext,
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
 
@@ -390,7 +395,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
         if let windowUUID = self.tab?.windowUUID {
             let action = PasswordGeneratorAction(windowUUID: windowUUID,
                                                  actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
-                                                 origin: origin)
+                                                 loginEntryOrigin: origin)
             store.dispatch(action)
         }
     }
@@ -417,8 +422,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
     @MainActor
     public static func setUpdatedPasswordEnabled(with tab: Tab?) {
         guard let tab = tab else { return }
-        let status = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.updatedPasswordManager, checking: .buildOnly)
-        let jsUpdatedPasswordEnabled = "window.__firefox__.logins.isUpdatedPasswordManagerEnabled(\(status))"
+        let jsUpdatedPasswordEnabled = "window.__firefox__.logins.isUpdatedPasswordManagerEnabled(true)"
         tab.webView?.evaluateJavascriptInDefaultContentWorld(jsUpdatedPasswordEnabled)
     }
 

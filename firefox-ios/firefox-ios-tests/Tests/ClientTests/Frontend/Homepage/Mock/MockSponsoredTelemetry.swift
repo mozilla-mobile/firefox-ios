@@ -24,13 +24,11 @@ class MockSponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry {
     var sendClickTelemetryCalled = 0
 
     func sendImpressionTelemetry(tileSite: Site,
-                                 position: Int,
-                                 isUnifiedAdsEnabled: Bool) {
+                                 position: Int) {
         sendImpressionTelemetryCalled += 1
     }
     func sendClickTelemetry(tileSite: Site,
-                            position: Int,
-                            isUnifiedAdsEnabled: Bool) {
+                            position: Int) {
         sendClickTelemetryCalled += 1
     }
 }

@@ -52,8 +52,7 @@ final class TopSitesProviderImplementation: TopSitesProvider, FeatureFlaggable {
     }
 
     private var shouldExcludeFirefoxJpGuide: Bool {
-        let isFirefoxJpGuideDefaultSiteEnabled = featureFlags.isFeatureEnabled(.firefoxJpGuideDefaultSite,
-                                                                               checking: .buildOnly)
+        let isFirefoxJpGuideDefaultSiteEnabled = featureFlagsProvider.isEnabled(.firefoxJpGuideDefaultSite)
         let locale = Locale.current
         return locale.identifier == "ja_JP" && !isFirefoxJpGuideDefaultSiteEnabled
     }

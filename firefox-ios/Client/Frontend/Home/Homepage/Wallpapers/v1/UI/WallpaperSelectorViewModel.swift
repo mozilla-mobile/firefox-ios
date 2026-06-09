@@ -49,13 +49,18 @@ final class WallpaperSelectorViewModel: @unchecked Sendable {
     private var wallpaperItems = [WallpaperSelectorItem]()
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
     var selectedIndexPath: IndexPath?
+    let telemetryUtility: OnboardingTelemetryProtocol
 
     var numberOfWallpapers: Int {
         return wallpaperItems.count
     }
 
-    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+    init(
+        wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+        telemetryUtility: OnboardingTelemetryProtocol
+    ) {
         self.wallpaperManager = wallpaperManager
+        self.telemetryUtility = telemetryUtility
         self.availableCollections = wallpaperManager.availableCollections
         setupWallpapers()
         selectedIndexPath = initialSelectedIndexPath
@@ -112,19 +117,11 @@ final class WallpaperSelectorViewModel: @unchecked Sendable {
     }
 
     func sendImpressionTelemetry() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .onboardingWallpaperSelector,
-                                     value: nil,
-                                     extras: nil)
+        telemetryUtility.sendWallpaperSelectorViewTelemetry()
     }
 
     func sendDismissImpressionTelemetry() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .close,
-                                     object: .onboardingWallpaperSelector,
-                                     value: nil,
-                                     extras: nil)
+        telemetryUtility.sendWallpaperSelectorCloseTelemetry()
     }
 
     func removeAssetsOnDismiss() {
@@ -194,38 +191,38 @@ private extension WallpaperSelectorViewModel {
     func updateCurrentWallpaper(for wallpaperItem: WallpaperSelectorItem,
                                 completion: @escaping (Result<Void, Error>) -> Void) {
         wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper) { [weak self] result in
-            guard let extra = self?.telemetryMetadata(for: wallpaperItem) else {
+            guard let self else {
                 completion(result)
                 return
             }
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .onboardingWallpaperSelector,
-                                         value: .wallpaperSelected,
-                                         extras: extra)
-
-           completion(result)
+            let metadata = self.telemetryMetadata(for: wallpaperItem)
+            self.telemetryUtility.sendWallpaperSelectorSelectedTelemetry(
+                wallpaperName: metadata.name,
+                wallpaperType: metadata.type
+            )
+            completion(result)
         }
     }
 
-    func telemetryMetadata(for item: WallpaperSelectorItem) -> [String: String] {
-        var metadata = [String: String]()
+    struct WallpaperTelemetryMetadata {
+        let name: String
+        let type: String
+    }
 
-        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = item.wallpaper.id
-
-        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
+    func telemetryMetadata(for item: WallpaperSelectorItem) -> WallpaperTelemetryMetadata {
+        let name = item.wallpaper.id
+        let type: String
         switch item.wallpaper.type {
         case .none:
-            metadata[wallpaperTypeKey] = "default"
+            type = "default"
         case .other:
             switch item.collection.type {
             case .classic:
-                metadata[wallpaperTypeKey] = item.collection.type.rawValue
+                type = item.collection.type.rawValue
             case .limitedEdition:
-                metadata[wallpaperTypeKey] = item.collection.id
+                type = item.collection.id
             }
         }
-
-        return metadata
+        return WallpaperTelemetryMetadata(name: name, type: type)
     }
 }

@@ -6,13 +6,12 @@ import Common
 import XCTest
 
 class SettingsTests: FeatureFlaggedTestBase {
-    var settingsScreen: SettingScreen!
-
     override func tearDown() async throws {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
             name.contains("testBrowsingSettingsOptionSubtitles") ||
             name.contains("testSettingsOptionSubtitlesDarkMode") ||
-            name.contains("testSettingsOptionSubtitlesDarkModeLandscape") {
+            name.contains("testSettingsOptionSubtitlesDarkModeLandscape") ||
+            name.contains("testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn") {
             switchThemeToDarkOrLight(theme: "Light")
         }
         XCUIDevice.shared.orientation = .portrait
@@ -61,37 +60,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.cells["SiriSettings"])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2334756
-    func testCopiedLinks() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowsingSettings)
-
-        // For iOS 15, we must scroll until the switch is visible.
-        if #unavailable(iOS 16) {
-            app.swipeUp()
-            mozWaitForElementToExist(app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"])
-        }
-        // Check Offer to open copied links, when opening firefox is off
-        let value = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
-        XCTAssertEqual(value as? String, "0")
-
-        // Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].waitAndTap()
-
-        // Check Offer to open copied links, when opening firefox is on
-        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
-        XCTAssertEqual(value2 as? String, "1")
-
-        navigator.nowAt(BrowsingSettings)
-        navigator.goto(NewTabScreen)
-        navigator.goto(BrowsingSettings)
-
-        // Check Offer to open copied links, when opening firefox is on
-        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
-        XCTAssertEqual(value3 as? String, "1")
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2307041
     func testOpenMailAppSettings() {
         app.launch()
@@ -128,36 +96,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // SmokeTest
     func testImageOnOff() {
-        // Select no images or hide images, check it's hidden or not
-        app.launch()
-        waitUntilPageLoad()
-
-        // Select hide images under Browsing Settings page
-        let blockImagesSwitch = app.otherElements.tables.cells.switches[
-            AccessibilityIdentifiers.Settings.BlockImages.title
-        ]
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
-
-        mozWaitForElementToExist(blockImagesSwitch)
-        app.swipeUp()
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: false)
-
-        // Select show images
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        mozWaitForElementToExist(blockImagesSwitch)
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: true)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307058
-    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
-    // SmokeTest TAE
-    func testImageOnOff_TAE() {
         let settingsScreen = SettingScreen(app: app)
         // Select no images or hide images, check it's hidden or not
         app.launch()
@@ -178,7 +116,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         // Select show images
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
-        settingsScreen.waitForBrowsingLinksSection()
+        _ = settingsScreen.waitForBlockImagesSwitch()
         navigator.performAction(Action.ToggleNoImageMode)
         settingsScreen.assertShowImagesState(showImages: true)
     }
@@ -186,13 +124,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2951435
     // Smoketest
     func testSettingsOptionSubtitles() {
-        app.launch()
-        validateSettingsUIOptions()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2951435
-    // Smoketest TAE
-    func testSettingsOptionSubtitles_TAE() {
         app.launch()
         let settingsScreen = SettingScreen(app: app)
         navigator.nowAt(NewTabScreen)
@@ -255,6 +186,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3135841
     func testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()
@@ -272,6 +204,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3376443
     func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
@@ -284,6 +217,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(summarizeSettings)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3135845
     func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()
@@ -424,18 +358,19 @@ class SettingsTests: FeatureFlaggedTestBase {
             [
                 table.cells[settingsQuery.OpenWithMail.title],
                 app.switches[settingsQuery.OfferToOpen.title],
+                app.switches[settingsQuery.ShowLink.title],
                 table.cells[settingsQuery.Browsing.autoPlay],
                 table.cells[settingsQuery.BlockPopUp.title],
                 table.cells[settingsQuery.NoImageMode.title],
                 app.switches[settingsQuery.BlockExternal.title]
             ]
         )
-        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
-                       "1",
-                       "Show links previews - toggle is not enabled by default")
         XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String,
                        "0",
                        "Offer to Open Copied Links - toggle is not disabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
+                       "1",
+                       "Show links previews - toggle is not enabled by default")
         XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String,
                        "1",
                        "Block Pop-up  Windows - toggle is not enabled by default")
@@ -526,7 +461,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         }
 
         for i in settingsElements {
-            scrollToElement(i)
             mozWaitForElementToExist(i)
             XCTAssertTrue(i.exists)
         }

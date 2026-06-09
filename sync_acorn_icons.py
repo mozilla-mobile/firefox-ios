@@ -136,7 +136,7 @@ def sort_icons_by_size() -> dict:
             size_key = next((key for key in icons_by_size if key in file_name), None)
             
             if size_key:
-                # Check wether Extra not in the size_key while the file name has Extra size
+                # Check whether Extra not in the size_key while the file name has Extra size
                 # this means the next method pulled the wrong size_key
                 if "Extra" not in size_key and "Extra" in file_name:
                     size_key = f"Extra{size_key}"

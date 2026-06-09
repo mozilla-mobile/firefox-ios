@@ -92,9 +92,28 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                                             title: title ?? "")
         // Add new bookmark to the top of the folder
         // Save bookmark to recent bookmark folder
-        let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
-        let parentGuid = recentBookmarkFolderGuid ?? BookmarkRoots.MobileFolderGUID
+        let parentGuid = await resolvedParentFolderGuid()
         _ = await save(bookmark: bookmarkData, parentFolderGUID: parentGuid)
+    }
+
+    @MainActor
+    private func resolvedParentFolderGuid() async -> String {
+        guard let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) else {
+            return BookmarkRoots.MobileFolderGUID
+        }
+
+        let bookmarkExists = await withCheckedContinuation { continuation in
+            profile.places.getBookmark(guid: recentBookmarkFolderGuid)
+                .uponQueue(.main) { result in
+                    continuation.resume(returning: (result.successValue ?? nil) != nil)
+                }
+        }
+
+        if !bookmarkExists {
+            profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+        }
+
+        return bookmarkExists ? recentBookmarkFolderGuid : BookmarkRoots.MobileFolderGUID
     }
 
     private func saveBookmark(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<GUID?, any Error> {

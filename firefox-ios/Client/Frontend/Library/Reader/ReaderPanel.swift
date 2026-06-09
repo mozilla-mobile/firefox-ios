@@ -173,6 +173,7 @@ class ReadingListPanel: UITableViewController,
     weak var navigationHandler: ReadingListNavigationHandler?
     let profile: Profile
     var state: LibraryPanelMainState
+    var isTransitioning = false
     var bottomToolbarItems = [UIBarButtonItem]()
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -410,7 +411,7 @@ class ReadingListPanel: UITableViewController,
         tableView.deselectRow(at: indexPath, animated: false)
         if let record = records?[indexPath.row],
             let url = URL(string: record.url),
-            let encodedURL = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+            let encodedURL = url.encodeReaderModeURL(ReaderModeSchemeHandler.currentBaseURL) {
             // Mark the item as read
             profile.readingList.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.

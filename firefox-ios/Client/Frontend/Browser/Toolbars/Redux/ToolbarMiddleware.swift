@@ -9,7 +9,7 @@ import SummarizeKit
 import Shared
 
 @MainActor
-final class ToolbarMiddleware: FeatureFlaggable {
+final class ToolbarMiddleware {
     private let manager: ToolbarManager
     private let toolbarHelper: ToolbarHelperInterface
     private let windowManager: WindowManager
@@ -18,8 +18,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let prefs: Prefs
     private let recentSearchProvider: RecentSearchProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
-    private let summarizationChecker: SummarizationCheckerProtocol
-    private let summarizerServiceFactory: SummarizerServiceFactory
+    private let summarizerConfigFactory: SummarizerConfigFactory
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -35,15 +34,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
          toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry(),
          profile: Profile = AppContainer.shared.resolve(),
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
-         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
-         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+         summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          recentSearchProvider: RecentSearchProvider? = nil,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
+        self.summarizerConfigFactory = summarizerConfigFactory
         self.manager = manager
-        self.summarizationChecker = summarizationChecker
-        self.summarizerServiceFactory = summarizerServiceFactory
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
         self.prefs = profile.prefs
@@ -77,6 +74,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
             let toolbarConfig = FxNimbus.shared.features.toolbarRefactorFeature.value()
             let toolbarLayout = ToolbarLayoutStyle.style(from: toolbarConfig.layout)
+            let tabTrayButtonStyle = TabTrayButtonStyle.style(from: toolbarConfig.tabTrayButtonType)
             let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
             let borderPosition = getAddressBorderPosition(toolbarPosition: position)
             let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
@@ -93,12 +91,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = ToolbarAction(
                 toolbarPosition: toolbarPosition,
                 toolbarLayout: toolbarLayout,
+                tabTrayButtonStyle: tabTrayButtonStyle,
                 isTranslucent: toolbarHelper.shouldBlur(),
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
-                isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
-                canShowDataClearanceAction: canShowDataClearanceAction(),
                 middleButton: middleButton,
+                isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
@@ -140,7 +138,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             updateTopAddressBorderPosition(scrollOffset: scrollOffset, windowUUID: action.windowUUID, state: state)
 
         case ToolbarMiddlewareActionType.didClearSearch:
-            guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+            guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
             else { return }
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.clearSearch)
             store.dispatch(action)
@@ -168,8 +166,17 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case ToolbarActionType.didSubmitSearchTerm:
-            // After a user submits a search term, we want to record it in our history storage via recent search provider
-            guard let url = action.url, let searchTerm = action.searchTerm else { return }
+            // After a user submits a search term, we want to record it in our history storage via recent search provider.
+            // We only want to record when in normal mode since recent searches is not available for private mode.
+            guard let toolbarState = state.componentState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: action.windowUUID
+            ) else {
+                return
+            }
+
+            guard let url = action.url, let searchTerm = action.searchTerm, !toolbarState.isPrivateMode else { return }
             recentSearchProvider.addRecentSearch(searchTerm, url: url.absoluteString)
 
         case ToolbarActionType.navigationMiddleButtonDidChange:
@@ -205,7 +212,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     @MainActor
     private func handleToolbarButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return }
 
         switch action.buttonType {
@@ -219,19 +226,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
             toolbarTelemetry.oneTapNewTabButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.addNewTab)
-            store.dispatch(action)
-
-        case .qrCode:
-            toolbarTelemetry.qrCodeButtonTapped(isPrivate: toolbarState.isPrivateMode)
-
-            if toolbarState.addressToolbar.isEditing {
-                let toolbarAction = ToolbarAction(windowUUID: action.windowUUID,
-                                                  actionType: ToolbarActionType.cancelEdit)
-                store.dispatch(toolbarAction)
-            }
-
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
 
         case .back:
@@ -273,7 +267,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .cancelEdit:
             cancelEditMode(windowUUID: action.windowUUID)
 
-        case .readerMode:
+        case .readerMode, .readerModeWithSummarizer:
             recordReaderModeTelemetry(state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReaderMode)
@@ -302,18 +296,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
 
-        case .dataClearance:
-            toolbarTelemetry.dataClearanceButtonTapped(isPrivate: toolbarState.isPrivateMode)
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.clearData)
-            store.dispatch(action)
         case .summarizer:
             Task { @MainActor in
-                guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
-                let summarizeMiddleware = SummarizerMiddleware()
-                let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
-                let contentType = summarizationCheckResult?.contentType ?? .generic
-                let action = GeneralBrowserAction(summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
+                guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView else { return }
+                let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
+                let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
+                                                  summarizerTrigger: .toolbarIcon,
                                                   windowUUID: action.windowUUID,
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
@@ -331,7 +319,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func handleToolbarButtonLongPressActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return }
 
         switch action.buttonType {
@@ -372,6 +360,19 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReaderMode)
             store.dispatch(action)
+        case .readerModeWithSummarizer:
+            Task {
+                guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView else { return }
+                let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
+                let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
+                                                  summarizerTrigger: .toolbarIcon,
+                                                  windowUUID: action.windowUUID,
+                                                  actionType: GeneralBrowserActionType.showSummarizer)
+                store.dispatch(action)
+            }
+        case .translate:
+            // Long-press on translate is handled in TranslationsMiddleware.
+            break
         default:
             break
         }
@@ -380,9 +381,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
     // MARK: - Border
     // For the top placement of the address bar, the border is only visible on scroll. This is due to a design choice.
     private func updateTopAddressBorderPosition(scrollOffset: CGPoint, windowUUID: WindowUUID, state: AppState) {
-        guard let toolbarState = state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID),
+        guard let toolbarState = state.componentState(ToolbarState.self,
+                                                      for: .toolbar,
+                                                      window: windowUUID),
               toolbarState.toolbarPosition == .top
         else { return }
 
@@ -401,7 +402,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func isMicrosurveyShown(action: GeneralBrowserMiddlewareAction, state: AppState) -> Bool {
-        let bvcState = state.screenState(
+        let bvcState = state.componentState(
             BrowserViewControllerState.self,
             for: .browserViewController,
             window: action.windowUUID
@@ -417,9 +418,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
     //  - When survey is shown and address bar is at bottom, hide borders for address and nav toolbar
     //  - When survey is dismissed, show border as expected based on the toolbar requirements
     private func updateToolbarBorders(windowUUID: WindowUUID, state: AppState, isMicrosurveyShown: Bool) {
-        guard let toolbarState = state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID) else { return }
+        guard let toolbarState = state.componentState(ToolbarState.self,
+                                                      for: .toolbar,
+                                                      window: windowUUID) else { return }
 
         if toolbarState.toolbarPosition == .top {
             let toolbarAction = ToolbarAction(displayNavBorder: !isMicrosurveyShown,
@@ -438,9 +439,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private func updateToolbarPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
         guard let searchBarPosition = action.toolbarPosition,
               let scrollOffset = action.scrollOffset,
-              let toolbarState = state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: action.windowUUID)
+              let toolbarState = state.componentState(ToolbarState.self,
+                                                      for: .toolbar,
+                                                      window: action.windowUUID)
         else { return }
 
         let addressToolbarPosition = addressToolbarPositionFromSearchBarPosition(searchBarPosition)
@@ -469,19 +470,15 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     @MainActor
     private func checkPageCanSummarize(action: ToolbarMiddlewareAction) {
-        guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView,
+        guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView,
               isSummarizerOn
         else { return }
-        let maxWords = summarizerServiceFactory.maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
-                                                         isHostedSummarizerEnabled: isHostedSummaryEnabled)
+
         Task { @MainActor in
-            let result = await summarizationChecker.check(
-                on: webView,
-                maxWords: maxWords
-            )
+            let canSummarize = await summarizerConfigFactory.makeConfiguration(from: webView) != nil
             store.dispatch(
                 ToolbarAction(
-                    canSummarize: result.canSummarize,
+                    canSummarize: canSummarize,
                     readerModeState: action.readerModeState,
                     windowUUID: action.windowUUID,
                     actionType: ToolbarActionType.readerModeStateChanged
@@ -493,7 +490,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     // MARK: - Helper
     @MainActor
     private func cancelEditMode(windowUUID: WindowUUID) {
-        var url = tabManager(for: windowUUID).selectedTab?.url
+        var url = tabManager(for: windowUUID)?.selectedTab?.url
         if let currentURL = url {
             url = (currentURL.isWebPage() && !currentURL.isReaderModeURL) ? url : nil
         }
@@ -523,15 +520,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 
-    private func canShowDataClearanceAction() -> Bool {
-        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
-
-        return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
-    }
-
     private func recordReaderModeTelemetry(state: AppState, windowUUID: WindowUUID) {
-        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
+        guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
 
         let isReaderModeEnabled = switch toolbarState.addressToolbar.readerModeState {
         case .available: true // will be enabled after action gets executed
@@ -541,7 +531,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         toolbarTelemetry.readerModeButtonTapped(isPrivate: toolbarState.isPrivateMode, isEnabled: isReaderModeEnabled)
     }
 
-    private func tabManager(for uuid: WindowUUID) -> TabManager {
+    private func tabManager(for uuid: WindowUUID) -> TabManager? {
         return windowManager.tabManager(for: uuid)
     }
 }

@@ -17,6 +17,7 @@ class SiteLoadTest: BaseTestCase {
             sleep(5)
 
             navigator.nowAt(BrowserTab)
+            waitForTabsButton()
             navigator.goto(TabTray)
 
             navigator.performAction(Action.AcceptRemovingAllTabs)

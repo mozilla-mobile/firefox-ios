@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Näin voit tallentaa kuvia.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox käyttää puheentunnistusta muuntaakseen äänesi tekstiksi äänihakua varten.";
+
 /* (No Comment) */
 "Scan QR Code" = "Skannaa QR-koodi";
 

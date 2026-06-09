@@ -8,6 +8,8 @@ protocol TabTrayUtils {
     @MainActor
     var isTabTrayUIExperimentsEnabled: Bool { get }
     @MainActor
+    var isTabTrayIpadUIExperimentsEnabled: Bool { get }
+    @MainActor
     var isTabTrayTranslucencyEnabled: Bool { get }
     @MainActor
     var isReduceTransparencyEnabled: Bool { get }
@@ -31,11 +33,15 @@ struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
     }
 
     var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
+    }
+
+    var isTabTrayIpadUIExperimentsEnabled: Bool {
+        return featureFlagsProvider.isEnabled(.tabTrayiPadUIExperiments)
     }
 
     var isTabTrayTranslucencyEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayTranslucency, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayTranslucency)
     }
 
     var isReduceTransparencyEnabled: Bool {
@@ -51,11 +57,13 @@ struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
     }
 
     func shouldDisplayExperimentUI() -> Bool {
-        return isTabTrayUIExperimentsEnabled && UIDevice.current.userInterfaceIdiom != .pad
+        return isTabTrayUIExperimentsEnabled && UIDevice.current.userInterfaceIdiom != .pad ||
+            isTabTrayIpadUIExperimentsEnabled && UIDevice.current.userInterfaceIdiom == .pad
     }
 
     func shouldBlur() -> Bool {
-        return isTabTrayUIExperimentsEnabled && isTabTrayTranslucencyEnabled && !isReduceTransparencyEnabled
+        return shouldDisplayExperimentUI() &&
+            isTabTrayTranslucencyEnabled && !isReduceTransparencyEnabled
     }
 
     func backgroundAlpha() -> CGFloat {

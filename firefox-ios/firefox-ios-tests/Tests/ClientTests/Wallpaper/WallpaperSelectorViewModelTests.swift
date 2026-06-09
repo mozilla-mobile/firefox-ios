@@ -2,25 +2,53 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Glean
+import OnboardingKit
 import XCTest
 
 @testable import Client
 
+private class MockWallpaperTelemetryUtility: OnboardingTelemetryProtocol {
+    var wallpaperSelectorViewCalled = false
+    var wallpaperSelectorCloseCalled = false
+    var wallpaperSelectorSelectedName: String?
+    var wallpaperSelectorSelectedType: String?
+
+    func sendCardViewTelemetry(from cardName: String) {}
+    func sendButtonActionTelemetry(from cardName: String, with action: OnboardingActions, and primaryButton: Bool) {}
+    func sendMultipleChoiceButtonActionTelemetry(from cardName: String, with action: OnboardingMultipleChoiceAction) {}
+    func sendDismissOnboardingTelemetry(from cardName: String) {}
+    func sendGoToSettingsButtonTappedTelemetry() {}
+    func sendDismissButtonTappedTelemetry() {}
+    func sendOnboardingShownTelemetry() {}
+    func sendOnboardingDismissedTelemetry(outcome: OnboardingFlowOutcome) {}
+
+    func sendWallpaperSelectorViewTelemetry() { wallpaperSelectorViewCalled = true }
+    func sendWallpaperSelectorCloseTelemetry() { wallpaperSelectorCloseCalled = true }
+    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {
+        wallpaperSelectorSelectedName = wallpaperName
+        wallpaperSelectorSelectedType = wallpaperType
+    }
+    func sendWallpaperSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
+    func sendEngagementNotificationTappedTelemetry() {}
+    func sendEngagementNotificationCancelTelemetry() {}
+}
+
 @MainActor
 final class WallpaperSelectorViewModelTests: XCTestCase {
     private var wallpaperManager: WallpaperManagerInterface!
+    private var mockTelemetry: MockWallpaperTelemetryUtility!
 
     override func setUp() async throws {
         try await super.setUp()
 
         wallpaperManager = WallpaperManagerMock()
+        mockTelemetry = MockWallpaperTelemetryUtility()
         addWallpaperCollections()
     }
 
     override func tearDown() async throws {
-        Self.tearDownTelemetry()
         wallpaperManager = nil
+        mockTelemetry = nil
         try await super.tearDown()
     }
 
@@ -54,24 +82,16 @@ final class WallpaperSelectorViewModelTests: XCTestCase {
         }
     }
 
-    // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
-    func testRecordsWallpaperSelectorView() throws {
-        Self.setupTelemetry(with: MockProfile())
-        wallpaperManager = WallpaperManager()
+    func testRecordsWallpaperSelectorView() {
         let subject = createSubject()
         subject.sendImpressionTelemetry()
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorView)
+        XCTAssertTrue(mockTelemetry.wallpaperSelectorViewCalled)
     }
 
-    // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
-    func testRecordsWallpaperSelectorClose() throws {
-        Self.setupTelemetry(with: MockProfile())
-        wallpaperManager = WallpaperManager()
+    func testRecordsWallpaperSelectorClose() {
         let subject = createSubject()
         subject.sendDismissImpressionTelemetry()
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorClose)
+        XCTAssertTrue(mockTelemetry.wallpaperSelectorCloseCalled)
     }
 
 //    func testClickingCell_recordsWallpaperChange() {
@@ -87,7 +107,10 @@ final class WallpaperSelectorViewModelTests: XCTestCase {
 //    }
 
     func createSubject() -> WallpaperSelectorViewModel {
-        let subject = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager)
+        let subject = WallpaperSelectorViewModel(
+            wallpaperManager: wallpaperManager,
+            telemetryUtility: mockTelemetry
+        )
         trackForMemoryLeaks(subject)
         return subject
     }

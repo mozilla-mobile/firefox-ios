@@ -5,30 +5,31 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class TinyRouterTests: XCTestCase {
-    func test_route_exactMatch_returnsReply() throws {
+    func test_route_exactMatch_returnsReply() async throws {
         let route = MockRoute(replyText: "A")
         let subject = createSubject()
             .register("a", route)
 
         let url = makeURL("a")
-        let reply = try subject.route(url)
+        let reply = try await subject.route(url)
         XCTAssertEqual(String(decoding: reply.body, as: UTF8.self), "A")
         XCTAssertEqual(route.calls.count, 1)
     }
 
-    func test_route_prefixMatch_returnsReply() throws {
+    func test_route_prefixMatch_returnsReply() async throws {
         let route = MockRoute(replyText: "a")
         let subject = createSubject()
             .register("a", route)
 
         let url = makeURL("a/b/c")
-        let reply = try subject.route(url)
+        let reply = try await subject.route(url)
         XCTAssertEqual(String(decoding: reply.body, as: UTF8.self), "a")
         XCTAssertEqual(route.calls.count, 1)
     }
 
-    func test_route_order_firstRegisteredWins() throws {
+    func test_route_order_firstRegisteredWins() async throws {
         /// This test ensures that if multiple routes are registered for the same path,
         /// the router uses the first one registered.
         let first = MockRoute(replyText: "first")
@@ -39,13 +40,13 @@ final class TinyRouterTests: XCTestCase {
             .register("a", second)
 
         let url = makeURL("a")
-        let reply = try subject.route(url)
+        let reply = try await subject.route(url)
         XCTAssertEqual(String(decoding: reply.body, as: UTF8.self), "first")
         XCTAssertEqual(first.calls.count, 1)
         XCTAssertEqual(second.calls.count, 0)
     }
 
-    func test_route_returnsNil_fallsThroughToNext() throws {
+    func test_route_returnsNil_fallsThroughToNext() async throws {
         let nilRoute = MockRoute(reply: nil)
         let nextRoute = MockRoute(replyText: "next")
 
@@ -54,13 +55,13 @@ final class TinyRouterTests: XCTestCase {
             .register("a", nextRoute)
 
         let url = makeURL("a/whatever")
-        let reply = try subject.route(url)
+        let reply = try await subject.route(url)
         XCTAssertEqual(String(decoding: reply.body, as: UTF8.self), "next")
         XCTAssertEqual(nilRoute.calls.count, 1)
         XCTAssertEqual(nextRoute.calls.count, 1)
     }
 
-    func test_route_usesDefaultRouteWhenNoMatch() throws {
+    func test_route_usesDefaultRouteWhenNoMatch() async throws {
         let randomRoute = MockRoute(replyText: "random")
         let defaultRoute = MockRoute(replyText: "default")
         let subject = createSubject()
@@ -68,20 +69,20 @@ final class TinyRouterTests: XCTestCase {
             .setDefault(defaultRoute)
 
         let url = makeURL("unknown/path")
-        let reply = try subject.route(url)
+        let reply = try await subject.route(url)
         XCTAssertEqual(String(decoding: reply.body, as: UTF8.self), "default")
         XCTAssertEqual(defaultRoute.calls.count, 1)
     }
 
-    func test_route_throwsNotFoundWhenNoHandlersAndNoDefault() {
+    func test_route_throwsNotFoundWhenNoHandlersAndNoDefault() async {
         let subject = createSubject()
         let url = makeURL("nada")
-        XCTAssertThrowsError(try subject.route(url)) { error in
-            XCTAssertEqual(error as? TinyRouterError, .notFound)
+        await assertAsyncThrowsEqual(TinyRouterError.notFound) {
+            try await subject.route(url)
         }
     }
 
-    func test_route_propagatesRouteError() {
+    func test_route_propagatesRouteError() async {
         enum Fake: Error, Equatable { case boom }
         let route = MockRoute(reply: nil, error: Fake.boom)
 
@@ -89,8 +90,8 @@ final class TinyRouterTests: XCTestCase {
             .register("explode", route)
 
         let url = makeURL("explode")
-        XCTAssertThrowsError(try subject.route(url)) { error in
-            XCTAssertEqual(error as? Fake, .boom)
+        await assertAsyncThrowsEqual(Fake.boom) {
+            try await subject.route(url)
         }
     }
 

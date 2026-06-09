@@ -15,6 +15,13 @@ enum TranslateButtonActionType: String {
 protocol TranslationsTelemetryProtocol {
     func pageLanguageIdentified(identifiedLanguage: String, deviceLanguage: String)
     func pageLanguageIdentificationFailed(errorType: String)
+    func translationRequested(
+        isPrivate: Bool,
+        translationFlowId: UUID,
+        fromLanguage: String,
+        toLanguage: String,
+        autoTranslate: Bool
+    )
     func translationFailed(translationFlowId: UUID, errorType: String)
     func webpageRestored(translationFlowId: UUID)
     func translateButtonTapped(isPrivate: Bool, actionType: TranslateButtonActionType, translationFlowId: UUID)
@@ -44,6 +51,26 @@ final class TranslationsTelemetry: TranslationsTelemetryProtocol {
         )
         gleanWrapper.recordEvent(
             for: GleanMetrics.Translations.pageLanguageIdentificationFailed,
+            extras: extras
+        )
+    }
+
+    func translationRequested(
+        isPrivate: Bool,
+        translationFlowId: UUID,
+        fromLanguage: String,
+        toLanguage: String,
+        autoTranslate: Bool
+    ) {
+        let extras = GleanMetrics.Translations.TranslationRequestedExtra(
+            autoTranslate: autoTranslate,
+            fromLanguage: fromLanguage,
+            isPrivateMode: isPrivate,
+            toLanguage: toLanguage,
+            translationFlowId: translationFlowId.uuidString
+        )
+        gleanWrapper.recordEvent(
+            for: GleanMetrics.Translations.translationRequested,
             extras: extras
         )
     }

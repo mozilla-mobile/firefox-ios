@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "This helps us diagnose and fix issues with the browser.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ will improve features, performance, and stability between updates. Changes applied remotely.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ will send what you type in the address bar to your search engine.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla strives to collect only what we need to provide and improve %@ for everyone.";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla strives to collect only what we need to provide and improve %@ for everyone.";
+
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ may install and run studies from time to time.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ randomly selects users to test features, which improves quality for everyone.";
 
 /* Title for section in settings menu */
 "Settings.general" = "General";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Show home screen tips";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Allow Remote Improvements";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Studies";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Allow Feature Studies";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Use Touch ID to unlock app";

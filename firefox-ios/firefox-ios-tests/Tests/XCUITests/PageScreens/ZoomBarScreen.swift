@@ -43,6 +43,8 @@ final class ZoomBarScreen {
     }
 
     func assertZoomPercent(_ expected: String, file: StaticString = #filePath, line: UInt = #line) {
+        BaseTestCase().mozWaitForElementToExist(zoomInButton)
+        BaseTestCase().mozWaitForElementToExist(zoomOutButton)
         XCTAssertEqual(currentZoomPercent(), expected, file: file, line: line)
     }
 

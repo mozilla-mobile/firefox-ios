@@ -17,21 +17,21 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testSaveAndLoadRecommendations() async throws {
+    func testSaveAndLoadResponse() async throws {
         let cache = createCache()
-        let recs = generateFakeDataWith(numberOfItems: 2)
+        let response = generateFakeResponse(numberOfItems: 2)
 
-        cache.save(recs)
+        cache.save(response)
 
-        let loaded = cache.loadRecommendations()
-        XCTAssertEqual(loaded?.count, 2)
-        XCTAssertEqual(loaded?.first?.title, "Title 1")
+        let loaded = cache.loadResponse()
+        XCTAssertEqual(loaded?.data.count, 2)
+        XCTAssertEqual(loaded?.data.first?.title, "Title 1")
     }
 
     func testLastUpdatedIsSet() {
         let cache = createCache()
-        let recs = generateFakeDataWith(numberOfItems: 1)
-        cache.save(recs)
+        let response = generateFakeResponse(numberOfItems: 1)
+        cache.save(response)
 
         let lastUpdated = cache.lastUpdatedDate()
         XCTAssertNotNil(lastUpdated)
@@ -40,34 +40,34 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
 
     func testOverwriteCache() {
         let cache = createCache()
-        let recs = generateFakeDataWith(numberOfItems: 1)
-        cache.save(recs)
+        let response = generateFakeResponse(numberOfItems: 1)
+        cache.save(response)
 
-        let new_recs = generateFakeDataWith(numberOfItems: 2)
-        cache.save(new_recs)
+        let newResponse = generateFakeResponse(numberOfItems: 2)
+        cache.save(newResponse)
 
-        let loaded = cache.loadRecommendations()
-        XCTAssertEqual(loaded?.count, 2)
-        XCTAssertEqual(loaded?.last?.title, "Title 2")
+        let loaded = cache.loadResponse()
+        XCTAssertEqual(loaded?.data.count, 2)
+        XCTAssertEqual(loaded?.data.last?.title, "Title 2")
     }
 
     func testClearCache() {
         let cache = createCache()
-        let recs = generateFakeDataWith(numberOfItems: 1)
-        cache.save(recs)
+        let response = generateFakeResponse(numberOfItems: 1)
+        cache.save(response)
         cache.clearCache()
 
-        XCTAssertNil(cache.loadRecommendations())
+        XCTAssertNil(cache.loadResponse())
         XCTAssertNil(cache.lastUpdatedDate())
     }
 
     func testLoadFromEmptyReturnsNil() {
         let cache = createCache()
-        XCTAssertNil(cache.loadRecommendations())
+        XCTAssertNil(cache.loadResponse())
         XCTAssertNil(cache.lastUpdatedDate())
     }
 
-    private func generateFakeDataWith(numberOfItems: Int) -> [RecommendationDataItem] {
+    private func generateFakeResponse(numberOfItems: Int) -> CuratedRecommendationsResponse {
         var data = [RecommendationDataItem]()
         for index in 1...numberOfItems {
             data.append(RecommendationDataItem(
@@ -84,7 +84,10 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
                 receivedRank: Int64(index)
             ))
         }
-        return data
+        return CuratedRecommendationsResponse(
+            recommendedAt: Int64(Date().timeIntervalSince1970 * 1000),
+            data: data
+        )
     }
 
     private func createCache() -> CuratedRecommendationCacheUtility {

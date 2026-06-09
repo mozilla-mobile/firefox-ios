@@ -5,20 +5,27 @@
 import XCTest
 import Common
 
-class StoryTests: BaseTestCase {
+class StoryTests: FeatureFlaggedTestBase {
+    private var newsScreen: NewsScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        newsScreen = NewsScreen(app: app)
+    }
+
     enum SwipeDirection {
         case up, down, left, right
     }
 
-    func validatePocketStoriesCount() {
-        let numPocketStories = app.collectionViews
+    func validateNewsStoriesCount() {
+        let numNewsStories = app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
             .staticTexts.count
-        XCTAssertTrue(numPocketStories > 1, "Expected at least 2 stories.")
+        XCTAssertTrue(numNewsStories > 1, "Expected at least 2 stories.")
     }
 
-    func togglePocket(shouldEnable: Bool) {
-        navigator.performAction(shouldEnable ? Action.TogglePocketInNewTab : Action.TogglePocketInNewTab)
+    func toggleStories(shouldEnable: Bool) {
+        navigator.performAction(shouldEnable ? Action.ToggleStoriesInNewTab : Action.ToggleStoriesInNewTab)
         navigator.goto(NewTabScreen)
     }
 
@@ -41,28 +48,25 @@ class StoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
-    func testPocketEnabledByDefault() {
+    func testNewsStoriesEnabledByDefault() {
+        app.launch()
+
         navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
-        XCTAssertEqual(
-            app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino].label,
-            "Stories"
-        )
+        app.partialSwipeUp(distance: 0.2)
+        mozWaitForElementToExist(app.otherElements["News"])
 
-        // There should be at least 8 stories on iPhone and 7 on iPad.
-        // You can see more stories on iPhone by swiping left, but not all
-        // stories are displayed at once.
-        validatePocketStoriesCount()
+        validateNewsStoriesCount()
 
-        // Disable Pocket
-        togglePocket(shouldEnable: false)
+        // Disable Stories
+        toggleStories(shouldEnable: false)
         mozWaitForElementToNotExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
 
         // Enable it again
-        togglePocket(shouldEnable: true)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+        toggleStories(shouldEnable: true)
+        app.partialSwipeUp(distance: 0.2)
+        mozWaitForElementToExist(app.otherElements["News"])
 
-        // Tap on the first Pocket element
+        // Tap on the first News element
         app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
             .staticTexts.firstMatch.tap()
@@ -73,12 +77,15 @@ class StoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
-    func testValidatePocketContextMenu() {
+    func testValidateNewsContextMenu() {
+        app.launch()
+
         navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+        app.partialSwipeUp(distance: 0.2)
+        mozWaitForElementToExist(app.otherElements["News"])
         // Long tap on one of the stories
-        let pocketCell = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
-        app.collectionViews.cells.matching(identifier: pocketCell).staticTexts.firstMatch.press(forDuration: 1.5)
+        let newsCell = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
+        app.collectionViews.cells.matching(identifier: newsCell).staticTexts.firstMatch.press(forDuration: 1.5)
         // Validate Context menu
         let contextMenuTable = app.tables["Context Menu"]
         waitForElementsToExist(
@@ -90,5 +97,23 @@ class StoryTests: BaseTestCase {
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
+    func testNewsStoryCategoriesFilterStories() {
+        addLaunchArgument(jsonFileName: "homepageStoryCategoriesOn", featureName: "homepage-redesign-feature")
+        app.launch()
+
+        newsScreen.scrollToNewsSection()
+        newsScreen.assertNewsSectionExists()
+        newsScreen.assertAllCategoryButtonExists()
+        newsScreen.assertCategoryCount(minimum: 2)
+
+        newsScreen.tapCategoryButton(at: 0)
+        newsScreen.assertFirstStoryCellExists()
+        newsScreen.tapCategoryButton(at: 1)
+        newsScreen.assertFirstStoryCellExists()
+        newsScreen.tapAllCategoryButton()
+        newsScreen.assertFirstStoryCellExists()
     }
 }

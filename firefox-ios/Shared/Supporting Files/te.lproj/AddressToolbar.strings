@@ -1,0 +1,9 @@
+/* Accessibility label for the address field in the address toolbar. */
+"AddressToolbar.Location.A11y.Label.v128" = "వెతకండి లేదా చిరునామాను ఇవ్వండి";
+
+/* Placeholder for the address field in the address toolbar. */
+"AddressToolbar.Location.Placeholder.v128" = "వెతకండి లేదా చిరునామాను ఇవ్వండి";
+
+/* Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings. */
+"AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "అంతరంగికత, భద్రత అమరికలు";
+

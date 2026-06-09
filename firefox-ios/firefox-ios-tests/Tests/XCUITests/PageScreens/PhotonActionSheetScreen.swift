@@ -14,6 +14,11 @@ final class PhotonActionSheetScreen {
         self.sel = selectors
     }
 
+    private func assertShareViewLoaded(timeout: TimeInterval = TIMEOUT) {
+        let shareViewNavBar = sel.PHOTON_ACTION_SHEET_SHARE_VIEW.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(shareViewNavBar, timeout: timeout)
+    }
+
     func assertPhotonActionSheetExists(timeout: TimeInterval = TIMEOUT) {
         if #unavailable(iOS 16) {
             BaseTestCase().waitForElementsToExist(
@@ -23,9 +28,11 @@ final class PhotonActionSheetScreen {
                 ]
             )
         } else {
+            let activityListView = sel.ACTIVITY_LIST_VIEW.element(in: app)
             BaseTestCase().waitForElementsToExist(
                 [
-                    sel.PHOTON_ACTION_SHEET_WEBSITE_TITLE.element(in: app),
+                    activityListView.otherElements[sel.PHOTON_ACTION_SHEET_WEBSITE_TITLE.value],
+                    activityListView.otherElements[sel.PHOTON_ACTION_SHEET_WEBSITE_URL.value],
                     sel.PHOTON_ACTION_SHEET_COPY_BUTTON.element(in: app)
                 ]
             )
@@ -41,6 +48,8 @@ final class PhotonActionSheetScreen {
                 .matching(identifier: "XCElementSnapshotPrivilegedValuePlaceholder").element(boundBy: 1)
         }
         fennecElement.waitAndTap()
+        // Wait for ShareView to load after tapping Fennec
+        assertShareViewLoaded()
     }
 
     func assertShareViewExists(timeout: TimeInterval = TIMEOUT) {

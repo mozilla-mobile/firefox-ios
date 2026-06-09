@@ -8,19 +8,21 @@ import UIKit
 import SwiftUI
 import OnboardingKit
 
-class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable, Themeable {
+class ModernLaunchScreenViewController: UIViewController,
+                                        LaunchFinishedLoadingDelegate,
+                                        Themeable {
     // MARK: - UX Constants
     private enum UX {
         static let fadeOutDuration: TimeInterval = 0.24
         static let fadeOutDelay: TimeInterval = 0
         static let fadeOutAlpha: CGFloat = 0.0
-        static let minimumDisplayTimeSeconds: TimeInterval = 0.1
         static let logoSize: CGFloat = 125.0
     }
 
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
     private let windowUUID: WindowUUID
+    private let variant: OnboardingKit.OnboardingVariant
 
     // MARK: - Themeable Properties
     var themeManager: ThemeManager
@@ -40,7 +42,11 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     }
     private lazy var backgroundViewController: UIHostingController<LaunchScreenBackgroundView> = {
         let controller = UIHostingController(
-            rootView: LaunchScreenBackgroundView(windowUUID: windowUUID, themeManager: themeManager)
+            rootView: LaunchScreenBackgroundView(
+                windowUUID: windowUUID,
+                themeManager: themeManager,
+                variant: variant
+            )
         )
         controller.view.backgroundColor = .clear
         return controller
@@ -49,12 +55,14 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     init(
         windowUUID: WindowUUID,
         coordinator: LaunchFinishedLoadingDelegate,
+        variant: OnboardingKit.OnboardingVariant = .modern,
         viewModel: LaunchScreenViewModel? = nil,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.windowUUID = windowUUID
         self.coordinator = coordinator
+        self.variant = variant
         self.viewModel = viewModel ?? LaunchScreenViewModel(windowUUID: windowUUID)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -64,6 +72,14 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
     }
 
     required init?(coder: NSCoder) {
@@ -90,9 +106,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         if isLoading {
             shouldLoadNextLaunchType = true
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + UX.minimumDisplayTimeSeconds) { [weak self] in
-                self?.viewModel.loadNextLaunchType()
-            }
+            viewModel.loadNextLaunchType()
         }
     }
 

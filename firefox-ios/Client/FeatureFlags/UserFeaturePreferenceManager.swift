@@ -1,0 +1,107 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Common
+import Shared
+
+/// Protocol for reading/writing user feature preferences.
+/// Bool preferences use the generic get/set keyed by FeatureFlagID.
+/// Typed (non-bool) preferences have named properties.
+protocol UserFeaturePreferring: Sendable {
+    // Generic bool preference
+    func getPreferenceFor(_ flag: FeatureFlagID) -> Bool
+    func setPreferenceFor(_ flag: FeatureFlagID, to value: Bool)
+
+    // Typed preferences
+    var searchBarPosition: SearchBarPosition { get }
+    var startAtHomeSetting: StartAtHome { get }
+
+    func setSearchBarPosition(_ position: SearchBarPosition)
+    func setStartAtHomeSetting(_ setting: StartAtHome)
+}
+
+final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Sendable {
+    private let prefs: Prefs
+    private let backendLayer: NimbusFeatureFlagLayerProviding
+    private let userInterfaceIdiom: UIUserInterfaceIdiom
+
+    init(
+        prefs: Prefs,
+        backendLayer: NimbusFeatureFlagLayerProviding = NimbusManager.shared.featureFlagLayer,
+        userInterfaceIdiom: UIUserInterfaceIdiom = UIDeviceDetails.userInterfaceIdiom
+    ) {
+        self.prefs = prefs
+        self.backendLayer = backendLayer
+        self.userInterfaceIdiom = userInterfaceIdiom
+    }
+
+    // MARK: - Generic bool preferences
+
+    func getPreferenceFor(_ flag: FeatureFlagID) -> Bool {
+        guard let key = flag.userPrefsKey else {
+            return checkDefaultValue(for: flag)
+        }
+        return prefs.boolForKey(key) ?? checkDefaultValue(for: flag)
+    }
+
+    // Some features might have a different default value than what's provided by
+    // the backend. Here, we can set our own default values.
+    private func checkDefaultValue(for flag: FeatureFlagID) -> Bool {
+        // Even when this feature is on in Nimbus, the user preference default value should be false
+        if flag == .aiKillSwitch {
+            return false
+        } else {
+            return backendLayer.checkNimbusConfigFor(flag)
+        }
+    }
+
+    func setPreferenceFor(_ flag: FeatureFlagID, to value: Bool) {
+        guard let key = flag.userPrefsKey else { return }
+        prefs.setBool(value, forKey: key)
+    }
+
+    // MARK: - Typed preferences
+
+    var searchBarPosition: SearchBarPosition {
+        // Bottom search bar is not supported on iPad; clamp to `.top` regardless
+        // of any value persisted in prefs so a stale write can't surface in the UI.
+        guard userInterfaceIdiom != .pad else { return .top }
+        if let raw = prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition),
+           let position = SearchBarPosition(rawValue: raw) {
+            return position
+        }
+        return .bottom
+    }
+
+    var startAtHomeSetting: StartAtHome {
+        if let raw = prefs.stringForKey(PrefsKeys.FeatureFlags.StartAtHome),
+           let setting = StartAtHome(rawValue: raw) {
+            return setting
+        }
+        return backendLayer.checkStartAtHomeConfiguration()
+    }
+
+    // MARK: - Typed setters
+
+    func setSearchBarPosition(_ position: SearchBarPosition) {
+        prefs.setString(position.rawValue, forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+    }
+
+    func setStartAtHomeSetting(_ setting: StartAtHome) {
+        prefs.setString(setting.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome)
+    }
+}
+
+// MARK: - DI Access Protocol
+
+/// Adopt this protocol to access user feature preferences via AppContainer.
+protocol UserFeaturePreferenceProvider {
+    var userPreferences: UserFeaturePreferring { get }
+}
+
+extension UserFeaturePreferenceProvider {
+    var userPreferences: UserFeaturePreferring {
+        AppContainer.shared.resolve()
+    }
+}

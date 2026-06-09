@@ -11,7 +11,8 @@ final class TrackingProtectionModelTests: XCTestCase {
         let cookiesClearable = MockCookiesClearable()
         let siteDataClearable = MockSiteDataClearable()
 
-        let trackingProtectionModel = TrackingProtectionModel(url: URL(string: "https://www.google.com")!,
+        let trackingProtectionModel = TrackingProtectionModel(userDefaults: nil,
+                                                              url: URL(string: "https://www.google.com")!,
                                                               displayTitle: "TitleTest",
                                                               connectionSecure: false,
                                                               globalETPIsEnabled: false,

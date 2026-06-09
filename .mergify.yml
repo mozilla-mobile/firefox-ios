@@ -79,3 +79,4 @@ priority_rules:
     conditions:
       - queue-name=rebase-queue
     priority: 2250
+    allow_checks_interruption: true

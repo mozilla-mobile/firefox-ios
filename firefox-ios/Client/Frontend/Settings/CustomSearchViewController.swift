@@ -28,7 +28,6 @@ class CustomSearchViewController: SettingsTableViewController {
     private let logger: Logger
     private var urlString: String?
     private var engineTitle = ""
-    var successCallback: (() -> Void)?
     private lazy var spinnerView: UIActivityIndicatorView = .build { [self] spinner in
         spinner.style = .medium
         spinner.color = themeManager.getCurrentTheme(for: windowUUID).colors.iconSpinner
@@ -76,11 +75,7 @@ class CustomSearchViewController: SettingsTableViewController {
                 let engine = try await createEngine(query: trimmedQuery, name: trimmedTitle)
                 spinnerView.stopAnimating()
                 searchEnginesManager.addSearchEngine(engine)
-
-                CATransaction.begin() // Use transaction to call callback after animation has been completed
-                CATransaction.setCompletionBlock(successCallback)
                 _ = navigationController?.popViewController(animated: true)
-                CATransaction.commit()
             } catch {
                 spinnerView.stopAnimating()
                 let alert: UIAlertController
@@ -214,8 +209,7 @@ class CustomSearchViewController: SettingsTableViewController {
             self.navigationItem.rightBarButtonItem?.tintColor = theme.colors.textAccent
         }
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
-
-        self.navigationItem.rightBarButtonItem?.isEnabled = false
+        updateSaveButton()
         return settings
     }
 

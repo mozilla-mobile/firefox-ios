@@ -1,3 +1,6 @@
+/* Button label on the auto-translate prompt that enables the auto-translate feature when tapped. */
+"Translations.AutoTranslatePrompt.EnableButton.v151" = "പ്രവർത്തനക്ഷമമാക്കുക";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
 "Translations.Banner.Close.Button.AccessibilityLabel.v145" = "മൊഴിമാറ്റപ്പലകം അടയ്ക്കുക";
 
@@ -21,6 +24,9 @@
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage. */
 "Translations.Banner.TranslateButton.v145" = "മൊഴിമാറ്റുക";
+
+/* Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English'). */
+"Translations.LanguagePicker.PageTranslatedTitle.v151" = "%@-ലേക്കു മൊഴിമാറ്റി";
 
 /* This is the text on the button used to translate a page from one language to another and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.Button.v145" = "മൊഴിമാറ്റുക";

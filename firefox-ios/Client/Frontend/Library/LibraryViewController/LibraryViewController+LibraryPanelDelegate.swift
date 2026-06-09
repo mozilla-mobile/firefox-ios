@@ -22,4 +22,8 @@ extension LibraryViewController: LibraryPanelDelegate {
     var libraryPanelWindowUUID: WindowUUID {
         return windowUUID
     }
+
+    func showToast(message: String) {
+        delegate?.showToast(message: message)
+    }
 }

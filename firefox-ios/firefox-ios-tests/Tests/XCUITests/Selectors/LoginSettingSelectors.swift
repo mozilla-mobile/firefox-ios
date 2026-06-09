@@ -125,7 +125,7 @@ struct LoginSettingsSelectors: LoginSettingsSelectorsSet {
     )
 
     let SAVE_BUTTON_CELL = Selector.buttonIdOrLabel(
-        IDs.saveButton,
+        IDs.saveButtonCell,
         description: "Save button in Add Login screen",
         groups: ["settings", "logins"]
     )

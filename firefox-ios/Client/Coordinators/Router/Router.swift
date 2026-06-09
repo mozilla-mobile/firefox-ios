@@ -64,9 +64,11 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     /// When a view controller is popped, either from the back button, the navigation controller delegate
     /// function determines which view controller was popped and executes the corresponding completion handler.
     ///
-    /// - Parameter animated: true means it will be animated
+    /// - Parameters:
+    ///   - reason: The reason/trigger for the dismissal (eg user, deeplink)
+    ///   - animated: Whether or not to animate the transition
     @MainActor
-    func popViewController(animated: Bool)
+    func popViewController(reason: DismissalReason, animated: Bool)
 
     /// Pops all view controllers off of the navigation stack until we reach `viewController`
     /// The navigation stack is not modified if the viewController parameter is the currently presented view controller or
@@ -112,11 +114,12 @@ extension Router {
     }
 
     @MainActor
-    func popViewController(animated: Bool = true) {
-        popViewController(animated: animated)
+    func popViewController(reason: DismissalReason = .user, animated: Bool = true) {
+        popViewController(reason: reason, animated: animated)
     }
 
     @MainActor
+    @discardableResult
     func popToViewController(_ viewController: UIViewController,
                              reason: DismissalReason = .user,
                              animated: Bool = true) -> [UIViewController]? {

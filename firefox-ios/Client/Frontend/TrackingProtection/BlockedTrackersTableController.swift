@@ -11,13 +11,16 @@ struct BlockedTrackerItem: Hashable {
     let identifier = UUID()
     let title: String
     let image: UIImage
+    let titleIdentifier: String
+    let imageIdentifier: String
 }
 
 // MARK: BlockedTrackersTableViewController
 class BlockedTrackersTableViewController: UIViewController,
                                           Themeable,
                                           UITableViewDelegate,
-                                          Notifiable {
+                                          Notifiable,
+                                          UITextViewDelegate {
     private struct UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
@@ -25,8 +28,10 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     private lazy var trackersTable: BlockedTrackersTableView = .build { tableView in
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers
         tableView.delegate = self
         tableView.isScrollEnabled = true
+        tableView.accessibilityIdentifier = A11y.trackersTable
     }
 
     // MARK: Navigation View
@@ -181,8 +186,41 @@ class BlockedTrackersTableViewController: UIViewController,
         return UITableView.automaticDimension
     }
 
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard section == 0, let footerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: BlockedTrackersFooterView.cellIdentifier
+        ) as? BlockedTrackersFooterView else { return nil }
+
+        footerView.configure(
+            with: model.getTrackersBlockedModeText(),
+            linkedText: .Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink,
+            url: SupportUtils.URLForTopic("tracking-protection-ios"),
+            theme: currentTheme(),
+            and: self
+        )
+        return footerView
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+
+    func textView(_ textView: UITextView,
+                  shouldInteractWith URL: URL,
+                  in characterRange: NSRange,
+                  interaction: UITextItemInteraction) -> Bool {
+        let viewController = BlockedTrackersLearnMoreViewController(
+            windowUUID: windowUUID,
+            notificationCenter: notificationCenter,
+            themeManager: themeManager,
+            url: URL
+        )
+        navigationController?.pushViewController(viewController, animated: true)
+        return false
     }
 
     @objc

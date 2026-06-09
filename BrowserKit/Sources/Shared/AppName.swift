@@ -37,5 +37,4 @@ public enum KVOConstants: String, Sendable {
     case canGoForward
     case contentSize
     case hasOnlySecureContent
-    case fullscreenState
 }

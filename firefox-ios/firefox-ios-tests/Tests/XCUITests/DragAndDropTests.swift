@@ -33,30 +33,15 @@ class DragAndDropTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest
     func testRearrangeTabsTabTray() {
+        let tabTrayScreen = TabTrayScreen(app: app)
         openTwoWebsites()
+        waitForTabsButton()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         if #available(iOS 17, *) {
-            dragAndDrop(
-                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-            )
-            mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"])
-            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2362645
-    // Smoketest TAE
-    func testRearrangeTabsTabTray_TAE() {
-        let tabTrayScreen = TabTrayScreen(app: app)
-        openTwoWebsites_TAE()
-        navigator.goto(TabTray)
-        checkTabsOrder_TAE(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-        if #available(iOS 17, *) {
             tabTrayScreen.dragTab(from: firstWebsite.tabName, to: secondWebsite.tabName)
             tabTrayScreen.waitForTab(named: firstWebsite.tabName)
-            checkTabsOrder_TAE(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
         }
     }
 
@@ -67,6 +52,7 @@ class DragAndDropTests: BaseTestCase {
 
         // Open three websites and home tab
         openTwoWebsites()
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
@@ -107,6 +93,7 @@ class DragAndDropTests: BaseTestCase {
         // Set the device in landscape mode
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         openTwoWebsites()
+        waitForTabsButton()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
 
@@ -146,6 +133,7 @@ class DragAndDropTests: BaseTestCase {
         navigator.nowAt(HomePanelsScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         openTwoWebsites()
+        waitForTabsButton()
         navigator.goto(TabTray)
         checkTabsOrder(
             dragAndDropTab: false,
@@ -173,25 +161,6 @@ class DragAndDropTests: BaseTestCase {
 private extension BaseTestCase {
     func openTwoWebsites() {
         // Open two tabs
-        if !userState.isPrivate && iPad() {
-            navigator.nowAt(NewTabScreen)
-        } else {
-            navigator.nowAt(BrowserTab)
-        }
-        if userState.isPrivate {
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-        }
-        navigator.openURL(firstWebsite.url)
-        waitUntilPageLoad()
-        waitForTabsButton()
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(BrowserTab)
-        navigator.openURL(secondWebsite.url)
-        waitUntilPageLoad()
-        waitForTabsButton()
-    }
-
-    func openTwoWebsites_TAE() {
         let tabTrayScreen = TabTrayScreen(app: app)
         let toolbarScreen = ToolbarScreen(app: app)
 
@@ -220,46 +189,6 @@ private extension BaseTestCase {
                         file: StaticString = #filePath,
                         line: UInt = #line) {
         // Determine which collection view to use based on the current screen
-        let collectionView: XCUIElement
-        if app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].exists {
-            collectionView = app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView]
-        } else if app.collectionViews[AccessibilityIdentifiers.TabTray.collectionView].exists {
-            collectionView = app.collectionViews[AccessibilityIdentifiers.TabTray.collectionView]
-        } else {
-            XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
-            return
-        }
-
-        waitForElementsToExist(
-            [
-                collectionView.cells.element(
-                    boundBy: 0
-                ),
-                collectionView.cells.element(
-                    boundBy: 1
-                )
-            ]
-        )
-
-        let firstTabCell = collectionView.cells.element(boundBy: 0).label
-        let secondTabCell = collectionView.cells.element(boundBy: 1).label
-
-        if dragAndDropTab {
-            sleep(2)
-            XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct", file: file, line: line)
-            XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct", file: file, line: line)
-        } else {
-            XCTAssertEqual(firstTabCell, firstTab, "first tab before is not correct", file: file, line: line)
-            XCTAssertEqual(secondTabCell, secondTab, "second tab before is not correct", file: file, line: line)
-        }
-    }
-
-    func checkTabsOrder_TAE(dragAndDropTab: Bool,
-                            firstTab: String,
-                            secondTab: String,
-                            file: StaticString = #filePath,
-                            line: UInt = #line) {
-        // Determine which collection view to use based on the current screen
         let tabTrayScreen = TabTrayScreen(app: app)
         tabTrayScreen.waitForTabCells()
 
@@ -267,12 +196,13 @@ private extension BaseTestCase {
             XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
             return
         }
-        let firstTabCell = collectionView.cells.element(boundBy: 0).label
-        let secondTabCell = collectionView.cells.element(boundBy: 1).label
 
         if dragAndDropTab {
-            sleep(2)
+            tabTrayScreen.waitForTabCells()
         }
+
+        let firstTabCell = collectionView.cells.element(boundBy: 0).label
+        let secondTabCell = collectionView.cells.element(boundBy: 1).label
 
         let context = dragAndDropTab ? "after" : "before"
         XCTAssertEqual(firstTabCell, firstTab, "first tab \(context) is not correct", file: file, line: line)
@@ -341,6 +271,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
         waitUntilPageLoad()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         // Drag first tab on the second one

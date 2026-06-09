@@ -1,6 +1,3 @@
-/* This is the title of the Pocket section on Firefox Homepage. */
-"FirefoxHome.Pocket.SectionTitle.v140" = "Zgodbe";
-
 /* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
 "FirefoxHome.PrivacyNotice.Body.v148" = "Dopolnili smo %1$@, da odraža najnovejše možnosti, vključene v %2$@. %3$@";
 
@@ -18,6 +15,12 @@
 
 /* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
 "FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Vse zgodbe";
+
+/* This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles */
+"FirefoxHome.Stories.NewsAffordanceLabel.v149" = "Novice";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.NewsSectionTitle.v149" = "Novice";
 
 /* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
 "FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Priljubljeno danes";
@@ -43,6 +46,18 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Iskanje ali naslov strani";
 
+/* The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2" = "Vnesite naslov URL spletnega mesta.";
+
+/* The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2" = "Dodaj bližnjico";
+
+/* The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153" = "Prekliči";
+
+/* The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153" = "Shrani";
+
 /* This is the navigation title for the Shortcuts Library view */
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "Bližnjice";
 
@@ -51,6 +66,9 @@
 
 /* This is the section title for the Shortcuts section on Firefox Homepage. */
 "FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Bližnjice";
+
+/* On the homepage, in the category selection bar, in the stories section, this will be the title of the button indicating that all story categories are currently selected. */
+"FirefoxHomepage.Stories.AllStoryCategories.v151" = "Vse";
 
 /* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
 "FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ od %2$@";

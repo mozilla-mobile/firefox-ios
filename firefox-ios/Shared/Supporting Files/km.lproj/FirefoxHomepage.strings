@@ -1,0 +1,63 @@
+/* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
+"FirefoxHome.PrivacyNotice.Body.v148" = "យើងបានធ្វើបច្ចុប្បន្នភាព %1$@ របស់យើង ដើម្បីឆ្លុះបញ្ចាំងពីមុខងារចុងក្រោយបំផុតនៅក្នុង %2$@។ %3$@";
+
+/* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
+"FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "ស្វែងយល់​បន្ថែម";
+
+/* Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice. */
+"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "ការជូនដំណឹង​អំពី​ឯកជនភាព";
+
+/* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
+"FirefoxHome.ScreenTitle.v144" = "គេហទំព័រ";
+
+/* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
+"FirefoxHome.Stories.AllStoriesButtonTitle.v145" = "រឿងទាំងអស់";
+
+/* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
+"FirefoxHome.Stories.AllStoriesViewTitle.v145" = "រឿងទាំងអស់";
+
+/* This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles */
+"FirefoxHome.Stories.NewsAffordanceLabel.v149" = "ព័ត៌មាន​";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.NewsSectionTitle.v149" = "ព័ត៌មាន​";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "ពេញនិយមនៅថ្ងៃនេះ";
+
+/* This is the title of the Stories section on Firefox Homepage. */
+"FirefoxHome.Stories.SectionTitle.v140" = "រឿងរ៉ាវ";
+
+/* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
+"FirefoxHomepage.FeltDeletion.Link.v122" = "ទិន្នន័យរុករកឯកជនត្រូវបានលុប";
+
+/* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. %@ is the app name (e.g. Firefox). */
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ លុបខូឃីស៍ ប្រវត្តិ និងទិន្នន័យគេហទំព័ររបស់អ្នក នៅពេលអ្នកបិទផ្ទាំងឯកជនរបស់អ្នកទាំងអស់។";
+
+/* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "តើអ្នកណាអាចមើលឃើញសកម្មភាពរបស់ខ្ញុំ?";
+
+/* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "កុំទុកដាននៅលើឧបករណ៍នេះ";
+
+/* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
+"FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "ផ្ទុក​ទំព័រ​​ឡើងវិញ";
+
+/* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
+"FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "ស្វែងរក ឬ​បញ្ចូល​អាសយដ្ឋាន";
+
+/* This is the navigation title for the Shortcuts Library view */
+"FirefoxHomepage.Shortcuts.Library.Title.v143" = "ផ្លូវកាត់";
+
+/* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
+"FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "បានខ្ទាស់៖ %@";
+
+/* This is the section title for the Shortcuts section on Firefox Homepage. */
+"FirefoxHomepage.Shortcuts.SectionTitle.v142" = "ផ្លូវកាត់";
+
+/* On the homepage, in the category selection bar, in the stories section, this will be the title of the button indicating that all story categories are currently selected. */
+"FirefoxHomepage.Stories.AllStoryCategories.v151" = "ទាំងអស់";
+
+/* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
+"FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ នៃ %2$@";
+

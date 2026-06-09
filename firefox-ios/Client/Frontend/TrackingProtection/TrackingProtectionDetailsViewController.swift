@@ -38,7 +38,10 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private let telemetryWrapper = TrackingProtectionTelemetry()
 
     // MARK: - UI
-    private let scrollView: UIScrollView = .build { scrollView in }
+    private let scrollView: UIScrollView = .build { scrollView in
+        scrollView.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.scrollView
+    }
+
     private let baseView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.containerView
@@ -51,7 +54,9 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private let connectionView: TrackingProtectionStatusView = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.connectionView
     }
-    private let verifiedByView: TrackingProtectionVerifiedByView = .build()
+    private let verifiedByView: TrackingProtectionVerifiedByView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.verifiedByView
+    }
 
     // MARK: See Certificates View
     private lazy var viewCertificatesButton: LinkButton = .build { button in
@@ -188,14 +193,21 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.mainView
         headerView.setupAccessibility(
             closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
-            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
-            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
+            closeButtonA11yId: A11y.closeButton,
+            titleA11yId: A11y.titleLabel,
             backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
-            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
+            backButtonA11yId: A11y.backButton
         )
+        connectionView.setupAccessibilityIdentifiers(
+            connectionImageA11yId: A11y.connectionImage,
+            connectionStatusLabelA11yId: A11y.connectionStatusLabel,
+            dividerViewA11yId: A11y.dividerView
+        )
+        verifiedByView.setupAccessibilityIdentifiers(verifiedByLabelA11yId: A11y.verifiedByLabel)
     }
 
     // MARK: View Transitions

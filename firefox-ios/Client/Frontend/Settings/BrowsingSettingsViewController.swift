@@ -40,7 +40,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
         var settings = [SettingSection]()
 
         var linksSettings: [Setting] = [OpenWithSetting(settings: self, settingsDelegate: parentCoordinator)]
-        var mediaSection = [Setting]()
+        var contentSection = [Setting]()
         if let profile {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             let offerToOpenCopiedLinksSettings = BoolSetting(
@@ -76,18 +76,31 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                                                   prefs: profile.prefs,
                                                   settingsDelegate: parentCoordinator)
 
-            mediaSection += [
-                autoplaySetting,
+            contentSection.append(autoplaySetting)
+            if featureFlagsProvider.isEnabled(.adBlocker) {
+                contentSection.append(BoolSetting(
+                    prefs: profile.prefs,
+                    theme: theme,
+                    prefKey: PrefsKeys.BlockAds,
+                    defaultValue: false,
+                    titleText: .Settings.Browsing.BlockAds
+                ))
+            }
+            contentSection += [
                 BlockPopupSetting(prefs: profile.prefs),
                 NoImageModeSetting(profile: profile),
                 blockOpeningExternalAppsSettings
             ]
         }
 
+        let contentSectionTitle = featureFlagsProvider.isEnabled(.adBlocker)
+            ? String.Settings.Browsing.Content
+            : String.Settings.Browsing.Media
+
         settings += [SettingSection(title: NSAttributedString(string: .Settings.Browsing.Links),
                                     children: linksSettings),
-                     SettingSection(title: NSAttributedString(string: .Settings.Browsing.Media),
-                                    children: mediaSection)]
+                     SettingSection(title: NSAttributedString(string: contentSectionTitle),
+                                    children: contentSection)]
 
         return settings
     }

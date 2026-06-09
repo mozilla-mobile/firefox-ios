@@ -84,31 +84,12 @@ class ClipBoardTests: BaseTestCase {
                 urlBarAddress.press(forDuration: 1)
             }
             app.otherElements.buttons["Paste"].waitAndTap()
-            mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
+            if #available(iOS 18, *) {
+                mozWaitForValueContains(urlBarAddress, value: "https://www.example.com/")
+            } else {
+                mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
+            }
         }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307051
-    func testCopyLink() {
-        // Tap on "Copy Link
-        navigator.openURL(url_3)
-        waitForTabsButton()
-        // Menu Refactor: No "Copy Link" from browser tab menu
-        /*
-        navigator.performAction(Action.CopyAddressPAM)
-        // The Link is copied to clipboard
-        mozWaitForElementToExist(app.staticTexts["URL Copied To Clipboard"])
-        // Open a new tab. Long tap on the URL and tap "Paste & Go"
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForElementToExist(urlBar)
-        urlBar.press(forDuration: 1.5)
-        app.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
-        // The URL is pasted and the page is correctly loaded
-        mozWaitForElementToExist(urlBar)
-        waitForValueContains(urlBar, value: "localhost")
-        mozWaitForElementToExist(app.staticTexts["Example Domain"])
-        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2325691

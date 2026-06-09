@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import LLMKit
+
 /// A default implementation of the SummarizerConfigSourceProtocol that provides hardcoded configurations.
 /// This will mostly be used as a fallback when no other configuration is available.
 public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {

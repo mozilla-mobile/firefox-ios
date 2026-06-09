@@ -22,6 +22,9 @@ protocol GeneralSettingsDelegate: AnyObject {
     func pressedSiri()
 
     @MainActor
+    func pressedAIControls()
+
+    @MainActor
     func pressedToolbar()
 
     @MainActor
@@ -29,6 +32,9 @@ protocol GeneralSettingsDelegate: AnyObject {
 
     @MainActor
     func pressedBrowsing()
+
+    @MainActor
+    func pressedQuickAnswers()
 
     @MainActor
     func pressedSummarize()

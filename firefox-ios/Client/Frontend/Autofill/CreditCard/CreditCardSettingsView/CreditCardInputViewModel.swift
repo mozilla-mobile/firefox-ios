@@ -313,7 +313,12 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     }
 
     func updateRightButtonState() {
-        isRightBarButtonEnabled = areFieldValuesValid()
+        switch state {
+        case .add, .edit:
+            isRightBarButtonEnabled = areFieldValuesValid()
+        case .view:
+            isRightBarButtonEnabled = true
+        }
     }
 
     func getDisplayedCCValues() -> UnencryptedCreditCardFields? {

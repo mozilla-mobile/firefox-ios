@@ -14,7 +14,12 @@ final class FirefoxHomePageScreen {
         self.sel = selectors
     }
 
-    private var customizeHomepage: XCUIElement { sel.CUSTOMIZE_HOMEPAGE.element(in: app) }
+    /// Dismisses the "new changes" popup on Home, if present.
+    func dismissNewChangesPopupIfNeeded() {
+        // Dismiss "new changes" popup if present
+        let closePopup = app.buttons["Close"]
+        if closePopup.exists { closePopup.tap() }
+    }
 
     func assertTopSitesItemCellExist(timeout: TimeInterval = TIMEOUT) {
         let topSites_ItemCell = sel.TOPSITES_ITEMCELL.element(in: app)
@@ -30,13 +35,5 @@ final class FirefoxHomePageScreen {
     func assertBookmarksItemCellExist(timeout: TimeInterval = TIMEOUT) {
         let bookmarks_ItemCell = sel.BOOKMARKS_ITEMCELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(bookmarks_ItemCell, timeout: timeout)
-    }
-
-    func tapOnCustomizeHomePageOption(timeout: TimeInterval = TIMEOUT) {
-        customizeHomepage.waitAndTap()
-    }
-
-    func assertCustomizeHomePageOptionExists(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(customizeHomepage)
     }
 }

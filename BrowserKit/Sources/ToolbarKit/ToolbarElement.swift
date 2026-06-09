@@ -17,6 +17,9 @@ public struct ToolbarElement: Equatable {
     /// Mask name of the badge's toolbar element
     let maskImageName: String?
 
+    /// The image for the bottom badge of the toolbar element
+    let bottomBadgeImage: UIImage?
+
     /// Indicated whether to use template mode or not for an image
     let templateModeForImage: Bool
 
@@ -56,6 +59,10 @@ public struct ToolbarElement: Equatable {
     /// Accessibility identifier of the toolbar element
     let a11yId: String
 
+    /// Stable cache key used to reuse the same button instance across visual state changes.
+    /// When set, the button cache uses this instead of `a11yId`.
+    let cacheId: String?
+
     /// Name for the custom accessibility action
     let a11yCustomActionName: String?
 
@@ -65,6 +72,12 @@ public struct ToolbarElement: Equatable {
     /// Indicates whether the toolbar element has a long press action or not
     /// this is only used to compare for equality as closures can't be compared
     let hasLongPressAction: Bool
+
+    /// Screenshot of the tab preceding the currently selected tab, used to render the stacked tab button.
+    let previousTabScreenshot: UIImage?
+
+    /// Screenshot of the tab following the currently selected tab, used to render the stacked tab button.
+    let nextTabScreenshot: UIImage?
 
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
@@ -77,6 +90,7 @@ public struct ToolbarElement: Equatable {
     public init(iconName: String? = nil,
                 title: String? = nil,
                 badgeImageName: String? = nil,
+                bottomBadgeImage: UIImage? = nil,
                 maskImageName: String? = nil,
                 templateModeForImage: Bool = true,
                 loadingConfig: LoadingConfig? = nil,
@@ -91,14 +105,18 @@ public struct ToolbarElement: Equatable {
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
+                cacheId: String? = nil,
                 a11yCustomActionName: String? = nil,
                 a11yCustomAction: (() -> Void)? = nil,
                 hasLongPressAction: Bool,
+                previousTabScreenshot: UIImage? = nil,
+                nextTabScreenshot: UIImage? = nil,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
         self.title = title
         self.badgeImageName = badgeImageName
+        self.bottomBadgeImage = bottomBadgeImage
         self.maskImageName = maskImageName
         self.templateModeForImage = templateModeForImage
         self.loadingConfig = loadingConfig
@@ -110,11 +128,14 @@ public struct ToolbarElement: Equatable {
         self.hasHighlightedColor = hasHighlightedColor
         self.largeContentTitle = largeContentTitle
         self.contextualHintType = contextualHintType
+        self.previousTabScreenshot = previousTabScreenshot
+        self.nextTabScreenshot = nextTabScreenshot
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
+        self.cacheId = cacheId
         self.a11yCustomActionName = a11yCustomActionName
         self.a11yCustomAction = a11yCustomAction
         self.hasLongPressAction = hasLongPressAction
@@ -124,6 +145,7 @@ public struct ToolbarElement: Equatable {
         lhs.iconName == rhs.iconName &&
         lhs.title == rhs.title &&
         lhs.badgeImageName == rhs.badgeImageName &&
+        lhs.bottomBadgeImage == rhs.bottomBadgeImage &&
         lhs.maskImageName == rhs.maskImageName &&
         lhs.templateModeForImage == rhs.templateModeForImage &&
         lhs.loadingConfig == rhs.loadingConfig &&
@@ -135,6 +157,8 @@ public struct ToolbarElement: Equatable {
         lhs.hasHighlightedColor == rhs.hasHighlightedColor &&
         lhs.largeContentTitle == rhs.largeContentTitle &&
         lhs.contextualHintType == rhs.contextualHintType &&
+        lhs.previousTabScreenshot == rhs.previousTabScreenshot &&
+        lhs.nextTabScreenshot == rhs.nextTabScreenshot &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&

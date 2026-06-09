@@ -24,6 +24,12 @@ protocol SettingsSelectorsSet {
     var CLEAR_PRIVATE_DATA_CELL: Selector { get }
     var ALERT_OK_BUTTON: Selector { get }
 
+    // Display / Theme
+    var DISPLAY_THEME_CELL: Selector { get }
+    var AUTOMATIC_THEME_BUTTON: Selector { get }
+    var DARK_THEME_BUTTON: Selector { get }
+    var LIGHT_THEME_BUTTON: Selector { get }
+
     // General
     var NEW_TAB_CELL: Selector { get }
     var TITLE: Selector { get }
@@ -35,9 +41,15 @@ protocol SettingsSelectorsSet {
     var BROWSING_LINKS_SECTION: Selector { get }
     var BLOCK_POPUPS_SWITCH: Selector { get }
     var TOOLBAR_CELL: Selector { get }
+    var BOTTOM_TOOLBAR_BUTTON: Selector { get }
     var DEFAULT_BROWSER_CELL: Selector { get }
+    var SEARCH_CELL: Selector { get }
     var BROWSING_CELL_TITLE: Selector { get }
     var BLOCK_IMAGES_SWITCH_TITLE: Selector { get }
+
+    // Send Data
+    var SEND_DATA_CELL: Selector { get }
+    var SEND_CRASH_REPORTS_CELL: Selector { get }
 
     // Translation
     var TRANSLATION_CELL_TITLE: Selector { get }
@@ -67,11 +79,15 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let connectSetting = AccessibilityIdentifiers.Settings.ConnectSetting.title
         static let settingTitle = "Settings"
         static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
+        static let bottomToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.bottomSetting
         static let defaultBrowserSettings = AccessibilityIdentifiers.Settings.DefaultBrowser.defaultBrowser
+        static let searchCellTitle = AccessibilityIdentifiers.Settings.Search.title
         static let browsingCellTitle = AccessibilityIdentifiers.Settings.Browsing.title
         static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
         static let noImageModeStatus = "NoImageModeStatus"
         static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
+        static let sendData = "settings.sendUsageData"
+        static let sendCrashReports = "settings.sendCrashReports"
     }
 
     // Core Element Selector
@@ -160,6 +176,31 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["alert"]
     )
 
+    // Display / Theme
+    let DISPLAY_THEME_CELL = Selector.tableCellById(
+        AccessibilityIdentifiers.Settings.Theme.title,
+        description: "Display Theme settings cell",
+        groups: ["settings", "theme"]
+    )
+
+    let AUTOMATIC_THEME_BUTTON = Selector.buttonId(
+        AccessibilityIdentifiers.Settings.Appearance.automaticThemeView,
+        description: "Automatic theme selection button",
+        groups: ["settings", "theme"]
+    )
+
+    let DARK_THEME_BUTTON = Selector.buttonId(
+        AccessibilityIdentifiers.Settings.Appearance.darkThemeView,
+        description: "Dark theme selection button",
+        groups: ["settings", "theme"]
+    )
+
+    let LIGHT_THEME_BUTTON = Selector.buttonId(
+        AccessibilityIdentifiers.Settings.Appearance.lightThemeView,
+        description: "Light theme selection button",
+        groups: ["settings", "theme"]
+    )
+
     let NEW_TAB_CELL = Selector.tableCellById(
         "NewTab",
         description: "Cell for New Tab option in Settings",
@@ -207,9 +248,21 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings"]
     )
 
+    let BOTTOM_TOOLBAR_BUTTON = Selector.buttonId(
+        IDs.bottomToolbarButton,
+        description: "Bottom toolbar setting button",
+        groups: ["settings"]
+    )
+
     let DEFAULT_BROWSER_CELL = Selector.tableCellById(
         IDs.defaultBrowserSettings,
         description: "Default browser cell in Settings",
+        groups: ["settings"]
+    )
+
+    let SEARCH_CELL = Selector.tableCellById(
+        IDs.searchCellTitle,
+        description: "Search settings cell",
         groups: ["settings"]
     )
 
@@ -237,9 +290,24 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "translation"]
     )
 
+    let SEND_DATA_CELL = Selector.switchById(
+        IDs.sendData,
+        description: "Send Technical Data settings cell",
+        groups: ["settings", "send data"]
+    )
+
+    let SEND_CRASH_REPORTS_CELL = Selector.switchById(
+        IDs.sendCrashReports,
+        description: "Send Crash Reports settings cell",
+        groups: ["settings", "send data"]
+    )
+
     func ALL_CELLS() -> [Selector] {
         let s = AccessibilityIdentifiers.Settings.self
         return [
+            Selector.tableCellById(s.DefaultBrowser.defaultBrowser,
+                                   description: "Default Browser setting",
+                                   groups: ["settings"]),
             Selector.tableCellById(s.ConnectSetting.title,
                                    description: "Connect setting",
                                    groups: ["settings"]),
@@ -323,7 +391,8 @@ struct SettingsSelectors: SettingsSelectorsSet {
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
          CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
-         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, DEFAULT_BROWSER_CELL,
-         BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH, TRANSLATION_CELL_TITLE]
+         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, DEFAULT_BROWSER_CELL,
+         SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,
+         TRANSLATION_CELL_TITLE, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL]
     }
 }

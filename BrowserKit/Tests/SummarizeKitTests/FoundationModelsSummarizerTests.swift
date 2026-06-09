@@ -5,6 +5,7 @@
 @testable import SummarizeKit
 import XCTest
 import Common
+import TestKit
 
 /// These compile-time checks ensure the app can still be built with pre–iOS 26 SDKs.
 /// The `@available` attribute only guards *runtime execution*; it doesn’t prevent XCTest
@@ -151,7 +152,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
             mockSession.respondWithError = error
         }
         return FoundationModelsSummarizer(
-            makeSession: { _ in mockSession },
+            makeSession: { _, _ in mockSession },
             config: SummarizerConfig(instructions: "instructions", options: [:])
         )
     }

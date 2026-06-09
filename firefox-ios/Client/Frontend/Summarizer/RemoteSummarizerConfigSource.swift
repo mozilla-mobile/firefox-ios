@@ -8,7 +8,17 @@ import SummarizeKit
 /// Since all of RS classes are in Client, we can't move it there yet.
 /// TODO(FXIOS-13186): Move all the needed RS typedefs to BrowserKit so we can move this file to SummarizeKit.
 struct RemoteSummarizerConfigSource: SummarizerConfigSourceProtocol {
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
+
+    init(summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
+    }
+
     func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {
-        return ASSummarizerRemoteConfig()?.fetchSummarizerConfig(summarizer, for: contentType)
+        return ASSummarizerRemoteConfig()?.fetchSummarizerConfig(
+            summarizer,
+            for: contentType,
+            useLocalized: summarizerNimbusUtils.isLanguageExpansionEnabled
+        )
     }
 }

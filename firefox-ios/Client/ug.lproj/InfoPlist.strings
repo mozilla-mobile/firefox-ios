@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "بۇ ئارقىلىق سۈرەتلەرنى ساقلىغىلى بولىدۇ.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "ئاۋازلىق ئىزدەش ئۈچۈن Firefox ئاۋاز پەرقلەندۈرۈش ئىقتىدارىنى ئىشلىتىپ ئاۋازىڭىزنى تېكىستكە ئايلاندۇرىدۇ.";
+
 /* (No Comment) */
 "Scan QR Code" = "QR كودىنى تارا";
 

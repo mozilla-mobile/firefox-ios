@@ -16,6 +16,9 @@
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "同步分頁";
 
+/* When user choose to have Blank Page as homepage, this will be displayed as tab title. */
+"TabTray.TabsSelectorBlankTabsTitle.v149" = "新分頁";
+
 /* The title on the button to look at regular tabs. */
 "TabTray.TabsSelectorNormalTabsTitle.v140" = "分頁";
 

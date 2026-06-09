@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -533,13 +552,13 @@ public protocol SearchEngineSelectorProtocol: AnyObject, Sendable {
  * on their region + locale.
  */
 open class SearchEngineSelector: SearchEngineSelectorProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -549,43 +568,44 @@ open class SearchEngineSelector: SearchEngineSelectorProtocol, @unchecked Sendab
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_search_fn_clone_searchengineselector(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_search_fn_clone_searchengineselector(self.handle, $0) }
     }
 public convenience init() {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_search_fn_constructor_searchengineselector_new($0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_search_fn_free_searchengineselector(pointer, $0) }
+        try! rustCall { uniffi_search_fn_free_searchengineselector(handle, $0) }
     }
 
     
@@ -597,7 +617,8 @@ public convenience init() {
      * after an app/environment update.
      */
 open func clearSearchConfig()  {try! rustCall() {
-    uniffi_search_fn_method_searchengineselector_clear_search_config(self.uniffiClonePointer(),$0
+    uniffi_search_fn_method_searchengineselector_clear_search_config(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -609,14 +630,16 @@ open func clearSearchConfig()  {try! rustCall() {
      */
 open func filterEngineConfiguration(userEnvironment: SearchUserEnvironment)throws  -> RefinedSearchConfig  {
     return try  FfiConverterTypeRefinedSearchConfig_lift(try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
-    uniffi_search_fn_method_searchengineselector_filter_engine_configuration(self.uniffiClonePointer(),
+    uniffi_search_fn_method_searchengineselector_filter_engine_configuration(
+            self.uniffiCloneHandle(),
         FfiConverterTypeSearchUserEnvironment_lower(userEnvironment),$0
     )
 })
 }
     
 open func setConfigOverrides(overrides: String)throws   {try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
-    uniffi_search_fn_method_searchengineselector_set_config_overrides(self.uniffiClonePointer(),
+    uniffi_search_fn_method_searchengineselector_set_config_overrides(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(overrides),$0
     )
 }
@@ -630,7 +653,8 @@ open func setConfigOverrides(overrides: String)throws   {try rustCallWithError(F
      * repeatedly.
      */
 open func setSearchConfig(configuration: String)throws   {try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
-    uniffi_search_fn_method_searchengineselector_set_search_config(self.uniffiClonePointer(),
+    uniffi_search_fn_method_searchengineselector_set_search_config(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(configuration),$0
     )
 }
@@ -648,7 +672,8 @@ open func setSearchConfig(configuration: String)throws   {try rustCallWithError(
      * application supports the click URL feature.
      */
 open func useRemoteSettingsServer(service: RemoteSettingsService, applyEngineOverrides: Bool)  {try! rustCall() {
-    uniffi_search_fn_method_searchengineselector_use_remote_settings_server(self.uniffiClonePointer(),
+    uniffi_search_fn_method_searchengineselector_use_remote_settings_server(
+            self.uniffiCloneHandle(),
         FfiConverterTypeRemoteSettingsService_lower(service),
         FfiConverterBool.lower(applyEngineOverrides),$0
     )
@@ -656,6 +681,7 @@ open func useRemoteSettingsServer(service: RemoteSettingsService, applyEngineOve
 }
     
 
+    
 }
 
 
@@ -663,33 +689,24 @@ open func useRemoteSettingsServer(service: RemoteSettingsService, applyEngineOve
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeSearchEngineSelector: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = SearchEngineSelector
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> SearchEngineSelector {
-        return SearchEngineSelector(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> SearchEngineSelector {
+        return SearchEngineSelector(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: SearchEngineSelector) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: SearchEngineSelector) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SearchEngineSelector {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: SearchEngineSelector, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -697,14 +714,14 @@ public struct FfiConverterTypeSearchEngineSelector: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSearchEngineSelector_lift(_ pointer: UnsafeMutableRawPointer) throws -> SearchEngineSelector {
-    return try FfiConverterTypeSearchEngineSelector.lift(pointer)
+public func FfiConverterTypeSearchEngineSelector_lift(_ handle: UInt64) throws -> SearchEngineSelector {
+    return try FfiConverterTypeSearchEngineSelector.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSearchEngineSelector_lower(_ value: SearchEngineSelector) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeSearchEngineSelector_lower(_ value: SearchEngineSelector) -> UInt64 {
     return FfiConverterTypeSearchEngineSelector.lower(value)
 }
 
@@ -716,7 +733,7 @@ public func FfiConverterTypeSearchEngineSelector_lower(_ value: SearchEngineSele
  * `types::SearchEngineUrl` as various fields may be optional in the supplied
  * configuration.
  */
-public struct JsonEngineUrl {
+public struct JsonEngineUrl: Equatable, Hashable {
     /**
      * The PrePath and FilePath of the URL. May include variables for engines
      * which have a variable FilePath, e.g. `{searchTerms}` for when a search
@@ -818,55 +835,15 @@ public struct JsonEngineUrl {
         self.excludePartnerCodeFromTelemetry = excludePartnerCodeFromTelemetry
         self.acceptedContentTypes = acceptedContentTypes
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension JsonEngineUrl: Sendable {}
 #endif
-
-
-extension JsonEngineUrl: Equatable, Hashable {
-    public static func ==(lhs: JsonEngineUrl, rhs: JsonEngineUrl) -> Bool {
-        if lhs.base != rhs.base {
-            return false
-        }
-        if lhs.method != rhs.method {
-            return false
-        }
-        if lhs.params != rhs.params {
-            return false
-        }
-        if lhs.searchTermParamName != rhs.searchTermParamName {
-            return false
-        }
-        if lhs.displayNameMap != rhs.displayNameMap {
-            return false
-        }
-        if lhs.isNewUntil != rhs.isNewUntil {
-            return false
-        }
-        if lhs.excludePartnerCodeFromTelemetry != rhs.excludePartnerCodeFromTelemetry {
-            return false
-        }
-        if lhs.acceptedContentTypes != rhs.acceptedContentTypes {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(base)
-        hasher.combine(method)
-        hasher.combine(params)
-        hasher.combine(searchTermParamName)
-        hasher.combine(displayNameMap)
-        hasher.combine(isNewUntil)
-        hasher.combine(excludePartnerCodeFromTelemetry)
-        hasher.combine(acceptedContentTypes)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -917,7 +894,7 @@ public func FfiConverterTypeJSONEngineUrl_lower(_ value: JsonEngineUrl) -> RustB
 /**
  * Reflects `types::SearchEngineUrls`, but using `EngineUrl`.
  */
-public struct JsonEngineUrls {
+public struct JsonEngineUrls: Equatable, Hashable {
     /**
      * The URL to use for searches.
      */
@@ -963,43 +940,15 @@ public struct JsonEngineUrls {
         self.searchForm = searchForm
         self.visualSearch = visualSearch
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension JsonEngineUrls: Sendable {}
 #endif
-
-
-extension JsonEngineUrls: Equatable, Hashable {
-    public static func ==(lhs: JsonEngineUrls, rhs: JsonEngineUrls) -> Bool {
-        if lhs.search != rhs.search {
-            return false
-        }
-        if lhs.suggestions != rhs.suggestions {
-            return false
-        }
-        if lhs.trending != rhs.trending {
-            return false
-        }
-        if lhs.searchForm != rhs.searchForm {
-            return false
-        }
-        if lhs.visualSearch != rhs.visualSearch {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(search)
-        hasher.combine(suggestions)
-        hasher.combine(trending)
-        hasher.combine(searchForm)
-        hasher.combine(visualSearch)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1045,7 +994,7 @@ public func FfiConverterTypeJSONEngineUrls_lower(_ value: JsonEngineUrls) -> Rus
  * Details of the search engines to display to the user, generated as a result
  * of processing the search configuration.
  */
-public struct RefinedSearchConfig {
+public struct RefinedSearchConfig: Equatable, Hashable {
     /**
      * A sorted list of engines. Clients may use the engine in the order that
      * this list is specified, or they may implement their own order if they
@@ -1109,35 +1058,15 @@ public struct RefinedSearchConfig {
         self.appDefaultEngineId = appDefaultEngineId
         self.appPrivateDefaultEngineId = appPrivateDefaultEngineId
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension RefinedSearchConfig: Sendable {}
 #endif
-
-
-extension RefinedSearchConfig: Equatable, Hashable {
-    public static func ==(lhs: RefinedSearchConfig, rhs: RefinedSearchConfig) -> Bool {
-        if lhs.engines != rhs.engines {
-            return false
-        }
-        if lhs.appDefaultEngineId != rhs.appDefaultEngineId {
-            return false
-        }
-        if lhs.appPrivateDefaultEngineId != rhs.appPrivateDefaultEngineId {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(engines)
-        hasher.combine(appDefaultEngineId)
-        hasher.combine(appPrivateDefaultEngineId)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1178,7 +1107,7 @@ public func FfiConverterTypeRefinedSearchConfig_lower(_ value: RefinedSearchConf
 /**
  * A definition for an individual search engine to be presented to the user.
  */
-public struct SearchEngineDefinition {
+public struct SearchEngineDefinition: Equatable, Hashable {
     /**
      * A list of aliases for this engine.
      */
@@ -1312,71 +1241,15 @@ public struct SearchEngineDefinition {
         self.orderHint = orderHint
         self.clickUrl = clickUrl
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SearchEngineDefinition: Sendable {}
 #endif
-
-
-extension SearchEngineDefinition: Equatable, Hashable {
-    public static func ==(lhs: SearchEngineDefinition, rhs: SearchEngineDefinition) -> Bool {
-        if lhs.aliases != rhs.aliases {
-            return false
-        }
-        if lhs.charset != rhs.charset {
-            return false
-        }
-        if lhs.classification != rhs.classification {
-            return false
-        }
-        if lhs.identifier != rhs.identifier {
-            return false
-        }
-        if lhs.isNewUntil != rhs.isNewUntil {
-            return false
-        }
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.optional != rhs.optional {
-            return false
-        }
-        if lhs.partnerCode != rhs.partnerCode {
-            return false
-        }
-        if lhs.telemetrySuffix != rhs.telemetrySuffix {
-            return false
-        }
-        if lhs.urls != rhs.urls {
-            return false
-        }
-        if lhs.orderHint != rhs.orderHint {
-            return false
-        }
-        if lhs.clickUrl != rhs.clickUrl {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(aliases)
-        hasher.combine(charset)
-        hasher.combine(classification)
-        hasher.combine(identifier)
-        hasher.combine(isNewUntil)
-        hasher.combine(name)
-        hasher.combine(optional)
-        hasher.combine(partnerCode)
-        hasher.combine(telemetrySuffix)
-        hasher.combine(urls)
-        hasher.combine(orderHint)
-        hasher.combine(clickUrl)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1435,7 +1308,7 @@ public func FfiConverterTypeSearchEngineDefinition_lower(_ value: SearchEngineDe
 /**
  * Defines an individual search engine URL.
  */
-public struct SearchEngineUrl {
+public struct SearchEngineUrl: Equatable, Hashable {
     /**
      * The PrePath and FilePath of the URL. May include variables for engines
      * which have a variable FilePath, e.g. `{searchTerms}` for when a search
@@ -1531,55 +1404,15 @@ public struct SearchEngineUrl {
         self.excludePartnerCodeFromTelemetry = excludePartnerCodeFromTelemetry
         self.acceptedContentTypes = acceptedContentTypes
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SearchEngineUrl: Sendable {}
 #endif
-
-
-extension SearchEngineUrl: Equatable, Hashable {
-    public static func ==(lhs: SearchEngineUrl, rhs: SearchEngineUrl) -> Bool {
-        if lhs.base != rhs.base {
-            return false
-        }
-        if lhs.method != rhs.method {
-            return false
-        }
-        if lhs.params != rhs.params {
-            return false
-        }
-        if lhs.searchTermParamName != rhs.searchTermParamName {
-            return false
-        }
-        if lhs.displayName != rhs.displayName {
-            return false
-        }
-        if lhs.isNewUntil != rhs.isNewUntil {
-            return false
-        }
-        if lhs.excludePartnerCodeFromTelemetry != rhs.excludePartnerCodeFromTelemetry {
-            return false
-        }
-        if lhs.acceptedContentTypes != rhs.acceptedContentTypes {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(base)
-        hasher.combine(method)
-        hasher.combine(params)
-        hasher.combine(searchTermParamName)
-        hasher.combine(displayName)
-        hasher.combine(isNewUntil)
-        hasher.combine(excludePartnerCodeFromTelemetry)
-        hasher.combine(acceptedContentTypes)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1630,7 +1463,7 @@ public func FfiConverterTypeSearchEngineUrl_lower(_ value: SearchEngineUrl) -> R
 /**
  * The URLs associated with the search engine.
  */
-public struct SearchEngineUrls {
+public struct SearchEngineUrls: Equatable, Hashable {
     /**
      * The URL to use for searches.
      */
@@ -1676,43 +1509,15 @@ public struct SearchEngineUrls {
         self.searchForm = searchForm
         self.visualSearch = visualSearch
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SearchEngineUrls: Sendable {}
 #endif
-
-
-extension SearchEngineUrls: Equatable, Hashable {
-    public static func ==(lhs: SearchEngineUrls, rhs: SearchEngineUrls) -> Bool {
-        if lhs.search != rhs.search {
-            return false
-        }
-        if lhs.suggestions != rhs.suggestions {
-            return false
-        }
-        if lhs.trending != rhs.trending {
-            return false
-        }
-        if lhs.searchForm != rhs.searchForm {
-            return false
-        }
-        if lhs.visualSearch != rhs.visualSearch {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(search)
-        hasher.combine(suggestions)
-        hasher.combine(trending)
-        hasher.combine(searchForm)
-        hasher.combine(visualSearch)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1758,7 +1563,7 @@ public func FfiConverterTypeSearchEngineUrls_lower(_ value: SearchEngineUrls) ->
  * Parameter definitions for search engine URLs. The name property is always
  * specified, along with one of value, experiment_config or search_access_point.
  */
-public struct SearchUrlParam {
+public struct SearchUrlParam: Equatable, Hashable {
     /**
      * The name of the parameter in the url.
      */
@@ -1804,39 +1609,15 @@ public struct SearchUrlParam {
         self.enterpriseValue = enterpriseValue
         self.experimentConfig = experimentConfig
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SearchUrlParam: Sendable {}
 #endif
-
-
-extension SearchUrlParam: Equatable, Hashable {
-    public static func ==(lhs: SearchUrlParam, rhs: SearchUrlParam) -> Bool {
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.value != rhs.value {
-            return false
-        }
-        if lhs.enterpriseValue != rhs.enterpriseValue {
-            return false
-        }
-        if lhs.experimentConfig != rhs.experimentConfig {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(value)
-        hasher.combine(enterpriseValue)
-        hasher.combine(experimentConfig)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1879,7 +1660,7 @@ public func FfiConverterTypeSearchUrlParam_lower(_ value: SearchUrlParam) -> Rus
 /**
  * The user's environment that is used for filtering the search configuration.
  */
-public struct SearchUserEnvironment {
+public struct SearchUserEnvironment: Equatable, Hashable {
     /**
      * The current locale of the application that the user is using.
      */
@@ -1955,55 +1736,15 @@ public struct SearchUserEnvironment {
         self.version = version
         self.deviceType = deviceType
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SearchUserEnvironment: Sendable {}
 #endif
-
-
-extension SearchUserEnvironment: Equatable, Hashable {
-    public static func ==(lhs: SearchUserEnvironment, rhs: SearchUserEnvironment) -> Bool {
-        if lhs.locale != rhs.locale {
-            return false
-        }
-        if lhs.region != rhs.region {
-            return false
-        }
-        if lhs.updateChannel != rhs.updateChannel {
-            return false
-        }
-        if lhs.distributionId != rhs.distributionId {
-            return false
-        }
-        if lhs.experiment != rhs.experiment {
-            return false
-        }
-        if lhs.appName != rhs.appName {
-            return false
-        }
-        if lhs.version != rhs.version {
-            return false
-        }
-        if lhs.deviceType != rhs.deviceType {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(locale)
-        hasher.combine(region)
-        hasher.combine(updateChannel)
-        hasher.combine(distributionId)
-        hasher.combine(experiment)
-        hasher.combine(appName)
-        hasher.combine(version)
-        hasher.combine(deviceType)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2056,12 +1797,16 @@ public func FfiConverterTypeSearchUserEnvironment_lower(_ value: SearchUserEnvir
  * The list of possible submission methods for search engine urls.
  */
 
-public enum JsonEngineMethod {
+public enum JsonEngineMethod: Equatable, Hashable {
     
     case post
     case get
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension JsonEngineMethod: Sendable {}
@@ -2116,22 +1861,28 @@ public func FfiConverterTypeJSONEngineMethod_lower(_ value: JsonEngineMethod) ->
 }
 
 
-extension JsonEngineMethod: Equatable, Hashable {}
 
-
-
-
-
-
-
-public enum SearchApiError: Swift.Error {
+public enum SearchApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
     case Other(reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension SearchApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2184,36 +1935,25 @@ public func FfiConverterTypeSearchApiError_lower(_ value: SearchApiError) -> Rus
     return FfiConverterTypeSearchApiError.lower(value)
 }
 
-
-extension SearchApiError: Equatable, Hashable {}
-
-
-
-
-extension SearchApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * The list of possible application names that are currently supported.
  */
 
-public enum SearchApplicationName {
+public enum SearchApplicationName: Equatable, Hashable {
     
     case firefoxAndroid
     case firefoxIos
     case focusAndroid
     case focusIos
     case firefox
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension SearchApplicationName: Sendable {}
@@ -2286,23 +2026,20 @@ public func FfiConverterTypeSearchApplicationName_lower(_ value: SearchApplicati
 }
 
 
-extension SearchApplicationName: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum SearchDeviceType {
+public enum SearchDeviceType: Equatable, Hashable {
     
     case smartphone
     case tablet
     case none
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension SearchDeviceType: Sendable {}
@@ -2363,25 +2100,22 @@ public func FfiConverterTypeSearchDeviceType_lower(_ value: SearchDeviceType) ->
 }
 
 
-extension SearchDeviceType: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
  * The list of acceptable classifications for a search engine.
  */
 
-public enum SearchEngineClassification {
+public enum SearchEngineClassification: Equatable, Hashable {
     
     case general
     case unknown
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension SearchEngineClassification: Sendable {}
@@ -2436,13 +2170,6 @@ public func FfiConverterTypeSearchEngineClassification_lower(_ value: SearchEngi
 }
 
 
-extension SearchEngineClassification: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -2450,7 +2177,7 @@ extension SearchEngineClassification: Equatable, Hashable {}
  * Use `default` for a self-build or an unknown channel.
  */
 
-public enum SearchUpdateChannel {
+public enum SearchUpdateChannel: Equatable, Hashable {
     
     case nightly
     case aurora
@@ -2458,8 +2185,12 @@ public enum SearchUpdateChannel {
     case release
     case esr
     case `default`
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension SearchUpdateChannel: Sendable {}
@@ -2536,13 +2267,6 @@ public func FfiConverterTypeSearchUpdateChannel_lift(_ buf: RustBuffer) throws -
 public func FfiConverterTypeSearchUpdateChannel_lower(_ value: SearchUpdateChannel) -> RustBuffer {
     return FfiConverterTypeSearchUpdateChannel.lower(value)
 }
-
-
-extension SearchUpdateChannel: Equatable, Hashable {}
-
-
-
-
 
 
 #if swift(>=5.8)
@@ -2847,28 +2571,28 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_search_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_clear_search_config() != 2155) {
+    if (uniffi_search_checksum_method_searchengineselector_clear_search_config() != 14084) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_filter_engine_configuration() != 58182) {
+    if (uniffi_search_checksum_method_searchengineselector_filter_engine_configuration() != 11688) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_set_config_overrides() != 22323) {
+    if (uniffi_search_checksum_method_searchengineselector_set_config_overrides() != 21942) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_set_search_config() != 35713) {
+    if (uniffi_search_checksum_method_searchengineselector_set_search_config() != 21675) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_use_remote_settings_server() != 47504) {
+    if (uniffi_search_checksum_method_searchengineselector_use_remote_settings_server() != 48578) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_constructor_searchengineselector_new() != 2296) {
+    if (uniffi_search_checksum_constructor_searchengineselector_new() != 29883) {
         return InitializationResult.apiChecksumMismatch
     }
 

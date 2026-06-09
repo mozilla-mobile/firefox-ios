@@ -27,9 +27,10 @@ final class ContextMenuConfigurationTests: XCTestCase {
                     tileId: 0,
                     receivedRank: 0
                 )
-            )
+            ),
+            nil
         )
-        guard case let .merino(state) = merinoItem else { return }
+        guard case let .merino(state, _) = merinoItem else { return }
         let subject = ContextMenuConfiguration(
             site: Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title),
             menuType: MenuType(homepageItem: merinoItem),

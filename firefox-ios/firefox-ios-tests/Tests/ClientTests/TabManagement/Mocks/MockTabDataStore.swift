@@ -9,6 +9,7 @@ import Common
 final class MockTabDataStore: TabDataStore, @unchecked Sendable {
     var fetchWindowDataCalledCount = 0
     var saveWindowDataCalledCount = 0
+    var saveWindowDataForcedValue = false
     var fetchTabWindowData: WindowData?
     var saveWindowData: WindowData?
     var clearAllWindowsDataCalled = 0
@@ -26,6 +27,7 @@ final class MockTabDataStore: TabDataStore, @unchecked Sendable {
 
     func saveWindowData(window: WindowData, forced: Bool) async {
         saveWindowDataCalledCount += 1
+        saveWindowDataForcedValue = forced
         saveWindowData = window
     }
 

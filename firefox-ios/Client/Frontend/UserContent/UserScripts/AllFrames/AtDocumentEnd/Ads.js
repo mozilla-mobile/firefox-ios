@@ -5,15 +5,13 @@
 /**
  * Send
  * - current URL
- * - cookies of this page
  * - all links found in this page
  * to the native application.
  */
 function sendCurrentState() {
     let message = {
         'url': document.location.href,
-        'urls': getLinks(),
-        'cookies': getCookies()
+        'urls': getLinks()
     };
     
     webkit.messageHandlers.adsMessageHandler.postMessage(message);
@@ -36,29 +34,6 @@ function getLinks() {
     }
 
     return urls;
-}
-
-/**
- * Get all cookies for the current document.
- *
- * @return {Array<{name: string, value: string}>} containing all cookies.
- */
-function getCookies() {
-    let cookiesList = document.cookie.split("; ");
-    let result = [];
-
-    cookiesList.forEach(cookie => {
-        var [name, ...value] = cookie.split('=');
-        // For that special cases where the value contains '='.
-        value = value.join("=")
-
-        result.push({
-            "name" : name,
-            "value" : value
-        });
-    });
-
-    return result;
 }
 
 // Whenever a page is first accessed or when loaded from cache

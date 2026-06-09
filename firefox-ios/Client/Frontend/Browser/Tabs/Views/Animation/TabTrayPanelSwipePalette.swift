@@ -99,6 +99,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerGradientURL: Gradient { base.layerGradientURL }
     var layerSurfaceLow: UIColor { base.layerSurfaceLow }
     var layerSurfaceMedium: UIColor { base.layerSurfaceMedium }
+    var layerSurfaceMediumAlpha: UIColor { base.layerSurfaceMediumAlpha }
     var layerSurfaceMediumAlt: UIColor { base.layerSurfaceMediumAlt }
     var layerGradientSummary: Gradient { base.layerGradientSummary }
 
@@ -139,6 +140,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var iconAccentYellow: UIColor { base.iconAccentYellow }
     var iconRatingNeutral: UIColor { base.iconRatingNeutral }
 
+    var borderSecondary: UIColor { base.borderSecondary }
     var borderAccentNonOpaque: UIColor { base.borderAccentNonOpaque }
     var borderInverted: UIColor { base.borderInverted }
     var borderToolbarDivider: UIColor { base.borderToolbarDivider }
@@ -151,6 +153,9 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientOnboardingStop2: UIColor { base.gradientOnboardingStop2 }
     var gradientOnboardingStop3: UIColor { base.gradientOnboardingStop3 }
     var gradientOnboardingStop4: UIColor { base.gradientOnboardingStop4 }
+    var gradientAIStrongStop1: UIColor { base.gradientAIStrongStop1 }
+    var gradientAIStrongStop2: UIColor { base.gradientAIStrongStop2 }
+    var gradientAIStrongStop3: UIColor { base.gradientAIStrongStop3 }
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base

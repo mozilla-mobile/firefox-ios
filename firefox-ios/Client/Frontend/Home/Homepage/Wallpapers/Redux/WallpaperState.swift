@@ -3,12 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Redux
 import Common
+import ModifiedCopy
 
+@Copyable
 struct WallpaperState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     let wallpaperConfiguration: WallpaperConfiguration
 
-    init(windowUUID: WindowUUID, wallpaperConfiguration: WallpaperConfiguration = WallpaperConfiguration()) {
+    init(windowUUID: WindowUUID) {
+        self.init(windowUUID: windowUUID, wallpaperConfiguration: WallpaperConfiguration())
+    }
+
+    private init(windowUUID: WindowUUID, wallpaperConfiguration: WallpaperConfiguration) {
         self.windowUUID = windowUUID
         self.wallpaperConfiguration = wallpaperConfiguration
     }
@@ -29,15 +35,15 @@ struct WallpaperState: ScreenState, Equatable {
 
     private static func handleWallpaperAction(action: Action, state: WallpaperState) -> WallpaperState {
         guard let wallpaperAction = action as? WallpaperAction else { return defaultState(from: state) }
-        return WallpaperState(
-            windowUUID: state.windowUUID,
+        return state.copy(
             wallpaperConfiguration: wallpaperAction.wallpaperConfiguration
         )
     }
 
    static func defaultState(from state: WallpaperState) -> WallpaperState {
         return WallpaperState(
-            windowUUID: state.windowUUID, wallpaperConfiguration: state.wallpaperConfiguration
+            windowUUID: state.windowUUID,
+            wallpaperConfiguration: state.wallpaperConfiguration
         )
    }
 }

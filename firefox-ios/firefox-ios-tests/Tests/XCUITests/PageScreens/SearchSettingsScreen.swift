@@ -73,4 +73,9 @@ final class SearchSettingsScreen {
     func assertRecentSearchesSwitchDoesNotExist() {
         BaseTestCase().mozWaitForElementToNotExist(recentSearchesToggle)
     }
+
+    func waitForSearchEngineSelectionComplete(timeout: TimeInterval = TIMEOUT) {
+        let defaultSearchEngineNavBar = sel.DEFAULT_SEARCH_ENGINE_NAVBAR.element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(defaultSearchEngineNavBar, timeout: timeout)
+    }
 }

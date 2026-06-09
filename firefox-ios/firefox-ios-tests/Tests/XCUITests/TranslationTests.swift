@@ -11,6 +11,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
     var browserScreen: BrowserScreen!
     var translationSettingScreen: TranslationSettingsScreen!
     var settingsScreen: SettingScreen!
+    var mainMenuScreen: MainMenuScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -19,8 +20,10 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         browserScreen = BrowserScreen(app: app)
         settingsScreen = SettingScreen(app: app)
         translationSettingScreen = TranslationSettingsScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3211480
     func testTranslationFlow_withDifferentStates_translationExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
@@ -49,8 +52,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
 
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
+        openSettingsFromToolbarMenu()
 
         // Check that translation feature setting is on
         settingsScreen.openTranslationSettings()
@@ -64,11 +66,11 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3379185
     func testTranslationSettingsDoesNotAppear_translationExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "translations-feature")
         app.launch()
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
+        openSettingsFromToolbarMenu()
 
         // Check that translation setting is hidden
         settingsScreen.assertTranslationSettingsDoesNotExist()
@@ -80,7 +82,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         toolBarScreen.assertTranslateButtonDoesNotExist(with: .inactive)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/edit/3210769
+    // https://mozilla.testrail.io/index.php?/cases/view/3210769
     func testTranslationSettingsFromToggleOnToOff_translationExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
@@ -90,8 +92,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         // Check that translation icon is shown in toolbar
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
 
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
+        openSettingsFromToolbarMenu()
 
         // Check that translation feature setting is on
         settingsScreen.openTranslationSettings()
@@ -106,8 +107,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         // Check that translation icon is no longer shown in toolbar
         toolBarScreen.assertTranslateButtonDoesNotExist(with: .inactive)
 
-        navigator.nowAt(BrowserTab)
-        navigator.goto(SettingsScreen)
+        openSettingsFromToolbarMenu()
 
         // Check that translation feature setting is off
         settingsScreen.openTranslationSettings()
@@ -126,6 +126,11 @@ final class TranslationsTests: FeatureFlaggedTestBase {
     private func dismissTranslationSettingsScreen() {
         translationSettingScreen.tapOnBackButton()
         settingsScreen.closeSettingsWithDoneButton()
+    }
+
+    private func openSettingsFromToolbarMenu() {
+        toolBarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
     }
 
     private func navigateToTranslationTestPage() {

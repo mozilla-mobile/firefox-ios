@@ -39,21 +39,32 @@ struct CreditCardInputView: ThemeableView {
     }
 
     var body: some View {
-        NavigationView {
-            main
-                .blur(radius: isBlurred ? UX.blurRadius : 0)
-                .onReceive(NotificationCenter.default.publisher(
-                    for: UIApplication.willResignActiveNotification)
-                ) { _ in
-                    isBlurred = true
-                }
-                .onReceive(NotificationCenter.default.publisher(
-                    for: UIApplication.didBecomeActiveNotification)
-                ) { _ in
-                    isBlurred = false
-                }
+        if #available(iOS 16.0, *) {
+            NavigationStack {
+                bodyContent
+            }
+            .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+        } else {
+            NavigationView {
+                bodyContent
+            }
+            .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
         }
-        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+    }
+
+    private var bodyContent: some View {
+        main
+            .blur(radius: isBlurred ? UX.blurRadius : 0)
+            .onReceive(NotificationCenter.default.publisher(
+                for: UIApplication.willResignActiveNotification)
+            ) { _ in
+                isBlurred = true
+            }
+            .onReceive(NotificationCenter.default.publisher(
+                for: UIApplication.didBecomeActiveNotification)
+            ) { _ in
+                isBlurred = false
+            }
     }
 
     private var main: some View {

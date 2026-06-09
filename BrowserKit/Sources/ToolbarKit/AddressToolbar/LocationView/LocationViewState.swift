@@ -8,7 +8,7 @@ public struct LocationViewConfiguration {
     public let searchEngineImageViewA11yId: String
     public let searchEngineImageViewA11yLabel: String
 
-    public let lockIconButtonA11yId: String
+    public let lockIconButtonA11yId: String?
     public let lockIconButtonA11yLabel: String
 
     public let urlTextFieldPlaceholder: String
@@ -31,7 +31,7 @@ public struct LocationViewConfiguration {
     public init(
         searchEngineImageViewA11yId: String,
         searchEngineImageViewA11yLabel: String,
-        lockIconButtonA11yId: String,
+        lockIconButtonA11yId: String?,
         lockIconButtonA11yLabel: String,
         urlTextFieldPlaceholder: String,
         urlTextFieldA11yId: String,

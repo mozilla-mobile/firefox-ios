@@ -11,7 +11,10 @@ protocol PhotonActionSheetContainerCellDelegate: AnyObject {
 }
 
 // A PhotonActionSheet cell
-class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplicable {
+class PhotonActionSheetContainerCell: UITableViewCell,
+                                      ReusableCell,
+                                      ThemeApplicable,
+                                      PhotonActionSheetViewDelegate {
     weak var delegate: PhotonActionSheetContainerCellDelegate?
     private lazy var containerStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill
@@ -39,7 +42,7 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Table view
+    // MARK: - Table view
 
     func configure(actions: PhotonRowActions, viewModel: PhotonActionSheetViewModel, theme: Theme) {
         addViews(for: actions, theme: theme)
@@ -79,10 +82,9 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
     }
 
     func applyTheme(theme: Theme) { }
-}
 
-// MARK: - PhotonActionSheetViewDelegate
-extension PhotonActionSheetContainerCell: PhotonActionSheetViewDelegate {
+    // MARK: - PhotonActionSheetViewDelegate
+
     func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void) {
         delegate?.didClick(item: item, animationCompletion: animationCompletion)
     }

@@ -257,6 +257,27 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.option, "edit_bookmark")
     }
 
+    func test_tapNavigateToDestination_readerViewAction_sendTelemetryData() throws {
+        let action = getNavigationDestinationAction(for: .readerView)
+        let subject = createSubject()
+
+        subject.mainMenuProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.option, "reader_view")
+    }
+
     func test_tapNavigateToDestination_zoomAction_sendTelemetryData() throws {
         let action = getNavigationDestinationAction(for: .zoom)
         let subject = createSubject()

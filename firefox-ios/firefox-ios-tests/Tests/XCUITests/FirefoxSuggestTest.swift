@@ -5,6 +5,13 @@
 import XCTest
 
 class FirefoxSuggestTest: BaseTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        if !isFennec {
+            throw XCTSkip("Skipping FirefoxSuggestTest on Firefox or FirefoxBeta schemas")
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2360075
     func testFirefoxSuggestExists() {
         navigator.goto(URLBarOpen)

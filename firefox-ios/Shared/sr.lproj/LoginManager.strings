@@ -1,0 +1,87 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Да ли сте сигурни?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Откажи";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Очисти претрагу";
+
+/* Copy password text selection menu item */
+"Copy" = "Умножи";
+
+/* Label describing when the current login was created. %@ is the timestamp. */
+"Created %@" = "Направљено %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Обриши";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Откажи";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Уклони";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Ова радња се не може опозвати.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Ово ће уклонити лозинку са свих ваших усклађених уређаја.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Уклонити лозинку?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Поништи избор свега";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Уђи у режим претраге";
+
+/* Hide password text selection menu item */
+"Hide" = "Сакриј";
+
+/* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
+"LoginList.DeleteToast.v135" = "Лозинка је уклоњена";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Пријаве ће бити трајно уклоњене.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Пријаве ће бити уклоњене са свих повезаних уређаја.";
+
+/* Label describing when the current login was last modified. %@ is the timestamp. */
+"Modified %@" = "Измењено %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Нису пронађене пријаве";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Нису пронађене лозинке";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Отвори и попуни";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Лозинка";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Откриј";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Претрага";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Поље за унос претраге";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Претрага";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Изабери све";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Корисничко име";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Веб-сајт";
+

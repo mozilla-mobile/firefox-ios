@@ -47,6 +47,10 @@ class TrackingProtectionVerifiedByView: UIView {
         verifiedByLabel.text = verifiedBy
     }
 
+    func setupAccessibilityIdentifiers(verifiedByLabelA11yId: String) {
+        verifiedByLabel.accessibilityIdentifier = verifiedByLabelA11yId
+    }
+
     // MARK: ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2

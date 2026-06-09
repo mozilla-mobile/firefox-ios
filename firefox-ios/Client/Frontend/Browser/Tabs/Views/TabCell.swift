@@ -57,9 +57,16 @@ final class TabCell: UICollectionViewCell,
         view.isHidden = true
     }
 
-    private lazy var screenshotView: UIImageView = .build { view in
+    private lazy var screenshotViewPhone: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+    }
+
+    private lazy var screenshotViewPad: TabCellCustomImage = .build()
+
+    private var screenshotView: UIImageView {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        return isPad ? screenshotViewPad : screenshotViewPhone
     }
 
     private lazy var titleText: UILabel = .build { label in
@@ -107,7 +114,13 @@ final class TabCell: UICollectionViewCell,
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
-    func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate, a11yId: String) {
+    func configure(
+        with tabModel: TabModel,
+        theme: Theme?,
+        delegate: TabCellDelegate,
+        a11yId: String,
+        newTabTitle: String?
+    ) {
         self.tabModel = tabModel
         self.delegate = delegate
 
@@ -117,16 +130,16 @@ final class TabCell: UICollectionViewCell,
 
         animator?.animateBackToCenter()
 
-        titleText.text = tabModel.tabTitle
-        accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
+        titleText.text = newTabTitle ?? tabModel.tabTitle
+        accessibilityLabel = getA11yTitleLabel(tabModel: tabModel, newTabTitle: newTabTitle)
+
+        if let firefoxFavicon = UIImage(named: ImageIdentifiers.firefoxFavicon) {
+            favicon.manuallySetImage(firefoxFavicon)
+        }
+
         isAccessibilityElement = true
         accessibilityHint = .TabsTray.TabTraySwipeToCloseAccessibilityHint
         accessibilityIdentifier = a11yId
-
-        let identifier = StandardImageIdentifiers.Large.globe
-        if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
-            favicon.manuallySetImage(globeFavicon)
-        }
 
         if !tabModel.isFxHomeTab, let tabURL = tabModel.url?.absoluteString {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
@@ -230,6 +243,8 @@ final class TabCell: UICollectionViewCell,
     override func prepareForReuse() {
         // Reset any close animations.
         super.prepareForReuse()
+        tabModel = nil
+        accessibilityLabel = nil
         screenshotView.image = nil
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
@@ -310,8 +325,8 @@ final class TabCell: UICollectionViewCell,
         return true
     }
 
-    private func getA11yTitleLabel(tabModel: TabModel) -> String? {
-        let baseName = tabModel.tabTitle
+    private func getA11yTitleLabel(tabModel: TabModel, newTabTitle: String?) -> String? {
+        let baseName = newTabTitle ?? tabModel.tabTitle
 
         if isSelectedTab, !baseName.isEmpty {
             return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel

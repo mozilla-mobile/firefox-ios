@@ -31,19 +31,22 @@ extension BrowserViewController {
         }
     }
 
+    // Used only on iOS 15
     private func useCustomFindInteraction(isVisible: Bool, tab: Tab? = nil) {
         if isVisible {
-            if findInPageBar == nil { setupFindInPage() }
+            if iOS15FindInPageBar == nil {
+                setupFindInPage()
+            }
 
-            self.findInPageBar?.becomeFirstResponder()
-        } else if let findInPageBar = self.findInPageBar {
+            self.iOS15FindInPageBar?.becomeFirstResponder()
+        } else if let findInPageBar = self.iOS15FindInPageBar {
             removeFindInPage(findInPageBar, tab: tab)
         }
     }
 
     private func setupFindInPage() {
         let findInPageBar = FindInPageBar()
-        self.findInPageBar = findInPageBar
+        self.iOS15FindInPageBar = findInPageBar
         findInPageBar.delegate = self
 
         bottomContentStackView.addArrangedViewToBottom(findInPageBar, animated: false, completion: {
@@ -55,8 +58,7 @@ extension BrowserViewController {
         ).isActive = true
 
         findInPageBar.applyTheme(theme: currentTheme())
-
-        updateViewConstraints()
+        updateConstraintsForFindInPageChanges()
 
         // We make the find-in-page bar the first responder below, causing the keyboard delegates
         // to fire. This, in turn, will animate the Find in Page container since we use the same
@@ -72,27 +74,35 @@ extension BrowserViewController {
         guard let webView = tab?.webView else { return }
         webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
         bottomContentStackView.removeArrangedView(findInPageBar)
-        self.findInPageBar = nil
-        updateViewConstraints()
+        self.iOS15FindInPageBar = nil
+        updateConstraintsForFindInPageChanges()
+    }
+
+    private func updateConstraintsForFindInPageChanges() {
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateConstraintsForKeyboard()
+        }
     }
 }
 
 extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate {
-    func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
+    func findInPage(didTextChange text: String) {
         find(text, function: "find")
     }
 
-    func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
-        findInPageBar?.endEditing(true)
+    func findInPage(didFindNextWithText text: String) {
+        iOS15FindInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
 
-    func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
-        findInPageBar?.endEditing(true)
+    func findInPage(didFindPreviousWithText text: String) {
+        iOS15FindInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
 
-    func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+    func findInPageDidPressClose() {
         updateFindInPageVisibility(isVisible: false)
     }
 
@@ -102,11 +112,11 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
         webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function)(\"\(escaped)\")")
     }
 
-    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int) {
-        findInPageBar?.currentResult = currentResult
+    func findInPageHelper(didUpdateCurrentResult currentResult: Int) {
+        iOS15FindInPageBar?.currentResult = currentResult
     }
 
-    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
-        findInPageBar?.totalResults = totalResults
+    func findInPageHelper(didUpdateTotalResults totalResults: Int) {
+        iOS15FindInPageBar?.totalResults = totalResults
     }
 }

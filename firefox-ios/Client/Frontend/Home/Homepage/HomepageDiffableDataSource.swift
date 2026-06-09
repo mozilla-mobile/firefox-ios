@@ -9,21 +9,27 @@ typealias HomepageSection = HomepageDiffableDataSource.HomeSection
 typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class HomepageDiffableDataSource:
-    UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>,
-    FeatureFlaggable {
+final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
+    typealias ShouldShowSectionHeader = Bool
+
+    private struct TopSitesSnapshotData {
+        let items: [HomeItem]
+        let numberOfTilesPerRow: NumberOfTilesPerRow
+        let shouldShowSectionHeader: ShouldShowSectionHeader
+    }
 
     enum HomeSection: Hashable {
         case privacyNotice
+        case header
         case messageCard
-        case topSites(TextColor?, NumberOfTilesPerRow)
+        case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
-        case customizeHomepage
+        case worldcup
         case spacer
 
         var canHandleLongPress: Bool {
@@ -37,33 +43,37 @@ final class HomepageDiffableDataSource:
     }
 
     enum HomeItem: Hashable, Sendable {
+        case header(HeaderState, TextColor?)
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
+        case addShortcutTile(TextColor?)
         case topSiteEmpty
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
-        case merino(MerinoStoryConfiguration)
-        case customizeHomepage
+        /// FXIOS-15423: Include the selected category in the item's identity so category transitions are treated as
+        /// a presentation-context change. Without the category context, diffable treats the same story in
+        /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
+        /// that story's on-screen position as stories are inserted above it.
+        case merino(MerinoStoryConfiguration, String?)
+        case worldcupCard
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
             return [
+                HomepageHeaderCell.self,
                 PrivacyNoticeCell.self,
                 HomepageMessageCardCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 SearchBarCell.self,
-                LegacyJumpBackInCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
-                LegacyBookmarksCell.self,
                 BookmarksCell.self,
-                MerinoStandardCell.self,
                 StoryCell.self,
-                CustomizeHomepageSectionCell.self,
+                WorldCupCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -80,21 +90,38 @@ final class HomepageDiffableDataSource:
                 return .bookmark
             case .merino:
                 return .story
-            case .customizeHomepage:
-                return .customizeHomepage
+            case .worldcupCard:
+                return .worldCupWidget
             default:
                 return nil
+            }
+        }
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .addShortcutTile:
+                return false
+            default:
+                return true
             }
         }
     }
 
     func updateSnapshot(
         state: HomepageState,
-        jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration
+        selectedNewsfeedCategoryID: String? = nil,
+        jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
+        animatingDifferences: Bool = true,
+        completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
+        let headerItem = HomeItem.header(state.headerState,
+                                         state.wallpaperState.wallpaperConfiguration.logoTextColor)
+
+        snapshot.appendSections([.header])
+        snapshot.appendItems([headerItem], toSection: .header)
 
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
@@ -106,9 +133,23 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems([.messageCard(configuration)], toSection: .messageCard)
         }
 
-        if let (topSites, numberOfCellsPerRow) = getTopSites(with: state.topSitesState, and: textColor) {
-            snapshot.appendSections([.topSites(textColor, numberOfCellsPerRow)])
-            snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
+        if let topSitesSnapshotData = getTopSites(with: state.topSitesState, and: textColor) {
+            let topSitesSection = HomeSection.topSites(
+                textColor,
+                topSitesSnapshotData.numberOfTilesPerRow,
+                topSitesSnapshotData.shouldShowSectionHeader
+            )
+            snapshot.appendSections([topSitesSection])
+            snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
+        }
+
+        if state.worldcupState.shouldShowSection {
+            snapshot.appendSections([.worldcup])
+            snapshot.appendItems(
+                [.worldcupCard],
+                toSection: .worldcup
+            )
+            snapshot.reconfigureItems([.worldcupCard])
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
@@ -121,35 +162,21 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
-        if state.shouldShowSpacer {
-            snapshot.appendSections([.spacer])
-            snapshot.appendItems([.spacer], toSection: .spacer)
-        }
+        snapshot.appendSections([.spacer])
+        snapshot.appendItems([.spacer], toSection: .spacer)
 
         if state.searchState.shouldShowSearchBar {
             snapshot.appendSections([.searchBar])
             snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
-        if let stories = getPocketStories(with: state.merinoState) {
-            snapshot.appendSections([.pocket(textColor)])
-            snapshot.appendItems(stories, toSection: .pocket(textColor))
+        if let stories = getMerinoStories(with: state.merinoState, selectedNewsfeedCategoryID: selectedNewsfeedCategoryID) {
+            let pocketSection = HomeSection.pocket(textColor)
+            snapshot.appendSections([pocketSection])
+            snapshot.appendItems(stories, toSection: pocketSection)
         }
 
-        if !isAnyStoriesRedesignEnabled {
-            snapshot.appendSections([.customizeHomepage])
-            snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
-        }
-
-        apply(snapshot, animatingDifferences: false)
-    }
-
-    private func getPocketStories(
-        with pocketState: MerinoState
-    ) -> [HomepageDiffableDataSource.HomeItem]? {
-        let stories: [HomeItem] = pocketState.merinoData.compactMap { .merino($0) }
-        guard pocketState.shouldShowSection, !stories.isEmpty else { return nil }
-        return stories
+        apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
     }
 
     /// Gets the proper amount of top sites based on layout configuration
@@ -160,15 +187,27 @@ final class HomepageDiffableDataSource:
     private func getTopSites(
         with topSitesState: TopSitesSectionState,
         and textColor: TextColor?
-    ) -> ([HomepageDiffableDataSource.HomeItem], Int)? {
+    ) -> TopSitesSnapshotData? {
         guard topSitesState.shouldShowSection else { return nil }
-        let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
-            topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        let maxVisibleItemCount = topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        guard maxVisibleItemCount > 0 else { return nil }
+
+        let topSitesItems: [HomeItem] = topSitesState.topSitesData.prefix(
+            maxVisibleItemCount
         ).compactMap {
             .topSite($0, textColor)
         }
-        guard !topSites.isEmpty else { return nil }
-        return (topSites, topSitesState.numberOfTilesPerRow)
+        let allItems = topSitesState.shouldShowAddShortcutTile
+            ? topSitesItems + [.addShortcutTile(textColor)]
+            : topSitesItems
+        let visibleItems = Array(allItems.prefix(maxVisibleItemCount))
+        guard !visibleItems.isEmpty else { return nil }
+
+        return TopSitesSnapshotData(
+            items: visibleItems,
+            numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
+            shouldShowSectionHeader: topSitesState.shouldShowSectionHeader
+        )
     }
 
     private func getJumpBackInTabs(
@@ -200,6 +239,17 @@ final class HomepageDiffableDataSource:
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         guard state.shouldShowSection, !state.bookmarks.isEmpty else { return nil }
         return state.bookmarks.compactMap { .bookmark($0) }
+    }
+
+    private func getMerinoStories(
+        with merinoState: MerinoState,
+        selectedNewsfeedCategoryID: String?
+    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        let stories: [HomeItem] = merinoState.visibleStories(selectedNewsfeedCategoryID: selectedNewsfeedCategoryID).map {
+            .merino($0, selectedNewsfeedCategoryID)
+        }
+        guard merinoState.shouldShowSection, !stories.isEmpty else { return nil }
+        return stories
     }
 }
 

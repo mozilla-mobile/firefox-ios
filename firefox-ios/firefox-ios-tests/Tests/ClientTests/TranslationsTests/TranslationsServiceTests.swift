@@ -2,8 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
+import TestKit
 import WebKit
+import XCTest
 @testable import Client
 
 @MainActor
@@ -30,7 +31,6 @@ final class TranslationsServiceTests: XCTestCase {
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
         )
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() async throws {
@@ -56,7 +56,7 @@ final class TranslationsServiceTests: XCTestCase {
 
         setupWebViewForTabManager()
 
-        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID)
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: [deviceLanguage])
         XCTAssertTrue(
             result,
             "Expected shouldOfferTranslation to be true when languages differ and models are available."
@@ -75,10 +75,77 @@ final class TranslationsServiceTests: XCTestCase {
 
         setupWebViewForTabManager()
 
-        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID)
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: [deviceLanguage])
         XCTAssertFalse(
             result,
             "Expected shouldOfferTranslation to be false when no models are available."
+        )
+    }
+
+    func test_shouldOfferTranslation_returnsFalse_whenPreferredLanguagesIsEmpty() async throws {
+        let subject = createSubject(
+            detectedLanguage: "de",
+            languageDetectorError: nil,
+            modelsAvailable: true
+        )
+
+        setupWebViewForTabManager()
+
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: [])
+        XCTAssertFalse(
+            result,
+            "Expected shouldOfferTranslation to be false when preferred languages list is empty."
+        )
+    }
+
+    func test_shouldOfferTranslation_returnsFalse_whenAllPreferredLanguagesMatchPageLanguage() async throws {
+        let subject = createSubject(
+            detectedLanguage: "de",
+            languageDetectorError: nil,
+            modelsAvailable: true
+        )
+
+        setupWebViewForTabManager()
+
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: ["de"])
+        XCTAssertFalse(
+            result,
+            "Expected shouldOfferTranslation to be false when the only preferred language matches the page language."
+        )
+    }
+
+    func test_shouldOfferTranslation_returnsTrue_whenPageLanguageMatchesFirstPreferredLanguageAndOthersExist() async throws {
+        let subject = createSubject(
+            detectedLanguage: "en",
+            languageDetectorError: nil,
+            modelsAvailable: false
+        )
+
+        setupWebViewForTabManager()
+
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: ["en", "fr"])
+        XCTAssertTrue(
+            result,
+            "Expected shouldOfferTranslation to be true when the page is in a preferred language and others exist."
+        )
+    }
+
+    func test_shouldOfferTranslation_returnsTrue_whenFallbackPreferredLanguageHasModel() async throws {
+        let subject = createSubject(
+            detectedLanguage: "de",
+            languageDetectorError: nil,
+            modelsAvailable: false
+        )
+        mockModelsFetcher.fetchModelsHandler = { _, targetLang in
+            return targetLang == "en" ? Data() : nil
+        }
+
+        setupWebViewForTabManager()
+
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: ["fr", "en"])
+        XCTAssertTrue(
+            result,
+            "Expected shouldOfferTranslation to be true when a fallback preferred language has an available model."
         )
     }
 
@@ -94,7 +161,7 @@ final class TranslationsServiceTests: XCTestCase {
         setupWebViewForTabManager()
 
         do {
-            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, to: "en", onLanguageIdentified: nil)
             XCTFail("Expected shouldOfferTranslation to throw when language detector fails, but no error was thrown.")
         } catch let error as TranslationsServiceError {
             guard case .unknown = error else {
@@ -115,7 +182,7 @@ final class TranslationsServiceTests: XCTestCase {
         )
 
         do {
-            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, to: "en", onLanguageIdentified: nil)
             XCTFail("Expected missingWebView error")
         } catch let error as TranslationsServiceError {
             XCTAssertEqual(error, .missingWebView)
@@ -136,7 +203,7 @@ final class TranslationsServiceTests: XCTestCase {
         setupWebViewForTabManager()
 
         do {
-            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, to: "en", onLanguageIdentified: nil)
             XCTFail("Expected translateCurrentPage to throw when language detector fails, but no error was thrown.")
         } catch let error as TranslationsServiceError {
             guard case .unknown = error else {

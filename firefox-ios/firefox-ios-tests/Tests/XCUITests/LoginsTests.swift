@@ -20,7 +20,7 @@ let loginsListUsernameLabel = "Username, test@example.com"
 let loginsListUsernameLabelEdited = "Username, foo"
 let loginsListPasswordLabel = "Password"
 let loginsListPasswordLabelEdited = "Password, bar"
-let defaultNumRowsLoginsList = 2
+let defaultNumRowsLoginsList = 1
 let defaultNumRowsEmptyFilterList = 0
 let searchPasswords = "Search passwords"
 let loginList = "Login List"
@@ -32,6 +32,7 @@ class LoginTest: BaseTestCase {
     var settingsScreen: SettingScreen!
     var webFormScreen: WebFormScreen!
     var saveLoginAlertScreen: SaveLoginAlertScreen!
+    var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
         // Fresh install the app
@@ -49,40 +50,19 @@ class LoginTest: BaseTestCase {
         settingsScreen = SettingScreen(app: app)
         webFormScreen = WebFormScreen(app: app)
         saveLoginAlertScreen = SaveLoginAlertScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
     }
 
     let passwordssQuery = AccessibilityIdentifiers.Settings.Logins.Passwords.self
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
-        app.buttons["submit"].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
-    }
-
-    private func saveLogin_TAE(givenUrl: String) {
-        navigator.openURL(givenUrl)
-        waitUntilPageLoad()
+        browserScreen.dismissMicrosurveyIfExists()
         loginSettingsScreen.tapOnSubmitButton()
         loginSettingsScreen.tapOnSaveButton()
     }
 
     private func openLoginsSettings() {
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            navigator.goto(BrowserTabMenu)
-            app.swipeUp()
-        }
-        navigator.goto(SettingsScreen)
-        let syncInToSync = AccessibilityIdentifiers.Settings.ConnectSetting.title.self
-        mozWaitForElementToExist(app.cells[syncInToSync])
-        app.cells[syncInToSync].swipeUp()
-        navigator.goto(LoginsSettings)
-
-        unlockLoginsView()
-        mozWaitForElementToExist(app.tables[loginList])
-    }
-
-    private func openLoginsSettings_TAE() {
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
             navigator.goto(BrowserTabMenu)
@@ -97,17 +77,6 @@ class LoginTest: BaseTestCase {
     }
 
     private func openLoginsSettingsFromBrowserTab() {
-        waitForExistence(app.buttons["TabToolbar.menuButton"])
-        navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
-        navigator.goto(LoginsSettings)
-
-        unlockLoginsView()
-        mozWaitForElementToExist(app.tables[loginList])
-        navigator.nowAt(LoginsSettings)
-    }
-
-    private func openLoginsSettingsFromBrowserTab_TAE() {
         toolBarScreen.assertTabToolbarMenuExists()
         navigator.goto(BrowserTabMenu)
         mainMenuScreen.assertMainMenuSettingsExist()
@@ -159,60 +128,27 @@ class LoginTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306951
     // Smoketest
     func testSaveLogin() {
-        closeURLBar()
+        toolBarScreen.assertTabsButtonExists()
+        navigator.nowAt(NewTabScreen)
         // Initially the login list should be empty
         openLoginsSettingsFromBrowserTab()
-        XCTAssertEqual(app.tables[loginList].cells.count, defaultNumRowsLoginsList)
-        // iOS 15 does not exit from the settings page intermittently
+        loginSettingsScreen.assertLoginCount(is: defaultNumRowsLoginsList)
+        // iOS 15 may show "Toolbar" instead of "Settings" intermittently.
         if #available(iOS 16, *) {
-            // Save a login and check that it appears on the list from BrowserTabMenu
+            // Check to see how it works with multiple entries in the list- in this case, two for now
             navigator.goto(HomePanelsScreen)
             navigator.nowAt(HomePanelsScreen)
-
             saveLogin(givenUrl: testLoginPage)
             openLoginsSettings()
-            mozWaitForElementToExist(app.tables[loginList])
-            mozWaitForElementToExist(app.staticTexts[domain])
-            // XCTAssertTrue(app.staticTexts[domainLogin].exists)
-            XCTAssertEqual(app.tables[loginList].cells.count, defaultNumRowsLoginsList + 1)
+            loginSettingsScreen.waitForLoginList()
+            loginSettingsScreen.assertDomainVisible(domain)
+            loginSettingsScreen.assertLoginCount(is: defaultNumRowsLoginsList + 1)
 
             // Check to see how it works with multiple entries in the list- in this case, two for now
             navigator.goto(HomePanelsScreen)
             navigator.nowAt(HomePanelsScreen)
             saveLogin(givenUrl: testSecondLoginPage)
             openLoginsSettings()
-            mozWaitForElementToExist(app.tables[loginList])
-            mozWaitForElementToExist(app.staticTexts[domain])
-            XCTAssertEqual(app.tables[loginList].cells.count, defaultNumRowsLoginsList + 2)
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306951
-    // Smoketest TAE
-    func testSaveLogin_TAE() {
-        toolBarScreen.assertTabsButtonExists()
-        navigator.nowAt(NewTabScreen)
-        // Initially the login list should be empty
-        openLoginsSettingsFromBrowserTab_TAE()
-        loginSettingsScreen.assertLoginCount(is: defaultNumRowsLoginsList)
-        // Save a login and check that it appears on the list from BrowserTabMenu
-        navigator.goto(HomePanelsScreen)
-        navigator.nowAt(HomePanelsScreen)
-
-        saveLogin_TAE(givenUrl: testLoginPage)
-        openLoginsSettings_TAE()
-        loginSettingsScreen.waitForLoginList()
-        loginSettingsScreen.assertDomainVisible(domain)
-        loginSettingsScreen.assertLoginCount(is: defaultNumRowsLoginsList + 1)
-
-        // iOS 15 may show "Toolbar" instead of "Settings" intermittently.
-        // I can't reproduce the issue manually. The issue occurs only during test automation.
-        if #available(iOS 16, *) {
-            // Check to see how it works with multiple entries in the list- in this case, two for now
-            navigator.goto(HomePanelsScreen)
-            navigator.nowAt(HomePanelsScreen)
-            saveLogin_TAE(givenUrl: testSecondLoginPage)
-            openLoginsSettings_TAE()
             loginSettingsScreen.waitForLoginList()
             loginSettingsScreen.assertDomainVisible(domain)
             loginSettingsScreen.assertLoginCount(is: defaultNumRowsLoginsList + 2)
@@ -323,38 +259,6 @@ class LoginTest: BaseTestCase {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         // Provided text fields are completely empty
-        mozWaitForElementToExist(app.webViews.staticTexts["Username:"])
-
-        // Fill in the username text box
-        app.webViews.textFields.element(boundBy: 0).tapAndTypeText(mailLogin)
-        // Fill in the password text box
-        app.webViews.secureTextFields.element(boundBy: 0).tapAndTypeText("test15mz")
-
-        // Submit form and choose to save the logins
-        app.buttons["submit"].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
-
-        // Clear Data and go to test page, fields should be filled in
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.AcceptClearPrivateData)
-
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL(urlLogin)
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.textFields.element(boundBy: 0))
-        // let emailValue = app.webViews.textFields.element(boundBy: 0).value!
-        // XCTAssertEqual(emailValue as! String, mailLogin)
-        // let passwordValue = app.webViews.secureTextFields.element(boundBy: 0).value!
-        // XCTAssertEqual(passwordValue as! String, "••••••••")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306952
-    // Smoketest TAE
-    func testSavedLoginAutofilled_TAE() {
-        navigator.openURL(urlLogin)
-        waitUntilPageLoad()
-        // Provided text fields are completely empty
          webFormScreen.waitForLoginForm()
 
         // Fill in the username and password text box
@@ -368,37 +272,23 @@ class LoginTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
 
+        if !iPad() {
+            waitForTabsButton()
+        }
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         webFormScreen.waitForUsernameField()
+        // let emailValue = app.webViews.textFields.element(boundBy: 0).value!
+        // XCTAssertEqual(emailValue as! String, mailLogin)
+        // let passwordValue = app.webViews.secureTextFields.element(boundBy: 0).value!
+        // XCTAssertEqual(passwordValue as! String, "••••••••")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306953
     // Smoketest
     func testCreateLoginManually() {
-        closeURLBar()
-        navigator.goto(LoginsSettings)
-        unlockLoginsView()
-        mozWaitForElementToExist(app.tables[loginList])
-        mozWaitForElementToExist(app.navigationBars["Passwords"])
-        mozWaitForElementToExist(app.staticTexts["No passwords found"])
-        mozWaitForElementToExist(app.buttons["Add"])
-        mozWaitForElementToExist(app.buttons["Edit"])
-        XCTAssertFalse(app.buttons["Edit"].isEnabled)
-        XCTAssertTrue(app.buttons["Add"].isEnabled)
-        createLoginManually()
-        if #unavailable(iOS 16) {
-            mozWaitForElementToExist(app.tables[loginList].staticTexts.firstMatch)
-        } else {
-            mozWaitForElementToExist(app.tables[loginList].staticTexts["https://testweb"])
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306953
-    // Smoketest TAE
-    func testCreateLoginManually_TAE() {
         toolBarScreen.assertTabsButtonExists()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LoginsSettings)
@@ -406,7 +296,11 @@ class LoginTest: BaseTestCase {
         loginSettingsScreen.waitForInitialState()
         loginSettingsScreen.assertInitialButtonStates()
         loginSettingsScreen.createLoginManually()
-        loginSettingsScreen.assertLoginCreated(for: "https://testweb")
+        if #unavailable(iOS 16) {
+            loginSettingsScreen.assertLoginCreatedFirstMatch()
+        } else {
+            loginSettingsScreen.assertLoginCreated(for: "https://testweb")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306954
@@ -436,7 +330,6 @@ class LoginTest: BaseTestCase {
         waitForElementsToExist(
             [
                 app.switches[passwordssQuery.saveLogins],
-                app.switches[passwordssQuery.showLoginsInAppMenu],
                 app.searchFields[passwordssQuery.searchPasswords],
                 app.staticTexts[passwordssQuery.emptyList],
                 app.buttons[passwordssQuery.addButton]
@@ -445,9 +338,6 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
                        "1",
                        "Save passwords toggle in not enabled by default")
-        XCTAssertEqual(app.switches[passwordssQuery.showLoginsInAppMenu].value as? String,
-                       "1",
-                       "Show in Application Menu toggle in not enabled by default")
         app.buttons[passwordssQuery.addButton].waitAndTap()
         waitForElementsToExist(
             [
@@ -479,12 +369,6 @@ class LoginTest: BaseTestCase {
             throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
         }
         validateChangedPasswordSavedState()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2798597
-    // Smoketest TAE
-    func testVerifyUpdatedPasswordIsSaved_TAE() {
-        validateChangedPasswordSavedState_TAE()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798598
@@ -555,7 +439,7 @@ class LoginTest: BaseTestCase {
     func testDismissedChangesAreNotSaved() {
         openLoginsSettingsFromBrowserTab()
         createLoginManually()
-        let savedCredentials = app.tables[loginList].cells.element(boundBy: 2)
+        let savedCredentials = app.tables[loginList].cells.element(boundBy: 1)
         let passwordCell = app.tables.cells["Password"]
         let editButton = app.buttons["Edit"]
         savedCredentials.waitAndTap()
@@ -602,59 +486,15 @@ class LoginTest: BaseTestCase {
     }
 
     private func validateChangedPasswordSavedState(isPasswordSaved: Bool = true) {
-        saveLogin(givenUrl: testLoginPage)
-        openLoginsSettings()
-        // There is a Saved Password toggle option (enabled)
-        XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
-                       "1",
-                       "Save passwords toggle in not enabled by default")
-        navigator.goto(NewTabScreen)
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL(testLoginPage)
-        waitUntilPageLoad()
-        app.secureTextFields.firstMatch.waitAndTap()
-        app.secureTextFields.firstMatch.press(forDuration: 1.5)
-        app.staticTexts["Select All"].waitAndTap()
-        app.secureTextFields.firstMatch.typeText("password")
-        app.buttons["submit"].waitAndTap()
-        waitForElementsToExist(
-            [
-                app.staticTexts["Update password?"],
-                app.buttons[AccessibilityIdentifiers.SaveLoginAlert.dontUpdateButton],
-                app.buttons[AccessibilityIdentifiers.SaveLoginAlert.updateButton]
-            ]
-        )
-        if isPasswordSaved {
-            app.buttons[AccessibilityIdentifiers.SaveLoginAlert.updateButton].waitAndTap()
-        } else {
-            app.buttons[AccessibilityIdentifiers.SaveLoginAlert.dontUpdateButton].waitAndTap()
-        }
-        openLoginsSettings()
-        app.tables[loginList].cells.element(boundBy: 2).waitAndTap()
-        app.tables.cells["Password"].waitAndTap()
-        app.staticTexts["Reveal"].waitAndTap()
-        if isPasswordSaved {
-            mozWaitForElementToExist(app.tables.cells.elementContainingText("password"))
-        } else {
-            mozWaitForElementToNotExist(app.tables.cells.elementContainingText("password"))
-        }
-    }
-
-    private func validateChangedPasswordSavedState_TAE(isPasswordSaved: Bool = true) {
         let password = "password"
         let selectAll = "Select All"
         let submit = "submit"
-        saveLogin_TAE(givenUrl: testLoginPage)
+        saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
         // There is a Saved Password toggle option (enabled)
         loginSettingsScreen.assertSavePasswordsToggleIsEnabled()
-        // iOS 15 may not clear the URL bar before entering the new URL.
-        // Open a fresh tab is a safer way to open the page for sure.
-        if #unavailable(iOS 16) {
-            navigator.goto(TabTray)
-        }
         navigator.goto(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
@@ -671,7 +511,7 @@ class LoginTest: BaseTestCase {
         saveLoginAlertScreen.respondToAlert(savePassword: isPasswordSaved)
 
         openLoginsSettings()
-        loginSettingsScreen.openLoginAtIndex(2)
+        loginSettingsScreen.openLoginAtIndex(defaultNumRowsLoginsList)
         loginSettingsScreen.revealPassword()
         if isPasswordSaved {
             loginSettingsScreen.assertPasswordVisible("password")
@@ -681,7 +521,7 @@ class LoginTest: BaseTestCase {
     }
 
     private func validateLoginTextFieldsCanBeCopied(indexField: Int, copiedText: String, field: String) {
-        app.tables[loginList].cells.element(boundBy: 2).waitAndTap()
+        app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).waitAndTap()
         // Long tap on the Website field and then tap on Copy
         app.tables.cells.element(boundBy: indexField).press(forDuration: 1.5)
         app.staticTexts["Copy"].waitAndTap()
@@ -719,7 +559,8 @@ class LoginTest: BaseTestCase {
         // Tap on the cancel button
         if #available(iOS 26, *) {
             if iPad() {
-                app.buttons["Clear text"].waitAndTap()
+                // Tapping on app on iPad to dismiss the keyboard
+                app.waitAndTap()
             } else {
                 app.buttons["close"].waitAndTap()
             }
@@ -736,12 +577,12 @@ class LoginTest: BaseTestCase {
         // Only matching results are displayed
         waitForElementsToExist(
             [
-                app.tables[loginList].cells.element(boundBy: 2).staticTexts[domain],
-                app.tables[loginList].cells.element(boundBy: 2).staticTexts[domainLogin]
+                app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).staticTexts[domain],
+                app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).staticTexts[domainLogin]
             ]
         )
         // Tap on one of the matching results
-        app.tables[loginList].cells.element(boundBy: 2).tap()
+        app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).tap()
         // The login details are displayed
         waitForElementsToExist(
             [
@@ -774,6 +615,13 @@ class LoginTest: BaseTestCase {
 
         app.buttons[passwordssQuery.AddLogin.saveButton].waitAndTap()
         mozWaitForElementToExist(app.tables[loginList].otherElements["SAVED PASSWORDS"])
+        loginSettingsScreen.tapSaveButtonIfExists()
+
+        // Modal only appears during first run
+        if app.sheets.firstMatch.exists {
+            app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
+            mozWaitForElementToNotExist(app.sheets.firstMatch)
+        }
     }
 
     func enterTextInField(typedText: String) {

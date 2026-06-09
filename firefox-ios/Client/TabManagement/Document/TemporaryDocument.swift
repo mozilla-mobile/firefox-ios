@@ -44,6 +44,26 @@ final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unche
 
     func urlSession(
         _ session: URLSession,
+        task: URLSessionTask,
+        willPerformHTTPRedirection response: HTTPURLResponse,
+        newRequest request: URLRequest,
+        completionHandler: @escaping @Sendable (URLRequest?) -> Void
+    ) {
+        guard let delegate else {
+            completionHandler(request)
+            return
+        }
+        delegate.urlSession?(
+            session,
+            task: task,
+            willPerformHTTPRedirection: response,
+            newRequest: request,
+            completionHandler: completionHandler
+        )
+    }
+
+    func urlSession(
+        _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
         didWriteData bytesWritten: Int64,
         totalBytesWritten: Int64,
@@ -61,11 +81,12 @@ final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unche
 
 // TODO: FXIOS-13619 Make DefaultTemporaryDocument actually sendable
 final class DefaultTemporaryDocument: NSObject,
-                                TemporaryDocument,
-                                FeatureFlaggable,
-                                URLSessionDownloadDelegate, @unchecked Sendable {
+                                      TemporaryDocument,
+                                      URLSessionDownloadDelegate,
+                                      @unchecked Sendable {
     private let session: URLSession
     private let request: URLRequest
+    private let cookies: [HTTPCookie]
     private var currentDownloadTask: URLSessionDownloadTask?
 
     private var onDownload: ((URL?) -> Void)?
@@ -94,6 +115,7 @@ final class DefaultTemporaryDocument: NSObject,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
+        self.cookies = cookies
         self.filename = filename ?? "unknown"
         self.mimeType = mimeType
         self.session = session
@@ -110,6 +132,7 @@ final class DefaultTemporaryDocument: NSObject,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = request
+        self.cookies = []
         self.filename = preflightResponse.suggestedFilename ?? "unknown"
         self.mimeType = mimeType
         self.session = session
@@ -121,7 +144,7 @@ final class DefaultTemporaryDocument: NSObject,
     /// Returns a modified request with Cookies header field
     private static func applyCookiesToRequest(_ request: URLRequest, cookies: [HTTPCookie]) -> URLRequest {
         var rawHeaderCookies = cookies.reduce("") { partialResult, cookie in
-            if let domain = request.url?.baseDomain, cookie.domain.contains(domain) {
+            if let url = request.url, cookieDomainMatches(cookie, url: url) {
                 return partialResult.appending("\(cookie.name)=\(cookie.value); ")
             }
             return partialResult
@@ -136,6 +159,22 @@ final class DefaultTemporaryDocument: NSObject,
         request.allHTTPHeaderFields = headers
 
         return request
+    }
+
+    /// Cookies match when request host is identical to domain (host-only cookie) or is a subdomain (domain-scoped cookie).
+    static func cookieDomainMatches(_ cookie: HTTPCookie, url: URL) -> Bool {
+        guard let host = url.host?.lowercased() else { return false }
+        let cookieDomain = cookie.domain.lowercased()
+        if cookieDomain.hasPrefix(".") {
+            // Domain-scoped cookie (explicit Domain attribute) then subdomain matching allowed
+            let domain = String(cookieDomain.dropFirst())
+            guard !domain.isEmpty else { return false }
+            return host == domain || host.hasSuffix("." + domain)
+        }
+        // If Host-only cookie (no Domain attribute, no leading dot)
+        // then according to RFC 6265 Section 5.4: identical match only
+        // See: https://www.rfc-editor.org/info/rfc6265/#section-5.4
+        return host == cookieDomain
     }
 
     func canDownload(request: URLRequest) -> Bool {
@@ -221,6 +260,24 @@ final class DefaultTemporaryDocument: NSObject,
     deinit {
         guard !shouldRetainTempFile(), let localFileURL else { return }
         try? FileManager.default.removeItem(at: localFileURL)
+    }
+
+    // MARK: - URLSessionTaskDelegate
+
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        willPerformHTTPRedirection response: HTTPURLResponse,
+        newRequest request: URLRequest,
+        completionHandler: @escaping @Sendable (URLRequest?) -> Void
+    ) {
+        guard !cookies.isEmpty else {
+            completionHandler(request)
+            return
+        }
+        // Re-evaluates cookies against the redirect destination so the `Cookie` header
+        // originally constructed is not forwarded incorrectly for a cross-origin redirect
+        completionHandler(Self.applyCookiesToRequest(request, cookies: cookies))
     }
 
     // MARK: - URLSessionDownloadDelegate

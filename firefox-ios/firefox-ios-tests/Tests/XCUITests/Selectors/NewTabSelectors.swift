@@ -8,7 +8,12 @@ import Common
 protocol NewTabSelectorSet {
     var ICON_PLUS: Selector { get }
     var ICON_CROSS: Selector { get }
+    var ICON_PLUS_IN_CELLS: Selector { get }
+    var ICON_CROSS_IN_CELLS: Selector { get }
+    var ICON_PLUS_IN_TABLE_CELLS: Selector { get }
+    var ICON_CROSS_IN_TABLE_CELLS: Selector { get }
     var NEW_PRIVATE_TAB_BUTTON: Selector { get }
+    var NEW_PRIVATE_TAB_IN_TABLE_CELLS: Selector { get }
     var OPEN_NEW_TAB_BUTTON: Selector { get }
     var OPEN_NEW_PRIVATE_TAB_BUTTON: Selector { get }
     var SWITCH_BUTTON: Selector { get }
@@ -37,9 +42,39 @@ struct NewTabSelectors: NewTabSelectorSet {
         groups: ["NewTabSelector"]
     )
 
+    let ICON_PLUS_IN_CELLS = Selector.cellButtonById(
+          IDs.iconPlus,
+          description: "Icon Plus in cells context",
+          groups: ["NewTabSelector"]
+    )
+
+    let ICON_CROSS_IN_CELLS = Selector.cellButtonById(
+        IDs.iconCross,
+        description: "Icon Cross in cells context",
+        groups: ["NewTabSelector"]
+    )
+
+    let ICON_PLUS_IN_TABLE_CELLS = Selector.tableCellButtonById(
+        IDs.iconPlus,
+        description: "Icon Plus in table cells context",
+        groups: ["NewTabSelector"]
+    )
+
+    let ICON_CROSS_IN_TABLE_CELLS = Selector.tableCellButtonById(
+        IDs.iconCross,
+        description: "Icon Cross in table cells context",
+        groups: ["NewTabSelector"]
+    )
+
     let NEW_PRIVATE_TAB_BUTTON = Selector.buttonId(
         IDs.newPrivateTab,
         description: "New Private Tab",
+        groups: ["NewTabSelector"]
+    )
+
+    let NEW_PRIVATE_TAB_IN_TABLE_CELLS = Selector.tableCellButtonById(
+        IDs.newPrivateTab,
+        description: "New Private Tab in table cells context",
         groups: ["NewTabSelector"]
     )
 

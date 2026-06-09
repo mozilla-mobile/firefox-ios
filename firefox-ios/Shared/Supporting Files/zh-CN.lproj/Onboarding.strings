@@ -164,7 +164,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "隐私声明";
 
 /* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "继续即表示您同意 %@";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "继续即表示您同意%@";
 
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ 使用条款";
@@ -186,6 +186,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "通过内置隐私保护的浏览器打开链接";
+
+/* Title for the welcome card in the v149 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "每次点开链接，都享内置隐私保护";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "自动";
@@ -311,10 +314,10 @@
 "Onboarding.Modern.TermsOfService.Subtitle.v140" = "网站加载快如闪电\n自动进行跟踪保护\n跨设备同步数据";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
-"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "继续即表示您同意 %@";
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "继续即表示您同意%@";
 
 /* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
-"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "继续即表示您同意 %@";
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "继续即表示您同意%@";
 
 /* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "%@ 使用条款。";
@@ -416,7 +419,7 @@
 "Onboarding.TermsOfService.Subtitle.v136" = "浏览快如风，安全不漏风";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
-"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "继续即表示您同意 %@";
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "继续即表示您同意%@";
 
 /* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "欢迎使用 %@";

@@ -59,6 +59,9 @@ class ScreenshotHelper {
         // The screenshot is then set for the tab, and a TabEvent is posted to indicate
         // that a screenshot has been set for the homepage.
         if tab.isFxHomeTab {
+            // Skip the screenshot if this tab is no longer selected to avoid capturing another tab's content.
+            guard controller?.tabManager.selectedTab?.tabUUID == tab.tabUUID else { return }
+
             // For complex views like homepage the Screenshot tool could be the controller directly
             // so check the contentController first otherwise fallback to the contentView.
             let screenshotTool = controller?.contentContainer.contentController as? Screenshotable
@@ -109,9 +112,9 @@ class ScreenshotHelper {
             }
             webView.setPullRefreshVisibility(isVisible: false)
 
-            webView.takeSnapshot(with: configuration) { image, error in
+            webView.takeSnapshot(with: configuration) { [weak tab] image, error in
                 webView.setPullRefreshVisibility(isVisible: true)
-                if let image {
+                if let image, let tab {
                     tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)
                     store.dispatch(

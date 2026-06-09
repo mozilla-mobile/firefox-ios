@@ -77,19 +77,6 @@ final class ShortcutRouteTests: XCTestCase {
         XCTAssertNil(route)
     }
 
-    func testQRCodeShortcut() {
-        let subject = createSubject()
-        let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode",
-                                                     localizedTitle: "QR Code")
-        let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
-        switch route {
-        case .action(let action):
-            XCTAssertEqual(action, .showQRCode)
-        default:
-            XCTFail("Expected .action(.showQRCode)")
-        }
-    }
-
     func testInvalidShortcut() {
         let subject = createSubject()
         let shortcutItem = UIApplicationShortcutItem(type: "invalid shortcut",

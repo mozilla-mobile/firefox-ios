@@ -62,6 +62,10 @@ class MockRouter: NSObject, Router {
     }
 
     func popViewController(animated: Bool) {
+        popViewController(reason: .user, animated: animated)
+    }
+
+    func popViewController(reason: DismissalReason, animated: Bool) {
         popViewControllerCalled += 1
         savedCompletion?()
         savedCompletion = nil

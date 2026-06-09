@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "أغلِق";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "يبدو أن الاتصال بالإنترنت مقطوع.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "حاول مجددًا";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "ابدأ";
 
@@ -234,6 +240,9 @@
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "موافقة ومتابعة";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "واصِل";
 
 /* Button label to dismiss the Privacy Policy and Terms of Use screen. */
 "Onboarding.TermsOfUse.Done.ButtonText" = "تمّ";
@@ -303,6 +312,9 @@
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
 "Settings.DailyUsagePing.Message" = "يساعد هذا Mozilla على تقدير عدد المستخدمين النشطين.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "تنبيه الاستخدام اليومي";
 
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "داكنة";
@@ -427,6 +439,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "اعرض الفوائد في شاشة البداية";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "السماح بإجراء تحسينات عن بُعد";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "سفاري";
 
@@ -435,6 +450,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "الدراسات";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "السماح بدراسات الميزات";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "استخدم معرّف اللمس لفكّ قفل التطبيق";

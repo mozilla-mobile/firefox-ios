@@ -2,9 +2,6 @@
 "RelayMask.RelayEmailMaskAvailableCFR.v146" = "新機能！ %@ Relay のメールマスクがモバイルでも利用できるようになりました。";
 
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
-"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "5 つの無料メールマスクが使用中なので、1 つを選択しました。";
-
-/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "無料のメールマスク 5 個を使い切ったので、再利用する 1 個を選びました。";
 
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
@@ -12,9 +9,6 @@
 
 /* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "メールマスクが挿入されました";
-
-/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "受信トレイをスパムから守るため、実際のメールアドレスを隠します。この機能は一部のサイトでサポートされていません。";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "受信トレイをスパムから守るため、実際のメールアドレスを隠します。一部のサイトではメールマスクがサポートされていません。";

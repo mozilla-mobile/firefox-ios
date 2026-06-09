@@ -10,7 +10,7 @@ let website1: [String: String] = [
     "value": "localhost",
     "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
 ]
-let website2 = path(forTestPage: "test-example.html")
+let website2 = path(forTestPage: TestPages.exampleHTML)
 
 class ToolbarTests: FeatureFlaggedTestBase {
     override func setUp() async throws {
@@ -170,8 +170,8 @@ class ToolbarTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
             if !isPrivate {
-                mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites])
-                mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+                app.partialSwipeUp(distance: 0.2)
+                mozWaitForElementToExist(app.otherElements["News"])
             }
             navigator.nowAt(BrowserTab)
             mozWaitElementHittable(element: app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)

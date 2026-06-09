@@ -16,6 +16,8 @@ class ButtonsViewController: UIViewController, Themeable {
     private lazy var primaryButton: PrimaryRoundedButton = .build { _ in }
     private lazy var primaryButtonDisabled: PrimaryRoundedButton = .build { _ in }
     private lazy var secondaryButton: SecondaryRoundedButton = .build { _ in }
+    private lazy var roundedButtonWithImage: RoundedButtonWithImage = .build { _ in }
+    private lazy var roundedButtonWithImageAnimated: RoundedButtonWithImage = .build { _ in }
     private lazy var linkButton: LinkButton = .build { _ in }
     private lazy var closeButton: CloseButton = .build { _ in }
     private lazy var enabledOnSwitch: PaddedSwitch = .build { _ in }
@@ -65,6 +67,20 @@ class ButtonsViewController: UIViewController, Themeable {
                                                                  a11yIdentifier: "a11ySecondary")
         secondaryButton.configure(viewModel: secondaryViewModel)
 
+        let roundedButtonWithImageViewModel = RoundedButtonWithImageViewModel(title: "Rounded",
+                                                                              image: nil,
+                                                                              isAnimating: false,
+                                                                              a11yIdentifier: "roundedButton")
+        roundedButtonWithImage.configure(viewModel: roundedButtonWithImageViewModel)
+
+        let roundedButtonWithImageAnimatedViewModel = RoundedButtonWithImageViewModel(
+            title: "Rounded Animated",
+            image: StandardImageIdentifiers.Large.sync,
+            isAnimating: true,
+            a11yIdentifier: "roundedButtonAnimated"
+        )
+        roundedButtonWithImageAnimated.configure(viewModel: roundedButtonWithImageAnimatedViewModel)
+
         let linkButtonViewModel = LinkButtonViewModel(title: "This is a link",
                                                       a11yIdentifier: "a11yLink")
         linkButton.configure(viewModel: linkButtonViewModel)
@@ -105,6 +121,8 @@ class ButtonsViewController: UIViewController, Themeable {
         primaryButton.applyTheme(theme: themeManager.currentTheme)
         primaryButtonDisabled.applyTheme(theme: themeManager.currentTheme)
         secondaryButton.applyTheme(theme: themeManager.currentTheme)
+        roundedButtonWithImage.applyTheme(theme: themeManager.currentTheme)
+        roundedButtonWithImageAnimated.applyTheme(theme: themeManager.currentTheme)
         linkButton.applyTheme(theme: themeManager.currentTheme)
     }
 
@@ -113,6 +131,8 @@ class ButtonsViewController: UIViewController, Themeable {
         buttonStackView.addArrangedSubview(primaryButton)
         buttonStackView.addArrangedSubview(primaryButtonDisabled)
         buttonStackView.addArrangedSubview(secondaryButton)
+        buttonStackView.addArrangedSubview(roundedButtonWithImage)
+        buttonStackView.addArrangedSubview(roundedButtonWithImageAnimated)
         buttonStackView.addArrangedSubview(linkButton)
         buttonStackView.addArrangedSubview(closeButton)
 

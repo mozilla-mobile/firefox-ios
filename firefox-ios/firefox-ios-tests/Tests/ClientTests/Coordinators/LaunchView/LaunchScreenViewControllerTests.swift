@@ -17,9 +17,8 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
-        viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: MockProfile())
+        viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: profile)
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
 

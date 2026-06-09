@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "الوضع الخاص";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "التصفح الخاص";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "شغّل/أوقِف الوضع الخاص";
 

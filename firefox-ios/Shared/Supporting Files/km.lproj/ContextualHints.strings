@@ -1,0 +1,9 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode. */
+"ContextualHints.FeltDeletion.Body.v122" = "ប៉ះ​ទីនេះ​ដើម្បី​ចាប់ផ្តើម​វគ្គ​ឯកជន​ថ្មី។ លុប​ប្រវត្តិ ខូគី — អ្វីៗ​ទាំងអស់។";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar. */
+"ContextualHints.Translations.Body.v145" = "រហ័ស និងការបកប្រែឯកជន គឺត្រៀមរួចរាល់ សម្រាប់អ្នក។";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox). */
+"ContextualHints.Translations.Title.v145" = "%@ និយាយភាសារបស់អ្នក";
+

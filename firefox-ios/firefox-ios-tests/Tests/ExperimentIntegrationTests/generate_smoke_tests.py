@@ -103,7 +103,7 @@ if __name__ == "__main__":
             tests = yaml.safe_load(file)
             test_modules = [test for test in tests.get("smoke_tests")]
     for item in test_modules:
-        try: # incase a test file gets deleted this will alllow the program to run
+        try: # in case a test file gets deleted this will allow the program to run
             tests = search_for_smoke_tests(item)
         except TypeError:
             continue

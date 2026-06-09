@@ -7,7 +7,7 @@
 import Common
 
 @MainActor
-public protocol WKUIHandler: WKUIDelegate {
+protocol WKUIHandler: WKUIDelegate {
     var delegate: EngineSessionDelegate? { get set }
     var isActive: Bool {get set}
 
@@ -57,7 +57,6 @@ public protocol WKUIHandler: WKUIDelegate {
 
 public final class DefaultUIHandler: NSObject, WKUIHandler {
     public weak var delegate: EngineSessionDelegate?
-    private var sessionCreator: SessionCreator?
 
     public var isActive = false
     private let sessionDependencies: EngineSessionDependencies
@@ -68,32 +67,22 @@ public final class DefaultUIHandler: NSObject, WKUIHandler {
     @MainActor
     public static func factory(
         sessionDependencies: EngineSessionDependencies,
-        sessionCreator: SessionCreator? = nil
     ) -> DefaultUIHandler {
-        let sessionCreator = sessionCreator ?? WKSessionCreator(dependencies: sessionDependencies)
         let policyDecider = WKPolicyDeciderFactory()
         let application = UIApplication.shared
         return DefaultUIHandler(
             sessionDependencies: sessionDependencies,
-            sessionCreator: sessionCreator,
             application: application,
             policyDecider: policyDecider
         )
     }
 
     init(sessionDependencies: EngineSessionDependencies,
-         sessionCreator: SessionCreator,
          application: Application,
          policyDecider: WKPolicyDecider) {
-        self.sessionCreator = sessionCreator
         self.sessionDependencies = sessionDependencies
         self.policyDecider = policyDecider
         self.application = application
-        super.init()
-
-        (self.sessionCreator as? WKSessionCreator)?.onNewSessionCreated = { [weak self] in
-            self?.delegate?.onRequestOpenNewSession($0)
-        }
     }
 
     public func webView(_ webView: WKWebView,
@@ -105,17 +94,22 @@ public final class DefaultUIHandler: NSObject, WKUIHandler {
         case .cancel:
             return nil
         case .allow:
+            let configurationProvider = DefaultWKEngineConfigurationProvider(configuration: configuration)
+            let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
+                                                         dependencies: sessionDependencies,
+                                                         configurationProvider: configurationProvider)
+
+            guard let session, let webView = session.webView as? WKWebView else { return nil }
+
             let url = navigationAction.request.url
             let urlString = url?.absoluteString ?? ""
-            let webView = sessionCreator?.createPopupSession(configuration: configuration, parent: webView)
-            guard let webView else { return nil }
 
             if url == nil || urlString.isEmpty,
                let blank = URL(string: EngineConstants.aboutBlank),
-               let url = BrowserURL(browsingContext: BrowsingContext(type: .internalNavigation,
-                                                                     url: blank)) {
-                webView.load(URLRequest(url: url.url))
+               let url = BrowserURL(browsingContext: BrowsingContext(type: .internalNavigation, url: blank)) {
+                               session.load(browserURL: url)
             }
+            delegate?.onRequestOpenNewSession(session)
             return webView
         case .launchExternalApp:
             guard let url = navigationAction.request.url, application.canOpen(url: url) else { return nil }

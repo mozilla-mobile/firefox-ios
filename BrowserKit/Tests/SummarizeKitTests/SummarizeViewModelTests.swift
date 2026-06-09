@@ -155,31 +155,7 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
         wait(for: [newDataExpectation], timeout: 0.5)
     }
 
-    func test_summarize_waitsForInitialDelay() {
-        let newDataExpectation = expectation(description: "summarize closure should be called")
-        let chunk = "This is the max words to proceed"
-        let delay = 2.0
-        summarizerService.mockChunchedResponse = [chunk]
-        summarizerService.delayStreamResultInSeconds = delay
-        // make sure enough words is false
-        let subject = createSubject(minDelayToShowSummary: delay, minWordsAcceptToShow: chunk.count + 1)
-
-        subject.unblockSummarization()
-
-        subject.summarize(webView: webView, footNoteLabel: "Footnote", dateProvider: dateProvider) { result in
-            let result = try? result.get()
-            // don't fulfill untill the footnote is passed
-            guard result != chunk else { return }
-            newDataExpectation.fulfill()
-        }
-
-        wait(for: [newDataExpectation], timeout: delay + 1)
-
-        XCTAssertEqual(dateProvider.returnedDates.count, 2)
-        XCTAssertGreaterThanOrEqual(dateProvider.returnedDates[1], dateProvider.returnedDates[0].addingTimeInterval(delay))
-    }
-
-    func test_summarize_whenPassRandomError_throwsUnkownSummarizerError() {
+    func test_summarize_whenPassRandomError_throwsUnknownSummarizerError() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let error = NSError(domain: "", code: 0)
         summarizerService.mockError = error

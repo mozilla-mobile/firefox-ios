@@ -14,10 +14,7 @@ final class TermsOfUseLinkViewController: UIViewController,
     weak var coordinator: TermsOfUseCoordinatorDelegate?
 
     private struct UX {
-        static let headerHeight: CGFloat = 44
-        static let backButtonLeading: CGFloat = 8
-        static let webViewTopInset: CGFloat = 44
-        static let backArrowImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
+        static let progressBarHeight: CGFloat = 2
     }
 
     private let url: URL
@@ -28,20 +25,11 @@ final class TermsOfUseLinkViewController: UIViewController,
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
 
-    private lazy var header: UIView = .build { view in
-        view.backgroundColor = self.currentTheme().colors.layer1
-    }
+    private var estimatedProgressObserver: NSKeyValueObservation?
+    private var isLoading = false
 
-    private lazy var backButton: UIButton = .build { button in
-        button.setImage(UX.backArrowImage.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        button.imageView?.contentMode = .scaleAspectFit
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.setTitle(TermsOfUse.BackButton, for: .normal)
-        button.setTitleColor(self.currentTheme().colors.actionPrimary, for: .normal)
-        button.tintColor = self.currentTheme().colors.actionPrimary
-        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
+    private lazy var progressBar: GradientProgressBar = .build { bar in
+        bar.isHidden = true
     }
 
     private lazy var webView: WKWebView = {
@@ -77,24 +65,28 @@ final class TermsOfUseLinkViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
+        observeEstimatedProgress()
         webView.load(URLRequest(url: url))
     }
 
     private func setupViews() {
-        view.addSubview(header)
-        header.addSubview(backButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: TermsOfUse.CloseButton,
+            style: .plain,
+            target: self,
+            action: #selector(closeTapped)
+        )
+
+        view.addSubview(progressBar)
         view.addSubview(webView)
 
         NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: view.topAnchor),
-            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            header.heightAnchor.constraint(equalToConstant: UX.headerHeight),
+            progressBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            progressBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            progressBar.heightAnchor.constraint(equalToConstant: UX.progressBarHeight),
 
-            backButton.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: UX.backButtonLeading),
-            backButton.centerYAnchor.constraint(equalTo: header.centerYAnchor),
-
-            webView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.webViewTopInset),
+            webView.topAnchor.constraint(equalTo: progressBar.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -102,7 +94,9 @@ final class TermsOfUseLinkViewController: UIViewController,
     }
 
     func applyTheme() {
-        view.backgroundColor = currentTheme().colors.layer1
+        let theme = currentTheme()
+        view.backgroundColor = theme.colors.layer1
+        applyProgressBarTheme(theme: theme)
     }
 
     @objc private func closeTapped() {
@@ -113,7 +107,52 @@ final class TermsOfUseLinkViewController: UIViewController,
         themeManager.getCurrentTheme(for: currentWindowUUID)
     }
 
-    // MARK: WebKit Navigation Delegate
+    private func applyProgressBarTheme(theme: Theme) {
+        let gradientStartColor = theme.colors.borderAccent
+        let gradientMiddleColor = theme.colors.iconAccentPink
+        let gradientEndColor = theme.colors.iconAccentYellow
+
+        progressBar.setGradientColors(
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
+        )
+    }
+
+    private func observeEstimatedProgress() {
+        estimatedProgressObserver = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, change in
+            let observedProgress = change.newValue ?? 0.0
+
+            ensureMainThread { [weak self] in
+                guard let self, self.isLoading else { return }
+                let currentProgress = Double(self.progressBar.progress)
+                let progress = max(currentProgress, observedProgress)
+
+                guard 0.0...1.0 ~= progress else { return }
+                self.updateProgressBar(progress: progress)
+            }
+        }
+    }
+
+    private func updateProgressBar(progress: Double) {
+        let maximumProgress: Double = isLoading ? 0.9 : 1.0
+        let displayedProgress = min(max(0.0, progress), maximumProgress)
+        guard displayedProgress >= Double(progressBar.progress) else { return }
+
+        progressBar.isHidden = false
+        progressBar.setProgress(Float(displayedProgress), animated: true)
+    }
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
+        isLoading = true
+        progressBar.isHidden = false
+        progressBar.setProgress(0, animated: false)
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
+        isLoading = false
+        updateProgressBar(progress: 1.0)
+    }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
         let nsError = error as NSError

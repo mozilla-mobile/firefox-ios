@@ -6,12 +6,13 @@
 "use strict";
 import { isProbablyReaderable, Readability } from "@mozilla/readability";
 import {setStyle} from "./ReaderModeStyles.js";
+import { findRecipeJSONLD } from "./JSONLD.js";
 
 const DEBUG = false;
 
 var readabilityResult = null;
-
-const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
+// Matches both localhost and readermode:// implementations of Reader mode
+const readerModeURL = /^(http:\/\/localhost:\d+\/reader-mode\/page|readermode:\/\/app\/page)/;
 
 const BLOCK_IMAGES_SELECTOR =
   ".content p > img:only-child, " +
@@ -100,6 +101,14 @@ function checkReadability() {
 // Readerize the document. Since we did the actual readerization already in checkReadability, we
 // can simply return the results we already have.
 function readerize() {
+  // Find recipe json ld in the current doc and append it to readabilty result to be able to embed the json
+  // for the reader view html when the page is created. This is needed in order to not lose recipe metadata
+  // when summarizing a reader view web page. 
+  const recipeJSON = findRecipeJSONLD();
+  if (readabilityResult) {
+    const serializedJSONLD = JSON.stringify(recipeJSON ?? "");
+    readabilityResult.jsonld = escapeForScriptBlock(serializedJSONLD);
+  }
   return readabilityResult;
 }
 
@@ -189,6 +198,14 @@ function escapeHTML(string) {
     .replace(/\>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/\'/g, "&#039;");
+}
+
+function escapeForScriptBlock(jsonString) {
+  if (typeof jsonString !== "string") { return ""; }
+  return jsonString
+    .replace(/\//g, "\\/") 
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e");
 }
 
 Object.defineProperty(window.__firefox__, "reader", {

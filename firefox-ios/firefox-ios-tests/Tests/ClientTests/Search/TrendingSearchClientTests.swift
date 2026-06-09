@@ -11,6 +11,7 @@ import XCTest
 final class TrendingSearchClientTest: XCTestCase, @unchecked Sendable {
     override func setUp() async throws {
         try await super.setUp()
+        setupNimbusTrendingSearchesTesting(isEnabled: true)
         clearState()
     }
 
@@ -152,6 +153,15 @@ final class TrendingSearchClientTest: XCTestCase, @unchecked Sendable {
             data: mockData,
             response: response,
             error: error
+        )
+    }
+}
+
+private func setupNimbusTrendingSearchesTesting(isEnabled: Bool) {
+    FxNimbus.shared.features.trendingSearchesFeature.with { _, _ in
+        return TrendingSearchesFeature(
+            enabled: isEnabled,
+            maxSuggestions: 5
         )
     }
 }

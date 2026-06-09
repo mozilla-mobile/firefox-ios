@@ -3,25 +3,28 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-@testable import SummarizeKit
+@testable import LLMKit
+
+// TODO: FXIOS-15199 Move to LLMKitTests package
 
 /// Mock implementation of a real  LiteLLMClient for testing the session and responses.
 /// This allows injecting controlled outputs or errors without calling the real inference backend.
-final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
+public final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     var respondWith: [String] = [""]
     var respondWithError: Error?
 
-    func requestChatCompletion(
-        messages: [LiteLLMMessage],
-        config: SummarizerConfig
-    ) async throws -> String {
+    public func requestChatCompletion<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
+        config: LLMConfig
+    ) async throws -> LiteLLMMessage<ProviderFields> {
         if let error = respondWithError { throw error }
-        return respondWith.joined(separator: " ")
+        let content = respondWith.joined(separator: " ")
+        return LiteLLMMessage(role: .assistant, content: content, providerSpecificFields: nil)
     }
 
-    func requestChatCompletionStreamed(
-        messages: [LiteLLMMessage],
-        config: SummarizerConfig
+    public func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
+        config: LLMConfig
     ) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream<String, Error> { continuation in
             if let error = respondWithError {

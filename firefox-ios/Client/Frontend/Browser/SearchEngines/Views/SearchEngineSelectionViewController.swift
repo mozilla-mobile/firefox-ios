@@ -103,10 +103,10 @@ class SearchEngineSelectionViewController: UIViewController,
 
     func subscribeToRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.showScreen,
-                screen: .searchEngineSelection
+                actionType: ComponentActionType.addComponent,
+                component: .searchEngineSelection
             )
         )
 
@@ -120,10 +120,10 @@ class SearchEngineSelectionViewController: UIViewController,
 
     func unsubscribeFromRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.closeScreen,
-                screen: .searchEngineSelection
+                actionType: ComponentActionType.removeComponent,
+                component: .searchEngineSelection
             )
         )
     }

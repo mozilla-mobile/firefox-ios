@@ -11,9 +11,15 @@ mozprofile = "*"
 mozrunner = "*"
 mozversion = "*"
 pytest = "*"
-pytest-fxa-mte = "1.6.0"
 pytest-html = "*"
 pytest-metadata = "*"
 requests = "*"
+pytest-fxa-mte = "==1.8.0"
 
 [dev-packages]
+
+[requires]
+python_version = "3.12"
+
+[pipenv]
+allow_prereleases = true

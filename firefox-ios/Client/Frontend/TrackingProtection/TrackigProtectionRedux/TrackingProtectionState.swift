@@ -2,10 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+import ModifiedCopy
 import Foundation
 import Redux
-import Common
 
+@Copyable
 struct TrackingProtectionState: ScreenState {
     enum NavType {
         case home
@@ -32,7 +34,7 @@ struct TrackingProtectionState: ScreenState {
 
     init(appState: AppState,
          uuid: WindowUUID) {
-        guard let trackingProtectionState = appState.screenState(
+        guard let trackingProtectionState = appState.componentState(
             TrackingProtectionState.self,
             for: .trackingProtection,
             window: uuid
@@ -120,155 +122,112 @@ struct TrackingProtectionState: ScreenState {
     }
 
     private static func handleClearCookiesAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: !state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: true,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: .home,
-            displayView: nil
-        )
+        return state
+            .copy(trackingProtectionEnabled: !state.trackingProtectionEnabled)
+            .copy(shouldClearCookies: true)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: .home)
+            .copy(displayView: nil)
     }
 
     private static func handleNavigateToSettingsAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: .settings,
-            displayView: nil
-        )
+        return state
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: .settings)
+            .copy(displayView: nil)
     }
 
     private static func handleShowTrackingProtectionDetailsAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: nil,
-            displayView: .trackingProtectionDetails
-        )
+        return state
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: nil)
+            .copy(displayView: .trackingProtectionDetails)
     }
 
     private static func handleShowBlockedTrackersDetailsAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: nil,
-            displayView: .blockedTrackersDetails
-        )
+        return state
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: nil)
+            .copy(displayView: .blockedTrackersDetails)
     }
 
     private static func handleGoBackAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: .back,
-            displayView: nil
-        )
+        return state
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: .back)
+            .copy(displayView: nil)
     }
 
     private static func handleUpdateBlockedTrackerStatsAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: state.shouldClearCookies,
-            shouldUpdateBlockedTrackerStats: true,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: nil,
-            displayView: nil
-        )
+        return state
+            .copy(shouldUpdateBlockedTrackerStats: true)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: nil)
+            .copy(displayView: nil)
     }
 
     private static func handleUpdateConnectionStatusAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: true,
-            navigateTo: nil,
-            displayView: nil
-        )
+        return state
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: true)
+            .copy(navigateTo: nil)
+            .copy(displayView: nil)
     }
 
     private static func handleShowAlertAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: nil,
-            displayView: .clearCookiesAlert
-        )
+        return state
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: nil)
+            .copy(displayView: .clearCookiesAlert)
     }
 
     private static func handleToggleTrackingProtectionStatusAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: !state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: nil,
-            displayView: nil
-        )
+        return state
+            .copy(trackingProtectionEnabled: !state.trackingProtectionEnabled)
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: nil)
+            .copy(displayView: nil)
     }
 
     private static func handleDismissTrackingProtectionAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: .close,
-            displayView: nil
-        )
+        return state
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: .close)
+            .copy(displayView: nil)
     }
 
     static func defaultState(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false,
-            shouldUpdateConnectionStatus: false,
-            navigateTo: nil,
-            displayView: nil
-        )
+        return state
+            .copy(shouldClearCookies: false)
+            .copy(shouldUpdateBlockedTrackerStats: false)
+            .copy(shouldUpdateConnectionStatus: false)
+            .copy(navigateTo: nil)
+            .copy(displayView: nil)
     }
 }

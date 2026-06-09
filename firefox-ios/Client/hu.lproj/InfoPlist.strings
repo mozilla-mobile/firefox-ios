@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ezzel lementheti a képeket.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "A Firefox beszédfelismerés segítségével szöveggé alakítja a hangját a hangalapú kereséshez.";
+
 /* (No Comment) */
 "Scan QR Code" = "QR-kód leolvasása";
 

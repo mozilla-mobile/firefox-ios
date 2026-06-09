@@ -25,13 +25,11 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
 
     private lazy var titleLabel: UILabel = .build { label in
         label.numberOfLines = 0
-        label.textAlignment = .left
         label.font = FXFontStyles.Regular.body.scaledFont()
     }
 
     private lazy var subtitleLabel: UILabel = .build { label in
         label.numberOfLines = 0
-        label.textAlignment = .left
         label.font = FXFontStyles.Regular.caption1.scaledFont()
     }
 

@@ -15,8 +15,7 @@ class MainMenuViewController: UIViewController,
                               UIScrollViewDelegate,
                               Themeable,
                               Notifiable,
-                              StoreSubscriber,
-                              FeatureFlaggable {
+                              StoreSubscriber {
     private struct UX {
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140
@@ -52,10 +51,6 @@ class MainMenuViewController: UIViewController,
     private var isPad: Bool {
         traitCollection.verticalSizeClass == .regular &&
         !(UIDevice.current.userInterfaceIdiom == .phone)
-    }
-
-    private var isMenuDefaultBrowserBanner: Bool {
-        return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
     }
 
     private var bannerShown: Bool {
@@ -149,6 +144,15 @@ class MainMenuViewController: UIViewController,
                     let customDetent = UISheetPresentationController.Detent.custom { context in
                         return height
                     }
+                    // The detents are large or medium only on the first presentation. We can avoid animating the new
+                    // detent in such case cause the animation is already running.
+                    let shouldAnimateDetentChange = self?.sheetPresentationController?.detents.contains { detent in
+                        return detent.identifier != .medium && detent.identifier != .large
+                    } ?? true
+                    guard shouldAnimateDetentChange else {
+                        self?.sheetPresentationController?.detents = [customDetent]
+                        return
+                    }
                     self?.sheetPresentationController?.animateChanges({
                         self?.sheetPresentationController?.detents = [customDetent]
                     })
@@ -178,6 +182,11 @@ class MainMenuViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+
+        // An extra reload for menu content is necessary only on iOS 15
+        if #unavailable(iOS 16) {
+            reloadTableView(with: menuState.menuElements)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -302,7 +311,6 @@ class MainMenuViewController: UIViewController,
             title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
             subtitle: .MainMenu.HeaderBanner.Subtitle,
             image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
-            isBannerFlagEnabled: isMenuDefaultBrowserBanner,
             isBrowserDefault: isBrowserDefault,
             bannerShown: bannerShown
         )
@@ -364,10 +372,10 @@ class MainMenuViewController: UIViewController,
     // MARK: - Redux
     func subscribeToRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.showScreen,
-                screen: .mainMenu
+                actionType: ComponentActionType.addComponent,
+                component: .mainMenu
             )
         )
         let uuid = windowUUID
@@ -380,10 +388,10 @@ class MainMenuViewController: UIViewController,
 
     func unsubscribeFromRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.closeScreen,
-                screen: .mainMenu
+                actionType: ComponentActionType.removeComponent,
+                component: .mainMenu
             )
         )
     }

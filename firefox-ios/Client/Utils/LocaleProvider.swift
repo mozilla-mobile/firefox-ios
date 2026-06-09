@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-protocol LocaleProvider {
+protocol LocaleProvider: Sendable {
     var current: Locale { get }
     var preferredLanguages: [String] { get }
     func regionCode(fallback: String?) -> String
@@ -16,6 +16,16 @@ extension LocaleProvider {
     // we explicitly want to set a specific fallback (rare cases).
     func regionCode() -> String {
         return regionCode(fallback: nil)
+    }
+
+    /// Returns the language name localized in the current locale (e.g. "French" for "fr" when current locale is "en").
+    func localizedLanguageName(for code: String) -> String {
+        return current.localizedString(forIdentifier: code)?.localizedCapitalized ?? code
+    }
+
+    /// Returns the language name in its own language (e.g. "Français" for "fr").
+    func nativeLanguageName(for code: String) -> String {
+        return Locale(identifier: code).localizedString(forIdentifier: code)?.localizedCapitalized ?? code
     }
 }
 
@@ -49,7 +59,7 @@ struct SystemLocaleProvider: LocaleProvider {
     /// If all attempts fail, this method logs a fatal error and returns a specified fallback or by default `"und"`,
     /// the BCP-47 primary language subtag for *Undetermined* linguistic content.
     ///
-    /// - Returns: A region code string (e.g. `"US"`, `"CA"`), or fallback string or`"und"` if the
+    /// - Returns: A region code string (e.g. `"US"`, `"CA"`), or fallback string or `"und"` if the
     ///   region cannot be determined.
     func regionCode(fallback: String?) -> String {
         let systemRegion: String?

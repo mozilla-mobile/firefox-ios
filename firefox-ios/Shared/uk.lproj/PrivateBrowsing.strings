@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Відкрити в приватній вкладці";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox не пам'ятатиме історію чи файли cookie, але нові закладки будуть збережені.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox не запам'ятовуватиме історію та файли cookie, але нові закладки буде збережено.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Докладніше";
@@ -29,5 +29,5 @@
 "Turns private mode on or off" = "Вмикає чи вимикає приватний режим";
 
 /* Will be displayed in Settings under 'Close Private Tabs' */
-"When Leaving Private Browsing" = "При виході з приватного перегляду";
+"When Leaving Private Browsing" = "Після виходу з приватного перегляду";
 

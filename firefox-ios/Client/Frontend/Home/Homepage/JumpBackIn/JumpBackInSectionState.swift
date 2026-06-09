@@ -3,47 +3,39 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ModifiedCopy
 import Redux
 import Shared
 import Storage
 
 /// State for the jump back in section that is used in the homepage view
+@Copyable
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     let jumpBackInTabs: [JumpBackInTabConfiguration]
     let mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderConfiguration(
-        title: .FirefoxHomeJumpBackInSectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
-        isButtonHidden: false,
-        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn,
-        buttonTitle: .BookmarksSavedShowAllText
-    )
+    struct Constants {
+        static let sectionHeaderConfiguration = SectionHeaderConfiguration(
+            title: .FirefoxHomeJumpBackInSectionTitle,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+            isButtonHidden: false,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn,
+            buttonTitle: .BookmarksSavedShowAllText
+        )
+    }
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
+        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
         windowUUID: WindowUUID
     ) {
-        // TODO: FXIOS-11412 / 11226 - Move profile dependency and show section also based on feature flags
-        let isStoriesRedesignEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesign,
-                                                                                         checking: .buildOnly)
-        let isStoriesRedesignV2Enabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesignV2,
-                                                                                           checking: .buildOnly)
-
-        // Jump back in section default value without nimbus is true
-        let jumpBackInSectionDefaultValue = !isStoriesRedesignV2Enabled
-        let isJumpBackInSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.JumpBackInSection)
-                                            ?? jumpBackInSectionDefaultValue
-
-        let shouldShowSection = isStoriesRedesignEnabled ? false : isJumpBackInSectionPrefEnabled
-
         self.init(
             windowUUID: windowUUID,
             jumpBackInTabs: [],
             mostRecentSyncedTab: nil,
-            shouldShowSection: shouldShowSection
+            shouldShowSection: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault)
         )
     }
 
@@ -98,8 +90,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return JumpBackInSectionState(
-            windowUUID: state.windowUUID,
+        return state.copy(
             jumpBackInTabs: recentTabs.compactMap { tab in
                 let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
                 let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
@@ -109,9 +100,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
                     descriptionText: site.tileURL.shortDisplayString.capitalized,
                     siteURL: itemURL
                 )
-            },
-            mostRecentSyncedTab: state.mostRecentSyncedTab,
-            shouldShowSection: state.shouldShowSection
+            }
         )
     }
 
@@ -129,15 +118,12 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         let site = Site.createBasicSite(url: itemURL, title: mostRecentSyncedTab.tab.title)
         let descriptionText = mostRecentSyncedTab.client.name
 
-        return JumpBackInSectionState(
-            windowUUID: state.windowUUID,
-            jumpBackInTabs: state.jumpBackInTabs,
+        return state.copy(
             mostRecentSyncedTab: JumpBackInSyncedTabConfiguration(
                 titleText: site.title,
                 descriptionText: descriptionText,
                 url: mostRecentSyncedTab.tab.URL
-            ),
-            shouldShowSection: state.shouldShowSection
+            )
         )
     }
 
@@ -148,10 +134,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return JumpBackInSectionState(
-            windowUUID: state.windowUUID,
-            jumpBackInTabs: state.jumpBackInTabs,
-            mostRecentSyncedTab: state.mostRecentSyncedTab,
+        return state.copy(
             shouldShowSection: isEnabled
         )
     }

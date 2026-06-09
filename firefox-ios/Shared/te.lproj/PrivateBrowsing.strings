@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "ప్రైవేట్ మోడ్";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "అంతరంగిక విహరణ";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "ప్రైవేట్ మోడ్ ఆన్ లేదా ఆఫ్ కు మార్చండి";
 

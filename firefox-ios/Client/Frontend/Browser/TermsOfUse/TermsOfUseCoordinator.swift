@@ -23,6 +23,9 @@ protocol TermsOfUseCoordinatorDelegate: AnyObject {
 
 @MainActor
 final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, FeatureFlaggable {
+    /// Prevents deep link route handling from dismissing the Terms of Use sheet
+    override var isDismissible: Bool { false }
+
     weak var parentCoordinator: ParentCoordinatorDelegate?
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
@@ -33,6 +36,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     private let prefs: Prefs
     private let hoursSinceDismissedTerms = 120 // 120 hours (5 days)
     private let debugMinutesSinceDismissed = 1 // 1 minute used for testing
+    private let experimentsTracking: ToUExperimentsTracking
 
     private var maxRemindersCount: Int {
         return nimbus.features.touFeature.value().maxRemindersCount
@@ -52,12 +56,14 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          prefs: Prefs,
+         experimentsTracking: ToUExperimentsTracking,
          nimbus: FxNimbus = FxNimbus.shared) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.prefs = prefs
         self.nimbus = nimbus
+        self.experimentsTracking = experimentsTracking
         super.init(router: router)
     }
 
@@ -96,19 +102,22 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             themeManager: themeManager,
             notificationCenter: notificationCenter
         )
-        linkVC.modalPresentationStyle = .pageSheet
-        linkVC.modalTransitionStyle = .coverVertical
-        presentedVC?.present(linkVC, animated: true)
+        let navController = UINavigationController(rootViewController: linkVC)
+        navController.modalPresentationStyle = .pageSheet
+        navController.modalTransitionStyle = .coverVertical
+        presentedVC?.present(navController, animated: true)
     }
 
     func shouldShowTermsOfUse(context: TriggerContext = .appLaunch) -> Bool {
         // 1. Feature must be enabled
-        guard featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) else { return false }
+        guard featureFlagsProvider.isEnabled(.touFeature) else { return false }
 
-        // 2. If user has already accepted (onboarding or bottom sheet), never show again
+        // 2. If user has already accepted, never show again
         let hasAcceptedTermsOfUse = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
-        let hasAcceptedTermsOfService = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
-        guard !hasAcceptedTermsOfUse && !hasAcceptedTermsOfService else { return false }
+        guard !hasAcceptedTermsOfUse else { return false }
+
+        // If experiment configuration changed, reset dismissal state
+        experimentsTracking.resetToUDataIfNeeded()
 
         // 3. Check if this is the first time it is shown
         // Always show first time - it is not a reminder

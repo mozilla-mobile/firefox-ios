@@ -41,6 +41,8 @@ class BlockedTrackersTableView: UITableView,
                  forCellReuseIdentifier: BlockedTrackerCell.cellIdentifier)
         register(BlockedTrackersHeaderView.self,
                  forHeaderFooterViewReuseIdentifier: BlockedTrackersHeaderView.cellIdentifier)
+        register(BlockedTrackersFooterView.self,
+                 forHeaderFooterViewReuseIdentifier: BlockedTrackersFooterView.cellIdentifier)
     }
 
     func applySnapshot(with items: [BlockedTrackerItem]) {

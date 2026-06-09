@@ -59,7 +59,7 @@ struct CreditCardValidator {
         .diners: "^3(?:0[0-5]|[68][0-9])[0-9]{4,}$",
         .jcb: "^(?:2131|1800|35[0-9]{3})[0-9]{3,}$",
         .discover: "^6(?:011|5[0-9]{2})[0-9]{3,}$",
-        .mir: "^2[0-9]{6,}$",
+        .mir: "^220[0-4][0-9]{12,}$",
         .unionpay: "^62[0-5]\\d{13,16}$"
     ]
 
@@ -78,25 +78,24 @@ struct CreditCardValidator {
     }
 
     func isExpirationValidFor(date: String) -> Bool {
+        let userCalendar = Calendar(identifier: .gregorian)
+
         guard date.count == 4,
               let inputMonth = Int(date.prefix(2)),
               let inputYear = Int(date.suffix(2)),
-              let currentYear = Calendar(identifier: .gregorian).dateComponents([.year], from: Date()).year,
-              inputMonth < 13 && inputMonth > 0,
-              (inputYear + 2000) < currentYear + 100 && (inputYear + 2000) >= currentYear else {
+              let currentMonth = userCalendar.dateComponents([.month], from: Date()).month,
+              let currentYear = userCalendar.dateComponents([.year], from: Date()).year,
+              inputMonth >= 1 && inputMonth <= 12 else {
             return false
         }
 
-        var userInputtedDate = DateComponents()
-        userInputtedDate.year = inputYear + 2000
-        userInputtedDate.month = inputMonth
-        let userCalendar = Calendar(identifier: .gregorian)
-
-        guard let userCardExpirationDate = userCalendar.date(from: userInputtedDate),
-              userCardExpirationDate >= Date() else {
+        let expiryYear = inputYear + 2000
+        if expiryYear < currentYear {
             return false
+        } else if expiryYear == currentYear {
+            return inputMonth >= currentMonth
+        } else {
+            return true
         }
-
-        return true
     }
 }

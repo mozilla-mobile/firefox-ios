@@ -281,12 +281,13 @@ class LibraryViewController: UIViewController, Themeable {
     private func topLeftButtonSetup() {
         let panelState = getCurrentPanelState()
         switch panelState {
-        case .bookmarks(state: .inFolder), .bookmarks(state: .transitioning),
+        case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
             topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?
                 .imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
-        case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField):
+        case .bookmarks(state: .itemEditMode),
+             .bookmarks(state: .itemEditModeInvalidField):
             topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)
             navigationItem.leftBarButtonItem = topLeftButton
         default:
@@ -301,39 +302,34 @@ class LibraryViewController: UIViewController, Themeable {
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textAccent
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .bookmarks(state: .itemEditModeInvalidField):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textAccent
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = false
         default:
             topRightButton.title = String.AppSettingsDone
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textPrimary
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
+        applyThemeToButtons()
     }
 
     // MARK: - Toolbar Button Actions
     @objc
     func topLeftButtonAction() {
         guard let navController = children.first as? UINavigationController,
-              getCurrentPanelState() != .bookmarks(state: .transitioning) else {
+              let currentPanel = getCurrentPanel(),
+              !currentPanel.isTransitioning else {
             return
         }
 
         navController.popViewController(animated: true)
-        let panel = getCurrentPanel()
-        panel?.handleLeftTopButton()
+        // After popping, notify the newly revealed panel so it can update its state
+        if let newPanel = getCurrentPanel() {
+            newPanel.handleLeftTopButton()
+        }
     }
 
     @objc
@@ -425,6 +421,21 @@ class LibraryViewController: UIViewController, Themeable {
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
+        applyThemeToButtons()
+    }
+
+    private func applyThemeToButtons() {
+        guard #available(iOS 26.0, *) else { return }
+
+        let panelState = getCurrentPanelState()
+        switch panelState {
+        case .bookmarks(state: .itemEditMode):
+            topRightButton.tintColor = currentTheme().colors.textAccent
+        case .bookmarks(state: .itemEditModeInvalidField):
+            topRightButton.tintColor = currentTheme().colors.textAccent
+        default:
+            topRightButton.tintColor = currentTheme().colors.textPrimary
+        }
     }
 
     func setNavigationBarHidden(_ value: Bool) {

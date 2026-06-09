@@ -5,7 +5,7 @@
 import WebKit
 
 @MainActor
-class UserScriptManager: FeatureFlaggable {
+class UserScriptManager {
     // Scripts can use this to verify the *app* (not JS on the web) is calling into them.
     public static let appIdToken = UUID().uuidString
 

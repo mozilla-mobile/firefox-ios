@@ -9,7 +9,7 @@ import Shared
 let websiteUrl1 = "www.mozilla.org"
 let websiteUrl2 = "developer.mozilla.org"
 let invalidUrl = "1-2-3"
-let exampleUrl = "test-example.html"
+let exampleUrl = TestPages.exampleHTML
 let urlExampleLabel = "Example Domain"
 let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
@@ -103,9 +103,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
         app.textFields["HomeAsCustomURLTextField"].waitAndTap()
-        if #unavailable(iOS 16) {
-            sleep(2)
-        }
         let textField = app.textFields["HomeAsCustomURLTextField"]
         let pasteOption = app.menuItems["Paste"]
         textField.pressWithRetry(duration: 2, element: pasteOption)
@@ -138,28 +135,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307031
-    func testSetCustomURLAsHome() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        // Enter a webpage
-        enterWebPageAsHomepage(text: websiteUrl1)
-
-        // Open a new tab and tap on Home option
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitForTabsButton()
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "mozilla.org")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
@@ -217,8 +192,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     func testJumpBackIn() {
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
+        enableJumpBackInInSettings()
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
@@ -252,7 +229,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
-        navigator.nowAt(BrowserTab)
+        enableBookmarksInSettings()
         bookmarkPages()
         // iOS 15 does not have the Reader View button available (when experiment Off)
         if #available(iOS 16, *) {
@@ -290,75 +267,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             checkBookmarksUpdated()
         }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306871
-    // Smoketest
-    func testCustomizeHomepage() {
-        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
-        app.launch()
-        if !iPad() {
-            mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
-            app.collectionViews["FxCollectionView"].swipeUp()
-            app.collectionViews["FxCollectionView"].swipeUp()
-            mozWaitForElementToExist(
-                app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage]
-            )
-        }
-        app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].waitAndTap()
-        // Verify default settings
-        waitForElementsToExist(
-            [
-            app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar],
-            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always],
-            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled]
-            ]
-        )
-        mozWaitForElementToExist(
-            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours]
-        )
-        // Commented due to experimental features
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
-//            "1"
-//        )
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
-//            "1"
-//        )
-
-        if #available(iOS 17, *) {
-            XCTAssertEqual(
-                app.cells.switches["Stories"].value as? String,
-                "1"
-            )
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306871
-    // Smoketest TAE
-    func testCustomizeHomepage_TAE() {
-        let fxHomePageScreen = FirefoxHomePageScreen(app: app)
-        let homePageScreen = HomePageScreen(app: app)
-        let settingHomePageScreen = SettingsHomepageScreen(app: app)
-
-        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
-        app.launch()
-        homePageScreen.swipeToCustomizeHomeOption()
-        fxHomePageScreen.tapOnCustomizeHomePageOption(timeout: TIMEOUT)
-        // Verify default settings
-        settingHomePageScreen.assertDefaultOptionsVisible()
-        // Commented due to experimental features
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String,
-//            "1"
-//        )
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String,
-//            "1"
-//        )
-
-        settingHomePageScreen.assertStoriesSwitch(isOn: true)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032

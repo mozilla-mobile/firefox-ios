@@ -199,6 +199,20 @@ final class EventQueue<QueueEventType: Hashable & Sendable>: @unchecked Sendable
         }
     }
 
+    /// Clears all signalled events and pending actions. Intended for use in tests only
+    /// to reset the global AppEventQueue between test cases.
+    func reset() {
+        guard AppConstants.isRunningUnitTest else {
+            assertionFailure("Test-only function called in production.")
+            return
+        }
+
+        mainQueue.ensureMainThread { [weak self] in
+            self?.signalledEvents.removeAll()
+            self?.actions.removeAll()
+        }
+    }
+
     /// Used to cancel an enqueued action using the token that was provided when the action was enqueued.
     /// - Returns: true if the action was canceled.
     ///
@@ -224,7 +238,7 @@ final class EventQueue<QueueEventType: Hashable & Sendable>: @unchecked Sendable
         assert(Thread.isMainThread, "Expects to be called on the main thread.")
         if isProcessingActions {
             // processActions() does not support reentrancy. If this gets called
-            // recursively, defer next call to the subequent iteration of the MT
+            // recursively, defer next call to the subsequent iteration of the MT
             // run loop. This fixes some edge case bugs with nested dependencies
             // which can potentially cause actions to be executed twice incorrectly.
             mainQueue.async { [weak self] in

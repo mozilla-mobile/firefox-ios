@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "របៀប​ជា​ឯកជន";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "ការរុករកឯកជន";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "បើក ឬ​បិទ​របៀប​ជា​ឯកជន";
 

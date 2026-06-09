@@ -23,9 +23,7 @@ struct TabTraySelectorUX {
     static let bottomSpacingIOS26: CGFloat = 16
 }
 
-class TabTraySelectorView: UIView,
-                           ThemeApplicable,
-                           FeatureFlaggable {
+class TabTraySelectorView: UIView, ThemeApplicable {
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme

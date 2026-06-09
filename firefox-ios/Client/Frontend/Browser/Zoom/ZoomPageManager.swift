@@ -11,20 +11,14 @@ struct ZoomConstants {
     static let upperZoomLimit: CGFloat = ZoomLevel.threeHundredPercent.rawValue
 }
 
-class ZoomPageManager: TabEventHandler, FeatureFlaggable {
+class ZoomPageManager: TabEventHandler {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     let windowUUID: WindowUUID
     let zoomStore: ZoomLevelStorage
     var tab: Tab?
 
-    var defaultZoomIsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
-    }
-
     var defaultZoomLevel: CGFloat {
-        guard defaultZoomIsEnabled else { return ZoomConstants.defaultZoomLimit }
-
         return zoomStore.getDefaultZoom()
     }
 
@@ -32,7 +26,7 @@ class ZoomPageManager: TabEventHandler, FeatureFlaggable {
          zoomStore: ZoomLevelStorage = ZoomLevelStore.shared) {
         self.windowUUID = windowUUID
         self.zoomStore = zoomStore
-        register(self, forTabEvents: .didGainFocus, .didChangeURL)
+        register(self, forTabEvents: .didGainFocus, .didLoseFocus, .didClose, .didChangeURL)
     }
 
     @MainActor
@@ -156,6 +150,16 @@ class ZoomPageManager: TabEventHandler, FeatureFlaggable {
         if tab.pageZoom != getZoomLevel() {
             updatePageZoom()
         }
+    }
+
+    func tabDidLoseFocus(_ tab: Tab) {
+        guard tab == self.tab else { return }
+        self.tab = nil
+    }
+
+    func tabDidClose(_ tab: Tab) {
+        guard tab == self.tab else { return }
+        self.tab = nil
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {

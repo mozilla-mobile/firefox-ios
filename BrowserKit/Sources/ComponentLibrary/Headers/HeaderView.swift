@@ -177,19 +177,27 @@ public final class HeaderView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate(viewConstraints)
     }
 
-    public func setupAccessibility(closeButtonA11yLabel: String,
-                                   closeButtonA11yId: String,
-                                   mainButtonA11yLabel: String? = nil,
-                                   mainButtonA11yId: String? = nil) {
+    public func setupAccessibility(
+        faviconA11yId: String,
+        titleLabelA11yId: String,
+        subtitleLabelA11yId: String,
+        closeButtonA11yLabel: String,
+        closeButtonA11yId: String,
+        mainButtonA11yLabel: String? = nil,
+        mainButtonA11yId: String? = nil
+    ) {
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yId)
         closeButton.configure(viewModel: closeButtonViewModel)
+        favicon.accessibilityIdentifier = faviconA11yId
         if let mainButtonA11yLabel, let mainButtonA11yId {
             titleLabel.isAccessibilityElement = false
             subtitleLabel.isAccessibilityElement = false
             mainButton.accessibilityIdentifier = mainButtonA11yId
             mainButton.accessibilityLabel = mainButtonA11yLabel
         } else {
+            titleLabel.accessibilityIdentifier = titleLabelA11yId
+            subtitleLabel.accessibilityIdentifier = subtitleLabelA11yId
             mainButton.isAccessibilityElement = false
         }
     }

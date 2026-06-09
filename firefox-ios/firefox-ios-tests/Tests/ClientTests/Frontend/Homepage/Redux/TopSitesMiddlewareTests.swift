@@ -18,7 +18,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         mockGleanWrapper = MockGleanWrapper()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
@@ -56,6 +55,28 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionsType, [.retrievedUpdatedSites])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
+    }
+
+    func test_homepageInitializeAction_whenAddShortcutTileFlagEnabled_dispatchesAddShortcutTileState() throws {
+        let featureFlags = MockNimbusFeatureFlags()
+        featureFlags.enabledFlags.insert(.homepageAddShortcutTile)
+        let subject = createSubject(topSitesManager: mockTopSitesManager, featureFlagsProvider: featureFlags)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "Top sites state update is dispatched")
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        XCTAssertTrue(actionsCalled.last?.shouldShowAddShortcutTile == true)
     }
 
     func test_homepageSectionSeenAction_withUnifiedAds_sendTelemetryData() {
@@ -380,13 +401,15 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - Helpers
     private func createSubject(
         topSitesManager: MockTopSitesManager,
-        unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry? = nil
+        unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry? = nil,
+        featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags()
     ) -> TopSitesMiddleware {
         return TopSitesMiddleware(
             topSitesManager: topSitesManager,
             homepageTelemetry: HomepageTelemetry(gleanWrapper: mockGleanWrapper),
             bookmarksTelemetry: BookmarksTelemetry(gleanWrapper: mockGleanWrapper),
-            unifiedAdsTelemetry: unifiedAdsTelemetry ??  MockUnifiedAdsCallbackTelemetry()
+            unifiedAdsTelemetry: unifiedAdsTelemetry ??  MockUnifiedAdsCallbackTelemetry(),
+            featureFlagsProvider: featureFlagsProvider
         )
     }
 

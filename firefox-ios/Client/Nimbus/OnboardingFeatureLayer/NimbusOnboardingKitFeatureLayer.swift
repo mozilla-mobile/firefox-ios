@@ -13,7 +13,7 @@ import OnboardingKit
 /// because defaults are not provided herein, but in the fml.
 class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
-    var onboardingVariant: OnboardingVariant
+    var onboardingVariant: Client.OnboardingVariant
     private let isDefaultBrowser: Bool
     private let isIpad: Bool
 
@@ -109,7 +109,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                     body: String(
                         format: cardData.body,
                         AppName.shortName.rawValue,
-                        AppName.shortName.rawValue),
+                        MozillaName.shortName.rawValue),
                     link: getOnboardingLink(from: cardData.link),
                     buttons: getOnboardingCardButtons(from: cardData.buttons),
                     multipleChoiceButtons: getOnboardingMultipleChoiceButtons_(from: cardData.multipleChoiceButtons),

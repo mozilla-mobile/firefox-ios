@@ -6,7 +6,8 @@ import SwiftUI
 import Common
 
 public struct AttributedLinkText<Action: RawRepresentable>: View where Action.RawValue == String {
-    let theme: Theme
+    let textColor: UIColor
+    let linkColor: UIColor
     let fullText: String
     let linkText: String
     let action: Action
@@ -14,14 +15,16 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
     let textAlignment: TextAlignment
 
     public init(
-        theme: Theme,
+        textColor: UIColor,
+        linkColor: UIColor,
         fullText: String,
         linkText: String,
         action: Action,
         textAlignment: TextAlignment = .center,
         linkAction: @escaping (Action) -> Void
     ) {
-        self.theme = theme
+        self.textColor = textColor
+        self.linkColor = linkColor
         self.fullText = fullText
         self.linkText = linkText
         self.action = action
@@ -53,12 +56,12 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
 
     private var attributedString: AttributedString {
         var attrString = AttributedString(fullText)
-        attrString.foregroundColor = Color(uiColor: theme.colors.textSecondary)
+        attrString.foregroundColor = Color(uiColor: textColor)
 
         let actionURL = URL(string: "action://\(action.rawValue)")!
         if let range = attrString.range(of: linkText) {
             attrString[range].underlineStyle = .single
-            attrString[range].foregroundColor = Color(uiColor: theme.colors.actionPrimary)
+            attrString[range].foregroundColor = Color(uiColor: linkColor)
             attrString[range].link = actionURL
         }
 

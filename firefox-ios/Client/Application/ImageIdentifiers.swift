@@ -11,8 +11,10 @@ import Foundation
 struct ImageIdentifiers {
     public static let badgeMask = "badge-mask"
     public static let firefoxFavicon = "faviconFox"
+    public static let firefoxLogoSoccer = "firefoxLogoSoccer"
     public static let foxConfirmation = "foxConfirmation"
     public static let foxDefaultBrowser = "foxDefaultBrowser"
+    public static let foxWithStars = "foxWithStars"
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
     public static let homepagePocket = "homepage-pocket"
@@ -62,6 +64,8 @@ struct ImageIdentifiers {
             public static let trackers = "onboardingTrackers"
             public static let syncWithIconsJapan = "onboardingSyncWithIconsJapan"
             public static let trackersJapan = "onboardingTrackersJapan"
+            public static let syncWithIconsBrandRefresh = "onboardingSyncWithIconsBrandRefresh"
+            public static let trackersBrandRefresh = "onboardingTrackersBrandRefresh"
         }
 
         public struct MultipleChoiceButtonImages {

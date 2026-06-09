@@ -367,7 +367,6 @@ public final class RustKeychain: KeychainProtocol {
             case .InvalidRecord(let message),
                     .NoSuchRecord(let message),
                     .Interrupted(let message),
-                    .SyncAuthInvalid(let message),
                     .UnexpectedLoginsApiError(let message):
                 return message
             case .InvalidKey:

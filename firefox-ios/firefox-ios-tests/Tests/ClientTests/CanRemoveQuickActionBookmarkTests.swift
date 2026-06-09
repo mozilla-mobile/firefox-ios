@@ -10,13 +10,13 @@ import XCTest
 
 class CanRemoveQuickActionBookmarkTests: XCTestCase {
     private var subject: MockCanRemoveQuickActionBookmark!
-    private var mockBookmarksHandler: BookmarksHandlerMock!
+    private var mockBookmarksHandler: MockBookmarksHandler!
     private var mockQuickActions: MockQuickActions!
 
     override func setUp() async throws {
         try await super.setUp()
         mockQuickActions = MockQuickActions()
-        mockBookmarksHandler = BookmarksHandlerMock()
+        mockBookmarksHandler = MockBookmarksHandler()
         subject = await MockCanRemoveQuickActionBookmark(bookmarksHandler: mockBookmarksHandler)
     }
 
@@ -29,8 +29,11 @@ class CanRemoveQuickActionBookmarkTests: XCTestCase {
 
     @MainActor
     func testWithoutBookmarks() {
-        subject.removeBookmarkShortcut(quickAction: mockQuickActions)
-        mockBookmarksHandler.callGetRecentBookmarksCompletion(with: [])
+        mockBookmarksHandler.getRecentBookmarksResult = []
+        MockCanRemoveQuickActionBookmark.removeBookmarkShortcut(
+            withBookmarksHandler: mockBookmarksHandler,
+            withQuickActions: mockQuickActions
+        )
 
         XCTAssertEqual(mockBookmarksHandler.getRecentBookmarksCallCount, 1)
         XCTAssertEqual(mockQuickActions.removeWasCalled, 1)
@@ -40,8 +43,11 @@ class CanRemoveQuickActionBookmarkTests: XCTestCase {
 
     @MainActor
     func testWithBookmarks() {
-        subject.removeBookmarkShortcut(quickAction: mockQuickActions)
-        mockBookmarksHandler.callGetRecentBookmarksCompletion(with: getMockBookmarks())
+        mockBookmarksHandler.getRecentBookmarksResult = getMockBookmarks()
+        MockCanRemoveQuickActionBookmark.removeBookmarkShortcut(
+            withBookmarksHandler: mockBookmarksHandler,
+            withQuickActions: mockQuickActions
+        )
 
         XCTAssertEqual(mockBookmarksHandler.getRecentBookmarksCallCount, 1)
         XCTAssertEqual(mockQuickActions.removeWasCalled, 0)

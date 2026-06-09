@@ -7,7 +7,7 @@ import MozillaAppServices
 
 struct MerinoStory: Equatable, Hashable {
     let corpusItemId: String
-    let scheduledCorpusItemId: String
+    let scheduledCorpusItemId: String?
     let url: URL?
     let title: String
     let excerpt: String
@@ -16,7 +16,7 @@ struct MerinoStory: Equatable, Hashable {
     let isTimeSensitive: Bool
     let imageURL: URL?
     let iconURL: URL?
-    let tileId: Int64
+    let tileId: Int64?
     let receivedRank: Int
 
     init(from item: RecommendationDataItem) {
@@ -38,7 +38,7 @@ struct MerinoStory: Equatable, Hashable {
 
     init(
         corpusItemId: String,
-        scheduledCorpusItemId: String,
+        scheduledCorpusItemId: String?,
         url: URL?,
         title: String,
         excerpt: String,
@@ -47,7 +47,7 @@ struct MerinoStory: Equatable, Hashable {
         isTimeSensitive: Bool,
         imageURL: URL?,
         iconURL: URL?,
-        tileId: Int64,
+        tileId: Int64?,
         receivedRank: Int
     ) {
         self.corpusItemId = corpusItemId

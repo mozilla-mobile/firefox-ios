@@ -9,6 +9,7 @@ import Common
 class BlockedTrackersTableViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     let blockedTrackersMockModel = BlockedTrackersTableModel(
+        userDefaults: nil,
         topLevelDomain: "test.com",
         title: "test.com",
         URL: "test.com",

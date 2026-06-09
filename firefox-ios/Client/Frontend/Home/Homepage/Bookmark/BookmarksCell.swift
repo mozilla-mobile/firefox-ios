@@ -6,13 +6,8 @@ import Common
 import Foundation
 import SiteImageView
 
-@MainActor
-protocol BookmarksCellProtocol: ReusableCell where Self: UIView {
-    func configure(config: BookmarkConfiguration, theme: Theme)
-}
-
 /// A cell used in homepage's Bookmarks section.
-final class BookmarksCell: UICollectionViewCell, BookmarksCellProtocol, ThemeApplicable, Blurrable {
+final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
     private struct UX {
         static let containerSpacing: CGFloat = 4
         static let heroImageSize = CGSize(width: 126, height: 68)

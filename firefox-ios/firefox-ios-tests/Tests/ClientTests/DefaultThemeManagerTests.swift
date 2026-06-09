@@ -17,10 +17,12 @@ final class DefaultThemeManagerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         userDefaults = MockUserDefaults()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {
         userDefaults = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 

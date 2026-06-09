@@ -32,6 +32,7 @@ class HistoryPanel: UIViewController,
     weak var historyCoordinatorDelegate: HistoryCoordinatorDelegate?
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     var state: LibraryPanelMainState
+    var isTransitioning = false
 
     let profile: Profile
     let windowUUID: WindowUUID
@@ -248,8 +249,15 @@ class HistoryPanel: UIViewController,
 
         let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
         bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
-        bottomStackView.isHidden = false
     }
+
+	func updateBottomSearchBarLayout(isHidden: Bool) {
+		bottomStackView.isHidden = isHidden
+
+		let bottomInset = isHidden ? 0 : searchbar.bounds.height
+		tableView.contentInset.bottom = bottomInset
+		tableView.verticalScrollIndicatorInsets.bottom = bottomInset
+	}
 
     func shouldDismissOnDone() -> Bool {
         guard state != .history(state: .search) else { return false }
@@ -805,12 +813,13 @@ extension HistoryPanel {
 extension HistoryPanel {
     func handleLeftTopButton() {
         updatePanelState(newState: .history(state: .mainView))
+        let userInfo: [String: Any] = ["state": state]
+        NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: userInfo)
     }
 
     func handleRightTopButton() {
         if state == .history(state: .search) {
             exitSearchState()
-            updatePanelState(newState: .history(state: .mainView))
         }
     }
 
@@ -836,9 +845,7 @@ extension HistoryPanel {
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
                     if result.isSuccess {
-                        SimpleToast().showAlertWithText(.LegacyAppMenu.AddPinToShortcutsConfirmMessage,
-                                                        bottomContainer: self.view,
-                                                        theme: self.currentTheme())
+                        self.libraryPanelDelegate?.showToast(message: .LegacyAppMenu.AddPinToShortcutsConfirmMessage)
                     }
                 }
             }

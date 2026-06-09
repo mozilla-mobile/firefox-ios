@@ -17,11 +17,6 @@ struct ToolbarTelemetry {
     }
 
     // Tap
-    func qrCodeButtonTapped(isPrivate: Bool) {
-        let isPrivateExtra = GleanMetrics.Toolbar.QrScanButtonTappedExtra(isPrivate: isPrivate)
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.qrScanButtonTapped, extras: isPrivateExtra)
-    }
-
     func clearSearchButtonTapped(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.ClearSearchButtonTappedExtra(isPrivate: isPrivate)
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.clearSearchButtonTapped, extras: isPrivateExtra)
@@ -82,11 +77,6 @@ struct ToolbarTelemetry {
     func menuButtonTapped(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.AppMenuButtonTappedExtra(isPrivate: isPrivate)
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.appMenuButtonTapped, extras: isPrivateExtra)
-    }
-
-    func dataClearanceButtonTapped(isPrivate: Bool) {
-        let isPrivateExtra = GleanMetrics.Toolbar.DataClearanceButtonTappedExtra(isPrivate: isPrivate)
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.dataClearanceButtonTapped, extras: isPrivateExtra)
     }
 
     // Long Press

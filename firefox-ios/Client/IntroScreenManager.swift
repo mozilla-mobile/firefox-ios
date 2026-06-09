@@ -4,11 +4,14 @@
 
 import Foundation
 import Shared
+import OnboardingKit
 
 protocol IntroScreenManagerProtocol {
     var shouldShowIntroScreen: Bool { get }
     var isModernOnboardingEnabled: Bool { get }
+    var shouldShowVideoIntro: Bool { get }
     var onboardingVariant: OnboardingVariant { get }
+    var onboardingKitVariant: OnboardingKit.OnboardingVariant { get }
     func didSeeIntroScreen()
 }
 
@@ -24,20 +27,44 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     }
 
     var isModernOnboardingEnabled: Bool {
-        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.modernOnboardingUI)
+    }
+
+    var shouldShowVideoIntro: Bool {
+        featureFlagsProvider.isEnabled(.videoIntroOnboarding)
+    }
+
+    var shouldUseBrandRefreshConfiguration: Bool {
+        featureFlagsProvider.isEnabled(.shouldUseBrandRefreshConfiguration)
     }
 
     var shouldUseJapanConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseJapanConfiguration)
     }
 
+    /// Determines the onboarding variant based on feature flags.
+    ///
+    /// Priority order (if multiple flags are enabled):
+    /// 1. Japan configuration (highest priority)
+    /// 2. Brand refresh configuration
+    /// 3. Onboarding (default fallback)
+    ///
+    /// Note: If both `shouldUseJapanConfiguration` and `shouldUseBrandRefreshConfiguration`
+    /// are enabled, Japan configuration takes precedence.
     var onboardingVariant: OnboardingVariant {
         if isModernOnboardingEnabled && shouldUseJapanConfiguration {
             return .japan
-        } else if isModernOnboardingEnabled {
-            return .modern
+        } else if isModernOnboardingEnabled && shouldUseBrandRefreshConfiguration {
+            return .brandRefresh
         } else {
-            return .legacy
+            // TODO: FXIOS-16008 Rename the "modern" variant to a non-time-relative name
+            return .modern
         }
+    }
+
+    /// Returns the OnboardingKit variant corresponding to the onboarding variant.
+    /// This avoids duplication of conversion logic across the codebase.
+    var onboardingKitVariant: OnboardingKit.OnboardingVariant {
+        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
     }
 }

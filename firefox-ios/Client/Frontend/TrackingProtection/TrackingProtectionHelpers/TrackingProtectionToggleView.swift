@@ -128,8 +128,16 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         toggleLabelsContainer.accessibilityHint = subtitle
     }
 
-    func setupAccessibilityIdentifiers(toggleViewLabelsContainerA11yId: String) {
+    func setupAccessibilityIdentifiers(
+        toggleViewLabelsContainerA11yId: String,
+        toggleLabelA11yId: String,
+        toggleSwitchA11yId: String,
+        toggleStatusLabelA11yId: String
+    ) {
         toggleLabelsContainer.accessibilityIdentifier = toggleViewLabelsContainerA11yId
+        toggleLabel.accessibilityIdentifier = toggleLabelA11yId
+        toggleSwitch.accessibilityIdentifier = toggleSwitchA11yId
+        toggleStatusLabel.accessibilityIdentifier = toggleStatusLabelA11yId
     }
 
     func setupActions() {

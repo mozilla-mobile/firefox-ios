@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Uschia pos ti memorisar fotografias.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox utilisescha la reconuschientscha vocala per convertir tia vusch en text en connex cun la tschertga vocala.";
+
 /* (No Comment) */
 "Scan QR Code" = "Scannar in code QR";
 

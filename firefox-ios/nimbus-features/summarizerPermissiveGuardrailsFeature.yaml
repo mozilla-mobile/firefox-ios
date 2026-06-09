@@ -1,0 +1,18 @@
+# The configuration for the permissive guardrails feature for the summarizer
+features:
+  summarizer-permissive-guardrails-feature:
+    description: >
+      This feature enables permissive guardrails for the summarizer.
+    variables:
+      enabled:
+        description: >
+          Enables permissive guardrails for the summarizer.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true

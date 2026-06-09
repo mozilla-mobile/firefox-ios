@@ -12,7 +12,7 @@ struct PasswordGeneratorState: ScreenState {
     var passwordHidden: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let passwordGeneratorState = appState.screenState(
+        guard let passwordGeneratorState = appState.componentState(
             PasswordGeneratorState.self,
             for: .passwordGenerator,
             window: uuid

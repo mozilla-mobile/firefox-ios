@@ -1,0 +1,6 @@
+/* Title of notification shown when a remote device has requested to close a number of tabs. %1$@ is the app name (e.g. Firefox). %2$@ is the number of tabs. */
+"CloseTab.ArrivingNotification.title.v133" = "%1$@ ផ្ទាំង​ត្រូវ​បាន​បិទ៖ %2$@";
+
+/* Label for an action used to view recently closed tabs. */
+"CloseTab.ViewAction.title.v133" = "មើលផ្ទាំងដែលទើបបិទថ្មីៗនេះ";
+

@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Z tym móžośo fota składowaś.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox powědańske spóznaśe wužywa, aby waš głos do teksta za głosowe pytanje pśetwórił.";
+
 /* (No Comment) */
 "Scan QR Code" = "QR-kod scannowaś";
 

@@ -60,6 +60,7 @@ let LoginsSettings = "LoginsSettings"
 let MailAppSettings = "MailAppSettings"
 let ShowTourInSettings = "ShowTourInSettings"
 let TrackingProtectionSettings = "TrackingProtectionSettings"
+let EnhancedTrackingProtection = "EnhancedTrackingProtection"
 let Intro_FxASignin = "Intro_FxASignin"
 let WebImageContextMenu = "WebImageContextMenu"
 let WebLinkContextMenu = "WebLinkContextMenu"
@@ -109,7 +110,6 @@ let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
 
 let allSettingsScreens = [
     SearchSettings,
-    AddCustomSearchSettings,
     NewTabSettings,
     MailAppSettings,
     DisplaySettings,
@@ -121,7 +121,9 @@ let allSettingsScreens = [
     SiriSettings,
     AutofillPasswordSettings,
     AppIconSettings,
-    ToolbarSettings
+    ToolbarSettings,
+    HomeSettings,
+    AddCustomSearchSettings,
 ]
 
 let allHomePanels = [
@@ -139,6 +141,8 @@ let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 @MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
+        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        backButton.mozWaitElementHittable(timeout: TIMEOUT)
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 }
@@ -209,9 +213,10 @@ class Action {
     static let OpenPrivateTabLongPressTabsButton = "OpenPrivateTabLongPressTabsButton"
     static let OpenNewTabLongPressTabsButton = "OpenNewTabLongPressTabsButton"
 
-    static let TogglePocketInNewTab = "TogglePocketInNewTab"
+    static let ToggleStoriesInNewTab = "ToggleStoriesInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
+    static let ToggleJumpBackIn = "ToggleJumpBackIn"
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
     static let SelectNewTabAsFirefoxHomePage = "SelectNewTabAsFirefoxHomePage"
@@ -287,6 +292,7 @@ class Action {
     static let SelectToolbarBottom = "SelectToolbarBottom"
     static let SelectToolbarTop = "SelectToolbarTop"
     static let SelectShortcuts = "TopSitesSettings"
+    static let SelectTrackersBlocked = "TrackersBlocked"
 }
 
 private let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -380,20 +386,7 @@ extension XCUIElement {
             if cellNum == UInt.min {
                 return
             }
-
-            let lastCell = self.cells.element(boundBy: Int(cellNum))
-            let bottom: XCUICoordinate
-            // If the cell is a little bit on the table.
-            // We shouldn't drag from too close to the edge of the screen,
-            // because Control Center gets summoned.
-            if lastCell.frame.minY < self.frame.maxY * 0.95 {
-                bottom = lastCell.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.0))
-            } else {
-                bottom = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
-            }
-
-            let top = firstCell.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.0))
-            bottom.press(forDuration: 0.1, thenDragTo: top)
+            firstCell.swipeUp()
             screenNum += 1
         }
     }

@@ -9,14 +9,14 @@ enum LaunchCoordinatorType {
 }
 
 enum LaunchType {
+    /// Showing the video intro, displayed before terms of service on a fresh install
+    case videoIntro
+
     /// Showing the terms of service
     case termsOfService(manager: TermsOfServiceManager)
 
     /// Showing the intro onboarding
     case intro(manager: IntroScreenManagerProtocol)
-
-    /// Show the update onboarding
-    case update(viewModel: UpdateViewModel)
 
     /// Show the surface survey
     case survey(manager: SurveySurfaceManager)
@@ -44,14 +44,13 @@ enum LaunchType {
     /// - Returns: if the launch type needs to be full screen or not
     func isFullScreenAvailable(isIphone: Bool) -> Bool {
         switch self {
+        case .videoIntro:
+            return true
         case .termsOfService:
             return true
-        case .intro(let introManager):
-            // For intro onboarding, use full screen on iPad only when modern onboarding is enabled
-            return isIphone || introManager.isModernOnboardingEnabled
-        case .update:
-            // For update onboarding, always use iPhone-only behavior for now
-            return isIphone
+        case .intro:
+            // Intro onboarding is always shown full screen
+            return true
         case .survey:
             return true
         case .defaultBrowser:

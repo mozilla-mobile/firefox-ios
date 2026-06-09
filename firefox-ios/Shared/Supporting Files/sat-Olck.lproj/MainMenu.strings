@@ -67,12 +67,6 @@
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
 "MainMenu.HeaderBanner.Title.v142" = "%@ ᱟᱢᱟᱜ ᱢᱩᱞ ᱞᱮᱠᱷᱟᱛᱮ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
 
-/* On the main menu, a title for a label that indicate the current option/action state is off. */
-"MainMenu.Off.Title.v141" = "ᱵᱚᱸᱫᱚ";
-
-/* On the main menu, a title for a label that indicate the current option/action state is on. */
-"MainMenu.On.Title.v141" = "ᱪᱟᱹᱞᱩ";
-
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ";
 

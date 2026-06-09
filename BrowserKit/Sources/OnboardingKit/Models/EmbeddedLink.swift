@@ -7,9 +7,9 @@ import Foundation
 public struct EmbeddedLink: Sendable {
     let fullText: String
     let linkText: String
-    let action: TosAction
+    let action: TermsOfUseAction
 
-    public init(fullText: String, linkText: String, action: TosAction) {
+    public init(fullText: String, linkText: String, action: TermsOfUseAction) {
         self.fullText = fullText
         self.linkText = linkText
         self.action = action

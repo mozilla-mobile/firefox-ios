@@ -18,8 +18,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setIsHostedSummarizerFeatureEnabled(enabled: false)
+        setIsSummarizerLanguageExpansionEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
     }
 
@@ -42,6 +42,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.borderPosition)
         XCTAssertNil(initialState.url)
         XCTAssertNil(initialState.searchTerm)
+        XCTAssertNil(initialState.lockIconButtonA11yId)
         XCTAssertNil(initialState.lockIconImageName)
         XCTAssertNil(initialState.safeListedURLImageName)
         XCTAssertFalse(initialState.isEditing)
@@ -77,6 +78,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.borderPosition, .top)
         XCTAssertNil(newState.url)
         XCTAssertNil(newState.searchTerm)
+        XCTAssertNil(newState.lockIconButtonA11yId)
         XCTAssertNil(newState.lockIconImageName)
         XCTAssertNil(newState.safeListedURLImageName)
         XCTAssertFalse(newState.isEditing)
@@ -201,6 +203,35 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
+    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeLanguaeExpansionOn() {
+        setIsSummarizerLanguageExpansionEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(
+            state: initialState,
+            reducer: reducer
+        )
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                canSummarize: true,
+                readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerModeWithSummarizer)
+        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
+        XCTAssertNotNil(newState.trailingPageActions[0].bottomBadgeImage)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn_readerModeActive() {
         setIsHostedSummarizerFeatureEnabled(enabled: true)
         setupStore()
@@ -225,6 +256,39 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 2)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerMode)
         XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    func test_summarizeModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn() {
+        setIsHostedSummarizerFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        // we need this state change in order to populate the AddressBarState
+        // with the reader mode state from the Toolbar action
+        let readerModeStateChange = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+        let newState = reducer(
+            readerModeStateChange,
+            ToolbarAction(
+                canSummarize: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didSummarizeSettingsChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .summarizer)
+        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.lightning)
         XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
@@ -458,7 +522,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsSettingsEnabled_showsNoTranslateButton() {
         setTranslationsFeatureEnabled(enabled: true)
-        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
@@ -467,7 +530,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: false),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
             )
@@ -476,6 +539,31 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.leadingPageActions.count, 1)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_reduxSettingsEnabled_showsTranslateButton() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(
+                    prefs: mockProfile.prefs,
+                    isUserSettingEnabled: true,
+                    state: .inactive
+                ),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 2)
+        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
     }
 
     func test_urlDidChangeAction_withTranslationConfiguration_andFFDisabled_doesNotIncludeTranslateButton() {
@@ -497,6 +585,99 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.leadingPageActions.count, 1)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    /// urlDidChange with `.active` config overrides existing Redux state.
+    func test_urlDidChangeAction_withActiveState_overridesExisting() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let stateWithInactiveIcon = reducer(
+            initialState,
+            TranslationsAction(
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
+                windowUUID: windowUUID,
+                actionType: TranslationsActionType.receivedTranslationLanguage
+            )
+        )
+
+        let newState = reducer(
+            stateWithInactiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .active),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.translationConfiguration?.state, .active)
+    }
+
+    /// urlDidChange with nil config preserves existing Redux state.
+    func test_urlDidChangeAction_withNilActionConfig_preservesExistingTranslationConfig() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let stateWithInactiveIcon = reducer(
+            initialState,
+            TranslationsAction(
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
+                windowUUID: windowUUID,
+                actionType: TranslationsActionType.receivedTranslationLanguage
+            )
+        )
+
+        let newState = reducer(
+            stateWithInactiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.translationConfiguration?.state, .inactive)
+    }
+
+    /// urlDidChange with default config (non-nil, state=nil) clears previous tab's Redux state.
+    func test_urlDidChangeAction_withDefaultActionConfig_clearsPreviousTabState() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        // Simulate the previous tab's `.active` state still in Redux at the moment of switch.
+        let stateWithActiveIcon = reducer(
+            initialState,
+            TranslationsAction(
+                translationConfiguration: TranslationConfiguration(
+                    prefs: mockProfile.prefs,
+                    state: .active,
+                    translatedToLanguage: "fr"
+                ),
+                windowUUID: windowUUID,
+                actionType: TranslationsActionType.translationCompleted
+            )
+        )
+
+        // Switching to a fresh tab dispatches urlDidChange with a default config (no state).
+        let newState = reducer(
+            stateWithActiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertNil(newState.translationConfiguration?.state)
+        XCTAssertNil(newState.translationConfiguration?.translatedToLanguage)
     }
 
     func test_traitCollectionDidChangedAction_returnsExpectedState() {
@@ -951,7 +1132,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 isShowingNavigationToolbar: isShowingNavigationToolbar,
                 canGoBack: true,
                 canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Large.lockFill,
+                lockIconImageName: StandardImageIdentifiers.Small.shieldCheckmarkFill,
                 safeListedURLImageName: nil,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
@@ -965,6 +1146,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    private func setIsSummarizerLanguageExpansionEnabled(enabled: Bool) {
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+            return SummarizerLanguageExpansionFeature(enabled: enabled)
+        }
+    }
+
     private func setTranslationsFeatureEnabled(enabled: Bool) {
         FxNimbus.shared.features.translationsFeature.with { _, _ in
             return TranslationsFeature(enabled: enabled)
@@ -974,8 +1161,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     // MARK: Helper
     func setupAppState(with initialToolbarState: ToolbarState) -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID
@@ -1000,6 +1187,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             windowUUID: windowUUID,
             toolbarPosition: toolbarState.toolbarPosition,
             toolbarLayout: toolbarState.toolbarLayout,
+            tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
             isPrivateMode: toolbarState.isPrivateMode,
             addressToolbar: toolbarState.addressToolbar,
             navigationToolbar: toolbarState.navigationToolbar,
@@ -1010,18 +1198,18 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             numberOfTabs: toolbarState.numberOfTabs,
             scrollAlpha: toolbarState.scrollAlpha,
             showMenuWarningBadge: toolbarState.showMenuWarningBadge,
-            isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
             canShowNavigationHint: toolbarState.canShowNavigationHint,
             shouldAnimate: toolbarState.shouldAnimate,
-            isTranslucent: toolbarState.isTranslucent)
+            isTranslucent: toolbarState.isTranslucent,
+            previousTabScreenshot: toolbarState.previousTabScreenshot,
+            nextTabScreenshot: toolbarState.nextTabScreenshot)
     }
 
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID

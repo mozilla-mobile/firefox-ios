@@ -79,6 +79,72 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "ຂ້າມ";
 
+/* Option for the automatic theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "ອັດຕະໂນມັດ";
+
+/* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "ສືບຕໍ່";
+
+/* Option for the dark theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "ມືດ";
+
+/* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "ເລືອກຮູບແບບທີ່ທ່ານມັກ ຫຼື ໃຫ້ %@ ຈັບຄູ່ກັບອຸປະກອນຂອງທ່ານ, ເຮັດໃຫ້ທ່ານຄວບຄຸມໄດ້.";
+
+/* Option for the light theme in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "ແສງສະຫວ່າງ";
+
+/* Title for the theme selection card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Title.v148" = "ເລືອກຮູບແບບຂອງທ່ານ";
+
+/* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "ສືບຕໍ່";
+
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "ເລີ່ມພິມເພື່ອຮັບຄຳແນະນຳການຄົ້ນຫາ, ເວັບໄຊທ໌ອັນດັບຕົ້ນໆ, ບຸກມາກ, ປະຫວັດ ແລະ ເຄື່ອງຈັກຊອກຫາຂອງທ່ານ - ທັງໝົດຢູ່ໃນບ່ອນດຽວ.";
+
+/* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "ເລືອກແຖບທີ່ຢູ່ຂອງທ່ານ";
+
+/* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "ພວກເຮົາໃຊ້ຂໍ້ມູນແນວໃດ";
+
+/* Button to skip the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Skip.Action.v148" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* Title for the marketing data sharing card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "ຊ່ວຍພວກເຮົາສ້າງອິນເຕີເນັດທີ່ດີຂຶ້ນ";
+
+/* Button to skip the notification card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "ການແຈ້ງເຕືອນຊ່ວຍໃຫ້ທ່ານປອດໄພຂຶ້ນດ້ວຍ %@";
+
+/* Button to turn on notifications in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "ເປີດການແຈ້ງເຕືອນ";
+
+/* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "ເລີ່ມການຊິ້ງຂໍ້ມູນ";
+
+/* Button to skip the sync setup during onboarding in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* Title for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "ສືບຕໍ່ທັນທີຈາກບ່ອນທີ່ທ່ານຄ້າງໄວ້";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "ຕົກລົງ ແລະ ສືບຕໍ່";
+
+/* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "ສືບຕໍ່";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "ວ່ອງໄວ, ປອດໄພ, ແລະ ຈະບໍ່ເຮັດໃຫ້ທ່ານຜິດຫວັງ. ການຊອກຫາເວັບໄຊທ໌ດີຂຶ້ນເລື້ອຍໆ.";
+
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "ຈັດການການຕັ້ງຄ່າ";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "ອັດຕະໂນມັດ";
 
@@ -106,8 +172,14 @@
 /* Continue button on the toolbar customization card. */
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "ສືບຕໍ່";
 
+/* Description for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "ເລີ່ມພິມເພື່ອຮັບຄຳແນະນຳໃນການຄົ້ນຫາ, ເວັບໄຊທ໌ອັນດັບຕົ້ນໆ, ບຸກມາກ, ປະຫວັດ ແລະ ເຄື່ອງຈັກຊອກຫາຂອງທ່ານ - ທັງໝົດຢູ່ໃນບ່ອນດຽວ.";
+
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "ເລືອກບ່ອນທີ່ຈະໃສ່ແຖບທີ່ຢູ່ຂອງເຈົ້າ";
+
+/* Title for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "ເລືອກແຖບທີ່ຢູ່ຂອງທ່ານ";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "ເທິງ";
@@ -120,6 +192,9 @@
 
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "ສາມາດເອົາບຸກມາກ, ປະຫວັດ, ແລະ ລະຫັດຜ່ານຂອງທ່ານຈາກອຸປະກອນໃດກໍໄດ້.";
+
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "ບຸກມາກ, ລະຫັດຜ່ານ ແລະ ອື່ນໆຂອງທ່ານຈະຖືກຊິ້ງຂໍ້ມູນໃນອຸປະກອນໃດກໍໄດ້. ທຸກຢ່າງຖືກປົກປ້ອງດ້ວຍການເຂົ້າລະຫັດ, ສະນັ້ນມີແຕ່ທ່ານເທົ່ານັ້ນທີ່ສາມາດເຂົ້າເຖິງມັນໄດ້.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "ເລີ່ມການຊິງຄ";
@@ -156,6 +231,9 @@
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ.";
+
+/* The text for the Privacy Notice link button. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "ແຈ້ງການຄວາມເປັນສ່ວນຕົວ.";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "ສຶກສາເພີ່ມເຕີມ";

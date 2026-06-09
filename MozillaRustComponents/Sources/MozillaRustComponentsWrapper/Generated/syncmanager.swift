@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -522,13 +541,13 @@ public protocol SyncManagerProtocol: AnyObject, Sendable {
     
 }
 open class SyncManager: SyncManagerProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -538,43 +557,44 @@ open class SyncManager: SyncManagerProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_sync_manager_fn_clone_syncmanager(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_sync_manager_fn_clone_syncmanager(self.handle, $0) }
     }
 public convenience init() {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_sync_manager_fn_constructor_syncmanager_new($0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_sync_manager_fn_free_syncmanager(pointer, $0) }
+        try! rustCall { uniffi_sync_manager_fn_free_syncmanager(handle, $0) }
     }
 
     
@@ -584,7 +604,8 @@ public convenience init() {
      * Disconnect engines from sync, deleting/resetting the sync-related data
      */
 open func disconnect()  {try! rustCall() {
-    uniffi_sync_manager_fn_method_syncmanager_disconnect(self.uniffiClonePointer(),$0
+    uniffi_sync_manager_fn_method_syncmanager_disconnect(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -594,7 +615,8 @@ open func disconnect()  {try! rustCall() {
      */
 open func getAvailableEngines() -> [String]  {
     return try!  FfiConverterSequenceString.lift(try! rustCall() {
-    uniffi_sync_manager_fn_method_syncmanager_get_available_engines(self.uniffiClonePointer(),$0
+    uniffi_sync_manager_fn_method_syncmanager_get_available_engines(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -604,13 +626,15 @@ open func getAvailableEngines() -> [String]  {
      */
 open func sync(params: SyncParams)throws  -> SyncResult  {
     return try  FfiConverterTypeSyncResult_lift(try rustCallWithError(FfiConverterTypeSyncManagerError_lift) {
-    uniffi_sync_manager_fn_method_syncmanager_sync(self.uniffiClonePointer(),
+    uniffi_sync_manager_fn_method_syncmanager_sync(
+            self.uniffiCloneHandle(),
         FfiConverterTypeSyncParams_lower(params),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -618,33 +642,24 @@ open func sync(params: SyncParams)throws  -> SyncResult  {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeSyncManager: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = SyncManager
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> SyncManager {
-        return SyncManager(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> SyncManager {
+        return SyncManager(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: SyncManager) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: SyncManager) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SyncManager {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: SyncManager, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -652,21 +667,21 @@ public struct FfiConverterTypeSyncManager: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSyncManager_lift(_ pointer: UnsafeMutableRawPointer) throws -> SyncManager {
-    return try FfiConverterTypeSyncManager.lift(pointer)
+public func FfiConverterTypeSyncManager_lift(_ handle: UInt64) throws -> SyncManager {
+    return try FfiConverterTypeSyncManager.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeSyncManager_lower(_ value: SyncManager) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeSyncManager_lower(_ value: SyncManager) -> UInt64 {
     return FfiConverterTypeSyncManager.lower(value)
 }
 
 
 
 
-public struct DeviceSettings {
+public struct DeviceSettings: Equatable, Hashable {
     public var fxaDeviceId: String
     public var name: String
     public var kind: DeviceType
@@ -678,35 +693,15 @@ public struct DeviceSettings {
         self.name = name
         self.kind = kind
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension DeviceSettings: Sendable {}
 #endif
-
-
-extension DeviceSettings: Equatable, Hashable {
-    public static func ==(lhs: DeviceSettings, rhs: DeviceSettings) -> Bool {
-        if lhs.fxaDeviceId != rhs.fxaDeviceId {
-            return false
-        }
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.kind != rhs.kind {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(fxaDeviceId)
-        hasher.combine(name)
-        hasher.combine(kind)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -744,7 +739,7 @@ public func FfiConverterTypeDeviceSettings_lower(_ value: DeviceSettings) -> Rus
 }
 
 
-public struct SyncAuthInfo {
+public struct SyncAuthInfo: Equatable, Hashable {
     public var kid: String
     public var fxaAccessToken: String
     public var syncKey: String
@@ -758,39 +753,15 @@ public struct SyncAuthInfo {
         self.syncKey = syncKey
         self.tokenserverUrl = tokenserverUrl
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SyncAuthInfo: Sendable {}
 #endif
-
-
-extension SyncAuthInfo: Equatable, Hashable {
-    public static func ==(lhs: SyncAuthInfo, rhs: SyncAuthInfo) -> Bool {
-        if lhs.kid != rhs.kid {
-            return false
-        }
-        if lhs.fxaAccessToken != rhs.fxaAccessToken {
-            return false
-        }
-        if lhs.syncKey != rhs.syncKey {
-            return false
-        }
-        if lhs.tokenserverUrl != rhs.tokenserverUrl {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(kid)
-        hasher.combine(fxaAccessToken)
-        hasher.combine(syncKey)
-        hasher.combine(tokenserverUrl)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -830,7 +801,7 @@ public func FfiConverterTypeSyncAuthInfo_lower(_ value: SyncAuthInfo) -> RustBuf
 }
 
 
-public struct SyncParams {
+public struct SyncParams: Equatable, Hashable {
     /**
      * Why are we performing this sync?
      */
@@ -908,51 +879,15 @@ public struct SyncParams {
         self.persistedState = persistedState
         self.deviceSettings = deviceSettings
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SyncParams: Sendable {}
 #endif
-
-
-extension SyncParams: Equatable, Hashable {
-    public static func ==(lhs: SyncParams, rhs: SyncParams) -> Bool {
-        if lhs.reason != rhs.reason {
-            return false
-        }
-        if lhs.engines != rhs.engines {
-            return false
-        }
-        if lhs.enabledChanges != rhs.enabledChanges {
-            return false
-        }
-        if lhs.localEncryptionKeys != rhs.localEncryptionKeys {
-            return false
-        }
-        if lhs.authInfo != rhs.authInfo {
-            return false
-        }
-        if lhs.persistedState != rhs.persistedState {
-            return false
-        }
-        if lhs.deviceSettings != rhs.deviceSettings {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(reason)
-        hasher.combine(engines)
-        hasher.combine(enabledChanges)
-        hasher.combine(localEncryptionKeys)
-        hasher.combine(authInfo)
-        hasher.combine(persistedState)
-        hasher.combine(deviceSettings)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -998,7 +933,7 @@ public func FfiConverterTypeSyncParams_lower(_ value: SyncParams) -> RustBuffer 
 }
 
 
-public struct SyncResult {
+public struct SyncResult: Equatable, Hashable {
     /**
      * Result from the sync server
      */
@@ -1072,51 +1007,15 @@ public struct SyncResult {
         self.nextSyncAllowedAt = nextSyncAllowedAt
         self.telemetryJson = telemetryJson
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SyncResult: Sendable {}
 #endif
-
-
-extension SyncResult: Equatable, Hashable {
-    public static func ==(lhs: SyncResult, rhs: SyncResult) -> Bool {
-        if lhs.status != rhs.status {
-            return false
-        }
-        if lhs.successful != rhs.successful {
-            return false
-        }
-        if lhs.failures != rhs.failures {
-            return false
-        }
-        if lhs.persistedState != rhs.persistedState {
-            return false
-        }
-        if lhs.declined != rhs.declined {
-            return false
-        }
-        if lhs.nextSyncAllowedAt != rhs.nextSyncAllowedAt {
-            return false
-        }
-        if lhs.telemetryJson != rhs.telemetryJson {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(status)
-        hasher.combine(successful)
-        hasher.combine(failures)
-        hasher.combine(persistedState)
-        hasher.combine(declined)
-        hasher.combine(nextSyncAllowedAt)
-        hasher.combine(telemetryJson)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1164,7 +1063,7 @@ public func FfiConverterTypeSyncResult_lower(_ value: SyncResult) -> RustBuffer 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum ServiceStatus {
+public enum ServiceStatus: Equatable, Hashable {
     
     case ok
     case networkError
@@ -1172,8 +1071,12 @@ public enum ServiceStatus {
     case authError
     case backedOff
     case otherError
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension ServiceStatus: Sendable {}
@@ -1252,23 +1155,20 @@ public func FfiConverterTypeServiceStatus_lower(_ value: ServiceStatus) -> RustB
 }
 
 
-extension ServiceStatus: Equatable, Hashable {}
-
-
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum SyncEngineSelection {
+public enum SyncEngineSelection: Equatable, Hashable {
     
     case all
     case some(engines: [String]
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension SyncEngineSelection: Sendable {}
@@ -1325,15 +1225,8 @@ public func FfiConverterTypeSyncEngineSelection_lower(_ value: SyncEngineSelecti
 }
 
 
-extension SyncEngineSelection: Equatable, Hashable {}
 
-
-
-
-
-
-
-public enum SyncManagerError: Swift.Error {
+public enum SyncManagerError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1355,8 +1248,21 @@ public enum SyncManagerError: Swift.Error {
     
     case AnyhowError(message: String)
     
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension SyncManagerError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1457,25 +1363,10 @@ public func FfiConverterTypeSyncManagerError_lower(_ value: SyncManagerError) ->
     return FfiConverterTypeSyncManagerError.lower(value)
 }
 
-
-extension SyncManagerError: Equatable, Hashable {}
-
-
-
-
-extension SyncManagerError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum SyncReason {
+public enum SyncReason: Equatable, Hashable {
     
     case scheduled
     case user
@@ -1483,8 +1374,12 @@ public enum SyncReason {
     case startup
     case enabledChange
     case backgrounded
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension SyncReason: Sendable {}
@@ -1561,13 +1456,6 @@ public func FfiConverterTypeSyncReason_lift(_ buf: RustBuffer) throws -> SyncRea
 public func FfiConverterTypeSyncReason_lower(_ value: SyncReason) -> RustBuffer {
     return FfiConverterTypeSyncReason.lower(value)
 }
-
-
-extension SyncReason: Equatable, Hashable {}
-
-
-
-
 
 
 #if swift(>=5.8)
@@ -1728,19 +1616,19 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_sync_manager_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_disconnect() != 52190) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_disconnect() != 33773) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_get_available_engines() != 8694) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_get_available_engines() != 56943) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_sync() != 25300) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_sync() != 25870) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_sync_manager_checksum_constructor_syncmanager_new() != 14797) {

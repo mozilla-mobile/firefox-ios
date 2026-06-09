@@ -7,5 +7,5 @@
 public protocol SummarizerProtocol: Sendable {
     var modelName: SummarizerModel { get }
     func summarize(_ contentToSummarize: String) async throws -> String
-    func summarizeStreamed(_ contentToSummarize: String) -> AsyncThrowingStream<String, Error>
+    func summarizeStreamed(_ contentToSummarize: String) async throws -> AsyncThrowingStream<String, Error>
 }

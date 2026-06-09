@@ -15,7 +15,7 @@ final class ModelsBufferRoute: TinyRoute {
         self.fetcher = fetcher
     }
 
-    func handle(url: URL, components: URLComponents) throws -> TinyHTTPReply? {
+    func handle(url: URL, components: URLComponents) async throws -> TinyHTTPReply? {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             throw TinyRouterError.badURL
         }
@@ -27,7 +27,7 @@ final class ModelsBufferRoute: TinyRoute {
             throw TinyRouterError.badURL
         }
 
-        guard let data = fetcher.fetchModelBuffer(recordId: recordId) else {
+        guard let data = await fetcher.fetchModelBuffer(recordId: recordId) else {
             throw TinyRouterError.notFound
         }
 

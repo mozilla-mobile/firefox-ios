@@ -22,10 +22,8 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = MockTabManager()
         fileManager = MockFileManager()
-        setWebEngineIntegrationEnabled(false)
     }
 
     override func tearDown() async throws {
@@ -34,22 +32,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         fileManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
-    }
-
-    @MainActor
-    func testWKUIDelegate_isBrowserWebUIDelegate_whenWebEngineIntegrationIsEnabled() {
-        let subject = createSubject()
-
-        setWebEngineIntegrationEnabled(true)
-
-        XCTAssertTrue(subject.wkUIDelegate is BrowserWebUIDelegate)
-    }
-
-    @MainActor
-    func testWKUIDelegate_isBrowserViewController_whenWebEngineIntegrationIsDisabled() {
-        let subject = createSubject()
-
-        XCTAssertTrue(subject.wkUIDelegate is BrowserViewController)
     }
 
     // MARK: - Decide policy for navigation action
@@ -244,7 +226,14 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowMarketPlaceScheme_whenUserAction() {
-        let subject = createSubject()
+        let subject = MockBrowserViewController(
+            profile: profile,
+            tabManager: tabManager,
+            userInitiatedQueue: MockDispatchQueue()
+        )
+        subject.mockIsMainFrameNavigation = true
+        trackForMemoryLeaks(subject)
+
         let url = URL(string: "marketplace-kit://install?exampleApp.com")!
         let tab = createTab()
         tabManager.tabs = [tab]
@@ -258,11 +247,18 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelMarketPlaceScheme_whenNotMainFrame() {
-        let subject = createSubject()
+        let subject = MockBrowserViewController(
+            profile: profile,
+            tabManager: tabManager,
+            userInitiatedQueue: MockDispatchQueue()
+        )
+        subject.mockIsMainFrameNavigation = false
+        trackForMemoryLeaks(subject)
+
         let url = URL(string: "marketplace-kit://install?exampleApp.com")!
         let tab = createTab()
         tabManager.tabs = [tab]
-        let navigationAction = MockNavigationAction(url: url, type: .linkActivated, isMainFrame: false)
+        let navigationAction = MockNavigationAction(url: url, type: .linkActivated)
 
         subject.webView(tab.webView!,
                         decidePolicyFor: navigationAction) { policy in
@@ -272,7 +268,14 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelMarketPlaceScheme_whenReloadAction() {
-        let subject = createSubject()
+        let subject = MockBrowserViewController(
+            profile: profile,
+            tabManager: tabManager,
+            userInitiatedQueue: MockDispatchQueue()
+        )
+        subject.mockIsMainFrameNavigation = true
+        trackForMemoryLeaks(subject)
+
         let url = URL(string: "marketplace-kit://install?exampleApp.com")!
         let tab = createTab()
         tabManager.tabs = [tab]
@@ -284,58 +287,115 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_allowInternalURL_whenAuthorized() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let internalURL = URL(string: "internal://local/about/home")!
+        let authorizedURL = InternalURL.authorize(url: internalURL)!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: authorizedURL,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_cancelInternalURL_whenUnprivileged() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "internal://local/about/home")!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_allowInternalURL_whenUnprivilegedWithBackForwardNavigation() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "internal://local/about/home")!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .backForward)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_allowInternalURL_whenUnprivilegedReaderModeURL() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "http://localhost:6571/reader-mode/page")!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
     // MARK: - Authentication
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodServerTrust() {
+    func testWebViewDidReceiveChallenge_MethodServerTrust() async {
         let subject = createSubject()
 
-        subject.webView(
+        let result = await subject.webView(
             anyWebView(),
-            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
-        ) { disposition, credential in
-            XCTAssertEqual(disposition, .performDefaultHandling)
-            XCTAssertNil(credential)
-        }
+            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
+        )
+
+        XCTAssertEqual(result.0, .performDefaultHandling)
+        XCTAssertNil(result.1)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPDigest() {
+    func testWebViewDidReceiveChallenge_MethodHTTPDigest() async {
         let subject = createSubject()
 
-        subject.webView(
+        let result = await subject.webView(
             anyWebView(),
-            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
-        ) { disposition, credential in
-            XCTAssertEqual(disposition, .performDefaultHandling)
-            XCTAssertNil(credential)
-        }
+            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
+        )
+
+        XCTAssertEqual(result.0, .performDefaultHandling)
+        XCTAssertNil(result.1)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPNTLM() {
+    func testWebViewDidReceiveChallenge_MethodHTTPNTLM() async {
         let subject = createSubject()
 
-        subject.webView(
+        let result = await subject.webView(
             anyWebView(),
-            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
-        ) { disposition, credential in
-            XCTAssertEqual(disposition, .performDefaultHandling)
-            XCTAssertNil(credential)
-        }
+            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
+        )
+
+        XCTAssertEqual(result.0, .performDefaultHandling)
+        XCTAssertNil(result.1)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPBasic() {
+    func testWebViewDidReceiveChallenge_MethodHTTPBasic() async {
         let subject = createSubject()
 
-        subject.webView(
+        let result = await subject.webView(
             anyWebView(),
-            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
-        ) { disposition, credential in
-            XCTAssertEqual(disposition, .performDefaultHandling)
-            XCTAssertNil(credential)
-        }
+            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
+        )
+
+        XCTAssertEqual(result.0, .performDefaultHandling)
+        XCTAssertNil(result.1)
     }
 
     @MainActor
@@ -389,10 +449,36 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         return SecCertificateCreateWithData(nil, data! as CFData)!
     }
 
-    private func setWebEngineIntegrationEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.webEngineIntegrationRefactor.with { _, _ in
-            return WebEngineIntegrationRefactor(enabled: enabled)
-        }
+    // MARK: - didCommit
+
+    @MainActor
+    func testWebViewDidCommit_withNoHandler_clearsTranslationConfiguration() {
+        let subject = createSubject()
+        let tab = createTab()
+        tab.translationConfiguration = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
+        (tab.webView as? MockTabWebView)?.loadedURL = URL(string: "https://example.com")
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didCommit: nil)
+
+        XCTAssertNil(tab.translationConfiguration)
+    }
+
+    @MainActor
+    func testWebViewDidCommit_withOnNextCommit_callsHandlerAndPreservesTranslationConfiguration() {
+        let subject = createSubject()
+        let tab = createTab()
+        tab.translationConfiguration = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
+        var handlerCalled = false
+        tab.onNextCommit = { handlerCalled = true }
+        (tab.webView as? MockTabWebView)?.loadedURL = URL(string: "https://example.com")
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didCommit: nil)
+
+        XCTAssertTrue(handlerCalled)
+        XCTAssertNil(tab.onNextCommit)
+        XCTAssertNotNil(tab.translationConfiguration)
     }
 
     // This test is being skipped because there are some very strange side effects

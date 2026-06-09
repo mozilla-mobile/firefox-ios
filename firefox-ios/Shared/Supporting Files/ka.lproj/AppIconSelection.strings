@@ -11,10 +11,7 @@
 "Settings.AppIconSelection.AppIconNames.Blue.Title.v136" = "ლურჯი";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of blue fading to purple. */
-"Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137" = "დღის ლურჯი საათი";
-
-/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon. */
-"Settings.AppIconSelection.AppIconNames.Cute.Title.v139" = "საყვარელი";
+"Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137" = "დღის ლურჯი დრო";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a cyan background. */
 "Settings.AppIconSelection.AppIconNames.Cyan.Title.v137" = "მოცისფრო";
@@ -32,22 +29,16 @@
 "Settings.AppIconSelection.AppIconNames.Fun.Cool.Title.146" = "კმაყოფილება";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a fox cuddling a globe. */
-"Settings.AppIconSelection.AppIconNames.Fun.Cuddling.Title.146" = "მიხუტება";
+"Settings.AppIconSelection.AppIconNames.Fun.Cuddling.Title.146" = "მიხუტებული";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with flames. */
 "Settings.AppIconSelection.AppIconNames.Fun.Flaming.Title.146" = "ცეცხლოვანი";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of yellow fading to orange. */
-"Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137" = "დღის ოქროს საათი";
+"Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137" = "დღის ოქროს დრო";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background. */
 "Settings.AppIconSelection.AppIconNames.Green.Title.v136" = "მწვანე";
-
-/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo. */
-"Settings.AppIconSelection.AppIconNames.Hug.Title.v136" = "ჩახუტება";
-
-/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe. */
-"Settings.AppIconSelection.AppIconNames.Lazy.Title.v136" = "ზარმაცი";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a white background. */
 "Settings.AppIconSelection.AppIconNames.Light.Title.v139" = "ნათელი";
@@ -92,7 +83,7 @@
 "Settings.AppIconSelection.AppIconNames.Retro2017.Title.v139" = "ძველებური 2017";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to yellow. */
-"Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137" = "გარიჟრაჟი";
+"Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137" = "რიჟრაჟი";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of purple fading to pink. */
 "Settings.AppIconSelection.AppIconNames.Sunset.Title.v137" = "დაისი";
@@ -107,7 +98,7 @@
 "Settings.AppIconSelection.AppIconNames.Yellow.Title.v137" = "ყვითელი";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the subtitle shown on alternative app icons added by contributors which credit them for their design work. The parameter %@ specifies the creator's name, @ handle, or other personal identifier. */
-"Settings.AppIconSelection.ContributorCredit.Subtitle.v139" = "შექმნილია %@";
+"Settings.AppIconSelection.ContributorCredit.Subtitle.v139" = "შემქმნელია %@";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the label for the button to acknowledge that an error setting the app icon has occurred. */
 "Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136" = "კარგი";

@@ -51,6 +51,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
                                 frame: WKFrameInfo?,
+                                viewController: UIViewController,
                                 alertContainer: UIView)
 
     /// Displays an autofill interface for saved logins, allowing the user to select from stored login credentials
@@ -79,6 +80,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo)
+
+    @MainActor
+    func showPasswordGenerator(tab: Tab, frameContext: PasswordGeneratorFrameContext)
 
     /// Shows the app menu
     @MainActor
@@ -118,16 +122,22 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showShortcutsLibrary()
 
     @MainActor
-    func showStoriesFeed()
+    func showWorldCupCountryPicker()
 
     @MainActor
-    func showStoriesWebView(url: URL?)
+    func showQuickAnswers()
 
     @MainActor
     func showPrivacyNoticeLink(url: URL)
 
     @MainActor
     func showTermsOfUse(context: TriggerContext)
+
+    @MainActor
+    func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String)
+
+    @MainActor
+    func openLearnMoreFromNativeErrorPage(url: URL)
 
     @MainActor
     func popToBVC()

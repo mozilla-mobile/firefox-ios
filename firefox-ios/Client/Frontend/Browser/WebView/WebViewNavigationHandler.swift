@@ -49,7 +49,15 @@ struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
                           navigationAction: WKNavigationAction) {
         // Only filter top-level navigation, not on data URL subframes.
         // If target frame is nil, we filter as well.
-        guard navigationAction.targetFrame?.isMainFrame ?? true else {
+        let isMainFrame = navigationAction.targetFrame?.isMainFrame
+        filterDataScheme(url: url, isMainFrame: isMainFrame)
+    }
+
+    @MainActor
+    func filterDataScheme(url: URL, isMainFrame: Bool?) {
+        let shouldFilter = isMainFrame ?? true
+
+        if !shouldFilter {
             decisionHandler(.allow)
             return
         }

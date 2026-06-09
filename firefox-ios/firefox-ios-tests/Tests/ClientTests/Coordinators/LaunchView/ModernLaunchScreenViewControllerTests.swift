@@ -19,7 +19,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         let profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: profile)
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
@@ -82,19 +81,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         }
     }
 
-    func test_launchWithLaunchType_withUpdateType_callsCoordinatorCorrectly() {
-        let subject = createSubject()
-        let launchType: LaunchType = .update(viewModel: viewModel.updateViewModel)
-
-        subject.launchWith(launchType: launchType)
-
-        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
-        guard case .update = coordinatorDelegate.savedLaunchType else {
-            XCTFail("Expected update launch type")
-            return
-        }
-    }
-
     func test_launchWithLaunchType_withSurveyType_callsCoordinatorCorrectly() {
         let subject = createSubject()
         let launchType: LaunchType = .survey(manager: viewModel.surveySurfaceManager)
@@ -121,6 +107,19 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         }
     }
 
+    func test_launchWithLaunchType_withVideoIntroType_callsCoordinatorCorrectly() {
+        let subject = createSubject()
+        let launchType: LaunchType = .videoIntro
+
+        subject.launchWith(launchType: launchType)
+
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+        guard case .videoIntro = coordinatorDelegate.savedLaunchType else {
+            XCTFail("Expected video intro launch type")
+            return
+        }
+    }
+
     func test_launchBrowser_callsCoordinatorDelegate() {
         let subject = createSubject()
 
@@ -141,20 +140,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
         guard case .intro = coordinatorDelegate.savedLaunchType else {
             XCTFail("Expected intro launch type")
-            return
-        }
-    }
-
-    func test_fullLaunchFlow_withUpdateLaunchType_triggersCorrectDelegateCall() {
-        viewModel.mockLaunchType = .update(viewModel: viewModel.updateViewModel)
-        let subject = createSubject()
-
-        subject.startLoading()
-
-        XCTAssertEqual(viewModel.startLoadingCalled, 1)
-        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
-        guard case .update = coordinatorDelegate.savedLaunchType else {
-            XCTFail("Expected update launch type")
             return
         }
     }
@@ -228,10 +213,10 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     func test_coordinatorDelegateCallTracking_verifiesCorrectBehavior() {
         let subject = createSubject()
         let introLaunchType: LaunchType = .intro(manager: viewModel.introScreenManager)
-        let updateLaunchType: LaunchType = .update(viewModel: viewModel.updateViewModel)
+        let surveyLaunchType: LaunchType = .survey(manager: viewModel.surveySurfaceManager)
 
         subject.launchWith(launchType: introLaunchType)
-        subject.launchWith(launchType: updateLaunchType)
+        subject.launchWith(launchType: surveyLaunchType)
         subject.launchBrowser()
 
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 2)
@@ -248,16 +233,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         subject.launchWith(launchType: introType)
 
         XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: introType))
-        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
-    }
-
-    func test_launchTypeVerification_withUpdateType_verifiesCorrectly() {
-        let subject = createSubject()
-        let updateType: LaunchType = .update(viewModel: viewModel.updateViewModel)
-
-        subject.launchWith(launchType: updateType)
-
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: updateType))
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
     }
 

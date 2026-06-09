@@ -1,0 +1,33 @@
+/* Section header for the Africa region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "Африка";
+
+/* Section header for the Asia region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "Азия";
+
+/* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
+"WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "КОНКАКАФ";
+
+/* Section header for the Oceania region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "Океания";
+
+/* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.England.v151" = "Англия";
+
+/* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.Scotland.v151" = "Шотландия";
+
+/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Әзер";
+
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "Калдырып тору";
+
+/* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
+"WorldCup.HomepageWidget.RemoveLabel.v151" = "Бетерү";
+
+/* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
+"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Яңарту";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "Уртаклашу";
+

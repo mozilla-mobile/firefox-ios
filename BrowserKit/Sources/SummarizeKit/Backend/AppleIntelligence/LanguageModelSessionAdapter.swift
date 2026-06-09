@@ -18,8 +18,11 @@ import Foundation
 final class LanguageModelSessionAdapter: LanguageModelSessionProtocol {
     private let realSession: LanguageModelSession
 
-    init(instructions: String) {
-        self.realSession = LanguageModelSession(instructions: instructions)
+    init(instructions: String, usesPermissiveGuardrails: Bool = false) {
+        let model: SystemLanguageModel = usesPermissiveGuardrails
+            ? SystemLanguageModel(guardrails: .permissiveContentTransformations)
+            : .default
+        self.realSession = LanguageModelSession(model: model, instructions: instructions)
     }
 
     func respond(

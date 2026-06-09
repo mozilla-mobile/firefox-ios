@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "2600"
+   LastUpgradeVersion = "2620"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MozillaRustComponents"
-               BuildableName = "MozillaRustComponents"
-               BlueprintName = "MozillaRustComponents"
+               BlueprintIdentifier = "MozillaAppServices"
+               BuildableName = "MozillaAppServices"
+               BlueprintName = "MozillaAppServices"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -27,13 +27,30 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:MozillaRustComponents.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "MozillaAppServices"
+            BuildableName = "MozillaAppServices"
+            BlueprintName = "MozillaAppServices"
+            ReferencedContainer = "container:">
+         </BuildableReference>
+      </CodeCoverageTargets>
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MozillaRustComponentsTests"
+               BuildableName = "MozillaRustComponentsTests"
+               BlueprintName = "MozillaRustComponentsTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -55,9 +72,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "MozillaRustComponents"
-            BuildableName = "MozillaRustComponents"
-            BlueprintName = "MozillaRustComponents"
+            BlueprintIdentifier = "MozillaAppServices"
+            BuildableName = "MozillaAppServices"
+            BlueprintName = "MozillaAppServices"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

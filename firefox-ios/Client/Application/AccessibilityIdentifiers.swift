@@ -19,11 +19,11 @@ struct AccessibilityIdentifiers {
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
         static let readerModeButton = "TabLocationView.readerModeButton"
+        static let readerModeWithSummarizerButton = "TabLocationView.readerModeWithSummarizerButton"
         static let reloadButton = "TabLocationView.reloadButton"
         static let shareButton = "TabLocationView.shareButton"
         static let summarizeButton = "TabLocationView.summarizeButton"
         static let backButton = "TabToolbar.backButton"
-        static let fireButton = "TabToolbar.fireButton"
         static let forwardButton = "TabToolbar.forwardButton"
         static let tabsButton = "TabToolbar.tabsButton"
         static let addNewTabButton = "TabToolbar.addNewTabButton"
@@ -56,6 +56,7 @@ struct AccessibilityIdentifiers {
 
         struct AddressToolbar {
             static let lockIcon = "AddressToolbar.lockIcon"
+            static let lockIconOff = "AddressToolbar.lockIconOff"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
             static let leadingSkeleton = "AddressToolbar.leadingSkeleton"
@@ -64,6 +65,12 @@ struct AccessibilityIdentifiers {
 
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
+            static let automationTestLeakIndicator = "WebView.LeakIndicatorElement"
+            static let contentView = "contentView"
+        }
+
+        struct Tab {
+            static let automationTestLeakIndicator = "Tab.LeakIndicatorElement"
         }
 
         static let overKeyboardContainer = "Browser.overKeyboardContainer"
@@ -72,6 +79,8 @@ struct AccessibilityIdentifiers {
         static let bottomContentStackView = "Browser.bottomContentStackView"
         static let contentContainer = "Browser.contentContainer"
         static let statusBarOverlay = "Browser.statusBarOverlay"
+        static let topBlurView = "Browser.topBlurView"
+        static let bottomBlurView = "Browser.bottomBlurView"
     }
 
     struct ContextualHints {
@@ -88,7 +97,6 @@ struct AccessibilityIdentifiers {
         }
 
         struct HeaderView {
-            static let mainButton = "MainMenu.MainButton"
             static let closeButton = "MainMenu.CloseMenuButton"
         }
 
@@ -105,10 +113,8 @@ struct AccessibilityIdentifiers {
         static let getHelp = "MainMenu.GetHelp"
         static let settings = "MainMenu.Settings"
         static let whatsNew = "MainMenu.WhatsNew"
-        static let customizeHomepage = "MainMenu.CustomizeHomepage"
         static let saveToReadingList = "MainMenu.SaveToReadingList"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
-        static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
         static let bookmarkPage = "MainMenu.BookmarkPage"
         static let print = "MainMenu.Print"
         static let share = "MainMenu.Share"
@@ -120,6 +126,7 @@ struct AccessibilityIdentifiers {
         static let moreLess = "MainMenu.MoreLess"
         static let signIn = "MainMenu.SignIn"
         static let summarizePage = "MainMenu.SummarizePage"
+        static let translatePage = "MainMenu.TranslatePage"
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
@@ -132,9 +139,15 @@ struct AccessibilityIdentifiers {
 
     struct EnhancedTrackingProtection {
         struct MainScreen {
+            static let scrollView = "TrackingProtection.ScrollView"
+            static let baseView = "TrackingProtection.BaseView"
             static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"
             static let trackingProtectionSettingsButton = "TrackingProtection.SettingsButton"
+            static let connectionDetailsContentView = "TrackingProtection.ConnectionDetailsContentView"
             static let foxImage = "TrackingProtection.FoxStatusImage"
+            static let connectionDetailsLabelsContainer = "TrackingProtection.ConnectionDetailsLabelsContainer"
+            static let connectionDetailsTitleLabel = "TrackingProtection.ConnectionDetailsTitleLabel"
+            static let connectionDetailsStatusLabel = "TrackingProtection.ConnectionDetailsStatusLabel"
             static let shieldImage = "TrackingProtection.ShieldImage"
             static let lockImage = "TrackingProtection.LockImage"
             static let arrowImage = "TrackingProtection.ArrowImage"
@@ -145,12 +158,25 @@ struct AccessibilityIdentifiers {
             static let trackersBlockedButton = "TrackingProtection.TrackersBlockedButton"
             static let securityStatusButton = "TrackingProtection.ConnectionSecurityStatusButton"
             static let toggleViewLabelsContainer = "TrackingProtection.ToggleViewLabelsContainer"
+            static let toggleLabel = "TrackingProtection.ToggleLabel"
+            static let toggleSwitch = "TrackingProtection.ToggleSwitch"
+            static let toggleStatusLabel = "TrackingProtection.ToggleStatusLabel"
             static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
             static let closeButton = "TrackingProtection.CloseButton"
             static let faviconImage = "TrackingProtection.FaviconImage"
+            static let trackersLabel  = "TrackingProtection.TrackersLabel"
+            static let trackersHorizontalLine = "TrackingProtection.TrackersHorizontalLine"
+            static let trackersConnectionContainer = "TrackingProtection.TrackersConnectionContainer"
+            static let connectionStatusImage = "TrackingProtection.ConnectionStatusImage"
+            static let connectionStatusLabel = "TrackingProtection.ConnectionStatusLabel"
+            static let connectionHorizontalLine = "TrackingProtection.ConnectionHorizontalLine"
+            static let favicon = "TrackingProtection.Favicon"
+            static let titleLabel = "TrackingProtection.TitleLabel"
+            static let subtitleLabel = "TrackingProtection.SubtitleLabel"
         }
 
         struct DetailsScreen {
+            static let scrollView = "TrackingProtectionDetails.ScrollView"
             static let headerView = "TrackingProtectionDetails.HeaderView"
             static let mainView = "TrackingProtectionDetails.MainView"
             static let containerView = "TrackingProtectionDetails.BaseView"
@@ -165,12 +191,41 @@ struct AccessibilityIdentifiers {
             static let sectionLabel = "TrackingProtectionDetails.SectionLabel"
             static let allSectionItems = "TrackingProtectionDetails.AllSectionItems"
             static let itemLabel = "TrackingProtectionDetails.ItemLabel"
+            static let connectionImage = "TrackingProtectionDetails.ConnectionImage"
+            static let connectionStatusLabel = "TrackingProtectionDetails.ConnectionStatusLabel"
+            static let dividerView = "TrackingProtectionDetails.DividerView"
+            static let verifiedByView = "TrackingProtectionDetails.VerifiedByView"
+            static let verifiedByLabel = "TrackingProtectionDetails.VerifiedByLabel"
         }
 
         struct BlockedTrackers {
             static let headerView = "BlockedTrackers.HeaderView"
+            static let footerView = "BlockedTrackers.FooterView"
             static let mainView = "BlockedTrackers.MainView"
             static let containerView = "BlockedTrackers.BaseView"
+            static let trackersTable = "BlockedTrackers.TrackersTable"
+            static let totalTrackersBlockedLabel = "BlockedTrackers.TotalTrackersBlockedLabel"
+            static let trackersBlockedInfoTextView = "BlockedTrackers.TrackersBlockedInfoTextView"
+
+            static let crossSiteTitle = "BlockedTrackers.CrossSiteTitle"
+            static let crossSiteImage = "BlockedTrackers.CrossSiteImage"
+
+            static let fingerPrintersTitle = "BlockedTrackers.FingerPrintersTitle"
+            static let fingerPrintersImage = "BlockedTrackers.FingerPrintersImage"
+
+            static let trackingContentTitle = "BlockedTrackers.TrackingContentTitle"
+            static let trackingContentImage = "BlockedTrackers.TrackingContentImage"
+
+            static let socialMediaTitle = "BlockedTrackers.SocialMediaTitle"
+            static let socialMediaImage = "BlockedTrackers.SocialMediaImage"
+        }
+
+        struct BlockedTrackersLearnMore {
+            static let headerView = "BlockedTrackersLearnMore.HeaderView"
+            static let containerView = "BlockedTrackersLearnMore.containerView"
+            static let closeButton = "BlockedTrackersLearnMore.CloseButton"
+            static let backButton = "BlockedTrackersLearnMore.BackButton"
+            static let titleLabel = "BlockedTrackersLearnMore.TitleLabel"
         }
 
         struct CertificatesScreen {
@@ -193,16 +248,14 @@ struct AccessibilityIdentifiers {
 
         struct OtherButtons {
             static let logoID = "FxHomeLogoID"
-            static let customizeHome = "FxHomeCustomizeHomeSettingButton"
             static let closeButton = "FirefoxHomepage.closeButton"
+            static let quickAnswersButton = "FirefoxHomepage.quickAnswersButton"
         }
 
         struct MoreButtons {
             static let shortcuts = "shortcutsSectionMoreButton"
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
-            static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
-            static let stories = "storiesSectionMoreButton"
         }
 
         struct SectionTitles {
@@ -214,6 +267,11 @@ struct AccessibilityIdentifiers {
 
         struct TopSites {
             static let itemCell = "TopSitesCell"
+
+            struct AddShortcutAlert {
+                static let view = "TopSites.AddShortcutAlert"
+                static let urlTextField = "TopSites.AddShortcutAlert.URLTextField"
+            }
         }
 
         struct SearchBar {
@@ -221,6 +279,8 @@ struct AccessibilityIdentifiers {
         }
 
         struct Pocket {
+            static let allCategory = "Category.All"
+            static let category = "Category"
             static let itemCell = "PocketCell"
             static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
         }
@@ -241,24 +301,10 @@ struct AccessibilityIdentifiers {
             static let favIconImage = "SyncedTabFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
         }
-
-        struct StoriesFeed {
-            static let storiesFeedCell = "StoriesFeedCell"
-        }
-
-        struct StoriesWebview {
-            static let reloadButton = "StoriesWebviewReloadButton"
-        }
     }
 
     struct GeneralizedIdentifiers {
         public static let back = "Back"
-    }
-
-    struct SaveCardPrompt {
-        struct Prompt {
-            static let closeButton = "a11yCloseButton"
-        }
     }
 
     struct Microsurvey {
@@ -274,6 +320,14 @@ struct AccessibilityIdentifiers {
             static let privacyPolicyLink = "Microsurvey.Prompt.PrivacyPolicyLink"
             static let submitButton = "Microsurvey.Survey.SubmitButton"
             static let radioButton = "Microsurvey.Survey.RadioButton"
+        }
+    }
+
+    struct Translations {
+        struct AutoTranslatePrompt {
+            static let messageLabel = "Translations.AutoTranslatePrompt.MessageLabel"
+            static let enableButton = "Translations.AutoTranslatePrompt.EnableButton"
+            static let closeButton = "Translations.AutoTranslatePrompt.CloseButton"
         }
     }
 
@@ -352,6 +406,7 @@ struct AccessibilityIdentifiers {
             static let saveButton = "BookmarksDetail.SaveButton"
             static let titleTextFieldClearButton = "BookmarksDetail.TitleTextFieldClearButton"
             static let urlTextFieldClearButton = "BookmarksDetail.UrlTextFieldClearButton"
+            static let bookmarksFolder = "BookmarksDetail.ParentFolderSelector.FolderCell_0"
         }
 
         struct HistoryPanel {
@@ -381,6 +436,10 @@ struct AccessibilityIdentifiers {
         static let closeButton = "CloseButton"
         static let pageControl = "PageControl"
         static let bottomSheetCloseButton = "Onboarding.bottomSheetCloseButton"
+
+        struct VideoIntro {
+            static let continueButton = "Onboarding.VideoIntro.ContinueButton"
+        }
 
         struct Wallpaper {
             static let card = "wallpaperCard"
@@ -423,7 +482,6 @@ struct AccessibilityIdentifiers {
     }
 
     struct Upgrade {
-        static let backgroundImage = "Upgrade.BackgroundImage"
         static let upgrade = "upgrade."
         static let closeButton = "Upgrade.CloseButton"
         static let pageControl = "Upgrade.PageControl"
@@ -433,6 +491,10 @@ struct AccessibilityIdentifiers {
         static let title = "Settings"
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
+
+        struct AIControls {
+            static let title = "AIControlsSettings"
+        }
 
         struct Appearance {
             static let browserThemeSectionTitle = "BrowserThemeSectionTitle"
@@ -589,6 +651,7 @@ struct AccessibilityIdentifiers {
             struct Addresses {
                 static let title = "Addresses"
                 static let addAddress = "Add address"
+                static let addressCell = "AddressCell"
             }
         }
 
@@ -705,6 +768,7 @@ struct AccessibilityIdentifiers {
             static let title = "SummarizeSettings"
             static let summarizeContentSwitch = "summarizeContentFeature"
             static let shakeGestureSwitch = "shakeGestureEnabledKey"
+            static let languageCell = "summarizeLanguageCell"
         }
 
         struct Theme {
@@ -715,9 +779,15 @@ struct AccessibilityIdentifiers {
             static let title = "Settings.Translation.Title"
             // This is based on `PrefsKeys.Settings.translationsFeature`
             static let toggleSwitch = "settings.translationFeature"
+            static let autoTranslateSwitch = "settings.translationAutoTranslate"
             static let navigationBar = "Settings.Translation.navigationBar"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"
+            static let languagePickerList = "Settings.Translation.LanguagePickerList"
+        }
+
+        struct QuickAnswers {
+            static let title = "Settings.QuickAnswers.Title"
         }
 
         struct BlockImages {
@@ -756,6 +826,10 @@ struct AccessibilityIdentifiers {
             static let allowAudioAndVideo = "AllowAudioAndVideo"
             static let blockAudio = "BlockAudio"
             static let blockAudioAndVideo = "BlockAudioAndVideo"
+        }
+
+        struct Debug {
+            static let offloadBackgroundWebViews = "Settings.Debug.OffloadBackgroundWebViews"
         }
     }
 
@@ -819,7 +893,6 @@ struct AccessibilityIdentifiers {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
         static let yesButton = "RememberCreditCard.yesButton"
         static let manageCardsButton = "RememberCreditCard.manageCardsButton"
-        static let notNowButton = "RememberCreditCard.notNowButton"
     }
 
     enum Autofill {
@@ -848,6 +921,11 @@ struct AccessibilityIdentifiers {
         static let titleLabel = "NativeErrorPage.titleLabel"
         static let errorDescriptionLabel = "NativeErrorPage.errorDescriptionLabel"
         static let reloadButton = "NativeErrorPage.reloadButton"
+        static let goBackButton = "NativeErrorPage.goBackButton"
+        static let proceedButton = "NativeErrorPage.proceedButton"
+        static let advancedSectionHeader = "NativeErrorPage.advancedSectionHeader"
+        static let viewCertificateLink = "NativeErrorPage.viewCertificateLink"
+        static let learnMoreLink = "NativeErrorPage.learnMoreLink"
     }
 
     struct SaveLoginAlert {
@@ -869,6 +947,13 @@ struct AccessibilityIdentifiers {
         static let lighterBrightnessButton = "ReaderMode.lighterBrightnessButton"
         static let darkerBrightnessButton = "ReaderMode.darkerBrightnessButton"
         static let brightnessSlider = "ReaderMode.brightnessSlider"
+
+        struct BarView {
+            static let readStatusButton = "ReaderModeBarView.readStatusButton"
+            static let settingsButton = "ReaderModeBarView.settingsButton"
+            static let listStatusButton = "ReaderModeBarView.listStatusButton"
+            static let summarizerButton = "ReaderModeBarView.summarizerButton"
+        }
     }
 }
 // swiftlint:enable line_length

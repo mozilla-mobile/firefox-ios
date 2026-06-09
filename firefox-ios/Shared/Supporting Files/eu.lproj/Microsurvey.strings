@@ -47,7 +47,7 @@
 "Microsurvey.Survey.Options.VerySatisfied.v132" = "Oso kontent";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states the order of the current option in the list of options. %1$@ is the number the option is in the list, %2$@ is the total number of options. An example of output is “1 out of 6”. */
-"Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129" = "%2$@ / %1$@";
+"Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129" = "%1$@/%2$@";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details. */
 "Microsurvey.Survey.PrivacyPolicyLink.v127" = "Pribatutasun-oharra";

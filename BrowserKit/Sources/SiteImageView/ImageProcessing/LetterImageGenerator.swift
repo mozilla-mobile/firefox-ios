@@ -63,7 +63,7 @@ final class DefaultLetterImageGenerator: LetterImageGenerator {
     }
 
     internal func generateBackgroundColor(forSite siteString: String) -> UIColor {
-        let index = abs(stableHash(siteString)) % (defaultBackgroundColors.count - 1)
+        let index = abs(stableHash(siteString)) % defaultBackgroundColors.count
         let colorHex = defaultBackgroundColors[index]
         return UIColor(colorString: colorHex)
     }

@@ -9,19 +9,21 @@ protocol MerinoFeedFetching: Sendable {
     func fetch(
         itemCount: Int,
         locale: CuratedRecommendationLocale,
+        region: String?,
         userAgent: String
-    ) async -> [RecommendationDataItem]
+    ) async -> CuratedRecommendationsResponse?
 }
 
-struct MerinoFeedFetcher: MerinoFeedFetching {
+struct MerinoFeedFetcher: MerinoFeedFetching, FeatureFlaggable {
     let baseURL: String
     let logger: Logger
 
     func fetch(
         itemCount: Int,
         locale: CuratedRecommendationLocale,
+        region: String?,
         userAgent: String
-    ) async -> [RecommendationDataItem] {
+    ) async -> CuratedRecommendationsResponse? {
         do {
             let client = try CuratedRecommendationsClient(
                 config: CuratedRecommendationsConfig(
@@ -29,9 +31,25 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
                     userAgentHeader: userAgent
                 )
             )
-            let request = CuratedRecommendationsRequest(locale: locale, count: Int32(itemCount))
-            let response = try client.getCuratedRecommendations(request: request)
-            return response.data
+            if featureFlagsProvider.isEnabled(.homepageStoryCategories) {
+                return try client.getCuratedRecommendations(
+                    request:
+                        CuratedRecommendationsRequest(
+                            locale: locale,
+                            region: region,
+                            count: Int32(itemCount),
+                            feeds: ["sections"]
+                        )
+                )
+            } else {
+                return try client.getCuratedRecommendations(
+                    request:
+                        CuratedRecommendationsRequest(
+                            locale: locale,
+                            count: Int32(itemCount),
+                        )
+                )
+            }
         } catch let error as CuratedRecommendationsApiError {
             switch error {
             case .Network(let reason):
@@ -71,14 +89,14 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
                     category: .merino
                 )
             }
-            return []
+            return nil
         } catch {
             logger.log(
                 "Unhandled error: \(error)",
                 level: .debug,
                 category: .merino
             )
-            return []
+            return nil
         }
     }
 }

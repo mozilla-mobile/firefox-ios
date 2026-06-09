@@ -114,14 +114,3 @@ extension WKUserScript {
         )
     }
 }
-
-extension WKFrameInfo {
-    // We check both the top and current frame protocol. This is to also check for mixed content.
-    // For most cases checking the top frame protocol.`hasOnlySecureContent` is deliberately not used here
-    // since it will return false if any external resource on the page is loaded via
-    // an insecure connection (i.e styles, images, ...), which might be too strict for most applications.
-    // Note: We should drop this extension in favour of SecurityManager in the future.
-    public var isFrameLoadedInSecureContext: Bool {
-        return self.webView?.url?.scheme == "https" && self.securityOrigin.protocol == "https"
-    }
-}

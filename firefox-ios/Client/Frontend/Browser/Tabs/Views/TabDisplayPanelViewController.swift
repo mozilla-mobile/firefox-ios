@@ -17,7 +17,6 @@ final class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
-                                     FeatureFlaggable,
                                      TabTrayThemeable {
     typealias SubscriberStateType = TabsPanelState
 
@@ -29,11 +28,7 @@ final class TabDisplayPanelViewController: UIViewController,
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private var viewHasAppeared = false
-
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
-    }
+    private var tabTrayUtils: TabTrayUtils
 
     private lazy var layout: TabTrayLayoutType = {
         return shouldUseiPadSetup() ? .regular : .compact
@@ -41,6 +36,10 @@ final class TabDisplayPanelViewController: UIViewController,
 
     var isCompactLayout: Bool {
         return layout == .compact
+    }
+
+    var isTabTrayUIExperimentsEnabled: Bool {
+        return tabTrayUtils.shouldDisplayExperimentUI()
     }
 
     // MARK: UI elements
@@ -75,12 +74,14 @@ final class TabDisplayPanelViewController: UIViewController,
          windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         dragAndDropDelegate: TabDisplayViewDragAndDropInteraction) {
+         dragAndDropDelegate: TabDisplayViewDragAndDropInteraction,
+         tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()) {
         self.panelType = isPrivateMode ? .privateTabs : .tabs
         self.tabsState = TabsPanelState(windowUUID: windowUUID, isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.tabTrayUtils = tabTrayUtils
         super.init(nibName: nil, bundle: nil)
         tabDisplayView.dragAndDropDelegate = dragAndDropDelegate
     }
@@ -206,11 +207,11 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        return true
     }
 
     var shouldBeInPrivateTheme: Bool {
-        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        let tabTrayState = store.state.componentState(TabTrayState.self, for: .tabsTray, window: windowUUID)
         return tabTrayState?.isPrivateMode ?? false
     }
 
@@ -311,9 +312,9 @@ final class TabDisplayPanelViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        let screenAction = ScreenAction(windowUUID: windowUUID,
-                                        actionType: ScreenActionType.showScreen,
-                                        screen: .tabsPanel)
+        let screenAction = ComponentAction(windowUUID: windowUUID,
+                                           actionType: ComponentActionType.addComponent,
+                                           component: .tabsPanel)
         store.dispatch(screenAction)
 
         let didLoadAction = TabPanelViewAction(panelType: panelType,
@@ -330,9 +331,9 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .tabsPanel)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .tabsPanel)
         store.dispatch(action)
     }
 

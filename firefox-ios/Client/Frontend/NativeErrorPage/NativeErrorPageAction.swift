@@ -27,6 +27,7 @@ struct NativeErrorPageAction: Action {
 enum NativeErrorPageActionType: ActionType {
     case receivedError
     case errorPageLoaded
+    case bypassCertificateWarning
 }
 
 enum NativeErrorPageMiddlewareActionType: ActionType {

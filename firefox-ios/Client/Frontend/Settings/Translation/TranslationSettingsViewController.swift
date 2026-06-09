@@ -5,6 +5,8 @@
 import Common
 import Shared
 
+/// Legacy translation settings view controller used when the `translationLanguagePicker`
+/// feature flag is OFF (Phase 1 / pre-language-picker behavior).
 final class TranslationSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
     init(prefs: Prefs, windowUUID: WindowUUID) {
@@ -34,11 +36,16 @@ final class TranslationSettingsViewController: SettingsTableViewController {
             titleText: .Settings.Translation.ToggleTitle
         ) { [weak self] _ in
             guard let self else { return }
+            let isEnabled = self.prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
             store.dispatch(
-                ToolbarAction(
-                    translationConfiguration: TranslationConfiguration(prefs: self.prefs, state: .inactive),
+                TranslationsAction(
+                    isTranslationsEnabled: isEnabled,
+                    translationConfiguration: TranslationConfiguration(
+                        prefs: self.prefs,
+                        isUserSettingEnabled: isEnabled
+                    ),
                     windowUUID: self.windowUUID,
-                    actionType: ToolbarActionType.didTranslationSettingsChange
+                    actionType: TranslationsActionType.didTranslationSettingsChange
                 )
             )
         }

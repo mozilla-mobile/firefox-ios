@@ -1,0 +1,27 @@
+/* (No Comment) */
+"New Private Tab" = "Нови приватни језичак";
+
+/* (No Comment) */
+"New Tab" = "Нови језичак";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Firefox користи вашу камеру за скенирање КР кодова и снимање фотографија и видео записа.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox захтева Face ID за приступ вашим сачуваним лозинкама и начинима плаћања.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Веб сајтови које посећујете могу захтевати вашу локацију.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Firefox користи ваш микрофон за снимање и отпремање звука.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Ово вам омогућава да сачувате фотографије.";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox користи препознавање говора за претварање вашег гласа у текст за гласовну претрагу.";
+
+/* (No Comment) */
+"Scan QR Code" = "Скенирај КР код";
+

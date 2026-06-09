@@ -8,13 +8,12 @@ import OnboardingKit
 import Foundation
 
 /// The ``OnboardingCardDelegate`` is responsible for handling a variety of
-/// functions relating to onboarding actions taken by the user that are
-/// shared by both ``IntroViewController`` and ``UpdateViewController``.
+/// functions relating to onboarding actions taken by the user in a
+/// card-based onboarding view controller.
 ///
 /// The function has default implementations for all these actions, with the
-/// exception of ``OnboardingCardDelegate/handleButtonPress(for:from:)``. This
-/// function is implemented uniquely in its respective view controller, to account
-/// for the difference in flows that the two onboarding paths represent.
+/// exception of ``OnboardingCardDelegate/handleButtonPress(for:from:)``, which
+/// is implemented uniquely in its respective view controller.
 protocol OnboardingCardDelegate: AnyObject {
     // These methods must be implemented by the object
     @MainActor

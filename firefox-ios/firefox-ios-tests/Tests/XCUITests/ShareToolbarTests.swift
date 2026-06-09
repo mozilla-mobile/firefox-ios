@@ -173,11 +173,15 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     private func validateMarkupTool() {
         // The Markup tool opens
         if #available(iOS 26, *) {
-            if iPad() {
+            if !iPad() {
                 app.navigationBars.buttons["More"].waitAndTap()
+                mozWaitForElementToExist(app.buttons["Markup"])
+                mozWaitForElementToExist(app.buttons["Close"])
+                mozWaitForElementToExist(app.otherElements["Drawing-Palette"])
+            } else {
+                mozWaitForElementToExist(app.switches["Markup"])
+                mozWaitForElementToExist(app.buttons["close"])
             }
-            // iOS 26: The markup isn't shown in debug description
-            // https://github.com/mozilla-mobile/firefox-ios/issues/31552
         } else {
             mozWaitForElementToExist(app.switches["Markup"])
             mozWaitForElementToExist(app.buttons["Done"])
@@ -192,7 +196,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         app.buttons["Reader View"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
-            app.cells["actionGroupCell"].staticTexts["More"].waitAndTap(timeout: 10)
+            app.scrollViews.cells["View More"].waitAndTap(timeout: 10)
         }
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
@@ -211,7 +215,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
-            app.cells["actionGroupCell"].staticTexts["More"].waitAndTap(timeout: 10)
+            app.scrollViews.cells["View More"].waitAndTap(timeout: 10)
         }
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])

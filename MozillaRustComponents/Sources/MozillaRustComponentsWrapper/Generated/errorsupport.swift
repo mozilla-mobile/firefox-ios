@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -395,29 +414,7 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
-// Magic number for the Rust proxy to call using the same mechanism as every other method,
-// to free the callback once it's dropped by Rust.
-private let IDX_CALLBACK_FREE: Int32 = 0
-// Callback return codes
-private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
-private let UNIFFI_CALLBACK_ERROR: Int32 = 1
-private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterUInt32: FfiConverterPrimitive {
-    typealias FfiType = UInt32
-    typealias SwiftType = UInt32
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt32 {
-        return try lift(readInt(&buf))
-    }
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(value))
-    }
-}
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -460,189 +457,6 @@ fileprivate struct FfiConverterString: FfiConverter {
     }
 }
 
-
-
-
-/**
- * Application error reporting trait
- *
- * The application that's consuming application-services implements this via a UniFFI callback
- * interface, then calls `set_application_error_reporter()` to setup a global
- * ApplicationErrorReporter.
- */
-public protocol ApplicationErrorReporter: AnyObject, Sendable {
-    
-    /**
-     * Send an error report to a Sentry-like error reporting system
-     *
-     * type_name should be used to group errors together
-     */
-    func reportError(typeName: String, message: String) 
-    
-    /**
-     * Send a breadcrumb to a Sentry-like error reporting system
-     */
-    func reportBreadcrumb(message: String, module: String, line: UInt32, column: UInt32) 
-    
-}
-
-
-// Put the implementation in a struct so we don't pollute the top-level namespace
-fileprivate struct UniffiCallbackInterfaceApplicationErrorReporter {
-
-    // Create the VTable using a series of closures.
-    // Swift automatically converts these into C callback functions.
-    //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceApplicationErrorReporter] = [UniffiVTableCallbackInterfaceApplicationErrorReporter(
-        reportError: { (
-            uniffiHandle: UInt64,
-            typeName: RustBuffer,
-            message: RustBuffer,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceApplicationErrorReporter.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.reportError(
-                     typeName: try FfiConverterString.lift(typeName),
-                     message: try FfiConverterString.lift(message)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        reportBreadcrumb: { (
-            uniffiHandle: UInt64,
-            message: RustBuffer,
-            module: RustBuffer,
-            line: UInt32,
-            column: UInt32,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceApplicationErrorReporter.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.reportBreadcrumb(
-                     message: try FfiConverterString.lift(message),
-                     module: try FfiConverterString.lift(module),
-                     line: try FfiConverterUInt32.lift(line),
-                     column: try FfiConverterUInt32.lift(column)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterCallbackInterfaceApplicationErrorReporter.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface ApplicationErrorReporter: handle missing in uniffiFree")
-            }
-        }
-    )]
-}
-
-private func uniffiCallbackInitApplicationErrorReporter() {
-    uniffi_error_support_fn_init_callback_vtable_applicationerrorreporter(UniffiCallbackInterfaceApplicationErrorReporter.vtable)
-}
-
-// FfiConverter protocol for callback interfaces
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterCallbackInterfaceApplicationErrorReporter {
-    fileprivate static let handleMap = UniffiHandleMap<ApplicationErrorReporter>()
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-extension FfiConverterCallbackInterfaceApplicationErrorReporter : FfiConverter {
-    typealias SwiftType = ApplicationErrorReporter
-    typealias FfiType = UInt64
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func lift(_ handle: UInt64) throws -> SwiftType {
-        try handleMap.get(handle: handle)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        let handle: UInt64 = try readInt(&buf)
-        return try lift(handle)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func lower(_ v: SwiftType) -> UInt64 {
-        return handleMap.insert(obj: v)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(v))
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterCallbackInterfaceApplicationErrorReporter_lift(_ handle: UInt64) throws -> ApplicationErrorReporter {
-    return try FfiConverterCallbackInterfaceApplicationErrorReporter.lift(handle)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterCallbackInterfaceApplicationErrorReporter_lower(_ v: ApplicationErrorReporter) -> UInt64 {
-    return FfiConverterCallbackInterfaceApplicationErrorReporter.lower(v)
-}
-/**
- * Set the global error reporter.  This is typically done early in startup.
- */
-public func setApplicationErrorReporter(errorReporter: ApplicationErrorReporter)  {try! rustCall() {
-    uniffi_error_support_fn_func_set_application_error_reporter(
-        FfiConverterCallbackInterfaceApplicationErrorReporter_lower(errorReporter),$0
-    )
-}
-}
-/**
- * Unset the global error reporter.  This is typically done at shutdown for
- * platforms that want to cleanup references like Desktop.
- */
-public func unsetApplicationErrorReporter()  {try! rustCall() {
-    uniffi_error_support_fn_func_unset_application_error_reporter($0
-    )
-}
-}
-
 private enum InitializationResult {
     case ok
     case contractVersionMismatch
@@ -652,26 +466,13 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_error_support_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_error_support_checksum_func_set_application_error_reporter() != 5026) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_error_support_checksum_func_unset_application_error_reporter() != 48726) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_error_support_checksum_method_applicationerrorreporter_report_error() != 35278) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_error_support_checksum_method_applicationerrorreporter_report_breadcrumb() != 15136) {
-        return InitializationResult.apiChecksumMismatch
-    }
 
-    uniffiCallbackInitApplicationErrorReporter()
     return InitializationResult.ok
 }()
 

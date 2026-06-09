@@ -13,23 +13,14 @@ features:
           awesome-bar:
             use-page-content: false
             search-highlights: false
-            position:
-              is-position-feature-enabled: true
-              is-bottom: false
       - channel: developer
         value:
           awesome-bar:
             search-highlights: false
-            position:
-              is-position-feature-enabled: true
-              is-bottom: false
       - channel: beta
         value:
           awesome-bar:
             search-highlights: false
-            position:
-              is-position-feature-enabled: true
-              is-bottom: false
 
 objects:
   AwesomeBar:
@@ -47,23 +38,3 @@ objects:
         description: "Whether or not search highlights are enabled"
         type: Boolean
         default: false
-      position:
-        description: >
-          This property defines whether or not the feature is
-          enabled, and the position of the search bar
-        type: SearchBarPositionFeature
-        default:
-          is-position-feature-enabled: true
-          is-bottom: true
-
-  SearchBarPositionFeature:
-    description: "The configuration for the bottom search bar on the homescreen"
-    fields:
-      is-position-feature-enabled:
-        type: Boolean
-        description: Whether or not the feature is enabled
-        default: true
-      is-bottom:
-        type: Boolean
-        description: Whether or not the default position is at the bottom
-        default: true

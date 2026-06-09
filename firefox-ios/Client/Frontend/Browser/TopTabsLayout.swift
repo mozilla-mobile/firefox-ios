@@ -15,14 +15,10 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
         @MainActor
         static let minTabWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 130 : 76
         static let maxTabWidth: CGFloat = 220
-        static let faderPading: CGFloat = 8
-        static let separatorYOffset: CGFloat = 7
-        static let separatorHeight: CGFloat = 32
     }
 
     weak var tabSelectionDelegate: TabSelectionDelegate?
     weak var scrollViewDelegate: TopTabsScrollDelegate?
-    let headerFooterWidth = UX.separatorWidth + UX.faderPading
 
     @objc
     func collectionView(
@@ -95,8 +91,6 @@ extension TopTabsLayoutDelegate: UICollectionViewDelegate {
 
 class TopTabsViewLayout: UICollectionViewFlowLayout {
     var decorationAttributeArr: [Int: UICollectionViewLayoutAttributes?] = [:]
-    let separatorYOffset = TopTabsLayoutDelegate.UX.separatorYOffset
-    let separatorSize = TopTabsLayoutDelegate.UX.separatorHeight
     let SeparatorZIndex = -2 /// Prevent the header/footer from appearing above the Tabs
 
     override func prepare() {

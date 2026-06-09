@@ -1,48 +1,48 @@
 /* (No Comment) */
-"2GqvPe" = "Go to Copied Link";
+"2GqvPe" = "ចូលទៅកាន់តំណភ្ជាប់ដែលបានចម្លង";
 
 /* (No Comment) */
-"ctDNmu" = "Quick access to various Firefox actions";
+"ctDNmu" = "ចូលប្រើសកម្មភាពផ្សេងៗរបស់ Firefox បានយ៉ាងរហ័ស";
 
 /* (No Comment) */
-"eHmH1H" = "Clear Private Tabs";
+"eHmH1H" = "សម្អាតផ្ទាំងឯកជន";
 
 /* (No Comment) */
-"eqyNJg" = "Quick Action";
+"eqyNJg" = "សកម្មភាពរហ័ស";
 
 /* (No Comment) */
-"eV8mOT" = "Quick Action Type";
+"eV8mOT" = "ប្រភេទសកម្មភាពរហ័ស";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+"fi3W24-2GqvPe" = "មានជម្រើស ${count} ដែលត្រូវគ្នានឹង 'ចូលទៅកាន់តំណភ្ជាប់ដែលបានចម្លង'។";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Private Tabs’.";
+"fi3W24-eHmH1H" = "មានជម្រើស ${count} ដែលត្រូវគ្នានឹង 'សម្អាតផ្ទាំងឯកជន'។";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "There are ${count} options matching ‘New Private Search’.";
+"fi3W24-scEmjs" = "មានជម្រើស ${count} ដែលត្រូវគ្នានឹង ‘ការស្វែងរកឯកជនថ្មី’។";
 
 /* (No Comment) */
-"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+"fi3W24-xRJbBP" = "មានជម្រើស ${count} ដែលត្រូវគ្នានឹង ‘ការស្វែងរកថ្មី’។";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+"PzSrmZ-2GqvPe" = "ដើម្បីបញ្ជាក់ តើអ្នកចង់ ‘ចូលទៅកាន់តំណភ្ជាប់ដែលបានចម្លង’ មែនទេ?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Private Tabs’?";
+"PzSrmZ-eHmH1H" = "ដើម្បីបញ្ជាក់ អ្នកចង់បាន 'លុបផ្ទាំងឯកជន'?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Private Search’?";
+"PzSrmZ-scEmjs" = "ដើម្បីបញ្ជាក់ តើអ្នកចង់បាន 'ការស្វែងរកឯកជនថ្មី' មែនទេ?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
+"PzSrmZ-xRJbBP" = "ដើម្បីបញ្ជាក់ តើអ្នកចង់បាន 'ការស្វែងរកថ្មី' មែនទេ?";
 
 /* (No Comment) */
-"scEmjs" = "New Private Search";
+"scEmjs" = "ការស្វែងរកឯកជនថ្មី";
 
 /* (No Comment) */
-"w9jdPK" = "Quick Action";
+"w9jdPK" = "សកម្មភាពរហ័ស";
 
 /* (No Comment) */
-"xRJbBP" = "New Search";
+"xRJbBP" = "ការស្វែងរកថ្មី";
 

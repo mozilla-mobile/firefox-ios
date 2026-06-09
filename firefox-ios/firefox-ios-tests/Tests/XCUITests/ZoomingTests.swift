@@ -66,7 +66,7 @@ final class ZoomingTests: BaseTestCase {
         openURLAndNavigateToZoom(index: 0)
         validateZoomActions()
 
-        // Repite the secuence again
+        // Repeat the sequence again
         XCUIDevice.shared.orientation = .landscapeLeft
         validateZoomActionsLandscape()
     }
@@ -247,6 +247,7 @@ final class ZoomingTests: BaseTestCase {
 
     func goToTabTray() {
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(TabTray)
     }
 }

@@ -38,6 +38,7 @@ class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             SearchViewDelegate,
                             FeatureFlaggable,
+                            UserFeaturePreferenceProvider,
                             Notifiable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
@@ -120,6 +121,10 @@ class SearchViewController: SiteTableViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Override keyboardDismissMode to `.none` to avoid bug where the address bar is behind the raise keyboard
+        // when dismissed by scrolling the search results because the keyboard reports stale keyboard frame
+        // This change matches Safari behaviour where keyboard doesn't dismissed when scrolling in results page
+        tableView.keyboardDismissMode = .none
         getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
@@ -393,9 +398,10 @@ class SearchViewController: SiteTableViewController,
         super.viewWillTransition(to: size, with: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
         coordinator.animate(alongsideTransition: { [self] _ in
-            tableView.reloadData()
             layoutSearchEngineScrollViewContent()
-        }, completion: nil)
+        }, completion: { [weak self] _ in
+            self?.tableView.reloadData()
+        })
     }
 
     private func getCachedTabs() {
@@ -628,7 +634,8 @@ class SearchViewController: SiteTableViewController,
                     }
                 }
             case .firefoxSuggestions:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                if featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+                    && userPreferences.getPreferenceFor(.firefoxSuggestFeature) {
                     let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
                     if searchTelemetry?.visibleFirefoxSuggestions
                         .contains(where: { $0.url == firefoxSuggestion.url }) == false {
