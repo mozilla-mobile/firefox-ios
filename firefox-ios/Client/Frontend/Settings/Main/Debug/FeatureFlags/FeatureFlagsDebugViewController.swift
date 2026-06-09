@@ -95,13 +95,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .trackingProtectionRefactor,
-                titleText: format(string: "Enhanced Tracking Protection"),
-                statusText: format(string: "Toggle to use enhanced tracking protection")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .homepageAddShortcutTile,
                 titleText: format(string: "Homepage Add Shortcut"),
                 statusText: format(string: "Toggle to enable the homepage add shortcut tile")
