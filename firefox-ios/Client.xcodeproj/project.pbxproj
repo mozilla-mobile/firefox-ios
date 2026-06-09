@@ -1,4 +1,4 @@
-// !$*UTF8*$!
+-// !$*UTF8*$!
 {
 	archiveVersion = 1;
 	classes = {
@@ -14083,15 +14083,11 @@
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */,
 				5A8017DF29CE15D90047120D /* TabManagerImplementation.swift */,
-<<<<<<< HEAD
-				1D558A592BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift */,
 				C2B255EC2F0BAE3F00A45183 /* SwipeUpTabWebViewPreview.swift */,
-=======
 				8A3FF9CB2FB408A1001F5DE9 /* TabRestorationResult.swift */,
 				8A3F08AB2FB40B8B001F5DE9 /* TabRestorer.swift */,
 				8A3FF9CC2FB408A1001F5DE9 /* TabRestorerDelegate.swift */,
 				8A0A7C3F2F61F03200D00820 /* TabWebView.swift */,
->>>>>>> main
 				BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */,
 				BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */,
 				1D558A592BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift */,
