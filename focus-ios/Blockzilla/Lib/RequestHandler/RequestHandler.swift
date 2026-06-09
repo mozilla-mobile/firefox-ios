@@ -4,7 +4,7 @@
 
 import UIKit
 
-private let internalSchemes: Set<String> = ["http", "https", "ftp", "file", "about", "javascript", "data"]
+private let internalSchemes: Set<String> = ["http", "https", "ftp", "file", "about", "data"]
 
 final class RequestHandler {
     func handle(request: URLRequest, alertCallback: (UIAlertController) -> Void) -> Bool {
