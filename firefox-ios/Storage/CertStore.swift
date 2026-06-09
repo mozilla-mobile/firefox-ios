@@ -8,6 +8,7 @@ import UIKit
 /// In-memory certificate store.
 open class CertStore {
     fileprivate var keys = Set<String>()
+    fileprivate var origins = Set<String>()
 
     public init() {}
 
@@ -15,12 +16,17 @@ open class CertStore {
         let data: Data = SecCertificateCopyData(cert) as Data
         let key = keyForData(data, origin: origin)
         keys.insert(key)
+        origins.insert(origin)
     }
 
     open func containsCertificate(_ cert: SecCertificate, forOrigin origin: String) -> Bool {
         let data: Data = SecCertificateCopyData(cert) as Data
         let key = keyForData(data, origin: origin)
         return keys.contains(key)
+    }
+
+    open func hasCertificate(forOrigin origin: String) -> Bool {
+        return origins.contains(origin)
     }
 
     fileprivate func keyForData(_ data: Data, origin: String) -> String {

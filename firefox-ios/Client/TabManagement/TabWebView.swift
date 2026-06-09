@@ -27,6 +27,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private var pullRefresh: PullRefreshView?
     private var theme: Theme?
     private var uiTestLeakView: UIView? // Used for automation
+    private var profile: Profile
 
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
@@ -48,7 +49,15 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         if let url, url.isFileURL, url.lastPathComponent.hasSuffix(".pdf") {
             return true
         }
-        return super.hasOnlySecureContent
+
+        guard let url, let host = url.host else {
+            return super.hasOnlySecureContent
+        }
+
+        let port = url.port ?? 443
+        let origin = "\(host):\(port)"
+
+        return super.hasOnlySecureContent && !profile.certStore.hasCertificate(forOrigin: origin)
     }
 
     override var inputAccessoryView: UIView? {
@@ -81,8 +90,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         }
     }
 
-    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
+    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, profile: Profile) {
         self.windowUUID = windowUUID
+        self.profile = profile
         super.init(frame: frame, configuration: configuration)
     }
 
