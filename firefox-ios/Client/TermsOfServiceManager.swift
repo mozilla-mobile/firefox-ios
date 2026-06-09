@@ -8,15 +8,16 @@ import Glean
 import MozillaAppServices
 import OnboardingKit
 
+struct Links {
+    static let termsOfService = "https://www.mozilla.org/about/legal/terms/firefox/"
+    static let privacyNotice = "https://www.mozilla.org/privacy/firefox/"
+}
+
 struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     var prefs: Prefs
 
     init(prefs: Prefs) {
         self.prefs = prefs
-    }
-
-    var isModernOnboardingEnabled: Bool {
-        featureFlagsProvider.isEnabled(.modernOnboardingUI)
     }
 
     var isFeatureEnabled: Bool {

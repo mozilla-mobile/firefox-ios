@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Foundation
 import Redux
 import Shared
@@ -11,7 +11,7 @@ import Shared
 /// State for the top sites section that is used in the homepage
 /// The state does not only contain the top sites list, but needs to also know about the number of rows
 /// and tiles per row in order to only show a specific amount of the top sites data.
-@CopyWithUpdates
+@Copyable
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
     let topSitesData: [TopSiteConfiguration]
@@ -101,11 +101,10 @@ struct TopSitesSectionState: StateType, Equatable {
             shouldShowAddShortcutTile: shouldShowAddShortcutTile
         )
 
-        return state.copyWithUpdates(
-            topSitesData: sites,
-            shouldShowSectionHeader: shouldShowSectionHeader,
-            shouldShowAddShortcutTile: shouldShowAddShortcutTile
-        )
+        return state
+            .copy(topSitesData: sites)
+            .copy(shouldShowSectionHeader: shouldShowSectionHeader)
+            .copy(shouldShowAddShortcutTile: shouldShowAddShortcutTile)
     }
 
     private static func handleUpdatedNumberOfRowsAction(action: Action, state: Self) -> TopSitesSectionState {
@@ -122,10 +121,9 @@ struct TopSitesSectionState: StateType, Equatable {
             shouldShowAddShortcutTile: state.shouldShowAddShortcutTile
         )
 
-        return state.copyWithUpdates(
-            numberOfRows: numberOfRows,
-            shouldShowSectionHeader: shouldShowSectionHeader
-        )
+        return state
+            .copy(numberOfRows: numberOfRows)
+            .copy(shouldShowSectionHeader: shouldShowSectionHeader)
     }
 
     private static func handleViewChangeAction(action: Action, state: Self) -> TopSitesSectionState {
@@ -142,10 +140,9 @@ struct TopSitesSectionState: StateType, Equatable {
             shouldShowAddShortcutTile: state.shouldShowAddShortcutTile
         )
 
-        return state.copyWithUpdates(
-            numberOfTilesPerRow: numberOfTilesPerRow,
-            shouldShowSectionHeader: shouldShowSectionHeader
-        )
+        return state
+            .copy(numberOfTilesPerRow: numberOfTilesPerRow)
+            .copy(shouldShowSectionHeader: shouldShowSectionHeader)
     }
 
     private static func handleToggleShowSectionSettingAction(action: Action, state: Self) -> TopSitesSectionState {
@@ -155,13 +152,21 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
+        return state.copy(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: TopSitesSectionState) -> TopSitesSectionState {
-        return state.copyWithUpdates()
+        return TopSitesSectionState(
+            windowUUID: state.windowUUID,
+            topSitesData: state.topSitesData,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowSection: state.shouldShowSection,
+            shouldShowSectionHeader: state.shouldShowSectionHeader,
+            shouldShowAddShortcutTile: state.shouldShowAddShortcutTile
+        )
     }
 
     /// Shows the shortcuts section header with shortcuts library affordance

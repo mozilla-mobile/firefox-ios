@@ -71,7 +71,7 @@
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "קיצורי דרך";
 
 /* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
-"FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "מוצמד: %@";
+"FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "נעוץ: %@";
 
 /* This is the section title for the Shortcuts section on Firefox Homepage. */
 "FirefoxHomepage.Shortcuts.SectionTitle.v142" = "קיצורי דרך";

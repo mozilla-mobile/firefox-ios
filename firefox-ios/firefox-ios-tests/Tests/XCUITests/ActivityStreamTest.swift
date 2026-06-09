@@ -63,7 +63,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         app.launch()
 
         topSites.assertVisible()
-        topSites.assertTopSitesCount(5)
+        topSites.assertTopSitesCount(4)
         topSites.assertDefaultTopSites()
     }
 

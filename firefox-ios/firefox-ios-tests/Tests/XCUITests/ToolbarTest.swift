@@ -10,7 +10,7 @@ let website1: [String: String] = [
     "value": "localhost",
     "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
 ]
-let website2 = path(forTestPage: "test-example.html")
+let website2 = path(forTestPage: TestPages.exampleHTML)
 
 class ToolbarTests: FeatureFlaggedTestBase {
     override func setUp() async throws {

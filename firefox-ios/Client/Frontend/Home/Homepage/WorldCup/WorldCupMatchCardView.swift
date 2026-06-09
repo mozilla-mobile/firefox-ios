@@ -58,31 +58,23 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
         let changeTeamAction = UIAction(
             title: .WorldCup.HomepageWidget.ChangeTeamLabel,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.soccerBall),
-            handler: { [weak self] _ in
-                self?.navigateToTeamSelection()
-            }
+            handler: { [weak self] _ in self?.navigateToTeamSelection() }
         )
         let wallpaperAction = UIAction(
             title: .WorldCup.HomepageWidget.GetCustomWallpaperLabel,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.image),
-            handler: { [weak self] _ in
-                self?.navigateToWallpaperSettings()
-            }
+            handler: { [weak self] _ in self?.navigateToWallpaperSettings() }
         )
         let shareAction = UIAction(
             title: .WorldCup.HomepageWidget.ShareLabel,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
-            handler: { [weak self] _ in
-                self?.shareSchedule()
-            }
+            handler: { [weak self] _ in self?.shareSchedule() }
         )
         let removeAction = UIAction(
             title: .WorldCup.HomepageWidget.RemoveLabel,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
             attributes: .destructive,
-            handler: { [weak self] _ in
-                self?.dismiss()
-            }
+            handler: { [weak self] _ in self?.dismiss() }
         )
         return UIMenu(children: [changeTeamAction, wallpaperAction, shareAction, removeAction])
     }
@@ -290,6 +282,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
     }
 
     func navigateToWallpaperSettings() {
+        telemetry.wallpaperButtonTapped()
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(.wallpaper)),
@@ -322,6 +315,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
     func shareSchedule() {
         let query = "\(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) schedule"
         guard let url = searchEnginesManager.defaultEngine?.searchURLForQuery(query) else { return }
+        telemetry.shareButtonTapped()
         let shareTitle = "\(String.WorldCup.HomepageWidget.FollowTeamCard.Title) 🦊⚽️"
         let configuration = ShareSheetConfiguration(
             shareType: .site(url: url),

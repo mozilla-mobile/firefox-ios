@@ -36,7 +36,7 @@ class PhotonActionSheetTests: BaseTestCase {
         app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         mozWaitForElementToExist(app.webViews.firstMatch)
 
         // Open Page Action Menu Sheet and Pin the site

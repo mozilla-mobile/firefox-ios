@@ -3,12 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Redux
 import Shared
 
 /// State for the bookmark section that is used in the homepage view
-@CopyWithUpdates
+@Copyable
 struct BookmarksSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var bookmarks: [BookmarkConfiguration]
@@ -70,7 +70,7 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return state.copyWithUpdates(
+        return state.copy(
             bookmarks: bookmarks
         )
     }
@@ -82,12 +82,16 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
+        return state.copy(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: BookmarksSectionState) -> BookmarksSectionState {
-        return state.copyWithUpdates()
+        return BookmarksSectionState(
+            windowUUID: state.windowUUID,
+            bookmarks: state.bookmarks,
+            shouldShowSection: state.shouldShowSection
+        )
     }
 }

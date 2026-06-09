@@ -77,7 +77,7 @@
 "WorldCup.GroupPhase.GroupL.Title.v151" = "Όμιλος Λ";
 
 /* The generic label indicating the Group Stage phase in the World Cup widget. */
-"WorldCup.GroupPhase.GroupStageLabel.v151" = "Φάση ομίλου";
+"WorldCup.GroupPhase.GroupStageLabel.v151" = "Φάση ομίλων";
 
 /* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Αλλαγή ομάδας";

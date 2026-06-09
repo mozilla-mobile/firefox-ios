@@ -11,7 +11,7 @@ let selectedTab = "Currently selected tab."
 let urlValue = "mozilla.org"
 let urlValueLong = "localhost"
 
-let urlExample = path(forTestPage: "test-example.html")
+let urlExample = path(forTestPage: TestPages.exampleHTML)
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
 let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.html"

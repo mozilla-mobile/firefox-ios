@@ -166,6 +166,34 @@ final class WorldCupTelemetryTests: XCTestCase {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
+    func test_wallpaperButtonTapped_recordsEvent() throws {
+        let subject = createSubject()
+
+        subject.wallpaperButtonTapped()
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
+        let expectedMetricType = type(of: GleanMetrics.WorldCupWidget.wallpaperButton)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
+    func test_shareButtonTapped_recordsEvent() throws {
+        let subject = createSubject()
+
+        subject.shareButtonTapped()
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
+        let expectedMetricType = type(of: GleanMetrics.WorldCupWidget.shareButton)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
     func test_multipleEvents_recordedIndependently() {
         let subject = createSubject()
 
