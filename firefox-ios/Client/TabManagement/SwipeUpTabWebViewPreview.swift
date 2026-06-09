@@ -17,7 +17,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         static let screenshotViewContainerShadowOffset = CGSize(width: 2, height: 4)
         static let triggerBoundsHeightPercentage: CGFloat = 0.25
     }
-    
+
     private let backgroundView: UIVisualEffectView = .build {
         if #available(iOS 26, *) {
             $0.effect = UIGlassEffect(style: .regular)
@@ -45,7 +45,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         }
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
     }
-    
+
     private var screenshotViewContainerTopConstraint: NSLayoutConstraint?
     private var screenshotViewContainerBottomConstraint: NSLayoutConstraint?
     private var tabBackgroundHoverTopConstraint: NSLayoutConstraint?
@@ -63,12 +63,12 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private func setup() {
         addSubviews(tabBackgroundHover, backgroundView, screenshotViewContainer, closeButton)
         screenshotViewContainer.addSubview(screenshotView)
-        
+
         tabBackgroundHoverTopConstraint = tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor)
         tabBackgroundHoverBottomConstraint = tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor)
         tabBackgroundHoverTopConstraint?.isActive = true
         tabBackgroundHoverBottomConstraint?.isActive = true
-        
+
         screenshotViewContainerTopConstraint = screenshotViewContainer.topAnchor.constraint(equalTo: topAnchor)
         screenshotViewContainerBottomConstraint = screenshotViewContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
         screenshotViewContainerTopConstraint?.isActive = true
@@ -76,10 +76,10 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             closeButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
+
             tabBackgroundHover.leadingAnchor.constraint(equalTo: leadingAnchor),
             tabBackgroundHover.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
+
             screenshotViewContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
             screenshotViewContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
@@ -90,7 +90,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     func addTabScreenshot(image: UIImage?) {
         screenshotView.image = image
     }
-    
+
     func setInitialTransform(topPadding: CGFloat, bottomPadding: CGFloat) {
         screenshotView.layer.cornerRadius = 0
         tabBackgroundHoverTopConstraint?.constant = topPadding
@@ -129,7 +129,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             y: scale
         )
     }
-    
+
     func shouldRemovePreview(translation: CGPoint) -> Bool {
         return translation.y < -(bounds.size.height * UX.triggerBoundsHeightPercentage)
     }
