@@ -11,10 +11,13 @@ import WebKit
 final class ReaderModeSchemeHandlerTests: XCTestCase {
     private var subject: ReaderModeSchemeHandler!
     private var tabManager: MockTabManager!
+    private var mockFlags: MockNimbusFeatureFlags!
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
+        mockFlags = MockNimbusFeatureFlags()
+        mockFlags.enabledFlags = [.customReaderModeScheme]
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: mockFlags)
         tabManager = MockTabManager()
         subject = ReaderModeSchemeHandler(profile: MockProfile(), tabManager: tabManager)
     }
@@ -22,6 +25,7 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
     override func tearDown() async throws {
         subject = nil
         tabManager = nil
+        mockFlags = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -185,6 +189,36 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
 
         XCTAssertTrue(task.failedErrors.isEmpty, "Expected no errors for a valid URL")
         XCTAssertEqual(task.finishCallCount, 1)
+    }
+
+    // MARK: - Feature flag gating
+
+    func test_start_featureFlagDisabledAfterRegistration_rejectsRequest() throws {
+        // Register the handler the way the app does (via TabConfigurationProvider) while the
+        // feature is enabled, then turn the flag off and confirm the handler rejects the request.
+        let provider = TabConfigurationProvider(profile: MockProfile(), tabManager: tabManager)
+        let configuration = provider.configuration(isPrivate: false).webViewConfiguration
+        let handler = try XCTUnwrap(
+            configuration.urlSchemeHandler(forURLScheme: ReaderModeSchemeHandler.scheme) as? ReaderModeSchemeHandler,
+            "Expected TabConfigurationProvider to register a ReaderModeSchemeHandler"
+        )
+
+        mockFlags.enabledFlags = []
+
+        let url = "\(ReaderModeSchemeHandler.baseURL)?url=https%3A%2F%2Fexample.com%2Farticle"
+        let task = MockWKURLSchemeTask(request: URLRequest(url: URL(string: url)!))
+        let webView = makeWebView()
+        let failExpectation = expectation(description: "onFail called")
+        task.onFail = { failExpectation.fulfill() }
+
+        handler.webView(webView, start: task)
+        wait(for: [failExpectation], timeout: 1.0)
+
+        XCTAssertTrue(task.receivedResponses.isEmpty)
+        XCTAssertTrue(task.receivedBodies.isEmpty)
+        XCTAssertEqual(task.finishCallCount, 0)
+        XCTAssertEqual(task.failedErrors.count, 1)
+        XCTAssertEqual(task.failedErrors.first as? TinyRouterError, .notAllowed)
     }
 
     // MARK: - ReaderFileRoute allowlist
