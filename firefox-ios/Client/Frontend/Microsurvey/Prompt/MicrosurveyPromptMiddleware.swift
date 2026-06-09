@@ -13,8 +13,14 @@ final class MicrosurveyPromptMiddleware {
     init(microsurveyManager: MicrosurveyManager = AppContainer.shared.resolve()) {
         self.microsurveyManager = microsurveyManager
     }
+    
+    lazy var microsurveyProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
-    lazy var microsurveyProvider: Middleware<AppState> = { state, action in
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
 
         switch action.actionType {

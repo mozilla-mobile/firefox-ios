@@ -44,7 +44,13 @@ final class MainMenuMiddleware {
         self.logger = logger
     }
 
-    lazy var mainMenuProvider: Middleware<AppState> = { state, action in
+    lazy var mainMenuProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         guard let action = action as? MainMenuAction else { return }
         let isHomepage = action.telemetryInfo?.isHomepage ?? false
         self.handleMainMenuActions(action: action, isHomepage: isHomepage)
