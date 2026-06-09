@@ -52,7 +52,8 @@ final class ErrorPageHandlerTests: XCTestCase {
         let webView = MockTabWebView(
             frame: .zero,
             configuration: WKWebViewConfiguration(),
-            windowUUID: .XCTestDefaultUUID
+            windowUUID: .XCTestDefaultUUID,
+            profile: MockProfile()
         )
         let failingURL = URL(string: "https://expired.badssl.com/")!
         let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorServerCertificateUntrusted)

@@ -41,7 +41,7 @@ final class MockTabWebView: TabWebView {
         super.init(frame: .zero,
                    configuration: WKWebViewConfiguration(),
                    windowUUID: .XCTestDefaultUUID,
-                   profile: tab.profile)
+                   profile: MockProfile())
         // Simulating the observer setup is required to use this mock because in production
         // the observers are set up in Tab.createWebView() which we don't call during test
         // and the observers are removed every time we call Tab.deinit(), so an error occurs
