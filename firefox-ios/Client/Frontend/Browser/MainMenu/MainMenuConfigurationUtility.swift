@@ -421,7 +421,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         let isActive = translationConfig.state == .active
         let infoTitle: String
         if isActive, let langCode = translationConfig.translatedToLanguage {
-            infoTitle = localeProvider.current.localizedString(forLanguageCode: langCode) ?? langCode
+            infoTitle = localeProvider.current.localizedString(forIdentifier: langCode) ?? langCode
         } else {
             infoTitle = .MainMenu.ToolsSection.Translation.Off
         }

@@ -3,12 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Foundation
 import Redux
 
 /// State for the header cell that is used in the homepage header section
-@CopyWithUpdates
+@Copyable
 struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
@@ -72,10 +72,9 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return state.copyWithUpdates(
-            isPrivate: false,
-            showiPadSetup: showiPadSetup,
-        )
+        return state
+            .copy(isPrivate: false)
+            .copy(showiPadSetup: showiPadSetup)
     }
 
     private static func handleQuickAnswersAction(for state: HeaderState, with action: Action) -> HeaderState {
@@ -84,8 +83,8 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return state.copyWithUpdates(
-            showQuickAnswersButton: showQuickAnswers,
+        return state.copy(
+            showQuickAnswersButton: showQuickAnswers
         )
     }
 
@@ -93,7 +92,7 @@ struct HeaderState: StateType, Equatable, Hashable {
         guard let worldCupAction = action as? WorldCupAction else {
             return defaultState(from: state)
         }
-        return state.copyWithUpdates(
+        return state.copy(
             isWorldCupSectionEnabled: worldCupAction.shouldShowHomepageWorldCupSection
         )
     }
@@ -104,12 +103,18 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return state.copyWithUpdates(
+        return state.copy(
             showiPadSetup: showiPadSetup
         )
     }
 
     static func defaultState(from state: HeaderState) -> HeaderState {
-        return state.copyWithUpdates()
+        return HeaderState(
+            windowUUID: state.windowUUID,
+            isPrivate: state.isPrivate,
+            showiPadSetup: state.showiPadSetup,
+            showQuickAnswersButton: state.showQuickAnswersButton,
+            isWorldCupSectionEnabled: state.isWorldCupSectionEnabled
+        )
     }
 }

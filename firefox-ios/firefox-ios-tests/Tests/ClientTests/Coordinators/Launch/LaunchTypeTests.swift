@@ -88,34 +88,6 @@ final class LaunchTypeTests: XCTestCase {
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
     }
 
-    func testCanLaunch_updateFromBrowserCoordinator() {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        let launchType = LaunchType.update(
-            viewModel: UpdateViewModel(
-                profile: profile,
-                model: onboardingModel,
-                telemetryUtility: telemetryUtility,
-                windowUUID: windowUUID))
-
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
-        XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
-    }
-
-    func testCanLaunch_updateFromSceneCoordinator() {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        let launchType = LaunchType.update(
-            viewModel: UpdateViewModel(
-                profile: profile,
-                model: onboardingModel,
-                telemetryUtility: telemetryUtility,
-                windowUUID: windowUUID))
-
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
-        XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
-    }
-
     // MARK: - Is full screen
 
     func testIsFullScreen_surveyIsAlwaysFullScreen() {
@@ -134,19 +106,5 @@ final class LaunchTypeTests: XCTestCase {
         let launchType = LaunchType.intro(manager: IntroScreenManager(prefs: profile.prefs))
         XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: true))
         XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: false))
-    }
-
-    func testIsFullScreen_updateFullScreenOnIphone() {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        let launchType = LaunchType.update(
-            viewModel: UpdateViewModel(
-                profile: profile,
-                model: onboardingModel,
-                telemetryUtility: telemetryUtility,
-                windowUUID: windowUUID))
-
-        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: true))
-        XCTAssertFalse(launchType.isFullScreenAvailable(isIphone: false))
     }
 }

@@ -159,6 +159,9 @@ class FindInPageTests: BaseTestCase {
         openFindInPageFromMenu(openSite: userState.url!)
 
         // Before reloading, it is necessary to hide the keyboard
+        if !iPad() {
+            app.webViews.element(boundBy: 0).waitAndTap()
+        }
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         urlBarAddress.typeText("\n")
 

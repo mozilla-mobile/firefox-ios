@@ -421,7 +421,7 @@ class SearchTests: FeatureFlaggedTestBase {
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
-        app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft].firstMatch.waitAndTap()
+        app.tables.cells.buttons.firstMatch.waitAndTap()
 
         // The search suggestion fills the URL bar but does not conduct the search
         waitForValueContains(urlBarAddress, value: "g")
@@ -516,7 +516,7 @@ class SearchTests: FeatureFlaggedTestBase {
     private func typeTextAndValidateSearchSuggestions(text: String, isSwitchOn: Bool) {
         typeOnSearchBar(text: text)
         // Search suggestions are shown
-        let appendArrowBtn = app.tables.cells.buttons.matching(identifier: "appendUpLeftLarge")
+        let appendArrowBtn = app.tables.cells.buttons
         if isSwitchOn {
             mozWaitForElementToExist(app.staticTexts.elementContainingText("google"))
             mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])

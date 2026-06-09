@@ -48,19 +48,9 @@ final class LaunchCoordinator: BaseCoordinator,
         case .videoIntro:
             presentVideoIntro()
         case .termsOfService(let manager):
-            if manager.isModernOnboardingEnabled {
-                presentModernTermsOfUse(with: manager, isFullScreen: isFullScreen)
-            } else {
-                presentTermsOfService(with: manager, isFullScreen: isFullScreen)
-            }
+            presentTermsOfUse(with: manager, isFullScreen: isFullScreen)
         case .intro(let manager):
-            if manager.isModernOnboardingEnabled {
-                presentModernIntroOnboarding(with: manager, isFullScreen: isFullScreen)
-            } else {
-                presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
-            }
-        case .update(let viewModel):
-            presentUpdateOnboarding(with: viewModel, isFullScreen: isFullScreen)
+            presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
         case .defaultBrowser:
             presentDefaultBrowserOnboarding()
         case .survey(let manager):
@@ -84,7 +74,7 @@ final class LaunchCoordinator: BaseCoordinator,
     }
 
     // MARK: - Terms of Use
-    private func presentModernTermsOfUse(
+    private func presentTermsOfUse(
         with manager: TermsOfServiceManager,
         isFullScreen: Bool
     ) {
@@ -175,40 +165,12 @@ final class LaunchCoordinator: BaseCoordinator,
         router.navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 
-    // MARK: - Terms of Service
-    private func presentTermsOfService(with manager: TermsOfServiceManager,
-                                       isFullScreen: Bool) {
-        TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
-        let viewController = TermsOfServiceViewController(profile: profile, windowUUID: windowUUID)
-        viewController.didFinishFlow = { [weak self] in
-            guard let self = self else { return }
-            let acceptedDate = Date()
-            manager.setAccepted(acceptedDate: acceptedDate)
-            TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped(acceptedDate: acceptedDate)
-
-            let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
-            let sendStudies = profile.prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true
-            manager.shouldSendTechnicalData(telemetryValue: sendTechnicalData, studiesValue: sendStudies)
-            self.profile.prefs.setBool(sendTechnicalData, forKey: AppConstants.prefSendUsageData)
-
-            let sendCrashReports = profile.prefs.boolForKey(AppConstants.prefSendCrashReports) ?? true
-            self.profile.prefs.setBool(sendCrashReports, forKey: AppConstants.prefSendCrashReports)
-            self.logger.setup(sendCrashReports: sendCrashReports)
-
-            TelemetryWrapper.shared.setup(profile: profile)
-            TelemetryWrapper.shared.recordStartUpTelemetry()
-
-            self.parentCoordinator?.didFinishTermsOfService(from: self)
-        }
-        viewController.modalPresentationStyle = .fullScreen
-        viewController.modalTransitionStyle = .crossDissolve
-        router.present(viewController, animated: false)
-    }
-
     // MARK: - Intro
     @MainActor
-    private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
-                                              isFullScreen: Bool) {
+    private func presentIntroOnboarding(
+        with manager: IntroScreenManagerProtocol,
+        isFullScreen: Bool
+    ) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: manager.onboardingVariant,
             isDefaultBrowser: DefaultBrowserUtility().isDefaultBrowser,
@@ -328,74 +290,6 @@ final class LaunchCoordinator: BaseCoordinator,
               let lastCardSeen = profile.prefs.stringForKey(PrefsKeys.OnboardingLastCardSeen)
         else { return nil }
         return cards.firstIndex(where: { $0.name == lastCardSeen })
-    }
-
-    // MARK: - Intro
-    private func presentIntroOnboarding(with manager: IntroScreenManagerProtocol,
-                                        isFullScreen: Bool) {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        let onboardingReason: OnboardingReason = manager.shouldShowIntroScreen ? .newUser : .showTour
-
-        let telemetryUtility = OnboardingTelemetryUtility(
-            with: onboardingModel,
-            onboardingReason: onboardingReason
-        )
-        let introViewModel = IntroViewModel(introScreenManager: manager,
-                                            profile: profile,
-                                            model: onboardingModel,
-                                            telemetryUtility: telemetryUtility)
-        let introViewController = IntroViewController(viewModel: introViewModel, windowUUID: windowUUID)
-        introViewController.qrCodeNavigationHandler = self
-        introViewController.didFinishFlow = { [weak self] in
-            guard let self = self else { return }
-            self.parentCoordinator?.didFinishLaunch(from: self)
-        }
-
-        if isFullScreen {
-            introViewController.modalPresentationStyle = .fullScreen
-            router.present(introViewController, animated: false)
-            telemetryUtility.sendOnboardingShownTelemetry()
-        } else {
-            introViewController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
-                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            introViewController.modalPresentationStyle = .formSheet
-            // Disables dismissing the view by tapping outside the view, based on
-            // Nimbus's configuration
-            if !introViewModel.isDismissible {
-                introViewController.isModalInPresentation = true
-            }
-            router.present(introViewController, animated: true) {
-                introViewController.closeOnboarding()
-            }
-            telemetryUtility.sendOnboardingShownTelemetry()
-        }
-    }
-
-    // MARK: - Update
-    private func presentUpdateOnboarding(with updateViewModel: UpdateViewModel,
-                                         isFullScreen: Bool) {
-        let updateViewController = UpdateViewController(viewModel: updateViewModel, windowUUID: windowUUID)
-        updateViewController.qrCodeNavigationHandler = self
-        updateViewController.didFinishFlow = { [weak self] in
-            guard let self = self else { return }
-            self.parentCoordinator?.didFinishLaunch(from: self)
-        }
-
-        if isFullScreen {
-            updateViewController.modalPresentationStyle = .fullScreen
-            router.present(updateViewController, animated: false)
-        } else {
-            updateViewController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
-                height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
-            updateViewController.modalPresentationStyle = .formSheet
-            // Nimbus's configuration
-            if !updateViewModel.isDismissible {
-                updateViewController.isModalInPresentation = true
-            }
-            router.present(updateViewController)
-        }
     }
 
     // MARK: - Default Browser

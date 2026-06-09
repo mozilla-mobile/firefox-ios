@@ -73,30 +73,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
-    func testLaunchType_update() {
-        profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
-        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-
-        let subject = createSubject()
-        subject.delegate = delegate
-        subject.startLoading(appVersion: "113.0")
-
-        XCTAssertEqual(delegate.launchBrowserCalled, 0)
-        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
-
-        subject.loadNextLaunchType()
-
-        let onboardingModel = createOnboardingViewModel()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        assertSavedLaunchType(.update(viewModel: UpdateViewModel(
-            profile: profile,
-            model: onboardingModel,
-            telemetryUtility: telemetryUtility,
-            windowUUID: windowUUID
-        )))
-        XCTAssertEqual(delegate.launchWithTypeCalled, 1)
-    }
-
     func testLaunchType_survey() {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
@@ -257,7 +233,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
             windowUUID: windowUUID,
             profile: profile,
             messageManager: messageManager,
-            onboardingModel: createOnboardingViewModel(),
             introScreenManager: mockIntroManager
         )
         subject.delegate = delegate
@@ -284,7 +259,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
             windowUUID: windowUUID,
             profile: profile,
             messageManager: messageManager,
-            onboardingModel: createOnboardingViewModel(),
             introScreenManager: mockIntroManager
         )
         subject.delegate = delegate
@@ -295,19 +269,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
     // MARK: - App Version Tests
 
-    func testStartLoading_withCustomAppVersion_usesProvidedVersion() {
-        profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
-        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        profile.hasSyncableAccountMock = true
-
-        let subject = createSubject()
-        subject.delegate = delegate
-        subject.startLoading(appVersion: "113.0")
-
-        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
-        XCTAssertEqual(subject.launchOrder.count, 1)
-    }
-
     func testStartLoading_withDefaultAppVersion_usesAppInfoVersion() {
         profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
 
@@ -316,46 +277,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
         subject.startLoading()
 
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
-    }
-
-    // MARK: - Update Screen Tests
-
-    func testLaunchType_update_withSyncableAccount_showsUpdate() {
-        profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
-        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        profile.hasSyncableAccountMock = true
-
-        let subject = createSubject()
-        subject.delegate = delegate
-        subject.startLoading(appVersion: "113.0")
-
-        XCTAssertEqual(delegate.launchBrowserCalled, 0)
-        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
-
-        subject.loadNextLaunchType()
-
-        let onboardingModel = createOnboardingViewModel()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        assertSavedLaunchType(.update(viewModel: UpdateViewModel(
-            profile: profile,
-            model: onboardingModel,
-            telemetryUtility: telemetryUtility,
-            windowUUID: windowUUID
-        )))
-        XCTAssertEqual(delegate.launchWithTypeCalled, 1)
-    }
-
-    func testLaunchType_update_withoutSyncableAccount_doesNotShowUpdate() {
-        profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
-        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        profile.hasSyncableAccountMock = false
-
-        let subject = createSubject()
-        subject.delegate = delegate
-        subject.startLoading(appVersion: "113.0")
-
-        XCTAssertEqual(subject.launchOrder.count, 0)
-        XCTAssertEqual(delegate.launchBrowserCalled, 1)
     }
 
     // MARK: - Survey Screen Tests
@@ -390,45 +311,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         XCTAssertEqual(subject.launchOrder.count, 0)
         XCTAssertEqual(delegate.launchBrowserCalled, 1)
-    }
-
-    // MARK: - Priority Tests
-
-    func testLaunchType_priority_introTakesPrecedenceOverUpdate() {
-        profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
-        profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
-        profile.hasSyncableAccountMock = true
-
-        let subject = createSubject()
-        subject.delegate = delegate
-        subject.startLoading(appVersion: "113.0")
-
-        XCTAssertEqual(subject.launchOrder.count, 1)
-        subject.loadNextLaunchType()
-        assertSavedLaunchType(.intro(manager: IntroScreenManager(prefs: profile.prefs)))
-    }
-
-    func testLaunchType_priority_updateTakesPrecedenceOverSurvey() {
-        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
-        profile.hasSyncableAccountMock = true
-        let message = createMessage()
-        messageManager.message = message
-
-        let subject = createSubject()
-        subject.delegate = delegate
-        subject.startLoading(appVersion: "113.0")
-
-        XCTAssertEqual(subject.launchOrder.count, 1)
-        subject.loadNextLaunchType()
-        let onboardingModel = createOnboardingViewModel()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        assertSavedLaunchType(.update(viewModel: UpdateViewModel(
-            profile: profile,
-            model: onboardingModel,
-            telemetryUtility: telemetryUtility,
-            windowUUID: windowUUID
-        )))
     }
 
     // MARK: - Splash Screen Experiment Tests
@@ -473,7 +355,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
         switch (saved, expected) {
         case (.intro, .intro),
              (.termsOfService, .termsOfService),
-             (.update, .update),
              (.survey, .survey),
              (.defaultBrowser, .defaultBrowser):
             break
@@ -484,12 +365,9 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
     private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchScreenViewModel {
-        let onboardingModel = createOnboardingViewModel()
-
         let subject = LaunchScreenViewModel(windowUUID: windowUUID,
                                             profile: profile,
-                                            messageManager: messageManager,
-                                            onboardingModel: onboardingModel)
+                                            messageManager: messageManager)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
@@ -510,37 +388,5 @@ final class LaunchScreenViewModelTests: XCTestCase {
                                  exceptIfAny: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
-    }
-
-    func createOnboardingViewModel() -> OnboardingKitViewModel {
-        let cards: [OnboardingKitCardInfoModel] = [
-            createCard(index: 1),
-            createCard(index: 2)
-        ]
-
-        return OnboardingKitViewModel(cards: cards,
-                                      isDismissible: true)
-    }
-
-    func createCard(index: Int) -> OnboardingKitCardInfoModel {
-        let buttons = OnboardingButtons<OnboardingActions>(
-            primary: OnboardingButtonInfoModel<OnboardingActions>(
-                title: "Button title \(index)",
-                action: .forwardOneCard))
-        return OnboardingKitCardInfoModel(
-            cardType: .basic,
-            name: "Name \(index)",
-            order: index,
-            title: "Title \(index)",
-            body: "Body \(index)",
-            link: nil,
-            buttons: buttons,
-            multipleChoiceButtons: [],
-            onboardingType: .upgrade,
-            a11yIdRoot: "A11y id \(index)",
-            imageID: "Image id \(index)",
-            instructionsPopup: nil,
-            embededLinkText: []
-        )
     }
 }

@@ -3,13 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Redux
 import Shared
 import Storage
 
 /// State for the jump back in section that is used in the homepage view
-@CopyWithUpdates
+@Copyable
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     let jumpBackInTabs: [JumpBackInTabConfiguration]
@@ -90,7 +90,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
+        return state.copy(
             jumpBackInTabs: recentTabs.compactMap { tab in
                 let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
                 let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
@@ -118,7 +118,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         let site = Site.createBasicSite(url: itemURL, title: mostRecentSyncedTab.tab.title)
         let descriptionText = mostRecentSyncedTab.client.name
 
-        return state.copyWithUpdates(
+        return state.copy(
             mostRecentSyncedTab: JumpBackInSyncedTabConfiguration(
                 titleText: site.title,
                 descriptionText: descriptionText,
@@ -134,12 +134,17 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
+        return state.copy(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: JumpBackInSectionState) -> JumpBackInSectionState {
-        return state.copyWithUpdates()
+        return JumpBackInSectionState(
+            windowUUID: state.windowUUID,
+            jumpBackInTabs: state.jumpBackInTabs,
+            mostRecentSyncedTab: state.mostRecentSyncedTab,
+            shouldShowSection: state.shouldShowSection
+        )
     }
 }

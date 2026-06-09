@@ -129,39 +129,6 @@ final class LaunchCoordinatorTests: XCTestCase {
         )
     }
 
-    // MARK: - Update
-    func testStart_updateNotIphone_present() throws {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        let viewModel = UpdateViewModel(profile: profile,
-                                        model: onboardingModel,
-                                        telemetryUtility: telemetryUtility,
-                                        windowUUID: windowUUID)
-        let subject = createSubject(isIphone: false)
-        subject.start(with: .update(viewModel: viewModel))
-
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
-        let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
-        XCTAssertNotNil(presentedViewController as? UpdateViewController)
-    }
-
-    func testStart_updateIsIphone_setRootView() throws {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        let viewModel = UpdateViewModel(profile: profile,
-                                        model: onboardingModel,
-                                        telemetryUtility: telemetryUtility,
-                                        windowUUID: windowUUID)
-        let subject = createSubject(isIphone: true)
-        subject.start(with: .update(viewModel: viewModel))
-
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
-        let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
-        XCTAssertNotNil(pushedVC as? UpdateViewController)
-    }
-
     // MARK: - Default browser
     func testStart_defaultBrowser_present() throws {
         let subject = createSubject(isIphone: false)

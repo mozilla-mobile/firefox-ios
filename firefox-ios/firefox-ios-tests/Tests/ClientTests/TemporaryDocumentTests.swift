@@ -64,6 +64,86 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         subject = nil
     }
 
+    // MARK: - Cookie Domain Tests
+
+    func testCookieDomainMatches_exactDomain_matches() {
+        let cookie = makeCookie(domain: "example.com")
+        XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://example.com")!))
+    }
+
+    func testCookieDomainMatches_hostOnlyCookie_doesNotMatchSubdomain() {
+        // RFC 6265 Section 5.4 specifies that host-only-flag=true requires identical host, not subdomain match
+        // https://www.rfc-editor.org/rfc/rfc6265#section-5.4
+        // no leading dot = host-only (no Domain attribute). This means it must NOT match subdomain
+        let hostOnlyCookie = makeCookie(domain: "example.com")
+        XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(hostOnlyCookie, url: URL(string: "https://evil.example.com")!))
+        // leading dot = domain-scoped (explicit Domain attribute). This means subdomain match IS expected
+        let domainScopedCookie = makeCookie(domain: ".example.com")
+        XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(domainScopedCookie, url: URL(string: "https://evil.example.com")!))
+    }
+
+    func testCookieDomainMatches_substringDomain_doesNotMatch() {
+        // Request to azon.com should not match amazon.com's cookie, even though
+        // "azon.com" is a substring of "amazon.com".
+        let cookie = makeCookie(domain: "amazon.com")
+        XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://azon.com")!))
+    }
+
+    func testCookieDomainMatches_unrelatedDomain_doesNotMatch() {
+        let cookie = makeCookie(domain: "example.com")
+        XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://othersite.com")!))
+    }
+
+    func testCookieDomainMatches_isCaseInsensitive() {
+        let cookie = makeCookie(domain: "Example.COM")
+        XCTAssertTrue(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://EXAMPLE.com")!))
+    }
+
+    func testCookieDomainMatches_siblingSubdomain_doesNotMatch() {
+        let cookie = makeCookie(domain: "subdomain1.example.com")
+        XCTAssertFalse(DefaultTemporaryDocument.cookieDomainMatches(cookie, url: URL(string: "https://subdomain2.example.com")!))
+    }
+
+    // MARK: - Redirect Cookie Tests
+
+    func testWillPerformHTTPRedirection_crossOrigin_stripsCookies() async {
+        let cookie = makeCookie(domain: "example.com")
+        subject = await createSubject(
+            filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF, cookies: [cookie]
+        )
+        var redirect = URLRequest(url: URL(string: "https://evil.com/x.pdf")!)
+        redirect.setValue("key=session=123", forHTTPHeaderField: "Cookie")
+
+        let result = performRedirect(on: subject, to: redirect)
+
+        XCTAssertEqual(result?.allHTTPHeaderFields?["Cookie"], "")
+        subject = nil
+    }
+
+    func testWillPerformHTTPRedirection_sameHost_keepsCookies() async {
+        let cookie = makeCookie(domain: "example.com")
+        subject = await createSubject(
+            filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF, cookies: [cookie]
+        )
+        let redirect = URLRequest(url: URL(string: "https://example.com/x.pdf")!)
+
+        let result = performRedirect(on: subject, to: redirect)
+
+        XCTAssertEqual(result?.allHTTPHeaderFields?["Cookie"], "key=session=123")
+        subject = nil
+    }
+
+    func testWillPerformHTTPRedirection_noCookies_passesRequestThrough() async {
+        subject = await createSubject(filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF)
+        var redirect = URLRequest(url: URL(string: "https://evil.com/x.pdf")!)
+        redirect.setValue("injected=value", forHTTPHeaderField: "Cookie")
+
+        let result = performRedirect(on: subject, to: redirect)
+
+        XCTAssertEqual(result?.allHTTPHeaderFields?["Cookie"], "injected=value")
+        subject = nil
+    }
+
     func testInit_passCorrectName_fromResponse() async {
         let response = MockURLResponse(filename: filename, url: request.url!)
         subject = await createSubject(response: response, request: request, session: mockURLSession)
@@ -206,5 +286,27 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         )
         await trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func performRedirect(on subject: DefaultTemporaryDocument, to newRequest: URLRequest) -> URLRequest? {
+        let response = HTTPURLResponse(url: request.url!, statusCode: 307, httpVersion: nil, headerFields: nil)!
+        // Handler calls completion synchronously, so this capture is safe
+        nonisolated(unsafe) var result: URLRequest?
+        subject.urlSession(
+            mockURLSession,
+            task: mockURLSession.downloadTask(with: newRequest),
+            willPerformHTTPRedirection: response,
+            newRequest: newRequest
+        ) { result = $0 }
+        return result
+    }
+
+    private func makeCookie(domain: String) -> HTTPCookie {
+        return HTTPCookie(properties: [
+            .domain: domain,
+            .path: "/",
+            .name: "key",
+            .value: "session=123"
+        ])!
     }
 }

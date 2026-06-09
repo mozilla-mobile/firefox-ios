@@ -92,7 +92,8 @@ extension UIAlertController {
         return deleteAlert
     }
 
-    class func addShortcutAlert() -> UIAlertController {
+    /// FXIOS-15928 - App crashes when dynamic type changes on iOS 26
+    class func addShortcutAlert(saveHandler: @escaping (URL) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: .FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle,
             message: .FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription,
@@ -107,7 +108,13 @@ extension UIAlertController {
         let saveAction = UIAlertAction(
             title: .FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle,
             style: .default
-        )
+        ) { [weak alert] _ in
+            guard let text = alert?.textFields?.first?.text,
+                  let url = URIFixup.getURL(text)
+            else { return }
+
+            saveHandler(url)
+        }
         saveAction.isEnabled = false
 
         alert.addTextField { textField in
@@ -120,8 +127,8 @@ extension UIAlertController {
             textField.accessibilityIdentifier =
                 AccessibilityIdentifiers.FirefoxHomepage.TopSites.AddShortcutAlert.urlTextField
             textField.addAction(UIAction { [weak textField, weak saveAction] _ in
-                let text = textField?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                saveAction?.isEnabled = !text.isEmpty
+                let text = textField?.text ?? ""
+                saveAction?.isEnabled = URIFixup.getURL(text) != nil
             }, for: .editingChanged)
         }
 
