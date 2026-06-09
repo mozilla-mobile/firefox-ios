@@ -33,12 +33,15 @@ final class MockTabWebView: TabWebView {
         return mockHasOnlySecureContent
     }
 
-    override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
-        super.init(frame: frame, configuration: configuration, windowUUID: windowUUID)
+    override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, profile: Profile) {
+        super.init(frame: frame, configuration: configuration, windowUUID: windowUUID, profile: profile)
     }
 
     init(tab: Tab) {
-        super.init(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+        super.init(frame: .zero,
+                   configuration: WKWebViewConfiguration(),
+                   windowUUID: .XCTestDefaultUUID,
+                   profile: tab.profile)
         // Simulating the observer setup is required to use this mock because in production
         // the observers are set up in Tab.createWebView() which we don't call during test
         // and the observers are removed every time we call Tab.deinit(), so an error occurs
