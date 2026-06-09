@@ -9,43 +9,55 @@ import XCTest
 final class LanguageDetectorTests: XCTestCase {
     var mockLanguageSampleSource = MockLanguageSampleSource()
 
-    // MARK: - HTML lang attribute
+    // MARK: - Signal reconciliation
 
-    func test_detectLanguage_prefersHTMLLangOverTextAnalysis() async throws {
+    func test_detectLanguage_whenTextIsConfident_overridesHTMLTag() async throws {
         mockLanguageSampleSource.htmlLangResult = "de"
         mockLanguageSampleSource.mockResult = "Hello world, this is clearly an English sentence."
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
-        XCTAssertEqual(result, "de")
-    }
-
-    func test_detectLanguage_normalizesHTMLLangWithRegion() async throws {
-        mockLanguageSampleSource.htmlLangResult = "en-US"
-        let subject = createSubject()
+        let subject = createSubject(confidenceThreshold: 0.5)
         let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
         XCTAssertEqual(result, "en")
     }
 
-    func test_detectLanguage_preservesScriptSubtag() async throws {
-        mockLanguageSampleSource.htmlLangResult = "zh-Hans-CN"
-        let subject = createSubject()
+    func test_detectLanguage_whenTextIsConfidentAndHTMLLangMissing_returnsText() async throws {
+        mockLanguageSampleSource.htmlLangResult = nil
+        mockLanguageSampleSource.mockResult = "Bonjour le monde, ceci est clairement une phrase française."
+        let subject = createSubject(confidenceThreshold: 0.5)
         let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
-        XCTAssertEqual(result, "zh-Hans")
+        XCTAssertEqual(result, "fr")
     }
+
+    func test_detectLanguage_whenTextIsNotConfident_fallsBackToHTMLTag() async throws {
+        mockLanguageSampleSource.htmlLangResult = "es"
+        mockLanguageSampleSource.mockResult = "Hello world"
+        let subject = createSubject(confidenceThreshold: 0.99)
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "es")
+    }
+
+    func test_detectLanguage_whenTextIsNotConfidentAndHTMLLangMissing_returnsNil() async throws {
+        mockLanguageSampleSource.htmlLangResult = nil
+        mockLanguageSampleSource.mockResult = "Hello world"
+        let subject = createSubject(confidenceThreshold: 0.99)
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertNil(result)
+    }
+
+    func test_detectLanguage_whenOnlyHTMLLangAvailable_returnsHTMLLang() async throws {
+        mockLanguageSampleSource.htmlLangResult = "es"
+        mockLanguageSampleSource.mockResult = nil
+        let subject = createSubject(confidenceThreshold: 0.5)
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "es")
+    }
+
+    // MARK: - HTML lang attribute
 
     func test_detectLanguage_normalizesUppercaseHTMLLang() async throws {
         mockLanguageSampleSource.htmlLangResult = "EN-US"
         let subject = createSubject()
         let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
         XCTAssertEqual(result, "en")
-    }
-
-    func test_detectLanguage_fallsBackToTextWhenHTMLLangMissing() async throws {
-        mockLanguageSampleSource.htmlLangResult = nil
-        mockLanguageSampleSource.mockResult = "Bonjour le monde"
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
-        XCTAssertEqual(result, "fr")
     }
 
     func test_detectLanguage_ignoresEmptyHTMLLang() async throws {
@@ -155,7 +167,7 @@ final class LanguageDetectorTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func createSubject() -> LanguageDetector {
-        LanguageDetector()
+    private func createSubject(confidenceThreshold: Double = 0) -> LanguageDetector {
+        LanguageDetector(confidenceThreshold: confidenceThreshold)
     }
 }
