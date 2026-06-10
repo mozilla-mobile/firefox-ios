@@ -81,6 +81,7 @@ struct AccessibilityIdentifiers {
         static let statusBarOverlay = "Browser.statusBarOverlay"
         static let topBlurView = "Browser.topBlurView"
         static let bottomBlurView = "Browser.bottomBlurView"
+        static let keyboardSpacer = "AddressToolbar.keyboardSpacer"
     }
 
     struct ContextualHints {

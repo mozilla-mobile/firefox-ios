@@ -2242,6 +2242,13 @@ class BrowserViewController: UIViewController,
 
         guard let searchController = self.searchController else { return }
 
+        // If searchController is already presented only update the bottom anchor
+        // based in `bottomSearchBar` position
+        guard searchController.view.superview == nil else {
+            updateSearchControllerConstraints()
+            return
+        }
+
         addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.translatesAutoresizingMaskIntoConstraints = false
