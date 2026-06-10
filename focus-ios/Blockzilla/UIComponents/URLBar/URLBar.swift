@@ -375,25 +375,11 @@ final class URLBar: UIView {
             }
         }
 
-        let leadingAnchor = if #available(iOS 26.0, *) {
-            layoutGuide(for: .margins(cornerAdaptation: .horizontal)).leadingAnchor
-        } else {
-            safeAreaLayoutGuide.leadingAnchor
+        backButton.snp.makeConstraints { make in
+            make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
+            make.centerY.equalTo(self)
+            make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier)
         }
-        let leadingConstant: CGFloat = if #available(iOS 26.0, *) {
-            0
-        } else {
-            UIConstants.layout.urlBarMargin
-        }
-
-        NSLayoutConstraint.activate([
-            backButton.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: leadingConstant
-            ),
-            backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            backButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: toolsetButtonWidthMultiplier),
-        ])
     }
 
     private func addForwardButtonConstraints() {
