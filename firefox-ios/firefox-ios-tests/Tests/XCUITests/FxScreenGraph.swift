@@ -382,11 +382,20 @@ extension XCUIElement {
             eachScreen(screenNum)
 
             let firstCell = self.cells.element(boundBy: Int(cellNum))
-            cellNum = firstInvisibleCell(cellNum)
-            if cellNum == UInt.min {
+            let nextCellNum = firstInvisibleCell(cellNum)
+            // Stop when every cell is visible, or when scrolling made no progress (the same cell is
+            // still the first one offscreen) — otherwise the table-swipe fallback below can spin.
+            if nextCellNum == UInt.min || nextCellNum == cellNum {
                 return
             }
-            firstCell.swipeUp()
+            cellNum = nextCellNum
+            // Swiping the cell fails ("visible frame is empty") when it is offscreen, which can happen
+            // for tall localized rows; fall back to swiping the table itself in that case.
+            if firstCell.isHittable {
+                firstCell.swipeUp()
+            } else {
+                self.swipeUp()
+            }
             screenNum += 1
         }
     }

@@ -9,34 +9,68 @@ import MappaMundi
 func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     let table = app.tables.element(boundBy: 0)
 
+    // swiftlint:disable:next closure_body_length
     map.addScreenState(SettingsScreen) { screenState in
-        screenState.tap(table.cells["Sync"], to: SyncSettings, if: "fxaUsername != nil")
-        screenState.tap(table.cells["SignInToSync"], to: Intro_FxASignin, if: "fxaUsername == nil")
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Search.searchNavigationBar], to: SearchSettings)
-        screenState.tap(table.cells["NewTab"], to: NewTabSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Homepage.homeSettings], to: HomeSettings)
-        screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.title], to: BrowsingSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Summarize.title], to: SummarizeSettings)
-        screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title],
-                        to: AutofillPasswordSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.title], to: ClearPrivateDataSettings)
+        // `scrollIntoViewWithin: table` lets MappaMundi scroll a target row into view before tapping;
+        // localized Settings rows are often pushed off-screen (still in the a11y tree but not hittable),
+        // which would otherwise fail the tap.
+        screenState.tap(table.cells["Sync"], to: SyncSettings, scrollIntoViewWithin: table, if: "fxaUsername != nil")
+        screenState.tap(
+            table.cells["SignInToSync"],
+            to: Intro_FxASignin,
+            scrollIntoViewWithin: table,
+            if: "fxaUsername == nil")
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.Search.searchNavigationBar],
+            to: SearchSettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(table.cells["NewTab"], to: NewTabSettings, scrollIntoViewWithin: table)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.Homepage.homeSettings],
+            to: HomeSettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings, scrollIntoViewWithin: table)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting],
+            to: ToolbarSettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.Browsing.title],
+            to: BrowsingSettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.Summarize.title],
+            to: SummarizeSettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(table.cells["SiriSettings"], to: SiriSettings, scrollIntoViewWithin: table)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title],
+            to: AutofillPasswordSettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.ClearData.title],
+            to: ClearPrivateDataSettings,
+            scrollIntoViewWithin: table)
         screenState.tap(
             table.cells[AccessibilityIdentifiers.Settings.ContentBlocker.title],
-            to: TrackingProtectionSettings
-        )
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ShowIntroduction.title],
-                        to: ShowTourInSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Notifications.title],
-                        to: NotificationsSettings)
+            to: TrackingProtectionSettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.ShowIntroduction.title],
+            to: ShowTourInSettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.Notifications.title],
+            to: NotificationsSettings,
+            scrollIntoViewWithin: table)
         screenState.gesture(forAction: Action.ToggleNoImageMode) { userState in
             app.otherElements.tables.cells.switches[
                 AccessibilityIdentifiers.Settings.BlockImages.title].waitAndTap()
         }
         screenState.tap(
-            table.cells[AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle], to: AppIconSettings)
+            table.cells[AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle],
+            to: AppIconSettings,
+            scrollIntoViewWithin: table)
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
@@ -50,7 +84,8 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     map.addScreenState(SearchSettings) { screenState in
         screenState.tap(
             table.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton],
-            to: AddCustomSearchSettings
+            to: AddCustomSearchSettings,
+            scrollIntoViewWithin: table
         )
         screenState.backAction = navigationControllerBackAction(for: app)
         screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
@@ -66,8 +101,11 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     }
 
     map.addScreenState(BrowsingSettings) { screenState in
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.autoPlay], to: AutoplaySettings)
-        screenState.tap(table.cells["OpenWith.Setting"], to: MailAppSettings)
+        screenState.tap(
+            table.cells[AccessibilityIdentifiers.Settings.Browsing.autoPlay],
+            to: AutoplaySettings,
+            scrollIntoViewWithin: table)
+        screenState.tap(table.cells["OpenWith.Setting"], to: MailAppSettings, scrollIntoViewWithin: table)
 
         screenState.backAction = navigationControllerBackAction(for: app)
     }
