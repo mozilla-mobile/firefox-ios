@@ -7,6 +7,7 @@ import Foundation
 /// Enum representing the different onboarding variants available.
 /// This mirrors the Nimbus OnboardingVariant configuration.
 public enum OnboardingVariant: String, Sendable {
+    // TODO: FXIOS-16036 Remove this dead `legacy` case (and `OnboardingType.upgrade`)
     case legacy
     case modern
     case japan
