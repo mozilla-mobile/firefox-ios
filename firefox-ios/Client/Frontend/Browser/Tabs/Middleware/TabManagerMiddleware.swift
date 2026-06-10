@@ -60,13 +60,19 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
         if let action = action as? TabPanelViewModernAction {
             switch action {
-            case .addNewTab(let panelType):
+            case let .addNewTab(panelType):
                 let isPrivateMode = panelType == .privateTabs
                 tabsPanelTelemetry.newTabButtonTapped(mode: panelType.modeForTelemetry)
                 addNewTab(with: nil, isPrivate: isPrivateMode, showOverlay: true, for: windowUUID)
                 dispatchRecentlyAccessedTabsAction(forWindowUUID: windowUUID)
-            default:
-                break
+
+            case let .selectTab(selectedTabPayload):
+                selectTab(
+                    for: selectedTabPayload.tabUUID,
+                    uuid: windowUUID,
+                    panelType: selectedTabPayload.panelType,
+                    selectedTabIndex: selectedTabPayload.index
+                )
             }
         }
     }
@@ -250,15 +256,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         case TabPanelViewActionType.deleteTabsOlderThan:
             guard let period = action.deleteTabPeriod else { return }
             deleteNormalTabsOlderThan(period: period, uuid: action.windowUUID)
-
-        case TabPanelViewActionType.selectTab:
-            guard let tabUUID = action.tabUUID else { return }
-            selectTab(
-                for: tabUUID,
-                uuid: action.windowUUID,
-                panelType: action.panelType ?? .tabs,
-                selectedTabIndex: action.selectedTabIndex
-            )
 
         case TabPanelViewActionType.learnMorePrivateMode:
             guard let urlRequest = action.urlRequest else { return }

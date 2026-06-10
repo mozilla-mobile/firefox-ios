@@ -264,12 +264,8 @@ final class TabDisplayView: UIView,
             switch selectedItem {
             case .tab(let tabModel):
                 let tabUUID = tabModel.tabUUID
-                let action = TabPanelViewAction(panelType: panelType,
-                                                tabUUID: tabUUID,
-                                                selectedTabIndex: indexPath.item,
-                                                windowUUID: windowUUID,
-                                                actionType: TabPanelViewActionType.selectTab)
-                store.dispatch(action)
+                let payload = SelectedTabPayload(tabUUID: tabUUID, index: indexPath.item, panelType: panelType)
+                store.dispatch(TabPanelViewModernAction.selectTab(payload), forWindowUUID: self.windowUUID)
             }
         }
     }
