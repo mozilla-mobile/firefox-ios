@@ -19,7 +19,11 @@ struct SKAdNetworkUpdater: ConversionValueUpdater {
     }
 
     func update(conversionValue: ConversionValue) {
-        if #available(iOS 16.1, *) {
+        // Apple declares the `coarseValue:lockWindow:` overload as available from iOS 16.1,
+        // but it seems like the selector is missing on iOS 16.1.0 devices and only present from 16.1.1
+        // onwards. Calling it on 16.1.0 crashes with an unrecognized selector exception,
+        // so we gate on the patch version here. See https://github.com/adjust/ios_sdk/issues/641
+        if #available(iOS 16.1.1, *) {
             SKAdNetwork.updatePostbackConversionValue(
                 conversionValue.fine,
                 coarseValue: conversionValue.coarse.value,
