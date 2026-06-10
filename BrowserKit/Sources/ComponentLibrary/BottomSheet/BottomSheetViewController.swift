@@ -350,9 +350,7 @@ public class BottomSheetViewController: UIViewController,
     // MARK: - BottomSheetDismissProtocol
 
     public func getBottomSheetHeaderHeight() -> CGFloat {
-        // this is a little work around to have `BottomSheetChild` being able to adjust for dynamic font size change
-        // since modifying the constraints is going to break the UI of other bottom sheet child.
-        return closeButton.dynamicSize.height
+        return closeButton.buttonSize.height
     }
 
     public func dismissSheetViewController(completion: (() -> Void)? = nil) {

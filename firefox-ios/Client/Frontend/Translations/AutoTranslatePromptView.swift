@@ -164,6 +164,6 @@ final class AutoTranslatePromptView: UIView, AlphaDimmable, ThemeApplicable, Not
         topBorderView.backgroundColor = theme.colors.borderPrimary
         messageLabel.textColor = theme.colors.textPrimary
         enableButton.setTitleColor(theme.colors.textAccent, for: .normal)
-        closeButton.applyTheme(tintColor: theme.colors.textSecondary)
+        closeButton.applyTheme(theme: theme)
     }
 }

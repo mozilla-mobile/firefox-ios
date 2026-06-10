@@ -150,7 +150,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         headerLabelsContainer.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
-        closeButton.applyTheme(tintColor: theme.colors.iconSecondary)
+        closeButton.applyTheme(theme: theme)
         if #unavailable(iOS 26.0) {
             closeButton.backgroundColor = .clear
         }

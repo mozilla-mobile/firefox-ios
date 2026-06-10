@@ -5,25 +5,15 @@
 import Common
 import UIKit
 
-public class CloseButton: UIButton,
-                          Notifiable {
-    public var notificationCenter: any NotificationProtocol = NotificationCenter.default
-
+public class CloseButton: UIButton, ThemeApplicable {
     private var viewModel: CloseButtonViewModel?
-    private var heightConstraint: NSLayoutConstraint?
-    private var widthConstraint: NSLayoutConstraint?
-    /// Returns the updated size of the button scaled with the current dynamic font size
-    var dynamicSize: CGSize {
-        updateButtonSizeForDynamicFont()
-        return CGSize(width: widthConstraint?.constant ?? UX.closeButtonSize.width,
-                      height: heightConstraint?.constant ?? UX.closeButtonSize.height)
-    }
+
+    var buttonSize: CGSize { UX.closeButtonSize }
 
     private struct UX {
         static let closeButtonSize = CGSize(width: 44, height: 44)
-        static let maxCloseButtonSize = CGSize(width: 44, height: 44)
         static let legacyCrossCircleImage = StandardImageIdentifiers.ExtraLarge.crossCircleFill
-        static let glassCrossImage = StandardImageIdentifiers.Medium.cross
+        static let glassCrossImage = StandardImageIdentifiers.Large.cross
     }
 
     override init(frame: CGRect) {
@@ -47,53 +37,25 @@ public class CloseButton: UIButton,
 
     private func setupConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
-        heightConstraint = heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height)
-        heightConstraint?.isActive = true
-        widthConstraint = widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
-        widthConstraint?.isActive = true
-        updateButtonSizeForDynamicFont()
+        NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
+            widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
+        ])
     }
 
-    public func applyTheme(tintColor: UIColor) {
-        self.tintColor = tintColor
-        if #available(iOS 26.0, *) {
-            configuration?.baseForegroundColor = tintColor
-        }
-    }
-
-    public func configure(viewModel: CloseButtonViewModel,
-                          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.notificationCenter = notificationCenter
-        startObservingNotifications(
-            withNotificationCenter: notificationCenter,
-            forObserver: self,
-            observing: [UIContentSizeCategory.didChangeNotification]
-        )
-
+    public func configure(viewModel: CloseButtonViewModel) {
         self.viewModel = viewModel
         accessibilityIdentifier = viewModel.a11yIdentifier
         accessibilityLabel = viewModel.a11yLabel
     }
 
-    private func updateButtonSizeForDynamicFont() {
-        let scaledWidth = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width)
-        let scaledHeight = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height)
-        let dynamicWidth = min(max(scaledWidth, UX.closeButtonSize.width), UX.maxCloseButtonSize.width)
-        let dynamicHeight = min(max(scaledHeight, UX.closeButtonSize.height), UX.maxCloseButtonSize.height)
-        heightConstraint?.constant = dynamicHeight
-        widthConstraint?.constant = dynamicWidth
-    }
+    // MARK: - ThemeApplicable
 
-    // MARK: - Notifiable
-
-    public func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            ensureMainThread {
-                self.updateButtonSizeForDynamicFont()
-            }
-        default:
-            break
+    public func applyTheme(theme: Theme) {
+        let tintColor = theme.colors.iconSecondary
+        self.tintColor = tintColor
+        if #available(iOS 26.0, *) {
+            configuration?.baseForegroundColor = tintColor
         }
     }
 }

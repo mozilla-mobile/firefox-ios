@@ -329,7 +329,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
             return zoomOutButton?.state == .highlighted ? colors.iconDisabled : baseColor
         })
         zoomOutButton.configuration?.imageColorTransformer = zoomOutButtonImageColorTransformer
-        closeButton.applyTheme(tintColor: colors.iconSecondary)
+        closeButton.applyTheme(theme: theme)
         if #unavailable(iOS 26.0) {
             let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
                 .withTintColor(theme.colors.iconSecondary)
