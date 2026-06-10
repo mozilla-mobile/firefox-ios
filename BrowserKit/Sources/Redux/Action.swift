@@ -25,7 +25,6 @@ extension Action {
 
 public protocol ActionType: Sendable {}
 
-
 /// Used to describe an action that can be dispatched by the redux store
 public protocol ModernAction: Sendable {
     var description: String { get }
