@@ -15,20 +15,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     private let onboardingReason: OnboardingReason
     private let gleanWrapper: GleanWrapper
 
-    // MARK: - Initializer (Legacy)
-    init(
-        with model: OnboardingKitViewModel,
-        onboardingReason: OnboardingReason,
-        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
-    ) {
-        self.cardOrder = model.cards.map { $0.name }
-        self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
-        self.onboardingVariant = .legacy
-        self.onboardingReason = onboardingReason
-        self.gleanWrapper = gleanWrapper
-    }
-
-    // MARK: - Initializer (Modern)
+    // MARK: - Initializer
     init(
         with model: OnboardingKitViewModel,
         onboardingVariant: OnboardingVariant,

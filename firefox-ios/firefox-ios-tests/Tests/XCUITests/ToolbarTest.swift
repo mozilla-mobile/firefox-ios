@@ -160,6 +160,26 @@ class ToolbarTests: FeatureFlaggedTestBase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4105580
+    // Smoketest
+    func testToolbarIsVisibleAfterTypingInWebPageTextField() {
+        let browserScreen = BrowserScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        app.launch()
+
+        // Access a page with a text field
+        browserScreen.navigateToURL(path(forTestPage: "empty-login-form.html"))
+        waitUntilPageLoad()
+
+        // Type some characters in the text field and tap on enter
+        browserScreen.typeOnWebFormTextField("firefox")
+        waitUntilPageLoad()
+
+        // The toolbar is visible
+        toolbarScreen.assertToolbarIsVisible()
+    }
+
     private func validateAddNewTabButtonOnToolbar(isPrivate: Bool) {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         restartInBackground()

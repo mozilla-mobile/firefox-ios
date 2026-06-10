@@ -325,6 +325,16 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertTrue(url.isReaderModeURL)
     }
 
+    func testIsReaderModeURLGivenCustomSchemeURLThenTrue() {
+        let url = URL(string: "readermode://app/page")!
+        XCTAssertTrue(url.isReaderModeURL)
+    }
+
+    func testIsReaderModeURLGivenCustomSchemeWrongHostThenFalse() {
+        let url = URL(string: "readermode://other/page")!
+        XCTAssertFalse(url.isReaderModeURL)
+    }
+
     // MARK: isSyncedReaderModeURL tests
 
     func testIsSyncedReaderModeURLWhenEmptyURLThenIsTrue() {

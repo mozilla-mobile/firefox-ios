@@ -1984,6 +1984,7 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+    - skip_macro_validation
     steps:
     - xcode-build-for-test@3:
         title: "Build for Testing"

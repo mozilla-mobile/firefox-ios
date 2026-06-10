@@ -1,8 +1,8 @@
-# The configuration for the homepageTrackerBlockerModuleFeature feature
+# The configuration for the customReaderModeSchemeFeature feature
 features:
-  homepage-tracker-blocker-module-feature:
+  custom-reader-mode-scheme-feature:
     description: >
-      Controls the Tracker Blocker module feature
+      Use a custom WKURLSchemeHandler for reader mode
     variables:
       enabled:
         description: >
@@ -15,4 +15,4 @@ features:
           enabled: false
       - channel: developer
         value:
-          enabled: false
+          enabled: true

@@ -59,10 +59,17 @@ final class TopSitesMiddleware {
         case TopSitesActionType.tapOnHomepageTopSitesCell:
             self.handleOpenTopSitesItemTelemetry(for: action)
 
+        case TopSitesActionType.shortcutPinned:
+            self.handleShortcutPinnedTelemetry(for: action)
+
+        case TopSitesActionType.shortcutUnpinned:
+            self.handleShortcutUnpinnedTelemetry(for: action)
+
         case ContextMenuActionType.tappedOnPinTopSite:
             guard let site = self.getSite(for: action) else { return }
             self.topSitesManager.pinTopSite(site)
             self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .pin)
+            self.homepageTelemetry.sendTopSitesShortcutPinnedEvent(source: .contextMenu)
 
         case ContextMenuActionType.tappedOnUnpinTopSite:
             self.handleTappedOnUnpinSites(for: action)
@@ -97,6 +104,7 @@ final class TopSitesMiddleware {
             await self.topSitesManager.unpinTopSite(site)
         }
         self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .unpin)
+        self.homepageTelemetry.sendTopSitesShortcutUnpinnedEvent(source: .contextMenu)
     }
 
     private func getSite(for action: Action) -> Site? {
@@ -181,6 +189,30 @@ final class TopSitesMiddleware {
                 isZeroSearch: telemetryConfig.isZeroSearch
             )
         sendBookmarkOpenTelemetry(with: config.site.url)
+    }
+
+    private func handleShortcutPinnedTelemetry(for action: Action) {
+        guard let source = (action as? TopSitesAction)?.shortcutPinnedSource else {
+            self.logger.log(
+                "Unable to retrieve shortcut pinned source for \(action.actionType)",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+        homepageTelemetry.sendTopSitesShortcutPinnedEvent(source: source)
+    }
+
+    private func handleShortcutUnpinnedTelemetry(for action: Action) {
+        guard let source = (action as? TopSitesAction)?.shortcutUnpinnedSource else {
+            self.logger.log(
+                "Unable to retrieve shortcut unpinned source for \(action.actionType)",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+        homepageTelemetry.sendTopSitesShortcutUnpinnedEvent(source: source)
     }
 
     private func sendBookmarkOpenTelemetry(with urlString: String) {

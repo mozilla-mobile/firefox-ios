@@ -6,6 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 import OnboardingKit
+import Shared
 import XCTest
 @testable import Client
 
@@ -212,7 +213,56 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.savedDidFinishCoordinator?.id, subject.id)
     }
 
+    // MARK: - Onboarding resume (FXIOS-15647)
+    func testOnboardingResumeCardIndex_newUserWithSavedCard_returnsItsIndex() {
+        let cards = [makeOnboardingCard(name: "a"), makeOnboardingCard(name: "b"), makeOnboardingCard(name: "c")]
+        profile.prefs.setString("b", forKey: PrefsKeys.OnboardingLastCardSeen)
+        let subject = createSubject(isIphone: true)
+
+        XCTAssertEqual(subject.onboardingResumeCardIndex(in: cards, reason: .newUser), 1)
+    }
+
+    func testOnboardingResumeCardIndex_savedCardNoLongerInSet_returnsNil() {
+        let cards = [makeOnboardingCard(name: "a"), makeOnboardingCard(name: "b")]
+        profile.prefs.setString("removed-card", forKey: PrefsKeys.OnboardingLastCardSeen)
+        let subject = createSubject(isIphone: true)
+
+        XCTAssertNil(subject.onboardingResumeCardIndex(in: cards, reason: .newUser))
+    }
+
+    func testOnboardingResumeCardIndex_noSavedCard_returnsNil() {
+        let cards = [makeOnboardingCard(name: "a"), makeOnboardingCard(name: "b")]
+        let subject = createSubject(isIphone: true)
+
+        XCTAssertNil(subject.onboardingResumeCardIndex(in: cards, reason: .newUser))
+    }
+
+    func testOnboardingResumeCardIndex_showTourReason_returnsNil() {
+        let cards = [makeOnboardingCard(name: "a"), makeOnboardingCard(name: "b")]
+        profile.prefs.setString("b", forKey: PrefsKeys.OnboardingLastCardSeen)
+        let subject = createSubject(isIphone: true)
+
+        XCTAssertNil(subject.onboardingResumeCardIndex(in: cards, reason: .showTour))
+    }
+
     // MARK: - Helpers
+    private func makeOnboardingCard(name: String) -> OnboardingKitCardInfoModel {
+        return OnboardingKitCardInfoModel(
+            cardType: .basic,
+            name: name,
+            order: 0,
+            title: "",
+            body: "",
+            buttons: OnboardingButtons<OnboardingActions>(
+                primary: OnboardingButtonInfoModel<OnboardingActions>(title: "", action: .forwardOneCard),
+                secondary: nil
+            ),
+            multipleChoiceButtons: [],
+            a11yIdRoot: "",
+            imageID: ""
+        )
+    }
+
     private func createSubject(isIphone: Bool,
                                file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchCoordinator {
