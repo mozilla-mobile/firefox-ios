@@ -432,10 +432,7 @@ final class TabManagerImplementation: NSObject,
         guard !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
-            if tabs.isEmpty {
-                let newTab = addTab()
-                selectTab(newTab)
-            }
+            ensureAtLeastOneSelectedTab()
             return
         }
 
@@ -451,9 +448,9 @@ final class TabManagerImplementation: NSObject,
     /// `tabs` array so deeplink tabs always land last. Guarded by `isRestoringTabs` to prevent
     /// concurrent re-entry while a restore is in flight.
     private func startRestoreTabs() {
-        guard !isRestoringTabs else {
-            logger.log("Tab restore already in progress",
-                       level: .debug,
+        guard !isRestoringTabs, !tabRestoreHasFinished else {
+            logger.log("Tab restore already in progress or has already been ran.",
+                       level: .warning,
                        category: .tabs)
             return
         }
@@ -465,10 +462,7 @@ final class TabManagerImplementation: NSObject,
         guard !AppConstants.isRunningUITests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
-            if tabs.isEmpty {
-                let newTab = addTab()
-                selectTab(newTab)
-            }
+            ensureAtLeastOneSelectedTab()
             return
         }
 
@@ -493,6 +487,12 @@ final class TabManagerImplementation: NSObject,
                        level: .debug,
                        category: .tabs)
         }
+    }
+
+    private func ensureAtLeastOneSelectedTab() {
+        guard tabs.isEmpty else { return }
+        let newTab = addTab()
+        selectTab(newTab)
     }
 
     private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
