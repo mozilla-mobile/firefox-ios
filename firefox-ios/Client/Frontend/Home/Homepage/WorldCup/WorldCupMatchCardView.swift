@@ -441,13 +441,14 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.spacing = UX.horizontalStackSpace
-        stack.accessibilityElements = [homeColumn.container, centerStack, awayColumn.container]
         return stack
     }()
 
     init() {
         super.init(frame: .zero)
         setupLayout()
+        isAccessibilityElement = true
+        accessibilityTraits = .link
         isUserInteractionEnabled = true
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
@@ -509,7 +510,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
 
         NSLayoutConstraint.activate([
             flagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
-            flagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height),
+            flagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
         ])
 
         return FeaturedColumn(container: stack, flagView: flagView, codeLabel: codeLabel)
@@ -526,6 +527,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         homeColumn.codeLabel.text = match.homeCode
         awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName)
         awayColumn.codeLabel.text = match.awayCode
+        accessibilityLabel = match.matchAccessibilityLabel
 
         if let score = match.score {
             dateLabel.isHidden = true
@@ -612,6 +614,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
     init() {
         super.init(frame: .zero)
         setupLayout()
+        isAccessibilityElement = true
+        accessibilityTraits = .link
         isUserInteractionEnabled = true
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
@@ -657,9 +661,9 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
             ),
 
             homeFlagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
-            homeFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height),
+            homeFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
             awayFlagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
-            awayFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height),
+            awayFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
         ])
     }
 
@@ -683,6 +687,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         } else {
             infoLabel.text = match.date
         }
+
+        accessibilityLabel = match.matchAccessibilityLabel
     }
 
     // MARK: - ThemeApplicable
@@ -695,5 +701,19 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         homeFlagView.backgroundColor = theme.colors.borderSecondary
         awayFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
         awayFlagView.backgroundColor = theme.colors.borderSecondary
+    }
+}
+
+private extension WorldCupMatch {
+    /// Reads the match as a single VoiceOver phrase: "Home team, date or score, Away team".
+    var matchAccessibilityLabel: String {
+        let homeName = WorldCupCountry.localizedName(forID: homeCode) ?? homeCode
+        let awayName = WorldCupCountry.localizedName(forID: awayCode) ?? awayCode
+        let middle: String = if let score {
+            "\(score.score), \(score.clock)"
+        } else {
+            date
+        }
+        return "\(homeName), \(middle), \(awayName)"
     }
 }

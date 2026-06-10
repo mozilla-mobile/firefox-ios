@@ -143,6 +143,7 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable, Blurrable {
     func configure(teamName: String, subtitle: String) {
         flagView.image = UIImage(named: teamName)
         teamNameLabel.text = teamName
+        teamNameLabel.accessibilityLabel = WorldCupCountry.localizedName(forID: teamName) ?? teamName
         subtitleLabel.text = subtitle
     }
 
