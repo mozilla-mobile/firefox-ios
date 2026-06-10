@@ -12,11 +12,14 @@ protocol LibrarySelectorsSet {
     var EDIT_BUTTON: Selector { get }
     var DONE_BUTTON: Selector { get }
     var BOTTOM_LEFT_BUTTON: Selector { get }
+    var BOTTOM_SEARCH_BUTTON: Selector { get }
     var TITLE_TEXT_FIELD: Selector { get }
     var BOOKMARKS_FOLDER: Selector { get }
     var SAVE_BUTTON: Selector { get }
     var BACK_BUTTON: Selector { get }
     var BACK_BUTTON_iOS18: Selector { get }
+    var GENERAL_BACK_BUTTON: Selector { get }
+    var BOOKMARK_BACK_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -30,11 +33,14 @@ struct LibrarySelectors: LibrarySelectorsSet {
         static let editButton = "Edit"
         static let doneButton = "Done"
         static let bottomLeftButton = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
+        static let bottomSearchButton = AccessibilityIdentifiers.LibraryPanels.bottomSearchButton
         static let titleTextFields = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.titleTextField
         static let bookmarksFolder = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksFolder
         static let saveButton = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.saveButton
         static let backButtoniOS26 = AccessibilityIdentifiers.Settings.Search.backButtoniOS26
         static let backButtoniOS18 = "Bookmarks"
+        static let generalBackButton = AccessibilityIdentifiers.GeneralizedIdentifiers.back
+        static let bookmarkBackButton = AccessibilityIdentifiers.LibraryPanels.topLeftButton
     }
 
     let BOOKMARKS_LIST = Selector.tableIdOrLabel(
@@ -67,6 +73,18 @@ struct LibrarySelectors: LibrarySelectorsSet {
         groups: ["bookmark", "search"]
     )
 
+    let GENERAL_BACK_BUTTON = Selector.buttonInNavigationBarByLabel(
+        IDs.generalBackButton,
+        description: "Back button inside new folder for iOS 18 and lower",
+        groups: ["bookmark", "search"]
+    )
+
+    let BOOKMARK_BACK_BUTTON = Selector.buttonInNavigationBarByLabel(
+        IDs.bookmarkBackButton,
+        description: "Back button inside new folder that navigates to main Bookmark view",
+        groups: ["bookmark", "search"]
+    )
+
     let BOOKMARK_EMPTY_STATE = Selector.staticTextId(
         IDs.bookmarkEmptyState,
         description: "Empty state text in the bookmarks panel",
@@ -91,6 +109,12 @@ struct LibrarySelectors: LibrarySelectorsSet {
         groups: ["library"]
     )
 
+    let BOTTOM_SEARCH_BUTTON = Selector.buttonId(
+        IDs.bottomSearchButton,
+        description: "Bottom search button in the library panels",
+        groups: ["library", "bookmarks", "search"]
+    )
+
     let TITLE_TEXT_FIELD = Selector.textFieldId(
         IDs.titleTextFields,
         description: "Title text field in the edit bookmark screen",
@@ -110,6 +134,6 @@ struct LibrarySelectors: LibrarySelectorsSet {
     )
 
     var all: [Selector] { [BOOKMARKS_LIST, DELETE_BUTTON, SIGN_IN_BUTTON, BOOKMARK_EMPTY_STATE,
-                           EDIT_BUTTON, BOTTOM_LEFT_BUTTON, TITLE_TEXT_FIELD, BOOKMARKS_FOLDER,
-                           DONE_BUTTON, BACK_BUTTON, BACK_BUTTON_iOS18] }
+                           EDIT_BUTTON, BOTTOM_LEFT_BUTTON, BOTTOM_SEARCH_BUTTON, TITLE_TEXT_FIELD,
+                           BOOKMARKS_FOLDER, DONE_BUTTON, BACK_BUTTON, BACK_BUTTON_iOS18, BOOKMARK_BACK_BUTTON] }
 }

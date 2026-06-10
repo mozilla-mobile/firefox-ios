@@ -75,6 +75,7 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Private constants
+    private let profile: Profile
     private let tabManager: TabManager
     private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
@@ -102,6 +103,7 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.profile = profile
         self.tabManager = tabManager
         self.homepageTabStateStore = homepageTabStateStore
         self.overlayManager = overlayManager
@@ -431,11 +433,9 @@ final class HomepageViewController: UIViewController,
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
             let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
-            let shouldReconfigureHeader = shouldReconfigureHomepageHeader(for: state)
             self.homepageState = state
 
             refreshHomepageDataSourceSnapshot(
-                reconfigureHeader: shouldReconfigureHeader,
                 animatingDifferences: animatingDifferences
             ) { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
@@ -618,9 +618,9 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header(let state):
+        case .header(let state, let logoTextColor):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state) { [weak self] in
+                cell.configure(headerState: state, logoTextColor: logoTextColor) { [weak self] in
                     self?.dispatchNavigationBrowserAction(
                         with: NavigationDestination(.quickAnswers),
                         actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
@@ -640,6 +640,10 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
                 cell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
             }
+        case .addShortcutTile(let textColor):
+            return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
+                cell.configureAddShortcutTile(theme: currentTheme, textColor: textColor)
+            }
         case .topSiteEmpty:
             return configuredCell(cellType: EmptyTopSiteCell.self, at: indexPath) { cell in
                 cell.applyTheme(theme: currentTheme)
@@ -654,6 +658,8 @@ final class HomepageViewController: UIViewController,
             }
         case .jumpBackInSyncedTab(let config):
             return configureSyncedTabCell(config, item: item, at: indexPath)
+        case .trackerBlockerModule:
+            return configuredCell(cellType: TrackerBlockerModuleCell.self, at: indexPath) { _ in }
         case .bookmark(let item):
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
@@ -662,10 +668,17 @@ final class HomepageViewController: UIViewController,
             return configureMerinoCell(story, at: indexPath)
         case .worldcupCard:
             return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(with: homepageState.worldcupState, theme: currentTheme) { [weak self] height in
-                    self?.sectionProvider.setWorldCupCellHeight(height)
-                    self?.relayoutForCellHeightChange()
-                }
+                cell.configure(
+                    with: homepageState.worldcupState,
+                    theme: currentTheme,
+                    onHeightChange: { [weak self] height in
+                        self?.sectionProvider.setWorldCupCellHeight(height)
+                        self?.relayoutForCellHeightChange()
+                    },
+                    isCardImpression: { [weak self] in
+                        return !(self?.alreadyTrackedSections.contains(.worldcup) ?? true)
+                    }
+                )
             }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
@@ -685,8 +698,9 @@ final class HomepageViewController: UIViewController,
     }
 
     private func relayoutForCellHeightChange() {
-        guard let collectionView else { return }
-        collectionView.performBatchUpdates(nil)
+        DispatchQueue.main.async {
+            self.refreshHomepageDataSourceSnapshot()
+        }
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
@@ -1001,7 +1015,7 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
-        if section.canHandleLongPress {
+        if section.canHandleLongPress && item.canHandleLongPress {
             navigateToContextMenu(for: item, sourceView: sourceView)
         }
     }
@@ -1148,23 +1162,16 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func refreshHomepageDataSourceSnapshot(reconfigureHeader: Bool = false,
-                                                   animatingDifferences: Bool = true,
+    private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true,
                                                    completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
-            reconfigureHeader: reconfigureHeader,
             animatingDifferences: animatingDifferences
         ) {
             completion?()
         }
-    }
-
-    private func shouldReconfigureHomepageHeader(for state: HomepageState) -> Bool {
-        return state.wallpaperState.wallpaperConfiguration.logoTextColor !=
-            homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
     }
 
     /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.
@@ -1264,9 +1271,11 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
-        dispatchDidSelectCardItemAction(with: item)
         switch item {
+        case .addShortcutTile:
+            presentAddShortcutAlert()
         case .topSite(let config, _):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: config.site.url.asURL,
@@ -1280,11 +1289,13 @@ final class HomepageViewController: UIViewController,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         case .searchBar:
+            dispatchDidSelectCardItemAction(with: item)
             dispatchNavigationBrowserAction(
                 with: NavigationDestination(.homepageZeroSearch),
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
+            dispatchDidSelectCardItemAction(with: item)
             store.dispatch(
                 JumpBackInAction(
                     tab: config.tab,
@@ -1293,6 +1304,7 @@ final class HomepageViewController: UIViewController,
                 )
             )
         case .bookmark(let config):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: URIFixup.getURL(config.site.url),
@@ -1301,6 +1313,7 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .merino(let story, _):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: story.url,
@@ -1311,6 +1324,28 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    private func presentAddShortcutAlert() {
+        let alert = UIAlertController.addShortcutAlert { [weak self] url in
+            self?.addPinnedShortcut(url: url)
+        }
+        present(alert, animated: true)
+    }
+
+    private func addPinnedShortcut(url: URL) {
+        let site = Site.createBasicSite(
+            url: url.absoluteString,
+            title: url.shortDisplayString.capitalized
+        )
+        profile.pinnedSites.addPinnedTopSite(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutPinnedSource: .homescreenButton,
+                windowUUID: windowUUID,
+                actionType: TopSitesActionType.shortcutPinned
+            )
+        )
     }
 
     /// Sends telemetry data associated with tapping on a card item. The jump back in synced card item

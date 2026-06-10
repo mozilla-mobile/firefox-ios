@@ -95,58 +95,54 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307487
     func testClearHistoryFromSettings() throws {
-        XCTExpectFailure("The app was not launched", strict: false) {
-            navigator.nowAt(NewTabScreen)
-            // Browse to have an item in history list
-            navigator.goto(LibraryPanel_History)
-            waitForElementsToExist(
-                [
-                    app.tables.cells[HistoryPanelA11y.recentlyClosedCell],
-                    app.tables.cells.staticTexts[oldHistoryEntries[0]]
-                ]
-            )
-            mozWaitForElementToNotExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        navigator.nowAt(NewTabScreen)
+        // Browse to have an item in history list
+        navigator.goto(LibraryPanel_History)
+        waitForElementsToExist(
+            [
+                app.tables.cells[HistoryPanelA11y.recentlyClosedCell],
+                app.tables.cells.staticTexts[oldHistoryEntries[0]]
+            ]
+        )
+        mozWaitForElementToNotExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
 
-            // Clear all private data via the settings
-            navigator.goto(HomePanelsScreen)
-            navigator.nowAt(NewTabScreen)
-            navigator.goto(ClearPrivateDataSettings)
-            app.tables.cells["ClearPrivateData"].waitAndTap()
-            app.alerts.buttons["OK"].waitAndTap()
+        // Clear all private data via the settings
+        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(ClearPrivateDataSettings)
+        app.tables.cells["ClearPrivateData"].waitAndTap()
+        app.alerts.buttons["OK"].waitAndTap()
 
-            // Back on History panel view check that there is not any item
-            navigator.goto(LibraryPanel_History)
-            waitForElementsToExist(
-                [
-                    app.tables[HistoryPanelA11y.tableView],
-                    app.tables.cells[HistoryPanelA11y.recentlyClosedCell]
-                ]
-            )
-            mozWaitForElementToNotExist(app.tables.cells.staticTexts[oldHistoryEntries[0]])
-            mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
-        }
+        // Back on History panel view check that there is not any item
+        navigator.goto(LibraryPanel_History)
+        waitForElementsToExist(
+            [
+                app.tables[HistoryPanelA11y.tableView],
+                app.tables.cells[HistoryPanelA11y.recentlyClosedCell]
+            ]
+        )
+        mozWaitForElementToNotExist(app.tables.cells.staticTexts[oldHistoryEntries[0]])
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307014
     // Smoketest
     func testClearPrivateData() throws {
-        XCTExpectFailure("The app was not launched", strict: false) {
-            navigator.nowAt(NewTabScreen)
-            toolbarScreen.assertSettingsButtonExists()
-            // Clear private data from settings and confirm
-            navigator.goto(ClearPrivateDataSettings)
-            settingScreen.clearPrivateDataAndConfirm()
+        navigator.nowAt(NewTabScreen)
+        toolbarScreen.assertSettingsButtonExists()
+        // Clear private data from settings and confirm
+        navigator.goto(ClearPrivateDataSettings)
+        settingScreen.clearPrivateDataAndConfirm()
 
-            // Wait for OK pop-up to disappear after confirming
-            settingScreen.assertConfirmationAlertNotPresent()
-            // Try to tap on the disabled Clear Private Data button
-            settingScreen.tryTapClearPrivateDataButton()
+        // Wait for OK pop-up to disappear after confirming
+        settingScreen.assertConfirmationAlertNotPresent()
+        // Try to tap on the disabled Clear Private Data button
+        settingScreen.tryTapClearPrivateDataButton()
 
-            // If the button is disabled, the confirmation pop-up should not exist
-            // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
-            // After this issue is clarified the assertion will be re-enabled or changed.
-            // XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
-        }
+        // If the button is disabled, the confirmation pop-up should not exist
+        // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
+        // After this issue is clarified the assertion will be re-enabled or changed.
+        // XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307357

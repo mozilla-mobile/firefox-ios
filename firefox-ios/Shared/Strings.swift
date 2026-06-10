@@ -1404,6 +1404,19 @@ extension String {
                 comment: "Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section.")
         }
 
+        public struct TrackerBlocker {
+            public static let TrackersBlocked = MZLocalizedString(
+                key: "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b",
+                tableName: "FirefoxHomepage",
+                value: "Trackers Blocked: %d",
+                comment: "The numbers of trackers we've blocked since we started tracking. The %d placeholder is the actual number of trackers blocked.")
+            public static let NoTrackersBlocked = MZLocalizedString(
+                key: "FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153",
+                tableName: "FirefoxHomepage",
+                value: "You’re Protected",
+                comment: "The text shown when we turn on the Tracker Blocker feature on the homepage, and the number of trackers blocked is zero.")
+        }
+
         public struct Pocket {
             public static let NewsSectionTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.NewsSectionTitle.v149",
@@ -1470,6 +1483,45 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+
+            public struct AddShortcut {
+                public static let TileTitle = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Add Shortcut",
+                    comment: "The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut.")
+                public static let AlertTitle = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2",
+                    tableName: "FirefoxHomepage",
+                    value: "Add Shortcut",
+                    comment: "The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section.")
+                public static let AlertDescription = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2",
+                    tableName: "FirefoxHomepage",
+                    value: "Enter the URL for the website.",
+                    comment: "The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section.")
+                public static let URLTextFieldPlaceholder = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Website URL",
+                    comment: "The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section.")
+                public static let InvalidURLErrorMessage = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.InvalidURLErrorMessage.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Enter a valid URL",
+                    comment: "The error message shown when a user enters an invalid website URL in the add shortcut alert on the Firefox homepage shortcuts section.")
+                public static let CancelButtonTitle = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Cancel",
+                    comment: "The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section.")
+                public static let SaveButtonTitle = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Save",
+                    comment: "The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section.")
+            }
+
             public struct Library {
                 public static let Title = MZLocalizedString(
                     key: "FirefoxHomepage.Shortcuts.Library.Title.v143",
@@ -3169,6 +3221,11 @@ extension String {
                     tableName: nil,
                     value: "Jump Back In",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off")
+                public static let PrivacyReport = MZLocalizedString(
+                    key: "Settings.CustomizeFirefoxHome.PrivacyReport.v153",
+                    tableName: "CustomizeFirefoxHome",
+                    value: "Privacy Report",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Tracker Blocker Module on the homepage on or off.")
                 public static let RecentlySaved = MZLocalizedString(
                     key: "Settings.Home.Option.RecentlySaved",
                     tableName: nil,
@@ -3361,6 +3418,18 @@ extension String {
                 tableName: "Settings",
                 value: "Media",
                 comment: "This is the title for Media customization under the Browsing settings section."
+            )
+            public static let Content = MZLocalizedString(
+                key: "Settings.Browsing.Content.v153",
+                tableName: "Settings",
+                value: "Content",
+                comment: "This is the title for the Content customization section under the Browsing settings page."
+            )
+            public static let BlockAds = MZLocalizedString(
+                key: "Settings.Browsing.BlockAds.Title.v153",
+                tableName: "Settings",
+                value: "Block Ads",
+                comment: "Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements."
             )
         }
 
@@ -5861,6 +5930,16 @@ extension String {
         }
 
         public struct SiteProtection {
+            public static let Protections = MZLocalizedString(
+                key: "MainMenu.SiteProtection.Protections.Title.v153",
+                tableName: "MainMenu",
+                value: "Protections",
+                comment: "On the main menu, at the top, title for a badge that opens site protection settings.")
+            public static let AdBlocker = MZLocalizedString(
+                key: "MainMenu.SiteProtection.AdBlocker.Title.v153",
+                tableName: "MainMenu",
+                value: "Ad Blocker",
+                comment: "On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting.")
             public static let ProtectionsOn = MZLocalizedString(
                 key: "MainMenu.SiteProtection.ProtectionsOn.Title.v141",
                 tableName: "MainMenu",

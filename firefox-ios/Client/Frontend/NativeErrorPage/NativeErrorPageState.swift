@@ -12,7 +12,7 @@ struct NativeErrorPageState: ScreenState {
     var foxImage: String
     var url: URL?
     var advancedSection: ErrorPageModel.AdvancedSectionConfig?
-    var showGoBackButton: Bool
+    var type: ErrorPageType
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = appState.componentState(
@@ -31,7 +31,7 @@ struct NativeErrorPageState: ScreenState {
             foxImage: nativeErrorPageState.foxImage,
             url: nativeErrorPageState.url,
             advancedSection: nativeErrorPageState.advancedSection,
-            showGoBackButton: nativeErrorPageState.showGoBackButton
+            type: nativeErrorPageState.type
         )
     }
 
@@ -42,7 +42,7 @@ struct NativeErrorPageState: ScreenState {
         foxImage: String = "",
         url: URL? = nil,
         advancedSection: ErrorPageModel.AdvancedSectionConfig? = nil,
-        showGoBackButton: Bool = false
+        type: ErrorPageType = .generic
     ) {
         self.windowUUID = windowUUID
         self.title = title
@@ -50,7 +50,7 @@ struct NativeErrorPageState: ScreenState {
         self.foxImage = foxImage
         self.url = url
         self.advancedSection = advancedSection
-        self.showGoBackButton = showGoBackButton
+        self.type = type
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -70,7 +70,7 @@ struct NativeErrorPageState: ScreenState {
                 foxImage: model.foxImageName,
                 url: model.url,
                 advancedSection: model.advancedSection,
-                showGoBackButton: model.showGoBackButton
+                type: model.type
             )
         default:
             return defaultState(from: state)
@@ -85,7 +85,7 @@ struct NativeErrorPageState: ScreenState {
             foxImage: state.foxImage,
             url: state.url,
             advancedSection: state.advancedSection,
-            showGoBackButton: state.showGoBackButton
+            type: state.type
         )
     }
 }

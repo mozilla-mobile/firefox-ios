@@ -87,4 +87,36 @@ final class WorldCupCountdownModelTests: XCTestCase {
         model.stop()
         XCTAssertEqual(fireCount, 1)
     }
+
+    func testStartAfterKickoffNotifiesWorldCupStarted() {
+        // 2026-06-11T20:00:00Z — one hour after kickoff
+        let now = utcDate(year: 2026, month: 6, day: 11, hour: 20)
+        let model = WorldCupCountdownModel(now: { now })
+        var startedCallCount = 0
+        model.onWorldCupStarted = { startedCallCount += 1 }
+        model.start()
+        XCTAssertEqual(startedCallCount, 1)
+        model.stop()
+    }
+
+    func testStartBeforeKickoffDoesNotNotifyWorldCupStarted() {
+        let now = utcDate(year: 2026, month: 6, day: 1, hour: 19)
+        let model = WorldCupCountdownModel(now: { now })
+        var startedCallCount = 0
+        model.onWorldCupStarted = { startedCallCount += 1 }
+        model.start()
+        XCTAssertEqual(startedCallCount, 0)
+        model.stop()
+    }
+
+    func testWorldCupStartedFiresOnlyOnce() {
+        let now = utcDate(year: 2026, month: 6, day: 11, hour: 20)
+        let model = WorldCupCountdownModel(now: { now })
+        var startedCallCount = 0
+        model.onWorldCupStarted = { startedCallCount += 1 }
+        model.start()
+        model.start()
+        XCTAssertEqual(startedCallCount, 1)
+        model.stop()
+    }
 }

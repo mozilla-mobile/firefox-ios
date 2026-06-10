@@ -8,11 +8,10 @@ import UIKit
 @MainActor
 struct WorldCupCellFactory {
     /// Builds the subpages array from the given state
-    static func makePages(from state: WorldCupSectionState) -> [UIView] {
-        let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
-        timerView.configure(state: state)
-
+    static func makePages(from state: WorldCupSectionState) -> [WorldCupPagerView] {
         guard state.isMilestone2 else {
+            let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
+            timerView.configure(state: state)
             return [timerView]
         }
 
@@ -27,6 +26,12 @@ struct WorldCupCellFactory {
             view.configure(with: $0)
             return view
         }
+
+        if state.selectedCountryId != nil {
+            return matchesViews
+        }
+        let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
+        timerView.configure(state: state)
         return [timerView] + matchesViews
     }
 }

@@ -596,10 +596,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         let stateWithInactiveIcon = reducer(
             initialState,
-            ToolbarAction(
+            TranslationsAction(
                 translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.receivedTranslationLanguage
+                actionType: TranslationsActionType.receivedTranslationLanguage
             )
         )
 
@@ -625,10 +625,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         let stateWithInactiveIcon = reducer(
             initialState,
-            ToolbarAction(
+            TranslationsAction(
                 translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.receivedTranslationLanguage
+                actionType: TranslationsActionType.receivedTranslationLanguage
             )
         )
 
@@ -654,14 +654,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         // Simulate the previous tab's `.active` state still in Redux at the moment of switch.
         let stateWithActiveIcon = reducer(
             initialState,
-            ToolbarAction(
+            TranslationsAction(
                 translationConfiguration: TranslationConfiguration(
                     prefs: mockProfile.prefs,
                     state: .active,
                     translatedToLanguage: "fr"
                 ),
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.translationCompleted
+                actionType: TranslationsActionType.translationCompleted
             )
         )
 

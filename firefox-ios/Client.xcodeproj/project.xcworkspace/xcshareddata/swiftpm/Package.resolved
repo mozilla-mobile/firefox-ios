@@ -1,5 +1,5 @@
 {
-  "originHash" : "e7d8931d67761f37e7664664586e08ff85dd2fa89878e390b6c48f85c6b6e85c",
+  "originHash" : "080d5c14ff8b97f985991f02dd7321403b5a7e1b1243a154f2cdcc561b9bc212",
   "pins" : [
     {
       "identity" : "a-star",
@@ -92,6 +92,15 @@
       }
     },
     {
+      "identity" : "modifiedcopymacro",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/WilhelmOks/ModifiedCopyMacro.git",
+      "state" : {
+        "revision" : "13dee3de60d4614ac268ec822325a19812e6c6f6",
+        "version" : "2.2.0"
+      }
+    },
+    {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
@@ -139,7 +148,7 @@
     {
       "identity" : "swift-syntax",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax.git",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
         "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
         "version" : "509.1.1"

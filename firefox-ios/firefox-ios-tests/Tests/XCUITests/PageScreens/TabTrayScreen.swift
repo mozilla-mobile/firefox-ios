@@ -36,20 +36,31 @@ final class TabTrayScreen {
         return cv.cells.containing(predicate).firstMatch
     }
 
+    // A tab cell is a single accessibility element whose label may be decorated with the
+    // "Currently selected tab" suffix (e.g. "Wikipedia. Currently selected tab"), so the
+    // selected tab can't be matched by the exact `cells[name]` subscript. Match the bare
+    // title or any label that begins with it.
+    private func cell(named name: String) -> XCUIElement {
+        let predicate = NSPredicate(format: "label == %@ OR label BEGINSWITH %@", name, "\(name).")
+        return collectionView.cells.matching(predicate).firstMatch
+    }
+
     func assertCellExists(named name: String, timeout: TimeInterval = TIMEOUT) {
-        let cell = collectionView.cells[name]
-        BaseTestCase().mozWaitForElementToExist(cell, timeout: timeout)
+        BaseTestCase().mozWaitForElementToExist(cell(named: name), timeout: timeout)
     }
 
     func tapOnCell(named name: String, timeout: TimeInterval = TIMEOUT) {
-        let cell = collectionView.cells[name]
+        let cell = cell(named: name)
         BaseTestCase().mozWaitForElementToExist(cell, timeout: timeout)
         cell.waitAndTap()
     }
 
     func assertTabCount(_ expected: Int, file: StaticString = #filePath, line: UInt = #line) {
         let cells = collectionView.cells
-        BaseTestCase().mozWaitForElementToExist(cells.firstMatch)
+        // The tab tray may still be populating after the first cell appears, so wait until the
+        // expected cell is rendered (bounded by TIMEOUT) before asserting. failOnTimeout is false
+        // so the XCTAssertEqual below produces the single, descriptive failure.
+        BaseTestCase().mozWaitForElementToExist(cells.element(boundBy: expected - 1), failOnTimeout: false)
         XCTAssertEqual(cells.count, expected, "The number of tabs is not correct", file: file, line: line)
     }
 
@@ -94,17 +105,35 @@ final class TabTrayScreen {
         BaseTestCase().mozWaitForElementToExist(newTabButton)
     }
 
+    func switchToPrivateBrowsing(timeout: TimeInterval = TIMEOUT) {
+        let privateModeButton: XCUIElement
+        if BaseTestCase().iPad() {
+            privateModeButton = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
+        } else {
+            privateModeButton = app.buttons["\(AccessibilityIdentifiers.TabTray.selectorCell)\(0)"]
+        }
+
+        BaseTestCase().mozWaitForElementToExist(privateModeButton, timeout: timeout)
+        privateModeButton.waitAndTap()
+    }
+
+    func switchToRegularBrowsing(timeout: TimeInterval = TIMEOUT) {
+        let regularModeButton: XCUIElement
+        if BaseTestCase().iPad() {
+            regularModeButton = app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
+        } else {
+            regularModeButton = app.buttons["\(AccessibilityIdentifiers.TabTray.selectorCell)\(1)"]
+        }
+
+        BaseTestCase().mozWaitForElementToExist(regularModeButton, timeout: timeout)
+        regularModeButton.waitAndTap()
+    }
+
     func tapTabAtIndex(index: Int) {
         let tabSelector = sel.tabCellAtIndex(index: index)
         let tabCell = tabSelector.element(in: app)
 
         tabCell.waitAndTap()
-    }
-
-    func switchToPrivateBrowsing() {
-        let privateModeButton = sel.tabSelectorButton(at: 0).element(in: app)
-        BaseTestCase().mozWaitForElementToExist(privateModeButton)
-        privateModeButton.waitAndTap()
     }
 
     func assertTabButtonEnabled(at index: Int) {
@@ -217,6 +246,26 @@ final class TabTrayScreen {
                 .collectionViews.cells.element(boundBy: 0)
                 .buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
         }
+    }
+
+    func closeTab(title: String, timeout: TimeInterval = TIMEOUT) {
+        let closeButton: XCUIElement
+        if BaseTestCase().iPad() {
+            BaseTestCase().mozWaitForElementToExist(
+                app.navigationBars.segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl],
+                timeout: timeout
+            )
+            closeButton = app.cells[title].buttons[StandardImageIdentifiers.Large.cross]
+        } else {
+            BaseTestCase().mozWaitForElementToExist(
+                app.otherElements[AccessibilityIdentifiers.TabTray.navBarSegmentedControl],
+                timeout: timeout
+            )
+            closeButton = app.cells[title].buttons[AccessibilityIdentifiers.TabTray.closeButton]
+        }
+
+        BaseTestCase().mozWaitForElementToExist(closeButton, timeout: timeout)
+        closeButton.waitAndTap()
     }
 
     func assertNoWebViewLeakDetected(timeout: TimeInterval = TIMEOUT) {

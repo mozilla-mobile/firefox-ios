@@ -87,34 +87,29 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "ios-japan-onboarding-with-video-release-prod",
-      "id": "ios-japan-onboarding-with-video-release-prod",
+      "slug": "ios-translations-phase-2",
+      "id": "ios-translations-phase-2",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "iOS - Japan Onboarding with Video - Release Prod",
-      "userFacingDescription": "Japan Onboarding with Video",
-      "isEnrollmentPaused": true,
-      "isRollout": false,
+      "userFacingName": "iOS Translations - Phase 2",
+      "userFacingDescription": "iOS Translations - Phase 2",
+      "isEnrollmentPaused": false,
+      "isRollout": true,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-onboarding-framework-feature-release-23",
+        "namespace": "ios-translations-feature-release-no_targeting-rollout-3",
         "start": 0,
         "count": 10000,
         "total": 10000
       },
       "featureIds": [
-        "onboarding-framework-feature"
+        "translations-feature"
       ],
       "probeSets": [],
-      "outcomes": [
-        {
-          "slug": "onboarding",
-          "priority": "primary"
-        }
-      ],
+      "outcomes": [],
       "branches": [
         {
           "slug": "control",
@@ -126,48 +121,26 @@
           },
           "features": [
             {
-              "featureId": "onboarding-framework-feature",
+              "featureId": "translations-feature",
               "enabled": true,
               "value": {
-                "enable-modern-ui": true,
-                "should-use-japan-configuration": true,
-                "enable-video-intro": false
-              }
-            }
-          ]
-        },
-        {
-          "slug": "treatment-a",
-          "ratio": 9,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "onboarding-framework-feature",
-              "enabled": true,
-              "value": {
-                "enable-modern-ui": true,
-                "should-use-japan-configuration": true,
-                "enable-video-intro": true
+                "languagePickerEnabled": true
               }
             }
           ]
         }
       ],
-      "targeting": "(app_version|versionCompare('149.3.0') >= 0) && (language in ['ja'])",
-      "startDate": "2026-04-03",
-      "enrollmentEndDate": "2026-04-24",
+      "targeting": "(app_version|versionCompare('151.!') >= 0) && (user_disabled_ai == false)",
+      "startDate": "2026-05-19",
+      "enrollmentEndDate": null,
       "endDate": null,
       "proposedDuration": 28,
-      "proposedEnrollment": 14,
+      "proposedEnrollment": 7,
       "referenceBranch": "control",
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2026-04-03T15:52:58.196625Z",
+      "publishedDate": "2026-05-19T22:30:29.542226Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": "",
       "firefoxLabsDescription": "",
@@ -177,20 +150,20 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "ios-worldcup-feature",
-      "id": "ios-worldcup-feature",
+      "slug": "ios-worldcup-feature-1512",
+      "id": "ios-worldcup-feature-1512",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "iOS - Worldcup Feature",
+      "userFacingName": "iOS - Worldcup Feature 151.2+",
       "userFacingDescription": "iOS - Worldcup Feature",
       "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-world-cup-widget-feature-release-1",
+        "namespace": "ios-world-cup-widget-feature-release-2",
         "start": 0,
         "count": 10000,
         "total": 10000
@@ -238,8 +211,8 @@
           ]
         }
       ],
-      "targeting": "((is_already_enrolled) || ((app_version|versionCompare('151.!') >= 0)))",
-      "startDate": "2026-05-08",
+      "targeting": "((is_already_enrolled) || ((app_version|versionCompare('151.2.0') >= 0)))",
+      "startDate": "2026-06-02",
       "enrollmentEndDate": null,
       "endDate": null,
       "proposedDuration": 28,
@@ -248,7 +221,7 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2026-05-08T16:32:08.540831Z",
+      "publishedDate": "2026-06-02T19:21:07.642032Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": "",
       "firefoxLabsDescription": "",
@@ -331,6 +304,97 @@
       "firefoxLabsDescription": null,
       "firefoxLabsDescriptionLinks": null,
       "firefoxLabsGroup": null,
+      "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "shake-to-summarize-mistral-rollout-languages",
+      "id": "shake-to-summarize-mistral-rollout-languages",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "Shake to Summarize - Mistral Rollout Languages",
+      "userFacingDescription": "Summarizer",
+      "isEnrollmentPaused": false,
+      "isRollout": true,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-hosted-summarizer-feature-summarizer-app-attest-auth-feature-summarizer-language-expansion-feature-release-no_targeting-rollout-3",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "hosted-summarizer-feature",
+        "summarizer-app-attest-auth-feature",
+        "summarizer-language-expansion-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "hosted-summarizer-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "toolbarEntrypoint": true,
+                "shakeGesture": true
+              }
+            },
+            {
+              "featureId": "summarizer-app-attest-auth-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true
+              }
+            },
+            {
+              "featureId": "summarizer-language-expansion-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "supportedLocales": [
+                  "ja",
+                  "jp",
+                  "en",
+                  "es",
+                  "de",
+                  "fr",
+                  "pt",
+                  "it"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((app_version|versionCompare('151.!') >= 0) && (language in ['de', 'en', 'es', 'fr', 'it', 'ja', 'pt']))) && (user_disabled_ai == false)",
+      "startDate": "2026-05-19",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2026-05-19T17:47:19.216360Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": "",
+      "firefoxLabsDescription": "",
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": "",
       "requiresRestart": false
     }
   ]

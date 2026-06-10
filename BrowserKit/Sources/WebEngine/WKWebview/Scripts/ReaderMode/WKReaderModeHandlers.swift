@@ -177,7 +177,6 @@ final class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
             img-src *;
             style-src 'unsafe-inline' http://localhost:*;
             font-src http://localhost:*;
-            script-src 'unsafe-inline' http://localhost:*;
         """
         response.setValue(csp, forAdditionalHeader: "Content-Security-Policy")
         return response

@@ -78,6 +78,9 @@ PasswordGenerator:
 ReaderMode:
   description: Corresponds to the reading mode viewer for webpages.
 
+ReadingList:
+  description: Corresponds to the internal data store of reading list within the app. Not to be confused with `ReadingListPanel`, which refers to the Reading List screen in the library.
+
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 

@@ -32,7 +32,7 @@ class DataManagementTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         // The Settings button may not be visible on iOS 15
@@ -87,7 +87,7 @@ class DataManagementTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         // The Settings button may not be visible on iOS 15

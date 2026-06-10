@@ -7,6 +7,7 @@ import Shared
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum FeatureFlagID: String, CaseIterable {
+    case adBlocker
     case addressAutofillEdit
     case addressBarMenu
     case adsClient
@@ -14,16 +15,19 @@ enum FeatureFlagID: String, CaseIterable {
     case appearanceMenu
     case badCertDomainErrorPage
     case bookmarksSearchFeature
+    case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
+    case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepagePinnedHeader
     case homepageSearchBar
     case homepageStoryCategories
+    case homepageTrackerBlockerModule
     case hostedSummarizer
     case hostedSummarizerShakeGesture
     case hostedSummarizerToolbarEntrypoint
@@ -71,11 +75,13 @@ enum FeatureFlagID: String, CaseIterable {
         switch self {
         case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
         case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
-        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
+        case .homepageTrackerBlockerModule: return HomepageKeys.TrackerBlockerSection
         case .sentFromFirefox: return FlagKeys.SentFromFirefox
         case .startAtHome: return FlagKeys.StartAtHome
+        case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
         default: return nil
         }
     }
@@ -84,17 +90,21 @@ enum FeatureFlagID: String, CaseIterable {
     // Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .addressBarMenu,
+        case    .adBlocker,
+                .addressBarMenu,
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
+                .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
+                .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageSearchBar,
                 .homepageStoryCategories,
+                .homepageTrackerBlockerModule,
                 .hostedSummarizer,
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,

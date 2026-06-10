@@ -6,23 +6,27 @@ import Foundation
 import Common
 
 class ActivityEventHelper {
-    var chosenOptions: IntroViewModel.OnboardingOptions = []
+    struct OnboardingOptions: OptionSet, CaseIterable {
+        let rawValue: Int
 
-    init(chosenOptions: IntroViewModel.OnboardingOptions = []) {
+        static let askForNotificationPermission = OnboardingOptions(rawValue: 1 << 0) // 1
+        static let setAsDefaultBrowser = OnboardingOptions(rawValue: 1 << 1) // 2
+        static let syncSignIn = OnboardingOptions(rawValue: 1 << 2) // 4
+
+        static var allCases: [OnboardingOptions] {
+            return [.askForNotificationPermission, .setAsDefaultBrowser, .syncSignIn]
+        }
+    }
+
+    var chosenOptions: OnboardingOptions = []
+
+    init(chosenOptions: OnboardingOptions = []) {
         self.chosenOptions = chosenOptions
     }
 
     // MARK: SkAdNetwork
-    // this event should be sent in the first 24h time window, if it's not sent the conversion value is locked by Apple
     func updateOnboardingUserActivationEvent() {
-        let fineValue = IntroViewModel
-            .OnboardingOptions
-            .allCases
-            .map { chosenOptions.contains($0) ? $0.rawValue : 0 }.reduce(0, +)
-        let conversionValue = ConversionValueUtil(fineValue: fineValue, coarseValue: .low, logger: DefaultLogger.shared)
-        // we should send this event only if an action has been selected during the onboarding flow
-        if fineValue > 0 {
-            conversionValue.adNetworkAttributionUpdateConversionEvent()
-        }
+        guard chosenOptions.contains(.setAsDefaultBrowser) else { return }
+        ConversionEventTracker().record(.setAsDefault)
     }
 }

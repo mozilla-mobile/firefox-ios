@@ -19,9 +19,9 @@ class FirefoxSuggestTest: BaseTestCase {
         // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/28166
         // Workaround: Press delete to trigger suggestions
         let suggestCell = app.tables["SiteTable"].staticTexts["Firefox Suggest"]
-        if !suggestCell.waitForExistence(timeout: 3) {
+        if !suggestCell.mozWaitForElementToExist(timeout: 3, failOnTimeout: false) {
             urlBarAddress.typeText(XCUIKeyboardKey.delete.rawValue)
-            XCTAssertTrue(suggestCell.waitForExistence(timeout: 1),
+            XCTAssertTrue(suggestCell.mozWaitForElementToExist(timeout: 1, failOnTimeout: false),
                           "Firefox Suggest did not appear even after workaround")
         }
         // End of workaround

@@ -15,7 +15,7 @@ extension WindowManagerImplementation {
         var result = "----------- Window Debug Info ------------\n"
         result.append("Open windows (\(windows.count)) & normal tabs (via TabManager):\n")
         for (idx, (uuid, _)) in windows.enumerated() {
-            let tabMgr = tabManager(for: uuid)
+            guard let tabMgr = tabManager(for: uuid) else { continue }
             let window = windows[uuid]?.sceneCoordinator?.window
             let frame = window?.frame ?? .zero
             result.append("    \(idx + 1): \(short(uuid)) (\(tabMgr.normalTabs.count) tabs) (frame: \(frame.debugDescription))\n")

@@ -8,13 +8,19 @@ import Redux
 struct TranslationsAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
+    let isTranslationsEnabled: Bool?
+    let translationConfiguration: TranslationConfiguration?
 
     init(
+        isTranslationsEnabled: Bool? = nil,
+        translationConfiguration: TranslationConfiguration? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType,
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
+        self.isTranslationsEnabled = isTranslationsEnabled
+        self.translationConfiguration = translationConfiguration
     }
 }
 
@@ -42,4 +48,9 @@ enum TranslationsActionType: ActionType {
     case showAutoTranslatePrompt
     case didTapEnableAutoTranslate
     case didDismissAutoTranslatePrompt
+    case didStartTranslatingPage
+    case translationCompleted
+    case receivedTranslationLanguage
+    case didReceiveErrorTranslating
+    case didTranslationSettingsChange
 }

@@ -152,7 +152,7 @@ class SearchTests: FeatureFlaggedTestBase {
         } else {
             urlBarAddress.press(forDuration: 1)
         }
-        if !app.menuItems["Select All"].waitForExistence(timeout: 3) {
+        if !app.menuItems["Select All"].mozWaitForElementToExist(timeout: 3, failOnTimeout: false) {
             urlBarAddress.waitAndTap()
         }
         app.menuItems["Select All"].waitAndTap()
@@ -421,10 +421,10 @@ class SearchTests: FeatureFlaggedTestBase {
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
-        app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft].firstMatch.waitAndTap()
+        app.tables.cells.buttons.firstMatch.waitAndTap()
 
         // The search suggestion fills the URL bar but does not conduct the search
-        waitForValueContains(urlBarAddress, value: "g")
+        mozWaitForValueContains(urlBarAddress, value: "g")
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
         // Delete the text and type "g"
@@ -437,7 +437,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
         // The search is conducted through the default search engine
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        waitForValueContains(urlBar, value: "google.com")
+        mozWaitForValueContains(urlBar, value: "google.com")
 
         // Disable "Show search suggestions" from Settings and type text in a new tab
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)
@@ -516,7 +516,7 @@ class SearchTests: FeatureFlaggedTestBase {
     private func typeTextAndValidateSearchSuggestions(text: String, isSwitchOn: Bool) {
         typeOnSearchBar(text: text)
         // Search suggestions are shown
-        let appendArrowBtn = app.tables.cells.buttons.matching(identifier: "appendUpLeftLarge")
+        let appendArrowBtn = app.tables.cells.buttons
         if isSwitchOn {
             mozWaitForElementToExist(app.staticTexts.elementContainingText("google"))
             mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])

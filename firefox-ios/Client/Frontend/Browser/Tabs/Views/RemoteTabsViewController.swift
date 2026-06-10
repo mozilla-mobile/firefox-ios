@@ -489,6 +489,7 @@ class RemoteTabsViewController: UIViewController,
             }
 
             emptyView.updateInsets(top: 0, bottom: bottomInset)
+            tableView.contentInset.bottom = view.safeAreaInsets.bottom
         }
     }
 }

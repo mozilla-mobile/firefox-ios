@@ -25,6 +25,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private var onQuickAnswersTapped: (() -> Void)?
     private var headerState: HeaderState?
+    private var logoTextColor: UIColor?
     private var hasConfiguredView = false
     private var headerConstraints = [NSLayoutConstraint]()
     private var logoConstraints = [NSLayoutConstraint]()
@@ -45,11 +46,12 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     private lazy var logoImage: UIImageView = .build { imageView in
-        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
     }
 
     private lazy var logoTextImage: UIImageView = .build { imageView in
+        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
+            .withRenderingMode(.alwaysTemplate)
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -88,7 +90,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
             logoContainerView.addSubview(logoStackView)
             stackContainer.addArrangedSubview(logoContainerView)
-            if featureFlagsProvider.isEnabled(.quickAnswers), !headerState.isPrivate {
+            if headerState.showQuickAnswersButton, !headerState.isPrivate {
                 if headerState.showiPadSetup {
                     // On iPad, add button directly to contentView so logo remains centered
                     contentView.addSubview(quickAnswersButton)
@@ -105,6 +107,11 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         }
 
         logoStackView.spacing = UX.interImageSpacing
+
+        let logoAsset = headerState.isWorldCupSectionEnabled
+            ? ImageIdentifiers.firefoxLogoSoccer
+            : ImageIdentifiers.homeHeaderLogoBall
+        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
         setupConstraints()
         setupLogoConstraints()
@@ -149,31 +156,18 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         NSLayoutConstraint.activate(logoConstraints)
     }
 
-    func configure(headerState: HeaderState, onQuickAnswersTapped: (() -> Void)? = nil) {
+    func configure(headerState: HeaderState,
+                   logoTextColor: UIColor? = nil,
+                   onQuickAnswersTapped: (() -> Void)? = nil) {
         self.headerState = headerState
+        self.logoTextColor = logoTextColor
         self.onQuickAnswersTapped = onQuickAnswersTapped
         setupView(headerState: headerState)
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        // TODO: FXIOS-10851 This can be moved to the new homescreen wallpaper fetching redux
-        let wallpaperManager = WallpaperManager()
-        let browserViewType = store.state.componentState(
-            BrowserViewControllerState.self,
-            for: .browserViewController,
-            window: currentWindowUUID
-        )?.browserViewType
-
-        if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor, browserViewType != .privateHomepage {
-            logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
-                .withRenderingMode(.alwaysTemplate)
-            logoTextImage.tintColor = logoTextColor
-        } else {
-            logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
-                .withRenderingMode(.alwaysTemplate)
-            logoTextImage.tintColor = theme.colors.textPrimary
-        }
+        logoTextImage.tintColor = logoTextColor ?? theme.colors.textPrimary
 
         quickAnswersButton.configuration?.baseBackgroundColor = theme.colors.layer4
         quickAnswersButton.configuration?.baseForegroundColor = theme.colors.actionPrimary

@@ -91,4 +91,50 @@ extension UIAlertController {
 
         return deleteAlert
     }
+
+    /// FXIOS-15928 - App crashes when dynamic type changes on iOS 26
+    class func addShortcutAlert(saveHandler: @escaping (URL) -> Void) -> UIAlertController {
+        let alert = UIAlertController(
+            title: .FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle,
+            message: .FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription,
+            preferredStyle: .alert
+        )
+        alert.view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TopSites.AddShortcutAlert.view
+
+        let cancelAction = UIAlertAction(
+            title: .FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle,
+            style: .cancel
+        )
+        let saveAction = UIAlertAction(
+            title: .FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle,
+            style: .default
+        ) { [weak alert] _ in
+            guard let text = alert?.textFields?.first?.text,
+                  let url = URIFixup.getURL(text)
+            else { return }
+
+            saveHandler(url)
+        }
+        saveAction.isEnabled = false
+
+        alert.addTextField { textField in
+            textField.placeholder = .FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder
+            textField.keyboardType = .URL
+            textField.autocapitalizationType = .none
+            textField.autocorrectionType = .no
+            textField.returnKeyType = .done
+            textField.clearButtonMode = .whileEditing
+            textField.accessibilityIdentifier =
+                AccessibilityIdentifiers.FirefoxHomepage.TopSites.AddShortcutAlert.urlTextField
+            textField.addAction(UIAction { [weak textField, weak saveAction] _ in
+                let text = textField?.text ?? ""
+                saveAction?.isEnabled = URIFixup.getURL(text) != nil
+            }, for: .editingChanged)
+        }
+
+        alert.addAction(cancelAction)
+        alert.addAction(saveAction)
+
+        return alert
+    }
 }

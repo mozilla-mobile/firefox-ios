@@ -18,11 +18,11 @@ private let ErrorPageCertErrorParam = "certerror"
 private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
 private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
 
-private struct LegacyCertErrors {
+struct CertErrorsMapping {
     // Error codes copied from Gecko. The ints corresponding to these codes were determined
     // by inspecting the NSError in each of these cases.
-    // TODO: This legacy constant should eventually be removed in favor of CertErrorCodes
-    // in NativeErrorPageHelper.swift once ErrorPageHelper is fully replaced.
+    // TODO: FXIOS-15970 This impacts the NativeErrorPageHelper too, once ErrorPageHelper is fully replaced,
+    // we should move this code over there.
     enum GeckoCode: Int {
         case unknownIssuer = -9813
         case expiredCertificate = -9814
@@ -55,12 +55,12 @@ private struct LegacyCertErrors {
     ]
 }
 
-private let legacyCertErrors = LegacyCertErrors()
+private let legacyCertErrors = CertErrorsMapping()
 
 private func certErrorFromNetworkErrorCode(_ networkErrorCode: Int) -> String {
     guard let geckoCode = legacyCertErrors.errorMapping[networkErrorCode] else {
         assertionFailure("Missing legacy cert mapping for NSURLErrorDomain code: \(networkErrorCode)")
-        return LegacyCertErrors.GeckoCode.unknownIssuer.description
+        return CertErrorsMapping.GeckoCode.unknownIssuer.description
     }
     return geckoCode.description
 }
@@ -212,7 +212,8 @@ final class ErrorPageHandler: InternalSchemeResponse {
         )
 
         let isNoInternetError = isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage
-        let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(errCode) && !useOldErrorPage
+        let isBadCertDomainURL = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isCertificateError = isBadCertDomainErrorPageEnabled && isBadCertDomainURL && !useOldErrorPage
 
         // Handle No internet access or certificate errors with native error page
         if isNoInternetError || isCertificateError {
@@ -358,7 +359,7 @@ class ErrorPageHelper {
 
             let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError
             let certErrorCode = underlyingError?.userInfo[StreamErrorCodeKey] as? Int
-            let certError = LegacyCertErrors.GeckoCode(rawValue: certErrorCode ?? Int.min)?.description
+            let certError = CertErrorsMapping.GeckoCode(rawValue: certErrorCode ?? Int.min)?.description
                 ?? certErrorFromNetworkErrorCode(error.code)
             queryItems.append(URLQueryItem(name: ErrorPageCertErrorParam, value: certError))
         }

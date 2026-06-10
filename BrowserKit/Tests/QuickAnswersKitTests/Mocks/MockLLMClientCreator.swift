@@ -12,7 +12,10 @@ final class MockLLMClientCreator: LiteLLMCreating {
     var shouldReturnNil = false
     var createAppAttestLiteLLMCallCount = 0
 
-    func createAppAttestLiteLLM(using prefs: Prefs, serviceType: MLPAServiceType) -> LiteLLMClientProtocol? {
+    func createAppAttestLiteLLM(
+        using prefs: Prefs,
+        serviceType: MLPAServiceType
+    ) -> LiteLLMClientProtocol? {
         createAppAttestLiteLLMCallCount += 1
         return shouldReturnNil ? nil : clientToReturn
     }

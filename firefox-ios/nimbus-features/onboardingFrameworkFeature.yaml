@@ -211,6 +211,7 @@ features:
               onboarding-type: fresh-install
               prerequisites:
                 - ALWAYS
+            # TODO: FXIOS-16009 Remove these dead "upgrade" onboarding cards; the upgrade flow was retired in FXIOS-15164
             update-welcome:
               card-type: basic
               order: 10

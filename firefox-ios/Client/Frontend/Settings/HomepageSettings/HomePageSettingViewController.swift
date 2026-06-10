@@ -150,22 +150,24 @@ class HomePageSettingViewController: SettingsTableViewController,
             }
             sectionItems.append(jumpBackInSetting)
 
-            let bookmarksSetting = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
-                titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
-            ) { value in
-                store.dispatch(
-                    BookmarksAction(
-                        isEnabled: value,
-                        windowUUID: self.windowUUID,
-                        actionType: BookmarksActionType.toggleShowSectionSetting
+            if featureFlagsProvider.isEnabled(.homepageTrackerBlockerModule) {
+                let trackerBlockerModuleSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.TrackerBlockerSection,
+                    defaultValue: userPreferences.getPreferenceFor(.homepageTrackerBlockerModule),
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.PrivacyReport
+                ) { value in
+                    store.dispatch(
+                        TrackerBlockerModuleAction(
+                            isEnabled: value,
+                            windowUUID: self.windowUUID,
+                            actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+                        )
                     )
-                )
+                }
+                sectionItems.append(trackerBlockerModuleSetting)
             }
-            sectionItems.append(bookmarksSetting)
 
             if worldCupStore.isFeatureEnabled {
                 let windowUUID = self.windowUUID
@@ -185,6 +187,23 @@ class HomePageSettingViewController: SettingsTableViewController,
                 }
                 sectionItems.append(worldCupSetting)
             }
+
+            let bookmarksSetting = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
+                defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
+                titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
+            ) { value in
+                store.dispatch(
+                    BookmarksAction(
+                        isEnabled: value,
+                        windowUUID: self.windowUUID,
+                        actionType: BookmarksActionType.toggleShowSectionSetting
+                    )
+                )
+            }
+            sectionItems.append(bookmarksSetting)
         }
 
         // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143

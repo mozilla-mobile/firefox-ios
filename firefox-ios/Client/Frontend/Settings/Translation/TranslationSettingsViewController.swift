@@ -38,15 +38,14 @@ final class TranslationSettingsViewController: SettingsTableViewController {
             guard let self else { return }
             let isEnabled = self.prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
             store.dispatch(
-                ToolbarAction(
+                TranslationsAction(
                     isTranslationsEnabled: isEnabled,
                     translationConfiguration: TranslationConfiguration(
                         prefs: self.prefs,
-                        isUserSettingEnabled: isEnabled,
-                        state: .inactive
+                        isUserSettingEnabled: isEnabled
                     ),
                     windowUUID: self.windowUUID,
-                    actionType: ToolbarActionType.didTranslationSettingsChange
+                    actionType: TranslationsActionType.didTranslationSettingsChange
                 )
             )
         }

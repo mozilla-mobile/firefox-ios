@@ -27,9 +27,10 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
+        case trackerBlockerModule
         case bookmarks(TextColor?)
         case pocket(TextColor?)
-        case worldcup(TextColor?)
+        case worldcup
         case spacer
 
         var canHandleLongPress: Bool {
@@ -43,14 +44,16 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
     }
 
     enum HomeItem: Hashable, Sendable {
-        case header(HeaderState)
+        case header(HeaderState, TextColor?)
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
+        case addShortcutTile(TextColor?)
         case topSiteEmpty
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
+        case trackerBlockerModule
         case bookmark(BookmarkConfiguration)
         /// FXIOS-15423: Include the selected category in the item's identity so category transitions are treated as
         /// a presentation-context change. Without the category context, diffable treats the same story in
@@ -70,6 +73,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 SearchBarCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
+                TrackerBlockerModuleCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
                 WorldCupCell.self,
@@ -89,8 +93,19 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 return .bookmark
             case .merino:
                 return .story
+            case .worldcupCard:
+                return .worldCupWidget
             default:
                 return nil
+            }
+        }
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .addShortcutTile:
+                return false
+            default:
+                return true
             }
         }
     }
@@ -99,21 +114,17 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
-        reconfigureHeader: Bool = false,
         animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
-        let headerItem = HomeItem.header(state.headerState)
+        let headerItem = HomeItem.header(state.headerState,
+                                         state.wallpaperState.wallpaperConfiguration.logoTextColor)
 
         snapshot.appendSections([.header])
         snapshot.appendItems([headerItem], toSection: .header)
-
-        if reconfigureHeader {
-            snapshot.reconfigureItems([headerItem])
-        }
 
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
@@ -136,12 +147,17 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         }
 
         if state.worldcupState.shouldShowSection {
-            snapshot.appendSections([.worldcup(textColor)])
+            snapshot.appendSections([.worldcup])
             snapshot.appendItems(
                 [.worldcupCard],
-                toSection: .worldcup(textColor)
+                toSection: .worldcup
             )
             snapshot.reconfigureItems([.worldcupCard])
+        }
+
+        if state.trackerBlockerModuleState.shouldShowSection {
+            snapshot.appendSections([.trackerBlockerModule])
+            snapshot.appendItems([.trackerBlockerModule], toSection: .trackerBlockerModule)
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
@@ -181,14 +197,22 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         and textColor: TextColor?
     ) -> TopSitesSnapshotData? {
         guard topSitesState.shouldShowSection else { return nil }
-        let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
-            topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        let maxVisibleItemCount = topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        guard maxVisibleItemCount > 0 else { return nil }
+
+        let topSitesItems: [HomeItem] = topSitesState.topSitesData.prefix(
+            maxVisibleItemCount
         ).compactMap {
             .topSite($0, textColor)
         }
-        guard !topSites.isEmpty else { return nil }
+        let allItems = topSitesState.shouldShowAddShortcutTile
+            ? topSitesItems + [.addShortcutTile(textColor)]
+            : topSitesItems
+        let visibleItems = Array(allItems.prefix(maxVisibleItemCount))
+        guard !visibleItems.isEmpty else { return nil }
+
         return TopSitesSnapshotData(
-            items: topSites,
+            items: visibleItems,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
             shouldShowSectionHeader: topSitesState.shouldShowSectionHeader
         )

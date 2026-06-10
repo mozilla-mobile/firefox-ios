@@ -32,6 +32,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         // order by titleText
         let children: [Setting] =  [
             FeatureFlagsBoolSetting(
+                with: .adBlocker,
+                titleText: format(string: "Ad Blocker"),
+                statusText: format(string: "Toggle to show the Ad Blocker feature.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
                 statusText: format(string: "Toggle to enable the rust ads client")
@@ -74,6 +81,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .customReaderModeScheme,
+                titleText: format(string: "Custom Reader Mode Scheme"),
+                statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .deeplinkOptimizationRefactor,
                 titleText: format(string: "Deeplink Optimization Refactor"),
                 statusText: format(string: "Toggle to enable deeplink optimization refactor")
@@ -95,6 +109,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageAddShortcutTile,
+                titleText: format(string: "Homepage Add Shortcut"),
+                statusText: format(string: "Toggle to enable the homepage add shortcut tile")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepagePinnedHeader,
                 titleText: format(string: "Homepage Pinned Header"),
                 statusText: format(string: "Toggle to enable the pinned homepage newsfeed header")
@@ -112,6 +133,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .homepageStoryCategories,
                 titleText: format(string: "Homepage Story Categories"),
                 statusText: format(string: "Toggle to enable homepage story categories")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepageTrackerBlockerModule,
+                titleText: format(string: "Homepage Tracker Blocker Module"),
+                statusText: format(string: "Toggle homepage Tracker Blocker module")
             ) { [weak self] _ in
                 self?.reloadView()
             },

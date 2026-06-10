@@ -59,13 +59,13 @@ struct WorldCupLiveResponseTests {
         #expect(response.matches?.count == 2)
 
         let first = try #require(response.matches?.first)
-        #expect(first.homeTeam.key == "USA")
-        #expect(first.awayTeam.key == "ENG")
+        #expect(first.homeTeam?.key == "USA")
+        #expect(first.awayTeam?.key == "ENG")
         #expect(first.homeScore == 3)
         #expect(first.awayScore == 0)
         #expect(first.clock == "90")
         #expect(first.statusType == "past")
-        #expect(first.homeTeam.iconUrl == "https://example.com/usa.svg")
+        #expect(first.homeTeam?.iconUrl == "https://example.com/usa.svg")
     }
 
     @Test

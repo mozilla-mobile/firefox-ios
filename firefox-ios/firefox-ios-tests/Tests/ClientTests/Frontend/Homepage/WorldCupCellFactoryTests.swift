@@ -42,7 +42,7 @@ final class WorldCupCellFactoryTests: XCTestCase {
         XCTAssertTrue(pages.first is WorldCupTimerView)
     }
 
-    func test_makePages_whenMilestone2_withMatches_returnsTimerFollowedByMatchCards() {
+    func test_makePages_whenMilestone2_withMatches_returnsTimerFollowedByMatchCards_whenTeamNotSelected() {
         var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
         state.isMilestone2 = true
         state.matches = [makeMatches(), makeMatches()]
@@ -90,9 +90,22 @@ final class WorldCupCellFactoryTests: XCTestCase {
         XCTAssertTrue(pages.first is WorldCupTimerView)
     }
 
+    func test_makePages_whenSelectedTeam_returnsMatchesCard() {
+        var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
+        state.isMilestone2 = true
+        state.selectedCountryId = "FRA"
+        state.matches = [makeMatches()]
+
+        let pages = WorldCupCellFactory.makePages(from: state)
+
+        XCTAssertEqual(pages.count, 1)
+        XCTAssertTrue(pages[0] is WorldCupMatchCardView)
+    }
+
     private func makeMatches() -> WorldCupMatches {
         return WorldCupMatches(
             phaseTitle: "Group Stage",
+            telemetryPhaseValue: "Group Stage",
             isLive: false,
             featuredMatch: [],
             upcomingMatches: []

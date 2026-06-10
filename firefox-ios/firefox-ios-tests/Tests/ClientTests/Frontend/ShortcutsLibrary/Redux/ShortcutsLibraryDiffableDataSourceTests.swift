@@ -82,6 +82,76 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    @MainActor
+    func test_updateSnapshot_withAddShortcutTileFlagEnabled_appendsTileToShortcuts() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = ShortcutsLibraryState.reducer(
+            ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                topSites: createSites(count: 10),
+                shouldShowAddShortcutTile: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: state)
+
+        let items = dataSource.snapshot().itemIdentifiers(inSection: .shortcuts)
+        XCTAssertEqual(items.count, 11)
+        XCTAssertEqual(shortcutTitles(from: items), (0..<10).map { "Title \($0)" })
+        guard case .addShortcutTile = items.last else {
+            return XCTFail("Expected Add Shortcut tile to be the last shortcut library item")
+        }
+    }
+
+    @MainActor
+    func test_updateSnapshot_withAddShortcutTileFlagEnabled_returnsMaxItemsIncludingTile() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = ShortcutsLibraryState.reducer(
+            ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                topSites: createSites(count: 20),
+                shouldShowAddShortcutTile: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: state)
+
+        let items = dataSource.snapshot().itemIdentifiers(inSection: .shortcuts)
+        XCTAssertEqual(items.count, 16)
+        XCTAssertEqual(shortcutTitles(from: items), (0..<15).map { "Title \($0)" })
+        guard case .addShortcutTile = items.last else {
+            return XCTFail("Expected Add Shortcut tile to be the last shortcut library item")
+        }
+    }
+
+    @MainActor
+    func test_updateSnapshot_withAddShortcutTileFlagEnabledAndNoShortcuts_showsAddShortcutTile() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let state = ShortcutsLibraryState.reducer(
+            ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                topSites: [],
+                shouldShowAddShortcutTile: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: state)
+
+        let items = dataSource.snapshot().itemIdentifiers(inSection: .shortcuts)
+        XCTAssertEqual(items.count, 1)
+        guard case .addShortcutTile = items.first else {
+            return XCTFail("Expected Add Shortcut tile to be the only shortcut library item")
+        }
+    }
+
     private func createSites(count: Int) -> [TopSiteConfiguration] {
         var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
@@ -92,5 +162,12 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
             sites.append(TopSiteConfiguration(site: site))
         }
         return sites
+    }
+
+    private func shortcutTitles(from items: [ShortcutsLibraryItem]) -> [String] {
+        items.compactMap {
+            guard case .shortcut(let topSite) = $0 else { return nil }
+            return topSite.title
+        }
     }
 }

@@ -12,7 +12,7 @@ let newTopSite = [
     "topSiteLabel": "Mozilla",
     "bookmarkLabel": "Mozilla - Internet for people, not profit (US)"
 ]
-let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
+let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia"]
 let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
 
 class ActivityStreamTest: FeatureFlaggedTestBase {
@@ -62,12 +62,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     func testDefaultSites() throws {
         app.launch()
 
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
-
         topSites.assertVisible()
-        topSites.assertTopSitesCount(5)
+        topSites.assertTopSitesCount(4)
         topSites.assertDefaultTopSites()
     }
 
@@ -75,7 +71,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     func testTopSites2Add() {
         app.launch()
         if iPad() {
-            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
+            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 10)
         } else {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }
@@ -84,10 +80,13 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2272219
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
         app.launch()
-        waitForExistence(app.links.staticTexts["Internet for people, not profit — Mozilla (US)"], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(
+            app.links.staticTexts["Internet for people, not profit — Mozilla (US)"],
+            timeout: TIMEOUT_LONG
+        )
         // A new site has been added to the top sites
         if iPad() {
-            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
+            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 11)
         } else {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }
@@ -100,14 +99,14 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             navigator.nowAt(ClearPrivateDataSettings)
             navigator.goto(BrowserTab)
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
         mozWaitForElementToNotExist(app.cells.staticTexts[newTopSite["bookmarkLabel"]!])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2272220
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         app.launch()
-        waitForExistence(TopSiteCellgroup)
+        mozWaitForElementToExist(TopSiteCellgroup)
         if iPad() {
             app.textFields.element(boundBy: 0).waitAndTap()
             app.typeText("mozilla.org\n")
@@ -132,11 +131,14 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         }
         let topSitesCells = app.collectionViews.links["TopSitesCell"]
         if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         } else {
-            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(
+                topSitesCells.staticTexts["Mozilla — Internet for people, not profit"],
+                timeout: TIMEOUT_LONG
+            )
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         if #available(iOS 16, *) {
             topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
         } else {
@@ -145,9 +147,12 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
         selectOptionFromContextMenu(option: "Pin")
         if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         } else {
-            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(
+                topSitesCells.staticTexts["Mozilla — Internet for people, not profit"],
+                timeout: TIMEOUT_LONG
+            )
         }
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -155,11 +160,14 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
         if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         } else {
-            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(
+                topSitesCells.staticTexts["Mozilla — Internet for people, not profit"],
+                timeout: TIMEOUT_LONG
+            )
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2272514
@@ -173,7 +181,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         XCTAssertTrue(topSiteFirstCell == allDefaultTopSites[0])
         XCTAssertTrue(topSiteSecondCell == allDefaultTopSites[1])
         // Remove facebook top sites, first cell
-        waitForExistence(allTopSites.element(boundBy: 0))
+        mozWaitForElementToExist(allTopSites.element(boundBy: 0))
         allTopSites.element(boundBy: 0).press(forDuration: 1)
         selectOptionFromContextMenu(option: "Remove")
         if #unavailable(iOS 16) {
@@ -181,10 +189,10 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         }
         mozWaitForElementToExist(allTopSites.staticTexts[topSiteSecondCell])
         mozWaitForElementToNotExist(allTopSites.staticTexts[topSiteFirstCell])
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 3)
         // Check top site in first cell now
         let updatedAllTopSites = app.collectionViews.links.matching(identifier: "TopSitesCell")
-        waitForExistence(updatedAllTopSites.element(boundBy: 0))
+        mozWaitForElementToExist(updatedAllTopSites.element(boundBy: 0))
         let topSiteCells = updatedAllTopSites.staticTexts
         let topSiteFirstCellAfter = updatedAllTopSites.element(boundBy: 0).label
         mozWaitForElementToExist(updatedAllTopSites.element(boundBy: 0))
@@ -201,9 +209,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         app.launch()
 
         // Assert that the Top Sites are visible upon launch
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
+        topSites.assertVisible()
 
         // Wait for the toolbar to exist, which includes the settings menu button
         toolbar.assertSettingsButtonExists()
@@ -231,9 +237,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
+        topSites.assertVisible()
         toolbar.assertSettingsButtonExists()
         navigator.nowAt(NewTabScreen)
 
@@ -263,7 +267,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // can't scroll only to that area. Needs investigation
         if iPad() {
             XCUIDevice.shared.orientation = .landscapeLeft
-            waitForExistence(TopSiteCellgroup)
+            mozWaitForElementToExist(TopSiteCellgroup)
             app.collectionViews.links.staticTexts["Wikipedia"].press(forDuration: 1)
             waitForElementsToExist(
                 [
@@ -282,7 +286,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2436086
     func testLongTapOnTopSiteOptions() {
         app.launch()
-        waitForExistence(app.links[TopSites.itemCell])
+        mozWaitForElementToExist(app.links[TopSites.itemCell])
         app.collectionViews.links.element(boundBy: 3).press(forDuration: 1)
         // Verify options given
         let contextMenuTable = app.tables["Context Menu"]
@@ -309,9 +313,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2861436
     func testShortcutsToggle() {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT_LONG)
-        }
+        mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         //  Go to customize homepage
         navigator.nowAt(NewTabScreen)
@@ -357,9 +359,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2861432
     func testHomepageHeader() {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
+        topSites.assertVisible()
         // "Firefox" text is displayed in the header
         homePage.validateHomePageLogo(isPrivate: false)
         // Validate step 1 in private browsing

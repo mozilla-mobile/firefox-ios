@@ -244,19 +244,22 @@ class NimbusTests: XCTestCase {
                 experimentSlug: "test-experiment",
                 branchSlug: "test-branch",
                 reason: "test-reason",
-                change: .enrollment
+                change: .enrollment,
+                featureIds: []
             ),
             EnrollmentChangeEvent(
                 experimentSlug: "test-experiment",
                 branchSlug: "test-branch",
                 reason: "test-reason",
-                change: .unenrollment
+                change: .unenrollment,
+                featureIds: []
             ),
             EnrollmentChangeEvent(
                 experimentSlug: "test-experiment",
                 branchSlug: "test-branch",
                 reason: "test-reason",
-                change: .disqualification
+                change: .disqualification,
+                featureIds: []
             ),
         ]
 
