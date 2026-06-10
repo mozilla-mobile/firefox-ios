@@ -5,7 +5,7 @@
 import Common
 import OnboardingKit
 
-struct OnboardingKitCardInfoModel: OnboardingCardInfoModelProtocol {
+struct OnboardingKitCardInfoModel: OnboardingCardInfoModelProtocol, UserFeaturePreferenceProvider {
     let cardType: OnboardingKit.OnboardingCardType
     let name: String
     let order: Int
@@ -64,30 +64,13 @@ struct OnboardingKitCardInfoModel: OnboardingCardInfoModelProtocol {
             return matchedButton
         }
 
-        let selectableButtons = multipleChoiceButtons
-            .filter { hasDefaultSelection($0.action) }
-            .map { ($0, defaultSelectionPriority($0.action)) }
-
-        return selectableButtons
-            .min(by: { $0.1 < $1.1 })?
-            .0 // Return the button, not the priority
-    }
-
-    private func hasDefaultSelection(_ action: OnboardingMultipleChoiceAction) -> Bool {
-        switch action {
-        case .toolbarBottom, .toolbarTop:
-            return true
-        default:
-            return false
+        if multipleChoiceButtons.contains(where: { $0.action.isToolbarAction }),
+           let savedAction = savedToolbarAction(),
+           let matchedButton = multipleChoiceButtons.first(where: { $0.action == savedAction }) {
+            return matchedButton
         }
-    }
 
-    private func defaultSelectionPriority(_ action: OnboardingMultipleChoiceAction) -> Int {
-        switch action {
-        case .toolbarBottom: return 1  // Highest priority
-        case .toolbarTop: return 2     // Lower priority
-        default: return Int.max        // No priority
-        }
+        return nil
     }
 
     private func savedThemeAction() -> OnboardingMultipleChoiceAction? {
@@ -111,6 +94,13 @@ struct OnboardingKitCardInfoModel: OnboardingCardInfoModelProtocol {
         default: return .themeSystemDefault
         }
     }
+
+    private func savedToolbarAction() -> OnboardingMultipleChoiceAction? {
+        switch userPreferences.searchBarPosition {
+        case .top: return .toolbarTop
+        case .bottom: return .toolbarBottom
+        }
+    }
 }
 
 // TODO: FXIOS-12866 Nimbus generated code should add `Sendable` to enums
@@ -123,6 +113,15 @@ private extension OnboardingMultipleChoiceAction {
     var isThemeAction: Bool {
         switch self {
         case .themeDark, .themeLight, .themeSystemDefault:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var isToolbarAction: Bool {
+        switch self {
+        case .toolbarTop, .toolbarBottom:
             return true
         default:
             return false
