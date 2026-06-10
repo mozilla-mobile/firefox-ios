@@ -127,7 +127,6 @@ public class BottomSheetViewController: UIViewController,
             }
         } else {
             view.backgroundColor = viewModel.backgroundColor
-            view.layoutIfNeeded()
         }
     }
 
