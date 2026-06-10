@@ -6951,17 +6951,6 @@ extension String {
 
 // MARK: - Tracking Protection menu
 extension String {
-    public static let ETPOn = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtectionOn.Title",
-        tableName: nil,
-        value: "Protections are ON for this site",
-        comment: "A switch to enable enhanced tracking protection inside the menu.")
-    public static let ETPOff = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtectionOff.Title",
-        tableName: nil,
-        value: "Protections are OFF for this site",
-        comment: "A switch to disable enhanced tracking protection inside the menu.")
-
     // Category Titles
     public static let TPCryptominersBlocked = MZLocalizedString(
         key: "Menu.TrackingProtectionCryptominersBlocked.Title",
@@ -8792,20 +8781,6 @@ extension String {
         comment: "Title for the inactive tabs section. This section groups all tabs that haven't been used in a while.")
 }
 
-// MARK: - v36 Strings
-extension String {
-    public static let ProtectionStatusSecure = MZLocalizedString(
-        key: "ProtectionStatus.Secure",
-        tableName: nil,
-        value: "Connection is secure",
-        comment: "This is the value for a label that indicates if a user is on a secure https connection.")
-    public static let ProtectionStatusNotSecure = MZLocalizedString(
-        key: "ProtectionStatus.NotSecure",
-        tableName: nil,
-        value: "Connection is not secure",
-        comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
-}
-
 // MARK: - Strings to be removed
 extension String {
     /// For more detailed information on how to use this struct, please see
@@ -9162,6 +9137,28 @@ extension String {
                 tableName: "WorldCup",
                 value: "Full time • Penalties",
                 comment: "The label indicating the displaying match has ended after penalties.")
+        }
+        struct v152 {
+            public static let ProtectionStatusSecure = MZLocalizedString(
+                key: "ProtectionStatus.Secure",
+                tableName: nil,
+                value: "Connection is secure",
+                comment: "This is the value for a label that indicates if a user is on a secure https connection.")
+            public static let ProtectionStatusNotSecure = MZLocalizedString(
+                key: "ProtectionStatus.NotSecure",
+                tableName: nil,
+                value: "Connection is not secure",
+                comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
+            public static let ETPOn = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtectionOn.Title",
+                tableName: nil,
+                value: "Protections are ON for this site",
+                comment: "A switch to enable enhanced tracking protection inside the menu.")
+            public static let ETPOff = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtectionOff.Title",
+                tableName: nil,
+                value: "Protections are OFF for this site",
+                comment: "A switch to disable enhanced tracking protection inside the menu.")
         }
     }
 }
