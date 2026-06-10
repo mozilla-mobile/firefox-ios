@@ -89,9 +89,6 @@ private final class PageContainer: UIView, ThemeApplicable {
     }
 }
 
-/// A page control that forwards VoiceOver's adjustable gesture (one-finger swipe up/down) as a
-/// `.valueChanged` action so the host can move the paged content, which `UIPageControl` does not do
-/// on its own for accessibility-driven page changes.
 private final class WorldCupPageControl: UIPageControl {
     override func accessibilityIncrement() {
         currentPage += 1
