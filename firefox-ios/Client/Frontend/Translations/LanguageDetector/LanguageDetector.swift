@@ -39,7 +39,7 @@ final class LanguageDetector: LanguageDetectorProvider {
     }
 
     /// Identifies the page language from an extracted text sample, but only when `NLLanguageRecognizer`
-    /// reports a confidence at or above ``confidenceThreshold``. A low-confidence result (typical of
+    /// reports a confidence at or above `confidenceThreshold`. A low-confidence result (typical of
     /// code, markup, or mixed-language samples) is discarded rather than used to override the HTML tag
     /// or stand on its own. Returns `nil` for empty or unrecognized samples.
     private func confidentlyIdentifiedLanguage(from source: LanguageSampleSource) async throws -> String? {
