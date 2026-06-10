@@ -53,7 +53,6 @@ enum TabPanelViewActionType: ActionType {
     case tabPanelDidLoad
     case tabPanelWillAppear
     case tabPanelDidAppear
-    case addNewTab
     case closeTab
     case closeAllTabs
     case cancelCloseAllTabs
@@ -108,4 +107,9 @@ struct ScreenshotAction: Action {
 enum ScreenshotActionType: ActionType {
     case screenshotTaken
     case screenshotRestored
+}
+
+// MARK: Modernizing actions
+enum TabPanelViewModernAction: ModernAction {
+    case addNewTab(TabTrayPanelType)
 }

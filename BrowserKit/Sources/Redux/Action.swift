@@ -31,7 +31,7 @@ public protocol ModernAction: Sendable {
     var description: String { get }
 }
 
-extension ModernAction {
+public extension ModernAction {
     // A generic extension to automatically generate a debug description of enumerated actions.
     var description: String {
         let mirror = Mirror(reflecting: self)

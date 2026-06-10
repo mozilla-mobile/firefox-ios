@@ -165,10 +165,10 @@ final class TabDisplayView: UIView,
         }
 
         if state.didTapAddTab {
-            let action = TabPanelViewAction(panelType: self.panelType,
-                                            windowUUID: self.windowUUID,
-                                            actionType: TabPanelViewActionType.addNewTab)
-            store.dispatch(action)
+            store.dispatch(
+                TabPanelViewModernAction.addNewTab(panelType),
+                forWindowUUID: self.windowUUID
+            )
         }
     }
 

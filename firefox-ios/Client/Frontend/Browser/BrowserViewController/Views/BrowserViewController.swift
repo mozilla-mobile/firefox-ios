@@ -3437,10 +3437,10 @@ class BrowserViewController: UIViewController,
         else { return }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-            let action = TabPanelViewAction(panelType: .tabs,
-                                            windowUUID: self.windowUUID,
-                                            actionType: TabPanelViewActionType.addNewTab)
-            store.dispatch(action)
+            store.dispatch(
+                TabPanelViewModernAction.addNewTab(.tabs),
+                forWindowUUID: self.windowUUID
+            )
 
             self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
         })
