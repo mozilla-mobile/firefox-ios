@@ -36,13 +36,21 @@ final class TabTrayScreen {
         return cv.cells.containing(predicate).firstMatch
     }
 
+    // A tab cell is a single accessibility element whose label may be decorated with the
+    // "Currently selected tab" suffix (e.g. "Wikipedia. Currently selected tab"), so the
+    // selected tab can't be matched by the exact `cells[name]` subscript. Match the bare
+    // title or any label that begins with it.
+    private func cell(named name: String) -> XCUIElement {
+        let predicate = NSPredicate(format: "label == %@ OR label BEGINSWITH %@", name, "\(name).")
+        return collectionView.cells.matching(predicate).firstMatch
+    }
+
     func assertCellExists(named name: String, timeout: TimeInterval = TIMEOUT) {
-        let cell = collectionView.cells[name]
-        BaseTestCase().mozWaitForElementToExist(cell, timeout: timeout)
+        BaseTestCase().mozWaitForElementToExist(cell(named: name), timeout: timeout)
     }
 
     func tapOnCell(named name: String, timeout: TimeInterval = TIMEOUT) {
-        let cell = collectionView.cells[name]
+        let cell = cell(named: name)
         BaseTestCase().mozWaitForElementToExist(cell, timeout: timeout)
         cell.waitAndTap()
     }
