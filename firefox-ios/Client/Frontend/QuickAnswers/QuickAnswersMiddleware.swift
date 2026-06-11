@@ -10,22 +10,19 @@ import Shared
 final class QuickAnswersMiddleware {
     private let prefs: Prefs
     let featureFlagsProvider: FeatureFlagProviding
-    let userPreferences: UserFeaturePreferring
-
     private var isQuickAnswersEnabled: Bool {
         let isFeatureFlagEnabled = featureFlagsProvider.isEnabled(.quickAnswers)
-        let isUserPreferencesEnabled = userPreferences.getPreferenceFor(.quickAnswers)
+        // default value is set to true like in the settings.
+        let isUserPreferencesEnabled = prefs.boolForKey(PrefsKeys.Settings.quickAnswersFeature) ?? true
         return isFeatureFlagEnabled && isUserPreferencesEnabled
     }
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
-        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
-        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()
     ) {
         self.prefs = profile.prefs
         self.featureFlagsProvider = featureFlagsProvider
-        self.userPreferences = userPreferences
     }
 
     lazy var quickAnswersProvider: Middleware<AppState> = { state, action in

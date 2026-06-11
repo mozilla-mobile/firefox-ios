@@ -41,7 +41,7 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController {
             // as the source of truth.
             store.dispatch(
                 QuickAnswersAction(
-                    windowUUID: self.windowUUID,
+                    windowUUID: windowUUID,
                     actionType: QuickAnswersActionType.didSettingsChange
                 )
             )

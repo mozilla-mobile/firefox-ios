@@ -63,11 +63,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         // TODO: - FXIOS-14720 Add Strings for accessibility label
         button.accessibilityIdentifier = a11y.quickAnswersButton
         button.adjustsImageSizeForAccessibilityContentSizeCategory = false
-        button.addAction(
-            UIAction(handler: { [weak self] _ in
-                self?.onQuickAnswersTapped?()
-            }),
-            for: .touchUpInside
+        button.addGestureRecognizer(
+            UILongPressGestureRecognizer(target: self, action: #selector(self.handleQuickAnswersLongPress))
         )
     }
 
@@ -163,6 +160,13 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.logoTextColor = logoTextColor
         self.onQuickAnswersTapped = onQuickAnswersTapped
         setupView(headerState: headerState)
+    }
+    
+    @objc
+    private func handleQuickAnswersLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else { return }
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        onQuickAnswersTapped?()
     }
 
     // MARK: - ThemeApplicable
