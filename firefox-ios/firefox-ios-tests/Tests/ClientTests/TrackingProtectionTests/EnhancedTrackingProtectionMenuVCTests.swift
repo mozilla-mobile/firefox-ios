@@ -10,7 +10,7 @@ import Common
 final class EnhancedTrackingProtectionMenuVCTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {
@@ -30,8 +30,10 @@ final class EnhancedTrackingProtectionMenuVCTests: XCTestCase {
 
         subject.panGestureRecognizerAction(sender: mockGesture)
 
-        XCTAssertEqual(subject.view.frame.origin,
-                       CGPoint(x: initialOrigin.x, y: initialOrigin.y + translationY))
+        XCTAssertEqual(
+            subject.view.frame.origin,
+            CGPoint(x: initialOrigin.x, y: initialOrigin.y + translationY)
+        )
     }
 
     func testPanGestureRecognizerAction_endedStateWhenPointOriginIsNil_restoresFrameToOriginalOrigin() {

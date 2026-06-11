@@ -12,7 +12,7 @@ final class TrackingProtectionViewControllerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
     }
 
@@ -34,8 +34,10 @@ final class TrackingProtectionViewControllerTests: XCTestCase {
 
         subject.panGestureRecognizerAction(sender: mockGesture)
 
-        XCTAssertEqual(subject.view.frame.origin,
-                       CGPoint(x: initialOrigin.x, y: initialOrigin.y + translationY))
+        XCTAssertEqual(
+            subject.view.frame.origin,
+            CGPoint(x: initialOrigin.x, y: initialOrigin.y + translationY)
+        )
     }
 
     func testPanGestureRecognizerAction_endedStateWhenPointOriginIsNil_restoresFrameToOriginalOrigin() {
