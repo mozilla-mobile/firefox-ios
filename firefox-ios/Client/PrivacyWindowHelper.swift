@@ -38,7 +38,7 @@ final class PrivacyWindowHelper {
         // Set the privacy window level to be above alert windows (highest in importance).
         privacyWindow?.windowLevel = .alert + 1
         // Avoid makeKeyAndVisible(), becoming key steals first responder
-        // and causses iOS keyboard to dismiss on background/foreground in private mode.
+        // and causes iOS keyboard to dismiss on background/foreground in private mode.
         privacyWindow?.isHidden = false
     }
 
