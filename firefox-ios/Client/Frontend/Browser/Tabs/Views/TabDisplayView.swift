@@ -378,17 +378,13 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
 
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
-        let moveTabData = MoveTabData(originIndex: start.row,
-                                      destinationIndex: end.row,
-                                      isPrivate: tabsState.isPrivateMode)
-        let action = TabPanelViewAction(
-            panelType: panelType,
-            moveTabData: moveTabData,
-            windowUUID: windowUUID,
-            actionType: TabPanelViewActionType.moveTab
+        let moveTabPayload = MoveTabPayload(originIndex: start.row,
+                                            destinationIndex: end.row,
+                                            isPrivate: tabsState.isPrivateMode)
+        store.dispatch(
+            TabPanelViewModernAction.moveTab(moveTabPayload),
+            forWindowUUID: windowUUID
         )
-
-        store.dispatch(action)
     }
 
     func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {

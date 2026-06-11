@@ -66,6 +66,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                 addNewTab(with: nil, isPrivate: isPrivateMode, showOverlay: true, for: windowUUID)
                 dispatchRecentlyAccessedTabsAction(forWindowUUID: windowUUID)
 
+            case let .moveTab(moveTabPayload):
+                moveTab(state: state, moveTabPayload: moveTabPayload, uuid: windowUUID)
+
             case let .selectTab(selectedTabPayload):
                 selectTab(
                     for: selectedTabPayload.tabUUID,
@@ -233,10 +236,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                                   windowUUID: action.windowUUID,
                                                   actionType: TabPanelMiddlewareActionType.willAppearTabPanel)
             store.dispatch(action)
-
-        case TabPanelViewActionType.moveTab:
-            guard let moveTabData = action.moveTabData else { return }
-            moveTab(state: state, moveTabData: moveTabData, uuid: action.windowUUID)
 
         case TabPanelViewActionType.closeTab:
             guard let tabUUID = action.tabUUID else { return }
@@ -411,18 +410,18 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     ///   - originIndex: from original position
     ///   - destinationIndex: to destination position
     private func moveTab(state: AppState,
-                         moveTabData: MoveTabData,
+                         moveTabPayload: MoveTabPayload,
                          uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .drop,
                                      object: .tab,
                                      value: .tabTray)
-        tabManager?.reorderTabs(isPrivate: moveTabData.isPrivate,
-                                fromIndex: moveTabData.originIndex,
-                                toIndex: moveTabData.destinationIndex)
+        tabManager?.reorderTabs(isPrivate: moveTabPayload.isPrivate,
+                                fromIndex: moveTabPayload.originIndex,
+                                toIndex: moveTabPayload.destinationIndex)
 
-        let model = getTabsDisplayModel(for: moveTabData.isPrivate, uuid: uuid)
+        let model = getTabsDisplayModel(for: moveTabPayload.isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
                                               windowUUID: uuid,
                                               actionType: TabPanelMiddlewareActionType.refreshTabs)

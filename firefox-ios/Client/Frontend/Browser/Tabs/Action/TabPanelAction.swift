@@ -5,12 +5,6 @@
 import Redux
 import Common
 
-struct MoveTabData {
-    let originIndex: Int
-    let destinationIndex: Int
-    let isPrivate: Bool
-}
-
 struct TabPanelViewAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
@@ -19,7 +13,6 @@ struct TabPanelViewAction: Action {
     let urlRequest: URLRequest?
     let tabUUID: TabUUID?
     let selectedTabIndex: Int?
-    let moveTabData: MoveTabData?
     let toastType: ToastType?
     let shareSheetURL: URL?
     let deleteTabPeriod: TabsDeletionPeriod?
@@ -29,7 +22,6 @@ struct TabPanelViewAction: Action {
          urlRequest: URLRequest? = nil,
          tabUUID: TabUUID? = nil,
          selectedTabIndex: Int? = nil,
-         moveTabData: MoveTabData? = nil,
          toastType: ToastType? = nil,
          shareSheetURL: URL? = nil,
          deleteTabPeriod: TabsDeletionPeriod? = nil,
@@ -42,7 +34,6 @@ struct TabPanelViewAction: Action {
         self.urlRequest = urlRequest
         self.tabUUID = tabUUID
         self.selectedTabIndex = selectedTabIndex
-        self.moveTabData = moveTabData
         self.toastType = toastType
         self.shareSheetURL = shareSheetURL
         self.deleteTabPeriod = deleteTabPeriod
@@ -58,7 +49,6 @@ enum TabPanelViewActionType: ActionType {
     case cancelCloseAllTabs
     case confirmCloseAllTabs
     case deleteTabsOlderThan
-    case moveTab
     case learnMorePrivateMode
     case prefetchScreenshots
 }
@@ -111,6 +101,7 @@ enum ScreenshotActionType: ActionType {
 // MARK: Modernizing actions
 enum TabPanelViewModernAction: ModernAction {
     case addNewTab(TabTrayPanelType)
+    case moveTab(MoveTabPayload)
     case selectTab(SelectedTabPayload)
 }
 
@@ -119,4 +110,10 @@ struct SelectedTabPayload {
     let tabUUID: TabUUID
     let index: Int
     let panelType: TabTrayPanelType
+}
+
+struct MoveTabPayload {
+    let originIndex: Int
+    let destinationIndex: Int
+    let isPrivate: Bool
 }
