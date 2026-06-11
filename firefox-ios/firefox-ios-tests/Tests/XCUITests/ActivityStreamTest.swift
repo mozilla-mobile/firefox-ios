@@ -306,7 +306,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         app.launch()
         addWebsiteToShortcut(website: url_3)
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        let cell = itemCell.staticTexts["Example Domain"]
+        let cell = itemCell.staticTexts[TestLabels.exampleDomain]
         mozWaitForElementToExist(cell)
     }
 
@@ -336,7 +336,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
         // Verify shortcuts are displayed on the homepage
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        let firstWebsite = itemCell.staticTexts["Example Domain"]
+        let firstWebsite = itemCell.staticTexts[TestLabels.exampleDomain]
         let secondWebsite = itemCell.staticTexts["Internet for people, not profit — Mozilla"]
         mozWaitForElementToExist(firstWebsite)
         mozWaitForElementToExist(secondWebsite)
