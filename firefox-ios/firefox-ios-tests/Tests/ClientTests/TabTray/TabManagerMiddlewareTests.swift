@@ -113,8 +113,11 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? TabPanelMiddlewareActionType)
 
         XCTAssertEqual(actionType, TabPanelMiddlewareActionType.refreshTabs)
-        XCTAssertEqual(mockTabManager.tabDidSetScreenshotCalls, 0,
-                       "screenshotRestored should not write the loaded image back to disk.")
+        XCTAssertEqual(
+            mockTabManager.tabDidSetScreenshotCalls,
+            0,
+            "screenshotRestored should not write the loaded image back to disk."
+        )
     }
 
     func test_prefetchScreenshotsAction_callsPreloadScreenshotForEachUUID() {
@@ -132,8 +135,10 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.tabsPanelProvider(appState, action)
 
-        XCTAssertEqual(mockTabManager.preloadScreenshotCalls.map { $0.tabUUID },
-                       [tabA.tabUUID, tabB.tabUUID])
+        XCTAssertEqual(
+            mockTabManager.preloadScreenshotCalls.map { $0.tabUUID },
+            [tabA.tabUUID, tabB.tabUUID]
+        )
     }
 
     func test_prefetchScreenshotsAction_skipsUnknownUUIDs() {
