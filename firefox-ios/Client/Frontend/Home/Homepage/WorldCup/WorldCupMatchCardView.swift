@@ -188,14 +188,47 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
 
     func configure(with model: WorldCupMatches) {
         guard model != self.model else { return }
+        let previous = self.model
         self.model = model
 
-        rebuildFeaturedMatches(matches: model.featuredMatch)
-        rebuildUpcomingRows(matches: model.upcomingMatches)
+        if let previous, Self.sameMatchLayout(previous, model) {
+            updateMatchViewsInPlace(featured: model.featuredMatch, upcoming: model.upcomingMatches)
+        } else {
+            rebuildFeaturedMatches(matches: model.featuredMatch)
+            rebuildUpcomingRows(matches: model.upcomingMatches)
+        }
         titleLabel.text = model.phaseTitle
         dateLabel.text = model.dateLabel.map { "\(UX.liveLabelDotText) \($0)" }
         dateLabel.isHidden = model.isLive
         liveLabelContainer.isHidden = !model.isLive
+    }
+
+    /// True when both hold the same matches (teams/date)
+    /// so views can be reconfigured instead of rebuilt.
+    private static func sameMatchLayout(_ lhs: WorldCupMatches, _ rhs: WorldCupMatches) -> Bool {
+        func keys(_ matches: [WorldCupMatch]) -> [String] {
+            matches.map { "\($0.homeCode)|\($0.awayCode)|\($0.date)" }
+        }
+        return keys(lhs.featuredMatch) == keys(rhs.featuredMatch)
+            && keys(lhs.upcomingMatches) == keys(rhs.upcomingMatches)
+    }
+
+    private func updateMatchViewsInPlace(featured: [WorldCupMatch], upcoming: [WorldCupMatch]) {
+        let featuredViews = featuredMatchesStack.arrangedSubviews.compactMap { $0 as? FeaturedMatchView }
+        let upcomingRows = upcomingStack.arrangedSubviews.compactMap { $0 as? UpcomingMatchRow }
+        guard featuredViews.count == featured.count, upcomingRows.count == upcoming.count else {
+            rebuildFeaturedMatches(matches: featured)
+            rebuildUpcomingRows(matches: upcoming)
+            return
+        }
+        for (view, match) in zip(featuredViews, featured) {
+            view.configure(with: match)
+            view.onTap = { [weak self] in self?.navigateToSERP(for: match) }
+        }
+        for (row, match) in zip(upcomingRows, upcoming) {
+            row.configure(with: match)
+            row.onTap = { [weak self] in self?.navigateToSERP(for: match) }
+        }
     }
 
     func getWinnerThirdPlaceOrFinal() -> (teamKey: String, winnerLabel: String)? {

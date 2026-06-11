@@ -996,6 +996,55 @@ struct WorldCupMatchesTests {
         #expect(model.winnerThirdPlaceOrFinal == nil)
     }
 
+    @Test
+    func test_liveAgnosticIdentity_isStableWhenOnlyScoreOrClockChanges() {
+        func card(score: WorldCupMatch.Score?) -> WorldCupMatches {
+            WorldCupMatches(
+                phaseTitle: "Group A",
+                telemetryPhaseValue: "Group A",
+                isLive: score != nil,
+                featuredMatch: [WorldCupMatch(
+                    homeFlagAssetName: "BRA",
+                    homeCode: "BRA",
+                    awayFlagAssetName: "GER",
+                    awayCode: "GER",
+                    date: "2026-06-12T18:00:00+00:00",
+                    score: score
+                )],
+                upcomingMatches: []
+            )
+        }
+        let before = card(score: nil)
+        let after = card(score: WorldCupMatch.Score(score: "2 – 1", clock: "67'"))
+
+        #expect(before != after)
+        #expect(before.liveAgnosticIdentity == after.liveAgnosticIdentity)
+    }
+
+    @Test
+    func test_liveAgnosticIdentity_changesWhenFixtureOrPhaseChanges() {
+        func card(home: String, away: String, phase: String = "Group A") -> WorldCupMatches {
+            WorldCupMatches(
+                phaseTitle: phase,
+                telemetryPhaseValue: phase,
+                isLive: false,
+                featuredMatch: [WorldCupMatch(
+                    homeFlagAssetName: home,
+                    homeCode: home,
+                    awayFlagAssetName: away,
+                    awayCode: away,
+                    date: "2026-06-12T18:00:00+00:00",
+                    score: nil
+                )],
+                upcomingMatches: []
+            )
+        }
+        #expect(card(home: "BRA", away: "GER").liveAgnosticIdentity
+                != card(home: "ARG", away: "ENG").liveAgnosticIdentity)
+        #expect(card(home: "BRA", away: "GER").liveAgnosticIdentity
+                != card(home: "BRA", away: "GER", phase: "Round of 16").liveAgnosticIdentity)
+    }
+
     // MARK: - Helpers
 
     private func makeViewMatch(home: String,
