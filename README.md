@@ -31,6 +31,7 @@ Note that, if you're using a fork, you'll have to use the `--with-fork <fork-url
 
 ```bash
 brew tap mozilla-mobile/fxios
+brew trust mozilla-mobile/fxios
 brew install fxios
 
 # Installing from the main repo
