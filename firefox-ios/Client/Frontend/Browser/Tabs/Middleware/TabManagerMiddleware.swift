@@ -66,6 +66,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                 addNewTab(with: nil, isPrivate: isPrivateMode, showOverlay: true, for: windowUUID)
                 dispatchRecentlyAccessedTabsAction(forWindowUUID: windowUUID)
 
+            case let .confirmCloseAllTabs(isPrivateMode):
+                closeAllTabs(isPrivateMode: isPrivateMode, uuid: windowUUID)
+
             case let .deleteTabsOlderThan(deleteTabPeriod):
                 deleteNormalTabsOlderThan(period: deleteTabPeriod, uuid: windowUUID)
 
@@ -254,9 +257,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                 option: .cancel,
                 mode: (action.panelType ?? .tabs).modeForTelemetry
             )
-
-        case TabPanelViewActionType.confirmCloseAllTabs:
-            closeAllTabs(state: state, uuid: action.windowUUID)
 
         case TabPanelViewActionType.prefetchScreenshots:
             guard let tabUUID = action.tabUUID else { return }
@@ -493,18 +493,17 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         store.dispatch(action)
     }
 
-    private func closeAllTabs(state: AppState, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+    private func closeAllTabs(isPrivateMode: Bool, windowUUID: WindowUUID) {
+        let tabManager = tabManager(for: windowUUID)
 
-        tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
-        tabManager?.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
+        tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: isPrivateMode ? .private : .normal)
+        tabManager?.removeAllTabs(isPrivateMode: isPrivateMode)
 
-        triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
+        triggerRefresh(uuid: windowUUID, isPrivate: isPrivateMode)
 
-        if !tabsState.isPrivateMode {
-            addNewNormalTabIfSelectedIsPrivate(uuid: uuid)
-            let dismissAction = TabTrayAction(windowUUID: uuid,
+        if !isPrivateMode {
+            addNewNormalTabIfSelectedIsPrivate(uuid: windowUUID)
+            let dismissAction = TabTrayAction(windowUUID: windowUUID,
                                               actionType: TabTrayActionType.dismissTabTray)
             store.dispatch(dismissAction)
         }

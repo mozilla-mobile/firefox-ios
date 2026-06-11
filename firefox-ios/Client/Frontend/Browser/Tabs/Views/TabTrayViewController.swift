@@ -948,10 +948,12 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func confirmCloseAll() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.confirmCloseAllTabs)
-        store.dispatch(action)
+        store.dispatch(
+            TabPanelViewModernAction.confirmCloseAllTabs(
+                isPrivateMode: tabTrayState.isPrivateMode
+            ),
+            forWindowUUID: windowUUID
+        )
     }
 
     private func deleteTabsOlderThan(period: TabsDeletionPeriod) {
