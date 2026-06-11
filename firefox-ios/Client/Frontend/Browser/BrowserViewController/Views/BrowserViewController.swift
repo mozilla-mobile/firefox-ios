@@ -826,8 +826,12 @@ class BrowserViewController: UIViewController,
     }
 
     private var canShowPrivacyWindow: Bool {
-        // Ensure the selected tab is private and determine if the privacy window can be shown.
-        guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else { return false }
+        // The overlay is shown for private tabs (privacy) or for any tab when the
+        // deeplinkOverlay flag is enabled (to mask the stale tab while a deep link
+        // is being handled on resume).
+        guard let selectedTab = tabManager.selectedTab else { return false }
+        let isDeeplinkOverlayEnabled = featureFlagsProvider.isEnabled(.deeplinkOverlay)
+        guard selectedTab.isPrivate || isDeeplinkOverlayEnabled else { return false }
         // Show privacy window if no view controller is presented
         // or if the presented view is a PhotonActionSheet.
         return self.presentedViewController == nil || presentedViewController is PhotonActionSheet

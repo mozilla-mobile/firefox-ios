@@ -17,6 +17,7 @@ enum FeatureFlagID: String, CaseIterable {
     case bookmarksSearchFeature
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
+    case deeplinkOverlay
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
@@ -99,6 +100,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
+                .deeplinkOverlay,
                 .downloadLiveActivities,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
