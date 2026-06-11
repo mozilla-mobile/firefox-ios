@@ -16,6 +16,8 @@ struct WorldCupMatches: Equatable, Hashable {
     let featuredMatch: [WorldCupMatch]
     let upcomingMatches: [WorldCupMatch]
 
+    /// Card fingerprint excluding live fields (scores/status). 
+    /// Equal ids means refreshable in place.
     var liveAgnosticIdentity: [String] {
         func key(_ match: WorldCupMatch) -> String {
             "\(match.homeCode)|\(match.awayCode)|\(match.date)"

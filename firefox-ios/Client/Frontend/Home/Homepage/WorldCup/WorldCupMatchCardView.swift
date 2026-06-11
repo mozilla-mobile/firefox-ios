@@ -213,6 +213,8 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
         liveLabelContainer.isHidden = !model.isLive
     }
 
+    /// True when both hold the same matches (teams/date)
+    /// so views can be reconfigured instead of rebuilt.
     private static func sameMatchLayout(_ lhs: WorldCupMatches, _ rhs: WorldCupMatches) -> Bool {
         func keys(_ matches: [WorldCupMatch]) -> [String] {
             matches.map { "\($0.homeCode)|\($0.awayCode)|\($0.date)" }
