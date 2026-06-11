@@ -955,11 +955,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func deleteTabsOlderThan(period: TabsDeletionPeriod) {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        deleteTabPeriod: period,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.deleteTabsOlderThan)
-        store.dispatch(action)
+        store.dispatch(TabPanelViewModernAction.deleteTabsOlderThan(period), forWindowUUID: windowUUID)
     }
 
     @objc
