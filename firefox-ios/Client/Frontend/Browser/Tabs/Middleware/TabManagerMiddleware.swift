@@ -76,6 +76,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                     panelType: selectedTabPayload.panelType,
                     selectedTabIndex: selectedTabPayload.index
                 )
+
+            case .learnMoreAboutPrivateMode:
+                didTapLearnMoreAboutPrivateMode(uuid: windowUUID)
             }
         }
     }
@@ -255,10 +258,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         case TabPanelViewActionType.deleteTabsOlderThan:
             guard let period = action.deleteTabPeriod else { return }
             deleteNormalTabsOlderThan(period: period, uuid: action.windowUUID)
-
-        case TabPanelViewActionType.learnMorePrivateMode:
-            guard let urlRequest = action.urlRequest else { return }
-            didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
 
         case TabPanelViewActionType.prefetchScreenshots:
             guard let tabUUID = action.tabUUID else { return }
@@ -535,7 +534,10 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         }
     }
 
-    private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest, uuid: WindowUUID) {
+    private func didTapLearnMoreAboutPrivateMode(uuid: WindowUUID) {
+        guard let topicURL = SupportUtils.URLForTopic("private-browsing-ios") else { return }
+
+        let urlRequest = URLRequest(url: topicURL)
         addNewTab(with: urlRequest, isPrivate: true, showOverlay: false, for: uuid)
     }
 

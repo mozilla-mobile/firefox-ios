@@ -355,11 +355,7 @@ final class TabDisplayPanelViewController: UIViewController,
 
     // MARK: - EmptyPrivateTabsViewDelegate
 
-    func didTapLearnMore(urlRequest: URLRequest) {
-        let action = TabPanelViewAction(panelType: panelType,
-                                        urlRequest: urlRequest,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.learnMorePrivateMode)
-        store.dispatch(action)
+    func didTapLearnMore() {
+        store.dispatch(TabPanelViewModernAction.learnMoreAboutPrivateMode, forWindowUUID: windowUUID)
     }
 }

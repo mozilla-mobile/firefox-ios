@@ -10,7 +10,7 @@ import ComponentLibrary
 
 protocol EmptyPrivateTabsViewDelegate: AnyObject {
     @MainActor
-    func didTapLearnMore(urlRequest: URLRequest)
+    func didTapLearnMore()
 }
 
 // View we display when there are no private tabs created
@@ -136,9 +136,7 @@ class EmptyPrivateTabsView: UIView,
 
     @objc
     private func didTapLearnMore() {
-        guard let url = SupportUtils.URLForTopic("private-browsing-ios") else { return }
-        let request = URLRequest(url: url)
-        delegate?.didTapLearnMore(urlRequest: request)
+        delegate?.didTapLearnMore()
     }
 
     // MARK: - InsetUpdatable
