@@ -3505,6 +3505,7 @@ extension String {
                         value: "Sends images and photos to Google for visual search.",
                         comment: "In the AI Controls settings, in the AI powered features section, this is the message that describes the Google Lens feature"
                     )
+                }
 
                 public static let BlockedStatus = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151",
