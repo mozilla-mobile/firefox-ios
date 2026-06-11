@@ -17,15 +17,17 @@ extension FolderHierarchyFetcher {
 }
 
 struct Folder: Equatable, Hashable {
-    init(title: String, guid: String, indentation: Int) {
+    init(title: String, guid: String, indentation: Int, parentTitle: String? = nil) {
         self.title = Self.localizedTitle(guid) ?? title
         self.guid = guid
         self.indentation = indentation
+        self.parentTitle = parentTitle
     }
 
     let title: String
     let guid: String
     let indentation: Int
+    let parentTitle: String?
 
     static let DesktopFolderHeaderPlaceholderGuid = "DUMMY"
 
@@ -94,13 +96,14 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
                                         hasDesktopBookmarks: Bool,
                                         indent: Int = 0,
                                         excludedGuids: [String],
-                                        prefixFolders: [BookmarkFolderData] = []) {
+                                        prefixFolders: [BookmarkFolderData] = [],
+                                        parentTitle: String? = nil) {
         // Only add the folder if it is:
         // a) A desktop folder and we have desktop bookmarks
         // b) Not a desktop or excluded folder
         if (BookmarkRoots.DesktopRoots.contains(folder.guid) && hasDesktopBookmarks) ||
             (!BookmarkRoots.DesktopRoots.contains(folder.guid) && !excludedGuids.contains(folder.guid)) {
-            folders.append(Folder(title: folder.title, guid: folder.guid, indentation: indent))
+            folders.append(Folder(title: folder.title, guid: folder.guid, indentation: indent, parentTitle: parentTitle))
 
             // Prepend desktop folders to the top of the mobile bookmarks folder hierarchy
             if folder.guid == BookmarkRoots.MobileFolderGUID {
@@ -114,13 +117,14 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
             }
         } else { return }
         for case let subFolder as BookmarkFolderData in folder.children ?? [] {
-            let indentation = subFolder.isRoot ? 0 : indent + 1
+            let indentation = folder.guid == BookmarkRoots.MobileFolderGUID ? 0 : 1
             recursiveAddSubFolders(
                 subFolder,
                 folders: &folders,
                 hasDesktopBookmarks: hasDesktopBookmarks,
                 indent: indentation,
-                excludedGuids: excludedGuids
+                excludedGuids: excludedGuids,
+                parentTitle: folder.title
             )
         }
     }
