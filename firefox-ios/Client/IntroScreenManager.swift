@@ -57,7 +57,8 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
         } else if isModernOnboardingEnabled && shouldUseBrandRefreshConfiguration {
             return .brandRefresh
         } else {
-            // TODO: FXIOS-16008 Rename the "modern" variant to a non-time-relative name
+            // `.modern` is the Nimbus `uiVariant` / Glean `onboarding_variant` wire value and
+            // stays as-is; the OnboardingKit-side identifier is `.base` (FXIOS-16008).
             return .modern
         }
     }
@@ -65,6 +66,6 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     /// Returns the OnboardingKit variant corresponding to the onboarding variant.
     /// This avoids duplication of conversion logic across the codebase.
     var onboardingKitVariant: OnboardingKit.OnboardingVariant {
-        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
+        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .base
     }
 }
