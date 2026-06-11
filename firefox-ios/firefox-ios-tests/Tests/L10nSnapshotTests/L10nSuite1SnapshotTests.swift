@@ -249,6 +249,10 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         allSettingsScreens.forEach { nodeName in
             self.navigator.goto(SettingsScreen)
+            // Returning from the previous subscreen taps the nav-bar back button but does not wait
+            // for the Settings list to come back; without this the next navigation can race the
+            // back transition and fail (e.g. "Cannot get from SettingsScreen to NewTabSettings").
+            table.mozWaitElementHittable(timeout: TIMEOUT)
             self.navigator.goto(nodeName)
             if nodeName == "DisplaySettings" {
                 snapshot("Settings-\(nodeName)")
