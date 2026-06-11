@@ -205,8 +205,8 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     }
 
     /// If the card is not available in the original card order, return 0 (zero) to indicate an error in telemetry. Given how
-    /// `NimbusOnboardingFeatureLayer` is built & tested, this should never happen, but we want eyes on it, in the case that
-    /// it does.
+    /// `NimbusOnboardingKitFeatureLayer` is built & tested, this should never happen, but we want eyes on it,
+    /// in the case that it does.
     private func sequencePosition(
         for cardName: String,
         from sequence: [String]
