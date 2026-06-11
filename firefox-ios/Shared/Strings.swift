@@ -7982,12 +7982,19 @@ extension String {
             comment: "Label for button in the address toolbar, that cancels editing the address field when tapped.")
 
         public struct GoogleLens {
+            public static let A11yLabel = MZLocalizedString(
+                key: "AddressToolbar.GoogleLens.A11yLabel.v153",
+                tableName: "AddressToolbar",
+                value: "Search with Google Lens",
+                comment: "Accessibility label describing the Google Lens button on the address toolbar that prompts a menu to allow the user to take a new photo or select an existing photo from their photo library to search with Google Lens.")
+
             public struct ContextMenu {
                 public static let TakePhotoActionTitle = MZLocalizedString(
                     key: "AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle.v153",
                     tableName: "AddressToolbar",
                     value: "Take Photo",
                     comment: "Action title in the Google Lens address toolbar context menu. Opens the camera so the user can take a new photo to search with Google Lens.")
+
                 public static let PhotoLibraryActionTitle = MZLocalizedString(
                     key: "AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle.v153",
                     tableName: "AddressToolbar",
