@@ -941,10 +941,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func cancelCloseAll() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.cancelCloseAllTabs)
-        store.dispatch(action)
+        store.dispatch(TabPanelViewModernAction.cancelCloseAllTabs(tabTrayState.selectedPanel), forWindowUUID: windowUUID)
     }
 
     private func confirmCloseAll() {

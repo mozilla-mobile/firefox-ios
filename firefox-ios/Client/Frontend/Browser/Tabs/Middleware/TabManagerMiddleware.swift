@@ -66,8 +66,14 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                 addNewTab(with: nil, isPrivate: isPrivateMode, showOverlay: true, for: windowUUID)
                 dispatchRecentlyAccessedTabsAction(forWindowUUID: windowUUID)
 
+            case let .cancelCloseAllTabs(panelType):
+                tabsPanelTelemetry.closeAllTabsSheetOptionSelected(
+                    option: .cancel,
+                    mode: panelType.modeForTelemetry
+                )
+
             case let .confirmCloseAllTabs(isPrivateMode):
-                closeAllTabs(isPrivateMode: isPrivateMode, uuid: windowUUID)
+                closeAllTabs(isPrivateMode: isPrivateMode, windowUUID: windowUUID)
 
             case let .deleteTabsOlderThan(deleteTabPeriod):
                 deleteNormalTabsOlderThan(period: deleteTabPeriod, uuid: windowUUID)
@@ -251,12 +257,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             closeTabFromTabPanel(with: tabUUID,
                                  uuid: action.windowUUID,
                                  isPrivate: action.panelType == .privateTabs)
-
-        case TabPanelViewActionType.cancelCloseAllTabs:
-            tabsPanelTelemetry.closeAllTabsSheetOptionSelected(
-                option: .cancel,
-                mode: (action.panelType ?? .tabs).modeForTelemetry
-            )
 
         case TabPanelViewActionType.prefetchScreenshots:
             guard let tabUUID = action.tabUUID else { return }
