@@ -628,6 +628,11 @@ final class TabManagerImplementation: NSObject,
             restoreScreenshot(for: tab)
         }
 
+        // Notify delegates of tabs restore before selecting a tab due to tab.tabDelegate assignment
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidRestoreTabs(self)
+        }
+
         let tabToSelect: Tab? = result.selectedTabUUID.flatMap { uuid in
             result.restoredTabs.first(where: { $0.tabUUID == uuid })
         }
@@ -635,10 +640,6 @@ final class TabManagerImplementation: NSObject,
 
         cleanUpUnusedScreenshots()
         cleanUpTabSessionData()
-
-        for delegate in delegates {
-            delegate.get()?.tabManagerDidRestoreTabs(self)
-        }
     }
 
     private func legacyConfigureNewTab(with tabData: TabData) -> Tab? {
