@@ -39,7 +39,7 @@ struct WorldCupPollingFetchStrategy: WorldCupFetchStrategyProtocol {
         /// on error, two short in-burst retries before falling back to the
         /// schedule. Everything capped at 20 minutes.
         static let matches = Config(
-            baseInterval: 60,
+            baseInterval: 180,
             emptyCadence: 600,
             backoffCap: 1200,
             errorRetries: 2,
@@ -51,7 +51,7 @@ struct WorldCupPollingFetchStrategy: WorldCupFetchStrategyProtocol {
         /// so seed the empty backoff at 10 minutes rather than the base
         /// interval. Capped at 20 minutes.
         static let live = Config(
-            baseInterval: 60,
+            baseInterval: 180,
             emptyCadence: 600,
             backoffCap: 1200,
             errorRetries: 1,
