@@ -109,6 +109,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .googleLens,
+                titleText: format(string: "Google Lens"),
+                statusText: format(string: "Toggle to enable Google Lens entry points")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageAddShortcutTile,
                 titleText: format(string: "Homepage Add Shortcut"),
                 statusText: format(string: "Toggle to enable the homepage add shortcut tile")
