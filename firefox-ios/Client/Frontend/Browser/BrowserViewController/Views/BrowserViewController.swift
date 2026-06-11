@@ -795,7 +795,11 @@ class BrowserViewController: UIViewController,
               currentWindowScene === windowScene else { return }
         guard canShowPrivacyWindow else { return }
 
-        privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
+        privacyWindowHelper.showWindow(
+            windowScene: currentWindowScene,
+            withThemedColor: currentTheme().colors.layer3,
+            showLogo: shouldShowOverlayLogo
+        )
     }
 
     func sceneDidActivateNotification() {
@@ -822,7 +826,18 @@ class BrowserViewController: UIViewController,
         }
 
         guard canShowPrivacyWindow else { return }
-        privacyWindowHelper.showWindow(windowScene: view.window?.windowScene, withThemedColor: currentTheme().colors.layer3)
+        privacyWindowHelper.showWindow(
+            windowScene: view.window?.windowScene,
+            withThemedColor: currentTheme().colors.layer3,
+            showLogo: shouldShowOverlayLogo
+        )
+    }
+
+    /// Show the Firefox logo on the overlay only for normal-mode tabs when the
+    /// deeplinkOverlay flag is on. Private-mode overlay stays a plain color.
+    private var shouldShowOverlayLogo: Bool {
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isPrivate else { return false }
+        return featureFlagsProvider.isEnabled(.deeplinkOverlay)
     }
 
     private var canShowPrivacyWindow: Bool {
