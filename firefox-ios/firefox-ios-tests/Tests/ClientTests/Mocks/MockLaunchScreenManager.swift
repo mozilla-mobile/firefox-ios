@@ -9,7 +9,6 @@ import Common
 class MockLaunchScreenViewModel: LaunchScreenViewModel {
     // MARK: - Properties
     var introScreenManager: IntroScreenManager
-    var updateViewModel: UpdateViewModel
     var surveySurfaceManager: SurveySurfaceManager
     var startLoadingCalled = 0
     var loadNextLaunchTypeCalled = 0
@@ -25,20 +24,13 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         windowUUID: WindowUUID,
         profile: Profile = AppContainer.shared.resolve(),
         messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
-        onboardingModel: OnboardingKitViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade),
         introScreenManager: IntroScreenManagerProtocol? = nil
     ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
-        self.updateViewModel = UpdateViewModel(profile: profile,
-                                               model: onboardingModel,
-                                               telemetryUtility: telemetryUtility,
-                                               windowUUID: windowUUID)
         self.surveySurfaceManager = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
         super.init(windowUUID: windowUUID,
                    profile: profile,
                    messageManager: messageManager,
-                   onboardingModel: onboardingModel,
                    introScreenManager: introScreenManager)
     }
 

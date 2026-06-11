@@ -1772,7 +1772,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if tabManager.selectedTab?.isFindInPageMode == false {
+        if tabManager.selectedTab?.isFindInPageMode != true {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -1781,9 +1781,7 @@ class BrowserViewController: UIViewController,
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: false)
-        } else {
+        if tabManager.selectedTab?.isFindInPageMode != true {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -3004,8 +3002,8 @@ class BrowserViewController: UIViewController,
         }
 
         data.languages.forEach { code in
-            let native = (Locale(identifier: code).localizedString(forLanguageCode: code) ?? code).localizedCapitalized
-            let localized = (Locale.current.localizedString(forLanguageCode: code) ?? code).localizedCapitalized
+            let native = (Locale(identifier: code).localizedString(forIdentifier: code) ?? code).localizedCapitalized
+            let localized = (Locale.current.localizedString(forIdentifier: code) ?? code).localizedCapitalized
             let title = native == localized ? native : "\(native) (\(localized))"
             alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
                 guard let self else { return }
@@ -3062,7 +3060,7 @@ class BrowserViewController: UIViewController,
         for alert: UIAlertController,
         languageCode: String
     ) {
-        let langName = Locale.current.localizedString(forLanguageCode: languageCode) ?? languageCode
+        let langName = Locale.current.localizedString(forIdentifier: languageCode) ?? languageCode
         alert.title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
         let showOriginalAction = UIAlertAction(
             title: .Translations.LanguagePicker.ShowOriginal,
@@ -5045,6 +5043,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        keyboardState = nil
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
@@ -5064,9 +5063,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        if !isSnapKitRemovalEnabled {
-            updateViewConstraints()
-        } else {
+        // keyboard frame changes that don't fire willShow/willHide like (find-in-page
+        // dismissal, accessory view toggle, interactive scroll-to-dismiss). Removing the calls to update layout
+        // leaves the keyboard spacer stale and combined with a stale scrollAlpha == 0 leaves the toolbar with extra space
+        if isSnapKitRemovalEnabled {
             updateConstraintsForKeyboard()
             updateBottomContentStackViewConstraints()
         }

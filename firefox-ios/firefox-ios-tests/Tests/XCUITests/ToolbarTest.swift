@@ -10,7 +10,7 @@ let website1: [String: String] = [
     "value": "localhost",
     "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
 ]
-let website2 = path(forTestPage: "test-example.html")
+let website2 = path(forTestPage: TestPages.exampleHTML)
 
 class ToolbarTests: FeatureFlaggedTestBase {
     override func setUp() async throws {
@@ -158,6 +158,26 @@ class ToolbarTests: FeatureFlaggedTestBase {
                 validateAddNewTabButtonOnToolbar(isPrivate: true)
             }
         }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4105580
+    // Smoketest
+    func testToolbarIsVisibleAfterTypingInWebPageTextField() {
+        let browserScreen = BrowserScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        app.launch()
+
+        // Access a page with a text field
+        browserScreen.navigateToURL(path(forTestPage: "empty-login-form.html"))
+        waitUntilPageLoad()
+
+        // Type some characters in the text field and tap on enter
+        browserScreen.typeOnWebFormTextField("firefox")
+        waitUntilPageLoad()
+
+        // The toolbar is visible
+        toolbarScreen.assertToolbarIsVisible()
     }
 
     private func validateAddNewTabButtonOnToolbar(isPrivate: Bool) {

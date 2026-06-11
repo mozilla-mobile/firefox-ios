@@ -36,7 +36,7 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
         // If the legacy "Agree and Continue" button is not present, skip the entire class.
         let agreeButton = onboardingScreen.agreeAndContinueButton()
-        if !agreeButton.waitForExistence(timeout: 4) {
+        if !agreeButton.mozWaitForElementToExist(timeout: 4, failOnTimeout: false) {
             throw XCTSkip("Skipping LegacyOnboardingTests because legacy" +
                           " 'Agree and Continue' button not found (not running legacy flow)")
         }

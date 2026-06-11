@@ -95,7 +95,6 @@ enum WorldCupCountryData {
             WorldCupCountry(id: "USA"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Asia, countries: [
-            WorldCupCountry(id: "AUS"),
             WorldCupCountry(id: "IRN"),
             WorldCupCountry(id: "IRQ"),
             WorldCupCountry(id: "JPN"),
@@ -131,6 +130,7 @@ enum WorldCupCountryData {
             WorldCupCountry(id: "URY"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Oceania, countries: [
+            WorldCupCountry(id: "AUS"),
             WorldCupCountry(id: "NZL"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Europe, countries: [

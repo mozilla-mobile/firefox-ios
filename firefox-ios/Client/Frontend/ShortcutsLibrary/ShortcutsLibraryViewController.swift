@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Redux
+import Storage
 
 class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
@@ -26,6 +27,7 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     // MARK: - Private constants
+    private let profile: Profile
     private let logger: Logger
 
     // MARK: - Private variables
@@ -42,11 +44,13 @@ class ShortcutsLibraryViewController: UIViewController,
 
     // MARK: Initializers
     init(windowUUID: WindowUUID,
+         profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
+        self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
@@ -392,8 +396,25 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     private func presentAddShortcutAlert() {
-        let alert = UIAlertController.addShortcutAlert()
+        let alert = UIAlertController.addShortcutAlert { [weak self] url in
+            self?.addPinnedShortcut(url: url)
+        }
         present(alert, animated: true)
+    }
+
+    private func addPinnedShortcut(url: URL) {
+        let site = Site.createBasicSite(
+            url: url.absoluteString,
+            title: url.shortDisplayString.capitalized
+        )
+        profile.pinnedSites.addPinnedTopSite(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutPinnedSource: .homescreenButton,
+                windowUUID: windowUUID,
+                actionType: TopSitesActionType.shortcutPinned
+            )
+        )
     }
 
     // MARK: - DismissalNotifiable

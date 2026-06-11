@@ -121,6 +121,10 @@ class SearchViewController: SiteTableViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Override keyboardDismissMode to `.none` to avoid bug where the address bar is behind the raise keyboard
+        // when dismissed by scrolling the search results because the keyboard reports stale keyboard frame
+        // This change matches Safari behaviour where keyboard doesn't dismissed when scrolling in results page
+        tableView.keyboardDismissMode = .none
         getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
 

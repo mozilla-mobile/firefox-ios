@@ -89,6 +89,18 @@ private final class PageContainer: UIView, ThemeApplicable {
     }
 }
 
+private final class WorldCupPageControl: UIPageControl {
+    override func accessibilityIncrement() {
+        currentPage += 1
+        sendActions(for: .valueChanged)
+    }
+
+    override func accessibilityDecrement() {
+        currentPage -= 1
+        sendActions(for: .valueChanged)
+    }
+}
+
 final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCell, ThemeApplicable, Blurrable {
     private struct UX {
         static let rootContainerCornerRadius: CGFloat = 16
@@ -126,7 +138,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         stack.semanticContentAttribute = .forceLeftToRight
     }
 
-    private let pageControl: UIPageControl = .build { control in
+    private let pageControl: WorldCupPageControl = .build { control in
         control.hidesForSinglePage = true
         control.isUserInteractionEnabled = false
         control.semanticContentAttribute = .forceLeftToRight
@@ -168,6 +180,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private func setupLayout() {
         scrollView.addSubview(pagesStack)
         rootContainer.addSubviews(scrollView, pageControl)
+        pageControl.addTarget(self, action: #selector(pageControlAccessibilityValueChanged), for: .valueChanged)
         contentView.addSubview(winnerBackgroundView)
         contentView.addSubview(rootContainer)
 
@@ -320,6 +333,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     }
 
     // MARK: - Accessibility
+
+    @objc
+    private func pageControlAccessibilityValueChanged() {
+        goToPage(pageControl.currentPage)
+    }
 
     override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
         let total = pagesStack.arrangedSubviews.count

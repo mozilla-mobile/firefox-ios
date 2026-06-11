@@ -1404,6 +1404,19 @@ extension String {
                 comment: "Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section.")
         }
 
+        public struct TrackerBlocker {
+            public static let TrackersBlocked = MZLocalizedString(
+                key: "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b",
+                tableName: "FirefoxHomepage",
+                value: "Trackers Blocked: %d",
+                comment: "The numbers of trackers we've blocked since we started tracking. The %d placeholder is the actual number of trackers blocked.")
+            public static let NoTrackersBlocked = MZLocalizedString(
+                key: "FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153",
+                tableName: "FirefoxHomepage",
+                value: "You’re Protected",
+                comment: "The text shown when we turn on the Tracker Blocker feature on the homepage, and the number of trackers blocked is zero.")
+        }
+
         public struct Pocket {
             public static let NewsSectionTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.NewsSectionTitle.v149",
@@ -2846,47 +2859,6 @@ extension String {
     }
 }
 
-// MARK: - Upgrade CoverSheet
-extension String {
-    public struct Upgrade {
-        public struct Welcome {
-            public static let Title = MZLocalizedString(
-                key: "Upgrade.Welcome.Title.v114",
-                tableName: "Upgrade",
-                value: "Welcome to a more personal internet",
-                comment: "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
-            public static let Description = MZLocalizedString(
-                key: "Upgrade.Welcome.Description.v114",
-                tableName: "Upgrade",
-                value: "New colors. New convenience. Same commitment to people over profits.",
-                comment: "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
-            public static let Action = MZLocalizedString(
-                key: "Upgrade.Welcome.Action.v114",
-                tableName: "Upgrade",
-                value: "Set as Default Browser",
-                comment: "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.")
-        }
-
-        public struct Sync {
-            public static let Title = MZLocalizedString(
-                key: "Upgrade.SyncSign.Title.v114",
-                tableName: "Upgrade",
-                value: "Switching screens is easier than ever",
-                comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
-            public static let Description = MZLocalizedString(
-                key: "Upgrade.SyncSign.Description.v114",
-                tableName: "Upgrade",
-                value: "Pick up where you left off with tabs from other devices now on your homepage.",
-                comment: "Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
-            public static let Action = MZLocalizedString(
-                key: "Upgrade.SyncSign.Action.v114",
-                tableName: "Upgrade",
-                value: "Sign In",
-                comment: "Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade.")
-        }
-    }
-}
-
 // MARK: - Research Surface
 extension String {
     public struct ResearchSurface {
@@ -3208,6 +3180,11 @@ extension String {
                     tableName: nil,
                     value: "Jump Back In",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off")
+                public static let PrivacyReport = MZLocalizedString(
+                    key: "Settings.CustomizeFirefoxHome.PrivacyReport.v153",
+                    tableName: "CustomizeFirefoxHome",
+                    value: "Privacy Report",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Tracker Blocker Module on the homepage on or off.")
                 public static let RecentlySaved = MZLocalizedString(
                     key: "Settings.Home.Option.RecentlySaved",
                     tableName: nil,
@@ -9144,6 +9121,38 @@ extension String {
                 tableName: "WorldCup",
                 value: "Full time • Penalties",
                 comment: "The label indicating the displaying match has ended after penalties.")
+        }
+        struct v153 {
+            public static let UpgradeWelcomeTitle = MZLocalizedString(
+                key: "Upgrade.Welcome.Title.v114",
+                tableName: "Upgrade",
+                value: "Welcome to a more personal internet",
+                comment: "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
+            public static let UpgradeWelcomeDescription = MZLocalizedString(
+                key: "Upgrade.Welcome.Description.v114",
+                tableName: "Upgrade",
+                value: "New colors. New convenience. Same commitment to people over profits.",
+                comment: "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
+            public static let UpgradeWelcomeAction = MZLocalizedString(
+                key: "Upgrade.Welcome.Action.v114",
+                tableName: "Upgrade",
+                value: "Set as Default Browser",
+                comment: "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.")
+            public static let UpgradeSyncTitle = MZLocalizedString(
+                key: "Upgrade.SyncSign.Title.v114",
+                tableName: "Upgrade",
+                value: "Switching screens is easier than ever",
+                comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
+            public static let UpgradeSyncDescription = MZLocalizedString(
+                key: "Upgrade.SyncSign.Description.v114",
+                tableName: "Upgrade",
+                value: "Pick up where you left off with tabs from other devices now on your homepage.",
+                comment: "Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
+            public static let UpgradeSyncAction = MZLocalizedString(
+                key: "Upgrade.SyncSign.Action.v114",
+                tableName: "Upgrade",
+                value: "Sign In",
+                comment: "Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade.")
         }
     }
 }

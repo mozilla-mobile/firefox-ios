@@ -4,6 +4,19 @@
 
 import Foundation
 
+enum ErrorPageType: Equatable {
+    case internetConnection
+    case badCertDomain
+    case generic
+
+    var isRegularUI: Bool {
+        switch self {
+        case .internetConnection, .generic: return true
+        case .badCertDomain: return false
+        }
+    }
+}
+
 struct ErrorPageModel: Equatable {
     let errorTitle: String
     let errorDescription: String
@@ -11,6 +24,10 @@ struct ErrorPageModel: Equatable {
     let url: URL?
     let advancedSection: AdvancedSectionConfig?
     let showGoBackButton: Bool
+    // TODO - FXIOS-16001 - Refactoring the error page model 
+    // so that the error page type determines the model structure 
+    // rather than storing type within the error page model itself.
+    let type: ErrorPageType
 
     struct AdvancedSectionConfig: Equatable {
         let buttonText: String

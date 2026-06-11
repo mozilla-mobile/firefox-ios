@@ -152,7 +152,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
     func testLongTapOnJumpBackInLink() {
         prepareTest()
         // On homepage, go to the "Jump back in" section and long tap on one of the links
-        browserScreen.navigateToURL(path(forTestPage: "test-example.html"))
+        browserScreen.navigateToURL(path(forTestPage: TestPages.exampleHTML))
         browserScreen.longPressLink(named: website_2["link"]!, duration: 2)
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
         contextMenuScreen.tapOpenInNewTab()

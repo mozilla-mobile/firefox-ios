@@ -170,6 +170,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         }
         switch notificationPermissionBehavior {
         case .automatic:
+            // TODO: FXIOS-16035 Remove OnboardingNotificationCardHelper + the legacy NimbusOnboardingFeatureLayer
+            // (modern onboarding has no notifications card, so this helper never finds one).
             self.shouldAskForNotificationPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
                 telemetryObj: self.telemetryObject
             )

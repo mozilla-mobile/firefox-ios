@@ -14,13 +14,13 @@ final class ExperimentIntegrationTests: BaseTestCase {
         let closeButton = app.buttons["CloseButton"]
         let menuPromoBox = app.buttons["Close"]
 
-        if closeButton.waitForExistence(timeout: TIMEOUT) {
+        if closeButton.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
             closeButton.waitAndTap()
         }
         super.setUpScreenGraph()
         UIView.setAnimationsEnabled(false) // IMPORTANT
 
-        if menuPromoBox.waitForExistence(timeout: TIMEOUT) {
+        if menuPromoBox.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
             menuPromoBox.waitAndTap()
         }
     }

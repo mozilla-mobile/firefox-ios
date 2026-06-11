@@ -184,7 +184,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressLinkAndSelectShareOption(option: String) {
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         app.webViews[AccessibilityIdentifiers.Browser.WebView.contentView].links.element(boundBy: 0).press(forDuration: 1.5)
         mozWaitForElementToExist(app.buttons["Open in New Tab"])

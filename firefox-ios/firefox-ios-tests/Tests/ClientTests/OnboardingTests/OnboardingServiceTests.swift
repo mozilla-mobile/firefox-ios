@@ -170,7 +170,7 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
 }
 
 class MockActivityEventHelper: ActivityEventHelper {
-    var chosenOption: [IntroViewModel.OnboardingOptions] = []
+    var chosenOption: [ActivityEventHelper.OnboardingOptions] = []
     var updateOnboardingUserActivationEventCalled = false
 
     override func updateOnboardingUserActivationEvent() {

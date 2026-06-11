@@ -75,6 +75,7 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Private constants
+    private let profile: Profile
     private let tabManager: TabManager
     private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
@@ -102,6 +103,7 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.profile = profile
         self.tabManager = tabManager
         self.homepageTabStateStore = homepageTabStateStore
         self.overlayManager = overlayManager
@@ -656,6 +658,8 @@ final class HomepageViewController: UIViewController,
             }
         case .jumpBackInSyncedTab(let config):
             return configureSyncedTabCell(config, item: item, at: indexPath)
+        case .trackerBlockerModule:
+            return configuredCell(cellType: TrackerBlockerModuleCell.self, at: indexPath) { _ in }
         case .bookmark(let item):
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
@@ -1323,8 +1327,25 @@ final class HomepageViewController: UIViewController,
     }
 
     private func presentAddShortcutAlert() {
-        let alert = UIAlertController.addShortcutAlert()
+        let alert = UIAlertController.addShortcutAlert { [weak self] url in
+            self?.addPinnedShortcut(url: url)
+        }
         present(alert, animated: true)
+    }
+
+    private func addPinnedShortcut(url: URL) {
+        let site = Site.createBasicSite(
+            url: url.absoluteString,
+            title: url.shortDisplayString.capitalized
+        )
+        profile.pinnedSites.addPinnedTopSite(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutPinnedSource: .homescreenButton,
+                windowUUID: windowUUID,
+                actionType: TopSitesActionType.shortcutPinned
+            )
+        )
     }
 
     /// Sends telemetry data associated with tapping on a card item. The jump back in synced card item

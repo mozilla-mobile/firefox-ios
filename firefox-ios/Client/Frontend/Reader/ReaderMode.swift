@@ -106,6 +106,9 @@ class ReaderMode: TabContentScript {
     @MainActor
     lazy var style = ReaderModeStyle.defaultStyle(for: tab?.windowUUID) {
         didSet {
+            guard tab?.url?.absoluteString.hasPrefix(ReaderModeSchemeHandler.currentBaseURL) == true else {
+                return
+            }
             if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavascriptInDefaultContentWorld(
                     "\(ReaderModeInfo.namespace.rawValue).setStyle(\(style.encode()))"

@@ -6,7 +6,7 @@ import XCTest
 
 let url1 = "example.com"
 let url2 = path(forTestPage: "test-mozilla-org.html")
-let url3 = path(forTestPage: "test-example.html")
+let url3 = path(forTestPage: TestPages.exampleHTML)
 let urlIndexedDB = path(forTestPage: "test-indexeddb-private.html")
 
 let url1And3Label = "Example Domain"
@@ -212,7 +212,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
         browserScreen.longPressLink(named: website_2["link"]!)
         browserScreen.waitForLinkPreview(named: website_2["moreLinkLongPressUrl"]!)
