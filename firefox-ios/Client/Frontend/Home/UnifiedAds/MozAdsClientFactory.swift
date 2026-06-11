@@ -7,11 +7,11 @@ import Foundation
 import MozillaAppServices
 
 protocol MozAdsClientFactory {
-    func createClient() -> MozAdsClientProtocol
+    func createClient() -> AdsClientProtocol
 }
 
 final class DefaultMozAdsClientFactory: MozAdsClientFactory, LegacyFeatureFlaggable {
-    func createClient() -> MozAdsClientProtocol {
+    func createClient() -> AdsClientProtocol {
         if CoreBuildFlags.isUsingStagingUnifiedAdsAPI {
             return RustAdsClient.staging
         }

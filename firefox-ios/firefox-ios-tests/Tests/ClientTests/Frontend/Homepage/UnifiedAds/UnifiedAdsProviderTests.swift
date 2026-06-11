@@ -8,19 +8,13 @@ import XCTest
 
 @testable import Client
 
-class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
+class MockMozAdsClient: AdsClientProtocol, @unchecked Sendable {
     var mockAdsImages: [String: MozAdsImage]?
     var mockAdsTiles: [String: MozAdsTile]?
     var mockError: Error?
 
     var recordClickCalledWith: String?
     var recordImpressionCalledWith: String?
-
-    func clearCache() throws {}
-
-    func cycleContextId() throws -> String {
-        return "test-context-id"
-    }
 
     func recordClick(clickUrl: String) throws {
         if let error = mockError { throw error }
@@ -43,16 +37,16 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
     }
 
     func requestSpocAds(
-        mozAdRequests: [MozillaAppServices.MozAdsPlacementRequestWithCount],
-        options: MozillaAppServices.MozAdsRequestOptions?
-    ) throws -> [String: [MozillaAppServices.MozAdsSpoc]] {
+        mozAdRequests: [MozAdsPlacementRequestWithCount],
+        options: MozAdsRequestOptions?
+    ) throws -> [String: [MozAdsSpoc]] {
         return [:]
     }
 
     func requestTileAds(
-        mozAdRequests: [MozillaAppServices.MozAdsPlacementRequest],
-        options: MozillaAppServices.MozAdsRequestOptions?
-    ) throws -> [String: MozillaAppServices.MozAdsTile] {
+        mozAdRequests: [MozAdsPlacementRequest],
+        options: MozAdsRequestOptions?
+    ) throws -> [String: MozAdsTile] {
         if let error = mockError { throw error }
         return mockAdsTiles ?? [:]
     }

@@ -15,7 +15,7 @@ protocol UnifiedAdsCallbackTelemetry {
 }
 
 final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, LegacyFeatureFlaggable {
-    private let adsClient: MozAdsClientProtocol
+    private let adsClient: AdsClientProtocol
     private let networking: UnifiedTileNetworking
     private let logger: Logger
     private let sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry

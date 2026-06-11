@@ -26,7 +26,7 @@ extension UnifiedAdsProviderInterface {
 }
 
 final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, LegacyFeatureFlaggable, Sendable {
-    private let adsClient: MozAdsClientProtocol
+    private let adsClient: AdsClientProtocol
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
     let maxCacheAge: Shared.Timestamp = OneMinuteInMilliseconds * 30
