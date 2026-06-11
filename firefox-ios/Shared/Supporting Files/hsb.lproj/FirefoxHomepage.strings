@@ -82,3 +82,9 @@
 /* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
 "FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ z %2$@";
 
+/* The text shown when we turn on the Tracker Blocker feature on the homepage, and the number of trackers blocked is zero. */
+"FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153" = "Sće škitany";
+
+/* The numbers of trackers we've blocked since we started tracking. The %d placeholder is the actual number of trackers blocked. */
+"FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b" = "Zablokowane přesćěhowaki: %d";
+
