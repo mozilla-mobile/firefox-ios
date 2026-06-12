@@ -22,7 +22,7 @@ struct WorldCupMatch: Equatable, Hashable {
     /// (draw, in-progress, or missing teams).
     let winnerKey: String?
     /// Whether the match is currently in the half-time break (regular or
-    /// extra-time half-time). Used to surface a "Half time" label.
+    /// extra-time half-time).
     let isInBreak: Bool
 
     init(homeFlagAssetName: String,
