@@ -160,11 +160,11 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         panGestureRecognizer?.isEnabled = true
     }
 
-    func enableSwipeUpGestureRecognizer() {
+    private func enableSwipeUpGestureRecognizer() {
         swipeUpGestureRecognizer?.isEnabled = true
     }
 
-    func enableSwipeDownGestureRecognizer() {
+    private func enableSwipeDownGestureRecognizer() {
         swipeDownGestureRecognizer?.isEnabled = true
     }
 
@@ -172,11 +172,11 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         panGestureRecognizer?.isEnabled = false
     }
 
-    func disableSwipeUpGestureRecognizer() {
+    private func disableSwipeUpGestureRecognizer() {
         swipeUpGestureRecognizer?.isEnabled = false
     }
 
-    func disableSwipeDownGestureRecognizer() {
+    private func disableSwipeDownGestureRecognizer() {
         swipeDownGestureRecognizer?.isEnabled = false
     }
 
