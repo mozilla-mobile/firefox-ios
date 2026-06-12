@@ -144,9 +144,13 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         // safely re-enable the gesture
         if state.addressToolbar.isEditing {
             disablePanGestureRecognizer()
+            disableSwipeUpGestureRecognizer()
+            disableSwipeDownGestureRecognizer()
         } else {
             enablePanGestureRecognizer()
             enablePanGestureOnHomepageIfNeeded()
+            enableSwipeUpGestureRecognizer()
+            enableSwipeDownGestureRecognizer()
         }
     }
 
@@ -156,8 +160,24 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         panGestureRecognizer?.isEnabled = true
     }
 
+    func enableSwipeUpGestureRecognizer() {
+        swipeUpGestureRecognizer?.isEnabled = true
+    }
+
+    func enableSwipeDownGestureRecognizer() {
+        swipeDownGestureRecognizer?.isEnabled = true
+    }
+
     func disablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = false
+    }
+
+    func disableSwipeUpGestureRecognizer() {
+        swipeUpGestureRecognizer?.isEnabled = false
+    }
+
+    func disableSwipeDownGestureRecognizer() {
+        swipeDownGestureRecognizer?.isEnabled = false
     }
 
     private func disablePanGestureIfTopAddressBar() {
