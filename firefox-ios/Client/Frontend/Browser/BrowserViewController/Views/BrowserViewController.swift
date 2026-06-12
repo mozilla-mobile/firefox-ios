@@ -2567,8 +2567,9 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // To prevent spoofing, if the origins are equal update the UI always
-        if tab.url?.origin == url?.origin {
+        // Require a non-nil incoming URL before comparing origins.
+        // Prevents false matches during error-page restore when both origins are nil.
+        if let url, tab.url?.origin == url.origin {
             tab.url = url
             // Update UI to reflect the URL we have set the tab to
             if tab === tabManager.selectedTab {

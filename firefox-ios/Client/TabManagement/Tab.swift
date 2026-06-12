@@ -713,8 +713,12 @@ class Tab: NSObject,
         if cancelTemporaryDocumentDownload() {
             return
         }
-        // If the current page is an error page, and the reload button is tapped, load the original URL
-        if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
+
+        // Prefer the tab URL over the webView URL when restoring an error page.
+        // The webView URL may be nil/about:blank after restore.
+        if let currentURL = url ?? webView?.url,
+           let internalUrl = InternalURL(currentURL),
+           let page = internalUrl.originalURLFromErrorPage {
             let request = URLRequest(url: page, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
             webView?.load(request)
             return
