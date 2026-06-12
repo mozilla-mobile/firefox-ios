@@ -21,6 +21,9 @@ struct WorldCupMatch: Equatable, Hashable {
     /// FIFA Key of the winning team for this match, or `nil` if there is no winner
     /// (draw, in-progress, or missing teams).
     let winnerKey: String?
+    /// Whether the match is currently in the half-time break (regular or
+    /// extra-time half-time). Used to surface a "Half time" label.
+    let isInBreak: Bool
 
     init(homeFlagAssetName: String,
          homeCode: String,
@@ -28,7 +31,8 @@ struct WorldCupMatch: Equatable, Hashable {
          awayCode: String,
          date: String,
          score: Score?,
-         winnerKey: String? = nil) {
+         winnerKey: String? = nil,
+         isInBreak: Bool = false) {
         self.homeFlagAssetName = homeFlagAssetName
         self.homeCode = homeCode
         self.awayFlagAssetName = awayFlagAssetName
@@ -36,6 +40,7 @@ struct WorldCupMatch: Equatable, Hashable {
         self.date = date
         self.score = score
         self.winnerKey = winnerKey
+        self.isInBreak = isInBreak
     }
 
     init(_ match: WorldCupMatchesResponse.Match,
@@ -50,6 +55,7 @@ struct WorldCupMatch: Equatable, Hashable {
         self.date = datePrefix.map { "\($0) • \(formatted)" } ?? formatted
         self.score = Self.score(from: match)
         self.winnerKey = match.winnerTeam?.key
+        self.isInBreak = match.isInBreak
     }
 
     static let missingTeamPlaceholder = "--"

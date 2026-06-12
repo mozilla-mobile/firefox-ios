@@ -566,7 +566,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
             dateLabel.isHidden = true
             scoreSection.isHidden = false
             scoreLabel.text = score.score
-            clockLabel.text = score.clock
+            clockLabel.text = match.isInBreak ? .WorldCup.HomepageWidget.HalfTimeLabel : score.clock
         } else {
             dateLabel.isHidden = false
             scoreSection.isHidden = true

@@ -767,6 +767,39 @@ struct WorldCupMatchesTests {
         #expect(match.score == nil)
     }
 
+    @Test
+    func test_match_isInBreak_isTrue_whenStatusIsBreak() {
+        let match = WorldCupMatch(
+            makeMatch(id: 0, home: "ENG", away: "USA", homeScore: 1, awayScore: 0, clock: "45", status: "Break")
+        )
+        #expect(match.isInBreak)
+    }
+
+    @Test
+    func test_match_isInBreak_isFalse_whenStatusIsNotBreak() {
+        let match = WorldCupMatch(
+            makeMatch(id: 0, home: "ENG", away: "USA", homeScore: 1, awayScore: 0, clock: "67")
+        )
+        #expect(!match.isInBreak)
+    }
+
+    @Test
+    func test_match_isInBreak_isFalse_duringPenaltyShootout() {
+        let match = WorldCupMatch(makeMatch(
+            id: 0,
+            home: "GER",
+            away: "FRA",
+            homeScore: 1,
+            awayScore: 1,
+            homePenalty: 5,
+            awayPenalty: 4,
+            clock: "120",
+            period: "pen",
+            status: "Break"
+        ))
+        #expect(!match.isInBreak)
+    }
+
     // MARK: - missing team fallbacks
 
     @Test
@@ -1072,6 +1105,8 @@ struct WorldCupMatchesTests {
                            homePenalty: Int? = nil,
                            awayPenalty: Int? = nil,
                            clock: String? = nil,
+                           period: String? = nil,
+                           status: String? = nil,
                            group: String? = nil,
                            stage: WorldCupMatchesResponse.Match.Stage? = .groupStage)
     -> WorldCupMatchesResponse.Match {
@@ -1098,7 +1133,7 @@ struct WorldCupMatchesTests {
             globalEventId: id,
             homeTeam: homeTeam,
             awayTeam: awayTeam,
-            period: nil,
+            period: period,
             homeScore: homeScore,
             awayScore: awayScore,
             homeExtra: homeExtra,
@@ -1107,6 +1142,7 @@ struct WorldCupMatchesTests {
             awayPenalty: awayPenalty,
             clock: clock,
             statusType: nil,
+            status: status,
             stage: stage
         )
     }
