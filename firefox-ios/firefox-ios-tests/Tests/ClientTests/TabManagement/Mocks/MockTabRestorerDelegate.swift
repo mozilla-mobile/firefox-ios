@@ -10,7 +10,6 @@ import Common
 @MainActor
 final class MockTabRestorerDelegate: TabRestorerDelegate {
     var createdTabs: [Tab] = []
-    var screenshotRestoredTabs: [Tab] = []
     private let profile: MockProfile
 
     init(profile: MockProfile) {
@@ -22,10 +21,5 @@ final class MockTabRestorerDelegate: TabRestorerDelegate {
         tab.tabUUID = tabData.id.uuidString
         createdTabs.append(tab)
         return tab
-    }
-
-    func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)?) {
-        screenshotRestoredTabs.append(tab)
-        onComplete?()
     }
 }

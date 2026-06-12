@@ -18,11 +18,6 @@ protocol TabRestorer: AnyObject {
     /// Fetches persisted tab data for `windowUUID`, builds the corresponding `Tab` objects,
     /// and returns a `TabRestorationResult` ready to be applied by the caller.
     func restoreTabs(for windowUUID: WindowUUID) async -> TabRestorationResult
-
-    /// Loads the screenshot for `tab` on demand. Skips the load if `tab.screenshot` is already set.
-    /// `onComplete` fires on the main actor once the in-memory screenshot is settled (loaded, failed,
-    /// or skipped). See ADR 0008 for the lazy restoration model that drives this entry point.
-    func restoreScreenshot(tab: Tab, onComplete: (() -> Void)?)
 }
 
 @MainActor
@@ -93,13 +88,5 @@ final class DefaultTabRestorer: TabRestorer {
     private func filterPrivateTabs(from windowData: WindowData) -> [TabData] {
         guard shouldClearPrivateTabs else { return windowData.tabData }
         return windowData.tabData.filter { !$0.isPrivate }
-    }
-
-    func restoreScreenshot(tab: Tab, onComplete: (() -> Void)?) {
-        guard tab.screenshot == nil else {
-            onComplete?()
-            return
-        }
-        delegate?.restoreScreenshot(for: tab, onComplete: onComplete)
     }
 }

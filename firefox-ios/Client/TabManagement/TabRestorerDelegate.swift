@@ -10,8 +10,7 @@ protocol TabRestorerDelegate: AnyObject {
     @MainActor
     func createTab(with tabData: TabData) -> Tab
 
-    /// Asynchronously loads a tab's screenshot from disk and sets it on the tab. `onComplete` runs on
-    /// the main actor after the load resolves (either with the loaded image or `nil` on failure).
+    /// Asynchronously loads a tab's screenshot from disk and sets it on the tab.
     @MainActor
     func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)?)
 }
