@@ -125,7 +125,8 @@ final class TabErrorTelemetryHelper {
     }
 
     private func getTotalTabCount(window: WindowUUID) -> Int? {
-        guard let tabManager = windowManager.tabManager(for: window) else {
+        guard windowManager.windows.keys.contains(window),
+              let tabManager = windowManager.tabManager(for: window) else {
             assertionFailure("getTabCount() should not be called prior to TabManager config.")
             return nil
         }
