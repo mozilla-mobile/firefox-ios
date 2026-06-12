@@ -255,10 +255,29 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         self.onHeightChange = onHeightChange
         self.isCardImpression = isCardImpression
         if currentState != state {
+            let previous = currentState
             currentState = state
-            rebuildPages(for: state)
+            if !refreshScoresInPlace(from: previous, to: state) { rebuildPages(for: state) }
         }
         applyTheme(theme: theme)
+    }
+
+    private func refreshScoresInPlace(from previous: WorldCupSectionState?, to state: WorldCupSectionState) -> Bool {
+        guard let previous, previous.isMilestone2, state.isMilestone2,
+              previous.apiError == nil, state.apiError == nil,
+              previous.windowUUID == state.windowUUID,
+              (previous.selectedCountryId == nil) == (state.selectedCountryId == nil),
+              previous.matches.map(\.liveAgnosticIdentity) == state.matches.map(\.liveAgnosticIdentity)
+        else { return false }
+        var matches = state.matches.makeIterator()
+        for view in pagesStack.arrangedSubviews {
+            switch (view as? PageContainer)?.content {
+            case let timer as WorldCupTimerView: timer.configure(state: state)
+            case let card as WorldCupMatchCardView: matches.next().map { card.configure(with: $0) }
+            default: break
+            }
+        }
+        return true
     }
 
     private func rebuildPages(for state: WorldCupSectionState) {
