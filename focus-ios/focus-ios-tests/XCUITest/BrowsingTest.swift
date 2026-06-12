@@ -150,7 +150,8 @@ class BrowsingTest: BaseTestCase {
     func testXssAccountTakeover() {
         loadWebPage("https://firefoxuxss.v12.sh")
         waitForWebPageLoad()
-        print(app.debugDescription)
+
+        waitForExistence(app.otherElements["Firefox Focus UXSS POC"])
         let buttons = [ "Google", "X", "YouTube", "Reddit" ]
         buttons.forEach { button in
             waitForExistence(app.buttons[button])
@@ -161,11 +162,9 @@ class BrowsingTest: BaseTestCase {
             waitForWebPageLoad()
             app.buttons["Back"].tap()
             waitForWebPageLoad()
+            waitForExistence(app.otherElements["Firefox Focus UXSS POC"])
         }
-        
-        buttons.forEach { button in
-            waitForExistence(app.buttons[button])
-        }
+
         app.buttons["Google"].tap()
         waitForNoExistence(app.buttons["Google"])
         waitForWebPageLoad()
