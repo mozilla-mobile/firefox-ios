@@ -23,6 +23,28 @@ open class CertStore {
         return keys.contains(key)
     }
 
+    open func removeAll() {
+        keys.removeAll()
+    }
+
+    open func removeCertificates(forDomains domains: Set<String>) {
+        domains.forEach { removeCertificates(forDomain: $0) }
+    }
+
+    open func removeCertificates(forDomain domain: String) {
+        let domain = domain.lowercased()
+        keys = keys.filter { key in
+            guard let origin = key.split(separator: "/").first else { return true }
+            let host = origin.split(separator: ":").first.map(String.init) ?? ""
+            return !Self.host(host, matches: domain)
+        }
+    }
+
+    fileprivate static func host(_ host: String, matches domain: String) -> Bool {
+        let host = host.lowercased()
+        return host == domain || host.hasSuffix(".\(domain)")
+    }
+
     fileprivate func keyForData(_ data: Data, origin: String) -> String {
         return "\(origin)/\(data.sha256.hexEncodedString)"
     }

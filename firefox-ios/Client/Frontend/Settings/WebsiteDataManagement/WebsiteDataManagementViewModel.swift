@@ -68,12 +68,14 @@ final class WebsiteDataManagementViewModel: @unchecked Sendable {
         state = .loading
         onViewModelChanged()
 
-        let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, for: Array(selectedRecords)) { [weak self] in
-            self?.state = previousState
-            self?.siteRecords.removeAll { self?.selectedRecords.contains($0) ?? false }
-            self?.selectedRecords = []
-            self?.onViewModelChanged()
+        let recordsToRemove = Array(selectedRecords)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            await CertificateExceptionClearing.clearSelectedWebsiteData(recordsToRemove)
+            state = previousState
+            siteRecords.removeAll { selectedRecords.contains($0) }
+            selectedRecords = []
+            onViewModelChanged()
         }
     }
 
@@ -83,12 +85,13 @@ final class WebsiteDataManagementViewModel: @unchecked Sendable {
         state = .loading
         onViewModelChanged()
 
-        let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) { [weak self] in
-            self?.siteRecords = []
-            self?.selectedRecords = []
-            self?.state = previousState
-            self?.onViewModelChanged()
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            await CertificateExceptionClearing.clearAllWebsiteData()
+            siteRecords = []
+            selectedRecords = []
+            state = previousState
+            onViewModelChanged()
         }
     }
 }

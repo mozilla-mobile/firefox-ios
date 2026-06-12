@@ -189,6 +189,12 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             .uponQueue(.main) { result in
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
+                    CertificateExceptionClearing.clearStoredExceptionsIfWebsiteDataCleared(
+                        clearables: self.clearables,
+                        toggles: toggles,
+                        profile: self.profile
+                    )
+
                     self.profile.prefs.setObject(self.toggles, forKey: Keys.keyTogglesPref.rawValue)
 
                     // Disable the Clear Private Data button after it's clicked.

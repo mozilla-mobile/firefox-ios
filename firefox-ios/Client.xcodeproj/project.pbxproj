@@ -92,6 +92,7 @@
 		0B6153E02E24E316000D2FBD /* SummarizeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6153DF2E24E316000D2FBD /* SummarizeCoordinator.swift */; };
 		0B6153E22E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6153E12E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift */; };
 		0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B62EFD11AD63CD100ACB9CD /* Clearables.swift */; };
+		CEC00112233445566778802 /* CertificateExceptionClearing.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC00112233445566778801 /* CertificateExceptionClearing.swift */; };
 		0B6AB0412DCA3CB900F03AF6 /* DocumentLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6AB0402DCA3CB900F03AF6 /* DocumentLoggerTests.swift */; };
 		0B6D1C882E15456F00919F1E /* SummarizeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6D1C872E15456F00919F1E /* SummarizeKit */; };
 		0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B6FBAB11AC1F830007EC669 /* numberedPage.html */; };
@@ -2829,6 +2830,7 @@
 		0B6153DF2E24E316000D2FBD /* SummarizeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeCoordinator.swift; sourceTree = "<group>"; };
 		0B6153E12E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeCoordinatorTests.swift; sourceTree = "<group>"; };
 		0B62EFD11AD63CD100ACB9CD /* Clearables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clearables.swift; sourceTree = "<group>"; };
+		CEC00112233445566778801 /* CertificateExceptionClearing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificateExceptionClearing.swift; sourceTree = "<group>"; };
 		0B6AB0402DCA3CB900F03AF6 /* DocumentLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentLoggerTests.swift; sourceTree = "<group>"; };
 		0B6FBAB11AC1F830007EC669 /* numberedPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = numberedPage.html; sourceTree = "<group>"; };
 		0B78DC6D2E3C9CE800804872 /* SummarizerNimbusUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerNimbusUtils.swift; sourceTree = "<group>"; };
@@ -12837,6 +12839,7 @@
 				8A15AB742D5FDB80008BB03C /* AutoplaySettingsViewController.swift */,
 				8ADED55B2D6679B200345293 /* BrowsingSettingsViewController.swift */,
 				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
+				CEC00112233445566778801 /* CertificateExceptionClearing.swift */,
 				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
 				EBB895322193FFF400EB91A0 /* ContentBlockerSettingViewController.swift */,
 				3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */,
@@ -19475,6 +19478,7 @@
 				81C297F92CA3117200B8BE78 /* MenuNavigationDestination.swift in Sources */,
 				61C92A012DEF39F9004ACF49 /* TabConfigurationProvider.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
+				CEC00112233445566778802 /* CertificateExceptionClearing.swift in Sources */,
 				0AFF7F6C2C7C7BBA00265214 /* CertificatesCell.swift in Sources */,
 				8AAEBA062BF51141000C02B5 /* MicrosurveyMiddleware.swift in Sources */,
 				431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */,
