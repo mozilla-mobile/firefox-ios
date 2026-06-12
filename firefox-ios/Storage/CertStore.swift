@@ -29,6 +29,12 @@ open class CertStore {
         return origins.contains(origin)
     }
 
+    public static func origin(for url: URL) -> String? {
+        guard let host = url.host else { return nil }
+        let port = url.port ?? 443
+        return "\(host):\(port)"
+    }
+
     fileprivate func keyForData(_ data: Data, origin: String) -> String {
         return "\(origin)/\(data.sha256.hexEncodedString)"
     }

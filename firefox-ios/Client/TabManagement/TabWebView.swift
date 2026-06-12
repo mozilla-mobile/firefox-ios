@@ -51,12 +51,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
             return true
         }
 
-        guard let url, let host = url.host else {
+        guard let url, let origin = CertStore.origin(for: url) else {
             return super.hasOnlySecureContent
         }
-
-        let port = url.port ?? 443
-        let origin = "\(host):\(port)"
 
         return super.hasOnlySecureContent && !certStore.hasCertificate(forOrigin: origin)
     }
