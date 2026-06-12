@@ -167,6 +167,7 @@ class BrowsingTest: BaseTestCase {
             waitForExistence(app.buttons[button])
         }
         app.buttons["Google"].tap()
+        waitForNoExistence(app.buttons["Google"])
         waitForWebPageLoad()
         waitForExistence(app.webViews.staticTexts["Redirecting you to https://qrshaka.fun/poc/b.php?redirect=1"])
     }
