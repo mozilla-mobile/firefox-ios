@@ -6,9 +6,21 @@ import Foundation
 import Common
 
 class ActivityEventHelper {
-    var chosenOptions: IntroViewModel.OnboardingOptions = []
+    struct OnboardingOptions: OptionSet, CaseIterable {
+        let rawValue: Int
 
-    init(chosenOptions: IntroViewModel.OnboardingOptions = []) {
+        static let askForNotificationPermission = OnboardingOptions(rawValue: 1 << 0) // 1
+        static let setAsDefaultBrowser = OnboardingOptions(rawValue: 1 << 1) // 2
+        static let syncSignIn = OnboardingOptions(rawValue: 1 << 2) // 4
+
+        static var allCases: [OnboardingOptions] {
+            return [.askForNotificationPermission, .setAsDefaultBrowser, .syncSignIn]
+        }
+    }
+
+    var chosenOptions: OnboardingOptions = []
+
+    init(chosenOptions: OnboardingOptions = []) {
         self.chosenOptions = chosenOptions
     }
 

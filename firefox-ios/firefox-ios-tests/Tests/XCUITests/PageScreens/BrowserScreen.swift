@@ -185,6 +185,26 @@ final class BrowserScreen {
         addressBar.typeText("\r")
     }
 
+    func typeOnWebFormTextField(_ text: String, submit: Bool = true) {
+        let textField = webFormTextField()
+        textField.waitAndTap()
+        textField.typeText(submit ? "\(text)\r" : text)
+    }
+
+    // The web form's container identifier varies across iOS versions,
+    // so look for the text field under either container.
+    private func webFormTextField(containers: [String] = ["form", "body"]) -> XCUIElement {
+        let candidates = containers.map { app.otherElements[$0].textFields.firstMatch }
+        let deadline = Date().addingTimeInterval(TIMEOUT_LONG)
+        while Date() < deadline {
+            if let field = candidates.first(where: { $0.exists }) {
+                return field
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        }
+        return candidates.last ?? app.textFields.firstMatch
+    }
+
     func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }

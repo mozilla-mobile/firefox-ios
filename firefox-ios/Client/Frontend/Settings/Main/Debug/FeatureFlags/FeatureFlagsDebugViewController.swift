@@ -81,6 +81,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .customReaderModeScheme,
+                titleText: format(string: "Custom Reader Mode Scheme"),
+                statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .deeplinkOptimizationRefactor,
                 titleText: format(string: "Deeplink Optimization Refactor"),
                 statusText: format(string: "Toggle to enable deeplink optimization refactor")
@@ -98,6 +105,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .trackingProtectionRefactor,
                 titleText: format(string: "Enhanced Tracking Protection"),
                 statusText: format(string: "Toggle to use enhanced tracking protection")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .googleLens,
+                titleText: format(string: "Google Lens"),
+                statusText: format(string: "Toggle to enable Google Lens entry points")
             ) { [weak self] _ in
                 self?.reloadView()
             },

@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Redux
 
 struct PreferredLanguageDetails: Equatable, Hashable {
@@ -20,7 +20,7 @@ struct PreferredLanguageDetails: Equatable, Hashable {
     }
 }
 
-@CopyWithUpdates
+@Copyable
 struct TranslationSettingsState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var isTranslationsEnabled: Bool
@@ -97,7 +97,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
         case let action as TranslationsAction
             where action.actionType as? TranslationsActionType == .didTranslationSettingsChange:
-            return state.copyWithUpdates(
+            return state.copy(
                 isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled
             )
 
@@ -113,13 +113,12 @@ struct TranslationSettingsState: ScreenState, Equatable {
         switch action.actionType {
         case TranslationSettingsMiddlewareActionType.didLoadSettings,
              TranslationSettingsMiddlewareActionType.didUpdateSettings:
-            return state.copyWithUpdates(
-                isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled,
-                isAutoTranslateEnabled: action.isAutoTranslateEnabled ?? state.isAutoTranslateEnabled,
-                preferredLanguages: action.preferredLanguages ?? state.preferredLanguages,
-                supportedLanguages: action.supportedLanguages ?? state.supportedLanguages,
-                availableLanguages: action.availableLanguages ?? state.availableLanguages
-            )
+            return state
+                .copy(isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled)
+                .copy(isAutoTranslateEnabled: action.isAutoTranslateEnabled ?? state.isAutoTranslateEnabled)
+                .copy(preferredLanguages: action.preferredLanguages ?? state.preferredLanguages)
+                .copy(supportedLanguages: action.supportedLanguages ?? state.supportedLanguages)
+                .copy(availableLanguages: action.availableLanguages ?? state.availableLanguages)
         default:
             return defaultState(from: state)
         }
@@ -131,25 +130,23 @@ struct TranslationSettingsState: ScreenState, Equatable {
     ) -> TranslationSettingsState {
         switch action.actionType {
         case TranslationSettingsViewActionType.enterEditMode:
-            return state.copyWithUpdates(
-                isEditing: true,
-                pendingLanguages: state.preferredLanguages
-            )
+            return state
+                .copy(isEditing: true)
+                .copy(pendingLanguages: state.preferredLanguages)
         case TranslationSettingsViewActionType.cancelEditMode:
-            return state.copyWithUpdates(
-                isEditing: false,
-                pendingLanguages: nil,
-            )
+            return state
+                .copy(isEditing: false)
+                .copy(pendingLanguages: nil)
         case TranslationSettingsViewActionType.reorderLanguages:
-            return state.copyWithUpdates(
-                pendingLanguages: action.pendingLanguages,
+            return state.copy(
+                pendingLanguages: action.pendingLanguages
             )
         case TranslationSettingsViewActionType.removeLanguage:
             guard let code = action.languageCode else { return defaultState(from: state) }
             var pending = state.pendingLanguages ?? state.preferredLanguages
             pending.removeAll { $0.code == code }
-            return state.copyWithUpdates(
-                pendingLanguages: pending,
+            return state.copy(
+                pendingLanguages: pending
             )
         default:
             return defaultState(from: state)
@@ -157,7 +154,16 @@ struct TranslationSettingsState: ScreenState, Equatable {
     }
 
     static func defaultState(from state: TranslationSettingsState) -> TranslationSettingsState {
-        return state.copyWithUpdates()
+        return TranslationSettingsState(
+            windowUUID: state.windowUUID,
+            isTranslationsEnabled: state.isTranslationsEnabled,
+            isAutoTranslateEnabled: state.isAutoTranslateEnabled,
+            isEditing: state.isEditing,
+            pendingLanguages: state.pendingLanguages,
+            preferredLanguages: state.preferredLanguages,
+            supportedLanguages: state.supportedLanguages,
+            availableLanguages: state.availableLanguages
+        )
     }
 
     static func == (lhs: TranslationSettingsState, rhs: TranslationSettingsState) -> Bool {

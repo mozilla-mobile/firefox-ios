@@ -102,7 +102,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
 
         // The lock icon should still be there
@@ -111,7 +111,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM

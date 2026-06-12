@@ -81,6 +81,7 @@ struct AccessibilityIdentifiers {
         static let statusBarOverlay = "Browser.statusBarOverlay"
         static let topBlurView = "Browser.topBlurView"
         static let bottomBlurView = "Browser.bottomBlurView"
+        static let keyboardSpacer = "AddressToolbar.keyboardSpacer"
     }
 
     struct ContextualHints {
@@ -376,6 +377,7 @@ struct AccessibilityIdentifiers {
         static let tabCell = "TabDisplayView.tabCell"
         static let closeButton = "tabCloseButton"
         static let tabsTray = "Tabs Tray"
+        static let iPadSelectionBackgroundView =  "TabTraySelectorView.selectionBackgroundView"
     }
 
     struct LibraryPanels {
@@ -779,6 +781,7 @@ struct AccessibilityIdentifiers {
             static let title = "Settings.Translation.Title"
             // This is based on `PrefsKeys.Settings.translationsFeature`
             static let toggleSwitch = "settings.translationFeature"
+            static let autoTranslateSwitch = "settings.translationAutoTranslate"
             static let navigationBar = "Settings.Translation.navigationBar"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"

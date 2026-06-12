@@ -8,81 +8,172 @@ import XCTest
 @MainActor
 final class LanguageDetectorTests: XCTestCase {
     var mockLanguageSampleSource = MockLanguageSampleSource()
+    var mockRecognizer = MockLanguageRecognizer()
 
-    func test_detectLanguage_withFrench_returnsProperLanguageCode() async throws {
-        mockLanguageSampleSource.mockResult = "Bonjour le monde"
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
-        XCTAssertEqual(result, "fr")
-    }
+    // MARK: - Signal reconciliation
 
-    func test_detectLanguage_withEnglish_returnsProperLanguageCode() async throws {
-        mockLanguageSampleSource.mockResult = "Hello world"
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+    func test_detectLanguage_whenTextIsConfident_overridesHTMLTag() async throws {
+        mockLanguageSampleSource.htmlLangResult = "de"
+        mockLanguageSampleSource.mockResult = "sample text"
+        mockRecognizer.result = (languageCode: "en", confidence: 0.95)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
         XCTAssertEqual(result, "en")
     }
 
-    func test_detectLanguage_withSpanish_returnsProperLanguageCode() async throws {
-        mockLanguageSampleSource.mockResult = "Hola mundo"
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+    func test_detectLanguage_whenTextIsConfidentAndHTMLLangMissing_returnsText() async throws {
+        mockLanguageSampleSource.htmlLangResult = nil
+        mockLanguageSampleSource.mockResult = "sample text"
+        mockRecognizer.result = (languageCode: "fr", confidence: 0.92)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "fr")
+    }
+
+    func test_detectLanguage_whenTextIsNotConfident_fallsBackToHTMLTag() async throws {
+        mockLanguageSampleSource.htmlLangResult = "es"
+        mockLanguageSampleSource.mockResult = "sample text"
+        mockRecognizer.result = (languageCode: "en", confidence: 0.40)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
         XCTAssertEqual(result, "es")
     }
 
-    func test_detectLanguage_withJapanese_returnsProperLanguageCode() async throws {
-        mockLanguageSampleSource.mockResult = "こんにちは世界"
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
-        XCTAssertEqual(result, "ja")
+    func test_detectLanguage_whenTextIsNotConfidentAndHTMLLangMissing_returnsNil() async throws {
+        mockLanguageSampleSource.htmlLangResult = nil
+        mockLanguageSampleSource.mockResult = "sample text"
+        mockRecognizer.result = (languageCode: "en", confidence: 0.40)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertNil(result)
     }
 
-    func test_detectLanguage_withKorean_returnsProperLanguageCode() async throws {
-        mockLanguageSampleSource.mockResult = "안녕하세요 세계"
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
-        XCTAssertEqual(result, "ko")
+    func test_detectLanguage_whenRecognizerReturnsNil_fallsBackToHTMLTag() async throws {
+        mockLanguageSampleSource.htmlLangResult = "es"
+        mockLanguageSampleSource.mockResult = "sample text"
+        mockRecognizer.result = nil
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "es")
     }
+
+    func test_detectLanguage_whenOnlyHTMLLangAvailable_returnsHTMLLang() async throws {
+        mockLanguageSampleSource.htmlLangResult = "es"
+        mockLanguageSampleSource.mockResult = nil
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "es")
+    }
+
+    // MARK: - Confidence threshold
+
+    func test_detectLanguage_acceptsConfidenceAtThreshold() async throws {
+        mockLanguageSampleSource.mockResult = "sample text"
+        mockRecognizer.result = (languageCode: "en", confidence: 0.85)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "en")
+    }
+
+    func test_detectLanguage_rejectsConfidenceBelowThreshold() async throws {
+        mockLanguageSampleSource.mockResult = "sample text"
+        mockRecognizer.result = (languageCode: "en", confidence: 0.84)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertNil(result)
+    }
+
+    // MARK: - HTML lang attribute
+
+    func test_detectLanguage_normalizesUppercaseHTMLLang() async throws {
+        mockLanguageSampleSource.htmlLangResult = "EN-US"
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "en")
+    }
+
+    func test_detectLanguage_ignoresEmptyHTMLLang() async throws {
+        mockLanguageSampleSource.htmlLangResult = ""
+        mockLanguageSampleSource.mockResult = "sample text"
+        mockRecognizer.result = (languageCode: "fr", confidence: 0.95)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "fr")
+    }
+
+    // MARK: - Sample handling
 
     func test_detectLanguage_withEmptyString_returnsNil() async throws {
         mockLanguageSampleSource.mockResult = ""
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
         XCTAssertNil(result)
     }
 
     func test_detectLanguage_withWhitespaces_returnsNil() async throws {
         mockLanguageSampleSource.mockResult = " \n\t "
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        mockRecognizer.result = (languageCode: "en", confidence: 0.99)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
         XCTAssertNil(result)
     }
 
     func test_detectLanguage_returnsNilForNonString() async throws {
         mockLanguageSampleSource.mockResult = 42
-        let subject = createSubject()
-        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        let result = try await createSubject().detectLanguage(from: mockLanguageSampleSource)
         XCTAssertNil(result)
     }
 
     func test_detectLanguage_propagatesError() async {
         enum FakeError: Error, Equatable { case foo }
         mockLanguageSampleSource.mockError = FakeError.foo
-        let subject = createSubject()
 
         await assertAsyncThrowsEqual(FakeError.foo) {
-            _ = try await subject.detectLanguage(from: mockLanguageSampleSource)
+            _ = try await self.createSubject().detectLanguage(from: self.mockLanguageSampleSource)
         }
     }
 
-    func test_detectLanguage_prefersDominantLanguage() async throws {
-        let subject = createSubject()
-        mockLanguageSampleSource.mockResult = "Hello! This is an English sentence. A common word in French is Bonjour."
+    // MARK: - NaturalLanguageRecognizer integration
+
+    func test_detectLanguage_withRealRecognizer_identifiesConfidentText() async throws {
+        mockLanguageSampleSource.htmlLangResult = nil
+        mockLanguageSampleSource.mockResult = "Hello world, this is clearly an English sentence."
+        let subject = createSubject(recognizer: NaturalLanguageRecognizer())
         let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
         XCTAssertEqual(result, "en")
     }
 
-    private func createSubject() -> LanguageDetector {
-        LanguageDetector()
+    func test_detectLanguage_withRealRecognizer_rejectsUnidentifiableText() async throws {
+        mockLanguageSampleSource.htmlLangResult = nil
+        mockLanguageSampleSource.mockResult = ":: == >>> ### @@@ {} [] () <> //"
+        let subject = createSubject(recognizer: NaturalLanguageRecognizer())
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertNil(result)
+    }
+
+    // MARK: - normalizeLanguageCode
+
+    func test_normalizeLanguageCode_simpleCode() {
+        XCTAssertEqual(LanguageDetector.normalizeLanguageCode("en"), "en")
+    }
+
+    func test_normalizeLanguageCode_regionCode() {
+        XCTAssertEqual(LanguageDetector.normalizeLanguageCode("en-US"), "en")
+    }
+
+    func test_normalizeLanguageCode_scriptCode() {
+        XCTAssertEqual(LanguageDetector.normalizeLanguageCode("zh-Hans"), "zh-Hans")
+    }
+
+    func test_normalizeLanguageCode_scriptAndRegion() {
+        XCTAssertEqual(LanguageDetector.normalizeLanguageCode("zh-Hans-CN"), "zh-Hans")
+    }
+
+    func test_normalizeLanguageCode_invalidCode() {
+        XCTAssertNil(LanguageDetector.normalizeLanguageCode(""))
+    }
+
+    // MARK: - Helpers
+
+    private func createSubject(recognizer: LanguageRecognizing? = nil) -> LanguageDetector {
+        LanguageDetector(recognizer: recognizer ?? mockRecognizer)
+    }
+}
+
+/// Test double for `LanguageRecognizing` that returns a preconfigured result regardless of input,
+/// so reconciliation and threshold logic can be exercised with deterministic confidence values.
+final class MockLanguageRecognizer: LanguageRecognizing, @unchecked Sendable {
+    var result: (languageCode: String, confidence: Double)?
+
+    func dominantLanguage(in text: String) -> (languageCode: String, confidence: Double)? {
+        result
     }
 }

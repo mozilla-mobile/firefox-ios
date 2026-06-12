@@ -211,7 +211,7 @@ class LoginTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
         app.staticTexts[domain].waitAndTap()
         // The login details are available
-        waitForExistence(app.tables["Login Detail List"])
+        mozWaitForElementToExist(app.tables["Login Detail List"])
         mozWaitForElementToExist(app.tables.cells[loginsListURLLabel])
         mozWaitForElementToExist(app.tables.cells[loginsListUsernameLabel])
         mozWaitForElementToExist(app.tables.cells[loginsListPasswordLabel])

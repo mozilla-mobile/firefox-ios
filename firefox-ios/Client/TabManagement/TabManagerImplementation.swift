@@ -82,7 +82,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     private(set) var selectedIndex: Int = -1
 
     private lazy var tabConfigurationProvider = {
-        return TabConfigurationProvider(prefs: profile.prefs)
+        return TabConfigurationProvider(profile: profile, tabManager: self)
     }()
 
     private var selectedTabUUID: UUID? {
@@ -738,9 +738,15 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
-        guard tabRestoreHasFinished, let url = selectedTab?.url, !url.isFxHomeUrl else { return }
+        guard tabRestoreHasFinished, let tab = selectedTab, let url = tab.url else { return }
+        // Skip a plain Firefox Home tab with no navigation history, but still save when home was
+        // reached by navigating back/forward, otherwise restoration replays the stale forward URL
+        // instead of the home page the user left on.
+        let webView = tab.webView
+        let hasNavigationHistory = (webView?.canGoBack ?? false) || (webView?.canGoForward ?? false)
+        guard !url.isFxHomeUrl || hasNavigationHistory else { return }
 
-        saveSessionData(forTab: selectedTab)
+        saveSessionData(forTab: tab)
         preserveTabs(forced: true)
     }
 

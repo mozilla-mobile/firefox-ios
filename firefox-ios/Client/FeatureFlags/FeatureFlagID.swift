@@ -15,10 +15,12 @@ enum FeatureFlagID: String, CaseIterable {
     case appearanceMenu
     case badCertDomainErrorPage
     case bookmarksSearchFeature
+    case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
+    case googleLens
     case hntSponsoredShortcuts
     case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
@@ -96,8 +98,10 @@ enum FeatureFlagID: String, CaseIterable {
                 .appearanceMenu,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
+                .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
+                .googleLens,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageSearchBar,

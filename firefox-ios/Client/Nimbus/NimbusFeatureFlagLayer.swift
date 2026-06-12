@@ -45,6 +45,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
+        case .customReaderModeScheme:
+            return checkCustomReaderModeSchemeFeature()
+
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature()
 
@@ -56,6 +59,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature()
+
+        case .googleLens:
+            return checkGoogleLensFeature()
 
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature()
@@ -363,6 +369,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return config.status
     }
 
+    private func checkGoogleLensFeature() -> Bool {
+        return nimbus.features.googleLensFeature.value().enabled
+    }
+
     private func checkMicrosurveyFeature() -> Bool {
         let config = nimbus.features.microsurveyFeature.value()
 
@@ -455,6 +465,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     func checkStartAtHomeConfiguration() -> StartAtHome {
         return nimbus.features.startAtHomeFeature.value().setting
+    }
+
+    private func checkCustomReaderModeSchemeFeature() -> Bool {
+        return nimbus.features.customReaderModeSchemeFeature.value().enabled
     }
 
     private func checkHomepageTrackerBlockerModuleFeature() -> Bool {

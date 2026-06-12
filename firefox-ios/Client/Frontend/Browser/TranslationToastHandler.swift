@@ -44,8 +44,8 @@ class TranslationToastHandler: TabEventHandler {
 
     func promptTranslation(_ tab: Tab, from pageLanguage: String, to myLanguage: String) {
         let locale = Locale.current
-        let localizedMyLanguage = locale.localizedString(forLanguageCode: myLanguage) ?? myLanguage
-        let localizedPageLanguage = locale.localizedString(forLanguageCode: pageLanguage) ?? pageLanguage
+        let localizedMyLanguage = locale.localizedString(forIdentifier: myLanguage) ?? myLanguage
+        let localizedPageLanguage = locale.localizedString(forIdentifier: pageLanguage) ?? pageLanguage
 
         let service = setting.useTranslationService
         let promptMessage = String(

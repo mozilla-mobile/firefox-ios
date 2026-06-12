@@ -79,6 +79,47 @@ final class TabManagerPreserveTabsTests: TabManagerTestsBase {
         XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, false)
     }
 
+    /// Navigating back to the homepage then backgrounding must still persist the
+    /// session, otherwise restoration replays the stale forward URL instead of the home page.
+    @MainActor
+    func testWillResignActive_whenHomeTabHasNavigationHistory_savesSession() async throws {
+        let subject = createSubject(tabs: generateTabs(count: 1))
+        subject.tabRestoreHasFinished = true
+        let tab = subject.tabs[0]
+        subject.selectTab(tab)
+
+        tab.url = URL(string: "internal://local/about/home")
+        let webView = MockTabWebView(tab: tab)
+        webView.mockCanGoForward = true
+        webView.mockInteractionState = Data()
+        tab.webView = webView
+        mockSessionStore.saveTabSessionCallCount = 0
+
+        subject.handleNotifications(Notification(name: UIApplication.willResignActiveNotification))
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
+    }
+
+    @MainActor
+    func testWillResignActive_whenHomeTabHasNoNavigationHistory_doesNotSaveSession() async throws {
+        let subject = createSubject(tabs: generateTabs(count: 1))
+        subject.tabRestoreHasFinished = true
+        let tab = subject.tabs[0]
+        subject.selectTab(tab)
+
+        tab.url = URL(string: "internal://local/about/home")
+        let webView = MockTabWebView(tab: tab)
+        webView.mockInteractionState = Data()
+        tab.webView = webView
+        mockSessionStore.saveTabSessionCallCount = 0
+
+        subject.handleNotifications(Notification(name: UIApplication.willResignActiveNotification))
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 0)
+    }
+
     // MARK: - Save preview screenshot
 
     @MainActor

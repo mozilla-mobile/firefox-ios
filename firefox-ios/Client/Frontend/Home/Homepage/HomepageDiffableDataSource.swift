@@ -27,6 +27,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
+        case trackerBlockerModule
         case bookmarks(TextColor?)
         case pocket(TextColor?)
         case worldcup
@@ -52,6 +53,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
+        case trackerBlockerModule
         case bookmark(BookmarkConfiguration)
         /// FXIOS-15423: Include the selected category in the item's identity so category transitions are treated as
         /// a presentation-context change. Without the category context, diffable treats the same story in
@@ -71,6 +73,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 SearchBarCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
+                TrackerBlockerModuleCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
                 WorldCupCell.self,
@@ -150,6 +153,11 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 toSection: .worldcup
             )
             snapshot.reconfigureItems([.worldcupCard])
+        }
+
+        if state.trackerBlockerModuleState.shouldShowSection {
+            snapshot.appendSections([.trackerBlockerModule])
+            snapshot.appendItems([.trackerBlockerModule], toSection: .trackerBlockerModule)
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {

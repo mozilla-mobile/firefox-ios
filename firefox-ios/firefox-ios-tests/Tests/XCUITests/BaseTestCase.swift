@@ -7,7 +7,7 @@ import MappaMundi
 import XCTest
 import Shared
 
-let page1 = "http://localhost:\(serverPort)/test-fixture/find-in-page-test.html"
+let page1 = "http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)"
 let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
 let serverPort = ProcessInfo.processInfo.environment["WEBSERVER_PORT"] ?? "\(Int.random(in: 1025..<65000))"
 @MainActor
@@ -171,54 +171,48 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitForExistence(
+    /// Polls for the element to exist. Returns `true` once it exists, or `false` on timeout.
+    /// When `failOnTimeout` is `true` (default) a timeout records a test failure; pass `false`
+    /// to use the result in a conditional without failing the test.
+    @discardableResult
+    func mozWaitForElementToExist(
         _ element: XCUIElement,
-        timeout: TimeInterval = TIMEOUT,
-        file: String = #filePath,
-        line: UInt = #line
-    ) {
-        waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
-    }
-
-    // is up to 25x more performant than the above waitForExistence method
-    func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+        timeout: TimeInterval? = TIMEOUT,
+        failOnTimeout: Bool = true
+    ) -> Bool {
         let startTime = Date()
-        guard element.exists else {
-            while !element.exists {
-                if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
-                    XCTFail("Timed out waiting for element \(element) to exist in \(timeout) seconds")
-                    break
-                }
-                usleep(10000)
-            }
-            return
-        }
-    }
-
-    func waitForNoExistence(
-        _ element: XCUIElement,
-        timeoutValue: TimeInterval = TIMEOUT,
-        file: String = #filePath,
-        line: UInt = #line
-    ) {
-        waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
-    }
-
-    // is up to 25x more performant than the above waitForNoExistence method
-    func mozWaitForElementToNotExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
-        let startTime = Date()
-
-        while element.exists {
+        while !element.exists {
             if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
-                XCTFail("Timed out waiting for element \(element) to not exist")
-                break
+                if failOnTimeout {
+                    XCTFail("Timed out waiting for element \(element) to exist in \(timeout) seconds")
+                }
+                return false
             }
             usleep(10000)
         }
+        return true
     }
 
-    func waitForValueContains(_ element: XCUIElement, value: String, file: String = #filePath, line: UInt = #line) {
-        waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
+    /// Polls for the element to stop existing. Returns `true` once it no longer exists, or `false`
+    /// on timeout. When `failOnTimeout` is `true` (default) a timeout records a test failure; pass
+    /// `false` to use the result in a conditional without failing the test.
+    @discardableResult
+    func mozWaitForElementToNotExist(
+        _ element: XCUIElement,
+        timeout: TimeInterval? = TIMEOUT,
+        failOnTimeout: Bool = true
+    ) -> Bool {
+        let startTime = Date()
+        while element.exists {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                if failOnTimeout {
+                    XCTFail("Timed out waiting for element \(element) to not exist")
+                }
+                return false
+            }
+            usleep(10000)
+        }
+        return true
     }
 
     func mozWaitForValueContains(_ element: XCUIElement, value: String, timeout: TimeInterval? = TIMEOUT) {
@@ -232,26 +226,6 @@ class BaseTestCase: XCTestCase {
                 break
             }
             usleep(10000) // waits for 0.01 seconds
-        }
-    }
-
-    private func waitFor(
-        _ element: XCUIElement,
-        with predicateString: String,
-        description: String? = nil,
-        timeout: TimeInterval = TIMEOUT,
-        file: String,
-        line: UInt
-    ) {
-        let predicate = NSPredicate(format: predicateString)
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
-        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
-        if result != .completed {
-            let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
-            var issue = XCTIssue(type: .assertionFailure, compactDescription: message)
-            let location = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
-            issue.sourceCodeContext = XCTSourceCodeContext(location: location)
-            self.record(issue)
         }
     }
 
@@ -359,12 +333,12 @@ class BaseTestCase: XCTestCase {
 
     func addContentToReaderView(isHomePageOn: Bool = true) {
         updateScreenGraph()
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = path(forTestPage: TestPages.mozillaBook)
         if isHomePageOn {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
         }
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         mozWaitForElementToExist(app.buttons["Reader View"])
 
         app.buttons["Reader View"].waitAndTap()
@@ -388,7 +362,7 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToNotExist(app.tables["Context Menu"])
     }
 
-    func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true, file: String = #filePath, line: UInt = #line) {
+    func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2.0)
@@ -397,12 +371,7 @@ class BaseTestCase: XCTestCase {
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
             let progressIndicator = app.progressIndicators.element(boundBy: 0)
-            waitFor(progressIndicator,
-                    with: "exists != true",
-                    description: "Problem loading \(url)",
-                    timeout: finishLoadingTimeout,
-                    file: file,
-                    line: line)
+            mozWaitForElementToNotExist(progressIndicator, timeout: finishLoadingTimeout)
         }
     }
 
@@ -416,9 +385,9 @@ class BaseTestCase: XCTestCase {
     func waitUntilPageLoad() {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
-        if progressIndicator.waitForExistence(timeout: 5) {
+        if progressIndicator.mozWaitForElementToExist(timeout: 5, failOnTimeout: false) {
             // Wait for the loading indicator to disappear
-            _ = progressIndicator.waitForNonExistence(timeout: 10)
+            mozWaitForElementToNotExist(progressIndicator, timeout: 10, failOnTimeout: false)
         }
     }
 
@@ -497,7 +466,7 @@ class BaseTestCase: XCTestCase {
         app.buttons["Close"].tapIfExists()
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
-        if !app.navigationBars["Appearance"].waitForExistence(timeout: TIMEOUT) {
+        if !app.navigationBars["Appearance"].mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
             navigator.goto(DisplaySettings)
         }
         mozWaitForElementToExist(app.navigationBars["Appearance"])
@@ -526,20 +495,16 @@ class BaseTestCase: XCTestCase {
     }
 
     func waitForElementsToExist(_ elements: [XCUIElement], timeout: TimeInterval = TIMEOUT, message: String? = nil) {
-        var elementsDict = [XCUIElement: String]()
+        let startTime = Date()
         for element in elements {
-            elementsDict[element] = "exists == true"
+            while !element.exists {
+                if Date().timeIntervalSince(startTime) > timeout {
+                    XCTFail(message ?? "Timed out waiting for elements to exist: \(elements)")
+                    return
+                }
+                usleep(10000)
+            }
         }
-        let expectations = elementsDict.map({
-                XCTNSPredicateExpectation(
-                    predicate: NSPredicate(
-                        format: $0.value
-                    ),
-                    object: $0.key
-                )
-            })
-        let result = XCTWaiter.wait(for: expectations, timeout: timeout)
-        if result == .timedOut { XCTFail(message ?? expectations.description) }
     }
 
     func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
@@ -651,10 +616,7 @@ extension XCUIElement {
     }
 
     func tapIfExists(timeout: TimeInterval = 5.0) {
-        let existsPredicate = NSPredicate(format: "exists == true")
-        let expectation = XCTNSPredicateExpectation(predicate: existsPredicate, object: self)
-        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
-        if result == .completed {
+        if mozWaitForElementToExist(timeout: timeout, failOnTimeout: false) {
             self.tap()
         }
     }
@@ -759,13 +721,13 @@ extension XCUIElement {
     func pressWithRetry(duration: TimeInterval, timeout: TimeInterval = TIMEOUT, element: XCUIElement) {
         self.mozWaitForElementToExist(timeout: timeout)
         self.press(forDuration: duration)
-        if element.waitForExistence(timeout: 1.0) {
+        if element.mozWaitForElementToExist(timeout: 1.0, failOnTimeout: false) {
             return
         }
         var attempts = 5
         while !element.exists && attempts > 0 {
             self.press(forDuration: duration)
-            if element.waitForExistence(timeout: 1.0) {
+            if element.mozWaitForElementToExist(timeout: 1.0, failOnTimeout: false) {
                 return
             }
             attempts -= 1
@@ -810,18 +772,19 @@ extension XCUIElement {
         startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
     }
 
-    func mozWaitForElementToExist(timeout: TimeInterval? = TIMEOUT) {
+    @discardableResult
+    func mozWaitForElementToExist(timeout: TimeInterval? = TIMEOUT, failOnTimeout: Bool = true) -> Bool {
         let startTime = Date()
-        guard exists else {
-            while !exists {
-                if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+        while !exists {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                if failOnTimeout {
                     XCTFail("Timed out waiting for element \(self) to exist in \(timeout) seconds")
-                    break
                 }
-                usleep(10000)
+                return false
             }
-            return
+            usleep(10000)
         }
+        return true
     }
 
     func mozWaitElementHittable(timeout: Double) {
