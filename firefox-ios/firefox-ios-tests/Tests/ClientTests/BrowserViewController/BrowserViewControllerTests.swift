@@ -120,6 +120,25 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
     }
 
+    @MainActor
+    func testObserveValueURL_whenWebViewURLIsNil_andTabShowsErrorPage_doesNotClearTabURL() {
+        let subject = createSubject()
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        let errorPageURL = URL(string: "internal://local/errorpage?url=https://www.amazon.ca/&code=-1009")!
+        tab.url = errorPageURL
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+
+        // Simulate the webView URL KVO firing with a transient nil value, as happens during the
+        // restore/reload cycle of an error page. `URL.origin` is nil for internal:// URLs, so before
+        // the fix the spoofing guard treated `nil == nil` as a match and nil'd out tab.url.
+        subject.observeValue(forKeyPath: KVOConstants.URL.rawValue, of: mockTabWebView, change: [:], context: nil)
+
+        XCTAssertEqual(tab.url, errorPageURL, "A transient nil URL KVO must not clear a valid error-page tab URL")
+    }
+
     func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {
         let subject = createSubject()
         let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)

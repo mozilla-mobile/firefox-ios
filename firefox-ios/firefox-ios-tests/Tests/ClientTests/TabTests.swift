@@ -349,6 +349,28 @@ class TabTests: XCTestCase {
     }
 
     @MainActor
+    func testReload_whenTabIsErrorPage_andWebViewURLIsBlank_loadsOriginalURL() {
+        let subject = createSubject()
+        subject.webView = mockTabWebView
+        // Simulate a restored error-page tab: the tab still points at the error page, but the
+        // webView itself shows about:blank (it didn't re-render the error page on restore).
+        mockTabWebView.loadedURL = URL(string: "about:blank")
+        subject.url = URL(string: "internal://local/errorpage?url=https://www.amazon.ca/&code=-1009")
+
+        subject.reload()
+        // remove it so in Tab deinit there is no crash for KVO
+        subject.webView = nil
+
+        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(
+            mockTabWebView.loadedRequest?.url,
+            URL(string: "https://www.amazon.ca/"),
+            "reload should recover the original URL from the error page, not reload about:blank"
+        )
+        XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 0)
+    }
+
+    @MainActor
     func testGoBack_whenDocumentIsDownloading_cancelDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
