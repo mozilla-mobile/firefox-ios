@@ -404,4 +404,57 @@ final class TabManagerTests: TabManagerTestsBase {
         await subject.offloadBackgroundWebViews()
         XCTAssertEqual(subject.tabs.count, 0)
     }
+
+    // MARK: - selectTab neighbour screenshot preloading (ADR 0008)
+
+    @MainActor
+    func testSelectTab_lazyMode_preloadsSelectedAndOneNeighbourEachSide() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let tabs = generateTabs(count: 5)
+        let mockTabRestorer = MockTabRestorer()
+        let subject = createSubject(tabs: tabs, tabRestorer: mockTabRestorer)
+
+        subject.selectTab(tabs[2])
+
+        let restoredUUIDs = mockTabRestorer.restoreScreenshotCalls.map { $0.tabUUID }
+        XCTAssertEqual(restoredUUIDs, [tabs[1].tabUUID, tabs[2].tabUUID, tabs[3].tabUUID])
+    }
+
+    @MainActor
+    func testSelectTab_lazyMode_atFirstIndex_preloadsSelectedAndRightNeighbourOnly() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let tabs = generateTabs(count: 5)
+        let mockTabRestorer = MockTabRestorer()
+        let subject = createSubject(tabs: tabs, tabRestorer: mockTabRestorer)
+
+        subject.selectTab(tabs[0])
+
+        let restoredUUIDs = mockTabRestorer.restoreScreenshotCalls.map { $0.tabUUID }
+        XCTAssertEqual(restoredUUIDs, [tabs[0].tabUUID, tabs[1].tabUUID])
+    }
+
+    @MainActor
+    func testSelectTab_lazyMode_atLastIndex_preloadsSelectedAndLeftNeighbourOnly() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let tabs = generateTabs(count: 5)
+        let mockTabRestorer = MockTabRestorer()
+        let subject = createSubject(tabs: tabs, tabRestorer: mockTabRestorer)
+
+        subject.selectTab(tabs[4])
+
+        let restoredUUIDs = mockTabRestorer.restoreScreenshotCalls.map { $0.tabUUID }
+        XCTAssertEqual(restoredUUIDs, [tabs[3].tabUUID, tabs[4].tabUUID])
+    }
+
+    @MainActor
+    func testSelectTab_legacyMode_doesNotPreloadNeighbours() {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        let tabs = generateTabs(count: 5)
+        let mockTabRestorer = MockTabRestorer()
+        let subject = createSubject(tabs: tabs, tabRestorer: mockTabRestorer)
+
+        subject.selectTab(tabs[2])
+
+        XCTAssertTrue(mockTabRestorer.restoreScreenshotCalls.isEmpty)
+    }
 }

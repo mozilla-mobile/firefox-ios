@@ -88,6 +88,18 @@ final class TabManagerImplementation: NSObject,
         return TabConfigurationProvider(profile: profile, tabManager: self)
     }()
 
+    private let injectedTabRestorer: TabRestorer?
+    private lazy var tabRestorer: TabRestorer = {
+        if let injectedTabRestorer { return injectedTabRestorer }
+        return DefaultTabRestorer(
+            delegate: self,
+            tabDataStore: tabDataStore,
+            shouldClearPrivateTabs: shouldClearPrivateTabs,
+            windowIsNew: windowIsNew,
+            logger: logger
+        )
+    }()
+
     private var selectedTabUUID: UUID? {
         guard let selectedTab = self.selectedTab,
               let uuid = UUID(uuidString: selectedTab.tabUUID) else {
@@ -110,6 +122,7 @@ final class TabManagerImplementation: NSObject,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         tabRestorer: TabRestorer? = nil,
          tabs: [Tab] = []
     ) {
         let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
@@ -122,6 +135,7 @@ final class TabManagerImplementation: NSObject,
         self.windowUUID = uuid.uuid
         self.profile = profile
         self.logger = logger
+        self.injectedTabRestorer = tabRestorer
         self.tabs = tabs
 
         super.init()
@@ -470,16 +484,9 @@ final class TabManagerImplementation: NSObject,
         AppEventQueue.started(.tabRestoration(windowUUID))
 
         let preRestoreTabs = tabs
-        let restorer = DefaultTabRestorer(
-            delegate: self,
-            tabDataStore: tabDataStore,
-            shouldClearPrivateTabs: shouldClearPrivateTabs,
-            windowIsNew: windowIsNew,
-            logger: logger
-        )
 
         Task { @MainActor in
-            let result = await restorer.restoreTabs(for: windowUUID)
+            let result = await tabRestorer.restoreTabs(for: windowUUID)
             applyRestorationResult(result, preRestoreTabs: preRestoreTabs)
             TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
             logger.log("Tabs restore ended using TabRestorer", level: .debug, category: .tabs)
@@ -622,12 +629,6 @@ final class TabManagerImplementation: NSObject,
 
         tabs = result.restoredTabs + preRestoreTabs
 
-        // TODO: FXIOS-15981 - Move screenshot restoration into TabRestorer
-        // This is here just for testing purposes so the feature flag is kind of in a working state
-        for tab in result.restoredTabs {
-            restoreScreenshot(for: tab)
-        }
-
         // Notify delegates of tabs restore before selecting a tab due to tab.tabDelegate assignment
         for delegate in delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
@@ -716,9 +717,17 @@ final class TabManagerImplementation: NSObject,
         selectTab(newTab)
     }
 
-    func restoreScreenshot(for tab: Tab) {
+    func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)? = nil) {
+        // TODO: Laurie - double check this
+        guard tab.screenshot == nil else {
+            onComplete?()
+            return
+        }
         Task { [weak tab, weak self] in
-            guard let tab else { return }
+            guard let tab else {
+                onComplete?()
+                return
+            }
             do {
                 let screenshot = try await self?.imageStore?.getImageForKey(tab.tabUUID)
                 tab.setScreenshot(screenshot)
@@ -727,6 +736,7 @@ final class TabManagerImplementation: NSObject,
                 tab.setScreenshot(nil)
             }
             await MainActor.run { [weak self] in self?.dispatchDidSetScreenshotAction(for: tab) }
+            onComplete?()
         }
     }
 
@@ -752,20 +762,56 @@ final class TabManagerImplementation: NSObject,
         tabConfigurationProvider.updateMediaTypesRequiringUserActionForPlayback(mediaType)
     }
 
+    /// ADR 0008: after a tab becomes selected, eagerly load its screenshot and those of its
+    /// immediate neighbours so the toolbar swipe preview and the tab tray have what they need.
+    /// Tabs whose screenshot is already in memory are skipped by the restorer.
+    @MainActor
+    private func preloadScreenshotsAroundSelectedTab() {
+        guard let selectedTab else { return }
+        let currentTabs = selectedTab.isPrivate ? privateTabs : normalTabs
+        guard let selectedIndex = currentTabs.firstIndex(of: selectedTab) else { return }
+        let radius = 1
+        for offset in -radius...radius {
+            guard let tab = currentTabs[safe: selectedIndex + offset] else { continue }
+            tabRestorer.restoreScreenshot(tab: tab, onComplete: nil)
+        }
+    }
+
     // MARK: - Redux
     @MainActor
     private func dispatchDidSetScreenshotAction(for tab: Tab) {
-        guard selectedTab === tab else { return }
-        let currentTabs = tab.isPrivate ? privateTabs : normalTabs
-        guard let index = currentTabs.firstIndex(of: tab) else { return }
-        store.dispatch(
-            ToolbarAction(
-                previousTabScreenshot: currentTabs[safe: index-1]?.screenshot,
-                nextTabScreenshot: currentTabs[safe: index+1]?.screenshot,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetTabScreenshot
+        if isDeeplinkOptimizationRefactorEnabled {
+            // ADR 0008: under lazy loading, a neighbour's screenshot may settle after the user has
+            // already selected the tab, so we also dispatch when the loaded tab is a neighbour of
+            // the currently-selected tab. The dispatched payload still uses the selected tab's
+            // neighbours, since that's what the toolbar swipe preview consumes.
+            guard let selectedTab else { return }
+            let currentTabs = selectedTab.isPrivate ? privateTabs : normalTabs
+            guard let selectedIndex = currentTabs.firstIndex(of: selectedTab) else { return }
+            let previousTab = currentTabs[safe: selectedIndex - 1]
+            let nextTab = currentTabs[safe: selectedIndex + 1]
+            guard tab === selectedTab || tab === previousTab || tab === nextTab else { return }
+            store.dispatch(
+                ToolbarAction(
+                    previousTabScreenshot: previousTab?.screenshot,
+                    nextTabScreenshot: nextTab?.screenshot,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.didSetTabScreenshot
+                )
             )
-        )
+        } else {
+            guard selectedTab === tab else { return }
+            let currentTabs = tab.isPrivate ? privateTabs : normalTabs
+            guard let index = currentTabs.firstIndex(of: tab) else { return }
+            store.dispatch(
+                ToolbarAction(
+                    previousTabScreenshot: currentTabs[safe: index-1]?.screenshot,
+                    nextTabScreenshot: currentTabs[safe: index+1]?.screenshot,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.didSetTabScreenshot
+                )
+            )
+        }
     }
 
     // MARK: - Save tabs
@@ -915,6 +961,9 @@ final class TabManagerImplementation: NSObject,
         didSelectTab(url)
         dispatchDidSetScreenshotAction(for: tab)
         updateMenuItemsForSelectedTab()
+        if isDeeplinkOptimizationRefactorEnabled {
+            preloadScreenshotsAroundSelectedTab()
+        }
 
         // Broadcast updates for any listeners
         delegates.forEach {
