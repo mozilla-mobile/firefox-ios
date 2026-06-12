@@ -60,6 +60,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature()
 
+        case .googleLens:
+            return checkGoogleLensFeature()
+
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature()
 
@@ -364,6 +367,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
+    }
+
+    private func checkGoogleLensFeature() -> Bool {
+        return nimbus.features.googleLensFeature.value().enabled
     }
 
     private func checkMicrosurveyFeature() -> Bool {

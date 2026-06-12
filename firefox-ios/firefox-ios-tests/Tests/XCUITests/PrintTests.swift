@@ -13,7 +13,7 @@ class PrintTests: BaseTestCase {
     }
 
     private func openUrlAndValidatePrintOptions() {
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenuMore)

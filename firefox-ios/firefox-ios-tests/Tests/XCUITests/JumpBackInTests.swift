@@ -106,7 +106,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         // Amazon and Twitter are visible in the "Jump Back In" section
         jumpBackInScreen.scrollToJumpBackInSection()
         jumpBackInScreen.assertSectionExists()
-        jumpBackInScreen.assertItemExists(title: "Example Domain")
+        jumpBackInScreen.assertItemExists(title: TestLabels.exampleDomain)
         jumpBackInScreen.assertItemExists(title: "Wikipedia")
         jumpBackInScreen.assertItemNotExists(title: "YouTube")
 
@@ -126,12 +126,12 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         jumpBackInScreen.assertSectionExists()
 
         // Amazon is visible in "Jump Back In"
-        jumpBackInScreen.assertItemExists(title: "Example Domain")
+        jumpBackInScreen.assertItemExists(title: TestLabels.exampleDomain)
 
         // Close the amazon tab
         waitForTabsButton()
         toolbarScreen.tapOnTabsButton()
-        tabTrayScreen.closeTab(title: "Example Domain")
+        tabTrayScreen.closeTab(title: TestLabels.exampleDomain)
 
         // Revisit the "Jump Back In" section
         tabTrayScreen.assertNewTabButtonExist()

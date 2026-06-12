@@ -7,7 +7,7 @@ import MappaMundi
 import XCTest
 import Shared
 
-let page1 = "http://localhost:\(serverPort)/test-fixture/find-in-page-test.html"
+let page1 = "http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)"
 let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
 let serverPort = ProcessInfo.processInfo.environment["WEBSERVER_PORT"] ?? "\(Int.random(in: 1025..<65000))"
 @MainActor
@@ -333,12 +333,12 @@ class BaseTestCase: XCTestCase {
 
     func addContentToReaderView(isHomePageOn: Bool = true) {
         updateScreenGraph()
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = path(forTestPage: TestPages.mozillaBook)
         if isHomePageOn {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
         }
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         mozWaitForElementToExist(app.buttons["Reader View"])
 
         app.buttons["Reader View"].waitAndTap()
