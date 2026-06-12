@@ -116,6 +116,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
 
+        case .novaDesignSystem:
+            return checkNovaDesignSystemFeature()
+
         case .quickAnswers:
             return checkQuickAnswersFeature()
 
@@ -207,6 +210,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .reportSiteIssue: return config.reportSiteIssue.status
         default: return false
         }
+    }
+
+    private func checkNovaDesignSystemFeature() -> Bool {
+        return nimbus.features.novaDesignSystemFeature.value().enabled
     }
 
     private func checkSentFromFirefoxFeature() -> Bool {

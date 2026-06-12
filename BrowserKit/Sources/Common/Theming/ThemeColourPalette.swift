@@ -82,6 +82,48 @@ public protocol ThemeColourPalette {
     var iconAccentGreen: UIColor { get }
     var iconAccentYellow: UIColor { get }
     var iconRatingNeutral: UIColor { get }
+    var iconAccentGreen1: UIColor { get }
+    var iconAccentGreen2: UIColor { get }
+    var iconAccentGreen3: UIColor { get }
+    var iconAccentGreen4: UIColor { get }
+    var iconAccentGreen5: UIColor { get }
+    var iconAccentGreen6: UIColor { get }
+    var iconAccentGreen7: UIColor { get }
+    var iconAccentCyan1: UIColor { get }
+    var iconAccentCyan2: UIColor { get }
+    var iconAccentCyan3: UIColor { get }
+    var iconAccentCyan4: UIColor { get }
+    var iconAccentCyan5: UIColor { get }
+    var iconAccentCyan6: UIColor { get }
+    var iconAccentCyan7: UIColor { get }
+    var iconAccentBlue1: UIColor { get }
+    var iconAccentBlue2: UIColor { get }
+    var iconAccentBlue3: UIColor { get }
+    var iconAccentBlue4: UIColor { get }
+    var iconAccentBlue5: UIColor { get }
+    var iconAccentBlue6: UIColor { get }
+    var iconAccentBlue7: UIColor { get }
+    var iconAccentYellow1: UIColor { get }
+    var iconAccentYellow2: UIColor { get }
+    var iconAccentYellow3: UIColor { get }
+    var iconAccentYellow4: UIColor { get }
+    var iconAccentYellow5: UIColor { get }
+    var iconAccentYellow6: UIColor { get }
+    var iconAccentYellow7: UIColor { get }
+    var iconAccentOrange1: UIColor { get }
+    var iconAccentOrange2: UIColor { get }
+    var iconAccentOrange3: UIColor { get }
+    var iconAccentOrange4: UIColor { get }
+    var iconAccentOrange5: UIColor { get }
+    var iconAccentOrange6: UIColor { get }
+    var iconAccentOrange7: UIColor { get }
+    var iconAccentRed1: UIColor { get }
+    var iconAccentRed2: UIColor { get }
+    var iconAccentRed3: UIColor { get }
+    var iconAccentRed4: UIColor { get }
+    var iconAccentRed5: UIColor { get }
+    var iconAccentRed6: UIColor { get }
+    var iconAccentRed7: UIColor { get }
 
     // MARK: - Border
     var borderPrimary: UIColor { get }
@@ -106,4 +148,49 @@ public protocol ThemeColourPalette {
     var gradientAIStrongStop1: UIColor { get }
     var gradientAIStrongStop2: UIColor { get }
     var gradientAIStrongStop3: UIColor { get }
+}
+
+public extension ThemeColourPalette {
+    var iconAccentGreen1: UIColor { iconAccentGreen }
+    var iconAccentGreen2: UIColor { iconAccentGreen }
+    var iconAccentGreen3: UIColor { iconAccentGreen }
+    var iconAccentGreen4: UIColor { iconAccentGreen }
+    var iconAccentGreen5: UIColor { iconAccentGreen }
+    var iconAccentGreen6: UIColor { iconAccentGreen }
+    var iconAccentGreen7: UIColor { iconAccentGreen }
+    var iconAccentCyan1: UIColor { iconAccentBlue }
+    var iconAccentCyan2: UIColor { iconAccentBlue }
+    var iconAccentCyan3: UIColor { iconAccentBlue }
+    var iconAccentCyan4: UIColor { iconAccentBlue }
+    var iconAccentCyan5: UIColor { iconAccentBlue }
+    var iconAccentCyan6: UIColor { iconAccentBlue }
+    var iconAccentCyan7: UIColor { iconAccentBlue }
+    var iconAccentBlue1: UIColor { iconAccentBlue }
+    var iconAccentBlue2: UIColor { iconAccentBlue }
+    var iconAccentBlue3: UIColor { iconAccentBlue }
+    var iconAccentBlue4: UIColor { iconAccentBlue }
+    var iconAccentBlue5: UIColor { iconAccentBlue }
+    var iconAccentBlue6: UIColor { iconAccentBlue }
+    var iconAccentBlue7: UIColor { iconAccentBlue }
+    var iconAccentYellow1: UIColor { iconAccentYellow }
+    var iconAccentYellow2: UIColor { iconAccentYellow }
+    var iconAccentYellow3: UIColor { iconAccentYellow }
+    var iconAccentYellow4: UIColor { iconAccentYellow }
+    var iconAccentYellow5: UIColor { iconAccentYellow }
+    var iconAccentYellow6: UIColor { iconAccentYellow }
+    var iconAccentYellow7: UIColor { iconAccentYellow }
+    var iconAccentOrange1: UIColor { actionWarning }
+    var iconAccentOrange2: UIColor { actionWarning }
+    var iconAccentOrange3: UIColor { actionWarning }
+    var iconAccentOrange4: UIColor { actionWarning }
+    var iconAccentOrange5: UIColor { actionWarning }
+    var iconAccentOrange6: UIColor { actionWarning }
+    var iconAccentOrange7: UIColor { actionWarning }
+    var iconAccentRed1: UIColor { iconCritical }
+    var iconAccentRed2: UIColor { iconCritical }
+    var iconAccentRed3: UIColor { iconCritical }
+    var iconAccentRed4: UIColor { iconCritical }
+    var iconAccentRed5: UIColor { iconCritical }
+    var iconAccentRed6: UIColor { iconCritical }
+    var iconAccentRed7: UIColor { iconCritical }
 }

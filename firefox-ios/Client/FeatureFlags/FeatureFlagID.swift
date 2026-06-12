@@ -39,6 +39,7 @@ enum FeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case needsReloadRefactor
     case noInternetConnectionErrorPage
+    case novaDesignSystem
     case quickAnswers
     case recentSearches
     case relayIntegration
@@ -114,6 +115,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
+                .novaDesignSystem,
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,

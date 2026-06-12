@@ -145,6 +145,37 @@ final class DefaultThemeManagerTests: XCTestCase {
         XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedResult)
     }
 
+    func testDTM_novaDesignSystemOn_returnsNovaLightThemeColors() {
+        let sut = createSubject(with: userDefaults, isNovaDesignSystemOn: true)
+
+        let theme = sut.getCurrentTheme(for: windowUUID)
+
+        XCTAssertEqual(theme.type, .light)
+        XCTAssertEqual(theme.colors.layer1, NovaColors.Gray5)
+    }
+
+    func testDTM_novaDesignSystemOnWithDarkTheme_returnsNovaDarkThemeColors() {
+        let sut = createSubject(with: userDefaults, isNovaDesignSystemOn: true)
+
+        sut.setManualTheme(to: .dark)
+
+        let theme = sut.getCurrentTheme(for: windowUUID)
+
+        XCTAssertEqual(theme.type, .dark)
+        XCTAssertEqual(theme.colors.layer1, NovaColors.Gray80)
+    }
+
+    func testDTM_novaDesignSystemOnWithPrivateMode_returnsNovaPrivateThemeColors() {
+        let sut = createSubject(with: userDefaults, isNovaDesignSystemOn: true)
+
+        sut.setPrivateTheme(isOn: true, for: windowUUID)
+
+        let theme = sut.getCurrentTheme(for: windowUUID)
+
+        XCTAssertEqual(theme.type, .privateMode)
+        XCTAssertEqual(theme.colors.layer1, NovaColors.VioletDesaturated90)
+    }
+
     func testDTM_privateModeEnabledAndThenDisabled_returnsOriginalTheme() {
         let sut = createSubject(with: userDefaults)
         let expectedResult = ThemeType.light
@@ -264,12 +295,17 @@ final class DefaultThemeManagerTests: XCTestCase {
 
     // MARK: - Helper methods
 
-    private func createSubject(with userDefaults: UserDefaultsInterface,
-                               file: StaticString = #filePath,
-                               line: UInt = #line) -> DefaultThemeManager {
+    private func createSubject(
+        with userDefaults: UserDefaultsInterface,
+        isNovaDesignSystemOn: Bool = false,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> DefaultThemeManager {
         let subject = DefaultThemeManager(
             userDefaults: userDefaults,
-            sharedContainerIdentifier: "")
+            sharedContainerIdentifier: "",
+            isNovaDesignSystemOnClosure: { isNovaDesignSystemOn }
+        )
         subject.setWindow(UIWindow(frame: .zero), for: windowUUID)
         trackForMemoryLeaks(subject, file: file, line: line)
 

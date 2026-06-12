@@ -201,6 +201,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .novaDesignSystem,
+                titleText: format(string: "Nova Design System"),
+                statusText: format(string: "Toggle to use the Nova design system")
+            ) { [weak self] _ in
+                self?.themeManager.applyThemeUpdatesToWindows()
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .quickAnswers,
                 titleText: format(string: "Quick Answers"),
                 statusText: format(string: "Toggle to enable the Quick Answers feature")

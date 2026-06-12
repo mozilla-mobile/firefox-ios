@@ -100,6 +100,17 @@ final class FeatureFlagsProviderTests: XCTestCase {
         XCTAssertEqual(prefs.boolForKey(debugKey), true)
     }
 
+    func testSetDebugOverride_novaDesignSystem_writesToPrefs() {
+        guard let debugKey = FeatureFlagID.novaDesignSystem.debugKey else {
+            XCTFail("novaDesignSystem should have a debugKey")
+            return
+        }
+
+        subject.setDebugOverride(.novaDesignSystem, to: true)
+
+        XCTAssertEqual(prefs.boolForKey(debugKey), true)
+    }
+
     func testSetDebugOverride_flagWithoutDebugKey_doesNotWriteToPrefs() {
         XCTAssertNil(FeatureFlagID.addressAutofillEdit.debugKey)
 
