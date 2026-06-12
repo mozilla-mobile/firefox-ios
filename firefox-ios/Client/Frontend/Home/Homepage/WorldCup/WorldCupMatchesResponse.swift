@@ -130,7 +130,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             if awayTotal > homeTotal { return awayTeam }
             return nil
         }
-        
+
         /// Whether the match is currently in a half-time break, either the
         /// regulation half-time or the extra-time half-time break.
         var isInBreak: Bool {
