@@ -7,11 +7,15 @@ import Storage
 
 final class MockDiskImageStore: DiskImageStore, @unchecked Sendable {
     var getImageForKeyCallCount = 0
+    var getImageForKeyCalls: [String] = []
+    var onGetImageForKey: (() -> Void)?
     var saveImageForKeyCallCount = 0
     var deleteImageForKeyCallCount = 0
 
     func getImageForKey(_ key: String) async throws -> UIImage {
         getImageForKeyCallCount += 1
+        getImageForKeyCalls.append(key)
+        onGetImageForKey?()
         return UIImage()
     }
 

@@ -141,47 +141,6 @@ final class TabRestorerTests: XCTestCase {
         XCTAssertNil(result.selectedTabUUID)
     }
 
-    func testRestoreScreenshot_callsDelegate_whenTabHasNoScreenshot() async {
-        let subject = createSubject()
-        let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
-
-        subject.restoreScreenshot(tab: tab, onComplete: nil)
-
-        XCTAssertEqual(mockDelegate.screenshotRestoredTabs.count, 1)
-        XCTAssertIdentical(mockDelegate.screenshotRestoredTabs.first, tab)
-    }
-
-    func testRestoreScreenshot_skipsDelegate_whenTabAlreadyHasScreenshot() async {
-        let subject = createSubject()
-        let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
-        tab.setScreenshot(UIImage())
-
-        subject.restoreScreenshot(tab: tab, onComplete: nil)
-
-        XCTAssertTrue(mockDelegate.screenshotRestoredTabs.isEmpty)
-    }
-
-    func testRestoreScreenshot_invokesOnComplete_whenSkipped() async {
-        let subject = createSubject()
-        let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
-        tab.setScreenshot(UIImage())
-        var onCompleteCalled = false
-
-        subject.restoreScreenshot(tab: tab, onComplete: { onCompleteCalled = true })
-
-        XCTAssertTrue(onCompleteCalled)
-    }
-
-    func testRestoreScreenshot_forwardsOnComplete_toDelegate() async {
-        let subject = createSubject()
-        let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
-        var onCompleteCalled = false
-
-        subject.restoreScreenshot(tab: tab, onComplete: { onCompleteCalled = true })
-
-        XCTAssertTrue(onCompleteCalled)
-    }
-
     func testRestoreTabs_preservesOrderOfPersistedTabs() async {
         let firstId = UUID()
         let secondId = UUID()

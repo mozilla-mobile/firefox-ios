@@ -88,7 +88,13 @@ final class TabManagerImplementation: NSObject,
         return TabConfigurationProvider(profile: profile, tabManager: self)
     }()
 
-    private var tabRestorer: TabRestorer!
+    private lazy var tabRestorer: TabRestorer = DefaultTabRestorer(
+        delegate: self,
+        tabDataStore: tabDataStore,
+        shouldClearPrivateTabs: shouldClearPrivateTabs,
+        windowIsNew: windowIsNew,
+        logger: logger
+    )
 
     private var selectedTabUUID: UUID? {
         guard let selectedTab = self.selectedTab,
@@ -112,7 +118,6 @@ final class TabManagerImplementation: NSObject,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          windowManager: WindowManager = AppContainer.shared.resolve(),
-         tabRestorer: TabRestorer? = nil,
          tabs: [Tab] = []
     ) {
         let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
@@ -128,14 +133,6 @@ final class TabManagerImplementation: NSObject,
         self.tabs = tabs
 
         super.init()
-
-        self.tabRestorer = tabRestorer ?? DefaultTabRestorer(
-            delegate: self,
-            tabDataStore: dataStore,
-            shouldClearPrivateTabs: shouldClearPrivateTabs,
-            windowIsNew: windowIsNew,
-            logger: logger
-        )
 
         GlobalTabEventHandlers.configure(with: profile)
 
