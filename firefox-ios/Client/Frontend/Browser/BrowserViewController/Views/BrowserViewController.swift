@@ -1163,59 +1163,95 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Notifiable
+
+    nonisolated private func shouldHandleNotificationSynchronously(_ notification: Notification.Name) -> Bool {
+        switch notification {
+        case UIApplication.willResignActiveNotification:
+            return true
+        default:
+            return false
+        }
+    }
+
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
-
         let windowScene = notification.object as? UIWindowScene
         let announcementText = notification.userInfo?[UIAccessibility.announcementStringValueUserInfoKey] as? String
         let dictionary = notification.object as? NSDictionary
         let searchBarPosition = dictionary?[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
         let windowUUID = notification.windowUUID
         let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel
-        // swiftlint:disable:next closure_body_length
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            switch notificationName {
-            case UIApplication.willTerminateNotification:
-                applicationWillTerminate()
-            case UIApplication.willResignActiveNotification:
-                appWillResignActiveNotification()
-            case UIApplication.didBecomeActiveNotification:
-                appDidBecomeActiveNotification()
-            case UIApplication.didEnterBackgroundNotification:
-                appDidEnterBackgroundNotification()
-            case UIScene.didEnterBackgroundNotification:
-                sceneDidEnterBackgroundNotification(windowScene: windowScene)
-            case UIScene.didActivateNotification:
-                sceneDidActivateNotification()
-            case UIAccessibility.announcementDidFinishNotification:
-                didFinishAnnouncement(announcementText: announcementText)
-            case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
-                onReduceTransparencyStatusDidChange()
-            case .FirefoxAccountStateChange:
-                appMenuBadgeUpdate()
-            case .SearchBarPositionDidChange:
-                searchBarPositionDidChange(newSearchBarPosition: searchBarPosition)
-            case .DidTapUndoCloseAllTabToast:
-                didTapUndoCloseAllTabToast(notificationWindowUUID: windowUUID)
-            case .PendingBlobDownloadAddedToQueue:
-                didAddPendingBlobDownloadToQueue()
-            case .SearchSettingsDidUpdateDefaultSearchEngine:
-                updateForDefaultSearchEngineDidChange()
-            case .PageZoomLevelUpdated:
-                handlePageZoomLevelUpdated(notificationWindowUUID: windowUUID, zoomSetting: zoomSetting)
-            case .PageZoomSettingsChanged:
-                handlePageZoomSettingsChanged()
-            case .RemoteTabNotificationTapped:
-                openRecentlyClosedTabs()
-            case .StopDownloads:
-                onStopDownloads(notificationWindowUUID: windowUUID)
-            case .SettingsDismissed:
-                onSettingsDismissed()
-            case .ReadingListUpdated:
-                updateReaderModeBar()
-            default: break
+
+        if shouldHandleNotificationSynchronously(notificationName) {
+            ensureMainThread {
+                self.performNotificationHandler(notificationName,
+                                                windowScene: windowScene,
+                                                announcementText: announcementText,
+                                                zoomSetting: zoomSetting,
+                                                windowUUID: windowUUID,
+                                                searchBarPosition: searchBarPosition)
             }
+        } else {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                self.performNotificationHandler(notificationName,
+                                                windowScene: windowScene,
+                                                announcementText: announcementText,
+                                                zoomSetting: zoomSetting,
+                                                windowUUID: windowUUID,
+                                                searchBarPosition: searchBarPosition)
+            }
+        }
+    }
+
+    @MainActor
+    private func performNotificationHandler(_ notificationName: Notification.Name,
+                                            windowScene: UIWindowScene?,
+                                            announcementText: String?,
+                                            zoomSetting: DomainZoomLevel?,
+                                            windowUUID: WindowUUID?,
+                                            searchBarPosition: SearchBarPosition?) {
+        // swiftlint:disable:next closure_body_length
+        switch notificationName {
+        case UIApplication.willTerminateNotification:
+            applicationWillTerminate()
+        case UIApplication.willResignActiveNotification:
+            appWillResignActiveNotification()
+        case UIApplication.didBecomeActiveNotification:
+            appDidBecomeActiveNotification()
+        case UIApplication.didEnterBackgroundNotification:
+            appDidEnterBackgroundNotification()
+        case UIScene.didEnterBackgroundNotification:
+            sceneDidEnterBackgroundNotification(windowScene: windowScene)
+        case UIScene.didActivateNotification:
+            sceneDidActivateNotification()
+        case UIAccessibility.announcementDidFinishNotification:
+            didFinishAnnouncement(announcementText: announcementText)
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            onReduceTransparencyStatusDidChange()
+        case .FirefoxAccountStateChange:
+            appMenuBadgeUpdate()
+        case .SearchBarPositionDidChange:
+            searchBarPositionDidChange(newSearchBarPosition: searchBarPosition)
+        case .DidTapUndoCloseAllTabToast:
+            didTapUndoCloseAllTabToast(notificationWindowUUID: windowUUID)
+        case .PendingBlobDownloadAddedToQueue:
+            didAddPendingBlobDownloadToQueue()
+        case .SearchSettingsDidUpdateDefaultSearchEngine:
+            updateForDefaultSearchEngineDidChange()
+        case .PageZoomLevelUpdated:
+            handlePageZoomLevelUpdated(notificationWindowUUID: windowUUID, zoomSetting: zoomSetting)
+        case .PageZoomSettingsChanged:
+            handlePageZoomSettingsChanged()
+        case .RemoteTabNotificationTapped:
+            openRecentlyClosedTabs()
+        case .StopDownloads:
+            onStopDownloads(notificationWindowUUID: windowUUID)
+        case .SettingsDismissed:
+            onSettingsDismissed()
+        case .ReadingListUpdated:
+            updateReaderModeBar()
+        default: break
         }
     }
 
