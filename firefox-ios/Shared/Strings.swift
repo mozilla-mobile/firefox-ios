@@ -3491,6 +3491,22 @@ extension String {
                     )
                 }
 
+                public struct GoogleLensSection {
+                    public static let Title = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.GoogleLensSection.Title.v153",
+                        tableName: "Settings",
+                        value: "Google Lens",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the title that describes the Google Lens feature"
+                    )
+
+                    public static let Message = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.GoogleLensSection.Message.v153",
+                        tableName: "Settings",
+                        value: "Sends images and photos to Google for visual search.",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the message that describes the Google Lens feature"
+                    )
+                }
+
                 public static let BlockedStatus = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151",
                     tableName: "Settings",
@@ -5695,6 +5711,11 @@ extension String {
         tableName: nil,
         value: "Copy Image Link",
         comment: "Context menu item for copying an image URL to the clipboard")
+    public static let ContextMenuGoogleLens = MZLocalizedString(
+        key: "ContextMenu.GoogleLensButtonTitle.v153",
+        tableName: "WebContextMenu",
+        value: "Search Image with Google Lens",
+        comment: "Context menu item to search for an image using Google Lens")
 }
 
 // MARK: - Photo Library access
@@ -7959,6 +7980,28 @@ extension String {
             tableName: "AddressToolbar",
             value: "Cancel",
             comment: "Label for button in the address toolbar, that cancels editing the address field when tapped.")
+
+        public struct GoogleLens {
+            public static let A11yLabel = MZLocalizedString(
+                key: "AddressToolbar.GoogleLens.A11yLabel.v153",
+                tableName: "AddressToolbar",
+                value: "Search with Google Lens",
+                comment: "Accessibility label describing the Google Lens button on the address toolbar that prompts a menu to allow the user to take a new photo or select an existing photo from their photo library to search with Google Lens.")
+
+            public struct ContextMenu {
+                public static let TakePhotoActionTitle = MZLocalizedString(
+                    key: "AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle.v153",
+                    tableName: "AddressToolbar",
+                    value: "Take Photo",
+                    comment: "Action title in the Google Lens address toolbar context menu. Opens the camera so the user can take a new photo to search with Google Lens.")
+
+                public static let PhotoLibraryActionTitle = MZLocalizedString(
+                    key: "AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle.v153",
+                    tableName: "AddressToolbar",
+                    value: "Photo Library",
+                    comment: "Action title in the Google Lens address toolbar context menu. Opens the photo library picker so the user can choose an existing photo to search with Google Lens.")
+            }
+        }
     }
 }
 
