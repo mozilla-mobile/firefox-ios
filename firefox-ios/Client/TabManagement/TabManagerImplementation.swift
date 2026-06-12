@@ -88,14 +88,6 @@ final class TabManagerImplementation: NSObject,
         return TabConfigurationProvider(profile: profile, tabManager: self)
     }()
 
-    private lazy var tabRestorer: TabRestorer = DefaultTabRestorer(
-        delegate: self,
-        tabDataStore: tabDataStore,
-        shouldClearPrivateTabs: shouldClearPrivateTabs,
-        windowIsNew: windowIsNew,
-        logger: logger
-    )
-
     private var selectedTabUUID: UUID? {
         guard let selectedTab = self.selectedTab,
               let uuid = UUID(uuidString: selectedTab.tabUUID) else {
@@ -478,9 +470,16 @@ final class TabManagerImplementation: NSObject,
         AppEventQueue.started(.tabRestoration(windowUUID))
 
         let preRestoreTabs = tabs
+        let restorer = DefaultTabRestorer(
+            delegate: self,
+            tabDataStore: tabDataStore,
+            shouldClearPrivateTabs: shouldClearPrivateTabs,
+            windowIsNew: windowIsNew,
+            logger: logger
+        )
 
         Task { @MainActor in
-            let result = await tabRestorer.restoreTabs(for: windowUUID)
+            let result = await restorer.restoreTabs(for: windowUUID)
             applyRestorationResult(result, preRestoreTabs: preRestoreTabs)
             TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
             logger.log("Tabs restore ended using TabRestorer", level: .debug, category: .tabs)
