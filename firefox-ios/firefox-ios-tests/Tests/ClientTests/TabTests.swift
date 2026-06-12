@@ -24,7 +24,7 @@ class TabTests: XCTestCase {
         mockTabWebView = MockTabWebView(frame: .zero,
                                         configuration: .init(),
                                         windowUUID: windowUUID,
-                                        profile: mockProfile)
+                                        certStore: mockProfile.certStore)
         mockTabWebView.loadedURL = url
         mockFileManager = MockFileManager()
         mockDispatchQueue = MockDispatchQueue()

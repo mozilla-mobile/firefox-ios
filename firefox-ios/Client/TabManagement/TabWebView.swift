@@ -4,6 +4,7 @@
 
 import Common
 import WebKit
+import Storage
 
 protocol TabWebViewDelegate: AnyObject {
     @MainActor
@@ -27,7 +28,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private var pullRefresh: PullRefreshView?
     private var theme: Theme?
     private var uiTestLeakView: UIView? // Used for automation
-    private var profile: Profile
+    private var certStore: CertStore
 
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
@@ -57,7 +58,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         let port = url.port ?? 443
         let origin = "\(host):\(port)"
 
-        return super.hasOnlySecureContent && !profile.certStore.hasCertificate(forOrigin: origin)
+        return super.hasOnlySecureContent && !certStore.hasCertificate(forOrigin: origin)
     }
 
     override var inputAccessoryView: UIView? {
@@ -90,9 +91,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         }
     }
 
-    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, profile: Profile) {
+    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, certStore: CertStore) {
         self.windowUUID = windowUUID
-        self.profile = profile
+        self.certStore = certStore
         super.init(frame: frame, configuration: configuration)
     }
 

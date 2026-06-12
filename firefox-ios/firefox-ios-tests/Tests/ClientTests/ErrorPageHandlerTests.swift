@@ -53,7 +53,7 @@ final class ErrorPageHandlerTests: XCTestCase {
             frame: .zero,
             configuration: WKWebViewConfiguration(),
             windowUUID: .XCTestDefaultUUID,
-            profile: MockProfile()
+            certStore: MockProfile().certStore
         )
         let failingURL = URL(string: "https://expired.badssl.com/")!
         let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorServerCertificateUntrusted)

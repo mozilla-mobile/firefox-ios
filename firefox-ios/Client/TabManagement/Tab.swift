@@ -542,7 +542,7 @@ class Tab: NSObject,
         let webView = TabWebView(frame: .zero,
                                  configuration: requiredConfiguration,
                                  windowUUID: windowUUID,
-                                 profile: profile)
+                                 certStore: profile.certStore)
         webView.configure(delegate: self, navigationDelegate: navigationDelegate)
         webView.accessibilityLabel = .WebViewAccessibilityLabel
         webView.allowsBackForwardNavigationGestures = true

@@ -30,7 +30,7 @@ class MockShareTab: ShareTab {
         self.webView = TabWebView(frame: CGRect.zero,
                                   configuration: .init(),
                                   windowUUID: .XCTestDefaultUUID,
-                                  profile: MockProfile())
+                                  certStore: MockProfile().certStore)
         self.temporaryDocument = withTemporaryDocument
     }
 }

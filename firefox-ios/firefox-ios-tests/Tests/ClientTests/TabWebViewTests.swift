@@ -109,7 +109,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         let subject = TabWebView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)),
                                  configuration: .init(),
                                  windowUUID: windowUUID,
-                                 profile: MockProfile())
+                                 certStore: MockProfile().certStore)
         try await Task.sleep(nanoseconds: sleepTime)
         subject.configure(delegate: tabWebViewDelegate, navigationDelegate: navigationDelegate)
         trackForMemoryLeaks(subject)
