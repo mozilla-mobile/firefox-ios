@@ -48,6 +48,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature()
 
+        case .deeplinkOverlay:
+            return checkDeeplinkOverlayFeature()
+
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature()
 
@@ -345,6 +348,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkDeeplinkOptimizationRefactorFeature() -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
+    }
+
+    private func checkDeeplinkOverlayFeature() -> Bool {
+        return nimbus.features.deeplinkOverlayFeature.value().enabled
     }
 
     private func checkDownloadLiveActivitiesFeature() -> Bool {
