@@ -90,6 +90,69 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(mockWindowManager.windowsWereAccessed)
     }
 
+    func test_screenshotRestoredAction_triggersRefresh_withoutSavingToDisk() throws {
+        let subject = createSubject()
+        let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        let action = ScreenshotAction(
+            windowUUID: .XCTestDefaultUUID,
+            tab: tab,
+            actionType: ScreenshotActionType.screenshotRestored
+        )
+
+        let expectation = XCTestExpectation(description: "Refresh dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        mockWindowManager.overrideWindows = true
+
+        subject.tabsPanelProvider(appState, action)
+        wait(for: [expectation])
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPanelMiddlewareAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? TabPanelMiddlewareActionType)
+
+        XCTAssertEqual(actionType, TabPanelMiddlewareActionType.refreshTabs)
+        XCTAssertEqual(mockTabManager.tabDidSetScreenshotCalls, 0,
+                       "screenshotRestored should not write the loaded image back to disk.")
+    }
+
+    func test_prefetchScreenshotsAction_callsPreloadScreenshotForEachUUID() {
+        let subject = createSubject()
+        let tabA = createTab(profile: mockProfile, urlString: "https://a.example")
+        let tabB = createTab(profile: mockProfile, urlString: "https://b.example")
+        mockTabManager.tabsByUUID = [tabA.tabUUID: tabA, tabB.tabUUID: tabB]
+
+        let action = TabPanelViewAction(
+            panelType: .tabs,
+            tabUUIDs: [tabA.tabUUID, tabB.tabUUID],
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelViewActionType.prefetchScreenshots
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        XCTAssertEqual(mockTabManager.preloadScreenshotCalls.map { $0.tabUUID },
+                       [tabA.tabUUID, tabB.tabUUID])
+    }
+
+    func test_prefetchScreenshotsAction_skipsUnknownUUIDs() {
+        let subject = createSubject()
+        let tabA = createTab(profile: mockProfile, urlString: "https://a.example")
+        mockTabManager.tabsByUUID = [tabA.tabUUID: tabA]
+
+        let action = TabPanelViewAction(
+            panelType: .tabs,
+            tabUUIDs: [tabA.tabUUID, "not-a-real-uuid"],
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelViewActionType.prefetchScreenshots
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        XCTAssertEqual(mockTabManager.preloadScreenshotCalls.map { $0.tabUUID }, [tabA.tabUUID])
+    }
+
     // MARK: - Recent Tabs
     func test_viewWillAppearHomeAction_returnsRecentTabs() throws {
         let subject = createSubject()

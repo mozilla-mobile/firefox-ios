@@ -27,6 +27,7 @@ final class TabDisplayView: UIView,
                       ThemeApplicable,
                       UICollectionViewDelegate,
                       UICollectionViewDelegateFlowLayout,
+                      UICollectionViewDataSourcePrefetching,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
                       InsetUpdatable {
@@ -118,6 +119,7 @@ final class TabDisplayView: UIView,
         collectionView.delegate = self
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
+        collectionView.prefetchDataSource = self
         collectionView.collectionViewLayout = createLayout()
         collectionView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.collectionView
         return collectionView
@@ -319,6 +321,22 @@ final class TabDisplayView: UIView,
     func updateInsets(top: CGFloat, bottom: CGFloat) {
         collectionView.contentInset.top = top
         collectionView.contentInset.bottom = bottom
+    }
+
+    // MARK: - UICollectionViewDataSourcePrefetching
+
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let tabUUIDs = indexPaths.compactMap { tabsState.tabs[safe: $0.row]?.tabUUID }
+        guard !tabUUIDs.isEmpty else { return }
+        let action = TabPanelViewAction(panelType: panelType,
+                                        tabUUIDs: tabUUIDs,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.prefetchScreenshots)
+        store.dispatch(action)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        // TODO: FXIOS-16047 - Implement UICollectionViewDataSourcePrefetching cancelPrefetchingForItemsAt
     }
 }
 

@@ -91,7 +91,17 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             return
         }
 
-        tabManager(for: action.windowUUID)?.tabDidSetScreenshot(action.tab)
+        switch action.actionType {
+        case ScreenshotActionType.screenshotTaken:
+            tabManager(for: action.windowUUID)?.tabDidSetScreenshot(action.tab)
+        case ScreenshotActionType.screenshotRestored:
+            // TODO: Laurie
+            // The screenshot was just loaded from disk, so we only need to refresh the
+            // tab tray. Saving back would be redundant work.
+            break
+        default:
+            return
+        }
 
         guard let tabsState = state.componentState(TabsPanelState.self,
                                                    for: .tabsPanel,
@@ -243,8 +253,22 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             guard let urlRequest = action.urlRequest else { return }
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
 
+        case TabPanelViewActionType.prefetchScreenshots:
+            guard let tabUUIDs = action.tabUUIDs else { return }
+            prefetchScreenshots(for: tabUUIDs, windowUUID: action.windowUUID)
+
         default:
             break
+        }
+    }
+
+    /// Asks the tab manager to load the screenshots for the upcoming visible cells. The
+    /// tab manager will not load tabs screenshots which are already in memory.
+    private func prefetchScreenshots(for tabUUIDs: [TabUUID], windowUUID: WindowUUID) {
+        guard let tabManager = tabManager(for: windowUUID) else { return }
+        for tabUUID in tabUUIDs {
+            guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { continue }
+            tabManager.restoreScreenshot(for: tab, onComplete: nil) // laurie
         }
     }
 

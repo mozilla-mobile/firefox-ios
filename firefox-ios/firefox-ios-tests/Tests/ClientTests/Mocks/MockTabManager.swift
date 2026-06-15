@@ -18,6 +18,8 @@ class MockTabManager: TabManager {
     var selectedTabUUID: UUID?
     // Use to return in getTabForUUID()
     var tabForUUID: Tab?
+    // Maps tabUUID → Tab; takes precedence over `tabForUUID` for callers that need per-UUID lookups.
+    var tabsByUUID: [TabUUID: Tab] = [:]
 
     var recentlyAccessedNormalTabs = [Tab]()
 
@@ -109,6 +111,7 @@ class MockTabManager: TabManager {
     func restoreTabs() {}
 
     func getTabForUUID(uuid: String) -> Tab? {
+        if let match = tabsByUUID[uuid] { return match }
         return tabForUUID
     }
 
@@ -154,6 +157,14 @@ class MockTabManager: TabManager {
         notifyCurrentTabDidFinishLoadingCalled += 1
     }
 
-    func tabDidSetScreenshot(_ tab: Client.Tab) {}
+    var tabDidSetScreenshotCalls = 0
+    func tabDidSetScreenshot(_ tab: Client.Tab) {
+        tabDidSetScreenshotCalls += 1
+    }
     func offloadBackgroundWebViews() async {}
+
+    var preloadScreenshotCalls: [Tab] = []
+    func preloadScreenshot(for tab: Tab) {
+        preloadScreenshotCalls.append(tab)
+    }
 }

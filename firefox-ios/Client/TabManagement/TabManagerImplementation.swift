@@ -710,10 +710,12 @@ final class TabManagerImplementation: NSObject,
         selectTab(newTab)
     }
 
+    // Laurie - todo; onComplete?
     func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)? = nil) {
         loadScreenshotFromDisk(for: tab) { [weak self] in
             Task { @MainActor [weak self] in
                 self?.dispatchDidSetScreenshotAction(for: tab)
+                self?.dispatchScreenshotRestoredAction(for: tab)
                 onComplete?()
             }
         }
@@ -800,6 +802,21 @@ final class TabManagerImplementation: NSObject,
                 nextTabScreenshot: currentTabs[safe: index+1]?.screenshot,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didSetTabScreenshot
+            )
+        )
+    }
+
+    /// ADR 0008: notifies the tab tray that a lazily-loaded screenshot has settled in memory so the
+    /// affected cell can rebind. Gated behind the deeplink-optimization flag because the legacy path
+    /// would otherwise fan out one refresh per restored tab at startup.
+    @MainActor
+    private func dispatchScreenshotRestoredAction(for tab: Tab) {
+        guard isDeeplinkOptimizationRefactorEnabled else { return }
+        store.dispatch(
+            ScreenshotAction(
+                windowUUID: windowUUID,
+                tab: tab,
+                actionType: ScreenshotActionType.screenshotRestored
             )
         )
     }

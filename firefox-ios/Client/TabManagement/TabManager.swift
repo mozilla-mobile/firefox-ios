@@ -120,6 +120,11 @@ protocol TabManager: AnyObject {
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
     func tabDidSetScreenshot(_ tab: Tab)
     func offloadBackgroundWebViews() async
+
+    /// ADR 0008: load `tab`'s screenshot from disk if it isn't already in memory. Intended for
+    /// just-in-time loading driven by the tab tray's prefetch data source. No-op if the tab
+    /// already has a screenshot.
+    func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)?)
 }
 
 extension TabManager {
