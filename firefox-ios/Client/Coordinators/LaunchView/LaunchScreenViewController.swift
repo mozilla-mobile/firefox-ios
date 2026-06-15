@@ -42,7 +42,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
 
     // MARK: - Loading
 
-    func startLoading() {
+    private func startLoading() {
         viewModel.startLoading()
         setupLayout()
     }
