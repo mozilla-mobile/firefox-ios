@@ -113,7 +113,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
             // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
 
             XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-            navigator.nowAt(HomePanelsScreen)
+            navigator.nowAt(NewTabScreen)
             navigator.goto(URLBarOpen)
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
 

@@ -422,7 +422,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307010
     func testiPadDirectAccessPrivateModeBrowserTab() {
         if skipPlatform { return }
-        navigator.openURL("www.mozilla.org")
+        navigator.openURL("http://example.com")
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
 
@@ -430,7 +430,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is not shown")
 
         // Open website and check it does not appear under history once going back to regular mode
-        navigator.openURL("http://example.com")
+        navigator.openURL("http://www.mozilla.org")
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
@@ -441,6 +441,6 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
             .cells.element(boundBy: 1)
             .staticTexts.element(boundBy: 1)
         mozWaitForElementToExist(savedToHistory)
-        XCTAssertNotNil(savedToHistory.label.range(of: url2Label))
+        XCTAssertNotNil(savedToHistory.label.range(of: url1And3Label))
     }
 }
