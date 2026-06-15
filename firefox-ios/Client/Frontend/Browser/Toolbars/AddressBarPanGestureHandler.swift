@@ -243,9 +243,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             return
         }
 
-        let action = GeneralBrowserAction(windowUUID: windowUUID,
-                                          actionType: GeneralBrowserActionType.showTabTray)
-        store.dispatch(action)
+        store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                               actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
     }
 
     private func handleGestureChangedState(translation: CGPoint, nextTab: Tab?) {
