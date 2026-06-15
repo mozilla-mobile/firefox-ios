@@ -24,7 +24,8 @@ final class MockTabRestorerDelegate: TabRestorerDelegate {
         return tab
     }
 
-    func restoreScreenshot(for tab: Tab) {
+    func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)?) {
         screenshotRestoredTabs.append(tab)
+        onComplete?()
     }
 }

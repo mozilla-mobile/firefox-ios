@@ -622,12 +622,6 @@ final class TabManagerImplementation: NSObject,
 
         tabs = result.restoredTabs + preRestoreTabs
 
-        // TODO: FXIOS-15981 - Move screenshot restoration into TabRestorer
-        // This is here just for testing purposes so the feature flag is kind of in a working state
-        for tab in result.restoredTabs {
-            restoreScreenshot(for: tab)
-        }
-
         // Notify delegates of tabs restore before selecting a tab due to tab.tabDelegate assignment
         for delegate in delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
@@ -716,9 +710,28 @@ final class TabManagerImplementation: NSObject,
         selectTab(newTab)
     }
 
-    func restoreScreenshot(for tab: Tab) {
+    func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)? = nil) {
+        loadScreenshotFromDisk(for: tab) { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.dispatchDidSetScreenshotAction(for: tab)
+                onComplete?()
+            }
+        }
+    }
+
+    /// Loads `tab.screenshot` from disk in the background and fires `onComplete` when done.
+    /// `onComplete` may run on a background thread, so callers must hop to the main thread
+    /// themselves before touching UI or main-actor state.
+    private func loadScreenshotFromDisk(for tab: Tab, onComplete: @escaping () -> Void) {
+        guard tab.screenshot == nil else {
+            onComplete()
+            return
+        }
         Task { [weak tab, weak self] in
-            guard let tab else { return }
+            guard let tab else {
+                onComplete()
+                return
+            }
             do {
                 let screenshot = try await self?.imageStore?.getImageForKey(tab.tabUUID)
                 tab.setScreenshot(screenshot)
@@ -726,7 +739,7 @@ final class TabManagerImplementation: NSObject,
                 self?.logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
-            await MainActor.run { [weak self] in self?.dispatchDidSetScreenshotAction(for: tab) }
+            onComplete()
         }
     }
 
@@ -752,12 +765,35 @@ final class TabManagerImplementation: NSObject,
         tabConfigurationProvider.updateMediaTypesRequiringUserActionForPlayback(mediaType)
     }
 
+    /// After a tab becomes selected, eagerly load its screenshot and those of its
+    /// immediate neighbours so the toolbar swipe preview and the tab tray have what they need (ADR 0008).
+    /// Dispatches `didSetTabScreenshot` once, after all three screenshots are loaded (screenshot loading is asynchronous).
+    @MainActor
+    private func preloadScreenshotsAroundSelectedTab() {
+        guard let selectedTab else { return }
+        let currentTabs = selectedTab.isPrivate ? privateTabs : normalTabs
+        guard let selectedIndex = currentTabs.firstIndex(of: selectedTab) else { return }
+
+        let radius = 1
+        let tabsToLoad = (-radius...radius).compactMap { currentTabs[safe: selectedIndex + $0] }
+        let group = DispatchGroup()
+        for tab in tabsToLoad {
+            group.enter()
+            loadScreenshotFromDisk(for: tab) { group.leave() }
+        }
+        group.notify(queue: .main) { [weak self] in
+            guard let self, let selectedTab = self.selectedTab else { return }
+            self.dispatchDidSetScreenshotAction(for: selectedTab)
+        }
+    }
+
     // MARK: - Redux
     @MainActor
     private func dispatchDidSetScreenshotAction(for tab: Tab) {
         guard selectedTab === tab else { return }
         let currentTabs = tab.isPrivate ? privateTabs : normalTabs
         guard let index = currentTabs.firstIndex(of: tab) else { return }
+
         store.dispatch(
             ToolbarAction(
                 previousTabScreenshot: currentTabs[safe: index-1]?.screenshot,
@@ -913,8 +949,12 @@ final class TabManagerImplementation: NSObject,
         tab.resumeDocumentDownload()
 
         didSelectTab(url)
-        dispatchDidSetScreenshotAction(for: tab)
         updateMenuItemsForSelectedTab()
+        if isDeeplinkOptimizationRefactorEnabled {
+            preloadScreenshotsAroundSelectedTab()
+        } else {
+            dispatchDidSetScreenshotAction(for: tab)
+        }
 
         // Broadcast updates for any listeners
         delegates.forEach {
