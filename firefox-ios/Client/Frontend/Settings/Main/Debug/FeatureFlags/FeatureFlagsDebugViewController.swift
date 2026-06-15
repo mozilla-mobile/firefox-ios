@@ -187,13 +187,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .addressBarMenu,
-                titleText: format(string: "New AddressBar Menu"),
-                statusText: format(string: "Toggle to show the new address bar menu")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .noInternetConnectionErrorPage,
                 titleText: format(string: "NIC Native Error Page"),
                 statusText: format(string: "Toggle to display natively created no internet connection error page")

@@ -27,9 +27,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
-        case .addressBarMenu:
-            return checkAddressBarMenuFeature()
-
         case .adsClient:
             return checkAdsClientFeature()
 
@@ -342,11 +339,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkAppearanceMenuFeature() -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
-        return config.status
-    }
-
-    private func checkAddressBarMenuFeature() -> Bool {
-        let config = nimbus.features.addressBarMenuFeature.value()
         return config.status
     }
 

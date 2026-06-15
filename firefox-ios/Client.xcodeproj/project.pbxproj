@@ -1261,7 +1261,6 @@
 		8ADED55E2D667A7700345293 /* BrowsingSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED55D2D667A7700345293 /* BrowsingSetting.swift */; };
 		8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */; };
 		8AE0BF4F2819B10E00F33EC4 /* TopSitesSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0BF4E2819B10E00F33EC4 /* TopSitesSettingsViewController.swift */; };
-		8AE1E1CB27B18F560024C45E /* SearchBarSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1CA27B18F560024C45E /* SearchBarSettingsViewController.swift */; };
 		8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */; };
 		8AE1E1D227B1ADC40024C45E /* TopBottomInterchangeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1D127B1ADC40024C45E /* TopBottomInterchangeable.swift */; };
 		8AE1E1D927B1BD380024C45E /* UIStackViewExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1D827B1BD380024C45E /* UIStackViewExtensionsTests.swift */; };
@@ -9715,7 +9714,6 @@
 		8ADED55D2D667A7700345293 /* BrowsingSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsingSetting.swift; sourceTree = "<group>"; };
 		8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionsTests.swift; sourceTree = "<group>"; };
 		8AE0BF4E2819B10E00F33EC4 /* TopSitesSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSettingsViewController.swift; sourceTree = "<group>"; };
-		8AE1E1CA27B18F560024C45E /* SearchBarSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarSettingsViewController.swift; sourceTree = "<group>"; };
 		8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarSettingsViewModel.swift; sourceTree = "<group>"; };
 		8AE1E1D127B1ADC40024C45E /* TopBottomInterchangeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBottomInterchangeable.swift; sourceTree = "<group>"; };
 		8AE1E1D827B1BD380024C45E /* UIStackViewExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExtensionsTests.swift; sourceTree = "<group>"; };
@@ -14652,7 +14650,6 @@
 		8AE1E1CE27B191160024C45E /* SearchBar */ = {
 			isa = PBXGroup;
 			children = (
-				8AE1E1CA27B18F560024C45E /* SearchBarSettingsViewController.swift */,
 				8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */,
 			);
 			path = SearchBar;
@@ -20235,7 +20232,6 @@
 				8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				E17798A22BD804D300F6F0EB /* AddressToolbarContainerModel.swift in Sources */,
-				8AE1E1CB27B18F560024C45E /* SearchBarSettingsViewController.swift in Sources */,
 				2122EE572DDD75D600D42716 /* GenericButtonCellView.swift in Sources */,
 				8A454D3F2CB9B8A0009436D9 /* TopSitesSectionState.swift in Sources */,
 				9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */,

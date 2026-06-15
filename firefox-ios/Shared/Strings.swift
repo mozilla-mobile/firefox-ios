@@ -3742,11 +3742,6 @@ extension String {
                 comment: "In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position.")
         }
         public struct Toolbar {
-            public static let Toolbar = MZLocalizedString(
-                key: "Settings.Toolbar.SettingsTitle",
-                tableName: nil,
-                value: "Toolbar",
-                comment: "In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance.")
             public static let Top = MZLocalizedString(
                 key: "Settings.Toolbar.Top",
                 tableName: nil,
@@ -9196,6 +9191,11 @@ extension String {
                 tableName: "Upgrade",
                 value: "Sign In",
                 comment: "Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade.")
+            public static let Toolbar = MZLocalizedString(
+                key: "Settings.Toolbar.SettingsTitle",
+                tableName: nil,
+                value: "Toolbar",
+                comment: "In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance.")
         }
     }
 }

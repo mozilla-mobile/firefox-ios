@@ -76,16 +76,8 @@ final class SearchBarSettingsViewModel: FeatureFlaggable, UserFeaturePreferenceP
         self.notificationCenter = notificationCenter
     }
 
-    var isNewAddressBarOn: Bool {
-        featureFlagsProvider.isEnabled(.addressBarMenu)
-    }
-
     var title: String {
-        isNewAddressBarOn ? .Settings.AddressBar.AddressBarMenuTitle : .Settings.Toolbar.Toolbar
-    }
-
-    var searchBarTitle: String {
-        isNewAddressBarOn ? "" : searchBarPosition.getLocalizedTitle
+        .Settings.AddressBar.AddressBarMenuTitle
     }
 
     var searchBarPosition: SearchBarPosition {

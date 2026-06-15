@@ -204,15 +204,13 @@ final class SettingsCoordinator: BaseCoordinator,
             // Toolbar position cannot be changed on iPad
             guard UIDeviceDetails.userInterfaceIdiom != .pad else { return nil }
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-            return featureFlagsProvider.isEnabled(.addressBarMenu)
-            ? UIHostingController(
+            return UIHostingController(
                 rootView: AddressBarSettingsView(
                     windowUUID: windowUUID,
                     viewModel: viewModel,
                     prefs: profile.prefs
                 )
             )
-               : SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
 
         case .topSites:
             let viewController = TopSitesSettingsViewController(windowUUID: windowUUID)
@@ -435,18 +433,13 @@ final class SettingsCoordinator: BaseCoordinator,
         // Toolbar position cannot be changed on iPad
         guard UIDeviceDetails.userInterfaceIdiom != .pad else { return }
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-        if featureFlagsProvider.isEnabled(.addressBarMenu) {
-            let viewController = UIHostingController(
-                rootView: AddressBarSettingsView(
+        let viewController = UIHostingController(
+            rootView: AddressBarSettingsView(
                 windowUUID: windowUUID,
                 viewModel: viewModel,
                 prefs: profile.prefs))
-            viewController.title = .Settings.AddressBar.AddressBarMenuTitle
-            router.push(viewController)
-        } else {
-            let viewController = SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
-            router.push(viewController)
-        }
+        viewController.title = .Settings.AddressBar.AddressBarMenuTitle
+        router.push(viewController)
     }
 
     func pressedTheme() {
