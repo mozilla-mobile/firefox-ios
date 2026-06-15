@@ -198,7 +198,7 @@ class SecurityTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/4104979
     func testXssAccountTakeover() {
-        navigator.openURL("https://firefoxuxss.v12.sh")
+        navigator.openURL(path(forTestPage: "test-firefoxuxss-v12-sh.html"))
         browserScreen.assertWebViewLoaded()
 
         browserScreen.assertWebElements(app.otherElements["Firefox Focus UXSS POC"])
@@ -215,6 +215,7 @@ class SecurityTests: BaseTestCase {
         }
 
         browserScreen.tapWebViewButton(buttonText: "Google")
+        browserScreen.assertAddressBarContains(value: "google.com")
         browserScreen.assertWebViewHasContent()
         browserScreen.assertWebPageText(with: "Redirecting you to https://qrshaka.fun/poc/b.php?redirect=1")
     }
