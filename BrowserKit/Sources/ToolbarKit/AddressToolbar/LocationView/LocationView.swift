@@ -54,6 +54,10 @@ final class LocationView: UIView,
         return window.safeAreaInsets.bottom > 0
     }
 
+    var isAddressBarMinimized: Bool {
+        return scrollAlpha == 0
+    }
+
     private var tapGestureRecognizer: UITapGestureRecognizer?
     private var longPressGestureRecognizer: UILongPressGestureRecognizer?
 
