@@ -620,12 +620,12 @@ class BrowserViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
-        let isScrollAlphaZero = if #available(iOS 26.0, *) {
-            store.state.componentState(
-                ToolbarState.self,
-                for: .toolbar,
-                window: windowUUID
-            )?.scrollAlpha == 0 } else { false }
+        let isToolbarCollapsed = store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.scrollAlpha == 0
+        let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
         // Only clear background if content exceeds viewport height.
@@ -649,6 +649,13 @@ class BrowserViewController: UIViewController,
         bottomContainer.isClearBackground = true
         bottomBlurView.isHidden = isScrollAlphaZero
         bottomContainer.isHidden = isScrollAlphaZero
+
+        // Below iOS 26 the bottom toolbar collapses by translating off-screen, so the blur stays.
+        // The auto-translate prompt extends the blur over its area; after the prompt fades on
+        // collapse the blur lingers as a ghost layer, so hide it explicitly here. (FXIOS-15971)
+        if #unavailable(iOS 26.0), autoTranslatePrompt != nil, isToolbarCollapsed {
+            bottomBlurView.isHidden = true
+        }
 
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
