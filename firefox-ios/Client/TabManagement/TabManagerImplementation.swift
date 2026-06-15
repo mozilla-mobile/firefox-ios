@@ -720,6 +720,8 @@ final class TabManagerImplementation: NSObject,
     }
 
     /// Loads `tab.screenshot` from disk in the background and fires `onComplete` when done.
+    /// `onComplete` may run on a background thread, so callers must hop to the main thread
+    /// themselves before touching UI or main-actor state.
     private func loadScreenshotFromDisk(for tab: Tab, onComplete: @escaping () -> Void) {
         guard tab.screenshot == nil else {
             onComplete()
@@ -771,6 +773,7 @@ final class TabManagerImplementation: NSObject,
         guard let selectedTab else { return }
         let currentTabs = selectedTab.isPrivate ? privateTabs : normalTabs
         guard let selectedIndex = currentTabs.firstIndex(of: selectedTab) else { return }
+
         let radius = 1
         let tabsToLoad = (-radius...radius).compactMap { currentTabs[safe: selectedIndex + $0] }
         let group = DispatchGroup()
