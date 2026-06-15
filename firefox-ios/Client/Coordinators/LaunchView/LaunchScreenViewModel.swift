@@ -57,17 +57,6 @@ class LaunchScreenViewModel {
         self.surveySurfaceManager = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
     }
 
-    /// Checks if the splash screen experiment has already been shown
-    /// - Returns: True if the splash screen experiment has been shown, false otherwise
-    func getSplashScreenExperimentHasShown() -> Bool {
-        profile.prefs.boolForKey(PrefsKeys.splashScreenShownKey) ?? false
-    }
-
-    /// Marks the splash screen experiment as having been shown
-    func setSplashScreenExperimentHasShown() {
-        profile.prefs.setBool(true, forKey: PrefsKeys.splashScreenShownKey)
-    }
-
     /// Starts loading and determining which launch screens to display
     /// - Parameter appVersion: Current app version (defaults to AppInfo.appVersion)
     func startLoading(appVersion: String = AppInfo.appVersion) {

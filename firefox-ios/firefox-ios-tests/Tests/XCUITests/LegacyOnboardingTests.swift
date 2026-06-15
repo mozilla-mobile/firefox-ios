@@ -19,8 +19,7 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
         launchArguments = [
             LaunchArguments.ClearProfile,
-            LaunchArguments.DisableAnimations,
-            LaunchArguments.SkipSplashScreenExperiment
+            LaunchArguments.DisableAnimations
         ]
     }
 
