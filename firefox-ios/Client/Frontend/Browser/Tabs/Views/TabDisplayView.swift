@@ -274,6 +274,20 @@ final class TabDisplayView: UIView,
         }
     }
 
+    /// ADR 0008: prefetchItemsAt only fires when the system predicts scrolling, so it misses cells
+    /// that are visible from initial layout (e.g. a small tab list that fits on one screen). This
+    /// hook covers that case by triggering a load for each cell as it actually appears.
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        guard let tab = tabsState.tabs[safe: indexPath.row] else { return }
+        let action = TabPanelViewAction(panelType: panelType,
+                                        tabUUIDs: [tab.tabUUID],
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.prefetchScreenshots)
+        store.dispatch(action)
+    }
+
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
