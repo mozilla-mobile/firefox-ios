@@ -32,6 +32,12 @@ protocol WindowManager {
     /// Convenience. Returns the TabManager for a specific window.
     func tabManager(for windowUUID: WindowUUID) -> TabManager?
 
+    /// Whether the given window has a fully configured browser (and TabManager).
+    /// Lets code that can legitimately run before a window exists — e.g. telemetry
+    /// during the onboarding/ToS flow — branch without going through the asserting
+    /// `tabManager(for:)`.
+    func isWindowConfigured(_ windowUUID: WindowUUID) -> Bool
+
     /// Convenience. Returns all TabManagers for all open windows.
     func allWindowTabManagers() -> [TabManager]
 
@@ -149,6 +155,10 @@ final class WindowManagerImplementation: WindowManager {
         }
 
         return manager
+    }
+
+    func isWindowConfigured(_ windowUUID: WindowUUID) -> Bool {
+        return window(for: windowUUID)?.tabManager != nil
     }
 
     func allWindowTabManagers() -> [TabManager] {

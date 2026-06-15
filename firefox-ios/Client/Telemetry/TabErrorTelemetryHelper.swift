@@ -125,11 +125,9 @@ final class TabErrorTelemetryHelper {
     }
 
     private func getTotalTabCount(window: WindowUUID) -> Int? {
-        guard let tabManager = windowManager.tabManager(for: window) else {
-            assertionFailure("getTabCount() should not be called prior to TabManager config.")
-            return nil
-        }
-        return tabManager.normalTabs.count
+        // Telemetry can fire during ToS/onboarding before this window's browser exists.
+        guard windowManager.isWindowConfigured(window) else { return nil }
+        return windowManager.tabManager(for: window)?.normalTabs.count
     }
 
     private func sendTelemetryTabLossDetectedEvent(expected: Int, actual: Int, entryPoint: EntryPoint) {

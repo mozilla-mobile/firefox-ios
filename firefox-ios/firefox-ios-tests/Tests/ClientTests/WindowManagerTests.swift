@@ -397,6 +397,22 @@ class WindowManagerTests: XCTestCase {
         XCTAssertNil(tabManager)
     }
 
+    func test_isWindowConfigured_returnsTrueForConfiguredWindow() {
+        let subject = createSubject()
+        let uuid = WindowUUID.XCTestDefaultUUID
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: uuid)
+
+        XCTAssertTrue(subject.isWindowConfigured(uuid))
+    }
+
+    // Regression for FXIOS-16078: querying an unconfigured window (e.g. telemetry during
+    // the ToS/onboarding flow) must report false rather than asserting.
+    func test_isWindowConfigured_returnsFalseForUnconfiguredWindow() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isWindowConfigured(.unavailable))
+    }
+
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {

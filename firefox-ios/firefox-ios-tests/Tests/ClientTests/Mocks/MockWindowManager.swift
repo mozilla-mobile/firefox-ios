@@ -41,6 +41,10 @@ final class MockWindowManager: WindowManager {
         return tabManager
     }
 
+    func isWindowConfigured(_ windowUUID: WindowUUID) -> Bool {
+        return windows[windowUUID]?.tabManager != nil
+    }
+
     func allWindowTabManagers() -> [TabManager] {
         wrappedManager.allWindowTabManagers()
     }
