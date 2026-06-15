@@ -767,6 +767,39 @@ struct WorldCupMatchesTests {
         #expect(match.score == nil)
     }
 
+    @Test
+    func test_match_isInBreak_isTrue_whenStatusIsBreak() {
+        let match = WorldCupMatch(
+            makeMatch(id: 0, home: "ENG", away: "USA", homeScore: 1, awayScore: 0, clock: "45", status: "Break")
+        )
+        #expect(match.isInBreak)
+    }
+
+    @Test
+    func test_match_isInBreak_isFalse_whenStatusIsNotBreak() {
+        let match = WorldCupMatch(
+            makeMatch(id: 0, home: "ENG", away: "USA", homeScore: 1, awayScore: 0, clock: "67")
+        )
+        #expect(!match.isInBreak)
+    }
+
+    @Test
+    func test_match_isInBreak_isFalse_duringPenaltyShootout() {
+        let match = WorldCupMatch(makeMatch(
+            id: 0,
+            home: "GER",
+            away: "FRA",
+            homeScore: 1,
+            awayScore: 1,
+            homePenalty: 5,
+            awayPenalty: 4,
+            clock: "120",
+            period: "pen",
+            status: "Break"
+        ))
+        #expect(!match.isInBreak)
+    }
+
     // MARK: - missing team fallbacks
 
     @Test
@@ -996,6 +1029,55 @@ struct WorldCupMatchesTests {
         #expect(model.winnerThirdPlaceOrFinal == nil)
     }
 
+    @Test
+    func test_liveAgnosticIdentity_isStableWhenOnlyScoreOrClockChanges() {
+        func card(score: WorldCupMatch.Score?) -> WorldCupMatches {
+            WorldCupMatches(
+                phaseTitle: "Group A",
+                telemetryPhaseValue: "Group A",
+                isLive: score != nil,
+                featuredMatch: [WorldCupMatch(
+                    homeFlagAssetName: "BRA",
+                    homeCode: "BRA",
+                    awayFlagAssetName: "GER",
+                    awayCode: "GER",
+                    date: "2026-06-12T18:00:00+00:00",
+                    score: score
+                )],
+                upcomingMatches: []
+            )
+        }
+        let before = card(score: nil)
+        let after = card(score: WorldCupMatch.Score(score: "2 – 1", clock: "67'"))
+
+        #expect(before != after)
+        #expect(before.liveAgnosticIdentity == after.liveAgnosticIdentity)
+    }
+
+    @Test
+    func test_liveAgnosticIdentity_changesWhenFixtureOrPhaseChanges() {
+        func card(home: String, away: String, phase: String = "Group A") -> WorldCupMatches {
+            WorldCupMatches(
+                phaseTitle: phase,
+                telemetryPhaseValue: phase,
+                isLive: false,
+                featuredMatch: [WorldCupMatch(
+                    homeFlagAssetName: home,
+                    homeCode: home,
+                    awayFlagAssetName: away,
+                    awayCode: away,
+                    date: "2026-06-12T18:00:00+00:00",
+                    score: nil
+                )],
+                upcomingMatches: []
+            )
+        }
+        #expect(card(home: "BRA", away: "GER").liveAgnosticIdentity
+                != card(home: "ARG", away: "ENG").liveAgnosticIdentity)
+        #expect(card(home: "BRA", away: "GER").liveAgnosticIdentity
+                != card(home: "BRA", away: "GER", phase: "Round of 16").liveAgnosticIdentity)
+    }
+
     // MARK: - Helpers
 
     private func makeViewMatch(home: String,
@@ -1023,6 +1105,8 @@ struct WorldCupMatchesTests {
                            homePenalty: Int? = nil,
                            awayPenalty: Int? = nil,
                            clock: String? = nil,
+                           period: String? = nil,
+                           status: String? = nil,
                            group: String? = nil,
                            stage: WorldCupMatchesResponse.Match.Stage? = .groupStage)
     -> WorldCupMatchesResponse.Match {
@@ -1049,7 +1133,7 @@ struct WorldCupMatchesTests {
             globalEventId: id,
             homeTeam: homeTeam,
             awayTeam: awayTeam,
-            period: nil,
+            period: period,
             homeScore: homeScore,
             awayScore: awayScore,
             homeExtra: homeExtra,
@@ -1058,6 +1142,7 @@ struct WorldCupMatchesTests {
             awayPenalty: awayPenalty,
             clock: clock,
             statusType: nil,
+            status: status,
             stage: stage
         )
     }

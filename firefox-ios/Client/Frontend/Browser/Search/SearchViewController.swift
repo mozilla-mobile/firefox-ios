@@ -143,6 +143,7 @@ class SearchViewController: SiteTableViewController,
         searchEngineScrollView.addSubview(searchEngineStackView)
 
         layoutTable()
+        setupSearchEngineScrollViewConstraints()
         layoutSearchEngineScrollView()
         layoutSearchEngineScrollViewContent()
 
@@ -185,14 +186,16 @@ class SearchViewController: SiteTableViewController,
         super.viewWillDisappear(animated)
     }
 
-    private func layoutSearchEngineScrollView() {
-        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
-
+    private func setupSearchEngineScrollViewConstraints() {
         NSLayoutConstraint.activate([
             searchEngineScrollView.leadingAnchor.constraint(equalTo: searchEngineContainerView.leadingAnchor),
             searchEngineScrollView.trailingAnchor.constraint(equalTo: searchEngineContainerView.trailingAnchor),
             searchEngineScrollView.topAnchor.constraint(equalTo: searchEngineContainerView.topAnchor)
         ])
+    }
+
+    private func layoutSearchEngineScrollView() {
+        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
 
         // Remove existing keyboard-related bottom constraints (if any)
         bottomConstraintWithKeyboard?.isActive = false
@@ -383,13 +386,6 @@ class SearchViewController: SiteTableViewController,
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper,
         keyboardWillHideWithState state: KeyboardState
-    ) {
-        layoutSearchEngineScrollView()
-    }
-
-    func keyboardHelper(
-        _ keyboardHelper: KeyboardHelper,
-        keyboardWillChangeWithState state: KeyboardState
     ) {
         layoutSearchEngineScrollView()
     }

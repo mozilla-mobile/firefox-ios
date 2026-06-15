@@ -5,10 +5,10 @@
 import XCTest
 
 let website1: [String: String] = [
-    "url": path(forTestPage: "test-mozilla-org.html"),
+    "url": path(forTestPage: TestPages.mozillaOrg),
     "label": "Internet for people, not profit — Mozilla",
     "value": "localhost",
-    "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
+    "longValue": "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)"
 ]
 let website2 = path(forTestPage: TestPages.exampleHTML)
 

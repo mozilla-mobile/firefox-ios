@@ -15,6 +15,18 @@ struct WorldCupMatches: Equatable, Hashable {
     let isLive: Bool
     let featuredMatch: [WorldCupMatch]
     let upcomingMatches: [WorldCupMatch]
+
+    /// Card fingerprint excluding live fields (scores/status). 
+    /// Equal ids means refreshable in place.
+    var liveAgnosticIdentity: [String] {
+        func key(_ match: WorldCupMatch) -> String {
+            "\(match.homeCode)|\(match.awayCode)|\(match.date)"
+        }
+        return [phaseTitle, winnerThirdPlaceOrFinal?.teamKey ?? ""]
+            + featuredMatch.map(key)
+            + upcomingMatches.map(key)
+    }
+
     /// Returns the team key and the label for the winner of the Bronze Final or Final match.
     var winnerThirdPlaceOrFinal: (teamKey: String, winnerLabel: String)? {
         guard phaseTitle == .WorldCup.HomepageWidget.RoundPhase.FinalLabel ||

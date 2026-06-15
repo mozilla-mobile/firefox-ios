@@ -5,11 +5,11 @@
 import XCTest
 
 let url1 = "example.com"
-let url2 = path(forTestPage: "test-mozilla-org.html")
+let url2 = path(forTestPage: TestPages.mozillaOrg)
 let url3 = path(forTestPage: TestPages.exampleHTML)
 let urlIndexedDB = path(forTestPage: "test-indexeddb-private.html")
 
-let url1And3Label = "Example Domain"
+let url1And3Label = TestLabels.exampleDomain
 let url2Label = "Mozilla - Internet for people, not profit (US)"
 let url3Label = "Internet for people, not profit — Mozilla"
 
@@ -192,7 +192,7 @@ class PrivateBrowsingTest: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
             navigator.nowAt(BrowserTab)
         }
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         // Wait until the page loads and go to regular browser
         waitUntilPageLoad()
         waitForTabsButton()

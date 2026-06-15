@@ -704,7 +704,7 @@ class TrackingProtectionViewController: UIViewController,
         // Setting x based on window calculation because we don't want
         // users to move the frame side ways, only straight up or down
         view.frame.origin = CGPoint(x: originalXPosition,
-                                    y: self.pointOrigin!.y + translation.y)
+                                    y: (self.pointOrigin?.y ?? originalYPosition) + translation.y)
 
         if sender.state == .ended {
             let dragVelocity = sender.velocity(in: view)
