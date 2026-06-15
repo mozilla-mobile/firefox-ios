@@ -25,7 +25,9 @@ struct MerinoState: StateType, Equatable {
     }
 
     var availableCategories: [MerinoCategoryConfiguration] {
-        (merinoData.categories ?? []).sorted { $0.rank < $1.rank }
+        (merinoData.categories ?? [])
+            .filter { !$0.recommendations.isEmpty }
+            .sorted { $0.rank < $1.rank }
     }
 
     func visibleStories(selectedNewsfeedCategoryID: String?) -> [MerinoStoryConfiguration] {
@@ -86,8 +88,8 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        let merinoContentExists = !(merinoResponse.stories?.isEmpty ?? true) ||
-                                  !(merinoResponse.categories?.isEmpty ?? true)
+        let categoriesContainStories = merinoResponse.categories?.contains { !$0.recommendations.isEmpty } == true
+        let merinoContentExists = !(merinoResponse.stories?.isEmpty ?? true) || categoriesContainStories
 
         return state
             .copy(merinoData: merinoResponse)
