@@ -10,8 +10,6 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
 
-    private var isViewSetupComplete = false
-
     init(windowUUID: WindowUUID,
          coordinator: LaunchFinishedLoadingDelegate,
          viewModel: LaunchScreenViewModel? = nil) {
@@ -34,27 +32,19 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-
-        Task {
-            try await delayStart()
-            startLoading()
-        }
+        startLoading()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        if !isViewSetupComplete {
-            setupLaunchScreen()
-            isViewSetupComplete = true
-        }
-
         viewModel.loadNextLaunchType()
     }
 
     // MARK: - Loading
+
     func startLoading() {
         viewModel.startLoading()
+        setupLayout()
     }
 
     // MARK: - Setup
