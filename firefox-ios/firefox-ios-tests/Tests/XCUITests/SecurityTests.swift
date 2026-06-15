@@ -196,6 +196,29 @@ class SecurityTests: BaseTestCase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4104979
+    func testXssAccountTakeover() {
+        navigator.openURL("https://firefoxuxss.v12.sh")
+        browserScreen.assertWebViewLoaded()
+
+        browserScreen.assertWebElements(app.otherElements["Firefox Focus UXSS POC"])
+        [ "Google", "X", "YouTube", "Reddit" ].forEach { button in
+            browserScreen.assertWebElements(app.buttons[button])
+        }
+
+        for _ in 0...5 {
+            browserScreen.tapWebViewButton(buttonText: "X")
+            browserScreen.assertWebViewLoaded()
+            browserScreen.tapBackButton()
+            browserScreen.assertWebViewLoaded()
+            browserScreen.assertWebElements(app.otherElements["Firefox Focus UXSS POC"])
+        }
+
+        browserScreen.tapWebViewButton(buttonText: "Google")
+        browserScreen.assertWebViewHasContent()
+        browserScreen.assertWebPageText(with: "Redirecting you to https://qrshaka.fun/poc/b.php?redirect=1")
+    }
+
     private func validateURLAndPageContent(URL: String, elementsShouldExists: Bool) {
         browserScreen.assertAddressBarContains(value: URL)
         browserScreen.assertWebElements(
