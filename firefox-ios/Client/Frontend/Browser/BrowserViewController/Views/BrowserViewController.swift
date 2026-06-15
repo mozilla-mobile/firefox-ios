@@ -1173,7 +1173,7 @@ class BrowserViewController: UIViewController,
         let windowUUID = notification.windowUUID
         let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel
         // swiftlint:disable:next closure_body_length
-        Task { @MainActor [weak self] in
+        ensureMainThread { [weak self] in
             guard let self else { return }
             switch notificationName {
             case UIApplication.willTerminateNotification:
