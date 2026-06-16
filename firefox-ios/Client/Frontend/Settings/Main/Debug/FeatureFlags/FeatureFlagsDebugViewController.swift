@@ -173,6 +173,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .novaDesign,
+                titleText: format(string: "Nova Design"),
+                statusText: format(string: "Toggle to enable Nova design")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .nativeErrorPage,
                 titleText: format(string: "Native Error Page"),
                 statusText: format(string: "Toggle to display natively created error pages")
