@@ -346,10 +346,6 @@ final class TabDisplayView: UIView,
                                         actionType: TabPanelViewActionType.prefetchScreenshots)
         store.dispatch(action)
     }
-
-    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-        // TODO: FXIOS-16047 - Implement UICollectionViewDataSourcePrefetching cancelPrefetchingForItemsAt
-    }
 }
 
 // MARK: - Drag and Drop delegates
