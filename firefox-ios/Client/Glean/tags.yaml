@@ -137,6 +137,9 @@ TrendingSearches:
 User:
   description: Corresponds to user properties and settings.
 
+WebCompat:
+  description: Corresponds to the in-app "Report Broken Site" (WebCompat) reporting tool.
+
 WorldCupWidget:
   description: Corresponds to the World Cup widget shown on the homepage.
 

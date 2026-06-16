@@ -190,3 +190,20 @@ onboarding:
     - https://github.com/mozilla-mobile/firefox-ios/pull/32275
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
+broken-site-report:
+  description: |
+    A ping submitted when a user files an in-app "Report Broken Site"
+    (WebCompat) report. Carries the reported URL, the chosen breakage
+    category, an optional free-text description, and a small set of
+    device/app environment fields. Does not include a client id — each
+    report is self-contained. iOS counterpart of the cross-platform
+    desktop/Android `broken-site-report` ping, with a reduced payload
+    (no Gecko engine-internals; WebKit has no equivalent).
+  include_client_id: false
+  send_if_empty: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXMO-860
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+  notification_emails:
+    - fx-ios-data-stewards@mozilla.com

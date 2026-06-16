@@ -1,0 +1,186 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - WebCompat
+
+###############################################################################
+# WebCompat — Report Broken Site
+#
+# Structured metrics submitted in the `broken-site-report` ping when a user
+# files an in-app "Report Broken Site" report. The metric shape mirrors the
+# cross-platform desktop/Android `broken_site_report.*` schema so iOS data
+# lands in the same family, but it is restricted to the subset of fields a
+# WebKit-based browser (Firefox iOS) can actually populate.
+#
+# Gecko engine-internals collected on desktop/Android (anti-tracking state,
+# JS framework detection, graphics/driver info, Gecko prefs, security software)
+# are intentionally omitted — iOS has no equivalent of GeckoView's
+# getWebCompatInfo API. Likewise the page-context values (the languages / UA
+# the site actually saw) are omitted for v1; iOS reports the app-configured
+# user agent and the app's preferred locale list instead.
+#
+# NOTE: `bugs` points at the implementation ticket and `data_reviews` must be
+# updated with the data-review PR URL before this ships. The free-text
+# `description` and `url` fields carry user-entered data — see the data review.
+###############################################################################
+
+broken_site_report:
+  url:
+    type: url
+    description: |
+      The URL of the site the user is reporting as broken. The user may edit
+      this before submitting. May contain PII.
+    data_sensitivity:
+      - web_activity
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  breakage_category:
+    type: string
+    description: |
+      The user-selected reason the site is broken. One of: load, content,
+      media, account, checkout, slow, adblocker, notsupported, deceptive,
+      other. Stored as a free string; the option set is UI-driven and may
+      change over time.
+    data_sensitivity:
+      - interaction
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  description:
+    type: text
+    description: |
+      Optional free-text description of the problem, entered by the user.
+      May contain PII (free-form text).
+    data_sensitivity:
+      - highly_sensitive
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+broken_site_report.browser_info.app:
+  default_useragent_string:
+    type: text
+    description: |
+      The default user agent string the app is configured to send. Note: this
+      is the app-level UA, not necessarily the exact UA the reported page saw
+      (per-site overrides and JS are not captured on iOS in v1).
+    # `text` metrics must declare a high sensitivity category; the UA is sent
+    # to every site as part of web requests.
+    data_sensitivity:
+      - web_activity
+    # Names mirror the cross-platform desktop/Android `browser_info.app.*`
+    # schema for data parity; suppress the shared-prefix nit.
+    no_lint:
+      - COMMON_PREFIX
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  default_locales:
+    type: string_list
+    description: |
+      The app's preferred locale list (e.g. ["en-US", "en"]).
+    data_sensitivity:
+      - technical
+    no_lint:
+      - COMMON_PREFIX
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+broken_site_report.browser_info.system:
+  is_tablet:
+    type: boolean
+    description: |
+      Whether the reporting device is a tablet (iPad).
+    data_sensitivity:
+      - technical
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  memory:
+    type: quantity
+    unit: mb
+    description: |
+      Total physical memory of the device, in megabytes.
+    data_sensitivity:
+      - technical
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+broken_site_report.browser_info.graphics:
+  device_pixel_ratio:
+    type: string
+    description: |
+      The device pixel ratio (screen scale) as a decimal string, e.g. "3.0".
+    data_sensitivity:
+      - technical
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
