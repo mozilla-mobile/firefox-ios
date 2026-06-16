@@ -743,7 +743,6 @@ workflows:
                 envman add --key NEW_RC_VERSION --value New_RC_Version
             fi
         title: Save Branch Name
-    - cache-pull@2: {}
   2_certificate_and_profile:
     steps:
     - certificate-and-profile-installer@1: {}
@@ -932,7 +931,6 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
-    - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
@@ -1003,7 +1001,6 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
-    - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
@@ -1617,8 +1614,6 @@ workflows:
 
   Bitrise_Performance_Test:
     steps:
-    - cache-pull@2:
-        is_always_run: true
     - xcode-test@6:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
@@ -2110,7 +2105,6 @@ workflows:
     before_run:
     - focus-clone-and-build-dependencies
     steps:
-    - cache-pull@2: {}
     #- swiftlint-extended@1:
     #    inputs:
     #    - linting_path: "$BITRISE_SOURCE_DIR"
@@ -2167,7 +2161,6 @@ workflows:
     before_run:
     - focus-clone-and-build-dependencies
     steps:
-    - cache-pull@2: {}
     #- swiftlint-extended@1:
     #    inputs:
     #    - linting_path: "$BITRISE_SOURCE_DIR"
