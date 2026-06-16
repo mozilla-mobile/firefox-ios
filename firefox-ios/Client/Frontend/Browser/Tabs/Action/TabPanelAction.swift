@@ -96,10 +96,10 @@ enum ScreenshotActionType: ActionType {
 
 // MARK: Modernizing actions
 enum TabPanelViewModernAction: ModernAction {
-    case addNewTab(TabTrayPanelType)
-    case cancelCloseAllTabs(TabTrayPanelType)
+    case addNewTab(panelType: TabTrayPanelType)
+    case cancelCloseAllTabs(panelType: TabTrayPanelType)
     case confirmCloseAllTabs(isPrivateMode: Bool)
-    case deleteTabsOlderThan(TabsDeletionPeriod)
+    case deleteTabsOlderThan(timeframe: TabsDeletionPeriod)
     case moveTab(MoveTabPayload)
     case selectTab(SelectedTabPayload)
     case learnMoreAboutPrivateMode
