@@ -2,12 +2,29 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 
 typealias UIAlertActionCallback = (UIAlertAction) -> Void
 
 // MARK: - Extension methods for building specific UIAlertController instances used across the app
 extension UIAlertController {
+    class func cameraAccessDisabledAlert(okayCallback: UIAlertActionCallback? = nil) -> UIAlertController {
+        let featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()
+        let alertMessage: String = featureFlagsProvider.isEnabled(.googleLens) ?
+            .CameraAccess.DisabledAlertMessage :
+            .ScanQRCodePermissionErrorMessage
+
+        let alert = UIAlertController(
+            title: "",
+            message: alertMessage,
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: okayCallback))
+        return alert
+    }
+
     class func clearSelectedWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
