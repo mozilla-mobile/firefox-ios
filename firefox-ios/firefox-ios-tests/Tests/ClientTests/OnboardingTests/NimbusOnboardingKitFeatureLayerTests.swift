@@ -72,22 +72,10 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
         XCTAssertTrue(subject.cards.allSatisfy { $0.name.contains("Japan") })
     }
 
-    func testGetOnboardingModel_withLegacyVariant_returnsOnlyLegacyCards() {
-        setupNimbusWithMixedVariants()
-        let layer = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: .legacy,
-            with: mockHelper)
-
-        let subject = layer.getOnboardingModel(for: .freshInstall)
-
-        XCTAssertEqual(subject.cards.count, 2)
-        XCTAssertTrue(subject.cards.allSatisfy { $0.name.contains("Legacy") })
-    }
-
     // MARK: - OnboardingType Filtering Tests
 
     func testGetOnboardingModel_freshInstall_returnsOnlyFreshInstallCards() {
-        setupNimbusWithMixedOnboardingTypes()
+        setupNimbusWithFreshInstallCards()
         let layer = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: .modern,
             with: mockHelper)
@@ -96,18 +84,6 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
 
         XCTAssertEqual(subject.cards.count, 2)
         XCTAssertTrue(subject.cards.allSatisfy { $0.onboardingType == .freshInstall })
-    }
-
-    func testGetOnboardingModel_upgrade_returnsOnlyUpgradeCards() {
-        setupNimbusWithMixedOnboardingTypes()
-        let layer = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: .modern,
-            with: mockHelper)
-
-        let subject = layer.getOnboardingModel(for: .upgrade)
-
-        XCTAssertEqual(subject.cards.count, 2)
-        XCTAssertTrue(subject.cards.allSatisfy { $0.onboardingType == .upgrade })
     }
 
     // MARK: - iPad-Specific Filtering Tests
@@ -304,21 +280,6 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
             return
         }
         XCTAssertTrue(card.a11yIdRoot.hasPrefix("onboarding."))
-    }
-
-    func testGetOnboardingModel_upgrade_hasCorrectA11yIdRoot() {
-        setupNimbusWithVariousWelcomeCards(onboardingType: .upgrade)
-        let layer = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: .modern,
-            with: mockHelper)
-
-        let subject = layer.getOnboardingModel(for: .upgrade)
-
-        guard let card = subject.cards.first else {
-            XCTFail("Expected a card")
-            return
-        }
-        XCTAssertTrue(card.a11yIdRoot.hasPrefix("upgrade."))
     }
 
     func testGetOnboardingModel_a11yIdRoot_updatesWithIndexAfterFiltering() {
@@ -558,9 +519,9 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     }
 
     func testGetOnboardingCards_prerequisiteNever_excludesCard() {
-        configUtility.setupNimbusWith(prerequisites: ["NEVER"])
+        configUtility.setupNimbusWith(prerequisites: ["NEVER"], uiVariant: .modern)
         let layer = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: .legacy,
+            onboardingVariant: .modern,
             with: mockHelper)
 
         let subject = layer.getOnboardingModel(for: .freshInstall)
@@ -659,7 +620,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
             uiVariant: .modern
         )
         let layer = NimbusOnboardingKitFeatureLayer(
-            onboardingVariant: .legacy,
+            onboardingVariant: .modern,
             with: mockHelper)
 
         let subject = layer.getOnboardingModel(for: .freshInstall)
@@ -694,7 +655,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     // MARK: - Edge Cases
 
     func testGetOnboardingModel_noMatchingCards_returnsEmptyArray() {
-        setupNimbusWithOnlyUpgradeCards()
+        setupNimbusWithNonMatchingVariantCards()
         let layer = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: .modern,
             with: mockHelper)
@@ -722,19 +683,15 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
             "Modern Card 1": createCard(variant: .modern, order: 1),
             "Modern Card 2": createCard(variant: .modern, order: 2),
             "Japan Card 1": createCard(variant: .japan, order: 3),
-            "Japan Card 2": createCard(variant: .japan, order: 4),
-            "Legacy Card 1": createCard(variant: .legacy, order: 5),
-            "Legacy Card 2": createCard(variant: .legacy, order: 6)
+            "Japan Card 2": createCard(variant: .japan, order: 4)
         ]
         setupNimbus(with: cards)
     }
 
-    private func setupNimbusWithMixedOnboardingTypes() {
+    private func setupNimbusWithFreshInstallCards() {
         let cards: [String: NimbusOnboardingCardData] = [
             "Fresh Install 1": createCard(variant: .modern, order: 1, onboardingType: .freshInstall),
-            "Fresh Install 2": createCard(variant: .modern, order: 2, onboardingType: .freshInstall),
-            "Upgrade 1": createCard(variant: .modern, order: 3, onboardingType: .upgrade),
-            "Upgrade 2": createCard(variant: .modern, order: 4, onboardingType: .upgrade)
+            "Fresh Install 2": createCard(variant: .modern, order: 2, onboardingType: .freshInstall)
         ]
         setupNimbus(with: cards)
     }
@@ -901,9 +858,9 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
         setupNimbus(with: cards)
     }
 
-    private func setupNimbusWithOnlyUpgradeCards() {
+    private func setupNimbusWithNonMatchingVariantCards() {
         let cards: [String: NimbusOnboardingCardData] = [
-            "Upgrade Card": createCard(variant: .modern, order: 1, onboardingType: .upgrade)
+            "Japan Card": createCard(variant: .japan, order: 1)
         ]
         setupNimbus(with: cards)
     }

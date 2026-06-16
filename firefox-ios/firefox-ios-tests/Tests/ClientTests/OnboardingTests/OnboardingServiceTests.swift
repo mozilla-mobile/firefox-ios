@@ -54,7 +54,7 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
     init(
         shouldShowIntro: Bool = false,
         isModernEnabled: Bool = false,
-        onboardingVariant: Client.OnboardingVariant = .legacy
+        onboardingVariant: Client.OnboardingVariant = .modern
     ) {
         self.stubShouldShowIntroScreen = shouldShowIntro
         self.stubIsModernOnboardingEnabled = isModernEnabled
