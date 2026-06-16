@@ -28,7 +28,7 @@ final class RemoteSettingsGleanTelemetryTests: XCTestCase {
             value: "success",
             source: "main/search-config-v2",
             age: "12",
-            trigger: "timer",
+            trigger: "startup",
             timestamp: "1717438800",
             duration: "150",
             errorName: nil
@@ -69,6 +69,8 @@ final class RemoteSettingsGleanTelemetryTests: XCTestCase {
             XCTFail("Expected UptakeRemotesettingsExtra")
             return
         }
+        XCTAssertEqual(extras.trigger, "timer")
+        XCTAssertEqual(extras.source, "main/search-config-v2")
         XCTAssertEqual(extras.value, "sync_error")
         XCTAssertEqual(extras.errorName, "NetworkError")
         XCTAssertNil(extras.age)

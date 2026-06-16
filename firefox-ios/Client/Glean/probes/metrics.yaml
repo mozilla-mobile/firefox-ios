@@ -2782,11 +2782,12 @@ remote_settings:
         description: >
           The current timestamp, received during synchronization.
         type: string
-    bugs: &uptake_remotecontent_result_uptake_bugs
+    bugs:
       - https://bugzil.la/1517469
       - https://bugzil.la/1617133
-    data_reviews: *uptake_remotecontent_result_uptake_bugs
-    notification_emails: &uptake_remotecontent_result_uptake_emails
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34053
+    notification_emails:
       - mleplatre@mozilla.com
       - acottner@mozilla.com
     data_sensitivity:

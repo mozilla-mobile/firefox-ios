@@ -675,8 +675,8 @@ open class BrowserProfile: Profile,
             try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         }
         let service = remoteSettingsServiceFactory(path, config)
-        service.setTelemetry(telemetry: RemoteSettingsGleanTelemetry())
         #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
+        service.setTelemetry(telemetry: RemoteSettingsGleanTelemetry())
         serviceSyncCoordinator = RemoteSettingsServiceSyncCoordinator(service: service, prefs: prefs)
         #endif
         return service
