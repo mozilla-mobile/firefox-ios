@@ -902,13 +902,23 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let response = WorldCupMatchesResponse(
             now: "2026-06-26T12:00:00+00:00",
             previous: [
-                makeWinningMatch(id: 1, winner: "CAN", loser: "BIH",
-                                 date: "2026-06-12T19:00:00+00:00", stage: .groupStage)
+                makeWinningMatch(
+                    id: 1,
+                    winner: "CAN",
+                    loser: "BIH",
+                    date: "2026-06-12T19:00:00+00:00",
+                    stage: .groupStage
+                )
             ],
             current: nil,
             next: [
-                makeMatch(id: 2, home: "MEX", away: "CAN",
-                          date: "2026-06-28T13:00:00+00:00", stage: .roundOf32)
+                makeMatch(
+                    id: 2,
+                    home: "MEX",
+                    away: "CAN",
+                    date: "2026-06-28T13:00:00+00:00",
+                    stage: .roundOf32
+                )
             ]
         )
         let apiClient = MockWorldCupAPIClient(
@@ -1008,8 +1018,13 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             now: "2026-07-19T21:00:00+00:00",
             previous: nil,
             current: nil,
-            next: [makeWinningMatch(id: 1, winner: "FRA", loser: "ARG",
-                                    date: "2026-07-19T18:00:00+00:00", stage: .final)]
+            next: [makeWinningMatch(
+                id: 1,
+                winner: "FRA",
+                loser: "ARG",
+                date: "2026-07-19T18:00:00+00:00",
+                stage: .final
+            )]
         )
         let apiClient = MockWorldCupAPIClient(
             matchesResult: .success(response),
@@ -1040,8 +1055,13 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             now: "2026-07-18T21:00:00+00:00",
             previous: nil,
             current: nil,
-            next: [makeWinningMatch(id: 1, winner: "CRO", loser: "MAR",
-                                    date: "2026-07-18T18:00:00+00:00", stage: .thirdPlace)]
+            next: [makeWinningMatch(
+                id: 1,
+                winner: "CRO",
+                loser: "MAR",
+                date: "2026-07-18T18:00:00+00:00",
+                stage: .thirdPlace
+            )]
         )
         let apiClient = MockWorldCupAPIClient(
             matchesResult: .success(response),
@@ -1065,8 +1085,14 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
         mockWorldCupStore.selectedTeam = nil
-        let final = makeMatch(id: 1, home: "FRA", away: "ARG",
-                              date: "2026-07-19T18:00:00+00:00", statusType: "live", stage: .final)
+        let final = makeMatch(
+            id: 1,
+            home: "FRA",
+            away: "ARG",
+            date: "2026-07-19T18:00:00+00:00",
+            statusType: "live",
+            stage: .final
+        )
         let response = WorldCupMatchesResponse(
             now: "2026-07-19T18:30:00+00:00",
             previous: nil,
@@ -1100,8 +1126,13 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             now: "2026-07-19T21:00:00+00:00",
             previous: nil,
             current: nil,
-            next: [makeWinningMatch(id: 1, winner: "FRA", loser: "ARG",
-                                    date: "2026-07-19T18:00:00+00:00", stage: .final)]
+            next: [makeWinningMatch(
+                id: 1,
+                winner: "FRA",
+                loser: "ARG",
+                date: "2026-07-19T18:00:00+00:00",
+                stage: .final
+            )]
         )
         let apiClient = MockWorldCupAPIClient(
             matchesResult: .success(response),
