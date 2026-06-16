@@ -286,7 +286,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34299
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: 2026-12-01
   app_menu_button_tapped:
     type: event
     description: |
