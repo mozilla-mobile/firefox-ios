@@ -152,11 +152,7 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - restore-spm-cache@3:
         is_always_run: true
-    # DIAGNOSTIC: Xcelerate build cache disabled to test if its remote
-    # content-addressed cache is causing the recurring
-    # testLongPressLinkOptionsPrivateMode failures. Restore this line if the
-    # experiment shows no improvement.
-    # - activate-build-cache-for-xcode@0: {}
+    - activate-build-cache-for-xcode@0: {}
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
@@ -184,16 +180,13 @@ workflows:
                 echo "Failure, the number of warnings increased"
                 exit 1
             fi
-    # DIAGNOSTIC: paired with the Xcelerate disable above. With Xcelerate off,
-    # the xcelerate bin is never in PATH so this strip becomes a no-op. Kept
-    # commented so it can be restored together with the activate step.
-    # - script@1:
-    #     title: Remove cache
-    #     is_always_run: true
-    #     inputs:
-    #     - content: |
-    #         export PATH="${PATH#"$HOME/.bitrise-xcelerate/bin:"}"
-    #         envman add --key PATH --value "$PATH"
+    - script@1:
+        title: Remove cache
+        is_always_run: true
+        inputs:
+        - content: |
+            export PATH="${PATH#"$HOME/.bitrise-xcelerate/bin:"}"
+            envman add --key PATH --value "$PATH"
     - script@1:
         title: Override xctestrun file to UnitTests
         inputs:
@@ -230,8 +223,12 @@ workflows:
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
         is_always_run: true
+    # Only push/release/epic builds save SPM cache. PRs read from the cache
+    # (via restore-spm-cache@3 above) but never write back, so they can't
+    # poison the cache for subsequent builds. main keeps the cache fresh.
     - save-spm-cache@1:
         is_always_run: true
+        run_if: '{{not .IsPR}}'
     - script@1:
         title: Clean before deploying
         timeout: 360
