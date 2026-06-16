@@ -47,7 +47,7 @@ final class RemoteSettingsGleanTelemetryTests: XCTestCase {
         XCTAssertEqual(extras.trigger, "startup")
         XCTAssertEqual(extras.timestamp, "1717438800")
         XCTAssertEqual(extras.duration, "150")
-        XCTAssertNil(extras.errorName)
+        XCTAssertNil(extras.errorname)
     }
 
     func testReportUptakeForwardsErrorFields() {
@@ -72,7 +72,7 @@ final class RemoteSettingsGleanTelemetryTests: XCTestCase {
         XCTAssertEqual(extras.trigger, "timer")
         XCTAssertEqual(extras.source, "main/search-config-v2")
         XCTAssertEqual(extras.value, "sync_error")
-        XCTAssertEqual(extras.errorName, "NetworkError")
+        XCTAssertEqual(extras.errorname, "NetworkError")
         XCTAssertNil(extras.age)
         XCTAssertNil(extras.timestamp)
         XCTAssertNil(extras.duration)
