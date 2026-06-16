@@ -3507,6 +3507,22 @@ extension String {
                     )
                 }
 
+                public struct QuickAnswersSection {
+                    public static let Title = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154",
+                        tableName: "Settings",
+                        value: "Quick Answers",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature"
+                    )
+
+                    public static let Message = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154",
+                        tableName: "Settings",
+                        value: "Your voice, questions, and answers are never stored.",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature"
+                    )
+                }
+
                 public static let BlockedStatus = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151",
                     tableName: "Settings",
