@@ -867,6 +867,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = "ARG"
         // now pinned past the match's featured + linger window so the won match
         // sits on the single (default-index 0) card.
@@ -896,6 +897,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = "CAN"
         // Group match already won (past); the R32 fixture is still upcoming and
         // is the default card. The win is on card 0, default index is 1.
@@ -945,6 +947,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = "ARG"
         let response = WorldCupMatchesResponse(
             now: "2026-06-12T21:00:00+00:00",
@@ -982,6 +985,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = nil
 
         let response = WorldCupMatchesResponse(
@@ -1012,6 +1016,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = nil
         let response = WorldCupMatchesResponse(
             now: "2026-07-19T21:00:00+00:00",
@@ -1049,6 +1054,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = nil
         let response = WorldCupMatchesResponse(
             now: "2026-07-18T21:00:00+00:00",
@@ -1083,6 +1089,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = nil
         let final = makeMatch(
             id: 1,
@@ -1120,6 +1127,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = nil
         let response = WorldCupMatchesResponse(
             now: "2026-07-19T21:00:00+00:00",
@@ -1162,6 +1170,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = "ARG"
         let response = WorldCupMatchesResponse(
             now: "2026-06-12T21:00:00+00:00",
@@ -1192,6 +1201,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
         mockWorldCupStore.selectedTeam = "ARG"
         let response = WorldCupMatchesResponse(
             now: "2026-06-12T21:00:00+00:00",

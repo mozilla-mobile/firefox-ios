@@ -92,7 +92,7 @@ final class WorldCupMiddleware {
     private func resolveShouldShowConfetti(for snapshot: WorldCupFeed.Snapshot) -> Bool {
         // If the homepage isn't visible, don't resolve the confetti state: it would
         // be consumed while off screen and never trigger the animation.
-        guard homepageIsOnScreen else { return false }
+        guard homepageIsOnScreen, worldCupStore.isCelebrationAnimationEnabled else { return false }
 
         if let team = worldCupStore.selectedTeam {
             guard let defaultCard = snapshot.matches[safe: snapshot.defaultMatchIndex] else { return false }

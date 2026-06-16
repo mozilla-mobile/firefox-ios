@@ -21,10 +21,18 @@ features:
           countdown target date.
         type: String
         default: "2026-06-01T19:00:00Z"
+      show-celebration-animation:
+        description: >
+          Whether or not the celebration animation is shown when a selected team's match is won. 
+          For the generic experience the animation is shown after the result of bronze final and final too.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: false
+          show-celebration-animation: true
       - channel: developer
         value:
           enabled: false
+          show-celebration-animation: true

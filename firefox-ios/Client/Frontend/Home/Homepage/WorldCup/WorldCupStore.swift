@@ -24,6 +24,9 @@ protocol WorldCupStoreProtocol {
     /// Returns true when the World Cup countdown target date has been reached.
     var hasWorldCupStarted: Bool { get }
 
+    /// Whether the celebration (confetti) animation is enabled.
+    var isCelebrationAnimationEnabled: Bool { get }
+
     /// Winning matches ids that have been already tracked.
     var seenWinningMatchIDs: Set<String> { get }
 
@@ -97,6 +100,10 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
     var hasWorldCupStarted: Bool {
         guard let startDate = worldCupStartDate else { return false }
         return dateProvider.now() >= startDate
+    }
+
+    var isCelebrationAnimationEnabled: Bool {
+        return nimbusFeature.value().showCelebrationAnimation
     }
 
     private var milestone2EnableDate: Date? {
