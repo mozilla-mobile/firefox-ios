@@ -132,6 +132,7 @@ public struct PrefsKeys {
 
     public struct Homepage {
         public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
+        public static let WorldCupSeenWinningMatchIDs = "WorldCupSeenWinningMatchIDsUserPrefsKey"
     }
 
     public struct SearchSettings {

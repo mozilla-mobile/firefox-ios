@@ -19,6 +19,7 @@ struct WorldCupAction: Action {
     /// default (closest upcoming match). 0 when irrelevant (single card or
     /// empty).
     let defaultMatchIndex: Int
+    let shouldShowConfetti: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -29,7 +30,8 @@ struct WorldCupAction: Action {
         selectedCountryId: String? = nil,
         matches: [WorldCupMatches] = [],
         apiError: WorldCupLoadError? = nil,
-        defaultMatchIndex: Int = 0
+        defaultMatchIndex: Int = 0,
+        shouldShowConfetti: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
@@ -40,6 +42,7 @@ struct WorldCupAction: Action {
         self.matches = matches
         self.apiError = apiError
         self.defaultMatchIndex = defaultMatchIndex
+        self.shouldShowConfetti = shouldShowConfetti
     }
 }
 

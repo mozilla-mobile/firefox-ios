@@ -16,6 +16,8 @@ final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
     private let feed: WorldCupFeed?
     private var lastWindowUUID: WindowUUID?
+    /// Wether the homepage is currently displayed on screen
+    private var homepageIsOnScreen = false
 
     convenience init() {
         let store = WorldCupStore()
@@ -38,6 +40,11 @@ final class WorldCupMiddleware {
              HomepageMiddlewareActionType.enteredForeground,
              WorldCupActionType.retryMatchesFetch:
             self.startFeed(windowUUID: action.windowUUID)
+        case HomepageActionType.viewDidAppear:
+            self.homepageIsOnScreen = true
+            self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
+        case HomepageActionType.viewWillDisappear:
+            self.homepageIsOnScreen = false
         case WorldCupActionType.didChangeHomepageSettings:
             self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
         case WorldCupActionType.removeHomepageCard:
@@ -46,6 +53,7 @@ final class WorldCupMiddleware {
             self.dispatch(snapshot: .empty)
         case WorldCupActionType.selectTeam:
             let countryId = (action as? WorldCupAction)?.selectedCountryId
+            self.worldCupStore.setSeenWinningMatchIDs([])
             self.worldCupStore.setSelectedTeam(countryId: countryId)
             self.startFeed(windowUUID: action.windowUUID)
         case WorldCupActionType.worldCupDidStart:
@@ -75,9 +83,39 @@ final class WorldCupMiddleware {
                 selectedCountryId: worldCupStore.selectedTeam,
                 matches: snapshot.matches,
                 apiError: snapshot.apiError,
-                defaultMatchIndex: snapshot.defaultMatchIndex
+                defaultMatchIndex: snapshot.defaultMatchIndex,
+                shouldShowConfetti: resolveShouldShowConfetti(for: snapshot)
             )
         )
+    }
+
+    private func resolveShouldShowConfetti(for snapshot: WorldCupFeed.Snapshot) -> Bool {
+        // If the homepage isn't visible, don't resolve the confetti state: it would
+        // be consumed while off screen and never trigger the animation.
+        guard homepageIsOnScreen else { return false }
+
+        if let team = worldCupStore.selectedTeam {
+            guard let defaultCard = snapshot.matches[safe: snapshot.defaultMatchIndex] else { return false }
+            return celebratesNewWin(
+                winningIDs: Set(snapshot.matches.flatMap { $0.winningMatchIDs(for: team) }),
+                celebratableIDs: Set(defaultCard.winningMatchIDs(for: team))
+            )
+        }
+        let cardIndex = snapshot.defaultMatchIndex - 1
+        guard let card = snapshot.matches[safe: cardIndex],
+              let winner = card.winnerThirdPlaceOrFinal else { return false }
+        let winningIDs = Set(card.winningMatchIDs(for: winner.teamKey))
+        return celebratesNewWin(winningIDs: winningIDs, celebratableIDs: winningIDs)
+    }
+
+    /// Folds `winningIDs` into the persisted seen set and reports whether any of
+    /// `celebratableIDs` is a newly-seen win.
+    private func celebratesNewWin(winningIDs: Set<String>, celebratableIDs: Set<String>) -> Bool {
+        guard !winningIDs.isEmpty else { return false }
+        let seen = worldCupStore.seenWinningMatchIDs
+        let newWins = winningIDs.subtracting(seen)
+        worldCupStore.setSeenWinningMatchIDs(seen.union(winningIDs))
+        return !celebratableIDs.isDisjoint(with: newWins)
     }
 
     private static func makeDefaultFeed(store: WorldCupStoreProtocol) -> WorldCupFeed? {

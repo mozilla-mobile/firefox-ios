@@ -19,6 +19,10 @@ final class MockWorldCupStore: WorldCupStoreProtocol {
     var setSelectedTeamCalled = 0
     var lastSetSelectedTeamCountryId: String?
 
+    var seenWinningMatchIDs: Set<String> = []
+    var setSeenWinningMatchIDsCalled = 0
+    var lastSetSeenWinningMatchIDs: Set<String>?
+
     var isFeatureEnabledAndSectionEnabled: Bool {
         return isFeatureEnabled && isHomepageSectionEnabled
     }
@@ -33,5 +37,11 @@ final class MockWorldCupStore: WorldCupStoreProtocol {
         setSelectedTeamCalled += 1
         lastSetSelectedTeamCountryId = countryId
         selectedTeam = countryId
+    }
+
+    func setSeenWinningMatchIDs(_ ids: Set<String>) {
+        setSeenWinningMatchIDsCalled += 1
+        lastSetSeenWinningMatchIDs = ids
+        seenWinningMatchIDs = ids
     }
 }
