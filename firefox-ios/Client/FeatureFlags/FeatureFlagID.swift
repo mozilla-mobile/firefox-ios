@@ -59,7 +59,6 @@ enum FeatureFlagID: String, CaseIterable {
     case tabTrayUIExperiments
     case tosFeature
     case touFeature
-    case trackingProtectionRefactor
     case translation
     case translationLanguagePicker
     case trendingSearches
@@ -125,7 +124,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .touFeature,
-                .trackingProtectionRefactor,
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,

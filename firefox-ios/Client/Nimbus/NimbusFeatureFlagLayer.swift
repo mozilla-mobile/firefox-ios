@@ -176,9 +176,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .touFeature:
             return checkTouFeature()
 
-        case .trackingProtectionRefactor:
-            return checkTrackingProtectionRefactor()
-
         case .translation:
             return checkTranslationFeature()
 
@@ -287,11 +284,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkTouFeature() -> Bool {
         return nimbus.features.touFeature.value().status
-    }
-
-    private func checkTrackingProtectionRefactor() -> Bool {
-        let config = nimbus.features.trackingProtectionRefactor.value()
-        return config.enabled
     }
 
     private func checkTranslationFeature() -> Bool {

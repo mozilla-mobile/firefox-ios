@@ -109,13 +109,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .trackingProtectionRefactor,
-                titleText: format(string: "Enhanced Tracking Protection"),
-                statusText: format(string: "Toggle to use enhanced tracking protection")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .googleLens,
                 titleText: format(string: "Google Lens"),
                 statusText: format(string: "Toggle to enable Google Lens entry points")
