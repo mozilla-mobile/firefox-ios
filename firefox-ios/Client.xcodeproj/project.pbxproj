@@ -32833,7 +32833,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla-mobile/MappaMundi.git";
 			requirement = {
-				branch = master;
+				branch = "cs/MTE-5449-scrollIntoViewWithin-settings";
 				kind = branch;
 			};
 		};
