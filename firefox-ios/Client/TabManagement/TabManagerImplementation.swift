@@ -804,7 +804,7 @@ final class TabManagerImplementation: NSObject,
         )
     }
 
-    /// ADR 0008: notifies the tab tray that a lazily-loaded screenshot has settled in memory so the
+    /// Notifies the tab tray that a lazily-loaded screenshot has settled in memory so the
     /// affected cell can reload. Only needed when the deeplink-optimization flag is enabled.
     @MainActor
     private func dispatchScreenshotRestoredAction(for tab: Tab) {

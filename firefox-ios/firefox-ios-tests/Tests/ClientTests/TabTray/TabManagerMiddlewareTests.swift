@@ -135,7 +135,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.tabsPanelProvider(appState, action)
 
         XCTAssertEqual(
-            mockTabManager.preloadScreenshotCalls.map { $0.tabUUID },
+            mockTabManager.restoreScreenshotCalls.map { $0.tabUUID },
             [tabA.tabUUID]
         )
     }
@@ -153,7 +153,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.tabsPanelProvider(appState, action)
 
-        XCTAssertTrue(mockTabManager.preloadScreenshotCalls.isEmpty)
+        XCTAssertTrue(mockTabManager.restoreScreenshotCalls.isEmpty)
     }
 
     // MARK: - Recent Tabs

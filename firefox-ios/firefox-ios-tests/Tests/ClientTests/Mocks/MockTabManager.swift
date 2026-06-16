@@ -163,8 +163,8 @@ class MockTabManager: TabManager {
     }
     func offloadBackgroundWebViews() async {}
 
-    var preloadScreenshotCalls: [Tab] = []
-    func preloadScreenshot(for tab: Tab) {
-        preloadScreenshotCalls.append(tab)
+    var restoreScreenshotCalls: [Tab] = []
+    func restoreScreenshot(for tab: Tab) {
+        restoreScreenshotCalls.append(tab)
     }
 }
