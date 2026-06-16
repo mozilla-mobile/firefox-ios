@@ -753,6 +753,47 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
+    func testDidSwipeToOpenTabTray_withTopToolbar_recordsIsAtBottomFalse() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray)
+        subject.toolbarProvider(mockStore.state, action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.tabTrayOpenedViaSwipe)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.isAtBottom, false)
+    }
+
+    func testDidSwipeToOpenTabTray_withBottomToolbar_recordsIsAtBottomTrue() throws {
+        mockStore = MockStoreForMiddleware(state: setupToolbarBottomPositionAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.isAtBottom, true)
+    }
+
     // MARK: - ToolbarAction
     func testCancelEdit_dispatchesDidClearAlternativeSearchEngine() throws {
         let subject = createSubject(manager: toolbarManager)

@@ -283,7 +283,7 @@ toolbar:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16079
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34299
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
