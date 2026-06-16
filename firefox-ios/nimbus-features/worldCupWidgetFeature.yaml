@@ -26,7 +26,7 @@ features:
           Whether or not the celebration animation is shown when a selected team's match is won. 
           For the generic experience the animation is shown after the result of bronze final and final too.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
