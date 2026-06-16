@@ -53,7 +53,7 @@ final class WorldCupLottieView: UIView {
         reduceMotionEnabled: Bool = UIAccessibility.isReduceMotionEnabled
     ) {
         guard !reduceMotionEnabled else { return }
-        
+
         let view = WorldCupLottieView(configuration: .kit)
         container.addSubview(view)
         view.translatesAutoresizingMaskIntoConstraints = false
