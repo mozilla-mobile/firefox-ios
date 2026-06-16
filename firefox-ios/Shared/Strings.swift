@@ -5688,8 +5688,8 @@ extension String {
         public static let DisabledAlertMessage = MZLocalizedString(
             key: "CameraAccess.DisabledAlertMessage.v153",
             tableName: "Camera",
-            value: "Go to Settings > Firefox on your device to allow Firefox to use your camera.",
-            comment: "Message shown in an alert when camera access is disabled in iOS Settings. This is used by features that require camera access, such as QR code scanning and Google Lens.")
+            value: "Go to Settings > %@ on your device to allow Firefox to use your camera.",
+            comment: "Message shown in an alert when camera access is disabled in iOS Settings. The %@ is replaced with the app name. This is used by features that require camera access, such as QR code scanning and Google Lens.")
     }
 }
 
