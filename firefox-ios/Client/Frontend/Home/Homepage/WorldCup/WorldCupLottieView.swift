@@ -32,7 +32,7 @@ final class WorldCupLottieView: UIView {
     private let configuration: Configuration
     private let animationView: LottieAnimationView
 
-    // MARK: - Play
+    // MARK: - Show Animations
 
     @MainActor
     static func showConfetti(
