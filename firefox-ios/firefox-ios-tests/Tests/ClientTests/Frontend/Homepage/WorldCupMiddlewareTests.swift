@@ -1171,7 +1171,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
         let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
-        
+
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
         let offScreenExpectation = expectationForMatchesDispatch()
         subject.worldCupProvider(appState, action)
