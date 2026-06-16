@@ -187,6 +187,7 @@
 		1D05C9842D9CD2080081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */; };
 		1D05C9852D9CD2080081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */; };
 		1D05C9862D9CD20F0081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */; };
+		AA02C9832D9CCF720081540C /* RemoteSettingsGleanTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA01C9822D9CCF690081540C /* RemoteSettingsGleanTelemetry.swift */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */; };
@@ -1218,6 +1219,7 @@
 		8ABE9F1A2CB45B4B0080E1DF /* RemotePasswordRules.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AF4E7702C45B98F00BAD91C /* RemotePasswordRules.json */; };
 		8ABE9F1B2CB4620A0080E1DF /* RemoteSettingsFetchConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AF4E76D2C41D86100BAD91C /* RemoteSettingsFetchConfig.json */; };
 		8ABE9F1D2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABE9F1C2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift */; };
+		AA06F1D2CB462730080E1DF0 /* RemoteSettingsGleanTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA07F1C2CB462730080E1DF0 /* RemoteSettingsGleanTelemetryTests.swift */; };
 		8ABE9F1E2CB462CA0080E1DF /* RemoteSettingsFetchConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AF4E76D2C41D86100BAD91C /* RemoteSettingsFetchConfig.json */; };
 		8AC0B1C02D1D935C004237FD /* ContextMenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC0B1BF2D1D9356004237FD /* ContextMenuConfiguration.swift */; };
 		8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1065E28D0CD700013263A /* OpenQLPreviewHelper.swift */; };
@@ -3024,6 +3026,7 @@
 		1CCD466289861742D68C9CA6 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
 		1CDB4EDFA0D3B346BC539F73 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsServiceSyncCoordinator.swift; sourceTree = "<group>"; };
+		AA01C9822D9CCF690081540C /* RemoteSettingsGleanTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsGleanTelemetry.swift; sourceTree = "<group>"; };
 		1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesProvider.swift; sourceTree = "<group>"; };
 		1D06AE6924FEE8D6000B092B /* TabProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabProvider.swift; sourceTree = "<group>"; };
 		1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesProvider.swift; sourceTree = "<group>"; };
@@ -9665,6 +9668,7 @@
 		8ABB15C82D5A4E3900A4635C /* RemoteTabsMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsMiddlewareTests.swift; sourceTree = "<group>"; };
 		8ABDBAA52CB6BF6600B51F63 /* HomepageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageHeaderCell.swift; sourceTree = "<group>"; };
 		8ABE9F1C2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsFetchConfigTests.swift; sourceTree = "<group>"; };
+		AA07F1C2CB462730080E1DF0 /* RemoteSettingsGleanTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsGleanTelemetryTests.swift; sourceTree = "<group>"; };
 		8AC0B1BF2D1D9356004237FD /* ContextMenuConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuConfiguration.swift; sourceTree = "<group>"; };
 		8AC1065E28D0CD700013263A /* OpenQLPreviewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQLPreviewHelper.swift; sourceTree = "<group>"; };
 		8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
@@ -12376,6 +12380,7 @@
 				C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */,
 				BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */,
 				1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */,
+				AA01C9822D9CCF690081540C /* RemoteSettingsGleanTelemetry.swift */,
 				1DCEC40F2D822F1500129966 /* ASRemoteSettingsCollection.swift */,
 				1DCEC3F12D5D1FDD00129966 /* ASSearchEngineSelector.swift */,
 				1DCEC3F32D600ADC00129966 /* ASSearchEngineProvider.swift */,
@@ -14780,6 +14785,7 @@
 				1D3564532D9329FA00F52F12 /* SearchPrefsMigrationTests.swift */,
 				1DA3E4B12DB1C86A0065F7E7 /* ASSearchEngineUtilitiesTests.swift */,
 				8ABE9F1C2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift */,
+				AA07F1C2CB462730080E1DF0 /* RemoteSettingsGleanTelemetryTests.swift */,
 			);
 			path = RemoteSettings;
 			sourceTree = "<group>";
@@ -19804,6 +19810,7 @@
 				ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */,
 				8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */,
 				1D05C9832D9CCF720081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
+				AA02C9832D9CCF720081540C /* RemoteSettingsGleanTelemetry.swift in Sources */,
 				CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */,
 				8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */,
 				C81A8F2526D3ED1900EBA539 /* UIWindow+Extension.swift in Sources */,
@@ -20779,6 +20786,7 @@
 				C714D7B62E4673A300FC02E6 /* ShortcutsLibraryDiffableDataSourceTests.swift in Sources */,
 				C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */,
 				8ABE9F1D2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift in Sources */,
+				AA06F1D2CB462730080E1DF0 /* RemoteSettingsGleanTelemetryTests.swift in Sources */,
 				8A106D632D416F82009AD7E4 /* MessageCardMiddlewareTests.swift in Sources */,
 				E1E425322B5A2E9700899550 /* DownloadTests.swift in Sources */,
 				5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */,
