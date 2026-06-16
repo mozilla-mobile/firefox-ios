@@ -983,8 +983,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
         mockWorldCupStore.selectedTeam = nil
-        // A finished group-stage match lands as the default card. With no team
-        // followed, only a finished Bronze Final / Final celebrates.
+
         let response = WorldCupMatchesResponse(
             now: "2026-06-12T21:00:00+00:00",
             previous: nil,
@@ -1172,10 +1171,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
         let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
-        // Homepage is not on screen yet — the win must neither celebrate nor be
-        // consumed, otherwise it would never trigger once the homepage appears.
+        
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
-
         let offScreenExpectation = expectationForMatchesDispatch()
         subject.worldCupProvider(appState, action)
         wait(for: [offScreenExpectation])
@@ -1183,8 +1180,6 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
         XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
 
-        // The homepage becomes visible: the cached snapshot is re-dispatched and
-        // the still-unseen win now celebrates.
         bringHomepageOnScreen(subject)
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
