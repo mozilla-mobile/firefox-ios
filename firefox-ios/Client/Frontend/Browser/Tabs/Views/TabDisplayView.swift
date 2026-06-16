@@ -274,9 +274,6 @@ final class TabDisplayView: UIView,
         }
     }
 
-    /// ADR 0008: prefetchItemsAt only fires when the system predicts scrolling, so it misses cells
-    /// that are visible from initial layout (e.g. a small tab list that fits on one screen). This
-    /// hook covers that case by triggering a load for each cell as it actually appears.
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {

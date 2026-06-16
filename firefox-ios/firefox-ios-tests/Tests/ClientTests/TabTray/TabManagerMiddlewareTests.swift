@@ -122,8 +122,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_prefetchScreenshotsAction_callsPreloadScreenshotForEachUUID() {
         let subject = createSubject()
-        let tabA = createTab(profile: mockProfile, urlString: "https://a.example")
-        let tabB = createTab(profile: mockProfile, urlString: "https://b.example")
+        let tabA = createTab(profile: mockProfile, urlString: "https://firefox.com")
+        let tabB = createTab(profile: mockProfile, urlString: "https://mozilla.com")
         mockTabManager.tabsByUUID = [tabA.tabUUID: tabA, tabB.tabUUID: tabB]
 
         let action = TabPanelViewAction(
@@ -143,7 +143,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_prefetchScreenshotsAction_skipsUnknownUUIDs() {
         let subject = createSubject()
-        let tabA = createTab(profile: mockProfile, urlString: "https://a.example")
+        let tabA = createTab(profile: mockProfile, urlString: "https://firefox.com")
         mockTabManager.tabsByUUID = [tabA.tabUUID: tabA]
 
         let action = TabPanelViewAction(

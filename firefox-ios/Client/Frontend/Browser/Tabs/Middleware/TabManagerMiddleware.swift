@@ -268,7 +268,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         guard let tabManager = tabManager(for: windowUUID) else { return }
         for tabUUID in tabUUIDs {
             guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { continue }
-            tabManager.restoreScreenshot(for: tab, onComplete: nil) // laurie
+            tabManager.restoreScreenshot(for: tab)
         }
     }
 

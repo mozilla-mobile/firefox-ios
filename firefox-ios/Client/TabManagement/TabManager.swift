@@ -124,7 +124,7 @@ protocol TabManager: AnyObject {
     /// ADR 0008: load `tab`'s screenshot from disk if it isn't already in memory. Intended for
     /// just-in-time loading driven by the tab tray's prefetch data source. No-op if the tab
     /// already has a screenshot.
-    func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)?)
+    func restoreScreenshot(for tab: Tab)
 }
 
 extension TabManager {

@@ -710,13 +710,11 @@ final class TabManagerImplementation: NSObject,
         selectTab(newTab)
     }
 
-    // Laurie - todo; onComplete?
-    func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)? = nil) {
+    func restoreScreenshot(for tab: Tab) {
         loadScreenshotFromDisk(for: tab) { [weak self] in
             Task { @MainActor [weak self] in
                 self?.dispatchDidSetScreenshotAction(for: tab)
                 self?.dispatchScreenshotRestoredAction(for: tab)
-                onComplete?()
             }
         }
     }
