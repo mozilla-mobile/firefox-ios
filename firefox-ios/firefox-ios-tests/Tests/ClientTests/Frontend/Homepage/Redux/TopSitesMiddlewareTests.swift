@@ -160,6 +160,31 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
+    func test_homepageInitializeAction_withoutSponsoredSites_dispatchesOtherSites() throws {
+        let topSitesManager = FallbackTopSitesManager()
+        let subject = createSubject(topSitesManager: topSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Top sites middleware dispatches fallback sites")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let topSites = try XCTUnwrap(actionsCalled.last?.topSites)
+
+        XCTAssertEqual(topSites.count, 1)
+        XCTAssertEqual(topSites.first?.title, "Fallback Site")
+        XCTAssertEqual(topSites.first?.isSponsored, false)
+    }
+
     func test_tappedOnHomepageTopSite_forSponsoredSites_withUnifiedAds_sendsTelemetry() throws {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
         let subject = createSubject(
@@ -563,7 +588,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
     private func createSubject(
-        topSitesManager: MockTopSitesManager,
+        topSitesManager: TopSitesManagerInterface,
         unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry? = nil,
         featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags()
     ) -> TopSitesMiddleware {
@@ -639,4 +664,29 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
     }
+}
+
+private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
+    func getOtherSites() async -> [TopSiteConfiguration] {
+        return [
+            TopSiteConfiguration(
+                site: Site.createBasicSite(url: "www.example.com", title: "Fallback Site")
+            )
+        ]
+    }
+
+    func fetchSponsoredSites() async -> [Site] {
+        return []
+    }
+
+    @MainActor
+    func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
+        return otherSites
+    }
+
+    func removeTopSite(_ site: Site) async {}
+
+    func pinTopSite(_ site: Site) {}
+
+    func unpinTopSite(_ site: Site) async {}
 }

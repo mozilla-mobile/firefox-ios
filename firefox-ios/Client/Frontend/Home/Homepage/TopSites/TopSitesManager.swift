@@ -52,9 +52,11 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
     private let searchEnginesManager: SearchEnginesManagerProvider
     private let unifiedAdsProvider: UnifiedAdsProviderInterface
     private let notification: NotificationProtocol
+    private let sponsoredTilesFetchTimeoutNanoseconds: UInt64
 
     private let maxTopSites: Int
     private let maxNumberOfSponsoredTile = 2
+    private static let defaultSponsoredTilesFetchTimeoutNanoseconds: UInt64 = 3_000_000_000
 
     init(
         profile: Profile,
@@ -64,7 +66,8 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
         searchEnginesManager: SearchEnginesManagerProvider,
         logger: Logger = DefaultLogger.shared,
         notification: NotificationProtocol = NotificationCenter.default,
-        maxTopSites: Int = 4 * 14 // Max rows * max tiles on the largest screen plus some padding
+        maxTopSites: Int = 4 * 14, // Max rows * max tiles on the largest screen plus some padding
+        sponsoredTilesFetchTimeoutNanoseconds: UInt64 = TopSitesManager.defaultSponsoredTilesFetchTimeoutNanoseconds
     ) {
         self.profile = profile
         self.unifiedAdsProvider = unifiedAdsProvider
@@ -74,6 +77,7 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
         self.logger = logger
         self.notification = notification
         self.maxTopSites = maxTopSites
+        self.sponsoredTilesFetchTimeoutNanoseconds = sponsoredTilesFetchTimeoutNanoseconds
     }
 
     @MainActor
@@ -103,22 +107,76 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
     // MARK: Sponsored tiles (Unified Tiles)
     func fetchSponsoredSites() async -> [Site] {
         guard shouldLoadSponsoredTiles else { return [] }
-        let unifiedTiles = await withCheckedContinuation { continuation in
-            unifiedAdsProvider.fetchTiles { [weak self] result in
-                if case .success(let unifiedTiles) = result {
-                    continuation.resume(returning: unifiedTiles)
-                } else {
-                    self?.logger.log(
-                        "Unified ads provider did not return any sponsored tiles when requested",
-                        level: .warning,
-                        category: .homepage
-                    )
-                    continuation.resume(returning: [])
-                }
-            }
-        }
+        let unifiedTiles = await fetchUnifiedTilesWithTimeout()
 
         return unifiedTiles.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
+    }
+
+    private func fetchUnifiedTilesWithTimeout() async -> [UnifiedTile] {
+        await withCheckedContinuation { continuation in
+            let fetchState = SponsoredTilesFetchState()
+            let timeoutTask = startSponsoredTilesTimeout(
+                fetchState: fetchState,
+                continuation: continuation
+            )
+
+            unifiedAdsProvider.fetchTiles { [weak self] result in
+                timeoutTask.cancel()
+                Self.resumeSponsoredTilesFetch(
+                    result,
+                    fetchState: fetchState,
+                    continuation: continuation,
+                    logger: self?.logger
+                )
+            }
+        }
+    }
+
+    private func startSponsoredTilesTimeout(
+        fetchState: SponsoredTilesFetchState,
+        continuation: CheckedContinuation<[UnifiedTile], Never>
+    ) -> Task<Void, Never> {
+        return Task { [logger, sponsoredTilesFetchTimeoutNanoseconds] in
+            do {
+                try await Task.sleep(nanoseconds: sponsoredTilesFetchTimeoutNanoseconds)
+            } catch {
+                return
+            }
+
+            guard !Task.isCancelled else { return }
+
+            logger.log(
+                "Unified ads provider timed out when requesting sponsored tiles",
+                level: .warning,
+                category: .homepage
+            )
+            fetchState.resumeOnce {
+                continuation.resume(returning: [])
+            }
+        }
+    }
+
+    private static func resumeSponsoredTilesFetch(
+        _ result: UnifiedTileResult,
+        fetchState: SponsoredTilesFetchState,
+        continuation: CheckedContinuation<[UnifiedTile], Never>,
+        logger: Logger?
+    ) {
+        switch result {
+        case .success(let unifiedTiles):
+            fetchState.resumeOnce {
+                continuation.resume(returning: unifiedTiles)
+            }
+        case .failure:
+            logger?.log(
+                "Unified ads provider did not return any sponsored tiles when requested",
+                level: .warning,
+                category: .homepage
+            )
+            fetchState.resumeOnce {
+                continuation.resume(returning: [])
+            }
+        }
     }
 
     private var shouldLoadSponsoredTiles: Bool {
@@ -241,5 +299,22 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
         profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { [weak self] _ in
             self?.notification.post(name: .TopSitesUpdated, withObject: nil)
         }
+    }
+}
+
+private final class SponsoredTilesFetchState: @unchecked Sendable {
+    private let lock = NSLock()
+    private var hasResumed = false
+
+    func resumeOnce(_ resume: () -> Void) {
+        lock.lock()
+        guard !hasResumed else {
+            lock.unlock()
+            return
+        }
+        hasResumed = true
+        lock.unlock()
+
+        resume()
     }
 }

@@ -35,7 +35,7 @@ final class WorldCupMiddleware {
         self.lastWindowUUID = action.windowUUID
         switch action.actionType {
         case HomepageActionType.initialize,
-             HomepageMiddlewareActionType.enteredForeground,
+             HomepageMiddlewareActionType.didBecomeActive,
              WorldCupActionType.retryMatchesFetch:
             self.startFeed(windowUUID: action.windowUUID)
         case WorldCupActionType.didChangeHomepageSettings:
