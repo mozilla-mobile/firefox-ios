@@ -711,7 +711,8 @@ final class TabManagerImplementation: NSObject,
     }
 
     func restoreScreenshot(for tab: Tab) {
-        loadScreenshotFromDisk(for: tab) { [weak self] in
+        loadScreenshotFromDisk(for: tab) { shouldReload in
+            guard shouldReload else { return }
             Task { @MainActor [weak self] in
                 self?.dispatchDidSetScreenshotAction(for: tab)
                 self?.dispatchScreenshotRestoredAction(for: tab)
@@ -722,14 +723,14 @@ final class TabManagerImplementation: NSObject,
     /// Loads `tab.screenshot` from disk in the background and fires `onComplete` when done.
     /// `onComplete` may run on a background thread, so callers must hop to the main thread
     /// themselves before touching UI or main-actor state.
-    private func loadScreenshotFromDisk(for tab: Tab, onComplete: @escaping () -> Void) {
+    private func loadScreenshotFromDisk(for tab: Tab, onComplete: @escaping (_ shouldReload: Bool) -> Void) {
         guard tab.screenshot == nil else {
-            onComplete()
+            onComplete(false)
             return
         }
         Task { [weak tab, weak self] in
             guard let tab else {
-                onComplete()
+                onComplete(false)
                 return
             }
             do {
@@ -739,7 +740,7 @@ final class TabManagerImplementation: NSObject,
                 self?.logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
-            onComplete()
+            onComplete(true)
         }
     }
 
@@ -779,7 +780,9 @@ final class TabManagerImplementation: NSObject,
         let group = DispatchGroup()
         for tab in tabsToLoad {
             group.enter()
-            loadScreenshotFromDisk(for: tab) { group.leave() }
+            loadScreenshotFromDisk(for: tab) { _ in
+                group.leave()
+            }
         }
         group.notify(queue: .main) { [weak self] in
             guard let self, let selectedTab = self.selectedTab else { return }
