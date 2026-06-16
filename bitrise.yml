@@ -223,7 +223,7 @@ workflows:
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
         is_always_run: true
-    - save-spm-cache@1:
+    - save-spm-cache@3:
         is_always_run: true
     - script@1:
         title: Clean before deploying
