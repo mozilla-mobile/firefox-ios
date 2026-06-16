@@ -18,7 +18,6 @@ struct TabPanelViewAction: Action {
     let isPrivateModeActive: Bool?
     let urlRequest: URLRequest?
     let tabUUID: TabUUID?
-    let tabUUIDs: [TabUUID]?
     let selectedTabIndex: Int?
     let moveTabData: MoveTabData?
     let toastType: ToastType?
@@ -29,7 +28,6 @@ struct TabPanelViewAction: Action {
          isPrivateModeActive: Bool? = nil,
          urlRequest: URLRequest? = nil,
          tabUUID: TabUUID? = nil,
-         tabUUIDs: [TabUUID]? = nil,
          selectedTabIndex: Int? = nil,
          moveTabData: MoveTabData? = nil,
          toastType: ToastType? = nil,
@@ -43,7 +41,6 @@ struct TabPanelViewAction: Action {
         self.isPrivateModeActive = isPrivateModeActive
         self.urlRequest = urlRequest
         self.tabUUID = tabUUID
-        self.tabUUIDs = tabUUIDs
         self.selectedTabIndex = selectedTabIndex
         self.moveTabData = moveTabData
         self.toastType = toastType

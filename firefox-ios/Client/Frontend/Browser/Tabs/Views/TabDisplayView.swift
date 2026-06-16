@@ -278,11 +278,7 @@ final class TabDisplayView: UIView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         guard let tab = tabsState.tabs[safe: indexPath.row] else { return }
-        let action = TabPanelViewAction(panelType: panelType,
-                                        tabUUIDs: [tab.tabUUID],
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.prefetchScreenshots)
-        store.dispatch(action)
+        dispatchPrefetchScreenshot(for: tab.tabUUID)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -337,10 +333,15 @@ final class TabDisplayView: UIView,
     // MARK: - UICollectionViewDataSourcePrefetching
 
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let tabUUIDs = indexPaths.compactMap { tabsState.tabs[safe: $0.row]?.tabUUID }
-        guard !tabUUIDs.isEmpty else { return }
+        for indexPath in indexPaths {
+            guard let tab = tabsState.tabs[safe: indexPath.row] else { continue }
+            dispatchPrefetchScreenshot(for: tab.tabUUID)
+        }
+    }
+
+    private func dispatchPrefetchScreenshot(for tabUUID: TabUUID) {
         let action = TabPanelViewAction(panelType: panelType,
-                                        tabUUIDs: tabUUIDs,
+                                        tabUUID: tabUUID,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.prefetchScreenshots)
         store.dispatch(action)

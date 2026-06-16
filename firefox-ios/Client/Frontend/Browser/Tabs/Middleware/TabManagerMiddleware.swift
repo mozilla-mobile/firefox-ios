@@ -95,14 +95,14 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         case ScreenshotActionType.screenshotTaken:
             tabManager(for: action.windowUUID)?.tabDidSetScreenshot(action.tab)
         case ScreenshotActionType.screenshotRestored:
-            // TODO: Laurie
-            // The screenshot was just loaded from disk, so we only need to refresh the
-            // tab tray. Saving back would be redundant work.
+            // The screenshot was just loaded from disk, so we only need to refresh the tab tray
             break
         default:
             return
         }
 
+        // Both screenshotTaken and screenshotRestored fall through here so the tab tray
+        // rebinds with the new `tab.screenshot`
         guard let tabsState = state.componentState(TabsPanelState.self,
                                                    for: .tabsPanel,
                                                    window: action.windowUUID) else { return }
@@ -254,22 +254,20 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
 
         case TabPanelViewActionType.prefetchScreenshots:
-            guard let tabUUIDs = action.tabUUIDs else { return }
-            prefetchScreenshots(for: tabUUIDs, windowUUID: action.windowUUID)
+            guard let tabUUID = action.tabUUID else { return }
+            prefetchScreenshot(for: tabUUID, windowUUID: action.windowUUID)
 
         default:
             break
         }
     }
 
-    /// Asks the tab manager to load the screenshots for the upcoming visible cells. The
-    /// tab manager will not load tabs screenshots which are already in memory.
-    private func prefetchScreenshots(for tabUUIDs: [TabUUID], windowUUID: WindowUUID) {
-        guard let tabManager = tabManager(for: windowUUID) else { return }
-        for tabUUID in tabUUIDs {
-            guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { continue }
-            tabManager.restoreScreenshot(for: tab)
-        }
+    /// Asks the tab manager to load the screenshot for an upcoming visible cell. The
+    /// tab manager will no-op if the tab's screenshot is already in memory.
+    private func prefetchScreenshot(for tabUUID: TabUUID, windowUUID: WindowUUID) {
+        guard let tabManager = tabManager(for: windowUUID),
+              let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
+        tabManager.restoreScreenshot(for: tab)
     }
 
     private func tabTrayDidLoad(for windowUUID: WindowUUID, panelType: TabTrayPanelType?) {

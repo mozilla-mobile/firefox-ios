@@ -120,15 +120,14 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    func test_prefetchScreenshotsAction_callsPreloadScreenshotForEachUUID() {
+    func test_prefetchScreenshotsAction_callsPreloadScreenshotForTab() {
         let subject = createSubject()
         let tabA = createTab(profile: mockProfile, urlString: "https://firefox.com")
-        let tabB = createTab(profile: mockProfile, urlString: "https://mozilla.com")
-        mockTabManager.tabsByUUID = [tabA.tabUUID: tabA, tabB.tabUUID: tabB]
+        mockTabManager.tabsByUUID = [tabA.tabUUID: tabA]
 
         let action = TabPanelViewAction(
             panelType: .tabs,
-            tabUUIDs: [tabA.tabUUID, tabB.tabUUID],
+            tabUUID: tabA.tabUUID,
             windowUUID: .XCTestDefaultUUID,
             actionType: TabPanelViewActionType.prefetchScreenshots
         )
@@ -137,25 +136,24 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(
             mockTabManager.preloadScreenshotCalls.map { $0.tabUUID },
-            [tabA.tabUUID, tabB.tabUUID]
+            [tabA.tabUUID]
         )
     }
 
-    func test_prefetchScreenshotsAction_skipsUnknownUUIDs() {
+    func test_prefetchScreenshotsAction_skipsUnknownUUID() {
         let subject = createSubject()
-        let tabA = createTab(profile: mockProfile, urlString: "https://firefox.com")
-        mockTabManager.tabsByUUID = [tabA.tabUUID: tabA]
+        mockTabManager.tabsByUUID = [:]
 
         let action = TabPanelViewAction(
             panelType: .tabs,
-            tabUUIDs: [tabA.tabUUID, "not-a-real-uuid"],
+            tabUUID: "not-a-real-uuid",
             windowUUID: .XCTestDefaultUUID,
             actionType: TabPanelViewActionType.prefetchScreenshots
         )
 
         subject.tabsPanelProvider(appState, action)
 
-        XCTAssertEqual(mockTabManager.preloadScreenshotCalls.map { $0.tabUUID }, [tabA.tabUUID])
+        XCTAssertTrue(mockTabManager.preloadScreenshotCalls.isEmpty)
     }
 
     // MARK: - Recent Tabs
