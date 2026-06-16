@@ -4211,7 +4211,7 @@ extension String {
                 public static let Description = MZLocalizedString(
                     key: "Settings.Search.GoogleLens.Description.v153",
                     tableName: "Settings",
-                    value: "Sends images and photos to Google for visual search.",
+                    value: "Send images to Google to search.",
                     comment: "In the Search settings, this is the description that describes the Google Lens feature"
                 )
 
