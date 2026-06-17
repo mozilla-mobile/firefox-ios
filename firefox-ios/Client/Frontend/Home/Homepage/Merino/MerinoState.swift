@@ -27,7 +27,6 @@ struct MerinoState: StateType, Equatable {
     var availableCategories: [MerinoCategoryConfiguration] {
         (merinoData.categories ?? [])
             .filter { !$0.recommendations.isEmpty }
-            .sorted { $0.rank < $1.rank }
     }
 
     func visibleStories(selectedNewsfeedCategoryID: String?) -> [MerinoStoryConfiguration] {
