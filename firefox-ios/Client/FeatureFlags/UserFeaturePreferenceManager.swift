@@ -52,7 +52,7 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
         if flag == .aiKillSwitch {
             return false
         } else {
-            return backendLayer.checkNimbusConfigFor(flag)
+            return backendLayer.checkNimbusConfigFor(flag, with: prefs)
         }
     }
 
