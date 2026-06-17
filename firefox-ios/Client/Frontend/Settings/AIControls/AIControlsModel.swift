@@ -110,7 +110,7 @@ class AIControlsModel: ObservableObject,
         }
 
         killSwitchIsOn = newValue
-        prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
+        userPreferences.setPreferenceFor(.aiKillSwitch, to: newValue)
         updatePageSummariesFeature(to: !newValue)
         updateTranslationsFeature(to: !newValue)
         updateQuickAnswersFeature(to: !newValue)
@@ -183,7 +183,7 @@ class AIControlsModel: ObservableObject,
         }
 
         pageSummariesEnabled = newValue
-        prefs.setBool(newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
+        userPreferences.setPreferenceFor(.hostedSummarizer, to: newValue)
     }
 
     @MainActor
@@ -198,7 +198,7 @@ class AIControlsModel: ObservableObject,
         }
 
         quickAnswersEnabled = newValue
-        prefs.setBool(newValue, forKey: PrefsKeys.Settings.quickAnswersFeature)
+        userPreferences.setPreferenceFor(.quickAnswers, to: newValue)
         store.dispatch(QuickAnswersAction(
             windowUUID: windowUUID,
             actionType: QuickAnswersActionType.didSettingsChange
