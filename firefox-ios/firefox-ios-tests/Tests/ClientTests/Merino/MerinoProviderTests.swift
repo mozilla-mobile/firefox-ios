@@ -211,7 +211,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(control.fetcher.callCount, 0)
     }
 
-    func test_fetchContent_fetchesFromNetwork_whenCategoriesEnabledAndCachedResponseHasNoFeeds() async throws {
+    func test_fetchContent_returnsCached_whenCategoriesEnabledAndCachedResponseHasFlatStoriesOnly() async throws {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             HomepageRedesignFeature(categoriesEnabled: true)
         }
@@ -221,18 +221,17 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
             items: [.makeItem("cached-story")],
             feeds: nil
         )
-        let networkFeeds = [FeedSection.makeSection(feedId: "technology", recommendations: [.makeItem("tech-story")])]
         control.cache.seed(response: cachedResponse, lastUpdated: Date())
         control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
             items: [.makeItem("network-story")],
-            feeds: networkFeeds
+            feeds: [FeedSection.makeSection(feedId: "technology", recommendations: [.makeItem("tech-story")])]
         )
 
         let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(control.fetcher.callCount, 1)
-        XCTAssertEqual(result.feeds?.first?.feedId, "technology")
-        XCTAssertTrue(control.cache.didClear)
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertEqual(result.data.map(\.title), ["cached-story"])
+        XCTAssertFalse(control.cache.didClear)
     }
 
     func test_fetchContent_returnsCached_whenCategoriesEnabledAndCachedResponseHasFeeds() async throws {
@@ -259,7 +258,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertFalse(control.cache.didClear)
     }
 
-    func test_fetchContent_fetchesFromNetwork_whenCategoriesDisabledAndCachedResponseHasNoStories() async throws {
+    func test_fetchContent_returnsCached_whenCategoriesDisabledAndCachedResponseHasCategoryStoriesOnly() async throws {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             HomepageRedesignFeature(categoriesEnabled: false)
         }
@@ -269,6 +268,25 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         let cachedResponse = CuratedRecommendationsResponse.makeResponse(
             items: [],
             feeds: cachedFeeds
+        )
+        control.cache.seed(response: cachedResponse, lastUpdated: Date())
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("network-story")],
+            feeds: nil
+        )
+
+        let result = try await control.subject.fetchContent()
+
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertEqual(result.feeds?.first?.feedId, "technology")
+        XCTAssertFalse(control.cache.didClear)
+    }
+
+    func test_fetchContent_fetchesFromNetwork_whenCachedResponseHasNoDisplayableContent() async throws {
+        let control = await createSubject(thresholdHours: 1)
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [],
+            feeds: [FeedSection.makeSection(feedId: "technology", recommendations: [])]
         )
         control.cache.seed(response: cachedResponse, lastUpdated: Date())
         control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
