@@ -19,6 +19,7 @@ if releaseCheck.isReleaseBranch {
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
     checkForSpecificFileChange()
     checkForGleanFileChange()
+    checkForNimbusFeatureChange()
     CodeUsageDetector().checkForCodeUsage()
     let coverageGate = CodeCoverageGate()
     coverageGate.failOnFiles(type: .newFiles)
@@ -470,6 +471,43 @@ func checkForGleanFileChange() {
         and tag @adudenamedruby for data review.
         """)
     }
+}
+
+// Detect added/removed Nimbus features and request a spreadsheet update
+func checkForNimbusFeatureChange() {
+    let nimbusFeaturesPath = "firefox-ios/nimbus-features/"
+    let nimbusManifestPath = "firefox-ios/nimbus.fml.yaml"
+    let spreadsheetURL = "https://docs.google.com/spreadsheets/d/1j5Eo0kY3LDgfKdeVu44PxYmkWMRJ1QaU07NTCl2c0Kg/edit?gid=842661143#gid=842661143"
+
+    let isFeatureFile: (String) -> Bool = { file in
+        file.contains(nimbusFeaturesPath) && file.hasSuffix(".yaml")
+    }
+    let createdFeatures = danger.git.createdFiles.filter(isFeatureFile)
+    let deletedFeatures = danger.git.deletedFiles.filter(isFeatureFile)
+    let manifestModified = danger.git.modifiedFiles.contains(nimbusManifestPath)
+
+    guard !createdFeatures.isEmpty || !deletedFeatures.isEmpty || manifestModified else { return }
+
+    var sections: [String] = []
+    if !createdFeatures.isEmpty {
+        let bullets = createdFeatures.map { "• `\($0)`" }.joined(separator: "\n")
+        sections.append("**Added feature file(s):**\n\(bullets)")
+    }
+    if !deletedFeatures.isEmpty {
+        let bullets = deletedFeatures.map { "• `\($0)`" }.joined(separator: "\n")
+        sections.append("**Removed feature file(s):**\n\(bullets)")
+    }
+    if manifestModified {
+        sections.append("**Manifest modified:** `\(nimbusManifestPath)`")
+    }
+
+    markdown("""
+    ### 🧪 **Nimbus feature changes detected**
+    \(sections.joined(separator: "\n\n"))
+
+    If a feature was added or removed, please update the \
+    [Nimbus features tracking spreadsheet](\(spreadsheetURL)) to reflect the change.
+    """)
 }
 
 private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
