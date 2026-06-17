@@ -70,6 +70,9 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     private lazy var googleLensRightView: UIView = {
         let container = UIView(frame: CGRect(origin: .zero, size: UX.googleLensRightViewSize))
+        container.isAccessibilityElement = true
+        container.accessibilityLabel = .AddressToolbar.GoogleLens.A11yLabel
+        container.accessibilityTraits = .button
         container.addSubview(googleLensImageView)
         return container
     }()
