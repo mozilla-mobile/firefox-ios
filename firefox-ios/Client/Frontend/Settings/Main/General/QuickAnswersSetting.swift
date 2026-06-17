@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-final class QuickAnswersSetting: Setting {
+final class QuickAnswersSetting: Setting, UserFeaturePreferenceProvider {
     private weak var settingsDelegate: GeneralSettingsDelegate?
     private let profile: Profile?
 
@@ -21,8 +21,7 @@ final class QuickAnswersSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     override var status: NSAttributedString? {
-        guard let profile else { return nil }
-        let isSwitchOn = profile.prefs.boolForKey(PrefsKeys.Settings.quickAnswersFeature) ?? true
+        let isSwitchOn = userPreferences.getPreferenceFor(.quickAnswers)
         // TODO: - FXIOS-14720 Add Strings
         let statusString: String = isSwitchOn ? "On" : "Off"
         return NSAttributedString(string: statusString)
