@@ -4,7 +4,8 @@
 
 import UIKit
 
-// This class contains Nova design system color primitives.
+// This class contains Nova colors referenced in
+// https://www.figma.com/design/13nzUgAKwSiWeqvyWnp2KY/branch/XrQf2Lqhpi2s5N03lTtJ5h/iOS-Library--2025-?node-id=12098-204
 // These should never be called directly; they should only be used from a Nova theme.
 final class NovaColors {
     // MARK: - Black & White
