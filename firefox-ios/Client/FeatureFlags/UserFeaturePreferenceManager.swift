@@ -51,6 +51,9 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
         // Even when this feature is on in Nimbus, the user preference default value should be false
         if flag == .aiKillSwitch {
             return false
+        // This feature has no nimbus configuration anymore, the default value should be false
+        } else if flag == .hntSponsoredShortcuts {
+            return false
         } else {
             return backendLayer.checkNimbusConfigFor(flag)
         }

@@ -26,7 +26,6 @@ include:
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/googleLensFeature.yaml
-  - nimbus-features/hntSponsoredShortcutsFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/homepageTrackerBlockerModuleFeature.yaml
   - nimbus-features/hostedSummarizerFeature.yaml
