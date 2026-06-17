@@ -42,7 +42,6 @@ final class WorldCupMiddleware {
             self.startFeed(windowUUID: action.windowUUID)
         case HomepageActionType.viewDidAppear:
             self.homepageIsOnScreen = true
-            self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
         case HomepageActionType.viewWillDisappear:
             self.homepageIsOnScreen = false
         case WorldCupActionType.didChangeHomepageSettings:
@@ -53,7 +52,6 @@ final class WorldCupMiddleware {
             self.dispatch(snapshot: .empty)
         case WorldCupActionType.selectTeam:
             let countryId = (action as? WorldCupAction)?.selectedCountryId
-            self.worldCupStore.setSeenWinningMatchIDs([])
             self.worldCupStore.setSelectedTeam(countryId: countryId)
             self.startFeed(windowUUID: action.windowUUID)
         case WorldCupActionType.worldCupDidStart:

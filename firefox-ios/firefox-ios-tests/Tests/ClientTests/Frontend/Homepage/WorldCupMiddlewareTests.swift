@@ -1166,37 +1166,6 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
-    func test_confetti_whenOffScreenAtFetch_isSuppressedThenCelebratesOnViewDidAppear() throws {
-        mockWorldCupStore.isFeatureEnabled = true
-        mockWorldCupStore.isHomepageSectionEnabled = true
-        mockWorldCupStore.isMilestone2 = true
-        mockWorldCupStore.isCelebrationAnimationEnabled = true
-        mockWorldCupStore.selectedTeam = "ARG"
-        let response = WorldCupMatchesResponse(
-            now: "2026-06-12T21:00:00+00:00",
-            previous: nil,
-            current: nil,
-            next: [makeWinningMatch(id: 1, winner: "ARG", loser: "BRA", date: "2026-06-12T18:00:00+00:00")]
-        )
-        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
-        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
-
-        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
-        let offScreenExpectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(appState, action)
-        wait(for: [offScreenExpectation])
-
-        XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
-        XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
-
-        bringHomepageOnScreen(subject)
-
-        let dispatched = try XCTUnwrap(latestWorldCupAction())
-        XCTAssertTrue(dispatched.shouldShowConfetti)
-        XCTAssertFalse(mockWorldCupStore.seenWinningMatchIDs.isEmpty)
-        subject.worldCupProvider = { _, _ in }
-    }
-
     func test_viewWillDisappear_suppressesConfettiWhileOffScreen() throws {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
@@ -1226,28 +1195,6 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
         XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
-        subject.worldCupProvider = { _, _ in }
-    }
-
-    func test_selectTeam_clearsSeenWinningMatchIDs() throws {
-        mockWorldCupStore.isMilestone2 = false
-        mockWorldCupStore.seenWinningMatchIDs = ["ARG|BRA|2026-06-12T18:00:00+00:00"]
-        let subject = createSubject(apiClient: nil)
-        let action = WorldCupAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: WorldCupActionType.selectTeam,
-            selectedCountryId: "FRA"
-        )
-
-        let expectation = XCTestExpectation(description: "didUpdate dispatched")
-        mockStore.dispatchCalled = { expectation.fulfill() }
-
-        subject.worldCupProvider(appState, action)
-
-        wait(for: [expectation])
-
-        XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 1)
-        XCTAssertEqual(mockWorldCupStore.lastSetSeenWinningMatchIDs, Set<String>())
         subject.worldCupProvider = { _, _ in }
     }
 
