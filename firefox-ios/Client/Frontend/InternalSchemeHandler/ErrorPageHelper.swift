@@ -416,8 +416,7 @@ extension ErrorPageHelper: TabContentScript {
         case MessageCertVisitOnce:
             // User taps "visit anyway" for an untrusted connection
             if let cert = certFromErrorURL(errorURL),
-                let host = originalURL.host {
-                let origin = "\(host):\(originalURL.port ?? 443)"
+               let origin = CertStore.origin(for: originalURL) {
                 certStore?.addCertificate(cert, forOrigin: origin)
                 // Note: webview.reload will not change the error URL back to the original URL
                 message.webView?.replaceLocation(with: originalURL)
