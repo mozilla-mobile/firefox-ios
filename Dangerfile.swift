@@ -399,7 +399,7 @@ func checkForSpecificFileChange() {
                 ].contains { file.hasSuffix($0) }
             },
             message: "Detected tab related changes in:",
-            contacts: "(cc @lmarceau)"
+            contacts: "(cc @yoanarios)"
         ),
         FileCheck(
             fileMatches: { $0.hasSuffix(".sh") },
