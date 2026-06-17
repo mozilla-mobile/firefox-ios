@@ -113,6 +113,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .needsReloadRefactor:
             return checkNeedsReloadRefactorFeature()
 
+        case .novaDesign:
+            return checkNovaDesignFeature()
+
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
 
@@ -436,6 +439,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkNeedsReloadRefactorFeature() -> Bool {
         return nimbus.features.needsReloadRefactor.value().enabled
+    }
+
+    private func checkNovaDesignFeature() -> Bool {
+        return nimbus.features.novaDesignFeature.value().enabled
     }
 
     private func checkAiKillSwitchFeature() -> Bool {
