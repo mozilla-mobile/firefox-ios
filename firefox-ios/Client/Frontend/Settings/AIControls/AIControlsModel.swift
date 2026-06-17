@@ -183,7 +183,7 @@ class AIControlsModel: ObservableObject,
         }
 
         pageSummariesEnabled = newValue
-        userPreferences.setPreferenceFor(.hostedSummarizer, to: newValue)
+        prefs.setBool(newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
     }
 
     @MainActor
