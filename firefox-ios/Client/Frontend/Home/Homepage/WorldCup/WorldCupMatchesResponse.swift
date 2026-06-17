@@ -73,6 +73,8 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
         /// `.unknown(raw)` so a new merino value doesn't fail decode and the
         /// raw label is still available for logging.
         let stage: Stage?
+        /// The game status, e.g. "Scheduled", "Delayed", "Postponed", "Break".
+        let status: String?
 
         init(date: String,
              globalEventId: Int,
@@ -88,6 +90,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
              clock: String? = nil,
              updated: Int? = nil,
              statusType: String? = nil,
+             status: String? = nil,
              stage: Stage? = nil) {
             self.date = date
             self.globalEventId = globalEventId
@@ -103,6 +106,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             self.clock = clock
             self.updated = updated
             self.statusType = statusType
+            self.status = status
             self.stage = stage
         }
 
@@ -125,6 +129,17 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             if homeTotal > awayTotal { return homeTeam }
             if awayTotal > homeTotal { return awayTeam }
             return nil
+        }
+
+        /// Whether the match is currently in a half-time break, either the
+        /// regulation half-time or the extra-time half-time break.
+        var isInBreak: Bool {
+            // During a penalty shootout we ignore the "Break" status: a
+            // half-time label makes no sense in a shootout, so don't show it.
+            if ["pen", "penaltyshootout"].contains(period?.lowercased() ?? "") || homePenalty != nil || awayPenalty != nil {
+                return false
+            }
+            return status == "Break"
         }
 
         /// Closed set of tournament stages emitted by merino's `stage` field.

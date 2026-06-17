@@ -27,9 +27,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
-        case .addressBarMenu:
-            return checkAddressBarMenuFeature()
-
         case .adsClient:
             return checkAdsClientFeature()
 
@@ -51,6 +48,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature()
 
+        case .deeplinkOverlay:
+            return checkDeeplinkOverlayFeature()
+
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature()
 
@@ -59,6 +59,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature()
+
+        case .googleLens:
+            return checkGoogleLensFeature()
 
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature()
@@ -109,6 +112,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .needsReloadRefactor:
             return checkNeedsReloadRefactorFeature()
+
+        case .novaDesign:
+            return checkNovaDesignFeature()
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
@@ -172,9 +178,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .touFeature:
             return checkTouFeature()
-
-        case .trackingProtectionRefactor:
-            return checkTrackingProtectionRefactor()
 
         case .translation:
             return checkTranslationFeature()
@@ -286,11 +289,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.touFeature.value().status
     }
 
-    private func checkTrackingProtectionRefactor() -> Bool {
-        let config = nimbus.features.trackingProtectionRefactor.value()
-        return config.enabled
-    }
-
     private func checkTranslationFeature() -> Bool {
         return nimbus.features.translationsFeature.value().enabled
     }
@@ -342,14 +340,13 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return config.status
     }
 
-    private func checkAddressBarMenuFeature() -> Bool {
-        let config = nimbus.features.addressBarMenuFeature.value()
-        return config.status
-    }
-
     private func checkDeeplinkOptimizationRefactorFeature() -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
+    }
+
+    private func checkDeeplinkOverlayFeature() -> Bool {
+        return nimbus.features.deeplinkOverlayFeature.value().enabled
     }
 
     private func checkDownloadLiveActivitiesFeature() -> Bool {
@@ -364,6 +361,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
+    }
+
+    private func checkGoogleLensFeature() -> Bool {
+        return nimbus.features.googleLensFeature.value().enabled
     }
 
     private func checkMicrosurveyFeature() -> Bool {
@@ -438,6 +439,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkNeedsReloadRefactorFeature() -> Bool {
         return nimbus.features.needsReloadRefactor.value().enabled
+    }
+
+    private func checkNovaDesignFeature() -> Bool {
+        return nimbus.features.novaDesignFeature.value().enabled
     }
 
     private func checkAiKillSwitchFeature() -> Bool {

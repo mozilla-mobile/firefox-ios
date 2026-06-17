@@ -287,7 +287,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
 
-        NSLayoutConstraint.activate([
+        var constraints = [
             view.heightAnchor.constraint(equalToConstant: UX.topTabsViewHeight),
 
             newTab.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -295,7 +295,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
             newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
 
             privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
             privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
 
@@ -308,7 +307,21 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
             collectionView.bottomAnchor.constraint(equalTo: topTabFader.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: topTabFader.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
-        ])
+        ]
+
+        if #available(iOS 26.0, *) {
+            constraints.append(
+                privateModeButton.leadingAnchor.constraint(
+                    equalTo: view.layoutGuide(for: .margins(cornerAdaptation: .horizontal)).leadingAnchor
+                )
+            )
+        } else {
+            constraints.append(
+                privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)
+            )
+        }
+
+        NSLayoutConstraint.activate(constraints)
 
         newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.trailingEdgeSpace).isActive = true
     }

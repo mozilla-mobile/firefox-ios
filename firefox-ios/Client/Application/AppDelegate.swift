@@ -31,7 +31,8 @@ class AppDelegate: UIResponder,
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNewAppearanceMenuOnClosure: { self.featureFlagsProvider.isEnabled(.appearanceMenu) }
+        isNewAppearanceMenuOnClosure: { self.featureFlagsProvider.isEnabled(.appearanceMenu) },
+        isNovaDesignOnClosure: { self.featureFlagsProvider.isEnabled(.novaDesign) }
     )
     lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()

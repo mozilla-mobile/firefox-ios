@@ -292,12 +292,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-
-        if featureFlagsProvider.isEnabled(.trackingProtectionRefactor) {
-            XCTAssertTrue(mockRouter.presentedViewController is UINavigationController)
-        } else {
-            XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
-        }
+        XCTAssertTrue(mockRouter.presentedViewController is UINavigationController)
     }
 
     func testStartShareSheetCoordinator_addsShareSheetCoordinator() {

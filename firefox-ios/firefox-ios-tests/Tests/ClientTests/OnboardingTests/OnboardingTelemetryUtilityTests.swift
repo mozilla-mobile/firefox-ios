@@ -376,14 +376,7 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
         line: UInt = #line
     ) -> OnboardingTelemetryUtility {
         let nimbusConfigUtility = NimbusOnboardingTestingConfigUtility()
-        let cardOrder: [NimbusOnboardingTestingConfigUtility.CardOrder] = {
-            switch onboardingType {
-            case .freshInstall:
-                return [.welcome, .notifications, .sync]
-            case .upgrade:
-                return [.updateWelcome, .updateSync]
-            }
-        }()
+        let cardOrder: [NimbusOnboardingTestingConfigUtility.CardOrder] = [.welcome, .notifications, .sync]
         nimbusConfigUtility.setupNimbus(withOrder: cardOrder, uiVariant: variant)
         let layer = NimbusOnboardingKitFeatureLayer(
             onboardingVariant: variant,

@@ -14,7 +14,7 @@ class OpeningScreenTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307039
     func testLastOpenedTab() {
         // Open a web page
-        browserScreen.navigateToURL(path(forTestPage: "test-mozilla-org.html"))
+        browserScreen.navigateToURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         // Close the app from app switcher. Relaunch the app
         closeFromAppSwitcherAndRelaunch()

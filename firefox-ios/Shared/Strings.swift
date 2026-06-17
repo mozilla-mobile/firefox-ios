@@ -2241,11 +2241,6 @@ extension String {
 
             public struct BrandRefresh {
                 public struct TermsOfUse {
-                    public static let Title = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148",
-                        tableName: "Onboarding",
-                        value: "Get ready to run free",
-                        comment: "Title for the Terms of Use card in the v148 brand refresh onboarding flow.")
                     public static let Description = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148",
                         tableName: "Onboarding",
@@ -2271,22 +2266,6 @@ extension String {
                         tableName: "Onboarding",
                         value: "Privacy Notice",
                         comment: "The text for the Privacy Notice link button in the v148 brand refresh onboarding flow.")
-                    public static let ManagePreferenceAgreement = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148",
-                        tableName: "Onboarding",
-                        value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
-                        comment: "Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences.")
-                    public static let ManageLink = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148",
-                        tableName: "Onboarding",
-                        value: "Manage settings",
-                        comment: "The text for the manage settings link button in the v148 brand refresh onboarding flow.")
-                    @available(*, deprecated, message: "Use AgreementButtonTitleV2 instead")
-                    public static let AgreementButtonTitle = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148",
-                        tableName: "Onboarding",
-                        value: "Agree and continue",
-                        comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
                     public static let AgreementButtonTitleV2 = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2",
                         tableName: "Onboarding",
@@ -2295,11 +2274,6 @@ extension String {
                 }
 
                 public struct Welcome {
-                    public static let TitleV2 = MZLocalizedString(
-                        key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2",
-                        tableName: "Onboarding",
-                        value: "Open your links with built-in privacy",
-                        comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
                     public static let TitleV3 = MZLocalizedString(
                         key: "Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149",
                         tableName: "Onboarding",
@@ -2802,24 +2776,6 @@ extension String {
         }
 
         public struct Customization {
-            public struct Intro {
-                public static let Title = MZLocalizedString(
-                    key: "Onboarding.Customization.Intro.Title.v123",
-                    tableName: "Onboarding",
-                    value: "%@ puts you in control",
-                    comment: "String used to describe the title of the customization onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox).")
-                public static let Description = MZLocalizedString(
-                    key: "Onboarding.Customization.Intro.Description.v123",
-                    tableName: "Onboarding",
-                    value: "Set your theme and toolbar to match your unique browsing style.",
-                    comment: "String used to describe the description label of the customization onboarding page in our Onboarding screens.")
-                public static let SkipAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Intro.Skip.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Start Browsing",
-                    comment: "String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing.")
-            }
-
             public struct Theme {
                 public static let Title = MZLocalizedString(
                     key: "Onboarding.Customization.Theme.Title.v123",
@@ -2831,11 +2787,6 @@ extension String {
                     tableName: "Onboarding",
                     value: "See the web in the best light.",
                     comment: "String used to describe the description label of the theme customization onboarding page in our Onboarding screens.")
-                public static let SkipAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.Skip.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Skip",
-                    comment: "String used to describe the option to skip the theme customization in Firefox Onboarding screens.")
             }
 
             public struct Toolbar {
@@ -2849,11 +2800,6 @@ extension String {
                     tableName: "Onboarding",
                     value: "Keep searches within reach.",
                     comment: "String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens.")
-                public static let SkipAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Toolbar.Skip.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Skip",
-                    comment: "String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app.")
             }
         }
     }
@@ -3491,6 +3437,22 @@ extension String {
                     )
                 }
 
+                public struct GoogleLensSection {
+                    public static let Title = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.GoogleLensSection.Title.v153",
+                        tableName: "Settings",
+                        value: "Google Lens",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the title that describes the Google Lens feature"
+                    )
+
+                    public static let Message = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.GoogleLensSection.Message.v153",
+                        tableName: "Settings",
+                        value: "Sends images and photos to Google for visual search.",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the message that describes the Google Lens feature"
+                    )
+                }
+
                 public static let BlockedStatus = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151",
                     tableName: "Settings",
@@ -3726,11 +3688,6 @@ extension String {
                 comment: "In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position.")
         }
         public struct Toolbar {
-            public static let Toolbar = MZLocalizedString(
-                key: "Settings.Toolbar.SettingsTitle",
-                tableName: nil,
-                value: "Toolbar",
-                comment: "In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance.")
             public static let Top = MZLocalizedString(
                 key: "Settings.Toolbar.Top",
                 tableName: nil,
@@ -5695,6 +5652,11 @@ extension String {
         tableName: nil,
         value: "Copy Image Link",
         comment: "Context menu item for copying an image URL to the clipboard")
+    public static let ContextMenuGoogleLens = MZLocalizedString(
+        key: "ContextMenu.GoogleLensButtonTitle.v153",
+        tableName: "WebContextMenu",
+        value: "Search Image with Google Lens",
+        comment: "Context menu item to search for an image using Google Lens")
 }
 
 // MARK: - Photo Library access
@@ -6910,17 +6872,6 @@ extension String {
 
 // MARK: - Tracking Protection menu
 extension String {
-    public static let ETPOn = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtectionOn.Title",
-        tableName: nil,
-        value: "Protections are ON for this site",
-        comment: "A switch to enable enhanced tracking protection inside the menu.")
-    public static let ETPOff = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtectionOff.Title",
-        tableName: nil,
-        value: "Protections are OFF for this site",
-        comment: "A switch to disable enhanced tracking protection inside the menu.")
-
     // Category Titles
     public static let TPCryptominersBlocked = MZLocalizedString(
         key: "Menu.TrackingProtectionCryptominersBlocked.Title",
@@ -7959,6 +7910,28 @@ extension String {
             tableName: "AddressToolbar",
             value: "Cancel",
             comment: "Label for button in the address toolbar, that cancels editing the address field when tapped.")
+
+        public struct GoogleLens {
+            public static let A11yLabel = MZLocalizedString(
+                key: "AddressToolbar.GoogleLens.A11yLabel.v153",
+                tableName: "AddressToolbar",
+                value: "Search with Google Lens",
+                comment: "Accessibility label describing the Google Lens button on the address toolbar that prompts a menu to allow the user to take a new photo or select an existing photo from their photo library to search with Google Lens.")
+
+            public struct ContextMenu {
+                public static let TakePhotoActionTitle = MZLocalizedString(
+                    key: "AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle.v153",
+                    tableName: "AddressToolbar",
+                    value: "Take Photo",
+                    comment: "Action title in the Google Lens address toolbar context menu. Opens the camera so the user can take a new photo to search with Google Lens.")
+
+                public static let PhotoLibraryActionTitle = MZLocalizedString(
+                    key: "AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle.v153",
+                    tableName: "AddressToolbar",
+                    value: "Photo Library",
+                    comment: "Action title in the Google Lens address toolbar context menu. Opens the photo library picker so the user can choose an existing photo to search with Google Lens.")
+            }
+        }
     }
 }
 
@@ -8751,20 +8724,6 @@ extension String {
         comment: "Title for the inactive tabs section. This section groups all tabs that haven't been used in a while.")
 }
 
-// MARK: - v36 Strings
-extension String {
-    public static let ProtectionStatusSecure = MZLocalizedString(
-        key: "ProtectionStatus.Secure",
-        tableName: nil,
-        value: "Connection is secure",
-        comment: "This is the value for a label that indicates if a user is on a secure https connection.")
-    public static let ProtectionStatusNotSecure = MZLocalizedString(
-        key: "ProtectionStatus.NotSecure",
-        tableName: nil,
-        value: "Connection is not secure",
-        comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
-}
-
 // MARK: - Strings to be removed
 extension String {
     /// For more detailed information on how to use this struct, please see
@@ -9123,6 +9082,26 @@ extension String {
                 comment: "The label indicating the displaying match has ended after penalties.")
         }
         struct v153 {
+            public static let ProtectionStatusSecure = MZLocalizedString(
+                key: "ProtectionStatus.Secure",
+                tableName: nil,
+                value: "Connection is secure",
+                comment: "This is the value for a label that indicates if a user is on a secure https connection.")
+            public static let ProtectionStatusNotSecure = MZLocalizedString(
+                key: "ProtectionStatus.NotSecure",
+                tableName: nil,
+                value: "Connection is not secure",
+                comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
+            public static let ETPOn = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtectionOn.Title",
+                tableName: nil,
+                value: "Protections are ON for this site",
+                comment: "A switch to enable enhanced tracking protection inside the menu.")
+            public static let ETPOff = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtectionOff.Title",
+                tableName: nil,
+                value: "Protections are OFF for this site",
+                comment: "A switch to disable enhanced tracking protection inside the menu.")
             public static let UpgradeWelcomeTitle = MZLocalizedString(
                 key: "Upgrade.Welcome.Title.v114",
                 tableName: "Upgrade",
@@ -9153,6 +9132,61 @@ extension String {
                 tableName: "Upgrade",
                 value: "Sign In",
                 comment: "Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade.")
+            public static let Toolbar = MZLocalizedString(
+                key: "Settings.Toolbar.SettingsTitle",
+                tableName: nil,
+                value: "Toolbar",
+                comment: "In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance.")
+            public static let OnboardingCustomizationIntroTitle = MZLocalizedString(
+                key: "Onboarding.Customization.Intro.Title.v123",
+                tableName: "Onboarding",
+                value: "%@ puts you in control",
+                comment: "String used to describe the title of the customization onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox).")
+            public static let OnboardingCustomizationIntroDescription = MZLocalizedString(
+                key: "Onboarding.Customization.Intro.Description.v123",
+                tableName: "Onboarding",
+                value: "Set your theme and toolbar to match your unique browsing style.",
+                comment: "String used to describe the description label of the customization onboarding page in our Onboarding screens.")
+            public static let OnboardingCustomizationIntroSkipAction = MZLocalizedString(
+                key: "Onboarding.Customization.Intro.Skip.Action.v123",
+                tableName: "Onboarding",
+                value: "Start Browsing",
+                comment: "String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing.")
+            public static let OnboardingCustomizationThemeSkipAction = MZLocalizedString(
+                key: "Onboarding.Customization.Theme.Skip.Action.v123",
+                tableName: "Onboarding",
+                value: "Skip",
+                comment: "String used to describe the option to skip the theme customization in Firefox Onboarding screens.")
+            public static let OnboardingCustomizationToolbarSkipAction = MZLocalizedString(
+                key: "Onboarding.Customization.Toolbar.Skip.Action.v123",
+                tableName: "Onboarding",
+                value: "Skip",
+                comment: "String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app.")
+            public static let OnboardingBrandRefreshTermsOfUseTitle = MZLocalizedString(
+                key: "Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148",
+                tableName: "Onboarding",
+                value: "Get ready to run free",
+                comment: "Title for the Terms of Use card in the v148 brand refresh onboarding flow.")
+            public static let OnboardingBrandRefreshTermsOfUseManagePreferenceAgreement = MZLocalizedString(
+                key: "Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148",
+                tableName: "Onboarding",
+                value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
+                comment: "Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences.")
+            public static let OnboardingBrandRefreshTermsOfUseManageLink = MZLocalizedString(
+                key: "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148",
+                tableName: "Onboarding",
+                value: "Manage settings",
+                comment: "The text for the manage settings link button in the v148 brand refresh onboarding flow.")
+            public static let OnboardingBrandRefreshTermsOfUseAgreementButtonTitle = MZLocalizedString(
+                key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148",
+                tableName: "Onboarding",
+                value: "Agree and continue",
+                comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
+            public static let OnboardingBrandRefreshWelcomeTitleV2 = MZLocalizedString(
+                key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2",
+                tableName: "Onboarding",
+                value: "Open your links with built-in privacy",
+                comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
         }
     }
 }

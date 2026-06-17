@@ -95,6 +95,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .deeplinkOverlay,
+                titleText: format(string: "Deeplink Overlay"),
+                statusText: format(string: "Toggle to show the background overlay for all tabs")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .downloadLiveActivities,
                 titleText: format(string: "Download Live Activities"),
                 statusText: format(string: "Toggle to enable download live activities")
@@ -102,9 +109,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .trackingProtectionRefactor,
-                titleText: format(string: "Enhanced Tracking Protection"),
-                statusText: format(string: "Toggle to use enhanced tracking protection")
+                with: .googleLens,
+                titleText: format(string: "Google Lens"),
+                statusText: format(string: "Toggle to enable Google Lens entry points")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -180,16 +187,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .addressBarMenu,
-                titleText: format(string: "New AddressBar Menu"),
-                statusText: format(string: "Toggle to show the new address bar menu")
+                with: .noInternetConnectionErrorPage,
+                titleText: format(string: "NIC Native Error Page"),
+                statusText: format(string: "Toggle to display natively created no internet connection error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .noInternetConnectionErrorPage,
-                titleText: format(string: "NIC Native Error Page"),
-                statusText: format(string: "Toggle to display natively created no internet connection error page")
+                with: .novaDesign,
+                titleText: format(string: "Nova Design"),
+                statusText: format(string: "Toggle to enable Nova design")
             ) { [weak self] _ in
                 self?.reloadView()
             },

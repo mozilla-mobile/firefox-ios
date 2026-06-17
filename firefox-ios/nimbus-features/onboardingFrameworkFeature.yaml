@@ -666,8 +666,6 @@ enums:
     description: >
       Which UI style this onboarding card is designed for.
     variants:
-      legacy:
-        description: Use the existing (legacy) onboarding UI.
       modern:
         description: Use the new (modern) onboarding UI.
       japan:
@@ -799,10 +797,6 @@ enums:
       fresh-install:
         description: >
           Corresponding to onboarding cards that are for new users
-      upgrade:
-        description: >
-          Corresponding to onboarding cards that are for users
-          who have updated
   OnboardingMultipleChoiceAction:
     description: >
       The identifiers for the different actions available for cards in onboarding

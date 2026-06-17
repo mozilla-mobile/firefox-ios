@@ -71,7 +71,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
             waitForElementsToExist(
                 [
                     app.navigationBars["Reminders"],
-                    app.links.elementContainingText("test-mozilla-book.html")
+                    app.links.elementContainingText(TestPages.mozillaBook)
                 ]
             )
         }
@@ -94,7 +94,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Copy")
-        openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
+        openNewTabAndValidateURLisPaste(url: TestPages.mozillaBook)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864308
@@ -189,7 +189,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
