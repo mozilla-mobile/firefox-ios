@@ -512,6 +512,7 @@ final class LocationView: UIView,
         // causing the keyboard to hide.
         // TODO: FXIOS-14618 don't fire the `keyboardWillHide` notification on device rotation
         let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
+        urlTextField.googleLensA11yLabel = config.googleLensA11yLabel
         urlTextField.shouldShowGoogleLensIcon = configurationIsEditing &&
             config.shouldShowGoogleLensIcon
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()

@@ -53,6 +53,12 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         }
     }
 
+    var googleLensA11yLabel = "" {
+        didSet {
+            googleLensRightView.accessibilityLabel = googleLensA11yLabel
+        }
+    }
+
     private lazy var googleLensImageView: UIImageView = {
         let imageView = UIImageView(
             image: UIImage(named: StandardImageIdentifiers.Medium.googleLens)?.withRenderingMode(.alwaysTemplate)
@@ -71,7 +77,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private lazy var googleLensRightView: UIView = {
         let container = UIView(frame: CGRect(origin: .zero, size: UX.googleLensRightViewSize))
         container.isAccessibilityElement = true
-        container.accessibilityLabel = .AddressToolbar.GoogleLens.A11yLabel
+        container.accessibilityLabel = googleLensA11yLabel
         container.accessibilityTraits = .button
         container.addSubview(googleLensImageView)
         return container

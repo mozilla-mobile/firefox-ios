@@ -26,6 +26,7 @@ public struct LocationViewConfiguration {
     public let shouldShowKeyboard: Bool
     public let shouldSelectSearchTerm: Bool
     public let shouldShowGoogleLensIcon: Bool
+    public let googleLensA11yLabel: String
     public var onTapLockIcon: (@MainActor (UIButton) -> Void)?
     public var onLongPress: (@MainActor () -> Void)?
 
@@ -48,6 +49,7 @@ public struct LocationViewConfiguration {
         shouldShowKeyboard: Bool,
         shouldSelectSearchTerm: Bool,
         shouldShowGoogleLensIcon: Bool = false,
+        googleLensA11yLabel: String = "",
         onTapLockIcon: (@MainActor (UIButton) -> Void)? = nil,
         onLongPress: (@MainActor () -> Void)? = nil
     ) {
@@ -69,6 +71,7 @@ public struct LocationViewConfiguration {
         self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.shouldShowGoogleLensIcon = shouldShowGoogleLensIcon
+        self.googleLensA11yLabel = googleLensA11yLabel
         self.onTapLockIcon = onTapLockIcon
         self.onLongPress = onLongPress
     }

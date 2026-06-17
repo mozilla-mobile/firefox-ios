@@ -78,6 +78,7 @@ final class AddressToolbarContainerModel: Equatable {
             shouldShowKeyboard: shouldShowKeyboard,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
             shouldShowGoogleLensIcon: shouldShowGoogleLensIcon,
+            googleLensA11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
             onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      buttonTapped: button,
