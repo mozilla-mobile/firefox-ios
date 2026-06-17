@@ -53,7 +53,7 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
             return false
         // This feature has no nimbus configuration anymore, the default value should be false
         } else if flag == .hntSponsoredShortcuts {
-            return false
+            return true
         } else {
             return backendLayer.checkNimbusConfigFor(flag)
         }
