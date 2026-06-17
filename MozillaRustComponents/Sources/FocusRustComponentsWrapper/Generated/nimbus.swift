@@ -982,6 +982,8 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
     
     func dumpStateToLog() throws 
     
+    func enrollInFirefoxLab(slug: String) throws  -> FirefoxLabsEnrollResult
+    
     /**
      * Fetches the list of experiments from the server. This does not affect the list
      * of active experiments or experiment enrolment.
@@ -999,6 +1001,8 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
      * It is not intended to be used to be used for user facing applications.
      */
     func getAvailableExperiments() throws  -> [AvailableExperiment]
+    
+    func getAvailableFirefoxLabs() throws  -> [FirefoxLabsMetadata]
     
     /**
      * Returns the branch allocated for a given slug or id.
@@ -1141,6 +1145,10 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
     
     func unenrollForGeckoPref(prefState: GeckoPrefState, prefUnenrollReason: PrefUnenrollReason) throws  -> [EnrollmentChangeEvent]
     
+    func unenrollFromAllFirefoxLabs() throws  -> [EnrollmentChangeEvent]
+    
+    func unenrollFromFirefoxLab(slug: String) throws  -> FirefoxLabsUnenrollResult
+    
 }
 open class NimbusClient: NimbusClientProtocol, @unchecked Sendable {
     fileprivate let handle: UInt64
@@ -1276,6 +1284,15 @@ open func dumpStateToLog()throws   {try rustCallWithError(FfiConverterTypeNimbus
 }
 }
     
+open func enrollInFirefoxLab(slug: String)throws  -> FirefoxLabsEnrollResult  {
+    return try  FfiConverterTypeFirefoxLabsEnrollResult_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbusclient_enroll_in_firefox_lab(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(slug),$0
+    )
+})
+}
+    
     /**
      * Fetches the list of experiments from the server. This does not affect the list
      * of active experiments or experiment enrolment.
@@ -1306,6 +1323,14 @@ open func getActiveExperiments()throws  -> [EnrolledExperiment]  {
 open func getAvailableExperiments()throws  -> [AvailableExperiment]  {
     return try  FfiConverterSequenceTypeAvailableExperiment.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
     uniffi_nimbus_fn_method_nimbusclient_get_available_experiments(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func getAvailableFirefoxLabs()throws  -> [FirefoxLabsMetadata]  {
+    return try  FfiConverterSequenceTypeFirefoxLabsMetadata.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbusclient_get_available_firefox_labs(
             self.uniffiCloneHandle(),$0
     )
 })
@@ -1594,6 +1619,23 @@ open func unenrollForGeckoPref(prefState: GeckoPrefState, prefUnenrollReason: Pr
             self.uniffiCloneHandle(),
         FfiConverterTypeGeckoPrefState_lower(prefState),
         FfiConverterTypePrefUnenrollReason_lower(prefUnenrollReason),$0
+    )
+})
+}
+    
+open func unenrollFromAllFirefoxLabs()throws  -> [EnrollmentChangeEvent]  {
+    return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbusclient_unenroll_from_all_firefox_labs(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func unenrollFromFirefoxLab(slug: String)throws  -> FirefoxLabsUnenrollResult  {
+    return try  FfiConverterTypeFirefoxLabsUnenrollResult_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbusclient_unenroll_from_firefox_lab(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(slug),$0
     )
 })
 }
@@ -2584,15 +2626,17 @@ public struct EnrolledExperiment: Equatable, Hashable {
     public var userFacingName: String
     public var userFacingDescription: String
     public var branchSlug: String
+    public var isRollout: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(featureIds: [String], slug: String, userFacingName: String, userFacingDescription: String, branchSlug: String) {
+    public init(featureIds: [String], slug: String, userFacingName: String, userFacingDescription: String, branchSlug: String, isRollout: Bool) {
         self.featureIds = featureIds
         self.slug = slug
         self.userFacingName = userFacingName
         self.userFacingDescription = userFacingDescription
         self.branchSlug = branchSlug
+        self.isRollout = isRollout
     }
 
     
@@ -2615,7 +2659,8 @@ public struct FfiConverterTypeEnrolledExperiment: FfiConverterRustBuffer {
                 slug: FfiConverterString.read(from: &buf), 
                 userFacingName: FfiConverterString.read(from: &buf), 
                 userFacingDescription: FfiConverterString.read(from: &buf), 
-                branchSlug: FfiConverterString.read(from: &buf)
+                branchSlug: FfiConverterString.read(from: &buf), 
+                isRollout: FfiConverterBool.read(from: &buf)
         )
     }
 
@@ -2625,6 +2670,7 @@ public struct FfiConverterTypeEnrolledExperiment: FfiConverterRustBuffer {
         FfiConverterString.write(value.userFacingName, into: &buf)
         FfiConverterString.write(value.userFacingDescription, into: &buf)
         FfiConverterString.write(value.branchSlug, into: &buf)
+        FfiConverterBool.write(value.isRollout, into: &buf)
     }
 }
 
@@ -2893,6 +2939,184 @@ public func FfiConverterTypeFeatureExposureExtraDef_lift(_ buf: RustBuffer) thro
 #endif
 public func FfiConverterTypeFeatureExposureExtraDef_lower(_ value: FeatureExposureExtraDef) -> RustBuffer {
     return FfiConverterTypeFeatureExposureExtraDef.lower(value)
+}
+
+
+public struct FirefoxLabsEnrollResult: Equatable, Hashable {
+    public var status: FirefoxLabsEnrollStatus
+    public var enrollmentChangeEvents: [EnrollmentChangeEvent]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(status: FirefoxLabsEnrollStatus, enrollmentChangeEvents: [EnrollmentChangeEvent]) {
+        self.status = status
+        self.enrollmentChangeEvents = enrollmentChangeEvents
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension FirefoxLabsEnrollResult: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsEnrollResult: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsEnrollResult {
+        return
+            try FirefoxLabsEnrollResult(
+                status: FfiConverterTypeFirefoxLabsEnrollStatus.read(from: &buf), 
+                enrollmentChangeEvents: FfiConverterSequenceTypeEnrollmentChangeEvent.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FirefoxLabsEnrollResult, into buf: inout [UInt8]) {
+        FfiConverterTypeFirefoxLabsEnrollStatus.write(value.status, into: &buf)
+        FfiConverterSequenceTypeEnrollmentChangeEvent.write(value.enrollmentChangeEvents, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsEnrollResult_lift(_ buf: RustBuffer) throws -> FirefoxLabsEnrollResult {
+    return try FfiConverterTypeFirefoxLabsEnrollResult.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsEnrollResult_lower(_ value: FirefoxLabsEnrollResult) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsEnrollResult.lower(value)
+}
+
+
+public struct FirefoxLabsMetadata: Equatable, Hashable {
+    public var slug: String
+    public var enrolled: Bool
+    public var titleStringId: String
+    public var descriptionStringId: String
+    public var requiresRestart: Bool
+    public var feedbackUrl: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(slug: String, enrolled: Bool, titleStringId: String, descriptionStringId: String, requiresRestart: Bool, feedbackUrl: String?) {
+        self.slug = slug
+        self.enrolled = enrolled
+        self.titleStringId = titleStringId
+        self.descriptionStringId = descriptionStringId
+        self.requiresRestart = requiresRestart
+        self.feedbackUrl = feedbackUrl
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension FirefoxLabsMetadata: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsMetadata: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsMetadata {
+        return
+            try FirefoxLabsMetadata(
+                slug: FfiConverterString.read(from: &buf), 
+                enrolled: FfiConverterBool.read(from: &buf), 
+                titleStringId: FfiConverterString.read(from: &buf), 
+                descriptionStringId: FfiConverterString.read(from: &buf), 
+                requiresRestart: FfiConverterBool.read(from: &buf), 
+                feedbackUrl: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FirefoxLabsMetadata, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.slug, into: &buf)
+        FfiConverterBool.write(value.enrolled, into: &buf)
+        FfiConverterString.write(value.titleStringId, into: &buf)
+        FfiConverterString.write(value.descriptionStringId, into: &buf)
+        FfiConverterBool.write(value.requiresRestart, into: &buf)
+        FfiConverterOptionString.write(value.feedbackUrl, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsMetadata_lift(_ buf: RustBuffer) throws -> FirefoxLabsMetadata {
+    return try FfiConverterTypeFirefoxLabsMetadata.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsMetadata_lower(_ value: FirefoxLabsMetadata) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsMetadata.lower(value)
+}
+
+
+public struct FirefoxLabsUnenrollResult: Equatable, Hashable {
+    public var status: FirefoxLabsUnenrollStatus
+    public var enrollmentChangeEvents: [EnrollmentChangeEvent]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(status: FirefoxLabsUnenrollStatus, enrollmentChangeEvents: [EnrollmentChangeEvent]) {
+        self.status = status
+        self.enrollmentChangeEvents = enrollmentChangeEvents
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension FirefoxLabsUnenrollResult: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsUnenrollResult: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsUnenrollResult {
+        return
+            try FirefoxLabsUnenrollResult(
+                status: FfiConverterTypeFirefoxLabsUnenrollStatus.read(from: &buf), 
+                enrollmentChangeEvents: FfiConverterSequenceTypeEnrollmentChangeEvent.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FirefoxLabsUnenrollResult, into buf: inout [UInt8]) {
+        FfiConverterTypeFirefoxLabsUnenrollStatus.write(value.status, into: &buf)
+        FfiConverterSequenceTypeEnrollmentChangeEvent.write(value.enrollmentChangeEvents, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsUnenrollResult_lift(_ buf: RustBuffer) throws -> FirefoxLabsUnenrollResult {
+    return try FfiConverterTypeFirefoxLabsUnenrollResult.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsUnenrollResult_lower(_ value: FirefoxLabsUnenrollResult) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsUnenrollResult.lower(value)
 }
 
 
@@ -3390,6 +3614,189 @@ public func FfiConverterTypeEnrollmentChangeEventType_lift(_ buf: RustBuffer) th
 #endif
 public func FfiConverterTypeEnrollmentChangeEventType_lower(_ value: EnrollmentChangeEventType) -> RustBuffer {
     return FfiConverterTypeEnrollmentChangeEventType.lower(value)
+}
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum FirefoxLabsEnrollStatus: Equatable, Hashable {
+    
+    case enrolled
+    case alreadyEnrolled
+    case noExperiment
+    case notFirefoxLabsOptIn
+    case featureConflict
+    case error
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension FirefoxLabsEnrollStatus: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsEnrollStatus: FfiConverterRustBuffer {
+    typealias SwiftType = FirefoxLabsEnrollStatus
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsEnrollStatus {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .enrolled
+        
+        case 2: return .alreadyEnrolled
+        
+        case 3: return .noExperiment
+        
+        case 4: return .notFirefoxLabsOptIn
+        
+        case 5: return .featureConflict
+        
+        case 6: return .error
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: FirefoxLabsEnrollStatus, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .enrolled:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .alreadyEnrolled:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .noExperiment:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .notFirefoxLabsOptIn:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .featureConflict:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .error:
+            writeInt(&buf, Int32(6))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsEnrollStatus_lift(_ buf: RustBuffer) throws -> FirefoxLabsEnrollStatus {
+    return try FfiConverterTypeFirefoxLabsEnrollStatus.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsEnrollStatus_lower(_ value: FirefoxLabsEnrollStatus) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsEnrollStatus.lower(value)
+}
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum FirefoxLabsUnenrollStatus: Equatable, Hashable {
+    
+    case unenrolled
+    case alreadyUnenrolled
+    case noExperiment
+    case notFirefoxLabsOptIn
+    case error
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension FirefoxLabsUnenrollStatus: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsUnenrollStatus: FfiConverterRustBuffer {
+    typealias SwiftType = FirefoxLabsUnenrollStatus
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsUnenrollStatus {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .unenrolled
+        
+        case 2: return .alreadyUnenrolled
+        
+        case 3: return .noExperiment
+        
+        case 4: return .notFirefoxLabsOptIn
+        
+        case 5: return .error
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: FirefoxLabsUnenrollStatus, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .unenrolled:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .alreadyUnenrolled:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .noExperiment:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .notFirefoxLabsOptIn:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .error:
+            writeInt(&buf, Int32(5))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsUnenrollStatus_lift(_ buf: RustBuffer) throws -> FirefoxLabsUnenrollStatus {
+    return try FfiConverterTypeFirefoxLabsUnenrollStatus.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsUnenrollStatus_lower(_ value: FirefoxLabsUnenrollStatus) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsUnenrollStatus.lower(value)
 }
 
 
@@ -4416,6 +4823,31 @@ fileprivate struct FfiConverterSequenceTypeExperimentBranch: FfiConverterRustBuf
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeFirefoxLabsMetadata: FfiConverterRustBuffer {
+    typealias SwiftType = [FirefoxLabsMetadata]
+
+    public static func write(_ value: [FirefoxLabsMetadata], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeFirefoxLabsMetadata.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [FirefoxLabsMetadata] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [FirefoxLabsMetadata]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeFirefoxLabsMetadata.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypeGeckoPrefState: FfiConverterRustBuffer {
     typealias SwiftType = [GeckoPrefState]
 
@@ -4763,6 +5195,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_dump_state_to_log() != 11961) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_nimbus_checksum_method_nimbusclient_enroll_in_firefox_lab() != 36090) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_nimbus_checksum_method_nimbusclient_fetch_experiments() != 19471) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4770,6 +5205,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_get_available_experiments() != 65080) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_available_firefox_labs() != 58220) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branch() != 54188) {
@@ -4836,6 +5274,12 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_for_gecko_pref() != 63205) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_from_all_firefox_labs() != 48425) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_from_firefox_lab() != 47442) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusstringhelper_get_uuid() != 61733) {
