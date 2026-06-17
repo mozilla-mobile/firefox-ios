@@ -100,6 +100,11 @@ struct ToolbarTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayLongPress, extras: isPrivateExtra)
     }
 
+    func tabTrayOpenedViaSwipe(isAtBottom: Bool) {
+        let isAtBottomExtra = GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra(isAtBottom: isAtBottom)
+        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayOpenedViaSwipe, extras: isAtBottomExtra)
+    }
+
     // Other
     func dragInteractionStarted() {
         gleanWrapper.recordEvent(for: GleanMetrics.Awesomebar.dragLocationBar)

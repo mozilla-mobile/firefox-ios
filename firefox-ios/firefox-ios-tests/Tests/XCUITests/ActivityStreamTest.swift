@@ -71,7 +71,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     func testTopSites2Add() {
         app.launch()
         if iPad() {
-            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 10)
+            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 11)
         } else {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }

@@ -51,7 +51,6 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
 
 enum OnboardingType: String, Codable, Sendable {
     case freshInstall = "fresh-install"
-    case upgrade
 }
 
 enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable, Sendable {

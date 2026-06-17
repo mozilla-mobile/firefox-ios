@@ -12,6 +12,7 @@ let urlIndexedDB = path(forTestPage: "test-indexeddb-private.html")
 let url1And3Label = TestLabels.exampleDomain
 let url2Label = "Mozilla - Internet for people, not profit (US)"
 let url3Label = "Internet for people, not profit — Mozilla"
+let url4Label = "Form Autofill Demo: Basic @autocomplete"
 
 class PrivateBrowsingTest: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
@@ -422,15 +423,16 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307010
     func testiPadDirectAccessPrivateModeBrowserTab() {
         if skipPlatform { return }
-        navigator.openURL("http://example.com")
-        waitForTabsButton()
+        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
+        waitUntilPageLoad()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
 
         // A Tab opens directly in HomePanels view
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is not shown")
 
         // Open website and check it does not appear under history once going back to regular mode
-        navigator.openURL("http://www.mozilla.org")
+        navigator.openURL("http://example.com")
+        waitUntilPageLoad()
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
@@ -441,6 +443,6 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
             .cells.element(boundBy: 1)
             .staticTexts.element(boundBy: 1)
         mozWaitForElementToExist(savedToHistory)
-        XCTAssertNotNil(savedToHistory.label.range(of: url1And3Label))
+        XCTAssertNotNil(savedToHistory.label.range(of: url4Label))
     }
 }

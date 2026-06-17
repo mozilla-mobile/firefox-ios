@@ -175,5 +175,6 @@ enum ToolbarMiddlewareActionType: ActionType {
     case urlDidChange
     case didClearSearch
     case didStartDragInteraction
+    case didSwipeToOpenTabTray
     case loadSummaryState
 }

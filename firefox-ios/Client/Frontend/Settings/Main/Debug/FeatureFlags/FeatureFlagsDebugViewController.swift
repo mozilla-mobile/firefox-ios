@@ -109,13 +109,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .trackingProtectionRefactor,
-                titleText: format(string: "Enhanced Tracking Protection"),
-                statusText: format(string: "Toggle to use enhanced tracking protection")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .googleLens,
                 titleText: format(string: "Google Lens"),
                 statusText: format(string: "Toggle to enable Google Lens entry points")
@@ -197,6 +190,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .noInternetConnectionErrorPage,
                 titleText: format(string: "NIC Native Error Page"),
                 statusText: format(string: "Toggle to display natively created no internet connection error page")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .novaDesign,
+                titleText: format(string: "Nova Design"),
+                statusText: format(string: "Toggle to enable Nova design")
             ) { [weak self] _ in
                 self?.reloadView()
             },

@@ -1,0 +1,18 @@
+# The configuration for the Nova design feature
+features:
+  nova-design-feature:
+    description: >
+      The feature flag to manage the rollout of Nova design.
+    variables:
+      enabled:
+        description: >
+          Enables Nova design.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

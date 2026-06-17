@@ -37,6 +37,7 @@ include:
   - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/needsReloadRefactor.yaml
   - nimbus-features/newAppearanceMenu.yaml
+  - nimbus-features/novaDesignFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/quickAnswersFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
@@ -55,7 +56,6 @@ include:
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/tosFeature.yaml
   - nimbus-features/touFeature.yaml
-  - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
   - nimbus-features/worldCupWidgetFeature.yaml

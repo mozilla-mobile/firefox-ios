@@ -38,6 +38,7 @@ enum FeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case needsReloadRefactor
+    case novaDesign
     case noInternetConnectionErrorPage
     case quickAnswers
     case recentSearches
@@ -59,7 +60,6 @@ enum FeatureFlagID: String, CaseIterable {
     case tabTrayUIExperiments
     case tosFeature
     case touFeature
-    case trackingProtectionRefactor
     case translation
     case translationLanguagePicker
     case trendingSearches
@@ -113,6 +113,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
+                .novaDesign,
                 .noInternetConnectionErrorPage,
                 .quickAnswers,
                 .recentSearches,
@@ -125,7 +126,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .touFeature,
-                .trackingProtectionRefactor,
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,
