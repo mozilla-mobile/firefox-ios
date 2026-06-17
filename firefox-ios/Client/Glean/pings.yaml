@@ -204,6 +204,6 @@ broken-site-report:
   bugs:
     - https://mozilla-hub.atlassian.net/browse/FXMO-860
   data_reviews:
-    - https://github.com/mozilla-mobile/firefox-ios/pull/TODO-DATA-REVIEW
+    - https://github.com/mozilla-mobile/firefox-ios/pull/34309
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
