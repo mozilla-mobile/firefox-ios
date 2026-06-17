@@ -187,6 +187,34 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(mockBVC.openBlankNewTabCalled)
     }
 
+    func testHandleQuery_opensBlankNewTab_byDefault() throws {
+        let subject = createSubject()
+
+        subject.handle(query: "Test", isPrivate: false)
+
+        let selectedTab = try XCTUnwrap(tabManager.selectedTab)
+        XCTAssertTrue(tabManager.addTabWasCalled)
+        XCTAssertFalse(selectedTab.isPrivate)
+    }
+
+    func testHandleQuery_inPrivateMode_opensPrivateBlankNewTab() throws {
+        let subject = createSubject()
+
+        subject.handle(query: "Test", isPrivate: true)
+
+        let selectedTab = try XCTUnwrap(tabManager.selectedTab)
+        XCTAssertTrue(tabManager.addTabWasCalled)
+        XCTAssertTrue(selectedTab.isPrivate)
+    }
+
+    func testHandleQuery_withShouldOpenNewTabFalse_doesNotOpenNewTab() {
+        let subject = createSubject()
+
+        subject.handle(query: "Test", isPrivate: false, shouldOpenNewTab: false)
+
+        XCTAssertFalse(tabManager.addTabWasCalled)
+    }
+
     func testHandle_withoutURL_withSelectedTab_notRestoring_opensBlankNewTab_ifPrivateDoesNotMatch() {
         let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         tabManager.selectedTab = MockTab(
@@ -363,7 +391,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_didTapButtonToolbarAction_withHomepageSearch_andNoSearchButtonType_triggersGeneralBrowserAction() {
+    func test_didTapButtonToolbarAction_withHomepageSearch_andNoSearchButtonType_doesNotTriggersGeneralBrowserAction() {
         setupStoreForSearchBar()
         let subject = createSubject()
 
@@ -376,7 +404,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         subject.newState(state: newState)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
+            guard let action = action as? GeneralBrowserAction,
+                  let actionType = action.actionType as? GeneralBrowserActionType else { return false }
+            if case .enteredZeroSearchScreen = actionType {
+                XCTFail("Expected entered zero search screen to not dispatch")
+                return true
+            }
+            return false
+        }
+        XCTAssertFalse(didEnteredZeroSearchScreenDispatched)
     }
 
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andSearchButtonType_doesNotTriggersGeneralBrowserAction() {
@@ -392,7 +429,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         subject.newState(state: newState)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
+            guard let action = action as? GeneralBrowserAction,
+                  let actionType = action.actionType as? GeneralBrowserActionType else { return false }
+            if case .enteredZeroSearchScreen = actionType {
+                XCTFail("Expected entered zero search screen to not dispatch")
+                return true
+            }
+            return false
+        }
+        XCTAssertFalse(didEnteredZeroSearchScreenDispatched)
     }
 
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andNoSearchButtonType_doesNotTriggersGeneralBrowserAction() {
@@ -407,7 +453,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         subject.newState(state: newState)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
+            guard let action = action as? GeneralBrowserAction,
+                  let actionType = action.actionType as? GeneralBrowserActionType else { return false }
+            if case .enteredZeroSearchScreen = actionType {
+                XCTFail("Expected entered zero search screen to not dispatch")
+                return true
+            }
+            return false
+        }
+        XCTAssertFalse(didEnteredZeroSearchScreenDispatched)
     }
 
     func testNewState_whenSummarizeDisplayRequested() {
@@ -525,7 +580,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - updateInContentHomePanel
 
-    func testUpdateInContentHomePanel_withCertificateErrorURL_showsNativeErrorPage() {
+    // NSURLErrorServerCertificateUntrusted alone is not enough to trigger the native
+    // error page — it also needs certerror=SSL_ERROR_BAD_CERT_DOMAIN in the URL.
+    func testUpdateInContentHomePanel_withNonBadCertDomainCertError_doesNotShowNativeErrorPage() {
         setupNimbusNativeErrorPageTesting(
             isEnabled: true,
             noInternetConnectionErrorIsEnabled: true,
@@ -536,6 +593,25 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let errorPageURL = URL(
             string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
             + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
+        )!
+
+        subject.updateInContentHomePanel(errorPageURL)
+
+        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
+    // A bad-cert-domain URL has both code=<cert error> AND certerror=SSL_ERROR_BAD_CERT_DOMAIN
+    func testUpdateInContentHomePanel_withBadCertDomainErrorURL_showsNativeErrorPage() {
+        setupNimbusNativeErrorPageTesting(
+            isEnabled: true,
+            noInternetConnectionErrorIsEnabled: true,
+            badCertDomainErrorPageIsEnabled: true
+        )
+        let subject = createSubject()
+        let certErrorCode = NSURLErrorServerCertificateUntrusted
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)&certerror=SSL_ERROR_BAD_CERT_DOMAIN"
         )!
 
         subject.updateInContentHomePanel(errorPageURL)
@@ -590,6 +666,101 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchActionType, GeneralBrowserActionType.didTapReaderModeBarSummarizerButton)
     }
 
+    // MARK: - Toolbar
+
+    func testToolbarLongPressMenu_rowsTitlesAndIcons() {
+        let subject = createSubject()
+        let nav = subject.getNavigationToolbarLongPressActions()
+        XCTAssertEqual([nav.count, nav[0].count, nav[1].count], [2, 2, 1])
+
+        let newTabOnly = subject.getNewTabLongPressActions()
+        XCTAssertEqual([newTabOnly.count, newTabOnly[0].count], [1, 2])
+
+        for index in 0..<2 {
+            let navigationItem = nav[0][index].items[0]
+            let newTabItem = newTabOnly[0][index].items[0]
+            XCTAssertEqual(navigationItem.title, newTabItem.title)
+            XCTAssertEqual(navigationItem.iconString, newTabItem.iconString)
+        }
+
+        let close = nav[1][0].items[0]
+        XCTAssertEqual(close.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
+        XCTAssertEqual(close.iconString, StandardImageIdentifiers.Large.cross)
+    }
+
+    func testDismissToolbarCFRs_mismatchedWindowUUID() {
+        let toolbarWindow = WindowUUID.XCTestDefaultUUID
+        let mismatchedWindow = WindowUUID.DefaultUITestingUUID
+
+        let state = AppState(presentedComponents: PresentedComponentsState(components: [
+            .browserViewController(BrowserViewControllerState(windowUUID: toolbarWindow)),
+            .toolbar(ToolbarState(windowUUID: toolbarWindow)),
+        ]))
+        mockStore = MockStoreForMiddleware(state: state)
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        createSubject().dismissToolbarCFRs(with: mismatchedWindow)
+    }
+
+    func testDismissToolbarCFRs_ToolbarAddedForWindow() {
+        let window = WindowUUID.XCTestDefaultUUID
+
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+        createSubject().dismissToolbarCFRs(with: window)
+
+        let state = AppState(presentedComponents: PresentedComponentsState(components: [
+            .browserViewController(BrowserViewControllerState(windowUUID: window)),
+            .toolbar(ToolbarState(windowUUID: window)),
+        ]))
+        mockStore = MockStoreForMiddleware(state: state)
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+        createSubject().dismissToolbarCFRs(with: window)
+    }
+
+    @MainActor
+    func testStartNavigationButtonDoubleTapTimer_singleTap_doesNotDispatchDoubleTap() {
+        let subject = createSubject()
+        defer { subject.navigationHintDoubleTapTimer?.invalidate() }
+
+        subject.startNavigationButtonDoubleTapTimer()
+
+        XCTAssertNil(
+            mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.first {
+                ($0.actionType as? ToolbarActionType) == .navigationButtonDoubleTapped
+            }
+        )
+    }
+
+    @MainActor
+    func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() throws {
+        let subject = createSubject()
+        subject.startNavigationButtonDoubleTapTimer()
+        let firstScheduledTimer = subject.navigationHintDoubleTapTimer
+        subject.startNavigationButtonDoubleTapTimer()
+        firstScheduledTimer?.invalidate()
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.last)
+        let actionType = try XCTUnwrap(action.actionType as? ToolbarActionType)
+        XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
+    }
+
+    // MARK: - Tab manager restore
+
+    @MainActor
+    func testTabManagerDidRestoreTabs_withDeeplinkFlagEnabled_assignsTabDelegateForAllTabs() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let subject = createSubject()
+        let tab1 = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let tab2 = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tabManager.tabs = [tab1, tab2]
+
+        subject.tabManagerDidRestoreTabs(tabManager)
+
+        XCTAssertTrue(tab1.tabDelegate === subject)
+        XCTAssertTrue(tab2.tabDelegate === subject)
+    }
+
     // MARK: - Private
 
     private func createSubject(file: StaticString = #filePath,
@@ -622,6 +793,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature()
+        }
+    }
+
+    private func setIsDeeplinkOptimizationRefactorEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
         }
     }
 

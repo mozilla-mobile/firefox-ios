@@ -107,6 +107,9 @@ extension BrowserViewController: PhotonActionSheetProtocol {
             presentedUsing: { [weak self] in
                 self?.presentContextualHint(for: .translation)
             },
+            actionOnDismiss: { [weak view] in
+                UIAccessibility.post(notification: .layoutChanged, argument: view)
+            },
             andActionForButton: { },
             overlayState: overlayManager)
     }

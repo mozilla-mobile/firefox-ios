@@ -29,6 +29,11 @@ features:
           If true, enables the pinned newsfeed header on homepage.
         type: Boolean
         default: false
+      add-shortcut-tile:
+        description: >
+          If true, enables the add shortcut tile on homepage.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
@@ -37,11 +42,13 @@ features:
           jbi-section-default: false
           categories-enabled: false
           pinned-header-enabled: false
+          add-shortcut-tile: false
 
       - channel: developer
         value:
           search-bar: false
           bookmarks-section-default: false
           jbi-section-default: false
-          categories-enabled: false
-          pinned-header-enabled: false
+          categories-enabled: true
+          pinned-header-enabled: true
+          add-shortcut-tile: false

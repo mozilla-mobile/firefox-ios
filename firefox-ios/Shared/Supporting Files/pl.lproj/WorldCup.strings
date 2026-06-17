@@ -206,7 +206,7 @@
 "WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "Trzecie miejsce";
 
 /* The label for an upcoming match in the World Cup widget round phase. */
-"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Następne";
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Niedługo";
 
 /* The label for the World Cup championship winner in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "Mistrzowie świata 2026";

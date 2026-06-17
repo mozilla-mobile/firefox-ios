@@ -1,0 +1,752 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Common
+import Shared
+import UIKit
+
+final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
+    private struct UX {
+        static let sectionSpacing: CGFloat = 16
+        static let headerSpacing: CGFloat = 6
+        static let moreOptionButtonIconSize: CGFloat = 24
+        static let horizontalPadding: CGFloat = 16.0
+
+        static let featuredMatchesStackHorizontalPadding: CGFloat = 41.0
+        static let featuredMatchesMinStackHorizontalPadding: CGFloat = 16.0
+        static let featuredMatchesSpacing: CGFloat = 16
+
+        static let dividerHeight: CGFloat = 1
+        static let upcomingRowSpacing: CGFloat = 8
+
+        static let liveLabelCornerRadius: CGFloat = 5
+        static let liveLabelHorizontalPadding: CGFloat = 6
+        static let liveLabelVerticalPadding: CGFloat = 4
+        static let liveLabelDotText = "•"
+    }
+
+    // MARK: - UI
+
+    private lazy var titleLabel: UILabel = .build { label in
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+    }
+
+    private lazy var dateLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    private lazy var moreOptionsButton: UIButton = .build { button in
+        button.menu = self.makeMoreOptionsMenu()
+        button.showsMenuAsPrimaryAction = true
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.moreHorizontalRound)?
+                .withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        button.accessibilityLabel = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
+        button.largeContentTitle = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    private func makeMoreOptionsMenu() -> UIMenu {
+        let changeTeamAction = UIAction(
+            title: .WorldCup.HomepageWidget.ChangeTeamLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.soccerBall),
+            handler: { [weak self] _ in self?.navigateToTeamSelection() }
+        )
+        let wallpaperAction = UIAction(
+            title: .WorldCup.HomepageWidget.GetCustomWallpaperLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.image),
+            handler: { [weak self] _ in self?.navigateToWallpaperSettings() }
+        )
+        let shareAction = UIAction(
+            title: .WorldCup.HomepageWidget.ShareLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
+            handler: { [weak self] _ in self?.shareSchedule() }
+        )
+        let removeAction = UIAction(
+            title: .WorldCup.HomepageWidget.RemoveLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
+            attributes: .destructive,
+            handler: { [weak self] _ in self?.dismiss() }
+        )
+        return UIMenu(children: [changeTeamAction, wallpaperAction, shareAction, removeAction])
+    }
+
+    private lazy var liveLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.text = "\(UX.liveLabelDotText) \(String.WorldCup.HomepageWidget.LiveLabel)"
+        label.accessibilityLabel = .WorldCup.HomepageWidget.LiveLabel
+        label.textAlignment = .center
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    private lazy var liveLabelContainer: UIView = .build { view in
+        view.layer.cornerRadius = UX.liveLabelCornerRadius
+    }
+
+    private lazy var headerStack: UIStackView = .build { stack in
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = UX.headerSpacing
+    }
+
+    private lazy var featuredMatchesStack: UIStackView = .build { stack in
+        stack.axis = .vertical
+        stack.spacing = UX.featuredMatchesSpacing
+    }
+
+    private lazy var upcomingStackDivider: UIView = .build()
+
+    private lazy var upcomingStack: UIStackView = .build { stack in
+        stack.axis = .vertical
+        stack.spacing = UX.upcomingRowSpacing
+    }
+    private var featuredMatchesTopConstraint: NSLayoutConstraint?
+    private var upcomingMatchesTopConstraint: NSLayoutConstraint?
+
+    // MARK: - State
+
+    private let telemetry = WorldCupTelemetry()
+    private let windowUUID: WindowUUID
+    private let searchEnginesManager: SearchEnginesManagerProvider
+    private var model: WorldCupMatches?
+    private var featuredDividers: [UIView] = []
+
+    // MARK: - Init
+
+    init(windowUUID: WindowUUID,
+         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self)) {
+        self.windowUUID = windowUUID
+        self.searchEnginesManager = searchEnginesManager
+        super.init(frame: .zero)
+        shouldGroupAccessibilityChildren = true
+        setupLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Layout
+
+    private func setupLayout() {
+        liveLabelContainer.addSubview(liveLabel)
+
+        headerStack.addArrangedSubview(titleLabel)
+        headerStack.addArrangedSubview(dateLabel)
+        headerStack.addArrangedSubview(liveLabelContainer)
+        // spacer view
+        headerStack.addArrangedSubview(UIView())
+        headerStack.addArrangedSubview(moreOptionsButton)
+
+        addSubviews(headerStack, featuredMatchesStack, upcomingStack)
+
+        let featuredMatchesTopConstraint = featuredMatchesStack.topAnchor.constraint(equalTo: headerStack.bottomAnchor,
+                                                                                     constant: UX.sectionSpacing)
+        self.featuredMatchesTopConstraint = featuredMatchesTopConstraint
+        let upcomingMatchesTopConstraint = upcomingStack.topAnchor.constraint(equalTo: featuredMatchesStack.bottomAnchor,
+                                                                              constant: UX.sectionSpacing)
+        self.upcomingMatchesTopConstraint = upcomingMatchesTopConstraint
+        NSLayoutConstraint.activate([
+            headerStack.topAnchor.constraint(equalTo: topAnchor),
+            headerStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
+            headerStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
+
+            featuredMatchesTopConstraint,
+            featuredMatchesStack.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                           constant: -UX.featuredMatchesStackHorizontalPadding)
+                                                            .priority(.defaultHigh),
+            featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesStackHorizontalPadding)
+                                                            .priority(.defaultHigh),
+            featuredMatchesStack.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesMinStackHorizontalPadding),
+            featuredMatchesStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor,
+                                                           constant: -UX.featuredMatchesMinStackHorizontalPadding),
+            featuredMatchesStack.centerXAnchor.constraint(equalTo: centerXAnchor),
+
+            upcomingMatchesTopConstraint,
+            upcomingStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
+            upcomingStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
+            upcomingStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            liveLabel.leadingAnchor.constraint(equalTo: liveLabelContainer.leadingAnchor,
+                                               constant: UX.liveLabelHorizontalPadding),
+            liveLabel.trailingAnchor.constraint(equalTo: liveLabelContainer.trailingAnchor,
+                                                constant: -UX.liveLabelHorizontalPadding),
+            liveLabel.topAnchor.constraint(equalTo: liveLabelContainer.topAnchor,
+                                           constant: UX.liveLabelVerticalPadding),
+            liveLabel.bottomAnchor.constraint(equalTo: liveLabelContainer.bottomAnchor,
+                                              constant: -UX.liveLabelVerticalPadding),
+
+            moreOptionsButton.widthAnchor.constraint(equalToConstant: UX.moreOptionButtonIconSize),
+            moreOptionsButton.heightAnchor.constraint(equalToConstant: UX.moreOptionButtonIconSize),
+
+            upcomingStackDivider.heightAnchor.constraint(equalToConstant: UX.dividerHeight),
+        ])
+    }
+
+    // MARK: - Configuration
+
+    func configure(with model: WorldCupMatches) {
+        guard model != self.model else { return }
+        let previous = self.model
+        self.model = model
+
+        if let previous, Self.sameMatchLayout(previous, model) {
+            updateMatchViewsInPlace(featured: model.featuredMatch, upcoming: model.upcomingMatches)
+        } else {
+            rebuildFeaturedMatches(matches: model.featuredMatch)
+            rebuildUpcomingRows(matches: model.upcomingMatches)
+        }
+        titleLabel.text = model.phaseTitle
+        dateLabel.text = model.dateLabel.map { "\(UX.liveLabelDotText) \($0)" }
+        dateLabel.isHidden = model.isLive
+        liveLabelContainer.isHidden = !model.isLive
+    }
+
+    /// True when both hold the same matches (teams/date)
+    /// so views can be reconfigured instead of rebuilt.
+    private static func sameMatchLayout(_ lhs: WorldCupMatches, _ rhs: WorldCupMatches) -> Bool {
+        func keys(_ matches: [WorldCupMatch]) -> [String] {
+            matches.map { "\($0.homeCode)|\($0.awayCode)|\($0.date)" }
+        }
+        return keys(lhs.featuredMatch) == keys(rhs.featuredMatch)
+            && keys(lhs.upcomingMatches) == keys(rhs.upcomingMatches)
+    }
+
+    private func updateMatchViewsInPlace(featured: [WorldCupMatch], upcoming: [WorldCupMatch]) {
+        let featuredViews = featuredMatchesStack.arrangedSubviews.compactMap { $0 as? FeaturedMatchView }
+        let upcomingRows = upcomingStack.arrangedSubviews.compactMap { $0 as? UpcomingMatchRow }
+        guard featuredViews.count == featured.count, upcomingRows.count == upcoming.count else {
+            rebuildFeaturedMatches(matches: featured)
+            rebuildUpcomingRows(matches: upcoming)
+            return
+        }
+        for (view, match) in zip(featuredViews, featured) {
+            view.configure(with: match)
+            view.onTap = { [weak self] in self?.navigateToSERP(for: match) }
+        }
+        for (row, match) in zip(upcomingRows, upcoming) {
+            row.configure(with: match)
+            row.onTap = { [weak self] in self?.navigateToSERP(for: match) }
+        }
+    }
+
+    func getWinnerThirdPlaceOrFinal() -> (teamKey: String, winnerLabel: String)? {
+        guard let model else { return nil }
+        return model.winnerThirdPlaceOrFinal
+    }
+
+    /// Untranslated phase identifier for this card, surfaced through the
+    /// enclosing cell when emitting swipe telemetry.
+    var telemetryValue: String? {
+        return model?.telemetryPhaseValue
+    }
+
+    private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {
+        featuredMatchesStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        featuredDividers.forEach { $0.removeFromSuperview() }
+        featuredDividers.removeAll()
+
+        if matches.isEmpty {
+            upcomingStackDivider.isHidden = true
+            featuredMatchesTopConstraint?.constant = 0.0
+        } else {
+            featuredMatchesTopConstraint?.constant = UX.sectionSpacing
+        }
+
+        for (index, match) in matches.enumerated() {
+            if index > 0 {
+                let separator: UIView = .build()
+                separator.heightAnchor.constraint(equalToConstant: UX.dividerHeight).isActive = true
+                featuredMatchesStack.addArrangedSubview(separator)
+                featuredDividers.append(separator)
+            }
+            let view: FeaturedMatchView = .build()
+            view.configure(with: match)
+            view.onTap = { [weak self] in
+                self?.navigateToSERP(for: match)
+            }
+            featuredMatchesStack.addArrangedSubview(view)
+        }
+    }
+
+    private func rebuildUpcomingRows(matches: [WorldCupMatch]) {
+        upcomingStack.isHidden = matches.isEmpty
+        upcomingStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        if matches.isEmpty {
+            upcomingMatchesTopConstraint?.constant = 0.0
+        } else {
+            upcomingMatchesTopConstraint?.constant = UX.sectionSpacing
+            upcomingStack.addArrangedSubview(upcomingStackDivider)
+        }
+
+        for match in matches {
+            let row: UpcomingMatchRow = .build()
+            row.configure(with: match)
+            row.onTap = { [weak self] in
+                self?.navigateToSERP(for: match)
+            }
+            upcomingStack.addArrangedSubview(row)
+        }
+    }
+
+    // MARK: - Actions
+
+    private func navigateToTeamSelection() {
+        telemetry.countrySelectorDisplayed()
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.worldCupCountryPicker),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
+
+    func navigateToWallpaperSettings() {
+        telemetry.wallpaperButtonTapped()
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.settings(.wallpaper)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnSettingsSection
+            )
+        )
+    }
+
+    private func navigateToSERP(for match: WorldCupMatch) {
+        guard let homeTeamName = WorldCupCountry.localizedName(forID: match.homeCode),
+              let awayTeamName = WorldCupCountry.localizedName(forID: match.awayCode) else { return }
+        let query = "\(homeTeamName) vs \(awayTeamName) \(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) 2026"
+        telemetry.matchClicked(match: "\(match.homeCode)/\(match.awayCode)")
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(
+                    .searchQuery(query),
+                    selectNewTab: false
+                ),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCell,
+            )
+        )
+    }
+
+    /// Shares a link to the World Cup 2026 schedule, resolved through the user's
+    /// default search engine. We use an english query here same as the SERP navigation, 
+    /// since the search engine localizes the results based on the user's location and language preferences.
+    func shareSchedule() {
+        let query = "\(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) schedule"
+        guard let url = searchEnginesManager.defaultEngine?.searchURLForQuery(query) else { return }
+        telemetry.shareButtonTapped()
+        let shareTitle = "\(String.WorldCup.HomepageWidget.FollowTeamCard.Title) 🦊⚽️"
+        let configuration = ShareSheetConfiguration(
+            shareType: .site(url: url),
+            shareMessage: ShareMessage(message: shareTitle, subtitle: nil),
+            sourceView: moreOptionsButton,
+            sourceRect: nil,
+            toastContainer: self,
+            popoverArrowDirection: [.up, .down, .left]
+        )
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.shareSheet(configuration)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShareSheet
+            )
+        )
+    }
+
+    private func dismiss() {
+        telemetry.widgetDismissed()
+        store.dispatch(
+            WorldCupAction(
+                windowUUID: windowUUID,
+                actionType: WorldCupActionType.removeHomepageCard,
+            )
+        )
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        dateLabel.textColor = theme.colors.textSecondary
+        moreOptionsButton.tintColor = theme.colors.iconSecondary
+        upcomingStackDivider.backgroundColor = theme.colors.borderSecondary
+        liveLabelContainer.backgroundColor = theme.colors.gradientAIStrongStop1
+        liveLabel.textColor = theme.colors.iconOnColor
+
+        featuredMatchesStack.arrangedSubviews.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
+        featuredDividers.forEach { $0.backgroundColor = theme.colors.borderPrimary }
+        upcomingStack.arrangedSubviews.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
+    }
+}
+
+// MARK: - Featured match
+
+private final class FeaturedMatchView: UIView, ThemeApplicable {
+    private struct UX {
+        static let horizontalStackSpace: CGFloat = 4.0
+        static let flagSize = CGSize(width: 60, height: 40)
+        static let flagCornerRadius: CGFloat = 7
+        static let flagToCodeSpacing: CGFloat = 4
+
+        static let scoreLabelHorizontalPadding: CGFloat = 16
+        static let scoreLabelVerticalPadding: CGFloat = 8
+        static let scorePillSpacing: CGFloat = 12
+        static let scoreSectionSpacing: CGFloat = 8
+    }
+
+    private struct FeaturedColumn {
+        let container: UIView
+        let flagView: UIImageView
+        let codeLabel: UILabel
+    }
+
+    var onTap: (() -> Void)?
+
+    private lazy var homeColumn = makeFeaturedColumn()
+    private lazy var awayColumn = makeFeaturedColumn()
+
+    private lazy var dateLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .center
+        label.numberOfLines = 0
+    }
+
+    private lazy var scoreLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Bold.title2.scaledFont()
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.4
+    }
+
+    private lazy var scoreContainer: UIView = .build { container in
+        container.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    private lazy var clockLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .center
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+    }
+
+    private lazy var scoreSection: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [scoreContainer, clockLabel])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.spacing = UX.scoreSectionSpacing
+        return stack
+    }()
+
+    private lazy var centerStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [dateLabel, scoreSection])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .center
+        return stack
+    }()
+
+    private lazy var horizontalStack: UIStackView = {
+        let spacer1 = UIView()
+        let spacer2 = UIView()
+        let stack = UIStackView(arrangedSubviews: [
+            homeColumn.container, spacer1, centerStack, spacer2, awayColumn.container
+        ])
+        spacer1.widthAnchor.constraint(equalTo: spacer2.widthAnchor).isActive = true
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = UX.horizontalStackSpace
+        return stack
+    }()
+
+    init() {
+        super.init(frame: .zero)
+        setupLayout()
+        isAccessibilityElement = true
+        accessibilityTraits = .link
+        isUserInteractionEnabled = true
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
+    }
+
+    private func setupLayout() {
+        scoreContainer.addSubview(scoreLabel)
+        addSubview(horizontalStack)
+
+        NSLayoutConstraint.activate([
+            horizontalStack.topAnchor.constraint(equalTo: topAnchor),
+            horizontalStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            horizontalStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            horizontalStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            scoreLabel.leadingAnchor.constraint(equalTo: scoreContainer.leadingAnchor,
+                                                constant: UX.scoreLabelHorizontalPadding),
+            scoreLabel.trailingAnchor.constraint(equalTo: scoreContainer.trailingAnchor,
+                                                 constant: -UX.scoreLabelHorizontalPadding),
+            scoreLabel.topAnchor.constraint(equalTo: scoreContainer.topAnchor,
+                                            constant: UX.scoreLabelVerticalPadding),
+            scoreLabel.bottomAnchor.constraint(equalTo: scoreContainer.bottomAnchor,
+                                               constant: -UX.scoreLabelVerticalPadding)
+        ])
+    }
+
+    private func makeFeaturedColumn() -> FeaturedColumn {
+        let flagView: UIImageView = .build { imageView in
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            imageView.layer.cornerRadius = UX.flagCornerRadius
+            imageView.layer.borderWidth = 1
+            imageView.isAccessibilityElement = false
+        }
+
+        let codeLabel: UILabel = .build { label in
+            label.font = FXFontStyles.Bold.footnote.scaledFont()
+            label.adjustsFontForContentSizeCategory = true
+            label.textAlignment = .center
+            label.numberOfLines = 1
+            label.lineBreakMode = .byTruncatingTail
+        }
+
+        let stack: UIStackView = .build { stack in
+            stack.axis = .vertical
+            stack.alignment = .center
+            stack.spacing = UX.flagToCodeSpacing
+        }
+        stack.addArrangedSubview(flagView)
+        stack.addArrangedSubview(codeLabel)
+
+        NSLayoutConstraint.activate([
+            flagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
+            flagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
+        ])
+
+        return FeaturedColumn(container: stack, flagView: flagView, codeLabel: codeLabel)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        scoreContainer.layoutIfNeeded()
+        scoreContainer.layer.cornerRadius = scoreContainer.frame.height / 2
+    }
+
+    func configure(with match: WorldCupMatch) {
+        homeColumn.flagView.image = UIImage(named: match.homeFlagAssetName)
+        homeColumn.codeLabel.text = match.homeCode
+        awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName)
+        awayColumn.codeLabel.text = match.awayCode
+        accessibilityLabel = match.matchAccessibilityLabel
+
+        if let score = match.score {
+            dateLabel.isHidden = true
+            scoreSection.isHidden = false
+            scoreLabel.text = score.score
+            clockLabel.text = match.isInBreak ? .WorldCup.HomepageWidget.HalfTimeLabel : score.clock
+        } else {
+            dateLabel.isHidden = false
+            scoreSection.isHidden = true
+            dateLabel.text = match.date
+        }
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        dateLabel.textColor = theme.colors.textSecondary
+        clockLabel.textColor = theme.colors.textSecondary
+        scoreLabel.textColor = theme.colors.textPrimary
+        scoreContainer.backgroundColor = theme.colors.layer3
+
+        homeColumn.codeLabel.textColor = theme.colors.textPrimary
+        homeColumn.flagView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        homeColumn.flagView.backgroundColor = theme.colors.borderSecondary
+        awayColumn.codeLabel.textColor = theme.colors.textPrimary
+        awayColumn.flagView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        awayColumn.flagView.backgroundColor = theme.colors.borderSecondary
+    }
+}
+
+// MARK: - Upcoming row
+
+private final class UpcomingMatchRow: UIView, ThemeApplicable {
+    private struct UX {
+        static let flagSize = CGSize(width: 36, height: 24)
+        static let flagCornerRadius: CGFloat = 5
+        static let flagBorderWidth: CGFloat = 1
+        static let flagToCodeSpacing: CGFloat = 8
+        static let dateLabelInset: CGFloat = 8
+    }
+
+    var onTap: (() -> Void)?
+
+    private lazy var homeFlagView = makeFlagView()
+    private lazy var awayFlagView = makeFlagView()
+
+    private lazy var homeCodeLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Bold.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .natural
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+    }
+
+    private lazy var awayCodeLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Bold.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .right
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+    }
+
+    /// Label for showing info about the match, it could be the date or the score.
+    private lazy var infoLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    private lazy var leftStack: UIStackView = .build { stack in
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = UX.flagToCodeSpacing
+    }
+
+    private lazy var rightStack: UIStackView = .build { stack in
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = UX.flagToCodeSpacing
+    }
+
+    init() {
+        super.init(frame: .zero)
+        setupLayout()
+        isAccessibilityElement = true
+        accessibilityTraits = .link
+        isUserInteractionEnabled = true
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
+    }
+
+    private func setupLayout() {
+        leftStack.addArrangedSubview(homeFlagView)
+        leftStack.addArrangedSubview(homeCodeLabel)
+
+        rightStack.addArrangedSubview(awayCodeLabel)
+        rightStack.addArrangedSubview(awayFlagView)
+
+        addSubviews(leftStack, infoLabel, rightStack)
+
+        NSLayoutConstraint.activate([
+            leftStack.topAnchor.constraint(equalTo: topAnchor),
+            leftStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            leftStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+
+            rightStack.topAnchor.constraint(equalTo: topAnchor),
+            rightStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            rightStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            infoLabel.topAnchor.constraint(equalTo: topAnchor),
+            infoLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            infoLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            infoLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            infoLabel.leadingAnchor.constraint(
+                greaterThanOrEqualTo: leftStack.trailingAnchor,
+                constant: UX.dateLabelInset
+            ),
+            infoLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: rightStack.leadingAnchor,
+                constant: -UX.dateLabelInset
+            ),
+
+            homeFlagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
+            homeFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
+            awayFlagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
+            awayFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
+        ])
+    }
+
+    private func makeFlagView() -> UIImageView {
+        return .build { imageView in
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            imageView.layer.cornerRadius = UX.flagCornerRadius
+            imageView.layer.borderWidth = UX.flagBorderWidth
+            imageView.isAccessibilityElement = false
+        }
+    }
+
+    func configure(with match: WorldCupMatch) {
+        homeFlagView.image = UIImage(named: match.homeFlagAssetName)
+        homeCodeLabel.text = match.homeCode
+        awayFlagView.image = UIImage(named: match.awayFlagAssetName)
+        awayCodeLabel.text = match.awayCode
+        if let score = match.score {
+            infoLabel.text = score.score
+        } else {
+            infoLabel.text = match.date
+        }
+
+        accessibilityLabel = match.matchAccessibilityLabel
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        homeCodeLabel.textColor = theme.colors.textPrimary
+        awayCodeLabel.textColor = theme.colors.textPrimary
+        infoLabel.textColor = theme.colors.textSecondary
+        homeFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
+        homeFlagView.backgroundColor = theme.colors.borderSecondary
+        awayFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
+        awayFlagView.backgroundColor = theme.colors.borderSecondary
+    }
+}
+
+private extension WorldCupMatch {
+    /// Reads the match as a single VoiceOver phrase: "Home team, date or score, Away team".
+    var matchAccessibilityLabel: String {
+        let homeName = WorldCupCountry.localizedName(forID: homeCode) ?? homeCode
+        let awayName = WorldCupCountry.localizedName(forID: awayCode) ?? awayCode
+        let middle: String = if let score {
+            "\(score.score), \(score.clock)"
+        } else {
+            date
+        }
+        return "\(homeName), \(middle), \(awayName)"
+    }
+}

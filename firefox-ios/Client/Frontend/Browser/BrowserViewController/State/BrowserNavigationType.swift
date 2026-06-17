@@ -17,6 +17,7 @@ enum BrowserNavigationDestination: Equatable {
     case homepageZeroSearch
     case zeroSearch
     case shortcutsLibrary
+    case worldCupCountryPicker
     case quickAnswers
     case privacyNoticeLink(URL)
     case summarizer(config: SummarizerConfig, trigger: SummarizerTrigger)
@@ -26,6 +27,7 @@ enum BrowserNavigationDestination: Equatable {
     // Webpage views
     case link
     case newTab
+    case searchQuery(String)
 
     // System views
     case shareSheet(ShareSheetConfiguration)

@@ -20,7 +20,9 @@ if releaseCheck.isReleaseBranch {
     checkForSpecificFileChange()
     checkForGleanFileChange()
     CodeUsageDetector().checkForCodeUsage()
-    CodeCoverageGate().failOnNewFilesWithoutCoverage()
+    let coverageGate = CodeCoverageGate()
+    coverageGate.failOnFiles(type: .newFiles)
+    coverageGate.failOnFiles(type: .modifiedFiles)
     BrowserViewControllerChecker().failsOnAddedExtension()
     checkCodeCoverage()
 }
@@ -100,59 +102,85 @@ func checkCodeCoverage() {
 class CodeCoverageGate {
     private let coverageBypassLabel = "ignore-code-coverage"
     private let jsonPath = "coverage.json"
-    private let minimumAddedLines = 5
 
-    func failOnNewFilesWithoutCoverage() {
-        guard let data = FileManager.default.contents(atPath: jsonPath),
-              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let targets = json["targets"] as? [[String: Any]] else {
-            fail("Could not parse coverage.json for per-file coverage")
-            return
+    enum CoverageType {
+        case newFiles
+        case modifiedFiles
+
+        var sourceFiles: [String] {
+            switch self {
+            case .newFiles: return danger.git.createdFiles
+            case .modifiedFiles: return danger.git.modifiedFiles
+            }
         }
 
-        let coverageFiles: [[String: Any]] = targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
-        // Consider created Swift files, excluding Tests & Generated
-        // Excluding `danger.git.modifiedFiles` for now
-        let candidates = (danger.git.createdFiles).filter {
-            $0.hasSuffix(".swift") &&
-            !$0.contains("Tests/") &&
-            !$0.contains("/Generated/") &&
-            !$0.contains("/Strings.swift") &&
-            !$0.contains("/AccessibilityIdentifiers.swift") &&
-            !$0.contains("Protocol.swift")
+        var minimumLines: Int {
+            switch self {
+            case .newFiles: return 5
+            case .modifiedFiles: return 20
+            }
         }
+
+        var label: String {
+            switch self {
+            case .newFiles: return "New file"
+            case .modifiedFiles: return "Existing file"
+            }
+        }
+
+        var emptyMessage: String {
+            switch self {
+            case .newFiles: return "No new file detected so code coverage gate wasn't ran."
+            case .modifiedFiles: return "No modified file detected so code coverage gate wasn't ran."
+            }
+        }
+
+        var insufficientChangesMessage: String {
+            switch self {
+            case .newFiles: return "No new file had significant enough changes for the coverage gate to run."
+            case .modifiedFiles: return "No modified file had significant enough changes for the coverage gate to run."
+            }
+        }
+
+        var allPassMessage: String {
+            switch self {
+            case .newFiles: return "All new files meet their thresholds**."
+            case .modifiedFiles: return "All modified files meet their thresholds."
+            }
+        }
+
+        var thresholdRange: (min: Double, max: Double) {
+            switch self {
+            case .newFiles: return (min: 0.4, max: 0.7)
+            case .modifiedFiles: return (min: 0.10, max: 0.25)
+            }
+        }
+    }
+
+    func failOnFiles(type: CoverageType) {
+        guard let coverageFiles = parseCoverageFiles() else { return }
+
+        let candidates = swiftSourceCandidates(from: type.sourceFiles)
 
         guard !candidates.isEmpty else {
             markdown("""
-            ### ✅ New file code coverage
-            No new file detected so code coverage gate wasn't ran.
+            ### ✅ \(type.label) code coverage
+            \(type.emptyMessage)
             """)
             return
         }
 
-        // Ignore tiny edits: only gate files with at least `minimumAddedLines`
-        func addedLines(_ file: String) -> Int {
-            switch saferFileDiff(for: file) {
-            case .success(let diff):
-                switch diff.changes {
-                case .created(let newLines):
-                    return newLines.count
-                case .deleted:
-                    return 0
-                case .modified(let hunks), .renamed(_, let hunks):
-                    return hunks.reduce(0) { acc, h in
-                        acc + h.lines.filter {
-                            let s = String(describing: $0)
-                            return s.hasPrefix("+") && !s.hasPrefix("+++")
-                        }.count
-                    }
-                }
-            case .failure:
-                return 999 // if diff fails, be conservative and mention it
-            }
+        // Ignore tiny edits: only gate files with at least `type.minimumLines`
+        let gated = candidates.filter { addedLines(in: $0) >= type.minimumLines }
+
+        guard !gated.isEmpty else {
+            markdown("""
+            ### ✅ \(type.label) code coverage
+            \(type.insufficientChangesMessage)
+            """)
+            return
         }
 
-        let gated = candidates.filter { addedLines($0) >= minimumAddedLines }
         // Collect failures
         var rows: [String] = []
         for file in gated {
@@ -167,7 +195,7 @@ class CodeCoverageGate {
 
             // Calculate threshold based on file length
             let lineCount = countLines(in: file)
-            let threshold = scaledPercentage(for: Double(lineCount)) * 100.0
+            let threshold = scaledPercentage(for: Double(lineCount), in: type.thresholdRange) * 100.0
 
             if percent + 0.0001 < threshold { // epsilon for float stability
                 rows.append("| `\(file)` | \(formatPct(percent)) | \(formatPct(threshold)) |")
@@ -176,21 +204,68 @@ class CodeCoverageGate {
 
         guard !rows.isEmpty else {
             markdown("""
-            ### ✅ New file code coverage
-            All new files meet their thresholds**.
+            ### ✅ \(type.label) code coverage
+            \(type.allPassMessage)
             """)
             return
         }
 
+        reportCoverageFailure(rows: rows, label: type.label)
+    }
+
+    private func swiftSourceCandidates(from files: [String]) -> [String] {
+        files.filter {
+            $0.hasSuffix(".swift") &&
+            !$0.contains("Tests/") &&
+            !$0.contains("/Generated/") &&
+            !$0.contains("/Strings.swift") &&
+            !$0.contains("/AccessibilityIdentifiers.swift") &&
+            !$0.contains("ImageIdentifiers.swift") &&
+            !$0.contains("Protocol.swift") &&
+            !$0.contains("Dangerfile.swift")
+        }
+    }
+
+    private func parseCoverageFiles() -> [[String: Any]]? {
+        guard let data = FileManager.default.contents(atPath: jsonPath),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let targets = json["targets"] as? [[String: Any]] else {
+            fail("Could not parse coverage.json for per-file coverage")
+            return nil
+        }
+        return targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
+    }
+
+    private func addedLines(in file: String) -> Int {
+        switch saferFileDiff(for: file) {
+        case .success(let diff):
+            switch diff.changes {
+            case .created(let newLines):
+                return newLines.count
+            case .deleted:
+                return 0
+            case .modified(let hunks), .renamed(_, let hunks):
+                return hunks.reduce(0) { acc, h in
+                    acc + h.lines.filter {
+                        let s = String(describing: $0)
+                        return s.hasPrefix("+") && !s.hasPrefix("+++")
+                    }.count
+                }
+            }
+        case .failure:
+            return 999 // if diff fails, be conservative and mention it
+        }
+    }
+
+    private func reportCoverageFailure(rows: [String], label: String) {
         let header = """
-        ### ❌ New file code coverage
-        The following new file(s) are below their scaled coverage:
+        ### ❌ \(label) code coverage
+        The following file(s) are below their scaled coverage:
 
         | File | Coverage | Required |
         |---|---:|---:|
         \(rows.joined(separator: "\n"))
         """
-
         if hasLabel(coverageBypassLabel) {
             warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
         } else {
@@ -201,25 +276,24 @@ class CodeCoverageGate {
         }
     }
 
-    /// Maps an input value to a percentage using logarithmic scaling.
+    /// Maps an input value to a percentage using logarithmic scaling within the given range.
     /// - Parameter x: Input value (must be > 0)
-    /// - Returns: A value between 0.5 and 0.8 for inputs between 10 and 500
-    func scaledPercentage(for x: Double) -> Double {
+    /// - Parameter range: The output min/max bounds for the scaling
+    /// - Returns: A scaled value within `range` for inputs between 10 and 500
+    private func scaledPercentage(for x: Double, in range: (min: Double, max: Double)) -> Double {
         precondition(x > 0, "Input must be greater than 0")
 
         let minX = 10.0
         let maxX = 500.0
-        let minY = 0.4
-        let maxY = 0.7
 
         // Clamp to min/max bounds
-        if x <= minX { return minY }
-        if x >= maxX { return maxY }
+        if x <= minX { return range.min }
+        if x >= maxX { return range.max }
 
         let numerator = log(x / minX)
         let denominator = log(maxX / minX)
 
-        return minY + (maxY - minY) * (numerator / denominator)
+        return range.min + (range.max - range.min) * (numerator / denominator)
     }
 
     /// Counts the number of lines in a file
@@ -440,6 +514,7 @@ class CodeUsageDetector {
         let keyword: Keywords
         let file: String
         let lineNumber: Int
+        let isRemoval: Bool
     }
 
     private enum Keywords: CaseIterable {
@@ -452,6 +527,8 @@ class CodeUsageDetector {
         case swiftUIText
         case task
         case notifiable
+        case unsafe
+        case cspHeader
 
         var bundledHeader: String {
             switch self {
@@ -470,6 +547,10 @@ class CodeUsageDetector {
                 return "### 🧑‍💻 New `Task {}` detected\nNew `Task {}` added. Please add a concurrency reviewer on your PR: \(contacts)"
             case .notifiable:
                 return "### ⚠️ `NotificationCenter.default.addObserver` detected\nPlease prefer Notifiable over `NotificationCenter` unless specific circumstances."
+            case .unsafe:
+                return "### 🔒 Security: CSP `unsafe-` detected\nPlease request a security review."
+            case .cspHeader:
+                return "### 🔒 Security: `Content-Security-Policy` change detected\nPlease request a security review."
             }
         }
 
@@ -489,6 +570,19 @@ class CodeUsageDetector {
                 return " Task {"
             case .notifiable:
                 return "NotificationCenter.default.addObserver("
+            case .unsafe:
+                return "unsafe-"
+            case .cspHeader:
+                return "Content-Security-Policy"
+            }
+        }
+
+        func applies(to file: String) -> Bool {
+            switch self {
+            case .unsafe, .cspHeader:
+                return file.hasSuffix(".swift") || file.hasSuffix(".js")
+            default:
+                return file.contains(".swift")
             }
         }
 
@@ -511,6 +605,14 @@ class CodeUsageDetector {
                 return false
             }
         }
+
+        // Default is false, expect for some code removals that we want to flag
+        var detectsRemovals: Bool {
+            switch self {
+            case .cspHeader: return true
+            default: return false
+            }
+        }
     }
     // swiftlint:enable line_length
 
@@ -523,9 +625,10 @@ class CodeUsageDetector {
     func checkForCodeUsage() {
         var detections: [Detection] = []
         let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
-        // Iterate through each added and modified file, running the checks on swift files only
-        for file in editedFiles where file.contains(".swift") && !file.contains("Dangerfile") {
-            // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
+        for file in editedFiles where !file.contains("Dangerfile") {
+            let applicable = Keywords.allCases.filter { $0.applies(to: file) }
+            guard !applicable.isEmpty else { continue }
+
             switch saferFileDiff(for: file) {
             case let .success(diff):
                 if file == BrowserViewControllerChecker.bvcPath {
@@ -533,9 +636,9 @@ class CodeUsageDetector {
                 }
                 switch diff.changes {
                 case let .modified(hunks), let .renamed(_, hunks):
-                    detections += collect(keywords: Keywords.allCases, inHunks: hunks, file: file)
+                    detections += collect(keywords: applicable, inHunks: hunks, file: file)
                 case let .created(newLines):
-                    detections += collect(keywords: Keywords.allCases, inLines: newLines, file: file)
+                    detections += collect(keywords: applicable, inLines: newLines, file: file)
                 case .deleted:
                     break // do not warn on deleted lines
                 }
@@ -553,14 +656,15 @@ class CodeUsageDetector {
     }
 
     private func emitBundled(keyword: Keywords, detections: [Detection]) {
-        let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) |" }.joined(separator: "\n")
+        let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) | \($0.isRemoval ? "Removed" : "Added") |" }.joined(separator: "\n")
         let fullMessage = """
         \(keyword.bundledHeader)
 
-        | File | Line |
-        |---|---|
+        | File | Line | Change |
+        |---|---|---|
         \(rows)
         """
+
         if keyword.shouldComment {
             markdown(fullMessage)
         } else if keyword.shouldWarn {
@@ -579,16 +683,26 @@ class CodeUsageDetector {
         var detections: [Detection] = []
         for hunk in hunks {
             var newLineCount = 0
+            var oldLineCount = 0
             for line in hunk.lines {
-                let isAddedLine = "\(line)".starts(with: "+")
-                let isRemovedLine = "\(line)".starts(with: "-")
-                // Make sure our newLineCount is proper to fail on correct line number
-                guard isAddedLine || !isRemovedLine else { continue }
-                newLineCount += 1
-                // Collect only added lines having the particular keyword
-                guard isAddedLine && String(describing: line).contains(keyword.keyword) else { continue }
-                let lineNumber = hunk.newLineStart + newLineCount - 1
-                detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber))
+                let lineStr = String(describing: line)
+                let isAddedLine = lineStr.starts(with: "+")
+                let isRemovedLine = lineStr.starts(with: "-")
+                if isRemovedLine {
+                    oldLineCount += 1
+                    if keyword.detectsRemovals && lineStr.contains(keyword.keyword) {
+                        let lineNumber = hunk.oldLineStart + oldLineCount - 1
+                        detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: true))
+                    }
+                } else {
+                    // Context or added line: exists in both old and new file
+                    newLineCount += 1
+                    oldLineCount += 1
+                    if isAddedLine && lineStr.contains(keyword.keyword) {
+                        let lineNumber = hunk.newLineStart + newLineCount - 1
+                        detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: false))
+                    }
+                }
             }
         }
         return detections
@@ -602,7 +716,7 @@ class CodeUsageDetector {
         guard !shouldSkip(keyword, for: file) else { return [] }
         return lines.enumerated().compactMap { index, line in
             guard line.contains(keyword.keyword) else { return nil }
-            return Detection(keyword: keyword, file: file, lineNumber: index + 1)
+            return Detection(keyword: keyword, file: file, lineNumber: index + 1, isRemoval: false)
         }
     }
 }
@@ -639,7 +753,10 @@ private func failOrWarn(_ message: String) {
         Since bypass label \(bypassLabel) detected we are reporting as warning only for this PR.
         """)
     } else {
-        fail(message)
+        fail("""
+        \(message)
+        You can add the \(bypassLabel) label on the PR to by-pass the checks.\nIf you use it, please add a comment explaining why.
+        """)
     }
 }
 

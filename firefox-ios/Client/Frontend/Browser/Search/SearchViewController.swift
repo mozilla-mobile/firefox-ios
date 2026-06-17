@@ -121,6 +121,10 @@ class SearchViewController: SiteTableViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Override keyboardDismissMode to `.none` to avoid bug where the address bar is behind the raise keyboard
+        // when dismissed by scrolling the search results because the keyboard reports stale keyboard frame
+        // This change matches Safari behaviour where keyboard doesn't dismissed when scrolling in results page
+        tableView.keyboardDismissMode = .none
         getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
@@ -139,6 +143,7 @@ class SearchViewController: SiteTableViewController,
         searchEngineScrollView.addSubview(searchEngineStackView)
 
         layoutTable()
+        setupSearchEngineScrollViewConstraints()
         layoutSearchEngineScrollView()
         layoutSearchEngineScrollViewContent()
 
@@ -181,14 +186,16 @@ class SearchViewController: SiteTableViewController,
         super.viewWillDisappear(animated)
     }
 
-    private func layoutSearchEngineScrollView() {
-        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
-
+    private func setupSearchEngineScrollViewConstraints() {
         NSLayoutConstraint.activate([
             searchEngineScrollView.leadingAnchor.constraint(equalTo: searchEngineContainerView.leadingAnchor),
             searchEngineScrollView.trailingAnchor.constraint(equalTo: searchEngineContainerView.trailingAnchor),
             searchEngineScrollView.topAnchor.constraint(equalTo: searchEngineContainerView.topAnchor)
         ])
+    }
+
+    private func layoutSearchEngineScrollView() {
+        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
 
         // Remove existing keyboard-related bottom constraints (if any)
         bottomConstraintWithKeyboard?.isActive = false
@@ -383,20 +390,14 @@ class SearchViewController: SiteTableViewController,
         layoutSearchEngineScrollView()
     }
 
-    func keyboardHelper(
-        _ keyboardHelper: KeyboardHelper,
-        keyboardWillChangeWithState state: KeyboardState
-    ) {
-        layoutSearchEngineScrollView()
-    }
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
         coordinator.animate(alongsideTransition: { [self] _ in
-            tableView.reloadData()
             layoutSearchEngineScrollViewContent()
-        }, completion: nil)
+        }, completion: { [weak self] _ in
+            self?.tableView.reloadData()
+        })
     }
 
     private func getCachedTabs() {

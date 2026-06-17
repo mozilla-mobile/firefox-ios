@@ -365,6 +365,10 @@ extension Selector {
         Selector(strategy: .tableCellButtonById(id), value: id, description: description, groups: groups)
     }
 
+    static func buttonInNavigationBarByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        return Selector(strategy: .navigationBarButtonById(label), value: label, description: description, groups: groups)
+    }
+
     static func navigationBarByIdOrLabel(_ value: String, description: String, groups: [String] = []) -> Selector {
         Selector(
             strategy: .navigationBarByIdOrLabel(value),

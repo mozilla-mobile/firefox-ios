@@ -48,6 +48,7 @@ struct ToolbarActionConfiguration: Equatable {
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String
+    var cacheId: String?
     var a11yCustomActionName: String?
 
     func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {

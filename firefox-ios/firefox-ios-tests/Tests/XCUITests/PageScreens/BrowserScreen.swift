@@ -15,6 +15,7 @@ final class BrowserScreen {
     }
 
     private var addressBar: XCUIElement { sel.ADDRESS_BAR.element(in: app) }
+	private var searchEngineLogo: XCUIElement { sel.SEARCH_ENGINE_LOGO.element(in: app) }
     private var cancelButton: XCUIElement { sel.CANCEL_BUTTON_URL_BAR.element(in: app) }
     private var bookText: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT.element(in: app) }
     private var bookTextInTable: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT_IN_TABLE.element(in: app) }
@@ -23,6 +24,11 @@ final class BrowserScreen {
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
         BaseTestCase().mozWaitForValueContains(addressBar, value: value, timeout: timeout)
+    }
+
+    func assertSearchEngineLogoExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(searchEngineLogo, timeout: timeout)
+        XCTAssertTrue(searchEngineLogo.isLeftOf(rightElement: addressBar))
     }
 
     func handleHumanVerification() {
@@ -179,6 +185,26 @@ final class BrowserScreen {
         addressBar.typeText("\r")
     }
 
+    func typeOnWebFormTextField(_ text: String, submit: Bool = true) {
+        let textField = webFormTextField()
+        textField.waitAndTap()
+        textField.typeText(submit ? "\(text)\r" : text)
+    }
+
+    // The web form's container identifier varies across iOS versions,
+    // so look for the text field under either container.
+    private func webFormTextField(containers: [String] = ["form", "body"]) -> XCUIElement {
+        let candidates = containers.map { app.otherElements[$0].textFields.firstMatch }
+        let deadline = Date().addingTimeInterval(TIMEOUT_LONG)
+        while Date() < deadline {
+            if let field = candidates.first(where: { $0.exists }) {
+                return field
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        }
+        return candidates.last ?? app.textFields.firstMatch
+    }
+
     func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }
@@ -239,7 +265,9 @@ final class BrowserScreen {
     }
 
     func waitForLinkPreview(named preview: String) {
-        let previewLabel = sel.linkPreview(named: preview).element(in: app)
+        // iOS wraps URL preview labels with LRI/PDI bidi isolates.
+        let isolated = "\u{2066}\(preview)\u{2069}"
+        let previewLabel = sel.linkPreview(named: isolated).element(in: app)
         BaseTestCase().mozWaitForElementToExist(previewLabel)
     }
 

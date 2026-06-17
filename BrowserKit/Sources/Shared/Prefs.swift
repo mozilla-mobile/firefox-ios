@@ -20,6 +20,7 @@ public struct PrefsKeys {
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyMailToOption = "MailToOption"
     public static let IntroSeen = "IntroViewControllerSeen"
+    public static let OnboardingLastCardSeen = "OnboardingLastCardSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
     // TermsOfUseAccepted should use same string key as before to maintain compatibility
@@ -50,6 +51,7 @@ public struct PrefsKeys {
     public static let ShowClipboardBar = "showClipboardBar"
     public static let ShowRelayMaskSuggestions = "showRelayMaskSuggestions"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
+    public static let BlockAds = "blockAds"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
@@ -112,8 +114,24 @@ public struct PrefsKeys {
     public struct HomepageSettings {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let TrackerBlockerSection = "TrackerBlockerSectionUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
-        public static let WorldCupNowOverride = "worldCupNowOverrideKey"
+        /// Tracks whether we've performed the one-time transition from World
+        /// Cup milestone 1 to milestone 2. When the milestone 2 date is first
+        /// reached we force-enable the homepage section once, then respect the
+        /// user preference on subsequent reads.
+        public static let WorldCupMilestone2Transitioned = "WorldCupMilestone2TransitionedUserPrefsKey"
+        /// Override for the merino WCS base host
+        public static let WorldCupBaseHost = "worldCupBaseHostKey"
+        /// Dev-only override for the World Cup `/matches` and `/live` polling
+        /// cadence in seconds. When set, both streams fire on this interval
+        /// regardless of result type — used to test live behavior without
+        /// waiting for the production cadence.
+        public static let WorldCupPollInterval = "worldCupPollIntervalKey"
+    }
+
+    public struct Homepage {
+        public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
     }
 
     public struct SearchSettings {
@@ -143,6 +161,7 @@ public struct PrefsKeys {
 
     public struct MLPASettings {
         public static let mlpaEndpointEnvironment = "mlpaEndpointEnvironment"
+        public static let lastUsedEnvironment = "mlpaLastUsedEnvironment"
     }
 
     public struct UserFeatureFlagPrefs {
@@ -175,6 +194,7 @@ public struct PrefsKeys {
         public static let translationAutoTranslate = "settings.translationAutoTranslate"
         public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
+        public static let quickAnswersFeature = "settings.quickAnswersFeature"
     }
 
     // Activity Stream

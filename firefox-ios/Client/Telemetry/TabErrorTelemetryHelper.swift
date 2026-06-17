@@ -6,6 +6,9 @@ import UIKit
 import Common
 
 /// Helper utility that aims to detect potential bugs in production which could result in tab loss.
+/// Note that it's possible for this telemetry helper to be called during onboarding flow before
+/// any tab managers have been configured, we need to be sure to gracefully handle any
+/// nil return values when querying `tabManager(for:)`
 @MainActor
 final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
@@ -77,9 +80,8 @@ final class TabErrorTelemetryHelper {
     // MARK: - Internal Utility
 
     private func recordTabCount(_ window: WindowUUID, entryPoint: EntryPoint) {
-        guard self.tabManagerAvailable(for: window) else { return }
         var tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int] ?? [String: Int]()
-        let tabCount = getTotalTabCount(window: window)
+        guard let tabCount = getTotalTabCount(window: window) else { return }
         tabCounts[window.uuidString] = tabCount
         defaults.set(tabCounts, forKey: entryPoint.defaultsKey)
     }
@@ -94,7 +96,10 @@ final class TabErrorTelemetryHelper {
             // fewer tabs than recorded and we'll send the event erroneously.
             invalidateTabCount(for: window, entryPoint: entryPoint)
         }
-        guard tabManagerAvailable(for: window) else {
+
+        guard let tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int],
+              let expectedTabCount = tabCounts[window.uuidString] else { return }
+        guard let currentTabCount = getTotalTabCount(window: window) else {
             logger.log("Can't validate tab count. Tab manager unavailable.",
                        level: .info,
                        category: .tabs,
@@ -102,10 +107,6 @@ final class TabErrorTelemetryHelper {
             )
             return
         }
-
-        guard let tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int],
-              let expectedTabCount = tabCounts[window.uuidString] else { return }
-        let currentTabCount = getTotalTabCount(window: window)
 
         if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
             // Potential tab loss bug detected. Log a MetricKit error.
@@ -123,17 +124,13 @@ final class TabErrorTelemetryHelper {
         defaults.set(tabCounts, forKey: entryPoint.defaultsKey)
     }
 
-    /// It's possible for this telemetry helper to be called during onboarding flow before
-    /// any tab managers have been configured.
-    private func tabManagerAvailable(for uuid: WindowUUID) -> Bool {
-        guard let info = windowManager.windows[uuid],
-              info.tabManager != nil else { return false }
-        return true
-    }
-
-    private func getTotalTabCount(window: WindowUUID) -> Int {
-        assert(tabManagerAvailable(for: window), "getTabCount() should not be called prior to TabManager config.")
-        return windowManager.tabManager(for: window).normalTabs.count
+    private func getTotalTabCount(window: WindowUUID) -> Int? {
+        guard windowManager.windows.keys.contains(window),
+              let tabManager = windowManager.tabManager(for: window) else {
+            assertionFailure("getTabCount() should not be called prior to TabManager config.")
+            return nil
+        }
+        return tabManager.normalTabs.count
     }
 
     private func sendTelemetryTabLossDetectedEvent(expected: Int, actual: Int, entryPoint: EntryPoint) {

@@ -9,8 +9,8 @@ import Shared
 let websiteUrl1 = "www.mozilla.org"
 let websiteUrl2 = "developer.mozilla.org"
 let invalidUrl = "1-2-3"
-let exampleUrl = "test-example.html"
-let urlExampleLabel = "Example Domain"
+let exampleUrl = TestPages.exampleHTML
+let urlExampleLabel = TestLabels.exampleDomain
 let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
 class HomePageSettingsUITests: FeatureFlaggedTestBase {
@@ -84,7 +84,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "http://example.com")
 
         // Check that it is actually set by opening a different website and going to Home
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
 
         // Now check open home page should load the previously saved home page
@@ -126,7 +126,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.tables.cells["HomeAsFirefoxHome"].isSelected, "Firefox Home is not selected by default")
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabScreen)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         // Add a new tab

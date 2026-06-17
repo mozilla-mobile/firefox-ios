@@ -59,6 +59,10 @@ public struct ToolbarElement: Equatable {
     /// Accessibility identifier of the toolbar element
     let a11yId: String
 
+    /// Stable cache key used to reuse the same button instance across visual state changes.
+    /// When set, the button cache uses this instead of `a11yId`.
+    let cacheId: String?
+
     /// Name for the custom accessibility action
     let a11yCustomActionName: String?
 
@@ -101,6 +105,7 @@ public struct ToolbarElement: Equatable {
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
+                cacheId: String? = nil,
                 a11yCustomActionName: String? = nil,
                 a11yCustomAction: (() -> Void)? = nil,
                 hasLongPressAction: Bool,
@@ -130,6 +135,7 @@ public struct ToolbarElement: Equatable {
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
+        self.cacheId = cacheId
         self.a11yCustomActionName = a11yCustomActionName
         self.a11yCustomAction = a11yCustomAction
         self.hasLongPressAction = hasLongPressAction

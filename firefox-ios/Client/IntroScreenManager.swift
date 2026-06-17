@@ -47,8 +47,7 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     /// Priority order (if multiple flags are enabled):
     /// 1. Japan configuration (highest priority)
     /// 2. Brand refresh configuration
-    /// 3. Modern onboarding
-    /// 4. Legacy onboarding (lowest priority)
+    /// 3. Onboarding (default fallback)
     ///
     /// Note: If both `shouldUseJapanConfiguration` and `shouldUseBrandRefreshConfiguration`
     /// are enabled, Japan configuration takes precedence.
@@ -57,10 +56,9 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
             return .japan
         } else if isModernOnboardingEnabled && shouldUseBrandRefreshConfiguration {
             return .brandRefresh
-        } else if isModernOnboardingEnabled {
-            return .modern
         } else {
-            return .legacy
+            // TODO: FXIOS-16008 Rename the "modern" variant to a non-time-relative name
+            return .modern
         }
     }
 

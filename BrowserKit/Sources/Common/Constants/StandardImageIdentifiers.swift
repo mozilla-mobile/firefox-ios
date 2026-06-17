@@ -11,6 +11,7 @@ public struct StandardImageIdentifiers {
     // Icon size 8x8
     public struct ExtraSmall {
         public static let chevronDown = "chevronDownExtraSmall"
+        public static let pin = "pinExtraSmall"
     }
 
     // Icon size 16x16
@@ -79,6 +80,7 @@ public struct StandardImageIdentifiers {
         public static let history = "historyLarge"
         public static let home = "homeLarge"
         public static let image = "imageLarge"
+        public static let information = "informationLarge"
         public static let lightbulb = "lightbulbLarge"
         public static let lightning = "lightningLarge"
         public static let lightningFill = "lightningFillLarge"
@@ -114,6 +116,7 @@ public struct StandardImageIdentifiers {
         public static let shield = "shieldLarge"
         public static let shieldCheckmark = "shieldCheckmarkLarge"
         public static let shieldSlash = "shieldSlashLarge"
+        public static let soccerBall = "soccerBallLarge"
         public static let socialMedia = "socialMediaLarge"
         public static let subtract = "subtractLarge"
         public static let summarizer = "summarizerLarge"

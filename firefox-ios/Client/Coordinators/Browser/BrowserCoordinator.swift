@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import SwiftUI
 import UIKit
 import WebKit
 import Shared
@@ -55,7 +56,8 @@ final class BrowserCoordinator: BaseCoordinator,
     private let homepageTabStateStore: HomepageTabStateStore
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
-    private var isDeeplinkOptimiziationRefactorEnabled: Bool {
+    private let worldCupStore: WorldCupStoreProtocol
+    private var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
     private var isSummarizerOn: Bool {
@@ -73,7 +75,8 @@ final class BrowserCoordinator: BaseCoordinator,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
@@ -85,6 +88,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
+        self.worldCupStore = worldCupStore
         super.init(router: router)
 
         browserViewController.browserDelegate = self
@@ -160,7 +164,7 @@ final class BrowserCoordinator: BaseCoordinator,
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
         }
         self.homepageViewController = homepageController
-        homepageController.restoreVerticalScrollOffset()
+        homepageController.restoreVerticalScrollOffset(force: didEmbed)
 
         if didEmbed {
             // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
@@ -269,16 +273,14 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func browserHasLoaded() {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            browserIsReady = true
-            logger.log("Browser has loaded", level: .info, category: .coordinator)
+        browserIsReady = true
+        logger.log("Browser has loaded", level: .info, category: .coordinator)
 
-            if let savedRoute {
-                logger.log("Find and handle route called after browserHasLoaded",
-                           level: .info,
-                           category: .coordinator)
-                findAndHandle(route: savedRoute)
-            }
+        if let savedRoute {
+            logger.log("Find and handle route called after browserHasLoaded",
+                       level: .info,
+                       category: .coordinator)
+            findAndHandle(route: savedRoute)
         }
     }
 
@@ -291,16 +293,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            guard browserIsReady, !tabManager.isRestoringTabs else {
-                let readyMessage = "browser is ready? \(browserIsReady)"
-                let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
-                logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
-                           level: .info,
-                           category: .coordinator)
-                return false
-            }
-        }
+        guard checkBrowserIsReady() else { return false }
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
@@ -311,14 +304,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            guard browserIsReady, !tabManager.isRestoringTabs else {
-                logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
-                           level: .info,
-                           category: .coordinator)
-                return
-            }
-        }
+        guard checkBrowserIsReady() else { return }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
@@ -362,6 +348,30 @@ final class BrowserCoordinator: BaseCoordinator,
                 startLaunch(with: .defaultBrowser)
             }
         }
+    }
+
+    /// Depending if we're using the deeplink refactor path or not, there's different checks to ensure we're properly
+    /// setup before we handle routes / deeplinks. `browserIsReady` can maybe be removed at a later point after the deeplink
+    /// refactor is shipped, but this will be a subsequent initiative just in case.
+    private func checkBrowserIsReady() -> Bool {
+        let isReady = isDeeplinkOptimizationRefactorEnabled
+        ? browserIsReady
+        : browserIsReady && !tabManager.isRestoringTabs
+
+        guard isReady else {
+            logger.log(
+            """
+            Not handling route. Browser ready: \(browserIsReady), \
+            restoring tabs: \(tabManager.isRestoringTabs) \
+            with refactor \(isDeeplinkOptimizationRefactorEnabled)
+            """,
+            level: .info,
+            category: .coordinator
+            )
+            return false
+        }
+
+        return true
     }
 
     private func showIntroOnboarding() {
@@ -660,14 +670,20 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showPrintSheet() {
-        if let tab = browserViewController.tabManager.selectedTab, let webView = tab.webView {
-            let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.jobName = tab.displayTitle
-            let printController = UIPrintInteractionController.shared
+        guard let tab = browserViewController.tabManager.selectedTab, let webView = tab.webView else { return }
+
+        let printInfo = UIPrintInfo(dictionary: nil)
+        printInfo.jobName = tab.displayTitle
+        let printController = UIPrintInteractionController.shared
+        printController.printInfo = printInfo
+
+        if tab.mimeType == MIMEType.PDF, let url = webView.url {
+            printController.printingItem = url
+        } else {
             printController.printFormatter = webView.viewPrintFormatter()
-            printController.printInfo = printInfo
-            printController.present(animated: true, completionHandler: nil)
         }
+
+        printController.present(animated: true, completionHandler: nil)
     }
 
     func showSignInView(fxaParameters: FxASignInViewParameters?) {
@@ -1077,6 +1093,17 @@ final class BrowserCoordinator: BaseCoordinator,
     func showShortcutsLibrary() {
         let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
         router.push(shortcutsLibraryViewController)
+    }
+
+    func showWorldCupCountryPicker() {
+        let selectedTeam = worldCupStore.selectedTeam
+        let pickerView = WorldCupCountryPickerView(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            selectedTeam: selectedTeam
+        )
+        let viewController = UIHostingController(rootView: pickerView)
+        present(viewController)
     }
 
     func showQuickAnswers() {

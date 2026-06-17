@@ -324,7 +324,7 @@ extension BrowserViewController {
 
     @objc
     func resetZoom() {
-        guard contentContainer.hasAnyHomepage else { return }
+        guard !contentContainer.hasAnyHomepage else { return }
 
         zoomManager.resetZoom()
     }

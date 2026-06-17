@@ -66,6 +66,10 @@ open class UserAgent {
     public static func getUserAgent(domain: String, platform: UserAgentPlatform) -> String {
         switch platform {
         case .Desktop:
+            if CustomUserAgentConstant.isGoogleDomain(domain) {
+                return CustomUserAgentConstant.googleDesktopUserAgent
+            }
+
             guard let customUA = CustomUserAgentConstant.customDesktopUAForDomain[domain] else {
                 return desktopUserAgent()
             }
@@ -98,6 +102,15 @@ struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
+    static let googleDesktopUserAgent = UserAgentBuilder.defaultDesktopUserAgent().clone(
+        extensions: "\(UserAgent.uaBitFx) Version/18.6 Safari/605.1.15"
+    )
+
+    static func isGoogleDomain(_ domain: String) -> Bool {
+        let urlString = domain.contains("://") ? domain : "https://\(domain)"
+        return URL(string: urlString)?.isDomain("google") == true
+    }
+
     static let customMobileUAForDomain = [
         // TODO: FXIOS-14371 [webcompat] rokuchannel blocking FXIOS "this browser isn't supported" (webcompat #126427)
         "roku.com": safariMobileUA,
@@ -114,7 +127,10 @@ struct CustomUserAgentConstant {
 
     static let customDesktopUAForDomain = [
         // FXIOS-10251: Do not appear as desktop/Safari for firefox.com/pair
-        "firefox.com": defaultMobileUA
+        "firefox.com": defaultMobileUA,
+        // TODO: FXIOS-15483 [webcompat] Docusign forms broken using desktop UA
+        "docusign.com": defaultMobileUA,
+        "docusign.net": defaultMobileUA
     ]
 }
 

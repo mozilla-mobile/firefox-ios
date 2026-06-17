@@ -110,7 +110,7 @@
 "Settings.AIControls.HeaderCard.Link.v151" = "Daha fazla bilgi al";
 
 /* This is the message for the Header Card under the AI Controls settings section. */
-"Settings.AIControls.HeaderCard.Message.v151" = "Yapay zekâ sayesinde çalışan özelliklerin kullanılması da dahildir.";
+"Settings.AIControls.HeaderCard.Message.v151" = "Yapay zekâyla çalışan özellikleri kullanıp kullanmayacağınızı da seçebilirsiniz.";
 
 /* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
 "Settings.AIControls.HeaderCard.Title.v151" = "%@ ile tercih daima sizin";
@@ -164,7 +164,13 @@
 "Settings.Autoplay.Footer.v137" = "Otomatik oynatma ayarları yalnızca yeni açılan sekmeler için geçerli olur. Uygulama yeniden başlatılmadıkça değişiklikler mevcut sekmelere uygulanamaz.";
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
-"Settings.Autoplay.SettingsTitle.v137" = "Otomatik oynatma";
+"Settings.Autoplay.SettingsTitle.v137" = "Otomatik oynat";
+
+/* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
+"Settings.Browsing.BlockAds.Title.v153" = "Reklamları engelle";
+
+/* This is the title for the Content customization section under the Browsing settings page. */
+"Settings.Browsing.Content.v153" = "İçerik";
 
 /* This is the title for Links customization under the Browsing settings section. */
 "Settings.Browsing.Links.v137" = "Bağlantılar";

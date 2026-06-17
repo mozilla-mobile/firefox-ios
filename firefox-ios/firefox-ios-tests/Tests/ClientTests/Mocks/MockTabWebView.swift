@@ -20,6 +20,9 @@ final class MockTabWebView: TabWebView {
     var takeSnapshotWasCalled = false
     var takeSnapshotShouldFail = false
     var mockHasOnlySecureContent = false
+    var mockCanGoBack = false
+    var mockCanGoForward = false
+    var mockInteractionState: Data?
 
     override var title: String? {
         return mockTitle
@@ -31,6 +34,19 @@ final class MockTabWebView: TabWebView {
 
     override var hasOnlySecureContent: Bool {
         return mockHasOnlySecureContent
+    }
+
+    override var canGoBack: Bool {
+        return mockCanGoBack
+    }
+
+    override var canGoForward: Bool {
+        return mockCanGoForward
+    }
+
+    override var interactionState: Any? {
+        get { return mockInteractionState }
+        set { mockInteractionState = newValue as? Data }
     }
 
     override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {

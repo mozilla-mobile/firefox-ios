@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Дастнорас аст**: шумо ин хусусиятро намебинед ва истифода бурда наметавонед. Барои истифодаи зеҳни сунъӣ (AI) дар дастгоҳ, ҳар гуна моделҳои боргиришуда нест карда мешаванд.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Дастнорас аст**: Шумо ин хусусиятро намебинед ва истифода бурда наметавонед. Барои истифодаи зеҳни сунъӣ (AI) дар дастгоҳ, ҳар гуна моделҳои боргиришуда нест карда мешаванд.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Саҳифаҳо ва хулосаҳо ҳеҷ гоҳ нигоҳ дошта намешаванд.";
 
@@ -162,6 +165,12 @@
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Пахши худкор";
+
+/* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
+"Settings.Browsing.BlockAds.Title.v153" = "Манъ кардани реклама";
+
+/* This is the title for the Content customization section under the Browsing settings page. */
+"Settings.Browsing.Content.v153" = "Муҳтаво";
 
 /* This is the title for Links customization under the Browsing settings section. */
 "Settings.Browsing.Links.v137" = "Пайвандҳо";

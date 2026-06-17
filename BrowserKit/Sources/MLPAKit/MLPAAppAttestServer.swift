@@ -18,7 +18,7 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
     public init(
         with type: MLPAEnvironment = .prod,
         urlSession: URLSessionProtocol = URLSession.shared,
-        bundleIdentifier: String = AppInfo.bundleIdentifier
+        bundleIdentifier: String
     ) {
         self.environmentType = type
         self.urlSession = urlSession

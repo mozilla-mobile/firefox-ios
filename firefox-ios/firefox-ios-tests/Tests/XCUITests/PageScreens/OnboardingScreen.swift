@@ -104,8 +104,16 @@ final class OnboardingScreen {
     /// Handles the initial ToS screen based on app channel (Firefox Beta, Firefox, Fennec). ToS must be accepted before the
     /// onboarding flow begins.
     func handleTermsOfService() {
-        BaseTestCase().mozWaitForElementToExist(tosContinueButton, timeout: TIMEOUT_LONG)
-        tosContinueButton.tap()
+        let continueButton = tosContinueButton
+        BaseTestCase().mozWaitForElementToExist(continueButton, timeout: TIMEOUT_LONG)
+        // The ToS is presented over full screen with a cross-dissolve transition, so the button
+        // can exist before it is hittable and an early tap gets absorbed. Wait for it to be
+        // hittable, then tap again if the screen has not advanced past the button.
+        BaseTestCase().mozWaitElementHittable(element: continueButton, timeout: TIMEOUT)
+        continueButton.tap()
+        if continueButton.exists {
+            continueButton.tap()
+        }
     }
 
     func assertContinueButtonIsOnTheBottom() {

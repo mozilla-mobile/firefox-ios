@@ -21,11 +21,11 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     public func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool {
         // For better code readability, please keep in alphabetical order by FeatureFlagID
         switch featureID {
+        case .adBlocker:
+            return checkAdBlockerFeature()
+
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
-
-        case .addressBarMenu:
-            return checkAddressBarMenuFeature()
 
         case .adsClient:
             return checkAdsClientFeature()
@@ -36,17 +36,20 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .appearanceMenu:
             return checkAppearanceMenuFeature()
 
-        case .appIconSelection:
-            return checkAppIconSelectionSetting()
-
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
 
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
+        case .customReaderModeScheme:
+            return checkCustomReaderModeSchemeFeature()
+
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature()
+
+        case .deeplinkOverlay:
+            return checkDeeplinkOverlayFeature()
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature()
@@ -57,8 +60,14 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature()
 
+        case .googleLens:
+            return checkGoogleLensFeature()
+
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature()
+
+        case .homepageAddShortcutTile:
+            return checkHomepageAddShortcutTile()
 
         case .homepageBookmarksSectionDefault:
             return checkHomepageBookmarksSectionDefault()
@@ -75,6 +84,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .homepageStoryCategories:
             return checkHomepageStoriesCaterogiesFeature()
 
+        case .homepageTrackerBlockerModule:
+            return checkHomepageTrackerBlockerModuleFeature()
         case .hostedSummarizer:
             return checkHostedSummarizerFeature()
 
@@ -101,6 +112,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .needsReloadRefactor:
             return checkNeedsReloadRefactorFeature()
+
+        case .novaDesign:
+            return checkNovaDesignFeature()
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
@@ -165,9 +179,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .touFeature:
             return checkTouFeature()
 
-        case .trackingProtectionRefactor:
-            return checkTrackingProtectionRefactor()
-
         case .translation:
             return checkTranslationFeature()
 
@@ -210,6 +221,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHNTSponsoredShortcutsFeature() -> Bool {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
+    }
+
+    private func checkHomepageAddShortcutTile() -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().addShortcutTile
     }
 
     private func checkHomepageBookmarksSectionDefault() -> Bool {
@@ -274,11 +289,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.touFeature.value().status
     }
 
-    private func checkTrackingProtectionRefactor() -> Bool {
-        let config = nimbus.features.trackingProtectionRefactor.value()
-        return config.enabled
-    }
-
     private func checkTranslationFeature() -> Bool {
         return nimbus.features.translationsFeature.value().enabled
     }
@@ -330,19 +340,13 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return config.status
     }
 
-    private func checkAppIconSelectionSetting() -> Bool {
-        let config = nimbus.features.appIconSelectionFeature.value()
-        return config.funIconsEnabled
-    }
-
-    private func checkAddressBarMenuFeature() -> Bool {
-        let config = nimbus.features.addressBarMenuFeature.value()
-        return config.status
-    }
-
     private func checkDeeplinkOptimizationRefactorFeature() -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
+    }
+
+    private func checkDeeplinkOverlayFeature() -> Bool {
+        return nimbus.features.deeplinkOverlayFeature.value().enabled
     }
 
     private func checkDownloadLiveActivitiesFeature() -> Bool {
@@ -357,6 +361,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
+    }
+
+    private func checkGoogleLensFeature() -> Bool {
+        return nimbus.features.googleLensFeature.value().enabled
     }
 
     private func checkMicrosurveyFeature() -> Bool {
@@ -433,6 +441,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.needsReloadRefactor.value().enabled
     }
 
+    private func checkNovaDesignFeature() -> Bool {
+        return nimbus.features.novaDesignFeature.value().enabled
+    }
+
     private func checkAiKillSwitchFeature() -> Bool {
         return nimbus.features.aiKillSwitchFeature.value().enabled
     }
@@ -445,7 +457,19 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.worldCupWidgetFeature.value().enabled
     }
 
+    private func checkAdBlockerFeature() -> Bool {
+        return nimbus.features.adBlockerFeature.value().enabled
+    }
+
     func checkStartAtHomeConfiguration() -> StartAtHome {
         return nimbus.features.startAtHomeFeature.value().setting
+    }
+
+    private func checkCustomReaderModeSchemeFeature() -> Bool {
+        return nimbus.features.customReaderModeSchemeFeature.value().enabled
+    }
+
+    private func checkHomepageTrackerBlockerModuleFeature() -> Bool {
+        return nimbus.features.homepageTrackerBlockerModuleFeature.value().enabled
     }
 }

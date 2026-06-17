@@ -23,6 +23,7 @@ class ToolbarMenuTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306840
+    // Smoketest
     func testToolbarMenu() {
         let hamburgerMenu = toolbarScreen.getToolbarSettingsMenuButtonElement()
         let tabsButton = toolbarScreen.getTabsButtonElement()

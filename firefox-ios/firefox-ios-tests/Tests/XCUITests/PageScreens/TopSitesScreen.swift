@@ -42,7 +42,7 @@ final class TopSitesScreen {
     }
 
     func assertDefaultTopSites(timeout: TimeInterval = TIMEOUT) {
-        let names = ["X", "Amazon", "Wikipedia", "YouTube", "Facebook"]
+        let names = ["Amazon", "Wikipedia", "YouTube", "Facebook"]
         for name in names {
             // Search a link with the label = `name`
             let pred = NSPredicate(format: "label == %@", name)

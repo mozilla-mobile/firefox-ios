@@ -5,7 +5,7 @@
 import Foundation
 
 class PrintTests: BaseTestCase {
-    // https://mozilla.testrail.io/index.php?/cases/view/3082504
+    // https://mozilla.testrail.io/index.php?/cases/view/3167647
     func testValidatePrintOption() {
         openUrlAndValidatePrintOptions()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -13,7 +13,7 @@ class PrintTests: BaseTestCase {
     }
 
     private func openUrlAndValidatePrintOptions() {
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenuMore)

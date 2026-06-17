@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Redux
+import Storage
 
 class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
@@ -26,6 +27,7 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     // MARK: - Private constants
+    private let profile: Profile
     private let logger: Logger
 
     // MARK: - Private variables
@@ -42,11 +44,13 @@ class ShortcutsLibraryViewController: UIViewController,
 
     // MARK: Initializers
     init(windowUUID: WindowUUID,
+         profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
+        self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
@@ -254,6 +258,19 @@ class ShortcutsLibraryViewController: UIViewController,
             }
 
             return UICollectionViewCell()
+        case .addShortcutTile:
+            let cellType: ReusableCell.Type = TopSiteCell.self
+
+            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
+                return UICollectionViewCell()
+            }
+
+            if let topSiteCell = topSiteCell as? TopSiteCell {
+                topSiteCell.configureAddShortcutTile(theme: currentTheme, textColor: nil)
+                return topSiteCell
+            }
+
+            return UICollectionViewCell()
         }
     }
 
@@ -333,6 +350,7 @@ class ShortcutsLibraryViewController: UIViewController,
             return
         }
 
+        guard item.canHandleLongPress else { return }
         navigateToContextMenu(for: item, sourceView: sourceView)
     }
 
@@ -344,6 +362,11 @@ class ShortcutsLibraryViewController: UIViewController,
                 level: .debug,
                 category: .shortcutsLibrary
             )
+            return
+        }
+
+        if case .addShortcutTile = item {
+            presentAddShortcutAlert()
             return
         }
 
@@ -368,6 +391,28 @@ class ShortcutsLibraryViewController: UIViewController,
             ShortcutsLibraryAction(
                 windowUUID: windowUUID,
                 actionType: ShortcutsLibraryActionType.tapOnShortcutCell
+            )
+        )
+    }
+
+    private func presentAddShortcutAlert() {
+        let alert = UIAlertController.addShortcutAlert { [weak self] url in
+            self?.addPinnedShortcut(url: url)
+        }
+        present(alert, animated: true)
+    }
+
+    private func addPinnedShortcut(url: URL) {
+        let site = Site.createBasicSite(
+            url: url.absoluteString,
+            title: url.shortDisplayString.capitalized
+        )
+        profile.pinnedSites.addPinnedTopSite(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutPinnedSource: .homescreenButton,
+                windowUUID: windowUUID,
+                actionType: TopSitesActionType.shortcutPinned
             )
         )
     }

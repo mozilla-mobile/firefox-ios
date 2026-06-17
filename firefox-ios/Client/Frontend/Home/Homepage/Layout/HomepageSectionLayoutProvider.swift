@@ -102,6 +102,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             }
         }
 
+        struct TrackerBlockerModuleConstants {
+            static let height: CGFloat = 50
+        }
+
         struct BookmarksConstants {
             static let cellWidth: CGFloat = 134
         }
@@ -116,9 +120,18 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// of the inputs differ between layout passes.
     private var measurementsCache = HomepageLayoutMeasurementCache()
 
+    /// Most recent height reported by a live `WorldCupCell`. Used for the spacer calculation so that
+    /// the stories section lands exactly above the fold once the cell has measured itself.
+    private var lastKnownWorldCupCellHeight: CGFloat?
+
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
         self.logger = logger
+    }
+
+    /// Called by the homepage when a `WorldCupCell` finishes laying out and reports its true height.
+    func setWorldCupCellHeight(_ height: CGFloat) {
+        lastKnownWorldCupCellHeight = height
     }
 
     func createLayoutSection(
@@ -157,6 +170,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 for: traitCollection,
                 config: configuration
             )
+        case .trackerBlockerModule:
+            return createTrackerBlockerModuleSectionLayout(for: traitCollection)
         case .pocket:
             return createStoriesSectionLayout(for: environment)
         case .bookmarks:
@@ -201,7 +216,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
         let containerWidth = environment.container.contentSize.width
-        let itemHeight = UX.MessageCardConstants.height
+        let itemHeight = lastKnownWorldCupCellHeight ?? UX.MessageCardConstants.height
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(itemHeight))
@@ -477,6 +492,28 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
+    private func createTrackerBlockerModuleSectionLayout(
+        for traitCollection: UITraitCollection
+    ) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(UX.TrackerBlockerModuleConstants.height)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, subitem: item, count: 1)
+        let section = NSCollectionLayoutSection(group: group)
+
+        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: leadingInset,
+            bottom: UX.spacingBetweenSections,
+            trailing: leadingInset
+        )
+
+        return section
+    }
+
     private func createBookmarksSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let cellWidth = UX.BookmarksConstants.cellWidth
 
@@ -624,6 +661,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             containerWidth: containerWidth,
             isLandscape: UIDevice.current.orientation.isLandscape,
             shouldShowSection: topSitesState.shouldShowSection,
+            shouldShowAddShortcutTile: topSitesState.shouldShowAddShortcutTile,
             contentSizeCategory: contentSizeCategory
         )
 
@@ -646,7 +684,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let cellsData = topSitesState.topSitesData.prefix(maxCells)
-        guard !cellsData.isEmpty else {
+        guard !cellsData.isEmpty || topSitesState.shouldShowAddShortcutTile else {
             measurementsCache.setHeight(0, for: measurementKey)
             return 0
         }
@@ -660,11 +698,17 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         // Build array of configured cells for the data being displayed on the homepage
-        let allCells = cellsData.map { data in
+        var allCells = cellsData.map { data in
             let cell = TopSiteCell()
             cell.configure(data, position: 0, theme: LightTheme(), textColor: .black)
             return cell
         }
+        if topSitesState.shouldShowAddShortcutTile {
+            let cell = TopSiteCell()
+            cell.configureAddShortcutTile(theme: LightTheme(), textColor: .black)
+            allCells.append(cell)
+        }
+        allCells = Array(allCells.prefix(maxCells))
 
         // Group into rows and compute each rows max height
         let rowHeights = stride(from: 0, to: allCells.count, by: cols).map { start in
@@ -779,6 +823,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return bookmarksMeasurement.totalHeight
     }
 
+    private func getTrackerBlockerModuleSectionHeight() -> CGFloat {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
+              state.trackerBlockerModuleState.shouldShowSection else { return 0 }
+
+        return UX.TrackerBlockerModuleConstants.height + UX.spacingBetweenSections
+    }
+
     /// Creates a "dummy" search bar section and returns its height
     private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
@@ -859,16 +910,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     /// Returns the estimated height of the World Cup section when it is visible, or 0 when hidden.
+    ///
+    /// Uses the most recent height pushed up by the live `WorldCupCell` via `setWorldCupCellHeight`.
+    /// Before the cell has measured itself (first render) we fall back to a sensible estimate that the
+    /// cell will correct via `relayoutForCellHeightChange` once it lays out.
     private func getWorldcupSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
-              state.worldcupState.shouldShowSection,
-              featureFlagsProvider.isEnabled(.worldCupWidget) else { return 0 }
+              state.worldcupState.shouldShowSection else { return 0 }
 
-        let containerWidth = normalizedDimension(environment.container.contentSize.width)
-        let cell = WorldCupCell()
-        cell.configure(with: state.worldcupState, theme: LightTheme(), onHeightChange: {})
-        let cellHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: containerWidth)
-
+        let cellHeight = lastKnownWorldCupCellHeight ?? UX.MessageCardConstants.height
         return cellHeight + UX.spacingBetweenSections
     }
 
@@ -889,6 +939,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let worldcupHeight = getWorldcupSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
+        let trackerBlockerModuleHeight = getTrackerBlockerModuleSectionHeight()
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
@@ -898,6 +949,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             - topSitesHeight
             - worldcupHeight
             - jumpBackInHeight
+            - trackerBlockerModuleHeight
             - bookmarksHeight
             - searchBarHeight
     }

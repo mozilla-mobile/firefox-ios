@@ -18,9 +18,6 @@ enum LaunchType {
     /// Showing the intro onboarding
     case intro(manager: IntroScreenManagerProtocol)
 
-    /// Show the update onboarding
-    case update(viewModel: UpdateViewModel)
-
     /// Show the surface survey
     case survey(manager: SurveySurfaceManager)
 
@@ -51,12 +48,9 @@ enum LaunchType {
             return true
         case .termsOfService:
             return true
-        case .intro(let introManager):
-            // For intro onboarding, use full screen on iPad only when modern onboarding is enabled
-            return isIphone || introManager.isModernOnboardingEnabled
-        case .update:
-            // For update onboarding, always use iPhone-only behavior for now
-            return isIphone
+        case .intro:
+            // Intro onboarding is always shown full screen
+            return true
         case .survey:
             return true
         case .defaultBrowser:

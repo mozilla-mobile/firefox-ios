@@ -138,6 +138,25 @@ final class TabTrayViewController: UIViewController,
         return selector
     }()
 
+    private lazy var experimentiPadSegmentControl: TabTrayiPadSelectorView = {
+        let selectedIndex = experimentConvertSelectedIndex()
+        let titles = [TabTrayPanelType.privateTabs.label,
+                     TabTrayPanelType.tabs.label,
+                     TabTrayPanelType.syncedTabs.label]
+        let selector = TabTrayiPadSelectorView(selectedIndex: selectedIndex,
+                                               theme: retrieveTheme(),
+                                               buttonTitles: titles)
+        selector.delegate = self
+        selector.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
+
+        didSelectSection(panelType: tabTrayState.selectedPanel)
+        return selector
+    }()
+
+    private var activeExperimentSegmentControl: TabTraySelectorView {
+        shouldUseiPadSetup() ? experimentiPadSegmentControl : experimentSegmentControl
+    }
+
     private func experimentConvertSelectedIndex() -> Int {
         // Temporary offset of numbers to account for the different order in the experiment - tabTrayUIExperiments
         // Order can be updated in TabTrayPanelType once the experiment is done
@@ -345,9 +364,16 @@ final class TabTrayViewController: UIViewController,
                 navigationItem.rightBarButtonItems = [doneButton]
             }
         case .regular:
-            navigationItem.titleView = tabTrayUtils.shouldDisplayExperimentUI() ? experimentSegmentControl : segmentedControl
+
+            navigationItem.titleView = getSegmentedControl()
         }
         updateToolbarItems()
+    }
+
+    func getSegmentedControl() -> UIView {
+        guard tabTrayUtils.shouldDisplayExperimentUI() else { return segmentedControl }
+
+        return shouldUseiPadSetup() ? experimentiPadSegmentControl : experimentSegmentControl
     }
 
     // MARK: - Redux
@@ -436,7 +462,7 @@ final class TabTrayViewController: UIViewController,
         panelContainer.backgroundColor = theme.colors.layer3
 
         if shouldUsePrivateOverride {
-            experimentSegmentControl.applyTheme(theme: theme)
+            activeExperimentSegmentControl.applyTheme(theme: theme)
 
             let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
             navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
@@ -461,7 +487,7 @@ final class TabTrayViewController: UIViewController,
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
         panelContainer.backgroundColor = swipeTheme.colors.layer3
 
-        experimentSegmentControl.applyTheme(theme: swipeTheme)
+        activeExperimentSegmentControl.applyTheme(theme: swipeTheme)
         setupToolBarAppearance(theme: swipeTheme)
         setupNavigationBarAppearance(theme: swipeTheme)
     }
@@ -646,7 +672,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupForiPadExperiment() {
-        navigationItem.titleView = experimentSegmentControl
+        navigationItem.titleView = getSegmentedControl()
         view.addSubviews(containerView)
         containerView.addSubview(panelContainer)
         setupBlurView()
@@ -660,12 +686,7 @@ final class TabTrayViewController: UIViewController,
             panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
             panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-
-            // Because experimentSegmentControl doesn't inherit from UISegmentControl
-            // we need to set height and width constraints
-            experimentSegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.iPadWidth),
-            experimentSegmentControl.heightAnchor.constraint(equalToConstant: tabTrayUtils.segmentedControlHeight)
+            panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
     }
 

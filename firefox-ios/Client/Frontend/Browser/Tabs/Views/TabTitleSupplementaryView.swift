@@ -35,6 +35,7 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        isUserInteractionEnabled = false
 
         addSubview(footerView)
         footerView.addArrangedSubview(faviconContainer)

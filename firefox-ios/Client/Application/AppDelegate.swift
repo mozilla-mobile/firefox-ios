@@ -31,7 +31,8 @@ class AppDelegate: UIResponder,
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNewAppearanceMenuOnClosure: { self.featureFlagsProvider.isEnabled(.appearanceMenu) }
+        isNewAppearanceMenuOnClosure: { self.featureFlagsProvider.isEnabled(.appearanceMenu) },
+        isNovaDesignOnClosure: { self.featureFlagsProvider.isEnabled(.novaDesign) }
     )
     lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
@@ -63,7 +64,7 @@ class AppDelegate: UIResponder,
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        startRecordingStartupOpenURLTime()
+        shareTelemetry.recordOpenDeeplinkTime()
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,
@@ -107,28 +108,6 @@ class AppDelegate: UIResponder,
         Tab.ChangeUserAgent.performMigration()
 
         return true
-    }
-
-    private func startRecordingStartupOpenURLTime() {
-        shareTelemetry.recordOpenDeeplinkTime()
-        nonisolated(unsafe) var recordCompleteToken: ActionToken?
-        nonisolated(unsafe) var recordCancelledToken: ActionToken?
-        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkComplete) { [weak self] in
-            ensureMainThread { [weak self] in
-                self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
-                guard let recordCancelledToken, let recordCompleteToken  else { return }
-                AppEventQueue.cancelAction(token: recordCancelledToken)
-                AppEventQueue.cancelAction(token: recordCompleteToken)
-            }
-        }
-        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkCancelled) { [weak self] in
-            ensureMainThread { [weak self] in
-                self?.shareTelemetry.cancelOpenURLTimeRecord()
-                guard let recordCancelledToken, let recordCompleteToken  else { return }
-                AppEventQueue.cancelAction(token: recordCancelledToken)
-                AppEventQueue.cancelAction(token: recordCompleteToken)
-            }
-        }
     }
 
     func application(
@@ -266,7 +245,7 @@ class AppDelegate: UIResponder,
         logger.log("Received memory warning", level: .info, category: .lifecycle)
         Task {
             for uuid in windowManager.allWindowUUIDs(includingReserved: false) {
-                await windowManager.tabManager(for: uuid).offloadBackgroundWebViews()
+                await windowManager.tabManager(for: uuid)?.offloadBackgroundWebViews()
             }
         }
     }

@@ -43,7 +43,7 @@ class ClipBoardTests: BaseTestCase {
             if let myString = UIPasteboard.general.string {
                 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
                 let allowBtn = springboard.buttons["Allow Paste"]
-                if allowBtn.waitForExistence(timeout: TIMEOUT) {
+                if allowBtn.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
                     allowBtn.waitAndTap()
                 }
 
@@ -84,7 +84,11 @@ class ClipBoardTests: BaseTestCase {
                 urlBarAddress.press(forDuration: 1)
             }
             app.otherElements.buttons["Paste"].waitAndTap()
-            mozWaitForValueContains(urlBarAddress, value: "https://www.example.com/")
+            if #available(iOS 18, *) {
+                mozWaitForValueContains(urlBarAddress, value: "https://www.example.com/")
+            } else {
+                mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
+            }
         }
     }
 

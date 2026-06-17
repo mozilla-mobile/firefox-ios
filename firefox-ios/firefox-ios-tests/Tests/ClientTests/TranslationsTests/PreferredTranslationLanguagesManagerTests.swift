@@ -146,6 +146,48 @@ final class PreferredTranslationLanguagesManagerTests: XCTestCase {
         XCTAssertEqual(result, ["de"])
     }
 
+    // MARK: - matchingSupportedCode
+
+    func test_matchingSupportedCode_exactFullTag_returnsFullTag() {
+        let result = PreferredTranslationLanguagesManager.matchingSupportedCode(
+            for: "zh-Hans-CN",
+            in: ["zh-Hans-CN", "en"]
+        )
+        XCTAssertEqual(result, "zh-Hans-CN")
+    }
+
+    func test_matchingSupportedCode_languageScriptRegion_returnsLanguageScript() {
+        let result = PreferredTranslationLanguagesManager.matchingSupportedCode(
+            for: "zh-Hans-CN",
+            in: ["zh-Hans", "en"]
+        )
+        XCTAssertEqual(result, "zh-Hans")
+    }
+
+    func test_matchingSupportedCode_languageRegion_returnsLanguage() {
+        let result = PreferredTranslationLanguagesManager.matchingSupportedCode(
+            for: "en-US",
+            in: ["en", "fr"]
+        )
+        XCTAssertEqual(result, "en")
+    }
+
+    func test_matchingSupportedCode_languageScript_notSupported_fallsBackToLanguage() {
+        let result = PreferredTranslationLanguagesManager.matchingSupportedCode(
+            for: "zh-Hant-TW",
+            in: ["zh", "en"]
+        )
+        XCTAssertEqual(result, "zh")
+    }
+
+    func test_matchingSupportedCode_noOverlap_returnsNil() {
+        let result = PreferredTranslationLanguagesManager.matchingSupportedCode(
+            for: "sq-AL",
+            in: ["en", "fr"]
+        )
+        XCTAssertNil(result)
+    }
+
     // MARK: - Helpers
 
     private func createSubject() -> PreferredTranslationLanguagesManager {

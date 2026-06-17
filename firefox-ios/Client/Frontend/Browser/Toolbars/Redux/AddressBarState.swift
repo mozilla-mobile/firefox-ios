@@ -146,11 +146,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return handleDidSetTabScreenshotAction(state: state, action: action)
 
         // Translation related actions
-        case ToolbarActionType.didStartTranslatingPage,
-            ToolbarActionType.translationCompleted,
-            ToolbarActionType.receivedTranslationLanguage,
-            ToolbarActionType.didReceiveErrorTranslating,
-            ToolbarActionType.didTranslationSettingsChange:
+        case TranslationsActionType.didStartTranslatingPage,
+            TranslationsActionType.translationCompleted,
+            TranslationsActionType.receivedTranslationLanguage,
+            TranslationsActionType.didReceiveErrorTranslating,
+            TranslationsActionType.didTranslationSettingsChange:
             return handleLeadingPageChangedAction(state: state, action: action)
 
         case ToolbarActionType.didSummarizeSettingsChange:
@@ -164,6 +164,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
+
+        case ToolbarActionType.lockIconChanged:
+            return handleLockIconChangedAction(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
@@ -315,14 +318,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleLeadingPageChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else {
+        guard let translationsAction = action as? TranslationsAction else {
             return defaultState(from: state)
         }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            leadingPageActions: leadingPageActions(action: toolbarAction,
+            leadingPageActions: leadingPageActions(action: translationsAction,
                                                    addressBarState: state,
                                                    isEditing: state.isEditing),
             trailingPageActions: state.trailingPageActions,
@@ -340,7 +343,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
-            translationConfiguration: toolbarAction.translationConfiguration,
+            translationConfiguration: translationsAction.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -503,6 +506,36 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // (see `Tab.translationConfiguration`). Inheriting the existing Redux state here would leak
         // the previous tab's icon onto a new tab whose own state is nil (FXIOS-15606).
         return action.translationConfiguration ?? existingConfig
+    }
+
+    @MainActor
+    private static func handleLockIconChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId,
+            lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
+            lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
     }
 
     @MainActor
@@ -1104,22 +1137,39 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func leadingPageActions(
-        action: ToolbarAction,
+        action: Action,
         addressBarState: AddressBarState,
         isEditing: Bool = false
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
+        guard action is ToolbarAction || action is TranslationsAction else { return actions }
+
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
               !isEditing
         else { return actions }
 
-        let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        let toolbarAction = action as? ToolbarAction
+        let actionTranslationConfiguration = TranslationConfiguration(from: action)
+        // For TranslationsAction the action's config is the sole authority — nil means "clear the icon".
+        // For ToolbarAction we fall back to state so the icon persists across unrelated toolbar updates.
+        let resolvedTranslationConfiguration: TranslationConfiguration? = action is TranslationsAction
+            ? actionTranslationConfiguration
+            : actionTranslationConfiguration ?? addressBarState.translationConfiguration
+        let isShowingNavigationToolbar = toolbarAction?.isShowingNavigationToolbar
+            ?? toolbarState.isShowingNavigationToolbar
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
+        let isHomepage = (isURLDidChangeAction ? toolbarAction?.url : toolbarState.addressToolbar.url) == nil
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
-        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
-        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
+        let isLoading = isLoadingChangeAction ? toolbarAction?.isLoading : addressBarState.isLoading
+        let hasAlternativeLocationColor: Bool
+        if let toolbarAction {
+            hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction)
+        } else {
+            hasAlternativeLocationColor = toolbarState.toolbarPosition == .top
+                && !toolbarState.isShowingTopTabs
+                && toolbarState.isShowingNavigationToolbar
+        }
 
         if !isHomepage, !isShowingNavigationToolbar {
             let shareAction = shareAction(enabled: isLoading == false,
@@ -1127,8 +1177,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actions.append(shareAction)
 
             if let translationAction = configureTranslationIcon(
-                for: action,
-                addressBarState: addressBarState,
+                translationConfiguration: resolvedTranslationConfiguration,
                 isLoading: isLoading,
                 hasAlternativeLocationColor: hasAlternativeLocationColor
             ) {
@@ -1140,8 +1189,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actions.append(shareAction)
 
             if let translationAction = configureTranslationIcon(
-                for: action,
-                addressBarState: addressBarState,
+                translationConfiguration: resolvedTranslationConfiguration,
                 isLoading: isLoading,
                 hasAlternativeLocationColor: hasAlternativeLocationColor
             ) {
@@ -1155,21 +1203,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
     // Checks whether we should show the translation icon based on the translation configuration
     // state and setups up the configuration for the translation icon on the toolbar (for iPad and iPhone)
     private static func configureTranslationIcon(
-        for action: ToolbarAction,
-        addressBarState: AddressBarState,
+        translationConfiguration: TranslationConfiguration?,
         isLoading: Bool?,
         hasAlternativeLocationColor: Bool
     ) -> ToolbarActionConfiguration? {
-        // Check if action has an updated configuration, otherwise default to state.
-        // We need to do this check because of existing architecture
-        // in which the state is updated after
-        // we configure the button, so we need to check action too.
-        let isFeatureEnabledFromAction = action.translationConfiguration?.isTranslationFeatureEnabled ?? false
-        let isFeatureEnabledFromState = addressBarState.translationConfiguration?.isTranslationFeatureEnabled ?? false
-        let shouldShowTranslationIcon = isFeatureEnabledFromAction || isFeatureEnabledFromState
-        guard shouldShowTranslationIcon else { return nil }
-        let iconState = action.translationConfiguration?.state ?? addressBarState.translationConfiguration?.state
-        guard let iconState else { return nil }
+        guard let config = translationConfiguration, config.isTranslationFeatureEnabled else { return nil }
+        guard let iconState = config.state else { return nil }
         return translateAction(
             enabled: isLoading == false,
             state: iconState,
@@ -1462,13 +1501,16 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return ToolbarActionConfiguration(
             actionType: .readerModeWithSummarizer,
             iconName: StandardImageIdentifiers.Medium.readerView,
-            bottomBadgeImage: UIImage(named: ImageIdentifiers.lightningBadge),
+            bottomBadgeImage: UIImage(
+                named: StandardImageIdentifiers.Large.lightningFill
+            )?.withRenderingMode(.alwaysTemplate),
             isEnabled: true,
             isSelected: isSelected,
             hasCustomColor: !hasAlternativeLocationColor,
             a11yLabel: .Toolbars.ReaderModeWithSummarizerButtonAccessibilityLabel,
             a11yHint: .TabLocationReloadAccessibilityHint,
-            a11yId: AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton)
+            a11yId: AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton
+        )
     }
 
     // Sets up translation icon on the toolbar
@@ -1499,7 +1541,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasHighlightedColor: false,
             contextualHintType: ContextualHintType.translation.rawValue,
             a11yLabel: state.buttonA11yLabel,
-            a11yId: state.buttonA11yIdentifier
+            a11yId: state.buttonA11yIdentifier,
+            cacheId: AccessibilityIdentifiers.Toolbar.translateButton
         )
     }
 }

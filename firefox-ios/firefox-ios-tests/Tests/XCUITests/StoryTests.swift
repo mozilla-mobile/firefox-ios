@@ -5,7 +5,14 @@
 import XCTest
 import Common
 
-class StoryTests: BaseTestCase {
+class StoryTests: FeatureFlaggedTestBase {
+    private var newsScreen: NewsScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        newsScreen = NewsScreen(app: app)
+    }
+
     enum SwipeDirection {
         case up, down, left, right
     }
@@ -42,6 +49,8 @@ class StoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
     func testNewsStoriesEnabledByDefault() {
+        app.launch()
+
         navigator.goto(NewTabScreen)
         app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.otherElements["News"])
@@ -69,6 +78,8 @@ class StoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
     func testValidateNewsContextMenu() {
+        app.launch()
+
         navigator.goto(NewTabScreen)
         app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.otherElements["News"])
@@ -86,5 +97,23 @@ class StoryTests: BaseTestCase {
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
+    func testNewsStoryCategoriesFilterStories() {
+        addLaunchArgument(jsonFileName: "homepageStoryCategoriesOn", featureName: "homepage-redesign-feature")
+        app.launch()
+
+        newsScreen.scrollToNewsSection()
+        newsScreen.assertNewsSectionExists()
+        newsScreen.assertAllCategoryButtonExists()
+        newsScreen.assertCategoryCount(minimum: 2)
+
+        newsScreen.tapCategoryButton(at: 0)
+        newsScreen.assertFirstStoryCellExists()
+        newsScreen.tapCategoryButton(at: 1)
+        newsScreen.assertFirstStoryCellExists()
+        newsScreen.tapAllCategoryButton()
+        newsScreen.assertFirstStoryCellExists()
     }
 }

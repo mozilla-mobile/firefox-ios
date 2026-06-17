@@ -996,8 +996,6 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     
     func getByBaseDomain(baseDomain: String) throws  -> [Login]
     
-    func getCheckpoint() throws  -> String?
-    
     func hasLoginsByBaseDomain(baseDomain: String) throws  -> Bool
     
     func isEmpty() throws  -> Bool
@@ -1047,9 +1045,7 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
      * This is intended to be run during idle time and will take steps / to clean up / shrink the
      * database.
      */
-    func runMaintenance() throws 
-    
-    func setCheckpoint(checkpoint: String) throws 
+    func runMaintenance(options: RunMaintenanceOptions?) throws 
     
     func shutdown() 
     
@@ -1283,14 +1279,6 @@ open func getByBaseDomain(baseDomain: String)throws  -> [Login]  {
 })
 }
     
-open func getCheckpoint()throws  -> String?  {
-    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
-    uniffi_logins_fn_method_loginstore_get_checkpoint(
-            self.uniffiCloneHandle(),$0
-    )
-})
-}
-    
 open func hasLoginsByBaseDomain(baseDomain: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_has_logins_by_base_domain(
@@ -1400,17 +1388,10 @@ open func resetAllBreaches()throws   {try rustCallWithError(FfiConverterTypeLogi
      * This is intended to be run during idle time and will take steps / to clean up / shrink the
      * database.
      */
-open func runMaintenance()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+open func runMaintenance(options: RunMaintenanceOptions? = nil)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_run_maintenance(
-            self.uniffiCloneHandle(),$0
-    )
-}
-}
-    
-open func setCheckpoint(checkpoint: String)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
-    uniffi_logins_fn_method_loginstore_set_checkpoint(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(checkpoint),$0
+        FfiConverterOptionTypeRunMaintenanceOptions.lower(options),$0
     )
 }
 }
@@ -2105,6 +2086,56 @@ public func FfiConverterTypeLoginsDeletionMetrics_lower(_ value: LoginsDeletionM
     return FfiConverterTypeLoginsDeletionMetrics.lower(value)
 }
 
+
+public struct RunMaintenanceOptions: Equatable, Hashable {
+    public var deleteUndecryptableRecordsForRemoteReplacement: Bool
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(deleteUndecryptableRecordsForRemoteReplacement: Bool = true) {
+        self.deleteUndecryptableRecordsForRemoteReplacement = deleteUndecryptableRecordsForRemoteReplacement
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension RunMaintenanceOptions: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRunMaintenanceOptions: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RunMaintenanceOptions {
+        return
+            try RunMaintenanceOptions(
+                deleteUndecryptableRecordsForRemoteReplacement: FfiConverterBool.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: RunMaintenanceOptions, into buf: inout [UInt8]) {
+        FfiConverterBool.write(value.deleteUndecryptableRecordsForRemoteReplacement, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRunMaintenanceOptions_lift(_ buf: RustBuffer) throws -> RunMaintenanceOptions {
+    return try FfiConverterTypeRunMaintenanceOptions.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRunMaintenanceOptions_lower(_ value: RunMaintenanceOptions) -> RustBuffer {
+    return FfiConverterTypeRunMaintenanceOptions.lower(value)
+}
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -2533,6 +2564,30 @@ fileprivate struct FfiConverterOptionTypeLogin: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionTypeRunMaintenanceOptions: FfiConverterRustBuffer {
+    typealias SwiftType = RunMaintenanceOptions?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeRunMaintenanceOptions.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeRunMaintenanceOptions.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceBool: FfiConverterRustBuffer {
     typealias SwiftType = [Bool]
 
@@ -2836,9 +2891,6 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_get_by_base_domain() != 30272) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_logins_checksum_method_loginstore_get_checkpoint() != 9423) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_logins_checksum_method_loginstore_has_logins_by_base_domain() != 40417) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -2869,10 +2921,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_reset_all_breaches() != 59640) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_logins_checksum_method_loginstore_run_maintenance() != 12968) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_logins_checksum_method_loginstore_set_checkpoint() != 45296) {
+    if (uniffi_logins_checksum_method_loginstore_run_maintenance() != 53717) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_shutdown() != 50825) {

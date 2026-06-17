@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**차단됨**: 해당 기능을 볼 수 없으며 사용할 수 없습니다. 온디바이스 AI의 경우 다운로드 된 모델이 제거됩니다.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**차단됨**: 해당 기능을 볼 수 없으며 사용할 수 없습니다. 온디바이스 AI의 경우 다운로드 된 모델이 제거됩니다.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "페이지와 요약은 저장되지 않습니다.";
 

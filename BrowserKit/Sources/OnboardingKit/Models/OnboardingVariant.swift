@@ -7,7 +7,6 @@ import Foundation
 /// Enum representing the different onboarding variants available.
 /// This mirrors the Nimbus OnboardingVariant configuration.
 public enum OnboardingVariant: String, Sendable {
-    case legacy
     case modern
     case japan
     case brandRefresh
@@ -15,7 +14,7 @@ public enum OnboardingVariant: String, Sendable {
     /// Whether the UI for the Onboarding should be according to the brand refresh.
     var shouldShowBrandRefreshUI: Bool {
         switch self {
-        case .legacy, .modern:
+        case .modern:
             return false
         case .brandRefresh, .japan:
             return true

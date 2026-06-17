@@ -7,14 +7,15 @@ import ComponentLibrary
 import Shared
 import UIKit
 
-final class WorldCupTimerView: UIView, ThemeApplicable {
+final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
     private struct UX {
+        static let horizontalPadding: CGFloat = 16.0
         static let leftContentStackSpacing: CGFloat = 16.0
         static let timerVerticalPadding: CGFloat = 8
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
-        static let dismissButtonSize = CGSize(width: 16, height: 16)
-        static let heroImageWidth: CGFloat = 160
+        static let actionButtonSize = CGSize(width: 24, height: 24)
+        static let heroImageWidth: CGFloat = 80.0
         static let heroImageHeight: CGFloat = 140.0
         static let heroImageTrailingPadding: CGFloat = 12.0
         static let heroGifName = "kitHeroGif"
@@ -29,6 +30,10 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     private let profile: Profile
     private var countdownModel: WorldCupCountdownModel?
     private let telemetry = WorldCupTelemetry()
+    private var hasWorldCupStarted = false
+    var telemetryValue: String? {
+        return hasWorldCupStarted ? "follow_your_team" : "countdown"
+    }
 
     private var heroVisibleConstraints: [NSLayoutConstraint] = []
     private var heroHiddenConstraints: [NSLayoutConstraint] = []
@@ -37,10 +42,11 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
 
     private lazy var heroImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = false
-
+        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
         guard let gifImage = UIImage.gifFromBundle(named: UX.heroGifName,
-                                                   frameDuration: UX.heroFrameDuration),
+                                                   frameDuration: UX.heroFrameDuration,
+                                                   maxPixelSize: UX.heroImageWidth * UIScreen.main.scale),
               let frames = gifImage.images, !frames.isEmpty else {
             imageView.image = UIImage(named: UX.heroImageName)
             return
@@ -60,7 +66,17 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         label.text = String.WorldCup.HomepageWidget.CountDown.Title
         label.textAlignment = .natural
         label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.setContentHuggingPriority(.required, for: .vertical)
+    }
+
+    private lazy var subtitleLabel: UILabel = .build { label in
+        label.numberOfLines = 0
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.text = String.WorldCup.HomepageWidget.FollowTeamCard.Description
+        label.isHidden = true
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private lazy var timerContainer: UIView = .build { view in
@@ -92,33 +108,14 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     }
 
     private lazy var ctaButton: PrimaryRoundedButton = .build { [weak self] button in
-        let buttonViewModel = PrimaryRoundedButtonViewModel(
-            title: String.WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel,
-            a11yIdentifier: ""
-        )
-        button.configure(viewModel: buttonViewModel)
         button.configuration?.titleLineBreakMode = .byWordWrapping
         button.titleLabel?.numberOfLines = 0
-        button.addAction(
-            UIAction { [weak self] _ in
-                self?.telemetry.viewScheduleTapped()
-                self?.handleCTATap()
-            },
-            for: .touchUpInside)
     }
 
-    private lazy var dismissButton: UIButton = .build { [weak self] button in
-        button.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
-        button.accessibilityLabel = .WorldCup.HomepageWidget.FollowTeamCard.CloseButtonAccessibilityLabel
-        button.addAction(
-            UIAction { [weak self] _ in
-                self?.telemetry.closeButtonTapped()
-                self?.handleDismissTap()
-            },
-            for: .touchUpInside)
+    /// The action button can represent either a close button with `X` icon for milestone 1
+    /// or a an option button with `...` icon for milestone2 and more.
+    private lazy var actionButton: UIButton = .build { button in
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     private lazy var leftContentStack: UIStackView = .build { stack in
@@ -161,28 +158,29 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         timerContainer.addSubview(timerStack)
         leftContentStack.addArrangedSubview(titleLabel)
         leftContentStack.addArrangedSubview(timerContainer)
+        leftContentStack.addArrangedSubview(subtitleLabel)
         leftContentStack.addArrangedSubview(ctaButton)
 
-        addSubviews(leftContentStack, heroImageView, dismissButton)
+        addSubviews(leftContentStack, heroImageView, actionButton)
 
         NSLayoutConstraint.activate([
             heroImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             heroImageView.trailingAnchor.constraint(
-                equalTo: dismissButton.leadingAnchor,
+                equalTo: actionButton.leadingAnchor,
                 constant: -UX.heroImageTrailingPadding
             ),
-            heroImageView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
+            heroImageView.widthAnchor.constraint(equalToConstant: UX.heroImageWidth),
             heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageHeight),
-            heroImageView.topAnchor.constraint(equalTo: topAnchor).priority(.defaultLow),
-            heroImageView.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultLow),
+            heroImageView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
+            heroImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
 
-            dismissButton.topAnchor.constraint(equalTo: topAnchor),
-            dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
-            dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
+            actionButton.topAnchor.constraint(equalTo: topAnchor),
+            actionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
+            actionButton.widthAnchor.constraint(equalToConstant: UX.actionButtonSize.width),
+            actionButton.heightAnchor.constraint(equalToConstant: UX.actionButtonSize.height),
 
             leftContentStack.topAnchor.constraint(equalTo: topAnchor),
-            leftContentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            leftContentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
 
             timerStack.topAnchor.constraint(
                 equalTo: timerContainer.topAnchor,
@@ -210,7 +208,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         ]
 
         heroHiddenConstraints = [
-            leftContentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            leftContentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
         ]
 
         updateA11yLayout()
@@ -266,15 +264,114 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         return stack
     }
 
+    // MARK: - Configure
+
+    func configure(state: WorldCupSectionState) {
+        if state.isMilestone2 {
+            configureMilestone2Actions()
+        } else {
+            configureMilestone1Actions()
+        }
+        applyStartedState(state.hasWorldCupStarted)
+    }
+
+    private func applyStartedState(_ hasStarted: Bool) {
+        hasWorldCupStarted = hasStarted
+        timerContainer.isHidden = hasStarted
+        subtitleLabel.isHidden = !hasStarted
+        if hasStarted {
+            titleLabel.text = .WorldCup.HomepageWidget.FollowTeamCard.Title
+            countdownModel?.stop()
+        } else {
+            titleLabel.text = .WorldCup.HomepageWidget.CountDown.Title
+        }
+    }
+
+    private func configureMilestone2Actions() {
+        ctaButton.configure(viewModel: .init(title: .WorldCup.HomepageWidget.FollowTeamCard.CTA, a11yIdentifier: ""))
+        ctaButton.addAction(
+            UIAction(
+                handler: { [weak self] _ in
+                    self?.navigateToTeamSelection()
+                }),
+            for: .touchUpInside
+        )
+        let changeTeamAction = UIAction(
+            title: .WorldCup.HomepageWidget.ChangeTeamLabel,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.soccerBall),
+            handler: { [weak self] _ in
+                self?.navigateToTeamSelection()
+            }
+        )
+        let removeAction = UIAction(
+            title: .WorldCup.HomepageWidget.RemoveLabel,
+            image: UIImage.templateImageNamed(
+                StandardImageIdentifiers.Large.cross
+            ),
+            attributes: .destructive,
+            handler: { [weak self] _ in
+                self?.dismissWidget()
+            }
+        )
+        let menu = UIMenu(children: [changeTeamAction, removeAction])
+        actionButton.menu = menu
+        actionButton.showsMenuAsPrimaryAction = true
+        actionButton.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.moreHorizontalRound)?
+                .withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        actionButton.accessibilityLabel = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
+        actionButton.largeContentTitle = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
+    }
+
+    private func configureMilestone1Actions() {
+        ctaButton.configure(
+            viewModel: .init(
+                title: .WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel,
+                a11yIdentifier: ""
+            )
+        )
+        ctaButton.addAction(
+            UIAction { [weak self] _ in
+                self?.navigateToScheduleURL()
+            },
+            for: .touchUpInside)
+        actionButton.showsMenuAsPrimaryAction = false
+        actionButton.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        actionButton.accessibilityLabel = .WorldCup.HomepageWidget.FollowTeamCard.CloseButtonAccessibilityLabel
+        actionButton.largeContentTitle = .WorldCup.HomepageWidget.FollowTeamCard.CloseButtonAccessibilityLabel
+        actionButton.addAction(
+            UIAction { [weak self] _ in
+                self?.dismissCountdown()
+            },
+            for: .touchUpInside)
+    }
+
     // MARK: - Countdown
 
     private func startCountdown() {
-        let model = WorldCupCountdownModel(prefs: profile.prefs)
+        let model = WorldCupCountdownModel()
         model.onCountdownUpdated = { [weak self] countdown in
             self?.apply(countdown: countdown)
         }
+        model.onWorldCupStarted = { [weak self] in
+            self?.notifyWorldCupStarted()
+        }
         model.start()
         countdownModel = model
+    }
+
+    private func notifyWorldCupStarted() {
+        store.dispatch(
+            WorldCupAction(
+                windowUUID: windowUUID,
+                actionType: WorldCupActionType.worldCupDidStart
+            )
+        )
     }
 
     private func apply(countdown: WorldCupCountdown) {
@@ -309,15 +406,26 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
 
     // MARK: - Actions
 
-    private func handleCTATap() {
+    private func navigateToTeamSelection() {
+        telemetry.countrySelectorDisplayed()
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.worldCupCountryPicker),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
+
+    private func navigateToScheduleURL() {
         guard let url = URL(string: UX.scheduleURL) else { return }
+        telemetry.viewScheduleTapped()
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
-                    .newTab,
+                    .link,
                     url: url,
-                    isPrivate: false,
-                    selectNewTab: true
+                    visitType: .link
                 ),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell
@@ -325,12 +433,26 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         )
     }
 
-    private func handleDismissTap() {
+    /// Called on milestone1 when we only show the countdown card.
+    /// It records a different telemetry then `dismissWidget`.
+    private func dismissCountdown() {
+        telemetry.closeCountdownWidgetButtonTapped()
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,
-                actionType: WorldCupActionType.closedCard,
-                shouldShowHomepageWorldCupSection: false
+                actionType: WorldCupActionType.removeHomepageCard,
+            )
+        )
+    }
+
+    /// Called on milestone2 and more when show the full match list.
+    /// It records a different telemetry then `dismissCountdown`
+    private func dismissWidget() {
+        telemetry.widgetDismissed()
+        store.dispatch(
+            WorldCupAction(
+                windowUUID: windowUUID,
+                actionType: WorldCupActionType.removeHomepageCard,
             )
         )
     }
@@ -339,13 +461,14 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
+        subtitleLabel.textColor = theme.colors.textSecondary
         [dayValueLabel, hourValueLabel, minuteValueLabel].forEach {
             $0.textColor = theme.colors.textPrimary
         }
         [dayUnitLabel, hourUnitLabel, minuteUnitLabel].forEach {
             $0.textColor = theme.colors.textPrimary
         }
-        dismissButton.imageView?.tintColor = theme.colors.textPrimary
+        actionButton.tintColor = theme.colors.iconSecondary
         ctaButton.applyTheme(theme: theme)
         timerContainer.backgroundColor = theme.colors.layer3
     }

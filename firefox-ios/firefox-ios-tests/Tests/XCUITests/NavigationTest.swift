@@ -61,7 +61,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
             navigator.nowAt(NewTabScreen)
         }
         navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: "localhost")
@@ -69,7 +69,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: "localhost")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
@@ -302,7 +302,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         navigator.performAction(Action.AcceptClearPrivateData)
 
         navigator.goto(HomePanelsScreen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         app.buttons[optionSelected].waitAndTap()
@@ -451,21 +451,10 @@ class NavigationTest: FeatureFlaggedTestSuite {
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
         navigator.goto(HomePanelsScreen)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         mozWaitForElementToExist(app.links["link-created-by-parent"])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307020
-    // Smoketest
-    func testVerifyBrowserTabMenu() {
-        let toolbarScreen = ToolbarScreen(app: app)
-        let mainMenuScreen = MainMenuScreen(app: app)
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
-        mainMenuScreen.waitForMenuOptionsToExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
@@ -494,7 +483,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // A new tab loading the article page should open
         waitForTabsButton()
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
+        mozWaitForElementToExist(app.cells.elementContainingText(TestLabels.exampleDomain))
         let numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
@@ -544,7 +533,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         closeFromAppSwitcherAndRelaunch()
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         app.links[website_2["link"]!].waitAndTap()
         waitUntilPageLoad()
@@ -630,8 +619,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         }
         springBoardScreen.tapNewPrivateButton()
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
-        onboardingScreen.closeTourIfNeeded()
+        onboardingScreen.closeTour()
         browserScreen.assertPrivateModeMessageCardExists()
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
@@ -674,8 +662,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
         // Close onboarding if it appears
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
-        onboardingScreen.closeTourIfNeeded()
+        onboardingScreen.closeTour()
 
         // Verify the bookmarked page opens
         waitUntilPageLoad()
@@ -700,7 +687,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
     private func openContextMenuForArticleLink() {
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))

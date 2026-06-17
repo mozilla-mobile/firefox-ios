@@ -283,7 +283,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [expectation])
 
-        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID).selectedTab
+        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
         XCTAssertEqual(selectedTab?.displayTitle, "www.mozilla.org")
         XCTAssertEqual(selectedTab?.url?.absoluteString, "www.mozilla.org")
     }
@@ -451,7 +451,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         subject.tabsPanelProvider(appState, action)
-        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID).selectedTab
+        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
 
         XCTAssertEqual(selectedTab, tab)
     }
@@ -466,9 +466,71 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         subject.tabsPanelProvider(appState, action)
-        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID).selectedTab
+        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
 
         XCTAssertNotEqual(selectedTab, tab)
+    }
+
+    func test_mainMenuAddToShortcutsAction_dispatchesShortcutPinnedTelemetryAction() throws {
+        let subject = createSubject()
+        let tab = createTab(profile: mockProfile, urlString: "https://www.mozilla.org")
+        mockTabManager.tabForUUID = tab
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapAddToShortcuts,
+            tabID: tab.tabUUID
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TopSitesAction)
+        let actionType = try XCTUnwrap(dispatchedAction.actionType as? TopSitesActionType)
+
+        XCTAssertEqual(actionType, .shortcutPinned)
+        XCTAssertEqual(dispatchedAction.shortcutPinnedSource, .appMenu)
+    }
+
+    func test_mainMenuAddToShortcutsAction_withoutTab_doesNotDispatchShortcutPinnedTelemetryAction() {
+        let subject = createSubject()
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapAddToShortcuts
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+    }
+
+    func test_mainMenuRemoveFromShortcutsAction_dispatchesShortcutUnpinnedTelemetryAction() throws {
+        let subject = createSubject()
+        let tab = createTab(profile: mockProfile, urlString: "https://www.mozilla.org")
+        mockTabManager.tabForUUID = tab
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapRemoveFromShortcuts,
+            tabID: tab.tabUUID
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TopSitesAction)
+        let actionType = try XCTUnwrap(dispatchedAction.actionType as? TopSitesActionType)
+
+        XCTAssertEqual(actionType, .shortcutUnpinned)
+        XCTAssertEqual(dispatchedAction.shortcutUnpinnedSource, .appMenu)
+    }
+
+    func test_mainMenuRemoveFromShortcutsAction_withoutTab_doesNotDispatchShortcutUnpinnedTelemetryAction() {
+        let subject = createSubject()
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapRemoveFromShortcuts
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
     }
 
     // MARK: - Tab Peek Actions

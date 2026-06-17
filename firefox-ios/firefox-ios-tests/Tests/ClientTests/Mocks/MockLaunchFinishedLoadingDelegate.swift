@@ -38,7 +38,7 @@ class MockLaunchFinishedLoadingDelegate: LaunchFinishedLoadingDelegate {
     func verifyLaunchWithCalled(with launchType: LaunchType) -> Bool {
         return launchWithTypeCallHistory.contains { savedType in
             switch (savedType, launchType) {
-            case (.intro, .intro), (.update, .update), (.survey, .survey),
+            case (.intro, .intro), (.survey, .survey),
                  (.defaultBrowser, .defaultBrowser), (.termsOfService, .termsOfService):
                 return true
             default:

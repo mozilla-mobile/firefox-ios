@@ -295,6 +295,30 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(navigationDestination.selectNewTab ?? false)
     }
 
+    func test_searchQuery_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.searchQuery("Test")),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: NavigationBrowserActionType.tapOnCell
+        )
+        let newState = reducer(initialState, action)
+
+        let navigationDestination = try XCTUnwrap(newState.navigationDestination)
+        switch navigationDestination.destination {
+        case .searchQuery(let query):
+            XCTAssertEqual(query, "Test")
+        default:
+            XCTFail("destination is not the right type")
+        }
+
+        XCTAssertNil(navigationDestination.url)
+    }
+
     func test_tapOnSettingsSection_navigationBrowserAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()

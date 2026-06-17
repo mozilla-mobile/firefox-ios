@@ -134,7 +134,7 @@
 "WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "Obtenha atualizações dos jogos em direto e muito mais.";
 
 /* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
-"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Manter separadores do Mundial de Futebol";
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Fique de olho no Mundial de Futebol";
 
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Seguir equipa";
@@ -143,10 +143,10 @@
 "WorldCup.HomepageWidget.FTLabel.v151" = "(Tempo regulamentar)";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Tempo completo";
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Tempo regulamentar";
 
 /* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
-"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Tempo completo • Multas (%@)";
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Tempo regulamentar • Penáltis (%@)";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Obter um fundo personalizado";
@@ -155,13 +155,13 @@
 "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Jogos relacionados";
 
 /* The label indicating that the displaying match is in the half time. */
-"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "Intervalo";
+"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "Primeira parte";
 
 /* The label that appears for live World Cup matches. */
 "WorldCup.HomepageWidget.LiveLabel.v151" = "EM DIRETO";
 
 /* Message shown in the World Cup widget when match data is temporarily unavailable. */
-"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "A informação do jogo não está disponível de momento. Tente atualizar dentro de alguns minutos.";
+"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "A informação do jogo não está atualmente disponível. Tente atualizar dentro de alguns minutos.";
 
 /* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
 "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Atualizar";
@@ -212,7 +212,7 @@
 "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "CAMPEÕES DO MUNDO 2026";
 
 /* The label indicating that the displaying match is in the second half. */
-"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "Segundo tempo";
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "Segunda parte";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
 "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Mais opções";

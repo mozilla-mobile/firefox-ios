@@ -3,13 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Redux
 
-@CopyWithUpdates
+@Copyable
 struct ShortcutsLibraryState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     let shortcuts: [TopSiteConfiguration]
+    let shouldShowAddShortcutTile: Bool
     let shouldRecordImpressionTelemetry: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -22,13 +23,19 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
             return
         }
 
-        self = shortcutsLibraryState.copyWithUpdates()
+        self.init(
+            windowUUID: shortcutsLibraryState.windowUUID,
+            shortcuts: shortcutsLibraryState.shortcuts,
+            shouldShowAddShortcutTile: shortcutsLibraryState.shouldShowAddShortcutTile,
+            shouldRecordImpressionTelemetry: shortcutsLibraryState.shouldRecordImpressionTelemetry
+        )
     }
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
             shortcuts: [],
+            shouldShowAddShortcutTile: false,
             shouldRecordImpressionTelemetry: false
         )
     }
@@ -36,10 +43,12 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         shortcuts: [TopSiteConfiguration],
+        shouldShowAddShortcutTile: Bool,
         shouldRecordImpressionTelemetry: Bool
     ) {
         self.windowUUID = windowUUID
         self.shortcuts = shortcuts
+        self.shouldShowAddShortcutTile = shouldShowAddShortcutTile
         self.shouldRecordImpressionTelemetry = shouldRecordImpressionTelemetry
     }
 
@@ -62,13 +71,13 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
     }
 
     private static func handleInitializeAction(state: Self) -> ShortcutsLibraryState {
-        return state.copyWithUpdates(
+        return state.copy(
             shouldRecordImpressionTelemetry: true
         )
     }
 
     private static func handleImpressionTelemetryRecordedAction(state: Self) -> ShortcutsLibraryState {
-        return state.copyWithUpdates(
+        return state.copy(
             shouldRecordImpressionTelemetry: false
         )
     }
@@ -80,12 +89,17 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
-            shortcuts: sites
-        )
+        return state
+            .copy(shortcuts: sites)
+            .copy(shouldShowAddShortcutTile: topSitesAction.shouldShowAddShortcutTile ?? state.shouldShowAddShortcutTile)
     }
 
     static func defaultState(from state: ShortcutsLibraryState) -> ShortcutsLibraryState {
-        return state.copyWithUpdates()
+        return ShortcutsLibraryState(
+            windowUUID: state.windowUUID,
+            shortcuts: state.shortcuts,
+            shouldShowAddShortcutTile: state.shouldShowAddShortcutTile,
+            shouldRecordImpressionTelemetry: state.shouldRecordImpressionTelemetry
+        )
     }
 }

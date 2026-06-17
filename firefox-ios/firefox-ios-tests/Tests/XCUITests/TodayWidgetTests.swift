@@ -127,7 +127,7 @@ private func checkFirefoxShortcutsOptions() {
 
 @MainActor
 private func skipOnboardingIfNeeded(app: XCUIApplication) {
-    if app.buttons["Continue"].waitForExistence(timeout: TIMEOUT) {
+    if app.buttons["Continue"].mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
         app.buttons["Continue"].waitAndTap()
         app.buttons["CloseButton"].waitAndTap()
     }

@@ -46,6 +46,7 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
+    private lazy var sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
     // Tracks which tab the shared homepage instance is currently representing.
     private var activeTabUUID: TabUUID?
 
@@ -74,6 +75,7 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Private constants
+    private let profile: Profile
     private let tabManager: TabManager
     private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
@@ -101,6 +103,7 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.profile = profile
         self.tabManager = tabManager
         self.homepageTabStateStore = homepageTabStateStore
         self.overlayManager = overlayManager
@@ -258,8 +261,11 @@ final class HomepageViewController: UIViewController,
 
     // Called when the homepage is displayed to make sure it's vertical scroll position is persisted.
     // If no scroll position exists for tab, scroll the homepage to the top
-    func restoreVerticalScrollOffset() {
-        activeTabUUID = tabManager.selectedTab?.tabUUID
+    func restoreVerticalScrollOffset(force: Bool = true) {
+        let selectedTabUUID = tabManager.selectedTab?.tabUUID
+        guard force || activeTabUUID != selectedTabUUID else { return }
+
+        activeTabUUID = selectedTabUUID
         guard let activeTabUUID,
               let homepageScrollOffset = homepageTabStateStore.state(for: activeTabUUID).scrollOffsetY
         else {
@@ -275,6 +281,12 @@ final class HomepageViewController: UIViewController,
             collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
             handleScroll(collectionView, isUserInteraction: false)
         }
+    }
+
+    func stopScrollingAndSaveVerticalScrollOffset() {
+        guard let collectionView else { return }
+        collectionView.setContentOffset(collectionView.contentOffset, animated: false)
+        saveVerticalScrollOffset()
     }
 
     func updateTopContentInset(_ topInset: CGFloat) {
@@ -314,12 +326,16 @@ final class HomepageViewController: UIViewController,
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        snapNewsTransitionHeaderIfNeeded()
         saveVerticalScrollOffset()
         trackVisibleItemImpressions()
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        saveVerticalScrollOffset()
+        if !decelerate {
+            snapNewsTransitionHeaderIfNeeded()
+            saveVerticalScrollOffset()
+        }
         trackVisibleItemImpressions()
     }
 
@@ -419,7 +435,9 @@ final class HomepageViewController: UIViewController,
             let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
             self.homepageState = state
 
-            refreshHomepageDataSourceSnapshot(animatingDifferences: animatingDifferences) { [weak self] in
+            refreshHomepageDataSourceSnapshot(
+                animatingDifferences: animatingDifferences
+            ) { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
@@ -548,8 +566,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
+        let layout = UICollectionViewCompositionalLayout { [weak self, sectionProvider] (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
                 self?.logger.log(
@@ -601,9 +618,9 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header(let state):
+        case .header(let state, let logoTextColor):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state) { [weak self] in
+                cell.configure(headerState: state, logoTextColor: logoTextColor) { [weak self] in
                     self?.dispatchNavigationBrowserAction(
                         with: NavigationDestination(.quickAnswers),
                         actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
@@ -623,6 +640,10 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
                 cell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
             }
+        case .addShortcutTile(let textColor):
+            return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
+                cell.configureAddShortcutTile(theme: currentTheme, textColor: textColor)
+            }
         case .topSiteEmpty:
             return configuredCell(cellType: EmptyTopSiteCell.self, at: indexPath) { cell in
                 cell.applyTheme(theme: currentTheme)
@@ -637,17 +658,27 @@ final class HomepageViewController: UIViewController,
             }
         case .jumpBackInSyncedTab(let config):
             return configureSyncedTabCell(config, item: item, at: indexPath)
+        case .trackerBlockerModule:
+            return configuredCell(cellType: TrackerBlockerModuleCell.self, at: indexPath) { _ in }
         case .bookmark(let item):
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
             }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
-        case .worldcupCard(let state):
+        case .worldcupCard:
             return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(with: state, theme: currentTheme) { [weak self] in
-                    self?.relayoutForCellHeightChange()
-                }
+                cell.configure(
+                    with: homepageState.worldcupState,
+                    theme: currentTheme,
+                    onHeightChange: { [weak self] height in
+                        self?.sectionProvider.setWorldCupCellHeight(height)
+                        self?.relayoutForCellHeightChange()
+                    },
+                    isCardImpression: { [weak self] in
+                        return !(self?.alreadyTrackedSections.contains(.worldcup) ?? true)
+                    }
+                )
             }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
@@ -667,8 +698,9 @@ final class HomepageViewController: UIViewController,
     }
 
     private func relayoutForCellHeightChange() {
-        guard let collectionView else { return }
-        collectionView.performBatchUpdates(nil)
+        DispatchQueue.main.async {
+            self.refreshHomepageDataSourceSnapshot()
+        }
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
@@ -877,6 +909,20 @@ final class HomepageViewController: UIViewController,
         return min(max(progress, 0), 1)
     }
 
+    /// Snaps the news transition header to either the start or end of the transition when scrolling stops mid-transition.
+    private func snapNewsTransitionHeaderIfNeeded() {
+        guard isNewsTransitionEnabled(), let collectionView else { return }
+
+        let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
+        guard let targetNormalizedOffset = NewsTransitionHeaderCell.UX.snappedTransitionOffset(for: normalizedOffset)
+        else { return }
+
+        let targetOffset = CGPoint(x: collectionView.contentOffset.x,
+                                   y: targetNormalizedOffset - collectionView.adjustedContentInset.top)
+        collectionView.setContentOffset(targetOffset, animated: true)
+        updateNewsTransitionHeaderProgress()
+    }
+
     // MARK: - Screenshotable
 
     func screenshot(bounds: CGRect) -> UIImage? {
@@ -969,7 +1015,7 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
-        if section.canHandleLongPress {
+        if section.canHandleLongPress && item.canHandleLongPress {
             navigateToContextMenu(for: item, sourceView: sourceView)
         }
     }
@@ -1116,7 +1162,8 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+    private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true,
+                                                   completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
@@ -1224,9 +1271,11 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
-        dispatchDidSelectCardItemAction(with: item)
         switch item {
+        case .addShortcutTile:
+            presentAddShortcutAlert()
         case .topSite(let config, _):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: config.site.url.asURL,
@@ -1240,11 +1289,13 @@ final class HomepageViewController: UIViewController,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         case .searchBar:
+            dispatchDidSelectCardItemAction(with: item)
             dispatchNavigationBrowserAction(
                 with: NavigationDestination(.homepageZeroSearch),
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
+            dispatchDidSelectCardItemAction(with: item)
             store.dispatch(
                 JumpBackInAction(
                     tab: config.tab,
@@ -1253,6 +1304,7 @@ final class HomepageViewController: UIViewController,
                 )
             )
         case .bookmark(let config):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: URIFixup.getURL(config.site.url),
@@ -1261,6 +1313,7 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .merino(let story, _):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: story.url,
@@ -1271,6 +1324,28 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    private func presentAddShortcutAlert() {
+        let alert = UIAlertController.addShortcutAlert { [weak self] url in
+            self?.addPinnedShortcut(url: url)
+        }
+        present(alert, animated: true)
+    }
+
+    private func addPinnedShortcut(url: URL) {
+        let site = Site.createBasicSite(
+            url: url.absoluteString,
+            title: url.shortDisplayString.capitalized
+        )
+        profile.pinnedSites.addPinnedTopSite(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutPinnedSource: .homescreenButton,
+                windowUUID: windowUUID,
+                actionType: TopSitesActionType.shortcutPinned
+            )
+        )
     }
 
     /// Sends telemetry data associated with tapping on a card item. The jump back in synced card item

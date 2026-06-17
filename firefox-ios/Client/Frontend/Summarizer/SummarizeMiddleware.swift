@@ -82,7 +82,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     }
 
     private func fetchSummarizerConfig(windowUUID: WindowUUID, completion: @escaping (SummarizerConfig?) -> Void) {
-        guard let webView = windowManager.tabManager(for: windowUUID).selectedTab?.webView else { return }
+        guard let webView = windowManager.tabManager(for: windowUUID)?.selectedTab?.webView else { return }
         Task {
             let configuration = await makeConfiguration(from: webView)
             completion(configuration)
@@ -130,7 +130,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     }
 
     private func dispatchShakeToSummarizeNotAvailable(windowUUID: WindowUUID) {
-        let isHomePage = windowManager.tabManager(for: windowUUID).selectedTab?.isFxHomeTab ?? false
+        let isHomePage = windowManager.tabManager(for: windowUUID)?.selectedTab?.isFxHomeTab ?? false
         guard summarizerNimbusUtils.isShakeGestureEnabled, !isHomePage else { return }
         store.dispatch(
             GeneralBrowserAction(

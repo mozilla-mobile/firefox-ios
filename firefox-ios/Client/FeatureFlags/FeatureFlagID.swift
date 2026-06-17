@@ -7,24 +7,28 @@ import Shared
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum FeatureFlagID: String, CaseIterable {
+    case adBlocker
     case addressAutofillEdit
-    case addressBarMenu
     case adsClient
     case aiKillSwitch
     case appearanceMenu
-    case appIconSelection
     case badCertDomainErrorPage
     case bookmarksSearchFeature
+    case customReaderModeScheme
     case deeplinkOptimizationRefactor
+    case deeplinkOverlay
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
+    case googleLens
     case hntSponsoredShortcuts
+    case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepagePinnedHeader
     case homepageSearchBar
     case homepageStoryCategories
+    case homepageTrackerBlockerModule
     case hostedSummarizer
     case hostedSummarizerShakeGesture
     case hostedSummarizerToolbarEntrypoint
@@ -34,6 +38,7 @@ enum FeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case needsReloadRefactor
+    case novaDesign
     case noInternetConnectionErrorPage
     case quickAnswers
     case recentSearches
@@ -55,7 +60,6 @@ enum FeatureFlagID: String, CaseIterable {
     case tabTrayUIExperiments
     case tosFeature
     case touFeature
-    case trackingProtectionRefactor
     case translation
     case translationLanguagePicker
     case trendingSearches
@@ -72,11 +76,13 @@ enum FeatureFlagID: String, CaseIterable {
         switch self {
         case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
         case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
-        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
+        case .homepageTrackerBlockerModule: return HomepageKeys.TrackerBlockerSection
         case .sentFromFirefox: return FlagKeys.SentFromFirefox
         case .startAtHome: return FlagKeys.StartAtHome
+        case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
         default: return nil
         }
     }
@@ -85,24 +91,29 @@ enum FeatureFlagID: String, CaseIterable {
     // Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .addressBarMenu,
+        case    .adBlocker,
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
-                .appIconSelection,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
+                .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
+                .deeplinkOverlay,
                 .downloadLiveActivities,
+                .googleLens,
+                .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageSearchBar,
                 .homepageStoryCategories,
+                .homepageTrackerBlockerModule,
                 .hostedSummarizer,
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
+                .novaDesign,
                 .noInternetConnectionErrorPage,
                 .quickAnswers,
                 .recentSearches,
@@ -115,7 +126,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .touFeature,
-                .trackingProtectionRefactor,
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,

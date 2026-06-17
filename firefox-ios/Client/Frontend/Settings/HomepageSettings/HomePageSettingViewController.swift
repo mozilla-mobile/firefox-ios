@@ -16,6 +16,7 @@ class HomePageSettingViewController: SettingsTableViewController,
     var currentStartAtHomeSetting: StartAtHomeSetting?
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
+    private let worldCupStore: WorldCupStoreProtocol
 
     var isWallpaperSectionEnabled: Bool {
         return wallpaperManager.canSettingsBeShown
@@ -29,9 +30,11 @@ class HomePageSettingViewController: SettingsTableViewController,
     init(prefs: Prefs,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          settingsDelegate: SettingsDelegate? = nil,
-         tabManager: TabManager) {
+         tabManager: TabManager,
+         worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
+        self.worldCupStore = worldCupStore
         super.init(style: .grouped, windowUUID: tabManager.windowUUID)
         super.settingsDelegate = settingsDelegate
         self.tabManager = tabManager
@@ -147,6 +150,44 @@ class HomePageSettingViewController: SettingsTableViewController,
             }
             sectionItems.append(jumpBackInSetting)
 
+            if featureFlagsProvider.isEnabled(.homepageTrackerBlockerModule) {
+                let trackerBlockerModuleSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.TrackerBlockerSection,
+                    defaultValue: userPreferences.getPreferenceFor(.homepageTrackerBlockerModule),
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.PrivacyReport
+                ) { value in
+                    store.dispatch(
+                        TrackerBlockerModuleAction(
+                            isEnabled: value,
+                            windowUUID: self.windowUUID,
+                            actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+                        )
+                    )
+                }
+                sectionItems.append(trackerBlockerModuleSetting)
+            }
+
+            if worldCupStore.isFeatureEnabled {
+                let windowUUID = self.windowUUID
+                let worldCupSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
+                    defaultValue: true,
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
+                ) { _ in
+                    store.dispatch(
+                        WorldCupAction(
+                            windowUUID: windowUUID,
+                            actionType: WorldCupActionType.didChangeHomepageSettings,
+                        )
+                    )
+                }
+                sectionItems.append(worldCupSetting)
+            }
+
             let bookmarksSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
@@ -163,26 +204,6 @@ class HomePageSettingViewController: SettingsTableViewController,
                 )
             }
             sectionItems.append(bookmarksSetting)
-
-            if featureFlagsProvider.isEnabled(.worldCupWidget) {
-                let windowUUID = self.windowUUID
-                let worldCupSetting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                    prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
-                    defaultValue: true,
-                    titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
-                ) { value in
-                    store.dispatch(
-                        WorldCupAction(
-                            windowUUID: windowUUID,
-                            actionType: WorldCupActionType.didChangeHomepageSettings,
-                            shouldShowHomepageWorldCupSection: value
-                        )
-                    )
-                }
-                sectionItems.append(worldCupSetting)
-            }
         }
 
         // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143

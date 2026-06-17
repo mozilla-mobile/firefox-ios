@@ -128,7 +128,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
             waitForElementsToExist(
                 [
                     app.navigationBars["Reminders"],
-                    app.links.elementContainingText("test-mozilla-book.html")
+                    app.links.elementContainingText(TestPages.mozillaBook)
                 ]
             )
         }
@@ -158,7 +158,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         app.launch()
         longPressReadingListAndReachShareOptions(option: "Copy")
         app.buttons["Done"].waitAndTap()
-        openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
+        openNewTabAndValidateURLisPaste(url: TestPages.mozillaBook)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864476
@@ -184,7 +184,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressLinkAndSelectShareOption(option: String) {
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         app.webViews[AccessibilityIdentifiers.Browser.WebView.contentView].links.element(boundBy: 0).press(forDuration: 1.5)
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
@@ -198,7 +198,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressReadingListAndReachShareOptions(option: String) {
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
@@ -248,7 +248,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         navigator.goto(LibraryPanel_Bookmarks)
         // Long-press on a bookmarked website
         let contextMenu = app.tables["Context Menu"]
-        app.tables.cells.staticTexts["Example Domain"].pressWithRetry(duration: 1.5, element: contextMenu)
+        app.tables.cells.staticTexts[TestLabels.exampleDomain].pressWithRetry(duration: 1.5, element: contextMenu)
         // Tap the Share button in the context menu
         contextMenu.buttons["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu

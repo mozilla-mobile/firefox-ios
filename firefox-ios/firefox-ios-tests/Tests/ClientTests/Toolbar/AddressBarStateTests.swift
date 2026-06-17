@@ -522,7 +522,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsSettingsEnabled_showsNoTranslateButton() {
         setTranslationsFeatureEnabled(enabled: true)
-        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
@@ -531,7 +530,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: false),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
             )
@@ -540,6 +539,31 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.leadingPageActions.count, 1)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_reduxSettingsEnabled_showsTranslateButton() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(
+                    prefs: mockProfile.prefs,
+                    isUserSettingEnabled: true,
+                    state: .inactive
+                ),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 2)
+        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
     }
 
     func test_urlDidChangeAction_withTranslationConfiguration_andFFDisabled_doesNotIncludeTranslateButton() {
@@ -572,10 +596,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         let stateWithInactiveIcon = reducer(
             initialState,
-            ToolbarAction(
+            TranslationsAction(
                 translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.receivedTranslationLanguage
+                actionType: TranslationsActionType.receivedTranslationLanguage
             )
         )
 
@@ -601,10 +625,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         let stateWithInactiveIcon = reducer(
             initialState,
-            ToolbarAction(
+            TranslationsAction(
                 translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.receivedTranslationLanguage
+                actionType: TranslationsActionType.receivedTranslationLanguage
             )
         )
 
@@ -630,14 +654,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         // Simulate the previous tab's `.active` state still in Redux at the moment of switch.
         let stateWithActiveIcon = reducer(
             initialState,
-            ToolbarAction(
+            TranslationsAction(
                 translationConfiguration: TranslationConfiguration(
                     prefs: mockProfile.prefs,
                     state: .active,
                     translatedToLanguage: "fr"
                 ),
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.translationCompleted
+                actionType: TranslationsActionType.translationCompleted
             )
         )
 
@@ -844,6 +868,28 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
+    }
+
+    func test_lockIconChangedAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                lockIconButtonA11yId: "test_lock_icon_a11y_id",
+                lockIconImageName: "test_lock_icon_image",
+                lockIconNeedsTheming: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.lockIconChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.lockIconButtonA11yId, "test_lock_icon_a11y_id")
+        XCTAssertEqual(newState.lockIconImageName, "test_lock_icon_image")
+        XCTAssertEqual(newState.lockIconNeedsTheming, true)
     }
 
     func test_scrollAlphaNeedsUpdateAction_returnsExpectedState() {

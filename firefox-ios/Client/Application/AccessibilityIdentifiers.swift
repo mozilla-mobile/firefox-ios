@@ -69,6 +69,10 @@ struct AccessibilityIdentifiers {
             static let contentView = "contentView"
         }
 
+        struct Tab {
+            static let automationTestLeakIndicator = "Tab.LeakIndicatorElement"
+        }
+
         static let overKeyboardContainer = "Browser.overKeyboardContainer"
         static let headerContainer = "Browser.headerContainer"
         static let bottomContainer = "Browser.bottomContainer"
@@ -77,6 +81,7 @@ struct AccessibilityIdentifiers {
         static let statusBarOverlay = "Browser.statusBarOverlay"
         static let topBlurView = "Browser.topBlurView"
         static let bottomBlurView = "Browser.bottomBlurView"
+        static let keyboardSpacer = "AddressToolbar.keyboardSpacer"
     }
 
     struct ContextualHints {
@@ -93,7 +98,6 @@ struct AccessibilityIdentifiers {
         }
 
         struct HeaderView {
-            static let mainButton = "MainMenu.MainButton"
             static let closeButton = "MainMenu.CloseMenuButton"
         }
 
@@ -112,7 +116,6 @@ struct AccessibilityIdentifiers {
         static let whatsNew = "MainMenu.WhatsNew"
         static let saveToReadingList = "MainMenu.SaveToReadingList"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
-        static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
         static let bookmarkPage = "MainMenu.BookmarkPage"
         static let print = "MainMenu.Print"
         static let share = "MainMenu.Share"
@@ -265,6 +268,11 @@ struct AccessibilityIdentifiers {
 
         struct TopSites {
             static let itemCell = "TopSitesCell"
+
+            struct AddShortcutAlert {
+                static let view = "TopSites.AddShortcutAlert"
+                static let urlTextField = "TopSites.AddShortcutAlert.URLTextField"
+            }
         }
 
         struct SearchBar {
@@ -298,12 +306,6 @@ struct AccessibilityIdentifiers {
 
     struct GeneralizedIdentifiers {
         public static let back = "Back"
-    }
-
-    struct SaveCardPrompt {
-        struct Prompt {
-            static let closeButton = "a11yCloseButton"
-        }
     }
 
     struct Microsurvey {
@@ -375,6 +377,7 @@ struct AccessibilityIdentifiers {
         static let tabCell = "TabDisplayView.tabCell"
         static let closeButton = "tabCloseButton"
         static let tabsTray = "Tabs Tray"
+        static let iPadSelectionBackgroundView =  "TabTraySelectorView.selectionBackgroundView"
     }
 
     struct LibraryPanels {
@@ -481,7 +484,6 @@ struct AccessibilityIdentifiers {
     }
 
     struct Upgrade {
-        static let backgroundImage = "Upgrade.BackgroundImage"
         static let upgrade = "upgrade."
         static let closeButton = "Upgrade.CloseButton"
         static let pageControl = "Upgrade.PageControl"
@@ -779,10 +781,15 @@ struct AccessibilityIdentifiers {
             static let title = "Settings.Translation.Title"
             // This is based on `PrefsKeys.Settings.translationsFeature`
             static let toggleSwitch = "settings.translationFeature"
+            static let autoTranslateSwitch = "settings.translationAutoTranslate"
             static let navigationBar = "Settings.Translation.navigationBar"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"
             static let languagePickerList = "Settings.Translation.LanguagePickerList"
+        }
+
+        struct QuickAnswers {
+            static let title = "Settings.QuickAnswers.Title"
         }
 
         struct BlockImages {
@@ -888,7 +895,6 @@ struct AccessibilityIdentifiers {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
         static let yesButton = "RememberCreditCard.yesButton"
         static let manageCardsButton = "RememberCreditCard.manageCardsButton"
-        static let notNowButton = "RememberCreditCard.notNowButton"
     }
 
     enum Autofill {

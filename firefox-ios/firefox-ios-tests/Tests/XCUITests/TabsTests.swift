@@ -11,8 +11,8 @@ let selectedTab = "Currently selected tab."
 let urlValue = "mozilla.org"
 let urlValueLong = "localhost"
 
-let urlExample = path(forTestPage: "test-example.html")
-let urlLabelExample = "Example Domain"
+let urlExample = path(forTestPage: TestPages.exampleHTML)
+let urlLabelExample = TestLabels.exampleDomain
 let urlValueExample = "example"
 let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.html"
 
@@ -34,7 +34,7 @@ class TabsTests: BaseTestCase {
         toolBarScreen.assertTabsButtonExists()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         toolBarScreen.assertTabsButtonExists()
         // The tabs counter shows the correct number
@@ -77,7 +77,7 @@ class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2354447
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -121,7 +121,7 @@ class TabsTests: BaseTestCase {
          firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
          tabTrayScreen = TabTrayScreen(app: app)
          // A different tab than home is open to do the proper checks
-         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
          waitUntilPageLoad()
          toolBarScreen.assertTabsButtonExists()
          navigator.nowAt(BrowserTab)
@@ -148,7 +148,7 @@ class TabsTests: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         toolBarScreen.assertTabsButtonExists()
 
@@ -173,7 +173,7 @@ class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2354579
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
@@ -199,7 +199,7 @@ class TabsTests: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
@@ -219,7 +219,7 @@ class TabsTests: BaseTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         toolBarScreen.assertNewTabButtonExists()
 
@@ -361,14 +361,37 @@ class TabsTests: BaseTestCase {
         tabTrayScreen = TabTrayScreen(app: app)
 
         toolBarScreen.assertTabsButtonExists()
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
 
         waitForTabsButton()
         navigator.goto(TabTray)
         tabTrayScreen.longPressTabCellAtIndex(0)
         tabTrayScreen.tapCloseTabFromContextMenu()
-        tabTrayScreen.assertNoWebViewLeakDetected()
+        // Tab teardown has more deferred async work than the WKWebView (notably the
+        // `await pauseAllMediaPlayback()` step in close()), so dealloc can land later
+        // on slower CI simulators. Using TIMEOUT_LONG instead
+        tabTrayScreen.assertNoWebViewLeakDetected(timeout: TIMEOUT_LONG)
+    }
+
+    // Smoketest
+    // This tests for leaks of the Tab object, ensuring that Tab instances are released
+    // after a tab is closed. If this test fails, it means that either:
+    // A) We've introduced a regression that leaks the Tab instance
+    // B) There is a bug in the sentinel UI element (make sure it's accessible)
+    func testCloseTabFreesTabObject_NoMemoryLeak() {
+        toolBarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+
+        toolBarScreen.assertTabsButtonExists()
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
+        waitUntilPageLoad()
+
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.longPressTabCellAtIndex(0)
+        tabTrayScreen.tapCloseTabFromContextMenu()
+        tabTrayScreen.assertNoTabLeakDetected()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306867
@@ -377,13 +400,13 @@ class TabsTests: BaseTestCase {
         /*
          // Open a few tabs
          waitForTabsButton()
-         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+         navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
          waitUntilPageLoad()
          navigator.createNewTab()
          navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-example.html")
          waitUntilPageLoad()
          navigator.createNewTab()
-         navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-org.html")
+         navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
          waitUntilPageLoad()
          waitForTabsButton()
          navigator.goto(TabTray)
@@ -487,7 +510,7 @@ fileprivate extension BaseTestCase {
 
     func closeExperimentTabTrayView(goBackToBrowserTab: String) {
         let tabCell = app.cells.containing(NSPredicate(format: "label CONTAINS %@", goBackToBrowserTab)).firstMatch
-        XCTAssertTrue(tabCell.waitForExistence(timeout: 5))
+        XCTAssertTrue(tabCell.mozWaitForElementToExist(timeout: 5, failOnTimeout: false))
         tabCell.tap()
         navigator.nowAt(BrowserTab)
     }

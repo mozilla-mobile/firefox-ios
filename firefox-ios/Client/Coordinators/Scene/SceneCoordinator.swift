@@ -13,9 +13,6 @@ class SceneCoordinator: BaseCoordinator,
                         FeatureFlaggable {
     var window: UIWindow?
     var windowUUID: WindowUUID { reservedWindowUUID.uuid }
-    private var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
-    }
     private let screenshotService: ScreenshotService
     private let sceneContainer: SceneContainer
     private let windowManager: WindowManager
@@ -57,8 +54,8 @@ class SceneCoordinator: BaseCoordinator,
         router.setRootViewController(sceneContainer, hideBar: true)
 
         let launchScreenVC: UIViewController
-        if introManager.isModernOnboardingEnabled && introManager.shouldShowIntroScreen {
-            // Show modern launch screen only for first-time users when modern onboarding is enabled
+        if introManager.shouldShowIntroScreen {
+            // Show the launch screen for first-time users
             let onboardingKitVariant = introManager.onboardingKitVariant
             launchScreenVC = ModernLaunchScreenViewController(
                 windowUUID: windowUUID,
@@ -66,7 +63,7 @@ class SceneCoordinator: BaseCoordinator,
                 variant: onboardingKitVariant
             )
         } else {
-            // Use legacy launch screen for returning users or when modern onboarding is disabled
+            // Use the standard launch screen for returning users
             launchScreenVC = LaunchScreenViewController(windowUUID: windowUUID, coordinator: self)
         }
         launchScreenViewController = launchScreenVC
@@ -158,13 +155,6 @@ class SceneCoordinator: BaseCoordinator,
 
         if let savedRoute {
             browserCoordinator.findAndHandle(route: savedRoute)
-            // In the case we have saved route it means we are starting the browser with a deeplink.
-            // A saved route is present when findAndHandle is called on the SceneCoordinator and BrowserCoordinator
-            // is not in the hierarchy yet.
-            guard isDeeplinkOptimizationRefactorEnabled,
-                  !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete),
-                  !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) else { return }
-            AppEventQueue.signal(event: .recordStartupTimeOpenDeeplinkComplete)
         }
     }
 

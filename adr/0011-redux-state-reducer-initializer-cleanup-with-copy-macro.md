@@ -1,0 +1,119 @@
+# 11. Redux State Reducer Initializer Cleanup with Copy Macro
+
+Date: 2026-06-01
+
+## Status
+
+Accepted
+
+## Context
+
+Our Redux reducers are pure functions which take the previous state, apply some action, and produce the transformed state.
+This is working well for us, but as our reducers grow, state initialization is becoming increasingly unwieldy.
+
+Our larger Redux states currently suffer from excessive code duplication. At a glance, it is unclear to developers which properties are updating in a given reducer helper method. This is because some states have over a dozen properties, meaning each fresh state initialization has over a dozen lines. Since an action typically updates only one or two properties, this creates needless visual noise.
+
+Take for example this `HomepageState` reducer helper method, which changes only a single property in response to the `HomepageActionType`.`availableContentHeightDidChange` action:
+
+```swift
+private static func handleAvailableContentHeightChangeAction(
+    state: HomepageState, action: Action
+) -> HomepageState {
+    guard let availableContentHeight = 
+(action as? HomepageAction)?.availableContentHeight else {
+        return defaultState(from: state)
+    }
+
+    return HomepageState(
+        windowUUID: state.windowUUID,
+        headerState: HeaderState.reducer(state.headerState, action),
+        messageState: MessageCardState.reducer(state.messageState, action),
+        topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+        searchState: SearchBarState.reducer(state.searchState, action),
+        jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+        bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+        merinoState: MerinoState.reducer(state.merinoState, action),
+        wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+        isZeroSearch: state.isZeroSearch,
+        shouldTriggerImpression: false,
+        shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
+        availableContentHeight: availableContentHeight,
+        availableWallpaperHeight: state.availableWallpaperHeight
+    )
+}
+```
+
+After a close inspection, we can see that we copy the previous state and change only two properties: the `availableContentHeight` and the `shouldTriggerImpression`.
+
+But at a glance, you cannot easily see which properties (if any) among the 14 total properties have changed.
+
+Compound this with the fact that we have Redux states which update in response to multiple Redux actions, and suddenly we start seeing our reducer files exceeding 1,000 lines. For example, at the time of this document's writing, `AddressBarState.swift` is over 1,500 lines long.
+
+## Decision
+
+Unlike TypeScript, which has a spread operator, Swift does not have any built-in mechanism for copying an existing type and only modifying a few values. To give us similar functionality, we will add a Swift macro package to the Client. The chosen macro implementation is this one: https://github.com/WilhelmOks/ModifiedCopyMacro.
+
+This will allow us to vastly simplify long Redux state initizers. Here is an example from our `HeaderState` reducer:
+
+```swift
+// 1) Import the macro
+import ModifiedCopy 
+
+// 2) Apply the macro
+@Copyable 
+struct HeaderState: StateType, Equatable, Hashable {
+    ...
+    
+    private static func handleQuickAnswersAction(
+        for state: HeaderState, 
+        with action: Action
+    ) -> HeaderState {
+        guard let quickAnswersAction = action as? QuickAnswersMiddlewareAction,
+            let showQuickAnswers = quickAnswersAction.isQuickAnswersEnabled
+        else {
+            return defaultState(from: state)
+        }
+
+        // 3) Use the macro copy methods
+        return state.copy( 
+            showQuickAnswersButton: showQuickAnswers
+        )
+    }
+}
+```
+
+For the rarer situations where multiple state properties must mutate, calls to `.copy` can be chained as follows:
+```swift
+return state
+    .copy(isPrivate: false)
+    .copy(showiPadSetup: showiPadSetup)
+```
+
+## Consequences
+
+### Positive Consequences
+
+- Significantly improved readability in some of our largest Redux state reducers
+- Less Redux state boilerplate
+- Shorter reducer files
+
+### Neutral Consequences
+
+- Third party Swift macro packages require an explicit approval step prior to building
+    - Developers must approve a popup when building locally with Xcode. This approval will be cached until the Swift packages are cleaned. 
+    - The Bitrise pipeline needs to pass the `-skipMacroValidation` flag to the xcodebuild step.
+
+Note that approving one macro with the `-skipMacroValidation` build flag approves *all* macros at once. Apple does not currently offer any way to individually approve macros. However, developers should carefully validate all new packages added to the project, macros or not, so this should not pose a significant risk.
+
+### Negative Consequences
+
+- Compiling Swift macros takes a bit of extra time (specifically due to the size of the `swift-syntax` dependency)
+    - This can be mitigated by enabling prebuilts (locally or in the CI). Also, the Bitrise cache helps keep these build times low as well.
+- The [ModifiedCopy macro](https://github.com/WilhelmOks/ModifiedCopyMacro) could go out of support
+    - This is a very small package, so it would be easy for us to fork and maintain ourselves
+- Adding a macro instead of leveraging a Swift language hack within the Client itself could mean slightly increased maintenance during future Swift language migrations
+
+## References
+
+- [swift-syntax prebuilts for macros](https://forums.swift.org/t/preview-swift-syntax-prebuilts-for-macros/80202)
+- [ModifiedCopy macro](https://github.com/WilhelmOks/ModifiedCopyMacro)

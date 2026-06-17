@@ -134,7 +134,7 @@
 "WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "获取实时赛况等信息。";
 
 /* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
-"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "持续关注世界杯";
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "全程关注世界杯";
 
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "关注球队";
@@ -203,10 +203,10 @@
 "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "半决赛";
 
 /* The label for the 'Third place' winner in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "第三名";
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "季军";
 
 /* The label for an upcoming match in the World Cup widget round phase. */
-"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "下场比赛";
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "即将进行";
 
 /* The label for the World Cup championship winner in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026 年世界杯冠军";
@@ -219,4 +219,7 @@
 
 /* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.ShareLabel.v151" = "分享";
+
+/* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "世界杯即将开幕，届时会提供最新消息";
 

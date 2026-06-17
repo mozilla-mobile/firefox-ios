@@ -21,6 +21,8 @@ final class SettingScreen {
         app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"]
     }
     private var translationCell: XCUIElement { sel.TRANSLATION_CELL_TITLE.element(in: app) }
+    private var toolbarCell: XCUIElement { sel.TOOLBAR_CELL.element(in: app) }
+    private var bottomToolbarButton: XCUIElement { sel.BOTTOM_TOOLBAR_BUTTON.element(in: app) }
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
@@ -186,6 +188,16 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
+    func navigateToToolbarSettings() {
+        BaseTestCase().mozWaitForElementToExist(toolbarCell)
+        toolbarCell.waitAndTap()
+    }
+
+    func selectBottomToolbar() {
+        BaseTestCase().mozWaitForElementToExist(bottomToolbarButton)
+        bottomToolbarButton.waitAndTap()
+    }
+
     func navigateToDisplaySettings() {
         let cell = sel.DISPLAY_THEME_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(cell)
@@ -322,5 +334,11 @@ final class SettingScreen {
         if switchElement.value as? String == "0" {
             switchElement.waitAndTap()
         }
+    }
+
+    func navigateToSearchSettings() {
+        let searchCell = sel.SEARCH_CELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(searchCell)
+        searchCell.waitAndTap()
     }
 }
