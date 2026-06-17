@@ -2801,8 +2801,18 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showShortcutsLibrary()
         case .worldCupCountryPicker:
             navigationHandler?.showWorldCupCountryPicker()
-        case .quickAnswers:
-            navigationHandler?.showQuickAnswers()
+        case .quickAnswers(let sourceView):
+            if let sourceView {
+                let summarizeViewProvider = ContextualHintViewProvider(forHintType: .summarizeToolbarEntry, with: profile)
+                let controller = ContextualHintViewController(with: summarizeViewProvider, windowUUID: windowUUID)
+                controller.configure(anchor: sourceView, withArrowDirection: .up, andDelegate: self, presentedUsing: nil)
+                present(controller, animated: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    controller.dismiss(animated: true)
+                }
+            } else {
+                navigationHandler?.showQuickAnswers()
+            }
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
         case .certificatesFromErrorPage:

@@ -91,7 +91,10 @@ final class TransitionAnimator: NSObject,
         containerView.addSubview(presentedController.view)
 
         presentedController.view.frame = containerView.bounds
+        presentedController.view.transform = .init(translationX: containerView.bounds.width / 2, y: -containerView.bounds.height / 2.0).scaledBy(x: 0.2, y: 0.2)
         presentedController.view.alpha = 0.0
+        presentedController.view.clipsToBounds = true
+        presentedController.view.layer.cornerRadius = UX.screenCornerRadius
 
         UIView.animate(
             withDuration: UX.springAnimationDuration,
@@ -100,6 +103,7 @@ final class TransitionAnimator: NSObject,
             initialSpringVelocity: UX.springAnimationVelocity,
             options: .curveEaseOut,
             animations: {
+                presentedController.view.transform = .identity
                 presentedController.view.alpha = 1.0
             },
             completion: { _ in

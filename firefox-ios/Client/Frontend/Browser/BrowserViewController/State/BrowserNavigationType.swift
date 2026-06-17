@@ -18,7 +18,7 @@ enum BrowserNavigationDestination: Equatable {
     case zeroSearch
     case shortcutsLibrary
     case worldCupCountryPicker
-    case quickAnswers
+    case quickAnswers(sourceView: UIView?)
     case privacyNoticeLink(URL)
     case summarizer(config: SummarizerConfig, trigger: SummarizerTrigger)
     case certificatesFromErrorPage

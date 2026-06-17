@@ -621,10 +621,10 @@ final class HomepageViewController: UIViewController,
         case .header(let state, let logoTextColor):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
                 cell.configure(headerState: state, logoTextColor: logoTextColor) { [weak self] in
-                    self?.dispatchNavigationBrowserAction(
-                        with: NavigationDestination(.quickAnswers),
-                        actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
-                    )
+//                    self?.dispatchNavigationBrowserAction(
+//                        with: NavigationDestination(.quickAnswers),
+//                        actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
+//                    )
                 }
                 cell.applyTheme(theme: currentTheme)
             }

@@ -57,6 +57,8 @@ struct ContextualHintCopyProvider {
 
         case .translation:
             return String(format: CFRStrings.Translations.Title, AppName.shortName.rawValue)
+        case .summarizeToolbarEntry:
+            return "Ask Out Loud for Quick Answers"
 
         default: return ""
         }
@@ -85,7 +87,7 @@ struct ContextualHintCopyProvider {
             descriptionCopy = CFRStrings.Translations.Body
 
         case .summarizeToolbarEntry:
-            descriptionCopy = CFRStrings.Summarize.Description
+            descriptionCopy = "Tap and hold here to get started"
         }
 
         return descriptionCopy

@@ -96,6 +96,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
                     stackContainer.addArrangedSubview(UIView())
                     stackContainer.addArrangedSubview(quickAnswersButton)
                 }
+                quickAnswersButton.addTarget(self, action: #selector(quickAnswerButtonTapped), for: .touchUpInside)
             }
             contentView.addSubview(stackContainer)
             logoStackView.pinToSuperview()
@@ -163,10 +164,27 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
     
     @objc
+    private func quickAnswerButtonTapped() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.quickAnswers(sourceView: quickAnswersButton)),
+                windowUUID: headerState?.windowUUID ?? .XCTestDefaultUUID,
+                actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
+    
+    @objc
     private func handleQuickAnswersLongPress(_ gesture: UILongPressGestureRecognizer) {
         guard gesture.state == .began else { return }
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        onQuickAnswersTapped?()
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.quickAnswers(sourceView: nil)),
+                windowUUID: headerState?.windowUUID ?? .XCTestDefaultUUID,
+                actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
     }
 
     // MARK: - ThemeApplicable
