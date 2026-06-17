@@ -6,6 +6,7 @@ import Foundation
 import Storage
 
 final class MockDiskImageStore: DiskImageStore, @unchecked Sendable {
+    private let lock = NSLock()
     var getImageForKeyCallCount = 0
     var getImageForKeyCalls: [String] = []
     var onGetImageForKey: (() -> Void)?
@@ -13,10 +14,16 @@ final class MockDiskImageStore: DiskImageStore, @unchecked Sendable {
     var deleteImageForKeyCallCount = 0
 
     func getImageForKey(_ key: String) async throws -> UIImage {
+        recordGetImageForKey(key)?()
+        return UIImage()
+    }
+
+    private func recordGetImageForKey(_ key: String) -> (() -> Void)? {
+        lock.lock()
+        defer { lock.unlock() }
         getImageForKeyCallCount += 1
         getImageForKeyCalls.append(key)
-        onGetImageForKey?()
-        return UIImage()
+        return onGetImageForKey
     }
 
     func saveImageForKey(_ key: String, image: UIImage) async throws {

@@ -710,11 +710,12 @@ final class TabManagerImplementation: NSObject,
         selectTab(newTab)
     }
 
-    func restoreScreenshot(for tab: Tab, onComplete: (() -> Void)? = nil) {
-        loadScreenshotFromDisk(for: tab) { [weak self] in
+    func restoreScreenshot(for tab: Tab) {
+        loadScreenshotFromDisk(for: tab) { [weak self] shouldReload in
+            guard shouldReload else { return }
             Task { @MainActor [weak self] in
                 self?.dispatchDidSetScreenshotAction(for: tab)
-                onComplete?()
+                self?.dispatchScreenshotRestoredAction(for: tab)
             }
         }
     }
@@ -722,14 +723,14 @@ final class TabManagerImplementation: NSObject,
     /// Loads `tab.screenshot` from disk in the background and fires `onComplete` when done.
     /// `onComplete` may run on a background thread, so callers must hop to the main thread
     /// themselves before touching UI or main-actor state.
-    private func loadScreenshotFromDisk(for tab: Tab, onComplete: @escaping () -> Void) {
+    private func loadScreenshotFromDisk(for tab: Tab, onComplete: @escaping (_ shouldReload: Bool) -> Void) {
         guard tab.screenshot == nil else {
-            onComplete()
+            onComplete(false)
             return
         }
         Task { [weak tab, weak self] in
             guard let tab else {
-                onComplete()
+                onComplete(false)
                 return
             }
             do {
@@ -739,7 +740,7 @@ final class TabManagerImplementation: NSObject,
                 self?.logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
-            onComplete()
+            onComplete(true)
         }
     }
 
@@ -779,7 +780,9 @@ final class TabManagerImplementation: NSObject,
         let group = DispatchGroup()
         for tab in tabsToLoad {
             group.enter()
-            loadScreenshotFromDisk(for: tab) { group.leave() }
+            loadScreenshotFromDisk(for: tab) { _ in
+                group.leave()
+            }
         }
         group.notify(queue: .main) { [weak self] in
             guard let self, let selectedTab = self.selectedTab else { return }
@@ -800,6 +803,20 @@ final class TabManagerImplementation: NSObject,
                 nextTabScreenshot: currentTabs[safe: index+1]?.screenshot,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didSetTabScreenshot
+            )
+        )
+    }
+
+    /// Notifies the tab tray that a lazily-loaded screenshot has settled in memory so the
+    /// affected cell can reload. Only needed when the deeplink-optimization flag is enabled.
+    @MainActor
+    private func dispatchScreenshotRestoredAction(for tab: Tab) {
+        guard isDeeplinkOptimizationRefactorEnabled else { return }
+        store.dispatch(
+            ScreenshotAction(
+                windowUUID: windowUUID,
+                tab: tab,
+                actionType: ScreenshotActionType.screenshotRestored
             )
         )
     }
