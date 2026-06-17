@@ -181,6 +181,30 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     @MainActor
+    func testAddressToolbarConfig_withGoogleLensFeatureEnabled_showsGoogleLensIcon() {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let model = createSubject(
+            withState: createToolbarState(),
+            featureFlagsProvider: featureFlagsProvider
+        )
+
+        XCTAssertTrue(model.shouldShowGoogleLensIcon)
+        XCTAssertTrue(model.addressToolbarConfig.locationViewConfiguration.shouldShowGoogleLensIcon)
+    }
+
+    @MainActor
+    func testAddressToolbarConfig_withGoogleLensFeatureDisabled_hidesGoogleLensIcon() {
+        let model = createSubject(
+            withState: createToolbarState(),
+            featureFlagsProvider: MockNimbusFeatureFlags()
+        )
+
+        XCTAssertFalse(model.shouldShowGoogleLensIcon)
+        XCTAssertFalse(model.addressToolbarConfig.locationViewConfiguration.shouldShowGoogleLensIcon)
+    }
+
+    @MainActor
     func testConfigureSkeletonAddressBar_uxConfiguration() {
         let model = createSubject(withState: createToolbarState())
         let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
@@ -256,9 +280,13 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     // MARK: - Private helpers
 
     @MainActor
-    private func createSubject(withState state: ToolbarState) -> AddressToolbarContainerModel {
+    private func createSubject(
+        withState state: ToolbarState,
+        featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags()
+    ) -> AddressToolbarContainerModel {
         return AddressToolbarContainerModel(state: state,
                                             profile: mockProfile,
+                                            featureFlagsProvider: featureFlagsProvider,
                                             windowUUID: windowUUID)
     }
 

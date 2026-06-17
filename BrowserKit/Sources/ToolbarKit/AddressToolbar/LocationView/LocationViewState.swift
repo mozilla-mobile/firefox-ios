@@ -25,6 +25,7 @@ public struct LocationViewConfiguration {
     public let didStartTyping: Bool
     public let shouldShowKeyboard: Bool
     public let shouldSelectSearchTerm: Bool
+    public let shouldShowGoogleLensIcon: Bool
     public var onTapLockIcon: (@MainActor (UIButton) -> Void)?
     public var onLongPress: (@MainActor () -> Void)?
 
@@ -46,6 +47,7 @@ public struct LocationViewConfiguration {
         didStartTyping: Bool,
         shouldShowKeyboard: Bool,
         shouldSelectSearchTerm: Bool,
+        shouldShowGoogleLensIcon: Bool = false,
         onTapLockIcon: (@MainActor (UIButton) -> Void)? = nil,
         onLongPress: (@MainActor () -> Void)? = nil
     ) {
@@ -66,6 +68,7 @@ public struct LocationViewConfiguration {
         self.didStartTyping = didStartTyping
         self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
+        self.shouldShowGoogleLensIcon = shouldShowGoogleLensIcon
         self.onTapLockIcon = onTapLockIcon
         self.onLongPress = onLongPress
     }

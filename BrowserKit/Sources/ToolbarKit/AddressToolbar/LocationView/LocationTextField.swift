@@ -18,6 +18,11 @@ protocol LocationTextFieldDelegate: AnyObject {
 }
 
 final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
+    private enum UX {
+        static let googleLensIconSize = CGSize(width: 20, height: 20)
+        static let googleLensRightViewSize = CGSize(width: 44, height: 44)
+    }
+
     public var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private var tintedClearImage: UIImage?
@@ -41,6 +46,33 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
+
+    var shouldShowGoogleLensIcon = false {
+        didSet {
+            updateRightView()
+        }
+    }
+
+    private lazy var googleLensImageView: UIImageView = {
+        let imageView = UIImageView(
+            image: UIImage(named: StandardImageIdentifiers.Medium.googleLens)?.withRenderingMode(.alwaysTemplate)
+        )
+        // Center the 20x20 icon inside the 44x44 right view used for the tap target.
+        imageView.frame = CGRect(
+            x: (UX.googleLensRightViewSize.width - UX.googleLensIconSize.width) / 2,
+            y: (UX.googleLensRightViewSize.height - UX.googleLensIconSize.height) / 2,
+            width: UX.googleLensIconSize.width,
+            height: UX.googleLensIconSize.height
+        )
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+
+    private lazy var googleLensRightView: UIView = {
+        let container = UIView(frame: CGRect(origin: .zero, size: UX.googleLensRightViewSize))
+        container.addSubview(googleLensImageView)
+        return container
+    }()
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -180,6 +212,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         let colors = theme.colors
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
+        googleLensImageView.tintColor = colors.iconSecondary
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
 
         // Force marked text to refresh with new style
@@ -204,6 +237,20 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
             notifyTextChanged?()
         } else {
             hideCursor = false
+        }
+        updateRightView()
+    }
+
+    private func updateRightView() {
+        let textIsEmpty = textWithoutSuggestion()?.isEmpty ?? true
+        if shouldShowGoogleLensIcon, isEditing, textIsEmpty {
+            rightView = googleLensRightView
+            rightViewMode = .whileEditing
+            clearButtonMode = .never
+        } else {
+            rightView = nil
+            rightViewMode = .never
+            clearButtonMode = .whileEditing
         }
     }
 
@@ -245,6 +292,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private func clear() {
         text = ""
         removeCompletion()
+        updateRightView()
         autocompleteDelegate?.locationTextFieldDidEnterText("")
     }
 
@@ -275,6 +323,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
+        updateRightView()
         autocompleteDelegate?.locationTextFieldDidBeginEditing(self)
     }
 
@@ -286,6 +335,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     public func textFieldDidEndEditing(_ textField: UITextField) {
         lastReplacement = nil
         textField.selectedTextRange = nil
+        updateRightView()
         autocompleteDelegate?.locationTextFieldDidEndEditing()
     }
 
@@ -318,6 +368,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         text = ""
         removeCompletion()
+        updateRightView()
         return autocompleteDelegate?.locationTextFieldShouldClear() ?? true
     }
 

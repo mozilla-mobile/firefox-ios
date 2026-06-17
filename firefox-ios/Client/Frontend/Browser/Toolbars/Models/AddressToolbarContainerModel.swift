@@ -29,6 +29,7 @@ final class AddressToolbarContainerModel: Equatable {
     let isEditing: Bool
     let didStartTyping: Bool
     let shouldShowKeyboard: Bool
+    let shouldShowGoogleLensIcon: Bool
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
@@ -76,6 +77,7 @@ final class AddressToolbarContainerModel: Equatable {
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
+            shouldShowGoogleLensIcon: shouldShowGoogleLensIcon,
             onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      buttonTapped: button,
@@ -202,6 +204,7 @@ final class AddressToolbarContainerModel: Equatable {
         state: ToolbarState,
         profile: Profile,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
         windowUUID: UUID
     ) {
@@ -240,6 +243,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.isEditing = state.addressToolbar.isEditing
         self.didStartTyping = state.addressToolbar.didStartTyping
         self.shouldShowKeyboard = state.addressToolbar.shouldShowKeyboard
+        self.shouldShowGoogleLensIcon = featureFlagsProvider.isEnabled(.googleLens)
         self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
@@ -353,6 +357,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.isEditing == rhs.isEditing &&
         lhs.didStartTyping == rhs.didStartTyping &&
         lhs.shouldShowKeyboard == rhs.shouldShowKeyboard &&
+        lhs.shouldShowGoogleLensIcon == rhs.shouldShowGoogleLensIcon &&
         lhs.isPrivateMode == rhs.isPrivateMode &&
         lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
