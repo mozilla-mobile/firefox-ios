@@ -45,13 +45,12 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         ])
     }
 
-    func test_didBecomeActiveNotification_dispatchesForegroundAndTopSitesRefresh() throws {
+    func test_didBecomeActiveNotification_dispatchesForegroundRefresh() throws {
         let mockWindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
         mockWindowManager.overrideWindows = true
         let subject = createSubject(windowManager: mockWindowManager)
         mockNotificationCenter.notifiableListener = subject
         let dispatchExpectation = XCTestExpectation(description: "Homepage active refresh actions dispatched")
-        dispatchExpectation.expectedFulfillmentCount = 2
 
         mockStore.dispatchCalled = {
             dispatchExpectation.fulfill()
@@ -64,8 +63,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
         let actionTypes = actionsCalled.compactMap { $0.actionType as? HomepageMiddlewareActionType }
 
-        XCTAssertEqual(actionTypes, [.didBecomeActive, .topSitesUpdated])
-        XCTAssertEqual(actionsCalled.map(\.windowUUID), [.XCTestDefaultUUID, .XCTestDefaultUUID])
+        XCTAssertEqual(actionTypes, [.didBecomeActive])
+        XCTAssertEqual(actionsCalled.map(\.windowUUID), [.XCTestDefaultUUID])
     }
 
     func test_viewWillAppearAction_doesNotSendTelemetryData() throws {

@@ -48,11 +48,10 @@ final class TopSitesMiddleware {
         switch action.actionType {
         case HomepageActionType.initialize,
             ShortcutsLibraryActionType.initialize,
+            HomepageMiddlewareActionType.didBecomeActive,
             HomepageMiddlewareActionType.topSitesUpdated,
             TopSitesActionType.toggleShowSponsoredSettings:
-            Task { @MainActor in
-                await self.getTopSitesDataAndUpdateState(for: action)
-            }
+            self.fetchTopSitesDataAndUpdateState(for: action)
         case TopSitesActionType.topSitesSeen:
             self.handleSponsoredImpressionTracking(for: action)
 
@@ -87,6 +86,12 @@ final class TopSitesMiddleware {
             self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .sponsoredSupport)
         default:
             break
+        }
+    }
+
+    private func fetchTopSitesDataAndUpdateState(for action: Action) {
+        Task { @MainActor in
+            await self.getTopSitesDataAndUpdateState(for: action)
         }
     }
 

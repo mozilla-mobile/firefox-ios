@@ -149,7 +149,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
                         actionType: HomepageMiddlewareActionType.didBecomeActive
                     )
                     store.dispatch(storiesAction)
-                    self.dispatchActionToFetchTopSites(windowUUID: windowUUID)
 
                 case .PrivateDataClearedHistory,
                         .TopSitesUpdated,

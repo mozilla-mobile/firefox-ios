@@ -129,6 +129,33 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
+    func test_didBecomeActiveAction_returnsTopSitesSection() throws {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didBecomeActive
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        XCTAssertEqual(mockTopSitesManager.recalculateTopSitesCalledCount, 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionsType, [.retrievedUpdatedSites])
+        XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
+    }
+
     func test_fetchTopSitesAction_withMultipleCalles_returnsTopSitesSection() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let action = HomepageAction(
