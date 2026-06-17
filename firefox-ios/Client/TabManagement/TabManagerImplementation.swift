@@ -711,7 +711,7 @@ final class TabManagerImplementation: NSObject,
     }
 
     func restoreScreenshot(for tab: Tab) {
-        loadScreenshotFromDisk(for: tab) { shouldReload in
+        loadScreenshotFromDisk(for: tab) { [weak self] shouldReload in
             guard shouldReload else { return }
             Task { @MainActor [weak self] in
                 self?.dispatchDidSetScreenshotAction(for: tab)
