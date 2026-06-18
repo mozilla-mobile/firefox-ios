@@ -32,6 +32,8 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
+    private var editingAccessoryForegroundColorNormal: UIColor = .clear
+    private var editingAccessoryForegroundColorHighlighted: UIColor = .clear
 
     weak var autocompleteDelegate: LocationTextFieldDelegate?
 
@@ -63,6 +65,9 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         let button = UIButton(type: .system)
         button.frame = CGRect(origin: .zero, size: UX.editingAccessoryRightViewSize)
         button.configuration = makeEditingAccessoryButtonConfiguration()
+        button.configurationUpdateHandler = { [weak self] _ in
+            self?.updateEditingAccessoryButtonState()
+        }
         button.addTarget(self, action: #selector(editingAccessoryButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -219,7 +224,9 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         let colors = theme.colors
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
-        editingAccessoryRightView.tintColor = colors.iconSecondary
+        editingAccessoryForegroundColorNormal = colors.iconSecondary
+        editingAccessoryForegroundColorHighlighted = colors.actionPrimary
+        updateEditingAccessoryButtonState()
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
 
         // Force marked text to refresh with new style
@@ -254,6 +261,14 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         return configuration
     }
 
+    private func updateEditingAccessoryButtonState() {
+        var configuration = editingAccessoryRightView.configuration ?? makeEditingAccessoryButtonConfiguration()
+        configuration.baseForegroundColor = editingAccessoryRightView.isHighlighted ?
+            editingAccessoryForegroundColorHighlighted :
+            editingAccessoryForegroundColorNormal
+        editingAccessoryRightView.configuration = configuration
+    }
+
     private func configureEditingAccessoryButton() {
         guard let editingAccessoryButtonConfiguration else { return }
         var configuration = editingAccessoryRightView.configuration ?? makeEditingAccessoryButtonConfiguration()
@@ -261,6 +276,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
             named: editingAccessoryButtonConfiguration.imageName
         )?.withRenderingMode(.alwaysTemplate)
         editingAccessoryRightView.configuration = configuration
+        updateEditingAccessoryButtonState()
         editingAccessoryRightView.accessibilityLabel = editingAccessoryButtonConfiguration.a11yLabel
     }
 
