@@ -59,8 +59,10 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         else { throw Error.failure }
 
         if let cachedResponse = cache.loadResponse(),
-           cacheUpdateThresholdHasNotPassed(),
            responseHasDisplayableContent(cachedResponse) {
+            if !cacheUpdateThresholdHasNotPassed() {
+                refreshCacheInBackground()
+            }
             return cachedResponse
         }
 
@@ -68,6 +70,10 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
             throw Error.failure
         }
         return response
+    }
+
+    private func refreshCacheInBackground() {
+        _ = createTask()
     }
 
     static func isLocaleSupported(_ locale: String) -> Bool {
