@@ -129,6 +129,33 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
+    func test_didBecomeActiveAction_returnsTopSitesSection() throws {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didBecomeActive
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        XCTAssertEqual(mockTopSitesManager.recalculateTopSitesCalledCount, 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionsType, [.retrievedUpdatedSites])
+        XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
+    }
+
     func test_fetchTopSitesAction_withMultipleCalles_returnsTopSitesSection() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let action = HomepageAction(
@@ -158,6 +185,31 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 3)
         XCTAssertEqual(actionsType, [.retrievedUpdatedSites, .retrievedUpdatedSites, .retrievedUpdatedSites])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
+    }
+
+    func test_homepageInitializeAction_withoutSponsoredSites_dispatchesOtherSites() throws {
+        let topSitesManager = FallbackTopSitesManager()
+        let subject = createSubject(topSitesManager: topSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Top sites middleware dispatches fallback sites")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let topSites = try XCTUnwrap(actionsCalled.last?.topSites)
+
+        XCTAssertEqual(topSites.count, 1)
+        XCTAssertEqual(topSites.first?.title, "Fallback Site")
+        XCTAssertEqual(topSites.first?.isSponsored, false)
     }
 
     func test_tappedOnHomepageTopSite_forSponsoredSites_withUnifiedAds_sendsTelemetry() throws {
@@ -563,7 +615,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
     private func createSubject(
-        topSitesManager: MockTopSitesManager,
+        topSitesManager: TopSitesManagerInterface,
         unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry? = nil,
         featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags()
     ) -> TopSitesMiddleware {
@@ -639,4 +691,29 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
     }
+}
+
+private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
+    func getOtherSites() async -> [TopSiteConfiguration] {
+        return [
+            TopSiteConfiguration(
+                site: Site.createBasicSite(url: "www.example.com", title: "Fallback Site")
+            )
+        ]
+    }
+
+    func fetchSponsoredSites() async -> [Site] {
+        return []
+    }
+
+    @MainActor
+    func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
+        return otherSites
+    }
+
+    func removeTopSite(_ site: Site) async {}
+
+    func pinTopSite(_ site: Site) {}
+
+    func unpinTopSite(_ site: Site) async {}
 }

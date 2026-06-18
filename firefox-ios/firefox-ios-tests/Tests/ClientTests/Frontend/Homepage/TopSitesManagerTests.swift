@@ -110,6 +110,16 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 0)
     }
 
+    func test_fetchSponsoredSites_forUnifiedAds_whenProviderDoesNotComplete_returnNoSponsoredSites() async throws {
+        let subject = try createSubject(
+            unifiedAdsProvider: MockUnifiedAdsProvider(result: nil),
+            sponsoredTilesFetchTimeoutNanoseconds: 1_000_000
+        )
+
+        let topSites = await subject.fetchSponsoredSites()
+        XCTAssertEqual(topSites.count, 0)
+    }
+
     func test_recalculateTopSites_shouldShowSponsoredSites_returnOnlyMaxSponsoredSites() throws {
         // Max tiles is currently at 2, so it should add 2 tiles only.
         let subject = try createSubject()
@@ -450,6 +460,7 @@ final class TopSitesManagerTests: XCTestCase {
         topSiteHistoryManager: TopSiteHistoryManagerProvider = MockTopSiteHistoryManager(sites: []),
         searchEngineManager: SearchEnginesManagerProvider = MockSearchEnginesManager(),
         maxCount: Int = 10,
+        sponsoredTilesFetchTimeoutNanoseconds: UInt64 = 3_000_000_000,
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws -> TopSitesManager {
@@ -462,7 +473,8 @@ final class TopSitesManagerTests: XCTestCase {
             topSiteHistoryManager: topSiteHistoryManager,
             searchEnginesManager: searchEngineManager,
             notification: mockNotificationCenter,
-            maxTopSites: maxCount
+            maxTopSites: maxCount,
+            sponsoredTilesFetchTimeoutNanoseconds: sponsoredTilesFetchTimeoutNanoseconds
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
