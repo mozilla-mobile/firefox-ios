@@ -9,7 +9,7 @@ import Testing
 struct OnboardingVariantTests {
     @Test
     func test_shouldShowBrandRefreshUI() {
-        #expect(!OnboardingVariant.modern.shouldShowBrandRefreshUI)
+        #expect(!OnboardingVariant.base.shouldShowBrandRefreshUI)
         #expect(OnboardingVariant.japan.shouldShowBrandRefreshUI)
         #expect(OnboardingVariant.brandRefresh.shouldShowBrandRefreshUI)
     }

@@ -6,9 +6,9 @@ import Common
 import XCTest
 @testable import Client
 
-// MARK: - ModernLaunchScreenViewController Tests
+// MARK: - OnboardingLaunchScreenViewController Tests
 @MainActor
-final class ModernLaunchScreenViewControllerTests: XCTestCase {
+final class OnboardingLaunchScreenViewControllerTests: XCTestCase {
     // MARK: - Test Properties
     private var viewModel: MockLaunchScreenViewModel!
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
@@ -256,11 +256,14 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
     }
 
-    private func createSubject(file: StaticString = #filePath,
-                               line: UInt = #line) -> ModernLaunchScreenViewController {
-        let subject = ModernLaunchScreenViewController(windowUUID: windowUUID,
-                                                       coordinator: coordinatorDelegate,
-                                                       viewModel: viewModel)
+    private func createSubject(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> OnboardingLaunchScreenViewController {
+        let subject = OnboardingLaunchScreenViewController(
+            windowUUID: windowUUID,
+            coordinator: coordinatorDelegate,
+            viewModel: viewModel)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

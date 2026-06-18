@@ -72,7 +72,7 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
     var shouldShowVideoIntro: Bool { return false }
 
     var onboardingKitVariant: OnboardingKit.OnboardingVariant {
-        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
+        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .base
     }
 
     func didSeeIntroScreen() {
