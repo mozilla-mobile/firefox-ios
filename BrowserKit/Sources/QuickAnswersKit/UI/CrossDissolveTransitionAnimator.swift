@@ -24,7 +24,7 @@ public enum QuickAnswersTransitionType: Equatable, Sendable {
 
 /// The animator for a custom cross dissolve presentation and dismissal.
 /// It adds a zoom in and fade from the provided source rect when presenting.
-/// The dismissal is a simple cross dissolve
+/// The dismissal is a simple cross dissolve.
 final class CrossDissolveTransitionAnimator: NSObject,
                                              UIViewControllerTransitioningDelegate,
                                              UIViewControllerAnimatedTransitioning {

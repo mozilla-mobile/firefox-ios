@@ -160,27 +160,22 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         setupView(headerState: headerState)
     }
     
-    @objc
     private func quickAnswerButtonTapped() {
         guard let headerState else { return }
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        let transitionType: QuickAnswersTransitionType = if headerState.showiPadSetup {
+            .formSheet
+        } else {
+            // convert the button frame to the parent window frame to have correct transition.
+            .crossDissolve(sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil))
+        }
         store.dispatch(
             NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.quickAnswers(transitionType: quickAnswersTransitionType)),
+                navigationDestination: NavigationDestination(.quickAnswers(transitionType: transitionType)),
                 windowUUID: headerState.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell
             )
         )
-    }
-
-    private var quickAnswersTransitionType: QuickAnswersTransitionType {
-        guard headerState?.showiPadSetup != true else {
-            return .formSheet
-        }
-        // Convert the button's frame to window coordinates so the presentation animation
-        // can originate from the tapped button regardless of the cell's position.
-        let sourceRect = quickAnswersButton.convert(quickAnswersButton.bounds, to: nil)
-        return .crossDissolve(sourceRect: sourceRect)
     }
 
     // MARK: - ThemeApplicable
