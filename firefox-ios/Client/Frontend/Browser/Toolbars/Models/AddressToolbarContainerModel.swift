@@ -115,6 +115,7 @@ final class AddressToolbarContainerModel: Equatable {
         return LocationViewEditingAccessoryConfiguration(
             imageName: imageName,
             a11yLabel: editingAccessoryAction.a11yLabel,
+            a11yIdentifier: editingAccessoryAction.a11yId,
             onTap: { view in
                 guard let button = view as? UIButton else { return }
 

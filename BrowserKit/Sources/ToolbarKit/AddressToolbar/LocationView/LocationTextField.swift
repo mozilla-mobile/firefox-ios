@@ -270,7 +270,12 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     private func configureEditingAccessoryButton() {
-        guard let editingAccessoryButtonConfiguration else { return }
+        guard let editingAccessoryButtonConfiguration else {
+            editingAccessoryRightView.accessibilityLabel = nil
+            editingAccessoryRightView.accessibilityIdentifier = nil
+            return
+        }
+
         var configuration = editingAccessoryRightView.configuration ?? makeEditingAccessoryButtonConfiguration()
         configuration.image = UIImage(
             named: editingAccessoryButtonConfiguration.imageName
@@ -278,6 +283,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         editingAccessoryRightView.configuration = configuration
         updateEditingAccessoryButtonState()
         editingAccessoryRightView.accessibilityLabel = editingAccessoryButtonConfiguration.a11yLabel
+        editingAccessoryRightView.accessibilityIdentifier = editingAccessoryButtonConfiguration.a11yIdentifier
     }
 
     @objc
