@@ -159,7 +159,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.logoTextColor = logoTextColor
         setupView(headerState: headerState)
     }
-    
+
     private func quickAnswerButtonTapped() {
         guard let headerState else { return }
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()

@@ -113,7 +113,7 @@ final class CrossDissolveTransitionAnimator: NSObject,
             }
         )
     }
-    
+
     /// The transform applied to the presented view before the cross dissolve animation begins.
     /// The view is scaled down and anchored so its top-right corner matches the source rect's
     /// top-right corner, making it zoom in from that edge.

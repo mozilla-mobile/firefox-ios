@@ -243,7 +243,7 @@ public final class QuickAnswersViewController: UIViewController,
         }
         viewModel.startRecordingVoice()
     }
-    
+
     // MARK: - UIAdaptivePresentationControllerDelegate
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         navigationHandler?.dismissQuickAnswers(with: nil)
