@@ -212,6 +212,86 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(topSites.first?.isSponsored, false)
     }
 
+    func test_homepageInitializeAction_whenHomepageTopSitesEmpty_dispatchesLocalSitesFirst() throws {
+        let topSitesManager = SponsoredFallbackTopSitesManager()
+        let subject = createSubject(topSitesManager: topSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Top sites middleware dispatches local sites")
+        let sponsoredFetchExpectation = XCTestExpectation(description: "Sponsored sites refresh starts")
+        topSitesManager.fetchSponsoredSitesCalled = {
+            sponsoredFetchExpectation.fulfill()
+        }
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation, sponsoredFetchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let topSites = try XCTUnwrap(actionsCalled.last?.topSites)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(topSites.map(\.title), ["Local Site"])
+        XCTAssertEqual(topSitesManager.sponsoredSitesUsedForRecalculation, [0])
+    }
+
+    func test_homepageInitializeAction_whenHomepageTopSitesEmptyAndLocalSitesEmpty_dispatchesSponsoredSites() throws {
+        let topSitesManager = SponsoredFallbackTopSitesManager()
+        topSitesManager.otherSites = []
+        let subject = createSubject(topSitesManager: topSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Top sites middleware dispatches sponsored sites")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let topSites = try XCTUnwrap(actionsCalled.last?.topSites)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(topSites.map(\.title), ["Sponsored Site"])
+        XCTAssertEqual(topSitesManager.sponsoredSitesUsedForRecalculation, [0, 1])
+    }
+
+    func test_homepageInitializeAction_whenHomepageTopSitesLoaded_dispatchesSponsoredSites() throws {
+        let topSitesManager = SponsoredFallbackTopSitesManager()
+        let subject = createSubject(topSitesManager: topSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Top sites middleware dispatches full sites")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.topSitesProvider(appStateWithHomepageTopSites(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let topSites = try XCTUnwrap(actionsCalled.last?.topSites)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(topSites.map(\.title), ["Sponsored Site", "Local Site"])
+        XCTAssertEqual(topSitesManager.sponsoredSitesUsedForRecalculation, [1])
+    }
+
     func test_tappedOnHomepageTopSite_forSponsoredSites_withUnifiedAds_sendsTelemetry() throws {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
         let subject = createSubject(
@@ -691,6 +771,29 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
     }
+
+    private func appStateWithHomepageTopSites() -> AppState {
+        let topSitesAction = TopSitesAction(
+            topSites: [
+                TopSiteConfiguration(
+                    site: Site.createBasicSite(url: "www.existing.com", title: "Existing Site")
+                )
+            ],
+            shouldShowAddShortcutTile: false,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+        )
+        let homepageState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            topSitesAction
+        )
+
+        return AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [.homepage(homepageState)]
+            )
+        )
+    }
 }
 
 private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
@@ -709,6 +812,47 @@ private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecke
     @MainActor
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
         return otherSites
+    }
+
+    func removeTopSite(_ site: Site) async {}
+
+    func pinTopSite(_ site: Site) {}
+
+    func unpinTopSite(_ site: Site) async {}
+}
+
+private final class SponsoredFallbackTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
+    var fetchSponsoredSitesCalled: () -> Void = {}
+    var sponsoredSitesUsedForRecalculation = [Int]()
+    var otherSites = [
+        TopSiteConfiguration(
+            site: Site.createBasicSite(url: "www.example.com", title: "Local Site")
+        )
+    ]
+
+    func getOtherSites() async -> [TopSiteConfiguration] {
+        return otherSites
+    }
+
+    func fetchSponsoredSites() async -> [Site] {
+        fetchSponsoredSitesCalled()
+        return [
+            Site.createSponsoredSite(
+                url: "www.sponsored.com",
+                title: "Sponsored Site",
+                siteInfo: SponsoredSiteInfo(
+                    impressionURL: "https://example.com/impression",
+                    clickURL: "https://example.com/click",
+                    imageURL: "https://example.com/image"
+                )
+            )
+        ]
+    }
+
+    @MainActor
+    func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
+        sponsoredSitesUsedForRecalculation.append(sponsoredSites.count)
+        return sponsoredSites.map { TopSiteConfiguration(site: $0) } + otherSites
     }
 
     func removeTopSite(_ site: Site) async {}

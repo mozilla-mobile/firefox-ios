@@ -51,7 +51,7 @@ final class TopSitesMiddleware {
             HomepageMiddlewareActionType.didBecomeActive,
             HomepageMiddlewareActionType.topSitesUpdated,
             TopSitesActionType.toggleShowSponsoredSettings:
-            self.fetchTopSitesDataAndUpdateState(for: action)
+            self.fetchTopSitesDataAndUpdateState(for: action, state: state)
         case TopSitesActionType.topSitesSeen:
             self.handleSponsoredImpressionTracking(for: action)
 
@@ -89,9 +89,26 @@ final class TopSitesMiddleware {
         }
     }
 
-    private func fetchTopSitesDataAndUpdateState(for action: Action) {
+    private func fetchTopSitesDataAndUpdateState(for action: Action, state: AppState) {
+        let shouldDispatchLocalSitesFirst = shouldDispatchLocalSitesFirst(for: action, state: state)
         Task { @MainActor in
-            await self.getTopSitesDataAndUpdateState(for: action)
+            await self.getTopSitesDataAndUpdateState(
+                for: action,
+                shouldDispatchLocalSitesFirst: shouldDispatchLocalSitesFirst
+            )
+        }
+    }
+
+    private func shouldDispatchLocalSitesFirst(for action: Action, state: AppState) -> Bool {
+        switch action.actionType {
+        case HomepageActionType.initialize,
+            HomepageMiddlewareActionType.didBecomeActive,
+            HomepageMiddlewareActionType.topSitesUpdated,
+            TopSitesActionType.toggleShowSponsoredSettings:
+            let homepageState = HomepageState(appState: state, uuid: action.windowUUID)
+            return homepageState.topSitesState.topSitesData.isEmpty
+        default:
+            return false
         }
     }
 
@@ -125,11 +142,36 @@ final class TopSitesMiddleware {
     }
 
     @MainActor
-    private func getTopSitesDataAndUpdateState(for action: Action) async {
+    private func getTopSitesDataAndUpdateState(
+        for action: Action,
+        shouldDispatchLocalSitesFirst: Bool
+    ) async {
+        if shouldDispatchLocalSitesFirst {
+            let sponsoredSitesTask = fetchSponsoredSitesInBackground()
+            let otherSites = await self.topSitesManager.getOtherSites()
+            let localTopSites = self.topSitesManager.recalculateTopSites(otherSites: otherSites, sponsoredSites: [])
+
+            if !localTopSites.isEmpty {
+                dispatchTopSitesRetrievedAction(for: action.windowUUID, topSites: localTopSites)
+                return
+            }
+
+            let sponsoredSites = await sponsoredSitesTask.value
+            let topSites = self.topSitesManager.recalculateTopSites(otherSites: otherSites, sponsoredSites: sponsoredSites)
+            dispatchTopSitesRetrievedAction(for: action.windowUUID, topSites: topSites)
+            return
+        }
+
         async let sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
         async let otherSites = await self.topSitesManager.getOtherSites()
         let topSites = await self.topSitesManager.recalculateTopSites(otherSites: otherSites, sponsoredSites: sponsoredSites)
         dispatchTopSitesRetrievedAction(for: action.windowUUID, topSites: topSites)
+    }
+
+    private func fetchSponsoredSitesInBackground() -> Task<[Site], Never> {
+        return Task { [topSitesManager] in
+            await topSitesManager.fetchSponsoredSites()
+        }
     }
 
     private func dispatchTopSitesRetrievedAction(for windowUUID: WindowUUID, topSites: [TopSiteConfiguration]) {
