@@ -125,6 +125,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .relayIntegration:
             return checkRelayIntegration()
 
+        case .reportBrokenSite:
+            return checkReportBrokenSiteFeature()
+
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID)
 
@@ -464,5 +467,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHomepageTrackerBlockerModuleFeature() -> Bool {
         return nimbus.features.homepageTrackerBlockerModuleFeature.value().enabled
+    }
+
+    private func checkReportBrokenSiteFeature() -> Bool {
+        return nimbus.features.reportBrokenSiteFeature.value().enabled
     }
 }
