@@ -308,9 +308,21 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                didStartTyping: false,
                                isEmptySearch: true,
                                alternativeSearchEngine: withSearchEngine,
-                               editingAccessoryAction: AddressBarState.makeEditingAccessoryAction(
+                               editingAccessoryAction: makeEditingAccessoryAction(
                                    isGoogleLensEnabled: isGoogleLensEnabled
                                ))
+    }
+
+    private func makeEditingAccessoryAction(isGoogleLensEnabled: Bool) -> ToolbarActionConfiguration? {
+        guard isGoogleLensEnabled else { return nil }
+
+        return ToolbarActionConfiguration(
+            actionType: .googleLens,
+            iconName: StandardImageIdentifiers.Medium.googleLens,
+            isEnabled: true,
+            a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
+            a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton
+        )
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {
