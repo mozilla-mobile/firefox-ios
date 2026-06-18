@@ -100,6 +100,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,
+            transitionType: .crossDissolve(sourceRect: .zero),
             onNavigate: onNavigate
         )
         trackForMemoryLeaks(subject, file: file, line: line)

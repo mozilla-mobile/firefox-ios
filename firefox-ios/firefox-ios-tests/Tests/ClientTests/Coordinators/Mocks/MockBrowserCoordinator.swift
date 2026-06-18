@@ -6,6 +6,7 @@ import Foundation
 import Storage
 import WebKit
 import SummarizeKit
+import QuickAnswersKit
 
 @testable import Client
 
@@ -177,7 +178,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         openLearnMoreFromNativeErrorPageCalled += 1
     }
 
-    func showQuickAnswers() {
+    func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         showQuickAnswersCalled += 1
     }
 

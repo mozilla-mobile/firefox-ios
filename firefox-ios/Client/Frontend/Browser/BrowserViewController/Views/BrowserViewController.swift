@@ -18,6 +18,7 @@ import WidgetKit
 import SummarizeKit
 import ActivityKit
 import Glean
+import QuickAnswersKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -2801,8 +2802,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showShortcutsLibrary()
         case .worldCupCountryPicker:
             navigationHandler?.showWorldCupCountryPicker()
-        case .quickAnswers:
-            navigationHandler?.showQuickAnswers()
+        case .quickAnswers(let transitionType):
+            navigationHandler?.showQuickAnswers(transitionType: transitionType)
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
         case .certificatesFromErrorPage:

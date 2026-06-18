@@ -6,6 +6,7 @@ import Foundation
 import Storage
 import WebKit
 import SummarizeKit
+import QuickAnswersKit
 
 import struct MozillaAppServices.CreditCard
 import enum MozillaAppServices.VisitType
@@ -125,7 +126,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showWorldCupCountryPicker()
 
     @MainActor
-    func showQuickAnswers()
+    func showQuickAnswers(transitionType: QuickAnswersTransitionType)
 
     @MainActor
     func showPrivacyNoticeLink(url: URL)

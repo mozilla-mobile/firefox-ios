@@ -13,6 +13,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     private let prefs: Prefs
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
+    private let transitionType: QuickAnswersTransitionType
     private let onNavigate: (QuickAnswersNavigationType) -> Void
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
@@ -24,12 +25,14 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         router: Router,
+        transitionType: QuickAnswersTransitionType,
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void,
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.prefs = prefs
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.transitionType = transitionType
         self.onNavigate = onNavigate
         super.init(router: router)
     }
@@ -37,6 +40,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     func start() {
         let controller = QuickAnswersViewController(
             navigationHandler: self,
+            transitionType: transitionType,
             prefs: prefs,
             windowUUID: windowUUID,
             themeManager: themeManager,

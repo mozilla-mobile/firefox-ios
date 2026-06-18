@@ -12,6 +12,7 @@ import XCTest
 import GCDWebServers
 import SummarizeKit
 import Shared
+import QuickAnswersKit
 
 @testable import Client
 
@@ -655,7 +656,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     func testShowQuickAnswers_addsQuickAnswersCoordinator() {
         let subject = createSubject()
 
-        subject.showQuickAnswers()
+        subject.showQuickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is QuickAnswersCoordinator)
@@ -665,8 +666,8 @@ final class BrowserCoordinatorTests: XCTestCase,
     func testShowQuickAnswers_doesNotAddDuplicateCoordinator() {
         let subject = createSubject()
 
-        subject.showQuickAnswers()
-        subject.showQuickAnswers()
+        subject.showQuickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+        subject.showQuickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
 
         let count = subject.childCoordinators.count { $0 is QuickAnswersCoordinator }
         XCTAssertEqual(count, 1)
@@ -674,7 +675,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     func testShowQuickAnswers_didFinish_removesChild() throws {
         let subject = createSubject()
-        subject.showQuickAnswers()
+        subject.showQuickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
 
         let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
         subject.didFinish(from: coordinator)

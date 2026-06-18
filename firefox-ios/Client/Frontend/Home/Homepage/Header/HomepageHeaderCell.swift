@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import Common
 import Shared
+import QuickAnswersKit
 
 // Header for the homepage in both normal and private mode
 // Contains the firefox logo, and optionally the Quick Answers button
@@ -23,7 +24,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
-    private var onQuickAnswersTapped: (() -> Void)?
     private var headerState: HeaderState?
     private var logoTextColor: UIColor?
     private var hasConfiguredView = false
@@ -63,12 +63,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         // TODO: - FXIOS-14720 Add Strings for accessibility label
         button.accessibilityIdentifier = a11y.quickAnswersButton
         button.adjustsImageSizeForAccessibilityContentSizeCategory = false
-        button.addAction(
-            UIAction(handler: { [weak self] _ in
-                self?.onQuickAnswersTapped?()
-            }),
-            for: .touchUpInside
-        )
+        button.addAction(UIAction(handler: { [weak self] _ in
+            self?.quickAnswerButtonTapped()
+        }), for: .touchUpInside)
     }
 
     // MARK: - Initializers
@@ -157,12 +154,33 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     func configure(headerState: HeaderState,
-                   logoTextColor: UIColor? = nil,
-                   onQuickAnswersTapped: (() -> Void)? = nil) {
+                   logoTextColor: UIColor? = nil) {
         self.headerState = headerState
         self.logoTextColor = logoTextColor
-        self.onQuickAnswersTapped = onQuickAnswersTapped
         setupView(headerState: headerState)
+    }
+    
+    @objc
+    private func quickAnswerButtonTapped() {
+        guard let headerState else { return }
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.quickAnswers(transitionType: quickAnswersTransitionType)),
+                windowUUID: headerState.windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
+
+    private var quickAnswersTransitionType: QuickAnswersTransitionType {
+        guard headerState?.showiPadSetup != true else {
+            return .formSheet
+        }
+        // Convert the button's frame to window coordinates so the presentation animation
+        // can originate from the tapped button regardless of the cell's position.
+        let sourceRect = quickAnswersButton.convert(quickAnswersButton.bounds, to: nil)
+        return .crossDissolve(sourceRect: sourceRect)
     }
 
     // MARK: - ThemeApplicable
