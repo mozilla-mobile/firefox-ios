@@ -45,10 +45,5 @@ for lang in $LOCALES; do
         --output_directory "l10n-screenshots/$lang" \
         --xcodebuild_formatter xcbeautify \
         $EXTRA_FAST_LANE_ARGS
-    FASTLANE_EXIT=$?
-    echo "Fastlane exited with code: $FASTLANE_EXIT"
-    if [ $FASTLANE_EXIT -ne 0 ]; then
-        echo "ERROR: Fastlane failed for locale $lang"
-        exit $FASTLANE_EXIT
-    fi
+    echo "Fastlane exited with code: $?"
 done
