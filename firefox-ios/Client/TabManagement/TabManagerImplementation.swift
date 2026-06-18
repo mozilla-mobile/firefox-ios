@@ -740,7 +740,7 @@ final class TabManagerImplementation: NSObject,
                 self?.logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
-            onComplete(true)
+            onComplete(tab.screenshot != nil)
         }
     }
 
