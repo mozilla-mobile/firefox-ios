@@ -72,11 +72,27 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .newTab)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
 
         let savedValue = try XCTUnwrap(
             mockGleanWrapper.savedValues.first as? String
         )
         XCTAssertEqual(savedValue, "newTab")
+    }
+
+    func testBrowserDidLoad_withGoogleLensEnabled_dispatchesDidLoadToolbarsWithGoogleLensEnabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(manager: toolbarManager, featureFlagsProvider: featureFlagsProvider)
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
     }
 
     func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {
@@ -892,13 +908,17 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
-    private func createSubject(manager: ToolbarManager) -> ToolbarMiddleware {
+    private func createSubject(
+        manager: ToolbarManager,
+        featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags()
+    ) -> ToolbarMiddleware {
         return ToolbarMiddleware(
             manager: manager,
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
             profile: profile,
             summarizerConfigFactory: summarizerConfigFactory,
             recentSearchProvider: mockRecentSearchProvider,
+            featureFlagsProvider: featureFlagsProvider,
             windowManager: windowManager,
         )
     }

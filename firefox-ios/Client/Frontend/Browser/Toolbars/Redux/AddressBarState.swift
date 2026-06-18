@@ -13,6 +13,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     var leadingPageActions: [ToolbarActionConfiguration]
     var trailingPageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
+    var editingAccessoryAction: ToolbarActionConfiguration?
     let borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
@@ -103,12 +104,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
          translationConfiguration: TranslationConfiguration?,
          didStartTyping: Bool,
          isEmptySearch: Bool,
-         alternativeSearchEngine: SearchEngineModel?) {
+         alternativeSearchEngine: SearchEngineModel?,
+         editingAccessoryAction: ToolbarActionConfiguration? = nil) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.browserActions = browserActions
+        self.editingAccessoryAction = editingAccessoryAction
         self.borderPosition = borderPosition
         self.url = url
         self.searchTerm = searchTerm
@@ -226,7 +229,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
-        guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else {
+        guard let toolbarAction = action as? ToolbarAction,
+              let borderPosition = toolbarAction.addressBorderPosition else {
             return defaultState(from: state)
         }
 
@@ -252,7 +256,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: nil,
             didStartTyping: false,
             isEmptySearch: true,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: makeEditingAccessoryAction(
+                isGoogleLensEnabled: toolbarAction.isGoogleLensEnabled == true
+            )
         )
     }
 
@@ -282,7 +289,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -312,7 +320,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -346,7 +355,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: translationsAction.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -382,7 +392,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine)
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
+        )
     }
 
     @MainActor
@@ -416,7 +428,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -452,7 +465,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -494,7 +508,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             ),
             didStartTyping: state.didStartTyping,
             isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -534,7 +549,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -570,7 +586,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -606,7 +623,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -642,7 +660,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -678,7 +697,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -713,7 +733,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -750,7 +771,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -795,7 +817,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -830,7 +853,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -862,7 +886,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -895,7 +920,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: true,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -928,7 +954,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: true,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -961,7 +988,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: false,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -990,7 +1018,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -1019,7 +1048,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -1050,7 +1080,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: selectedSearchEngine
+            alternativeSearchEngine: selectedSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -1079,7 +1110,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: nil
+            alternativeSearchEngine: nil,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -1106,7 +1138,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            editingAccessoryAction: state.editingAccessoryAction
         )
     }
 
@@ -1417,6 +1450,22 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isEnabled: true,
             a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
+    }
+
+    private static func makeEditingAccessoryAction(isGoogleLensEnabled: Bool) -> ToolbarActionConfiguration? {
+        guard isGoogleLensEnabled else { return nil }
+
+        return googleLensAction()
+    }
+
+    private static func googleLensAction() -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .googleLens,
+            iconName: StandardImageIdentifiers.Medium.googleLens,
+            isEnabled: true,
+            a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
+            a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton
+        )
     }
 
     private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {

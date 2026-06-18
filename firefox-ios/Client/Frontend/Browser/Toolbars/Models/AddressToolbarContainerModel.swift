@@ -29,7 +29,7 @@ final class AddressToolbarContainerModel: Equatable {
     let isEditing: Bool
     let didStartTyping: Bool
     let shouldShowKeyboard: Bool
-    let shouldShowGoogleLensIcon: Bool
+    let editingAccessoryAction: ToolbarActionConfiguration?
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
@@ -77,7 +77,7 @@ final class AddressToolbarContainerModel: Equatable {
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
-            editingAccessoryButton: googleLensEditingAccessoryButtonConfiguration(),
+            editingAccessoryButton: editingAccessoryButtonConfiguration(),
             onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      buttonTapped: button,
@@ -109,13 +109,22 @@ final class AddressToolbarContainerModel: Equatable {
     }
 
     @MainActor
-    private func googleLensEditingAccessoryButtonConfiguration() -> LocationViewEditingAccessoryConfiguration? {
-        guard shouldShowGoogleLensIcon else { return nil }
+    private func editingAccessoryButtonConfiguration() -> LocationViewEditingAccessoryConfiguration? {
+        guard let editingAccessoryAction, let imageName = editingAccessoryAction.iconName else { return nil }
 
         return LocationViewEditingAccessoryConfiguration(
-            imageName: StandardImageIdentifiers.Medium.googleLens,
-            a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
-            onTap: { _ in }
+            imageName: imageName,
+            a11yLabel: editingAccessoryAction.a11yLabel,
+            onTap: { view in
+                guard let button = view as? UIButton else { return }
+
+                let action = ToolbarMiddlewareAction(buttonType: editingAccessoryAction.actionType,
+                                                     buttonTapped: button,
+                                                     gestureType: .tap,
+                                                     windowUUID: self.windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
+                store.dispatch(action)
+            }
         )
     }
 
@@ -215,7 +224,6 @@ final class AddressToolbarContainerModel: Equatable {
         state: ToolbarState,
         profile: Profile,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
-        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
         windowUUID: UUID
     ) {
@@ -254,7 +262,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.isEditing = state.addressToolbar.isEditing
         self.didStartTyping = state.addressToolbar.didStartTyping
         self.shouldShowKeyboard = state.addressToolbar.shouldShowKeyboard
-        self.shouldShowGoogleLensIcon = featureFlagsProvider.isEnabled(.googleLens)
+        self.editingAccessoryAction = state.addressToolbar.editingAccessoryAction
         self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
@@ -368,7 +376,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.isEditing == rhs.isEditing &&
         lhs.didStartTyping == rhs.didStartTyping &&
         lhs.shouldShowKeyboard == rhs.shouldShowKeyboard &&
-        lhs.shouldShowGoogleLensIcon == rhs.shouldShowGoogleLensIcon &&
+        lhs.editingAccessoryAction == rhs.editingAccessoryAction &&
         lhs.isPrivateMode == rhs.isPrivateMode &&
         lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
