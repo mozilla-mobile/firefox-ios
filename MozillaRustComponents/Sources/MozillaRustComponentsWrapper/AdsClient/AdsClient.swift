@@ -30,8 +30,9 @@ public struct RustAdsClient {
 
     private static func getDatabaseURL(environment: MozAdsEnvironment) -> String {
         let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let applicationSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        try? fileManager.createDirectory(at: applicationSupportURL, withIntermediateDirectories: true)
         let dbName = environment == .prod ? "ads-client.db" : "ads-client-staging.db"
-        return documentsURL.appendingPathComponent(dbName).path
+        return applicationSupportURL.appendingPathComponent(dbName).path
     }
 }
