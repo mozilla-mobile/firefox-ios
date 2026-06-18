@@ -252,9 +252,6 @@ public struct PrefsKeys {
     // Only used to force showing the App Store review dialog for debugging purposes
     public static let ForceShowAppReviewPromptOverride = "ForceShowAppReviewPromptOverride"
 
-    // Used to show splash screen only during first time on fresh install
-    public static let splashScreenShownKey = "splashScreenShownKey"
-
     public static let PasswordGeneratorShown = "PasswordGeneratorShown"
 
     // The guid of the bookmark folder that was most recently created or saved to by the user.

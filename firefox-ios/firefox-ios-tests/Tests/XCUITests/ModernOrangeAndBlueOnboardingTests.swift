@@ -21,8 +21,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
     override func setUpExperimentVariables() {
         launchArguments = [
             LaunchArguments.ClearProfile,
-            LaunchArguments.DisableAnimations,
-            LaunchArguments.SkipSplashScreenExperiment
+            LaunchArguments.DisableAnimations
         ]
 
         jsonFileName = flowType.jsonFeatureOverrideFileName

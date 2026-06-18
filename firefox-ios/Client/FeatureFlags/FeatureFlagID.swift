@@ -49,7 +49,6 @@ enum FeatureFlagID: String, CaseIterable {
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case snapkitRemovalRefactor
-    case splashScreen
     case startAtHome
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion

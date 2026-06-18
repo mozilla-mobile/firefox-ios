@@ -152,9 +152,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .snapkitRemovalRefactor:
             return checkSnapKitRemovalRefactor()
 
-        case .splashScreen:
-            return checkSplashScreenFeature(for: featureID)
-
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID) != .disabled
 
@@ -310,10 +307,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkQuickAnswersFeature() -> Bool {
         return nimbus.features.quickAnswersFeature.value().enabled
-    }
-
-    private func checkSplashScreenFeature(for featureID: FeatureFlagID) -> Bool {
-        return nimbus.features.splashScreen.value().enabled
     }
 
     private func checkStartAtHomeFeature(for featureID: FeatureFlagID) -> StartAtHome {
