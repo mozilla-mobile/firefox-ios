@@ -399,7 +399,7 @@ func checkForSpecificFileChange() {
                 ].contains { file.hasSuffix($0) }
             },
             message: "Detected tab related changes in:",
-            contacts: "(cc @lmarceau)"
+            contacts: "(cc @yoanarios)"
         ),
         FileCheck(
             fileMatches: { $0.hasSuffix(".sh") },
@@ -543,7 +543,7 @@ class CodeUsageDetector {
             case .swiftUIText:
                 return "### ⚠️ SwiftUI `Text(\"\")` usage detected\nSwiftUI 'Text(\"\"' needs to be avoided, use Strings.swift localization instead."
             case .task:
-                let contacts = "@Cramsden @ih-codes @lmarceau"
+                let contacts = "@Cramsden @ih-codes"
                 return "### 🧑‍💻 New `Task {}` detected\nNew `Task {}` added. Please add a concurrency reviewer on your PR: \(contacts)"
             case .notifiable:
                 return "### ⚠️ `NotificationCenter.default.addObserver` detected\nPlease prefer Notifiable over `NotificationCenter` unless specific circumstances."

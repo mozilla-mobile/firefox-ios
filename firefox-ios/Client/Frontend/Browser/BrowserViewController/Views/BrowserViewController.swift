@@ -100,6 +100,9 @@ class BrowserViewController: UIViewController,
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var searchController: SearchViewController?
+    /// Bottom constraint of `searchController.view`. The anchor it targets depends on the search bar
+    /// position (`overKeyboardContainer.top` for bottom bar, `view.bottom` for top bar)
+    private var searchControllerBottomConstraint: NSLayoutConstraint?
     var searchSessionState: SearchSessionState?
     var searchLoader: SearchLoader?
     var iOS15FindInPageBar: FindInPageBar? /* TODO: Remove once we drop iOS 15 support */
@@ -357,6 +360,13 @@ class BrowserViewController: UIViewController,
         && header.arrangedSubviews.isEmpty
     }
 
+    /// The anchor `searchController.view`'s bottom is pinned to, based on the current search bar position.
+    /// - Bottom search bar: `overKeyboardContainer.top`, which sits above the keyboard.
+    /// - Top search bar: `view.bottom`, so the search view fills the screen
+    private var searchControllerBottomAnchor: NSLayoutYAxisAnchor {
+        return isBottomSearchBar ? overKeyboardContainer.topAnchor : view.bottomAnchor
+    }
+
     // MARK: Data management
 
     let profile: Profile
@@ -577,6 +587,7 @@ class BrowserViewController: UIViewController,
         updateSwipingTabs()
 
         searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: isBottomSearchBar)
+        updateSearchControllerConstraints()
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil, shouldUpdateBlurViews: Bool = true) {
@@ -610,12 +621,12 @@ class BrowserViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
-        let isScrollAlphaZero = if #available(iOS 26.0, *) {
-            store.state.componentState(
-                ToolbarState.self,
-                for: .toolbar,
-                window: windowUUID
-            )?.scrollAlpha == 0 } else { false }
+        let isToolbarCollapsed = store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.scrollAlpha == 0
+        let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
         // Only clear background if content exceeds viewport height.
@@ -639,6 +650,13 @@ class BrowserViewController: UIViewController,
         bottomContainer.isClearBackground = true
         bottomBlurView.isHidden = isScrollAlphaZero
         bottomContainer.isHidden = isScrollAlphaZero
+
+        // Below iOS 26 the bottom toolbar collapses by translating off-screen, so the blur stays.
+        // The auto-translate prompt extends the blur over its area; after the prompt fades on
+        // collapse the blur lingers as a ghost layer, so hide it explicitly here. (FXIOS-15971)
+        if #unavailable(iOS 26.0), autoTranslatePrompt != nil, isToolbarCollapsed {
+            bottomBlurView.isHidden = true
+        }
 
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
@@ -796,7 +814,11 @@ class BrowserViewController: UIViewController,
               currentWindowScene === windowScene else { return }
         guard canShowPrivacyWindow else { return }
 
-        privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
+        privacyWindowHelper.showWindow(
+            windowScene: currentWindowScene,
+            withThemedColor: currentTheme().colors.layer3,
+            showLogo: shouldShowOverlayLogo
+        )
     }
 
     func sceneDidActivateNotification() {
@@ -823,12 +845,27 @@ class BrowserViewController: UIViewController,
         }
 
         guard canShowPrivacyWindow else { return }
-        privacyWindowHelper.showWindow(windowScene: view.window?.windowScene, withThemedColor: currentTheme().colors.layer3)
+        privacyWindowHelper.showWindow(
+            windowScene: view.window?.windowScene,
+            withThemedColor: currentTheme().colors.layer3,
+            showLogo: shouldShowOverlayLogo
+        )
+    }
+
+    /// Show the Firefox logo on the overlay only for normal-mode tabs when the
+    /// deeplinkOverlay flag is on. Private-mode overlay stays a plain color.
+    private var shouldShowOverlayLogo: Bool {
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isPrivate else { return false }
+        return featureFlagsProvider.isEnabled(.deeplinkOverlay)
     }
 
     private var canShowPrivacyWindow: Bool {
-        // Ensure the selected tab is private and determine if the privacy window can be shown.
-        guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else { return false }
+        // The overlay is shown for private tabs (privacy) or for any tab when the
+        // deeplinkOverlay flag is enabled (to mask the stale tab while a deep link
+        // is being handled on resume).
+        guard let selectedTab = tabManager.selectedTab else { return false }
+        let isDeeplinkOverlayEnabled = featureFlagsProvider.isEnabled(.deeplinkOverlay)
+        guard selectedTab.isPrivate || isDeeplinkOverlayEnabled else { return false }
         // Show privacy window if no view controller is presented
         // or if the presented view is a PhotonActionSheet.
         return self.presentedViewController == nil || presentedViewController is PhotonActionSheet
@@ -2190,6 +2227,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    // MARK: - SearchViewController
+
     fileprivate func createSearchControllerIfNeeded() {
         guard self.searchController == nil else { return }
 
@@ -2230,16 +2269,24 @@ class BrowserViewController: UIViewController,
 
         guard let searchController = self.searchController else { return }
 
+        // If searchController is already presented only update the bottom anchor
+        // based in `bottomSearchBar` position
+        guard searchController.view.superview == nil else {
+            updateSearchControllerConstraints()
+            return
+        }
+
         addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.translatesAutoresizingMaskIntoConstraints = false
 
-        let constraintTarget = isBottomSearchBar ? overKeyboardContainer.topAnchor : view.bottomAnchor
+        let bottomConstraint = searchController.view.bottomAnchor.constraint(equalTo: searchControllerBottomAnchor)
+        searchControllerBottomConstraint = bottomConstraint
         NSLayoutConstraint.activate([
             searchController.view.topAnchor.constraint(equalTo: header.bottomAnchor),
             searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchController.view.bottomAnchor.constraint(equalTo: constraintTarget)
+            bottomConstraint
         ])
 
         searchController.didMove(toParent: self)
@@ -2249,6 +2296,17 @@ class BrowserViewController: UIViewController,
         // be read by VoiceOver when reading in the
         // Search Controller
         contentContainer.accessibilityElementsHidden = true
+    }
+
+    /// Updates `searchController.view`'s bottom constraint to match the current search bar position
+    private func updateSearchControllerConstraints() {
+        guard let searchController, searchController.view.superview != nil else { return }
+
+        searchControllerBottomConstraint?.isActive = false
+        searchControllerBottomConstraint = searchController.view.bottomAnchor.constraint(
+            equalTo: searchControllerBottomAnchor
+        )
+        searchControllerBottomConstraint?.isActive = true
     }
 
     private func setupKeyboardBackdropConstraints(for backdrop: UIView?) {
@@ -2268,6 +2326,7 @@ class BrowserViewController: UIViewController,
         searchController.willMove(toParent: nil)
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
+        searchControllerBottomConstraint = nil
 
         contentContainer.accessibilityElementsHidden = false
     }
@@ -2595,6 +2654,20 @@ class BrowserViewController: UIViewController,
         guard let selectedTabURL = tabManager.selectedTab?.url,
               let webViewURL = webView.url,
               selectedTabURL == webViewURL else { return }
+
+        let hasSecureContent = webView.hasOnlySecureContent
+        let lockIconState = toolbarHelper.getLockIconState(
+            hasOnlySecureContent: hasSecureContent,
+            isWebsiteMode: tabManager.selectedTab?.url?.isReaderModeURL == false
+        )
+
+        let action = ToolbarAction(
+            lockIconButtonA11yId: lockIconState.a11yId,
+            lockIconImageName: lockIconState.imageName,
+            lockIconNeedsTheming: lockIconState.needsTheming,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.lockIconChanged)
+        store.dispatch(action)
     }
 
     // MARK: - Update UI
@@ -2643,15 +2716,13 @@ class BrowserViewController: UIViewController,
         var lockIconNeedsTheming = true
 
         if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-            lockIconImageName = hasSecureContent ?
-                StandardImageIdentifiers.Small.shieldCheckmarkFill :
-                StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-            lockIconButtonA11yId = hasSecureContent ?
-                AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
-                AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
-            lockIconNeedsTheming = hasSecureContent
-            let isWebsiteMode = tab.url?.isReaderModeURL == false
-            lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+            let lockIconState = toolbarHelper.getLockIconState(
+                hasOnlySecureContent: hasSecureContent,
+                isWebsiteMode: tab.url?.isReaderModeURL == false
+            )
+            lockIconImageName = lockIconState.imageName
+            lockIconButtonA11yId = lockIconState.a11yId
+            lockIconNeedsTheming = lockIconState.needsTheming
         }
 
         let action = ToolbarAction(
@@ -4862,6 +4933,13 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        // The deeplink-optimization restore path no longer fires `TabManagerDelegate.didAddTab` per restored tab,
+        // so `tab.tabDelegate` is never assigned during restoration otherwise.
+        if isDeeplinkOptimizationRefactorEnabled {
+            for tab in tabManager.tabs {
+                tab.tabDelegate = self
+            }
+        }
         updateTabCountUsingTabManager(tabManager)
     }
 

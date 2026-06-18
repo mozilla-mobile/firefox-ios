@@ -68,39 +68,8 @@ class PersistedFirefoxAccount {
         }
     }
 
-    func beginOAuthFlow(
-        scopes: [String],
-        entrypoint: String
-    ) throws -> URL {
-        return try notifyAuthErrors {
-            try URL(string: self.inner.beginOauthFlow(
-                scopes: scopes,
-                entrypoint: entrypoint
-            ))!
-        }
-    }
-
     func getPairingAuthorityURL() throws -> URL {
         return try URL(string: inner.getPairingAuthorityUrl())!
-    }
-
-    func beginPairingFlow(
-        pairingUrl: String,
-        scopes: [String],
-        entrypoint: String
-    ) throws -> URL {
-        return try notifyAuthErrors {
-            try URL(string: self.inner.beginPairingFlow(pairingUrl: pairingUrl,
-                                                        scopes: scopes,
-                                                        entrypoint: entrypoint))!
-        }
-    }
-
-    func completeOAuthFlow(code: String, state: String) throws {
-        defer { tryPersistState() }
-        try notifyAuthErrors {
-            try self.inner.completeOauthFlow(code: code, state: state)
-        }
     }
 
     func checkAuthorizationStatus() throws -> AuthorizationInfo {

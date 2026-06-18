@@ -722,192 +722,6 @@ key_commands:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
-# Top Site
-top_sites:
-  tile_pressed:
-    type: event
-    description: |
-      Records an event when user taps on top site tile.
-    extra_keys:
-      tile_type:
-        type: string
-        description: |
-          Type of tile pressed (Ex: google,
-          suggested, user-added or history-based)
-      position:
-        type: string
-        description: |
-          Position of top site.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8501
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  pressed_tile_origin:
-    type: labeled_counter
-    description: |
-      Records an event when user taps on top site tile,
-      with a home page origin.
-    labels:
-      - zero-search
-      - origin-other
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9494
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  contextual_menu:
-    type: event
-    description: |
-        Records when a user clicks on a contextual
-        menu option on top site
-    extra_keys:
-      type:
-        type: string
-        description: |
-          Type of contextual action
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10514
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10514
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  context_id:
-    type: uuid
-    description: |
-      A UUID that is unjoinable with other browser metrics. This ID will not be
-      shared with AdM, only for internal uses. This ID is shared across all
-      contextual services features.
-    lifetime: application
-    send_in_pings:
-      - topsites-impression
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - highly_sensitive
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-    metadata:
-      tags:
-        - TopSites
-  contile_advertiser:
-    type: string
-    description: |
-      Advertiser brand for the sponsored TopSites tile
-    lifetime: ping
-    send_in_pings:
-      - topsites-impression
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - technical
-      - interaction
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-    metadata:
-      tags:
-        - TopSites
-  contile_impression:
-    type: event
-    description: |
-      A user saw a Contile top site
-    extra_keys:
-      source:
-        description: The source of the event, example "newtab", "urlbar"
-        type: string
-      position:
-        description: The tile placement (1-based)
-        type: quantity
-    send_in_pings:
-      - topsites-impression
-      - events
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - interaction
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-    metadata:
-      tags:
-        - TopSites
-  contile_click:
-    type: event
-    description: |
-      A user clicked a Contile top site
-    extra_keys:
-      source:
-        description: The source of the event, example "newtab", "urlbar"
-        type: string
-      position:
-        description: The tile placement (1-based)
-        type: quantity
-    send_in_pings:
-      - topsites-impression
-      - events
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - interaction
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-    metadata:
-      tags:
-        - TopSites
-  open_in_private_tab:
-    type: event
-    description: |
-      A user opens a new private tab based on a top site item
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  sponsored_shortcuts:
-    type: boolean
-    description: |
-      Tracks if the user has enabled sponsored shortcuts
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1842084
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15768
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
 # HomePage - Normal
 firefox_home_page:
   open_from_menu_home_button:
@@ -2934,3 +2748,48 @@ nimbus_system:
       - nimbus-targeting-context
     lifetime: application
 
+remote_settings:
+  uptake_remotesettings:
+    type: event
+    disabled: true # To be controlled by server knobs due to expected high volume
+    description: >
+      Was the remote content successfully pulled? This uptake telemetry
+      allows to monitor the behaviour of our clients when it comes to
+      fetching data from remote servers.
+    extra_keys:
+      value:
+        description: The synchronization status (success, up_to_date, sync_error, ...)
+        type: string
+      source:
+        description: >
+          A label to distinguish what is being pulled or updated in the component (eg. settings collection name, ...).
+        type: string
+      duration:
+        description: The duration of the synchronization process in milliseconds.
+        type: string
+      errorName:
+        description: An optional string with the error name attribute in case of failure.
+        type: string
+      trigger:
+        description: >
+          A label to distinguish what triggered the polling/fetching of remote content (eg. "broadcast", "timer", "forced", "manual")
+        type: string
+      age:
+        description: >
+          The age of pulled data in seconds (ie. difference between publication time and fetch time).
+        type: string
+      timestamp:
+        description: >
+          The current timestamp, received during synchronization.
+        type: string
+    bugs:
+      - https://bugzil.la/1517469
+      - https://bugzil.la/1617133
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34053
+    notification_emails:
+      - mleplatre@mozilla.com
+      - acottner@mozilla.com
+    data_sensitivity:
+      - technical
+    expires: never

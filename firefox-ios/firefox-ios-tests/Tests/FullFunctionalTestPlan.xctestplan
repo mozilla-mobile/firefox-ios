@@ -340,6 +340,7 @@
         "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingLandscape()",
         "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingPortrait()",
         "ToolbarTests\/testShowToolbarWhenScrollingDefaultOption()",
+        "ToolbarTests\/testToolbarIsVisibleAfterTypingInWebPageTextField()",
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
         "TrackingProtectionTests\/testStandardProtectionLevel_TAE()",
         "TrackingProtectionTests\/testStandardProtectionLevel_tabTrayExperimentOff()",

@@ -28,7 +28,7 @@ class ReportSiteTests: FeatureFlaggedTestBase {
     func launchAndGoToMenu() {
         app.launch()
         
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         navigator.goto(ToolsBrowserTabMenu)
     }
 }

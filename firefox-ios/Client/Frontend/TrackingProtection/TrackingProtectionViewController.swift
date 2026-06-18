@@ -57,7 +57,7 @@ class TrackingProtectionViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
     private let logger: Logger
 
-    weak var enhancedTrackingProtectionMenuDelegate: TrackingProtectionMenuDelegate?
+    weak var trackingProtectionMenuDelegate: TrackingProtectionMenuDelegate?
 
     private var foxImageHeightConstraint: NSLayoutConstraint?
 
@@ -250,7 +250,7 @@ class TrackingProtectionViewController: UIViewController,
             case .back:
                 navigationController?.popViewController(animated: true)
             case .close:
-                enhancedTrackingProtectionMenuDelegate?.didFinish()
+                trackingProtectionMenuDelegate?.didFinish()
             case .settings:
                 showSettings()
             }
@@ -334,7 +334,7 @@ class TrackingProtectionViewController: UIViewController,
         ]
         constraints.append(contentsOf: headerConstraints)
         headerContainer.closeButtonCallback = { [weak self] in
-            self?.enhancedTrackingProtectionMenuDelegate?.didFinish()
+            self?.trackingProtectionMenuDelegate?.didFinish()
         }
         headerContainer.updateHeaderLineView(isHidden: true)
     }
@@ -704,12 +704,12 @@ class TrackingProtectionViewController: UIViewController,
         // Setting x based on window calculation because we don't want
         // users to move the frame side ways, only straight up or down
         view.frame.origin = CGPoint(x: originalXPosition,
-                                    y: self.pointOrigin!.y + translation.y)
+                                    y: (self.pointOrigin?.y ?? originalYPosition) + translation.y)
 
         if sender.state == .ended {
             let dragVelocity = sender.velocity(in: view)
             if dragVelocity.y >= 1300 {
-                enhancedTrackingProtectionMenuDelegate?.didFinish()
+                trackingProtectionMenuDelegate?.didFinish()
             } else {
                 // Set back to original position of the view controller
                 UIView.animate(withDuration: 0.3) {

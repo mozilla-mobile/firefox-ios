@@ -653,6 +653,8 @@ final class HomepageViewController: UIViewController,
             }
         case .jumpBackInSyncedTab(let config):
             return configureSyncedTabCell(config, item: item, at: indexPath)
+        case .trackerBlockerModule:
+            return configuredCell(cellType: TrackerBlockerModuleCell.self, at: indexPath) { _ in }
         case .bookmark(let item):
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
@@ -1332,6 +1334,13 @@ final class HomepageViewController: UIViewController,
             title: url.shortDisplayString.capitalized
         )
         profile.pinnedSites.addPinnedTopSite(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutPinnedSource: .homescreenButton,
+                windowUUID: windowUUID,
+                actionType: TopSitesActionType.shortcutPinned
+            )
+        )
     }
 
     /// Sends telemetry data associated with tapping on a card item. The jump back in synced card item

@@ -42,7 +42,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
     public init(
         onboardingCards: [ViewModel],
         skipText: String,
-        variant: OnboardingVariant = .modern,
+        variant: OnboardingVariant = .base,
         onActionTap: @MainActor @escaping (
             ViewModel.OnboardingActionType,
             String,

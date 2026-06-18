@@ -133,7 +133,7 @@ class DomainAutocompleteTests: BaseTestCase {
     // Non-matches.
     // https://mozilla.testrail.io/index.php?/cases/view/2334650
     func test5NoMatches() {
-        navigator.openURL("twitter.com/login")
+        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)

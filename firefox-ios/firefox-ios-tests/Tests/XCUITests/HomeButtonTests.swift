@@ -21,14 +21,14 @@ class HomeButtonTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306925
     func testGoHome() throws {
-        browserScreen.navigateToURL(path(forTestPage: "test-mozilla-org.html"))
+        browserScreen.navigateToURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         toolbarScreen.tapHomeButton()
         waitForTabsButton()
         if !iPad() {
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
         }
-        browserScreen.navigateToURL(path(forTestPage: "test-mozilla-org.html"))
+        browserScreen.navigateToURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         toolbarScreen.assertNewTabButtonExists()
 
@@ -39,7 +39,7 @@ class HomeButtonTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306883
     func testSwitchHomepageKeyboardRaisedUp() {
         // Open a new tab and load a web page
-        browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
 
         // Switch to Homepage by taping the home button

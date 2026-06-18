@@ -539,7 +539,10 @@ class Tab: NSObject,
             requiredConfiguration.defaultWebpagePreferences = pagePrefs
         }
 
-        let webView = TabWebView(frame: .zero, configuration: requiredConfiguration, windowUUID: windowUUID)
+        let webView = TabWebView(frame: .zero,
+                                 configuration: requiredConfiguration,
+                                 windowUUID: windowUUID,
+                                 certStore: profile.certStore)
         webView.configure(delegate: self, navigationDelegate: navigationDelegate)
         webView.accessibilityLabel = .WebViewAccessibilityLabel
         webView.allowsBackForwardNavigationGestures = true
@@ -689,7 +692,7 @@ class Tab: NSObject,
             if let url = request.url,
                let syncedReaderModeURL = url.decodeReaderModeURL,
                let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(
-                WebServer.sharedInstance.baseReaderModeURL()
+                ReaderModeSchemeHandler.currentBaseURL
                ) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest

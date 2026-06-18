@@ -198,14 +198,47 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
 
     func configure(with model: WorldCupMatches) {
         guard model != self.model else { return }
+        let previous = self.model
         self.model = model
 
-        rebuildFeaturedMatches(matches: model.featuredMatch)
-        rebuildUpcomingRows(matches: model.upcomingMatches)
+        if let previous, Self.sameMatchLayout(previous, model) {
+            updateMatchViewsInPlace(featured: model.featuredMatch, upcoming: model.upcomingMatches)
+        } else {
+            rebuildFeaturedMatches(matches: model.featuredMatch)
+            rebuildUpcomingRows(matches: model.upcomingMatches)
+        }
         titleLabel.text = model.phaseTitle
         dateLabel.text = model.dateLabel.map { "\(UX.liveLabelDotText) \($0)" }
         dateLabel.isHidden = model.isLive
         liveLabelContainer.isHidden = !model.isLive
+    }
+
+    /// True when both hold the same matches (teams/date)
+    /// so views can be reconfigured instead of rebuilt.
+    private static func sameMatchLayout(_ lhs: WorldCupMatches, _ rhs: WorldCupMatches) -> Bool {
+        func keys(_ matches: [WorldCupMatch]) -> [String] {
+            matches.map { "\($0.homeCode)|\($0.awayCode)|\($0.date)" }
+        }
+        return keys(lhs.featuredMatch) == keys(rhs.featuredMatch)
+            && keys(lhs.upcomingMatches) == keys(rhs.upcomingMatches)
+    }
+
+    private func updateMatchViewsInPlace(featured: [WorldCupMatch], upcoming: [WorldCupMatch]) {
+        let featuredViews = featuredMatchesStack.arrangedSubviews.compactMap { $0 as? FeaturedMatchView }
+        let upcomingRows = upcomingStack.arrangedSubviews.compactMap { $0 as? UpcomingMatchRow }
+        guard featuredViews.count == featured.count, upcomingRows.count == upcoming.count else {
+            rebuildFeaturedMatches(matches: featured)
+            rebuildUpcomingRows(matches: upcoming)
+            return
+        }
+        for (view, match) in zip(featuredViews, featured) {
+            view.configure(with: match)
+            view.onTap = { [weak self] in self?.navigateToSERP(for: match) }
+        }
+        for (row, match) in zip(upcomingRows, upcoming) {
+            row.configure(with: match)
+            row.onTap = { [weak self] in self?.navigateToSERP(for: match) }
+        }
     }
 
     func getWinnerThirdPlaceOrFinal() -> (teamKey: String, winnerLabel: String)? {
@@ -441,13 +474,14 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.spacing = UX.horizontalStackSpace
-        stack.accessibilityElements = [homeColumn.container, centerStack, awayColumn.container]
         return stack
     }()
 
     init() {
         super.init(frame: .zero)
         setupLayout()
+        isAccessibilityElement = true
+        accessibilityTraits = .link
         isUserInteractionEnabled = true
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
@@ -509,7 +543,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
 
         NSLayoutConstraint.activate([
             flagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
-            flagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height),
+            flagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
         ])
 
         return FeaturedColumn(container: stack, flagView: flagView, codeLabel: codeLabel)
@@ -526,12 +560,13 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         homeColumn.codeLabel.text = match.homeCode
         awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName)
         awayColumn.codeLabel.text = match.awayCode
+        accessibilityLabel = match.matchAccessibilityLabel
 
         if let score = match.score {
             dateLabel.isHidden = true
             scoreSection.isHidden = false
             scoreLabel.text = score.score
-            clockLabel.text = score.clock
+            clockLabel.text = match.isInBreak ? .WorldCup.HomepageWidget.HalfTimeLabel : score.clock
         } else {
             dateLabel.isHidden = false
             scoreSection.isHidden = true
@@ -612,6 +647,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
     init() {
         super.init(frame: .zero)
         setupLayout()
+        isAccessibilityElement = true
+        accessibilityTraits = .link
         isUserInteractionEnabled = true
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
@@ -657,9 +694,9 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
             ),
 
             homeFlagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
-            homeFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height),
+            homeFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
             awayFlagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
-            awayFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height),
+            awayFlagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height).priority(.defaultHigh),
         ])
     }
 
@@ -683,6 +720,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         } else {
             infoLabel.text = match.date
         }
+
+        accessibilityLabel = match.matchAccessibilityLabel
     }
 
     // MARK: - ThemeApplicable
@@ -695,5 +734,19 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         homeFlagView.backgroundColor = theme.colors.borderSecondary
         awayFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
         awayFlagView.backgroundColor = theme.colors.borderSecondary
+    }
+}
+
+private extension WorldCupMatch {
+    /// Reads the match as a single VoiceOver phrase: "Home team, date or score, Away team".
+    var matchAccessibilityLabel: String {
+        let homeName = WorldCupCountry.localizedName(forID: homeCode) ?? homeCode
+        let awayName = WorldCupCountry.localizedName(forID: awayCode) ?? awayCode
+        let middle: String = if let score {
+            "\(score.score), \(score.clock)"
+        } else {
+            date
+        }
+        return "\(homeName), \(middle), \(awayName)"
     }
 }

@@ -394,7 +394,7 @@ final class StatusBarOverlayTests: XCTestCase {
 
     private func createToolbarMock(isReduceTransparencyEnabled: Bool = false) -> ToolbarHelperInterface {
         let toolbarHelper = MockToolbarHelper()
-        toolbarHelper.isReduceTransparencyEnabled = isReduceTransparencyEnabled
+        toolbarHelper.reduceTransparencyEnabled = isReduceTransparencyEnabled
         return toolbarHelper
     }
 }

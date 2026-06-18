@@ -604,6 +604,11 @@ extension BrowserViewController: WKNavigationDelegate {
             handleCustomSchemeURLNavigation(url: url, navigationAction: navigationAction)
         }
 
+        if url.scheme == ReaderModeSchemeHandler.scheme {
+            decisionHandler(.allow)
+            return
+        }
+
         decisionHandler(.cancel)
     }
 

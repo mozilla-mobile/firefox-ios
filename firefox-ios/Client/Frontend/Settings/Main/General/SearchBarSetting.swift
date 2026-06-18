@@ -17,10 +17,6 @@ class SearchBarSetting: Setting {
         return AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
     }
 
-    override var status: NSAttributedString {
-        return NSAttributedString(string: viewModel.searchBarTitle )
-    }
-
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     init(settings: SettingsTableViewController,

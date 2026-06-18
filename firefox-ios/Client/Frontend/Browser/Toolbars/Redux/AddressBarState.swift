@@ -165,6 +165,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
 
+        case ToolbarActionType.lockIconChanged:
+            return handleLockIconChangedAction(state: state, action: action)
+
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
 
@@ -503,6 +506,36 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // (see `Tab.translationConfiguration`). Inheriting the existing Redux state here would leak
         // the previous tab's icon onto a new tab whose own state is nil (FXIOS-15606).
         return action.translationConfiguration ?? existingConfig
+    }
+
+    @MainActor
+    private static func handleLockIconChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId,
+            lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
+            lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
     }
 
     @MainActor

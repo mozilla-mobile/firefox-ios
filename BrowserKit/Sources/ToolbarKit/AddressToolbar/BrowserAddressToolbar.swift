@@ -66,6 +66,10 @@ public class BrowserAddressToolbar: UIView,
     private var leadingNavigationActionStackConstraint: NSLayoutConstraint?
     private var trailingBrowserActionStackConstraint: NSLayoutConstraint?
     private var locationContainerHeightConstraint: NSLayoutConstraint?
+    private var toolbarContainerSafeAreaLeadingConstraint: NSLayoutConstraint?
+    private var toolbarContainerSafeAreaTrailingConstraint: NSLayoutConstraint?
+    private var toolbarContainerWindowControlLeadingConstraint: NSLayoutConstraint?
+    private var toolbarContainerWindowControlTrailingConstraint: NSLayoutConstraint?
 
     // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
     private var previousConfiguration: AddressToolbarConfiguration? {
@@ -181,6 +185,7 @@ public class BrowserAddressToolbar: UIView,
         let locationViewPaddings = config.locationViewVerticalPaddings(addressBarPosition: toolbarPosition)
         toolbarBottomConstraint?.constant = -locationViewPaddings.bottom
         toolbarTopConstraint?.constant = locationViewPaddings.top
+        updateToolbarContainerHorizontalConstraints(for: toolbarPosition)
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -254,10 +259,26 @@ public class BrowserAddressToolbar: UIView,
         toolbarTopConstraint = toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor)
         toolbarTopConstraint?.isActive = true
 
-        NSLayoutConstraint.activate([
-            toolbarContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            toolbarContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+        toolbarContainerSafeAreaLeadingConstraint = toolbarContainerView.leadingAnchor.constraint(
+            equalTo: safeAreaLayoutGuide.leadingAnchor
+        )
+        toolbarContainerSafeAreaTrailingConstraint = toolbarContainerView.trailingAnchor.constraint(
+            equalTo: safeAreaLayoutGuide.trailingAnchor
+        )
+        toolbarContainerSafeAreaLeadingConstraint?.isActive = true
+        toolbarContainerSafeAreaTrailingConstraint?.isActive = true
 
+        if #available(iOS 26.0, *) {
+            let windowControlLayoutGuide = layoutGuide(for: .margins(cornerAdaptation: .horizontal))
+            toolbarContainerWindowControlLeadingConstraint = toolbarContainerView.leadingAnchor.constraint(
+                equalTo: windowControlLayoutGuide.leadingAnchor
+            )
+            toolbarContainerWindowControlTrailingConstraint = toolbarContainerView.trailingAnchor.constraint(
+                equalTo: windowControlLayoutGuide.trailingAnchor
+            )
+        }
+
+        NSLayoutConstraint.activate([
             toolbarTopBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarTopBorderView.topAnchor.constraint(equalTo: topAnchor),
             toolbarTopBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -296,6 +317,20 @@ public class BrowserAddressToolbar: UIView,
         updateActionSpacing(uxConfig: .default())
 
         setupAccessibility()
+    }
+
+    private func updateToolbarContainerHorizontalConstraints(for toolbarPosition: AddressToolbarPosition) {
+        if #available(iOS 26.0, *), toolbarPosition == .top {
+            toolbarContainerSafeAreaLeadingConstraint?.isActive = false
+            toolbarContainerSafeAreaTrailingConstraint?.isActive = false
+            toolbarContainerWindowControlLeadingConstraint?.isActive = true
+            toolbarContainerWindowControlTrailingConstraint?.isActive = true
+        } else {
+            toolbarContainerWindowControlLeadingConstraint?.isActive = false
+            toolbarContainerWindowControlTrailingConstraint?.isActive = false
+            toolbarContainerSafeAreaLeadingConstraint?.isActive = true
+            toolbarContainerSafeAreaTrailingConstraint?.isActive = true
+        }
     }
 
     private func setupDragInteraction() {
@@ -513,9 +548,7 @@ public class BrowserAddressToolbar: UIView,
         let dragPoint = session.location(in: self)
         guard let url = droppableUrl,
               let itemProvider = NSItemProvider(contentsOf: url),
-              // allow drag only on the location view frame in order to don't mess with long press gesture
-              // on the address bar buttons.
-              locationView.frame.contains(dragPoint) else { return [] }
+              locationViewCanBeDrag(dragPoint: dragPoint) else { return [] }
 
         toolbarDelegate?.addressToolbarDidProvideItemsForDragInteraction()
 
@@ -525,5 +558,13 @@ public class BrowserAddressToolbar: UIView,
 
     public func dragInteraction(_ interaction: UIDragInteraction, sessionWillBegin session: UIDragSession) {
         toolbarDelegate?.addressToolbarDidBeginDragInteraction()
+    }
+
+    // Allow drag only when the touch is within the location view frame.
+    // This avoids interfering with long-press gestures on address bar buttons
+    // and disables drag interactions while the location view is minimized.
+    private func locationViewCanBeDrag(dragPoint: CGPoint) -> Bool {
+        return locationView.frame.contains(dragPoint) &&
+            !locationView.isAddressBarMinimized
     }
 }

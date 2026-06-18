@@ -51,7 +51,6 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
 
 enum OnboardingType: String, Codable, Sendable {
     case freshInstall = "fresh-install"
-    case upgrade
 }
 
 enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable, Sendable {
@@ -593,7 +592,7 @@ extension PreviewModel {
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.modernFlow,
             skipText: "Skip",
-            variant: .modern,
+            variant: .base,
             onActionTap: { _, _, _ in
             },
             onMultipleChoiceActionTap: { _, _ in },
@@ -626,7 +625,7 @@ extension PreviewModel {
     TermsOfUseView(
         viewModel: TermsOfUseFlowViewModel(
             configuration: PreviewModel.tos,
-            variant: .modern,
+            variant: .base,
             onTermsOfUseTap: {},
             onPrivacyNoticeTap: {},
             onManageSettingsTap: {},

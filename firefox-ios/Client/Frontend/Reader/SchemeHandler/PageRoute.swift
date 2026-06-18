@@ -23,7 +23,7 @@ final class PageRoute: TinyRoute {
     init(cache: ReaderModeCache,
          profile: Profile,
          extractor: @escaping Extractor = { url, cache, profile in
-        try await ReadabilityService().extract(url, cache: cache, with: profile) // default value
+             try await ReadabilityService().extract(url, cache: cache, with: profile) // default value
          }) {
         self.cache = cache
         self.profile = profile

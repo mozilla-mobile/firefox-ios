@@ -20,6 +20,7 @@ public struct PrefsKeys {
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyMailToOption = "MailToOption"
     public static let IntroSeen = "IntroViewControllerSeen"
+    public static let OnboardingLastCardSeen = "OnboardingLastCardSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
     // TermsOfUseAccepted should use same string key as before to maintain compatibility

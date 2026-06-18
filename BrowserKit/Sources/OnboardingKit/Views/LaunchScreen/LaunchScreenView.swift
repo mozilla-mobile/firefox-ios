@@ -13,7 +13,7 @@ public struct LaunchScreenBackgroundView: View {
     public init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        variant: OnboardingVariant = .modern
+        variant: OnboardingVariant = .base
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager

@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
+class MockMozAdsClient: MozAdsClient, @unchecked Sendable {
     var mockAdsImages: [String: MozAdsImage]?
     var mockAdsTiles: [String: MozAdsTile]?
     var mockError: Error?
@@ -16,31 +16,27 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
     var recordClickCalledWith: String?
     var recordImpressionCalledWith: String?
 
-    func clearCache() throws {}
-
-    func cycleContextId() throws -> String {
-        return "test-context-id"
+    init() {
+        super.init(noHandle: MozAdsClient.NoHandle())
     }
 
-    func recordClick(clickUrl: String, options: MozillaAppServices.MozAdsCallbackOptions?) throws {
+    required init(unsafeFromHandle handle: UInt64) {
+        super.init(unsafeFromHandle: handle)
+    }
+
+    override func recordClick(clickUrl: String, options: MozAdsCallbackOptions?) throws {
         if let error = mockError { throw error }
         recordClickCalledWith = clickUrl
     }
 
-    func recordImpression(impressionUrl: String, options: MozillaAppServices.MozAdsCallbackOptions?) throws {
+    override func recordImpression(impressionUrl: String, options: MozAdsCallbackOptions?) throws {
         if let error = mockError { throw error }
         recordImpressionCalledWith = impressionUrl
     }
 
-    func reportAd(
-        reportUrl: String,
-        reason: MozillaAppServices.MozAdsReportReason,
-        options: MozillaAppServices.MozAdsCallbackOptions?
-    ) throws {
-        // no-op for tests for now
-    }
+    override func reportAd(reportUrl: String, reason: MozAdsReportReason, options: MozAdsCallbackOptions?) throws {}
 
-    func requestImageAds(
+    override func requestImageAds(
         mozAdRequests: [MozAdsPlacementRequest],
         options: MozAdsRequestOptions?
     ) throws -> [String: MozAdsImage] {
@@ -48,16 +44,16 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
         return mockAdsImages ?? [:]
     }
 
-    func requestSpocAds(
-        mozAdRequests: [MozillaAppServices.MozAdsPlacementRequestWithCount],
-        options: MozillaAppServices.MozAdsRequestOptions?
-    ) throws -> [String: [MozillaAppServices.MozAdsSpoc]] {
+    override func requestSpocAds(
+        mozAdRequests: [MozAdsPlacementRequestWithCount],
+        options: MozAdsRequestOptions?
+    ) throws -> [String: [MozAdsSpoc]] {
         return [:]
     }
 
-    func requestTileAds(
-        mozAdRequests: [MozillaAppServices.MozAdsPlacementRequest],
-        options: MozillaAppServices.MozAdsRequestOptions?
+    override func requestTileAds(
+        mozAdRequests: [MozAdsPlacementRequest],
+        options: MozAdsRequestOptions?
     ) throws -> [String: MozillaAppServices.MozAdsTile] {
         if let error = mockError { throw error }
         return mockAdsTiles ?? [:]

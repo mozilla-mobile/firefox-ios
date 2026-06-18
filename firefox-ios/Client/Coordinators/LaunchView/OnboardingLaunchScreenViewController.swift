@@ -8,9 +8,9 @@ import UIKit
 import SwiftUI
 import OnboardingKit
 
-class ModernLaunchScreenViewController: UIViewController,
-                                        LaunchFinishedLoadingDelegate,
-                                        Themeable {
+class OnboardingLaunchScreenViewController: UIViewController,
+                                           LaunchFinishedLoadingDelegate,
+                                           Themeable {
     // MARK: - UX Constants
     private enum UX {
         static let fadeOutDuration: TimeInterval = 0.24
@@ -55,7 +55,7 @@ class ModernLaunchScreenViewController: UIViewController,
     init(
         windowUUID: WindowUUID,
         coordinator: LaunchFinishedLoadingDelegate,
-        variant: OnboardingKit.OnboardingVariant = .modern,
+        variant: OnboardingKit.OnboardingVariant = .base,
         viewModel: LaunchScreenViewModel? = nil,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
