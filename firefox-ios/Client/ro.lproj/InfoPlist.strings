@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "Pictogramă aplicație";
+
 /* (No Comment) */
 "New Private Tab" = "Filă privată nouă";
 
@@ -5,7 +8,7 @@
 "New Tab" = "Filă nouă";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox folosește camera pentru scanare de coduri QR și fotografii și videoclipuri.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox are nevoie de Face ID pentru a-ți accesa parolele și metodele de plată salvate.";

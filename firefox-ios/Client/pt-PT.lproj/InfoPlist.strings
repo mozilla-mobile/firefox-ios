@@ -8,7 +8,7 @@
 "New Tab" = "Novo separador";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "O Firefox utiliza a sua câmara para digitalizar códigos QR e tirar fotos e vídeos.";
+"NSCameraUsageDescription" = "O Firefox pode utilizar a sua câmara para digitalizar códigos QR ou tirar fotos e vídeos.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "O Firefox requer o Face ID para aceder às suas palavras-passe e métodos de pagamento guardados.";
