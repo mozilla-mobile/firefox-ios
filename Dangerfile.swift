@@ -21,9 +21,7 @@ if releaseCheck.isReleaseBranch {
     checkForGleanFileChange()
     checkForNimbusFeatureChange()
     CodeUsageDetector().checkForCodeUsage()
-    let coverageGate = CodeCoverageGate()
-    coverageGate.failOnFiles(type: .newFiles)
-    coverageGate.failOnFiles(type: .modifiedFiles)
+    CodeCoverageGate().run()
     BrowserViewControllerChecker().failsOnAddedExtension()
     checkCodeCoverage()
 }
@@ -122,34 +120,6 @@ class CodeCoverageGate {
             }
         }
 
-        var label: String {
-            switch self {
-            case .newFiles: return "New file"
-            case .modifiedFiles: return "Existing file"
-            }
-        }
-
-        var emptyMessage: String {
-            switch self {
-            case .newFiles: return "No new file detected so code coverage gate wasn't ran."
-            case .modifiedFiles: return "No modified file detected so code coverage gate wasn't ran."
-            }
-        }
-
-        var insufficientChangesMessage: String {
-            switch self {
-            case .newFiles: return "No new file had significant enough changes for the coverage gate to run."
-            case .modifiedFiles: return "No modified file had significant enough changes for the coverage gate to run."
-            }
-        }
-
-        var allPassMessage: String {
-            switch self {
-            case .newFiles: return "All new files meet their thresholds**."
-            case .modifiedFiles: return "All modified files meet their thresholds."
-            }
-        }
-
         var thresholdRange: (min: Double, max: Double) {
             switch self {
             case .newFiles: return (min: 0.4, max: 0.7)
@@ -158,34 +128,39 @@ class CodeCoverageGate {
         }
     }
 
-    func failOnFiles(type: CoverageType) {
+    enum GateOutcome {
+        case noCandidates
+        case noSignificantChanges
+        case allPass
+        case failures([String]) // pre-formatted markdown table rows
+    }
+
+    func run() {
         guard let coverageFiles = parseCoverageFiles() else { return }
+        let newOutcome = evaluate(type: .newFiles, coverageFiles: coverageFiles)
+        let modifiedOutcome = evaluate(type: .modifiedFiles, coverageFiles: coverageFiles)
 
-        let candidates = swiftSourceCandidates(from: type.sourceFiles)
+        var failureRows: [String] = []
+        if case .failures(let rows) = newOutcome { failureRows += rows }
+        if case .failures(let rows) = modifiedOutcome { failureRows += rows }
 
-        guard !candidates.isEmpty else {
-            markdown("""
-            ### ✅ \(type.label) code coverage
-            \(type.emptyMessage)
-            """)
-            return
+        if !failureRows.isEmpty {
+            reportCoverageFailure(rows: failureRows)
+        } else {
+            reportCoverageSuccess(newOutcome: newOutcome, modifiedOutcome: modifiedOutcome)
         }
+    }
+
+    private func evaluate(type: CoverageType, coverageFiles: [[String: Any]]) -> GateOutcome {
+        let candidates = swiftSourceCandidates(from: type.sourceFiles)
+        guard !candidates.isEmpty else { return .noCandidates }
 
         // Ignore tiny edits: only gate files with at least `type.minimumLines`
         let gated = candidates.filter { addedLines(in: $0) >= type.minimumLines }
+        guard !gated.isEmpty else { return .noSignificantChanges }
 
-        guard !gated.isEmpty else {
-            markdown("""
-            ### ✅ \(type.label) code coverage
-            \(type.insufficientChangesMessage)
-            """)
-            return
-        }
-
-        // Collect failures
         var rows: [String] = []
         for file in gated {
-            // Find matching coverage entry
             let entry = coverageMatch(repoPath: file, coverageFiles: coverageFiles)
 
             // Extract percentage (supports 0..1 or 0..100 in lineCoverage)
@@ -194,7 +169,6 @@ class CodeCoverageGate {
                 return raw <= 1.000001 ? raw * 100.0 : raw
             }()
 
-            // Calculate threshold based on file length
             let lineCount = countLines(in: file)
             let threshold = scaledPercentage(for: Double(lineCount), in: type.thresholdRange) * 100.0
 
@@ -203,15 +177,40 @@ class CodeCoverageGate {
             }
         }
 
-        guard !rows.isEmpty else {
-            markdown("""
-            ### ✅ \(type.label) code coverage
-            \(type.allPassMessage)
-            """)
-            return
-        }
+        return rows.isEmpty ? .allPass : .failures(rows)
+    }
 
-        reportCoverageFailure(rows: rows, label: type.label)
+    private func reportCoverageSuccess(newOutcome: GateOutcome, modifiedOutcome: GateOutcome) {
+        let body: String
+        switch (newOutcome, modifiedOutcome) {
+        case (.noCandidates, .noCandidates):
+            body = "No new or modified files detected so the code coverage gate wasn't run."
+        case (.allPass, .allPass):
+            body = "All new and modified files meet their coverage thresholds."
+        default:
+            body = """
+            - \(successLine(for: newOutcome, type: .newFiles))
+            - \(successLine(for: modifiedOutcome, type: .modifiedFiles))
+            """
+        }
+        markdown("""
+        ### ✅ Code coverage
+        \(body)
+        """)
+    }
+
+    private func successLine(for outcome: GateOutcome, type: CoverageType) -> String {
+        let noun = (type == .newFiles) ? "new" : "modified"
+        switch outcome {
+        case .noCandidates:
+            return "No \(noun) files detected so the coverage gate wasn't run."
+        case .noSignificantChanges:
+            return "No \(noun) files had significant enough changes for the coverage gate to run."
+        case .allPass:
+            return "All \(noun) files meet their coverage thresholds."
+        case .failures:
+            return ""
+        }
     }
 
     private func swiftSourceCandidates(from files: [String]) -> [String] {
@@ -258,9 +257,9 @@ class CodeCoverageGate {
         }
     }
 
-    private func reportCoverageFailure(rows: [String], label: String) {
+    private func reportCoverageFailure(rows: [String]) {
         let header = """
-        ### ❌ \(label) code coverage
+        ### ❌ Code coverage
         The following file(s) are below their scaled coverage:
 
         | File | Coverage | Required |
