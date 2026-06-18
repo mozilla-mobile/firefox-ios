@@ -1411,6 +1411,7 @@
 		A093CF852F3696D70017774C /* MockMozAdsClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A093CF842F3696D70017774C /* MockMozAdsClientFactory.swift */; };
 		A0B6D6632EB49C0400574E34 /* MockTelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */; };
 		A1F0D0012F70000100ABC001 /* NewsTransitionHeaderCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F0D0002F70000100ABC001 /* NewsTransitionHeaderCellTests.swift */; };
+		A545CC0C21C148228C7EC0A1 /* EnhancedTrackingProtectionMenuVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E270802C896845E2B6624BCE /* EnhancedTrackingProtectionMenuVCTests.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
@@ -1558,6 +1559,7 @@
 		BDB4E7212F337AAB000DB45F /* LocationTextFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB4E7202F337AAB000DB45F /* LocationTextFieldTests.swift */; };
 		BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */; };
 		BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */; };
+		C0FFE71000000000000000A3 /* worldCupConfetti.json in Resources */ = {isa = PBXBuildFile; fileRef = C0FFE71000000000000000A2 /* worldCupConfetti.json */; };
 		C209316E2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C209316D2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift */; };
 		C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */; };
 		C2126EF82F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2126EF72F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift */; };
@@ -1653,6 +1655,8 @@
 		C2CD38EA2EE6D6AE0085F045 /* PrivateModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CD38E92EE6D6AE0085F045 /* PrivateModeButton.swift */; };
 		C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */; };
 		C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */; };
+		C2D3A8C22FDFF686008D5689 /* WorldCupLottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D3A8C12FDFF686008D5689 /* WorldCupLottieView.swift */; };
+		C2D3B8182FE0563A008D5689 /* worldCupKit.json in Resources */ = {isa = PBXBuildFile; fileRef = C2D3B8172FE0563A008D5689 /* worldCupKit.json */; };
 		C2D71B952A384F11003DEC7A /* ThemedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B942A384F11003DEC7A /* ThemedTableViewCell.swift */; };
 		C2D71B972A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B962A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift */; };
 		C2D71B992A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D71B982A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift */; };
@@ -10391,6 +10395,7 @@
 		C0B34DEA99883C8DD6E438BD /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/Storage.strings"; sourceTree = "<group>"; };
 		C0D149EEAFBD42FA7224483F /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		C0FF42DD9A2428BC0251F299 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		C0FFE71000000000000000A2 /* worldCupConfetti.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = worldCupConfetti.json; sourceTree = "<group>"; };
 		C1014811AAA7568AE6738714 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Storage.strings; sourceTree = "<group>"; };
 		C1114054A20B1072F603BD52 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C14343D394A0611E4D96C725 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/Search.strings; sourceTree = "<group>"; };
@@ -10502,6 +10507,8 @@
 		C2CD38E92EE6D6AE0085F045 /* PrivateModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateModeButton.swift; sourceTree = "<group>"; };
 		C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinator.swift; sourceTree = "<group>"; };
 		C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinatorTests.swift; sourceTree = "<group>"; };
+		C2D3A8C12FDFF686008D5689 /* WorldCupLottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLottieView.swift; sourceTree = "<group>"; };
+		C2D3B8172FE0563A008D5689 /* worldCupKit.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = worldCupKit.json; sourceTree = "<group>"; };
 		C2D47B07BE70DD7C23C13187 /* CoreBuildFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreBuildFlags.swift; sourceTree = "<group>"; };
 		C2D71B942A384F11003DEC7A /* ThemedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableViewCell.swift; sourceTree = "<group>"; };
 		C2D71B962A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedSubtitleTableViewCell.swift; sourceTree = "<group>"; };
@@ -11418,6 +11425,7 @@
 		E24446F28B659E7C536D9286 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E2479B332E959A5C00A0C9DB /* HomepageLayoutMeasurementCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageLayoutMeasurementCache.swift; sourceTree = "<group>"; };
 		E26A4AA195C4D0271D29D280 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/Shared.strings"; sourceTree = "<group>"; };
+		E270802C896845E2B6624BCE /* EnhancedTrackingProtectionMenuVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTrackingProtectionMenuVCTests.swift; sourceTree = "<group>"; };
 		E28E48D890A60FBD4E5CBECA /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		E2C3433DA5BC0340E7B869C2 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		E2F64415B375B748FB9DF5F1 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -13784,6 +13792,7 @@
 			children = (
 				8A6904812B97BC2000E30047 /* SplashScreenAnimation */,
 				8A1A93562B757C7B0069C190 /* DataClearanceAnimation */,
+				C0FFE71000000000000000A1 /* WorldCupConfettiAnimation */,
 			);
 			path = LottieFiles;
 			sourceTree = "<group>";
@@ -15180,6 +15189,15 @@
 			path = Summarizer;
 			sourceTree = "<group>";
 		};
+		C0FFE71000000000000000A1 /* WorldCupConfettiAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				C2D3B8172FE0563A008D5689 /* worldCupKit.json */,
+				C0FFE71000000000000000A2 /* worldCupConfetti.json */,
+			);
+			path = WorldCupConfettiAnimation;
+			sourceTree = "<group>";
+		};
 		C22753422A3CA25100B9C0D1 /* WebsiteDataManagement */ = {
 			isa = PBXGroup;
 			children = (
@@ -15320,6 +15338,7 @@
 				F00CA4012F00000000000010 /* WorldCupFetchStrategyProtocol.swift */,
 				F00CA4012F00000000000012 /* WorldCupNormalFetchStrategy.swift */,
 				F00CA4012F0000000000001D /* WorldCupPollingFetchStrategy.swift */,
+				C2D3A8C12FDFF686008D5689 /* WorldCupLottieView.swift */,
 				F00CA4012F00000000000021 /* WorldCupFeed.swift */,
 				C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */,
 				C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */,
@@ -18351,6 +18370,7 @@
 				9A6A6D06E2CA4A33943C7881 /* homepageStoryCategoriesOn.json in Resources */,
 				8A3709E42DC16531004B9350 /* defaultEnabledOn.json in Resources */,
 				EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */,
+				C2D3B8182FE0563A008D5689 /* worldCupKit.json in Resources */,
 				BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */,
 				BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */,
 				8A1A935B2B757C7C0069C190 /* wave.json in Resources */,
@@ -18417,6 +18437,7 @@
 				0BBAC4BC2CDD44EC0072DB61 /* easterEggGif.gif in Resources */,
 				1D91C1822CF11EA500B24960 /* disconnect-block-content.json in Resources */,
 				8A7D1AC52BA3542600162F4B /* splashScreen.json in Resources */,
+				C0FFE71000000000000000A3 /* worldCupConfetti.json in Resources */,
 				8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */,
 				1D91C1812CF11EA500B24960 /* disconnect-block-advertising.json in Resources */,
 				8A2B1A5F28216C4D0061216B /* Release.xcconfig in Resources */,
@@ -20055,6 +20076,7 @@
 				8A7892052CF91FEF00490CA4 /* UnifiedAdsCallbackTelemetry.swift in Sources */,
 				8A454D292CB7078D009436D9 /* MerinoState.swift in Sources */,
 				21E77E502AA8BAEC00FABA10 /* TabTrayState.swift in Sources */,
+				C2D3A8C22FDFF686008D5689 /* WorldCupLottieView.swift in Sources */,
 				8C2447E82DFADF3D00BD2C91 /* ActivityEventHelper.swift in Sources */,
 				0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */,
 				5AE371872A4E11750092A760 /* AboutSettingsDelegate.swift in Sources */,

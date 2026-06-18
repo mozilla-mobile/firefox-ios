@@ -56,6 +56,7 @@ enum HomepageActionType: ActionType {
     case viewWillTransition
     case viewWillAppear
     case viewDidAppear
+    case viewWillDisappear
     case viewDidLayoutSubviews
     case didSelectItem
     case embeddedHomepage

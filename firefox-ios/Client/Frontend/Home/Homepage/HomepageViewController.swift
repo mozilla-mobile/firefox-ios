@@ -206,6 +206,12 @@ final class HomepageViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewWillDisappear
+            )
+        )
         stopCFRsTimer()
         saveVerticalScrollOffset()
     }

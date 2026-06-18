@@ -271,6 +271,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             let previous = currentState
             currentState = state
             if !refreshScoresInPlace(from: previous, to: state) { rebuildPages(for: state) }
+            celebrateWinIfNeeded(shouldShowConfetti: state.shouldShowConfetti)
         }
         applyTheme(theme: theme)
     }
@@ -290,6 +291,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             default: break
             }
         }
+        goToPage(pageControl.currentPage)
         return true
     }
 
@@ -496,6 +498,12 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         }
 
         return (shouldShowWinner, applyChanges)
+    }
+
+    private func celebrateWinIfNeeded(shouldShowConfetti: Bool) {
+        guard shouldShowConfetti, let container = window else { return }
+        WorldCupLottieView.showConfetti(in: container)
+        WorldCupLottieView.showKit(in: contentView)
     }
 
     private func updatePageAccessibility() {

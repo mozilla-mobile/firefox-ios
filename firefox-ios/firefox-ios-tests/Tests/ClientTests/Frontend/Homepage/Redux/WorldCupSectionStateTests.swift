@@ -82,6 +82,37 @@ final class WorldCupSectionStateTests: XCTestCase {
         XCTAssertEqual(result, state)
     }
 
+    // MARK: - shouldShowConfetti
+
+    func test_didUpdateAction_propagatesShouldShowConfetti() {
+        let reducer = WorldCupSectionState.reducer
+
+        let newState = reducer(
+            createSubject(),
+            WorldCupAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WorldCupMiddlewareActionType.didUpdate,
+                shouldShowConfetti: true
+            )
+        )
+
+        XCTAssertTrue(newState.shouldShowConfetti)
+    }
+
+    func test_didUpdateAction_defaultsShouldShowConfettiToFalse() {
+        let reducer = WorldCupSectionState.reducer
+
+        let newState = reducer(
+            createSubject(),
+            WorldCupAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WorldCupMiddlewareActionType.didUpdate
+            )
+        )
+
+        XCTAssertFalse(newState.shouldShowConfetti)
+    }
+
     // MARK: - Helpers
 
     private func createSubject() -> WorldCupSectionState {
