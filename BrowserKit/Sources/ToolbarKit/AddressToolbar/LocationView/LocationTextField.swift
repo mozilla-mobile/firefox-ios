@@ -159,7 +159,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
             return super.rightViewRect(forBounds: bounds)
         }
 
-        // UITextField seems to shrink rightVIew control size, so force 44x44.
+        // UITextField seems to shrink rightView control size, so force 44x44.
         return CGRect(
             x: bounds.maxX - UX.editingAccessoryRightViewSize.width,
             y: bounds.midY - UX.editingAccessoryRightViewSize.height / 2,

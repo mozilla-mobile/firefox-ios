@@ -4,22 +4,6 @@
 
 import UIKit
 
-public struct LocationViewEditingAccessoryConfiguration {
-    public let imageName: String
-    public let a11yLabel: String
-    public let onTap: @MainActor (UIView) -> Void
-
-    public init(
-        imageName: String,
-        a11yLabel: String,
-        onTap: @escaping @MainActor (UIView) -> Void
-    ) {
-        self.imageName = imageName
-        self.a11yLabel = a11yLabel
-        self.onTap = onTap
-    }
-}
-
 public struct LocationViewConfiguration {
     public let searchEngineImageViewA11yId: String
     public let searchEngineImageViewA11yLabel: String
