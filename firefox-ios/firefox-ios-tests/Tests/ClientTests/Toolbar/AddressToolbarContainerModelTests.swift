@@ -181,7 +181,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     @MainActor
-    func testAddressToolbarConfig_withGoogleLensFeatureEnabled_showsGoogleLensIcon() {
+    func testAddressToolbarConfig_withGoogleLensFeatureEnabled_configuresEditingAccessoryButton() {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let model = createSubject(
@@ -190,18 +190,20 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         )
 
         XCTAssertTrue(model.shouldShowGoogleLensIcon)
-        XCTAssertTrue(model.addressToolbarConfig.locationViewConfiguration.shouldShowGoogleLensIcon)
+        let accessoryButton = model.addressToolbarConfig.locationViewConfiguration.editingAccessoryButton
+        XCTAssertEqual(accessoryButton?.imageName, StandardImageIdentifiers.Medium.googleLens)
+        XCTAssertEqual(accessoryButton?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
     }
 
     @MainActor
-    func testAddressToolbarConfig_withGoogleLensFeatureDisabled_hidesGoogleLensIcon() {
+    func testAddressToolbarConfig_withGoogleLensFeatureDisabled_doesNotConfigureEditingAccessoryButton() {
         let model = createSubject(
             withState: createToolbarState(),
             featureFlagsProvider: MockNimbusFeatureFlags()
         )
 
         XCTAssertFalse(model.shouldShowGoogleLensIcon)
-        XCTAssertFalse(model.addressToolbarConfig.locationViewConfiguration.shouldShowGoogleLensIcon)
+        XCTAssertNil(model.addressToolbarConfig.locationViewConfiguration.editingAccessoryButton)
     }
 
     @MainActor

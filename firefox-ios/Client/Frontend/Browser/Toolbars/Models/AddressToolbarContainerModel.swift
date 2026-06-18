@@ -77,8 +77,7 @@ final class AddressToolbarContainerModel: Equatable {
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
-            shouldShowGoogleLensIcon: shouldShowGoogleLensIcon,
-            googleLensA11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
+            editingAccessoryButton: googleLensEditingAccessoryButtonConfiguration(),
             onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      buttonTapped: button,
@@ -106,6 +105,17 @@ final class AddressToolbarContainerModel: Equatable {
             ),
             uxConfiguration: uxConfiguration,
             shouldAnimate: shouldAnimate
+        )
+    }
+
+    @MainActor
+    private func googleLensEditingAccessoryButtonConfiguration() -> LocationViewEditingAccessoryConfiguration? {
+        guard shouldShowGoogleLensIcon else { return nil }
+
+        return LocationViewEditingAccessoryConfiguration(
+            imageName: StandardImageIdentifiers.Medium.googleLens,
+            a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
+            onTap: { _ in }
         )
     }
 

@@ -19,8 +19,13 @@ protocol LocationTextFieldDelegate: AnyObject {
 
 final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
     private enum UX {
-        static let googleLensIconSize = CGSize(width: 20, height: 20)
-        static let googleLensRightViewSize = CGSize(width: 44, height: 44)
+        static let editingAccessoryRightViewSize = CGSize(width: 44, height: 44)
+        static let editingAccessoryContentInsets = NSDirectionalEdgeInsets(
+            top: 12,
+            leading: 12,
+            bottom: 12,
+            trailing: 12
+        )
     }
 
     public var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -47,40 +52,19 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         return value(forKey: "_clearButton") as? UIButton
     }
 
-    var shouldShowGoogleLensIcon = false {
+    var editingAccessoryButtonConfiguration: LocationViewEditingAccessoryConfiguration? {
         didSet {
+            configureEditingAccessoryButton()
             updateRightView()
         }
     }
 
-    var googleLensA11yLabel = "" {
-        didSet {
-            googleLensRightView.accessibilityLabel = googleLensA11yLabel
-        }
-    }
-
-    private lazy var googleLensImageView: UIImageView = {
-        let imageView = UIImageView(
-            image: UIImage(named: StandardImageIdentifiers.Medium.googleLens)?.withRenderingMode(.alwaysTemplate)
-        )
-        // Center the 20x20 icon inside the 44x44 right view used for the tap target.
-        imageView.frame = CGRect(
-            x: (UX.googleLensRightViewSize.width - UX.googleLensIconSize.width) / 2,
-            y: (UX.googleLensRightViewSize.height - UX.googleLensIconSize.height) / 2,
-            width: UX.googleLensIconSize.width,
-            height: UX.googleLensIconSize.height
-        )
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-
-    private lazy var googleLensRightView: UIView = {
-        let container = UIView(frame: CGRect(origin: .zero, size: UX.googleLensRightViewSize))
-        container.isAccessibilityElement = true
-        container.accessibilityLabel = googleLensA11yLabel
-        container.accessibilityTraits = .button
-        container.addSubview(googleLensImageView)
-        return container
+    private lazy var editingAccessoryRightView: UIButton = {
+        let button = UIButton(type: .system)
+        button.frame = CGRect(origin: .zero, size: UX.editingAccessoryRightViewSize)
+        button.configuration = makeEditingAccessoryButtonConfiguration()
+        button.addTarget(self, action: #selector(editingAccessoryButtonTapped), for: .touchUpInside)
+        return button
     }()
 
     // MARK: - Init
@@ -170,6 +154,20 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         super.touchesBegan(touches, with: event)
     }
 
+    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        guard rightView === editingAccessoryRightView else {
+            return super.rightViewRect(forBounds: bounds)
+        }
+
+        // UITextField seems to shrink rightVIew control size, so force 44x44.
+        return CGRect(
+            x: bounds.maxX - UX.editingAccessoryRightViewSize.width,
+            y: bounds.midY - UX.editingAccessoryRightViewSize.height / 2,
+            width: UX.editingAccessoryRightViewSize.width,
+            height: UX.editingAccessoryRightViewSize.height
+        )
+    }
+
     override public func caretRect(for position: UITextPosition) -> CGRect {
         return hideCursor ? CGRect.zero : super.caretRect(for: position)
     }
@@ -221,7 +219,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         let colors = theme.colors
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
-        googleLensImageView.tintColor = colors.iconSecondary
+        editingAccessoryRightView.tintColor = colors.iconSecondary
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
 
         // Force marked text to refresh with new style
@@ -250,10 +248,31 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         updateRightView()
     }
 
+    private func makeEditingAccessoryButtonConfiguration() -> UIButton.Configuration {
+        var configuration = UIButton.Configuration.plain()
+        configuration.contentInsets = UX.editingAccessoryContentInsets
+        return configuration
+    }
+
+    private func configureEditingAccessoryButton() {
+        guard let editingAccessoryButtonConfiguration else { return }
+        var configuration = editingAccessoryRightView.configuration ?? makeEditingAccessoryButtonConfiguration()
+        configuration.image = UIImage(
+            named: editingAccessoryButtonConfiguration.imageName
+        )?.withRenderingMode(.alwaysTemplate)
+        editingAccessoryRightView.configuration = configuration
+        editingAccessoryRightView.accessibilityLabel = editingAccessoryButtonConfiguration.a11yLabel
+    }
+
+    @objc
+    private func editingAccessoryButtonTapped() {
+        editingAccessoryButtonConfiguration?.onTap(editingAccessoryRightView)
+    }
+
     private func updateRightView() {
         let textIsEmpty = textWithoutSuggestion()?.isEmpty ?? true
-        if shouldShowGoogleLensIcon, isEditing, textIsEmpty {
-            rightView = googleLensRightView
+        if editingAccessoryButtonConfiguration != nil, isEditing, textIsEmpty {
+            rightView = editingAccessoryRightView
             rightViewMode = .whileEditing
             clearButtonMode = .never
         } else {

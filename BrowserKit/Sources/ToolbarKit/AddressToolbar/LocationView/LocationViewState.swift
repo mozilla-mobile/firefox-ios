@@ -4,6 +4,22 @@
 
 import UIKit
 
+public struct LocationViewEditingAccessoryConfiguration {
+    public let imageName: String
+    public let a11yLabel: String
+    public let onTap: @MainActor (UIView) -> Void
+
+    public init(
+        imageName: String,
+        a11yLabel: String,
+        onTap: @escaping @MainActor (UIView) -> Void
+    ) {
+        self.imageName = imageName
+        self.a11yLabel = a11yLabel
+        self.onTap = onTap
+    }
+}
+
 public struct LocationViewConfiguration {
     public let searchEngineImageViewA11yId: String
     public let searchEngineImageViewA11yLabel: String
@@ -25,8 +41,7 @@ public struct LocationViewConfiguration {
     public let didStartTyping: Bool
     public let shouldShowKeyboard: Bool
     public let shouldSelectSearchTerm: Bool
-    public let shouldShowGoogleLensIcon: Bool
-    public let googleLensA11yLabel: String
+    public let editingAccessoryButton: LocationViewEditingAccessoryConfiguration?
     public var onTapLockIcon: (@MainActor (UIButton) -> Void)?
     public var onLongPress: (@MainActor () -> Void)?
 
@@ -48,8 +63,7 @@ public struct LocationViewConfiguration {
         didStartTyping: Bool,
         shouldShowKeyboard: Bool,
         shouldSelectSearchTerm: Bool,
-        shouldShowGoogleLensIcon: Bool = false,
-        googleLensA11yLabel: String = "",
+        editingAccessoryButton: LocationViewEditingAccessoryConfiguration? = nil,
         onTapLockIcon: (@MainActor (UIButton) -> Void)? = nil,
         onLongPress: (@MainActor () -> Void)? = nil
     ) {
@@ -70,8 +84,7 @@ public struct LocationViewConfiguration {
         self.didStartTyping = didStartTyping
         self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
-        self.shouldShowGoogleLensIcon = shouldShowGoogleLensIcon
-        self.googleLensA11yLabel = googleLensA11yLabel
+        self.editingAccessoryButton = editingAccessoryButton
         self.onTapLockIcon = onTapLockIcon
         self.onLongPress = onLongPress
     }
