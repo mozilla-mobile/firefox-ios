@@ -79,6 +79,8 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()
 
+        AdsClientDocumentsDirectoryMigration().removeLegacyDatabaseFiles()
+
         /// Migrate TermsOfService prefs to TermsOfUse prefs
         /// before Nimbus is initialized (should be available for experiments)
         /// and backfill accept date/version if needed - after telemetry set up
