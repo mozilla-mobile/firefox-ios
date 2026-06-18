@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 protocol NimbusFeatureFlagLayerProviding: Sendable {
-    func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool
+    func checkNimbusConfigFor(_ featureID: FeatureFlagID, with prefs: Prefs) -> Bool
     func checkStartAtHomeConfiguration() -> StartAtHome
 }
 
@@ -18,7 +19,15 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     // MARK: - Public methods
     // swiftlint:disable:next function_body_length
-    public func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool {
+    public func checkNimbusConfigFor(_ featureID: FeatureFlagID, with prefs: Prefs) -> Bool {
+        // Always override Nimbus defaults if we're toggling things in the debug menu
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        if let debugKey = featureID.debugKey,
+           let override = prefs.boolForKey(debugKey) {
+            return override
+        }
+        #endif
+
         // For better code readability, please keep in alphabetical order by FeatureFlagID
         switch featureID {
         case .adBlocker:

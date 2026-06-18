@@ -55,7 +55,7 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
         } else if flag == .hntSponsoredShortcuts {
             return true
         } else {
-            return backendLayer.checkNimbusConfigFor(flag)
+            return backendLayer.checkNimbusConfigFor(flag, with: prefs)
         }
     }
 
