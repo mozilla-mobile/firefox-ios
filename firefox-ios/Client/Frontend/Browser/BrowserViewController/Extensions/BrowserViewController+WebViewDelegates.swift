@@ -1279,6 +1279,33 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 }
 
+// MARK: - Javascript alert utilities
+extension BrowserViewController {
+    /// Whether blocking a JS dialog from `webView`'s tab could freeze the visible tab's
+    /// rendering. An enqueued alert suspends its tab's JS thread; if that process is shared
+    /// with the selected tab, the visible page stops updating while a committed URL is
+    /// already shown, which can lead to spoofing. Independent tabs run separately and so
+    /// their alerts can still be queued safely.
+    func alertCouldFreezeSelectedTab(_ webView: WKWebView) -> Bool {
+        guard let requestingTab = tabManager[webView],
+              let selectedTab = tabManager.selectedTab,
+              requestingTab !== selectedTab
+        else { return false }
+
+        return sharesPopupProcessGroup(requestingTab, selectedTab)
+            || sharesPopupProcessGroup(selectedTab, requestingTab)
+    }
+
+    private func sharesPopupProcessGroup(_ ancestor: Tab, _ descendant: Tab) -> Bool {
+        var current: Tab? = descendant
+        while let tab = current, tab.requiredPopupConfiguration != nil, let parent = tab.parent {
+            if parent === ancestor { return true }
+            current = parent
+        }
+        return false
+    }
+}
+
 // MARK: - Private
 private extension BrowserViewController {
     // Handle Universal link for Firefox wallpaper setting
@@ -1382,29 +1409,6 @@ private extension BrowserViewController {
         guard let tab = tabManager.selectedTab else { return false }
         // Only display a JS Alert if we are selected and there isn't anything being shown
         return (tab.webView === webView && self.presentedViewController == nil)
-    }
-
-    /// Whether blocking a JS dialog from `webView`'s tab could freeze the visible tab's
-    /// rendering. An enqueued alerts suspends its tab's JS thread; if that process is shared
-    /// with the selected tab, the visible page stops updating while a committed URL is
-    /// already shown which can lead to spoofing. Independent tabs run separately and so
-    /// their alerts can still be queued safely.
-    func alertCouldFreezeSelectedTab(_ webView: WKWebView) -> Bool {
-        guard let requestingTab = tabManager[webView],
-              let selectedTab = tabManager.selectedTab,
-              requestingTab !== selectedTab
-        else { return false }
-
-        return sharesPopupProcessGroup(requestingTab, selectedTab) || sharesPopupProcessGroup(selectedTab, requestingTab)
-    }
-
-    private func sharesPopupProcessGroup(_ ancestor: Tab, _ descendant: Tab) -> Bool {
-        var current: Tab? = descendant
-        while let tab = current, tab.requiredPopupConfiguration != nil, let parent = tab.parent {
-            if parent === ancestor { return true }
-            current = parent
-        }
-        return false
     }
 
     func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
