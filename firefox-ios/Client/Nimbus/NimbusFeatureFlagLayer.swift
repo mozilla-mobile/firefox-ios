@@ -63,9 +63,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .googleLens:
             return checkGoogleLensFeature()
 
-        case .hntSponsoredShortcuts:
-            return checkHNTSponsoredShortcutsFeature()
-
         case .homepageAddShortcutTile:
             return checkHomepageAddShortcutTile()
 
@@ -196,6 +193,11 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .worldCupWidget:
             return checkWorldCupWidgetFeature()
+
+        // This feature flag has no Nimbus configuration because it is only tied to a user setting.
+        // Requesting Nimbus configuration for it is a developer error.
+        case .hntSponsoredShortcuts:
+            fatalError("There's no nimbus configuration for this feature. This is a developer error.")
         }
     }
 
@@ -217,10 +219,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkSentFromFirefoxFeatureTreatmentA() -> Bool {
         let config = nimbus.features.sentFromFirefoxFeature.value()
         return config.isTreatmentA
-    }
-
-    private func checkHNTSponsoredShortcutsFeature() -> Bool {
-        return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
     private func checkHomepageAddShortcutTile() -> Bool {

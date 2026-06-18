@@ -398,8 +398,6 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     func test_sponsoredShortcutsFlagEnabled_withoutUserPref_returnsSponsoredSites() throws {
-        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: true)
-
         let subject = try createSubject()
 
         let topSites = subject.recalculateTopSites(
@@ -408,24 +406,10 @@ final class TopSitesManagerTests: XCTestCase {
         )
 
         XCTAssertEqual(topSites.count, 2)
-    }
-
-    func test_sponsoredShorcutsFlagDisabled_withoutUserPref_returnsNoSponsoredSites() throws {
-        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: false)
-
-        let subject = try createSubject()
-
-        let topSites = subject.recalculateTopSites(
-            otherSites: [],
-            sponsoredSites: createSponsoredSites()
-        )
-
-        XCTAssertEqual(topSites.count, 0)
     }
 
     func test_sponsoredShortcutsFlagEnabled_withUserPref_returnsNoSponsoredSites() throws {
         profile?.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
-        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: true)
 
         let subject = try createSubject()
 
@@ -435,20 +419,6 @@ final class TopSitesManagerTests: XCTestCase {
         )
 
         XCTAssertEqual(topSites.count, 0)
-    }
-
-    func test_sponsoredShortcutsFlagDisabled_withUserPref_returnsSponsoredSites() throws {
-        profile?.prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
-        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: false)
-
-        let subject = try createSubject()
-
-        let topSites = subject.recalculateTopSites(
-            otherSites: [],
-            sponsoredSites: createSponsoredSites()
-        )
-
-        XCTAssertEqual(topSites.count, 2)
     }
 
     private func createSubject(
@@ -507,13 +477,5 @@ final class TopSitesManagerTests: XCTestCase {
             sponsoredSites.append(Site.createSponsoredSite(fromUnifiedTile: tile))
         }
         return sponsoredSites
-    }
-
-    private func setupNimbusHNTSponsoredShortcutsTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hntSponsoredShortcutsFeature.with { _, _ in
-            return HntSponsoredShortcutsFeature(
-                enabled: isEnabled
-            )
-        }
     }
 }
