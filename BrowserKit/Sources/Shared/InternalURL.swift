@@ -121,4 +121,11 @@ public struct InternalURL {
         }
         return nil
     }
+
+    public var isCertificateErrorPage: Bool {
+        guard isErrorPage else { return false }
+
+        let query = url.getQuery()
+        return query["badcert"] != nil || query["certerror"] != nil
+    }
 }

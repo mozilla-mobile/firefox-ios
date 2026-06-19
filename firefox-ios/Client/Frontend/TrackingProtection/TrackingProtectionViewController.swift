@@ -9,6 +9,7 @@ import ComponentLibrary
 import SiteImageView
 import Redux
 import X509
+import Storage
 
 struct TPMenuUX {
     struct UX {
@@ -194,14 +195,13 @@ class TrackingProtectionViewController: UIViewController,
         }
     }
 
-    private func getCertificates(from serverTrust: SecTrust) -> [Certificate] {
-        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
-            return []
-        }
+    private func getCertificates(from certificateChain: [SecCertificate]) -> [Certificate] {
         var certificates = [Certificate]()
         certificates.reserveCapacity(certificateChain.count)
+
         for certificate in certificateChain {
             let certificateData = SecCertificateCopyData(certificate) as Data
+
             do {
                 let certificate = try Certificate(derEncoded: Array(certificateData))
                 certificates.append(certificate)
@@ -211,7 +211,16 @@ class TrackingProtectionViewController: UIViewController,
                                          category: .certificate)
             }
         }
+
         return certificates
+    }
+
+    private func getCertificates(from serverTrust: SecTrust) -> [Certificate] {
+        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
+            return []
+        }
+
+        return getCertificates(from: certificateChain)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -219,8 +228,16 @@ class TrackingProtectionViewController: UIViewController,
         updateBlockedTrackersCount()
         updateConnectionStatus()
         applyTheme()
+
         if let serverTrust = model.selectedTab?.webView?.serverTrust {
             model.certificates = getCertificates(from: serverTrust)
+        } else if let url = model.selectedTab?.webView?.url,
+           let internalURL = InternalURL(url),
+           internalURL.isCertificateErrorPage,
+           let originalURL = internalURL.originalURLFromErrorPage,
+           let origin = CertStore.origin(for: originalURL),
+           let certificateChain = profile?.certStore.certificateChain(forOrigin: origin) {
+            model.certificates = getCertificates(from: certificateChain)
         }
     }
 
@@ -399,7 +416,13 @@ class TrackingProtectionViewController: UIViewController,
             )
         }
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
-            guard let self, model.connectionSecure else { return }
+            guard let self else { return }
+
+            let isCertificateErrorPage = InternalURL(model.url)?.isCertificateErrorPage ?? false
+
+            guard InternalURL(model.url) == nil || isCertificateErrorPage else {
+                return
+            }
 
             store.dispatch(
                 TrackingProtectionAction(
@@ -515,11 +538,13 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func updateConnectionStatus() {
+        let isInternalCertErrorURL = InternalURL(model.url)?.isCertificateErrorPage ?? false
         model.connectionSecure = model.selectedTab?.webView?.hasOnlySecureContent ?? false
         connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: currentTheme().type),
                                                  text: model.connectionStatusString,
                                                  isConnectionSecure: model.connectionSecure,
-                                                 theme: currentTheme())
+                                                 theme: currentTheme(),
+                                                 isInternalCertErrorURL: isInternalCertErrorURL)
         connectionDetailsHeaderView.setupDetails(title: model.connectionDetailsTitle,
                                                  status: model.connectionDetailsHeader,
                                                  image: model.connectionDetailsImage)

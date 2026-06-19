@@ -1485,8 +1485,13 @@ private extension BrowserViewController {
         let backgroundTask: Task<(URLSession.AuthChallengeDisposition, URLCredential?), Never>
         = Task.detached(priority: .userInitiated) {
             guard let certChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate],
-                  let firstCert = certChain.first,
-                  self.profile.certStore.containsCertificate(firstCert, forOrigin: origin) else {
+                  let firstCert = certChain.first else {
+                return (.performDefaultHandling, nil)
+            }
+
+            self.profile.certStore.setCertificateChain(certChain, forOrigin: origin)
+
+            guard self.profile.certStore.containsCertificate(firstCert, forOrigin: origin) else {
                 return (.performDefaultHandling, nil)
             }
 

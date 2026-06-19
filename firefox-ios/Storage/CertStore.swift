@@ -9,6 +9,7 @@ import UIKit
 open class CertStore {
     fileprivate var keys = Set<String>()
     fileprivate var origins = Set<String>()
+    fileprivate var certificateChains = [String: [SecCertificate]]()
 
     public init() {}
 
@@ -27,6 +28,14 @@ open class CertStore {
 
     open func hasCertificate(forOrigin origin: String) -> Bool {
         return origins.contains(origin)
+    }
+
+    open func setCertificateChain(_ certChain: [SecCertificate], forOrigin origin: String) {
+        certificateChains[origin] = certChain
+    }
+
+    open func certificateChain(forOrigin origin: String) -> [SecCertificate]? {
+        return certificateChains[origin]
     }
 
     public static func origin(for url: URL) -> String? {
