@@ -357,6 +357,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let selectedTab = tabManager.selectedTab
         let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
         tabManagerTabs.forEach { tab in
+            print("LM ### screenshotUUID is not nil `\(tab.screenshotUUID != nil)` for \(tab.tabUUID)")
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: tab.tabUUID == selectedTab?.tabUUID,
                                     isPrivate: tab.isPrivate,
@@ -364,7 +365,8 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                     tabTitle: tab.displayTitle,
                                     url: tab.url,
                                     screenshot: tab.screenshot,
-                                    hasHomeScreenshot: tab.hasHomeScreenshot)
+                                    hasHomeScreenshot: tab.hasHomeScreenshot,
+                                    hasScreenshotOnDisk: tab.screenshotUUID != nil)
             tabs.append(tabModel)
         }
 

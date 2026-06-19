@@ -15,6 +15,7 @@ struct TabModel: Equatable, Identifiable, Hashable {
 
     let screenshot: UIImage?
     let hasHomeScreenshot: Bool
+    let hasScreenshotOnDisk: Bool
 
     static func emptyState(
         tabUUID: TabUUID,
@@ -30,7 +31,8 @@ struct TabModel: Equatable, Identifiable, Hashable {
             tabTitle: title,
             url: nil,
             screenshot: nil,
-            hasHomeScreenshot: false
+            hasHomeScreenshot: false,
+            hasScreenshotOnDisk: false
         )
     }
 }
