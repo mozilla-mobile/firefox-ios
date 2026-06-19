@@ -8,7 +8,7 @@
 "New Tab" = "新建标签页";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
+"NSCameraUsageDescription" = "Firefox 需要使用您的相机扫码、拍摄照片或视频。";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox 需进行面容 ID 验证才能访问保存的密码和付款方式。";

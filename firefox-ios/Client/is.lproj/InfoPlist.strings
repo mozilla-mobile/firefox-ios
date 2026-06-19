@@ -8,7 +8,7 @@
 "New Tab" = "Nýr flipi";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
+"NSCameraUsageDescription" = "Firefox notar myndavélina þína til að skanna QR-kóða og taka myndir og myndskeið.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox krefst notkunar Face ID til að fá aðgang að vistuðum lykilorðum þínum og greiðslumátum.";

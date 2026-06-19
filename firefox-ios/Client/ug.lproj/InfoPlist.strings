@@ -5,7 +5,7 @@
 "New Tab" = "يېڭى بەتكۈچ";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
+"NSCameraUsageDescription" = "Firefox كامېرا ئارقىلىق QR كودىنى تارايدۇ ھەمدە سۈرەت تارتىپ ۋە سىنغا ئالىدۇ.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox ساقلانغان ئىم ۋە پۇل تۆلەش ئۇسۇلىڭىزنى زىيارەت قىلىش ئۈچۈن چىراي كىملىكىنى تەلەپ قىلىدۇ.";
