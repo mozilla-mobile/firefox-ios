@@ -6,17 +6,12 @@ import Common
 import Shared
 import UIKit
 
-extension LibraryViewController: UIToolbarDelegate {
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
-}
-
 class LibraryViewController: UIViewController, Themeable {
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
             static let width: CGFloat = 343
+            static let bottomPadding: CGFloat = 8
         }
     }
 
@@ -35,15 +30,13 @@ class LibraryViewController: UIViewController, Themeable {
     private var controllerContainerView: UIView = .build { view in }
 
     // UI Elements
-    private lazy var librarySegmentControl: UISegmentedControl = .build { librarySegmentControl in
-        librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
-        librarySegmentControl.selectedSegmentIndex = 1
-    }
-
-    private lazy var segmentControlToolbar: TestableUIToolbar = .build { [weak self] toolbar in
-        guard let self = self else { return }
-        toolbar.delegate = self
-    }
+    private lazy var librarySegmentControl: UISegmentedControl = {
+        let segmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+        segmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
+        segmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
+        segmentControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentControl
+    }()
 
     private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
@@ -102,27 +95,8 @@ class LibraryViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        recreateSegmentedControl()
-        applyTheme()
-    }
-
-    private func recreateSegmentedControl() {
-        let newSegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
-        newSegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
-        newSegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
-        newSegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
-        newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
-        librarySegmentControl = newSegmentControl
-
-        let newItem = UIBarButtonItem(customView: newSegmentControl)
-
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
-        segmentControlToolbar.setItems([newItem], animated: false)
-
-        NSLayoutConstraint.activate([
-            librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
-            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
-        ])
+        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {
@@ -133,17 +107,17 @@ class LibraryViewController: UIViewController, Themeable {
 
     private func viewSetup() {
         navigationItem.rightBarButtonItem = topRightButton
-        view.addSubviews(controllerContainerView, segmentControlToolbar)
+        view.addSubviews(controllerContainerView, librarySegmentControl)
 
         NSLayoutConstraint.activate([
-            segmentControlToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            segmentControlToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            segmentControlToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
+            librarySegmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            librarySegmentControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
 
-            controllerContainerView.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
+            controllerContainerView.topAnchor.constraint(
+                equalTo: librarySegmentControl.bottomAnchor,
+                constant: UX.NavigationMenu.bottomPadding),
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -257,7 +231,7 @@ class LibraryViewController: UIViewController, Themeable {
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
-        view.bringSubviewToFront(segmentControlToolbar)
+        view.bringSubviewToFront(librarySegmentControl)
         libraryPanel.endAppearanceTransition()
 
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
@@ -415,41 +389,11 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.backgroundColor = theme.colors.layer1
         navigationController?.toolbar.barTintColor = theme.colors.layer1
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
-        segmentControlToolbar.barTintColor = theme.colors.layer1
-        segmentControlToolbar.tintColor = theme.colors.textPrimary
-        segmentControlToolbar.isTranslucent = false
-
-        librarySegmentControl.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
-        librarySegmentControl.setBackgroundImage(selectedSegmentPill(color: .gray),
-                                                 for: .selected,
-                                                 barMetrics: .default)
+        librarySegmentControl.tintColor = theme.colors.textPrimary
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
         applyThemeToButtons()
-    }
-
-    /// Builds a rounded-rectangle pill image used as the selected segment's background.
-    /// The image is drawn at the actual segment width (rather than a resizable stub) so both ends
-    /// keep their rounding instead of being stretched flat across the segment.
-    private func selectedSegmentPill(color: UIColor) -> UIImage {
-        let height = UX.NavigationMenu.height
-        let segmentCount = CGFloat(max(librarySegmentControl.numberOfSegments, 1))
-        let width = UX.NavigationMenu.width / segmentCount
-        let verticalInset: CGFloat = 2
-        let horizontalInset: CGFloat = 2
-        let pillHeight = height - verticalInset * 2
-        let cornerRadius = pillHeight / 2
-
-        let size = CGSize(width: width, height: height)
-        return UIGraphicsImageRenderer(size: size).image { _ in
-            let pillRect = CGRect(x: horizontalInset,
-                                  y: verticalInset,
-                                  width: width - horizontalInset * 2,
-                                  height: pillHeight)
-            color.setFill()
-            UIBezierPath(roundedRect: pillRect, cornerRadius: cornerRadius).fill()
-        }
     }
 
     private func applyThemeToButtons() {
@@ -469,8 +413,8 @@ class LibraryViewController: UIViewController, Themeable {
     func setNavigationBarHidden(_ value: Bool) {
         navigationController?.setToolbarHidden(value, animated: true)
         navigationController?.setNavigationBarHidden(value, animated: false)
-        let controlbarHeight = segmentControlToolbar.frame.height
-        segmentControlToolbar.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
+        let controlbarHeight = librarySegmentControl.frame.height
+        librarySegmentControl.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
         controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
 
         // Reload the current panel
