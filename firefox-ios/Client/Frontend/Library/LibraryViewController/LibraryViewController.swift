@@ -10,7 +10,7 @@ class LibraryViewController: UIViewController, Themeable {
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
-            static let width: CGFloat = 343
+            static let horizontalPadding: CGFloat = 16
             static let bottomPadding: CGFloat = 8
         }
     }
@@ -111,8 +111,14 @@ class LibraryViewController: UIViewController, Themeable {
 
         NSLayoutConstraint.activate([
             librarySegmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            librarySegmentControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
+
+            librarySegmentControl.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: UX.NavigationMenu.horizontalPadding),
+            librarySegmentControl.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -UX.NavigationMenu.horizontalPadding),
+
             librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
 
             controllerContainerView.topAnchor.constraint(
