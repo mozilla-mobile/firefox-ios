@@ -14,102 +14,93 @@ public struct NovaLightTheme: Theme {
 }
 
 private struct NovaLightColourPalette: NovaThemeColourPalette {
+    // MARK: - Layer
 
-    // MARK: - Layers
     var layer1: UIColor = NovaColors.Gray5
     var layer2: UIColor = NovaColors.White
     var layer3: UIColor = NovaColors.Gray10
     var layer4: UIColor = NovaColors.Gray15
-    var layer5: UIColor = NovaColors.White
-    var layer5Hover: UIColor = NovaColors.Gray10
-    var layerScrim: UIColor = NovaColors.Gray80.withAlphaComponent(0.95)
-    var layerGradient: Gradient { gradient }
-    var layerGradientOverlay: Gradient { gradientAccentSubtle }
-    var layerAccentNonOpaque: UIColor = NovaColors.VioletDesaturated10
-    var layerAccentPrivate: UIColor = NovaColors.Violet70
-    var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
-    var layerSepia: UIColor = NovaColors.Yellow0
-    var layerHomepage: Gradient { gradientPrivacy }
-    var layerInformation: UIColor = NovaColors.Blue10
-    var layerSuccess: UIColor = NovaColors.Green10
-    var layerWarning: UIColor = NovaColors.Yellow10
-    var layerCritical: UIColor = NovaColors.Red10
-    var layerCriticalSubdued: UIColor = NovaColors.Red10.withAlphaComponent(0.7)
-    var layerSelectedText: UIColor = NovaColors.Gray15
-    var layerAutofillText: UIColor = NovaColors.VioletDesaturated10
-    var layerEmphasis: UIColor = NovaColors.Gray15
-    var layerGradientURL: Gradient { gradientTabBorder }
     var layerSurfaceLow = NovaColors.Gray10
     var layerSurfaceMedium = NovaColors.White
     var layerSurfaceMediumAlpha = NovaColors.White.withAlphaComponent(0.4)
-    var layerSurfaceMediumAlt = NovaColors.Gray15
-    var layerGradientSummary: Gradient { gradientAIStrong }
+    var layerAccentSubtle: UIColor = NovaColors.VioletDesaturated10
+    var layerInverse: UIColor = NovaColors.Gray70.withAlphaComponent(0.8)
+    var layerWarning: UIColor = NovaColors.Yellow10
+    var layerSuccess: UIColor = NovaColors.Green10
+    var layerCritical: UIColor = NovaColors.Red10
+    var layerInformation: UIColor = NovaColors.Blue10
+    var layerSepia: UIColor = NovaColors.Yellow0
+    var layerAutofillText: UIColor = NovaColors.VioletDesaturated30
+    var layerSelectedText: UIColor = NovaColors.Gray35
+    var layerGlassTintNova: UIColor = NovaColors.VioletDesaturated10.withAlphaComponent(0.45)
 
-    // MARK: - Actions
+    //TODO: Check if layerAccentPrivateNonOpaque should be renamed
+    var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
+
+    // MARK: - Action
+
     var actionPrimary: UIColor = NovaColors.Violet50
     var actionPrimaryHover: UIColor = NovaColors.Violet60
     var actionPrimaryDisabled: UIColor = NovaColors.Violet50.withAlphaComponent(0.4)
     var actionSecondary: UIColor = NovaColors.Gray15
-    var actionSecondaryDisabled: UIColor = NovaColors.Gray15.withAlphaComponent(0.4)
     var actionSecondaryHover: UIColor = NovaColors.Gray20
-    var formSurfaceOff: UIColor = NovaColors.Gray15
-    var formKnob: UIColor = NovaColors.White
-    var indicatorActive: UIColor = NovaColors.Violet50
-    var indicatorInactive: UIColor = NovaColors.Gray30
-    var actionSuccess: UIColor = NovaColors.Green50
+    var actionSecondaryDisabled: UIColor = NovaColors.Gray15.withAlphaComponent(0.4)
     var actionWarning: UIColor = NovaColors.Yellow50
+    var actionSuccess: UIColor = NovaColors.Green50
     var actionCritical: UIColor = NovaColors.Red50
     var actionInformation: UIColor = NovaColors.Blue50
+    var formKnob: UIColor = NovaColors.White
+    var formSurfaceOff: UIColor = NovaColors.Gray15
     var actionTabActive: UIColor = NovaColors.White
     var actionTabInactive: UIColor = NovaColors.Gray10
     var actionCloseButton: UIColor = NovaColors.White
 
     // MARK: - Text
+
     var textPrimary: UIColor = NovaColors.VioletDesaturated90
     var textSecondary: UIColor = NovaColors.VioletDesaturated90.withAlphaComponent(0.7)
     var textDisabled: UIColor = NovaColors.VioletDesaturated90.withAlphaComponent(0.4)
-    var textCritical: UIColor = NovaColors.Red50
     var textAccent: UIColor = NovaColors.Violet50
-    var textOnDark: UIColor = NovaColors.VioletDesaturated0
-    var textOnLight: UIColor = NovaColors.VioletDesaturated90
+    var textCritical: UIColor = NovaColors.Red50
     var textInverted: UIColor = NovaColors.VioletDesaturated0
     var textInvertedDisabled: UIColor = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
+    var textOnDark: UIColor = NovaColors.VioletDesaturated0
+    var textOnLight: UIColor = NovaColors.VioletDesaturated90
+    var textColorPrimary: UIColor = NovaColors.VioletDesaturated0
+    var textToast: UIColor = NovaColors.Violet50
 
-    // MARK: - Icons
+    // MARK: - Icon
+
     var iconPrimary: UIColor = NovaColors.VioletDesaturated90
     var iconSecondary: UIColor = NovaColors.VioletDesaturated90.withAlphaComponent(0.7)
     var iconDisabled: UIColor = NovaColors.VioletDesaturated90.withAlphaComponent(0.4)
     var iconAccent: UIColor = NovaColors.Violet50
-    var iconOnColor: UIColor = NovaColors.VioletDesaturated0
     var iconCritical: UIColor = NovaColors.Red50
-    var iconSpinner: UIColor = NovaColors.VioletDesaturated90
-    var iconAccentViolet: UIColor = NovaColors.Violet50
-    var iconAccentBlue: UIColor = NovaColors.Blue50
-    var iconAccentPink: UIColor = NovaColors.Pink40
-    var iconAccentGreen: UIColor = NovaColors.Green50
-    var iconAccentYellow: UIColor = NovaColors.Yellow50
-    var iconRatingNeutral: UIColor = NovaColors.Gray30
+    var iconInverted: UIColor = NovaColors.VioletDesaturated0
+    var iconOnColor: UIColor = NovaColors.VioletDesaturated0
+    var iconOnColorDisabled: UIColor = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
+    var iconSpinner: UIColor = NovaColors.Violet30
+    var iconPrivate: UIColor = NovaColors.Violet50
+    var iconPrivateOutline: UIColor = NovaColors.VioletDesaturated90
 
     // MARK: - Border
+
     var borderPrimary: UIColor = NovaColors.Gray15
-    var borderSecondary: UIColor = NovaColors.Gray20
-    var borderAccent: UIColor = NovaColors.Violet50
-    var borderAccentNonOpaque: UIColor = NovaColors.Violet30.withAlphaComponent(0.4)
-    var borderAccentPrivate: UIColor = NovaColors.Violet70
+    var borderStrong: UIColor = NovaColors.Gray20
+    var borderOnColor: UIColor = NovaColors.Gray15
     var borderInverted: UIColor = NovaColors.Gray60
-    var borderToolbarDivider: UIColor = NovaColors.Gray10
+    var borderRadioButtonDefault: UIColor = NovaColors.Gray35
+    var borderAccent: UIColor = NovaColors.Violet50
 
     // MARK: - Shadow
+
     var shadowSubtle: UIColor = NovaColors.Gray60.withAlphaComponent(0.10)
     var shadowDefault: UIColor = NovaColors.Gray60.withAlphaComponent(0.12)
-    var shadowStrong: UIColor = NovaColors.Gray60.withAlphaComponent(0.15)
+    var shadowStrong: UIColor = NovaColors.Gray60.withAlphaComponent(0.16)
     var shadowBorder: UIColor = NovaColors.VioletDesaturated90
 
-    // MARK: - Nova tokens
-    var layerAccentSubtle: UIColor = NovaColors.VioletDesaturated10
-
     // MARK: - Gradients
-    // TODO: Review gradient mapping when updating the UIComponents
+
     var gradient = Gradient(colors: [NovaColors.Violet60, NovaColors.Violet50])
     var gradientAccent = Gradient(colors: [NovaColors.Violet30, NovaColors.Orange30])
     var gradientAccentSubtle = Gradient(colors: [
@@ -132,13 +123,44 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
         NovaColors.VioletDesaturated90
     ])
     var gradientPrivacyMask = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
-
+    
     var gradientAIStrongStop1: UIColor = NovaColors.Violet50
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30
 
+    // TODO: FXIOS - 16130 Map gradient properties to Nova gradient tokens.
+    var layerGradient: Gradient = LightTheme().colors.layerGradient
+    var layerGradientOverlay: Gradient = LightTheme().colors.layerGradientOverlay
+    var layerGradientURL: Gradient = LightTheme().colors.layerGradientURL
+    var layerGradientSummary: Gradient = LightTheme().colors.layerGradientSummary
+    var layerHomepage: Gradient = LightTheme().colors.layerHomepage
     var gradientOnboardingStop1: UIColor = LightTheme().colors.gradientOnboardingStop1
     var gradientOnboardingStop2: UIColor = LightTheme().colors.gradientOnboardingStop2
     var gradientOnboardingStop3: UIColor = LightTheme().colors.gradientOnboardingStop3
     var gradientOnboardingStop4: UIColor = LightTheme().colors.gradientOnboardingStop4
+
+    // MARK: - Light theme defaults
+    // TODO: Check if some tokens should be replaced by Nova tokens or deprecated
+    var layerScrim: UIColor = LightTheme().colors.layerScrim
+    var layerAccentNonOpaque: UIColor = LightTheme().colors.layerAccentNonOpaque
+    var layerAccentPrivate: UIColor = LightTheme().colors.layerAccentPrivate
+    var layerCriticalSubdued: UIColor = LightTheme().colors.layerCriticalSubdued
+    var layerEmphasis: UIColor = LightTheme().colors.layerEmphasis
+    var layer5: UIColor = LightTheme().colors.layer5
+    var layer5Hover: UIColor = LightTheme().colors.layer5Hover
+    var layerSurfaceMediumAlt: UIColor = LightTheme().colors.layerSurfaceMediumAlt
+
+    var indicatorActive: UIColor = LightTheme().colors.indicatorActive
+    var indicatorInactive: UIColor = LightTheme().colors.indicatorInactive
+    var iconRatingNeutral: UIColor = LightTheme().colors.iconRatingNeutral
+    var iconAccentViolet: UIColor = LightTheme().colors.iconAccentViolet
+    var iconAccentBlue: UIColor = LightTheme().colors.iconAccentBlue
+    var iconAccentPink: UIColor = LightTheme().colors.iconAccentPink
+    var iconAccentGreen: UIColor = LightTheme().colors.iconAccentGreen
+    var iconAccentYellow: UIColor = LightTheme().colors.iconAccentYellow
+
+    var borderSecondary: UIColor = LightTheme().colors.borderSecondary
+    var borderAccentNonOpaque: UIColor = LightTheme().colors.borderAccentNonOpaque
+    var borderAccentPrivate: UIColor = LightTheme().colors.borderAccentPrivate
+    var borderToolbarDivider: UIColor = LightTheme().colors.borderToolbarDivider
 }

@@ -4,9 +4,24 @@
 
 import UIKit
 
-/// Nova only Figma tokens.  Corresponding `ThemeColourPalette` properties are forward to these.
+// Nova only Figma tokens.
+// TODO: These tokens will be used when updating components design
 public protocol NovaThemeColourPalette: ThemeColourPalette {
     var layerAccentSubtle: UIColor { get }
+    var layerInverse: UIColor { get }
+    var layerGlassTintNova: UIColor { get }
+
+    var textColorPrimary: UIColor { get }
+    var textToast: UIColor { get }
+    var iconInverted: UIColor { get }
+    var iconOnColorDisabled: UIColor { get }
+    var iconPrivate: UIColor { get }
+    var iconPrivateOutline: UIColor { get }
+
+    var borderStrong: UIColor { get }
+    var borderOnColor: UIColor { get }
+    var borderRadioButtonDefault: UIColor { get }
+
     var gradient: Gradient { get }
     var gradientAccent: Gradient { get }
     var gradientAccentSubtle: Gradient { get }
