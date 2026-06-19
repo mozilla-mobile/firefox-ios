@@ -357,7 +357,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let selectedTab = tabManager.selectedTab
         let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
         tabManagerTabs.forEach { tab in
-            print("LM ### screenshotUUID is not nil `\(tab.screenshotUUID != nil)` for \(tab.tabUUID)")
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: tab.tabUUID == selectedTab?.tabUUID,
                                     isPrivate: tab.isPrivate,
