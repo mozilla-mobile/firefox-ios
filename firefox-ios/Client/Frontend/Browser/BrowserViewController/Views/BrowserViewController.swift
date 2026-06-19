@@ -5090,7 +5090,14 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        if #available(iOS 26.0, *), isBottomSearchBar {
+        // Only restore the address bar to fully shown if it wasn't collapsed by scrolling. When the
+        // keyboard is dismissed via scroll and the toolbars are already collapsed, so forcing scrollAlpha
+        // back to 1 here would leave the address bar full while the bottom containers stay collapsed
+        // (inconsistent state).
+        // This is a legacy-only patch (via the `LegacyTabScrollProvider` cast below); the scroll
+        // controller refactor (TabScrollHandler) will address the underlying issue differently
+        let isToolbarStateCollapsed = (scrollController as? LegacyTabScrollProvider)?.isToolbarStateCollapsed ?? false
+        if #available(iOS 26.0, *), isBottomSearchBar, !isToolbarStateCollapsed {
             store.dispatch(
                 ToolbarAction(
                     scrollAlpha: 1,
@@ -5141,9 +5148,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        // keyboard frame changes that don't fire willShow/willHide like (find-in-page
-        // dismissal, accessory view toggle, interactive scroll-to-dismiss). Removing the calls to update layout
-        // leaves the keyboard spacer stale and combined with a stale scrollAlpha == 0 leaves the toolbar with extra space
+        // Keep the keyboard spacer and bottom constraints in sync as the keyboard frame changes
+        // (e.g. accessory-view height changes, interactive scroll-to-dismiss). Without this the
+        // spacer holds its previous height and leaves a gap below the address bar.
         if isSnapKitRemovalEnabled {
             updateConstraintsForKeyboard()
             updateBottomContentStackViewConstraints()
