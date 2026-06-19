@@ -419,9 +419,37 @@ class LibraryViewController: UIViewController, Themeable {
         segmentControlToolbar.tintColor = theme.colors.textPrimary
         segmentControlToolbar.isTranslucent = false
 
+        librarySegmentControl.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        librarySegmentControl.setBackgroundImage(selectedSegmentPill(color: .gray),
+                                                 for: .selected,
+                                                 barMetrics: .default)
+
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
         applyThemeToButtons()
+    }
+
+    /// Builds a rounded-rectangle pill image used as the selected segment's background.
+    /// The image is drawn at the actual segment width (rather than a resizable stub) so both ends
+    /// keep their rounding instead of being stretched flat across the segment.
+    private func selectedSegmentPill(color: UIColor) -> UIImage {
+        let height = UX.NavigationMenu.height
+        let segmentCount = CGFloat(max(librarySegmentControl.numberOfSegments, 1))
+        let width = UX.NavigationMenu.width / segmentCount
+        let verticalInset: CGFloat = 2
+        let horizontalInset: CGFloat = 2
+        let pillHeight = height - verticalInset * 2
+        let cornerRadius = pillHeight / 2
+
+        let size = CGSize(width: width, height: height)
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            let pillRect = CGRect(x: horizontalInset,
+                                  y: verticalInset,
+                                  width: width - horizontalInset * 2,
+                                  height: pillHeight)
+            color.setFill()
+            UIBezierPath(roundedRect: pillRect, cornerRadius: cornerRadius).fill()
+        }
     }
 
     private func applyThemeToButtons() {
