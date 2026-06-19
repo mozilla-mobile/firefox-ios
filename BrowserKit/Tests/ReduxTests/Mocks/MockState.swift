@@ -3,12 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
+
 @testable import Redux
 
 struct MockState: StateType, Equatable {
     let counter: Int
 
     nonisolated(unsafe) static var actionsReduced = [ActionType]()
+    nonisolated(unsafe) static var modernActionsReduced: [(action: ModernAction, windowUUID: WindowUUID)] = []
     nonisolated(unsafe) static var runMidReducerActions = false
     nonisolated(unsafe) static var midReducerActions: (() -> Void)?
 
@@ -18,7 +21,15 @@ struct MockState: StateType, Equatable {
         MockState.runMidReducerActions = false
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
+        Self.modernActionsReduced.append((action: action, windowUUID: windowUUID))
+
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         MockState.actionsReduced.append(action.actionType)
 
         if MockState.runMidReducerActions {

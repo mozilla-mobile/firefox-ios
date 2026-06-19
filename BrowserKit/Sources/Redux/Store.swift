@@ -18,7 +18,7 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     private var middlewares: [Middleware<State>]
     private var subscriptions: Set<SubscriptionType> = []
 
-    private var actionQueue: [Action] = []
+    private var actionQueue: [(action: Either<Action, ModernAction>, windowUUID: WindowUUID)] = []
     private var isProcessingActions = false
 
     public var state: State {
@@ -35,7 +35,7 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     }
 
     public init(state: State,
-                reducer: @escaping Reducer<State>,
+                reducer: Reducer<State>,
                 middlewares: [Middleware<State>] = [],
                 logger: Logger = DefaultLogger.shared) {
         self.state = state
@@ -71,13 +71,26 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         }
     }
 
+    /// Legacy method to dispatch actions to the global store. Eventually will be deprecated and replaced by
+    /// `dispatch(_action:forWindowUUID)`, which takes a `ModernAction`.
     public func dispatch(_ action: Action) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
 
         // We queue and process actions to ensure each single action completely passes through reducers and middlewares
         // before the next action fires.
-        actionQueue.append(action)
+        actionQueue.append((.left(action), action.windowUUID))
+        processQueuedActions()
+    }
+
+    /// Method to dispatch actions to the global store.
+    public func dispatch(_ action: ModernAction, forWindowUUID windowUUID: WindowUUID) {
+        MainActor.assertIsolated("Expected to be called only on main actor.")
+        logger.log("Dispatched action: \(action.description)", level: .info, category: .redux)
+
+        // We queue and process actions to ensure each single action completely passes through reducers and middlewares
+        // before the next action fires.
+        actionQueue.append((.right(action), windowUUID))
         processQueuedActions()
     }
 
@@ -85,25 +98,36 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         guard !isProcessingActions else { return }
         isProcessingActions = true
         while !actionQueue.isEmpty {
-            let action = actionQueue.removeFirst()
-            executeAction(action)
+            let tuple = actionQueue.removeFirst()
+            executeAction(tuple.action, forWindowUUID: tuple.windowUUID)
         }
         isProcessingActions = false
     }
 
-    private func executeAction(_ action: Action) {
+    private func executeAction(_ action: Either<Action, ModernAction>, forWindowUUID windowUUID: WindowUUID) {
         // Each active screen state is given an opportunity to be reduced using the dispatched action
         // (Note: this is true even if the action's UUID differs from the screen's window's UUID).
         // Typically, reducers should compare the action's UUID to the incoming state UUID and skip
         // processing for actions originating in other windows.
         // Note that only reducers for active screens are processed.
-        let newState = reducer(state, action)
+        let newState: State
+        switch action {
+        case .left(let legacyAction):
+            newState = reducer.legacyReducer(state, legacyAction)
+        case .right(let modernAction):
+            newState = reducer.modernReducer(state, modernAction, windowUUID)
+        }
 
         // Middlewares are all given an opportunity to respond to the action. This is only done once
         // per middleware, regardless of how many active windows or screen states there are. (This
         // differs slightly from reducers, which are called once for each screen.)
         middlewares.forEach { middleware in
-            middleware(newState, action)
+            switch action {
+            case .left(let legacyAction):
+                middleware.legacyMiddleware(newState, legacyAction)
+            case .right(let modernAction):
+                middleware.modernMiddleware(newState, modernAction, windowUUID)
+            }
         }
 
         state = newState
