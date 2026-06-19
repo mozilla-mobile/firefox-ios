@@ -337,7 +337,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagList() -> SettingSection {
-        let flags = FeatureFlagID.allCases
+        let flags = FeatureFlagID.allCases.filter { $0.isNimbusConfigured }
         let settingsList = flags.compactMap { flagID in
             return Setting(title: format(string: "\(flagID): \(featureFlagsProvider.isEnabled(flagID))"))
         }

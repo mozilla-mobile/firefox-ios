@@ -86,6 +86,14 @@ enum FeatureFlagID: String, CaseIterable {
         }
     }
 
+    /// Returns `false` for flags that have no Nimbus configuration and are driven solely by a user preference.
+    var isNimbusConfigured: Bool {
+        switch self {
+        case .hntSponsoredShortcuts: return false
+        default: return true
+        }
+    }
+
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`.
     // Add in alphabetical order.
     var debugKey: String? {
