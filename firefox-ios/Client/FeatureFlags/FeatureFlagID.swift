@@ -87,7 +87,7 @@ enum FeatureFlagID: String, CaseIterable {
     }
 
     /// Returns `false` for flags that have no Nimbus configuration and are driven solely by a user preference.
-    var isNimbusBacked: Bool {
+    var isNimbusConfigured: Bool {
         switch self {
         case .hntSponsoredShortcuts: return false
         default: return true
