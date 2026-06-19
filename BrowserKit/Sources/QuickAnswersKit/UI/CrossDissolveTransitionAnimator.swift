@@ -30,7 +30,7 @@ final class CrossDissolveTransitionAnimator: NSObject,
                                              UIViewControllerAnimatedTransitioning {
     private struct UX {
         static let springAnimationDuration: TimeInterval = 0.4
-        static let springAnimationDumping: CGFloat = 0.8
+        static let springAnimationDamping: CGFloat = 0.8
         static let springAnimationVelocity: CGFloat = 1.0
         static let crossDissolveInitialScale: CGFloat = 0.2
         @MainActor
@@ -101,7 +101,7 @@ final class CrossDissolveTransitionAnimator: NSObject,
         UIView.animate(
             withDuration: UX.springAnimationDuration,
             delay: 0,
-            usingSpringWithDamping: UX.springAnimationDumping,
+            usingSpringWithDamping: UX.springAnimationDamping,
             initialSpringVelocity: UX.springAnimationVelocity,
             options: .curveEaseOut,
             animations: {
@@ -149,7 +149,7 @@ final class CrossDissolveTransitionAnimator: NSObject,
         UIView.animate(
             withDuration: UX.springAnimationDuration,
             delay: 0,
-            usingSpringWithDamping: UX.springAnimationDumping,
+            usingSpringWithDamping: UX.springAnimationDamping,
             initialSpringVelocity: UX.springAnimationVelocity,
             options: .curveEaseOut,
             animations: {

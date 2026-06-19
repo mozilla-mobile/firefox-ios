@@ -173,7 +173,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.quickAnswers(transitionType: transitionType)),
                 windowUUID: headerState.windowUUID,
-                actionType: NavigationBrowserActionType.tapOnCell
+                actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
             )
         )
     }
