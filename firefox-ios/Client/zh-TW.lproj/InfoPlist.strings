@@ -8,7 +8,7 @@
 "New Tab" = "新分頁";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox 可使用您的攝影機掃描 QR Code 或為網站拍照、錄影上傳。";
+"NSCameraUsageDescription" = "Firefox 可使用您的攝影機掃描 QR Code 或拍照、錄影。";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox 需要進行 Face ID 才能存取您儲存的密碼與付款方式資訊。";

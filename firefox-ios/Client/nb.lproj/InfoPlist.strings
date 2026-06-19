@@ -8,7 +8,7 @@
 "New Tab" = "Ny fane";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox bruker kameraet ditt til å skanne QR-koder og ta bilder og video.";
+"NSCameraUsageDescription" = "Firefox kan bruke kameraet ditt til å skanne QR-koder eller ta bilder og videoer.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox krever Face ID for å få tilgang til dine lagrede passord og betalingsmåter.";

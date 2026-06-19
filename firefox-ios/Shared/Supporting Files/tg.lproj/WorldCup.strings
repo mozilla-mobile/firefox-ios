@@ -1,3 +1,42 @@
+/* Section header for the Africa region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "Африқо";
+
+/* Section header for the Asia region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "Осиё";
+
+/* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "Амрикои Марказӣ";
+
+/* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
+"WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "«КОНКАКАФ»";
+
+/* Section header for the Europe region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Europe.v151" = "Аврупо";
+
+/* Section header for the North America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "Амрикои Шимолӣ";
+
+/* Section header for the Oceania region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "Уқёнусия";
+
+/* Section header for the South America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "Амрикои Ҷанубӣ";
+
+/* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.England.v151" = "Англия";
+
+/* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.Scotland.v151" = "Шотландия";
+
+/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Тайёр";
+
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "Нодида гузарондан";
+
+/* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.Title.v151" = "Дастаи худро пайгирӣ кунед";
+
 /* The title of the Group A group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupA.Title.v151" = "Гурӯҳи «A»";
 
@@ -46,17 +85,41 @@
 /* M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
 "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "М";
 
+/* The accessibility labels for the button that allow to disable World Cup notifications. */
+"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Пинҳон кардани огоҳномаҳо";
+
 /* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Тоза кардан";
 
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Пайгирӣ кардани даста";
 
+/* The label that appears for live World Cup matches. */
+"WorldCup.HomepageWidget.LiveLabel.v151" = "ПАХШИ МУСТАҚИМ";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Нав кардан";
+
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "Тоза кардан";
 
 /* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
 "WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Нав кардан";
+
+/* The label for the 'Bronze final' match in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "НИҲОИИ БИРИНҶӢ";
+
+/* The label for the 'Final' match in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "НИҲОӢ";
+
+/* The label for the 'Round of 16' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "ДАВРАИ 16-УМ";
+
+/* The label for the 'Round of 32' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "ДАВРАИ 32-ЮМ";
+
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "ҶОИ СЕЮМ";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
 "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Имконоти бештар";
