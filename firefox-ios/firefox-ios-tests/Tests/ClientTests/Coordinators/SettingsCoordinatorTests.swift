@@ -192,7 +192,7 @@ final class SettingsCoordinatorTests: XCTestCase {
         let navigationController = try XCTUnwrap(mockRouter.navigationController as? MockNavigationController)
         navigationController.viewControllers = [root, UIViewController()]
 
-        subject.start(with: .appIcon)
+        subject.handle(route: .settings(section: .appIcon))
 
         XCTAssertEqual(mockRouter.pushCalled, 0)
         XCTAssertEqual(navigationController.setViewControllersCalled, 1)
@@ -210,7 +210,7 @@ final class SettingsCoordinatorTests: XCTestCase {
         )
         navigationController.viewControllers = [root, existingAppIcon]
 
-        subject.start(with: .appIcon)
+        subject.handle(route: .settings(section: .appIcon))
 
         XCTAssertEqual(mockRouter.pushCalled, 0)
         XCTAssertEqual(navigationController.viewControllers.count, 2)
@@ -224,7 +224,7 @@ final class SettingsCoordinatorTests: XCTestCase {
         let navigationController = try XCTUnwrap(mockRouter.navigationController as? MockNavigationController)
         navigationController.viewControllers = [root, UIViewController()]
 
-        subject.start(with: .general)
+        subject.handle(route: .settings(section: .general))
 
         XCTAssertEqual(mockRouter.popToViewControllerCalled, 1)
         XCTAssertEqual(mockRouter.pushCalled, 0)
@@ -543,6 +543,20 @@ final class SettingsCoordinatorTests: XCTestCase {
 
         subject.pressedPasswords()
 
+        XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
+        XCTAssertEqual(mockSettingsVC.savedRoute, .password)
+    }
+
+    func testPasswordSettingsRoute_whenStackIsDeep_handlesWithoutPopping() throws {
+        let subject = createSubject()
+        subject.settingsViewController = mockSettingsVC
+        let root = try XCTUnwrap(mockRouter.rootViewController)
+        let navigationController = try XCTUnwrap(mockRouter.navigationController as? MockNavigationController)
+        navigationController.viewControllers = [root, UIViewController()]
+
+        subject.pressedPasswords()
+
+        XCTAssertEqual(mockRouter.popToViewControllerCalled, 0)
         XCTAssertEqual(mockSettingsVC.handleRouteCalled, 1)
         XCTAssertEqual(mockSettingsVC.savedRoute, .password)
     }

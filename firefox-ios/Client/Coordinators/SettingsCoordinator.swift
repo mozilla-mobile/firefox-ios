@@ -75,19 +75,20 @@ final class SettingsCoordinator: BaseCoordinator,
         router.setRootViewController(settingsViewController)
     }
 
-    func start(with settingsSection: Route.SettingsSection) {
+    func start(with settingsSection: Route.SettingsSection, fromExternalRoute: Bool = false) {
         // We might already know the sub-settings page we want to show, but in some case we don't and
         // the flow decision needs to be figured out by the view controller
         if let viewController = getSettingsViewController(settingsSection: settingsSection) {
             // If the user is currently viewing a sub-setting page, reset back to the root and navigate to this new route
-            if let root = router.rootViewController,
+            if fromExternalRoute,
+               let root = router.rootViewController,
                router.navigationController.viewControllers.count > 1 {
                 router.navigationController.setViewControllers([root, viewController], animated: false)
             } else {
                 router.push(viewController)
             }
         } else {
-            if let root = router.rootViewController {
+            if fromExternalRoute, let root = router.rootViewController {
                 router.popToViewController(root, reason: .deeplink, animated: false)
             }
             assert(settingsViewController != nil)
@@ -107,7 +108,7 @@ final class SettingsCoordinator: BaseCoordinator,
     override func handle(route: Route) {
         switch route {
         case let .settings(section):
-            start(with: section)
+            start(with: section, fromExternalRoute: true)
         default:
             break
         }
@@ -346,11 +347,11 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedCreditCard() {
-        findAndHandle(route: .settings(section: .creditCard))
+        settingsViewController?.handle(route: .creditCard)
     }
 
     func pressedRelayMask() {
-        findAndHandle(route: .settings(section: .relayMask))
+        settingsViewController?.handle(route: .relayMask)
     }
 
     func pressedClearPrivateData() {
@@ -367,7 +368,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedPasswords() {
-        findAndHandle(route: .settings(section: .password))
+        settingsViewController?.handle(route: .password)
     }
 
     func pressedNotifications() {
