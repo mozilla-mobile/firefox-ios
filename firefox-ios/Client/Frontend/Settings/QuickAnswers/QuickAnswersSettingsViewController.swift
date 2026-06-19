@@ -5,7 +5,7 @@
 import Common
 import Shared
 
-final class QuickAnswersSettingsViewController: SettingsTableViewController {
+final class QuickAnswersSettingsViewController: SettingsTableViewController, UserFeaturePreferenceProvider {
     let prefs: Prefs
     init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
@@ -31,7 +31,7 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController {
             prefs: prefs,
             theme: theme,
             prefKey: PrefsKeys.Settings.quickAnswersFeature,
-            defaultValue: true,
+            defaultValue: userPreferences.getPreferenceFor(.quickAnswers),
             // TODO: - FXIOS-14720 Add Strings
             titleText: "Quick Answers"
         ) { [weak self] _ in
