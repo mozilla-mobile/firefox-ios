@@ -34,7 +34,7 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var layerSelectedText: UIColor = NovaColors.Gray35
     var layerGlassTintNova: UIColor = NovaColors.VioletDesaturated10.withAlphaComponent(0.45)
 
-    //TODO: Check if layerAccentPrivateNonOpaque should be renamed
+    // TODO: Check if layerAccentPrivateNonOpaque should be renamed
     var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
 
     // MARK: - Action
@@ -123,7 +123,6 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
         NovaColors.VioletDesaturated90
     ])
     var gradientPrivacyMask = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
-    
     var gradientAIStrongStop1: UIColor = NovaColors.Violet50
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30
