@@ -55,7 +55,7 @@ final class LocationView: UIView,
     }
 
     var isAddressBarMinimized: Bool {
-        return scrollAlpha == 0
+        return scrollAlpha.isZero
     }
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
@@ -65,7 +65,7 @@ final class LocationView: UIView,
     /// An additional offset (default is 0) used when reader mode is available,
     /// to ensure the text does not overlap the icon when the view is constrained to its superview.
     private func isNormalizedHostWiderThanVisibleArea(safeOffset offset: CGFloat = 0) -> Bool {
-        guard let text = urlTextField.text, let font = urlTextField.font, !scrollAlpha.isZero else {
+        guard let text = urlTextField.text, let font = urlTextField.font, !isAddressBarMinimized else {
             return false
         }
         let (_, normalizedHost) = URL.getSubdomainAndHost(from: text)
@@ -487,7 +487,7 @@ final class LocationView: UIView,
     private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
         guard scrollAlpha != alpha else { return }
         scrollAlpha = alpha
-        if scrollAlpha.isZero {
+        if isAddressBarMinimized {
             shrinkLocationView(barPosition: barPosition)
             if #available(iOS 26.0, *), barPosition == .bottom {
                 effectView.effect = glassEffect
@@ -765,7 +765,7 @@ final class LocationView: UIView,
         ).cgColors
         searchEngineContentView.applyTheme(theme: theme)
         lockIconButton.tintColor = secondaryColor
-        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
+        lockIconButton.backgroundColor = isAddressBarMinimized ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.textColor = primaryColor
         setTextFieldPlaceholder(color: colors.textPrimary)
@@ -777,7 +777,7 @@ final class LocationView: UIView,
     }
 
     private func getPrimaryAndSecondaryColors() -> (primary: UIColor, secondary: UIColor) {
-        if #available(iOS 26.0, *), scrollAlpha.isZero {
+        if #available(iOS 26.0, *), isAddressBarMinimized {
             // We want to use system colors when the location view is fully transparent
             // To make sure it blends well with the background when using glass effect.
             return (.label, .label)
