@@ -80,7 +80,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 if authenticationManager.authenticationState == .loggedin { hidePrivacyProtectionWindow() }
 
             case .willResignActive:
-                guard privacyProtectionWindow == nil else { return }
+                // Must stay synchronous: appPhase is delivered inline (no receive(on:)),
+                // so the overlay covers content before iOS snapshots the app switcher.
+                // The async .loggedout path below isn't enough on its own. FXIOS-16007.
                 showPrivacyProtectionWindow()
 
             case .didEnterBackground:
@@ -300,23 +302,24 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // MARK: Privacy Protection
-    private var privacyProtectionWindow: UIWindow?
+    private lazy var privacyProtectionWindowManager = PrivacyProtectionWindowManager(
+        privacyWindowFactory: { [unowned self] in
+            guard let windowScene = window?.windowScene else { return nil }
+            return UIWindow(windowScene: windowScene)
+        },
+        mainWindowProvider: { [unowned self] in window },
+        rootViewControllerFactory: { [unowned self] in
+            SplashViewController(authenticationManager: authenticationManager)
+        }
+    )
 
     private func showPrivacyProtectionWindow() {
         browserViewController.deactivateUrlBarOnHomeView()
-        guard let windowScene = self.window?.windowScene else {
-            return
-        }
-
-        privacyProtectionWindow = UIWindow(windowScene: windowScene)
-        privacyProtectionWindow?.rootViewController = SplashViewController(authenticationManager: authenticationManager)
-        privacyProtectionWindow?.windowLevel = .alert + 1
-        privacyProtectionWindow?.makeKeyAndVisible()
+        privacyProtectionWindowManager.show()
     }
 
     private func hidePrivacyProtectionWindow() {
-        privacyProtectionWindow?.isHidden = true
-        privacyProtectionWindow = nil
+        privacyProtectionWindowManager.hide()
         browserViewController.activateUrlBarOnHomeView()
         KeyboardType.identifyKeyboardNameTelemetry()
     }
