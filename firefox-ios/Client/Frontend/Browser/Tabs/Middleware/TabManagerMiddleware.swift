@@ -364,7 +364,8 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                     tabTitle: tab.displayTitle,
                                     url: tab.url,
                                     screenshot: tab.screenshot,
-                                    hasHomeScreenshot: tab.hasHomeScreenshot)
+                                    hasHomeScreenshot: tab.hasHomeScreenshot,
+                                    hasScreenshotOnDisk: tab.screenshotUUID != nil)
             tabs.append(tabModel)
         }
 
