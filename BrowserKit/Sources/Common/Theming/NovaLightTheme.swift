@@ -14,7 +14,7 @@ public struct NovaLightTheme: Theme {
 }
 
 private struct NovaLightColourPalette: NovaThemeColourPalette {
-    
+
     // MARK: - Layers
     var layer1: UIColor = NovaColors.Gray5
     var layer2: UIColor = NovaColors.White
