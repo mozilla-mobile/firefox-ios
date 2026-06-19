@@ -262,14 +262,31 @@ final class DefaultThemeManagerTests: XCTestCase {
         XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedThemeInSystemMode)
     }
 
+    func testDTM_novaDesignOn_returnsNovaLightThemeForLightMode() {
+        let sut = createSubject(with: userDefaults, isNovaDesignOn: true)
+
+        XCTAssertTrue(sut.getCurrentTheme(for: windowUUID) is NovaLightTheme)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).colors.layer1, NovaColors.Gray5)
+    }
+
+    func testDTM_novaDesignOff_returnsLegacyLightThemeForLightMode() {
+        let sut = createSubject(with: userDefaults, isNovaDesignOn: false)
+
+        XCTAssertTrue(sut.getCurrentTheme(for: windowUUID) is LightTheme)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).colors.layer1, LightTheme().colors.layer1)
+    }
+
     // MARK: - Helper methods
 
     private func createSubject(with userDefaults: UserDefaultsInterface,
+                               isNovaDesignOn: Bool = false,
                                file: StaticString = #filePath,
                                line: UInt = #line) -> DefaultThemeManager {
         let subject = DefaultThemeManager(
             userDefaults: userDefaults,
-            sharedContainerIdentifier: "")
+            sharedContainerIdentifier: "",
+            isNovaDesignOnClosure: { isNovaDesignOn }
+        )
         subject.setWindow(UIWindow(frame: .zero), for: windowUUID)
         trackForMemoryLeaks(subject, file: file, line: line)
 
