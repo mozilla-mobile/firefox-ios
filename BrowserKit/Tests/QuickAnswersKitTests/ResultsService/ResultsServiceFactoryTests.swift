@@ -16,7 +16,7 @@ struct ResultsServiceFactoryTests {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.clientToReturn = MockLiteLLMClient()
         let prefs = MockProfilePrefs()
-        let config = QuickAnswersConfig(options: ["model": "test-model"])
+        let config = QuickAnswersConfig(rawOptions: ["model": "test-model"])
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
         let result = try subject.make(prefs: prefs, config: config)
@@ -30,7 +30,7 @@ struct ResultsServiceFactoryTests {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.clientToReturn = MockLiteLLMClient()
         let prefs = MockProfilePrefs()
-        let config = QuickAnswersConfig(options: [:])
+        let config = QuickAnswersConfig(rawOptions: [:])
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
         #expect(throws: ResultsServiceError.unableToCreateService) {
@@ -44,7 +44,7 @@ struct ResultsServiceFactoryTests {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.clientToReturn = MockLiteLLMClient()
         let prefs = MockProfilePrefs()
-        let config = QuickAnswersConfig(options: ["model": ""])
+        let config = QuickAnswersConfig(rawOptions: ["model": ""])
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
         #expect(throws: ResultsServiceError.unableToCreateService) {
@@ -58,7 +58,7 @@ struct ResultsServiceFactoryTests {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.shouldReturnNil = true
         let prefs = MockProfilePrefs()
-        let config = QuickAnswersConfig(options: ["model": "test-model"])
+        let config = QuickAnswersConfig(rawOptions: ["model": "test-model"])
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
         #expect(throws: ResultsServiceError.unableToCreateService) {

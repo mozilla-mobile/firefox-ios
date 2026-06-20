@@ -21,10 +21,10 @@ final class DefaultResultsService: ResultsService {
     }
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
-        let message: QuickAnswersMessage = LiteLLMMessage(role: .user, content: transcription)
+        let messages = makeMessages(for: transcription)
 
         do {
-            let fullResponse = try await requestChatCompletion(for: message)
+            let fullResponse = try await requestChatCompletion(for: messages)
             let citations = fullResponse.providerSpecificFields?.citations ?? []
             return formatResult(from: fullResponse.content, and: citations)
         } catch {
@@ -32,12 +32,24 @@ final class DefaultResultsService: ResultsService {
         }
     }
 
-    private func requestChatCompletion(for message: QuickAnswersMessage) async throws -> QuickAnswersMessage {
+    /// Builds the typed message array for a request. When `config.instructions` is non-empty (e.g. for the
+    /// Exa model), a `.system` message is prepended ahead of the `.user` message; otherwise only the user
+    /// message is sent.
+    private func makeMessages(for transcription: String) -> [QuickAnswersMessage] {
+        var messages: [QuickAnswersMessage] = []
+        if !config.instructions.isEmpty {
+            messages.append(LiteLLMMessage(role: .system, content: config.instructions))
+        }
+        messages.append(LiteLLMMessage(role: .user, content: transcription))
+        return messages
+    }
+
+    private func requestChatCompletion(for messages: [QuickAnswersMessage]) async throws -> QuickAnswersMessage {
         // TODO: FXIOS-15198 Handle errors appropriately
         // and may need to change type and not use String,
         // but waiting for what we get on server side
         return try await client.requestChatCompletion(
-            messages: [message],
+            messages: messages,
             config: config
         )
     }

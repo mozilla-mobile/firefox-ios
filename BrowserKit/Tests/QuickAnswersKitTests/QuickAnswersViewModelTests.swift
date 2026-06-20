@@ -136,9 +136,24 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[2], .showSearchResult(searchResult, nil))
     }
 
+    func testInit_passesModelIntoServiceFactory() {
+        var receivedModel: QuickAnswersModel?
+        let subject = QuickAnswersViewModel(
+            prefs: MockProfilePrefs(),
+            model: .liner,
+            makeService: { _, model in
+                receivedModel = model
+                return self.mockService
+            }
+        )
+        trackForMemoryLeaks(subject)
+
+        XCTAssertEqual(receivedModel, .liner)
+    }
+
     // MARK: - Helper
     private func createSubject() -> QuickAnswersViewModel {
-        let model = QuickAnswersViewModel(prefs: MockProfilePrefs(), makeService: { _ in
+        let model = QuickAnswersViewModel(prefs: MockProfilePrefs(), makeService: { _, _ in
             return self.mockService
         })
         trackForMemoryLeaks(model)

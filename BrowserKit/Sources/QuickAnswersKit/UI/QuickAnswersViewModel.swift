@@ -22,12 +22,13 @@ final class QuickAnswersViewModel {
 
     init(
         prefs: Prefs,
-        makeService: (Prefs) throws -> QuickAnswersService = { prefs in
-            try DefaultQuickAnswersService(prefs: prefs)
+        model: QuickAnswersModel = .exa,
+        makeService: (Prefs, QuickAnswersModel) throws -> QuickAnswersService = { prefs, model in
+            try DefaultQuickAnswersService(model: model, prefs: prefs)
         }
     ) {
         do {
-            self.service = try makeService(prefs)
+            self.service = try makeService(prefs, model)
         } catch {
             // TODO: FXIOS-15570 - Possibly add telemetry to capture service failing
             self.service = nil

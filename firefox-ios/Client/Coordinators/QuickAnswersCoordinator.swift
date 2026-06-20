@@ -44,8 +44,16 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             prefs: prefs,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            model: nimbusModel(),
         )
         router.present(controller, animated: shouldAnimateTransition)
+    }
+
+    /// Reads the Nimbus-configured Quick Answers model and maps it to the `QuickAnswersKit` enum,
+    /// falling back to `.exa` if the value is unrecognized.
+    private func nimbusModel() -> QuickAnswersModel {
+        let rawValue = FxNimbus.shared.features.quickAnswersFeature.value().model.rawValue
+        return QuickAnswersModel(rawValue: rawValue) ?? .exa
     }
 
     // MARK: - QuickAnswersNavigationHandler

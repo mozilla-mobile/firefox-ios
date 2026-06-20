@@ -12,12 +12,24 @@ public struct QuickAnswersConfig: LLMConfig, Sendable {
     nonisolated(unsafe) public let options: [String: AnyHashable]
 
     // TODO: FXIOS-15123 - need confirm we want to pass these options, follow similar to S2S for now
-    /// Default initializer with production configuration
-    public init(instructions: String = "", options: [String: AnyHashable] = [
-        "model": "exa",
+    /// Default initializer with production configuration.
+    /// - Parameters:
+    ///   - model: The provider model that backs Quick Answers. Determines whether a system prompt is injected
+    ///     and is synced into `options["model"]` so the factory can read it.
+    ///   - options: Additional inference options. `model` is always overridden from the `model` parameter.
+    public init(model: QuickAnswersModel = .exa, options: [String: AnyHashable] = [
         "stream": false
     ]) {
-        self.instructions = instructions
+        self.instructions = model.injectsSystemPrompt ? QuickAnswersInstructions.exaInstructions : ""
+        var options = options
+        options["model"] = model.rawValue
         self.options = options
+    }
+
+    /// Initializer used by tests to inject arbitrary `options` and `instructions` directly,
+    /// bypassing the `model`-driven syncing of the public initializer.
+    init(instructions: String = "", rawOptions: [String: AnyHashable]) {
+        self.instructions = instructions
+        self.options = rawOptions
     }
 }

@@ -28,13 +28,14 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     /// Creates a new service with a platform-appropriate transcription engine and results service.
     init(
         engine: TranscriptionEngine? = nil,
-        config: QuickAnswersConfig = QuickAnswersConfig(),
+        model: QuickAnswersModel = .exa,
         resultsServiceFactory: ResultsServiceFactory = DefaultResultsServiceFactory(
             liteLLMCreator: LiteLLMCreator()
         ),
         prefs: Prefs
     ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
+        let config = QuickAnswersConfig(model: model)
         self.resultsService = try resultsServiceFactory.make(prefs: prefs, config: config)
     }
 

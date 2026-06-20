@@ -98,11 +98,12 @@ public final class QuickAnswersViewController: UIViewController,
         prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
+        model: QuickAnswersModel = .exa,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(prefs: prefs),
+            viewModel: QuickAnswersViewModel(prefs: prefs, model: model),
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
