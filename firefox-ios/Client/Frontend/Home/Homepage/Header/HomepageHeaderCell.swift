@@ -17,6 +17,13 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         static let interImageSpacing: CGFloat = 10
         static let quickAnswersButtonSize: CGFloat = 44
 
+        // Quick Answers button wave (pulse) animation
+        static let waveAnimationKey = "quickAnswersWave"
+        static let waveAnimationKeyPath = "opacity"
+        static let waveAnimationDuration: CFTimeInterval = 1.2
+        static let waveAnimationFromOpacity: Float = 0.6
+        static let waveAnimationToOpacity: Float = 1.0
+
         static func contentWidth() -> CGFloat {
             return UX.firefoxLogoImageSize.width + UX.interImageSpacing + UX.firefoxTextImageSize.width
         }
@@ -77,9 +84,17 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // Remove the wave animation so it doesn't leak into a reused cell that hides the button.
+        stopWaveAnimation()
+    }
+
     // MARK: - UI Setup
 
     private func setupView(headerState: HeaderState) {
+        let showsQuickAnswersButton = headerState.showQuickAnswersButton && !headerState.isPrivate
+
         if !hasConfiguredView {
             contentView.backgroundColor = .clear
             logoStackView.addArrangedSubview(logoImage)
@@ -87,7 +102,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
             logoContainerView.addSubview(logoStackView)
             stackContainer.addArrangedSubview(logoContainerView)
-            if headerState.showQuickAnswersButton, !headerState.isPrivate {
+            if showsQuickAnswersButton {
                 if headerState.showiPadSetup {
                     // On iPad, add button directly to contentView so logo remains centered
                     contentView.addSubview(quickAnswersButton)
@@ -100,6 +115,16 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             contentView.addSubview(stackContainer)
             logoStackView.pinToSuperview()
 
+            // Build the header layout once. Re-running this on every configure deactivated and
+            // reactivated the required centerX constraint alongside the low-priority leading/trailing
+            // ones, producing a one-frame layout pass where the logo rendered centered before jumping
+            // to the side. Performing the initial layout without animation avoids that visible flicker.
+            setupConstraints()
+            setupLogoConstraints()
+            UIView.performWithoutAnimation {
+                contentView.layoutIfNeeded()
+            }
+
             hasConfiguredView = true
         }
 
@@ -110,13 +135,14 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             : ImageIdentifiers.homeHeaderLogoBall
         logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
-        setupConstraints()
-        setupLogoConstraints()
+        if showsQuickAnswersButton {
+            startWaveAnimation()
+        } else {
+            stopWaveAnimation()
+        }
     }
 
     private func setupConstraints() {
-        NSLayoutConstraint.deactivate(headerConstraints)
-
         headerConstraints = [
             stackContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
             stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
@@ -141,7 +167,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     private func setupLogoConstraints() {
-        NSLayoutConstraint.deactivate(logoConstraints)
         logoConstraints = [
             logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
             logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
@@ -151,6 +176,25 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         ]
 
         NSLayoutConstraint.activate(logoConstraints)
+    }
+
+    // MARK: - Wave animation
+
+    /// Start a subtle, repeating opacity pulse on the Quick Answers button to draw attention to it.
+    private func startWaveAnimation() {
+        guard quickAnswersButton.layer.animation(forKey: UX.waveAnimationKey) == nil else { return }
+        let pulse = CABasicAnimation(keyPath: UX.waveAnimationKeyPath)
+        pulse.fromValue = UX.waveAnimationFromOpacity
+        pulse.toValue = UX.waveAnimationToOpacity
+        pulse.duration = UX.waveAnimationDuration
+        pulse.autoreverses = true
+        pulse.repeatCount = .infinity
+        pulse.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        quickAnswersButton.layer.add(pulse, forKey: UX.waveAnimationKey)
+    }
+
+    private func stopWaveAnimation() {
+        quickAnswersButton.layer.removeAnimation(forKey: UX.waveAnimationKey)
     }
 
     func configure(headerState: HeaderState,
