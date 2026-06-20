@@ -55,11 +55,16 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             creditCardProvider.listCreditCards { [weak self] cards, error in
                 DispatchQueue.main.async { [weak self] in
                     guard let self else { return }
-                    guard let cards, !cards.isEmpty, error == nil else {
+                    guard let cards, error == nil else {
                         self.logger.log("Error fetching credit cards",
                                         level: .warning,
                                         category: .autofill,
                                         description: "Error fetching saved credit cards for autofill")
+                        self.parentCoordinator?.didFinish(from: self)
+                        return
+                    }
+
+                    guard !cards.isEmpty else {
                         self.parentCoordinator?.didFinish(from: self)
                         return
                     }

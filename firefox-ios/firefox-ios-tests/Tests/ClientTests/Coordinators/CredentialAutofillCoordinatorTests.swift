@@ -84,6 +84,29 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
         XCTAssertEqual(bottomSheetViewController?.viewModel.animatesPresentation, false)
     }
 
+    func testShowCreditCardAutofill_withSelectSavedCardAndNoCards_finishesWithoutPresenting() {
+        let subject = createSubject()
+        creditCardProvider.creditCards = []
+        let prefetchExpectation = expectation(description: "wait for card prefetch")
+
+        subject.showCreditCardAutofill(
+            creditCard: nil,
+            decryptedCard: nil,
+            viewType: .selectSavedCard,
+            frame: nil,
+            viewController: UIViewController(),
+            alertContainer: UIView()
+        )
+        DispatchQueue.main.async {
+            prefetchExpectation.fulfill()
+        }
+
+        wait(for: [prefetchExpectation], timeout: 1.0)
+        XCTAssertEqual(creditCardProvider.listCreditCardsCalledCount, 1)
+        XCTAssertEqual(router.presentCalled, 0)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
     private func createSubject() -> CredentialAutofillCoordinator {
         let subject = CredentialAutofillCoordinator(
             profile: profile,
