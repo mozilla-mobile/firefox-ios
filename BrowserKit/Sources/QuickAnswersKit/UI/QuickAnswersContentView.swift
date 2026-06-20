@@ -46,6 +46,12 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private let sourceView: QuickAnswersSourceView = .build {
         $0.alpha = 0.0
     }
+    private let footerLabel: UILabel = .build {
+        $0.font = FXFontStyles.Regular.caption1.scaledFont()
+        $0.numberOfLines = 0
+        $0.alpha = 0.0
+        $0.adjustsFontForContentSizeCategory = true
+    }
     private var theme: Theme?
 
     // MARK: - Init
@@ -60,7 +66,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
 
     // MARK: - Setup
     private func setupSubviews() {
-        contentView.addSubviews(placeholderLabel, transcriptLabel, searchingLabel, answerLabel, sourceView)
+        contentView.addSubviews(placeholderLabel, transcriptLabel, searchingLabel, answerLabel, sourceView, footerLabel)
         scrollView.addSubview(contentView)
         addSubview(scrollView)
 
@@ -91,7 +97,11 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             sourceView.topAnchor.constraint(equalTo: answerLabel.bottomAnchor, constant: UX.contentSpacing),
             sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            sourceView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+
+            footerLabel.topAnchor.constraint(equalTo: sourceView.bottomAnchor, constant: UX.contentSpacing),
+            footerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            footerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            footerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
@@ -147,6 +157,14 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
+    func configureFooter(model: QuickAnswersModel) {
+        // TODO: - FXIOS-14720 Add Strings and accessibility ids
+        footerLabel.text = "Powered by \(model.displayName)"
+        UIView.animate(withDuration: UX.animationDuration) { [self] in
+            footerLabel.alpha = 1.0
+        }
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
@@ -155,5 +173,13 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         searchingLabel.textColor = theme.colors.textSecondary
         answerLabel.textColor = theme.colors.textPrimary
         sourceView.applyTheme(theme: theme)
+        footerLabel.textColor = theme.colors.textSecondary
     }
 }
+
+#if DEBUG
+extension QuickAnswersContentView {
+    var footerText: String? { footerLabel.text }
+    var footerAlpha: CGFloat { footerLabel.alpha }
+}
+#endif

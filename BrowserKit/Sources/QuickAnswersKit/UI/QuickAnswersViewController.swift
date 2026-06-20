@@ -87,6 +87,7 @@ public final class QuickAnswersViewController: UIViewController,
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
+    private let model: QuickAnswersModel
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
         navigationHandler: navigationHandler
@@ -107,6 +108,7 @@ public final class QuickAnswersViewController: UIViewController,
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            model: model,
             notificationCenter: notificationCenter
         )
     }
@@ -117,9 +119,11 @@ public final class QuickAnswersViewController: UIViewController,
         transitionType: QuickAnswersTransitionType,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
+        model: QuickAnswersModel = .exa,
         notificationCenter: NotificationProtocol
     ) {
         self.navigationHandler = navigationHandler
+        self.model = model
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -234,9 +238,10 @@ public final class QuickAnswersViewController: UIViewController,
             case .showSearchResult(let result, let error):
                 if let error {
                     self?.errorHandler.handleSearchError(error)
-                } else {
-                    self?.contentView.configureAnswer(result.resultText)
-                    self?.contentView.configureSources(result.sources)
+                } else if let self {
+                    self.contentView.configureAnswer(result.resultText)
+                    self.contentView.configureSources(result.sources)
+                    self.contentView.configureFooter(model: self.model)
                 }
             case .initializationFailed:
                 self?.errorHandler.handleInitializationError()
