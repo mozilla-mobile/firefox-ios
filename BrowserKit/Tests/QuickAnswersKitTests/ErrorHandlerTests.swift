@@ -59,6 +59,63 @@ struct ErrorHandlerTests {
         #expect(navigationHandler.dismissCallCount == 0)
     }
 
+    // MARK: - Generic Errors
+    @Test
+    func test_handleSearchError_presentsGenericAlert() throws {
+        let subject = createSubject()
+
+        subject.handleSearchError(.unknown("boom"))
+
+        #expect(presenter.presentCallCount == 1)
+        #expect(navigationHandler.dismissCallCount == 0)
+
+        let alert = try #require(presenter.lastPresentedViewController as? UIAlertController)
+        #expect(alert.actions.count == 1)
+    }
+
+    @Test
+    func test_handleInitializationError_presentsGenericAlert() throws {
+        let subject = createSubject()
+
+        subject.handleInitializationError()
+
+        #expect(presenter.presentCallCount == 1)
+        #expect(navigationHandler.dismissCallCount == 0)
+
+        let alert = try #require(presenter.lastPresentedViewController as? UIAlertController)
+        #expect(alert.actions.count == 1)
+    }
+
+    @Test
+    func test_handleSpeechError_nonPermission_presentsGenericAlert() throws {
+        let subject = createSubject()
+
+        subject.handleSpeechError(.recognizerNotAvailable)
+
+        #expect(presenter.presentCallCount == 1)
+        #expect(navigationHandler.dismissCallCount == 0)
+
+        let alert = try #require(presenter.lastPresentedViewController as? UIAlertController)
+        #expect(alert.actions.count == 1)
+    }
+
+    @Test
+    func test_genericAlertAction_dismissesViaNavigationHandler() throws {
+        let subject = createSubject()
+
+        subject.handleInitializationError()
+
+        let alert = try #require(presenter.lastPresentedViewController as? UIAlertController)
+        let action = try #require(alert.actions.first)
+
+        let handler = try #require(action.value(forKey: "handler"))
+        let block = unsafeBitCast(handler as AnyObject, to: (@convention(block) (UIAlertAction) -> Void).self)
+        block(action)
+
+        #expect(navigationHandler.dismissCallCount == 1)
+        #expect(navigationHandler.lastNavigationType == nil)
+    }
+
     // MARK: - Helper
     private func createSubject() -> ErrorHandler {
         let subject = ErrorHandler(presenter: presenter, navigationHandler: navigationHandler)

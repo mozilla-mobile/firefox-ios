@@ -37,7 +37,7 @@ final class ErrorHandler {
             )
         // TODO: - FXIOS-15572 Handle Speech errors that are not related to permissions
         default:
-            break
+            showGenericErrorAlert()
         }
     }
 
@@ -54,12 +54,12 @@ final class ErrorHandler {
 
     // MARK: - Search Errors
     func handleSearchError(_ error: ResultsServiceError) {
-        // TODO: - FXIOS-15573 Handle Search errors
+        showGenericErrorAlert()
     }
 
     // MARK: - Other Errors
     func handleInitializationError() {
-        // TODO: - FXIOS-15573 Handle errors
+        showGenericErrorAlert()
     }
 
     // MARK: - Private
@@ -81,6 +81,21 @@ final class ErrorHandler {
         )
         alertController.addAction(
             UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+            }
+        )
+        presenter?.present(alertController, animated: true)
+    }
+
+    // TODO: - FXIOS-14720 Add Strings and accessibility ids
+    private func showGenericErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Something went wrong",
+            message: "Please try again later",
+            preferredStyle: .alert
+        )
+        alertController.addAction(
+            UIAlertAction(title: "OK", style: .default) { [weak self] _ in
                 self?.navigationHandler?.dismissQuickAnswers(with: nil)
             }
         )
