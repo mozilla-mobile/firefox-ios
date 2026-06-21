@@ -142,11 +142,12 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
                              text: String,
                              isConnectionSecure: Bool,
                              theme: Theme,
-                             isInternalCertErrorURL: Bool) {
+                             isInternalCertErrorURL: Bool,
+                             isManuallyTrusted: Bool) {
         connectionStatusImage.image = image
         connectionStatusLabel.text = text
         connectionButton.accessibilityLabel = text
         connectionStatusImage.tintColor = theme.colors.iconSecondary
-        connectionDetailArrow.isHidden = !isConnectionSecure && !isInternalCertErrorURL
+        connectionDetailArrow.isHidden = !isConnectionSecure && !isInternalCertErrorURL && !isManuallyTrusted
     }
 }
