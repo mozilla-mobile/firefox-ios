@@ -936,13 +936,21 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             )
             return
         }
+
+        let subtitle: String?
+        if let internalURL = InternalURL(selectedTab.url), internalURL.isCertificateErrorPage {
+            subtitle = internalURL.originalURLFromErrorPage?.baseDomain
+        } else {
+            subtitle = selectedTab.url?.baseDomain
+        }
+
         store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
                 actionType: MainMenuActionType.updateSiteProtectionsHeader,
                 siteProtectionsData: SiteProtectionsData(
                     title: selectedTab.displayTitle,
-                    subtitle: selectedTab.url?.baseDomain,
+                    subtitle: subtitle,
                     image: selectedTab.url?.absoluteString,
                     state: getSiteProtectionState(for: selectedTab)
                 )

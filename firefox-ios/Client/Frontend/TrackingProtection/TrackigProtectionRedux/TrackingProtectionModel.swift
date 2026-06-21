@@ -73,7 +73,13 @@ class TrackingProtectionModel {
     let subtitleLabelA11yId = A11y.subtitleLabel
 
     var websiteTitle: String {
-        return url.baseDomain ?? ""
+        let websiteTitle: String?
+        if let internalURL = InternalURL(url), internalURL.isCertificateErrorPage {
+            websiteTitle = internalURL.originalURLFromErrorPage?.baseDomain
+        } else {
+            websiteTitle = url.baseDomain
+        }
+        return websiteTitle ?? ""
     }
 
     let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
