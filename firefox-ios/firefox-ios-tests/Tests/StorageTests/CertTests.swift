@@ -43,15 +43,86 @@ class CertTests: XCTestCase {
         let origin = "www.mozilla.org:80"
         let cert = getCertificate("testcert1")
 
-        // Check that hasCertificate returns false before adding
+        // Check that hasCertificate returns false before adding.
         XCTAssertFalse(certStore.hasCertificate(forOrigin: origin))
 
-        // Add a certificate and check it's found
+        // Add a certificate and check it's found.
         certStore.addCertificate(cert, forOrigin: origin)
         XCTAssert(certStore.hasCertificate(forOrigin: origin))
 
-        // Check that it's unique to the origin
+        // Check that it's unique to the origin.
         XCTAssertFalse(certStore.hasCertificate(forOrigin: "people.mozilla.org:80"))
+    }
+
+    func testSetAndGetCertificateChain() {
+        let certStore = CertStore()
+        let origin1 = "www.mozilla.org:80"
+        let origin2 = "people.mozilla.org:80"
+        let cert1 = getCertificate("testcert1")
+        let cert2 = getCertificate("testcert2")
+        let chain = [cert1, cert2]
+
+        // No chain exists for an origin before it's set.
+        XCTAssertNil(certStore.certificateChain(forOrigin: origin1))
+
+        // Set a chain for an origin.
+        certStore.setCertificateChain(chain, forOrigin: origin1)
+
+        // The chain is retrievable, in order, and matches what was stored.
+        let storedChain = certStore.certificateChain(forOrigin: origin1)
+        XCTAssertEqual(storedChain?.count, 2)
+        XCTAssert(storedChain?[0] === cert1)
+        XCTAssert(storedChain?[1] === cert2)
+
+        // The chain is scoped to the origin it was set for.
+        XCTAssertNil(certStore.certificateChain(forOrigin: origin2))
+    }
+
+    func testSetCertificateChainOverwritesExistingChain() {
+        let certStore = CertStore()
+        let origin = "www.mozilla.org:80"
+        let cert1 = getCertificate("testcert1")
+        let cert2 = getCertificate("testcert2")
+
+        certStore.setCertificateChain([cert1], forOrigin: origin)
+        XCTAssertEqual(certStore.certificateChain(forOrigin: origin)?.count, 1)
+
+        // Setting a new chain for the same origin replaces the old one (dictionary assignment), not appends.
+        certStore.setCertificateChain([cert2], forOrigin: origin)
+        let updatedChain = certStore.certificateChain(forOrigin: origin)
+        XCTAssertEqual(updatedChain?.count, 1)
+        XCTAssert(updatedChain?[0] === cert2)
+    }
+
+    func testSetCertificateChainWithEmptyArray() {
+        let certStore = CertStore()
+        let origin = "www.mozilla.org:80"
+        let cert = getCertificate("testcert1")
+
+        certStore.setCertificateChain([cert], forOrigin: origin)
+        certStore.setCertificateChain([], forOrigin: origin)
+
+        // Dictionary still has an entry for the origin, so this is Optional([]), not nil.
+        XCTAssertNotNil(certStore.certificateChain(forOrigin: origin))
+        XCTAssertEqual(certStore.certificateChain(forOrigin: origin)?.count, 0)
+    }
+
+    func testCertificateChainIsIndependentFromCertificateSet() {
+        let certStore = CertStore()
+        let origin = "www.mozilla.org:80"
+        let cert1 = getCertificate("testcert1")
+        let cert2 = getCertificate("testcert2")
+
+        // addCertificate (keys/origins) and setCertificateChain (certificateChains) are separate stores.
+        certStore.addCertificate(cert1, forOrigin: origin)
+        XCTAssert(certStore.hasCertificate(forOrigin: origin))
+        XCTAssertNil(certStore.certificateChain(forOrigin: origin))
+
+        certStore.setCertificateChain([cert2], forOrigin: origin)
+        XCTAssertNotNil(certStore.certificateChain(forOrigin: origin))
+        // containsCertificate only ever reflects addCertificate, regardless of the chain.
+        XCTAssertFalse(certStore.containsCertificate(cert2, forOrigin: origin))
+        XCTAssert(certStore.containsCertificate(cert1, forOrigin: origin))
     }
 
     fileprivate func getCertificate(_ file: String) -> SecCertificate {
