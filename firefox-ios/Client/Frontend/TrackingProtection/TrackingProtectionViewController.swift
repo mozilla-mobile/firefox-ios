@@ -233,7 +233,7 @@ class TrackingProtectionViewController: UIViewController,
             model.certificates = getCertificates(from: serverTrust)
         } else if let url = model.selectedTab?.webView?.url,
            let internalURL = InternalURL(url),
-           internalURL.isCertificateErrorPage,
+           internalURL.isCertificateErrorURL,
            let originalURL = internalURL.originalURLFromErrorPage,
            let origin = CertStore.origin(for: originalURL),
            let certificateChain = profile?.certStore.certificateChain(forOrigin: origin) {
@@ -418,7 +418,7 @@ class TrackingProtectionViewController: UIViewController,
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
             guard let self else { return }
 
-            let isCertificateErrorPage = InternalURL(model.url)?.isCertificateErrorPage ?? false
+            let isCertificateErrorPage = InternalURL(model.url)?.isCertificateErrorURL ?? false
 
             guard InternalURL(model.url) == nil || isCertificateErrorPage else {
                 return
@@ -538,7 +538,7 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func updateConnectionStatus() {
-        let isInternalCertErrorURL = InternalURL(model.url)?.isCertificateErrorPage ?? false
+        let isInternalCertErrorURL = InternalURL(model.url)?.isCertificateErrorURL ?? false
         model.connectionSecure = model.selectedTab?.webView?.hasOnlySecureContent ?? false
         connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: currentTheme().type),
                                                  text: model.connectionStatusString,

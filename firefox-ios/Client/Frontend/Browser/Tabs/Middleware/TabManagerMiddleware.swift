@@ -938,7 +938,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         }
 
         let subtitle: String?
-        if let internalURL = InternalURL(selectedTab.url), internalURL.isCertificateErrorPage {
+        if let internalURL = InternalURL(selectedTab.url), internalURL.isCertificateErrorURL {
             subtitle = internalURL.originalURLFromErrorPage?.baseDomain
         } else {
             subtitle = selectedTab.url?.baseDomain

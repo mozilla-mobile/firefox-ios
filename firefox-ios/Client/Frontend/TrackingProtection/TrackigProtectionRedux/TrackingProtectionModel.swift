@@ -74,7 +74,7 @@ class TrackingProtectionModel {
 
     var websiteTitle: String {
         let websiteTitle: String?
-        if let internalURL = InternalURL(url), internalURL.isCertificateErrorPage {
+        if let internalURL = InternalURL(url), internalURL.isCertificateErrorURL {
             websiteTitle = internalURL.originalURLFromErrorPage?.baseDomain
         } else {
             websiteTitle = url.baseDomain

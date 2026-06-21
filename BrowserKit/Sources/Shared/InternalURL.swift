@@ -122,7 +122,7 @@ public struct InternalURL {
         return nil
     }
 
-    public var isCertificateErrorPage: Bool {
+    public var isCertificateErrorURL: Bool {
         guard isErrorPage else { return false }
 
         let query = url.getQuery()
