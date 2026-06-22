@@ -1762,6 +1762,10 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.2.x
+        machine_type_id: g2.mac.4large
   Firebase_Performance_Test:
     before_run:
     - 1_git_clone_and_post_clone
@@ -1807,8 +1811,11 @@ workflows:
                 -sdk "$SDK$IOS_VERSION" \
                 -destination "$DESTINATION" \
                 -derivedDataPath "${DERIVED_DATA_DIR}" \
-                -skipMacroValidation
-                ENABLE_DEBUG_DYLIB=NO
+                -skipMacroValidation \
+                ENABLE_DEBUG_DYLIB=NO \
+                CODE_SIGNING_ALLOWED=NO \
+                CODE_SIGN_IDENTITY= \
+                CODE_SIGNING_REQUIRED=NO
 
             echo "-- verify build artifacts --"
 
