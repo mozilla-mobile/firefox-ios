@@ -301,7 +301,20 @@ struct ContextMenuState {
 
     private func getBookmarkAction(site: Site) -> PhotonRowActions {
         let bookmarkAction: SingleActionViewModel
+        let start = Date()
+        let host = FreezeDiag.host(from: site.url)
+        logger.log(
+            "\(FreezeDiag.prefix)[BookmarkTelemetry] contextMenu isBookmarked wait start isMainThread=\(Thread.isMainThread) appState=\(FreezeDiag.applicationState) host=\(host)",
+            level: .debug,
+            category: .storage
+        )
         let isBookmarked = profile.places.isBookmarked(url: site.url).value.successValue ?? false
+        let durationMs = FreezeDiag.durationMs(since: start)
+        logger.log(
+            "\(FreezeDiag.prefix)[BookmarkTelemetry] contextMenu isBookmarked wait end durationMs=\(durationMs) isMainThread=\(Thread.isMainThread) appState=\(FreezeDiag.applicationState) host=\(host) isBookmarked=\(isBookmarked)",
+            level: durationMs > 100 ? .warning : .debug,
+            category: .storage
+        )
         if isBookmarked {
             bookmarkAction = getRemoveBookmarkAction(site: site)
         } else {

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 /// Polls the WCS endpoints on a fixed cadence with three independent
 /// behaviors layered on top:
@@ -95,11 +96,11 @@ struct WorldCupPollingFetchStrategy: WorldCupFetchStrategyProtocol {
     }
 
     func matchesStream(using client: WorldCupAPIClientProtocol, team: String?) -> WorldCupMatchesStream {
-        makeStream(config: matchesConfig) { try client.fetchMatches(team: team) }
+        makeStream(endpoint: "get_matches", team: team, config: matchesConfig) { try client.fetchMatches(team: team) }
     }
 
     func liveStream(using client: WorldCupAPIClientProtocol, team: String?) -> WorldCupLiveStream {
-        makeStream(config: liveConfig) { try client.fetchLive(team: team) }
+        makeStream(endpoint: "get_live", team: team, config: liveConfig) { try client.fetchLive(team: team) }
     }
 
     func loadTeams(using client: WorldCupAPIClientProtocol,
@@ -127,33 +128,83 @@ struct WorldCupPollingFetchStrategy: WorldCupFetchStrategyProtocol {
     }
 
     private func makeStream<Response: Sendable>(
+        endpoint: String,
+        team: String?,
         config: Config,
         fetch: @escaping @Sendable () throws -> Response?
     ) -> AsyncStream<Result<Response?, WorldCupLoadError>> {
         let sleep = self.sleep
         return AsyncStream { continuation in
             let task = Task.detached(priority: .userInitiated) {
-                var emptyStreak = 0
-                var errorStreak = 0
-                while !Task.isCancelled {
-                    let result = await attemptWithBurstRetry(
-                        config: config,
-                        sleep: sleep,
-                        fetch: fetch
-                    )
-                    if Task.isCancelled { break }
-                    continuation.yield(result)
-                    let delay = nextDelay(
-                        after: result,
-                        config: config,
-                        emptyStreak: &emptyStreak,
-                        errorStreak: &errorStreak
-                    )
-                    await sleep(delay)
-                }
-                continuation.finish()
+                await Self.runStreamLoop(
+                    endpoint: endpoint,
+                    team: team,
+                    config: config,
+                    sleep: sleep,
+                    fetch: fetch,
+                    continuation: continuation
+                )
             }
             continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    private static func runStreamLoop<Response: Sendable>(
+        endpoint: String,
+        team: String?,
+        config: Config,
+        sleep: @escaping Sleep,
+        fetch: @escaping @Sendable () throws -> Response?,
+        continuation: AsyncStream<Result<Response?, WorldCupLoadError>>.Continuation
+    ) async {
+        let streamID = String(UUID().uuidString.prefix(8))
+        let logger = DefaultLogger.shared
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFetch] \(endpoint) stream start id=\(streamID) appState=\(FreezeDiag.applicationState) team=\(team ?? "<nil>")",
+            level: .info,
+            category: .homepage
+        )
+        var emptyStreak = 0
+        var errorStreak = 0
+        while !Task.isCancelled {
+            let result = await attemptWithBurstRetry(
+                endpoint: endpoint,
+                team: team,
+                config: config,
+                sleep: sleep,
+                fetch: fetch
+            )
+            if Task.isCancelled { break }
+            continuation.yield(result)
+            let delay = nextDelay(
+                after: result,
+                config: config,
+                emptyStreak: &emptyStreak,
+                errorStreak: &errorStreak
+            )
+            logger.log(
+                "\(FreezeDiag.prefix)[WorldCupFetch] \(endpoint) stream nextDelay id=\(streamID) delaySeconds=\(delay) result=\(Self.resultSummary(result)) emptyStreak=\(emptyStreak) errorStreak=\(errorStreak) appState=\(FreezeDiag.applicationState)",
+                level: .debug,
+                category: .homepage
+            )
+            await sleep(delay)
+        }
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFetch] \(endpoint) stream finish id=\(streamID) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled)",
+            level: Task.isCancelled ? .warning : .info,
+            category: .homepage
+        )
+        continuation.finish()
+    }
+
+    private static func resultSummary<Response>(_ result: Result<Response?, WorldCupLoadError>) -> String {
+        switch result {
+        case .success(.some):
+            return "success"
+        case .success(.none):
+            return "successNil"
+        case .failure(let error):
+            return "failure(\(error))"
         }
     }
 }
@@ -163,17 +214,24 @@ struct WorldCupPollingFetchStrategy: WorldCupFetchStrategyProtocol {
 /// (so 1× then 2× then 3× …) — short enough that the user doesn't notice,
 /// long enough to ride out a transient blip.
 private func attemptWithBurstRetry<Response: Sendable>(
+    endpoint: String,
+    team: String?,
     config: WorldCupPollingFetchStrategy.Config,
     sleep: WorldCupPollingFetchStrategy.Sleep,
     fetch: @escaping @Sendable () throws -> Response?
 ) async -> Result<Response?, WorldCupLoadError> {
     var attempt = 0
     while true {
-        let result = await WorldCupNormalFetchStrategy.singleAttempt(fetch)
+        let result = await WorldCupNormalFetchStrategy.singleAttempt(endpoint: endpoint, team: team, fetch)
         if case .failure = result,
            attempt < config.errorRetries,
            !Task.isCancelled {
             attempt += 1
+            DefaultLogger.shared.log(
+                "\(FreezeDiag.prefix)[WorldCupFetch] \(endpoint) retry attempt=\(attempt) delaySeconds=\(config.inBurstDelay * Double(attempt)) appState=\(FreezeDiag.applicationState) team=\(team ?? "<nil>")",
+                level: .debug,
+                category: .homepage
+            )
             await sleep(config.inBurstDelay * Double(attempt))
             continue
         }

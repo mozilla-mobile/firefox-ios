@@ -36,10 +36,12 @@ final class WorldCupFeed {
     /// thing the middleware needs to coordinate.
     private let selectedTeamProvider: () -> String?
     private let store: WorldCupStoreProtocol
+    private let logger: Logger
 
     private var matchesTask: Task<Void, Never>?
     private var liveTask: Task<Void, Never>?
     private var teamsTask: Task<Void, Never>?
+    private var feedRunID = 0
 
     private var lastMatchesResponse: WorldCupMatchesResponse?
     private var cachedLiveIDs: Set<Int> = []
@@ -51,11 +53,13 @@ final class WorldCupFeed {
     init(apiClient: WorldCupAPIClientProtocol,
          store: WorldCupStoreProtocol = WorldCupStore(),
          usesDevServerTimeline: Bool,
-         selectedTeamProvider: @escaping () -> String?) {
+         selectedTeamProvider: @escaping () -> String?,
+         logger: Logger = DefaultLogger.shared) {
         self.apiClient = apiClient
         self.usesDevServerTimeline = usesDevServerTimeline
         self.selectedTeamProvider = selectedTeamProvider
         self.store = store
+        self.logger = logger
     }
 
     deinit {
@@ -69,6 +73,13 @@ final class WorldCupFeed {
     /// from.
     func start() {
         stop()
+        feedRunID += 1
+        let runID = feedRunID
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFeed] start runID=\(runID) appState=\(FreezeDiag.applicationState) selectedTeam=\(selectedTeamProvider() ?? "<nil>")",
+            level: .info,
+            category: .homepage
+        )
         cachedLiveIDs = []
         lastMatchesResponse = nil
         cachedTeamsResponse = nil
@@ -76,28 +87,43 @@ final class WorldCupFeed {
         matchesTask = Task { @MainActor [weak self] in
             for await result in stream {
                 guard let self else { break }
-                self.handleMatchesResult(result)
+                self.handleMatchesResult(result, runID: runID, taskCancelled: Task.isCancelled)
             }
         }
-        startTeams()
+        startTeams(runID: runID)
     }
 
     func stop() {
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFeed] stop runID=\(feedRunID) appState=\(FreezeDiag.applicationState) matchesTask=\(matchesTask != nil) teamsTask=\(teamsTask != nil) liveTask=\(liveTask != nil)",
+            level: .info,
+            category: .homepage
+        )
         matchesTask?.cancel(); matchesTask = nil
         teamsTask?.cancel(); teamsTask = nil
-        stopLive()
+        stopLive(reason: "feedStop")
     }
 
-    private func stopLive() {
+    private func stopLive(reason: String) {
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFeed] stopLive runID=\(feedRunID) reason=\(reason) appState=\(FreezeDiag.applicationState) liveTask=\(liveTask != nil)",
+            level: .debug,
+            category: .homepage
+        )
         liveTask?.cancel(); liveTask = nil
     }
 
-    private func startLive() {
+    private func startLive(runID: Int) {
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFeed] startLive runID=\(runID) appState=\(FreezeDiag.applicationState) selectedTeam=\(selectedTeamProvider() ?? "<nil>")",
+            level: .info,
+            category: .homepage
+        )
         let stream = apiClient.liveStream(team: nil)
         liveTask = Task { @MainActor [weak self] in
             for await result in stream {
                 guard let self else { break }
-                self.handleLiveResult(result)
+                self.handleLiveResult(result, runID: runID, taskCancelled: Task.isCancelled)
             }
         }
     }
@@ -106,12 +132,18 @@ final class WorldCupFeed {
     /// we don't poll on a timer: `start()` re-fetches on foreground/retry,
     /// and `handleLiveResult` re-fetches when a knockout involving the
     /// selected team leaves the live set.
-    private func startTeams() {
+    private func startTeams(runID: Int? = nil) {
+        let runID = runID ?? feedRunID
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFeed] startTeams runID=\(runID) appState=\(FreezeDiag.applicationState) selectedTeam=\(selectedTeamProvider() ?? "<nil>")",
+            level: .info,
+            category: .homepage
+        )
         teamsTask?.cancel()
         teamsTask = Task { @MainActor [weak self] in
             guard let self else { return }
             let result = await self.apiClient.loadTeams(team: nil)
-            self.handleTeamsResult(result)
+            self.handleTeamsResult(result, runID: runID, taskCancelled: Task.isCancelled)
         }
     }
 
@@ -119,7 +151,16 @@ final class WorldCupFeed {
     /// keeps the previous snapshot so the UI doesn't blink to empty while
     /// the strategy waits on the empty backoff. `failure` surfaces the
     /// error so the UI can show a retry state.
-    private func handleMatchesResult(_ result: Result<WorldCupMatchesResponse?, WorldCupLoadError>) {
+    private func handleMatchesResult(
+        _ result: Result<WorldCupMatchesResponse?, WorldCupLoadError>,
+        runID: Int,
+        taskCancelled: Bool
+    ) {
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFeed] matchesResult runID=\(runID) appState=\(FreezeDiag.applicationState) cancelled=\(taskCancelled) result=\(Self.resultSummary(result))",
+            level: taskCancelled ? .warning : .info,
+            category: .homepage
+        )
         switch result {
         case .success(let response):
             guard let response else { return }
@@ -139,7 +180,16 @@ final class WorldCupFeed {
     /// `/live` failure is intentionally swallowed: matches data is the
     /// primary view; we just don't refresh the live badge. On success we
     /// only re-emit when the live ID set actually changed.
-    private func handleLiveResult(_ result: Result<WorldCupLiveResponse?, WorldCupLoadError>) {
+    private func handleLiveResult(
+        _ result: Result<WorldCupLiveResponse?, WorldCupLoadError>,
+        runID: Int,
+        taskCancelled: Bool
+    ) {
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFeed] liveResult runID=\(runID) appState=\(FreezeDiag.applicationState) cancelled=\(taskCancelled) result=\(Self.resultSummary(result))",
+            level: taskCancelled ? .warning : .info,
+            category: .homepage
+        )
         guard case .success(let response) = result else { return }
         // Merino keeps recently-final matches in `/live` for ~24h so the
         // result tile can show alongside live ones. Filter on
@@ -187,7 +237,16 @@ final class WorldCupFeed {
         }
     }
 
-    private func handleTeamsResult(_ result: Result<WorldCupTeamsResponse?, WorldCupLoadError>) {
+    private func handleTeamsResult(
+        _ result: Result<WorldCupTeamsResponse?, WorldCupLoadError>,
+        runID: Int,
+        taskCancelled: Bool
+    ) {
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupFeed] teamsResult runID=\(runID) appState=\(FreezeDiag.applicationState) cancelled=\(taskCancelled) result=\(Self.resultSummary(result))",
+            level: taskCancelled ? .warning : .info,
+            category: .homepage
+        )
         guard case .success(let response) = result, let response else { return }
         let wasEliminated = isSelectedTeamEliminated(in: cachedTeamsResponse)
         cachedTeamsResponse = response
@@ -199,9 +258,9 @@ final class WorldCupFeed {
     private func reconcileLivePolling(against response: WorldCupMatchesResponse) {
         let now = effectiveNow(from: response) ?? Date()
         if WorldCupPollingFetchStrategy.shouldPollLive(matches: response, now: now) {
-            if liveTask == nil { startLive() }
+            if liveTask == nil { startLive(runID: feedRunID) }
         } else {
-            stopLive()
+            stopLive(reason: "notInLiveWindow")
             if !cachedLiveIDs.isEmpty {
                 cachedLiveIDs = []
                 emit(buildSnapshot(from: response))
@@ -265,5 +324,16 @@ final class WorldCupFeed {
     private func emit(_ snapshot: Snapshot) {
         latestSnapshot = snapshot
         onUpdate?(snapshot)
+    }
+
+    private static func resultSummary<Response>(_ result: Result<Response?, WorldCupLoadError>) -> String {
+        switch result {
+        case .success(.some):
+            return "success"
+        case .success(.none):
+            return "successNil"
+        case .failure(let error):
+            return "failure(\(error))"
+        }
     }
 }

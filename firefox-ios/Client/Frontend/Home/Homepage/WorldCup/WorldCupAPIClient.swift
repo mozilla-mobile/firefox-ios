@@ -26,12 +26,14 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     /// When true, the API client omits the `date` query parameter so the
     /// mock server picks its own "today".
     private let usesDevServerTimeline: Bool
+    private let logger: Logger
 
     init(config: WorldCupConfig = WorldCupAPIClient.emptyConfig,
          usesDevServerTimeline: Bool = false,
          matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
          liveStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
-         teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy()) throws {
+         teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
+         logger: Logger = DefaultLogger.shared) throws {
         self.client = try WorldCupClient(config: config)
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -40,6 +42,7 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         self.liveStrategy = liveStrategy
         self.teamsStrategy = teamsStrategy
         self.usesDevServerTimeline = usesDevServerTimeline
+        self.logger = logger
     }
 
     /// Convenience init that points the FFI at a custom host. Pass `nil` or
@@ -48,35 +51,112 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     convenience init(baseHost: String?,
                      matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
                      liveStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
-                     teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy()) throws {
+                     teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
+                     logger: Logger = DefaultLogger.shared) throws {
         let trimmed = baseHost?.trimmingCharacters(in: .whitespacesAndNewlines)
         let host = (trimmed?.isEmpty == false) ? trimmed : nil
         try self.init(config: WorldCupConfig(baseHost: host),
                       usesDevServerTimeline: host != nil,
                       matchesStrategy: matchesStrategy,
                       liveStrategy: liveStrategy,
-                      teamsStrategy: teamsStrategy)
+                      teamsStrategy: teamsStrategy,
+                      logger: logger)
     }
 
     /// Low-level sync matches fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
     func fetchMatches(team: String? = nil) throws -> WorldCupMatchesResponse? {
-        let json = try client.getMatches(options: options(forTeam: team))
-        return try decode(json, as: WorldCupMatchesResponse.self)
+        let requestID = String(UUID().uuidString.prefix(8))
+        let start = Date()
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupAPI] get_matches start id=\(requestID) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled) team=\(team ?? "<nil>")",
+            level: .info,
+            category: .homepage
+        )
+        do {
+            let json = try client.getMatches(options: options(forTeam: team))
+            let response = try decode(json, as: WorldCupMatchesResponse.self)
+            let durationMs = FreezeDiag.durationMs(since: start)
+            let level: LoggerLevel = durationMs > 3000 || Task.isCancelled ? .warning : .info
+            logger.log(
+                "\(FreezeDiag.prefix)[WorldCupAPI] get_matches end id=\(requestID) durationMs=\(durationMs) result=\(response == nil ? "successNil" : "success") matchCount=\(Self.matchCount(response)) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled)",
+                level: level,
+                category: .homepage
+            )
+            return response
+        } catch {
+            let durationMs = FreezeDiag.durationMs(since: start)
+            logger.log(
+                "\(FreezeDiag.prefix)[WorldCupAPI] get_matches end id=\(requestID) durationMs=\(durationMs) result=failure error=\(WorldCupLoadError.from(error)) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled)",
+                level: .warning,
+                category: .homepage
+            )
+            throw error
+        }
     }
 
     /// Low-level sync live fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
     func fetchLive(team: String? = nil) throws -> WorldCupLiveResponse? {
-        let json = try client.getLive(options: options(forTeam: team))
-        return try decode(json, as: WorldCupLiveResponse.self)
+        let requestID = String(UUID().uuidString.prefix(8))
+        let start = Date()
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupAPI] get_live start id=\(requestID) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled) team=\(team ?? "<nil>")",
+            level: .info,
+            category: .homepage
+        )
+        do {
+            let json = try client.getLive(options: options(forTeam: team))
+            let response = try decode(json, as: WorldCupLiveResponse.self)
+            let durationMs = FreezeDiag.durationMs(since: start)
+            let level: LoggerLevel = durationMs > 3000 || Task.isCancelled ? .warning : .info
+            logger.log(
+                "\(FreezeDiag.prefix)[WorldCupAPI] get_live end id=\(requestID) durationMs=\(durationMs) result=\(response == nil ? "successNil" : "success") matchCount=\(response?.matches?.count ?? 0) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled)",
+                level: level,
+                category: .homepage
+            )
+            return response
+        } catch {
+            let durationMs = FreezeDiag.durationMs(since: start)
+            logger.log(
+                "\(FreezeDiag.prefix)[WorldCupAPI] get_live end id=\(requestID) durationMs=\(durationMs) result=failure error=\(WorldCupLoadError.from(error)) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled)",
+                level: .warning,
+                category: .homepage
+            )
+            throw error
+        }
     }
 
     /// Low-level sync teams fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to scope the roster response.
     func fetchTeams(team: String? = nil) throws -> WorldCupTeamsResponse? {
-        let json = try client.getTeams(options: options(forTeam: team))
-        return try decode(json, as: WorldCupTeamsResponse.self)
+        let requestID = String(UUID().uuidString.prefix(8))
+        let start = Date()
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCupAPI] get_teams start id=\(requestID) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled) team=\(team ?? "<nil>")",
+            level: .info,
+            category: .homepage
+        )
+        do {
+            let json = try client.getTeams(options: options(forTeam: team))
+            let response = try decode(json, as: WorldCupTeamsResponse.self)
+            let durationMs = FreezeDiag.durationMs(since: start)
+            let level: LoggerLevel = durationMs > 3000 || Task.isCancelled ? .warning : .info
+            logger.log(
+                "\(FreezeDiag.prefix)[WorldCupAPI] get_teams end id=\(requestID) durationMs=\(durationMs) result=\(response == nil ? "successNil" : "success") teamCount=\(response?.teams.count ?? 0) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled)",
+                level: level,
+                category: .homepage
+            )
+            return response
+        } catch {
+            let durationMs = FreezeDiag.durationMs(since: start)
+            logger.log(
+                "\(FreezeDiag.prefix)[WorldCupAPI] get_teams end id=\(requestID) durationMs=\(durationMs) result=failure error=\(WorldCupLoadError.from(error)) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled)",
+                level: .warning,
+                category: .homepage
+            )
+            throw error
+        }
     }
 
     func matchesStream(team: String? = nil) -> WorldCupMatchesStream {
@@ -128,6 +208,11 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     private func decode<T: Decodable>(_ json: String?, as type: T.Type) throws -> T? {
         guard let data = json?.data(using: .utf8) else { return nil }
         return try decoder.decode(type, from: data)
+    }
+
+    private static func matchCount(_ response: WorldCupMatchesResponse?) -> Int {
+        guard let response else { return 0 }
+        return (response.previous?.count ?? 0) + (response.current?.count ?? 0) + (response.next?.count ?? 0)
     }
 
     /// Builds the production-default client honoring two dev-only prefs:

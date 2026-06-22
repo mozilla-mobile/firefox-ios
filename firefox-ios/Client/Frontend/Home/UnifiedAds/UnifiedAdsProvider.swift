@@ -143,7 +143,13 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     private func fetchTilesWithAdsClient(completion: @escaping (UnifiedTileResult) -> Void) {
-        logger.log("Fetching tiles with ads client", level: .info, category: .homepage)
+        let requestID = String(UUID().uuidString.prefix(8))
+        let start = Date()
+        logger.log(
+            "\(FreezeDiag.prefix)[Ads] request start id=\(requestID) provider=adsClient appState=\(FreezeDiag.applicationState)",
+            level: .info,
+            category: .homepage
+        )
         let mozAdRequests = [
             MozAdsPlacementRequest(iabContent: nil, placementId: TileOrder.position1.rawValue),
             MozAdsPlacementRequest(iabContent: nil, placementId: TileOrder.position2.rawValue)
@@ -154,10 +160,19 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             let unifiedTiles: [UnifiedTile] = mozAdsTiles.map { name, mozAdsTile in
                 UnifiedTile.from(name: name, mozAdsTile: mozAdsTile)
             }
-            logger.log("Ads client request successful", level: .info, category: .homepage)
+            let durationMs = FreezeDiag.durationMs(since: start)
+            logger.log(
+                "\(FreezeDiag.prefix)[Ads] request end id=\(requestID) durationMs=\(durationMs) provider=adsClient result=success tileCount=\(unifiedTiles.count) appState=\(FreezeDiag.applicationState)",
+                level: durationMs > 3000 ? .warning : .info,
+                category: .homepage
+            )
             completion(.success(unifiedTiles))
         } catch let error {
-            logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
+            logger.log(
+                "\(FreezeDiag.prefix)[Ads] request end id=\(requestID) durationMs=\(FreezeDiag.durationMs(since: start)) provider=adsClient result=failure error=\(error) appState=\(FreezeDiag.applicationState)",
+                level: .warning,
+                category: .homepage
+            )
             completion(.failure(Error.noDataAvailable))
         }
     }

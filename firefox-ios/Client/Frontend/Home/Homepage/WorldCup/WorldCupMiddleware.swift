@@ -15,7 +15,9 @@ import Shared
 final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
     private let feed: WorldCupFeed?
+    private let logger: Logger
     private var lastWindowUUID: WindowUUID?
+    private var lastActionType = "<none>"
     /// Wether the homepage is currently displayed on screen
     private var homepageIsOnScreen = false
 
@@ -25,52 +27,89 @@ final class WorldCupMiddleware {
         self.init(worldCupStore: store, feed: feed)
     }
 
-    init(worldCupStore: WorldCupStoreProtocol, feed: WorldCupFeed?) {
+    init(worldCupStore: WorldCupStoreProtocol,
+         feed: WorldCupFeed?,
+         logger: Logger = DefaultLogger.shared) {
         self.worldCupStore = worldCupStore
         self.feed = feed
+        self.logger = logger
         feed?.onUpdate = { [weak self] snapshot in
-            self?.dispatch(snapshot: snapshot)
+            self?.dispatch(snapshot: snapshot, reason: "feedUpdate")
         }
     }
 
-    lazy var worldCupProvider: Middleware<AppState> = { state, action in
-        self.lastWindowUUID = action.windowUUID
+    lazy var worldCupProvider: Middleware<AppState> = { _, action in
+        self.handle(action: action)
+    }
+
+    private func handle(action: Action) {
+        lastWindowUUID = action.windowUUID
+        lastActionType = String(describing: action.actionType)
         switch action.actionType {
         case HomepageActionType.initialize,
              HomepageMiddlewareActionType.didBecomeActive,
              WorldCupActionType.retryMatchesFetch:
-            self.startFeed(windowUUID: action.windowUUID)
+            startFeed(windowUUID: action.windowUUID)
         case HomepageActionType.viewDidAppear:
-            self.homepageIsOnScreen = true
+            updateHomepageVisibility(true, windowUUID: action.windowUUID)
         case HomepageActionType.viewWillDisappear:
-            self.homepageIsOnScreen = false
+            updateHomepageVisibility(false, windowUUID: action.windowUUID)
         case WorldCupActionType.didChangeHomepageSettings:
-            self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
+            dispatch(snapshot: feed?.latestSnapshot ?? .empty, reason: "didChangeHomepageSettings")
         case WorldCupActionType.removeHomepageCard:
-            self.worldCupStore.setIsHomepageSectionEnabled(false)
-            self.feed?.stop()
-            self.dispatch(snapshot: .empty)
+            removeHomepageCard(windowUUID: action.windowUUID)
         case WorldCupActionType.selectTeam:
             let countryId = (action as? WorldCupAction)?.selectedCountryId
-            self.worldCupStore.setSelectedTeam(countryId: countryId)
-            self.startFeed(windowUUID: action.windowUUID)
+            worldCupStore.setSelectedTeam(countryId: countryId)
+            startFeed(windowUUID: action.windowUUID)
         case WorldCupActionType.worldCupDidStart:
-            self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
+            dispatch(snapshot: feed?.latestSnapshot ?? .empty, reason: "worldCupDidStart")
         default:
             break
         }
     }
 
+    private func updateHomepageVisibility(_ isVisible: Bool, windowUUID: WindowUUID) {
+        homepageIsOnScreen = isVisible
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCup] homepage visibility changed visible=\(isVisible) window=\(FreezeDiag.shortWindowID(windowUUID)) appState=\(FreezeDiag.applicationState)",
+            level: .debug,
+            category: .homepage
+        )
+    }
+
+    private func removeHomepageCard(windowUUID: WindowUUID) {
+        worldCupStore.setIsHomepageSectionEnabled(false)
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCup] feed.stop reason=removeHomepageCard window=\(FreezeDiag.shortWindowID(windowUUID)) appState=\(FreezeDiag.applicationState)",
+            level: .info,
+            category: .homepage
+        )
+        feed?.stop()
+        dispatch(snapshot: .empty, reason: "removeHomepageCard")
+    }
+
     private func startFeed(windowUUID: WindowUUID) {
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCup] startFeed requested action=\(lastActionType) window=\(FreezeDiag.shortWindowID(windowUUID)) appState=\(FreezeDiag.applicationState) milestone2=\(worldCupStore.isMilestone2) selectedTeam=\(worldCupStore.selectedTeam ?? "<nil>")",
+            level: .info,
+            category: .homepage
+        )
         guard worldCupStore.isMilestone2, let feed else {
-            dispatch(snapshot: .empty)
+            dispatch(snapshot: .empty, reason: "startFeedUnavailable")
             return
         }
         feed.start()
     }
 
-    private func dispatch(snapshot: WorldCupFeed.Snapshot) {
+    private func dispatch(snapshot: WorldCupFeed.Snapshot, reason: String) {
         guard let windowUUID = lastWindowUUID else { return }
+        let level: LoggerLevel = FreezeDiag.isApplicationActive ? .info : .warning
+        logger.log(
+            "\(FreezeDiag.prefix)[WorldCup] dispatchSnapshot reason=\(reason) action=\(lastActionType) appState=\(FreezeDiag.applicationState) homepageOnScreen=\(homepageIsOnScreen) window=\(FreezeDiag.shortWindowID(windowUUID)) matches=\(snapshot.matches.count) apiError=\(snapshot.apiError != nil) selectedTeam=\(worldCupStore.selectedTeam ?? "<nil>")",
+            level: level,
+            category: .homepage
+        )
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,

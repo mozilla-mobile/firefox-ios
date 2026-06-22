@@ -33,8 +33,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_init_setsUpNotifications() {
         _ = createSubject()
 
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 10)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           UIApplication.willResignActiveNotification,
+                                                           UIApplication.didEnterBackgroundNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
                                                            .ProfileDidFinishSyncing,
@@ -65,6 +67,18 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionTypes, [.didBecomeActive])
         XCTAssertEqual(actionsCalled.map(\.windowUUID), [.XCTestDefaultUUID])
+    }
+
+    func test_backgroundLifecycleNotifications_areDiagnosticOnly() throws {
+        let mockWindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
+        mockWindowManager.overrideWindows = true
+        let subject = createSubject(windowManager: mockWindowManager)
+        mockNotificationCenter.notifiableListener = subject
+
+        mockNotificationCenter.post(name: UIApplication.willResignActiveNotification)
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
     func test_viewWillAppearAction_doesNotSendTelemetryData() throws {

@@ -106,16 +106,42 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
 
     // MARK: Sponsored tiles (Unified Tiles)
     func fetchSponsoredSites() async -> [Site] {
-        guard shouldLoadSponsoredTiles else { return [] }
-        let unifiedTiles = await fetchUnifiedTilesWithTimeout()
+        let requestID = String(UUID().uuidString.prefix(8))
+        let start = Date()
+        guard shouldLoadSponsoredTiles else {
+            logger.log(
+                "\(FreezeDiag.prefix)[TopSites] fetchSponsoredSites skipped id=\(requestID) reason=preferenceDisabled appState=\(FreezeDiag.applicationState)",
+                level: .debug,
+                category: .homepage
+            )
+            return []
+        }
+        logger.log(
+            "\(FreezeDiag.prefix)[TopSites] fetchSponsoredSites start id=\(requestID) appState=\(FreezeDiag.applicationState)",
+            level: .info,
+            category: .homepage
+        )
+        let unifiedTiles = await fetchUnifiedTilesWithTimeout(requestID: requestID)
+        let sites = unifiedTiles.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
 
-        return unifiedTiles.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
+        logger.log(
+            "\(FreezeDiag.prefix)[TopSites] fetchSponsoredSites end id=\(requestID) durationMs=\(FreezeDiag.durationMs(since: start)) tileCount=\(sites.count) appState=\(FreezeDiag.applicationState)",
+            level: .info,
+            category: .homepage
+        )
+        return sites
     }
 
-    private func fetchUnifiedTilesWithTimeout() async -> [UnifiedTile] {
-        await withCheckedContinuation { continuation in
+    private func fetchUnifiedTilesWithTimeout(requestID: String) async -> [UnifiedTile] {
+        logger.log(
+            "\(FreezeDiag.prefix)[TopSites] sponsoredTimeoutWrapper start id=\(requestID) timeoutSeconds=\(Double(sponsoredTilesFetchTimeoutNanoseconds) / 1_000_000_000) appState=\(FreezeDiag.applicationState)",
+            level: .debug,
+            category: .homepage
+        )
+        return await withCheckedContinuation { continuation in
             let fetchState = SponsoredTilesFetchState()
             let timeoutTask = startSponsoredTilesTimeout(
+                requestID: requestID,
                 fetchState: fetchState,
                 continuation: continuation
             )
@@ -124,6 +150,7 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
                 timeoutTask.cancel()
                 Self.resumeSponsoredTilesFetch(
                     result,
+                    requestID: requestID,
                     fetchState: fetchState,
                     continuation: continuation,
                     logger: self?.logger
@@ -133,6 +160,7 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
     }
 
     private func startSponsoredTilesTimeout(
+        requestID: String,
         fetchState: SponsoredTilesFetchState,
         continuation: CheckedContinuation<[UnifiedTile], Never>
     ) -> Task<Void, Never> {
@@ -145,37 +173,43 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
 
             guard !Task.isCancelled else { return }
 
+            let didResume = fetchState.resumeOnce {
+                continuation.resume(returning: [])
+            }
             logger.log(
-                "Unified ads provider timed out when requesting sponsored tiles",
+                "\(FreezeDiag.prefix)[TopSites] sponsoredTimeoutWrapper timeout id=\(requestID) timeoutSeconds=\(Double(sponsoredTilesFetchTimeoutNanoseconds) / 1_000_000_000) didResume=\(didResume) appState=\(FreezeDiag.applicationState)",
                 level: .warning,
                 category: .homepage
             )
-            fetchState.resumeOnce {
-                continuation.resume(returning: [])
-            }
         }
     }
 
     private static func resumeSponsoredTilesFetch(
         _ result: UnifiedTileResult,
+        requestID: String,
         fetchState: SponsoredTilesFetchState,
         continuation: CheckedContinuation<[UnifiedTile], Never>,
         logger: Logger?
     ) {
         switch result {
         case .success(let unifiedTiles):
-            fetchState.resumeOnce {
+            let didResume = fetchState.resumeOnce {
                 continuation.resume(returning: unifiedTiles)
             }
-        case .failure:
             logger?.log(
-                "Unified ads provider did not return any sponsored tiles when requested",
+                "\(FreezeDiag.prefix)[TopSites] sponsoredTimeoutWrapper completion id=\(requestID) result=success tileCount=\(unifiedTiles.count) didResume=\(didResume) appState=\(FreezeDiag.applicationState)",
+                level: didResume ? .debug : .warning,
+                category: .homepage
+            )
+        case .failure:
+            let didResume = fetchState.resumeOnce {
+                continuation.resume(returning: [])
+            }
+            logger?.log(
+                "\(FreezeDiag.prefix)[TopSites] sponsoredTimeoutWrapper completion id=\(requestID) result=failure tileCount=0 didResume=\(didResume) appState=\(FreezeDiag.applicationState)",
                 level: .warning,
                 category: .homepage
             )
-            fetchState.resumeOnce {
-                continuation.resume(returning: [])
-            }
         }
     }
 
@@ -306,15 +340,17 @@ private final class SponsoredTilesFetchState: @unchecked Sendable {
     private let lock = NSLock()
     private var hasResumed = false
 
-    func resumeOnce(_ resume: () -> Void) {
+    @discardableResult
+    func resumeOnce(_ resume: () -> Void) -> Bool {
         lock.lock()
         guard !hasResumed else {
             lock.unlock()
-            return
+            return false
         }
         hasResumed = true
         lock.unlock()
 
         resume()
+        return true
     }
 }

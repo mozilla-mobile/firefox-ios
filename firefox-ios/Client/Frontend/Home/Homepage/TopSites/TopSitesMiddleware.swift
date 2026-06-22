@@ -18,6 +18,7 @@ final class TopSitesMiddleware {
     private let logger: Logger
     private let profile: Profile
     private var inFlightHomepageTopSitesFetchWindowIDs = Set<WindowUUID>()
+    private var nextTopSitesRefreshID = 0
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
@@ -91,28 +92,52 @@ final class TopSitesMiddleware {
     }
 
     private func fetchTopSitesDataAndUpdateState(for action: Action, state: AppState) {
+        let refreshID = nextRefreshID()
+        let shouldDispatchLocalSitesFirst = shouldDispatchLocalSitesFirst(for: action, state: state)
         // We add an in-flight guard per window in TopSitesMiddleware so `initialize`,
         // `didBecomeActive`, and top-site notifications do not fire parallel sponsored
         // requests on launch/foreground. This is to address issues on slow-networks
         // and not create unnecessary additional pressure.
         let shouldCoalesceRefresh = shouldCoalesceHomepageRefresh(for: action)
         if shouldCoalesceRefresh {
-            guard inFlightHomepageTopSitesFetchWindowIDs.insert(action.windowUUID).inserted else { return }
+            guard inFlightHomepageTopSitesFetchWindowIDs.insert(action.windowUUID).inserted else {
+                logger.log(
+                    "\(FreezeDiag.prefix)[TopSites] refresh skipped id=\(refreshID) action=\(action.actionType) window=\(FreezeDiag.shortWindowID(action.windowUUID)) appState=\(FreezeDiag.applicationState) localFirst=\(shouldDispatchLocalSitesFirst) coalesced=true",
+                    level: .debug,
+                    category: .homepage
+                )
+                return
+            }
         }
 
-        let shouldDispatchLocalSitesFirst = shouldDispatchLocalSitesFirst(for: action, state: state)
+        logger.log(
+            "\(FreezeDiag.prefix)[TopSites] refresh start id=\(refreshID) action=\(action.actionType) window=\(FreezeDiag.shortWindowID(action.windowUUID)) appState=\(FreezeDiag.applicationState) localFirst=\(shouldDispatchLocalSitesFirst) coalesced=\(shouldCoalesceRefresh)",
+            level: .info,
+            category: .homepage
+        )
         Task { @MainActor in
             defer {
                 if shouldCoalesceRefresh {
                     self.inFlightHomepageTopSitesFetchWindowIDs.remove(action.windowUUID)
                 }
+                self.logger.log(
+                    "\(FreezeDiag.prefix)[TopSites] refresh cleanup id=\(refreshID) action=\(action.actionType) window=\(FreezeDiag.shortWindowID(action.windowUUID)) appState=\(FreezeDiag.applicationState)",
+                    level: .debug,
+                    category: .homepage
+                )
             }
 
             await self.getTopSitesDataAndUpdateState(
                 for: action,
+                refreshID: refreshID,
                 shouldDispatchLocalSitesFirst: shouldDispatchLocalSitesFirst
             )
         }
+    }
+
+    private func nextRefreshID() -> Int {
+        nextTopSitesRefreshID += 1
+        return nextTopSitesRefreshID
     }
 
     private func shouldCoalesceHomepageRefresh(for action: Action) -> Bool {
@@ -171,37 +196,90 @@ final class TopSitesMiddleware {
     @MainActor
     private func getTopSitesDataAndUpdateState(
         for action: Action,
+        refreshID: Int,
         shouldDispatchLocalSitesFirst: Bool
     ) async {
         if shouldDispatchLocalSitesFirst {
-            let sponsoredSitesTask = fetchSponsoredSitesInBackground()
+            logger.log(
+                "\(FreezeDiag.prefix)[TopSites] localFirst start id=\(refreshID) window=\(FreezeDiag.shortWindowID(action.windowUUID)) appState=\(FreezeDiag.applicationState)",
+                level: .debug,
+                category: .homepage
+            )
+            let sponsoredSitesTask = fetchSponsoredSitesInBackground(refreshID: refreshID)
             let otherSites = await self.topSitesManager.getOtherSites()
             let localTopSites = self.topSitesManager.recalculateTopSites(otherSites: otherSites, sponsoredSites: [])
+            logger.log(
+                "\(FreezeDiag.prefix)[TopSites] localFirst localSites id=\(refreshID) otherCount=\(otherSites.count) localCount=\(localTopSites.count) sponsoredTaskStarted=true",
+                level: .debug,
+                category: .homepage
+            )
 
             if !localTopSites.isEmpty {
                 dispatchTopSitesRetrievedAction(for: action.windowUUID, topSites: localTopSites)
+                logger.log(
+                    "\(FreezeDiag.prefix)[TopSites] localFirst earlyReturn id=\(refreshID) localCount=\(localTopSites.count) sponsoredTaskStarted=true sponsoredTaskAwaited=false",
+                    level: .warning,
+                    category: .homepage
+                )
                 return
             }
 
+            logger.log(
+                "\(FreezeDiag.prefix)[TopSites] localFirst awaitingSponsored id=\(refreshID)",
+                level: .debug,
+                category: .homepage
+            )
             let sponsoredSites = await sponsoredSitesTask.value
             let topSites = self.topSitesManager.recalculateTopSites(otherSites: otherSites, sponsoredSites: sponsoredSites)
+            logger.log(
+                "\(FreezeDiag.prefix)[TopSites] localFirst sponsoredResolved id=\(refreshID) sponsoredCount=\(sponsoredSites.count) topSitesCount=\(topSites.count)",
+                level: .debug,
+                category: .homepage
+            )
             dispatchTopSitesRetrievedAction(for: action.windowUUID, topSites: topSites)
             return
         }
 
+        logger.log(
+            "\(FreezeDiag.prefix)[TopSites] fullRefresh start id=\(refreshID) window=\(FreezeDiag.shortWindowID(action.windowUUID)) appState=\(FreezeDiag.applicationState)",
+            level: .debug,
+            category: .homepage
+        )
         async let sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
         async let otherSites = await self.topSitesManager.getOtherSites()
         let topSites = await self.topSitesManager.recalculateTopSites(otherSites: otherSites, sponsoredSites: sponsoredSites)
+        logger.log(
+            "\(FreezeDiag.prefix)[TopSites] fullRefresh resolved id=\(refreshID) topSitesCount=\(topSites.count)",
+            level: .debug,
+            category: .homepage
+        )
         dispatchTopSitesRetrievedAction(for: action.windowUUID, topSites: topSites)
     }
 
-    private func fetchSponsoredSitesInBackground() -> Task<[Site], Never> {
-        return Task { [topSitesManager] in
-            await topSitesManager.fetchSponsoredSites()
+    private func fetchSponsoredSitesInBackground(refreshID: Int) -> Task<[Site], Never> {
+        logger.log(
+            "\(FreezeDiag.prefix)[TopSites] sponsoredTask start id=\(refreshID) appState=\(FreezeDiag.applicationState)",
+            level: .debug,
+            category: .homepage
+        )
+        return Task { [topSitesManager, logger] in
+            let start = Date()
+            let sites = await topSitesManager.fetchSponsoredSites()
+            logger.log(
+                "\(FreezeDiag.prefix)[TopSites] sponsoredTask end id=\(refreshID) durationMs=\(FreezeDiag.durationMs(since: start)) sponsoredCount=\(sites.count) appState=\(FreezeDiag.applicationState) taskCancelled=\(Task.isCancelled)",
+                level: Task.isCancelled ? .warning : .debug,
+                category: .homepage
+            )
+            return sites
         }
     }
 
     private func dispatchTopSitesRetrievedAction(for windowUUID: WindowUUID, topSites: [TopSiteConfiguration]) {
+        logger.log(
+            "\(FreezeDiag.prefix)[TopSites] dispatch retrievedUpdatedSites window=\(FreezeDiag.shortWindowID(windowUUID)) appState=\(FreezeDiag.applicationState) topSitesCount=\(topSites.count)",
+            level: FreezeDiag.isApplicationActive ? .debug : .warning,
+            category: .homepage
+        )
         store.dispatch(
             TopSitesAction(
                 topSites: topSites,
@@ -290,7 +368,20 @@ final class TopSitesMiddleware {
     }
 
     private func sendBookmarkOpenTelemetry(with urlString: String) {
+        let start = Date()
+        let host = FreezeDiag.host(from: urlString)
+        logger.log(
+            "\(FreezeDiag.prefix)[BookmarkTelemetry] isBookmarked wait start isMainThread=\(Thread.isMainThread) appState=\(FreezeDiag.applicationState) host=\(host)",
+            level: .debug,
+            category: .storage
+        )
         let isBookmarked = profile.places.isBookmarked(url: urlString).value.successValue ?? false
+        let durationMs = FreezeDiag.durationMs(since: start)
+        logger.log(
+            "\(FreezeDiag.prefix)[BookmarkTelemetry] isBookmarked wait end durationMs=\(durationMs) isMainThread=\(Thread.isMainThread) appState=\(FreezeDiag.applicationState) host=\(host) isBookmarked=\(isBookmarked)",
+            level: durationMs > 100 ? .warning : .debug,
+            category: .storage
+        )
         guard isBookmarked else { return }
         bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
     }

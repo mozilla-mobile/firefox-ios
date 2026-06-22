@@ -41,8 +41,26 @@ final class MerinoMiddleware {
     }
 
     private func getHomepageStoriesAndUpdateState(for action: Action) {
+        let requestID = String(UUID().uuidString.prefix(8))
+        let start = Date()
+        logger.log(
+            "\(FreezeDiag.prefix)[Merino] middleware request start id=\(requestID) action=\(action.actionType) window=\(FreezeDiag.shortWindowID(action.windowUUID)) appState=\(FreezeDiag.applicationState)",
+            level: .info,
+            category: .homepage
+        )
         Task {
             let merinoStories = await merinoManager.getMerinoItems(source: .homepage)
+            let durationMs = FreezeDiag.durationMs(since: start)
+            self.logger.log(
+                "\(FreezeDiag.prefix)[Merino] middleware request end id=\(requestID) durationMs=\(durationMs) storyCount=\(merinoStories.stories?.count ?? 0) hasCategories=\(merinoStories.categories?.isEmpty == false) appState=\(FreezeDiag.applicationState)",
+                level: durationMs > 3000 ? .warning : .info,
+                category: .homepage
+            )
+            self.logger.log(
+                "\(FreezeDiag.prefix)[Merino] middleware dispatch retrievedUpdatedHomepageStories id=\(requestID) window=\(FreezeDiag.shortWindowID(action.windowUUID)) appState=\(FreezeDiag.applicationState)",
+                level: FreezeDiag.isApplicationActive ? .debug : .warning,
+                category: .homepage
+            )
             store.dispatch(
                 MerinoAction(
                     merinoStoryResponse: merinoStories,

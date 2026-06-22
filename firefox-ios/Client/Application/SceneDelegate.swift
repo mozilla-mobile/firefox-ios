@@ -92,6 +92,11 @@ class SceneDelegate: UIResponder,
         guard !AppConstants.isRunningUnitTest else { return }
         let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
         logger.log("SceneDelegate: scene did become active. UUID: \(logUUID)", level: .info, category: .lifecycle)
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] sceneDidBecomeActive appState=\(FreezeDiag.applicationState) window=\(FreezeDiag.shortWindowID(sceneCoordinator?.windowUUID))",
+            level: .info,
+            category: .lifecycle
+        )
 
         // Resume previously stopped downloads for, and on, THIS scene only.
         if let uuid = sceneCoordinator?.windowUUID {
@@ -100,6 +105,24 @@ class SceneDelegate: UIResponder,
                 self.tabErrorTelemetryHelper.validateTabCountForForegroundedScene(uuid)
             }
         }
+    }
+
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        guard !AppConstants.isRunningUnitTest else { return }
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] sceneWillEnterForeground appState=\(FreezeDiag.applicationState) window=\(FreezeDiag.shortWindowID(sceneCoordinator?.windowUUID))",
+            level: .info,
+            category: .lifecycle
+        )
+    }
+
+    func sceneWillResignActive(_ scene: UIScene) {
+        guard !AppConstants.isRunningUnitTest else { return }
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] sceneWillResignActive appState=\(FreezeDiag.applicationState) window=\(FreezeDiag.shortWindowID(sceneCoordinator?.windowUUID))",
+            level: .info,
+            category: .lifecycle
+        )
     }
 
     // MARK: - Transitioning to Background
@@ -111,6 +134,11 @@ class SceneDelegate: UIResponder,
     func sceneDidEnterBackground(_ scene: UIScene) {
         let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
         logger.log("SceneDelegate: scene did enter background. UUID: \(logUUID)", level: .info, category: .lifecycle)
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] sceneDidEnterBackground appState=\(FreezeDiag.applicationState) window=\(FreezeDiag.shortWindowID(sceneCoordinator?.windowUUID))",
+            level: .info,
+            category: .lifecycle
+        )
         if let uuid = sceneCoordinator?.windowUUID {
             downloadQueue.pauseAll(for: uuid)
             tabErrorTelemetryHelper.recordTabCountForBackgroundedScene(uuid)

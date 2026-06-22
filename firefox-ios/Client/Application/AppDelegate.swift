@@ -96,7 +96,7 @@ class AppDelegate: UIResponder,
         // Set up a web server that serves us static content.
         // Do this early so that it is ready when the UI is presented.
         webServerUtil = WebServerUtil(readerModeHandler: ReaderModeHandlers(), profile: profile)
-        webServerUtil?.setUpWebServer()
+        setUpWebServerWithFreezeDiag(context: "willFinishLaunching")
 
         menuBuilderHelper = MenuBuilderHelper()
 
@@ -163,9 +163,15 @@ class AppDelegate: UIResponder,
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(_ application: UIApplication) {
+        let start = Date()
         logger.log("applicationDidBecomeActive start",
                    level: .info,
                    category: .lifecycle)
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] applicationDidBecomeActive start appState=\(FreezeDiag.applicationState) windows=\(windowManager.windows.count) windowIDs=\(FreezeDiag.windowIDs(windowManager.windows.keys))",
+            level: .info,
+            category: .lifecycle
+        )
 
         shutdownWebServer?.cancel()
         shutdownWebServer = nil
@@ -177,7 +183,7 @@ class AppDelegate: UIResponder,
         }
 
         profile.syncManager?.applicationDidBecomeActive()
-        webServerUtil?.setUpWebServer()
+        setUpWebServerWithFreezeDiag(context: "applicationDidBecomeActive")
 
         // Process any pending app extension telemetry events (e.g., from Share Extension)
         TelemetryWrapper.shared.processPendingAppExtensionTelemetry(profile: profile)
@@ -204,16 +210,41 @@ class AppDelegate: UIResponder,
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] applicationDidBecomeActive end durationMs=\(FreezeDiag.durationMs(since: start)) appState=\(FreezeDiag.applicationState) windows=\(windowManager.windows.count) windowIDs=\(FreezeDiag.windowIDs(windowManager.windows.keys))",
+            level: .info,
+            category: .lifecycle
+        )
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] applicationWillResignActive appState=\(FreezeDiag.applicationState) windows=\(windowManager.windows.count) windowIDs=\(FreezeDiag.windowIDs(windowManager.windows.keys))",
+            level: .info,
+            category: .lifecycle
+        )
+
         updateTopSitesWidget()
 
         UserDefaults.standard.setValue(Date(), forKey: "LastActiveTimestamp")
     }
 
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] applicationWillEnterForeground appState=\(FreezeDiag.applicationState) windows=\(windowManager.windows.count) windowIDs=\(FreezeDiag.windowIDs(windowManager.windows.keys))",
+            level: .info,
+            category: .lifecycle
+        )
+    }
+
     func applicationDidEnterBackground(_ application: UIApplication) {
+        let start = Date()
         logger.log("applicationDidEnterBackground start", level: .info, category: .lifecycle)
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] applicationDidEnterBackground start appState=\(FreezeDiag.applicationState) windows=\(windowManager.windows.count) windowIDs=\(FreezeDiag.windowIDs(windowManager.windows.keys))",
+            level: .info,
+            category: .lifecycle
+        )
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
@@ -224,7 +255,20 @@ class AppDelegate: UIResponder,
         // <500ms is expected on newer devices.
         singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
         singleShotTimer.setEventHandler {
+            let stopStart = Date()
+            let wasRunning = WebServer.sharedInstance.server.isRunning
+            self.logger.log(
+                "\(FreezeDiag.prefix)[Lifecycle] webServer.stop start context=applicationDidEnterBackgroundDelayed isRunning=\(wasRunning) isMainThread=\(Thread.isMainThread)",
+                level: .info,
+                category: .lifecycle
+            )
             WebServer.sharedInstance.server.stop()
+            let durationMs = FreezeDiag.durationMs(since: stopStart)
+            self.logger.log(
+                "\(FreezeDiag.prefix)[Lifecycle] webServer.stop end context=applicationDidEnterBackgroundDelayed durationMs=\(durationMs) isRunning=\(WebServer.sharedInstance.server.isRunning) isMainThread=\(Thread.isMainThread)",
+                level: durationMs > 500 ? .warning : .info,
+                category: .lifecycle
+            )
             self.shutdownWebServer = nil
         }
         singleShotTimer.resume()
@@ -232,6 +276,11 @@ class AppDelegate: UIResponder,
         backgroundWorkUtility?.scheduleOnAppBackground()
 
         logger.log("applicationDidEnterBackground end", level: .info, category: .lifecycle)
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] applicationDidEnterBackground end durationMs=\(FreezeDiag.durationMs(since: start)) appState=\(FreezeDiag.applicationState) windows=\(windowManager.windows.count) windowIDs=\(FreezeDiag.windowIDs(windowManager.windows.keys))",
+            level: .info,
+            category: .lifecycle
+        )
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -253,6 +302,23 @@ class AppDelegate: UIResponder,
     private func updateTopSitesWidget() {
         // Since we only need the topSites data in the archiver, let's write it
         widgetManager?.writeWidgetKitTopSites()
+    }
+
+    @MainActor
+    private func setUpWebServerWithFreezeDiag(context: String) {
+        let start = Date()
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] webServer.setUp start context=\(context) isRunning=\(WebServer.sharedInstance.server.isRunning) isMainThread=\(Thread.isMainThread)",
+            level: .info,
+            category: .lifecycle
+        )
+        webServerUtil?.setUpWebServer()
+        let durationMs = FreezeDiag.durationMs(since: start)
+        logger.log(
+            "\(FreezeDiag.prefix)[Lifecycle] webServer.setUp end context=\(context) durationMs=\(durationMs) isRunning=\(WebServer.sharedInstance.server.isRunning) isMainThread=\(Thread.isMainThread)",
+            level: durationMs > 500 ? .warning : .info,
+            category: .lifecycle
+        )
     }
 
     private func loadBackgroundTabs() {
@@ -334,6 +400,51 @@ class AppDelegate: UIResponder,
         }
         UserDefaults.standard.removeObject(forKey: key)
         #endif
+    }
+}
+
+enum FreezeDiag {
+    static let prefix = "[FreezeDiag]"
+
+    static var applicationState: String {
+        switch UIApplication.shared.applicationState {
+        case .active:
+            return "active"
+        case .inactive:
+            return "inactive"
+        case .background:
+            return "background"
+        @unknown default:
+            return "unknown"
+        }
+    }
+
+    static var isApplicationActive: Bool {
+        return UIApplication.shared.applicationState == .active
+    }
+
+    static func durationMs(since start: Date) -> Int {
+        return Int(Date().timeIntervalSince(start) * 1000)
+    }
+
+    static func shortWindowID(_ uuid: WindowUUID?) -> String {
+        guard let uuid else { return "<nil>" }
+        return String(uuid.uuidString.prefix(8))
+    }
+
+    static func windowIDs(_ uuids: some Sequence<WindowUUID>) -> String {
+        let ids = uuids.map { shortWindowID($0) }.sorted()
+        return ids.isEmpty ? "[]" : "[\(ids.joined(separator: ","))]"
+    }
+
+    static func host(from urlString: String) -> String {
+        if let host = URL(string: urlString)?.host, !host.isEmpty {
+            return host
+        }
+        if let host = URL(string: "https://\(urlString)")?.host, !host.isEmpty {
+            return host
+        }
+        return "<nil>"
     }
 }
 

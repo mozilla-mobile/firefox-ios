@@ -16,17 +16,20 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private let privacyNoticeHelper: PrivacyNoticeHelperProtocol
     private let notificationCenter: NotificationProtocol
     private let windowManager: WindowManager
+    private let logger: Logger
 
     init(profile: Profile = AppContainer.shared.resolve(),
          homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
          privacyNoticeHelper: PrivacyNoticeHelperProtocol? = nil,
          notificationCenter: NotificationProtocol,
-         windowManager: WindowManager = AppContainer.shared.resolve()) {
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.homepageTelemetry = homepageTelemetry
         self.privacyNoticeHelper = privacyNoticeHelper ?? PrivacyNoticeHelper(prefs: profile.prefs)
         self.notificationCenter = notificationCenter
         self.windowManager = windowManager
+        self.logger = logger
         observeNotifications()
     }
 
@@ -116,6 +119,8 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private func observeNotifications() {
         let notifications: [Notification.Name] = [
             UIApplication.didBecomeActiveNotification,
+            UIApplication.willResignActiveNotification,
+            UIApplication.didEnterBackgroundNotification,
             .FirefoxAccountChanged,
             .PrivateDataClearedHistory,
             .ProfileDidFinishSyncing,
@@ -141,34 +146,56 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         // TODO: FXIOS-12199 Update to improve how we handle notifications for multi-window
         let notificationName = notification.name
         ensureMainThread {
+            self.logger.log(
+                "\(FreezeDiag.prefix)[Homepage] notification received name=\(notificationName.rawValue) appState=\(FreezeDiag.applicationState) windows=\(self.windowManager.windows.count)",
+                level: .debug,
+                category: .homepage
+            )
             self.windowManager.windows.forEach { windowUUID, _ in
-                switch notificationName {
-                case UIApplication.didBecomeActiveNotification:
-                    let storiesAction = HomepageAction(
-                        windowUUID: windowUUID,
-                        actionType: HomepageMiddlewareActionType.didBecomeActive
-                    )
-                    store.dispatch(storiesAction)
-
-                case .PrivateDataClearedHistory,
-                        .TopSitesUpdated,
-                        .DefaultSearchEngineUpdated:
-                    self.dispatchActionToFetchTopSites(windowUUID: windowUUID)
-
-                case .BookmarksUpdated, .RustPlacesOpened:
-                    let bookmarksAction = HomepageAction(
-                        windowUUID: windowUUID,
-                        actionType: HomepageMiddlewareActionType.bookmarksUpdated
-                    )
-                    store.dispatch(bookmarksAction)
-
-                case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
-                    self.dispatchActionToFetchTopSites(windowUUID: windowUUID)
-                    self.dispatchActionToFetchTabs(windowUUID: windowUUID)
-
-                default: break
-                }
+                self.handleNotification(notificationName, for: windowUUID)
             }
+        }
+    }
+
+    private func handleNotification(_ notificationName: Notification.Name, for windowUUID: WindowUUID) {
+        switch notificationName {
+        case UIApplication.didBecomeActiveNotification:
+            logger.log(
+                "\(FreezeDiag.prefix)[Homepage] dispatch didBecomeActive window=\(FreezeDiag.shortWindowID(windowUUID)) appState=\(FreezeDiag.applicationState) windows=\(windowManager.windows.count)",
+                level: .info,
+                category: .homepage
+            )
+            let storiesAction = HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageMiddlewareActionType.didBecomeActive
+            )
+            store.dispatch(storiesAction)
+
+        case UIApplication.willResignActiveNotification,
+             UIApplication.didEnterBackgroundNotification:
+            logger.log(
+                "\(FreezeDiag.prefix)[Homepage] lifecycle notification diagnosticOnly name=\(notificationName.rawValue) window=\(FreezeDiag.shortWindowID(windowUUID)) appState=\(FreezeDiag.applicationState) windows=\(windowManager.windows.count)",
+                level: .info,
+                category: .homepage
+            )
+
+        case .PrivateDataClearedHistory,
+                .TopSitesUpdated,
+                .DefaultSearchEngineUpdated:
+            dispatchActionToFetchTopSites(windowUUID: windowUUID)
+
+        case .BookmarksUpdated, .RustPlacesOpened:
+            let bookmarksAction = HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageMiddlewareActionType.bookmarksUpdated
+            )
+            store.dispatch(bookmarksAction)
+
+        case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
+            dispatchActionToFetchTopSites(windowUUID: windowUUID)
+            dispatchActionToFetchTabs(windowUUID: windowUUID)
+
+        default: break
         }
     }
 
