@@ -11,7 +11,6 @@ struct AppState: StateType, Sendable {
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
-    // FIXME: IHC
     static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
         // Does not handle any modern actions, but substates might.
         // FXIOS-16139 Abstain from using the copy macro here, so the compiler tips off developers who add new reducer

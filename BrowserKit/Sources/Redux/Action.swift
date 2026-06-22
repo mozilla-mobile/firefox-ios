@@ -63,8 +63,6 @@ extension ModernAction {
                    : "\(label): \(value)\(optionalTrailingComma)"
         }.joined(separator: indentValue)
 
-//        let optionalTrailingComma = numberOfChildren > 1 ? "," : ""
-
         return "\(enumTypeName).\(caseName) {\(values)\n}"
     }
 }

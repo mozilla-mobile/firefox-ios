@@ -25,7 +25,6 @@ enum ComponentState: Sendable, Equatable {
     case shortcutsLibrary(ShortcutsLibraryState)
     case translationSettings(TranslationSettingsState)
 
-    // FIXME: IHC
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
     // swiftlint:disable:next closure_body_length
