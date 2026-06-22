@@ -13,7 +13,7 @@ final class MicrosurveyPromptMiddleware {
     init(microsurveyManager: MicrosurveyManager = AppContainer.shared.resolve()) {
         self.microsurveyManager = microsurveyManager
     }
-    
+
     lazy var microsurveyProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
     lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in

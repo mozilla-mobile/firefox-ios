@@ -135,7 +135,34 @@ struct HomepageState: ScreenState, Equatable {
         self.availableWallpaperHeight = availableWallpaperHeight
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
+        // Does not handle any modern actions, but substates might.
+        // FXIOS-16139 Abstain from using the copy macro here, so the compiler tips off developers who add new reducer
+        // parameters to forward those calls here until we have passthrough reducer guidelines in place.
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer.modernReducer(state.headerState, action, windowUUID),
+            messageState: MessageCardState.reducer.modernReducer(state.messageState, action, windowUUID),
+            topSitesState: TopSitesSectionState.reducer.modernReducer(state.topSitesState, action, windowUUID),
+            searchState: SearchBarState.reducer.modernReducer(state.searchState, action, windowUUID),
+            jumpBackInState: JumpBackInSectionState.reducer.modernReducer(state.jumpBackInState, action, windowUUID),
+            trackerBlockerModuleState: TrackerBlockerModuleState
+                .reducer.modernReducer(state.trackerBlockerModuleState, action, windowUUID),
+            bookmarkState: BookmarksSectionState.reducer.modernReducer(state.bookmarkState, action, windowUUID),
+            worldcupState: WorldCupSectionState.reducer.modernReducer(state.worldcupState, action, windowUUID),
+            merinoState: MerinoState.reducer.modernReducer(state.merinoState, action, windowUUID),
+            wallpaperState: WallpaperState.reducer.modernReducer(state.wallpaperState, action, windowUUID),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: state.shouldTriggerImpression,
+            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
+        )
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
             return passthroughState(from: state, action: action)
@@ -166,16 +193,17 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState
+                                             .reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
     }
 
@@ -184,16 +212,17 @@ struct HomepageState: ScreenState, Equatable {
                                                      action: Action,
                                                      isZeroSearch: Bool) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState
+                                             .reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(isZeroSearch: isZeroSearch)
             .copy(shouldTriggerImpression: false)
     }
@@ -209,16 +238,17 @@ struct HomepageState: ScreenState, Equatable {
         let availableWallpaperHeight = homepageAction.availableWallpaperHeight ?? state.availableWallpaperHeight
 
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState
+                                             .reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
             .copy(availableContentHeight: availableContentHeight)
             .copy(availableWallpaperHeight: availableWallpaperHeight)
@@ -227,16 +257,17 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handlePrivacyNoticeCloseButtonTappedAction(state: HomepageState, action: Action) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState
+                                             .reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
             .copy(shouldShowPrivacyNotice: false)
     }
@@ -244,32 +275,34 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState
+                                             .reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: true)
     }
 
     @MainActor
     private static func handlePrivacyNoticeInitialization(action: Action, state: Self) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState
+                                             .reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
             .copy(shouldShowPrivacyNotice: true)
     }
@@ -277,16 +310,17 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func passthroughState(from state: HomepageState, action: Action) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer(state.wallpaperState, action))
+            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
+            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
+            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
+            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState
+                                             .reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
+            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
+            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
+            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
     }
 

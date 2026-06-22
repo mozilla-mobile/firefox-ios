@@ -9,9 +9,25 @@ import Common
 struct AppState: StateType, Sendable {
     let presentedComponents: PresentedComponentsState
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    // FIXME: IHC
+    static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
+        // Does not handle any modern actions, but substates might.
+        // FXIOS-16139 Abstain from using the copy macro here, so the compiler tips off developers who add new reducer
+        // parameters to forward those calls here until we have passthrough reducer guidelines in place.
         return AppState(
-            presentedComponents: PresentedComponentsState.reducer(state.presentedComponents, action)
+            presentedComponents: PresentedComponentsState.reducer.modernReducer(
+                state.presentedComponents,
+                action,
+                windowUUID
+            )
+        )
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
+        return AppState(
+            presentedComponents: PresentedComponentsState.reducer.legacyReducer(state.presentedComponents, action)
         )
     }
 

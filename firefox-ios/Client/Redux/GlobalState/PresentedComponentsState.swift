@@ -25,28 +25,89 @@ enum ComponentState: Sendable, Equatable {
     case shortcutsLibrary(ShortcutsLibraryState)
     case translationSettings(TranslationSettingsState)
 
-    static let reducer: Reducer<Self> = { state, action in
+    // FIXME: IHC
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    // swiftlint:disable:next closure_body_length
+    static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
+        // Does not handle any modern actions, but substates might.
+        // FXIOS-16139 Abstain from using the copy macro here, so the compiler tips off developers who add new reducer
+        // parameters to forward those calls here until we have passthrough reducer guidelines in place.
         switch state {
         case .browserViewController(let state):
-            return .browserViewController(BrowserViewControllerState.reducer(state, action))
-        case .homepage(let state): return .homepage(HomepageState.reducer(state, action))
-        case .mainMenu(let state): return .mainMenu(MainMenuState.reducer(state, action))
-        case .microsurvey(let state): return .microsurvey(MicrosurveyState.reducer(state, action))
-        case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
-        case .tabPeek(let state): return .tabPeek(TabPeekState.reducer(state, action))
-        case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
-        case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
-        case .termsOfUse(let state): return .termsOfUse(TermsOfUseState.reducer(state, action))
-        case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
-        case .trackingProtection(let state): return .trackingProtection(TrackingProtectionState.reducer(state, action))
-        case .toolbar(let state): return .toolbar(ToolbarState.reducer(state, action))
+            return .browserViewController(BrowserViewControllerState.reducer.modernReducer(state, action, windowUUID))
+        case .homepage(let state):
+            return .homepage(HomepageState.reducer.modernReducer(state, action, windowUUID))
+        case .mainMenu(let state):
+            return .mainMenu(MainMenuState.reducer.modernReducer(state, action, windowUUID))
+        case .microsurvey(let state):
+            return .microsurvey(MicrosurveyState.reducer.modernReducer(state, action, windowUUID))
+        case .remoteTabsPanel(let state):
+            return .remoteTabsPanel(RemoteTabsPanelState.reducer.modernReducer(state, action, windowUUID))
+        case .tabPeek(let state):
+            return .tabPeek(TabPeekState.reducer.modernReducer(state, action, windowUUID))
+        case .tabsTray(let state):
+            return .tabsTray(TabTrayState.reducer.modernReducer(state, action, windowUUID))
+        case .tabsPanel(let state):
+            return .tabsPanel(TabsPanelState.reducer.modernReducer(state, action, windowUUID))
+        case .termsOfUse(let state):
+            return .termsOfUse(TermsOfUseState.reducer.modernReducer(state, action, windowUUID))
+        case .themeSettings(let state):
+            return .themeSettings(ThemeSettingsState.reducer.modernReducer(state, action, windowUUID))
+        case .trackingProtection(let state):
+            return .trackingProtection(TrackingProtectionState.reducer.modernReducer(state, action, windowUUID))
+        case .toolbar(let state):
+            return .toolbar(ToolbarState.reducer.modernReducer(state, action, windowUUID))
         case .searchEngineSelection(let state):
-            return .searchEngineSelection(SearchEngineSelectionState.reducer(state, action))
-        case .passwordGenerator(let state): return .passwordGenerator(PasswordGeneratorState.reducer(state, action))
-        case .nativeErrorPage(let state): return .nativeErrorPage(NativeErrorPageState.reducer(state, action))
-        case .shortcutsLibrary(let state): return .shortcutsLibrary(ShortcutsLibraryState.reducer(state, action))
+            return .searchEngineSelection(SearchEngineSelectionState.reducer.modernReducer(state, action, windowUUID))
+        case .passwordGenerator(let state):
+            return .passwordGenerator(PasswordGeneratorState.reducer.modernReducer(state, action, windowUUID))
+        case .nativeErrorPage(let state):
+            return .nativeErrorPage(NativeErrorPageState.reducer.modernReducer(state, action, windowUUID))
+        case .shortcutsLibrary(let state):
+            return .shortcutsLibrary(ShortcutsLibraryState.reducer.modernReducer(state, action, windowUUID))
         case .translationSettings(let state):
-            return .translationSettings(TranslationSettingsState.reducer(state, action))
+            return .translationSettings(TranslationSettingsState.reducer.modernReducer(state, action, windowUUID))
+        }
+    }
+
+    // swiftlint:disable:next closure_body_length
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
+        switch state {
+        case .browserViewController(let state):
+            return .browserViewController(BrowserViewControllerState.reducer.legacyReducer(state, action))
+        case .homepage(let state):
+            return .homepage(HomepageState.reducer.legacyReducer(state, action))
+        case .mainMenu(let state):
+            return .mainMenu(MainMenuState.reducer.legacyReducer(state, action))
+        case .microsurvey(let state):
+            return .microsurvey(MicrosurveyState.reducer.legacyReducer(state, action))
+        case .remoteTabsPanel(let state):
+            return .remoteTabsPanel(RemoteTabsPanelState.reducer.legacyReducer(state, action))
+        case .tabPeek(let state):
+            return .tabPeek(TabPeekState.reducer.legacyReducer(state, action))
+        case .tabsTray(let state):
+            return .tabsTray(TabTrayState.reducer.legacyReducer(state, action))
+        case .tabsPanel(let state):
+            return .tabsPanel(TabsPanelState.reducer.legacyReducer(state, action))
+        case .termsOfUse(let state):
+            return .termsOfUse(TermsOfUseState.reducer.legacyReducer(state, action))
+        case .themeSettings(let state):
+            return .themeSettings(ThemeSettingsState.reducer.legacyReducer(state, action))
+        case .trackingProtection(let state):
+            return .trackingProtection(TrackingProtectionState.reducer.legacyReducer(state, action))
+        case .toolbar(let state):
+            return .toolbar(ToolbarState.reducer.legacyReducer(state, action))
+        case .searchEngineSelection(let state):
+            return .searchEngineSelection(SearchEngineSelectionState.reducer.legacyReducer(state, action))
+        case .passwordGenerator(let state):
+            return .passwordGenerator(PasswordGeneratorState.reducer.legacyReducer(state, action))
+        case .nativeErrorPage(let state):
+            return .nativeErrorPage(NativeErrorPageState.reducer.legacyReducer(state, action))
+        case .shortcutsLibrary(let state):
+            return .shortcutsLibrary(ShortcutsLibraryState.reducer.legacyReducer(state, action))
+        case .translationSettings(let state):
+            return .translationSettings(TranslationSettingsState.reducer.legacyReducer(state, action))
         }
     }
 
@@ -107,12 +168,23 @@ struct PresentedComponentsState: Sendable, Equatable {
         self.components = components
     }
 
-    static let reducer: Reducer<Self> = { state, action in
-        // Add or remove components from the active component list as needed
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
+        // This reducer does not yet handle any modern actions. Simply pass along to substate reducers.
+
+        // Reduce each component state
+        var components = state.components.map { ComponentState.reducer.modernReducer($0, action, windowUUID) }
+
+        return PresentedComponentsState(components: components)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
+        // Add or remove components from the active component list as needed (ComponentActionType is a legacy action)
         var components = updateActiveComponents(action: action, components: state.components)
 
         // Reduce each component state
-        components = components.map { ComponentState.reducer($0, action) }
+        components = components.map { ComponentState.reducer.legacyReducer($0, action) }
 
         return PresentedComponentsState(components: components)
     }

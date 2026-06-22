@@ -152,7 +152,14 @@ fileprivate extension ModifiedCopyMacroTests {
             self.favoriteColor = favoriteColor
         }
 
-        static let reducer: Reducer<Self> = { state, action in
+        static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+        static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
+            // Does not handle any modern actions
+            return defaultState(from: state)
+        }
+
+        static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
             // Handles only PersonReduxActions
             guard let action = action as? PersonReduxAction,
                   let actionType = action.actionType as? PersonReduxActionType else {

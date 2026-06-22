@@ -130,7 +130,37 @@ struct ToolbarState: ScreenState, Sendable {
         self.nextTabScreenshot = nextTabScreenshot
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, windowUUID in
+        // Does not handle any modern actions, but substates might.
+        // FXIOS-16139 Abstain from using the copy macro here, so the compiler tips off developers who add new reducer
+        // parameters to forward those calls here until we have passthrough reducer guidelines in place.
+        return ToolbarState(
+            windowUUID: state.windowUUID,
+            toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
+            isPrivateMode: state.isPrivateMode,
+            addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar, action, windowUUID),
+            navigationToolbar: NavigationBarState.reducer.modernReducer(state.navigationToolbar, action, windowUUID),
+            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+            isShowingTopTabs: state.isShowingTopTabs,
+            canGoBack: state.canGoBack,
+            canGoForward: state.canGoForward,
+            numberOfTabs: state.numberOfTabs,
+            scrollAlpha: state.scrollAlpha,
+            showMenuWarningBadge: state.showMenuWarningBadge,
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
+        )
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         return handleReducer(state: state, action: action)
     }
 
@@ -215,8 +245,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: toolbarLayout,
             tabTrayButtonStyle: tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
@@ -248,8 +278,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: toolbarAction?.isPrivate ?? state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, action),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, action),
             isShowingNavigationToolbar: toolbarAction?.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
             isShowingTopTabs: toolbarAction?.isShowingTopTabs ?? state.isShowingTopTabs,
             canGoBack: toolbarAction?.canGoBack ?? state.canGoBack,
@@ -275,8 +305,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
@@ -302,8 +332,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
@@ -329,8 +359,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
@@ -361,8 +391,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, action),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, action),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
@@ -388,8 +418,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
@@ -415,8 +445,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
             isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
             canGoBack: state.canGoBack,
@@ -442,8 +472,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
@@ -469,8 +499,8 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
@@ -499,8 +529,9 @@ struct ToolbarState: ScreenState, Sendable {
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, searchEngineSelectionAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, searchEngineSelectionAction),
+            addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, searchEngineSelectionAction),
+            navigationToolbar: NavigationBarState
+                              .reducer.legacyReducer(state.navigationToolbar, searchEngineSelectionAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
