@@ -63,10 +63,10 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var textAccent: UIColor = NovaColors.Violet50
     var textCritical: UIColor = NovaColors.Red50
     var textInverted: UIColor = NovaColors.VioletDesaturated0
-    var textInvertedDisabled: UIColor = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
+    var textInvertedDisabled: UIColor = NovaColors.VioletDesaturated0
     var textOnDark: UIColor = NovaColors.VioletDesaturated0
     var textOnLight: UIColor = NovaColors.VioletDesaturated90
-    var textColorPrimary: UIColor = NovaColors.VioletDesaturated0
+    var textOnColorPrimary: UIColor = NovaColors.VioletDesaturated0
     var textToast: UIColor = NovaColors.Violet50
 
     // MARK: - Icon
@@ -81,7 +81,7 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var iconOnColorDisabled: UIColor = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
     var iconSpinner: UIColor = NovaColors.Violet30
     var iconPrivate: UIColor = NovaColors.Violet50
-    var iconPrivateOutline: UIColor = NovaColors.VioletDesaturated90
+    var iconPrivateOutline: UIColor = NovaColors.VioletDesaturated80
 
     // MARK: - Border
 
@@ -90,14 +90,14 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var borderOnColor: UIColor = NovaColors.Gray15
     var borderInverted: UIColor = NovaColors.Gray60
     var borderRadioButtonDefault: UIColor = NovaColors.Gray35
-    var borderAccent: UIColor = NovaColors.Violet50
+    var borderAccent: UIColor = NovaColors.Violet30
 
     // MARK: - Shadow
 
     var shadowSubtle: UIColor = NovaColors.Gray60.withAlphaComponent(0.10)
     var shadowDefault: UIColor = NovaColors.Gray60.withAlphaComponent(0.12)
     var shadowStrong: UIColor = NovaColors.Gray60.withAlphaComponent(0.16)
-    var shadowBorder: UIColor = NovaColors.VioletDesaturated90
+    var shadowBorder: UIColor = NovaColors.VioletDesaturated30
 
     // MARK: - Gradients
 

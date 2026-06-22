@@ -11,7 +11,6 @@ public protocol NovaThemeColourPalette: ThemeColourPalette {
     var layerInverse: UIColor { get }
     var layerGlassTintNova: UIColor { get }
 
-    var textColorPrimary: UIColor { get }
     var textToast: UIColor { get }
     var iconInverted: UIColor { get }
     var iconOnColorDisabled: UIColor { get }
