@@ -36,6 +36,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         let subject = QuickAnswersViewController(
             navigationHandler: MockNavigationHandler(),
             viewModel: viewModel,
+            store: Store(prefs: MockProfilePrefs()),
             transitionType: transitionType,
             windowUUID: .XCTestDefaultUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
