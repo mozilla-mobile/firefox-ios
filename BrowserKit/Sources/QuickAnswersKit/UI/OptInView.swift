@@ -18,7 +18,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         )
         static let descriptionText = """
         Ask a question out loud, and get a short answer from a Firefox partner. \
-        We don't store your voice, questions, or answers.
+        We don't store your voice or questions.
         """
         static let learnMoreText = "Learn more"
         static let learnMoreURL = SupportUtils.URLForTopic("quick-answer-mobile")
