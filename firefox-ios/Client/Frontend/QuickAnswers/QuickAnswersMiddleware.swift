@@ -6,19 +6,26 @@ import Common
 import Redux
 import Shared
 
+/// Public surface for reading the Quick Answers feature's enabled state.
+/// Used to derive the initial value for the header state.
+protocol QuickAnswersStore {
+    /// Whether the Quick Answers feature flag is enabled and the user preference for it is enabled.
+    var isQuickAnswersEnabled: Bool { get }
+}
+
 @MainActor
-final class QuickAnswersMiddleware {
+final class QuickAnswersMiddleware: QuickAnswersStore {
     private let prefs: Prefs
     let featureFlagsProvider: FeatureFlagProviding
     let userPreferences: UserFeaturePreferring
 
-    private var isQuickAnswersEnabled: Bool {
+    nonisolated var isQuickAnswersEnabled: Bool {
         let isFeatureFlagEnabled = featureFlagsProvider.isEnabled(.quickAnswers)
         let isUserPreferencesEnabled = userPreferences.getPreferenceFor(.quickAnswers)
         return isFeatureFlagEnabled && isUserPreferencesEnabled
     }
 
-    init(
+    nonisolated init(
         profile: Profile = AppContainer.shared.resolve(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()

@@ -26,9 +26,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private var headerState: HeaderState?
     private var logoTextColor: UIColor?
-    private var hasConfiguredView = false
-    private var headerConstraints = [NSLayoutConstraint]()
-    private var logoConstraints = [NSLayoutConstraint]()
 
     private lazy var stackContainer: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -39,6 +36,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     private lazy var logoStackView: UIStackView = .build { view in
         view.backgroundColor = .clear
         view.alignment = .center
+        view.spacing = UX.interImageSpacing
         view.accessibilityIdentifier = a11y.logoID
         view.accessibilityLabel = AppName.shortName.rawValue
         view.isAccessibilityElement = true
@@ -68,9 +66,22 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         }), for: .touchUpInside)
     }
 
+    /// Centers the logo within the cell. Active when the Quick Answers button is hidden, or when
+    /// it is shown on the iPad layout where the logo remains centered.
+    private lazy var logoCenterXConstraint = stackContainer.centerXAnchor.constraint(
+        equalTo: contentView.centerXAnchor
+    )
+
+    /// Pins the logo to the leading edge. Active on the iPhone layout when the Quick Answers button
+    /// is shown, so the logo sits leading and the button trailing.
+    private lazy var logoLeadingConstraint = stackContainer.leadingAnchor.constraint(
+        equalTo: contentView.leadingAnchor
+    )
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupLayout()
     }
 
     required init?(coder: NSCoder) {
@@ -79,85 +90,58 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     // MARK: - UI Setup
 
-    private func setupView(headerState: HeaderState) {
-        if !hasConfiguredView {
-            contentView.backgroundColor = .clear
-            logoStackView.addArrangedSubview(logoImage)
-            logoStackView.addArrangedSubview(logoTextImage)
+    private func setupLayout() {
+        contentView.backgroundColor = .clear
 
-            logoContainerView.addSubview(logoStackView)
-            stackContainer.addArrangedSubview(logoContainerView)
-            if headerState.showQuickAnswersButton, !headerState.isPrivate {
-                if headerState.showiPadSetup {
-                    // On iPad, add button directly to contentView so logo remains centered
-                    contentView.addSubview(quickAnswersButton)
-                } else {
-                    // On iPhone, add spacer view to stretch the logo and the button to leading and trailing
-                    stackContainer.addArrangedSubview(UIView())
-                    stackContainer.addArrangedSubview(quickAnswersButton)
-                }
-            }
-            contentView.addSubview(stackContainer)
-            logoStackView.pinToSuperview()
+        logoStackView.addArrangedSubview(logoImage)
+        logoStackView.addArrangedSubview(logoTextImage)
+        logoContainerView.addSubview(logoStackView)
+        stackContainer.addArrangedSubview(logoContainerView)
 
-            hasConfiguredView = true
-        }
+        contentView.addSubview(stackContainer)
+        contentView.addSubview(quickAnswersButton)
 
-        logoStackView.spacing = UX.interImageSpacing
-
-        let logoAsset = headerState.isWorldCupSectionEnabled
-            ? ImageIdentifiers.firefoxLogoSoccer
-            : ImageIdentifiers.homeHeaderLogoBall
-        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
+        logoStackView.pinToSuperview()
 
         setupConstraints()
-        setupLogoConstraints()
     }
 
     private func setupConstraints() {
-        NSLayoutConstraint.deactivate(headerConstraints)
-
-        headerConstraints = [
+        NSLayoutConstraint.activate([
             stackContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
             stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
-            stackContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            stackContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).priority(.defaultLow),
-            stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).priority(.defaultLow),
 
-            quickAnswersButton.widthAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
-            quickAnswersButton.heightAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
-        ]
-        // Instead of checking on the state check if the quickAnswer button was added to the superview in order to avoid
-        // potential crashes.
-        // When the button is added to the contentView it is the iPad layout.
-        if quickAnswersButton.superview == contentView {
-            headerConstraints.append(contentsOf: [
-                quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                quickAnswersButton.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor)
-            ])
-        }
-
-        NSLayoutConstraint.activate(headerConstraints)
-    }
-
-    private func setupLogoConstraints() {
-        NSLayoutConstraint.deactivate(logoConstraints)
-        logoConstraints = [
             logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
             logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
             logoTextImage.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
             logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height),
-            logoContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.firefoxLogoImageSize.height)
-        ]
+            logoContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.firefoxLogoImageSize.height),
 
-        NSLayoutConstraint.activate(logoConstraints)
+            quickAnswersButton.widthAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
+            quickAnswersButton.heightAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
+            quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            quickAnswersButton.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
+        ])
     }
 
     func configure(headerState: HeaderState,
                    logoTextColor: UIColor? = nil) {
         self.headerState = headerState
         self.logoTextColor = logoTextColor
-        setupView(headerState: headerState)
+
+        let logoAsset = headerState.isWorldCupSectionEnabled
+            ? ImageIdentifiers.firefoxLogoSoccer
+            : ImageIdentifiers.homeHeaderLogoBall
+        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
+
+        let shouldShowQuickAnswersButton = headerState.showQuickAnswersButton && !headerState.isPrivate
+        quickAnswersButton.isHidden = !shouldShowQuickAnswersButton
+
+        // On iPhone, the visible button is pinned trailing and the logo is aligned leading.
+        // Otherwise (iPad layout, or no button) the logo stays centered within the cell.
+        let alignLogoToLeading = shouldShowQuickAnswersButton && !headerState.showiPadSetup
+        logoCenterXConstraint.isActive = !alignLogoToLeading
+        logoLeadingConstraint.isActive = alignLogoToLeading
     }
 
     private func quickAnswerButtonTapped() {

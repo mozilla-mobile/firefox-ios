@@ -9,14 +9,17 @@ import XCTest
 
 final class HeaderStateTests: XCTestCase {
     private var mockWorldCupStore: MockWorldCupStore!
+    private var mockQuickAnswersStore: MockQuickAnswersStore!
 
     override func setUp() {
         super.setUp()
         mockWorldCupStore = MockWorldCupStore()
+        mockQuickAnswersStore = MockQuickAnswersStore()
     }
 
     override func tearDown() {
         mockWorldCupStore = nil
+        mockQuickAnswersStore = nil
         super.tearDown()
     }
 
@@ -27,6 +30,7 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(initialState.isPrivate)
         XCTAssertFalse(initialState.showiPadSetup)
         XCTAssertTrue(initialState.isWorldCupSectionEnabled)
+        XCTAssertFalse(initialState.showQuickAnswersButton)
     }
 
     @MainActor
@@ -157,12 +161,38 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(state.isWorldCupSectionEnabled)
     }
 
+    func test_init_quickAnswersEnabled_setsShowQuickAnswersButtonTrue() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+
+        let state = createSubject()
+
+        XCTAssertTrue(state.showQuickAnswersButton)
+    }
+
+    func test_init_quickAnswersDisabled_setsShowQuickAnswersButtonFalse() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = false
+
+        let state = createSubject()
+
+        XCTAssertFalse(state.showQuickAnswersButton)
+    }
+
+    func test_init_privateMode_forcesShowQuickAnswersButtonFalse_evenWhenStoreEnabled() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+
+        let state = createSubject(isPrivate: true)
+
+        XCTAssertTrue(state.isPrivate)
+        XCTAssertFalse(state.showQuickAnswersButton)
+    }
+
     // MARK: - Private
     private func createSubject(isPrivate: Bool = false) -> HeaderState {
         return HeaderState(
             windowUUID: .XCTestDefaultUUID,
             isPrivate: isPrivate,
-            worldCupStore: mockWorldCupStore
+            worldCupStore: mockWorldCupStore,
+            quickAnswersStore: mockQuickAnswersStore
         )
     }
 

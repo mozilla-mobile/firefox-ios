@@ -2353,6 +2353,7 @@
 		FF0003AD2F000004000BBBBB /* WorldCupCellFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0003AC2F000003000BBBBB /* WorldCupCellFactoryTests.swift */; };
 		FF0004AB2F000002000BBBBB /* WorldCupSectionStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0004AA2F000001000BBBBB /* WorldCupSectionStateTests.swift */; };
 		FF0005AB2F000002000BBBBB /* MockWorldCupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0005AA2F000001000BBBBB /* MockWorldCupStore.swift */; };
+		FF0005AD2F000004000BBBBB /* MockQuickAnswersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0005AC2F000003000BBBBB /* MockQuickAnswersStore.swift */; };
 		FFCAFE022F0000AB000BBBBB /* WorldCupMatchCardViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCAFE012F0000AA000BBBBB /* WorldCupMatchCardViewTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -11891,6 +11892,7 @@
 		FF0003AC2F000003000BBBBB /* WorldCupCellFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCellFactoryTests.swift; sourceTree = "<group>"; };
 		FF0004AA2F000001000BBBBB /* WorldCupSectionStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupSectionStateTests.swift; sourceTree = "<group>"; };
 		FF0005AA2F000001000BBBBB /* MockWorldCupStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupStore.swift; sourceTree = "<group>"; };
+		FF0005AC2F000003000BBBBB /* MockQuickAnswersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockQuickAnswersStore.swift; sourceTree = "<group>"; };
 		FF0C48F58DE0387A8E383D09 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		FF374BAA8FB31A2CE67D6C0A /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
 		FF5847B3BD6CDAFE8F96AE44 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
@@ -15696,6 +15698,7 @@
 				8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */,
 				8A01FE3F2DF0CE49002C483B /* MockDateProvider.swift */,
 				FF0005AA2F000001000BBBBB /* MockWorldCupStore.swift */,
+				FF0005AC2F000003000BBBBB /* MockQuickAnswersStore.swift */,
 				8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */,
 				8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */,
 				2199A1D32DB8389000DC84BD /* MockZoomStore.swift */,
@@ -20383,6 +20386,7 @@
 				EEB965162FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift in Sources */,
 				FF0004AB2F000002000BBBBB /* WorldCupSectionStateTests.swift in Sources */,
 				FF0005AB2F000002000BBBBB /* MockWorldCupStore.swift in Sources */,
+				FF0005AD2F000004000BBBBB /* MockQuickAnswersStore.swift in Sources */,
 				EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */,
 				E571EE7E28756A130051D9AA /* StoryProviderTests.swift in Sources */,
 				21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */,

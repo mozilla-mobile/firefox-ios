@@ -19,14 +19,16 @@ struct HeaderState: StateType, Equatable, Hashable {
     init(
         windowUUID: WindowUUID,
         isPrivate: Bool = false,
-        worldCupStore: WorldCupStoreProtocol = WorldCupStore()
+        worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
+        quickAnswersStore: QuickAnswersStore = QuickAnswersMiddleware()
     ) {
         let isWorldCupSectionEnabled = isPrivate ? false : worldCupStore.isFeatureEnabledAndSectionEnabled
+        let showQuickAnswersButton = isPrivate ? false : quickAnswersStore.isQuickAnswersEnabled
         self.init(
             windowUUID: windowUUID,
             isPrivate: isPrivate,
             showiPadSetup: false,
-            showQuickAnswersButton: false,
+            showQuickAnswersButton: showQuickAnswersButton,
             isWorldCupSectionEnabled: isWorldCupSectionEnabled
         )
     }
