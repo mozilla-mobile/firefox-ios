@@ -29,7 +29,13 @@ final class PasswordGeneratorMiddleware {
         PasswordGeneratorMiddleware.loadPasswordRules()
     }
 
-    lazy var passwordGeneratorProvider: Middleware<AppState> = { state, action in
+    lazy var passwordGeneratorProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
 
         switch action.actionType {

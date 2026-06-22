@@ -55,7 +55,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
     }
 
-    lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
+    lazy var tabsPanelProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         if let action = action as? TabPeekAction {
             self.resolveTabPeekActions(action: action, state: state)
         } else if let action = action as? RemoteTabsPanelAction {

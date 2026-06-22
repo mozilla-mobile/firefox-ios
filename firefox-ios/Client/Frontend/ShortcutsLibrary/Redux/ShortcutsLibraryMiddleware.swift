@@ -16,7 +16,13 @@ final class ShortcutsLibraryMiddleware {
         self.shortcutsLibraryTelemetry = shortcutsLibraryTelemetry
     }
 
-    lazy var shortcutsLibraryProvider: Middleware<AppState> = { state, action in
+    lazy var shortcutsLibraryProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         switch action.actionType {
         case ShortcutsLibraryActionType.tapOnShortcutCell:
             self.shortcutsLibraryTelemetry.sendShortcutTappedEvent()

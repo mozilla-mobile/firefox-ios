@@ -34,7 +34,13 @@ final class TranslationSettingsMiddleware {
         loadSettingsTask?.cancel()
     }
 
-    lazy var translationSettingsProvider: Middleware<AppState> = { state, action in
+    lazy var translationSettingsProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         guard let action = action as? TranslationSettingsViewAction else { return }
         self.handleAction(action, state: state)
     }
