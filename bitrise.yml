@@ -1684,6 +1684,10 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
+        - xcconfig_content: |-
+            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGN_IDENTITY=
+            CODE_SIGNING_REQUIRED=NO
     - deploy-to-bitrise-io@2: {}
     - script@1:
         title: Update Google Cloud SDK Components
@@ -1785,7 +1789,11 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
-        - xcconfig_content: ENABLE_DEBUG_DYLIB=NO
+        - xcconfig_content: |-
+            ENABLE_DEBUG_DYLIB=NO
+            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGN_IDENTITY=
+            CODE_SIGNING_REQUIRED=NO
     - deploy-to-bitrise-io@2: {}
     - script@1:
         title: Firebase Build for Testing Physical Devices
