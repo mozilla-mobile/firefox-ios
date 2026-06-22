@@ -40,9 +40,9 @@ final class LocationView: UIView,
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
-    private var scrollAlpha: CGFloat = 1
     private var hasAlternativeLocationColor = false
     private var config: LocationViewConfiguration?
+    private(set) var isAddressBarMinimized = false
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -52,10 +52,6 @@ final class LocationView: UIView,
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let window = windowScene.windows.first else { return false }
         return window.safeAreaInsets.bottom > 0
-    }
-
-    var isAddressBarMinimized: Bool {
-        return scrollAlpha.isZero
     }
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
@@ -194,7 +190,7 @@ final class LocationView: UIView,
         )
 
         applyToolbarAlphaIfNeeded(
-            alpha: uxConfig.scrollAlpha,
+            isAddressBarMinimized: uxConfig.isAddressBarMinimized,
             barPosition: addressBarPosition
         )
         configureLockIconButton(config)
@@ -484,9 +480,8 @@ final class LocationView: UIView,
         effectView.effect = nil
     }
 
-    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
-        guard scrollAlpha != alpha else { return }
-        scrollAlpha = alpha
+    private func applyToolbarAlphaIfNeeded(isAddressBarMinimized: Bool, barPosition: AddressToolbarPosition) {
+        self.isAddressBarMinimized = isAddressBarMinimized
         if isAddressBarMinimized {
             shrinkLocationView(barPosition: barPosition)
             if #available(iOS 26.0, *), barPosition == .bottom {
