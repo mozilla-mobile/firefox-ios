@@ -223,9 +223,16 @@ class AppDelegate: UIResponder,
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
         // <500ms is expected on newer devices.
         singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
-        singleShotTimer.setEventHandler {
-            WebServer.sharedInstance.server.stop()
-            self.shutdownWebServer = nil
+        singleShotTimer.setEventHandler { [weak self] in
+            var bgTaskId: UIBackgroundTaskIdentifier = .invalid
+            bgTaskId = application.beginBackgroundTask(withName: "WebServerShutdown") {
+                if bgTaskId != .invalid { application.endBackgroundTask(bgTaskId); bgTaskId = .invalid }
+            }
+            DispatchQueue.global(qos: .utility).async {
+                WebServer.sharedInstance.server.stop()
+                if bgTaskId != .invalid { application.endBackgroundTask(bgTaskId); bgTaskId = .invalid }
+            }
+            self?.shutdownWebServer = nil
         }
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer

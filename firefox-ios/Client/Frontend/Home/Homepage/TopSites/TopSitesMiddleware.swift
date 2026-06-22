@@ -290,8 +290,9 @@ final class TopSitesMiddleware {
     }
 
     private func sendBookmarkOpenTelemetry(with urlString: String) {
-        let isBookmarked = profile.places.isBookmarked(url: urlString).value.successValue ?? false
-        guard isBookmarked else { return }
-        bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
+        profile.places.isBookmarked(url: urlString).uponQueue(.main) { [weak self] result in
+            guard result.successValue == true else { return }
+            self?.bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
+        }
     }
 }
