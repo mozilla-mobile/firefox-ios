@@ -9,9 +9,9 @@ import UIKit
 class LibraryViewController: UIViewController, Themeable {
     struct UX {
         struct NavigationMenu {
-            static let height: CGFloat = 32
-            static let horizontalPadding: CGFloat = 16
-            static let bottomPadding: CGFloat = 8
+            static let height: CGFloat = 40
+            static let horizontalPadding: CGFloat = 15
+            static let bottomPadding: CGFloat = 12
         }
     }
 
