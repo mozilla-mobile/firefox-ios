@@ -30,13 +30,7 @@ class LibraryViewController: UIViewController, Themeable {
     private var controllerContainerView: UIView = .build { view in }
 
     // UI Elements
-    private lazy var librarySegmentControl: UISegmentedControl = {
-        let segmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
-        segmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
-        segmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
-        segmentControl.translatesAutoresizingMaskIntoConstraints = false
-        return segmentControl
-    }()
+    private lazy var librarySegmentControl: UISegmentedControl = makeSegmentControl()
 
     private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
@@ -95,6 +89,9 @@ class LibraryViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // setupSegmentControl() calls makeSegmentControl(), which makes a new
+        // UISegmentedControl
+        setupSegmentControl()
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
         applyTheme()
     }
@@ -107,26 +104,41 @@ class LibraryViewController: UIViewController, Themeable {
 
     private func viewSetup() {
         navigationItem.rightBarButtonItem = topRightButton
-        view.addSubviews(controllerContainerView, librarySegmentControl)
+        view.addSubview(controllerContainerView)
+
+        NSLayoutConstraint.activate([
+            controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    private func makeSegmentControl() -> UISegmentedControl {
+        let segmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+        segmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
+        segmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
+        segmentControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentControl
+    }
+
+    private func setupSegmentControl() {
+        librarySegmentControl.removeFromSuperview()
+        librarySegmentControl = makeSegmentControl()
+        view.addSubview(librarySegmentControl)
 
         NSLayoutConstraint.activate([
             librarySegmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-
             librarySegmentControl.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: UX.NavigationMenu.horizontalPadding),
             librarySegmentControl.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                 constant: -UX.NavigationMenu.horizontalPadding),
-
             librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
 
             controllerContainerView.topAnchor.constraint(
                 equalTo: librarySegmentControl.bottomAnchor,
-                constant: UX.NavigationMenu.bottomPadding),
-            controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+                constant: UX.NavigationMenu.bottomPadding)
         ])
     }
 
