@@ -42,7 +42,8 @@ final class ToUExperimentsTrackingTests: XCTestCase {
             slug: slug,
             userFacingName: name,
             userFacingDescription: "Test",
-            branchSlug: branch
+            branchSlug: branch,
+            isRollout: false
         )
     }
 
