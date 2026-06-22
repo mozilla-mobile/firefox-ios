@@ -186,9 +186,9 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         let model = createSubject(withState: state)
 
         XCTAssertEqual(state.addressToolbar.editingAccessoryAction?.actionType, .googleLens)
-        let accessoryButton = model.addressToolbarConfig.locationViewConfiguration.editingAccessoryButton
-        XCTAssertEqual(accessoryButton?.imageName, StandardImageIdentifiers.Medium.googleLens)
-        XCTAssertEqual(accessoryButton?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
+        let accessoryAction = model.addressToolbarConfig.locationViewConfiguration.editingAccessoryAction
+        XCTAssertEqual(accessoryAction?.iconName, StandardImageIdentifiers.Medium.googleLens)
+        XCTAssertEqual(accessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
     }
 
     @MainActor
@@ -197,7 +197,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         let model = createSubject(withState: state)
 
         XCTAssertNil(state.addressToolbar.editingAccessoryAction)
-        XCTAssertNil(model.addressToolbarConfig.locationViewConfiguration.editingAccessoryButton)
+        XCTAssertNil(model.addressToolbarConfig.locationViewConfiguration.editingAccessoryAction)
     }
 
     @MainActor
@@ -291,6 +291,9 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                leadingPageActions: [],
                                trailingPageActions: [],
                                browserActions: [],
+                               editingAccessoryAction: makeEditingAccessoryAction(
+                                   isGoogleLensEnabled: isGoogleLensEnabled
+                               ),
                                borderPosition: nil,
                                url: nil,
                                searchTerm: nil,
@@ -307,10 +310,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                translationConfiguration: nil,
                                didStartTyping: false,
                                isEmptySearch: true,
-                               alternativeSearchEngine: withSearchEngine,
-                               editingAccessoryAction: makeEditingAccessoryAction(
-                                   isGoogleLensEnabled: isGoogleLensEnabled
-                               ))
+                               alternativeSearchEngine: withSearchEngine)
     }
 
     private func makeEditingAccessoryAction(isGoogleLensEnabled: Bool) -> ToolbarActionConfiguration? {
