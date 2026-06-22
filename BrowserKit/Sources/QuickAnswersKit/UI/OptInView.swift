@@ -99,7 +99,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         text.append(NSAttributedString(string: UX.learnMoreText, attributes: linkAttributes))
         return text
     }
-    
+
     // MARK: - UITextViewDelegate
     func textView(
         _ textView: UITextView,

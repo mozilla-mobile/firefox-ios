@@ -109,12 +109,12 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             sourceView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
+
     // MARK: - Configuration
     func startAudioWaveformAnimation() {
         audioWaveform.startAnimating()
     }
-    
+
     func adjustBottomInsets(for height: CGFloat) {
         scrollView.contentInset.bottom = height
     }

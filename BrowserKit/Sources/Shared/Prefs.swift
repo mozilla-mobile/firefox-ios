@@ -138,7 +138,7 @@ public struct PrefsKeys {
         public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
         public static let WorldCupSeenWinningMatchIDs = "WorldCupSeenWinningMatchIDsUserPrefsKey"
     }
-    
+
     public struct QuickAnswers {
         public static let optInCompleted = "quickAnswers.optInCompleted"
     }

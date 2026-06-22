@@ -124,7 +124,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         registerCallbacks()
     }
-    
+
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startFlow()
@@ -183,7 +183,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         contentView.startAudioWaveformAnimation()
         viewModel.startRecordingVoice()
     }
-    
+
     private func registerCallbacks() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
