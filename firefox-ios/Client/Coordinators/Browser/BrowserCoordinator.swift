@@ -12,6 +12,7 @@ import Storage
 import Redux
 import PDFKit
 import SummarizeKit
+import QuickAnswersKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -1106,7 +1107,7 @@ final class BrowserCoordinator: BaseCoordinator,
         present(viewController)
     }
 
-    func showQuickAnswers() {
+    func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
@@ -1114,6 +1115,7 @@ final class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             themeManager: themeManager,
             router: router,
+            transitionType: transitionType,
         ) { [weak self] navigationType in
             switch navigationType {
             case .url(let url):

@@ -6,7 +6,9 @@ import UIKit
 import Common
 import Shared
 
-public final class QuickAnswersViewController: UIViewController, Themeable {
+public final class QuickAnswersViewController: UIViewController,
+                                               UIAdaptivePresentationControllerDelegate,
+                                               Themeable {
     private struct UX {
         static let closeButtonSidePadding: CGFloat = 16.0
         static let closeButtonPadding: CGFloat = 13.0
@@ -54,7 +56,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         )
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionAnimator: TransitionAnimator
+    private let transitionAnimator: CrossDissolveTransitionAnimator?
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -70,7 +72,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
-        presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
+        transitionType: QuickAnswersTransitionType,
         prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
@@ -80,7 +82,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             navigationHandler: navigationHandler,
             viewModel: QuickAnswersViewModel(prefs: prefs),
             store: Store(prefs: prefs),
-            presentationTransitionType: presentationTransitionType,
+            transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
             notificationCenter: notificationCenter
@@ -91,7 +93,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         navigationHandler: QuickAnswersNavigationHandler?,
         viewModel: QuickAnswersViewModel,
         store: Store,
-        presentationTransitionType: QuickAnswersTransitionType,
+        transitionType: QuickAnswersTransitionType,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol
@@ -100,15 +102,21 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.transitionAnimator = TransitionAnimator(
-            presentationTransitionType: presentationTransitionType,
-            themeManager: themeManager,
-            windowUUID: windowUUID
-        )
+        // The custom transition animator is only used for the cross dissolve transition; the form sheet
+        // relies on the system presentation.
+        if case let .crossDissolve(sourceRect) = transitionType {
+            self.transitionAnimator = CrossDissolveTransitionAnimator(
+                themeManager: themeManager,
+                windowUUID: windowUUID,
+                sourceRect: sourceRect
+            )
+        } else {
+            self.transitionAnimator = nil
+        }
         self.viewModel = viewModel
         self.store = store
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .custom
+        modalPresentationStyle = transitionType.modalPresentationStyle
         transitioningDelegate = transitionAnimator
     }
 
@@ -119,6 +127,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
         setupSubviews()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -216,6 +225,11 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.navigationHandler?.dismissQuickAnswers(with: .url(url))
             }
         )
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        navigationHandler?.dismissQuickAnswers(with: nil)
     }
 
     // MARK: - Themeable

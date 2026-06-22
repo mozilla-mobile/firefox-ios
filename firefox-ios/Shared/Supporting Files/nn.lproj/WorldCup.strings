@@ -167,7 +167,7 @@
 "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Oppdater";
 
 /* Message shown in the World Cup widget when the device has no internet connection. */
-"WorldCup.HomepageWidget.OfflineLabel.v151" = "Det ser ut som om du er fråkopla. Sjekk internett-tilkoblinga di og prøv igjen.";
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "Det ser ut som om du er fråkopla. Sjekk internett-tilkoplinga di og prøv igjen.";
 
 /* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
 "WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Straffespark (%@)";

@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import Common
 import Shared
+import QuickAnswersKit
 
 // Header for the homepage in both normal and private mode
 // Contains the firefox logo, and optionally the Quick Answers button
@@ -23,7 +24,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
-    private var onQuickAnswersTapped: (() -> Void)?
     private var headerState: HeaderState?
     private var logoTextColor: UIColor?
     private var hasConfiguredView = false
@@ -63,12 +63,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         // TODO: - FXIOS-14720 Add Strings for accessibility label
         button.accessibilityIdentifier = a11y.quickAnswersButton
         button.adjustsImageSizeForAccessibilityContentSizeCategory = false
-        button.addAction(
-            UIAction(handler: { [weak self] _ in
-                self?.onQuickAnswersTapped?()
-            }),
-            for: .touchUpInside
-        )
+        button.addAction(UIAction(handler: { [weak self] _ in
+            self?.quickAnswerButtonTapped()
+        }), for: .touchUpInside)
     }
 
     // MARK: - Initializers
@@ -157,12 +154,28 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     func configure(headerState: HeaderState,
-                   logoTextColor: UIColor? = nil,
-                   onQuickAnswersTapped: (() -> Void)? = nil) {
+                   logoTextColor: UIColor? = nil) {
         self.headerState = headerState
         self.logoTextColor = logoTextColor
-        self.onQuickAnswersTapped = onQuickAnswersTapped
         setupView(headerState: headerState)
+    }
+
+    private func quickAnswerButtonTapped() {
+        guard let headerState else { return }
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        let transitionType: QuickAnswersTransitionType = if headerState.showiPadSetup {
+            .formSheet
+        } else {
+            // convert the button frame to the parent window frame to have correct transition.
+            .crossDissolve(sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil))
+        }
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.quickAnswers(transitionType: transitionType)),
+                windowUUID: headerState.windowUUID,
+                actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
+            )
+        )
     }
 
     // MARK: - ThemeApplicable

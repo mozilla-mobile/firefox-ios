@@ -61,7 +61,8 @@ class TabCellTests: XCTestCase {
                         tabTitle: "Firefox Browser",
                         url: URL(string: "https://www.mozilla.org/en-US/firefox/")!,
                         screenshot: nil,
-                        hasHomeScreenshot: false)
+                        hasHomeScreenshot: false,
+                        hasScreenshotOnDisk: false)
     }
 }
 
