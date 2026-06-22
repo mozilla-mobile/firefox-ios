@@ -9,8 +9,7 @@ import TestKit
 @testable import QuickAnswersKit
 
 @MainActor
-class StoreTests {
-    let testHelper = SwiftTestingHelper()
+struct StoreTests {
     let prefs = MockProfilePrefs()
 
     @Test
@@ -27,13 +26,12 @@ class StoreTests {
         subject.setOptInCompleted()
 
         #expect(subject.isOptInCompleted == true)
-        #expect(prefs.boolForKey(PrefsKeys.Settings.quickAnswersOptInCompleted) == true)
+        #expect(prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted) == true)
     }
 
     // MARK: - Helper
     private func createSubject() -> Store {
         let subject = Store(prefs: prefs)
-        testHelper.trackForMemoryLeaks(subject)
         return subject
     }
 }

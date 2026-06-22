@@ -138,6 +138,10 @@ public struct PrefsKeys {
         public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
         public static let WorldCupSeenWinningMatchIDs = "WorldCupSeenWinningMatchIDsUserPrefsKey"
     }
+    
+    public struct QuickAnswers {
+        public static let optInCompleted = "quickAnswers.optInCompleted"
+    }
 
     public struct SearchSettings {
         public static let showFirefoxBrowsingHistorySuggestions = "FirefoxSuggestBrowsingHistorySuggestions"
@@ -200,7 +204,6 @@ public struct PrefsKeys {
         public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
         public static let quickAnswersFeature = "settings.quickAnswersFeature"
-        public static let quickAnswersOptInCompleted = "settings.quickAnswersOptInCompleted"
     }
 
     // Activity Stream

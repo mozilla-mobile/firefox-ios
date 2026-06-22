@@ -15,11 +15,11 @@ struct Store {
 
     /// Whether the user has accepted the Quick Answers opt-in.
     var isOptInCompleted: Bool {
-        return prefs.boolForKey(PrefsKeys.Settings.quickAnswersOptInCompleted) ?? false
+        return prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted) ?? false
     }
 
     /// Marks the Quick Answers opt-in as completed.
     func setOptInCompleted() {
-        prefs.setBool(true, forKey: PrefsKeys.Settings.quickAnswersOptInCompleted)
+        prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
     }
 }
