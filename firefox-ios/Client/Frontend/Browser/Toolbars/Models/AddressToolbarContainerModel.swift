@@ -29,7 +29,7 @@ final class AddressToolbarContainerModel: Equatable {
     let isEditing: Bool
     let didStartTyping: Bool
     let shouldShowKeyboard: Bool
-    let editingAccessoryAction: ToolbarActionConfiguration?
+    let editingAccessoryAction: ToolbarElement?
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
@@ -77,7 +77,7 @@ final class AddressToolbarContainerModel: Equatable {
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
-            editingAccessoryButton: editingAccessoryButtonConfiguration(),
+            editingAccessoryAction: editingAccessoryAction,
             onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      buttonTapped: button,
@@ -105,27 +105,6 @@ final class AddressToolbarContainerModel: Equatable {
             ),
             uxConfiguration: uxConfiguration,
             shouldAnimate: shouldAnimate
-        )
-    }
-
-    @MainActor
-    private func editingAccessoryButtonConfiguration() -> LocationViewEditingAccessoryConfiguration? {
-        guard let editingAccessoryAction, let imageName = editingAccessoryAction.iconName else { return nil }
-
-        return LocationViewEditingAccessoryConfiguration(
-            imageName: imageName,
-            a11yLabel: editingAccessoryAction.a11yLabel,
-            a11yIdentifier: editingAccessoryAction.a11yId,
-            onTap: { view in
-                guard let button = view as? UIButton else { return }
-
-                let action = ToolbarMiddlewareAction(buttonType: editingAccessoryAction.actionType,
-                                                     buttonTapped: button,
-                                                     gestureType: .tap,
-                                                     windowUUID: self.windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
-                store.dispatch(action)
-            }
         )
     }
 
@@ -241,6 +220,9 @@ final class AddressToolbarContainerModel: Equatable {
         self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
                                                                       isShowingTopTabs: state.isShowingTopTabs,
                                                                       windowUUID: windowUUID)
+        self.editingAccessoryAction = AddressToolbarContainerModel.mapAction(state.addressToolbar.editingAccessoryAction,
+                                                                             isShowingTopTabs: state.isShowingTopTabs,
+                                                                             windowUUID: windowUUID)
 
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
         let searchEngineModel = state.addressToolbar.alternativeSearchEngine
@@ -263,7 +245,6 @@ final class AddressToolbarContainerModel: Equatable {
         self.isEditing = state.addressToolbar.isEditing
         self.didStartTyping = state.addressToolbar.didStartTyping
         self.shouldShowKeyboard = state.addressToolbar.shouldShowKeyboard
-        self.editingAccessoryAction = state.addressToolbar.editingAccessoryAction
         self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
@@ -287,39 +268,55 @@ final class AddressToolbarContainerModel: Equatable {
     }
 
     @MainActor
+    private static func mapAction(_ action: ToolbarActionConfiguration?,
+                                  isShowingTopTabs: Bool,
+                                  windowUUID: UUID) -> ToolbarElement? {
+        guard let action else { return nil }
+
+        return makeToolbarElement(action, isShowingTopTabs: isShowingTopTabs, windowUUID: windowUUID)
+    }
+
+    @MainActor
     private static func mapActions(_ actions: [ToolbarActionConfiguration],
                                    isShowingTopTabs: Bool,
                                    windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in
-            ToolbarElement(
-                iconName: action.iconName,
-                title: action.actionLabel,
-                badgeImageName: action.badgeImageName,
-                bottomBadgeImage: action.bottomBadgeImage,
-                maskImageName: action.maskImageName,
-                templateModeForImage: action.templateModeForImage,
-                loadingConfig: action.loadingConfig,
-                numberOfTabs: action.numberOfTabs,
-                isEnabled: action.isEnabled,
-                isFlippedForRTL: action.isFlippedForRTL,
-                isSelected: action.isSelected,
-                hasCustomColor: action.hasCustomColor,
-                hasHighlightedColor: action.hasHighlightedColor,
-                largeContentTitle: action.largeContentTitle,
-                contextualHintType: action.contextualHintType,
-                a11yLabel: action.a11yLabel,
-                a11yHint: action.a11yHint,
-                a11yId: action.a11yId,
-                cacheId: action.cacheId,
-                a11yCustomActionName: action.a11yCustomActionName,
-                a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
-                hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
-                previousTabScreenshot: action.previousTabScreenshot,
-                nextTabScreenshot: action.nextTabScreenshot,
-                onSelected: getOnSelected(action: action, windowUUID: windowUUID),
-                onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
-            )
+            makeToolbarElement(action, isShowingTopTabs: isShowingTopTabs, windowUUID: windowUUID)
         }
+    }
+
+    @MainActor
+    private static func makeToolbarElement(_ action: ToolbarActionConfiguration,
+                                           isShowingTopTabs: Bool,
+                                           windowUUID: UUID) -> ToolbarElement {
+        return ToolbarElement(
+            iconName: action.iconName,
+            title: action.actionLabel,
+            badgeImageName: action.badgeImageName,
+            bottomBadgeImage: action.bottomBadgeImage,
+            maskImageName: action.maskImageName,
+            templateModeForImage: action.templateModeForImage,
+            loadingConfig: action.loadingConfig,
+            numberOfTabs: action.numberOfTabs,
+            isEnabled: action.isEnabled,
+            isFlippedForRTL: action.isFlippedForRTL,
+            isSelected: action.isSelected,
+            hasCustomColor: action.hasCustomColor,
+            hasHighlightedColor: action.hasHighlightedColor,
+            largeContentTitle: action.largeContentTitle,
+            contextualHintType: action.contextualHintType,
+            a11yLabel: action.a11yLabel,
+            a11yHint: action.a11yHint,
+            a11yId: action.a11yId,
+            cacheId: action.cacheId,
+            a11yCustomActionName: action.a11yCustomActionName,
+            a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
+            hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
+            previousTabScreenshot: action.previousTabScreenshot,
+            nextTabScreenshot: action.nextTabScreenshot,
+            onSelected: getOnSelected(action: action, windowUUID: windowUUID),
+            onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
+        )
     }
 
     @MainActor

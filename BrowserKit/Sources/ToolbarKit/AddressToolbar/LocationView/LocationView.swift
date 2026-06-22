@@ -512,8 +512,8 @@ final class LocationView: UIView,
         // causing the keyboard to hide.
         // TODO: FXIOS-14618 don't fire the `keyboardWillHide` notification on device rotation
         let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
-        urlTextField.editingAccessoryButtonConfiguration = configurationIsEditing ?
-            config.editingAccessoryButton :
+        urlTextField.editingAccessoryAction = configurationIsEditing ?
+            config.editingAccessoryAction :
             nil
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 

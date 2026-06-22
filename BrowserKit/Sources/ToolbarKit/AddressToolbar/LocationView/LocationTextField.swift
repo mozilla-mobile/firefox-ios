@@ -32,8 +32,6 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
-    private var editingAccessoryForegroundColorNormal: UIColor = .clear
-    private var editingAccessoryForegroundColorHighlighted: UIColor = .clear
 
     weak var autocompleteDelegate: LocationTextFieldDelegate?
 
@@ -54,21 +52,16 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         return value(forKey: "_clearButton") as? UIButton
     }
 
-    var editingAccessoryButtonConfiguration: LocationViewEditingAccessoryConfiguration? {
+    var editingAccessoryAction: ToolbarElement? {
         didSet {
             configureEditingAccessoryButton()
             updateRightView()
         }
     }
 
-    private lazy var editingAccessoryRightView: UIButton = {
-        let button = UIButton(type: .system)
+    private lazy var editingAccessoryRightView: ToolbarButton = {
+        let button = ToolbarButton()
         button.frame = CGRect(origin: .zero, size: UX.editingAccessoryRightViewSize)
-        button.configuration = makeEditingAccessoryButtonConfiguration()
-        button.configurationUpdateHandler = { [weak self] _ in
-            self?.updateEditingAccessoryButtonState()
-        }
-        button.addTarget(self, action: #selector(editingAccessoryButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -224,9 +217,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         let colors = theme.colors
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
-        editingAccessoryForegroundColorNormal = colors.iconSecondary
-        editingAccessoryForegroundColorHighlighted = colors.actionPrimary
-        updateEditingAccessoryButtonState()
+        editingAccessoryRightView.applyTheme(theme: theme)
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
 
         // Force marked text to refresh with new style
@@ -255,45 +246,22 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         updateRightView()
     }
 
-    private func makeEditingAccessoryButtonConfiguration() -> UIButton.Configuration {
-        var configuration = UIButton.Configuration.plain()
-        configuration.contentInsets = UX.editingAccessoryContentInsets
-        return configuration
-    }
-
-    private func updateEditingAccessoryButtonState() {
-        var configuration = editingAccessoryRightView.configuration ?? makeEditingAccessoryButtonConfiguration()
-        configuration.baseForegroundColor = editingAccessoryRightView.isHighlighted ?
-            editingAccessoryForegroundColorHighlighted :
-            editingAccessoryForegroundColorNormal
-        editingAccessoryRightView.configuration = configuration
-    }
-
     private func configureEditingAccessoryButton() {
-        guard let editingAccessoryButtonConfiguration else {
+        guard let editingAccessoryAction, editingAccessoryAction.iconName != nil else {
             editingAccessoryRightView.accessibilityLabel = nil
             editingAccessoryRightView.accessibilityIdentifier = nil
             return
         }
 
-        var configuration = editingAccessoryRightView.configuration ?? makeEditingAccessoryButtonConfiguration()
-        configuration.image = UIImage(
-            named: editingAccessoryButtonConfiguration.imageName
-        )?.withRenderingMode(.alwaysTemplate)
+        editingAccessoryRightView.configure(element: editingAccessoryAction)
+        var configuration = editingAccessoryRightView.configuration
+        configuration?.contentInsets = UX.editingAccessoryContentInsets
         editingAccessoryRightView.configuration = configuration
-        updateEditingAccessoryButtonState()
-        editingAccessoryRightView.accessibilityLabel = editingAccessoryButtonConfiguration.a11yLabel
-        editingAccessoryRightView.accessibilityIdentifier = editingAccessoryButtonConfiguration.a11yIdentifier
-    }
-
-    @objc
-    private func editingAccessoryButtonTapped() {
-        editingAccessoryButtonConfiguration?.onTap(editingAccessoryRightView)
     }
 
     private func updateRightView() {
         let textIsEmpty = textWithoutSuggestion()?.isEmpty ?? true
-        if editingAccessoryButtonConfiguration != nil, isEditing, textIsEmpty {
+        if editingAccessoryAction?.iconName != nil, isEditing, textIsEmpty {
             rightView = editingAccessoryRightView
             rightViewMode = .whileEditing
             clearButtonMode = .never
