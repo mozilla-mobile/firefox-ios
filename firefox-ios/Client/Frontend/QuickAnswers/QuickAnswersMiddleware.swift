@@ -6,13 +6,11 @@ import Common
 import Redux
 import Shared
 
-@MainActor
 protocol QuickAnswersStore {
     /// Whether the Quick Answers feature flag is enabled and the user preference for it is enabled.
     var isQuickAnswersEnabled: Bool { get }
 }
 
-@MainActor
 final class QuickAnswersMiddleware: QuickAnswersStore {
     private let prefs: Prefs
     let featureFlagsProvider: FeatureFlagProviding
@@ -34,6 +32,7 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
         self.userPreferences = userPreferences
     }
 
+    @MainActor
     lazy var quickAnswersProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case HomepageActionType.initialize, HomepageActionType.viewWillAppear:
@@ -45,6 +44,7 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
         }
     }
 
+    @MainActor
     private func handleInitializeAction(action: Action) {
         store.dispatch(QuickAnswersMiddlewareAction(
             isQuickAnswersEnabled: isQuickAnswersEnabled,
@@ -53,6 +53,7 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
         ))
     }
 
+    @MainActor
     private func handleDidSettingsChangeAction(action: Action) {
         store.dispatch(QuickAnswersMiddlewareAction(
             isQuickAnswersEnabled: isQuickAnswersEnabled,

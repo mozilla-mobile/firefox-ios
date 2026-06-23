@@ -26,11 +26,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private var headerState: HeaderState?
     private var logoTextColor: UIColor?
-
-    private lazy var stackContainer: UIStackView = .build { stackView in
-        stackView.axis = .horizontal
-    }
-
     private lazy var logoContainerView: UIView = .build()
 
     private lazy var logoStackView: UIStackView = .build { view in
@@ -65,18 +60,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             self?.quickAnswerButtonTapped()
         }), for: .touchUpInside)
     }
-
-    /// Centers the logo within the cell. Active when the Quick Answers button is hidden, or when
-    /// it is shown on the iPad layout where the logo remains centered.
-    private lazy var logoCenterXConstraint = stackContainer.centerXAnchor.constraint(
-        equalTo: contentView.centerXAnchor
-    )
-
-    /// Pins the logo to the leading edge. Active on the iPhone layout when the Quick Answers button
-    /// is shown, so the logo sits leading and the button trailing.
-    private lazy var logoLeadingConstraint = stackContainer.leadingAnchor.constraint(
-        equalTo: contentView.leadingAnchor
-    )
+    private lazy var logoCenterConstraint = logoContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+    private lazy var logoLeadingConstraint = logoContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -96,9 +81,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         logoStackView.addArrangedSubview(logoImage)
         logoStackView.addArrangedSubview(logoTextImage)
         logoContainerView.addSubview(logoStackView)
-        stackContainer.addArrangedSubview(logoContainerView)
 
-        contentView.addSubview(stackContainer)
+        contentView.addSubview(logoContainerView)
         contentView.addSubview(quickAnswersButton)
 
         logoStackView.pinToSuperview()
@@ -107,21 +91,25 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     private func setupConstraints() {
+        
         NSLayoutConstraint.activate([
-            stackContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
-            stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
-
             logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
             logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
             logoTextImage.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
             logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height),
-            logoContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.firefoxLogoImageSize.height),
+            
+            logoContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            logoContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            logoContainerView.trailingAnchor.constraint(lessThanOrEqualTo: quickAnswersButton.leadingAnchor),
 
             quickAnswersButton.widthAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
             quickAnswersButton.heightAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
             quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             quickAnswersButton.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
+            quickAnswersButton.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
+            quickAnswersButton.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor)
         ])
+        logoCenterConstraint.isActive = true
     }
 
     func configure(headerState: HeaderState,
@@ -138,7 +126,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
         // if the quick answers button is visible and we are on iPhone setup, align the logo to the leading
         let alignLogoToLeading = headerState.showQuickAnswersButton && !headerState.showiPadSetup
-        logoCenterXConstraint.isActive = !alignLogoToLeading
+        logoCenterConstraint.isActive = !alignLogoToLeading
         logoLeadingConstraint.isActive = alignLogoToLeading
     }
 

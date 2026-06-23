@@ -125,7 +125,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 
         snapshot.appendSections([.header])
         snapshot.appendItems([headerItem], toSection: .header)
-
+        
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
             snapshot.appendItems([.privacyNotice], toSection: .privacyNotice)
