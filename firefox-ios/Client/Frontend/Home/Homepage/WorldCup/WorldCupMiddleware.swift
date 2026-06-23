@@ -66,6 +66,7 @@ final class WorldCupMiddleware {
             dispatch(snapshot: .empty)
             return
         }
+        guard worldCupStore.isFeatureEnabledAndSectionEnabled else { return }
         feed.start()
     }
 
