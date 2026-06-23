@@ -41,21 +41,22 @@ final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
     // MARK: - UI
 
     private lazy var heroImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
-        guard let gifImage = UIImage.gifFromBundle(named: UX.heroGifName,
-                                                   frameDuration: UX.heroFrameDuration,
-                                                   maxPixelSize: UX.heroImageWidth * UIScreen.main.scale),
-              let frames = gifImage.images, !frames.isEmpty else {
-            imageView.image = UIImage(named: UX.heroImageName)
-            return
-        }
-        imageView.image = frames[Int(Double(frames.count) * UX.heroInitialFramePosition)]
-        imageView.animationImages = frames
-        imageView.animationDuration = gifImage.duration
-        imageView.animationRepeatCount = UX.heroAnimationRepeatCount
-        imageView.startAnimating()
+//        imageView.contentMode = .scaleAspectFit
+//        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+//        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
+//        guard let gifImage = UIImage.gifFromBundle(named: UX.heroGifName,
+//                                                   frameDuration: UX.heroFrameDuration,
+//                                                   maxPixelSize: UX.heroImageWidth * UIScreen.main.scale),
+//              let frames = gifImage.images, !frames.isEmpty else {
+//            imageView.image = UIImage(named: UX.heroImageName)
+//            return
+//        }
+//        imageView.image = frames[Int(Double(frames.count) * UX.heroInitialFramePosition)]
+//        imageView.animationImages = frames
+//        imageView.animationDuration = gifImage.duration
+//        imageView.animationRepeatCount = UX.heroAnimationRepeatCount
+//        imageView.startAnimating()
+        imageView.image = UIImage(systemName: "xmark")
     }
 
     private lazy var titleLabel: UILabel = .build { label in
