@@ -61,7 +61,11 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     private lazy var editingAccessoryRightView: ToolbarButton = {
         let button = ToolbarButton()
-        button.frame = CGRect(origin: .zero, size: UX.editingAccessoryRightViewSize)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: UX.editingAccessoryRightViewSize.width),
+            button.heightAnchor.constraint(equalToConstant: UX.editingAccessoryRightViewSize.height)
+        ])
         return button
     }()
 
@@ -150,20 +154,6 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         guard isEditing else { return }
         applyCompletion()
         super.touchesBegan(touches, with: event)
-    }
-
-    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-        guard rightView === editingAccessoryRightView else {
-            return super.rightViewRect(forBounds: bounds)
-        }
-
-        // UITextField seems to shrink rightView control size, so force 44x44.
-        return CGRect(
-            x: bounds.maxX - UX.editingAccessoryRightViewSize.width,
-            y: bounds.midY - UX.editingAccessoryRightViewSize.height / 2,
-            width: UX.editingAccessoryRightViewSize.width,
-            height: UX.editingAccessoryRightViewSize.height
-        )
     }
 
     override public func caretRect(for position: UITextPosition) -> CGRect {

@@ -208,21 +208,21 @@ final class AddressToolbarContainerModel: Equatable {
         windowUUID: UUID
     ) {
         self.borderPosition = state.addressToolbar.borderPosition
-        self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
-                                                                         isShowingTopTabs: state.isShowingTopTabs,
-                                                                         windowUUID: windowUUID)
-        self.leadingPageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.leadingPageActions,
-                                                                          isShowingTopTabs: state.isShowingTopTabs,
-                                                                          windowUUID: windowUUID)
-        self.trailingPageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.trailingPageActions,
-                                                                           isShowingTopTabs: state.isShowingTopTabs,
-                                                                           windowUUID: windowUUID)
-        self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
-                                                                      isShowingTopTabs: state.isShowingTopTabs,
-                                                                      windowUUID: windowUUID)
-        self.editingAccessoryAction = AddressToolbarContainerModel.mapAction(state.addressToolbar.editingAccessoryAction,
-                                                                             isShowingTopTabs: state.isShowingTopTabs,
-                                                                             windowUUID: windowUUID)
+        self.navigationActions = Self.mapActions(state.addressToolbar.navigationActions,
+                                                 isShowingTopTabs: state.isShowingTopTabs,
+                                                 windowUUID: windowUUID)
+        self.leadingPageActions = Self.mapActions(state.addressToolbar.leadingPageActions,
+                                                  isShowingTopTabs: state.isShowingTopTabs,
+                                                  windowUUID: windowUUID)
+        self.trailingPageActions = Self.mapActions(state.addressToolbar.trailingPageActions,
+                                                   isShowingTopTabs: state.isShowingTopTabs,
+                                                   windowUUID: windowUUID)
+        self.browserActions = Self.mapActions(state.addressToolbar.browserActions,
+                                              isShowingTopTabs: state.isShowingTopTabs,
+                                              windowUUID: windowUUID)
+        self.editingAccessoryAction = state.addressToolbar.editingAccessoryAction.map {
+            Self.mapAction($0, isShowingTopTabs: state.isShowingTopTabs, windowUUID: windowUUID)
+        }
 
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
         let searchEngineModel = state.addressToolbar.alternativeSearchEngine
@@ -268,27 +268,18 @@ final class AddressToolbarContainerModel: Equatable {
     }
 
     @MainActor
-    private static func mapAction(_ action: ToolbarActionConfiguration?,
-                                  isShowingTopTabs: Bool,
-                                  windowUUID: UUID) -> ToolbarElement? {
-        guard let action else { return nil }
-
-        return makeToolbarElement(action, isShowingTopTabs: isShowingTopTabs, windowUUID: windowUUID)
-    }
-
-    @MainActor
     private static func mapActions(_ actions: [ToolbarActionConfiguration],
                                    isShowingTopTabs: Bool,
                                    windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in
-            makeToolbarElement(action, isShowingTopTabs: isShowingTopTabs, windowUUID: windowUUID)
+            mapAction(action, isShowingTopTabs: isShowingTopTabs, windowUUID: windowUUID)
         }
     }
 
     @MainActor
-    private static func makeToolbarElement(_ action: ToolbarActionConfiguration,
-                                           isShowingTopTabs: Bool,
-                                           windowUUID: UUID) -> ToolbarElement {
+    private static func mapAction(_ action: ToolbarActionConfiguration,
+                                  isShowingTopTabs: Bool,
+                                  windowUUID: UUID) -> ToolbarElement {
         return ToolbarElement(
             iconName: action.iconName,
             title: action.actionLabel,
