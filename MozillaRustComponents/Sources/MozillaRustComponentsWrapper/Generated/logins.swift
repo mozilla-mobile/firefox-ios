@@ -970,6 +970,13 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
      */
     func arePotentiallyVulnerablePasswords(ids: [String]) throws  -> [String]
     
+    /**
+     * Returns a bridged sync engine for Desktop's Sync framework.
+     * Without this UDL entry the engine is invisible to JS: UniFFI generates
+     * the XPCOM glue that lets JS call `rustStore.bridgedEngine()`.
+     */
+    func bridgedEngine() throws  -> LoginsBridgedEngine
+    
     func count() throws  -> Int64
     
     func countByFormActionOrigin(formActionOrigin: String) throws  -> Int64
@@ -1188,6 +1195,19 @@ open func arePotentiallyVulnerablePasswords(ids: [String])throws  -> [String]  {
     uniffi_logins_fn_method_loginstore_are_potentially_vulnerable_passwords(
             self.uniffiCloneHandle(),
         FfiConverterSequenceString.lower(ids),$0
+    )
+})
+}
+    
+    /**
+     * Returns a bridged sync engine for Desktop's Sync framework.
+     * Without this UDL entry the engine is invisible to JS: UniFFI generates
+     * the XPCOM glue that lets JS call `rustStore.bridgedEngine()`.
+     */
+open func bridgedEngine()throws  -> LoginsBridgedEngine  {
+    return try  FfiConverterTypeLoginsBridgedEngine_lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_bridged_engine(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1484,6 +1504,242 @@ public func FfiConverterTypeLoginStore_lift(_ handle: UInt64) throws -> LoginSto
 #endif
 public func FfiConverterTypeLoginStore_lower(_ value: LoginStore) -> UInt64 {
     return FfiConverterTypeLoginStore.lower(value)
+}
+
+
+
+
+
+
+/**
+ * The Desktop-facing bridged sync engine. The canonical docs are in
+ * https://searchfox.org/mozilla-central/source/services/interfaces/mozIBridgedSyncEngine.idl
+ * It's only actually used on Desktop, but it's fine to expose this everywhere.
+ * NOTE: all timestamps here are milliseconds.
+ */
+public protocol LoginsBridgedEngineProtocol: AnyObject, Sendable {
+    
+    func apply() throws  -> [String]
+    
+    func ensureCurrentSyncId(newSyncId: String) throws  -> String
+    
+    func lastSync() throws  -> Int64
+    
+    func reset() throws 
+    
+    func resetSyncId() throws  -> String
+    
+    func setLastSync(lastSync: Int64) throws 
+    
+    func setUploaded(newTimestamp: Int64, uploadedIds: [String]) throws 
+    
+    func storeIncoming(incomingEnvelopesAsJson: [String]) throws 
+    
+    func syncFinished() throws 
+    
+    func syncId() throws  -> String?
+    
+    func syncStarted() throws 
+    
+    func wipe() throws 
+    
+}
+/**
+ * The Desktop-facing bridged sync engine. The canonical docs are in
+ * https://searchfox.org/mozilla-central/source/services/interfaces/mozIBridgedSyncEngine.idl
+ * It's only actually used on Desktop, but it's fine to expose this everywhere.
+ * NOTE: all timestamps here are milliseconds.
+ */
+open class LoginsBridgedEngine: LoginsBridgedEngineProtocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_logins_fn_clone_loginsbridgedengine(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_logins_fn_free_loginsbridgedengine(handle, $0) }
+    }
+
+    
+
+    
+open func apply()throws  -> [String]  {
+    return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_apply(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func ensureCurrentSyncId(newSyncId: String)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_ensure_current_sync_id(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(newSyncId),$0
+    )
+})
+}
+    
+open func lastSync()throws  -> Int64  {
+    return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_last_sync(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func reset()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_reset(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+open func resetSyncId()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_reset_sync_id(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func setLastSync(lastSync: Int64)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_set_last_sync(
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(lastSync),$0
+    )
+}
+}
+    
+open func setUploaded(newTimestamp: Int64, uploadedIds: [String])throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_set_uploaded(
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(newTimestamp),
+        FfiConverterSequenceString.lower(uploadedIds),$0
+    )
+}
+}
+    
+open func storeIncoming(incomingEnvelopesAsJson: [String])throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_store_incoming(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceString.lower(incomingEnvelopesAsJson),$0
+    )
+}
+}
+    
+open func syncFinished()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_sync_finished(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+open func syncId()throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_sync_id(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func syncStarted()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_sync_started(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+open func wipe()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_wipe(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+
+    
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeLoginsBridgedEngine: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = LoginsBridgedEngine
+
+    public static func lift(_ handle: UInt64) throws -> LoginsBridgedEngine {
+        return LoginsBridgedEngine(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: LoginsBridgedEngine) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> LoginsBridgedEngine {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: LoginsBridgedEngine, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLoginsBridgedEngine_lift(_ handle: UInt64) throws -> LoginsBridgedEngine {
+    return try FfiConverterTypeLoginsBridgedEngine.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLoginsBridgedEngine_lower(_ value: LoginsBridgedEngine) -> UInt64 {
+    return FfiConverterTypeLoginsBridgedEngine.lower(value)
 }
 
 
@@ -2864,6 +3120,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_are_potentially_vulnerable_passwords() != 24759) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_logins_checksum_method_loginstore_bridged_engine() != 17864) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_logins_checksum_method_loginstore_count() != 14902) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -2934,6 +3193,42 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_wipe_local() != 53422) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_apply() != 41329) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_ensure_current_sync_id() != 41085) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_last_sync() != 59682) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_reset() != 37044) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_reset_sync_id() != 63879) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_set_last_sync() != 28145) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_set_uploaded() != 62228) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_store_incoming() != 41331) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_sync_finished() != 4118) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_sync_id() != 41787) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_sync_started() != 40049) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginsbridgedengine_wipe() != 16170) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_constructor_loginstore_new() != 9176) {
