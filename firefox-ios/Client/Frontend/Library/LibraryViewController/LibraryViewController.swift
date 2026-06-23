@@ -11,7 +11,7 @@ class LibraryViewController: UIViewController, Themeable {
         struct NavigationMenu {
             static let height: CGFloat = 40
             static let horizontalPadding: CGFloat = 15
-            static let bottomPadding: CGFloat = 12
+            static let bottomPadding: CGFloat = 30
         }
     }
 
@@ -89,8 +89,6 @@ class LibraryViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // setupSegmentControl() calls makeSegmentControl(), which makes a new
-        // UISegmentedControl
         setupSegmentControl()
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
         applyTheme()
@@ -123,7 +121,12 @@ class LibraryViewController: UIViewController, Themeable {
 
     private func setupSegmentControl() {
         librarySegmentControl.removeFromSuperview()
+
+        // makeSegmentControl() makes a new UISegmentedControl.
+        // We need to do this in viewWillAppear (calls setupSegmentControl) to avoid a
+        // liquid glass animation bug that was fixed in iOS 26.4
         librarySegmentControl = makeSegmentControl()
+
         view.addSubview(librarySegmentControl)
 
         NSLayoutConstraint.activate([
