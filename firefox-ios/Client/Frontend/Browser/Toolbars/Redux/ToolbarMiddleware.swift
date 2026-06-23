@@ -19,6 +19,7 @@ final class ToolbarMiddleware {
     private let recentSearchProvider: RecentSearchProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizerConfigFactory: SummarizerConfigFactory
+    private let featureFlagsProvider: FeatureFlagProviding
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -36,10 +37,12 @@ final class ToolbarMiddleware {
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          recentSearchProvider: RecentSearchProvider? = nil,
+         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.summarizerConfigFactory = summarizerConfigFactory
+        self.featureFlagsProvider = featureFlagsProvider
         self.manager = manager
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
@@ -97,6 +100,7 @@ final class ToolbarMiddleware {
                 displayNavBorder: displayBorder,
                 middleButton: middleButton,
                 isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
+                isGoogleLensEnabled: featureFlagsProvider.isEnabled(.googleLens),
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)

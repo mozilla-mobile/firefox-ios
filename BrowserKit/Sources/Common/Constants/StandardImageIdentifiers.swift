@@ -30,6 +30,7 @@ public struct StandardImageIdentifiers {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
         public static let lightning = "lightningMedium"
+        public static let googleLens = "logoGoogleLensMedium"
         public static let nightMode = "nightModeMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
         public static let readerView = "readerViewMedium"

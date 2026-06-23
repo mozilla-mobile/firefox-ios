@@ -19,6 +19,7 @@ struct ToolbarActionConfiguration: Equatable {
         case stopLoading
         case trackingProtection
         case locationView
+        case googleLens
         case readerMode
         case readerModeWithSummarizer
         case summarizer
