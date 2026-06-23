@@ -15,6 +15,12 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     private let discardResult: Result<Void, Error>
     private let detectPageLanguageResult: Result<String, Error>
     private let currentTranslationStateResult: Result<PageTranslationState, Error>
+    /// Successive results returned by `currentTranslationState`, one per call. When non-empty it
+    /// overrides `currentTranslationStateResult`, letting a test model the two reads a single
+    /// back/forward triggers (e.g. a mid-transition `.notTranslated` followed by the restored
+    /// `.translated`). The last element is reused once exhausted.
+    private let currentTranslationStateResults: [Result<PageTranslationState, Error>]
+    private var currentTranslationStateCallIndex = 0
 
     // MARK: - Init
     init(
@@ -23,7 +29,8 @@ final class MockTranslationsService: TranslationsServiceProtocol {
         firstResponseReceivedResult: Result<Void, Error> = .success(()),
         discardResult: Result<Void, Error> = .success(()),
         detectPageLanguageResult: Result<String, Error> = .success("en"),
-        currentTranslationStateResult: Result<PageTranslationState, Error> = .success(.notTranslated)
+        currentTranslationStateResult: Result<PageTranslationState, Error> = .success(.notTranslated),
+        currentTranslationStateResults: [Result<PageTranslationState, Error>] = []
     ) {
         self.shouldOfferTranslationResult = shouldOfferTranslationResult
         self.translateResult = translateResult
@@ -31,6 +38,7 @@ final class MockTranslationsService: TranslationsServiceProtocol {
         self.discardResult = discardResult
         self.detectPageLanguageResult = detectPageLanguageResult
         self.currentTranslationStateResult = currentTranslationStateResult
+        self.currentTranslationStateResults = currentTranslationStateResults
     }
 
     // MARK: - TranslationsServiceProtocol
@@ -65,6 +73,11 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     }
 
     func currentTranslationState(for windowUUID: WindowUUID) async throws -> PageTranslationState {
-        return try currentTranslationStateResult.get()
+        guard !currentTranslationStateResults.isEmpty else {
+            return try currentTranslationStateResult.get()
+        }
+        let index = min(currentTranslationStateCallIndex, currentTranslationStateResults.count - 1)
+        currentTranslationStateCallIndex += 1
+        return try currentTranslationStateResults[index].get()
     }
 }

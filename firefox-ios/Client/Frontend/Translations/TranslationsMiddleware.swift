@@ -44,6 +44,11 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         let task: Task<Void, Never>
     }
     private var translationTasks: [WindowUUID: InFlightTranslation] = [:]
+    /// The in-flight navigation reconcile (engine read + eligibility) per window. A single
+    /// back/forward emits several `urlDidChange`s whose reads observe the document at different
+    /// transition moments; only the latest read may write toolbar state. A new navigation cancels
+    /// the previous reconcile so a stale "not translated" read can't clobber a correct `.active`.
+    private var navigationReconcileTasks: [WindowUUID: Task<Void, Never>] = [:]
     var backgroundTimestamp: Date?
     private static let backgroundRecoveryThreshold: TimeInterval = 3
 
@@ -172,40 +177,59 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         // The translation state lives in the page, so it is correct after both back/forward cache
         // restores (translated DOM survives) and fresh reloads (untranslated) — unlike a cached
         // guess, which cannot tell the two apart.
+        // Supersede any reconcile still resolving for this window: a single back/forward emits
+        // several `urlDidChange`s whose reads observe the document mid-transition, so only the
+        // latest read may write toolbar state.
         let originatingTab = selectedTab(for: action.windowUUID)
-        Task {
-            let pageState: PageTranslationState
-            do {
-                pageState = try await self.translationsService.currentTranslationState(for: windowUUID)
-            } catch {
-                self.logger.log(
-                    "Failed to read in-page translation state on navigation; treating page as untranslated.",
-                    level: .warning,
-                    category: .translations,
-                    description: error.localizedDescription
-                )
-                // An unreadable engine state must not strand a stale `.active`: fall back to untranslated.
-                self.persistTranslationConfig(nil, on: originatingTab)
-                self.checkTranslationsAreEligible(for: action, on: originatingTab)
-                return
-            }
+        navigationReconcileTasks[windowUUID]?.cancel()
+        navigationReconcileTasks[windowUUID] = Task {
+            await self.reconcileNavigationState(action: action, windowUUID: windowUUID, originatingTab: originatingTab)
+        }
+    }
 
-            switch pageState {
-            case .translated(let from, let to):
-                self.dispatchAction(
-                    for: TranslationsActionType.translationCompleted,
-                    with: .active,
-                    translatedToLanguage: to,
-                    sourceLanguage: from,
-                    and: windowUUID,
-                    on: originatingTab
-                )
-            case .notTranslated:
-                // Not translated: reset any stale `.active` so the eligibility check isn't
-                // short-circuited, then re-offer or clear as appropriate.
-                self.persistTranslationConfig(nil, on: originatingTab)
-                self.checkTranslationsAreEligible(for: action, on: originatingTab)
-            }
+    /// Reads the engine's ground-truth translation state for the just-committed document and writes
+    /// the resulting toolbar state. Runs inside the per-window reconcile task so a superseding
+    /// navigation's cancellation prevents a stale read from writing over the latest one.
+    private func reconcileNavigationState(
+        action: ToolbarAction,
+        windowUUID: WindowUUID,
+        originatingTab: Tab?
+    ) async {
+        let pageState: PageTranslationState
+        do {
+            pageState = try await translationsService.currentTranslationState(for: windowUUID)
+        } catch {
+            guard !Task.isCancelled else { return }
+            logger.log(
+                "Failed to read in-page translation state on navigation; treating page as untranslated.",
+                level: .warning,
+                category: .translations,
+                description: error.localizedDescription
+            )
+            // An unreadable engine state must not strand a stale `.active`: fall back to untranslated.
+            persistTranslationConfig(nil, on: originatingTab)
+            await reconcileEligibility(for: action, on: originatingTab)
+            return
+        }
+
+        guard !Task.isCancelled else { return }
+
+        switch pageState {
+        case .translated(let from, let to):
+            dispatchAction(
+                for: TranslationsActionType.translationCompleted,
+                with: .active,
+                translatedToLanguage: to,
+                sourceLanguage: from,
+                and: windowUUID,
+                on: originatingTab
+            )
+        case .notTranslated:
+            // Not translated: reset any stale `.active` so the eligibility check isn't
+            // short-circuited, then re-offer or clear as appropriate. Awaited in this same
+            // task so a superseding navigation's cancellation reaches the eligibility check.
+            persistTranslationConfig(nil, on: originatingTab)
+            await reconcileEligibility(for: action, on: originatingTab)
         }
     }
 
@@ -529,6 +553,13 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     /// Checks whether the current page in the active tab is eligible for translation,
     /// and if so, dispatches a translation action to update the translation state.
     private func checkTranslationsAreEligible(for action: Action, on tab: Tab? = nil) {
+        Task { await reconcileEligibility(for: action, on: tab) }
+    }
+
+    /// Runs the eligibility check and writes the resulting toolbar state. Awaitable so callers that
+    /// run inside a cancellable task (the `urlDidChange` reconcile) propagate cancellation here: a
+    /// superseding navigation cancels this work before it can write a stale icon state.
+    private func reconcileEligibility(for action: Action, on tab: Tab? = nil) async {
         // Pre-capture the tab so a tab switch mid-flight doesn't stomp the new active tab's state.
         let originatingTab = tab ?? selectedTab(for: action.windowUUID)
         // The action's `isTranslationsEnabled` carries the explicit new value for settings-change
@@ -552,45 +583,50 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             return
         }
 
-        Task {
-            do {
-                let preferredLanguages = await targetLanguagesForEligibilityCheck()
-                let isEligible = try await translationsService.shouldOfferTranslation(
-                    for: action.windowUUID,
-                    using: preferredLanguages
-                )
-                guard isEligible else {
-                    self.dispatchClearTranslationIcon(windowUUID: action.windowUUID, on: originatingTab)
-                    return
-                }
+        do {
+            let preferredLanguages = await targetLanguagesForEligibilityCheck()
+            let isEligible = try await translationsService.shouldOfferTranslation(
+                for: action.windowUUID,
+                using: preferredLanguages
+            )
 
-                // Auto-translate handled the page load — skip the manual offer.
-                if await self.tryAutoTranslate(windowUUID: action.windowUUID, on: originatingTab) { return }
+            // A superseding navigation cancelled this reconcile while we awaited language detection;
+            // its read is authoritative, so don't write a stale icon state over it.
+            guard !Task.isCancelled else { return }
 
-                // Auto-translate didn't run; offer manual translation instead.
-                // A bfcache restoration may have set `.active` between when this check
-                // started and now — don't clobber it.
-                guard originatingTab?.translationConfiguration?.state != .active else { return }
-                let config = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
-                self.persistTranslationConfig(config, on: originatingTab)
-                let translationsAction = TranslationsAction(
-                    translationConfiguration: config,
-                    windowUUID: action.windowUUID,
-                    actionType: TranslationsActionType.receivedTranslationLanguage
-                )
-                store.dispatch(translationsAction)
-            } catch {
-                let serviceError = TranslationsServiceError.fromUnknown(error)
-                translationsTelemetry.pageLanguageIdentificationFailed(
-                    errorType: serviceError.telemetryDescription
-                )
-                logger.log(
-                    "Unable to detect language from page to determine if eligible for translations.",
-                    level: .warning,
-                    category: .translations,
-                    extra: ["LanguageDetector error": "\(error.localizedDescription)"]
-                )
+            guard isEligible else {
+                dispatchClearTranslationIcon(windowUUID: action.windowUUID, on: originatingTab)
+                return
             }
+
+            // Auto-translate handled the page load — skip the manual offer.
+            if await tryAutoTranslate(windowUUID: action.windowUUID, on: originatingTab) { return }
+
+            guard !Task.isCancelled else { return }
+
+            // Auto-translate didn't run; offer manual translation instead.
+            // A bfcache restoration may have set `.active` between when this check
+            // started and now — don't clobber it.
+            guard originatingTab?.translationConfiguration?.state != .active else { return }
+            let config = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
+            persistTranslationConfig(config, on: originatingTab)
+            let translationsAction = TranslationsAction(
+                translationConfiguration: config,
+                windowUUID: action.windowUUID,
+                actionType: TranslationsActionType.receivedTranslationLanguage
+            )
+            store.dispatch(translationsAction)
+        } catch {
+            let serviceError = TranslationsServiceError.fromUnknown(error)
+            translationsTelemetry.pageLanguageIdentificationFailed(
+                errorType: serviceError.telemetryDescription
+            )
+            logger.log(
+                "Unable to detect language from page to determine if eligible for translations.",
+                level: .warning,
+                category: .translations,
+                extra: ["LanguageDetector error": "\(error.localizedDescription)"]
+            )
         }
     }
 

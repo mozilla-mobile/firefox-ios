@@ -346,6 +346,49 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertNotEqual(tab.translationConfiguration?.state, .active)
     }
 
+    /// Regression: a single back/forward emits several `urlDidChange`s whose engine reads observe the
+    /// document mid-transition. The first read can see a not-yet-restored (`.notTranslated`) document
+    /// while the superseding read sees the restored, translated one. The superseded reconcile must be
+    /// cancelled so its eligibility check can't re-offer/clear over the `.active` the latest read sets.
+    func test_urlDidChangeAction_whenSupersededByLaterNavigation_staleReadDoesNotClobberActive() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        mockTabManager.selectedTab = tab
+        // First read: document mid-transition, not yet translated (would re-offer and clobber).
+        // Second read: restored, translated document — this is the authoritative one.
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true),
+            currentTranslationStateResults: [.success(.notTranslated), .success(.translated(from: "fr", to: "en"))]
+        )
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "translationCompleted .active dispatched")
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? TranslationsActionType) == .translationCompleted {
+                expectation.fulfill()
+            }
+        }
+
+        // Two urlDidChange for the same page: the second supersedes (and cancels) the first.
+        subject.translationsProvider(mockStore.state, action)
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(tab.translationConfiguration?.state, .active)
+        let didReoffer = mockStore.dispatchedActions.contains {
+            ($0 as? TranslationsAction)?.actionType as? TranslationsActionType == .receivedTranslationLanguage
+        }
+        XCTAssertFalse(didReoffer, "Superseded stale read must not re-offer/clear over the active state")
+    }
+
     /// urlDidChange with `.loading` skips eligibility re-check.
     func test_urlDidChangeAction_withLoadingState_skipsEligibilityRecheck() throws {
         setTranslationsFeatureEnabled(enabled: true)
