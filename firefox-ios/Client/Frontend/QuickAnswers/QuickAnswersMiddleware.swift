@@ -6,8 +6,6 @@ import Common
 import Redux
 import Shared
 
-/// Public surface for reading the Quick Answers feature's enabled state.
-/// Used to derive the initial value for the header state.
 @MainActor
 protocol QuickAnswersStore {
     /// Whether the Quick Answers feature flag is enabled and the user preference for it is enabled.
