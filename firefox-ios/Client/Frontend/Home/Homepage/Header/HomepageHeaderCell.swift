@@ -134,12 +134,10 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             : ImageIdentifiers.homeHeaderLogoBall
         logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
-        let shouldShowQuickAnswersButton = headerState.showQuickAnswersButton && !headerState.isPrivate
-        quickAnswersButton.isHidden = !shouldShowQuickAnswersButton
+        quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 
-        // On iPhone, the visible button is pinned trailing and the logo is aligned leading.
-        // Otherwise (iPad layout, or no button) the logo stays centered within the cell.
-        let alignLogoToLeading = shouldShowQuickAnswersButton && !headerState.showiPadSetup
+        // if the quick answers button is visible and we are on iPhone setup, align the logo to the leading
+        let alignLogoToLeading = headerState.showQuickAnswersButton && !headerState.showiPadSetup
         logoCenterXConstraint.isActive = !alignLogoToLeading
         logoLeadingConstraint.isActive = alignLogoToLeading
     }
