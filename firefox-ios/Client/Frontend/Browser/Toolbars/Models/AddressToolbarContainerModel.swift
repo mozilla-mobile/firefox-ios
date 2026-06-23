@@ -37,6 +37,10 @@ final class AddressToolbarContainerModel: Equatable {
     let scrollAlpha: Float
     let hasAlternativeLocationColor: Bool
 
+    var isAddressBarMinimized: Bool {
+        return scrollAlpha.isZero
+    }
+
     let windowUUID: UUID
 
     @MainActor

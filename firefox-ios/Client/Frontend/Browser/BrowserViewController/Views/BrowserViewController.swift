@@ -625,7 +625,7 @@ class BrowserViewController: UIViewController,
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
-        )?.scrollAlpha == 0
+        )?.isAddressBarMinimized == true
         let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
