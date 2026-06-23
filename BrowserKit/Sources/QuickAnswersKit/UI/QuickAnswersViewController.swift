@@ -65,6 +65,7 @@ public final class QuickAnswersViewController: UIViewController,
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
     private let store: Store
+    private let learnMoreURL: URL?
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
         navigationHandler: navigationHandler
@@ -76,6 +77,7 @@ public final class QuickAnswersViewController: UIViewController,
         prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
+        learnMoreURL: URL?,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
@@ -85,6 +87,7 @@ public final class QuickAnswersViewController: UIViewController,
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            learnMoreURL: learnMoreURL,
             notificationCenter: notificationCenter
         )
     }
@@ -96,6 +99,7 @@ public final class QuickAnswersViewController: UIViewController,
         transitionType: QuickAnswersTransitionType,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
+        learnMoreURL: URL?,
         notificationCenter: NotificationProtocol
     ) {
         self.navigationHandler = navigationHandler
@@ -115,6 +119,7 @@ public final class QuickAnswersViewController: UIViewController,
         }
         self.viewModel = viewModel
         self.store = store
+        self.learnMoreURL = learnMoreURL
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
         transitioningDelegate = transitionAnimator
@@ -216,6 +221,7 @@ public final class QuickAnswersViewController: UIViewController,
             }
         }
         contentView.configureOptIn(
+            learnMoreURL: learnMoreURL,
             onContinue: { [weak self] in
                 self?.store.setOptInCompleted()
                 self?.contentView.hideOptIn()

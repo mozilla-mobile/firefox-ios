@@ -40,6 +40,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
             transitionType: transitionType,
             windowUUID: .XCTestDefaultUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+            learnMoreURL: nil,
             notificationCenter: NotificationCenter.default
         )
         trackForMemoryLeaks(subject, file: file, line: line)

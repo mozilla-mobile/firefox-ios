@@ -119,7 +119,12 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         scrollView.contentInset.bottom = height
     }
 
-    func configureOptIn(onContinue: @escaping () -> Void, onLearnMore: @escaping (URL) -> Void) {
+    func configureOptIn(
+        learnMoreURL: URL?,
+        onContinue: @escaping () -> Void,
+        onLearnMore: @escaping (URL) -> Void
+    ) {
+        optInView.learnMoreURL = learnMoreURL
         optInView.onContinue = onContinue
         optInView.onLearnMore = onLearnMore
     }

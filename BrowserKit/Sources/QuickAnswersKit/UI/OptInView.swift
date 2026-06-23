@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import Shared
 
 // TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
@@ -21,11 +20,15 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         We don't store your voice or questions.
         """
         static let learnMoreText = "Learn more"
-        static let learnMoreURL = SupportUtils.URLForTopic("quick-answer-mobile")
     }
 
     var onContinue: (() -> Void)?
     var onLearnMore: ((URL) -> Void)?
+    var learnMoreURL: URL? {
+        didSet {
+            descriptionTextView.attributedText = makeDescriptionText()
+        }
+    }
 
     // MARK: - Subviews
     private let titleLabel: UILabel = .build {
@@ -93,7 +96,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
             attributes: [.font: font]
         )
         var linkAttributes: [NSAttributedString.Key: Any] = [.font: font]
-        if let learnMoreURL = UX.learnMoreURL {
+        if let learnMoreURL {
             linkAttributes[.link] = learnMoreURL
         }
         text.append(NSAttributedString(string: UX.learnMoreText, attributes: linkAttributes))
