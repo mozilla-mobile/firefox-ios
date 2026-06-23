@@ -20,7 +20,6 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
         static let englishLanguage = "English"
         static let defaultSources: [any SummarizerConfigSourceProtocol] = [
             UserSummarizerConfigSource(),
-            RemoteSummarizerConfigSource(),
             DefaultSummarizerConfigSource(),
         ]
     }
