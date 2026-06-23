@@ -181,7 +181,7 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertTrue(state.isPrivate)
         XCTAssertFalse(state.showQuickAnswersButton)
     }
-    
+
     func test_quickAnswersDidUpdateSettings_enabled_setsShowQuickAnswersButtonTrue() {
         let initialState = createSubject()
         let reducer = headerReducer()
