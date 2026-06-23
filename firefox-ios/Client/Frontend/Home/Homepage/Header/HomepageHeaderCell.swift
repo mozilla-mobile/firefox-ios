@@ -109,7 +109,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             quickAnswersButton.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
             quickAnswersButton.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor)
         ])
-        logoCenterConstraint.isActive = true
     }
 
     func configure(headerState: HeaderState,
@@ -122,7 +121,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             : ImageIdentifiers.homeHeaderLogoBall
         logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
-        quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
+//        quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 
         // if the quick answers button is visible and we are on iPhone setup, align the logo to the leading
         let alignLogoToLeading = headerState.showQuickAnswersButton && !headerState.showiPadSetup

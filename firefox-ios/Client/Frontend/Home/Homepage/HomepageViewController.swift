@@ -626,6 +626,13 @@ final class HomepageViewController: UIViewController,
         switch item {
         case .header(let state, let logoTextColor):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
+                var state = state
+                // This work around is needed unfortunately to avoid lags when showing the quick answer button
+                // on iPad. It happens that state is not aligned 
+                var shouldUseiPadLayout = shouldUseiPadSetup()
+                if state.showiPadSetup != shouldUseiPadLayout {
+                    state.showiPadSetup = shouldUseiPadLayout
+                }
                 cell.configure(headerState: state, logoTextColor: logoTextColor)
                 cell.applyTheme(theme: currentTheme)
             }
