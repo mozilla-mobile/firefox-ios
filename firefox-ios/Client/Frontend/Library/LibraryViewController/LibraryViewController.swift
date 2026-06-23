@@ -11,7 +11,7 @@ class LibraryViewController: UIViewController, Themeable {
         struct NavigationMenu {
             static let height: CGFloat = 40
             static let horizontalPadding: CGFloat = 15
-            static let bottomPadding: CGFloat = 30
+            static let bottomPadding: CGFloat = 12
         }
     }
 
