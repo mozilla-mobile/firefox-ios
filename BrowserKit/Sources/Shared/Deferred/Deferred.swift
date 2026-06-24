@@ -138,8 +138,7 @@ open class Deferred<T: Sendable>: @unchecked Sendable {
 
 // FIXME: FXIOS-13242 We want to remove this function for the sake of proper Swift Concurrency
 public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
-    //swiftlint:disable:next empty_count
-    if deferreds.count == 0 {
+    if deferreds.isEmpty {
         return Deferred(value: [])
     }
 
