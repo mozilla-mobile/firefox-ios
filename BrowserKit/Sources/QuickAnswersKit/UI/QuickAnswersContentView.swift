@@ -10,6 +10,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 32.0
         static let animationDuration: TimeInterval = 0.2
+        static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
     }
 
     // MARK: - Subviews
@@ -19,6 +20,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.clipsToBounds = false
     }
     private let contentView: UIView = .build()
+    private let audioWaveform: AudioWaveformView = .build()
     private let placeholderLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.text = "Ask anything…"
@@ -46,6 +48,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private let sourceView: QuickAnswersSourceView = .build {
         $0.alpha = 0.0
     }
+    private let optInView: OptInView = .build()
     private var theme: Theme?
 
     // MARK: - Init
@@ -60,7 +63,14 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
 
     // MARK: - Setup
     private func setupSubviews() {
-        contentView.addSubviews(placeholderLabel, transcriptLabel, searchingLabel, answerLabel, sourceView)
+        contentView.addSubviews(
+            audioWaveform,
+            placeholderLabel,
+            transcriptLabel,
+            searchingLabel,
+            answerLabel,
+            sourceView
+        )
         scrollView.addSubview(contentView)
         addSubview(scrollView)
 
@@ -72,11 +82,16 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
-            placeholderLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            audioWaveform.topAnchor.constraint(equalTo: contentView.topAnchor),
+            audioWaveform.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
+            audioWaveform.heightAnchor.constraint(equalToConstant: UX.audioWaveformSize.height),
+
+            placeholderLabel.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor, constant: UX.contentSpacing),
             placeholderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             placeholderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            transcriptLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            transcriptLabel.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor, constant: UX.contentSpacing),
             transcriptLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             transcriptLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
@@ -96,8 +111,40 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     // MARK: - Configuration
+    func startAudioWaveformAnimation() {
+        audioWaveform.startAnimating()
+    }
+
     func adjustBottomInsets(for height: CGFloat) {
         scrollView.contentInset.bottom = height
+    }
+
+    func configureOptIn(
+        learnMoreURL: URL?,
+        onContinue: @escaping () -> Void,
+        onLearnMore: @escaping (URL) -> Void
+    ) {
+        optInView.learnMoreURL = learnMoreURL
+        optInView.onContinue = onContinue
+        optInView.onLearnMore = onLearnMore
+    }
+
+    func showOptIn() {
+        contentView.addSubview(optInView)
+        optInView.pinToSuperview()
+        placeholderLabel.alpha = 0.0
+        audioWaveform.alpha = 0.0
+    }
+
+    func hideOptIn() {
+        UIView.animate(withDuration: UX.animationDuration) {
+            self.optInView.alpha = 0.0
+            self.placeholderLabel.alpha = 1.0
+            self.audioWaveform.alpha = 1.0
+        } completion: { [weak self] _ in
+            self?.optInView.removeFromSuperview()
+            self?.audioWaveform.startAnimating()
+        }
     }
 
     func configureTranscript(_ text: String) {
@@ -120,6 +167,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     func configureSearching() {
+        audioWaveform.stopAnimating()
         if let theme {
             searchingLabel.startShimmering(
                 light: theme.colors.textDisabled,
@@ -150,10 +198,12 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
+        audioWaveform.applyTheme(theme: theme)
         placeholderLabel.textColor = theme.colors.textSecondary
         transcriptLabel.textColor = theme.colors.textPrimary
         searchingLabel.textColor = theme.colors.textSecondary
         answerLabel.textColor = theme.colors.textPrimary
         sourceView.applyTheme(theme: theme)
+        optInView.applyTheme(theme: theme)
     }
 }

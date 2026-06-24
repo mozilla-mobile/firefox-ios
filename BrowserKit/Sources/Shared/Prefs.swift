@@ -139,6 +139,10 @@ public struct PrefsKeys {
         public static let WorldCupSeenWinningMatchIDs = "WorldCupSeenWinningMatchIDsUserPrefsKey"
     }
 
+    public struct QuickAnswers {
+        public static let optInCompleted = "quickAnswers.optInCompleted"
+    }
+
     public struct SearchSettings {
         public static let showFirefoxBrowsingHistorySuggestions = "FirefoxSuggestBrowsingHistorySuggestions"
         public static let showFirefoxBookmarksSuggestions = "FirefoxSuggestBookmarksSuggestions"
