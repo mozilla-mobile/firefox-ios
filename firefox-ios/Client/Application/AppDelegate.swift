@@ -54,6 +54,8 @@ class AppDelegate: UIResponder,
     private var suggestBackgroundUtility: BackgroundFirefoxSuggestIngestUtility?
     private var suggestBackgroundTaskID: UIBackgroundTaskIdentifier = .invalid
     private static let suggestBackgroundTaskName = "SuggestIngest"
+    private var webServerShutdownTaskID: UIBackgroundTaskIdentifier = .invalid
+    private static let webServerShutdownTaskName = "WebServerShutdown"
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
     private lazy var metricKitWrapper = MetricKitWrapper()
@@ -223,15 +225,32 @@ class AppDelegate: UIResponder,
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
         // <500ms is expected on newer devices.
         singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
-        singleShotTimer.setEventHandler {
-            WebServer.sharedInstance.server.stop()
+        singleShotTimer.setEventHandler { [weak self] in
+            guard let self else { return }
             self.shutdownWebServer = nil
+            // Stop the server off the main thread so a slow shutdown can't trip the watchdog.
+            // Hold a background task so iOS lets the stop finish while we're backgrounded, and
+            // end it both when the stop completes and if the OS deadline expires first.
+            self.webServerShutdownTaskID = application.beginBackgroundTask(
+                withName: Self.webServerShutdownTaskName) { [weak self] in
+                self?.endWebServerShutdownTask()
+            }
+            WebServer.sharedInstance.stop { [weak self] in
+                Task { @MainActor in self?.endWebServerShutdownTask() }
+            }
         }
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
         backgroundWorkUtility?.scheduleOnAppBackground()
 
         logger.log("applicationDidEnterBackground end", level: .info, category: .lifecycle)
+    }
+
+    @MainActor
+    private func endWebServerShutdownTask() {
+        guard webServerShutdownTaskID != .invalid else { return }
+        UIApplication.shared.endBackgroundTask(webServerShutdownTaskID)
+        webServerShutdownTaskID = .invalid
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
