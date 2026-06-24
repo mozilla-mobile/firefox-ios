@@ -15,9 +15,8 @@ final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
         static let actionButtonSize = CGSize(width: 24, height: 24)
-        static let heroImageWidth: CGFloat = 80.0
-        static let heroImageHeight: CGFloat = 140.0
-        static let heroImageTrailingPadding: CGFloat = 12.0
+        static let heroImageWidth: CGFloat = 120.0
+        static let heroImageHeight: CGFloat = 120.0
         static let heroImageName = "kitHero"
         static let scheduleURL = "https://www.fifa.com/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures"
     }
@@ -149,15 +148,11 @@ final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
         addSubviews(leftContentStack, heroImageView, actionButton)
 
         NSLayoutConstraint.activate([
-            heroImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            heroImageView.trailingAnchor.constraint(
-                equalTo: actionButton.leadingAnchor,
-                constant: -UX.heroImageTrailingPadding
-            ),
+            heroImageView.trailingAnchor.constraint(equalTo: actionButton.leadingAnchor),
             heroImageView.widthAnchor.constraint(equalToConstant: UX.heroImageWidth),
             heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageHeight),
             heroImageView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
-            heroImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+            heroImageView.bottomAnchor.constraint(lessThanOrEqualTo: leftContentStack.bottomAnchor),
 
             actionButton.topAnchor.constraint(equalTo: topAnchor),
             actionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
