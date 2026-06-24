@@ -247,9 +247,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         switch type {
         case .light:
             return NovaLightTheme()
-        // TODO: Add Nova dark theme, nightMode and privateMode.
-        case .dark, .nightMode, .privateMode:
-            return nil
+        case .dark:
+            return NovaDarkTheme()
+        case .nightMode:
+            return NovaNightModeTheme()
+        case .privateMode:
+            return NovaPrivateTheme()
         }
     }
 
