@@ -41,7 +41,8 @@ class BrowserViewController: UIViewController,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
-                             LegacyTabScrollController.Delegate {
+                             LegacyTabScrollController.Delegate,
+                             SearchEngineDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
@@ -513,6 +514,7 @@ class BrowserViewController: UIViewController,
         tabManager.addDelegate(self)
         tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
+        self.searchEnginesManager.delegate = self
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             ensureMainThread { [weak self] in
@@ -4666,6 +4668,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
         store.dispatch(action)
         searchController?.reloadSearchEngines()
         searchController?.reloadData()
+    }
+
+    func searchEnginesDidUpdate() {
+        updateForDefaultSearchEngineDidChange()
     }
 
     func setLocationView(text: String, search: Bool) {
