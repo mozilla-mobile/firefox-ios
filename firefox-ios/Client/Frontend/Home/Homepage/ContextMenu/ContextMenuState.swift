@@ -301,7 +301,11 @@ struct ContextMenuState {
 
     private func getBookmarkAction(site: Site) -> PhotonRowActions {
         let bookmarkAction: SingleActionViewModel
-        let isBookmarked = profile.places.isBookmarked(url: site.url).value.successValue ?? false
+        // The context menu is built synchronously on the main thread, so we cap the bookmark
+        // lookup with a short timeout instead of blocking indefinitely on a contended Places
+        // DB (which could trip the watchdog). On timeout we default to "not bookmarked".
+        let isBookmarked = profile.places.isBookmarked(url: site.url)
+            .value(timeout: .milliseconds(100))?.successValue ?? false
         if isBookmarked {
             bookmarkAction = getRemoveBookmarkAction(site: site)
         } else {
