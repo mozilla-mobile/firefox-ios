@@ -471,13 +471,10 @@
 		3933D4F42EF3358300C0C4E3 /* DefaultBrowserUtilityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3933D4F32EF3357D00C0C4E3 /* DefaultBrowserUtilityTelemetry.swift */; };
 		3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */; };
 		39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39455F761FC83F430088A22C /* TabEventHandler.swift */; };
-<<<<<<< HEAD
-=======
 		394614102FEC2928003321D8 /* MockWorldCupFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3946140F2FEC2928003321D8 /* MockWorldCupFeed.swift */; };
 		394615602FEC37E3003321D8 /* WebServerUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3946155F2FEC37E1003321D8 /* WebServerUtilTests.swift */; };
 		394615622FEC37FC003321D8 /* MockWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394615612FEC37FA003321D8 /* MockWebServer.swift */; };
 		394615642FEC381D003321D8 /* MockReaderModeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394615632FEC381A003321D8 /* MockReaderModeHandlers.swift */; };
->>>>>>> dc1b88d81 (Refator FXIOS-161446 [GCDWebServer] Move GCDWebServer lifecycle off main thread (#34399))
 		394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
 		3954D0F12F74288E00CDC338 /* MerinoStoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3954D0F02F74286800CDC338 /* MerinoStoryResponse.swift */; };
 		39673BC12B6D82F400653F4A /* FxNimbusMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39673BC02B6D82F400653F4A /* FxNimbusMessaging.swift */; };
@@ -3492,13 +3489,10 @@
 		3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAPushMessageTest.swift; sourceTree = "<group>"; };
 		39444D13AAEACA4C6EF83703 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		39455F761FC83F430088A22C /* TabEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabEventHandler.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
-=======
 		3946140F2FEC2928003321D8 /* MockWorldCupFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupFeed.swift; sourceTree = "<group>"; };
 		3946155F2FEC37E1003321D8 /* WebServerUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServerUtilTests.swift; sourceTree = "<group>"; };
 		394615612FEC37FA003321D8 /* MockWebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWebServer.swift; sourceTree = "<group>"; };
 		394615632FEC381A003321D8 /* MockReaderModeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReaderModeHandlers.swift; sourceTree = "<group>"; };
->>>>>>> dc1b88d81 (Refator FXIOS-161446 [GCDWebServer] Move GCDWebServer lifecycle off main thread (#34399))
 		394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSuggestedSites.swift; sourceTree = "<group>"; };
 		3954D0F02F74286800CDC338 /* MerinoStoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoStoryResponse.swift; sourceTree = "<group>"; };
 		3964F5FB2656D2B500065278 /* initial_experiments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = initial_experiments.json; path = Client/Experiments/initial_experiments.json; sourceTree = SOURCE_ROOT; };
