@@ -1880,8 +1880,9 @@ workflows:
         title: Pin Python version
         inputs:
         - content: |-
-            brew unlink python@3.12
-            brew unlink python@3.11
+            brew install python@3.11
+            brew unlink python@3.12 || true
+            brew unlink python@3.11 || true
             brew link --force python@3.11
     - cache-push@2:
         inputs:
