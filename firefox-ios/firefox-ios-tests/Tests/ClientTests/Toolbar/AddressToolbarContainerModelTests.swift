@@ -184,11 +184,26 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     func testAddressToolbarConfig_withGoogleLensFeatureEnabled_configuresEditingAccessoryButton() {
         let state = createToolbarState(isGoogleLensEnabled: true)
         let model = createSubject(withState: state)
+        let expectedMenuElements = [
+            ToolbarMenuElement(
+                title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
+                imageName: StandardImageIdentifiers.Large.cameraLarge,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction,
+                onSelected: { _ in }
+            ),
+            ToolbarMenuElement(
+                title: .AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle,
+                imageName: StandardImageIdentifiers.Large.image,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensPhotoLibraryAction,
+                onSelected: { _ in }
+            )
+        ]
 
         XCTAssertEqual(state.addressToolbar.editingAccessoryAction?.actionType, .googleLens)
         let accessoryAction = model.addressToolbarConfig.locationViewConfiguration.editingAccessoryAction
         XCTAssertEqual(accessoryAction?.iconName, StandardImageIdentifiers.Medium.googleLens)
         XCTAssertEqual(accessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
+        XCTAssertEqual(accessoryAction?.menuElements, expectedMenuElements)
     }
 
     @MainActor
