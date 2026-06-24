@@ -35,21 +35,14 @@ final class WorldCupMiddleware {
         self.lastWindowUUID = action.windowUUID
         switch action.actionType {
         case HomepageActionType.initialize,
-             HomepageMiddlewareActionType.enteredForeground,
+             HomepageMiddlewareActionType.didBecomeActive,
              WorldCupActionType.retryMatchesFetch:
             self.startFeed(windowUUID: action.windowUUID)
-<<<<<<< HEAD
-=======
         case HomepageMiddlewareActionType.didEnterBackground:
             // Stop polling when the app is backgrounded so the feed calling
             // the network (and contending for shared resources) off-screen.
             // It is restarted on the next `didBecomeActive`.
             self.feed?.stop()
-        case HomepageActionType.viewDidAppear:
-            self.homepageIsOnScreen = true
-        case HomepageActionType.viewWillDisappear:
-            self.homepageIsOnScreen = false
->>>>>>> dcb725d9a (Refactor FXIOS-16149 [WorldCup] Feature flag gate and stop background poll (#34394))
         case WorldCupActionType.didChangeHomepageSettings:
             self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
         case WorldCupActionType.removeHomepageCard:

@@ -69,12 +69,8 @@ enum HomepageMiddlewareActionType: ActionType {
     case jumpBackInLocalTabsUpdated
     case jumpBackInRemoteTabsUpdated
     case bookmarksUpdated
-<<<<<<< HEAD
-    case enteredForeground
-=======
     case didBecomeActive
     case didEnterBackground
->>>>>>> dcb725d9a (Refactor FXIOS-16149 [WorldCup] Feature flag gate and stop background poll (#34394))
     case configuredPrivacyNotice
     case configuredSearchBar
     case configuredSpacer
