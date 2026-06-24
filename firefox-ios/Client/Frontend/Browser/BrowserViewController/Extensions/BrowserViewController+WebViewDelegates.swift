@@ -546,18 +546,6 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Disabled due to https://bugzilla.mozilla.org/show_bug.cgi?id=1588928
-//                if url.scheme == "javascript", navigationAction.request.isPrivileged {
-//                    decisionHandler(.cancel)
-//                    if let javaScriptString = url.absoluteString.replaceFirstOccurrence(
-//                        of: "javascript:",
-//                        with: ""
-//                    ).removingPercentEncoding {
-//                        webView.evaluateJavaScript(javaScriptString)
-//                    }
-//                    return
-//                }
-
         if isStoreURL(url) {
             decisionHandler(.cancel)
             handleStoreURLNavigation(url: url)
@@ -851,9 +839,9 @@ extension BrowserViewController: WKNavigationDelegate {
             // We don't have a temporary document, fallthrough
         }
 
-        /// FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
-        /// This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
-        /// In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
+        // FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
+        // This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
+        // In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
         if let url = responseURL,
            ["http", "https"].contains(url.scheme),
            tabManager[webView]?.mimeType == MIMEType.Calendar {
