@@ -17,18 +17,16 @@ public struct QuickAnswersConfig: LLMConfig, Sendable {
     ///   - model: The provider model that backs Quick Answers.
     ///   - instructions: The system prompt instructions injected into the request. Empty by default.
     ///   - options: Additional inference options. `model` is always overridden from the `model` parameter.
-    public init(model: QuickAnswersModel = .exa, instructions: String = "", options: [String: AnyHashable] = [
-        "stream": false
-    ]) {
+    public init(
+        model: QuickAnswersModel = .exa,
+        instructions: String = "",
+        options: [String: AnyHashable] = [
+            "stream": false
+        ]
+    ) {
         self.instructions = instructions
         var options = options
         options["model"] = model.rawValue
         self.options = options
-    }
-
-    /// Initializer used by tests to inject arbitrary `options` and `instructions` directly.
-    init(instructions: String = "", rawOptions: [String: AnyHashable]) {
-        self.instructions = instructions
-        self.options = rawOptions
     }
 }
