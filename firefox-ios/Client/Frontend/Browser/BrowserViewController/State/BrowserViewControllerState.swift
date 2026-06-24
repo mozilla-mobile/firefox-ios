@@ -40,6 +40,7 @@ struct BrowserViewControllerState: ScreenState {
         case readerModeLongPressAction
         case passwordGenerator
         case translationLanguagePicker(TranslationLanguagePickerData)
+        case googleLensPhotoPicker
     }
 
     let windowUUID: WindowUUID
@@ -393,6 +394,8 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowSummarizerAction(state: state, action: action)
         case GeneralBrowserActionType.showTranslationLanguagePicker:
             return handleShowTranslationLanguagePickerAction(state: state, action: action)
+        case GeneralBrowserActionType.showGoogleLensPhotoPicker:
+            return handleShowGoogleLensPhotoPickerAction(state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -738,6 +741,22 @@ struct BrowserViewControllerState: ScreenState {
                 translatedToLanguage: action.translatedToLanguage
             )),
             buttonTapped: action.buttonTapped,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+    }
+
+    @MainActor
+    private static func handleShowGoogleLensPhotoPickerAction(
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
+            browserViewType: state.browserViewType,
+            displayView: .googleLensPhotoPicker,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
     }
