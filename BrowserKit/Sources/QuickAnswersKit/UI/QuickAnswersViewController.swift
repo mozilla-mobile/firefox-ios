@@ -77,13 +77,13 @@ public final class QuickAnswersViewController: UIViewController,
         prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
-        model: QuickAnswersModel = .exa,
+        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
         learnMoreURL: URL?,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(prefs: prefs, model: model),
+            viewModel: QuickAnswersViewModel(prefs: prefs, configFetcher: configFetcher),
             store: Store(prefs: prefs),
             transitionType: transitionType,
             windowUUID: windowUUID,
@@ -215,7 +215,9 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.contentView.configureAnswer(result.resultText)
-                    self?.contentView.configureSources(result.sources)
+                    self?.contentView.configureSources(result.sources) { [weak self] url in
+                        self?.navigationHandler?.dismissQuickAnswers(with: .url(url))
+                    }
                 }
             case .initializationFailed:
                 self?.errorHandler.handleInitializationError()
@@ -223,6 +225,7 @@ public final class QuickAnswersViewController: UIViewController,
         }
         contentView.configureOptIn(
             learnMoreURL: learnMoreURL,
+            theme: themeManager.getCurrentTheme(for: currentWindowUUID),
             onContinue: { [weak self] in
                 self?.store.setOptInCompleted()
                 self?.contentView.hideOptIn()

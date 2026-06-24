@@ -55,14 +55,17 @@ final class DefaultResultsService: ResultsService {
     }
 
     private func formatResult(from answer: String, and citations: [Citation]) -> SearchResult {
-        let sources = citations.map { citation in
+        // limit the citations to the first 3 in the array
+        let filteredCitations = citations.prefix(3)
+        let sources = filteredCitations.map { citation in
             SearchResult.Source(
                 title: citation.title ?? "",
+                url: URL(string: citation.url ?? ""),
                 thumbnailURL: URL(string: citation.image ?? ""),
                 faviconURL: URL(string: citation.favicon ?? "")
             )
         }
-        return SearchResult(resultText: answer, sources: sources)
+        return SearchResult(resultText: answer, sources: Array(sources))
     }
 
     /// Maps underlying errors to `ResultsServiceError` types.

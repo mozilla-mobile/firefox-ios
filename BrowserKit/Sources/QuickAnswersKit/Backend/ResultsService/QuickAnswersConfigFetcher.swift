@@ -3,25 +3,25 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// Fetches the `QuickAnswersConfig` used to drive a Quick Answers request.
-protocol QuickAnswersConfigFetcher: Sendable {
+public protocol QuickAnswersConfigFetcher: Sendable {
     func fetch() async throws -> QuickAnswersConfig
 }
 
 /// Default fetcher that builds a `QuickAnswersConfig` for the given model,
 /// injecting the model-specific system prompt instructions.
-struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
+public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     // TODO: FXIOS-15123 - Replace with the real Exa system prompt once it is finalized.
     private static let exaInstructions = """
-    You are a helpful assistant that provides concise, accurate answers to user questions.
+    Answer in 1 sentence. Remove any superscript numbers from the response.
     """.replacingOccurrences(of: "\n", with: " ")
 
     private let model: QuickAnswersModel
 
-    init(model: QuickAnswersModel) {
+    public init(model: QuickAnswersModel) {
         self.model = model
     }
 
-    func fetch() async throws -> QuickAnswersConfig {
+    public func fetch() async throws -> QuickAnswersConfig {
         return QuickAnswersConfig(model: model, instructions: instructions(for: model))
     }
 

@@ -22,13 +22,8 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         static let learnMoreText = "Learn more"
     }
 
-    var onContinue: (() -> Void)?
-    var onLearnMore: ((URL) -> Void)?
-    var learnMoreURL: URL? {
-        didSet {
-            descriptionTextView.attributedText = makeDescriptionText()
-        }
-    }
+    private var onContinue: (() -> Void)?
+    private var onLearnMore: ((URL) -> Void)?
 
     // MARK: - Subviews
     private let titleLabel: UILabel = .build {
@@ -70,7 +65,6 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     // MARK: - Setup
     private func setupSubviews() {
         addSubviews(titleLabel, descriptionTextView, continueButton)
-        descriptionTextView.attributedText = makeDescriptionText()
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
@@ -88,18 +82,30 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
             continueButton.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
+    
+    func configure(
+        learnMoreURL: URL?,
+        theme: Theme,
+        onContinue: @escaping () -> Void,
+        onLearnMore: @escaping (URL) -> Void
+    ) {
+        self.onLearnMore = onLearnMore
+        self.onContinue = onContinue
+        descriptionTextView.attributedText = makeDescriptionText(url: learnMoreURL)
+        applyTheme(theme: theme)
+    }
 
-    private func makeDescriptionText() -> NSAttributedString {
+    private func makeDescriptionText(url: URL?) -> NSAttributedString {
         let font = FXFontStyles.Regular.subheadline.scaledFont()
         let text = NSMutableAttributedString(
             string: UX.descriptionText + " ",
             attributes: [.font: font]
         )
-        var linkAttributes: [NSAttributedString.Key: Any] = [.font: font]
-        if let learnMoreURL {
-            linkAttributes[.link] = learnMoreURL
+        if let url {
+            var linkAttributes: [NSAttributedString.Key: Any] = [.font: font]
+            linkAttributes[.link] = url
+            text.append(NSAttributedString(string: UX.learnMoreText, attributes: linkAttributes))
         }
-        text.append(NSAttributedString(string: UX.learnMoreText, attributes: linkAttributes))
         return text
     }
 

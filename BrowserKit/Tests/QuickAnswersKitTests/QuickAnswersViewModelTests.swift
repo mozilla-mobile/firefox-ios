@@ -28,6 +28,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
             resultText: "Test",
             sources: [SearchResult.Source(
                 title: "SourceTest",
+                url: nil,
                 thumbnailURL: nil,
                 faviconURL: nil
             )]
@@ -110,6 +111,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
             resultText: "Test",
             sources: [SearchResult.Source(
                 title: "SourceTest",
+                url: nil,
                 thumbnailURL: nil,
                 faviconURL: nil
             )]
@@ -136,19 +138,20 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[2], .showSearchResult(searchResult, nil))
     }
 
-    func testInit_passesModelIntoServiceFactory() {
-        var receivedModel: QuickAnswersModel?
+    func testInit_passesConfigFetcherIntoServiceFactory() {
+        var receivedFetcher: QuickAnswersConfigFetcher?
+        let expectedFetcher = MockQuickAnswersConfigFetcher()
         let subject = QuickAnswersViewModel(
             prefs: MockProfilePrefs(),
-            model: .liner,
-            makeService: { _, model in
-                receivedModel = model
+            configFetcher: expectedFetcher,
+            makeService: { _, fetcher in
+                receivedFetcher = fetcher
                 return self.mockService
             }
         )
         trackForMemoryLeaks(subject)
 
-        XCTAssertEqual(receivedModel, .liner)
+        XCTAssertTrue(receivedFetcher as? MockQuickAnswersConfigFetcher === expectedFetcher)
     }
 
     // MARK: - Helper
