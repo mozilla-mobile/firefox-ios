@@ -7,8 +7,6 @@ public protocol QuickAnswersConfigFetcher: Sendable {
     func fetch() async throws -> QuickAnswersConfig
 }
 
-/// Default fetcher that builds a `QuickAnswersConfig` for the given model,
-/// injecting the model-specific system prompt instructions.
 public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     // TODO: FXIOS-15123 - Replace with the real Exa system prompt once it is finalized.
     private static let exaInstructions = """

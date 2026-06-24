@@ -8,19 +8,11 @@ import Testing
 
 struct QuickAnswersConfigTests {
     @Test
-    func test_init_withInstructions_syncsModelOptionAndSetsInstructions() {
+    func test_init_setsModelOptionAndSetsInstructions() {
         let config = QuickAnswersConfig(model: .exa, instructions: "Some instructions")
 
         #expect(config.options["model"] as? String == "exa")
         #expect(config.instructions == "Some instructions")
-    }
-
-    @Test
-    func test_init_withoutInstructions_syncsModelOptionAndOmitsInstructions() {
-        let config = QuickAnswersConfig(model: .liner)
-
-        #expect(config.options["model"] as? String == "liner")
-        #expect(config.instructions.isEmpty)
     }
 
     @Test

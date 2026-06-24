@@ -6,7 +6,7 @@ import Testing
 
 @testable import QuickAnswersKit
 
-struct QuickAnswersConfigFetcherTests {
+struct DefaultQuickAnswersConfigFetcherTests {
     @Test
     func test_fetch_withExaModel_syncsModelOptionAndInjectsInstructions() async throws {
         let fetcher = DefaultQuickAnswersConfigFetcher(model: .exa)
@@ -14,7 +14,7 @@ struct QuickAnswersConfigFetcherTests {
         let config = try await fetcher.fetch()
 
         #expect(config.options["model"] as? String == "exa")
-        #expect(config.instructions.isEmpty == false)
+        #expect(!config.instructions.isEmpty)
     }
 
     @Test

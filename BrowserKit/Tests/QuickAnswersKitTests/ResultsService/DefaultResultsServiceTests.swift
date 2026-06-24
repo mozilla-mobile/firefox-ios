@@ -22,16 +22,9 @@ struct DefaultResultsServiceTests {
                 url: "https://example.com"
             )
         ]
-        let config = QuickAnswersConfig(rawOptions: ["model": "liner"])
-        let subject = createSubject(client: client, config: config)
+        let subject = createSubject(client: client)
 
         let result = try await subject.fetchResults(for: "What is the weather?")
-
-        // Verify the request message (no instructions -> user-only)
-        let firstMessage = client.lastMessages.first as? QuickAnswersMessage
-        #expect(client.lastMessages.count == 1)
-        #expect(firstMessage?.content == "What is the weather?")
-        #expect(firstMessage?.role == .user)
 
         // Verify the search result
         #expect(result.resultText == "This is a quick answer")
@@ -46,17 +39,17 @@ struct DefaultResultsServiceTests {
         let client = MockLiteLLMClient()
         client.respondWith = ["Answer"]
         let instructions = "You are a helpful assistant."
-        let config = QuickAnswersConfig(instructions: instructions, rawOptions: ["model": "exa"])
+        let config = QuickAnswersConfig(model: .exa, instructions: instructions)
         let subject = createSubject(client: client, config: config)
 
         _ = try await subject.fetchResults(for: "What is the weather?")
-
-        #expect(client.lastMessages.count == 2)
+        
         let systemMessage = client.lastMessages.first as? QuickAnswersMessage
         let userMessage = client.lastMessages.last as? QuickAnswersMessage
+        
+        #expect(client.lastMessages.count == 2)
         #expect(systemMessage?.role == .system)
         #expect(systemMessage?.content == instructions)
-        #expect(systemMessage?.content.isEmpty == false)
         #expect(userMessage?.role == .user)
         #expect(userMessage?.content == "What is the weather?")
     }
@@ -69,9 +62,9 @@ struct DefaultResultsServiceTests {
         let subject = createSubject(client: client, config: config)
 
         _ = try await subject.fetchResults(for: "What is the weather?")
-
-        #expect(client.lastMessages.count == 1)
+        
         let userMessage = client.lastMessages.first as? QuickAnswersMessage
+        #expect(client.lastMessages.count == 1)
         #expect(userMessage?.role == .user)
         #expect(userMessage?.content == "What is the weather?")
     }

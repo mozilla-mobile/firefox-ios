@@ -7,7 +7,7 @@ public enum QuickAnswersModel: String, Sendable {
     case exa
     case liner
 
-    /// The user-facing name of the model, used by the "Powered by" footer.
+    /// The user-facing name of the model.
     public var displayName: String {
         switch self {
         case .exa: return "Exa"

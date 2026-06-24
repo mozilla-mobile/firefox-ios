@@ -11,8 +11,7 @@ features:
         default: false
       model:
         description: >
-          Which provider model backs Quick Answers. A system prompt is injected only for models
-          that require it (e.g. exa).
+          Which provider model backs Quick Answers.
         type: QuickAnswersModel
         default: exa
     defaults:
@@ -30,6 +29,6 @@ enums:
     description: The provider model that backs the Quick Answers feature.
     variants:
       exa:
-        description: The Exa model; a system prompt is injected into the request.
+        description: The Exa model provider.
       liner:
-        description: The Liner model; no system prompt is injected.
+        description: The Liner model provider.
