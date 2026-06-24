@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "originHash" : "080d5c14ff8b97f985991f02dd7321403b5a7e1b1243a154f2cdcc561b9bc212",
+=======
+  "originHash" : "86bd697a1a392b72e648b2bd9af514fbcaac7c4077351b276556d0690e757411",
+>>>>>>> dc1b88d81 (Refator FXIOS-161446 [GCDWebServer] Move GCDWebServer lifecycle off main thread (#34399))
   "pins" : [
     {
       "identity" : "a-star",
