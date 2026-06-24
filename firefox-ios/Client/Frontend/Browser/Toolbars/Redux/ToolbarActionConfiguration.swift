@@ -20,6 +20,8 @@ struct ToolbarActionConfiguration: Equatable {
         case trackingProtection
         case locationView
         case googleLens
+        case googleLensPhotoLibrary
+        case googleLensTakePhoto
         case readerMode
         case readerModeWithSummarizer
         case summarizer

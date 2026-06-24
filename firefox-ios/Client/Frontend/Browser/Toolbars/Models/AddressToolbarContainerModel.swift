@@ -310,7 +310,8 @@ final class AddressToolbarContainerModel: Equatable {
             previousTabScreenshot: action.previousTabScreenshot,
             nextTabScreenshot: action.nextTabScreenshot,
             onSelected: getOnSelected(action: action, windowUUID: windowUUID),
-            onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
+            onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs),
+            menuElements: ToolbarMenuElementProvider.menuElements(for: action, windowUUID: windowUUID)
         )
     }
 

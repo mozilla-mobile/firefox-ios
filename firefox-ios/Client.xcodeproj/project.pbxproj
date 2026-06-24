@@ -2046,6 +2046,8 @@
 		E177989E2BD7D75A00F6F0EB /* ToolbarMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = E177989D2BD7D75A00F6F0EB /* ToolbarMiddleware.swift */; };
 		E17798A02BD8043800F6F0EB /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E177989F2BD8043800F6F0EB /* ToolbarKit */; };
 		E17798A22BD804D300F6F0EB /* AddressToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17798A12BD804D300F6F0EB /* AddressToolbarContainerModel.swift */; };
+		E1D4A9A22FAD000100ABCDEF /* GoogleLensMenuElementProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D4A9A12FAD000100ABCDEF /* GoogleLensMenuElementProvider.swift */; };
+		E1D4A9A42FAD000100ABCDEF /* ToolbarMenuElementProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D4A9A32FAD000100ABCDEF /* ToolbarMenuElementProvider.swift */; };
 		E17EFC342CD16F5B00169A1F /* Sticker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E17EFC2D2CD16F5900169A1F /* Sticker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */; };
 		E18259E329B2A51B00E6BE76 /* MockNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259E229B2A51B00E6BE76 /* MockNotificationManager.swift */; };
@@ -11416,6 +11418,8 @@
 		E177989B2BD7D48500F6F0EB /* ToolbarAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarAction.swift; sourceTree = "<group>"; };
 		E177989D2BD7D75A00F6F0EB /* ToolbarMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMiddleware.swift; sourceTree = "<group>"; };
 		E17798A12BD804D300F6F0EB /* AddressToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModel.swift; sourceTree = "<group>"; };
+		E1D4A9A12FAD000100ABCDEF /* GoogleLensMenuElementProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensMenuElementProvider.swift; sourceTree = "<group>"; };
+		E1D4A9A32FAD000100ABCDEF /* ToolbarMenuElementProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMenuElementProvider.swift; sourceTree = "<group>"; };
 		E17EFC2D2CD16F5900169A1F /* Sticker.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Sticker.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E17EFC312CD16F5B00169A1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCenterProtocol.swift; sourceTree = "<group>"; };
@@ -16396,7 +16400,9 @@
 			isa = PBXGroup;
 			children = (
 				E17798A12BD804D300F6F0EB /* AddressToolbarContainerModel.swift */,
+				E1D4A9A12FAD000100ABCDEF /* GoogleLensMenuElementProvider.swift */,
 				E18CE8DB2BDA3FA600EE2BCD /* NavigationToolbarContainerModel.swift */,
+				E1D4A9A32FAD000100ABCDEF /* ToolbarMenuElementProvider.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -20256,6 +20262,8 @@
 				8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				E17798A22BD804D300F6F0EB /* AddressToolbarContainerModel.swift in Sources */,
+				E1D4A9A22FAD000100ABCDEF /* GoogleLensMenuElementProvider.swift in Sources */,
+				E1D4A9A42FAD000100ABCDEF /* ToolbarMenuElementProvider.swift in Sources */,
 				2122EE572DDD75D600D42716 /* GenericButtonCellView.swift in Sources */,
 				8A454D3F2CB9B8A0009436D9 /* TopSitesSectionState.swift in Sources */,
 				9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */,

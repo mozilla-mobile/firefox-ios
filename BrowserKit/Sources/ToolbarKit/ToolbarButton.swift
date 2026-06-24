@@ -121,7 +121,10 @@ class ToolbarButton: UIButton,
         // By removing all existing actions first, we guarantee that only the new action
         // will be associated with the .touchUpInside event.
         removeTarget(nil, action: nil, for: .touchUpInside)
-        addAction(action, for: .touchUpInside)
+        configureMenuIfNeeded(for: element)
+        if element.menuElements.isEmpty {
+            addAction(action, for: .touchUpInside)
+        }
 
         showsLargeContentViewer = true
         largeContentTitle = element.a11yLabel
@@ -251,6 +254,30 @@ class ToolbarButton: UIButton,
             return true
         }
         accessibilityCustomActions = [a11yAction]
+    }
+
+    private func configureMenuIfNeeded(for element: ToolbarElement) {
+        guard !element.menuElements.isEmpty else {
+            showsMenuAsPrimaryAction = false
+            menu = nil
+            return
+        }
+
+        let actions: [UIMenuElement] = element.menuElements.map { menuElement in
+            let action = UIAction(
+                title: menuElement.title,
+                image: menuElement.imageName.flatMap { UIImage(named: $0) },
+                handler: { [weak self] _ in
+                    guard let self else { return }
+                    menuElement.onSelected?(self)
+                }
+            )
+            action.accessibilityIdentifier = menuElement.a11yIdentifier
+            return action
+        }
+
+        menu = UIMenu(children: actions)
+        showsMenuAsPrimaryAction = true
     }
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {

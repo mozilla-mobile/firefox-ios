@@ -54,6 +54,7 @@ public struct StandardImageIdentifiers {
         public static let bookmarkSlash = "bookmarkSlashLarge"
         public static let bookmarkTray = "bookmarkTrayLarge"
         public static let bookmarkTrayFill = "bookmarkTrayFillLarge"
+        public static let cameraLarge = "cameraLarge"
         public static let checkmark = "checkmarkLarge"
         public static let chevronDown = "chevronDownLarge"
         public static let chevronLeft = "chevronLeftLarge"
