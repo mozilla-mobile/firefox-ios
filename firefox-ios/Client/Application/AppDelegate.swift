@@ -231,6 +231,9 @@ class AppDelegate: UIResponder,
             // Stop the server off the main thread so a slow shutdown can't trip the watchdog.
             // Hold a background task so iOS lets the stop finish while we're backgrounded, and
             // end it both when the stop completes and if the OS deadline expires first.
+            // End any task still outstanding from a previous, slow shutdown so we don't clobber
+            // and leak its identifier.
+            self.endWebServerShutdownTask()
             self.webServerShutdownTaskID = application.beginBackgroundTask(
                 withName: Self.webServerShutdownTaskName) { [weak self] in
                 self?.endWebServerShutdownTask()
