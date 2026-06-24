@@ -79,7 +79,7 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var iconInverted: UIColor = NovaColors.VioletDesaturated0
     var iconOnColor: UIColor = NovaColors.VioletDesaturated0
     var iconOnColorDisabled: UIColor = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
-    var iconSpinner: UIColor = NovaColors.Violet30
+    var iconSpinner: UIColor = NovaColors.Gray40
     var iconPrivate: UIColor = NovaColors.Violet50
     var iconPrivateOutline: UIColor = NovaColors.VioletDesaturated80
 
@@ -90,14 +90,13 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var borderOnColor: UIColor = NovaColors.Gray15
     var borderInverted: UIColor = NovaColors.Gray60
     var borderRadioButtonDefault: UIColor = NovaColors.Gray35
-    var borderAccent: UIColor = NovaColors.Violet30
 
     // MARK: - Shadow
 
     var shadowSubtle: UIColor = NovaColors.Gray60.withAlphaComponent(0.10)
     var shadowDefault: UIColor = NovaColors.Gray60.withAlphaComponent(0.12)
     var shadowStrong: UIColor = NovaColors.Gray60.withAlphaComponent(0.16)
-    var shadowBorder: UIColor = NovaColors.VioletDesaturated30
+    var shadowBorder: UIColor = NovaColors.Gray65.withAlphaComponent(0.50)
 
     // MARK: - Gradients
 
@@ -159,6 +158,7 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var iconAccentYellow: UIColor = LightTheme().colors.iconAccentYellow
 
     var borderSecondary: UIColor = LightTheme().colors.borderSecondary
+    var borderAccent: UIColor = LightTheme().colors.borderAccent
     var borderAccentNonOpaque: UIColor = LightTheme().colors.borderAccentNonOpaque
     var borderAccentPrivate: UIColor = LightTheme().colors.borderAccentPrivate
     var borderToolbarDivider: UIColor = LightTheme().colors.borderToolbarDivider
