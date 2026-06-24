@@ -7313,8 +7313,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 66.3.0;
+				kind = exactVersion;
+				version = 69.0.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {

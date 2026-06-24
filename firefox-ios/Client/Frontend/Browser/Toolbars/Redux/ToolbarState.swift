@@ -28,6 +28,10 @@ struct ToolbarState: ScreenState, Sendable {
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
 
+    var isAddressBarMinimized: Bool {
+        return scrollAlpha.isZero
+    }
+
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
             ToolbarState.self,

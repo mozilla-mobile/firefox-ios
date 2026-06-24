@@ -45,6 +45,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             windowUUID: windowUUID,
             themeManager: themeManager,
             model: nimbusModel(),
+            learnMoreURL: SupportUtils.URLForTopic("quick-answers-mobile"),
         )
         router.present(controller, animated: shouldAnimateTransition)
     }

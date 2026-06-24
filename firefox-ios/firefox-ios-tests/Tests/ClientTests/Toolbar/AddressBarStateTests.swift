@@ -89,6 +89,27 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertTrue(newState.isEmptySearch)
         XCTAssertNil(newState.translationConfiguration)
+        XCTAssertNil(newState.editingAccessoryAction)
+    }
+
+    func test_didLoadToolbarsAction_withGoogleLensEnabled_setsEditingAccessoryAction() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                addressBorderPosition: .top,
+                isGoogleLensEnabled: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didLoadToolbars
+            )
+        )
+
+        XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
+        XCTAssertEqual(newState.editingAccessoryAction?.iconName, StandardImageIdentifiers.Medium.googleLens)
+        XCTAssertEqual(newState.editingAccessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
     }
 
     func test_numberOfTabsChangedAction_withoutNavToolbar_returnsExpectedState() {

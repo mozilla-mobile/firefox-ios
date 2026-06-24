@@ -218,7 +218,8 @@ class NimbusTests: XCTestCase {
             slug: "test-experiment",
             userFacingName: "Test Experiment",
             userFacingDescription: "A test experiment for testing experiments",
-            branchSlug: "test-branch"
+            branchSlug: "test-branch",
+            isRollout: false
         )]
 
         nimbus.recordExperimentTelemetry(enrolledExperiments)

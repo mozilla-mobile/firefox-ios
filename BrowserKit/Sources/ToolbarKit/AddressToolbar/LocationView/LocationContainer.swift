@@ -33,8 +33,8 @@ final class LocationContainer: UIView, ThemeApplicable {
         layer.masksToBounds = false
     }
 
-    func updateShadowOpacityBasedOn(scrollAlpha: CGFloat) {
-        let targetOpacity = scrollAlpha.isZero ? 0 : UX.shadowOpacity
+    func updateShadowOpacityBasedOn(isAddressBarMinimized: Bool) {
+        let targetOpacity = isAddressBarMinimized ? 0 : UX.shadowOpacity
         guard layer.shadowOpacity != targetOpacity else { return }
         layer.shadowOpacity = targetOpacity
     }

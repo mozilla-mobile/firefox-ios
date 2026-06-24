@@ -1119,7 +1119,7 @@ final class BrowserCoordinator: BaseCoordinator,
         ) { [weak self] navigationType in
             switch navigationType {
             case .url(let url):
-                self?.openURLinNewTab(url)
+                self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
             case .searchResult(let query):
                 self?.browserViewController.openSearchNewTab(query)
             }
