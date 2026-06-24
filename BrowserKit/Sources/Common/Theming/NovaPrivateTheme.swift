@@ -32,7 +32,6 @@ private struct NovaPrivateColourPalette: NovaThemeColourPalette {
     var layerSepia: UIColor = NovaColors.Yellow0
     var layerAutofillText: UIColor = NovaColors.VioletDesaturated30.withAlphaComponent(0.55)
     var layerSelectedText: UIColor = NovaColors.Gray45.withAlphaComponent(0.81)
-    // TODO: Figma marks layerGlassTintNova as N/A for private mode. Confirm intended value.
     var layerGlassTintNova: UIColor = .clear
 
     // TODO: Check if layerAccentPrivateNonOpaque should be renamed
@@ -91,7 +90,6 @@ private struct NovaPrivateColourPalette: NovaThemeColourPalette {
     var borderOnColor: UIColor = NovaColors.Gray15
     var borderInverted: UIColor = NovaColors.Gray15
     var borderRadioButtonDefault: UIColor = NovaColors.Gray45
-    var borderAccent: UIColor = NovaColors.Violet30
 
     // MARK: - Shadow
 
@@ -104,10 +102,9 @@ private struct NovaPrivateColourPalette: NovaThemeColourPalette {
 
     var gradient = Gradient(colors: [NovaColors.Violet60, NovaColors.Violet50])
     var gradientAccent = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
-    // TODO: Confirm private stops for gradientAccentSubtle (Figma private column ambiguous).
     var gradientAccentSubtle = Gradient(colors: [
-        NovaColors.VioletDesaturated90.withAlphaComponent(0.5),
-        NovaColors.VioletDesaturated90.withAlphaComponent(0.5)
+        NovaColors.VioletDesaturated90,
+        NovaColors.VioletDesaturated90
     ])
     var gradientAISubtle = Gradient(colors: [
         NovaColors.Gray45,
@@ -161,6 +158,7 @@ private struct NovaPrivateColourPalette: NovaThemeColourPalette {
     var iconAccentYellow: UIColor = PrivateModeTheme().colors.iconAccentYellow
 
     var borderSecondary: UIColor = PrivateModeTheme().colors.borderSecondary
+    var borderAccent: UIColor = PrivateModeTheme().colors.borderAccent
     var borderAccentNonOpaque: UIColor = PrivateModeTheme().colors.borderAccentNonOpaque
     var borderAccentPrivate: UIColor = PrivateModeTheme().colors.borderAccentPrivate
     var borderToolbarDivider: UIColor = PrivateModeTheme().colors.borderToolbarDivider
