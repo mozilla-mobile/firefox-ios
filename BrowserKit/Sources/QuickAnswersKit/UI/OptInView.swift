@@ -82,7 +82,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
             continueButton.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
-    
+
     func configure(
         learnMoreURL: URL?,
         theme: Theme,

@@ -43,10 +43,10 @@ struct DefaultResultsServiceTests {
         let subject = createSubject(client: client, config: config)
 
         _ = try await subject.fetchResults(for: "What is the weather?")
-        
+
         let systemMessage = client.lastMessages.first as? QuickAnswersMessage
         let userMessage = client.lastMessages.last as? QuickAnswersMessage
-        
+
         #expect(client.lastMessages.count == 2)
         #expect(systemMessage?.role == .system)
         #expect(systemMessage?.content == instructions)
@@ -62,7 +62,7 @@ struct DefaultResultsServiceTests {
         let subject = createSubject(client: client, config: config)
 
         _ = try await subject.fetchResults(for: "What is the weather?")
-        
+
         let userMessage = client.lastMessages.first as? QuickAnswersMessage
         #expect(client.lastMessages.count == 1)
         #expect(userMessage?.role == .user)
