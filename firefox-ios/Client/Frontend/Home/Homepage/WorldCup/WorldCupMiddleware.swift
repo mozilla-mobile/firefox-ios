@@ -14,7 +14,7 @@ import Shared
 @MainActor
 final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
-    private let feed: WorldCupFeed?
+    private let feed: WorldCupFeedProtocol?
     private var lastWindowUUID: WindowUUID?
 
     convenience init() {
@@ -23,7 +23,7 @@ final class WorldCupMiddleware {
         self.init(worldCupStore: store, feed: feed)
     }
 
-    init(worldCupStore: WorldCupStoreProtocol, feed: WorldCupFeed?) {
+    init(worldCupStore: WorldCupStoreProtocol, feed: WorldCupFeedProtocol?) {
         self.worldCupStore = worldCupStore
         self.feed = feed
         feed?.onUpdate = { [weak self] snapshot in
@@ -38,6 +38,18 @@ final class WorldCupMiddleware {
              HomepageMiddlewareActionType.enteredForeground,
              WorldCupActionType.retryMatchesFetch:
             self.startFeed(windowUUID: action.windowUUID)
+<<<<<<< HEAD
+=======
+        case HomepageMiddlewareActionType.didEnterBackground:
+            // Stop polling when the app is backgrounded so the feed calling
+            // the network (and contending for shared resources) off-screen.
+            // It is restarted on the next `didBecomeActive`.
+            self.feed?.stop()
+        case HomepageActionType.viewDidAppear:
+            self.homepageIsOnScreen = true
+        case HomepageActionType.viewWillDisappear:
+            self.homepageIsOnScreen = false
+>>>>>>> dcb725d9a (Refactor FXIOS-16149 [WorldCup] Feature flag gate and stop background poll (#34394))
         case WorldCupActionType.didChangeHomepageSettings:
             self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
         case WorldCupActionType.removeHomepageCard:
@@ -60,6 +72,7 @@ final class WorldCupMiddleware {
             dispatch(snapshot: .empty)
             return
         }
+        guard worldCupStore.isFeatureEnabledAndSectionEnabled else { return }
         feed.start()
     }
 

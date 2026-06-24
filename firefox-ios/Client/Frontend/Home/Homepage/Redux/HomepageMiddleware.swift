@@ -116,6 +116,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private func observeNotifications() {
         let notifications: [Notification.Name] = [
             UIApplication.didBecomeActiveNotification,
+            UIApplication.didEnterBackgroundNotification,
             .FirefoxAccountChanged,
             .PrivateDataClearedHistory,
             .ProfileDidFinishSyncing,
@@ -149,6 +150,13 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
                         actionType: HomepageMiddlewareActionType.enteredForeground
                     )
                     store.dispatch(storiesAction)
+
+                case UIApplication.didEnterBackgroundNotification:
+                    let backgroundAction = HomepageAction(
+                        windowUUID: windowUUID,
+                        actionType: HomepageMiddlewareActionType.didEnterBackground
+                    )
+                    store.dispatch(backgroundAction)
 
                 case .PrivateDataClearedHistory,
                         .TopSitesUpdated,
