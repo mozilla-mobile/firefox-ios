@@ -116,7 +116,7 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
         NovaColors.Violet20,
         NovaColors.Orange10
     ])
-    var gradientTabBorder = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
+    var gradientBorder = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
     var gradientPrivacy = Gradient(colors: [
         NovaColors.Purple40,
         NovaColors.VioletDesaturated90

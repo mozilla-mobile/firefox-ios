@@ -26,7 +26,7 @@ public protocol NovaThemeColourPalette: ThemeColourPalette {
     var gradientAccentSubtle: Gradient { get }
     var gradientAIStrong: Gradient { get }
     var gradientAISubtle: Gradient { get }
-    var gradientTabBorder: Gradient { get }
+    var gradientBorder: Gradient { get }
     var gradientPrivacy: Gradient { get }
     var gradientPrivacyMask: Gradient { get }
 }
