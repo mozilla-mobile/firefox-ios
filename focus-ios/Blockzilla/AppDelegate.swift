@@ -80,9 +80,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 if authenticationManager.authenticationState == .loggedin { hidePrivacyProtectionWindow() }
 
             case .willResignActive:
-                // Must stay synchronous: appPhase is delivered inline (no receive(on:)),
-                // so the overlay covers content before iOS snapshots the app switcher.
-                // The async .loggedout path below isn't enough on its own. FXIOS-16007.
+                // Reveal synchronously so the overlay is up before iOS takes the
+                // app-switcher snapshot. FXIOS-16007.
                 showPrivacyProtectionWindow()
 
             case .didEnterBackground:

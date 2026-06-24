@@ -4,15 +4,13 @@
 
 import UIKit
 
-/// Covers app content with a splash overlay while Focus is backgrounded, so the
+/// Splash overlay shown over app content while Focus is backgrounded, so the
 /// app-switcher snapshot can't capture the live page (FXIOS-16007).
 ///
-/// The window is built once and kept alive. Rebuilding it on each resign raced the
-/// snapshot — the fresh window hadn't rendered yet. Reusing it makes `show()` a
-/// synchronous reveal.
+/// The overlay window is built once and reused; rebuilding it on each resign raced
+/// the snapshot, so it stays alive and `show()` just reveals it.
 final class PrivacyProtectionWindowManager {
-    // Injected so tests can supply a plain UIWindow; a UIWindowScene can't be built
-    // in a unit test. Returns nil when no scene is available yet.
+    // Injected so tests can supply a plain UIWindow (a UIWindowScene can't be built in a unit test).
     private let privacyWindowFactory: () -> UIWindow?
     private let mainWindowProvider: () -> UIWindow?
     private let rootViewControllerFactory: () -> UIViewController

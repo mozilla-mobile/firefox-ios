@@ -43,60 +43,31 @@ final class PrivacyProtectionWindowManagerTests: XCTestCase {
         )
     }
 
-    func testShowRevealsOverlay() {
+    func testShowRevealsOverlayAboveAlertLevel() {
         let manager = makeManager()
 
         manager.show()
 
         XCTAssertNotNil(manager.privacyWindow)
         XCTAssertFalse(manager.privacyWindow?.isHidden ?? true)
-    }
-
-    func testOverlayUsesWindowLevelAboveAlert() {
-        let manager = makeManager()
-
-        manager.show()
-
         XCTAssertEqual(manager.privacyWindow?.windowLevel, .alert + 1)
     }
 
-    func testShowReusesSameWindowAndBuildsOnlyOnce() {
+    func testReusedOverlayIsUnhiddenOnNextShow() {
+        // Regression for FXIOS-16007: hide must keep the window alive and the next
+        // show must reuse it rather than rebuild a not-yet-rendered one.
         let manager = makeManager()
-
         manager.show()
         let firstWindow = manager.privacyWindow
+
         manager.hide()
+        XCTAssertTrue(firstWindow?.isHidden ?? false)
+
         manager.show()
 
         XCTAssertTrue(manager.privacyWindow === firstWindow)
         XCTAssertEqual(privacyWindowBuildCount, 1)
-    }
-
-    func testHideKeepsWindowAliveButHidden() {
-        let manager = makeManager()
-        manager.show()
-
-        manager.hide()
-
-        // Must survive: nil'ing it forced a not-yet-rendered rebuild on the next resign.
-        XCTAssertNotNil(manager.privacyWindow)
-        XCTAssertTrue(manager.privacyWindow?.isHidden ?? false)
-    }
-
-    func testReusedOverlayIsUnhiddenOnNextShow() {
-        // Ticket sequence: lock, Face ID unlock, background ~2s later. The fix drops
-        // `isHidden = false` and leans on makeKeyAndVisible() to un-hide the reused
-        // window — pin that here. FXIOS-16007.
-        let manager = makeManager()
-        manager.show()
-        let firstWindow = manager.privacyWindow
-        manager.hide()
-        XCTAssertTrue(firstWindow?.isHidden ?? false, "overlay should be hidden after unlock")
-
-        manager.show()
-
-        XCTAssertTrue(manager.privacyWindow === firstWindow, "must reuse, not rebuild")
-        XCTAssertFalse(firstWindow?.isHidden ?? true, "reused overlay must be un-hidden on next show")
+        XCTAssertFalse(firstWindow?.isHidden ?? true)
     }
 
     func testHideRestoresMainWindow() {
@@ -105,7 +76,6 @@ final class PrivacyProtectionWindowManagerTests: XCTestCase {
 
         manager.hide()
 
-        // Hiding the overlay must hand key back to the main window.
         XCTAssertEqual(mainWindowRestoreCount, 1)
     }
 
