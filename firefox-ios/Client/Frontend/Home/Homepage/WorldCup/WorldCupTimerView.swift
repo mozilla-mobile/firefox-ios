@@ -18,11 +18,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
         static let heroImageWidth: CGFloat = 80.0
         static let heroImageHeight: CGFloat = 140.0
         static let heroImageTrailingPadding: CGFloat = 12.0
-        static let heroGifName = "kitHeroGif"
         static let heroImageName = "kitHero"
-        static let heroFrameDuration = 0.04
-        static let heroInitialFramePosition = 0.7
-        static let heroAnimationRepeatCount = 2
         static let scheduleURL = "https://www.fifa.com/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures"
     }
 
@@ -44,18 +40,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
         imageView.contentMode = .scaleAspectFit
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
-        guard let gifImage = UIImage.gifFromBundle(named: UX.heroGifName,
-                                                   frameDuration: UX.heroFrameDuration,
-                                                   maxPixelSize: UX.heroImageWidth * UIScreen.main.scale),
-              let frames = gifImage.images, !frames.isEmpty else {
-            imageView.image = UIImage(named: UX.heroImageName)
-            return
-        }
-        imageView.image = frames[Int(Double(frames.count) * UX.heroInitialFramePosition)]
-        imageView.animationImages = frames
-        imageView.animationDuration = gifImage.duration
-        imageView.animationRepeatCount = UX.heroAnimationRepeatCount
-        imageView.startAnimating()
+        imageView.image = UIImage(named: UX.heroImageName)
     }
 
     private lazy var titleLabel: UILabel = .build { label in
