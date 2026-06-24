@@ -172,7 +172,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func windowNonspecificTheme() -> Theme {
         switch getUserManualTheme() {
         case .dark, .nightMode, .privateMode: return DarkTheme()
-        case .light: return LightTheme()
+        case .light: return getThemeFrom(type: .light)
         }
     }
 
@@ -227,6 +227,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func getThemeFrom(type: ThemeType) -> Theme {
+        if isNovaDesignOn, let novaTheme = novaTheme(for: type) {
+            return novaTheme
+        }
+
         switch type {
         case .light:
             return LightTheme()
@@ -236,6 +240,16 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return NightModeTheme()
         case .privateMode:
             return PrivateModeTheme()
+        }
+    }
+
+    private func novaTheme(for type: ThemeType) -> Theme? {
+        switch type {
+        case .light:
+            return NovaLightTheme()
+        // TODO: Add Nova dark theme, nightMode and privateMode.
+        case .dark, .nightMode, .privateMode:
+            return nil
         }
     }
 
