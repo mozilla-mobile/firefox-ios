@@ -162,7 +162,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertEqual(model.type, .internetConnection)
-        XCTAssertTrue(model.type.isRegularUI)
+        XCTAssertTrue(model.isRegularUI)
     }
 
     func testParseErrorDetails_noFailingURL_returnsNoInternetModel() {
@@ -190,7 +190,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertEqual(model.type, .generic)
-        XCTAssertTrue(model.type.isRegularUI)
+        XCTAssertTrue(model.isRegularUI)
     }
 
     func testParseErrorDetails_certErrorBadCertDomain_returnsAdvancedSection() {
@@ -212,9 +212,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = helper.parseErrorDetails()
 
         XCTAssertNotNil(model.advancedSection)
-        XCTAssertTrue(model.showGoBackButton)
         XCTAssertEqual(model.type, .badCertDomain)
-        XCTAssertFalse(model.type.isRegularUI)
+        XCTAssertFalse(model.isRegularUI)
     }
 
     func testParseErrorDetails_genericError_withURL_returnsGenericModel() {
@@ -229,7 +228,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertNil(model.advancedSection)
         XCTAssertEqual(model.type, .generic)
-        XCTAssertTrue(model.type.isRegularUI)
+        XCTAssertTrue(model.isRegularUI)
     }
 
     // MARK: - getCertDetails
@@ -267,5 +266,119 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertNil(model.advancedSection)
         XCTAssertEqual(model.type, .generic)
+    }
+
+    // MARK: - ErrorPageModel computed properties
+
+    func testInternetConnectionModel_hasCorrectComputedProperties() {
+        let model = ErrorPageModel.internetConnection
+
+        XCTAssertEqual(model.title, .NativeErrorPage.NoInternetConnection.TitleLabel)
+        XCTAssertEqual(model.description, .NativeErrorPage.NoInternetConnection.Description)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
+        XCTAssertNil(model.url)
+        XCTAssertNil(model.advancedSection)
+        XCTAssertTrue(model.isRegularUI)
+        XCTAssertEqual(model.type, .internetConnection)
+    }
+
+    func testBadCertDomainModel_hasCorrectComputedProperties() {
+        let testURL = URL(string: "https://example.com")!
+        let advancedSection = ErrorPageModel.AdvancedSectionConfig(
+            buttonText: "Advanced",
+            infoText: "Info",
+            warningText: "Warning",
+            certificateErrorCode: "SSL_ERROR_BAD_CERT_DOMAIN",
+            showProceedButton: true
+        )
+        let model = ErrorPageModel.badCertDomain(BadCertDomainModel(
+            url: testURL,
+            advancedSection: advancedSection
+        ))
+
+        XCTAssertEqual(model.title, String.NativeErrorPage.BadCertDomain.TitleLabel)
+        XCTAssertEqual(model.description, String.NativeErrorPage.BadCertDomain.Description)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.url, testURL)
+        XCTAssertNotNil(model.advancedSection)
+        XCTAssertEqual(model.advancedSection?.buttonText, "Advanced")
+        XCTAssertEqual(model.advancedSection?.infoText, "Info")
+        XCTAssertEqual(model.advancedSection?.warningText, "Warning")
+        XCTAssertEqual(model.advancedSection?.certificateErrorCode, "SSL_ERROR_BAD_CERT_DOMAIN")
+        XCTAssertTrue(model.advancedSection?.showProceedButton ?? false)
+        XCTAssertFalse(model.isRegularUI)
+        XCTAssertEqual(model.type, .badCertDomain)
+    }
+
+    func testGenericErrorModel_withURL_hasCorrectComputedProperties() {
+        let testURL = URL(string: "https://example.com")!
+        let model = ErrorPageModel.generic(GenericErrorModel(url: testURL))
+
+        XCTAssertEqual(model.title, .NativeErrorPage.GenericError.TitleLabel)
+        XCTAssertEqual(model.description, .NativeErrorPage.GenericError.Description)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.url, testURL)
+        XCTAssertNil(model.advancedSection)
+        XCTAssertTrue(model.isRegularUI)
+        XCTAssertEqual(model.type, .generic)
+    }
+
+    func testGenericErrorModel_withoutURL_hasNilURL() {
+        let model = ErrorPageModel.generic(GenericErrorModel(url: nil))
+
+        XCTAssertEqual(model.title, .NativeErrorPage.GenericError.TitleLabel)
+        XCTAssertEqual(model.description, .NativeErrorPage.GenericError.Description)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertNil(model.url)
+        XCTAssertNil(model.advancedSection)
+        XCTAssertTrue(model.isRegularUI)
+        XCTAssertEqual(model.type, .generic)
+    }
+
+    func testBadCertDomainModel_requiresNonOptionalURL() {
+        let advancedSection = ErrorPageModel.AdvancedSectionConfig(
+            buttonText: "Advanced",
+            infoText: "Info",
+            warningText: "Warning",
+            certificateErrorCode: nil,
+            showProceedButton: false
+        )
+        let domainModel = BadCertDomainModel(
+            url: URL(string: "https://example.com")!,
+            advancedSection: advancedSection
+        )
+
+        XCTAssertEqual(domainModel.url.absoluteString, "https://example.com")
+        XCTAssertEqual(domainModel.advancedSection.buttonText, "Advanced")
+    }
+
+    func testGenericErrorModel_acceptsOptionalURL() {
+        let withURL = GenericErrorModel(url: URL(string: "https://example.com")!)
+        let withoutURL = GenericErrorModel(url: nil)
+
+        XCTAssertEqual(withURL.url?.absoluteString, "https://example.com")
+        XCTAssertNil(withoutURL.url)
+    }
+
+    func testErrorPageModel_equatable() {
+        let url = URL(string: "https://example.com")!
+        let section = ErrorPageModel.AdvancedSectionConfig(
+            buttonText: "B",
+            infoText: "I",
+            warningText: "W",
+            certificateErrorCode: nil,
+            showProceedButton: false
+        )
+
+        XCTAssertEqual(ErrorPageModel.internetConnection, ErrorPageModel.internetConnection)
+        XCTAssertNotEqual(ErrorPageModel.internetConnection, ErrorPageModel.generic(GenericErrorModel(url: nil)))
+
+        let badCert1 = ErrorPageModel.badCertDomain(BadCertDomainModel(url: url, advancedSection: section))
+        let badCert2 = ErrorPageModel.badCertDomain(BadCertDomainModel(url: url, advancedSection: section))
+        XCTAssertEqual(badCert1, badCert2)
+
+        let generic1 = ErrorPageModel.generic(GenericErrorModel(url: url))
+        let generic2 = ErrorPageModel.generic(GenericErrorModel(url: url))
+        XCTAssertEqual(generic1, generic2)
     }
 }

@@ -7,12 +7,14 @@ import Common
 
 struct NativeErrorPageState: ScreenState {
     var windowUUID: WindowUUID
-    var title: String
-    var description: String
-    var foxImage: String
-    var url: URL?
-    var advancedSection: ErrorPageModel.AdvancedSectionConfig?
-    var type: ErrorPageType
+    var model: ErrorPageModel?
+
+    var title: String { model?.title ?? "" }
+    var description: String { model?.description ?? "" }
+    var foxImage: String { model?.foxImageName ?? "" }
+    var url: URL? { model?.url }
+    var advancedSection: ErrorPageModel.AdvancedSectionConfig? { model?.advancedSection }
+    var isRegularUI: Bool { model?.isRegularUI ?? false }
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = appState.componentState(
@@ -26,31 +28,16 @@ struct NativeErrorPageState: ScreenState {
 
         self.init(
             windowUUID: nativeErrorPageState.windowUUID,
-            title: nativeErrorPageState.title,
-            description: nativeErrorPageState.description,
-            foxImage: nativeErrorPageState.foxImage,
-            url: nativeErrorPageState.url,
-            advancedSection: nativeErrorPageState.advancedSection,
-            type: nativeErrorPageState.type
+            model: nativeErrorPageState.model
         )
     }
 
     init(
         windowUUID: WindowUUID,
-        title: String = "",
-        description: String = "",
-        foxImage: String = "",
-        url: URL? = nil,
-        advancedSection: ErrorPageModel.AdvancedSectionConfig? = nil,
-        type: ErrorPageType = .generic
+        model: ErrorPageModel? = nil
     ) {
         self.windowUUID = windowUUID
-        self.title = title
-        self.description = description
-        self.foxImage = foxImage
-        self.url = url
-        self.advancedSection = advancedSection
-        self.type = type
+        self.model = model
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -65,12 +52,7 @@ struct NativeErrorPageState: ScreenState {
             }
             return NativeErrorPageState(
                 windowUUID: state.windowUUID,
-                title: model.errorTitle,
-                description: model.errorDescription,
-                foxImage: model.foxImageName,
-                url: model.url,
-                advancedSection: model.advancedSection,
-                type: model.type
+                model: model
             )
         default:
             return defaultState(from: state)
@@ -80,12 +62,7 @@ struct NativeErrorPageState: ScreenState {
     static func defaultState(from state: NativeErrorPageState) -> NativeErrorPageState {
         return NativeErrorPageState(
             windowUUID: state.windowUUID,
-            title: state.title,
-            description: state.description,
-            foxImage: state.foxImage,
-            url: state.url,
-            advancedSection: state.advancedSection,
-            type: state.type
+            model: state.model
         )
     }
 }

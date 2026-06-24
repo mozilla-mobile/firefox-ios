@@ -180,9 +180,9 @@ final class NativeErrorPageViewController: UIViewController,
 
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
-        guard !state.title.isEmpty else { return }
+        guard state.model != nil else { return }
 
-        if state.type.isRegularUI {
+        if state.isRegularUI {
             showRegularUI()
         } else {
             showBadCertUI()

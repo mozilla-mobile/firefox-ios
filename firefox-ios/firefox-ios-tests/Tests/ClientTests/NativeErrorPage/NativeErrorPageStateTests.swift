@@ -1,7 +1,3 @@
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/
-
 import Redux
 import XCTest
 
@@ -11,12 +7,13 @@ final class NativeErrorPageStateTests: XCTestCase {
     func testInitialState() {
         let initialState = createSubject()
 
+        XCTAssertNil(initialState.model)
         XCTAssertEqual(initialState.title, "")
         XCTAssertEqual(initialState.description, "")
         XCTAssertEqual(initialState.foxImage, "")
         XCTAssertNil(initialState.url)
         XCTAssertNil(initialState.advancedSection)
-        XCTAssertEqual(initialState.type, .generic)
+        XCTAssertFalse(initialState.isRegularUI)
     }
 
     @MainActor
@@ -24,28 +21,17 @@ final class NativeErrorPageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = nativeErrorPageReducer()
 
-        let mockModel = ErrorPageModel(
-            errorTitle: "NoInternetConnection",
-            errorDescription: "There’s a problem with your internet connection.",
-            foxImageName: "foxLogo",
-            url: URL(
-                string: "url.com"
-            ),
-            advancedSection: nil,
-            showGoBackButton: false,
-            type: .internetConnection
-        )
+        let model = ErrorPageModel.internetConnection
 
-        let action = getAction(model: mockModel, for: .initialize)
+        let action = getAction(model: model, for: .initialize)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.title, mockModel.errorTitle)
-        XCTAssertEqual(newState.description, mockModel.errorDescription)
-        XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
-        XCTAssertEqual(newState.url, mockModel.url)
+        XCTAssertEqual(newState.title, model.title)
+        XCTAssertEqual(newState.description, model.description)
+        XCTAssertEqual(newState.foxImage, model.foxImageName)
+        XCTAssertNil(newState.url)
         XCTAssertNil(newState.advancedSection)
-        XCTAssertEqual(newState.type, .internetConnection)
-        XCTAssertTrue(newState.type.isRegularUI)
+        XCTAssertTrue(newState.isRegularUI)
     }
 
     @MainActor
@@ -64,31 +50,76 @@ If you’re on a corporate network, your support team might have more info.
             showProceedButton: true
         )
 
-        let mockModel = ErrorPageModel(
-            errorTitle: "Be careful. Something doesn’t look right.",
-            errorDescription: "Someone pretending to be the site could try to steal your personal info.",
-            foxImageName: "securityError",
+        let model = ErrorPageModel.badCertDomain(BadCertDomainModel(
             url: URL(string: "https://example.com"),
-            advancedSection: advancedSection,
-            showGoBackButton: true,
-            type: .badCertDomain
-        )
+            advancedSection: advancedSection
+        ))
 
-        let action = getAction(model: mockModel, for: .initialize)
+        let action = getAction(model: model, for: .initialize)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.title, mockModel.errorTitle)
-        XCTAssertEqual(newState.description, mockModel.errorDescription)
-        XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
-        XCTAssertEqual(newState.url, mockModel.url)
-        XCTAssertEqual(newState.type, .badCertDomain)
-        XCTAssertFalse(newState.type.isRegularUI)
+        XCTAssertEqual(newState.title, model.title)
+        XCTAssertEqual(newState.description, model.description)
+        XCTAssertEqual(newState.foxImage, model.foxImageName)
+        XCTAssertEqual(newState.url, model.url)
+        XCTAssertFalse(newState.isRegularUI)
         XCTAssertNotNil(newState.advancedSection)
         XCTAssertEqual(newState.advancedSection?.buttonText, advancedSection.buttonText)
         XCTAssertEqual(newState.advancedSection?.infoText, advancedSection.infoText)
         XCTAssertEqual(newState.advancedSection?.warningText, advancedSection.warningText)
         XCTAssertEqual(newState.advancedSection?.certificateErrorCode, advancedSection.certificateErrorCode)
         XCTAssertEqual(newState.advancedSection?.showProceedButton, advancedSection.showProceedButton)
+    }
+
+    @MainActor
+    func testStateComputedProperties_withGenericModelWithURL() {
+        let initialState = createSubject()
+        let reducer = nativeErrorPageReducer()
+
+        let testURL = URL(string: "https://example.com/page")!
+        let model = ErrorPageModel.generic(GenericErrorModel(url: testURL))
+
+        let action = getAction(model: model, for: .initialize)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.title, .NativeErrorPage.GenericError.TitleLabel)
+        XCTAssertEqual(newState.description, .NativeErrorPage.GenericError.Description)
+        XCTAssertEqual(newState.foxImage, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(newState.url, testURL)
+        XCTAssertNil(newState.advancedSection)
+        XCTAssertTrue(newState.isRegularUI)
+    }
+
+    @MainActor
+    func testStateComputedProperties_withGenericModelWithoutURL() {
+        let initialState = createSubject()
+        let reducer = nativeErrorPageReducer()
+
+        let model = ErrorPageModel.generic(GenericErrorModel(url: nil))
+
+        let action = getAction(model: model, for: .initialize)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.title, .NativeErrorPage.GenericError.TitleLabel)
+        XCTAssertNil(newState.url)
+        XCTAssertNil(newState.advancedSection)
+        XCTAssertTrue(newState.isRegularUI)
+    }
+
+    @MainActor
+    func testStateDefaultStatePreservesModel() {
+        let initialState = createSubject()
+        let reducer = nativeErrorPageReducer()
+
+        let model = ErrorPageModel.generic(GenericErrorModel(url: URL(string: "https://example.com")!))
+        let action = getAction(model: model, for: .initialize)
+        let state = reducer(initialState, action)
+
+        let defaultState = NativeErrorPageState.defaultState(from: state)
+
+        XCTAssertEqual(defaultState.model, state.model)
+        XCTAssertEqual(defaultState.title, state.title)
+        XCTAssertEqual(defaultState.url, state.url)
     }
 
     // MARK: - Private
