@@ -35,8 +35,8 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         prefs: Prefs
     ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
-        let config = QuickAnswersConfig(model: model)
-        self.resultsService = try resultsServiceFactory.make(prefs: prefs, config: config)
+        let configFetcher = DefaultQuickAnswersConfigFetcher(model: model)
+        self.resultsService = try resultsServiceFactory.make(prefs: prefs, configFetcher: configFetcher)
     }
 
     // MARK: Speech Service

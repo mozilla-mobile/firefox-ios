@@ -8,16 +8,15 @@ import Testing
 
 struct QuickAnswersConfigTests {
     @Test
-    func test_init_withExaModel_syncsModelOptionAndInjectsInstructions() {
-        let config = QuickAnswersConfig(model: .exa)
+    func test_init_withInstructions_syncsModelOptionAndSetsInstructions() {
+        let config = QuickAnswersConfig(model: .exa, instructions: "Some instructions")
 
         #expect(config.options["model"] as? String == "exa")
-        #expect(config.instructions == QuickAnswersInstructions.exaInstructions)
-        #expect(config.instructions.isEmpty == false)
+        #expect(config.instructions == "Some instructions")
     }
 
     @Test
-    func test_init_withLinerModel_syncsModelOptionAndOmitsInstructions() {
+    func test_init_withoutInstructions_syncsModelOptionAndOmitsInstructions() {
         let config = QuickAnswersConfig(model: .liner)
 
         #expect(config.options["model"] as? String == "liner")
@@ -43,11 +42,5 @@ struct QuickAnswersConfigTests {
     func test_model_displayName() {
         #expect(QuickAnswersModel.exa.displayName == "Exa")
         #expect(QuickAnswersModel.liner.displayName == "Liner")
-    }
-
-    @Test
-    func test_model_injectsSystemPrompt() {
-        #expect(QuickAnswersModel.exa.injectsSystemPrompt == true)
-        #expect(QuickAnswersModel.liner.injectsSystemPrompt == false)
     }
 }

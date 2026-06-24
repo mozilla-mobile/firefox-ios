@@ -12,45 +12,17 @@ import TestKit
 
 struct ResultsServiceFactoryTests {
     @Test
-    func test_make_withValidConfig_returnsConfiguredService() throws {
+    func test_make_withValidClient_returnsConfiguredService() throws {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.clientToReturn = MockLiteLLMClient()
         let prefs = MockProfilePrefs()
-        let config = QuickAnswersConfig(rawOptions: ["model": "test-model"])
+        let configFetcher = MockQuickAnswersConfigFetcher()
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
-        let result = try subject.make(prefs: prefs, config: config)
+        let result = try subject.make(prefs: prefs, configFetcher: configFetcher)
 
         #expect(result is DefaultResultsService, "Factory should return configured service when LLM client is available")
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should call createAppAttestLiteLLM once")
-    }
-
-    @Test
-    func test_make_withNoModelOption_throwsError() {
-        let mockLLMCreator = MockLLMClientCreator()
-        mockLLMCreator.clientToReturn = MockLiteLLMClient()
-        let prefs = MockProfilePrefs()
-        let config = QuickAnswersConfig(rawOptions: [:])
-        let subject = createSubject(liteLLMCreator: mockLLMCreator)
-
-        #expect(throws: ResultsServiceError.unableToCreateService) {
-            try subject.make(prefs: prefs, config: config)
-        }
-        #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 0, "Should not call when model is missing")
-    }
-
-    @Test
-    func test_make_withEmptyModel_throwsError() {
-        let mockLLMCreator = MockLLMClientCreator()
-        mockLLMCreator.clientToReturn = MockLiteLLMClient()
-        let prefs = MockProfilePrefs()
-        let config = QuickAnswersConfig(rawOptions: ["model": ""])
-        let subject = createSubject(liteLLMCreator: mockLLMCreator)
-
-        #expect(throws: ResultsServiceError.unableToCreateService) {
-            try subject.make(prefs: prefs, config: config)
-        }
-        #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 0, "Should not call when model is empty")
     }
 
     @Test
@@ -58,11 +30,11 @@ struct ResultsServiceFactoryTests {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.shouldReturnNil = true
         let prefs = MockProfilePrefs()
-        let config = QuickAnswersConfig(rawOptions: ["model": "test-model"])
+        let configFetcher = MockQuickAnswersConfigFetcher()
         let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
         #expect(throws: ResultsServiceError.unableToCreateService) {
-            try subject.make(prefs: prefs, config: config)
+            try subject.make(prefs: prefs, configFetcher: configFetcher)
         }
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should attempt to create LLM client")
     }

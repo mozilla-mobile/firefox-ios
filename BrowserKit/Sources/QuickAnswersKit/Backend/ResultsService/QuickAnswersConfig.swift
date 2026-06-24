@@ -14,13 +14,14 @@ public struct QuickAnswersConfig: LLMConfig, Sendable {
     // TODO: FXIOS-15123 - need confirm we want to pass these options, follow similar to S2S for now
     /// Default initializer with production configuration.
     /// - Parameters:
-    ///   - model: The provider model that backs Quick Answers. Determines whether a system prompt is injected
-    ///     and is synced into `options["model"]` so the factory can read it.
+    ///   - model: The provider model that backs Quick Answers. Synced into `options["model"]` so the factory
+    ///     can read it.
+    ///   - instructions: The system prompt instructions injected into the request. Empty by default.
     ///   - options: Additional inference options. `model` is always overridden from the `model` parameter.
-    public init(model: QuickAnswersModel = .exa, options: [String: AnyHashable] = [
+    public init(model: QuickAnswersModel = .exa, instructions: String = "", options: [String: AnyHashable] = [
         "stream": false
     ]) {
-        self.instructions = model.injectsSystemPrompt ? QuickAnswersInstructions.exaInstructions : ""
+        self.instructions = instructions
         var options = options
         options["model"] = model.rawValue
         self.options = options

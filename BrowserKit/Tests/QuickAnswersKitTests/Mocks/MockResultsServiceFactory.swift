@@ -9,7 +9,7 @@ final class MockResultsServiceFactory: ResultsServiceFactory {
     var makeCallCount = 0
     var shouldThrow = false
 
-    func make(prefs: Prefs, config: QuickAnswersConfig) throws -> ResultsService {
+    func make(prefs: Prefs, configFetcher: QuickAnswersConfigFetcher) throws -> ResultsService {
         makeCallCount += 1
 
         if shouldThrow {

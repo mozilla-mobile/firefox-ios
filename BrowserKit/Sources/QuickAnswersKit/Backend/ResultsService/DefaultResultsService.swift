@@ -13,18 +13,18 @@ protocol ResultsService: Sendable {
 
 final class DefaultResultsService: ResultsService {
     private let client: LiteLLMClientProtocol
-    private let config: LLMConfig
+    private let configFetcher: QuickAnswersConfigFetcher
 
-    init(client: LiteLLMClientProtocol, config: LLMConfig) {
+    init(client: LiteLLMClientProtocol, configFetcher: QuickAnswersConfigFetcher) {
         self.client = client
-        self.config = config
+        self.configFetcher = configFetcher
     }
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
-        let messages = makeMessages(for: transcription)
-
         do {
-            let fullResponse = try await requestChatCompletion(for: messages)
+            let config = try await configFetcher.fetch()
+            let messages = makeMessages(for: transcription, config: config)
+            let fullResponse = try await requestChatCompletion(for: messages, config: config)
             let citations = fullResponse.providerSpecificFields?.citations ?? []
             return formatResult(from: fullResponse.content, and: citations)
         } catch {
@@ -32,10 +32,7 @@ final class DefaultResultsService: ResultsService {
         }
     }
 
-    /// Builds the typed message array for a request. When `config.instructions` is non-empty (e.g. for the
-    /// Exa model), a `.system` message is prepended ahead of the `.user` message; otherwise only the user
-    /// message is sent.
-    private func makeMessages(for transcription: String) -> [QuickAnswersMessage] {
+    private func makeMessages(for transcription: String, config: LLMConfig) -> [QuickAnswersMessage] {
         var messages: [QuickAnswersMessage] = []
         if !config.instructions.isEmpty {
             messages.append(LiteLLMMessage(role: .system, content: config.instructions))
@@ -44,7 +41,10 @@ final class DefaultResultsService: ResultsService {
         return messages
     }
 
-    private func requestChatCompletion(for messages: [QuickAnswersMessage]) async throws -> QuickAnswersMessage {
+    private func requestChatCompletion(
+        for messages: [QuickAnswersMessage],
+        config: LLMConfig
+    ) async throws -> QuickAnswersMessage {
         // TODO: FXIOS-15198 Handle errors appropriately
         // and may need to change type and not use String,
         // but waiting for what we get on server side

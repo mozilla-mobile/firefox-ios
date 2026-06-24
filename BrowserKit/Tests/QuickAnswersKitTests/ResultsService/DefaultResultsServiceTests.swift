@@ -45,7 +45,8 @@ struct DefaultResultsServiceTests {
     func test_fetchResults_withInstructions_sendsSystemAndUserMessages() async throws {
         let client = MockLiteLLMClient()
         client.respondWith = ["Answer"]
-        let config = QuickAnswersConfig(model: .exa)
+        let instructions = "You are a helpful assistant."
+        let config = QuickAnswersConfig(instructions: instructions, rawOptions: ["model": "exa"])
         let subject = createSubject(client: client, config: config)
 
         _ = try await subject.fetchResults(for: "What is the weather?")
@@ -54,7 +55,7 @@ struct DefaultResultsServiceTests {
         let systemMessage = client.lastMessages.first as? QuickAnswersMessage
         let userMessage = client.lastMessages.last as? QuickAnswersMessage
         #expect(systemMessage?.role == .system)
-        #expect(systemMessage?.content == QuickAnswersInstructions.exaInstructions)
+        #expect(systemMessage?.content == instructions)
         #expect(systemMessage?.content.isEmpty == false)
         #expect(userMessage?.role == .user)
         #expect(userMessage?.content == "What is the weather?")
@@ -182,7 +183,8 @@ struct DefaultResultsServiceTests {
         client: LiteLLMClientProtocol,
         config: QuickAnswersConfig = QuickAnswersConfig()
     ) -> DefaultResultsService {
-        let subject = DefaultResultsService(client: client, config: config)
+        let configFetcher = MockQuickAnswersConfigFetcher(configToReturn: config)
+        let subject = DefaultResultsService(client: client, configFetcher: configFetcher)
         testHelper.trackForMemoryLeaks(subject)
         return subject
     }
