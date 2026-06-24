@@ -5,6 +5,16 @@
 import Foundation
 import Common
 
+/// The subset of `WorldCupFeed` the middleware drives. Extracted so the
+/// middleware can be unit-tested against a mock feed.
+@MainActor
+protocol WorldCupFeedProtocol: AnyObject {
+    var onUpdate: ((WorldCupFeed.Snapshot) -> Void)? { get set }
+    var latestSnapshot: WorldCupFeed.Snapshot { get }
+    func start()
+    func stop()
+}
+
 /// Owns the World Cup data lifecycle: consumes the `/matches` and `/live`
 /// streams from `WorldCupAPIClientProtocol`, merges live IDs into the
 /// matches view-model, and emits a fresh `Snapshot` to its listener every
@@ -16,7 +26,7 @@ import Common
 /// (see `WorldCupPollingFetchStrategy.shouldPollLive`), so we don't hit
 /// merino outside the tournament window.
 @MainActor
-final class WorldCupFeed {
+final class WorldCupFeed: WorldCupFeedProtocol {
     struct Snapshot: Equatable {
         let matches: [WorldCupMatches]
         let defaultMatchIndex: Int
