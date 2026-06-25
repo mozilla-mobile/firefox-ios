@@ -146,5 +146,6 @@ final class AdsTelemetryHelper: TabContentScript {
 
     static func trackAdsClickedOnPage(providerName: String) {
         GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
+        ConversionEventTracker().record(.firstAdClick)
     }
 }
