@@ -103,6 +103,7 @@ final class ToolbarMiddleware {
                 displayNavBorder: displayBorder,
                 middleButton: middleButton,
                 isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
+                isGoogleLensEnabled: isGoogleLensToolbarEntryPointAvailable(),
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)

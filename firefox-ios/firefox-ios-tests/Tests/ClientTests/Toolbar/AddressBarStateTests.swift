@@ -92,6 +92,42 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(newState.editingAccessoryAction)
     }
 
+    func test_didLoadToolbarsAction_withGoogleLensEnabled_seedsEditingAccessoryAction() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                addressBorderPosition: .top,
+                isGoogleLensEnabled: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didLoadToolbars
+            )
+        )
+
+        XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
+    }
+
+    func test_didLoadToolbarsAction_withGoogleLensDisabled_doesNotSeedEditingAccessoryAction() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                addressBorderPosition: .top,
+                isGoogleLensEnabled: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didLoadToolbars
+            )
+        )
+
+        XCTAssertNil(newState.editingAccessoryAction)
+    }
+
     func test_didUpdateDefaultSearchEngineAction_withGoogleLensDisabled_removesEditingAccessoryAction() {
         setupStore()
         let initialState = createSubject()

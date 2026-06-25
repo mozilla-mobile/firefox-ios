@@ -265,7 +265,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: [ToolbarActionConfiguration](),
             trailingPageActions: [ToolbarActionConfiguration](),
             browserActions: [ToolbarActionConfiguration](),
-            editingAccessoryAction: nil,
+            editingAccessoryAction: editingAccessoryAction(isGoogleLensEnabled: toolbarAction.isGoogleLensEnabled ?? false),
             borderPosition: borderPosition,
             url: nil,
             searchTerm: nil,
