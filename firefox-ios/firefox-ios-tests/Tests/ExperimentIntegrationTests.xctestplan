@@ -196,7 +196,6 @@
         "SettingsTests\/testTranslationSettingsShouldShow_translationExperimentOn()",
         "SettingsTests\/testTranslationSettingsWithToggleOnOff_translationExperimentOn()",
         "ShareLongPressTests",
-        "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",
         "SwipingTabsTests",

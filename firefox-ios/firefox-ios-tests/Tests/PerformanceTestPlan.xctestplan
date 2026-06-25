@@ -134,7 +134,6 @@
         "SecurityTests",
         "SettingsTests",
         "ShareLongPressTests",
-        "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",
         "StoryTests",
