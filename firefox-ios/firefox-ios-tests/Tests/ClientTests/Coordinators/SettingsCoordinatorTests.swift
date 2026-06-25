@@ -147,7 +147,9 @@ final class SettingsCoordinatorTests: XCTestCase {
         subject.start(with: .browser)
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is BrowsingSettingsViewController)
+        let viewController = mockRouter.pushedViewController as? BrowsingSettingsViewController
+        XCTAssertNotNil(viewController)
+        XCTAssertTrue(viewController?.parentCoordinator === subject)
     }
 
     func testToolbarSettingsRoute_showsToolbarSettingsPage() throws {

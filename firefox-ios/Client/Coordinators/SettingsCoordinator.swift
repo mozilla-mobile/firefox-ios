@@ -75,12 +75,12 @@ final class SettingsCoordinator: BaseCoordinator,
         router.setRootViewController(settingsViewController)
     }
 
-    func start(with settingsSection: Route.SettingsSection, fromExternalRoute: Bool = false) {
+    func start(with settingsSection: Route.SettingsSection, shouldResetNavigationStack: Bool = false) {
         // We might already know the sub-settings page we want to show, but in some case we don't and
         // the flow decision needs to be figured out by the view controller
         if let viewController = getSettingsViewController(settingsSection: settingsSection) {
-            // If the user is currently viewing a sub-setting page, reset back to the root and navigate to this new route
-            if fromExternalRoute,
+            // If Settings is already showing a subpage, reset to root before opening the routed destination.
+            if shouldResetNavigationStack,
                let root = router.rootViewController,
                router.navigationController.viewControllers.count > 1 {
                 router.navigationController.setViewControllers([root, viewController], animated: false)
@@ -88,7 +88,7 @@ final class SettingsCoordinator: BaseCoordinator,
                 router.push(viewController)
             }
         } else {
-            if fromExternalRoute, let root = router.rootViewController {
+            if shouldResetNavigationStack, let root = router.rootViewController {
                 router.popToViewController(root, reason: .deeplink, animated: false)
             }
             assert(settingsViewController != nil)
@@ -108,7 +108,7 @@ final class SettingsCoordinator: BaseCoordinator,
     override func handle(route: Route) {
         switch route {
         case let .settings(section):
-            start(with: section, fromExternalRoute: true)
+            start(with: section, shouldResetNavigationStack: true)
         default:
             break
         }
@@ -208,7 +208,9 @@ final class SettingsCoordinator: BaseCoordinator,
             return contentBlockerVC
 
         case .browser:
-            return BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+            let viewController = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+            viewController.parentCoordinator = self
+            return viewController
 
         case .toolbar:
             // Toolbar position cannot be changed on iPad
