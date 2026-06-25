@@ -28,6 +28,7 @@ class EditBookmarkViewController: UIViewController,
         view.delegate = self
         view.register(cellType: EditBookmarkCell.self)
         view.register(cellType: OneLineTableViewCell.self)
+        view.register(cellType: FolderTreeCell.self)
         view.register(UITableViewHeaderFooterView.self,
                       forHeaderFooterViewReuseIdentifier: UX.folderHeaderIdentifier)
         view.separatorStyle = .none
@@ -199,18 +200,19 @@ class EditBookmarkViewController: UIViewController,
             return cell
 
         case .folder(let folder, _):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                           for: indexPath) as? OneLineTableViewCell
-            else {
-                return UITableViewCell()
+            if let placeholderTitle = placeholderHeaderTitle(for: folder) {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                               for: indexPath) as? OneLineTableViewCell
+                else { return UITableViewCell() }
+                configurePlaceholderHeaderCell(cell, title: placeholderTitle, folder: folder)
+                return cell
             }
-            if folder.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
-                configureDesktopBookmarksHeaderCell(cell)
-            } else {
-                configureParentFolderCell(cell, folder: folder)
-                cell.accessibilityIdentifier =
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: FolderTreeCell.cellIdentifier,
+                                                           for: indexPath) as? FolderTreeCell
+            else { return UITableViewCell() }
+            configureParentFolderCell(cell, folder: folder)
+            cell.accessibilityIdentifier =
                 "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarkParentFolderCell)_\(indexPath.row)"
-            }
             return cell
 
         case .newFolder:
@@ -237,23 +239,40 @@ class EditBookmarkViewController: UIViewController,
         cell.applyTheme(theme: theme)
     }
 
-    private func configureParentFolderCell(_ cell: OneLineTableViewCell, folder: Folder) {
-        cell.titleLabel.text = folder.title
-        let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
-        cell.leftImageView.image = folderImage
+    private func configureParentFolderCell(_ cell: FolderTreeCell, folder: Folder) {
+        let breadcrumb: String?
+        if !viewModel.isFolderCollapsed,
+           folder.indentation > 0,
+           let parentTitle = folder.parentTitle, !parentTitle.isEmpty {
+            breadcrumb = String(format: String.Bookmarks.Menu.EditBookmarkParentFolderBreadcrumbFormat, parentTitle)
+        } else {
+            breadcrumb = nil
+        }
+
+        let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)
         cell.indentationLevel = viewModel.indentationForFolder(folder)
-        let canShowAccessoryView = viewModel.shouldShowDisclosureIndicatorForFolder(folder)
-        cell.accessoryType = canShowAccessoryView ? .checkmark : .none
-        cell.selectionStyle = .default
-        cell.accessibilityTraits = .button
-        cell.customization = .regular
+        cell.configure(title: folder.title,
+                       breadcrumb: breadcrumb,
+                       image: folderImage,
+                       isSelected: viewModel.shouldShowDisclosureIndicatorForFolder(folder))
         cell.applyTheme(theme: theme)
     }
 
-    private func configureDesktopBookmarksHeaderCell(_ cell: OneLineTableViewCell) {
-        cell.titleLabel.text = String.Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel
+    private func placeholderHeaderTitle(for folder: Folder) -> String? {
+        switch folder.guid {
+        case EditBookmarkViewModel.mobileHeaderPlaceholderGuid:
+            return .Bookmarks.Menu.EditBookmarkMobileBookmarksLabel
+        case EditBookmarkViewModel.desktopHeaderPlaceholderGuid:
+            return String.Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel
+        default:
+            return nil
+        }
+    }
+
+    private func configurePlaceholderHeaderCell(_ cell: OneLineTableViewCell, title: String, folder: Folder) {
+        cell.titleLabel.text = title
         cell.customization = .desktopBookmarksLabel
-        cell.indentationLevel = 1
+        cell.indentationLevel = folder.indentation
         cell.accessoryType = .none
         cell.selectionStyle = .none
         cell.applyTheme(theme: theme)
@@ -305,7 +324,8 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
+        if let folder = viewModel.folderStructures[safe: indexPath.row],
+           placeholderHeaderTitle(for: folder) != nil {
             return nil
         }
         return indexPath

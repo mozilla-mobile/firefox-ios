@@ -17,22 +17,79 @@ extension FolderHierarchyFetcher {
 }
 
 struct Folder: Equatable, Hashable {
-    init(title: String, guid: String, indentation: Int, parentTitle: String? = nil) {
+    init(title: String, guid: String, indentation: Int, parentTitle: String? = nil, isDesktopRoot: Bool = false) {
         self.title = Self.localizedTitle(guid) ?? title
         self.guid = guid
         self.indentation = indentation
         self.parentTitle = parentTitle
+        self.isDesktopRoot = isDesktopRoot
     }
 
     let title: String
     let guid: String
     let indentation: Int
     let parentTitle: String?
-
-    static let DesktopFolderHeaderPlaceholderGuid = "DUMMY"
+    let isDesktopRoot: Bool
 
     static func localizedTitle(_ guid: String) -> String? {
         return LocalizedRootBookmarkFolderStrings[guid]
+    }
+}
+
+struct FolderGroup: Equatable, Identifiable {
+    let id: String
+    let title: String
+    var folders: [Folder]
+    var isExpanded: Bool
+
+    static let mobileGroupID = "group.mobile"
+    static let desktopGroupID = "group.desktop"
+
+    struct Block: Equatable {
+        let folders: [Folder]
+    }
+
+    var blocks: [Block] {
+        var result: [Block] = []
+        var current: [Folder] = []
+        for folder in folders {
+            if folder.indentation == 0, !current.isEmpty {
+                result.append(Block(folders: current))
+                current = []
+            }
+            current.append(folder)
+        }
+        if !current.isEmpty {
+            result.append(Block(folders: current))
+        }
+        return result
+    }
+
+    static func makeGroups(from folders: [Folder],
+                           mobileTitle: String,
+                           desktopTitle: String,
+                           mobileExpandedByDefault: Bool,
+                           desktopExpandedByDefault: Bool) -> [FolderGroup] {
+        let mobileFolders = folders.filter { !$0.isDesktopRoot }
+        let desktopFolders = folders.filter { $0.isDesktopRoot }
+
+        guard !desktopFolders.isEmpty else {
+            return [FolderGroup(id: mobileGroupID,
+                                title: mobileTitle,
+                                folders: mobileFolders,
+                                isExpanded: mobileExpandedByDefault)]
+        }
+
+        return [
+            FolderGroup(id: mobileGroupID,
+                        title: mobileTitle,
+                        folders: mobileFolders,
+                        isExpanded: mobileExpandedByDefault),
+            FolderGroup(id: desktopGroupID,
+                        title: desktopTitle,
+                        folders: desktopFolders,
+                        isExpanded: desktopExpandedByDefault)
+        ]
     }
 }
 
@@ -91,26 +148,36 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
     ///   - indent: Folder indentation
     ///   - prefixFolders: Optional folders to be prepended to the top of the "folder" subfolder hierarchy.
     ///                    Namely used to prepend the desktop folders to the top of the mobile bookmarks subfolder hierarchy
+    ///   - isDesktopSubtree: True if this folder is the Desktop subtree's root or a descendant of it -
+    ///                    propagated to children so every folder in the subtree (not just the root)
+    ///                    can be identified later via `Folder.isDesktopRoot`.
     private func recursiveAddSubFolders(_ folder: BookmarkFolderData,
                                         folders: inout [Folder],
                                         hasDesktopBookmarks: Bool,
                                         indent: Int = 0,
                                         excludedGuids: [String],
                                         prefixFolders: [BookmarkFolderData] = [],
-                                        parentTitle: String? = nil) {
+                                        parentTitle: String? = nil,
+                                        isDesktopSubtree: Bool = false) {
+        let isDesktopRootFolder = BookmarkRoots.DesktopRoots.contains(folder.guid)
+        let isDesktop = isDesktopRootFolder || isDesktopSubtree
+
         // Only add the folder if it is:
         // a) A desktop folder and we have desktop bookmarks
         // b) Not a desktop or excluded folder
-        if (BookmarkRoots.DesktopRoots.contains(folder.guid) && hasDesktopBookmarks) ||
-            (!BookmarkRoots.DesktopRoots.contains(folder.guid) && !excludedGuids.contains(folder.guid)) {
-            folders.append(Folder(title: folder.title, guid: folder.guid, indentation: indent, parentTitle: parentTitle))
+        if (isDesktopRootFolder && hasDesktopBookmarks) ||
+            (!isDesktopRootFolder && !excludedGuids.contains(folder.guid)) {
+            folders.append(Folder(title: folder.title,
+                                  guid: folder.guid,
+                                  indentation: indent,
+                                  parentTitle: parentTitle,
+                                  isDesktopRoot: isDesktop))
 
             // Prepend desktop folders to the top of the mobile bookmarks folder hierarchy
             if folder.guid == BookmarkRoots.MobileFolderGUID {
                 prependDesktopFolders(
                     folder,
                     folders: &folders,
-                    indent: indent,
                     excludedGuids: excludedGuids,
                     prefixFolders: prefixFolders
                 )
@@ -124,7 +191,8 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
                 hasDesktopBookmarks: hasDesktopBookmarks,
                 indent: indentation,
                 excludedGuids: excludedGuids,
-                parentTitle: folder.title
+                parentTitle: Folder.localizedTitle(folder.guid) ?? folder.title,
+                isDesktopSubtree: isDesktop
             )
         }
     }
@@ -144,7 +212,6 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
 
     private func prependDesktopFolders(_ folder: BookmarkFolderData,
                                        folders: inout [Folder],
-                                       indent: Int = 0,
                                        excludedGuids: [String],
                                        prefixFolders: [BookmarkFolderData] = []) {
         prefixFolders.forEach {
@@ -152,14 +219,9 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
                 $0,
                 folders: &folders,
                 hasDesktopBookmarks: true,
-                indent: indent + 2,
-                excludedGuids: excludedGuids
+                excludedGuids: excludedGuids,
+                isDesktopSubtree: true
             )
-        }
-        // Find the first desktop folder and prepend a dummy folder object to use for the "DESKTOP BOOKMARKS" header
-        if let firstDesktopFolderIndex = folders.firstIndex(where: { BookmarkRoots.DesktopRoots.contains($0.guid) }) {
-            let dummyFolder = Folder(title: "", guid: Folder.DesktopFolderHeaderPlaceholderGuid, indentation: indent + 2)
-            folders.insert(dummyFolder, at: firstDesktopFolderIndex)
         }
     }
 }

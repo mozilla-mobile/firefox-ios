@@ -19,6 +19,11 @@ protocol ParentFolderSelector: AnyObject {
 
 // FIXME: FXIOS-14161 Make EditBookmarkViewModel actually Sendable
 class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
+    static let mobileHeaderPlaceholderGuid = "EditBookmarkViewModel.mobileHeaderPlaceholder"
+    static let desktopHeaderPlaceholderGuid = "EditBookmarkViewModel.desktopHeaderPlaceholder"
+
+    private static let placeholderIndentation = 0
+
     private let parentFolder: FxBookmarkNode
     private var node: BookmarkItemData?
     private let profile: Profile
@@ -102,9 +107,23 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
         Task { @MainActor [weak self] in
             let folders = await self?.folderFetcher.fetchFolders()
             guard let folders else { return }
-            self?.folderStructures = folders
+            self?.folderStructures = Self.insertSectionPlaceholders(into: folders)
             self?.onFolderStatusUpdate?()
         }
+    }
+
+    private static func insertSectionPlaceholders(into folders: [Folder]) -> [Folder] {
+        let mobileFolders = folders.filter { !$0.isDesktopRoot }
+        let desktopFolders = folders.filter { $0.isDesktopRoot }
+        guard !desktopFolders.isEmpty else { return mobileFolders }
+
+        let mobilePlaceholder = Folder(title: "",
+                                       guid: mobileHeaderPlaceholderGuid,
+                                       indentation: placeholderIndentation)
+        let desktopPlaceholder = Folder(title: "",
+                                        guid: desktopHeaderPlaceholderGuid,
+                                        indentation: placeholderIndentation)
+        return [mobilePlaceholder] + mobileFolders + [desktopPlaceholder] + desktopFolders
     }
 
     func setUpdatedTitle(_ title: String) {

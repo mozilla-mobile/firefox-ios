@@ -9,6 +9,9 @@ import Shared
 
 // FIXME: FXIOS-14160 Make EditFolderViewModel actually Sendable
 class EditFolderViewModel: @unchecked Sendable {
+    private static let mobileExpandedByDefault = true
+    private static let desktopExpandedByDefault = false
+
     private let profile: Profile
     private let logger: Logger
     private let parentFolder: FxBookmarkNode
@@ -16,13 +19,14 @@ class EditFolderViewModel: @unchecked Sendable {
     private let bookmarkSaver: BookmarksSaver
     private let folderFetcher: FolderHierarchyFetcher
     private(set) var selectedFolder: Folder?
-    private(set) var folderStructures = [Folder]()
-    private(set) var isFolderCollapsed = true
+    private(set) var folderGroups = [FolderGroup]()
+    private(set) var isBrowsingFolders = false
     private var isNewFolderView: Bool {
         return folder == nil
     }
 
     var onFolderStatusUpdate: VoidReturnCallback?
+    var onGroupExpansionUpdate: ((Int) -> Void)?
     var onBookmarkSaved: VoidReturnCallback?
     weak var parentFolderSelector: ParentFolderSelector?
 
@@ -46,38 +50,55 @@ class EditFolderViewModel: @unchecked Sendable {
         self.bookmarkSaver = bookmarkSaver ?? DefaultBookmarksSaver(profile: profile)
         self.folderFetcher = folderFetcher ?? DefaultFolderHierarchyFetcher(profile: profile,
                                                                             rootFolderGUID: BookmarkRoots.RootGUID)
-        let folder = Folder(title: parentFolder.title, guid: parentFolder.guid, indentation: 0)
-        folderStructures = [folder]
-        selectedFolder = folder
+        selectedFolder = Folder(title: parentFolder.title, guid: parentFolder.guid, indentation: 0)
     }
 
     private func title(for folder: BookmarkFolderData) -> String {
         return LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
     }
 
-    func shouldShowDisclosureIndicator(isFolderSelected: Bool) -> Bool {
-        return isFolderSelected && !isFolderCollapsed
+    private func loadFolderGroups() {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            let folders = await self.folderFetcher.fetchFolders(excludedGuids: [self.folder?.guid ?? ""])
+            let previousExpansionByID = Dictionary(uniqueKeysWithValues: self.folderGroups.map { ($0.id, $0.isExpanded) })
+
+            var newGroups = FolderGroup.makeGroups(
+                from: folders,
+                mobileTitle: .Bookmarks.Menu.EditBookmarkMobileGroupLabel,
+                desktopTitle: .Bookmarks.Menu.EditBookmarkDesktopGroupLabel,
+                mobileExpandedByDefault: Self.mobileExpandedByDefault,
+                desktopExpandedByDefault: Self.desktopExpandedByDefault
+            )
+            for index in newGroups.indices {
+                if let previousValue = previousExpansionByID[newGroups[index].id] {
+                    newGroups[index].isExpanded = previousValue
+                }
+            }
+
+            self.folderGroups = newGroups
+            self.onFolderStatusUpdate?()
+        }
+    }
+
+    @MainActor
+    func beginBrowsingFolders() {
+        isBrowsingFolders = true
+        loadFolderGroups()
     }
 
     @MainActor
     func selectFolder(_ folder: Folder) {
-        isFolderCollapsed.toggle()
-        if isFolderCollapsed {
-            selectedFolder = folder
-            folderStructures = [folder]
-            onFolderStatusUpdate?()
-        } else {
-            getFolderStructure(folder)
-        }
+        selectedFolder = folder
+        isBrowsingFolders = false
+        onFolderStatusUpdate?()
     }
 
-    private func getFolderStructure(_ selectedFolder: Folder) {
-        Task { @MainActor [weak self] in
-            let folders = await self?.folderFetcher.fetchFolders(excludedGuids: [self?.folder?.guid ?? ""])
-            guard let folders else { return }
-            self?.folderStructures = folders
-            self?.onFolderStatusUpdate?()
-        }
+    @MainActor
+    func toggleGroupExpansion(at index: Int) {
+        guard folderGroups.indices.contains(index) else { return }
+        folderGroups[index].isExpanded.toggle()
+        onGroupExpansionUpdate?(index)
     }
 
     func updateFolderTitle(_ title: String) {

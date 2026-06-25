@@ -11,14 +11,11 @@ class EditFolderViewController: UIViewController,
                                 Themeable {
     private struct UX {
         static let editFolderCellTopPadding: CGFloat = 25.0
-        static let parentFolderHeaderHorizontalPadding: CGFloat = 16.0
-        static let parentFolderHeaderBottomPadding: CGFloat = 8.0
-        static let parentFolderHeaderIdentifier = "parentFolderHeaderIdentifier"
     }
-    private enum Section: Int, CaseIterable {
-        case editFolder = 0
-        case parentFolder = 1
-    }
+
+    private static let editFolderSection = 0
+    private static let firstGroupSection = 1
+
     var currentWindowUUID: WindowUUID?
     var themeManager: any ThemeManager
     var themeListenerCancellable: Any?
@@ -35,9 +32,10 @@ class EditFolderViewController: UIViewController,
         view.dataSource = self
         view.delegate = self
         view.register(cellType: EditFolderCell.self)
-        view.register(cellType: OneLineTableViewCell.self)
-        view.register(UITableViewHeaderFooterView.self,
-                      forHeaderFooterViewReuseIdentifier: UX.parentFolderHeaderIdentifier)
+        view.register(cellType: FolderTreeCell.self)
+        view.register(cellType: LinkActionCell.self)
+        view.register(FolderSectionHeaderView.self,
+                      forHeaderFooterViewReuseIdentifier: FolderSectionHeaderView.reuseIdentifier)
         let headerSpacerView = UIView(frame: CGRect(origin: .zero,
                                                     size: CGSize(width: 0, height: UX.editFolderCellTopPadding)))
         view.tableHeaderView = headerSpacerView
@@ -82,9 +80,11 @@ class EditFolderViewController: UIViewController,
         super.viewDidLoad()
         title = viewModel.controllerTitle
         navigationItem.rightBarButtonItem = saveBarButton
+
         viewModel.onFolderStatusUpdate = { [weak self] in
-            self?.tableView.reloadSections(IndexSet(integer: Section.parentFolder.rawValue), with: .automatic)
+            self?.tableView.reloadData()
         }
+
         setupSubviews()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -138,6 +138,45 @@ class EditFolderViewController: UIViewController,
         navigationController?.popViewController(animated: true)
     }
 
+    private func toggleGroup(at groupIndex: Int) {
+        guard let group = viewModel.folderGroups[safe: groupIndex],
+              let headerOffset = groupSections.firstIndex(where: { $0.groupIndex == groupIndex })
+        else { return }
+
+        let headerSection = Self.firstGroupSection + headerOffset
+        let willExpand = !group.isExpanded
+        let blocks = group.blocks
+        let firstBlockRowCount = blocks.first?.folders.count ?? 0
+        let trailingSectionCount = max(blocks.count - 1, 0)
+
+        if let header = tableView.headerView(forSection: headerSection) as? FolderSectionHeaderView {
+            header.setExpanded(willExpand, animated: true)
+        }
+
+        viewModel.toggleGroupExpansion(at: groupIndex)
+
+        let rowIndexPaths = (0..<firstBlockRowCount).map { IndexPath(row: $0, section: headerSection) }
+        let trailingSections = trailingSectionCount > 0
+            ? IndexSet(integersIn: (headerSection + 1)...(headerSection + trailingSectionCount))
+            : IndexSet()
+
+        guard !rowIndexPaths.isEmpty || !trailingSections.isEmpty else { return }
+
+        tableView.performBatchUpdates({
+            if willExpand {
+                self.tableView.insertRows(at: rowIndexPaths, with: .fade)
+                if !trailingSections.isEmpty {
+                    self.tableView.insertSections(trailingSections, with: .fade)
+                }
+            } else {
+                self.tableView.deleteRows(at: rowIndexPaths, with: .fade)
+                if !trailingSections.isEmpty {
+                    self.tableView.deleteSections(trailingSections, with: .fade)
+                }
+            }
+        })
+    }
+
     // MARK: - Themeable
 
     func applyTheme() {
@@ -166,42 +205,70 @@ class EditFolderViewController: UIViewController,
     // MARK: - UITableViewDataSource & UITableViewDelegate
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.allCases.count
+        guard viewModel.isBrowsingFolders else {
+            return Self.firstGroupSection + 1
+        }
+        return Self.firstGroupSection + groupSections.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = Section(rawValue: section) else { return 0 }
-        switch section {
-        case .editFolder:
-            return 1
-        case .parentFolder:
-            return viewModel.folderStructures.count
-        }
+        if section == Self.editFolderSection { return 1 }
+        guard viewModel.isBrowsingFolders else { return 2 }
+        guard let location = groupSections[safe: section - Self.firstGroupSection],
+              let group = viewModel.folderGroups[safe: location.groupIndex],
+              group.isExpanded
+        else { return 0 }
+        return group.blocks[safe: location.blockIndex]?.folders.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
-        switch section {
-        case .editFolder:
+        if indexPath.section == Self.editFolderSection {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EditFolderCell.cellIdentifier,
                                                            for: indexPath) as? EditFolderCell
             else { return UITableViewCell() }
             configureEditFolderCell(cell)
             return cell
-        case .parentFolder:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                           for: indexPath) as? OneLineTableViewCell,
-                  let folder = viewModel.folderStructures[safe: indexPath.row]
+        }
+
+        if !viewModel.isBrowsingFolders {
+            return configureSummaryRow(tableView, at: indexPath)
+        }
+
+        guard let location = groupSections[safe: indexPath.section - Self.firstGroupSection],
+              let group = viewModel.folderGroups[safe: location.groupIndex],
+              let folder = group.blocks[safe: location.blockIndex]?.folders[safe: indexPath.row],
+              let cell = tableView.dequeueReusableCell(withIdentifier: FolderTreeCell.cellIdentifier,
+                                                       for: indexPath) as? FolderTreeCell
+        else { return UITableViewCell() }
+
+        configureParentFolderCell(cell, folder: folder)
+        cell.accessibilityIdentifier =
+            "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarkParentFolderCell)_\(indexPath.section)_\(indexPath.row)"
+        return cell
+    }
+
+    private func configureSummaryRow(_ tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: FolderTreeCell.cellIdentifier,
+                                                           for: indexPath) as? FolderTreeCell
             else { return UITableViewCell() }
-            if folder.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
-                configureDesktopBookmarksHeaderCell(cell)
-            } else {
-                configureParentFolderCell(cell, folder: folder)
-                cell.accessibilityIdentifier =
-                "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarkParentFolderCell)_\(indexPath.row)"
-            }
+            let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)
+            cell.indentationLevel = 0
+            cell.configure(title: viewModel.selectedFolder?.title ?? "",
+                           breadcrumb: nil,
+                           image: folderImage,
+                           isSelected: false)
+            cell.selectionStyle = .none
+            cell.applyTheme(theme: theme)
             return cell
         }
+
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: LinkActionCell.cellIdentifier,
+                                                       for: indexPath) as? LinkActionCell
+        else { return UITableViewCell() }
+        cell.configure(title: .Bookmarks.Menu.EditBookmarkChangeLocationLabel)
+        cell.applyTheme(theme: theme)
+        return cell
     }
 
     private func configureEditFolderCell(_ cell: EditFolderCell) {
@@ -212,69 +279,106 @@ class EditFolderViewController: UIViewController,
         cell.applyTheme(theme: theme)
     }
 
-    private func configureParentFolderCell(_ cell: OneLineTableViewCell, folder: Folder) {
-        cell.titleLabel.text = folder.title
-        let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
-        cell.leftImageView.image = folderImage
-        cell.indentationLevel = viewModel.folderStructures.count == 1 ? 0 : folder.indentation
-        let isFolderSelected = folder.guid == viewModel.selectedFolder?.guid
-        let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
-        cell.accessoryType = canShowAccessoryView ? .checkmark : .none
-        cell.selectionStyle = .default
-        cell.accessibilityTraits = .button
-        cell.customization = .regular
-        cell.applyTheme(theme: theme)
-    }
-
-    private func configureDesktopBookmarksHeaderCell(_ cell: OneLineTableViewCell) {
-        cell.titleLabel.text = String.Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel
-        cell.customization = .desktopBookmarksLabel
-        cell.indentationLevel = 1
-        cell.accessoryType = .none
-        cell.selectionStyle = .none
-        cell.applyTheme(theme: theme)
-    }
-
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
-            return nil
+    private func configureParentFolderCell(_ cell: FolderTreeCell, folder: Folder) {
+        let breadcrumb: String?
+        if folder.indentation > 0, let parentTitle = folder.parentTitle, !parentTitle.isEmpty {
+            breadcrumb = String(format: String.Bookmarks.Menu.EditBookmarkParentFolderBreadcrumbFormat, parentTitle)
+        } else {
+            breadcrumb = nil
         }
-        return indexPath
+
+        let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)
+        cell.indentationLevel = folder.indentation
+        cell.configure(title: folder.title,
+                       breadcrumb: breadcrumb,
+                       image: folderImage,
+                       isSelected: folder.guid == viewModel.selectedFolder?.guid)
+        cell.applyTheme(theme: theme)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let section = Section(rawValue: indexPath.section) else { return }
-        if section == .parentFolder, let folder = viewModel.folderStructures[safe: indexPath.row] {
-            viewModel.selectFolder(folder)
+        guard indexPath.section != Self.editFolderSection else { return }
+
+        guard viewModel.isBrowsingFolders else {
+            if indexPath.row == 1 {
+                viewModel.beginBrowsingFolders()
+            }
+            return
         }
+
+        guard let location = groupSections[safe: indexPath.section - Self.firstGroupSection],
+              let group = viewModel.folderGroups[safe: location.groupIndex],
+              let folder = group.blocks[safe: location.blockIndex]?.folders[safe: indexPath.row]
+        else { return }
+        viewModel.selectFolder(folder)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let section = Section(rawValue: section),
-              section == .parentFolder,
-              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.parentFolderHeaderIdentifier)
+        guard section != Self.editFolderSection,
+              let header = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: FolderSectionHeaderView.reuseIdentifier
+              ) as? FolderSectionHeaderView
         else { return nil }
-        var configuration = UIListContentConfiguration.plainHeader()
-        configuration.text = .Bookmarks.Menu.EditBookmarkSaveIn.uppercased()
-        configuration.textProperties.font = FXFontStyles.Regular.callout.scaledFont()
-        configuration.textProperties.color = theme.colors.textSecondary
-        let layoutMargins = NSDirectionalEdgeInsets(top: 0,
-                                                    leading: UX.parentFolderHeaderHorizontalPadding,
-                                                    bottom: UX.parentFolderHeaderBottomPadding,
-                                                    trailing: UX.parentFolderHeaderHorizontalPadding)
-        configuration.directionalLayoutMargins = layoutMargins
-        header.contentConfiguration = configuration
-        header.directionalLayoutMargins = .zero
-        header.preservesSuperviewLayoutMargins = false
+
+        guard viewModel.isBrowsingFolders else {
+            guard section == Self.firstGroupSection else { return nil }
+            header.configure(
+                title: nil,
+                caption: .Bookmarks.Menu.EditBookmarkLocationLabel,
+                showsChevron: false,
+                titleColor: theme.colors.textPrimary,
+                captionColor: theme.colors.textSecondary
+            )
+            header.onTap = nil
+            return header
+        }
+
+        guard let location = groupSections[safe: section - Self.firstGroupSection],
+              location.blockIndex == 0,
+              let group = viewModel.folderGroups[safe: location.groupIndex]
+        else { return nil }
+
+        let isFirstGroup = location.groupIndex == 0
+        header.configure(
+            title: group.title,
+            caption: isFirstGroup ? .Bookmarks.Menu.EditBookmarkAllFoldersLabel : nil,
+            showsChevron: true,
+            isExpanded: group.isExpanded,
+            titleColor: theme.colors.textPrimary,
+            captionColor: theme.colors.textSecondary
+        )
+        header.onTap = { [weak self] in
+            self?.toggleGroup(at: location.groupIndex)
+        }
         return header
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        guard let section = Section(rawValue: section), section == .parentFolder else { return 0 }
-        return UITableView.automaticDimension
+        guard section != Self.editFolderSection else { return 0 }
+        guard viewModel.isBrowsingFolders else {
+            return section == Self.firstGroupSection ? UITableView.automaticDimension : 0
+        }
+        guard let location = groupSections[safe: section - Self.firstGroupSection] else { return 0 }
+        return location.blockIndex == 0 ? UITableView.automaticDimension : CGFloat.leastNormalMagnitude
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+
+    // MARK: - Helpers
+
+    private var groupSections: [(groupIndex: Int, blockIndex: Int)] {
+        var result: [(groupIndex: Int, blockIndex: Int)] = []
+        for (groupIndex, group) in viewModel.folderGroups.enumerated() {
+            guard group.isExpanded, !group.folders.isEmpty else {
+                result.append((groupIndex, 0))
+                continue
+            }
+            for blockIndex in group.blocks.indices {
+                result.append((groupIndex, blockIndex))
+            }
+        }
+        return result
     }
 }
