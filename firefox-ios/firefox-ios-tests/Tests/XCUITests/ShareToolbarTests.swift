@@ -6,6 +6,7 @@ import Foundation
 import XCTest
 import Common
 
+let pdfUrl = "https://storage.googleapis.com/mobile_test_assets/public/lorem_ipsum.pdf"
 let sendLinkMsg1 = "You are not signed in to your account."
 let sendLinkMsg2 = "Please open Firefox, go to Settings and sign in to continue."
 
