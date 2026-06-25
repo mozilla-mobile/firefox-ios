@@ -893,8 +893,6 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         return subject
     }
 
-<<<<<<< HEAD
-=======
     /// Hands the middleware a `MockWorldCupFeed` so tests can assert on the
     /// feed lifecycle (start/stop) without driving the real network plumbing.
     private func createSubject(feed: MockWorldCupFeed) -> WorldCupMiddleware {
@@ -913,7 +911,6 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
->>>>>>> a8c110297 (BugFix FXIOS-16157 [WorldCup] didChangeHomepageSettings not turning back on the feed (#34423))
     /// Fires when at least one matches dispatch has landed (apiError nil and
     /// matches non-empty). Live re-dispatches are tolerated — the test reads
     /// `latestWorldCupAction()` to get the final state.
