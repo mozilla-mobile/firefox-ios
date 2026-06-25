@@ -266,7 +266,9 @@ class ToolbarButton: UIButton,
         let actions: [UIMenuElement] = element.menuElements.map { menuElement in
             let action = UIAction(
                 title: menuElement.title,
-                image: menuElement.imageName.flatMap { UIImage(named: $0) },
+                image: menuElement.imageName.flatMap {
+                    UIImage(named: $0)?.withRenderingMode(.alwaysTemplate)
+                },
                 handler: { [weak self] _ in
                     guard let self else { return }
                     menuElement.onSelected?(self)
