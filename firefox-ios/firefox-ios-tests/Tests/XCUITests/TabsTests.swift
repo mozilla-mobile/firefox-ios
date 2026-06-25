@@ -113,31 +113,6 @@ class TabsTests: BaseTestCase {
         }
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306865
-    func testCloseAllTabsUndo() throws {
-        throw XCTSkip("Undo toast no longer available")
-        /*
-         toolBarScreen = ToolbarScreen(app: app)
-         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
-         tabTrayScreen = TabTrayScreen(app: app)
-         // A different tab than home is open to do the proper checks
-         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
-         waitUntilPageLoad()
-         toolBarScreen.assertTabsButtonExists()
-         navigator.nowAt(BrowserTab)
-         toolBarScreen.tapOnTabsButton()
-         tabTrayScreen.tapOnNewTabButton()
-         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-         // Close all tabs, undo it and check that the number of tabs is correct
-         navigator.performAction(Action.AcceptRemovingAllTabs)
-         tabTrayScreen.undoRemovingAllTabs()
-         firefoxHomePageScreen.assertTopSitesItemCellExist()
-         navigator.nowAt(BrowserTab)
-         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-         tabTrayScreen.waitForTabWithLabel(urlLabel)
-         */
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
     // Smoketest
     func testCloseAllTabsPrivateModeUndo() {
@@ -322,33 +297,6 @@ class TabsTests: BaseTestCase {
         } else {
             XCTAssertEqual(tabsTrayCell.element(boundBy: 6).label, "Homepage. Currently selected tab.")
         }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306868
-    func testTabTrayCloseMultipleTabs() throws {
-        throw XCTSkip("Undo toast no longer available")
-        /*
-         validateToastWhenClosingMultipleTabs()
-         // Choose to undo the action
-         app.buttons["Undo"].waitAndTap()
-         waitUntilPageLoad()
-         // Only the latest tab closed is restored
-         navigator.nowAt(BrowserTab)
-         waitForTabsButton()
-         navigator.goto(TabTray)
-         let tabsTrayCell = app.otherElements[tabsTray].cells
-         XCTAssertEqual(tabsTrayCell.count, 2)
-         mozWaitForElementToExist(app.buttons["2"])
-         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
-         // Repeat for private browsing mode
-         navigator.performAction(Action.ToggleExperimentPrivateMode)
-         navigator.performAction(Action.OpenNewTabFromTabTray)
-         validateToastWhenClosingMultipleTabs()
-         // Choose to undo the action
-         app.buttons["Undo"].waitAndTap()
-         // Only the latest tab closed is restored
-         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
-         */
     }
 
     // Smoketest
