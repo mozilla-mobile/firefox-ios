@@ -5,7 +5,7 @@
 "New Tab" = "ନୂତନ ଟ୍ୟାବ";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "ଏହା ଆପଣକୁ ଫଟୋ ଉଠାଇବା ଓ ଅପଲୋଡ଼ କରିବାର ସୁଯୋଗ ଦେବ ।";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ଆପଣ ଦେଖୁଥିବା ୱେବସାଇଟସବୁ ଆପଣଙ୍କ ଅବସ୍ଥିତି ମାଗିପାରନ୍ତି ।";

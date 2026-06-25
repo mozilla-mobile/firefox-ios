@@ -95,7 +95,7 @@
 "WorldCup.HomepageWidget.CountDown.Title.v151" = "Odliczanie do mistrzostw świata";
 
 /* Label for the button that takes users to the World Cup schedule website on the countdown section. */
-"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Harmonogram";
+"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Terminarz";
 
 /* The accessibility labels for the button that allow to disable World Cup notifications. */
 "WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Wyłącz powiadomienia";

@@ -8,7 +8,7 @@
 "New Tab" = "Nový panel";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox používá váš fotoaparát ke skenování QR kódů a pořizování fotografií a videí.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox vyžaduje Face ID pro přístup k uloženým heslům a platebním metodám.";

@@ -5,7 +5,7 @@
 "New Tab" = "لسان جديد";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "يستعمل Firefox كاميراتك لمسح رموز QR رقميًا ولالتقاط الصور والڤِديوهات.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "يتطلب Firefox تفعيل بصمة الوجه للوصول إلى كلمات المرور وطرق الدفع المحفوظة لديك.";
