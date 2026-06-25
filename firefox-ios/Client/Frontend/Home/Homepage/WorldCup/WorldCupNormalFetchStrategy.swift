@@ -47,8 +47,7 @@ struct WorldCupNormalFetchStrategy: WorldCupFetchStrategyProtocol {
     /// so `/matches`, `/live` and `/teams` don't serialize behind one another.
     private static let fetchQueue = DispatchQueue(
         label: "org.mozilla.ios.worldcup.fetch",
-        qos: .userInitiated,
-        attributes: .concurrent
+        qos: .userInitiated
     )
 
     static func singleAttempt<Response: Sendable>(
