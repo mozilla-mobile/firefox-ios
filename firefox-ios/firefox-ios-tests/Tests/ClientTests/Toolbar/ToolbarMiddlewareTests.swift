@@ -651,6 +651,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
+    func testDidTapButton_tapOnGoogleLensPhotoLibraryButton_dispatchesShowGoogleLensPhotoPicker() throws {
+        try didTapButton(buttonType: .googleLensPhotoLibrary,
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
+    }
+
     func testDidTapButton_tapOnSearchButton_dispatchesDidStartEditingUrl() throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
