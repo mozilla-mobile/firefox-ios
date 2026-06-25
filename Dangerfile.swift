@@ -923,7 +923,7 @@ struct ReleaseBranchCheck {
         markdown("""
         # ‼️ ATTENTION ‼️
         ### 🎯 This PR targets a **release branch**.
-        Please ensure you've followed the [uplift request process](https://github.com/mozilla-mobile/firefox-ios/wiki/Requesting-an-uplift-to-a-release-branch).
+        Please ensure you've followed the [uplift request process](https://mozilla-hub.atlassian.net/wiki/x/OgAbog).
         """)
     }
 }
