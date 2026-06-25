@@ -49,43 +49,13 @@ final class EditFolderViewModelTests: XCTestCase {
     func testInit() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
 
-        XCTAssertTrue(subject.isFolderCollapsed)
-        XCTAssertTrue(!subject.folderStructures.isEmpty)
+        XCTAssertFalse(subject.isBrowsingFolders)
+        XCTAssertTrue(subject.folderGroups.isEmpty)
         XCTAssertEqual(subject.selectedFolder?.title, parentFolder.title)
         XCTAssertEqual(subject.selectedFolder?.guid, parentFolder.guid)
     }
 
-    func testShouldShowDisclosureIndicator_whenIsFolderSelected() {
-        let subject = createSubject(folder: folder, parentFolder: parentFolder)
-
-        XCTAssertFalse(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
-    }
-
-    func testShouldShowDisclosureIndicator_whenIsNotFolderSelected() {
-        let subject = createSubject(folder: folder, parentFolder: parentFolder)
-
-        XCTAssertFalse(subject.shouldShowDisclosureIndicator(isFolderSelected: false))
-    }
-
-    func testShouldShowDisclosureIndicator_whenIsNotFolderSelectedAfterSelectFolder() {
-        let subject = createSubject(folder: folder, parentFolder: parentFolder)
-        subject.selectFolder(Folder(title: "Test", guid: "", indentation: 0))
-
-        XCTAssertTrue(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
-    }
-
-    func testSelectFolder_callsOnFolderStatusUpdate() {
-        let subject = createSubject(folder: folder, parentFolder: parentFolder)
-        let expectation = expectation(description: "onFolderStatusUpdate should be called")
-        subject.onFolderStatusUpdate = {
-            expectation.fulfill()
-        }
-        subject.selectFolder(Folder(title: "Test", guid: "", indentation: 0))
-
-        waitForExpectations(timeout: 0.1)
-    }
-
-    func testSelectFolder_callsGetFolderStructure() {
+    func testSelectFolder_updatesSelectionAndCollapsesBackToSummary() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         let expectation = expectation(description: "onFolderStatusUpdate should be called")
         subject.onFolderStatusUpdate = {
@@ -95,8 +65,51 @@ final class EditFolderViewModelTests: XCTestCase {
         subject.selectFolder(Folder(title: "Test", guid: "", indentation: 0))
 
         waitForExpectations(timeout: 0.1)
+        XCTAssertEqual(subject.selectedFolder?.title, "Test")
+        XCTAssertFalse(subject.isBrowsingFolders)
+    }
+
+    func testBeginBrowsingFolders_fetchesAndPopulatesFolderGroups() {
+        let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        let expectation = expectation(description: "onFolderStatusUpdate should be called")
+        subject.onFolderStatusUpdate = {
+            expectation.fulfill()
+        }
+
+        subject.beginBrowsingFolders()
+
+        waitForExpectations(timeout: 0.1)
+        XCTAssertTrue(subject.isBrowsingFolders)
         XCTAssertEqual(folderFetcher.fetchFoldersCalled, 1)
-        XCTAssertEqual(folderFetcher.mockFolderStructures, subject.folderStructures)
+
+        let allGroupedFolders = subject.folderGroups.flatMap { $0.folders }
+        XCTAssertEqual(allGroupedFolders, folderFetcher.mockFolderStructures)
+    }
+
+    func testToggleGroupExpansion_togglesIsExpandedAndCallsCallback() {
+        let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        let loadExpectation = expectation(description: "onFolderStatusUpdate should be called")
+        subject.onFolderStatusUpdate = {
+            loadExpectation.fulfill()
+        }
+        subject.beginBrowsingFolders()
+        waitForExpectations(timeout: 0.1)
+
+        guard !subject.folderGroups.isEmpty else {
+            XCTFail("Expected at least one folder group to test toggling against")
+            return
+        }
+        let initialExpansionState = subject.folderGroups[0].isExpanded
+
+        let toggleExpectation = expectation(description: "onGroupExpansionUpdate should be called")
+        subject.onGroupExpansionUpdate = { index in
+            XCTAssertEqual(index, 0)
+            toggleExpectation.fulfill()
+        }
+        subject.toggleGroupExpansion(at: 0)
+
+        waitForExpectations(timeout: 0.1)
+        XCTAssertEqual(subject.folderGroups[0].isExpanded, !initialExpansionState)
     }
 
     func testSave_whenEmptyFolder_thenDoesntSave() throws {
