@@ -148,6 +148,39 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
+    // MARK: - HomepageMiddlewareActionType.didEnterBackground
+
+    func test_didEnterBackground_stopsFeed() throws {
+        let feed = MockWorldCupFeed()
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, feed: feed)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didEnterBackground
+        )
+
+        subject.worldCupProvider(appState, action)
+
+        XCTAssertEqual(feed.stopCalled, 1)
+        XCTAssertEqual(feed.startCalled, 0)
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didBecomeActive_whenMilestone2_startsFeed() throws {
+        mockWorldCupStore.isMilestone2 = true
+        let feed = MockWorldCupFeed()
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, feed: feed)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didBecomeActive
+        )
+
+        subject.worldCupProvider(appState, action)
+
+        XCTAssertEqual(feed.startCalled, 1)
+        subject.worldCupProvider = { _, _ in }
+    }
+
     // MARK: - WorldCupActionType.selectTeam
 
     func test_selectTeam_persistsTeamAndKicksOffFetch() throws {
