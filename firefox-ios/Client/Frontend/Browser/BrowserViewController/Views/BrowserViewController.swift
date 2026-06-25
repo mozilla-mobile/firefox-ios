@@ -4,11 +4,6 @@
 
 import Foundation
 import Photos
-import PhotosUI
-// Required: importing PhotosUI alongside WidgetKit (below) pulls in the
-// _PhotosUI_WidgetKit cross-import overlay, which hides PhotosUI's PHPicker
-// symbols unless SwiftUI is also imported (Xcode 26.5 toolchain bug).
-import SwiftUI
 import UIKit
 import WebKit
 import Shared
@@ -2957,7 +2952,7 @@ class BrowserViewController: UIViewController,
             }
         case .translationLanguagePicker(let data):
             presentTranslationLanguagePicker(data: data, sourceButton: state.buttonTapped)
-        case .googleLensPhotoPicker:
+        case .photoPicker:
             presentGoogleLensPhotoPicker()
         }
     }
@@ -3157,17 +3152,6 @@ class BrowserViewController: UIViewController,
         }
         alert.addAction(showOriginalAction)
         alert.preferredAction = showOriginalAction
-    }
-
-    private func presentGoogleLensPhotoPicker() {
-        var configuration = PHPickerConfiguration(photoLibrary: .shared())
-        configuration.filter = .images
-        configuration.selectionLimit = 1
-        configuration.preferredAssetRepresentationMode = .current
-
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        present(picker, animated: true)
     }
 
     func didTapOnHome() {
@@ -5082,12 +5066,6 @@ extension BrowserViewController {
     // no-op - relates to UIImageWriteToSavedPhotosAlbum
     @objc
     func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
-}
-
-extension BrowserViewController: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking _: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-    }
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
