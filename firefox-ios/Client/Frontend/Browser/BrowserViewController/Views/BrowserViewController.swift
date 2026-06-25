@@ -1165,8 +1165,13 @@ class BrowserViewController: UIViewController,
     // MARK: - Notifiable
 
     nonisolated private func shouldHandleNotificationSynchronously(_ notification: Notification.Name) -> Bool {
+        // Whether to respond to the notification synchronously. Main thread notifications will (by default)
+        // be handled in a Task which allows the concurrency engine to schedule the work asynchronously.
+        // If a notification returns `true` here, then it will instead be wrapped in an `ensureMainThread`
+        // which (if the notification arrives on the MT) will perform the notification handler immediately.
         switch notification {
         case UIApplication.willResignActiveNotification:
+            // Handle immediately since this is where we display the PBM privacy screen
             return true
         default:
             return false
@@ -1194,12 +1199,12 @@ class BrowserViewController: UIViewController,
         } else {
             Task { @MainActor [weak self] in
                 guard let self else { return }
-                self.performNotificationHandler(notificationName,
-                                                windowScene: windowScene,
-                                                announcementText: announcementText,
-                                                zoomSetting: zoomSetting,
-                                                windowUUID: windowUUID,
-                                                searchBarPosition: searchBarPosition)
+                performNotificationHandler(notificationName,
+                                           windowScene: windowScene,
+                                           announcementText: announcementText,
+                                           zoomSetting: zoomSetting,
+                                           windowUUID: windowUUID,
+                                           searchBarPosition: searchBarPosition)
             }
         }
     }
