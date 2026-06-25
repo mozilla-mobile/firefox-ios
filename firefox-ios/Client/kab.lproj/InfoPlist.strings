@@ -5,7 +5,7 @@
 "New Tab" = "Iccer amaynut";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Ayagi ad k-isireg tuṭṭfa d usali n tvidyutin.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox yesra Face ID i unekcum ɣer wawalen-ik·im uffiren d tarrayin n uxelleṣ yettwawgelhen.";

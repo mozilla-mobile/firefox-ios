@@ -8,7 +8,7 @@
 "New Tab" = "Новая вкладка";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox использует вашу камеру для сканирования QR-кодов и съёмки фотографий и видео.";
+"NSCameraUsageDescription" = "Firefox может использовать вашу камеру для сканирования QR-кодов или создания фото и видео.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox требует Face ID для доступа к вашим сохранённым логинам и зашифрованным картам.";

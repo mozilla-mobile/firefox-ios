@@ -8,7 +8,7 @@
 "New Tab" = "Нови језичак";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox користи вашу камеру за скенирање КР кодова и снимање фотографија и видео записа.";
+"NSCameraUsageDescription" = "Firefox може користити вашу камеру за скенирање КР кодова и снимање фотографија и видео записа.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox захтева Face ID за приступ вашим сачуваним лозинкама и начинима плаћања.";

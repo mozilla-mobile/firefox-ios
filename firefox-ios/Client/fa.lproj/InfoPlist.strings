@@ -5,7 +5,7 @@
 "New Tab" = "زبانه‌ جدید";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "فایرفاکس از دوربین شما برای پردازش کد QR یا گرفتن عکس یا ویدیو شما استفاده می‌کند.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "وب سایت‌هایی که شما بازدید میکنید ممکن است مکان شما را درخواست کنند.";

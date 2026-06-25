@@ -8,7 +8,7 @@
 "New Tab" = "Új lap";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "A Firefox a kameráját használja, hogy QR-kódokat olvasson le, fényképeket és videókat készítsen.";
+"NSCameraUsageDescription" = "A Firefox használhatja a kameráját, hogy QR-kódokat olvasson le, vagy fényképeket és videókat készítsen.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "A Firefox a Face ID-t igényli a mentett jelszavak és a fizetési módok eléréséhez.";

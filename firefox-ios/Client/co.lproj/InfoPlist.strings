@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "Icona di l’appiecazione";
+
 /* (No Comment) */
 "New Private Tab" = "Nova unghjetta privata";
 
@@ -5,7 +8,7 @@
 "New Tab" = "Nova unghjetta";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox impiega u vostru apparechju-fotò per analizà i codici QR è per piglià fotò è video.";
+"NSCameraUsageDescription" = "Firefox pò impiegà u vostru apparechju-fotò per analizà i codici QR o per piglià fotò è video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox richiede Face ID per accede à e vostre parolle d’intesa è metode di pagamentu arregistrate.";

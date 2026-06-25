@@ -5,7 +5,7 @@
 "New Tab" = "ᱱᱟᱶᱟ ᱴᱮᱵ";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "ᱟᱢᱟᱜ ᱥᱟᱧᱪᱟᱣ ᱨᱩᱠᱷᱭᱟᱹ ᱞᱳᱜᱤᱱ ᱨᱮ ᱵᱚᱞᱚᱱ ᱞᱟᱹᱜᱤᱱ Firefox ᱟᱢᱟᱜ ᱢᱮᱫᱦᱟᱸ ID ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟᱭ ᱾";
