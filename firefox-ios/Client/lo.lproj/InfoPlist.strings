@@ -5,7 +5,7 @@
 "New Tab" = "ແທັບໃຫມ່";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
+"NSCameraUsageDescription" = "ສິ່ງນີ້ຈະເຮັດໃຫ້ທ່ານຖ່າຍ ແລະ ອັບໂຫລດຮູບພາບໄດ້.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox ຕ້ອງການ Face ID ເພື່ອເຂົ້າເຖິງລະຫັດຜ່ານທີ່ບັນທຶກໄວ້ ແລະ ວິທີການຊໍາລະເງິນຂອງທ່ານ.";
