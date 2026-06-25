@@ -522,13 +522,19 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func addCreditCard(cc: UpdatableCreditCardFields) throws  -> CreditCard
     
+    func addPassport(p: UpdatablePassportFields) throws  -> Passport
+    
     func countAllAddresses() throws  -> Int64
     
     func countAllCreditCards() throws  -> Int64
     
+    func countAllPassports() throws  -> Int64
+    
     func deleteAddress(guid: String) throws  -> Bool
     
     func deleteCreditCard(guid: String) throws  -> Bool
+    
+    func deletePassport(guid: String) throws  -> Bool
     
     func getAddress(guid: String) throws  -> Address
     
@@ -536,7 +542,11 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func getAllCreditCards() throws  -> [CreditCard]
     
+    func getAllPassports() throws  -> [Passport]
+    
     func getCreditCard(guid: String) throws  -> CreditCard
+    
+    func getPassport(guid: String) throws  -> Passport
     
     func registerWithSyncManager() 
     
@@ -564,9 +574,13 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func touchCreditCard(guid: String) throws 
     
+    func touchPassport(guid: String) throws 
+    
     func updateAddress(guid: String, a: UpdatableAddressFields) throws 
     
     func updateCreditCard(guid: String, cc: UpdatableCreditCardFields) throws 
+    
+    func updatePassport(guid: String, p: UpdatablePassportFields) throws 
     
 }
 open class Store: StoreProtocol, @unchecked Sendable {
@@ -648,6 +662,15 @@ open func addCreditCard(cc: UpdatableCreditCardFields)throws  -> CreditCard  {
 })
 }
     
+open func addPassport(p: UpdatablePassportFields)throws  -> Passport  {
+    return try  FfiConverterTypePassport_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_add_passport(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeUpdatablePassportFields_lower(p),$0
+    )
+})
+}
+    
 open func countAllAddresses()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_count_all_addresses(
@@ -659,6 +682,14 @@ open func countAllAddresses()throws  -> Int64  {
 open func countAllCreditCards()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_count_all_credit_cards(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func countAllPassports()throws  -> Int64  {
+    return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_count_all_passports(
             self.uniffiCloneHandle(),$0
     )
 })
@@ -676,6 +707,15 @@ open func deleteAddress(guid: String)throws  -> Bool  {
 open func deleteCreditCard(guid: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_delete_credit_card(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(guid),$0
+    )
+})
+}
+    
+open func deletePassport(guid: String)throws  -> Bool  {
+    return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_delete_passport(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),$0
     )
@@ -707,9 +747,26 @@ open func getAllCreditCards()throws  -> [CreditCard]  {
 })
 }
     
+open func getAllPassports()throws  -> [Passport]  {
+    return try  FfiConverterSequenceTypePassport.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_get_all_passports(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
 open func getCreditCard(guid: String)throws  -> CreditCard  {
     return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_get_credit_card(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(guid),$0
+    )
+})
+}
+    
+open func getPassport(guid: String)throws  -> Passport  {
+    return try  FfiConverterTypePassport_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_get_passport(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),$0
     )
@@ -776,6 +833,14 @@ open func touchCreditCard(guid: String)throws   {try rustCallWithError(FfiConver
 }
 }
     
+open func touchPassport(guid: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_touch_passport(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(guid),$0
+    )
+}
+}
+    
 open func updateAddress(guid: String, a: UpdatableAddressFields)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_update_address(
             self.uniffiCloneHandle(),
@@ -790,6 +855,15 @@ open func updateCreditCard(guid: String, cc: UpdatableCreditCardFields)throws   
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),
         FfiConverterTypeUpdatableCreditCardFields_lower(cc),$0
+    )
+}
+}
+    
+open func updatePassport(guid: String, p: UpdatablePassportFields)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_update_passport(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(guid),
+        FfiConverterTypeUpdatablePassportFields_lower(p),$0
     )
 }
 }
@@ -1098,6 +1172,111 @@ public func FfiConverterTypeCreditCardsDeletionMetrics_lower(_ value: CreditCard
 
 
 /**
+ * What you get back as a passport.
+ */
+public struct Passport: Equatable, Hashable {
+    public var guid: String
+    public var name: String
+    public var country: String
+    public var passportNumber: String
+    public var issueDateMonth: Int64
+    public var issueDateDay: Int64
+    public var issueDateYear: Int64
+    public var expiryDateMonth: Int64
+    public var expiryDateDay: Int64
+    public var expiryDateYear: Int64
+    public var timeCreated: Int64
+    public var timeLastUsed: Int64?
+    public var timeLastModified: Int64
+    public var timesUsed: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(guid: String, name: String, country: String, passportNumber: String, issueDateMonth: Int64, issueDateDay: Int64, issueDateYear: Int64, expiryDateMonth: Int64, expiryDateDay: Int64, expiryDateYear: Int64, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64) {
+        self.guid = guid
+        self.name = name
+        self.country = country
+        self.passportNumber = passportNumber
+        self.issueDateMonth = issueDateMonth
+        self.issueDateDay = issueDateDay
+        self.issueDateYear = issueDateYear
+        self.expiryDateMonth = expiryDateMonth
+        self.expiryDateDay = expiryDateDay
+        self.expiryDateYear = expiryDateYear
+        self.timeCreated = timeCreated
+        self.timeLastUsed = timeLastUsed
+        self.timeLastModified = timeLastModified
+        self.timesUsed = timesUsed
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension Passport: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypePassport: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Passport {
+        return
+            try Passport(
+                guid: FfiConverterString.read(from: &buf), 
+                name: FfiConverterString.read(from: &buf), 
+                country: FfiConverterString.read(from: &buf), 
+                passportNumber: FfiConverterString.read(from: &buf), 
+                issueDateMonth: FfiConverterInt64.read(from: &buf), 
+                issueDateDay: FfiConverterInt64.read(from: &buf), 
+                issueDateYear: FfiConverterInt64.read(from: &buf), 
+                expiryDateMonth: FfiConverterInt64.read(from: &buf), 
+                expiryDateDay: FfiConverterInt64.read(from: &buf), 
+                expiryDateYear: FfiConverterInt64.read(from: &buf), 
+                timeCreated: FfiConverterInt64.read(from: &buf), 
+                timeLastUsed: FfiConverterOptionInt64.read(from: &buf), 
+                timeLastModified: FfiConverterInt64.read(from: &buf), 
+                timesUsed: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: Passport, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.guid, into: &buf)
+        FfiConverterString.write(value.name, into: &buf)
+        FfiConverterString.write(value.country, into: &buf)
+        FfiConverterString.write(value.passportNumber, into: &buf)
+        FfiConverterInt64.write(value.issueDateMonth, into: &buf)
+        FfiConverterInt64.write(value.issueDateDay, into: &buf)
+        FfiConverterInt64.write(value.issueDateYear, into: &buf)
+        FfiConverterInt64.write(value.expiryDateMonth, into: &buf)
+        FfiConverterInt64.write(value.expiryDateDay, into: &buf)
+        FfiConverterInt64.write(value.expiryDateYear, into: &buf)
+        FfiConverterInt64.write(value.timeCreated, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastUsed, into: &buf)
+        FfiConverterInt64.write(value.timeLastModified, into: &buf)
+        FfiConverterInt64.write(value.timesUsed, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypePassport_lift(_ buf: RustBuffer) throws -> Passport {
+    return try FfiConverterTypePassport.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypePassport_lower(_ value: Passport) -> RustBuffer {
+    return FfiConverterTypePassport.lower(value)
+}
+
+
+/**
  * What you pass to create or update an address.
  */
 public struct UpdatableAddressFields: Equatable, Hashable {
@@ -1256,6 +1435,91 @@ public func FfiConverterTypeUpdatableCreditCardFields_lift(_ buf: RustBuffer) th
 #endif
 public func FfiConverterTypeUpdatableCreditCardFields_lower(_ value: UpdatableCreditCardFields) -> RustBuffer {
     return FfiConverterTypeUpdatableCreditCardFields.lower(value)
+}
+
+
+/**
+ * What you pass to create or update a passport.
+ */
+public struct UpdatablePassportFields: Equatable, Hashable {
+    public var name: String
+    public var country: String
+    public var passportNumber: String
+    public var issueDateMonth: Int64
+    public var issueDateDay: Int64
+    public var issueDateYear: Int64
+    public var expiryDateMonth: Int64
+    public var expiryDateDay: Int64
+    public var expiryDateYear: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(name: String, country: String, passportNumber: String, issueDateMonth: Int64, issueDateDay: Int64, issueDateYear: Int64, expiryDateMonth: Int64, expiryDateDay: Int64, expiryDateYear: Int64) {
+        self.name = name
+        self.country = country
+        self.passportNumber = passportNumber
+        self.issueDateMonth = issueDateMonth
+        self.issueDateDay = issueDateDay
+        self.issueDateYear = issueDateYear
+        self.expiryDateMonth = expiryDateMonth
+        self.expiryDateDay = expiryDateDay
+        self.expiryDateYear = expiryDateYear
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension UpdatablePassportFields: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeUpdatablePassportFields: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UpdatablePassportFields {
+        return
+            try UpdatablePassportFields(
+                name: FfiConverterString.read(from: &buf), 
+                country: FfiConverterString.read(from: &buf), 
+                passportNumber: FfiConverterString.read(from: &buf), 
+                issueDateMonth: FfiConverterInt64.read(from: &buf), 
+                issueDateDay: FfiConverterInt64.read(from: &buf), 
+                issueDateYear: FfiConverterInt64.read(from: &buf), 
+                expiryDateMonth: FfiConverterInt64.read(from: &buf), 
+                expiryDateDay: FfiConverterInt64.read(from: &buf), 
+                expiryDateYear: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UpdatablePassportFields, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.name, into: &buf)
+        FfiConverterString.write(value.country, into: &buf)
+        FfiConverterString.write(value.passportNumber, into: &buf)
+        FfiConverterInt64.write(value.issueDateMonth, into: &buf)
+        FfiConverterInt64.write(value.issueDateDay, into: &buf)
+        FfiConverterInt64.write(value.issueDateYear, into: &buf)
+        FfiConverterInt64.write(value.expiryDateMonth, into: &buf)
+        FfiConverterInt64.write(value.expiryDateDay, into: &buf)
+        FfiConverterInt64.write(value.expiryDateYear, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUpdatablePassportFields_lift(_ buf: RustBuffer) throws -> UpdatablePassportFields {
+    return try FfiConverterTypeUpdatablePassportFields.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUpdatablePassportFields_lower(_ value: UpdatablePassportFields) -> RustBuffer {
+    return FfiConverterTypeUpdatablePassportFields.lower(value)
 }
 
 
@@ -1441,6 +1705,31 @@ fileprivate struct FfiConverterSequenceTypeCreditCard: FfiConverterRustBuffer {
         return seq
     }
 }
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypePassport: FfiConverterRustBuffer {
+    typealias SwiftType = [Passport]
+
+    public static func write(_ value: [Passport], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypePassport.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [Passport] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [Passport]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypePassport.read(from: &buf))
+        }
+        return seq
+    }
+}
 /**
  * Create a new, random, encryption key.
  */
@@ -1504,16 +1793,25 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_add_credit_card() != 39831) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_store_add_passport() != 41691) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_count_all_addresses() != 51483) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_count_all_credit_cards() != 16961) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_store_count_all_passports() != 5277) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_delete_address() != 63199) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_delete_credit_card() != 33261) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_delete_passport() != 36583) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_get_address() != 1991) {
@@ -1525,7 +1823,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_get_all_credit_cards() != 8890) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_store_get_all_passports() != 59026) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_get_credit_card() != 31148) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_get_passport() != 57057) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_register_with_sync_manager() != 50761) {
@@ -1546,10 +1850,16 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_touch_credit_card() != 11199) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_store_touch_passport() != 39386) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_update_address() != 21288) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_update_credit_card() != 23488) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_update_passport() != 64688) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_constructor_store_new() != 12483) {
