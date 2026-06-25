@@ -1197,6 +1197,7 @@ class BrowserViewController: UIViewController,
                                                 searchBarPosition: searchBarPosition)
             }
         } else {
+            // TODO: [FXIOS-16160] We should migrate all of our handlers to ensureMainThread. 
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 performNotificationHandler(notificationName,
