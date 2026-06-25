@@ -216,8 +216,13 @@ final class TopSitesMiddleware {
     }
 
     private func sendBookmarkOpenTelemetry(with urlString: String) {
-        let isBookmarked = profile.places.isBookmarked(url: urlString).value.successValue ?? false
-        guard isBookmarked else { return }
-        bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
+        // Resolve the bookmark lookup off the main thread to avoid blocking it on a contended
+        // Places DB query (this runs on the homepage tap path).
+        profile.places.isBookmarked(url: urlString) { [weak self] result in
+            guard case .success(true) = result else { return }
+            Task { @MainActor in
+                self?.bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
+            }
+        }
     }
 }

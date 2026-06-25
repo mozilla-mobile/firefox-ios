@@ -76,6 +76,26 @@ class DeferredTests: XCTestCase {
         XCTAssertTrue(deferMaybe("foo").value.isSuccess)
     }
 
+    // MARK: Test `value(timeout:)`
+
+    func testValueWithTimeout_returnsValue_whenAlreadyFilled() {
+        let d = Deferred<Int>(value: 5)
+        XCTAssertEqual(d.value(timeout: .milliseconds(100)), 5)
+    }
+
+    func testValueWithTimeout_returnsValue_whenFilledBeforeTimeout() {
+        let d = Deferred<Int>()
+        DispatchQueue.global().async {
+            d.fill(7)
+        }
+        XCTAssertEqual(d.value(timeout: .seconds(5)), 7)
+    }
+
+    func testValueWithTimeout_returnsNil_whenTimeoutElapses() {
+        let d = Deferred<Int>()
+        XCTAssertNil(d.value(timeout: .milliseconds(50)))
+    }
+
     // MARK: Test `all`
 
     @MainActor // Test explicitly calling `all` on the main thread
