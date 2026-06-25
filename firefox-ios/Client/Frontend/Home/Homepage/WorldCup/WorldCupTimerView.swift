@@ -15,14 +15,9 @@ final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
         static let actionButtonSize = CGSize(width: 24, height: 24)
-        static let heroImageWidth: CGFloat = 80.0
-        static let heroImageHeight: CGFloat = 140.0
-        static let heroImageTrailingPadding: CGFloat = 12.0
-        static let heroGifName = "kitHeroGif"
+        static let heroImageWidth: CGFloat = 120.0
+        static let heroImageHeight: CGFloat = 120.0
         static let heroImageName = "kitHero"
-        static let heroFrameDuration = 0.04
-        static let heroInitialFramePosition = 0.7
-        static let heroAnimationRepeatCount = 2
         static let scheduleURL = "https://www.fifa.com/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures"
     }
 
@@ -44,18 +39,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
         imageView.contentMode = .scaleAspectFit
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
-        guard let gifImage = UIImage.gifFromBundle(named: UX.heroGifName,
-                                                   frameDuration: UX.heroFrameDuration,
-                                                   maxPixelSize: UX.heroImageWidth * UIScreen.main.scale),
-              let frames = gifImage.images, !frames.isEmpty else {
-            imageView.image = UIImage(named: UX.heroImageName)
-            return
-        }
-        imageView.image = frames[Int(Double(frames.count) * UX.heroInitialFramePosition)]
-        imageView.animationImages = frames
-        imageView.animationDuration = gifImage.duration
-        imageView.animationRepeatCount = UX.heroAnimationRepeatCount
-        imageView.startAnimating()
+        imageView.image = UIImage(named: UX.heroImageName)
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -164,15 +148,11 @@ final class WorldCupTimerView: UIView, ThemeApplicable, WorldCupPagerView {
         addSubviews(leftContentStack, heroImageView, actionButton)
 
         NSLayoutConstraint.activate([
-            heroImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            heroImageView.trailingAnchor.constraint(
-                equalTo: actionButton.leadingAnchor,
-                constant: -UX.heroImageTrailingPadding
-            ),
+            heroImageView.trailingAnchor.constraint(equalTo: actionButton.leadingAnchor),
             heroImageView.widthAnchor.constraint(equalToConstant: UX.heroImageWidth),
             heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageHeight),
             heroImageView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
-            heroImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+            heroImageView.bottomAnchor.constraint(lessThanOrEqualTo: leftContentStack.bottomAnchor),
 
             actionButton.topAnchor.constraint(equalTo: topAnchor),
             actionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
