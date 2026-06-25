@@ -462,6 +462,7 @@
 		367C100A7ABD4B4585D029D5 /* AutoTranslatePromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137DDFADC6034016BE36E02B /* AutoTranslatePromptView.swift */; };
 		39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
 		391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
+		39230FDC2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39230FDB2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift */; };
 		39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */; };
 		392D791A2F8FCE1A00B10BDC /* FeatureFlagID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */; };
 		392D80542F901D2600B10BDC /* UserFeaturePreferenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */; };
@@ -471,6 +472,9 @@
 		3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */; };
 		39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39455F761FC83F430088A22C /* TabEventHandler.swift */; };
 		394614102FEC2928003321D8 /* MockWorldCupFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3946140F2FEC2928003321D8 /* MockWorldCupFeed.swift */; };
+		394615602FEC37E3003321D8 /* WebServerUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3946155F2FEC37E1003321D8 /* WebServerUtilTests.swift */; };
+		394615622FEC37FC003321D8 /* MockWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394615612FEC37FA003321D8 /* MockWebServer.swift */; };
+		394615642FEC381D003321D8 /* MockReaderModeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394615632FEC381A003321D8 /* MockReaderModeHandlers.swift */; };
 		394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
 		3954D0F12F74288E00CDC338 /* MerinoStoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3954D0F02F74286800CDC338 /* MerinoStoryResponse.swift */; };
 		39673BC12B6D82F400653F4A /* FxNimbusMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39673BC02B6D82F400653F4A /* FxNimbusMessaging.swift */; };
@@ -3474,6 +3478,7 @@
 		3905274B1C874D35007E0BB7 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		3905B4D41E8E7A6B0027D953 /* FxAPushMessageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAPushMessageHandler.swift; sourceTree = "<group>"; };
 		39104C4F9A5CFDE66911D82B /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/Search.strings"; sourceTree = "<group>"; };
+		39230FDB2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServerLifecycleTests.swift; sourceTree = "<group>"; };
 		39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabEventHandlerTests.swift; sourceTree = "<group>"; };
 		392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagID.swift; sourceTree = "<group>"; };
 		392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeaturePreferenceManager.swift; sourceTree = "<group>"; };
@@ -3485,6 +3490,9 @@
 		39444D13AAEACA4C6EF83703 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		39455F761FC83F430088A22C /* TabEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabEventHandler.swift; sourceTree = "<group>"; };
 		3946140F2FEC2928003321D8 /* MockWorldCupFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupFeed.swift; sourceTree = "<group>"; };
+		3946155F2FEC37E1003321D8 /* WebServerUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServerUtilTests.swift; sourceTree = "<group>"; };
+		394615612FEC37FA003321D8 /* MockWebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWebServer.swift; sourceTree = "<group>"; };
+		394615632FEC381A003321D8 /* MockReaderModeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReaderModeHandlers.swift; sourceTree = "<group>"; };
 		394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSuggestedSites.swift; sourceTree = "<group>"; };
 		3954D0F02F74286800CDC338 /* MerinoStoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoStoryResponse.swift; sourceTree = "<group>"; };
 		3964F5FB2656D2B500065278 /* initial_experiments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = initial_experiments.json; path = Client/Experiments/initial_experiments.json; sourceTree = SOURCE_ROOT; };
@@ -15735,6 +15743,8 @@
 				C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */,
 				C27484DD2F558BD000920313 /* MockSummarizerNimbusUtils.swift */,
 				C27484DF2F558C2800920313 /* MockSummarizerLanguageProvider.swift */,
+				394615632FEC381A003321D8 /* MockReaderModeHandlers.swift */,
+				394615612FEC37FA003321D8 /* MockWebServer.swift */,
 				C27484E12F558DDD00920313 /* MockSummarizerConfigProvider.swift */,
 				C27484E32F55C4B600920313 /* MockSummarizerConfigFactory.swift */,
 			);
@@ -17143,6 +17153,8 @@
 				8A1E3BE028CBAC1F003388C4 /* Utils */,
 				C84655ED28873C4800861B4A /* Wallpaper */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
+				3946155F2FEC37E1003321D8 /* WebServerUtilTests.swift */,
+				39230FDB2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift */,
 				8A0727472B4898750071BB9F /* WebviewTelemetryTests.swift */,
 				1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
@@ -20332,6 +20344,7 @@
 			files = (
 				2151EF572F2AB94A007B67A6 /* BrowserViewControllerConstraintTests.swift in Sources */,
 				8C50DD752F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift in Sources */,
+				394615622FEC37FC003321D8 /* MockWebServer.swift in Sources */,
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
 				961577942A39008100391E8D /* SponsoredTileDataUtilityTests.swift in Sources */,
 				1D2A1B592F3BAB5200157ACB /* RelayMaskSettingsViewControllerTests.swift in Sources */,
@@ -20505,6 +20518,7 @@
 				ED6D46E02D3573F80045E4ED /* TitleActivityItemProviderTests.swift in Sources */,
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
 				39E186E22F7DAA7F00FD3FFA /* MerinoCategoryConfigurationTests.swift in Sources */,
+				394615642FEC381D003321D8 /* MockReaderModeHandlers.swift in Sources */,
 				39E186E32F7DAA7F00FD3FFA /* MerinoCategoryTests.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,
 				CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */,
@@ -20552,6 +20566,7 @@
 				F00CA4022F00000000000009 /* WorldCupAPIClientTests.swift in Sources */,
 				C2886BB22EC4AB58007AE6C3 /* TinyRouterTests.swift in Sources */,
 				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
+				394615602FEC37E3003321D8 /* WebServerUtilTests.swift in Sources */,
 				C2500D7C2ECB4A600071506F /* MockTranslationModelsFetcher.swift in Sources */,
 				8AD8FF172EBB022A00FDFD78 /* MockGleanPlumbMessageManagerProtocol.swift in Sources */,
 				C8EDDBF029DD83FC003A4C07 /* RouteTests.swift in Sources */,
@@ -20854,6 +20869,7 @@
 				8AA0A6682CAC747500AC7EB3 /* HomepageDiffableDataSourceTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
 				213046B92F202F27007ECEDA /* UIFontExtensionsTests.swift in Sources */,
+				39230FDC2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift in Sources */,
 				032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */,
 				AAB5AF382EDDCF600051EF6E /* MockLocaleProvider.swift in Sources */,
 				F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */,
