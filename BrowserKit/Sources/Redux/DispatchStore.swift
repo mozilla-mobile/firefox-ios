@@ -8,6 +8,9 @@ import Foundation
 @MainActor
 public protocol DispatchStore {
     func dispatch(_ action: Action)
+
+    // TODO: FXIOS-16140, FXIOS-16140 (needed for later Client integration)
+    // func dispatch(_ action: ModernAction, forWindowUUID windowUUID: WindowUUID)
 }
 
 public protocol DefaultDispatchStore<State>: DispatchStore where State: StateType {
