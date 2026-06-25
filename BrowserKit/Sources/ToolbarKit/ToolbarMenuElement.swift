@@ -23,7 +23,6 @@ public struct ToolbarMenuElement: Equatable {
     public static func == (lhs: ToolbarMenuElement, rhs: ToolbarMenuElement) -> Bool {
         lhs.title == rhs.title &&
         lhs.imageName == rhs.imageName &&
-        lhs.a11yIdentifier == rhs.a11yIdentifier &&
-        (lhs.onSelected != nil) == (rhs.onSelected != nil)
+        lhs.a11yIdentifier == rhs.a11yIdentifier
     }
 }
