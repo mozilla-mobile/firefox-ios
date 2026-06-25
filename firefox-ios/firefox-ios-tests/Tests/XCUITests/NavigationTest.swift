@@ -229,69 +229,6 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2441923
-    func testLongPressOnAddressBar() throws {
-        // Long press on the URL requires copy & paste permission
-        throw XCTSkip("Test needs to be updated")
-        /*
-            app.launch()
-            // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
-            urlBarAddress.typeText("www.google.com")
-            // Tapping two times when the text is not selected will reveal the menu
-            urlBarAddress.tap()
-            mozWaitForElementToExist(urlBarAddress)
-            urlBarAddress.tap()
-            mozWaitForElementToExist(app.menuItems["Select All"])
-            XCTAssertTrue(app.menuItems["Select All"].exists)
-            XCTAssertTrue(app.menuItems["Select"].exists)
-
-            // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
-            app.menuItems["Select All"].tap()
-            mozWaitForElementToExist(app.menuItems["Copy"])
-            if iPad() {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
-                XCTAssertTrue(app.menuItems["Share…"].exists)
-                XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            } else {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-            }
-
-            urlBarAddress.typeText("\n")
-            waitUntilPageLoad()
-            mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 3)
-            app.tables.otherElements[StandardImageIdentifiers.Large.link].tap()
-
-            sleep(2)
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
-            // Since the textField value appears all selected first time is clicked
-            // this workaround is necessary
-            mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-            urlBarAddress.waitAndTap()
-            mozWaitForElementToExist(app.menuItems["Copy"])
-            if iPad() {
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-            } else {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-            }
-        }
-         */
-    }
-
     private func longPressLinkOptions(optionSelected: String) {
         navigator.nowAt(NewTabScreen)
         if app.buttons["Done"].exists {

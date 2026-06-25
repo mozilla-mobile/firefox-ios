@@ -342,47 +342,6 @@ class TabsTests: BaseTestCase {
         tabTrayScreen.assertNoTabLeakDetected()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306867
-    func testCloseOneTabUndo() throws {
-        throw XCTSkip("Undo toast no longer available")
-        /*
-         // Open a few tabs
-         waitForTabsButton()
-         navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
-         waitUntilPageLoad()
-         navigator.createNewTab()
-         navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-example.html")
-         waitUntilPageLoad()
-         navigator.createNewTab()
-         navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
-         waitUntilPageLoad()
-         waitForTabsButton()
-         navigator.goto(TabTray)
-         
-         // Experiment from #25337: "Undo" button no longer available on iPhone.
-         // Tap "x"
-         let secondTab = app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_0_2"]
-         secondTab.buttons[StandardImageIdentifiers.Large.cross].tap()
-         mozWaitForElementToNotExist(secondTab)
-         app.buttons["Undo"].waitAndTap()
-         mozWaitForElementToExist(secondTab)
-         
-         // Long press tab. Tap "Close Tab" from the context menu
-         secondTab.press(forDuration: 2)
-         mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
-         app.collectionViews.buttons["Close Tab"].waitAndTap()
-         mozWaitForElementToNotExist(secondTab)
-         app.buttons["Undo"].waitAndTap()
-         mozWaitForElementToExist(secondTab)
-         
-         // Swipe tab
-         secondTab.swipeLeft()
-         mozWaitForElementToNotExist(secondTab)
-         app.buttons["Undo"].waitAndTap()
-         mozWaitForElementToExist(secondTab)
-         */
-    }
-
     private func validateToastWhenClosingMultipleTabs() {
         // Have multiple tabs opened in the tab tray
         navigator.nowAt(BrowserTab)
