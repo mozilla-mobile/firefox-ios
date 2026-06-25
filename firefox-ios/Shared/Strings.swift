@@ -208,7 +208,7 @@ extension String {
             public static let EditBookmarkChangeLocationLabel = MZLocalizedString(
                 key: "Bookmarks.Menu.EditBookmarkChangeLocationLabel.v154",
                 tableName: "Bookmarks",
-                value: "Change Location...",
+                value: "Change Location",
                 comment: "Link that expands the collapsed Location summary into the full folder picker in the New/Edit Folder screen.")
             public static let EditBookmarkParentFolderBreadcrumbFormat = MZLocalizedString(
                 key: "Bookmarks.Menu.EditBookmarkParentFolderBreadcrumbFormat.v154",
