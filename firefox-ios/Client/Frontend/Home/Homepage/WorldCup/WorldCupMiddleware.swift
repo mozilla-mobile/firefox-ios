@@ -51,6 +51,11 @@ final class WorldCupMiddleware {
             self.homepageIsOnScreen = false
         case WorldCupActionType.didChangeHomepageSettings:
             self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
+            if self.worldCupStore.isFeatureEnabledAndSectionEnabled {
+                self.startFeed(windowUUID: action.windowUUID)
+            } else {
+                self.feed?.stop()
+            }
         case WorldCupActionType.removeHomepageCard:
             self.worldCupStore.setIsHomepageSectionEnabled(false)
             self.feed?.stop()
