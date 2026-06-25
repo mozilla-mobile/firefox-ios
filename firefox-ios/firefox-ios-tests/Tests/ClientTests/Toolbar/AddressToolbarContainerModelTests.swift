@@ -336,8 +336,21 @@ final class AddressToolbarContainerModelTests: XCTestCase {
             iconName: StandardImageIdentifiers.Medium.googleLens,
             isEnabled: true,
             a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
-            a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton
-        )
+            a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton,
+            menuElements: [
+                ToolbarMenuElementConfiguration(
+                    actionType: .googleLensTakePhoto,
+                    title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
+                    imageName: StandardImageIdentifiers.Large.cameraLarge,
+                    a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
+                ),
+                ToolbarMenuElementConfiguration(
+                    actionType: .googleLensPhotoLibrary,
+                    title: .AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle,
+                    imageName: StandardImageIdentifiers.Large.image,
+                    a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensPhotoLibraryAction
+                )
+            ])
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {

@@ -309,9 +309,9 @@ final class AddressToolbarContainerModel: Equatable {
             hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
             previousTabScreenshot: action.previousTabScreenshot,
             nextTabScreenshot: action.nextTabScreenshot,
-            onSelected: getOnSelected(action: action, windowUUID: windowUUID),
+            onSelected: getOnSelected(actionType: action.actionType, windowUUID: windowUUID),
             onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs),
-            menuElements: ToolbarMenuElementProvider.menuElements(for: action, windowUUID: windowUUID)
+            menuElements: getMenuElements(action: action, windowUUID: windowUUID)
         )
     }
 
@@ -326,9 +326,10 @@ final class AddressToolbarContainerModel: Equatable {
     }
 
     @MainActor
-    private static func getOnSelected(action: ToolbarActionConfiguration, windowUUID: UUID) -> ((UIButton) -> Void)? {
+    private static func getOnSelected(actionType: ToolbarActionConfiguration.ActionType,
+                                      windowUUID: UUID) -> ((UIButton) -> Void)? {
         return { button in
-            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+            let action = ToolbarMiddlewareAction(buttonType: actionType,
                                                  buttonTapped: button,
                                                  gestureType: .tap,
                                                  windowUUID: windowUUID,
@@ -349,6 +350,18 @@ final class AddressToolbarContainerModel: Equatable {
                                                  actionType: ToolbarMiddlewareActionType.didTapButton)
             store.dispatch(action)
         } : nil
+    }
+
+    @MainActor
+    private static func getMenuElements(action: ToolbarActionConfiguration, windowUUID: UUID) -> [ToolbarMenuElement] {
+        return action.menuElements.map { menuElement in
+            ToolbarMenuElement(
+                title: menuElement.title,
+                imageName: menuElement.imageName,
+                a11yIdentifier: menuElement.a11yIdentifier,
+                onSelected: getOnSelected(actionType: menuElement.actionType, windowUUID: windowUUID)
+            )
+        }
     }
 
     static func == (lhs: AddressToolbarContainerModel, rhs: AddressToolbarContainerModel) -> Bool {

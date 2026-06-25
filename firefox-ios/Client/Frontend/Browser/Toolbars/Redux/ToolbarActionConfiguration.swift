@@ -5,6 +5,13 @@
 import Foundation
 import ToolbarKit
 
+struct ToolbarMenuElementConfiguration: Equatable {
+    let actionType: ToolbarActionConfiguration.ActionType
+    let title: String
+    let imageName: String?
+    let a11yIdentifier: String?
+}
+
 struct ToolbarActionConfiguration: Equatable {
     enum ActionType {
         case back
@@ -53,6 +60,7 @@ struct ToolbarActionConfiguration: Equatable {
     var a11yId: String
     var cacheId: String?
     var a11yCustomActionName: String?
+    var menuElements: [ToolbarMenuElementConfiguration] = []
 
     func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {
         return actionType == .back ||
