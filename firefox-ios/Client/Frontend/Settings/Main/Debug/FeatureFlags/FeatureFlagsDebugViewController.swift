@@ -266,7 +266,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             FeatureFlagsBoolSetting(
                 with: .swipeAddressBarToOpenTabTray,
                 titleText: format(string: "Fancy animation when opening tab tray via swipe"),
-                statusText: format(string: "Toggle to have a fancier animation when swiping on the address bar to open the tab tray")
+                statusText: format(string: "Toggle to enable fancier animations for address bar swipe gestures")
             ) { [weak self] _ in
                 self?.reloadView()
             },
