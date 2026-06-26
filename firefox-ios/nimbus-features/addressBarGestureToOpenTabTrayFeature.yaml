@@ -17,7 +17,9 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled_swipe: false
+          enabled_interactive: false
       - channel: developer
         value:
-          enabled: true
+          enabled_swipe: true
+          enabled_interactive: false

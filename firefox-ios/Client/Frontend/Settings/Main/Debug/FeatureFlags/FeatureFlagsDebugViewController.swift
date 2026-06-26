@@ -48,8 +48,10 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             FeatureFlagsBoolSetting(
                 with: .addressBarGestureToOpenTabTraySwipe,
                 titleText: format(string: "Address bar gesture swipe"),
-                statusText: format(string: "Toggle to enable swipe gestures for the address bar. " +
-                                   "Overrides interactive animation if enabled")
+                statusText: format(string: """
+                                            Toggle to enable swipe gestures for the address bar. Overrides 
+                                            interactive animation if enabled
+                                            """)
             ) { [weak self] _ in
                 self?.reloadView()
             },

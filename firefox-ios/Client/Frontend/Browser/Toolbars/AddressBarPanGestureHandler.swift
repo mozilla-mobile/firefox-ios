@@ -8,7 +8,7 @@ import Redux
 import Shared
 
 @MainActor
-final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlaggable {
     /// Delegate protocol for handling address bar pan gesture events.
     /// Allows external objects to respond to swipe gesture state changes during tab switching.
     protocol Delegate: AnyObject {
@@ -107,10 +107,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         addressToolbarContainer.addGestureRecognizer(panGesture)
         panGestureRecognizer = panGesture
 
-        let provider: FeatureFlagProviding = AppContainer.shared.resolve()
-
         // only create the swipeGestureRecognizer if the feature flag is enabled
-        if provider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
+        if featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
             let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
             swipeUpGesture.direction = .up
             addressToolbarContainer.addGestureRecognizer(swipeUpGesture)
@@ -156,6 +154,11 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             enablePanGestureOnHomepageIfNeeded()
             enableSwipeUpGestureRecognizer()
             enableSwipeDownGestureRecognizer()
+        }
+
+        if featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) == false {
+            disableSwipeUpGestureRecognizer()
+            disableSwipeDownGestureRecognizer()
         }
     }
 
@@ -240,12 +243,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     @objc
     @MainActor
     private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        let provider: FeatureFlagProviding = AppContainer.shared.resolve()
-
-        // This stops swipe gestures if the feature flag is turned off and the app is NOT closed
-        if provider.isEnabled(.addressBarGestureToOpenTabTraySwipe) == false {
-            return
-        }
         let direction = gesture.direction
 
         if direction == .up && toolbarState?.toolbarPosition == .top {
