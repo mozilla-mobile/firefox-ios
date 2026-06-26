@@ -13,6 +13,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     var leadingPageActions: [ToolbarActionConfiguration]
     var trailingPageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
+    var editingAccessoryAction: ToolbarActionConfiguration?
     let borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
@@ -55,6 +56,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
         a11yLabel: .Toolbars.NewTabButton,
         a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
 
+    private static let googleLensAction = ToolbarActionConfiguration(
+        actionType: .googleLens,
+        iconName: StandardImageIdentifiers.Medium.googleLens,
+        isEnabled: true,
+        a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
+        a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton)
+
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
@@ -62,6 +70,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: [],
             trailingPageActions: [],
             browserActions: [],
+            editingAccessoryAction: nil,
             borderPosition: nil,
             url: nil,
             searchTerm: nil,
@@ -87,6 +96,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
          leadingPageActions: [ToolbarActionConfiguration],
          trailingPageActions: [ToolbarActionConfiguration],
          browserActions: [ToolbarActionConfiguration],
+         editingAccessoryAction: ToolbarActionConfiguration?,
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
          searchTerm: String?,
@@ -109,6 +119,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.browserActions = browserActions
+        self.editingAccessoryAction = editingAccessoryAction
         self.borderPosition = borderPosition
         self.url = url
         self.searchTerm = searchTerm
@@ -165,6 +176,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
 
+        case ToolbarActionType.lockIconChanged:
+            return handleLockIconChangedAction(state: state, action: action)
+
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
 
@@ -217,13 +231,17 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleDidClearAlternativeSearchEngine(state: state, action: action)
 
+        case ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine:
+            return handleSearchEngineDidChange(state: state, action: action)
+
         default:
             return defaultState(from: state)
         }
     }
 
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
-        guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else {
+        guard let toolbarAction = action as? ToolbarAction,
+              let borderPosition = toolbarAction.addressBorderPosition else {
             return defaultState(from: state)
         }
 
@@ -233,6 +251,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: [ToolbarActionConfiguration](),
             trailingPageActions: [ToolbarActionConfiguration](),
             browserActions: [ToolbarActionConfiguration](),
+            editingAccessoryAction: nil,
             borderPosition: borderPosition,
             url: nil,
             searchTerm: nil,
@@ -263,6 +282,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -293,6 +313,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -327,6 +348,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                    isEditing: state.isEditing),
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -363,6 +385,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -379,7 +402,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine)
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
     }
 
     @MainActor
@@ -397,6 +421,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -433,6 +458,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -472,6 +498,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: state.isEditing,
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: toolbarAction.url,
             searchTerm: nil,
@@ -506,6 +533,37 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
+    private static func handleLockIconChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
+            browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId,
+            lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
+            lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
@@ -521,6 +579,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: nil,
@@ -557,6 +616,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -593,6 +653,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -629,6 +690,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: toolbarAction.addressBorderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -664,6 +726,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: true,
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: toolbarAction.searchTerm,
@@ -701,6 +764,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: true,
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: searchTerm,
@@ -746,6 +810,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: false,
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: false),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: url,
             searchTerm: nil,
@@ -781,6 +846,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: true,
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: toolbarAction.searchTerm,
@@ -813,6 +879,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -846,6 +913,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: true,
                                                      isEmptySearch: true),
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: nil,
@@ -879,6 +947,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: true,
                                                      isEmptySearch: true),
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -912,6 +981,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: true,
                                                      isEmptySearch: false),
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -941,6 +1011,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: toolbarAction.searchTerm,
@@ -970,6 +1041,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -1001,6 +1073,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -1030,6 +1103,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -1050,6 +1124,39 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
+    private static func handleSearchEngineDidChange(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarMiddlewareAction,
+              let isGoogleLensEnabled = toolbarAction.isGoogleLensEnabled else {
+            return defaultState(from: state)
+        }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
+            browserActions: state.browserActions,
+            editingAccessoryAction: editingAccessoryAction(isGoogleLensEnabled: isGoogleLensEnabled),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconButtonA11yId: state.lockIconButtonA11yId,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
     static func defaultState(from state: AddressBarState) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -1057,6 +1164,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
+            editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -1309,6 +1417,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return actions
+    }
+
+    private static func editingAccessoryAction(isGoogleLensEnabled: Bool) -> ToolbarActionConfiguration? {
+        guard isGoogleLensEnabled else { return nil }
+
+        return googleLensAction
     }
 
     // MARK: - Helper

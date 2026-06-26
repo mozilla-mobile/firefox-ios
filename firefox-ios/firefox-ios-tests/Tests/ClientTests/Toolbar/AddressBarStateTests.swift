@@ -89,6 +89,51 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertTrue(newState.isEmptySearch)
         XCTAssertNil(newState.translationConfiguration)
+        XCTAssertNil(newState.editingAccessoryAction)
+    }
+
+    func test_didUpdateDefaultSearchEngineAction_withGoogleLensDisabled_removesEditingAccessoryAction() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let stateWithGoogleLens = reducer(
+            initialState,
+            ToolbarMiddlewareAction(
+                isGoogleLensEnabled: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
+            )
+        )
+        let newState = reducer(
+            stateWithGoogleLens,
+            ToolbarMiddlewareAction(
+                isGoogleLensEnabled: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
+            )
+        )
+
+        XCTAssertNil(newState.editingAccessoryAction)
+    }
+
+    func test_didUpdateDefaultSearchEngineAction_withGoogleLensEnabled_setsEditingAccessoryAction() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarMiddlewareAction(
+                isGoogleLensEnabled: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
+            )
+        )
+
+        XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
+        XCTAssertEqual(newState.editingAccessoryAction?.iconName, StandardImageIdentifiers.Medium.googleLens)
+        XCTAssertEqual(newState.editingAccessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
     }
 
     func test_numberOfTabsChangedAction_withoutNavToolbar_returnsExpectedState() {
@@ -868,6 +913,28 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
+    }
+
+    func test_lockIconChangedAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                lockIconButtonA11yId: "test_lock_icon_a11y_id",
+                lockIconImageName: "test_lock_icon_image",
+                lockIconNeedsTheming: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.lockIconChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.lockIconButtonA11yId, "test_lock_icon_a11y_id")
+        XCTAssertEqual(newState.lockIconImageName, "test_lock_icon_image")
+        XCTAssertEqual(newState.lockIconNeedsTheming, true)
     }
 
     func test_scrollAlphaNeedsUpdateAction_returnsExpectedState() {

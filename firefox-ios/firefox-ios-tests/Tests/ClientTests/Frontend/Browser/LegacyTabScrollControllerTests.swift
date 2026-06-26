@@ -44,7 +44,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         mockGesture.gestureTranslation = CGPoint(x: 0, y: 100)
         subject.handlePan(mockGesture)
 
-        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.collapsed)
+        XCTAssertTrue(subject.isToolbarStateCollapsed)
     }
 
     func testHandlePan_ScrollingDown() {
@@ -54,7 +54,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         mockGesture.gestureTranslation = CGPoint(x: 0, y: -100)
         subject.handlePan(mockGesture)
 
-        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.visible)
+        XCTAssertFalse(subject.isToolbarStateCollapsed)
     }
 
     func testShowToolbar_AfterHidingWithScroll() {
@@ -67,7 +67,20 @@ final class LegacyTabScrollControllerTests: XCTestCase {
 
         // Force call to showToolbars like clicking on top bar area
         subject.showToolbars(animated: true)
-        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.visible)
+        XCTAssertFalse(subject.isToolbarStateCollapsed)
+    }
+
+    func testIsToolbarStateCollapsed_reflectsHideAndShowToolbars() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        XCTAssertFalse(subject.isToolbarStateCollapsed)
+
+        subject.hideToolbars(animated: false)
+        XCTAssertTrue(subject.isToolbarStateCollapsed)
+
+        subject.showToolbars(animated: false)
+        XCTAssertFalse(subject.isToolbarStateCollapsed)
     }
 
     func testScrollDidEndDragging_ScrollingUp() {
@@ -79,7 +92,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         subject.handlePan(mockGesture)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
 
-        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.visible)
+        XCTAssertFalse(subject.isToolbarStateCollapsed)
     }
 
     func testScrollDidEndDragging_ScrollingDown() {
@@ -91,7 +104,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         subject.handlePan(mockGesture)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
 
-        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.collapsed)
+        XCTAssertTrue(subject.isToolbarStateCollapsed)
     }
 
     func testDidSetTab_addsPullRefreshViewToScrollView() {
@@ -279,24 +292,23 @@ final class LegacyTabScrollControllerTests: XCTestCase {
     func testToolbarTapHandler_WhenMinimalAddressBarEnabledAndCollapsed_ShowsToolbar() {
         let subject = createSubject()
         setupTabScroll(with: subject)
-        subject.toolbarState = .collapsed
+        subject.hideToolbars(animated: false)
 
         let handler = subject.createToolbarTapHandler()
         handler()
 
-        XCTAssertEqual(subject.toolbarState, .visible)
+        XCTAssertFalse(subject.isToolbarStateCollapsed)
     }
 
     func testToolbarTapHandler_WhenToolbarVisible_DoesNothing() {
         let subject = createSubject()
         setupTabScroll(with: subject)
-
-        subject.toolbarState = .visible
+        subject.showToolbars(animated: false)
 
         let handler = subject.createToolbarTapHandler()
         handler()
 
-        XCTAssertEqual(subject.toolbarState, .visible)
+        XCTAssertFalse(subject.isToolbarStateCollapsed)
     }
 
     // MARK: - Setup

@@ -54,7 +54,7 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
     init(
         shouldShowIntro: Bool = false,
         isModernEnabled: Bool = false,
-        onboardingVariant: Client.OnboardingVariant = .legacy
+        onboardingVariant: Client.OnboardingVariant = .modern
     ) {
         self.stubShouldShowIntroScreen = shouldShowIntro
         self.stubIsModernOnboardingEnabled = isModernEnabled
@@ -72,7 +72,7 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
     var shouldShowVideoIntro: Bool { return false }
 
     var onboardingKitVariant: OnboardingKit.OnboardingVariant {
-        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
+        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .base
     }
 
     func didSeeIntroScreen() {

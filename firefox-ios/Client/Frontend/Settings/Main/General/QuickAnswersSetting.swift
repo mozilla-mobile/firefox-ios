@@ -4,10 +4,12 @@
 
 import Foundation
 import Shared
+import Common
 
-final class QuickAnswersSetting: Setting {
+final class QuickAnswersSetting: Setting, UserFeaturePreferenceProvider {
     private weak var settingsDelegate: GeneralSettingsDelegate?
     private let profile: Profile?
+    let userPreferences: UserFeaturePreferring
 
     override var accessoryView: UIImageView? {
         guard let theme else { return nil }
@@ -21,17 +23,20 @@ final class QuickAnswersSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     override var status: NSAttributedString? {
-        guard let profile else { return nil }
-        let isSwitchOn = profile.prefs.boolForKey(PrefsKeys.Settings.quickAnswersFeature) ?? true
+        let isSwitchOn = userPreferences.getPreferenceFor(.quickAnswers)
         // TODO: - FXIOS-14720 Add Strings
         let statusString: String = isSwitchOn ? "On" : "Off"
         return NSAttributedString(string: statusString)
     }
 
-    init(settings: SettingsTableViewController,
-         settingsDelegate: GeneralSettingsDelegate?) {
+    init(
+        settings: SettingsTableViewController,
+        settingsDelegate: GeneralSettingsDelegate?,
+        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+    ) {
         self.profile = settings.profile
         self.settingsDelegate = settingsDelegate
+        self.userPreferences = userPreferences
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         // TODO: - FXIOS-14720 Add Strings
         super.init(

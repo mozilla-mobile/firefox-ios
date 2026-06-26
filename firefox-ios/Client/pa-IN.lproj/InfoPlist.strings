@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "ਐਪ ਦਾ ਆਈਕਾਨ";
+
 /* (No Comment) */
 "New Private Tab" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ";
 
@@ -5,7 +8,7 @@
 "New Tab" = "ਨਵੀਂ ਟੈਬ";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox ਤੁਹਾਡੇ ਕੈਮਰੇ ਨੂੰ QR ਕੋਡ ਸਕੈਨ ਕਰਨ ਅਤੇ ਫੋਟੋ ਖਿੱਚ ਤੇ ਵੀਡੀਓ ਬਣਾਉਣ ਲਈ ਵਰਤਦਾ ਹੈ।";
+"NSCameraUsageDescription" = "Firefox ਤੁਹਾਡੇ ਕੈਮਰੇ ਨੂੰ QR ਕੋਡ ਸਕੈਨ ਕਰਨ ਜਾਂ ਫ਼ੋਟੋ ਅਤੇ ਵੀਡੀਓ ਲੈਣ ਲਈ ਵਰਤ ਸਕਦਾ ਹੈ।";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox ਨੂੰ ਤੁਹਾਡੇ ਸੰਭਾਲੇ ਹੋਏ ਪਾਸਵਰਡਾਂ ਅਤੇ ਭੁਗਤਾਨ ਢੰਗਾਂ ਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ Face ID ਚਾਹੀਦਾ ਹੈ।";

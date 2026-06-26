@@ -85,6 +85,12 @@
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Sayfa özetleri";
 
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Sesiniz, sorularınız ve cevaplarınız asla saklanmaz.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Hızlı cevaplar";
+
 /* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
 "Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "YAPAY ZEKÂ ÖZELLİKLERİ";
 
@@ -258,6 +264,12 @@
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "Arama motorlarından öneriler";
+
+/* In the Search settings, this is the description that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Description.v153" = "Arama yapmak için resimleri Google’a gönder.";
+
+/* In the Search settings, this is the title that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Title.v153" = "Google Lens";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Arama";

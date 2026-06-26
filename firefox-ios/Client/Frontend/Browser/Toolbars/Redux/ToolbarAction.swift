@@ -36,6 +36,7 @@ struct ToolbarAction: Action {
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
+    let isGoogleLensEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
     let previousTabScreenshot: UIImage?
     let nextTabScreenshot: UIImage?
@@ -67,6 +68,7 @@ struct ToolbarAction: Action {
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          isTranslationsEnabled: Bool? = nil,
+         isGoogleLensEnabled: Bool? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
          previousTabScreenshot: UIImage? = nil,
          nextTabScreenshot: UIImage? = nil,
@@ -101,6 +103,7 @@ struct ToolbarAction: Action {
         self.canSummarize = canSummarize
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
+        self.isGoogleLensEnabled = isGoogleLensEnabled
         self.translationConfiguration = translationConfiguration
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
@@ -111,6 +114,7 @@ enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
     case urlDidChange
+    case lockIconChanged
     case scrollAlphaNeedsUpdate
     case didSetTextInLocationView
     case borderPositionChanged
@@ -150,12 +154,14 @@ struct ToolbarMiddlewareAction: Action {
     let gestureType: ToolbarButtonGesture?
     let scrollOffset: CGPoint?
     let readerModeState: ReaderModeState?
+    let isGoogleLensEnabled: Bool?
 
     init(buttonType: ToolbarActionConfiguration.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          scrollOffset: CGPoint? = nil,
          readerModeState: ReaderModeState? = nil,
+         isGoogleLensEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -165,6 +171,7 @@ struct ToolbarMiddlewareAction: Action {
         self.readerModeState = readerModeState
         self.gestureType = gestureType
         self.scrollOffset = scrollOffset
+        self.isGoogleLensEnabled = isGoogleLensEnabled
     }
 }
 
@@ -172,7 +179,9 @@ enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
     case urlDidChange
+    case didUpdateDefaultSearchEngine
     case didClearSearch
     case didStartDragInteraction
+    case didSwipeToOpenTabTray
     case loadSummaryState
 }

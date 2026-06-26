@@ -9,11 +9,19 @@ import UIKit
 final class TranslationToggleCell: UICollectionViewListCell, ThemeApplicable {
     private let toggle = UISwitch()
 
-    func configure(title: String, isOn: Bool, target: Any?, action: Selector, theme: Theme) {
+    func configure(
+        title: String,
+        isOn: Bool,
+        accessibilityIdentifier: String?,
+        target: Any?,
+        action: Selector,
+        theme: Theme
+    ) {
         var content = defaultContentConfiguration()
         content.text = title
         contentConfiguration = content
         toggle.isOn = isOn
+        toggle.accessibilityIdentifier = accessibilityIdentifier
         toggle.addTarget(target, action: action, for: .valueChanged)
         accessories = [.customView(configuration: .init(customView: toggle, placement: .trailing(displayed: .always)))]
         applyTheme(theme: theme)

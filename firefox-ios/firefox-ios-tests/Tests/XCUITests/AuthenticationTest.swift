@@ -15,17 +15,8 @@ class AuthenticationTest: BaseTestCase {
         navigator.openURL(testBasicHTTPAuthURL)
         waitUntilPageLoad()
 
-        // Predicate to wait for element to exist
-        let existsPredicate = NSPredicate(format: "exists == true")
-
         // Wait for the element to appear within the timeout
-        let expectation = XCTNSPredicateExpectation(
-            predicate: existsPredicate,
-            object: app.staticTexts["Authentication required"]
-        )
-        let result = XCTWaiter().wait(for: [expectation], timeout: 5)
-
-        if result != .completed {
+        if !app.staticTexts["Authentication required"].mozWaitForElementToExist(timeout: 5, failOnTimeout: false) {
             // User already logged, tap on reload button
             app.buttons["TabLocationView.reloadButton"].waitAndTap()
             waitUntilPageLoad()
@@ -49,8 +40,8 @@ class AuthenticationTest: BaseTestCase {
         waitUntilPageLoad()
         /* There is no other way to verify basic auth is successful as the webview is
          inaccessible after sign in to verify the success text. */
-        waitForNoExistence(app.alerts.buttons["Cancel"], timeoutValue: 5)
-        waitForNoExistence(app.alerts.buttons["Log in"], timeoutValue: 5)
+        mozWaitForElementToNotExist(app.alerts.buttons["Cancel"], timeout: 5)
+        mozWaitForElementToNotExist(app.alerts.buttons["Log in"], timeout: 5)
         // Added this check to ensure the BasicAuth login is persisting after app restart as well.
         forceRestartApp()
         navigator.openURL(testBasicHTTPAuthURL)

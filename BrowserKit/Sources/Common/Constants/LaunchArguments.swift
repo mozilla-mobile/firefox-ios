@@ -23,7 +23,6 @@ public struct LaunchArguments {
     public static let LoadExperiment = "LOAD_EXPERIMENT"
     public static let ExperimentFeatureName = "EXPERIMENT_FEATURE_NAME"
     public static let DisableAnimations = "DISABLE_ANIMATIONS"
-    public static let SkipSplashScreenExperiment = "SKIP_SPLASH_SCREEN_EXPERIMENT"
     public static let ResetMicrosurveyExpirationCount = "RESET_MICROSURVEY_EXPIRATION_COUNT"
     public static let SkipAppleIntelligence = "SKIP_APPLE_INTELLIGENCE"
 

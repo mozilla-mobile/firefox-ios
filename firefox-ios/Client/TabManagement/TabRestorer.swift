@@ -13,6 +13,7 @@ import TabDataStore
 /// agnostic of how tabs are fetched or filtered.
 ///
 /// See ADR 0007 (Deeplink Startup Flow Refactor) for the rationale behind this separation.
+@MainActor
 protocol TabRestorer: AnyObject {
     /// Fetches persisted tab data for `windowUUID`, builds the corresponding `Tab` objects,
     /// and returns a `TabRestorationResult` ready to be applied by the caller.
@@ -71,8 +72,6 @@ final class DefaultTabRestorer: TabRestorer {
             if windowData.activeTabId == tabData.id {
                 selectedTabUUID = tab.tabUUID
             }
-            // TODO: FXIOS-15981 - Implement TabRestorer logic for screenshots
-            // delegate?.restoreScreenshot(for: tab)
         }
 
         logger.log("There were \(filteredTabData.count) tabs restored",

@@ -42,7 +42,7 @@ jobs:
           close-issue-reason: not_planned
 
           # Labels on issues exempted from stale
-          exempt-issue-labels: "do not stale,Feature-Request"
+          exempt-issue-labels: "do not stale,Feature-Request,Contributor OK"
 
           # Label to apply on staled issues
           stale-issue-label: "stale"

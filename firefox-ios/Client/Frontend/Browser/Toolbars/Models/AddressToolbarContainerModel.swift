@@ -29,6 +29,7 @@ final class AddressToolbarContainerModel: Equatable {
     let isEditing: Bool
     let didStartTyping: Bool
     let shouldShowKeyboard: Bool
+    let editingAccessoryAction: ToolbarElement?
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
@@ -36,6 +37,10 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldAnimate: Bool
     let scrollAlpha: Float
     let hasAlternativeLocationColor: Bool
+
+    var isAddressBarMinimized: Bool {
+        return scrollAlpha.isZero
+    }
 
     let windowUUID: UUID
 
@@ -76,6 +81,7 @@ final class AddressToolbarContainerModel: Equatable {
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
+            editingAccessoryAction: editingAccessoryAction,
             onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      buttonTapped: button,
@@ -206,18 +212,21 @@ final class AddressToolbarContainerModel: Equatable {
         windowUUID: UUID
     ) {
         self.borderPosition = state.addressToolbar.borderPosition
-        self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
-                                                                         isShowingTopTabs: state.isShowingTopTabs,
-                                                                         windowUUID: windowUUID)
-        self.leadingPageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.leadingPageActions,
-                                                                          isShowingTopTabs: state.isShowingTopTabs,
-                                                                          windowUUID: windowUUID)
-        self.trailingPageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.trailingPageActions,
-                                                                           isShowingTopTabs: state.isShowingTopTabs,
-                                                                           windowUUID: windowUUID)
-        self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
-                                                                      isShowingTopTabs: state.isShowingTopTabs,
-                                                                      windowUUID: windowUUID)
+        self.navigationActions = Self.mapActions(state.addressToolbar.navigationActions,
+                                                 isShowingTopTabs: state.isShowingTopTabs,
+                                                 windowUUID: windowUUID)
+        self.leadingPageActions = Self.mapActions(state.addressToolbar.leadingPageActions,
+                                                  isShowingTopTabs: state.isShowingTopTabs,
+                                                  windowUUID: windowUUID)
+        self.trailingPageActions = Self.mapActions(state.addressToolbar.trailingPageActions,
+                                                   isShowingTopTabs: state.isShowingTopTabs,
+                                                   windowUUID: windowUUID)
+        self.browserActions = Self.mapActions(state.addressToolbar.browserActions,
+                                              isShowingTopTabs: state.isShowingTopTabs,
+                                              windowUUID: windowUUID)
+        self.editingAccessoryAction = state.addressToolbar.editingAccessoryAction.map {
+            Self.mapAction($0, isShowingTopTabs: state.isShowingTopTabs, windowUUID: windowUUID)
+        }
 
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
         let searchEngineModel = state.addressToolbar.alternativeSearchEngine
@@ -267,35 +276,42 @@ final class AddressToolbarContainerModel: Equatable {
                                    isShowingTopTabs: Bool,
                                    windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in
-            ToolbarElement(
-                iconName: action.iconName,
-                title: action.actionLabel,
-                badgeImageName: action.badgeImageName,
-                bottomBadgeImage: action.bottomBadgeImage,
-                maskImageName: action.maskImageName,
-                templateModeForImage: action.templateModeForImage,
-                loadingConfig: action.loadingConfig,
-                numberOfTabs: action.numberOfTabs,
-                isEnabled: action.isEnabled,
-                isFlippedForRTL: action.isFlippedForRTL,
-                isSelected: action.isSelected,
-                hasCustomColor: action.hasCustomColor,
-                hasHighlightedColor: action.hasHighlightedColor,
-                largeContentTitle: action.largeContentTitle,
-                contextualHintType: action.contextualHintType,
-                a11yLabel: action.a11yLabel,
-                a11yHint: action.a11yHint,
-                a11yId: action.a11yId,
-                cacheId: action.cacheId,
-                a11yCustomActionName: action.a11yCustomActionName,
-                a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
-                hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
-                previousTabScreenshot: action.previousTabScreenshot,
-                nextTabScreenshot: action.nextTabScreenshot,
-                onSelected: getOnSelected(action: action, windowUUID: windowUUID),
-                onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
-            )
+            mapAction(action, isShowingTopTabs: isShowingTopTabs, windowUUID: windowUUID)
         }
+    }
+
+    @MainActor
+    private static func mapAction(_ action: ToolbarActionConfiguration,
+                                  isShowingTopTabs: Bool,
+                                  windowUUID: UUID) -> ToolbarElement {
+        return ToolbarElement(
+            iconName: action.iconName,
+            title: action.actionLabel,
+            badgeImageName: action.badgeImageName,
+            bottomBadgeImage: action.bottomBadgeImage,
+            maskImageName: action.maskImageName,
+            templateModeForImage: action.templateModeForImage,
+            loadingConfig: action.loadingConfig,
+            numberOfTabs: action.numberOfTabs,
+            isEnabled: action.isEnabled,
+            isFlippedForRTL: action.isFlippedForRTL,
+            isSelected: action.isSelected,
+            hasCustomColor: action.hasCustomColor,
+            hasHighlightedColor: action.hasHighlightedColor,
+            largeContentTitle: action.largeContentTitle,
+            contextualHintType: action.contextualHintType,
+            a11yLabel: action.a11yLabel,
+            a11yHint: action.a11yHint,
+            a11yId: action.a11yId,
+            cacheId: action.cacheId,
+            a11yCustomActionName: action.a11yCustomActionName,
+            a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
+            hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
+            previousTabScreenshot: action.previousTabScreenshot,
+            nextTabScreenshot: action.nextTabScreenshot,
+            onSelected: getOnSelected(action: action, windowUUID: windowUUID),
+            onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
+        )
     }
 
     @MainActor
@@ -353,6 +369,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.isEditing == rhs.isEditing &&
         lhs.didStartTyping == rhs.didStartTyping &&
         lhs.shouldShowKeyboard == rhs.shouldShowKeyboard &&
+        lhs.editingAccessoryAction == rhs.editingAccessoryAction &&
         lhs.isPrivateMode == rhs.isPrivateMode &&
         lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&

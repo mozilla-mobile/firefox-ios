@@ -7,101 +7,91 @@ import UIKit
 import OnboardingKit
 @testable import Client
 
+@MainActor
 class OnboardingKitCardInfoModelTests: XCTestCase {
-    func testDefaultSelectedButton_EmptyButtonsArray() {
+    private var mockUserPreferences: MockUserFeaturePreferences!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        mockUserPreferences = MockUserFeaturePreferences()
+        DependencyHelperMock().bootstrapDependencies(injectedUserFeaturePreferences: mockUserPreferences)
+        clearSavedTheme()
+    }
+
+    override func tearDown() async throws {
+        clearSavedTheme()
+        DependencyHelperMock().reset()
+        mockUserPreferences = nil
+        try await super.tearDown()
+    }
+
+    func testDefaultSelectedButton_emptyButtons_returnsNil() {
         let model = createModel(multipleChoiceButtons: [])
 
         XCTAssertNil(model.defaultSelectedButton, "Should return nil when no buttons are available")
     }
 
-    func testDefaultSelectedButton_VersionedLayout_PrioritizesToolbarBottom() {
-        let buttons = [
-            createMockMultipleChoiceButton(action: .toolbarTop),     // Priority 2
-            createMockMultipleChoiceButton(action: .toolbarBottom) // Priority 1 (highest)
-        ]
-        let model = createModel(multipleChoiceButtons: buttons)
+    // MARK: - Toolbar selection reflects the saved search bar position
 
-        // Should return toolbarBottom due to highest priority (1)
-        XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarBottom)
-    }
-
-    func testDefaultSelectedButton_VersionedLayout_PrioritizesToolbarTop_WhenBottomNotAvailable() {
-        let buttons = [
-            createMockMultipleChoiceButton(action: .themeDark),
-            createMockMultipleChoiceButton(action: .toolbarTop),     // Priority 2
-            createMockMultipleChoiceButton(action: .themeLight)
-        ]
-        let model = createModel(multipleChoiceButtons: buttons)
-
-        // Should return toolbarTop as it's the only selectable option
-        XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarTop)
-    }
-
-    func testDefaultSelectedButton_VersionedLayout_NoSelectableButtons_ReturnsFirst() {
-        let buttons = [
-            createMockMultipleChoiceButton(action: .themeDark),
-            createMockMultipleChoiceButton(action: .themeLight)
-        ]
-        let model = createModel(multipleChoiceButtons: buttons)
-
-        // When no buttons have default selection, should return first button
-        XCTAssertEqual(model.defaultSelectedButton?.action, .themeDark)
-    }
-
-    func testDefaultSelectedButton_VersionedLayout_OnlyToolbarBottom() {
-        let buttons = [
+    func testDefaultSelectedButton_savedBottomPosition_selectsToolbarBottom() {
+        mockUserPreferences.searchBarPosition = .bottom
+        let model = createModel(multipleChoiceButtons: [
+            createMockMultipleChoiceButton(action: .toolbarTop),
             createMockMultipleChoiceButton(action: .toolbarBottom)
-        ]
-        let model = createModel(multipleChoiceButtons: buttons)
+        ])
 
         XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarBottom)
     }
 
-    func testDefaultSelectedButton_VersionedLayout_OnlyToolbarTop() {
-        let buttons = [
-            createMockMultipleChoiceButton(action: .toolbarTop)
-        ]
-        let model = createModel(multipleChoiceButtons: buttons)
+    func testDefaultSelectedButton_savedTopPosition_selectsToolbarTop() {
+        mockUserPreferences.searchBarPosition = .top
+        let model = createModel(multipleChoiceButtons: [
+            createMockMultipleChoiceButton(action: .toolbarTop),
+            createMockMultipleChoiceButton(action: .toolbarBottom)
+        ])
 
         XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarTop)
     }
 
-    func testDefaultSelectedButton_VersionedLayout_MultipleToolbarBottomButtons() {
-        let buttons = [
-            createMockMultipleChoiceButton(action: .toolbarBottom), // First with priority 1
-            createMockMultipleChoiceButton(action: .toolbarTop),    // Priority 2
-            createMockMultipleChoiceButton(action: .toolbarBottom)  // Second with priority 1
-        ]
-        let model = createModel(multipleChoiceButtons: buttons)
+    func testDefaultSelectedButton_savedPositionMissingFromButtons_fallsBackToFirst() {
+        mockUserPreferences.searchBarPosition = .bottom
+        let model = createModel(multipleChoiceButtons: [
+            createMockMultipleChoiceButton(action: .toolbarTop)
+        ])
 
-        // Should return the first toolbarBottom button (both have same priority)
-        XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarBottom)
+        // Saved position has no matching button, so fall back to the first button.
+        XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarTop)
     }
 
-    // MARK: - Edge Cases
+    // MARK: - Theme selection reflects the saved theme
 
-    func testDefaultSelectedButton_SingleNonSelectableButton() {
-        let buttons = [
+    func testDefaultSelectedButton_systemThemeOn_selectsSystemDefault() {
+        UserDefaults.standard.set(true, forKey: "prefKeySystemThemeSwitchOnOff")
+        let model = createModel(multipleChoiceButtons: [
+            createMockMultipleChoiceButton(action: .themeLight),
+            createMockMultipleChoiceButton(action: .themeSystemDefault),
             createMockMultipleChoiceButton(action: .themeDark)
-        ]
-        let model = createModel(multipleChoiceButtons: buttons)
+        ])
 
-        // Should return the only available button
-        XCTAssertEqual(model.defaultSelectedButton?.action, .themeDark)
+        XCTAssertEqual(model.defaultSelectedButton?.action, .themeSystemDefault)
     }
 
-    func testDefaultSelectedButton_OrderMatters() {
-        let buttons = [
-            createMockMultipleChoiceButton(action: .toolbarTop),    // Priority 2
-            createMockMultipleChoiceButton(action: .toolbarBottom) // Priority 1
-        ]
-        let model = createModel(multipleChoiceButtons: buttons)
+    func testDefaultSelectedButton_noSavedTheme_returnsFirst() {
+        let model = createModel(multipleChoiceButtons: [
+            createMockMultipleChoiceButton(action: .themeDark),
+            createMockMultipleChoiceButton(action: .themeLight)
+        ])
 
-        // Should return toolbarBottom despite being second in array
-        XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarBottom)
+        // With no saved theme and no toolbar buttons, fall back to the first button.
+        XCTAssertEqual(model.defaultSelectedButton?.action, .themeDark)
     }
 
     // MARK: - Test Helpers
+
+    private func clearSavedTheme() {
+        UserDefaults.standard.removeObject(forKey: "prefKeySystemThemeSwitchOnOff")
+        UserDefaults.standard.removeObject(forKey: "prefKeyThemeName")
+    }
 
     private func createMockButtons() -> OnboardingKit.OnboardingButtons<OnboardingActions> {
         return OnboardingKit.OnboardingButtons<OnboardingActions>(

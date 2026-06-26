@@ -242,6 +242,10 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         } else if let tabScreenshot = tabModel.screenshot {
             // Use Tab screenshot when available
             screenshotView.image = tabScreenshot
+        } else if tabModel.hasScreenshotOnDisk {
+            // A screenshot exists on disk and is being loaded asynchronously. Keep the cell blank
+            // until it arrives to avoid a brief favicon-to-screenshot flash after tab restoration.
+            screenshotView.image = nil
         } else {
             // Favicon or letter image when tab screenshot isn't available
             smallFaviconView.isHidden = false

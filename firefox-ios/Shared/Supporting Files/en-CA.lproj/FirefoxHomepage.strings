@@ -46,6 +46,27 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Search or enter address";
 
+/* The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2" = "Enter the URL for the website.";
+
+/* The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2" = "Add Shortcut";
+
+/* The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153" = "Cancel";
+
+/* The error message shown when a user enters an invalid website URL in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.InvalidURLErrorMessage.v153" = "Enter a valid URL";
+
+/* The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153" = "Save";
+
+/* The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut. */
+"FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153" = "Add Shortcut";
+
+/* The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153" = "Website URL";
+
 /* This is the navigation title for the Shortcuts Library view */
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "Shortcuts";
 
@@ -60,4 +81,10 @@
 
 /* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
 "FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ of %2$@";
+
+/* The text shown when we turn on the Tracker Blocker feature on the homepage, and the number of trackers blocked is zero. */
+"FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153" = "You’re Protected";
+
+/* The numbers of trackers we've blocked since we started tracking. The %d placeholder is the actual number of trackers blocked. */
+"FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b" = "Trackers Blocked: %d";
 

@@ -8,11 +8,15 @@ import Foundation
 /// Test helper that simulates JS evaluation for language sample extraction.
 final class MockLanguageSampleSource: LanguageSampleSource, @unchecked Sendable {
     var mockResult: Any?
+    var htmlLangResult: String?
     var mockError: Error?
 
     @MainActor
     func getLanguageSample(scriptEvalExpression: String) async throws -> String? {
         if let error = mockError { throw error }
+        if scriptEvalExpression.contains("documentElement.lang") {
+            return htmlLangResult
+        }
         return mockResult as? String
     }
 }

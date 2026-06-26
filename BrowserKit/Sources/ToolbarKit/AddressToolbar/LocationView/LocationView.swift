@@ -40,9 +40,9 @@ final class LocationView: UIView,
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
-    private var scrollAlpha: CGFloat = 1
     private var hasAlternativeLocationColor = false
     private var config: LocationViewConfiguration?
+    private(set) var isAddressBarMinimized = false
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -61,7 +61,7 @@ final class LocationView: UIView,
     /// An additional offset (default is 0) used when reader mode is available,
     /// to ensure the text does not overlap the icon when the view is constrained to its superview.
     private func isNormalizedHostWiderThanVisibleArea(safeOffset offset: CGFloat = 0) -> Bool {
-        guard let text = urlTextField.text, let font = urlTextField.font, !scrollAlpha.isZero else {
+        guard let text = urlTextField.text, let font = urlTextField.font, !isAddressBarMinimized else {
             return false
         }
         let (_, normalizedHost) = URL.getSubdomainAndHost(from: text)
@@ -190,7 +190,7 @@ final class LocationView: UIView,
         )
 
         applyToolbarAlphaIfNeeded(
-            alpha: uxConfig.scrollAlpha,
+            isAddressBarMinimized: uxConfig.isAddressBarMinimized,
             barPosition: addressBarPosition
         )
         configureLockIconButton(config)
@@ -480,10 +480,9 @@ final class LocationView: UIView,
         effectView.effect = nil
     }
 
-    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
-        guard scrollAlpha != alpha else { return }
-        scrollAlpha = alpha
-        if scrollAlpha.isZero {
+    private func applyToolbarAlphaIfNeeded(isAddressBarMinimized: Bool, barPosition: AddressToolbarPosition) {
+        self.isAddressBarMinimized = isAddressBarMinimized
+        if isAddressBarMinimized {
             shrinkLocationView(barPosition: barPosition)
             if #available(iOS 26.0, *), barPosition == .bottom {
                 effectView.effect = glassEffect
@@ -508,6 +507,9 @@ final class LocationView: UIView,
         // causing the keyboard to hide.
         // TODO: FXIOS-14618 don't fire the `keyboardWillHide` notification on device rotation
         let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
+        urlTextField.editingAccessoryAction = configurationIsEditing ?
+            config.editingAccessoryAction :
+            nil
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Remove the default drop interaction from the URL text field so that our
@@ -761,7 +763,7 @@ final class LocationView: UIView,
         ).cgColors
         searchEngineContentView.applyTheme(theme: theme)
         lockIconButton.tintColor = secondaryColor
-        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
+        lockIconButton.backgroundColor = isAddressBarMinimized ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.textColor = primaryColor
         setTextFieldPlaceholder(color: colors.textPrimary)
@@ -773,7 +775,7 @@ final class LocationView: UIView,
     }
 
     private func getPrimaryAndSecondaryColors() -> (primary: UIColor, secondary: UIColor) {
-        if #available(iOS 26.0, *), scrollAlpha.isZero {
+        if #available(iOS 26.0, *), isAddressBarMinimized {
             // We want to use system colors when the location view is fully transparent
             // To make sure it blends well with the background when using glass effect.
             return (.label, .label)

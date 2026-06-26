@@ -27,7 +27,10 @@ class MockShareTab: ShareTab {
         self.url = url
         self.canonicalURL = canonicalURL
         self.tabUUID = tabUUID
-        self.webView = TabWebView(frame: CGRect.zero, configuration: .init(), windowUUID: .XCTestDefaultUUID)
+        self.webView = TabWebView(frame: CGRect.zero,
+                                  configuration: .init(),
+                                  windowUUID: .XCTestDefaultUUID,
+                                  certStore: MockProfile().certStore)
         self.temporaryDocument = withTemporaryDocument
     }
 }

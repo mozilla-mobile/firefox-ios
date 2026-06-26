@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "앱 아이콘";
+
 /* (No Comment) */
 "New Private Tab" = "새 사생활 보호 탭";
 
@@ -5,7 +8,7 @@
 "New Tab" = "새 탭";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox가 QR code 를 스캔하거나 사진, 영상을 찍기 위해 카메라를 사용합니다.";
+"NSCameraUsageDescription" = "Firefox는 QR코드를 스캔하거나 사진이나 동영상을 찍을 때 카메라를 사용할 수 있습니다.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox가 저장된 비밀번호와 결제 방법에 접근하려면 Face ID가 필요합니다.";

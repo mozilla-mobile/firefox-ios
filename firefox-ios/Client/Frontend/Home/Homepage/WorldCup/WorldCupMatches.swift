@@ -15,6 +15,18 @@ struct WorldCupMatches: Equatable, Hashable {
     let isLive: Bool
     let featuredMatch: [WorldCupMatch]
     let upcomingMatches: [WorldCupMatch]
+
+    /// Card fingerprint excluding live fields (scores/status). 
+    /// Equal ids means refreshable in place.
+    var liveAgnosticIdentity: [String] {
+        func key(_ match: WorldCupMatch) -> String {
+            "\(match.homeCode)|\(match.awayCode)|\(match.date)"
+        }
+        return [phaseTitle, winnerThirdPlaceOrFinal?.teamKey ?? ""]
+            + featuredMatch.map(key)
+            + upcomingMatches.map(key)
+    }
+
     /// Returns the team key and the label for the winner of the Bronze Final or Final match.
     var winnerThirdPlaceOrFinal: (teamKey: String, winnerLabel: String)? {
         guard phaseTitle == .WorldCup.HomepageWidget.RoundPhase.FinalLabel ||
@@ -25,6 +37,14 @@ struct WorldCupMatches: Equatable, Hashable {
             .WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
         guard let winner else { return nil }
         return (winner, label)
+    }
+
+    /// Stable identities ("home|away|date") of the matches won by `teamKey` on
+    /// this card. 
+    func winningMatchIDs(for teamKey: String) -> [String] {
+        return (featuredMatch + upcomingMatches)
+            .filter { $0.winnerKey == teamKey }
+            .map { "\($0.homeCode)|\($0.awayCode)|\($0.date)" }
     }
 
     init(phaseTitle: String,
@@ -51,7 +71,7 @@ struct WorldCupMatches: Equatable, Hashable {
     /// Grace period after a card's last match is estimated to be over during
     /// which the card stays selected, so a just-finished result lingers briefly
     /// before we advance to the next fixture. A live match still wins.
-    private static let resultLingerWindow: TimeInterval = 30 * 60
+    private static let resultLingerWindow: TimeInterval = 60 * 60
 
     static func defaultIndex(in cards: [WorldCupMatches],
                              latestKickoffs: [Date],

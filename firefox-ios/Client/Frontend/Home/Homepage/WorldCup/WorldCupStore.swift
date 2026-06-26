@@ -24,11 +24,20 @@ protocol WorldCupStoreProtocol {
     /// Returns true when the World Cup countdown target date has been reached.
     var hasWorldCupStarted: Bool { get }
 
+    /// Whether the celebration (confetti) animation is enabled.
+    var isCelebrationAnimationEnabled: Bool { get }
+
+    /// Winning matches ids that have been already tracked.
+    var seenWinningMatchIDs: Set<String> { get }
+
     /// Saves the world cup section selection in the preference
     func setIsHomepageSectionEnabled(_ isEnabled: Bool)
 
     /// Persists the user's selected team.
     func setSelectedTeam(countryId: String?)
+
+    /// Persists the set of match identities already seen.
+    func setSeenWinningMatchIDs(_ ids: Set<String>)
 }
 
 /// A Store for all the preferences and feature flags related to the WorldCup feature.
@@ -78,6 +87,11 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
         return profile.prefs.stringForKey(PrefsKeys.Homepage.WorldCupSelectedCountry)
     }
 
+    var seenWinningMatchIDs: Set<String> {
+        let stored = profile.prefs.stringArrayForKey(PrefsKeys.Homepage.WorldCupSeenWinningMatchIDs) ?? []
+        return Set(stored)
+    }
+
     var isMilestone2: Bool {
         guard let enableDate = milestone2EnableDate else { return false }
         return dateProvider.now() >= enableDate
@@ -86,6 +100,10 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
     var hasWorldCupStarted: Bool {
         guard let startDate = worldCupStartDate else { return false }
         return dateProvider.now() >= startDate
+    }
+
+    var isCelebrationAnimationEnabled: Bool {
+        return nimbusFeature.value().showCelebrationAnimation
     }
 
     private var milestone2EnableDate: Date? {
@@ -104,5 +122,9 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
 
     func setSelectedTeam(countryId: String?) {
         profile.prefs.setObject(countryId, forKey: PrefsKeys.Homepage.WorldCupSelectedCountry)
+    }
+
+    func setSeenWinningMatchIDs(_ ids: Set<String>) {
+        profile.prefs.setObject(Array(ids), forKey: PrefsKeys.Homepage.WorldCupSeenWinningMatchIDs)
     }
 }

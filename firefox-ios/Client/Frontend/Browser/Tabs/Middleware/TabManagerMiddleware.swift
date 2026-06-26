@@ -91,8 +91,18 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             return
         }
 
-        tabManager(for: action.windowUUID)?.tabDidSetScreenshot(action.tab)
+        switch action.actionType {
+        case ScreenshotActionType.screenshotTaken:
+            tabManager(for: action.windowUUID)?.tabDidSetScreenshot(action.tab)
+        case ScreenshotActionType.screenshotRestored:
+            // The screenshot was just loaded from disk, so we only need to refresh the tab tray
+            break
+        default:
+            return
+        }
 
+        // Both screenshotTaken and screenshotRestored fall through here so the tab tray
+        // rebinds with the new `tab.screenshot`
         guard let tabsState = state.componentState(TabsPanelState.self,
                                                    for: .tabsPanel,
                                                    window: action.windowUUID) else { return }
@@ -243,9 +253,21 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             guard let urlRequest = action.urlRequest else { return }
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
 
+        case TabPanelViewActionType.prefetchScreenshots:
+            guard let tabUUID = action.tabUUID else { return }
+            prefetchScreenshot(for: tabUUID, windowUUID: action.windowUUID)
+
         default:
             break
         }
+    }
+
+    /// Asks the tab manager to load the screenshot for an upcoming visible cell. The
+    /// tab manager will no-op if the tab's screenshot is already in memory.
+    private func prefetchScreenshot(for tabUUID: TabUUID, windowUUID: WindowUUID) {
+        guard let tabManager = tabManager(for: windowUUID),
+              let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
+        tabManager.restoreScreenshot(for: tab)
     }
 
     private func tabTrayDidLoad(for windowUUID: WindowUUID, panelType: TabTrayPanelType?) {
@@ -342,7 +364,8 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                     tabTitle: tab.displayTitle,
                                     url: tab.url,
                                     screenshot: tab.screenshot,
-                                    hasHomeScreenshot: tab.hasHomeScreenshot)
+                                    hasHomeScreenshot: tab.hasHomeScreenshot,
+                                    hasScreenshotOnDisk: tab.screenshotUUID != nil)
             tabs.append(tabModel)
         }
 
@@ -1009,6 +1032,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
         profile.pinnedSites.addPinnedTopSite(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutPinnedSource: .appMenu,
+                windowUUID: uuid,
+                actionType: TopSitesActionType.shortcutPinned
+            )
+        )
     }
 
     private func removeFromShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
@@ -1021,6 +1051,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
         profile.pinnedSites.removeFromPinnedTopSites(site)
+        store.dispatch(
+            TopSitesAction(
+                shortcutUnpinnedSource: .appMenu,
+                windowUUID: uuid,
+                actionType: TopSitesActionType.shortcutUnpinned
+            )
+        )
     }
 
     private func preserveTabs(uuid: WindowUUID) {

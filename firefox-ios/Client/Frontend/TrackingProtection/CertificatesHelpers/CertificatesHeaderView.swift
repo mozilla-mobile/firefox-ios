@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-class CertificatesHeaderView: UITableViewHeaderFooterView, ReusableCell {
+class CertificatesHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     private struct UX {
         static let headerStackViewSpacing = 16.0
         static let separatorHeight = 1.0
@@ -63,10 +63,17 @@ class CertificatesHeaderView: UITableViewHeaderFooterView, ReusableCell {
             headerStackView.addArrangedSubview(item)
         }
 
+        applyTheme(theme: theme)
+    }
+
+    func applyTheme(theme: Theme) {
         contentView.backgroundColor = theme.colors.layer5
         headerStackView.backgroundColor = theme.colors.layer5
         separatorBottomView.backgroundColor = theme.colors.borderPrimary
         separatorTopView.backgroundColor = theme.colors.borderPrimary
+        for case let item as CertificatesHeaderItem in headerStackView.arrangedSubviews {
+            item.applyTheme(theme: theme)
+        }
     }
 
     // MARK: Accessibility

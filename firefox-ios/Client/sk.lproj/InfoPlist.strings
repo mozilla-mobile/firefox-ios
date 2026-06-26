@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "Ikona aplikácie";
+
 /* (No Comment) */
 "New Private Tab" = "Nová súkromná karta";
 
@@ -5,7 +8,7 @@
 "New Tab" = "Nová karta";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox používa váš fotoaparát na skenovanie QR kódov a snímanie fotografií a videí.";
+"NSCameraUsageDescription" = "Firefox môže použiť váš fotoaparát na skenovanie QR kódov alebo na vytvorenie fotografií či videa.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox vyžaduje Face ID na prístup k vašim uloženým heslám a spôsobom platby.";

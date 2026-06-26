@@ -47,6 +47,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         keyboardSpacer?.removeFromSuperview()
         if keyboardSpacer == nil {
             keyboardSpacer = UIView()
+            keyboardSpacer?.accessibilityIdentifier = AccessibilityIdentifiers.Browser.keyboardSpacer
         }
         addArrangedViewToBottom(keyboardSpacer!)
         setKeyboardSpacerHeight(height: spacerHeight)

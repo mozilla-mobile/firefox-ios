@@ -92,7 +92,7 @@ extension BrowserViewController: WKUIDelegate {
                 alertController.delegate = self
                 present(alertController, animated: true)
             }
-        } else if let promptingTab = tabManager[webView] {
+        } else if let promptingTab = tabManager[webView], !alertCouldFreezeSelectedTab(webView) {
             logger.log("JavaScript \(messageAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
 
             await withCheckedContinuation { (continuation: CheckedContinuation<Void?, Never>) in
@@ -121,7 +121,7 @@ extension BrowserViewController: WKUIDelegate {
                 alertController.delegate = self
                 present(alertController, animated: true)
             }
-        } else if let promptingTab = tabManager[webView] {
+        } else if let promptingTab = tabManager[webView], !alertCouldFreezeSelectedTab(webView) {
             logger.log("JavaScript \(confirmAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
 
             return await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
@@ -129,9 +129,15 @@ extension BrowserViewController: WKUIDelegate {
                 promptingTab.queueJavascriptAlertPrompt(confirmAlert)
             }
         } else {
-            logger.log("JavaScript \(confirmAlert.type.rawValue) not shown. This shouldn't happen.",
-                       level: .warning,
-                       category: .webview)
+            if alertCouldFreezeSelectedTab(webView) {
+                // Alert is from tab sharing the visible tab's WebContent process (window.open
+                // popup); we drop it rather than block, which would freeze the visible tab
+                // and allow for potential spoofing.
+            } else {
+                logger.log("JavaScript \(confirmAlert.type.rawValue) not shown. This shouldn't happen.",
+                           level: .warning,
+                           category: .webview)
+            }
             return false
         }
     }
@@ -156,7 +162,7 @@ extension BrowserViewController: WKUIDelegate {
                 alertController.delegate = self
                 present(alertController, animated: true)
             }
-        } else if let promptingTab = tabManager[webView] {
+        } else if let promptingTab = tabManager[webView], !alertCouldFreezeSelectedTab(webView) {
             logger.log("JavaScript \(textInputAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
 
             return await withCheckedContinuation { (continuation: CheckedContinuation<String?, Never>) in
@@ -164,9 +170,15 @@ extension BrowserViewController: WKUIDelegate {
                 promptingTab.queueJavascriptAlertPrompt(textInputAlert)
             }
         } else {
-            logger.log("JavaScript \(textInputAlert.type.rawValue) not shown. This shouldn't happen.",
-                       level: .warning,
-                       category: .webview)
+            if alertCouldFreezeSelectedTab(webView) {
+                // Alert is from tab sharing the visible tab's WebContent process (window.open
+                // popup); we drop it rather than block, which would freeze the visible tab
+                // and allow for potential spoofing.
+            } else {
+                logger.log("JavaScript \(textInputAlert.type.rawValue) not shown. This shouldn't happen.",
+                           level: .warning,
+                           category: .webview)
+            }
             return nil
         }
     }
@@ -534,18 +546,6 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Disabled due to https://bugzilla.mozilla.org/show_bug.cgi?id=1588928
-//                if url.scheme == "javascript", navigationAction.request.isPrivileged {
-//                    decisionHandler(.cancel)
-//                    if let javaScriptString = url.absoluteString.replaceFirstOccurrence(
-//                        of: "javascript:",
-//                        with: ""
-//                    ).removingPercentEncoding {
-//                        webView.evaluateJavaScript(javaScriptString)
-//                    }
-//                    return
-//                }
-
         if isStoreURL(url) {
             decisionHandler(.cancel)
             handleStoreURLNavigation(url: url)
@@ -602,6 +602,11 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if let scheme = url.scheme, !scheme.contains("firefox"), !shouldBlockExternalApps, !tab.isPrivate {
             handleCustomSchemeURLNavigation(url: url, navigationAction: navigationAction)
+        }
+
+        if url.scheme == ReaderModeSchemeHandler.scheme {
+            decisionHandler(.allow)
+            return
         }
 
         decisionHandler(.cancel)
@@ -834,9 +839,9 @@ extension BrowserViewController: WKNavigationDelegate {
             // We don't have a temporary document, fallthrough
         }
 
-        /// FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
-        /// This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
-        /// In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
+        // FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
+        // This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
+        // In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
         if let url = responseURL,
            ["http", "https"].contains(url.scheme),
            tabManager[webView]?.mimeType == MIMEType.Calendar {
@@ -1259,6 +1264,33 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
         }
+    }
+}
+
+// MARK: - Javascript alert utilities
+extension BrowserViewController {
+    /// Whether blocking a JS dialog from `webView`'s tab could freeze the visible tab's
+    /// rendering. An enqueued alert suspends its tab's JS thread; if that process is shared
+    /// with the selected tab, the visible page stops updating while a committed URL is
+    /// already shown, which can lead to spoofing. Independent tabs run separately and so
+    /// their alerts can still be queued safely.
+    func alertCouldFreezeSelectedTab(_ webView: WKWebView) -> Bool {
+        guard let requestingTab = tabManager[webView],
+              let selectedTab = tabManager.selectedTab,
+              requestingTab !== selectedTab
+        else { return false }
+
+        return sharesPopupProcessGroup(requestingTab, selectedTab)
+            || sharesPopupProcessGroup(selectedTab, requestingTab)
+    }
+
+    private func sharesPopupProcessGroup(_ ancestor: Tab, _ descendant: Tab) -> Bool {
+        var current: Tab? = descendant
+        while let tab = current, tab.requiredPopupConfiguration != nil, let parent = tab.parent {
+            if parent === ancestor { return true }
+            current = parent
+        }
+        return false
     }
 }
 
