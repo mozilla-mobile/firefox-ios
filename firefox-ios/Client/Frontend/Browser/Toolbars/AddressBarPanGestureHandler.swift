@@ -106,7 +106,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addressToolbarContainer.addGestureRecognizer(panGesture)
         panGestureRecognizer = panGesture
-        
+
         let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeUpGesture.direction = .up
         addressToolbarContainer.addGestureRecognizer(swipeUpGesture)
