@@ -106,21 +106,18 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addressToolbarContainer.addGestureRecognizer(panGesture)
         panGestureRecognizer = panGesture
+        
+        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeUpGesture.direction = .up
+        addressToolbarContainer.addGestureRecognizer(swipeUpGesture)
+        swipeUpGestureRecognizer = swipeUpGesture
 
-        // only create the swipeGestureRecognizer if the feature flag is enabled
-        if featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
-            let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-            swipeUpGesture.direction = .up
-            addressToolbarContainer.addGestureRecognizer(swipeUpGesture)
-            swipeUpGestureRecognizer = swipeUpGesture
+        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeDownGesture.direction = .down
+        addressToolbarContainer.addGestureRecognizer(swipeDownGesture)
+        swipeDownGestureRecognizer = swipeDownGesture
 
-            let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-            swipeDownGesture.direction = .down
-            addressToolbarContainer.addGestureRecognizer(swipeDownGesture)
-            swipeDownGestureRecognizer = swipeDownGesture
-
-            panGesture.require(toFail: swipeUpGesture)
-        }
+        panGesture.require(toFail: swipeUpGesture)
     }
 
     // MARK: - Redux
