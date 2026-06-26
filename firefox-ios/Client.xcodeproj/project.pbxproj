@@ -1711,6 +1711,7 @@
 		C7470EEB2E974E42000E1B6E /* MockStoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7470EEA2E974E3D000E1B6E /* MockStoryProvider.swift */; };
 		C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */; };
 		C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */; };
+		C795535A2FEEB2E300750D19 /* BrowserViewController+PHPickerViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79553592FEEB2E300750D19 /* BrowserViewController+PHPickerViewControllerDelegate.swift */; };
 		C796E22A2E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */; };
 		C79CEE5E2EDF3C4B004C4EB8 /* JumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79CEE5D2EDF3C48004C4EB8 /* JumpBackInCell.swift */; };
 		C79CF6B22EE0E593004C4EB8 /* BookmarksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79CF6B12EE0E590004C4EB8 /* BookmarksCell.swift */; };
@@ -10677,6 +10678,7 @@
 		C7664A29B78A808DC314353C /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Search.strings; sourceTree = "<group>"; };
 		C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxAccountSignInViewControllerTests.swift; sourceTree = "<group>"; };
 		C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewControllerTests.swift; sourceTree = "<group>"; };
+		C79553592FEEB2E300750D19 /* BrowserViewController+PHPickerViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+PHPickerViewControllerDelegate.swift"; sourceTree = "<group>"; };
 		C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewController.swift; sourceTree = "<group>"; };
 		C79CEE5D2EDF3C48004C4EB8 /* JumpBackInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInCell.swift; sourceTree = "<group>"; };
 		C79CF6B12EE0E590004C4EB8 /* BookmarksCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCell.swift; sourceTree = "<group>"; };
@@ -13685,6 +13687,7 @@
 		81122E1D2B221998003DD9F8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C79553592FEEB2E300750D19 /* BrowserViewController+PHPickerViewControllerDelegate.swift */,
 				EBE26B4E220C959D00D1D99A /* BrowserViewController+ToolBarActionMenuDelegate.swift */,
 				EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */,
 				EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */,
@@ -19303,6 +19306,7 @@
 				C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */,
 				5FC276552894AEFF00AF2721 /* LibraryPanelHelper.swift in Sources */,
 				602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */,
+				C795535A2FEEB2E300750D19 /* BrowserViewController+PHPickerViewControllerDelegate.swift in Sources */,
 				E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */,
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				5A47D0002FCB000100AD5DB0 /* AdsClientDocumentsDirectoryMigration.swift in Sources */,
