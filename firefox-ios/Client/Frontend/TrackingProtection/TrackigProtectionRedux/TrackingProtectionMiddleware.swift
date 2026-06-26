@@ -10,7 +10,13 @@ import Common
 final class TrackingProtectionMiddleware {
     private let telemetryWrapper = TrackingProtectionTelemetry()
 
-    lazy var trackingProtectionProvider: Middleware<AppState> = { state, action in
+    lazy var trackingProtectionProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
         case TrackingProtectionActionType.toggleTrackingProtectionStatus:

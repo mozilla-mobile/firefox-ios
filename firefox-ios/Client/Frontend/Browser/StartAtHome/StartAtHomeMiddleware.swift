@@ -23,7 +23,13 @@ final class StartAtHomeMiddleware {
         self.dateProvider = dateProvider
     }
 
-    lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
+    lazy var startAtHomeProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         switch action.actionType {
         case StartAtHomeActionType.didBrowserBecomeActive:
             let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)

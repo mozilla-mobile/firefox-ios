@@ -30,7 +30,13 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         observeNotifications()
     }
 
-    lazy var homepageProvider: Middleware<AppState> = { state, action in
+    lazy var homepageProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         switch action.actionType {
         case HomepageActionType.viewDidAppear:
             self.homepageTelemetry.sendHomepageImpressionEvent()

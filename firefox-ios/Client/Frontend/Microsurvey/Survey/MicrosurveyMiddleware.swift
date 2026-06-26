@@ -14,7 +14,13 @@ final class MicrosurveyMiddleware {
         self.microsurveyTelemetry = microsurveyTelemetry
     }
 
-    lazy var microsurveyProvider: Middleware<AppState> = { state, action in
+    lazy var microsurveyProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
         guard let surveyId = (action as? MicrosurveyAction)?.surveyId else { return }
         switch action.actionType {
