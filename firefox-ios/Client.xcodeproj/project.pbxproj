@@ -2201,6 +2201,8 @@
 		ECA53D322FEC2E4200DA92E7 /* LinkActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA53D312FEC2E3E00DA92E7 /* LinkActionCell.swift */; };
 		ECA53D362FEC58A700DA92E7 /* FolderSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA53D352FEC58A300DA92E7 /* FolderSectionHeaderView.swift */; };
 		ECA53D382FEC5A8000DA92E7 /* FolderTreeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA53D372FEC5A7C00DA92E7 /* FolderTreeCell.swift */; };
+		ECD8D74A2FEE0B6F002092C6 /* EditFolderViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8D7492FEE0B6A002092C6 /* EditFolderViewControllerTests.swift */; };
+		ECD8D74C2FEE0C60002092C6 /* EditBookmarkViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8D74B2FEE0C58002092C6 /* EditBookmarkViewControllerTests.swift */; };
 		ECF83C3F2FEDF6CC0038E1BB /* FolderTreeCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF83C3E2FEDF6C70038E1BB /* FolderTreeCellTests.swift */; };
 		ECF83C412FEDF6EC0038E1BB /* FolderSectionHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF83C402FEDF6E60038E1BB /* FolderSectionHeaderViewTests.swift */; };
 		ECF83C432FEDF8980038E1BB /* LinkActionCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF83C422FEDF8930038E1BB /* LinkActionCellTests.swift */; };
@@ -11654,6 +11656,8 @@
 		ECA53D312FEC2E3E00DA92E7 /* LinkActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkActionCell.swift; sourceTree = "<group>"; };
 		ECA53D352FEC58A300DA92E7 /* FolderSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderView.swift; sourceTree = "<group>"; };
 		ECA53D372FEC5A7C00DA92E7 /* FolderTreeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCell.swift; sourceTree = "<group>"; };
+		ECD8D7492FEE0B6A002092C6 /* EditFolderViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewControllerTests.swift; sourceTree = "<group>"; };
+		ECD8D74B2FEE0C58002092C6 /* EditBookmarkViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewControllerTests.swift; sourceTree = "<group>"; };
 		ECDA4593850BA4E08FDAC5AF /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		ECF83C3E2FEDF6C70038E1BB /* FolderTreeCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCellTests.swift; sourceTree = "<group>"; };
 		ECF83C402FEDF6E60038E1BB /* FolderSectionHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderViewTests.swift; sourceTree = "<group>"; };
@@ -12305,6 +12309,8 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				ECD8D74B2FEE0C58002092C6 /* EditBookmarkViewControllerTests.swift */,
+				ECD8D7492FEE0B6A002092C6 /* EditFolderViewControllerTests.swift */,
 				ECF83C422FEDF8930038E1BB /* LinkActionCellTests.swift */,
 				ECF83C402FEDF6E60038E1BB /* FolderSectionHeaderViewTests.swift */,
 				ECF83C3E2FEDF6C70038E1BB /* FolderTreeCellTests.swift */,
@@ -20588,6 +20594,7 @@
 				1D4D79462BF2F4E7007C6796 /* SimpleTab.swift in Sources */,
 				8A3F08B02FB40BDC001F5DE9 /* MockTabRestorerDelegate.swift in Sources */,
 				21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */,
+				ECD8D74A2FEE0B6F002092C6 /* EditFolderViewControllerTests.swift in Sources */,
 				C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */,
 				81DAB2F92C8901AC00F4BE98 /* MainMenuStateTests.swift in Sources */,
 				8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */,
@@ -20780,6 +20787,7 @@
 				CA24B53924ABFE250093848C /* PasswordManagerSelectionHelperTests.swift in Sources */,
 				4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */,
 				8A827E322C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift in Sources */,
+				ECD8D74C2FEE0C60002092C6 /* EditBookmarkViewControllerTests.swift in Sources */,
 				39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */,
 				BCBE09BF2E3BAE2A004B6039 /* SummarizeSettingsViewControllerTests.swift in Sources */,
 				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,
