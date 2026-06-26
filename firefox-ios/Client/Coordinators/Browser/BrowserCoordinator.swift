@@ -1128,6 +1128,18 @@ final class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
     }
 
+    func showGoogleLensPhotoPicker() {
+        guard !childCoordinators.contains(where: { $0 is PhotoPickerCoordinator }) else { return }
+        let coordinator = PhotoPickerCoordinator(
+            parentCoordinatorDelegate: self,
+            router: router
+        ) { _ in
+            // TODO FXIOS-16064: Send the picked image to the Lens API and navigate to the result
+        }
+        add(child: coordinator)
+        coordinator.start()
+    }
+
     func showPrivacyNoticeLink(url: URL) {
         let linkVC = TermsOfUseLinkViewController(
             url: url,

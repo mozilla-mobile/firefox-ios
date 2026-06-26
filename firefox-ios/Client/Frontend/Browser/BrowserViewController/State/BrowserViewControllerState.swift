@@ -40,7 +40,7 @@ struct BrowserViewControllerState: ScreenState {
         case readerModeLongPressAction
         case passwordGenerator
         case translationLanguagePicker(TranslationLanguagePickerData)
-        case photoPicker
+        case googleLensPhotoPicker
     }
 
     let windowUUID: WindowUUID
@@ -394,7 +394,7 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowSummarizerAction(state: state, action: action)
         case GeneralBrowserActionType.showTranslationLanguagePicker:
             return handleShowTranslationLanguagePickerAction(state: state, action: action)
-        case GeneralBrowserActionType.showPhotoPicker:
+        case GeneralBrowserActionType.showGoogleLensPhotoPicker:
             return handleShowGoogleLensPhotoPickerAction(state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
@@ -756,7 +756,7 @@ struct BrowserViewControllerState: ScreenState {
             windowUUID: state.windowUUID,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
-            displayView: .photoPicker,
+            displayView: .googleLensPhotoPicker,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
     }

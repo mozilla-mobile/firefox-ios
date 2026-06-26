@@ -316,7 +316,7 @@ final class ToolbarMiddleware {
 
         case .googleLensPhotoLibrary:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showPhotoPicker)
+                                              actionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
             store.dispatch(action)
 
         case .search:

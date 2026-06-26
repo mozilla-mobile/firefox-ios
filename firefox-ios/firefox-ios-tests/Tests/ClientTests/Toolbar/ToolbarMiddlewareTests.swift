@@ -672,7 +672,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testDidTapButton_tapOnGoogleLensPhotoLibraryButton_dispatchesShowGoogleLensPhotoPicker() throws {
         try didTapButton(buttonType: .googleLensPhotoLibrary,
-                         expectedActionType: GeneralBrowserActionType.showPhotoPicker)
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
     }
 
     func testDidTapButton_tapOnSearchButton_dispatchesDidStartEditingUrl() throws {
