@@ -21,11 +21,6 @@ public class Viaduct {
 
     public func initialize(userAgent: String) {
         setGlobalDefaultUserAgent(userAgent: userAgent)
-        do {
-            try viaductInitBackendHyper()
-        } catch {
-            // The last line will throw if we try to initialize more than once.
-            // Just ignore the error in this case.
-        }
+        viaductInitBackendHyper()
     }
 }
