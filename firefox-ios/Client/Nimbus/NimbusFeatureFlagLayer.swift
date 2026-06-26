@@ -164,6 +164,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
 
+        case .swipeAddressBarToOpenTabTray:
+            return checkSwipeAddressBarToOpenTabTrayFeature()
+
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature()
 
@@ -471,5 +474,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHomepageTrackerBlockerModuleFeature() -> Bool {
         return nimbus.features.homepageTrackerBlockerModuleFeature.value().enabled
+    }
+
+    private func checkSwipeAddressBarToOpenTabTrayFeature() -> Bool {
+        return nimbus.features.swipeAddressBarToOpenTabTrayFeature.value().enabled
     }
 }

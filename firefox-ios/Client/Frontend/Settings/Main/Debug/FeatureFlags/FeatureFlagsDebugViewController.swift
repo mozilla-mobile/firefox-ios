@@ -264,6 +264,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .swipeAddressBarToOpenTabTray,
+                titleText: format(string: "Fancy animation when opening tab tray via swipe"),
+                statusText: format(string: "Toggle to have a fancier animation when swiping on the address bar to open the tab tray")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .tabScrollRefactorFeature,
                 titleText: format(string: "Tab scroll refactor"),
                 statusText: format(string: "Toggle to enable tab scroll refactor feature")

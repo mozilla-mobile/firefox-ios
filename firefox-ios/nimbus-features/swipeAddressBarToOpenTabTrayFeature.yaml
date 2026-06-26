@@ -1,0 +1,18 @@
+# The configuration for the swipeAddressBarToOpenTabTrayFeature feature
+features:
+  swipe-address-bar-to-open-tab-tray-feature:
+    description: >
+      Decides whether or not the swipe-to-open-tab-tray gesture is fancy or not
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true
