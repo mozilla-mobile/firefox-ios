@@ -1164,20 +1164,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Notifiable
 
-    nonisolated private func shouldHandleNotificationSynchronously(_ notification: Notification.Name) -> Bool {
-        // Whether to respond to the notification synchronously. Main thread notifications will (by default)
-        // be handled in a Task which allows the concurrency engine to schedule the work asynchronously.
-        // If a notification returns `true` here, then it will instead be wrapped in an `ensureMainThread`
-        // which (if the notification arrives on the MT) will perform the notification handler immediately.
-        switch notification {
-        case UIApplication.willResignActiveNotification:
-            // Handle immediately since this is where we display the PBM privacy screen
-            return true
-        default:
-            return false
-        }
-    }
-
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
         let windowScene = notification.object as? UIWindowScene
@@ -1186,27 +1172,13 @@ class BrowserViewController: UIViewController,
         let searchBarPosition = dictionary?[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
         let windowUUID = notification.windowUUID
         let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel
-
-        if shouldHandleNotificationSynchronously(notificationName) {
-            ensureMainThread {
-                self.performNotificationHandler(notificationName,
-                                                windowScene: windowScene,
-                                                announcementText: announcementText,
-                                                zoomSetting: zoomSetting,
-                                                windowUUID: windowUUID,
-                                                searchBarPosition: searchBarPosition)
-            }
-        } else {
-            // TODO: [FXIOS-16160] We should migrate all of our handlers to ensureMainThread. 
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                performNotificationHandler(notificationName,
-                                           windowScene: windowScene,
-                                           announcementText: announcementText,
-                                           zoomSetting: zoomSetting,
-                                           windowUUID: windowUUID,
-                                           searchBarPosition: searchBarPosition)
-            }
+        ensureMainThread {
+            self.performNotificationHandler(notificationName,
+                                            windowScene: windowScene,
+                                            announcementText: announcementText,
+                                            zoomSetting: zoomSetting,
+                                            windowUUID: windowUUID,
+                                            searchBarPosition: searchBarPosition)
         }
     }
 
