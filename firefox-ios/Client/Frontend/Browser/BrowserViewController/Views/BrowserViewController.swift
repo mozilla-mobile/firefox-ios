@@ -2968,7 +2968,6 @@ class BrowserViewController: UIViewController,
             guard let button = state.buttonTapped else { return }
             presentRefreshLongPressAction(from: button)
         case .tabTray:
-            // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
             store.dispatch(
