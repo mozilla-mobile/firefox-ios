@@ -79,7 +79,7 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
 
         // We queue and process actions to ensure each single action completely passes through reducers and middlewares
         // before the next action fires.
-        actionQueue.append((.left(action), action.windowUUID))
+        actionQueue.append((.legacy(action), action.windowUUID))
         processQueuedActions()
     }
 
@@ -90,7 +90,7 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
 
         // We queue and process actions to ensure each single action completely passes through reducers and middlewares
         // before the next action fires.
-        actionQueue.append((.right(action), windowUUID))
+        actionQueue.append((.modern(action), windowUUID))
         processQueuedActions()
     }
 
@@ -112,9 +112,9 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         // Note that only reducers for active screens are processed.
         let newState: State
         switch action {
-        case .left(let legacyAction):
+        case .legacy(let legacyAction):
             newState = reducer(state, legacyAction)
-        case .right:
+        case .modern:
             // TODO: FXIOS-16140 Part 2 - Reducer migration
             // newState = reducer.modernReducer(state, modernAction, windowUUID)
             return
@@ -125,9 +125,9 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         // differs slightly from reducers, which are called once for each screen.)
         middlewares.forEach { middleware in
             switch action {
-            case .left(let legacyAction):
+            case .legacy(let legacyAction):
                 middleware(newState, legacyAction)
-            case .right:
+            case .modern:
                 // TODO: FXIOS-16140 Part 3 - Middleware migration
                 //  middleware.modernMiddleware(newState, modernAction, windowUUID)
                 break

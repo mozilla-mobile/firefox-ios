@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// A code migration helper; can be used to wrap different values in an array, method arguments, etc. while migrating from
-/// one type to another.
+/// some legacy type to a new type.
 public enum Either<Left, Right> {
-    case left(Left)
-    case right(Right)
+    case legacy(Left)
+    case modern(Right)
 }
