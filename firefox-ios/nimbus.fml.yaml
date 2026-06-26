@@ -13,7 +13,6 @@ channels:
   - beta
   - release
 include:
-
   - nimbus-features/adBlockerFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/addressBarGestureToOpenTabTrayFeature.yaml
