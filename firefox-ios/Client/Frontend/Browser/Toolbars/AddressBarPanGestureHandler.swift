@@ -240,6 +240,12 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     @objc
     @MainActor
     private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        let provider: FeatureFlagProviding = AppContainer.shared.resolve()
+
+        // This stops swipe gestures if the feature flag is turned off and the app is NOT closed
+        if provider.isEnabled(.addressBarGestureToOpenTabTraySwipe) == false {
+            return
+        }
         let direction = gesture.direction
 
         if direction == .up && toolbarState?.toolbarPosition == .top {
