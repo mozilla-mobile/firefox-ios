@@ -35,10 +35,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
-            
+
         case .addressBarGestureToOpenTabTrayInteractive:
             return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
-            
+
         case .addressBarGestureToOpenTabTraySwipe:
             return checkAddressBarGestureToOpenTabTraySwipeFeature()
 

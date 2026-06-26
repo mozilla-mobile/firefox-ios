@@ -111,7 +111,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
 
         // only create the swipeGestureRecognizer if the feature flag is enabled
         if provider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
-
             let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
             swipeUpGesture.direction = .up
             addressToolbarContainer.addGestureRecognizer(swipeUpGesture)
