@@ -35,6 +35,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
+            
+        case .addressBarGestureToOpenTabTrayInteractive:
+            return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
+            
+        case .addressBarGestureToOpenTabTraySwipe:
+            return checkAddressBarGestureToOpenTabTraySwipeFeature()
 
         case .adsClient:
             return checkAdsClientFeature()
@@ -163,9 +169,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
-
-        case .swipeAddressBarToOpenTabTray:
-            return checkSwipeAddressBarToOpenTabTrayFeature()
 
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature()
@@ -476,7 +479,11 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.homepageTrackerBlockerModuleFeature.value().enabled
     }
 
-    private func checkSwipeAddressBarToOpenTabTrayFeature() -> Bool {
-        return nimbus.features.swipeAddressBarToOpenTabTrayFeature.value().enabled
+    private func checkAddressBarGestureToOpenTabTrayInteractiveFeature() -> Bool {
+        return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledInteractive
+    }
+
+    private func checkAddressBarGestureToOpenTabTraySwipeFeature() -> Bool {
+        return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledSwipe
     }
 }
