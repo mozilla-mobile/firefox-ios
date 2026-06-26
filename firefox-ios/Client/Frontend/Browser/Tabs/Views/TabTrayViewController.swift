@@ -941,7 +941,10 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func cancelCloseAll() {
-        store.dispatch(TabPanelViewModernAction.cancelCloseAllTabs(tabTrayState.selectedPanel), forWindowUUID: windowUUID)
+        store.dispatch(
+            TabPanelViewModernAction.cancelCloseAllTabs(panelType: tabTrayState.selectedPanel),
+            forWindowUUID: windowUUID
+        )
     }
 
     private func confirmCloseAll() {
@@ -954,13 +957,16 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func deleteTabsOlderThan(period: TabsDeletionPeriod) {
-        store.dispatch(TabPanelViewModernAction.deleteTabsOlderThan(period), forWindowUUID: windowUUID)
+        store.dispatch(
+            TabPanelViewModernAction.deleteTabsOlderThan(timeframe: period),
+            forWindowUUID: windowUUID
+        )
     }
 
     @objc
     private func newTabButtonTapped() {
         store.dispatch(
-            TabPanelViewModernAction.addNewTab(tabTrayState.selectedPanel),
+            TabPanelViewModernAction.addNewTab(panelType: tabTrayState.selectedPanel),
             forWindowUUID: self.windowUUID
         )
     }

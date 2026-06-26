@@ -166,7 +166,7 @@ final class TabDisplayView: UIView,
 
         if state.didTapAddTab {
             store.dispatch(
-                TabPanelViewModernAction.addNewTab(panelType),
+                TabPanelViewModernAction.addNewTab(panelType: panelType),
                 forWindowUUID: self.windowUUID
             )
         }
