@@ -128,13 +128,11 @@
 		0BCC26962CFF106A0072CD5A /* Localizations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; };
 		0BCC26982CFF10830072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26972CFF10830072CD5A /* Shared */; };
 		0BCC269E2CFF12ED0072CD5A /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC269D2CFF12ED0072CD5A /* GCDWebServers */; };
-		0BCC26A32CFF13E50072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26A22CFF13E50072CD5A /* Shared */; };
-		0BCC26A52CFF150C0072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26A42CFF150C0072CD5A /* Shared */; };
 		0BCC26A72CFF15A20072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26A62CFF15A20072CD5A /* Shared */; };
 		0BCC26A92CFF15D00072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26A82CFF15D00072CD5A /* Shared */; };
-		0BCC26AB2CFF15F90072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AA2CFF15F90072CD5A /* Shared */; };
 		0BCC26AD2CFF16220072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AC2CFF16220072CD5A /* Shared */; };
 		0BCC26AF2CFF16FF0072CD5A /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AE2CFF16FF0072CD5A /* GCDWebServers */; };
+		A5163EFB4448DCBC295F4B00 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 3802E29A8D8E43B4A359EBC5 /* GCDWebServers */; };
 		0BCC26B12CFF17250072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26B02CFF17250072CD5A /* Shared */; };
 		0BCC26B32CFF18C40072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26B22CFF18C40072CD5A /* Shared */; };
 		0BD049CE2DFC4AAE00614E61 /* PopupHTMLSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD049CD2DFC4A9C00614E61 /* PopupHTMLSetting.swift */; };
@@ -1118,7 +1116,6 @@
 		8A89046D2D52874600A5BB29 /* SyncedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A89046C2D52874200A5BB29 /* SyncedTabCell.swift */; };
 		8A89046F2D52977E00A5BB29 /* RemoteTabsManagerAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A89046E2D52976D00A5BB29 /* RemoteTabsManagerAction.swift */; };
 		8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE112B2107E400D774EB /* GCDWebServers */; };
-		8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE132B21110000D774EB /* GCDWebServers */; };
 		8A8D12142DD671DC00E0B8BB /* TabTrayPanelSwipePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D12132DD671DC00E0B8BB /* TabTrayPanelSwipePalette.swift */; };
 		8A8D12162DD671FE00E0B8BB /* TabTrayPanelSwipeTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D12152DD671FE00E0B8BB /* TabTrayPanelSwipeTheme.swift */; };
 		8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */; };
@@ -2152,7 +2149,6 @@
 		E5BDF3552EBE3C8300FD3E6D /* UXConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BDF34D2EBE3C8300FD3E6D /* UXConstants.swift */; };
 		E5BDF3FA2EBE3CC200FD3E6D /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = E5BDF3F92EBE3CC200FD3E6D /* Common */; };
 		E5BDF3FC2EBE3CF200FD3E6D /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = E5BDF3FB2EBE3CF200FD3E6D /* Fuzi */; };
-		E5C2BA922EA9054E001E3DEF /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AC2CFF16220072CD5A /* Shared */; };
 		E5C2C1572EA9138D001E3DEF /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = E5C2C1562EA9138D001E3DEF /* Common */; };
 		E60D03181D511398002FE3F6 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
 		E60D03271D511554002FE3F6 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
@@ -2276,8 +2272,6 @@
 		EDF2C0562D693A7300723609 /* AppIconSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF2C0552D693A7300723609 /* AppIconSetting.swift */; };
 		EDF2C0582D693B7D00723609 /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF2C0572D693B7C00723609 /* AppIconSelectionView.swift */; };
 		EDF2C05C2D6CDB6F00723609 /* AppIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDF2C05B2D6CDB6F00723609 /* AppIcons.xcassets */; };
-		EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = EDF5679F2C8B51DC00FDB09D /* SiteImageView */; };
-		EDF567A22C8B51E100FDB09D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EDF567A12C8B51E100FDB09D /* Kingfisher */; };
 		EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = EDFEE3F32DE670B8005ADE03 /* gleanProbes.xcfilelist */; };
 		EEB965112FBCCDFC00D6C232 /* PageRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9650E2FBCCDFC00D6C232 /* PageRoute.swift */; };
 		EEB965122FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9650F2FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift */; };
@@ -12037,7 +12031,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BCC26A32CFF13E50072CD5A /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12062,7 +12055,6 @@
 			files = (
 				45D5EDCA292D65D600311934 /* RustMozillaAppServices.framework in Frameworks */,
 				28ECD9BF1BA1F19900D829DA /* libz.tbd in Frameworks */,
-				0BCC26A52CFF150C0072CD5A /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12158,7 +12150,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				43F93C2427A8681C009833D9 /* RustMozillaAppServices.framework in Frameworks */,
-				0BCC26AB2CFF15F90072CD5A /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12261,12 +12252,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C26B96D72F29188100D4B140 /* TestKit in Frameworks */,
-				EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */,
+				A5163EFB4448DCBC295F4B00 /* GCDWebServers in Frameworks */,
 				43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */,
-				E5C2BA922EA9054E001E3DEF /* Shared in Frameworks */,
-				8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
-				EDF567A22C8B51E100FDB09D /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -17597,9 +17585,6 @@
 				2827316B1ABC9BE700AA1954 /* PBXTargetDependency */,
 			);
 			name = SyncTests;
-			packageProductDependencies = (
-				0BCC26A42CFF150C0072CD5A /* Shared */,
-			);
 			productName = SyncTests;
 			productReference = 282731681ABC9BE700AA1954 /* SyncTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -17707,9 +17692,6 @@
 				2FCAE2291ABB51F800877008 /* PBXTargetDependency */,
 			);
 			name = StorageTests;
-			packageProductDependencies = (
-				0BCC26AA2CFF15F90072CD5A /* Shared */,
-			);
 			productName = StorageTests;
 			productReference = 2FCAE2241ABB51F800877008 /* StorageTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -17920,9 +17902,6 @@
 				E6F9653A1B2F1D330034B023 /* PBXTargetDependency */,
 			);
 			name = SharedTests;
-			packageProductDependencies = (
-				0BCC26A22CFF13E50072CD5A /* Shared */,
-			);
 			productName = SharedTests;
 			productReference = E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -18035,10 +18014,7 @@
 			);
 			name = ClientTests;
 			packageProductDependencies = (
-				8A8BAE132B21110000D774EB /* GCDWebServers */,
-				EDF5679F2C8B51DC00FDB09D /* SiteImageView */,
-				EDF567A12C8B51E100FDB09D /* Kingfisher */,
-				0BCC26AC2CFF16220072CD5A /* Shared */,
+				3802E29A8D8E43B4A359EBC5 /* GCDWebServers */,
 				C26B96D62F29188100D4B140 /* TestKit */,
 			);
 			productName = ClientTests;
@@ -33227,23 +33203,16 @@
 			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
 			productName = GCDWebServers;
 		};
-		0BCC26A22CFF13E50072CD5A /* Shared */ = {
+		3802E29A8D8E43B4A359EBC5 /* GCDWebServers */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
-		};
-		0BCC26A42CFF150C0072CD5A /* Shared */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
 		};
 		0BCC26A62CFF15A20072CD5A /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
 		};
 		0BCC26A82CFF15D00072CD5A /* Shared */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
-		};
-		0BCC26AA2CFF15F90072CD5A /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
 		};
@@ -33433,11 +33402,6 @@
 			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
 			productName = GCDWebServers;
 		};
-		8A8BAE132B21110000D774EB /* GCDWebServers */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
-			productName = GCDWebServers;
-		};
 		8AB30EC72B6C038600BD9A9B /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */;
@@ -33532,15 +33496,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EDD592482FC1090C0015EF9E /* XCRemoteSwiftPackageReference "ModifiedCopyMacro" */;
 			productName = ModifiedCopy;
-		};
-		EDF5679F2C8B51DC00FDB09D /* SiteImageView */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SiteImageView;
-		};
-		EDF567A12C8B51E100FDB09D /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5A984D322C8A31A0007938C9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
