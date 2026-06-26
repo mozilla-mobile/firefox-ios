@@ -121,6 +121,20 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
+        let expectedMenuElements = [
+            ToolbarMenuElementConfiguration(
+                actionType: .googleLensTakePhoto,
+                title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
+                imageName: StandardImageIdentifiers.Large.cameraLarge,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
+            ),
+            ToolbarMenuElementConfiguration(
+                actionType: .googleLensPhotoLibrary,
+                title: .AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle,
+                imageName: StandardImageIdentifiers.Large.image,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensPhotoLibraryAction
+            )
+        ]
 
         let newState = reducer(
             initialState,
@@ -134,6 +148,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
         XCTAssertEqual(newState.editingAccessoryAction?.iconName, StandardImageIdentifiers.Medium.googleLens)
         XCTAssertEqual(newState.editingAccessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
+        XCTAssertEqual(newState.editingAccessoryAction?.menuElements, expectedMenuElements)
     }
 
     func test_numberOfTabsChangedAction_withoutNavToolbar_returnsExpectedState() {

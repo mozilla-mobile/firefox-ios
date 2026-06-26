@@ -121,6 +121,43 @@ final class ToolbarButtonTests: XCTestCase {
         XCTAssertEqual(button.imageView?.subviews.count, 0)
     }
 
+    func testConfigure_withMenuElements_configuresMenuAsPrimaryAction() {
+        let menuElements = [
+            ToolbarMenuElement(
+                title: "First",
+                imageName: nil,
+                a11yIdentifier: "firstAction",
+                onSelected: { _ in }
+            ),
+            ToolbarMenuElement(
+                title: "Second",
+                imageName: nil,
+                a11yIdentifier: "secondAction"
+            )
+        ]
+        let element = createToolbarElement(a11yLabel: "Test", menuElements: menuElements)
+
+        button.configure(element: element)
+
+        XCTAssertTrue(button.showsMenuAsPrimaryAction)
+        XCTAssertEqual(button.menu?.children.count, 2)
+        let firstAction = button.menu?.children.first as? UIAction
+        XCTAssertEqual(firstAction?.title, "First")
+        XCTAssertEqual(firstAction?.accessibilityIdentifier, "firstAction")
+    }
+
+    func testConfigure_withoutMenuElements_clearsExistingMenu() {
+        let menuElement = ToolbarMenuElement(title: "First", a11yIdentifier: "firstAction")
+        let elementWithMenu = createToolbarElement(a11yLabel: "Test", menuElements: [menuElement])
+        let elementWithoutMenu = createToolbarElement(iconName: "icon2", a11yLabel: "Test")
+
+        button.configure(element: elementWithMenu)
+        button.configure(element: elementWithoutMenu)
+
+        XCTAssertFalse(button.showsMenuAsPrimaryAction)
+        XCTAssertNil(button.menu)
+    }
+
     // MARK: - Helper Methods
     private func createToolbarElement(
         iconName: String? = nil,
@@ -138,7 +175,8 @@ final class ToolbarButtonTests: XCTestCase {
         a11yId: String = "testId",
         hasLongPressAction: Bool = false,
         onSelected: ((UIButton) -> Void)? = nil,
-        onLongPress: ((UIButton) -> Void)? = nil
+        onLongPress: ((UIButton) -> Void)? = nil,
+        menuElements: [ToolbarMenuElement] = []
     ) -> ToolbarElement {
         return ToolbarElement(
             iconName: iconName,
@@ -156,7 +194,8 @@ final class ToolbarButtonTests: XCTestCase {
             a11yId: a11yId,
             hasLongPressAction: hasLongPressAction,
             onSelected: onSelected,
-            onLongPress: onLongPress
+            onLongPress: onLongPress,
+            menuElements: menuElements
         )
     }
 }

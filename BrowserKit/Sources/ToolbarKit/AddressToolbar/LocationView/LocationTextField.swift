@@ -237,11 +237,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     private func configureEditingAccessoryButton() {
-        guard let editingAccessoryAction, editingAccessoryAction.iconName != nil else {
-            editingAccessoryRightView.accessibilityLabel = nil
-            editingAccessoryRightView.accessibilityIdentifier = nil
-            return
-        }
+        guard let editingAccessoryAction, editingAccessoryAction.iconName != nil else { return }
 
         editingAccessoryRightView.configure(element: editingAccessoryAction)
         var configuration = editingAccessoryRightView.configuration

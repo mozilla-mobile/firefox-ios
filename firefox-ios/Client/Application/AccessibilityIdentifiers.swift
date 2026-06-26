@@ -60,6 +60,8 @@ struct AccessibilityIdentifiers {
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
             static let googleLensButton = "AddressToolbar.googleLensButton"
+            static let googleLensTakePhotoAction = "AddressToolbar.googleLensTakePhotoAction"
+            static let googleLensPhotoLibraryAction = "AddressToolbar.googleLensPhotoLibraryAction"
             static let leadingSkeleton = "AddressToolbar.leadingSkeleton"
             static let trailingSkeleton = "AddressToolbar.trailingSkeleton"
         }
