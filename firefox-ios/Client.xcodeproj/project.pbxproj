@@ -2201,6 +2201,9 @@
 		ECA53D322FEC2E4200DA92E7 /* LinkActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA53D312FEC2E3E00DA92E7 /* LinkActionCell.swift */; };
 		ECA53D362FEC58A700DA92E7 /* FolderSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA53D352FEC58A300DA92E7 /* FolderSectionHeaderView.swift */; };
 		ECA53D382FEC5A8000DA92E7 /* FolderTreeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA53D372FEC5A7C00DA92E7 /* FolderTreeCell.swift */; };
+		ECF83C3F2FEDF6CC0038E1BB /* FolderTreeCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF83C3E2FEDF6C70038E1BB /* FolderTreeCellTests.swift */; };
+		ECF83C412FEDF6EC0038E1BB /* FolderSectionHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF83C402FEDF6E60038E1BB /* FolderSectionHeaderViewTests.swift */; };
+		ECF83C432FEDF8980038E1BB /* LinkActionCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF83C422FEDF8930038E1BB /* LinkActionCellTests.swift */; };
 		ED07C0EB2CCADCD5006C0627 /* SearchEngineSelectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */; };
 		ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */; };
 		ED07C0EF2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */; };
@@ -11652,6 +11655,9 @@
 		ECA53D352FEC58A300DA92E7 /* FolderSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderView.swift; sourceTree = "<group>"; };
 		ECA53D372FEC5A7C00DA92E7 /* FolderTreeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCell.swift; sourceTree = "<group>"; };
 		ECDA4593850BA4E08FDAC5AF /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		ECF83C3E2FEDF6C70038E1BB /* FolderTreeCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCellTests.swift; sourceTree = "<group>"; };
+		ECF83C402FEDF6E60038E1BB /* FolderSectionHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderViewTests.swift; sourceTree = "<group>"; };
+		ECF83C422FEDF8930038E1BB /* LinkActionCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkActionCellTests.swift; sourceTree = "<group>"; };
 		ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionState.swift; sourceTree = "<group>"; };
 		ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionAction.swift; sourceTree = "<group>"; };
 		ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionMiddleware.swift; sourceTree = "<group>"; };
@@ -12299,6 +12305,9 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				ECF83C422FEDF8930038E1BB /* LinkActionCellTests.swift */,
+				ECF83C402FEDF6E60038E1BB /* FolderSectionHeaderViewTests.swift */,
+				ECF83C3E2FEDF6C70038E1BB /* FolderTreeCellTests.swift */,
 				8A9D31612D13545100171502 /* EditFolderViewModelTests.swift */,
 				8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */,
 				0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */,
@@ -19532,7 +19541,6 @@
 				C209316E2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
 				ECA53D362FEC58A700DA92E7 /* FolderSectionHeaderView.swift in Sources */,
-				C8B41E0A29F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift in Sources */,
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				0BDDB3442CA6E43100D501DF /* FolderHierarchyFetcher.swift in Sources */,
 				8A8904132D511E6A00A5BB29 /* TabManagerAction.swift in Sources */,
@@ -20404,6 +20412,7 @@
 				F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */,
 				F00CA4022F00000000000003 /* WorldCupLiveResponseTests.swift in Sources */,
 				F00CA4022F0000000000000D /* WorldCupTeamsResponseTests.swift in Sources */,
+				ECF83C3F2FEDF6CC0038E1BB /* FolderTreeCellTests.swift in Sources */,
 				F00CA4022F0000000000000F /* WorldCupLoadErrorTests.swift in Sources */,
 				F00CA4022F00000000000013 /* WorldCupPollingFetchStrategyTests.swift in Sources */,
 				F00CA4032F00000000000007 /* WorldCupMatchesTests.swift in Sources */,
@@ -20419,6 +20428,7 @@
 				E571EE7E28756A130051D9AA /* StoryProviderTests.swift in Sources */,
 				21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */,
 				1DDE3DB52AC360EC0039363B /* TabCellTests.swift in Sources */,
+				ECF83C432FEDF8980038E1BB /* LinkActionCellTests.swift in Sources */,
 				8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */,
 				961D6B832995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift in Sources */,
 				21ED80B32AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift in Sources */,
@@ -20542,6 +20552,7 @@
 				8A9E041F2D4D0B7A0022ED90 /* BookmarksSectionStateTests.swift in Sources */,
 				1D558A582BED7ECB001EF527 /* MockWindowManager.swift in Sources */,
 				C8DC90D22A067C6D0008832B /* MarkupAttributionUtilityTests.swift in Sources */,
+				ECF83C412FEDF6EC0038E1BB /* FolderSectionHeaderViewTests.swift in Sources */,
 				BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */,
 				8A6E63CB2D4A6F230040D355 /* JumpBackInSectionStateTests.swift in Sources */,
 				C2DFB1472ECE686E004E20AB /* TranslationsServiceTests.swift in Sources */,

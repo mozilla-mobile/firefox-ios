@@ -17,17 +17,17 @@ final class FolderSectionHeaderView: UITableViewHeaderFooterView {
         static let rotationAnimationDuration: TimeInterval = 0.2
     }
 
-    private lazy var captionLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.headline.scaledFont()
+    lazy var captionLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.numberOfLines = 1
     }
 
-    private lazy var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Bold.title3.scaledFont()
+    lazy var titleLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Bold.callout.scaledFont()
         label.numberOfLines = 1
     }
 
-    private lazy var chevronImageView: UIImageView = .build { imageView in
+    lazy var chevronImageView: UIImageView = .build { imageView in
         imageView.image = UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysTemplate)
         imageView.contentMode = .scaleAspectFit
     }
@@ -139,7 +139,7 @@ final class FolderSectionHeaderView: UITableViewHeaderFooterView {
     }
 
     @objc
-    private func handleTap() {
+    func handleTap() {
         onTap?()
     }
 }

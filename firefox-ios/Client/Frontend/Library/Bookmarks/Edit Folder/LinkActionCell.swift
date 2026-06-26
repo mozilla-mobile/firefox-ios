@@ -11,7 +11,7 @@ final class LinkActionCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let verticalPadding: CGFloat = 11.0
     }
 
-    private lazy var titleLabel: UILabel = .build { label in
+    lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 1
         label.textAlignment = .center
