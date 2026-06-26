@@ -1711,7 +1711,7 @@ public func sendOhttpRequest(request: Request, channel: String)async throws  -> 
             errorHandler: FfiConverterTypeViaductError_lift
         )
 }
-public func initBackend(backend: Backend)throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
+public func initBackend(backend: Backend)  {try! rustCall() {
     uniffi_viaduct_fn_func_init_backend(
         FfiConverterTypeBackend_lower(backend),$0
     )
@@ -1795,7 +1795,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_viaduct_checksum_func_send_ohttp_request() != 6311) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_init_backend() != 54406) {
+    if (uniffi_viaduct_checksum_func_init_backend() != 49860) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_viaduct_checksum_func_clear_ohttp_channels() != 2859) {
