@@ -2354,6 +2354,12 @@
 		FA6B2AC21D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		FA6B2AC41D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9293D31D6580E100AC8D33 /* QRCodeViewController.swift */; };
+		FB16062100000000000000E2 /* GoogleLensImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000E1 /* GoogleLensImageProcessor.swift */; };
+		FB16062100000000000000E4 /* GoogleLensRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000E3 /* GoogleLensRequestBuilder.swift */; };
+		FB16062100000000000000E6 /* GoogleLensService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000E5 /* GoogleLensService.swift */; };
+		FB16062100000000000000D2 /* GoogleLensImageProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */; };
+		FB16062100000000000000D4 /* GoogleLensRequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */; };
+		FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000D5 /* GoogleLensServiceTests.swift */; };
 		FF0001AA2F000007000AAAAA /* WorldCupSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0001AA2F000004000AAAAA /* WorldCupSectionState.swift */; };
 		FF0001AB2F000007000AAAAA /* WorldCupMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0001AB2F000004000AAAAA /* WorldCupMiddleware.swift */; };
 		FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0002AA2F000001000BBBBB /* ClearablesTests.swift */; };
@@ -11903,6 +11909,12 @@
 		FAE64251BDC58A94D5B49138 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		FB07463C8357A3CFE68CC8AA /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		FB08479DBB32F259EDD0F069 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FB16062100000000000000E1 /* GoogleLensImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensImageProcessor.swift; sourceTree = "<group>"; };
+		FB16062100000000000000E3 /* GoogleLensRequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensRequestBuilder.swift; sourceTree = "<group>"; };
+		FB16062100000000000000E5 /* GoogleLensService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensService.swift; sourceTree = "<group>"; };
+		FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensImageProcessorTests.swift; sourceTree = "<group>"; };
+		FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensRequestBuilderTests.swift; sourceTree = "<group>"; };
+		FB16062100000000000000D5 /* GoogleLensServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensServiceTests.swift; sourceTree = "<group>"; };
 		FB254B83B0B5E0487089B861 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Today.strings; sourceTree = "<group>"; };
 		FB4D447195CC566A034F89EE /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = "ca.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		FB634DAD901C5B1C29FF1E8C /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -14457,6 +14469,16 @@
 				FB16062100000000000000B1 /* PhotoPickerCoordinatorTests.swift */,
 			);
 			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		FB16062100000000000000E0 /* GoogleLens */ = {
+			isa = PBXGroup;
+			children = (
+				FB16062100000000000000E1 /* GoogleLensImageProcessor.swift */,
+				FB16062100000000000000E3 /* GoogleLensRequestBuilder.swift */,
+				FB16062100000000000000E5 /* GoogleLensService.swift */,
+			);
+			path = GoogleLens;
 			sourceTree = "<group>";
 		};
 		8A93F86E29D3A147004159D9 /* Router */ = {
@@ -17137,6 +17159,7 @@
 				8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */,
 				C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */,
 				8A93F86329D37314004159D9 /* Coordinators */,
+				FB16062100000000000000D0 /* GoogleLens */,
 				43B658D729CE249D00C9EF08 /* CreditCard */,
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */,
@@ -17309,6 +17332,7 @@
 			children = (
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				AA5E81452EB12BAB00919E60 /* Translations */,
+				FB16062100000000000000E0 /* GoogleLens */,
 				8A1A93572B757C7B0069C190 /* LottieFiles */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
@@ -17408,6 +17432,16 @@
 				E41A7D4A1A1BE04500245963 /* InitialViewController.swift */,
 			);
 			path = ShareTo;
+			sourceTree = "<group>";
+		};
+		FB16062100000000000000D0 /* GoogleLens */ = {
+			isa = PBXGroup;
+			children = (
+				FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */,
+				FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */,
+				FB16062100000000000000D5 /* GoogleLensServiceTests.swift */,
+			);
+			path = GoogleLens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -19556,6 +19590,9 @@
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				C209316E2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift in Sources */,
 				FB16062100000000000000A2 /* PhotoPickerCoordinator.swift in Sources */,
+				FB16062100000000000000E2 /* GoogleLensImageProcessor.swift in Sources */,
+				FB16062100000000000000E4 /* GoogleLensRequestBuilder.swift in Sources */,
+				FB16062100000000000000E6 /* GoogleLensService.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				0BDDB3442CA6E43100D501DF /* FolderHierarchyFetcher.swift in Sources */,
@@ -20894,6 +20931,9 @@
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */,
 				FB16062100000000000000B2 /* PhotoPickerCoordinatorTests.swift in Sources */,
+				FB16062100000000000000D2 /* GoogleLensImageProcessorTests.swift in Sources */,
+				FB16062100000000000000D4 /* GoogleLensRequestBuilderTests.swift in Sources */,
+				FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */,
 				8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
 				21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */,
