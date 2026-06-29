@@ -153,7 +153,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
             enableSwipeDownGestureRecognizer()
         }
 
-        if featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) == false {
+        if !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
             disableSwipeUpGestureRecognizer()
             disableSwipeDownGestureRecognizer()
         }
