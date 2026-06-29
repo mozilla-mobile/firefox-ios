@@ -32,8 +32,9 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_init_setsUpNotifications() {
         _ = createSubject()
 
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 9)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           UIApplication.didEnterBackgroundNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
                                                            .ProfileDidFinishSyncing,

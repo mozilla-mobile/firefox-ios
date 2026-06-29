@@ -69,7 +69,8 @@ enum HomepageMiddlewareActionType: ActionType {
     case jumpBackInLocalTabsUpdated
     case jumpBackInRemoteTabsUpdated
     case bookmarksUpdated
-    case enteredForeground
+    case didBecomeActive
+    case didEnterBackground
     case configuredPrivacyNotice
     case configuredSearchBar
     case configuredSpacer
