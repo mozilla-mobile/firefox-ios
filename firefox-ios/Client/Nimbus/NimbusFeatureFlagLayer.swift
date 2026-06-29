@@ -36,6 +36,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
+        case .addressBarGestureToOpenTabTrayInteractive:
+            return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
+
+        case .addressBarGestureToOpenTabTraySwipe:
+            return checkAddressBarGestureToOpenTabTraySwipeFeature()
+
         case .adsClient:
             return checkAdsClientFeature()
 
@@ -471,5 +477,13 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHomepageTrackerBlockerModuleFeature() -> Bool {
         return nimbus.features.homepageTrackerBlockerModuleFeature.value().enabled
+    }
+
+    private func checkAddressBarGestureToOpenTabTrayInteractiveFeature() -> Bool {
+        return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledInteractive
+    }
+
+    private func checkAddressBarGestureToOpenTabTraySwipeFeature() -> Bool {
+        return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledSwipe
     }
 }
