@@ -28,6 +28,14 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         stack.spacing = UX.allSectionItemsSpacing
     }
 
+    private enum ItemLabelRole {
+        case title
+        case value
+        case underlinedValue
+    }
+
+    private var itemLabels: [(label: UILabel, role: ItemLabelRole)] = []
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -56,6 +64,7 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         super.prepareForReuse()
         allSectionItemsStackView.removeAllArrangedViews()
         sectionLabel.text = nil
+        itemLabels.removeAll()
     }
 
     required init?(coder: NSCoder) {
@@ -63,7 +72,6 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     func configure(theme: Theme, sectionTitle: String, items: CertificateItems, isIssuerName: Bool = false) {
-        applyTheme(theme: theme)
         sectionLabel.text = sectionTitle
         for (key, value) in items {
             let isUnderlined = isIssuerName && key == .Menu.EnhancedTrackingProtection.certificateCommonName
@@ -79,6 +87,7 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
             ))
             allSectionItemsStackView.addArrangedSubview(stackView)
         }
+        applyTheme(theme: theme)
     }
 
     // MARK: Accessibility
@@ -91,6 +100,16 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer5
         sectionLabel.textColor = theme.colors.textPrimary
+        for (label, role) in itemLabels {
+            switch role {
+            case .title:
+                label.textColor = theme.colors.textSecondary
+            case .value:
+                label.textColor = theme.colors.textPrimary
+            case .underlinedValue:
+                label.textColor = theme.colors.textAccent
+            }
+        }
     }
 
     private func getItemLabel(theme: Theme, with title: String, isTitle: Bool, isUnderlined: Bool) -> UILabel {
@@ -100,6 +119,7 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         itemLabel.numberOfLines = 0
         itemLabel.lineBreakMode = .byWordWrapping
         itemLabel.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.itemLabel
+        let role: ItemLabelRole
         if isUnderlined, !isTitle {
             let attributedString = NSAttributedString(
                 string: title,
@@ -109,10 +129,13 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
             )
             itemLabel.textColor = theme.colors.textAccent
             itemLabel.attributedText = attributedString
+            role = .underlinedValue
         } else {
             itemLabel.textColor = isTitle ? theme.colors.textSecondary : theme.colors.textPrimary
             itemLabel.text = title
+            role = isTitle ? .title : .value
         }
+        itemLabels.append((itemLabel, role))
         return itemLabel
     }
 

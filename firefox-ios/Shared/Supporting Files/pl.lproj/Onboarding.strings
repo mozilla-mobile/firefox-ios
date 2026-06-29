@@ -131,7 +131,7 @@
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Włącz powiadomienia";
 
 /* Description for the sync card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Przenieś zakładki, hasła i nie tylko na każde urządzenie w mgnieniu okna. Twoje dane osobiste są bezpieczne dzięki szyfrowaniu.";
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Przenieś zakładki, hasła i nie tylko na każde urządzenie w mgnieniu oka. Twoje dane osobiste są bezpieczne dzięki szyfrowaniu.";
 
 /* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "Zacznij synchronizować";

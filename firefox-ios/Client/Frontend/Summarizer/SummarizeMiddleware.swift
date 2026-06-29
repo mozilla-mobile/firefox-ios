@@ -179,7 +179,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         let summarizerModel: SummarizerModel =
             summarizerNimbusUtils.isAppleSummarizerEnabled() ? .appleSummarizer : .liteLLMSummarizer
 
-        return summarizerConfigProvider.getConfig(
+        return await summarizerConfigProvider.getConfig(
             summarizerModel: summarizerModel,
             contentType: contentType,
             locale: summarizerLocale

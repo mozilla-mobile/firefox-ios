@@ -8,7 +8,7 @@ import Redux
 import Shared
 
 @MainActor
-final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlaggable {
     /// Delegate protocol for handling address bar pan gesture events.
     /// Allows external objects to respond to swipe gesture state changes during tab switching.
     protocol Delegate: AnyObject {
@@ -151,6 +151,11 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             enablePanGestureOnHomepageIfNeeded()
             enableSwipeUpGestureRecognizer()
             enableSwipeDownGestureRecognizer()
+        }
+
+        if !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
+            disableSwipeUpGestureRecognizer()
+            disableSwipeDownGestureRecognizer()
         }
     }
 

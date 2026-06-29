@@ -92,31 +92,39 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - WorldCupActionType.didChangeHomepageSettings
-
-    func test_didChangeHomepageSettings_dispatchesDidUpdate() throws {
+    func test_didChangeHomepageSettings_whenFeatureAndSectionEnabled_startsFeed() throws {
         mockWorldCupStore.isFeatureEnabled = true
-        mockWorldCupStore.isHomepageSectionEnabled = false
-        let apiClient = MockWorldCupAPIClient(matchesResult: .success(makeResponse()))
-        let subject = createSubject(apiClient: apiClient)
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        let feed = MockWorldCupFeed()
+        let subject = createSubject(feed: feed)
         let action = WorldCupAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: WorldCupActionType.didChangeHomepageSettings
         )
 
-        let expectation = XCTestExpectation(description: "didUpdate dispatched")
-        mockStore.dispatchCalled = { expectation.fulfill() }
+        subject.worldCupProvider(appState, action)
+
+        XCTAssertEqual(feed.startCalled, 1)
+        XCTAssertEqual(feed.stopCalled, 0)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didChangeHomepageSettings_whenSectionDisabled_stopsFeed() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = false
+        mockWorldCupStore.isMilestone2 = true
+        let feed = MockWorldCupFeed()
+        let subject = createSubject(feed: feed)
+        let action = WorldCupAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WorldCupActionType.didChangeHomepageSettings
+        )
 
         subject.worldCupProvider(appState, action)
 
-        wait(for: [expectation])
-
-        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
-        let actionType = try XCTUnwrap(dispatched.actionType as? WorldCupMiddlewareActionType)
-
-        XCTAssertEqual(actionType, .didUpdate)
-        XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
-        XCTAssertEqual(mockWorldCupStore.setIsHomepageSectionEnabledCalled, 0)
-        XCTAssertEqual(apiClient.matchesFetchCount, 0)
+        XCTAssertEqual(feed.stopCalled, 1)
+        XCTAssertEqual(feed.startCalled, 0)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -145,6 +153,39 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockWorldCupStore.lastSetIsHomepageSectionEnabledValue, false)
         XCTAssertEqual(actionType, .didUpdate)
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    // MARK: - HomepageMiddlewareActionType.didEnterBackground
+
+    func test_didEnterBackground_stopsFeed() throws {
+        let feed = MockWorldCupFeed()
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, feed: feed)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didEnterBackground
+        )
+
+        subject.worldCupProvider(appState, action)
+
+        XCTAssertEqual(feed.stopCalled, 1)
+        XCTAssertEqual(feed.startCalled, 0)
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didBecomeActive_whenMilestone2_startsFeed() throws {
+        mockWorldCupStore.isMilestone2 = true
+        let feed = MockWorldCupFeed()
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, feed: feed)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didBecomeActive
+        )
+
+        subject.worldCupProvider(appState, action)
+
+        XCTAssertEqual(feed.startCalled, 1)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -1218,6 +1259,14 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             )
         }
         let subject = WorldCupMiddleware(worldCupStore: store, feed: feed)
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    /// Hands the middleware a `MockWorldCupFeed` so tests can assert on the
+    /// feed lifecycle (start/stop) without driving the real network plumbing.
+    private func createSubject(feed: MockWorldCupFeed) -> WorldCupMiddleware {
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, feed: feed)
         trackForMemoryLeaks(subject)
         return subject
     }

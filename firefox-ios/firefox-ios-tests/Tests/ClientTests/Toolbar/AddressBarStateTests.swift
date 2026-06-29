@@ -92,24 +92,63 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(newState.editingAccessoryAction)
     }
 
-    func test_didLoadToolbarsAction_withGoogleLensEnabled_setsEditingAccessoryAction() {
+    func test_didUpdateDefaultSearchEngineAction_withGoogleLensDisabled_removesEditingAccessoryAction() {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        let newState = reducer(
+        let stateWithGoogleLens = reducer(
             initialState,
-            ToolbarAction(
-                addressBorderPosition: .top,
+            ToolbarMiddlewareAction(
                 isGoogleLensEnabled: true,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.didLoadToolbars
+                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
+            )
+        )
+        let newState = reducer(
+            stateWithGoogleLens,
+            ToolbarMiddlewareAction(
+                isGoogleLensEnabled: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
+            )
+        )
+
+        XCTAssertNil(newState.editingAccessoryAction)
+    }
+
+    func test_didUpdateDefaultSearchEngineAction_withGoogleLensEnabled_setsEditingAccessoryAction() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+        let expectedMenuElements = [
+            ToolbarMenuElementConfiguration(
+                actionType: .googleLensTakePhoto,
+                title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
+                imageName: StandardImageIdentifiers.Large.cameraLarge,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
+            ),
+            ToolbarMenuElementConfiguration(
+                actionType: .googleLensPhotoLibrary,
+                title: .AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle,
+                imageName: StandardImageIdentifiers.Large.image,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensPhotoLibraryAction
+            )
+        ]
+
+        let newState = reducer(
+            initialState,
+            ToolbarMiddlewareAction(
+                isGoogleLensEnabled: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
             )
         )
 
         XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
         XCTAssertEqual(newState.editingAccessoryAction?.iconName, StandardImageIdentifiers.Medium.googleLens)
         XCTAssertEqual(newState.editingAccessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
+        XCTAssertEqual(newState.editingAccessoryAction?.menuElements, expectedMenuElements)
     }
 
     func test_numberOfTabsChangedAction_withoutNavToolbar_returnsExpectedState() {

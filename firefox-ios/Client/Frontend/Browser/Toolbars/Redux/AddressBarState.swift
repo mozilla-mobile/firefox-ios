@@ -61,7 +61,21 @@ struct AddressBarState: StateType, Sendable, Equatable {
         iconName: StandardImageIdentifiers.Medium.googleLens,
         isEnabled: true,
         a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
-        a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton)
+        a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton,
+        menuElements: [
+            ToolbarMenuElementConfiguration(
+                actionType: .googleLensTakePhoto,
+                title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
+                imageName: StandardImageIdentifiers.Large.cameraLarge,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
+            ),
+            ToolbarMenuElementConfiguration(
+                actionType: .googleLensPhotoLibrary,
+                title: .AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle,
+                imageName: StandardImageIdentifiers.Large.image,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensPhotoLibraryAction
+            )
+        ])
 
     init(windowUUID: WindowUUID) {
         self.init(
@@ -231,6 +245,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleDidClearAlternativeSearchEngine(state: state, action: action)
 
+        case ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine:
+            return handleSearchEngineDidChange(state: state, action: action)
+
         default:
             return defaultState(from: state)
         }
@@ -248,7 +265,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: [ToolbarActionConfiguration](),
             trailingPageActions: [ToolbarActionConfiguration](),
             browserActions: [ToolbarActionConfiguration](),
-            editingAccessoryAction: editingAccessoryAction(isGoogleLensEnabled: toolbarAction.isGoogleLensEnabled == true),
+            editingAccessoryAction: nil,
             borderPosition: borderPosition,
             url: nil,
             searchTerm: nil,
@@ -1118,6 +1135,39 @@ struct AddressBarState: StateType, Sendable, Equatable {
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: nil
+        )
+    }
+
+    private static func handleSearchEngineDidChange(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarMiddlewareAction,
+              let isGoogleLensEnabled = toolbarAction.isGoogleLensEnabled else {
+            return defaultState(from: state)
+        }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
+            browserActions: state.browserActions,
+            editingAccessoryAction: editingAccessoryAction(isGoogleLensEnabled: isGoogleLensEnabled),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconButtonA11yId: state.lockIconButtonA11yId,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 

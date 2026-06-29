@@ -74,7 +74,6 @@ enum ConversionEvent {
     case setAsDefault
     case appOpenDay2Plus
     case uriLoadDay2Plus
-    // TODO: FXIOS-15945 implement this conversion value for SERP ad click
     case firstAdClick
     case thirdActivityFirstWeek
     case activeLastThreeWeek1

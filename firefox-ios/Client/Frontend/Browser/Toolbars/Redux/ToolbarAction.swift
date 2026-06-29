@@ -154,12 +154,14 @@ struct ToolbarMiddlewareAction: Action {
     let gestureType: ToolbarButtonGesture?
     let scrollOffset: CGPoint?
     let readerModeState: ReaderModeState?
+    let isGoogleLensEnabled: Bool?
 
     init(buttonType: ToolbarActionConfiguration.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          scrollOffset: CGPoint? = nil,
          readerModeState: ReaderModeState? = nil,
+         isGoogleLensEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -169,6 +171,7 @@ struct ToolbarMiddlewareAction: Action {
         self.readerModeState = readerModeState
         self.gestureType = gestureType
         self.scrollOffset = scrollOffset
+        self.isGoogleLensEnabled = isGoogleLensEnabled
     }
 }
 
@@ -176,6 +179,7 @@ enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
     case urlDidChange
+    case didUpdateDefaultSearchEngine
     case didClearSearch
     case didStartDragInteraction
     case didSwipeToOpenTabTray
