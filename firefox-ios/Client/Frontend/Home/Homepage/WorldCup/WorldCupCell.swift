@@ -290,6 +290,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             default: break
             }
         }
+        goToPage(pageControl.currentPage)
         return true
     }
 
