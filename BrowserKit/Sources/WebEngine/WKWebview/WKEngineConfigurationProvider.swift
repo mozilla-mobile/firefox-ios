@@ -50,11 +50,12 @@ public struct WKWebViewParameters {
 @MainActor
 public protocol WKEngineConfigurationProvider {
     func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration
+    func endPrivateBrowsingSession()
 }
 
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
-    private static let nonPersistentStore = WKWebsiteDataStore.nonPersistent()
+    private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
     private static let defaultStore = WKWebsiteDataStore.default()
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
     private let configuration: WKWebViewConfiguration
@@ -90,5 +91,9 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         }
 
         return DefaultEngineConfiguration(webViewConfiguration: configuration)
+    }
+
+    public func endPrivateBrowsingSession() {
+        Self.nonPersistentStore = .nonPersistent()
     }
 }
