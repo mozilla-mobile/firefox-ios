@@ -42,10 +42,11 @@ final class GoogleLensImageProcessorTests: XCTestCase {
         let result = try XCTUnwrap(subject.process(image))
         let decoded = try XCTUnwrap(UIImage(data: result.jpegData))
 
-        XCTAssertEqual(result.dimensions, CGSize(width: 800, height: 400))
+        // 1600 (longest side) scaled to the 1000px max → 1000x500.
+        XCTAssertEqual(result.dimensions, CGSize(width: 1000, height: 500))
         // UIImage(data:) for JPEG has scale 1, so points equal pixels here.
-        XCTAssertEqual(decoded.size.width, 800, accuracy: 1)
-        XCTAssertEqual(decoded.size.height, 400, accuracy: 1)
+        XCTAssertEqual(decoded.size.width, 1000, accuracy: 1)
+        XCTAssertEqual(decoded.size.height, 500, accuracy: 1)
     }
 
     func test_process_producesNonEmptyJpegData() throws {
