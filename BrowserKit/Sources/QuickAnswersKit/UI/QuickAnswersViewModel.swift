@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Foundation
 import Shared
 
 @MainActor
@@ -15,6 +16,7 @@ final class QuickAnswersViewModel {
     }
 
     private let service: QuickAnswersService?
+    private let telemetry: QuickAnswersTelemetry
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
     private var recentSpeechResult: SpeechResult?
@@ -22,17 +24,20 @@ final class QuickAnswersViewModel {
 
     init(
         prefs: Prefs,
+        telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
         makeService: (Prefs, QuickAnswersConfigFetcher) throws -> QuickAnswersService = { prefs, configFetcher in
             try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
         }
     ) {
+        self.telemetry = telemetry
         do {
             self.service = try makeService(prefs, configFetcher)
         } catch {
             // TODO: FXIOS-15570 - Possibly add telemetry to capture service failing
             self.service = nil
         }
+        telemetry.quickAnswersRequested()
     }
 
     func startRecordingVoice() {
@@ -40,7 +45,6 @@ final class QuickAnswersViewModel {
             onStateChange?(.initializationFailed)
             return
         }
-
         searchResultTask?.cancel()
         searchResultTask = nil
         recordVoiceTask = Task { [weak self] in
@@ -50,6 +54,7 @@ final class QuickAnswersViewModel {
 
     // TODO: FXIOS-14880 - Update view model
     private func recordVoiceTask(service: QuickAnswersService) async throws {
+        telemetry.recordingStarted()
         do {
             let stream = try await service.record()
             for try await result in stream {
@@ -57,12 +62,13 @@ final class QuickAnswersViewModel {
                 recentSpeechResult = result
                 onStateChange?(.recordVoice(result, nil))
                 guard result.isFinal else { continue }
+                telemetry.recordingCompleted(outcome: true, errorType: nil)
                 await searchVoiceResult(result, service: service)
                 break
             }
         } catch {
             let error = (error as? SpeechError) ?? SpeechError.unknown(error.localizedDescription)
-            // TODO: FXIOS-15579 Possibly add telemetry
+            telemetry.recordingCompleted(outcome: false, errorType: error.localizedDescription)
             onStateChange?(.recordVoice(.empty(), error))
         }
     }
@@ -90,12 +96,23 @@ final class QuickAnswersViewModel {
 
     private func searchVoiceResult(_ result: SpeechResult, service: QuickAnswersService) async {
         onStateChange?(.loadingSearchResult)
+        telemetry.resultsStarted()
         let searchResult = await service.search(text: result.text)
         switch searchResult {
         case .success(let result):
+            telemetry.resultsCompleted(outcome: true, errorType: nil)
             onStateChange?(.showSearchResult(result, nil))
         case .failure(let error):
+            telemetry.resultsCompleted(outcome: false, errorType: error.localizedDescription)
             onStateChange?(.showSearchResult(.empty(), error))
         }
+    }
+
+    func recordConsentShown(_ agreed: Bool) {
+        telemetry.consentShown(agreed: agreed)
+    }
+
+    func recordClosed() {
+        telemetry.closed()
     }
 }

@@ -30,9 +30,13 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersViewController {
-        let viewModel = QuickAnswersViewModel(prefs: MockProfilePrefs(), makeService: { _, _ in
-            MockTestQuickAnswersService()
-        })
+        let viewModel = QuickAnswersViewModel(
+            prefs: MockProfilePrefs(),
+            telemetry: MockQuickAnswersTelemetry(),
+            makeService: { _, _ in
+                MockTestQuickAnswersService()
+            }
+        )
         let subject = QuickAnswersViewController(
             navigationHandler: MockNavigationHandler(),
             viewModel: viewModel,

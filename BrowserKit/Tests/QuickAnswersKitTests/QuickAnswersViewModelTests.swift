@@ -10,14 +10,17 @@ import TestKit
 @MainActor
 final class QuickAnswersViewModelTests: XCTestCase {
     private var mockService: MockTestQuickAnswersService!
+    private var mockTelemetry: MockQuickAnswersTelemetry!
 
     override func setUp() async throws {
         try await super.setUp()
         mockService = MockTestQuickAnswersService()
+        mockTelemetry = MockQuickAnswersTelemetry()
     }
 
     override func tearDown() async throws {
         mockService = nil
+        mockTelemetry = nil
         try await super.tearDown()
     }
 
@@ -54,6 +57,15 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[1], .recordVoice(finalResult, nil))
         XCTAssertEqual(states[2], .loadingSearchResult)
         XCTAssertEqual(states[3], .showSearchResult(searchResult, nil))
+        XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastRecordingOutcome, true)
+        XCTAssertNil(mockTelemetry.lastRecordingErrorType)
+        XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
+        XCTAssertEqual(mockTelemetry.displayedCalledCount, 1)
     }
 
     func testStartRecordingVoice_withRecordError_receivesError() {
@@ -77,6 +89,14 @@ final class QuickAnswersViewModelTests: XCTestCase {
         }
         XCTAssertEqual(result, .empty())
         XCTAssertEqual(error, .unknown("Unknown error occurred"))
+        XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastRecordingOutcome, false)
+        XCTAssertNotNil(mockTelemetry.lastRecordingErrorType)
+        XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 0)
+        XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 0)
+        XCTAssertEqual(mockTelemetry.displayedCalledCount, 0)
     }
 
     func testStartRecordingVoice_withSearchError_receivesError() {
@@ -101,6 +121,13 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[1], .loadingSearchResult)
         XCTAssertEqual(states[2], .showSearchResult(.empty(), searchError))
         XCTAssertEqual(searchError, .unknown("Test error"))
+        XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastRecordingOutcome, true)
+        XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastResultsOutcome, false)
+        XCTAssertEqual(mockTelemetry.displayedCalledCount, 0)
     }
 
     // MARK: - Stop Recording Tests
@@ -138,11 +165,35 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[2], .showSearchResult(searchResult, nil))
     }
 
+    // MARK: - Telemetry Passthrough Tests
+
+    func testRecordConsentShown_recordsConsent() {
+        let subject = createSubject()
+
+        subject.recordConsentShown(true)
+
+        XCTAssertEqual(mockTelemetry.consentShownCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastConsentAgreed, true)
+    }
+
+    func testRecordClosed_recordsClosedOnlyOnce() {
+        let subject = createSubject()
+
+        subject.recordClosed()
+        subject.recordClosed()
+
+        XCTAssertEqual(mockTelemetry.closedCalledCount, 1)
+    }
+
     // MARK: - Helper
     private func createSubject() -> QuickAnswersViewModel {
-        let model = QuickAnswersViewModel(prefs: MockProfilePrefs(), makeService: { _, _ in
-            return self.mockService
-        })
+        let model = QuickAnswersViewModel(
+            prefs: MockProfilePrefs(),
+            telemetry: mockTelemetry,
+            makeService: { _, _ in
+                return self.mockService
+            }
+        )
         trackForMemoryLeaks(model)
         return model
     }

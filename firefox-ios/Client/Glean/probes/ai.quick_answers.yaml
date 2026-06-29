@@ -1,0 +1,141 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Ai
+  - QuickAnswers
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+
+ai.quick_answers:
+  requested:
+    type: event
+    description: |
+      Recorded the instant the user initiates the Quick Answers flow (e.g. taps the button on the homepage).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  recording_started:
+    type: event
+    description: |
+      Recorded when the Quick Answers service starts attempting to capture user audio.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  recording_completed:
+    type: event
+    description: |
+      Recorded when the transcription completes.
+    extra_keys:
+      outcome:
+        type: boolean
+        description: |
+          True for success, false otherwise.
+      error_type:
+        type: string
+        description: |
+          Optional. The error message if present.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  results_started:
+    type: event
+    description: |
+      Recorded when the Quick Answers results service starts to fetch the results from the backend.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  results_completed:
+    type: event
+    description: |
+      Recorded when the Quick Answers result service returns the response or errors out.
+      This events when success is true coincides to the display of the response to the user, 
+      while when the results error out to the display of an error message.
+    extra_keys:
+      outcome:
+        type: boolean
+        description: |
+          True for success, false otherwise.
+      error_type:
+        type: string
+        description: |
+          Optional. The error message if present.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  closed:
+    type: event
+    description: |
+      Recorded when the user cancels or closes the Quick Answers screen at any point.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  results_time:
+    type: timing_distribution
+    time_unit: millisecond
+    description: |
+      Records the total time for generating the results and showing them to the user.
+      Starts when the request for fetching results starts.
+      Ends when the user sees the results or an error.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  consent_shown:
+    type: event
+    description: |
+      Recorded when the user is shown the Use Quick Answers consent dialogue.
+    extra_keys:
+      agreed:
+        type: boolean
+        description: |
+          Whether the consent prompt was accepted.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

@@ -1653,6 +1653,7 @@
 		C2B31EC92EDCE79100D53FF5 /* TranslationsVersionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B31EC82EDCE78600D53FF5 /* TranslationsVersionHelper.swift */; };
 		C2B31ECD2EDCEB1B00D53FF5 /* TranslationsVersionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B31ECC2EDCEB0D00D53FF5 /* TranslationsVersionHelperTests.swift */; };
 		C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */; };
+		C2BA5A312FEEB54D00AD1FBD /* DefaultQuickAnswersTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BA5A302FEEB54D00AD1FBD /* DefaultQuickAnswersTelemetry.swift */; };
 		C2C6FF8E2ED9A79100B833D4 /* TestableUIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */; };
 		C2CD38EA2EE6D6AE0085F045 /* PrivateModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CD38E92EE6D6AE0085F045 /* PrivateModeButton.swift */; };
 		C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */; };
@@ -10550,6 +10551,7 @@
 		C2B31EC82EDCE78600D53FF5 /* TranslationsVersionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsVersionHelper.swift; sourceTree = "<group>"; };
 		C2B31ECC2EDCEB0D00D53FF5 /* TranslationsVersionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsVersionHelperTests.swift; sourceTree = "<group>"; };
 		C2B808B02A77FA3F00A65487 /* DownloadsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCoordinatorTests.swift; sourceTree = "<group>"; };
+		C2BA5A302FEEB54D00AD1FBD /* DefaultQuickAnswersTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultQuickAnswersTelemetry.swift; sourceTree = "<group>"; };
 		C2BD4AC2A2935AE48BEB94B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableUIToolbar.swift; sourceTree = "<group>"; };
 		C2CB4D369C756DA6836BC4A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -14998,6 +15000,7 @@
 		AAD00A732FBB410000123E8C /* QuickAnswers */ = {
 			isa = PBXGroup;
 			children = (
+				C2BA5A302FEEB54D00AD1FBD /* DefaultQuickAnswersTelemetry.swift */,
 				AAD00A742FBB412800123E8C /* QuickAnswersAction.swift */,
 				AAD00A752FBB412800123E8C /* QuickAnswersMiddleware.swift */,
 			);
@@ -19553,6 +19556,7 @@
 				8AAEBA082BF52708000C02B5 /* MicrosurveyCoordinator.swift in Sources */,
 				5A679E4B2B239FAE004F2B0D /* TabPeekViewController.swift in Sources */,
 				E18CE8DC2BDA3FA600EE2BCD /* NavigationToolbarContainerModel.swift in Sources */,
+				C2BA5A312FEEB54D00AD1FBD /* DefaultQuickAnswersTelemetry.swift in Sources */,
 				2178A6A0291454B5002EC290 /* ReaderModeThemeButton.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
 				81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */,

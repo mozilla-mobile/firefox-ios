@@ -44,6 +44,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             prefs: prefs,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            telemetry: DefaultQuickAnswersTelemetry(),
             configFetcher: DefaultQuickAnswersConfigFetcher(model: nimbusModel()),
             learnMoreURL: SupportUtils.URLForTopic("quick-answers-mobile"),
         )

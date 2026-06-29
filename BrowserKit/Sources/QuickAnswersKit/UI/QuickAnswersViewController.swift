@@ -77,13 +77,14 @@ public final class QuickAnswersViewController: UIViewController,
         prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
+        telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
         learnMoreURL: URL?,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(prefs: prefs, configFetcher: configFetcher),
+            viewModel: QuickAnswersViewModel(prefs: prefs, telemetry: telemetry, configFetcher: configFetcher),
             store: Store(prefs: prefs),
             transitionType: transitionType,
             windowUUID: windowUUID,
@@ -154,6 +155,7 @@ public final class QuickAnswersViewController: UIViewController,
                 try await viewModel.stopRecordingVoice()
             }
         }
+        viewModel.recordClosed()
         super.viewDidDisappear(animated)
     }
 
@@ -227,6 +229,7 @@ public final class QuickAnswersViewController: UIViewController,
             learnMoreURL: learnMoreURL,
             theme: themeManager.getCurrentTheme(for: currentWindowUUID),
             onContinue: { [weak self] in
+                self?.viewModel.recordConsentShown(true)
                 self?.store.setOptInCompleted()
                 self?.contentView.hideOptIn()
                 self?.startFlow()

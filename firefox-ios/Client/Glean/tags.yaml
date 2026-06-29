@@ -75,6 +75,9 @@ Passwords:
 PasswordGenerator:
   description: Corresponds to the generation of strong passwords for logins and autofill.
 
+QuickAnswers:
+  description: Corresponds to the AI-powered Quick Answers feature that returns spoken/searched answers.
+
 ReaderMode:
   description: Corresponds to the reading mode viewer for webpages.
 
