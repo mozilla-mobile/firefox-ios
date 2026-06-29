@@ -6,14 +6,14 @@ import Foundation
 import SummarizeKit
 @testable import Client
 
-final class MockSummarizerConfigProvider: SummarizerConfigProvider {
+final class MockSummarizerConfigProvider: SummarizerConfigProvider, @unchecked Sendable {
     private(set) var getConfigCalledCount = 0
 
     func getConfig(
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
         locale: Locale
-    ) -> SummarizerConfig {
+    ) async -> SummarizerConfig {
         getConfigCalledCount += 1
         return SummarizerConfig.defaultConfig
     }
