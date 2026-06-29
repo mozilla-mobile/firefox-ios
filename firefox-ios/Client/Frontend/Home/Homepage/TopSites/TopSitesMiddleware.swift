@@ -91,8 +91,34 @@ final class TopSitesMiddleware {
     }
 
     private func fetchTopSitesDataAndUpdateState(for action: Action) {
+        // We add an in-flight guard per window in TopSitesMiddleware so `initialize`,
+        // `didBecomeActive`, and top-site notifications do not fire parallel sponsored
+        // requests on launch/foreground. This is to address issues on slow-networks
+        // and not create unnecessary additional pressure.
+        let shouldCoalesceRefresh = shouldCoalesceHomepageRefresh(for: action)
+        if shouldCoalesceRefresh {
+            guard inFlightHomepageTopSitesFetchWindowIDs.insert(action.windowUUID).inserted else { return }
+        }
+
         Task { @MainActor in
+            defer {
+                if shouldCoalesceRefresh {
+                    self.inFlightHomepageTopSitesFetchWindowIDs.remove(action.windowUUID)
+                }
+            }
+
             await self.getTopSitesDataAndUpdateState(for: action)
+        }
+    }
+
+    private func shouldCoalesceHomepageRefresh(for action: Action) -> Bool {
+        switch action.actionType {
+        case HomepageActionType.initialize,
+            HomepageMiddlewareActionType.didBecomeActive,
+            HomepageMiddlewareActionType.topSitesUpdated:
+            return true
+        default:
+            return false
         }
     }
 
