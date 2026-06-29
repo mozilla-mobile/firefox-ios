@@ -296,7 +296,7 @@
 "SearchSuggestions.promptMessage" = "A javaslatok kéréséhez a %@nak el kell küldenie a címsorba írt üzenetet a keresőszolgáltatásnak.";
 
 /* Title for search suggestions prompt */
-"SearchSuggestions.promptTitle" = "Jelenítsen-e meg keresési javaslatokat?";
+"SearchSuggestions.promptTitle" = "Megjelenjenek a keresési javaslatok?";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Automatikus webcím-kiegészítés";
