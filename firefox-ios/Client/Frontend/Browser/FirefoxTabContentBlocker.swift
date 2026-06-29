@@ -64,8 +64,25 @@ extension BlockingStrength {
 
 /// Firefox-specific implementation of tab content blocking.
 @MainActor
-final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
+final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript, FeatureFlaggable {
     let userPrefs: Prefs
+
+    /// Whether the ad-blocker list (fetched from Remote Settings) should be applied to tabs.
+    /// Gated behind the `.adBlocker` feature flag and the user's Block Ads setting.
+    private var isAdBlockingEnabled: Bool {
+        return featureFlagsProvider.isEnabled(.adBlocker) && (userPrefs.boolForKey(PrefsKeys.BlockAds) ?? false)
+    }
+
+    /// The content blocking rules to apply for the current tab: the standard tracking protection
+    /// lists (only when TP is enabled) plus the ad-blocker list when enabled. The ad-blocker list is
+    /// independent of tracking protection — it applies even when TP is off.
+    private func currentRules() -> [String] {
+        var rules = isEnabled ? BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict) : []
+        if isAdBlockingEnabled {
+            rules.append(ContentBlocker.adBlockerRuleIdentifier)
+        }
+        return rules
+    }
 
     class func name() -> String {
         return "TrackingProtectionStats"
@@ -104,11 +121,13 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 
     func setupForTab(completion: (() -> Void)? = nil) {
         guard let tab = tab else { return }
-        let rules = BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
+        let rules = currentRules()
         logger.log("Setup tracking protection for tab: \(tab)", level: .info, category: .adblock)
+        // The ad-blocker rule list is independent of tracking protection — it must apply even when
+        // TP is off, so the content blocker is considered enabled if either is on.
         ContentBlocker.shared.setupTrackingProtection(
             forTab: tab,
-            isEnabled: isEnabled,
+            isEnabled: isEnabled || isAdBlockingEnabled,
             rules: rules,
             completion: completion
         )
@@ -122,7 +141,7 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     }
 
     override func currentlyEnabledLists() -> [String] {
-        return BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
+        return currentRules()
     }
 
     override func notifyContentBlockingChanged() {

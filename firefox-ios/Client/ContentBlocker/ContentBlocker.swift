@@ -118,11 +118,20 @@ class ContentBlocker {
     var blockImagesRule: WKContentRuleList?
     var setupCompleted = false
     let logger: Logger
+    /// Internal (not private) so tests can inject a mock fetcher on the shared instance.
+    var adBlockerListFetcher: AdBlockerListFetcherProtocol
+
+    /// Rule store identifier for the ad-blocker list fetched from Remote Settings.
+    static let adBlockerRuleIdentifier = ASAdBlockerListFetcher.adBlockerRecordID
 
     static let shared = ContentBlocker()
 
-    private init(logger: Logger = DefaultLogger.shared) {
+    private init(
+        logger: Logger = DefaultLogger.shared,
+        adBlockerListFetcher: AdBlockerListFetcherProtocol = ASAdBlockerListFetcher()
+    ) {
         self.logger = logger
+        self.adBlockerListFetcher = adBlockerListFetcher
 
         // Compile No Image Mode script
         compileNoImageModeScript()
@@ -140,8 +149,10 @@ class ContentBlocker {
         removeOldListsByHashFromStore { [weak self] in
             self?.removeOldListsByNameFromStore {
                 self?.compileListsNotInStore {
-                    self?.setupCompleted = true
-                    NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
+                    self?.reloadAdBlockerList {
+                        self?.setupCompleted = true
+                        NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
+                    }
                 }
             }
         }
@@ -388,15 +399,11 @@ extension ContentBlocker {
                 self?.logger.log("Will compile list: \(filename)", level: .info, category: .adblock)
                 self?.loadJsonFromBundle(forResource: filename) { jsonString in
                     ensureMainThread {
-                        var str = jsonString
-
-                        // Here we find the closing array bracket in the JSON string
-                        // and append our safelist as a rule to the end of the JSON.
-                        guard let self, let range = str.range(of: "]", options: String.CompareOptions.backwards) else {
+                        // We append our safelist as a rule to the end of the JSON before compiling.
+                        guard let self, let str = self.appendingSafelist(to: jsonString) else {
                             dispatchGroup.leave()
                             return
                         }
-                        str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
                         self.ruleStore?.compileContentRuleList(
                             forIdentifier: filename,
                             encodedContentRuleList: str
@@ -421,6 +428,61 @@ extension ContentBlocker {
                              level: .info,
                              category: .adblock)
             completion()
+        }
+    }
+
+    /// Finds the closing array bracket in the content blocking JSON and appends our safelist as a
+    /// rule to the end. Returns nil if the JSON has no closing bracket (malformed).
+    private func appendingSafelist(to jsonString: String) -> String? {
+        guard let range = jsonString.range(of: "]", options: String.CompareOptions.backwards) else {
+            return nil
+        }
+        return jsonString.replacingCharacters(in: range, with: safelistAsJSON() + "]")
+    }
+
+    /// Fetches the ad-blocker list from Remote Settings and compiles it into the rule store under
+    /// `adBlockerRuleIdentifier`. The compiled rule is only applied to a tab when the user has the
+    /// Block Ads setting enabled (see `FirefoxTabContentBlocker`).
+    func reloadAdBlockerList(completion: (@MainActor @Sendable () -> Void)? = nil) {
+        let identifier = Self.adBlockerRuleIdentifier
+        let logger = self.logger
+        // The enclosing type is @MainActor, so this Task inherits MainActor isolation. Awaiting the
+        // fetcher (a non-isolated Sendable type) hops off the main thread for the Remote Settings call.
+        Task { [weak self] in
+            let jsonString = await self?.adBlockerListFetcher.fetchAdBlockerListJSON()
+            guard let self, let jsonString, let str = self.appendingSafelist(to: jsonString) else {
+                logger.log("Skipping ad-blocker list compilation, no list available.",
+                           level: .info,
+                           category: .adblock)
+                completion?()
+                return
+            }
+
+            await self.compileAdBlockerRuleList(encoded: str, identifier: identifier)
+            completion?()
+        }
+    }
+
+    private func compileAdBlockerRuleList(encoded: String, identifier: String) async {
+        let logger = self.logger
+        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+            guard let ruleStore else {
+                continuation.resume()
+                return
+            }
+            ruleStore.compileContentRuleList(
+                forIdentifier: identifier,
+                encodedContentRuleList: encoded
+            ) { rule, error in
+                if let error {
+                    logger.log("Ad-blocker list compilation failed: \(error)", level: .warning, category: .adblock)
+                } else if rule == nil {
+                    logger.log("Nil rule set for ad-blocker list.", level: .warning, category: .adblock)
+                } else {
+                    logger.log("Compiled ad-blocker list.", level: .info, category: .adblock)
+                }
+                continuation.resume()
+            }
         }
     }
 
