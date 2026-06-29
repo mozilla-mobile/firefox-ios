@@ -202,7 +202,7 @@ broken-site-report:
   include_client_id: false
   send_if_empty: false
   bugs:
-    - https://mozilla-hub.atlassian.net/browse/FXMO-860
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
   data_reviews:
     - https://github.com/mozilla-mobile/firefox-ios/pull/34309
   notification_emails:

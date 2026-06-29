@@ -36,7 +36,7 @@ $tags:
 # capture/storage is a separate open decision (see the data-review doc); no
 # screenshot field is defined here.
 #
-# `bugs` is the impl ticket (placeholder FXMO-860); `data_reviews` is the
+# `bugs` is the impl ticket (FXIOS-16177); `data_reviews` is the
 # data-review PR. `url` and `description` carry user-entered data.
 ###############################################################################
 
@@ -52,7 +52,7 @@ broken_site_report:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -70,7 +70,7 @@ broken_site_report:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -87,7 +87,7 @@ broken_site_report:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -106,7 +106,7 @@ broken_site_report.tab_info:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -123,7 +123,7 @@ broken_site_report.tab_info:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -141,7 +141,7 @@ broken_site_report.tab_info.antitracking:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -159,7 +159,7 @@ broken_site_report.tab_info.antitracking:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -175,7 +175,7 @@ broken_site_report.tab_info.antitracking:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -191,7 +191,7 @@ broken_site_report.tab_info.antitracking:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -210,7 +210,7 @@ broken_site_report.tab_info.frameworks:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -226,7 +226,7 @@ broken_site_report.tab_info.frameworks:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -242,7 +242,7 @@ broken_site_report.tab_info.frameworks:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -260,7 +260,7 @@ broken_site_report.browser_info.app:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -279,7 +279,7 @@ broken_site_report.browser_info.app:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -299,7 +299,7 @@ broken_site_report.browser_info.system:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -316,7 +316,7 @@ broken_site_report.browser_info.system:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -334,7 +334,7 @@ broken_site_report.browser_info.graphics:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
@@ -350,7 +350,7 @@ broken_site_report.browser_info.graphics:
     send_in_pings:
       - broken-site-report
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-860
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
     notification_emails:
