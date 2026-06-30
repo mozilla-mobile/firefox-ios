@@ -1,0 +1,18 @@
+# The configuration for the newBookmarkFolderTreeFeature feature
+features:
+  new-bookmark-folder-tree-feature:
+    description: >
+      This property determines weather we show the new bookmark folder tree UI
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

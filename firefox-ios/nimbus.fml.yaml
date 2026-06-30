@@ -37,6 +37,7 @@ include:
   - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/needsReloadRefactor.yaml
   - nimbus-features/newAppearanceMenu.yaml
+  - nimbus-features/newBookmarkFolderTreeFeature.yaml
   - nimbus-features/novaDesignFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/quickAnswersFeature.yaml
