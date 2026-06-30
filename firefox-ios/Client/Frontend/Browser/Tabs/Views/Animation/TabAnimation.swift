@@ -181,7 +181,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         destinationController.view.layoutIfNeeded()
 
         // Don't block the UI rendering with the animation to make the snapshotting code more performant
-        
+
         let collectionView = panelViewController.tabDisplayView.collectionView
         guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
               let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
