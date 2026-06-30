@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+@testable import Common
 @testable import SiteImageView
 
 final class LetterImageGeneratorTests: XCTestCase {
@@ -104,6 +105,32 @@ final class LetterImageGeneratorTests: XCTestCase {
         let subject = DefaultLetterImageGenerator()
         let siteString = "?$%^"
         let expectedBackgroundColor = UIColor(red: 1.0, green: 0.655, blue: 0.573, alpha: 1.0)
+        let pixelSamplePoint = CGPoint(x: 5, y: 5)
+
+        let image = try await subject.generateLetterImage(siteString: siteString)
+        let capturedColor = try XCTUnwrap(try? image.cgImage?.getPixelColor(pixelSamplePoint))
+
+        testColor(capturedColor: capturedColor, expectedColor: expectedBackgroundColor)
+    }
+
+    // MARK: - Nova palette
+
+    func testGenerateBackgroundColor_withNovaPalette_usesNovaColor() {
+        let subject = DefaultLetterImageGenerator(colorSet: NovaFaviconAccentColors.palette)
+        let siteString = "mozilla.com"
+        let index = subject.colorIndex(forSite: siteString)
+
+        let color = subject.generateBackgroundColor(forSite: siteString)
+
+        XCTAssertEqual(color, NovaFaviconAccentColors.palette.backgroundColors[index])
+        XCTAssertNotEqual(color, StandardFaviconAccentColors.palette.backgroundColors[index])
+    }
+
+    func testGenerateLetterImage_withNovaPalette_returnsImageWithNovaBackgroundColor() async throws {
+        let subject = DefaultLetterImageGenerator(colorSet: NovaFaviconAccentColors.palette)
+        let siteString = "mozilla.com"
+        let index = subject.colorIndex(forSite: siteString)
+        let expectedBackgroundColor = NovaFaviconAccentColors.palette.backgroundColors[index]
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
         let image = try await subject.generateLetterImage(siteString: siteString)
