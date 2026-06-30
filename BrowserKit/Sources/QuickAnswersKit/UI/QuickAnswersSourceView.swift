@@ -145,6 +145,7 @@ final class QuickAnswersSourceView: UIView,
     private var items: [SearchResult.Source] = []
     private var theme: Theme?
     private var contentSizeObservation: NSKeyValueObservation?
+    private var onSourceTapped: ((URL) -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -193,8 +194,9 @@ final class QuickAnswersSourceView: UIView,
     }
 
     // MARK: - Configuration
-    func configure(with items: [SearchResult.Source]) {
+    func configure(with items: [SearchResult.Source], onSourceTapped: ((URL) -> Void)? = nil) {
         self.items = items
+        self.onSourceTapped = onSourceTapped
         collectionView.reloadData()
     }
 
@@ -227,6 +229,11 @@ final class QuickAnswersSourceView: UIView,
         let numberOfItemsPerRow = floor(availableWidth / UX.maxItemWidth)
         let width = (availableWidth - numberOfItemsPerRow * UX.interItemSpacing) / numberOfItemsPerRow
         return CGSize(width: width, height: width * UX.thumbnailAspectRatio)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let url = items[indexPath.item].url else { return }
+        onSourceTapped?(url)
     }
 
     // MARK: - ThemeApplicable

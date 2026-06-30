@@ -28,6 +28,12 @@
 /* Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English'). */
 "Translations.LanguagePicker.PageTranslatedTitle.v151" = "%@-ലേക്കു മൊഴിമാറ്റി";
 
+/* Button in the translation action sheet to restore the page to its original language. */
+"Translations.LanguagePicker.ShowOriginal.v151" = "യഥാര്‍ത്ഥമുള്ളവ കാണിക്കുക";
+
+/* Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into. */
+"Translations.LanguagePicker.Title.v151" = "ഇതിലേക്കു താൾ മൊഴിമാറ്റുക…";
+
 /* This is the text on the button used to translate a page from one language to another and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.Button.v145" = "മൊഴിമാറ്റുക";
 

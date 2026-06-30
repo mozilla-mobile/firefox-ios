@@ -8,7 +8,7 @@ import Redux
 import Shared
 
 @MainActor
-final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlaggable {
     /// Delegate protocol for handling address bar pan gesture events.
     /// Allows external objects to respond to swipe gesture state changes during tab switching.
     protocol Delegate: AnyObject {
@@ -152,6 +152,11 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             enableSwipeUpGestureRecognizer()
             enableSwipeDownGestureRecognizer()
         }
+
+        if !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
+            disableSwipeUpGestureRecognizer()
+            disableSwipeDownGestureRecognizer()
+        }
     }
 
     // MARK: - Pan Gesture Availability
@@ -243,9 +248,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             return
         }
 
-        let action = GeneralBrowserAction(windowUUID: windowUUID,
-                                          actionType: GeneralBrowserActionType.showTabTray)
-        store.dispatch(action)
+        store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                               actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
     }
 
     private func handleGestureChangedState(translation: CGPoint, nextTab: Tab?) {

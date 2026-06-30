@@ -206,6 +206,12 @@ final class HomepageViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewWillDisappear
+            )
+        )
         stopCFRsTimer()
         saveVerticalScrollOffset()
     }
@@ -620,12 +626,7 @@ final class HomepageViewController: UIViewController,
         switch item {
         case .header(let state, let logoTextColor):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state, logoTextColor: logoTextColor) { [weak self] in
-                    self?.dispatchNavigationBrowserAction(
-                        with: NavigationDestination(.quickAnswers),
-                        actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
-                    )
-                }
+                cell.configure(headerState: state, logoTextColor: logoTextColor)
                 cell.applyTheme(theme: currentTheme)
             }
         case .privacyNotice:

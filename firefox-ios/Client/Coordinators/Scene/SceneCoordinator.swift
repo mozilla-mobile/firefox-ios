@@ -57,7 +57,7 @@ class SceneCoordinator: BaseCoordinator,
         if introManager.shouldShowIntroScreen {
             // Show the launch screen for first-time users
             let onboardingKitVariant = introManager.onboardingKitVariant
-            launchScreenVC = ModernLaunchScreenViewController(
+            launchScreenVC = OnboardingLaunchScreenViewController(
                 windowUUID: windowUUID,
                 coordinator: self,
                 variant: onboardingKitVariant
@@ -164,7 +164,7 @@ class SceneCoordinator: BaseCoordinator,
         remove(child: coordinator)
         // TODO: FXIOS-13434 Refactor the `LaunchScreenViewModel` to enhance the presentation logic
         // This workaround is needed since .overFullScreen presentation doesn't call UIViewController lifecycle methods.
-        guard let launchScreenViewController = launchScreenViewController as? ModernLaunchScreenViewController else {
+        guard let launchScreenViewController = launchScreenViewController as? OnboardingLaunchScreenViewController else {
             return
         }
         launchScreenViewController.loadNextLaunchType()

@@ -35,6 +35,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var sharedContainerIdentifier: String
 
     private var isNewAppearanceMenuOnClosure: () -> Bool
+    private var isNovaDesignOnClosure: () -> Bool
 
     private var nightModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
@@ -56,6 +57,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return isNewAppearanceMenuOnClosure()
     }
 
+    public var isNovaDesignOn: Bool {
+        return isNovaDesignOnClosure()
+    }
+
     public var hasMigratedToNewAppearanceMenu: Bool {
         return userDefaults.bool(forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
     }
@@ -67,13 +72,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
         sharedContainerIdentifier: String,
-        isNewAppearanceMenuOnClosure: @escaping () -> Bool = { false }
+        isNewAppearanceMenuOnClosure: @escaping () -> Bool = { false },
+        isNovaDesignOnClosure: @escaping () -> Bool = { false }
     ) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
         self.isNewAppearanceMenuOnClosure = isNewAppearanceMenuOnClosure
+        self.isNovaDesignOnClosure = isNovaDesignOnClosure
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -165,7 +172,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func windowNonspecificTheme() -> Theme {
         switch getUserManualTheme() {
         case .dark, .nightMode, .privateMode: return DarkTheme()
-        case .light: return LightTheme()
+        case .light: return getThemeFrom(type: .light)
         }
     }
 
@@ -220,6 +227,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func getThemeFrom(type: ThemeType) -> Theme {
+        if isNovaDesignOn, let novaTheme = novaTheme(for: type) {
+            return novaTheme
+        }
+
         switch type {
         case .light:
             return LightTheme()
@@ -229,6 +240,19 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return NightModeTheme()
         case .privateMode:
             return PrivateModeTheme()
+        }
+    }
+
+    private func novaTheme(for type: ThemeType) -> Theme? {
+        switch type {
+        case .light:
+            return NovaLightTheme()
+        case .dark:
+            return NovaDarkTheme()
+        case .nightMode:
+            return NovaNightModeTheme()
+        case .privateMode:
+            return NovaPrivateTheme()
         }
     }
 

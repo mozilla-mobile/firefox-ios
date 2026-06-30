@@ -5,6 +5,7 @@
 import WebKit
 import Common
 import Shared
+import Storage
 @testable import Client
 
 final class MockTabWebView: TabWebView {
@@ -49,12 +50,15 @@ final class MockTabWebView: TabWebView {
         set { mockInteractionState = newValue as? Data }
     }
 
-    override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
-        super.init(frame: frame, configuration: configuration, windowUUID: windowUUID)
+    override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, certStore: CertStore) {
+        super.init(frame: frame, configuration: configuration, windowUUID: windowUUID, certStore: certStore)
     }
 
     init(tab: Tab) {
-        super.init(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+        super.init(frame: .zero,
+                   configuration: WKWebViewConfiguration(),
+                   windowUUID: .XCTestDefaultUUID,
+                   certStore: MockProfile().certStore)
         // Simulating the observer setup is required to use this mock because in production
         // the observers are set up in Tab.createWebView() which we don't call during test
         // and the observers are removed every time we call Tab.deinit(), so an error occurs

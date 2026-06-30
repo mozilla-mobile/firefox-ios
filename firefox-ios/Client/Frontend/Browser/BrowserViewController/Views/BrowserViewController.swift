@@ -18,6 +18,7 @@ import WidgetKit
 import SummarizeKit
 import ActivityKit
 import Glean
+import QuickAnswersKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -40,7 +41,8 @@ class BrowserViewController: UIViewController,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
-                             LegacyTabScrollController.Delegate {
+                             LegacyTabScrollController.Delegate,
+                             SearchEngineDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
@@ -512,6 +514,7 @@ class BrowserViewController: UIViewController,
         tabManager.addDelegate(self)
         tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
+        self.searchEnginesManager.delegate = self
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             ensureMainThread { [weak self] in
@@ -620,12 +623,12 @@ class BrowserViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
-        let isScrollAlphaZero = if #available(iOS 26.0, *) {
-            store.state.componentState(
-                ToolbarState.self,
-                for: .toolbar,
-                window: windowUUID
-            )?.scrollAlpha == 0 } else { false }
+        let isToolbarCollapsed = store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.isAddressBarMinimized == true
+        let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
         // Only clear background if content exceeds viewport height.
@@ -649,6 +652,13 @@ class BrowserViewController: UIViewController,
         bottomContainer.isClearBackground = true
         bottomBlurView.isHidden = isScrollAlphaZero
         bottomContainer.isHidden = isScrollAlphaZero
+
+        // Below iOS 26 the bottom toolbar collapses by translating off-screen, so the blur stays.
+        // The auto-translate prompt extends the blur over its area; after the prompt fades on
+        // collapse the blur lingers as a ghost layer, so hide it explicitly here. (FXIOS-15971)
+        if #unavailable(iOS 26.0), autoTranslatePrompt != nil, isToolbarCollapsed {
+            bottomBlurView.isHidden = true
+        }
 
         let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
         views.forEach {
@@ -1153,59 +1163,101 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Notifiable
+
+    nonisolated private func shouldHandleNotificationSynchronously(_ notification: Notification.Name) -> Bool {
+        // Whether to respond to the notification synchronously. Main thread notifications will (by default)
+        // be handled in a Task which allows the concurrency engine to schedule the work asynchronously.
+        // If a notification returns `true` here, then it will instead be wrapped in an `ensureMainThread`
+        // which (if the notification arrives on the MT) will perform the notification handler immediately.
+        switch notification {
+        case UIApplication.willResignActiveNotification:
+            // Handle immediately since this is where we display the PBM privacy screen
+            return true
+        default:
+            return false
+        }
+    }
+
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
-
         let windowScene = notification.object as? UIWindowScene
         let announcementText = notification.userInfo?[UIAccessibility.announcementStringValueUserInfoKey] as? String
         let dictionary = notification.object as? NSDictionary
         let searchBarPosition = dictionary?[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
         let windowUUID = notification.windowUUID
         let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel
-        // swiftlint:disable:next closure_body_length
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            switch notificationName {
-            case UIApplication.willTerminateNotification:
-                applicationWillTerminate()
-            case UIApplication.willResignActiveNotification:
-                appWillResignActiveNotification()
-            case UIApplication.didBecomeActiveNotification:
-                appDidBecomeActiveNotification()
-            case UIApplication.didEnterBackgroundNotification:
-                appDidEnterBackgroundNotification()
-            case UIScene.didEnterBackgroundNotification:
-                sceneDidEnterBackgroundNotification(windowScene: windowScene)
-            case UIScene.didActivateNotification:
-                sceneDidActivateNotification()
-            case UIAccessibility.announcementDidFinishNotification:
-                didFinishAnnouncement(announcementText: announcementText)
-            case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
-                onReduceTransparencyStatusDidChange()
-            case .FirefoxAccountStateChange:
-                appMenuBadgeUpdate()
-            case .SearchBarPositionDidChange:
-                searchBarPositionDidChange(newSearchBarPosition: searchBarPosition)
-            case .DidTapUndoCloseAllTabToast:
-                didTapUndoCloseAllTabToast(notificationWindowUUID: windowUUID)
-            case .PendingBlobDownloadAddedToQueue:
-                didAddPendingBlobDownloadToQueue()
-            case .SearchSettingsDidUpdateDefaultSearchEngine:
-                updateForDefaultSearchEngineDidChange()
-            case .PageZoomLevelUpdated:
-                handlePageZoomLevelUpdated(notificationWindowUUID: windowUUID, zoomSetting: zoomSetting)
-            case .PageZoomSettingsChanged:
-                handlePageZoomSettingsChanged()
-            case .RemoteTabNotificationTapped:
-                openRecentlyClosedTabs()
-            case .StopDownloads:
-                onStopDownloads(notificationWindowUUID: windowUUID)
-            case .SettingsDismissed:
-                onSettingsDismissed()
-            case .ReadingListUpdated:
-                updateReaderModeBar()
-            default: break
+
+        if shouldHandleNotificationSynchronously(notificationName) {
+            ensureMainThread {
+                self.performNotificationHandler(notificationName,
+                                                windowScene: windowScene,
+                                                announcementText: announcementText,
+                                                zoomSetting: zoomSetting,
+                                                windowUUID: windowUUID,
+                                                searchBarPosition: searchBarPosition)
             }
+        } else {
+            // TODO: [FXIOS-16160] We should migrate all of our handlers to ensureMainThread. 
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                performNotificationHandler(notificationName,
+                                           windowScene: windowScene,
+                                           announcementText: announcementText,
+                                           zoomSetting: zoomSetting,
+                                           windowUUID: windowUUID,
+                                           searchBarPosition: searchBarPosition)
+            }
+        }
+    }
+
+    @MainActor
+    private func performNotificationHandler(_ notificationName: Notification.Name,
+                                            windowScene: UIWindowScene?,
+                                            announcementText: String?,
+                                            zoomSetting: DomainZoomLevel?,
+                                            windowUUID: WindowUUID?,
+                                            searchBarPosition: SearchBarPosition?) {
+        // swiftlint:disable:next closure_body_length
+        switch notificationName {
+        case UIApplication.willTerminateNotification:
+            applicationWillTerminate()
+        case UIApplication.willResignActiveNotification:
+            appWillResignActiveNotification()
+        case UIApplication.didBecomeActiveNotification:
+            appDidBecomeActiveNotification()
+        case UIApplication.didEnterBackgroundNotification:
+            appDidEnterBackgroundNotification()
+        case UIScene.didEnterBackgroundNotification:
+            sceneDidEnterBackgroundNotification(windowScene: windowScene)
+        case UIScene.didActivateNotification:
+            sceneDidActivateNotification()
+        case UIAccessibility.announcementDidFinishNotification:
+            didFinishAnnouncement(announcementText: announcementText)
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            onReduceTransparencyStatusDidChange()
+        case .FirefoxAccountStateChange:
+            appMenuBadgeUpdate()
+        case .SearchBarPositionDidChange:
+            searchBarPositionDidChange(newSearchBarPosition: searchBarPosition)
+        case .DidTapUndoCloseAllTabToast:
+            didTapUndoCloseAllTabToast(notificationWindowUUID: windowUUID)
+        case .PendingBlobDownloadAddedToQueue:
+            didAddPendingBlobDownloadToQueue()
+        case .SearchSettingsDidUpdateDefaultSearchEngine:
+            updateForDefaultSearchEngineDidChange()
+        case .PageZoomLevelUpdated:
+            handlePageZoomLevelUpdated(notificationWindowUUID: windowUUID, zoomSetting: zoomSetting)
+        case .PageZoomSettingsChanged:
+            handlePageZoomSettingsChanged()
+        case .RemoteTabNotificationTapped:
+            openRecentlyClosedTabs()
+        case .StopDownloads:
+            onStopDownloads(notificationWindowUUID: windowUUID)
+        case .SettingsDismissed:
+            onSettingsDismissed()
+        case .ReadingListUpdated:
+            updateReaderModeBar()
+        default: break
         }
     }
 
@@ -2865,8 +2917,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showShortcutsLibrary()
         case .worldCupCountryPicker:
             navigationHandler?.showWorldCupCountryPicker()
-        case .quickAnswers:
-            navigationHandler?.showQuickAnswers()
+        case .quickAnswers(let transitionType):
+            navigationHandler?.showQuickAnswers(transitionType: transitionType)
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
         case .certificatesFromErrorPage:
@@ -2916,7 +2968,6 @@ class BrowserViewController: UIViewController,
             guard let button = state.buttonTapped else { return }
             presentRefreshLongPressAction(from: button)
         case .tabTray:
-            // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
             store.dispatch(
@@ -4660,6 +4711,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
         searchController?.reloadData()
     }
 
+    func searchEnginesDidUpdate() {
+        updateForDefaultSearchEngineDidChange()
+    }
+
     func setLocationView(text: String, search: Bool) {
         let toolbarAction = ToolbarAction(
             searchTerm: text,
@@ -5083,7 +5138,14 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        if #available(iOS 26.0, *), isBottomSearchBar {
+        // Only restore the address bar to fully shown if it wasn't collapsed by scrolling. When the
+        // keyboard is dismissed via scroll and the toolbars are already collapsed, so forcing scrollAlpha
+        // back to 1 here would leave the address bar full while the bottom containers stay collapsed
+        // (inconsistent state).
+        // This is a legacy-only patch (via the `LegacyTabScrollProvider` cast below); the scroll
+        // controller refactor (TabScrollHandler) will address the underlying issue differently
+        let isToolbarStateCollapsed = (scrollController as? LegacyTabScrollProvider)?.isToolbarStateCollapsed ?? false
+        if #available(iOS 26.0, *), isBottomSearchBar, !isToolbarStateCollapsed {
             store.dispatch(
                 ToolbarAction(
                     scrollAlpha: 1,
@@ -5134,9 +5196,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        // keyboard frame changes that don't fire willShow/willHide like (find-in-page
-        // dismissal, accessory view toggle, interactive scroll-to-dismiss). Removing the calls to update layout
-        // leaves the keyboard spacer stale and combined with a stale scrollAlpha == 0 leaves the toolbar with extra space
+        // Keep the keyboard spacer and bottom constraints in sync as the keyboard frame changes
+        // (e.g. accessory-view height changes, interactive scroll-to-dismiss). Without this the
+        // spacer holds its previous height and leaves a gap below the address bar.
         if isSnapKitRemovalEnabled {
             updateConstraintsForKeyboard()
             updateBottomContentStackViewConstraints()

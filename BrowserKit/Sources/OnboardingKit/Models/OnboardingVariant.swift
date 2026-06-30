@@ -7,16 +7,16 @@ import Foundation
 /// Enum representing the different onboarding variants available.
 /// This mirrors the Nimbus OnboardingVariant configuration.
 public enum OnboardingVariant: String, Sendable {
-    // TODO: FXIOS-16036 Remove this dead `legacy` case (and `OnboardingType.upgrade`)
-    case legacy
-    case modern
+    /// rawValue stays "modern" to match the Nimbus `uiVariant` / Glean `onboarding_variant`
+    /// wire values; only the Swift identifier was renamed (FXIOS-16008).
+    case base = "modern"
     case japan
     case brandRefresh
 
     /// Whether the UI for the Onboarding should be according to the brand refresh.
     var shouldShowBrandRefreshUI: Bool {
         switch self {
-        case .legacy, .modern:
+        case .base:
             return false
         case .brandRefresh, .japan:
             return true

@@ -366,7 +366,7 @@ final class BrowserScreen {
 
         // Coordinates with margins to avoid edge gestures
         let leftPoint = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0.12, dy: 0.5))
-        let rightPoint = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0.88, dy: 0.5))
+        let rightPoint = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 2, dy: 0.5))
         let startPoint = swipeRight ? leftPoint : rightPoint
         let endPoint = swipeRight ? rightPoint : leftPoint
 

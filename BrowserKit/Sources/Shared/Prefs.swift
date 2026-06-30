@@ -86,6 +86,10 @@ public struct PrefsKeys {
         public static let Latest = "latestAppVersion"
     }
 
+    public struct AdsClient {
+        public static let documentsDirectoryMigrationCheck = "adsClientDocumentsDirectoryMigrationCheckUserPrefsKey"
+    }
+
     public struct Wallpapers {
         public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedUserPrefsKey"
         public static let CurrentWallpaper = "CurrentWallpaperUserPrefsKey"
@@ -132,6 +136,11 @@ public struct PrefsKeys {
 
     public struct Homepage {
         public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
+        public static let WorldCupSeenWinningMatchIDs = "WorldCupSeenWinningMatchIDsUserPrefsKey"
+    }
+
+    public struct QuickAnswers {
+        public static let optInCompleted = "quickAnswers.optInCompleted"
     }
 
     public struct SearchSettings {
@@ -246,9 +255,6 @@ public struct PrefsKeys {
 
     // Only used to force showing the App Store review dialog for debugging purposes
     public static let ForceShowAppReviewPromptOverride = "ForceShowAppReviewPromptOverride"
-
-    // Used to show splash screen only during first time on fresh install
-    public static let splashScreenShownKey = "splashScreenShownKey"
 
     public static let PasswordGeneratorShown = "PasswordGeneratorShown"
 

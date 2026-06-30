@@ -8,7 +8,7 @@
 "New Tab" = "Жаңа бет";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Бұл арқылы фотоларды түсіріп, жүктеуге болады.";
+"NSCameraUsageDescription" = "Firefox сіздің камераңызды QR кодтарын сканерлеу немесе фотосуреттер мен видеоларды түсіру үшін пайдалана алады.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Сақталған парольдер мен төлем әдістеріне қол жеткізу үшін Firefox Face ID қажет етеді.";

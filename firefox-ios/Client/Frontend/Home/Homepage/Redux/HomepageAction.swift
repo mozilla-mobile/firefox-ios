@@ -56,6 +56,7 @@ enum HomepageActionType: ActionType {
     case viewWillTransition
     case viewWillAppear
     case viewDidAppear
+    case viewWillDisappear
     case viewDidLayoutSubviews
     case didSelectItem
     case embeddedHomepage
@@ -69,7 +70,8 @@ enum HomepageMiddlewareActionType: ActionType {
     case jumpBackInLocalTabsUpdated
     case jumpBackInRemoteTabsUpdated
     case bookmarksUpdated
-    case enteredForeground
+    case didBecomeActive
+    case didEnterBackground
     case configuredPrivacyNotice
     case configuredSearchBar
     case configuredSpacer

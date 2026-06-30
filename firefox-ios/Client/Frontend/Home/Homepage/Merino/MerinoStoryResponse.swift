@@ -13,8 +13,26 @@ final class MerinoStoryResponse: Sendable, Equatable, Hashable {
         stories: [MerinoStoryConfiguration]? = nil,
         categories: [MerinoCategoryConfiguration]? = nil
     ) {
-        self.stories = stories
-        self.categories = categories
+        self.stories = stories?.sorted { $0.rank < $1.rank }
+        self.categories = categories?
+            .map(Self.categoryWithSortedRecommendations)
+            .sorted { $0.rank < $1.rank }
+    }
+
+    private static func categoryWithSortedRecommendations(
+        _ category: MerinoCategoryConfiguration
+    ) -> MerinoCategoryConfiguration {
+        return MerinoCategoryConfiguration(
+            category: MerinoCategory(
+                feedID: category.feedID,
+                recommendations: category.recommendations.sorted { $0.rank < $1.rank },
+                isBlocked: category.isBlocked,
+                isFollowed: category.isFollowed,
+                title: category.title,
+                subtitle: category.subtitle,
+                receivedFeedRank: category.rank
+            )
+        )
     }
 
     // MARK: - Equatable

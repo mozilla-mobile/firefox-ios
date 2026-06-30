@@ -38,6 +38,22 @@ class CertTests: XCTestCase {
         XCTAssert(certStore.containsCertificate(cert1, forOrigin: origin1))
     }
 
+    func testHasCertificateForOrigin() {
+        let certStore = CertStore()
+        let origin = "www.mozilla.org:80"
+        let cert = getCertificate("testcert1")
+
+        // Check that hasCertificate returns false before adding
+        XCTAssertFalse(certStore.hasCertificate(forOrigin: origin))
+
+        // Add a certificate and check it's found
+        certStore.addCertificate(cert, forOrigin: origin)
+        XCTAssert(certStore.hasCertificate(forOrigin: origin))
+
+        // Check that it's unique to the origin
+        XCTAssertFalse(certStore.hasCertificate(forOrigin: "people.mozilla.org:80"))
+    }
+
     fileprivate func getCertificate(_ file: String) -> SecCertificate {
         let path = Bundle(for: type(of: self)).path(forResource: file, ofType: "pem")
         let data = try? Data(contentsOf: URL(fileURLWithPath: path!))

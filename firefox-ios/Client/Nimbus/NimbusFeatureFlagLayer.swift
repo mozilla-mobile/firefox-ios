@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 protocol NimbusFeatureFlagLayerProviding: Sendable {
-    func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool
+    func checkNimbusConfigFor(_ featureID: FeatureFlagID, with prefs: Prefs) -> Bool
     func checkStartAtHomeConfiguration() -> StartAtHome
 }
 
@@ -18,7 +19,15 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     // MARK: - Public methods
     // swiftlint:disable:next function_body_length
-    public func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool {
+    public func checkNimbusConfigFor(_ featureID: FeatureFlagID, with prefs: Prefs) -> Bool {
+        // Always override Nimbus defaults if we're toggling things in the debug menu
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        if let debugKey = featureID.debugKey,
+           let override = prefs.boolForKey(debugKey) {
+            return override
+        }
+        #endif
+
         // For better code readability, please keep in alphabetical order by FeatureFlagID
         switch featureID {
         case .adBlocker:
@@ -26,6 +35,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
+
+        case .addressBarGestureToOpenTabTrayInteractive:
+            return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
+
+        case .addressBarGestureToOpenTabTraySwipe:
+            return checkAddressBarGestureToOpenTabTraySwipeFeature()
 
         case .adsClient:
             return checkAdsClientFeature()
@@ -62,9 +77,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .googleLens:
             return checkGoogleLensFeature()
-
-        case .hntSponsoredShortcuts:
-            return checkHNTSponsoredShortcutsFeature()
 
         case .homepageAddShortcutTile:
             return checkHomepageAddShortcutTile()
@@ -113,6 +125,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .needsReloadRefactor:
             return checkNeedsReloadRefactorFeature()
 
+        case .novaDesign:
+            return checkNovaDesignFeature()
+
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
 
@@ -145,9 +160,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .snapkitRemovalRefactor:
             return checkSnapKitRemovalRefactor()
-
-        case .splashScreen:
-            return checkSplashScreenFeature(for: featureID)
 
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID) != .disabled
@@ -196,6 +208,11 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .worldCupWidget:
             return checkWorldCupWidgetFeature()
+
+        // This feature flag has no Nimbus configuration because it is only tied to a user setting.
+        // Requesting Nimbus configuration for it is a developer error.
+        case .hntSponsoredShortcuts:
+            fatalError("There's no nimbus configuration for this feature. This is a developer error.")
         }
     }
 
@@ -217,10 +234,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkSentFromFirefoxFeatureTreatmentA() -> Bool {
         let config = nimbus.features.sentFromFirefoxFeature.value()
         return config.isTreatmentA
-    }
-
-    private func checkHNTSponsoredShortcutsFeature() -> Bool {
-        return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
     private func checkHomepageAddShortcutTile() -> Bool {
@@ -303,10 +316,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkQuickAnswersFeature() -> Bool {
         return nimbus.features.quickAnswersFeature.value().enabled
-    }
-
-    private func checkSplashScreenFeature(for featureID: FeatureFlagID) -> Bool {
-        return nimbus.features.splashScreen.value().enabled
     }
 
     private func checkStartAtHomeFeature(for featureID: FeatureFlagID) -> StartAtHome {
@@ -441,6 +450,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.needsReloadRefactor.value().enabled
     }
 
+    private func checkNovaDesignFeature() -> Bool {
+        return nimbus.features.novaDesignFeature.value().enabled
+    }
+
     private func checkAiKillSwitchFeature() -> Bool {
         return nimbus.features.aiKillSwitchFeature.value().enabled
     }
@@ -471,5 +484,13 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkReportBrokenSiteFeature() -> Bool {
         return nimbus.features.reportBrokenSiteFeature.value().enabled
+    }
+
+    private func checkAddressBarGestureToOpenTabTrayInteractiveFeature() -> Bool {
+        return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledInteractive
+    }
+
+    private func checkAddressBarGestureToOpenTabTraySwipeFeature() -> Bool {
+        return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledSwipe
     }
 }

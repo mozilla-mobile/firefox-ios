@@ -140,10 +140,10 @@ public class BrowserAddressToolbar: UIView,
                           isUnifiedSearchEnabled: Bool,
                           animated: Bool) {
         [navigationActionStack, leadingPageActionStack, trailingPageActionStack, browserActionStack].forEach {
-            $0.isHidden = config.uxConfiguration.scrollAlpha.isZero
+            $0.isHidden = config.uxConfiguration.isAddressBarMinimized
         }
         if #available(iOS 26.0, *) {
-            toolbarTopBorderView.isHidden = config.uxConfiguration.scrollAlpha.isZero
+            toolbarTopBorderView.isHidden = config.uxConfiguration.isAddressBarMinimized
         }
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
@@ -180,7 +180,7 @@ public class BrowserAddressToolbar: UIView,
     private func configureUX(config: AddressToolbarUXConfiguration,
                              toolbarPosition: AddressToolbarPosition) {
         locationContainer.layer.cornerRadius = config.toolbarCornerRadius
-        locationContainer.updateShadowOpacityBasedOn(scrollAlpha: config.scrollAlpha)
+        locationContainer.updateShadowOpacityBasedOn(isAddressBarMinimized: config.isAddressBarMinimized)
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
         let locationViewPaddings = config.locationViewVerticalPaddings(addressBarPosition: toolbarPosition)
         toolbarBottomConstraint?.constant = -locationViewPaddings.bottom
@@ -548,9 +548,7 @@ public class BrowserAddressToolbar: UIView,
         let dragPoint = session.location(in: self)
         guard let url = droppableUrl,
               let itemProvider = NSItemProvider(contentsOf: url),
-              // allow drag only on the location view frame in order to don't mess with long press gesture
-              // on the address bar buttons.
-              locationView.frame.contains(dragPoint) else { return [] }
+              locationViewCanBeDrag(dragPoint: dragPoint) else { return [] }
 
         toolbarDelegate?.addressToolbarDidProvideItemsForDragInteraction()
 
@@ -560,5 +558,13 @@ public class BrowserAddressToolbar: UIView,
 
     public func dragInteraction(_ interaction: UIDragInteraction, sessionWillBegin session: UIDragSession) {
         toolbarDelegate?.addressToolbarDidBeginDragInteraction()
+    }
+
+    // Allow drag only when the touch is within the location view frame.
+    // This avoids interfering with long-press gestures on address bar buttons
+    // and disables drag interactions while the location view is minimized.
+    private func locationViewCanBeDrag(dragPoint: CGPoint) -> Bool {
+        return locationView.frame.contains(dragPoint) &&
+            !locationView.isAddressBarMinimized
     }
 }

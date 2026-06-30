@@ -14,7 +14,7 @@ public final class TermsOfUseFlowViewModel<ViewModel: OnboardingCardInfoModelPro
 
     public init(
         configuration: ViewModel,
-        variant: OnboardingVariant = .modern,
+        variant: OnboardingVariant = .base,
         onTermsOfUseTap: @escaping () -> Void,
         onPrivacyNoticeTap: @escaping () -> Void,
         onManageSettingsTap: @escaping () -> Void = {},

@@ -15,6 +15,7 @@ channels:
 include:
   - nimbus-features/adBlockerFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/addressBarGestureToOpenTabTrayFeature.yaml
   - nimbus-features/adsClient.yaml
   - nimbus-features/aiKillSwitchFeature.yaml
   - nimbus-features/bookmarksSearchFeature.yaml
@@ -26,7 +27,6 @@ include:
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/googleLensFeature.yaml
-  - nimbus-features/hntSponsoredShortcutsFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/homepageTrackerBlockerModuleFeature.yaml
   - nimbus-features/hostedSummarizerFeature.yaml
@@ -37,6 +37,7 @@ include:
   - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/needsReloadRefactor.yaml
   - nimbus-features/newAppearanceMenu.yaml
+  - nimbus-features/novaDesignFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/quickAnswersFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
@@ -45,7 +46,6 @@ include:
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/snapkitRemovalRefactor.yaml
-  - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml
   - nimbus-features/summarizerAppAttestAuthFeature.yaml

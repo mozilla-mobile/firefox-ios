@@ -1493,6 +1493,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             leadingPageActions: [],
             trailingPageActions: [],
             browserActions: [],
+            editingAccessoryAction: nil,
             borderPosition: nil,
             url: nil,
             searchTerm: nil,

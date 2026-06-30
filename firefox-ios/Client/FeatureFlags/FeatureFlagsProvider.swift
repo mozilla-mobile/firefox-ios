@@ -27,13 +27,7 @@ final class FeatureFlagsProvider: FeatureFlagProviding, @unchecked Sendable {
 
     /// Used for checking the status of a feature flag from the feature flag backend
     func isEnabled(_ flag: FeatureFlagID) -> Bool {
-        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
-        if let debugKey = flag.debugKey,
-           let override = prefs.boolForKey(debugKey) {
-            return override
-        }
-        #endif
-        return backendLayer.checkNimbusConfigFor(flag)
+        return backendLayer.checkNimbusConfigFor(flag, with: prefs)
     }
 
     /// Used specifically for overriding the status of a feature flag from the backend.

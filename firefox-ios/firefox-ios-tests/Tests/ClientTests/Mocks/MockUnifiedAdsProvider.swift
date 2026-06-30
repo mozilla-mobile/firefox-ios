@@ -7,13 +7,15 @@
 import Shared
 
 final class MockUnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Sendable {
-    private var result: UnifiedTileResult
+    private var result: UnifiedTileResult?
 
-    init(result: UnifiedTileResult) {
+    init(result: UnifiedTileResult?) {
         self.result = result
     }
 
-    func fetchTiles(timestamp: Timestamp, completion: @escaping (UnifiedTileResult) -> Void) {
+    func fetchTiles(timestamp: Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
+        guard let result else { return }
+
         switch result {
         case .success(let unifiedTiles):
             completion(.success(unifiedTiles))

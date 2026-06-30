@@ -10,4 +10,6 @@ struct MockWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
         return MockWKEngineConfiguration(webViewConfiguration: WKWebViewConfiguration())
     }
+
+    func endPrivateBrowsingSession() {}
 }

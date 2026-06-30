@@ -411,7 +411,10 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     private func anyWebView(url: URL? = nil) -> MockTabWebView {
-        let tab = MockTabWebView(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTabWebView(frame: .zero,
+                                 configuration: WKWebViewConfiguration(),
+                                 windowUUID: .XCTestDefaultUUID,
+                                 certStore: MockProfile().certStore)
         tab.loadedURL = url
         return tab
     }

@@ -244,6 +244,7 @@ final class AddressToolbarContainer: UIView,
             let height = frame.height + UX.accessoryViewGradientOffset
             accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
+            // Dispatch action to change address bar to minimized state
             store.dispatch(
                 ToolbarAction(
                     scrollAlpha: 0,
@@ -372,7 +373,7 @@ final class AddressToolbarContainer: UIView,
         guard self.model != newModel else { return }
 
         updateSkeletonAddressBarsAlpha(to: CGFloat(newModel.scrollAlpha))
-        if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.scrollAlpha.isZero {
+        if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.isAddressBarMinimized {
             accessoryViewGradient.opacity = 0
         }
         // in case we are in edit mode but overlay is not active yet we have to activate it

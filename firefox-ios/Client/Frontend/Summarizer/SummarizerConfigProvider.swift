@@ -5,12 +5,12 @@
 import SummarizeKit
 import WebKit
 
-protocol SummarizerConfigProvider {
+protocol SummarizerConfigProvider: Sendable {
     func getConfig(
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
         locale: Locale
-    ) -> SummarizerConfig
+    ) async -> SummarizerConfig
 }
 
 struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
@@ -36,7 +36,7 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
         locale: Locale
-    ) -> SummarizerConfig {
+    ) async -> SummarizerConfig {
         let initialConfig = SummarizerConfig(instructions: "", options: [:])
         // Merge configs in reverse order (so higher priority overrides lower)
         // $0.merging(with: $1) means "merge $0 into $1" so the result will prioritize $0's values.

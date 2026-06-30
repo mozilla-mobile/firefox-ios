@@ -19,6 +19,8 @@ final class ToolbarMiddleware {
     private let recentSearchProvider: RecentSearchProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizerConfigFactory: SummarizerConfigFactory
+    private let featureFlagsProvider: FeatureFlagProviding
+    private let searchEnginesManager: SearchEnginesManagerProvider
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -36,10 +38,14 @@ final class ToolbarMiddleware {
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          recentSearchProvider: RecentSearchProvider? = nil,
+         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
+         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.summarizerConfigFactory = summarizerConfigFactory
+        self.featureFlagsProvider = featureFlagsProvider
+        self.searchEnginesManager = searchEnginesManager
         self.manager = manager
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
@@ -147,6 +153,14 @@ final class ToolbarMiddleware {
         case ToolbarMiddlewareActionType.didStartDragInteraction:
             toolbarTelemetry.dragInteractionStarted()
 
+        case ToolbarMiddlewareActionType.didSwipeToOpenTabTray:
+            guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+            else { return }
+            toolbarTelemetry.tabTrayOpenedViaSwipe(isAtBottom: toolbarState.toolbarPosition == .bottom)
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showTabTray)
+            store.dispatch(action)
+
         case ToolbarMiddlewareActionType.loadSummaryState:
             checkPageCanSummarize(action: action)
 
@@ -162,6 +176,14 @@ final class ToolbarMiddleware {
             let action = SearchEngineSelectionAction(
                 windowUUID: action.windowUUID,
                 actionType: SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine
+            )
+            store.dispatch(action)
+
+        case ToolbarActionType.searchEngineDidChange:
+            let action = ToolbarMiddlewareAction(
+                isGoogleLensEnabled: isGoogleLensToolbarEntryPointAvailable(),
+                windowUUID: action.windowUUID,
+                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
             )
             store.dispatch(action)
 
@@ -533,5 +555,19 @@ final class ToolbarMiddleware {
 
     private func tabManager(for uuid: WindowUUID) -> TabManager? {
         return windowManager.tabManager(for: uuid)
+    }
+
+    private func isGoogleLensToolbarEntryPointAvailable() -> Bool {
+        guard featureFlagsProvider.isEnabled(.googleLens),
+              let defaultEngine = searchEnginesManager.defaultEngine,
+              !defaultEngine.isCustomEngine
+        else { return false }
+
+        let engineID = defaultEngine.engineID
+        let googleEngineID = OpenSearchEngine.googleEngineID
+
+        // App Services can return regional Google engine IDs such as "google-b-1-m".
+        let isGoogleDefaultEngine = engineID == googleEngineID || engineID.hasPrefix("\(googleEngineID)-")
+        return isGoogleDefaultEngine
     }
 }

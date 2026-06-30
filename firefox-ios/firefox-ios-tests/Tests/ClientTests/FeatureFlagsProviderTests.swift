@@ -41,6 +41,17 @@ final class FeatureFlagsProviderTests: XCTestCase {
         XCTAssertFalse(subject.isEnabled(.translation))
     }
 
+    func testIsEnabled_passesPrefsToLayer() {
+        _ = subject.isEnabled(.translation)
+
+        XCTAssertEqual(mockLayer.checkedFlags, [.translation])
+        guard let receivedPrefs = mockLayer.checkedPrefs.first as? MockProfilePrefs else {
+            XCTFail("Expected layer to receive MockProfilePrefs")
+            return
+        }
+        XCTAssertTrue(receivedPrefs === prefs)
+    }
+
     // MARK: - Debug override behavior
 
     func testIsEnabled_debugOverrideTrue_overridesLayerFalse() {
@@ -100,6 +111,17 @@ final class FeatureFlagsProviderTests: XCTestCase {
         XCTAssertEqual(prefs.boolForKey(debugKey), true)
     }
 
+    func testSetDebugOverride_novaDesign_writesToPrefs() {
+        guard let debugKey = FeatureFlagID.novaDesign.debugKey else {
+            XCTFail("novaDesign should have a debugKey")
+            return
+        }
+
+        subject.setDebugOverride(.novaDesign, to: true)
+
+        XCTAssertEqual(prefs.boolForKey(debugKey), true)
+    }
+
     func testSetDebugOverride_flagWithoutDebugKey_doesNotWriteToPrefs() {
         XCTAssertNil(FeatureFlagID.addressAutofillEdit.debugKey)
 
@@ -126,9 +148,21 @@ final class FeatureFlagsProviderTests: XCTestCase {
 
 final class MockNimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, @unchecked Sendable {
     var enabledFlags: Set<FeatureFlagID> = []
+    private(set) var checkedFlags: [FeatureFlagID] = []
+    private(set) var checkedPrefs: [Prefs] = []
 
-    func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool {
-        enabledFlags.contains(featureID)
+    func checkNimbusConfigFor(_ featureID: FeatureFlagID, with prefs: Prefs) -> Bool {
+        checkedFlags.append(featureID)
+        checkedPrefs.append(prefs)
+
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        if let debugKey = featureID.debugKey,
+           let override = prefs.boolForKey(debugKey) {
+            return override
+        }
+        #endif
+
+        return enabledFlags.contains(featureID)
     }
 
     func checkStartAtHomeConfiguration() -> StartAtHome {

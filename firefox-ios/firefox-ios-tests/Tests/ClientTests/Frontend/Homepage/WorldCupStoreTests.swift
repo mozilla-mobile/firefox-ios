@@ -135,6 +135,23 @@ final class WorldCupStoreTests: XCTestCase {
         XCTAssertEqual(subject.selectedTeam, "FRA")
     }
 
+    // MARK: - seenWinningMatchIDs
+
+    func test_seenWinningMatchIDs_returnsEmptyWhenUnset() {
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.seenWinningMatchIDs.isEmpty)
+    }
+
+    func test_seenWinningMatchIDs_roundTripsThroughPrefs() {
+        let subject = createSubject()
+        let ids: Set<String> = ["ARG|BRA|Jun 12", "ARG|CHI|Jun 20"]
+
+        subject.setSeenWinningMatchIDs(ids)
+
+        XCTAssertEqual(subject.seenWinningMatchIDs, ids)
+    }
+
     // MARK: - isMilestone2
 
     func test_isMilestone2_whenNowIsAfterEnableDate_returnsTrue() {

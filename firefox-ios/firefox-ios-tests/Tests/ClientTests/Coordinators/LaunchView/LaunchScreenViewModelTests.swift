@@ -92,17 +92,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
-    func testSplashScreenExperiment_afterShown_returnsTrue() {
-        let subject = createSubject()
-        let value = subject.getSplashScreenExperimentHasShown()
-        XCTAssertFalse(value)
-
-        subject.setSplashScreenExperimentHasShown()
-
-        let updatedValue = subject.getSplashScreenExperimentHasShown()
-        XCTAssertTrue(updatedValue)
-    }
-
     // MARK: - Multiple Launch Types Tests
 
     func testLaunchType_termsOfServiceAndIntro_sequence() {
@@ -311,27 +300,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         XCTAssertEqual(subject.launchOrder.count, 0)
         XCTAssertEqual(delegate.launchBrowserCalled, 1)
-    }
-
-    // MARK: - Splash Screen Experiment Tests
-
-    func testSplashScreenExperiment_initiallyNotShown() {
-        let subject = createSubject()
-        XCTAssertFalse(subject.getSplashScreenExperimentHasShown())
-    }
-
-    func testSplashScreenExperiment_setThenGet_returnsTrue() {
-        let subject = createSubject()
-        subject.setSplashScreenExperimentHasShown()
-        XCTAssertTrue(subject.getSplashScreenExperimentHasShown())
-    }
-
-    func testSplashScreenExperiment_multipleSets_staysTrue() {
-        let subject = createSubject()
-        subject.setSplashScreenExperimentHasShown()
-        subject.setSplashScreenExperimentHasShown()
-        subject.setSplashScreenExperimentHasShown()
-        XCTAssertTrue(subject.getSplashScreenExperimentHasShown())
     }
 
     // MARK: - Helpers

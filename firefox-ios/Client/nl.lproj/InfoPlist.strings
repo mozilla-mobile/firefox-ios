@@ -8,7 +8,7 @@
 "New Tab" = "Nieuw tabblad";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox gebruikt uw camera om QR-codes te scannen en foto’s en video te maken.";
+"NSCameraUsageDescription" = "Firefox kan uw camera gebruiken om QR-codes te scannen of foto’s en video te maken.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox vereist Face ID om uw opgeslagen aanmeldingen en betalingsmethoden te benaderen.";

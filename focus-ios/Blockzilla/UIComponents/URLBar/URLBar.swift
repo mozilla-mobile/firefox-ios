@@ -226,6 +226,20 @@ final class URLBar: UIView {
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
+    private var windowControlAdjustedLayoutGuide: UILayoutGuide {
+        if #available(iOS 26.0, *) {
+            return layoutGuide(for: .margins(cornerAdaptation: .horizontal))
+        } else {
+            return safeAreaLayoutGuide
+        }
+    }
+    private var windowControlAdjustedLayoutInset: CGFloat {
+        if #available(iOS 26.0, *) {
+            return 0
+        } else {
+            return UIConstants.layout.urlBarMargin
+        }
+    }
     var draggableUrlTextView: UIView { return urlTextField }
 
     var centerURLBar = false {
@@ -349,7 +363,10 @@ final class URLBar: UIView {
             make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
 
-            hideToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide).offset(UIConstants.layout.urlBarMargin).constraint)
+            hideToolsetConstraints.append(
+                make.leading.equalTo(windowControlAdjustedLayoutGuide.snp.leading)
+                    .offset(windowControlAdjustedLayoutInset).constraint
+            )
 
             showToolsetConstraints.append(make.leading.equalTo( forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
         }
@@ -376,7 +393,8 @@ final class URLBar: UIView {
         }
 
         backButton.snp.makeConstraints { make in
-            make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
+            make.leading.equalTo(windowControlAdjustedLayoutGuide.snp.leading)
+                .offset(windowControlAdjustedLayoutInset)
             make.centerY.equalTo(self)
             make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier)
         }
@@ -417,7 +435,10 @@ final class URLBar: UIView {
 
             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
             if inBrowsingMode {
-                compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+                compressedBarConstraints.append(
+                    make.trailing.equalTo(windowControlAdjustedLayoutGuide.snp.trailing)
+                        .inset(windowControlAdjustedLayoutInset).constraint
+                )
             } else {
                 compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.contextMenuButtonMargin).constraint)
             }
@@ -670,7 +691,8 @@ final class URLBar: UIView {
             }
         } else {
             leftBarViewLayoutGuide.snp.makeConstraints { make in
-                make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
+                make.leading.equalTo(windowControlAdjustedLayoutGuide.snp.leading)
+                    .offset(windowControlAdjustedLayoutInset)
             }
         }
 
@@ -889,7 +911,8 @@ final class URLBar: UIView {
             }
             if !isIPadRegularDimensions {
                 leftBarViewLayoutGuide.snp.makeConstraints { make in
-                    make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
+                    make.leading.equalTo(windowControlAdjustedLayoutGuide.snp.leading)
+                        .offset(windowControlAdjustedLayoutInset)
                 }
             }
 
@@ -932,7 +955,10 @@ final class URLBar: UIView {
 
             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
             if inBrowsingMode {
-                compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+                compressedBarConstraints.append(
+                    make.trailing.equalTo(windowControlAdjustedLayoutGuide.snp.trailing)
+                        .inset(windowControlAdjustedLayoutInset).constraint
+                )
             } else {
                 compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
             }

@@ -157,6 +157,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(action.readerModeState, .active)
     }
+
+    func testSearchEnginesDidUpdate_dispatchesSearchEngineDidChangeAction() throws {
+        let subject = createSubject()
+
+        subject.searchEnginesDidUpdate()
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertEqual(action.actionType as? ToolbarActionType, ToolbarActionType.searchEngineDidChange)
+    }
+
     // TODO(FXIOS-13126): Fix and uncomment this test
 //    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesToolbarAction() throws {
 //        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")

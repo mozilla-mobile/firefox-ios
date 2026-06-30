@@ -223,8 +223,12 @@ workflows:
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
         is_always_run: true
+    # Only push/release/epic builds save SPM cache. PRs read from the cache
+    # (via restore-spm-cache@3 above) but never write back, so they can't
+    # poison the cache for subsequent builds. main keeps the cache fresh.
     - save-spm-cache@1:
         is_always_run: true
+        run_if: '{{not .IsPR}}'
     - script@1:
         title: Clean before deploying
         timeout: 360
@@ -1029,7 +1033,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.228.0
+            gem install fastlane -v 2.233.1
             fastlane -version
             xcodebuild -version
 

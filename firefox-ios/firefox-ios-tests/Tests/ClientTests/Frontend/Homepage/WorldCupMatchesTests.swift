@@ -1029,6 +1029,54 @@ struct WorldCupMatchesTests {
         #expect(model.winnerThirdPlaceOrFinal == nil)
     }
 
+    // MARK: - winningMatchIDs
+
+    @Test
+    func test_winningMatchIDs_returnsIDsForMatchesWonByTeam_acrossFeaturedAndUpcoming() {
+        let model = WorldCupMatches(
+            phaseTitle: "Group A",
+            telemetryPhaseValue: "Group A",
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "BRA")],
+            upcomingMatches: [
+                makeViewMatch(home: "BRA", away: "GER", winnerKey: "BRA"),
+                makeViewMatch(home: "FRA", away: "ESP", winnerKey: "ESP")
+            ]
+        )
+
+        // featured matches come before upcoming, and the ESP win is excluded.
+        #expect(model.winningMatchIDs(for: "BRA") == [
+            "BRA|ARG|2026-07-19T18:00:00+00:00",
+            "BRA|GER|2026-07-19T18:00:00+00:00"
+        ])
+    }
+
+    @Test
+    func test_winningMatchIDs_excludesLostAndUndecidedMatches() {
+        let model = WorldCupMatches(
+            phaseTitle: "Group A",
+            telemetryPhaseValue: "Group A",
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "ARG")],
+            upcomingMatches: [makeViewMatch(home: "BRA", away: "GER", winnerKey: nil)]
+        )
+
+        #expect(model.winningMatchIDs(for: "BRA").isEmpty)
+    }
+
+    @Test
+    func test_winningMatchIDs_matchesAwayTeamWins() {
+        let model = WorldCupMatches(
+            phaseTitle: "Group A",
+            telemetryPhaseValue: "Group A",
+            isLive: false,
+            featuredMatch: [makeViewMatch(home: "BRA", away: "ARG", winnerKey: "ARG")],
+            upcomingMatches: []
+        )
+
+        #expect(model.winningMatchIDs(for: "ARG") == ["BRA|ARG|2026-07-19T18:00:00+00:00"])
+    }
+
     @Test
     func test_liveAgnosticIdentity_isStableWhenOnlyScoreOrClockChanges() {
         func card(score: WorldCupMatch.Score?) -> WorldCupMatches {

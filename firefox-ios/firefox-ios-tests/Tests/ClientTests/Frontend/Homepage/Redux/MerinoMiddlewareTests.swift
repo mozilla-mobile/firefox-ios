@@ -50,14 +50,14 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
-    func test_enterForegroundAction_getPocketData() throws {
+    func test_didBecomeActiveAction_getPocketData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageMiddlewareActionType.enteredForeground
+            actionType: HomepageMiddlewareActionType.didBecomeActive
         )
 
-        let expectation = XCTestExpectation(description: "Homepage action entered foreground dispatched")
+        let expectation = XCTestExpectation(description: "Homepage action did become active dispatched")
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }

@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+import Shared
 import UIKit
 
 typealias UIAlertActionCallback = (UIAlertAction) -> Void
@@ -135,6 +137,22 @@ extension UIAlertController {
         alert.addAction(cancelAction)
         alert.addAction(saveAction)
 
+        return alert
+    }
+
+    class func cameraAccessDisabledAlert(okayCallback: UIAlertActionCallback? = nil) -> UIAlertController {
+        let featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()
+        let alertMessage: String = featureFlagsProvider.isEnabled(.googleLens) ?
+            String(format: .CameraAccess.DisabledAlertMessage, AppName.shortName.rawValue)
+            : .ScanQRCodePermissionErrorMessage
+
+        let alert = UIAlertController(
+            title: "",
+            message: alertMessage,
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: okayCallback))
         return alert
     }
 }

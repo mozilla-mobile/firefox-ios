@@ -21,7 +21,10 @@ class TabTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
-        mockTabWebView = MockTabWebView(frame: .zero, configuration: .init(), windowUUID: windowUUID)
+        mockTabWebView = MockTabWebView(frame: .zero,
+                                        configuration: .init(),
+                                        windowUUID: windowUUID,
+                                        certStore: mockProfile.certStore)
         mockTabWebView.loadedURL = url
         mockFileManager = MockFileManager()
         mockDispatchQueue = MockDispatchQueue()

@@ -9,6 +9,8 @@ import Shared
 enum FeatureFlagID: String, CaseIterable {
     case adBlocker
     case addressAutofillEdit
+    case addressBarGestureToOpenTabTrayInteractive
+    case addressBarGestureToOpenTabTraySwipe
     case adsClient
     case aiKillSwitch
     case appearanceMenu
@@ -38,6 +40,7 @@ enum FeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case needsReloadRefactor
+    case novaDesign
     case noInternetConnectionErrorPage
     case quickAnswers
     case recentSearches
@@ -49,7 +52,6 @@ enum FeatureFlagID: String, CaseIterable {
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case snapkitRemovalRefactor
-    case splashScreen
     case startAtHome
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
@@ -92,6 +94,8 @@ enum FeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .adBlocker,
+                .addressBarGestureToOpenTabTrayInteractive,
+                .addressBarGestureToOpenTabTraySwipe,
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
@@ -113,6 +117,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
+                .novaDesign,
                 .noInternetConnectionErrorPage,
                 .quickAnswers,
                 .recentSearches,
