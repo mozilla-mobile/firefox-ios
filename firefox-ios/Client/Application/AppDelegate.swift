@@ -127,7 +127,7 @@ class AppDelegate: UIResponder,
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
 
-        // Provide the Nova design flag used to select the placeholder favicon palette.
+        // Select the placeholder favicon palette based on Nova design feature flag
         FaviconLetterColorSet.isNovaDesignEnabled = { self.featureFlagsProvider.isEnabled(.novaDesign) }
 
         backgroundWorkUtility = BackgroundFetchAndProcessingUtility()

@@ -113,8 +113,6 @@ final class LetterImageGeneratorTests: XCTestCase {
         testColor(capturedColor: capturedColor, expectedColor: expectedBackgroundColor)
     }
 
-    // MARK: - Nova palette
-
     func testGenerateBackgroundColor_withNovaPalette_usesNovaColor() {
         let subject = DefaultLetterImageGenerator(colorSet: NovaFaviconAccentColors.palette)
         let siteString = "mozilla.com"

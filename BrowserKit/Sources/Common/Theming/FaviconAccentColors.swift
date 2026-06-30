@@ -8,20 +8,18 @@ public struct FaviconLetterColorSet: @unchecked Sendable {
     public let backgroundColors: [UIColor]
     public let letterColors: [UIColor]
 
-    public init(backgroundColors: [UIColor], letterColors: [UIColor]) {
+    init(backgroundColors: [UIColor], letterColors: [UIColor]) {
         self.backgroundColors = backgroundColors
         self.letterColors = letterColors
     }
 
-    /// Set once at app launch from the Nova feature flag; defaults to legacy.
     nonisolated(unsafe) public static var isNovaDesignEnabled: () -> Bool = { false }
 
-    /// The active palette, selected by `isNovaDesignEnabled`.
     public static var current: FaviconLetterColorSet {
         isNovaDesignEnabled() ? NovaFaviconAccentColors.palette : StandardFaviconAccentColors.palette
     }
 
-    /// Assembles a palette from ordered color families; `letterColor` maps a shade index to its letter.
+    /// Assembles a palette from ordered color families
     static func make(families: [[UIColor]],
                      letterColor: (_ shade: Int) -> UIColor) -> FaviconLetterColorSet {
         return FaviconLetterColorSet(backgroundColors: families.flatMap { $0 },
@@ -91,9 +89,10 @@ final class NovaFaviconAccentColors {
                        iconAccentOrange5, iconAccentOrange6, iconAccentOrange7]
         let reds = [iconAccentRed1, iconAccentRed2, iconAccentRed3, iconAccentRed4,
                     iconAccentRed5, iconAccentRed6, iconAccentRed7]
-        // The 3 darkest shades of each family use the on-dark letter; the lighter 4 the on-light one.
+        let nova = NovaLightTheme().colors
+        // Lighter shades (1–4) take the on-light text token; darker shades (5–7) the on-dark one.
         return .make(families: [greens, cyans, blues, yellows, oranges, reds]) {
-            $0 < 4 ? NovaColors.VioletDesaturated90 : NovaColors.VioletDesaturated0
+            $0 < 4 ? nova.textOnLight : nova.textOnDark
         }
     }()
 }
