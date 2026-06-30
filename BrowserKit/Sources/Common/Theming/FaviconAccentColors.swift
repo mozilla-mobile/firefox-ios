@@ -8,11 +8,6 @@ public struct FaviconLetterColorSet: @unchecked Sendable {
     public let backgroundColors: [UIColor]
     public let letterColors: [UIColor]
 
-    init(backgroundColors: [UIColor], letterColors: [UIColor]) {
-        self.backgroundColors = backgroundColors
-        self.letterColors = letterColors
-    }
-
     nonisolated(unsafe) public static var isNovaDesignEnabled: () -> Bool = { false }
 
     public static var current: FaviconLetterColorSet {
