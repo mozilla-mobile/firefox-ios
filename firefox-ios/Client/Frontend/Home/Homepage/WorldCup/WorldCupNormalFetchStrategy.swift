@@ -41,16 +41,28 @@ struct WorldCupNormalFetchStrategy: WorldCupFetchStrategyProtocol {
         }
     }
 
+    /// Dedicated queue for the blocking synchronous FFI. It is deliberately NOT the Swift
+    /// Concurrency cooperative pool: a stuck merino request blocks a thread here instead of
+    /// starving the cooperative pool (which would stall all async work app-wide). Concurrent
+    /// so `/matches`, `/live` and `/teams` don't serialize behind one another.
+    private static let fetchQueue = DispatchQueue(
+        label: "org.mozilla.ios.worldcup.fetch",
+        qos: .userInitiated
+    )
+
     static func singleAttempt<Response: Sendable>(
         _ fetch: @escaping @Sendable () throws -> Response?
     ) async -> Result<Response?, WorldCupLoadError> {
-        await Task.detached(priority: .userInitiated) {
-            () -> Result<Response?, WorldCupLoadError> in
-            do {
-                return .success(try fetch())
-            } catch {
-                return .failure(WorldCupLoadError.from(error))
+        await withCheckedContinuation { continuation in
+            fetchQueue.async {
+                let result: Result<Response?, WorldCupLoadError>
+                do {
+                    result = .success(try fetch())
+                } catch {
+                    result = .failure(WorldCupLoadError.from(error))
+                }
+                continuation.resume(returning: result)
             }
-        }.value
+        }
     }
 }

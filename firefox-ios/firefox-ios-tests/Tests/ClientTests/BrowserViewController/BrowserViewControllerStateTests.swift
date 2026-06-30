@@ -5,6 +5,7 @@
 import Redux
 import XCTest
 import SummarizeKit
+import QuickAnswersKit
 
 @testable import Client
 
@@ -511,22 +512,31 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        let action = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
+        let action = getNavigationBrowserAction(
+            for: .tapOnQuickAnswersButton,
+            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+        )
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .quickAnswers)
+        XCTAssertEqual(
+            newState.navigationDestination?.destination,
+            .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+        )
     }
 
     func test_navigationDestinationHandled_clearsNavigationDestination() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        let navigateAction = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
+        let navigateAction = getNavigationBrowserAction(
+            for: .tapOnQuickAnswersButton,
+            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+        )
         let navigatedState = reducer(initialState, navigateAction)
 
         let handledAction = getNavigationBrowserAction(
             for: .navigationDestinationHandled,
-            destination: .quickAnswers
+            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
         )
         let handledState = reducer(navigatedState, handledAction)
 

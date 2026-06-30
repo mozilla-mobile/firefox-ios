@@ -26,7 +26,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         readingListScreen.assertFennecAlertNotExists()

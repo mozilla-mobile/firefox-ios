@@ -56,7 +56,7 @@ class A11ySearchTest: BaseTestCase {
             app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft].firstMatch.tap()
 
             // The search suggestion fills the URL bar but does not conduct the search
-            waitForValueContains(urlBarAddress, value: "g")
+            mozWaitForValueContains(urlBarAddress, value: "g")
 
             // Check accessibility
             // swiftlint:disable empty_count

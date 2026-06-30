@@ -1,5 +1,6 @@
 {
   "originHash" : "ac4a620fa91442cdd75522bad3285692d20983f4c9f6e1d966ec217bbe13fd02",
+
   "pins" : [
     {
       "identity" : "a-star",
@@ -51,8 +52,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "8470fb7d0ff00d1d0f845ec445fbc70b4c6cbab3",
-        "version" : "66.3.0"
+        "revision" : "afd55ed0bea2aeefc1394f06ab02ad3c6d9178dc",
+        "version" : "69.0.0"
       }
     },
     {
@@ -69,8 +70,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "cf8be20d07654570554c8a8a4952bc8a5766a8b0",
-        "version" : "8.9.0"
+        "revision" : "ac632bd26a1c00f139ff62fd01806f21cf67325e",
+        "version" : "8.10.0"
       }
     },
     {

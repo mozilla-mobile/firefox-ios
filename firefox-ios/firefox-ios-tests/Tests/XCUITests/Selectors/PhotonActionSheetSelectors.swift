@@ -25,7 +25,7 @@ struct PhotonActionSheetSelectors: PhotonActionSheetSelectorsSet {
     private enum IDs {
         static let settingsMenuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
         static let photonActionSheetNavigationBar = "UIActivityContentView"
-        static let photonActionSheetWebsiteTitle = "Example Domain"
+        static let photonActionSheetWebsiteTitle = TestLabels.exampleDomain
         static let photonActionSheetWebsiteURL = "example.com"
         static let photonActionSheetCopyButton = "Copy"
         static let shareView = "ShareTo.ShareView"

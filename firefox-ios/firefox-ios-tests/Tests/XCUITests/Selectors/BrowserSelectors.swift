@@ -90,7 +90,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
     )
 
     let STATIC_TEXT_EXAMPLE_DOMAIN = Selector.staticTextByExactLabel(
-        "Example Domain",
+        TestLabels.exampleDomain,
         description: "Static text 'Example Domain'",
         groups: ["browser"]
     )

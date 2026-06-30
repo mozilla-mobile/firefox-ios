@@ -28,6 +28,12 @@
 /* Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English'). */
 "Translations.LanguagePicker.PageTranslatedTitle.v151" = "Side oversat til %@";
 
+/* Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen. */
+"Translations.LanguagePicker.PreferredLanguages.v151" = "Foretrukne sprog…";
+
+/* Button in the translation action sheet to restore the page to its original language. */
+"Translations.LanguagePicker.ShowOriginal.v151" = "Vis original";
+
 /* Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into. */
 "Translations.LanguagePicker.Title.v151" = "Oversæt side til…";
 

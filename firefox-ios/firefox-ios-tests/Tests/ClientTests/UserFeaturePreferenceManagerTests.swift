@@ -301,6 +301,20 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
     }
 
     @MainActor
+    func testGetPreference_flagWithNoUserPrefsKey_passesPrefsToNimbusLayer() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        _ = subject.getPreferenceFor(.microsurvey)
+
+        XCTAssertEqual(mockLayer.checkedFlags, [.microsurvey])
+        guard let receivedPrefs = mockLayer.checkedPrefs.first as? MockProfilePrefs else {
+            XCTFail("Expected layer to receive MockProfilePrefs")
+            return
+        }
+        XCTAssertTrue(receivedPrefs === prefs)
+    }
+
+    @MainActor
     func testSetPreference_flagWithNoUserPrefsKey_isNoOp() {
         let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
 

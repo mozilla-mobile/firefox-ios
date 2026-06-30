@@ -62,6 +62,7 @@ enum TabPanelViewActionType: ActionType {
     case moveTab
     case learnMorePrivateMode
     case selectTab
+    case prefetchScreenshots
 }
 
 struct TabPanelMiddlewareAction: Action {
@@ -106,4 +107,5 @@ struct ScreenshotAction: Action {
 
 enum ScreenshotActionType: ActionType {
     case screenshotTaken
+    case screenshotRestored
 }

@@ -9,7 +9,7 @@ final class CookiePersistenceTests: BaseTestCase {
     private var toolbarScreen: ToolbarScreen!
     private var tabTrayScreen: TabTrayScreen!
 
-    let cookieSiteURL = "http://localhost:\(serverPort)/test-fixture/test-cookie-store.html"
+    let cookieSiteURL = "http://localhost:\(serverPort)/test-fixture/\(TestPages.cookieStore)"
     let topSitesTitle = ["Facebook", "YouTube", "Wikipedia"]
 
     override func setUp() async throws {

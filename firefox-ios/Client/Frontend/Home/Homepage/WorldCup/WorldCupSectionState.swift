@@ -20,6 +20,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     /// the swipe view so that with no team selected we land on the closest
     /// upcoming match rather than the chronologically latest one.
     var defaultMatchIndex: Int
+    var shouldShowConfetti: Bool
 
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
@@ -30,6 +31,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         self.matches = []
         self.apiError = nil
         self.defaultMatchIndex = 0
+        self.shouldShowConfetti = false
     }
 
     private init(
@@ -40,7 +42,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         selectedCountryId: String?,
         matches: [WorldCupMatches],
         apiError: WorldCupLoadError?,
-        defaultMatchIndex: Int
+        defaultMatchIndex: Int,
+        shouldShowConfetti: Bool
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
@@ -50,6 +53,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         self.matches = matches
         self.apiError = apiError
         self.defaultMatchIndex = defaultMatchIndex
+        self.shouldShowConfetti = shouldShowConfetti
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -66,7 +70,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
                 selectedCountryId: action.selectedCountryId,
                 matches: action.matches,
                 apiError: action.apiError,
-                defaultMatchIndex: action.defaultMatchIndex
+                defaultMatchIndex: action.defaultMatchIndex,
+                shouldShowConfetti: action.shouldShowConfetti
             )
         default:
             return state

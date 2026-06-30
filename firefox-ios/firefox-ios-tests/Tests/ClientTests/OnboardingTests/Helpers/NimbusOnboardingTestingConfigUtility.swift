@@ -15,7 +15,6 @@ struct NimbusOnboardingTestingConfigUtility {
         static let popupSecondInstruction = "second instruction"
         static let popupThirdInstruction = "third instruction"
         static let a11yIDOnboarding = "onboarding."
-        static let a11yIDUpgrade = "upgrade."
         static let linkTitle = "MacRumors"
         static let linkURL = "https://www.mozilla.org/en-US/privacy/firefox/"
         static let primaryButtonTitle = "Primary Button"
@@ -28,10 +27,8 @@ struct NimbusOnboardingTestingConfigUtility {
         case welcome
         case notifications = "notificationPermissions"
         case sync = "signToSync"
-        case updateWelcome = "update.welcome"
-        case updateSync = "update.signToSync"
 
-        static let allCards: [CardOrder] = [.welcome, .notifications, .sync, .updateWelcome, .updateSync]
+        static let allCards: [CardOrder] = [.welcome, .notifications, .sync]
         static let welcomeNotificationSync: [CardOrder] = [.welcome, .notifications, .sync]
         static let welcomeSync: [CardOrder] = [.welcome, .sync]
     }
@@ -124,13 +121,12 @@ struct NimbusOnboardingTestingConfigUtility {
         andOrder order: Int,
         uiVariant: OnboardingVariant? = nil
     ) -> NimbusOnboardingCardData {
-        let shouldAddLink: [CardOrder] = [.welcome, .updateWelcome]
-        let isUpdate: [CardOrder] = [.updateWelcome, .updateSync]
+        let shouldAddLink: [CardOrder] = [.welcome]
         let image: NimbusOnboardingHeaderImage = {
             switch id {
             case .notifications: return .notifications
-            case .welcome, .updateWelcome: return .welcomeGlobe
-            case .sync, .updateSync: return .syncDevices
+            case .welcome: return .welcomeGlobe
+            case .sync: return .syncDevices
             }
         }()
 
@@ -142,7 +138,7 @@ struct NimbusOnboardingTestingConfigUtility {
             image: image,
             instructionsPopup: buildInfoPopup(),
             link: shouldAddLink.contains(where: { $0 == id }) ? buildLink() : nil,
-            onboardingType: isUpdate.contains(where: { $0 == id }) ? .upgrade : .freshInstall,
+            onboardingType: .freshInstall,
             order: order,
             prerequisites: ["ALWAYS"],
             title: "title text",
@@ -174,7 +170,7 @@ struct NimbusOnboardingTestingConfigUtility {
 
     private func createButtons(for id: CardOrder) -> NimbusOnboardingButtons {
         switch id {
-        case .welcome, .updateWelcome:
+        case .welcome:
             return NimbusOnboardingButtons(
                 primary: NimbusOnboardingButton(
                     action: .forwardOneCard,
@@ -187,7 +183,7 @@ struct NimbusOnboardingTestingConfigUtility {
                 secondary: NimbusOnboardingButton(
                     action: .forwardOneCard,
                     title: "\(CardElementNames.secondaryButtonTitle)"))
-        case .sync, .updateSync:
+        case .sync:
             return NimbusOnboardingButtons(
                 primary: NimbusOnboardingButton(
                     action: .syncSignIn,

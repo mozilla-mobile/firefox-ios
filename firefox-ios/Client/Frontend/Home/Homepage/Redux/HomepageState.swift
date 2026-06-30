@@ -16,6 +16,7 @@ struct HomepageState: ScreenState, Equatable {
     let topSitesState: TopSitesSectionState
     let searchState: SearchBarState
     let jumpBackInState: JumpBackInSectionState
+    let trackerBlockerModuleState: TrackerBlockerModuleState
     let bookmarkState: BookmarksSectionState
     let worldcupState: WorldCupSectionState
     let merinoState: MerinoState
@@ -64,6 +65,7 @@ struct HomepageState: ScreenState, Equatable {
             topSitesState: homepageState.topSitesState,
             searchState: homepageState.searchState,
             jumpBackInState: homepageState.jumpBackInState,
+            trackerBlockerModuleState: homepageState.trackerBlockerModuleState,
             bookmarkState: homepageState.bookmarkState,
             worldcupState: homepageState.worldcupState,
             merinoState: homepageState.merinoState,
@@ -84,6 +86,7 @@ struct HomepageState: ScreenState, Equatable {
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
             searchState: SearchBarState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
+            trackerBlockerModuleState: TrackerBlockerModuleState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
             worldcupState: WorldCupSectionState(windowUUID: windowUUID),
             merinoState: MerinoState(windowUUID: windowUUID),
@@ -103,6 +106,7 @@ struct HomepageState: ScreenState, Equatable {
         topSitesState: TopSitesSectionState,
         searchState: SearchBarState,
         jumpBackInState: JumpBackInSectionState,
+        trackerBlockerModuleState: TrackerBlockerModuleState,
         bookmarkState: BookmarksSectionState,
         worldcupState: WorldCupSectionState,
         merinoState: MerinoState,
@@ -119,6 +123,7 @@ struct HomepageState: ScreenState, Equatable {
         self.topSitesState = topSitesState
         self.searchState = searchState
         self.jumpBackInState = jumpBackInState
+        self.trackerBlockerModuleState = trackerBlockerModuleState
         self.bookmarkState = bookmarkState
         self.worldcupState = worldcupState
         self.merinoState = merinoState
@@ -166,6 +171,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer(state.merinoState, action))
@@ -183,6 +189,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer(state.merinoState, action))
@@ -207,6 +214,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer(state.merinoState, action))
@@ -224,6 +232,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer(state.merinoState, action))
@@ -240,6 +249,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer(state.merinoState, action))
@@ -255,6 +265,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer(state.merinoState, action))
@@ -271,6 +282,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer(state.merinoState, action))
@@ -284,6 +296,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState))
             .copy(searchState: SearchBarState.defaultState(from: state.searchState))
             .copy(jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.defaultState(from: state.trackerBlockerModuleState))
             .copy(bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState))
             .copy(worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState))
             .copy(merinoState: MerinoState.defaultState(from: state.merinoState))

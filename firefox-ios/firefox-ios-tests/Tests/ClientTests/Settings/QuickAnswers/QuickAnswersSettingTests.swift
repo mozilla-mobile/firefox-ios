@@ -11,6 +11,7 @@ final class QuickAnswersSettingTests: XCTestCase {
     private var profile: MockProfile!
     private var delegate: MockGeneralSettingsDelegate!
     private var settings: SettingsTableViewController!
+    let mockUserPreferences = MockUserFeaturePreferences()
 
     override func setUp() async throws {
         try await super.setUp()
@@ -53,20 +54,13 @@ final class QuickAnswersSettingTests: XCTestCase {
     // MARK: - Status
 
     func test_status_showsOnWhenFeatureEnabled() {
-        profile.prefs.setBool(true, forKey: PrefsKeys.Settings.quickAnswersFeature)
         let subject = createSubject()
         XCTAssertEqual(subject.status?.string, "On")
     }
 
     func test_status_showsOffWhenFeatureDisabled() {
-        profile.prefs.setBool(false, forKey: PrefsKeys.Settings.quickAnswersFeature)
-        let subject = createSubject()
+        let subject = createSubject(enabled: false)
         XCTAssertEqual(subject.status?.string, "Off")
-    }
-
-    func test_status_showsOnByDefault() {
-        let subject = createSubject()
-        XCTAssertEqual(subject.status?.string, "On")
     }
 
     // MARK: - onClick
@@ -108,19 +102,22 @@ final class QuickAnswersSettingTests: XCTestCase {
     func test_status_updatesWhenPreferenceChanges() {
         let subject = createSubject()
 
-        profile.prefs.setBool(true, forKey: PrefsKeys.Settings.quickAnswersFeature)
+        mockUserPreferences.boolPreferences[.quickAnswers] = true
         XCTAssertEqual(subject.status?.string, "On")
 
+        mockUserPreferences.boolPreferences[.quickAnswers] = false
         profile.prefs.setBool(false, forKey: PrefsKeys.Settings.quickAnswersFeature)
         XCTAssertEqual(subject.status?.string, "Off")
     }
 
     // MARK: - Helpers
 
-    private func createSubject() -> QuickAnswersSetting {
+    private func createSubject(enabled: Bool = true) -> QuickAnswersSetting {
+        mockUserPreferences.boolPreferences[.quickAnswers] = enabled
         let subject = QuickAnswersSetting(
             settings: settings,
-            settingsDelegate: delegate
+            settingsDelegate: delegate,
+            userPreferences: mockUserPreferences
         )
         trackForMemoryLeaks(subject)
         return subject

@@ -150,6 +150,25 @@ class HomePageSettingViewController: SettingsTableViewController,
             }
             sectionItems.append(jumpBackInSetting)
 
+            if featureFlagsProvider.isEnabled(.homepageTrackerBlockerModule) {
+                let trackerBlockerModuleSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.TrackerBlockerSection,
+                    defaultValue: userPreferences.getPreferenceFor(.homepageTrackerBlockerModule),
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.PrivacyReport
+                ) { value in
+                    store.dispatch(
+                        TrackerBlockerModuleAction(
+                            isEnabled: value,
+                            windowUUID: self.windowUUID,
+                            actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+                        )
+                    )
+                }
+                sectionItems.append(trackerBlockerModuleSetting)
+            }
+
             if worldCupStore.isFeatureEnabled {
                 let windowUUID = self.windowUUID
                 let worldCupSetting = BoolSetting(

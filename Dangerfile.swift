@@ -19,10 +19,9 @@ if releaseCheck.isReleaseBranch {
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
     checkForSpecificFileChange()
     checkForGleanFileChange()
+    checkForNimbusFeatureChange()
     CodeUsageDetector().checkForCodeUsage()
-    let coverageGate = CodeCoverageGate()
-    coverageGate.failOnFiles(type: .newFiles)
-    coverageGate.failOnFiles(type: .modifiedFiles)
+    CodeCoverageGate().run()
     BrowserViewControllerChecker().failsOnAddedExtension()
     checkCodeCoverage()
 }
@@ -121,34 +120,6 @@ class CodeCoverageGate {
             }
         }
 
-        var label: String {
-            switch self {
-            case .newFiles: return "New file"
-            case .modifiedFiles: return "Existing file"
-            }
-        }
-
-        var emptyMessage: String {
-            switch self {
-            case .newFiles: return "No new file detected so code coverage gate wasn't ran."
-            case .modifiedFiles: return "No modified file detected so code coverage gate wasn't ran."
-            }
-        }
-
-        var insufficientChangesMessage: String {
-            switch self {
-            case .newFiles: return "No new file had significant enough changes for the coverage gate to run."
-            case .modifiedFiles: return "No modified file had significant enough changes for the coverage gate to run."
-            }
-        }
-
-        var allPassMessage: String {
-            switch self {
-            case .newFiles: return "All new files meet their thresholds**."
-            case .modifiedFiles: return "All modified files meet their thresholds."
-            }
-        }
-
         var thresholdRange: (min: Double, max: Double) {
             switch self {
             case .newFiles: return (min: 0.4, max: 0.7)
@@ -157,34 +128,39 @@ class CodeCoverageGate {
         }
     }
 
-    func failOnFiles(type: CoverageType) {
+    enum GateOutcome {
+        case noCandidates
+        case noSignificantChanges
+        case allPass
+        case failures([String]) // pre-formatted markdown table rows
+    }
+
+    func run() {
         guard let coverageFiles = parseCoverageFiles() else { return }
+        let newOutcome = evaluate(type: .newFiles, coverageFiles: coverageFiles)
+        let modifiedOutcome = evaluate(type: .modifiedFiles, coverageFiles: coverageFiles)
 
-        let candidates = swiftSourceCandidates(from: type.sourceFiles)
+        var failureRows: [String] = []
+        if case .failures(let rows) = newOutcome { failureRows += rows }
+        if case .failures(let rows) = modifiedOutcome { failureRows += rows }
 
-        guard !candidates.isEmpty else {
-            markdown("""
-            ### ✅ \(type.label) code coverage
-            \(type.emptyMessage)
-            """)
-            return
+        if !failureRows.isEmpty {
+            reportCoverageFailure(rows: failureRows)
+        } else {
+            reportCoverageSuccess(newOutcome: newOutcome, modifiedOutcome: modifiedOutcome)
         }
+    }
+
+    private func evaluate(type: CoverageType, coverageFiles: [[String: Any]]) -> GateOutcome {
+        let candidates = swiftSourceCandidates(from: type.sourceFiles)
+        guard !candidates.isEmpty else { return .noCandidates }
 
         // Ignore tiny edits: only gate files with at least `type.minimumLines`
         let gated = candidates.filter { addedLines(in: $0) >= type.minimumLines }
+        guard !gated.isEmpty else { return .noSignificantChanges }
 
-        guard !gated.isEmpty else {
-            markdown("""
-            ### ✅ \(type.label) code coverage
-            \(type.insufficientChangesMessage)
-            """)
-            return
-        }
-
-        // Collect failures
         var rows: [String] = []
         for file in gated {
-            // Find matching coverage entry
             let entry = coverageMatch(repoPath: file, coverageFiles: coverageFiles)
 
             // Extract percentage (supports 0..1 or 0..100 in lineCoverage)
@@ -193,7 +169,6 @@ class CodeCoverageGate {
                 return raw <= 1.000001 ? raw * 100.0 : raw
             }()
 
-            // Calculate threshold based on file length
             let lineCount = countLines(in: file)
             let threshold = scaledPercentage(for: Double(lineCount), in: type.thresholdRange) * 100.0
 
@@ -202,15 +177,40 @@ class CodeCoverageGate {
             }
         }
 
-        guard !rows.isEmpty else {
-            markdown("""
-            ### ✅ \(type.label) code coverage
-            \(type.allPassMessage)
-            """)
-            return
-        }
+        return rows.isEmpty ? .allPass : .failures(rows)
+    }
 
-        reportCoverageFailure(rows: rows, label: type.label)
+    private func reportCoverageSuccess(newOutcome: GateOutcome, modifiedOutcome: GateOutcome) {
+        let body: String
+        switch (newOutcome, modifiedOutcome) {
+        case (.noCandidates, .noCandidates):
+            body = "No new or modified files detected so the code coverage gate wasn't run."
+        case (.allPass, .allPass):
+            body = "All new and modified files meet their coverage thresholds."
+        default:
+            body = """
+            - \(successLine(for: newOutcome, type: .newFiles))
+            - \(successLine(for: modifiedOutcome, type: .modifiedFiles))
+            """
+        }
+        markdown("""
+        ### ✅ Code coverage
+        \(body)
+        """)
+    }
+
+    private func successLine(for outcome: GateOutcome, type: CoverageType) -> String {
+        let noun = (type == .newFiles) ? "new" : "modified"
+        switch outcome {
+        case .noCandidates:
+            return "No \(noun) files detected so the coverage gate wasn't run."
+        case .noSignificantChanges:
+            return "No \(noun) files had significant enough changes for the coverage gate to run."
+        case .allPass:
+            return "All \(noun) files meet their coverage thresholds."
+        case .failures:
+            return ""
+        }
     }
 
     private func swiftSourceCandidates(from files: [String]) -> [String] {
@@ -257,9 +257,9 @@ class CodeCoverageGate {
         }
     }
 
-    private func reportCoverageFailure(rows: [String], label: String) {
+    private func reportCoverageFailure(rows: [String]) {
         let header = """
-        ### ❌ \(label) code coverage
+        ### ❌ Code coverage
         The following file(s) are below their scaled coverage:
 
         | File | Coverage | Required |
@@ -399,7 +399,7 @@ func checkForSpecificFileChange() {
                 ].contains { file.hasSuffix($0) }
             },
             message: "Detected tab related changes in:",
-            contacts: "(cc @lmarceau)"
+            contacts: "(cc @yoanarios)"
         ),
         FileCheck(
             fileMatches: { $0.hasSuffix(".sh") },
@@ -470,6 +470,43 @@ func checkForGleanFileChange() {
         and tag @adudenamedruby for data review.
         """)
     }
+}
+
+// Detect added/removed Nimbus features and request a spreadsheet update
+func checkForNimbusFeatureChange() {
+    let nimbusFeaturesPath = "firefox-ios/nimbus-features/"
+    let nimbusManifestPath = "firefox-ios/nimbus.fml.yaml"
+    let spreadsheetURL = "https://docs.google.com/spreadsheets/d/1j5Eo0kY3LDgfKdeVu44PxYmkWMRJ1QaU07NTCl2c0Kg/edit?gid=842661143#gid=842661143"
+
+    let isFeatureFile: (String) -> Bool = { file in
+        file.contains(nimbusFeaturesPath) && file.hasSuffix(".yaml")
+    }
+    let createdFeatures = danger.git.createdFiles.filter(isFeatureFile)
+    let deletedFeatures = danger.git.deletedFiles.filter(isFeatureFile)
+    let manifestModified = danger.git.modifiedFiles.contains(nimbusManifestPath)
+
+    guard !createdFeatures.isEmpty || !deletedFeatures.isEmpty || manifestModified else { return }
+
+    var sections: [String] = []
+    if !createdFeatures.isEmpty {
+        let bullets = createdFeatures.map { "• `\($0)`" }.joined(separator: "\n")
+        sections.append("**Added feature file(s):**\n\(bullets)")
+    }
+    if !deletedFeatures.isEmpty {
+        let bullets = deletedFeatures.map { "• `\($0)`" }.joined(separator: "\n")
+        sections.append("**Removed feature file(s):**\n\(bullets)")
+    }
+    if manifestModified {
+        sections.append("**Manifest modified:** `\(nimbusManifestPath)`")
+    }
+
+    markdown("""
+    ### 🧪 **Nimbus feature changes detected**
+    \(sections.joined(separator: "\n\n"))
+
+    If a feature was added or removed, please update the \
+    [Nimbus features tracking spreadsheet](\(spreadsheetURL)) to reflect the change.
+    """)
 }
 
 private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
@@ -543,7 +580,7 @@ class CodeUsageDetector {
             case .swiftUIText:
                 return "### ⚠️ SwiftUI `Text(\"\")` usage detected\nSwiftUI 'Text(\"\"' needs to be avoided, use Strings.swift localization instead."
             case .task:
-                let contacts = "@Cramsden @ih-codes @lmarceau"
+                let contacts = "@Cramsden @ih-codes"
                 return "### 🧑‍💻 New `Task {}` detected\nNew `Task {}` added. Please add a concurrency reviewer on your PR: \(contacts)"
             case .notifiable:
                 return "### ⚠️ `NotificationCenter.default.addObserver` detected\nPlease prefer Notifiable over `NotificationCenter` unless specific circumstances."
@@ -886,7 +923,7 @@ struct ReleaseBranchCheck {
         markdown("""
         # ‼️ ATTENTION ‼️
         ### 🎯 This PR targets a **release branch**.
-        Please ensure you've followed the [uplift request process](https://github.com/mozilla-mobile/firefox-ios/wiki/Requesting-an-uplift-to-a-release-branch).
+        Please ensure you've followed the [uplift request process](https://mozilla-hub.atlassian.net/wiki/x/OgAbog).
         """)
     }
 }

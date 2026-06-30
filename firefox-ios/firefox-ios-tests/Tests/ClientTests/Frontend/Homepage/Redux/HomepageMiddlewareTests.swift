@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Glean
 import Redux
 import XCTest
@@ -32,8 +33,9 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_init_setsUpNotifications() {
         _ = createSubject()
 
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 9)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           UIApplication.didEnterBackgroundNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
                                                            .ProfileDidFinishSyncing,
@@ -42,6 +44,50 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
                                                            .BookmarksUpdated,
                                                            .RustPlacesOpened
         ])
+    }
+
+    func test_didBecomeActiveNotification_dispatchesForegroundRefresh() throws {
+        let mockWindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
+        mockWindowManager.overrideWindows = true
+        let subject = createSubject(windowManager: mockWindowManager)
+        mockNotificationCenter.notifiableListener = subject
+        let dispatchExpectation = XCTestExpectation(description: "Homepage active refresh actions dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        mockNotificationCenter.post(name: UIApplication.didBecomeActiveNotification)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let actionTypes = actionsCalled.compactMap { $0.actionType as? HomepageMiddlewareActionType }
+
+        XCTAssertEqual(actionTypes, [.didBecomeActive])
+        XCTAssertEqual(actionsCalled.map(\.windowUUID), [.XCTestDefaultUUID])
+    }
+
+    func test_didEnterBackgroundNotification_dispatchesBackgroundAction() throws {
+        let mockWindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
+        mockWindowManager.overrideWindows = true
+        let subject = createSubject(windowManager: mockWindowManager)
+        mockNotificationCenter.notifiableListener = subject
+        let dispatchExpectation = XCTestExpectation(description: "Homepage background action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let actionTypes = actionsCalled.compactMap { $0.actionType as? HomepageMiddlewareActionType }
+
+        XCTAssertEqual(actionTypes, [.didEnterBackground])
+        XCTAssertEqual(actionsCalled.map(\.windowUUID), [.XCTestDefaultUUID])
     }
 
     func test_viewWillAppearAction_doesNotSendTelemetryData() throws {
@@ -539,13 +585,17 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
-    private func createSubject(privacyNoticeHelper: PrivacyNoticeHelperProtocol? = nil) -> HomepageMiddleware {
+    private func createSubject(
+        privacyNoticeHelper: PrivacyNoticeHelperProtocol? = nil,
+        windowManager: WindowManager = AppContainer.shared.resolve()
+    ) -> HomepageMiddleware {
         return HomepageMiddleware(
             homepageTelemetry: HomepageTelemetry(
                 gleanWrapper: mockGleanWrapper
             ),
             privacyNoticeHelper: privacyNoticeHelper,
-            notificationCenter: mockNotificationCenter
+            notificationCenter: mockNotificationCenter,
+            windowManager: windowManager
         )
     }
 

@@ -90,6 +90,72 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(mockWindowManager.windowsWereAccessed)
     }
 
+    func test_screenshotRestoredAction_triggersRefresh_withoutSavingToDisk() throws {
+        let subject = createSubject()
+        let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        let action = ScreenshotAction(
+            windowUUID: .XCTestDefaultUUID,
+            tab: tab,
+            actionType: ScreenshotActionType.screenshotRestored
+        )
+
+        let expectation = XCTestExpectation(description: "Refresh dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        mockWindowManager.overrideWindows = true
+
+        subject.tabsPanelProvider(appState, action)
+        wait(for: [expectation])
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPanelMiddlewareAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? TabPanelMiddlewareActionType)
+
+        XCTAssertEqual(actionType, TabPanelMiddlewareActionType.refreshTabs)
+        XCTAssertEqual(
+            mockTabManager.tabDidSetScreenshotCalls,
+            0,
+            "screenshotRestored should not write the loaded image back to disk."
+        )
+    }
+
+    func test_prefetchScreenshotsAction_callsPreloadScreenshotForTab() {
+        let subject = createSubject()
+        let tabA = createTab(profile: mockProfile, urlString: "https://firefox.com")
+        mockTabManager.tabsByUUID = [tabA.tabUUID: tabA]
+
+        let action = TabPanelViewAction(
+            panelType: .tabs,
+            tabUUID: tabA.tabUUID,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelViewActionType.prefetchScreenshots
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        XCTAssertEqual(
+            mockTabManager.restoreScreenshotCalls.map { $0.tabUUID },
+            [tabA.tabUUID]
+        )
+    }
+
+    func test_prefetchScreenshotsAction_skipsUnknownUUID() {
+        let subject = createSubject()
+        mockTabManager.tabsByUUID = [:]
+
+        let action = TabPanelViewAction(
+            panelType: .tabs,
+            tabUUID: "not-a-real-uuid",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelViewActionType.prefetchScreenshots
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        XCTAssertTrue(mockTabManager.restoreScreenshotCalls.isEmpty)
+    }
+
     // MARK: - Recent Tabs
     func test_viewWillAppearHomeAction_returnsRecentTabs() throws {
         let subject = createSubject()
@@ -469,6 +535,68 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
 
         XCTAssertNotEqual(selectedTab, tab)
+    }
+
+    func test_mainMenuAddToShortcutsAction_dispatchesShortcutPinnedTelemetryAction() throws {
+        let subject = createSubject()
+        let tab = createTab(profile: mockProfile, urlString: "https://www.mozilla.org")
+        mockTabManager.tabForUUID = tab
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapAddToShortcuts,
+            tabID: tab.tabUUID
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TopSitesAction)
+        let actionType = try XCTUnwrap(dispatchedAction.actionType as? TopSitesActionType)
+
+        XCTAssertEqual(actionType, .shortcutPinned)
+        XCTAssertEqual(dispatchedAction.shortcutPinnedSource, .appMenu)
+    }
+
+    func test_mainMenuAddToShortcutsAction_withoutTab_doesNotDispatchShortcutPinnedTelemetryAction() {
+        let subject = createSubject()
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapAddToShortcuts
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+    }
+
+    func test_mainMenuRemoveFromShortcutsAction_dispatchesShortcutUnpinnedTelemetryAction() throws {
+        let subject = createSubject()
+        let tab = createTab(profile: mockProfile, urlString: "https://www.mozilla.org")
+        mockTabManager.tabForUUID = tab
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapRemoveFromShortcuts,
+            tabID: tab.tabUUID
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TopSitesAction)
+        let actionType = try XCTUnwrap(dispatchedAction.actionType as? TopSitesActionType)
+
+        XCTAssertEqual(actionType, .shortcutUnpinned)
+        XCTAssertEqual(dispatchedAction.shortcutUnpinnedSource, .appMenu)
+    }
+
+    func test_mainMenuRemoveFromShortcutsAction_withoutTab_doesNotDispatchShortcutUnpinnedTelemetryAction() {
+        let subject = createSubject()
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapRemoveFromShortcuts
+        )
+
+        subject.tabsPanelProvider(appState, action)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
     }
 
     // MARK: - Tab Peek Actions

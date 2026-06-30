@@ -132,7 +132,7 @@
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Firefox uses speech recognition to convert your voice to text for voice search.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Firefox uses your camera to scan QR codes and take photos and video.</string>
+	<string>Firefox can use your camera to scan QR codes or take photos and video.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Firefox requires Face ID to access your saved passwords and payment methods.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

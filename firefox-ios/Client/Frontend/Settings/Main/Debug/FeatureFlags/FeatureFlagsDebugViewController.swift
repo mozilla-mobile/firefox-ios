@@ -39,6 +39,23 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .addressBarGestureToOpenTabTrayInteractive,
+                titleText: format(string: "Address bar gesture interactive"),
+                statusText: format(string: "Toggle to enable fancier animations for address bar swipe gestures")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .addressBarGestureToOpenTabTraySwipe,
+                titleText: format(string: "Address bar gesture swipe"),
+                statusText: format(string: """
+                                            Toggle to enable swipe gestures for the address bar.
+                                            Overrides interactive animation if enabled
+                                            """)
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
                 statusText: format(string: "Toggle to enable the rust ads client")
@@ -95,6 +112,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .deeplinkOverlay,
+                titleText: format(string: "Deeplink Overlay"),
+                statusText: format(string: "Toggle to show the background overlay for all tabs")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .downloadLiveActivities,
                 titleText: format(string: "Download Live Activities"),
                 statusText: format(string: "Toggle to enable download live activities")
@@ -102,9 +126,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .trackingProtectionRefactor,
-                titleText: format(string: "Enhanced Tracking Protection"),
-                statusText: format(string: "Toggle to use enhanced tracking protection")
+                with: .googleLens,
+                titleText: format(string: "Google Lens"),
+                statusText: format(string: "Toggle to enable Google Lens entry points")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -180,16 +204,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .addressBarMenu,
-                titleText: format(string: "New AddressBar Menu"),
-                statusText: format(string: "Toggle to show the new address bar menu")
+                with: .noInternetConnectionErrorPage,
+                titleText: format(string: "NIC Native Error Page"),
+                statusText: format(string: "Toggle to display natively created no internet connection error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .noInternetConnectionErrorPage,
-                titleText: format(string: "NIC Native Error Page"),
-                statusText: format(string: "Toggle to display natively created no internet connection error page")
+                with: .novaDesign,
+                titleText: format(string: "Nova Design"),
+                statusText: format(string: "Toggle to enable Nova design")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -330,7 +354,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagList() -> SettingSection {
-        let flags = FeatureFlagID.allCases
+        let flags = FeatureFlagID.allCases.filter { $0.debugKey != nil }
         let settingsList = flags.compactMap { flagID in
             return Setting(title: format(string: "\(flagID): \(featureFlagsProvider.isEnabled(flagID))"))
         }

@@ -20,6 +20,7 @@ public struct PrefsKeys {
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyMailToOption = "MailToOption"
     public static let IntroSeen = "IntroViewControllerSeen"
+    public static let OnboardingLastCardSeen = "OnboardingLastCardSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
     // TermsOfUseAccepted should use same string key as before to maintain compatibility
@@ -85,6 +86,10 @@ public struct PrefsKeys {
         public static let Latest = "latestAppVersion"
     }
 
+    public struct AdsClient {
+        public static let documentsDirectoryMigrationCheck = "adsClientDocumentsDirectoryMigrationCheckUserPrefsKey"
+    }
+
     public struct Wallpapers {
         public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedUserPrefsKey"
         public static let CurrentWallpaper = "CurrentWallpaperUserPrefsKey"
@@ -131,6 +136,11 @@ public struct PrefsKeys {
 
     public struct Homepage {
         public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
+        public static let WorldCupSeenWinningMatchIDs = "WorldCupSeenWinningMatchIDsUserPrefsKey"
+    }
+
+    public struct QuickAnswers {
+        public static let optInCompleted = "quickAnswers.optInCompleted"
     }
 
     public struct SearchSettings {
@@ -245,9 +255,6 @@ public struct PrefsKeys {
 
     // Only used to force showing the App Store review dialog for debugging purposes
     public static let ForceShowAppReviewPromptOverride = "ForceShowAppReviewPromptOverride"
-
-    // Used to show splash screen only during first time on fresh install
-    public static let splashScreenShownKey = "splashScreenShownKey"
 
     public static let PasswordGeneratorShown = "PasswordGeneratorShown"
 

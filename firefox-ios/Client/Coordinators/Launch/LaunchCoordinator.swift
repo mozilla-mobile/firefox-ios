@@ -227,14 +227,18 @@ final class LaunchCoordinator: BaseCoordinator,
                 }
                 telemetryUtility.sendOnboardingDismissedTelemetry(outcome: outcome)
                 manager.didSeeIntroScreen()
+                profile.prefs.removeObjectForKey(PrefsKeys.OnboardingLastCardSeen)
                 SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
                 self.onboardingService = nil
                 parentCoordinator?.didFinishLaunch(from: self)
             }
         )
 
-        flowViewModel.onCardView = { cardName in
+        flowViewModel.onCardView = { [weak self] cardName in
             telemetryUtility.sendCardViewTelemetry(from: cardName)
+            if onboardingReason == .newUser {
+                self?.profile.prefs.setString(cardName, forKey: PrefsKeys.OnboardingLastCardSeen)
+            }
         }
 
         flowViewModel.onButtonTap = { cardName, action, isPrimary in
@@ -250,6 +254,10 @@ final class LaunchCoordinator: BaseCoordinator,
                 from: cardName,
                 with: action
             )
+        }
+
+        if let resumeIndex = onboardingResumeCardIndex(in: onboardingModel.cards, reason: onboardingReason) {
+            flowViewModel.pageCount = resumeIndex
         }
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(
@@ -269,6 +277,19 @@ final class LaunchCoordinator: BaseCoordinator,
 
         router.present(hostingController, animated: true)
         telemetryUtility.sendOnboardingShownTelemetry()
+    }
+
+    /// Resolves the card a new user left off on, so onboarding resumes in place after the app is
+    /// terminated mid-flow. Returns `nil` for the settings-launched tour, when nothing was saved,
+    /// or when the saved card no longer exists in the current set (e.g. variant change).
+    func onboardingResumeCardIndex(
+        in cards: [OnboardingKitCardInfoModel],
+        reason: OnboardingReason
+    ) -> Int? {
+        guard reason == .newUser,
+              let lastCardSeen = profile.prefs.stringForKey(PrefsKeys.OnboardingLastCardSeen)
+        else { return nil }
+        return cards.firstIndex(where: { $0.name == lastCardSeen })
     }
 
     // MARK: - Default Browser

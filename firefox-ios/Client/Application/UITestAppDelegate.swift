@@ -104,10 +104,6 @@ class UITestAppDelegate: AppDelegate {
             UIView.setAnimationsEnabled(false)
         }
 
-        if launchArguments.contains(LaunchArguments.SkipSplashScreenExperiment) {
-            profile.prefs.setBool(true, forKey: PrefsKeys.splashScreenShownKey)
-        }
-
         if launchArguments.contains(LaunchArguments.ResetMicrosurveyExpirationCount) {
             // String is pulled from our "evergreen" messages configurations
             // that are displayed via the Nimbus Messaging system.

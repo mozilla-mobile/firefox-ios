@@ -122,7 +122,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertFalse(control.cache.didClear)
     }
 
-    func test_fetchContent_fetchesAndSaves_whenThresholdPassed() async throws {
+    func test_fetchContent_returnsStaleCacheAndRefreshes_whenThresholdPassed() async throws {
         let control = await createSubject(thresholdHours: 1/60)
         let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("old")])
         control.cache.seed(response: cachedResponse, lastUpdated: Date().addingTimeInterval(-3600))
@@ -132,10 +132,12 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
                 .makeItem("new2")
             ]
         )
+        control.fetcher.fetchDelay = 10_000_000
 
         let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.data.map(\.title), ["new1", "new2"])
+        XCTAssertEqual(result.data.map(\.title), ["old"])
+        await waitForBackgroundRefresh(control: control, expectedTitles: ["new1", "new2"])
         XCTAssertTrue(control.cache.didClear)
         XCTAssertEqual(control.cache.loadResponse()?.data.map(\.title), ["new1", "new2"])
         XCTAssertEqual(control.fetcher.callCount, 1)
@@ -169,7 +171,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         }
     }
 
-    func test_fetchContent_fetches_whenNoLastUpdatedEvenIfItemsExist() async throws {
+    func test_fetchContent_returnsStaleCacheAndRefreshes_whenNoLastUpdatedEvenIfItemsExist() async throws {
         let control = await createSubject(prefsEnabled: true)
 
         let cachedResponse = CuratedRecommendationsResponse.makeResponse(
@@ -183,16 +185,18 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
                 .makeItem("net2")
             ]
         )
+        control.fetcher.fetchDelay = 10_000_000
 
         let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.data.count, 2)
-        XCTAssertEqual(result.data.map(\.title), ["net1", "net2"])
-        XCTAssertEqual(control.fetcher.callCount, 1)
+        XCTAssertEqual(result.data.count, 1)
+        XCTAssertEqual(result.data.map(\.title), ["staleButNoTimestamp"])
 
+        await waitForBackgroundRefresh(control: control, expectedTitles: ["net1", "net2"])
         XCTAssertTrue(control.cache.didClear)
         XCTAssertEqual(control.cache.loadResponse()?.data.count, 2)
         XCTAssertEqual(control.cache.loadResponse()?.data.map(\.title), ["net1", "net2"])
+        XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
     func test_fetchContent_returnsCached_whenWithinOneHourThreshold() async throws {
@@ -211,7 +215,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(control.fetcher.callCount, 0)
     }
 
-    func test_fetchContent_fetchesFromNetwork_whenCategoriesEnabledAndCachedResponseHasNoFeeds() async throws {
+    func test_fetchContent_returnsCached_whenCategoriesEnabledAndCachedResponseHasFlatStoriesOnly() async throws {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             HomepageRedesignFeature(categoriesEnabled: true)
         }
@@ -221,18 +225,17 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
             items: [.makeItem("cached-story")],
             feeds: nil
         )
-        let networkFeeds = [FeedSection.makeSection(feedId: "technology", recommendations: [.makeItem("tech-story")])]
         control.cache.seed(response: cachedResponse, lastUpdated: Date())
         control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
             items: [.makeItem("network-story")],
-            feeds: networkFeeds
+            feeds: [FeedSection.makeSection(feedId: "technology", recommendations: [.makeItem("tech-story")])]
         )
 
         let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(control.fetcher.callCount, 1)
-        XCTAssertEqual(result.feeds?.first?.feedId, "technology")
-        XCTAssertTrue(control.cache.didClear)
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertEqual(result.data.map(\.title), ["cached-story"])
+        XCTAssertFalse(control.cache.didClear)
     }
 
     func test_fetchContent_returnsCached_whenCategoriesEnabledAndCachedResponseHasFeeds() async throws {
@@ -259,7 +262,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertFalse(control.cache.didClear)
     }
 
-    func test_fetchContent_fetchesFromNetwork_whenCategoriesDisabledAndCachedResponseHasNoStories() async throws {
+    func test_fetchContent_returnsCached_whenCategoriesDisabledAndCachedResponseHasCategoryStoriesOnly() async throws {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             HomepageRedesignFeature(categoriesEnabled: false)
         }
@@ -269,6 +272,25 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         let cachedResponse = CuratedRecommendationsResponse.makeResponse(
             items: [],
             feeds: cachedFeeds
+        )
+        control.cache.seed(response: cachedResponse, lastUpdated: Date())
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("network-story")],
+            feeds: nil
+        )
+
+        let result = try await control.subject.fetchContent()
+
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertEqual(result.feeds?.first?.feedId, "technology")
+        XCTAssertFalse(control.cache.didClear)
+    }
+
+    func test_fetchContent_fetchesFromNetwork_whenCachedResponseHasNoDisplayableContent() async throws {
+        let control = await createSubject(thresholdHours: 1)
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [],
+            feeds: [FeedSection.makeSection(feedId: "technology", recommendations: [])]
         )
         control.cache.seed(response: cachedResponse, lastUpdated: Date())
         control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
@@ -303,7 +325,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(response2.data.map(\.title), ["a", "b"])
     }
 
-    func test_fetchContent_fetchesFromNetwork_whenOneHourThresholdPassed() async throws {
+    func test_fetchContent_returnsStaleCacheAndRefreshes_whenOneHourThresholdPassed() async throws {
         let control = await createSubject(thresholdHours: 1)
         let cachedResponse = CuratedRecommendationsResponse.makeResponse(
             items: [.makeItem("old")]
@@ -315,7 +337,8 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
 
         let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.data.map(\.title), ["fresh"])
+        XCTAssertEqual(result.data.map(\.title), ["old"])
+        await waitForBackgroundRefresh(control: control, expectedTitles: ["fresh"])
         XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
@@ -353,6 +376,27 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
 
         await trackForMemoryLeaks(subject)
         return TestableSubject(subject: subject, cache: cache, fetcher: fetcher)
+    }
+
+    private func waitForBackgroundRefresh(
+        control: TestableSubject,
+        expectedTitles: [String],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        let didRefresh = await waitUntil {
+            control.cache.loadResponse()?.data.map(\.title) == expectedTitles
+        }
+
+        XCTAssertTrue(didRefresh, "Timed out waiting for Merino background refresh", file: file, line: line)
+    }
+
+    private func waitUntil(_ condition: () -> Bool) async -> Bool {
+        for _ in 0..<100 {
+            if condition() { return true }
+            try? await Task.sleep(nanoseconds: 10_000_000)
+        }
+        return condition()
     }
 }
 

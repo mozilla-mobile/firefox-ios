@@ -9,7 +9,8 @@ import Shared
 enum FeatureFlagID: String, CaseIterable {
     case adBlocker
     case addressAutofillEdit
-    case addressBarMenu
+    case addressBarGestureToOpenTabTrayInteractive
+    case addressBarGestureToOpenTabTraySwipe
     case adsClient
     case aiKillSwitch
     case appearanceMenu
@@ -17,9 +18,11 @@ enum FeatureFlagID: String, CaseIterable {
     case bookmarksSearchFeature
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
+    case deeplinkOverlay
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
+    case googleLens
     case hntSponsoredShortcuts
     case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
@@ -37,6 +40,7 @@ enum FeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case needsReloadRefactor
+    case novaDesign
     case noInternetConnectionErrorPage
     case quickAnswers
     case recentSearches
@@ -47,7 +51,6 @@ enum FeatureFlagID: String, CaseIterable {
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case snapkitRemovalRefactor
-    case splashScreen
     case startAtHome
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
@@ -58,7 +61,6 @@ enum FeatureFlagID: String, CaseIterable {
     case tabTrayUIExperiments
     case tosFeature
     case touFeature
-    case trackingProtectionRefactor
     case translation
     case translationLanguagePicker
     case trendingSearches
@@ -91,7 +93,8 @@ enum FeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .adBlocker,
-                .addressBarMenu,
+                .addressBarGestureToOpenTabTrayInteractive,
+                .addressBarGestureToOpenTabTraySwipe,
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
@@ -99,7 +102,9 @@ enum FeatureFlagID: String, CaseIterable {
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
+                .deeplinkOverlay,
                 .downloadLiveActivities,
+                .googleLens,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageSearchBar,
@@ -111,6 +116,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
+                .novaDesign,
                 .noInternetConnectionErrorPage,
                 .quickAnswers,
                 .recentSearches,
@@ -123,7 +129,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .touFeature,
-                .trackingProtectionRefactor,
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,

@@ -59,6 +59,9 @@ struct AccessibilityIdentifiers {
             static let lockIconOff = "AddressToolbar.lockIconOff"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
+            static let googleLensButton = "AddressToolbar.googleLensButton"
+            static let googleLensTakePhotoAction = "AddressToolbar.googleLensTakePhotoAction"
+            static let googleLensPhotoLibraryAction = "AddressToolbar.googleLensPhotoLibraryAction"
             static let leadingSkeleton = "AddressToolbar.leadingSkeleton"
             static let trailingSkeleton = "AddressToolbar.trailingSkeleton"
         }
@@ -81,6 +84,7 @@ struct AccessibilityIdentifiers {
         static let statusBarOverlay = "Browser.statusBarOverlay"
         static let topBlurView = "Browser.topBlurView"
         static let bottomBlurView = "Browser.bottomBlurView"
+        static let keyboardSpacer = "AddressToolbar.keyboardSpacer"
     }
 
     struct ContextualHints {
@@ -376,6 +380,7 @@ struct AccessibilityIdentifiers {
         static let tabCell = "TabDisplayView.tabCell"
         static let closeButton = "tabCloseButton"
         static let tabsTray = "Tabs Tray"
+        static let iPadSelectionBackgroundView =  "TabTraySelectorView.selectionBackgroundView"
     }
 
     struct LibraryPanels {

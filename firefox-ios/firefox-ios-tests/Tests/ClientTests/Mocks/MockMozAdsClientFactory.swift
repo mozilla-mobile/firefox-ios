@@ -8,13 +8,13 @@ import MozillaAppServices
 @testable import Client
 
 final class MockMozAdsClientFactory: MozAdsClientFactory {
-    private let mockClient: MozAdsClientProtocol
+    private let mockClient: MozAdsClient
 
-    init(mockClient: MozAdsClientProtocol) {
+    init(mockClient: MozAdsClient) {
         self.mockClient = mockClient
     }
 
-    func createClient() -> MozAdsClientProtocol {
+    func createClient() -> MozAdsClient {
         return mockClient
     }
 }

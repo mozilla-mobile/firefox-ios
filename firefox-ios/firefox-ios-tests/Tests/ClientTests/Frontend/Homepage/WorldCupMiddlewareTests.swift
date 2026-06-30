@@ -92,31 +92,39 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - WorldCupActionType.didChangeHomepageSettings
-
-    func test_didChangeHomepageSettings_dispatchesDidUpdate() throws {
+    func test_didChangeHomepageSettings_whenFeatureAndSectionEnabled_startsFeed() throws {
         mockWorldCupStore.isFeatureEnabled = true
-        mockWorldCupStore.isHomepageSectionEnabled = false
-        let apiClient = MockWorldCupAPIClient(matchesResult: .success(makeResponse()))
-        let subject = createSubject(apiClient: apiClient)
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        let feed = MockWorldCupFeed()
+        let subject = createSubject(feed: feed)
         let action = WorldCupAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: WorldCupActionType.didChangeHomepageSettings
         )
 
-        let expectation = XCTestExpectation(description: "didUpdate dispatched")
-        mockStore.dispatchCalled = { expectation.fulfill() }
+        subject.worldCupProvider(appState, action)
+
+        XCTAssertEqual(feed.startCalled, 1)
+        XCTAssertEqual(feed.stopCalled, 0)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didChangeHomepageSettings_whenSectionDisabled_stopsFeed() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = false
+        mockWorldCupStore.isMilestone2 = true
+        let feed = MockWorldCupFeed()
+        let subject = createSubject(feed: feed)
+        let action = WorldCupAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WorldCupActionType.didChangeHomepageSettings
+        )
 
         subject.worldCupProvider(appState, action)
 
-        wait(for: [expectation])
-
-        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
-        let actionType = try XCTUnwrap(dispatched.actionType as? WorldCupMiddlewareActionType)
-
-        XCTAssertEqual(actionType, .didUpdate)
-        XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
-        XCTAssertEqual(mockWorldCupStore.setIsHomepageSectionEnabledCalled, 0)
-        XCTAssertEqual(apiClient.matchesFetchCount, 0)
+        XCTAssertEqual(feed.stopCalled, 1)
+        XCTAssertEqual(feed.startCalled, 0)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -145,6 +153,39 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockWorldCupStore.lastSetIsHomepageSectionEnabledValue, false)
         XCTAssertEqual(actionType, .didUpdate)
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    // MARK: - HomepageMiddlewareActionType.didEnterBackground
+
+    func test_didEnterBackground_stopsFeed() throws {
+        let feed = MockWorldCupFeed()
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, feed: feed)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didEnterBackground
+        )
+
+        subject.worldCupProvider(appState, action)
+
+        XCTAssertEqual(feed.stopCalled, 1)
+        XCTAssertEqual(feed.startCalled, 0)
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didBecomeActive_whenMilestone2_startsFeed() throws {
+        mockWorldCupStore.isMilestone2 = true
+        let feed = MockWorldCupFeed()
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, feed: feed)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didBecomeActive
+        )
+
+        subject.worldCupProvider(appState, action)
+
+        XCTAssertEqual(feed.startCalled, 1)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -861,6 +902,343 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
+    // MARK: - Confetti
+
+    func test_didUpdate_whenSelectedTeamWinsMatchOnDefaultCard_setsConfettiAndPersistsSeen() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = "ARG"
+        // now pinned past the match's featured + linger window so the won match
+        // sits on the single (default-index 0) card.
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-12T21:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [makeWinningMatch(id: 1, winner: "ARG", loser: "BRA", date: "2026-06-12T18:00:00+00:00")]
+        )
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+
+        let expectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(appState, action)
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertEqual(dispatched.defaultMatchIndex, 0)
+        XCTAssertTrue(dispatched.shouldShowConfetti)
+        XCTAssertFalse(mockWorldCupStore.seenWinningMatchIDs.isEmpty)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didUpdate_whenWinningMatchIsNotOnDefaultCard_doesNotSetConfetti() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = "CAN"
+        // Group match already won (past); the R32 fixture is still upcoming and
+        // is the default card. The win is on card 0, default index is 1.
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-26T12:00:00+00:00",
+            previous: [
+                makeWinningMatch(
+                    id: 1,
+                    winner: "CAN",
+                    loser: "BIH",
+                    date: "2026-06-12T19:00:00+00:00",
+                    stage: .groupStage
+                )
+            ],
+            current: nil,
+            next: [
+                makeMatch(
+                    id: 2,
+                    home: "MEX",
+                    away: "CAN",
+                    date: "2026-06-28T13:00:00+00:00",
+                    stage: .roundOf32
+                )
+            ]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            teamsResult: .success(makeTeamsResponse())
+        )
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+
+        let expectation = expectationForMatchCardCount(2)
+        subject.worldCupProvider(appState, action)
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertEqual(dispatched.defaultMatchIndex, 1)
+        XCTAssertFalse(dispatched.shouldShowConfetti)
+        // The win is still recorded as seen even though it didn't celebrate.
+        XCTAssertFalse(mockWorldCupStore.seenWinningMatchIDs.isEmpty)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didUpdate_whenWinAlreadySeen_doesNotReCelebrateOnRefetch() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = "ARG"
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-12T21:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [makeWinningMatch(id: 1, winner: "ARG", loser: "BRA", date: "2026-06-12T18:00:00+00:00")]
+        )
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+
+        let firstExpectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(
+            appState,
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+        )
+        wait(for: [firstExpectation])
+        XCTAssertTrue(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
+
+        // A second fetch re-emits the same won match. Because the win was
+        // persisted as seen, it must not celebrate again — this is the
+        // cross-launch correlation behavior.
+        let secondExpectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(
+            appState,
+            WorldCupAction(windowUUID: .XCTestDefaultUUID, actionType: WorldCupActionType.retryMatchesFetch)
+        )
+        wait(for: [secondExpectation])
+
+        XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didUpdate_whenNoTeam_andDefaultCardIsNotAFinal_doesNotSetConfetti() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = nil
+
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-12T21:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [makeWinningMatch(id: 1, winner: "ARG", loser: "BRA", date: "2026-06-12T18:00:00+00:00")]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: []))
+        )
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+
+        let expectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(appState, action)
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertFalse(dispatched.shouldShowConfetti)
+        XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didUpdate_whenNoTeam_andDefaultCardIsFinishedFinal_setsConfettiAndPersists() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = nil
+        let response = WorldCupMatchesResponse(
+            now: "2026-07-19T21:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [makeWinningMatch(
+                id: 1,
+                winner: "FRA",
+                loser: "ARG",
+                date: "2026-07-19T18:00:00+00:00",
+                stage: .final
+            )]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: []))
+        )
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+
+        let expectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(appState, action)
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        // Page 0 is the countdown timer, so the final card sits at page 1.
+        XCTAssertEqual(dispatched.defaultMatchIndex, 1)
+        XCTAssertTrue(dispatched.shouldShowConfetti)
+        XCTAssertFalse(mockWorldCupStore.seenWinningMatchIDs.isEmpty)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didUpdate_whenNoTeam_andDefaultCardIsFinishedBronzeFinal_setsConfetti() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = nil
+        let response = WorldCupMatchesResponse(
+            now: "2026-07-18T21:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [makeWinningMatch(
+                id: 1,
+                winner: "CRO",
+                loser: "MAR",
+                date: "2026-07-18T18:00:00+00:00",
+                stage: .thirdPlace
+            )]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: []))
+        )
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+
+        let expectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(appState, action)
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertTrue(dispatched.shouldShowConfetti)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didUpdate_whenNoTeam_andFinalIsLiveNotEnded_doesNotSetConfetti() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = nil
+        let final = makeMatch(
+            id: 1,
+            home: "FRA",
+            away: "ARG",
+            date: "2026-07-19T18:00:00+00:00",
+            statusType: "live",
+            stage: .final
+        )
+        let response = WorldCupMatchesResponse(
+            now: "2026-07-19T18:30:00+00:00",
+            previous: nil,
+            current: [final],
+            next: nil
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: [final]))
+        )
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+
+        let expectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(appState, action)
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertFalse(dispatched.shouldShowConfetti)
+        XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_didUpdate_whenNoTeam_finalCelebratesOnceThenNotOnRefetch() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = nil
+        let response = WorldCupMatchesResponse(
+            now: "2026-07-19T21:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [makeWinningMatch(
+                id: 1,
+                winner: "FRA",
+                loser: "ARG",
+                date: "2026-07-19T18:00:00+00:00",
+                stage: .final
+            )]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: []))
+        )
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+
+        let firstExpectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(
+            appState,
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+        )
+        wait(for: [firstExpectation])
+        XCTAssertTrue(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
+
+        let secondExpectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(
+            appState,
+            WorldCupAction(windowUUID: .XCTestDefaultUUID, actionType: WorldCupActionType.retryMatchesFetch)
+        )
+        wait(for: [secondExpectation])
+        XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_viewWillDisappear_suppressesConfettiWhileOffScreen() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isCelebrationAnimationEnabled = true
+        mockWorldCupStore.selectedTeam = "ARG"
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-12T21:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [makeWinningMatch(id: 1, winner: "ARG", loser: "BRA", date: "2026-06-12T18:00:00+00:00")]
+        )
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        bringHomepageOnScreen(subject)
+        subject.worldCupProvider(
+            appState,
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewWillDisappear)
+        )
+
+        let expectation = expectationForMatchesDispatch()
+        subject.worldCupProvider(
+            appState,
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+        )
+        wait(for: [expectation])
+
+        XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
+        XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
+        subject.worldCupProvider = { _, _ in }
+    }
+
     // MARK: - Helpers
 
     /// Builds a feed around the mock client (when provided) and hands both
@@ -883,6 +1261,24 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = WorldCupMiddleware(worldCupStore: store, feed: feed)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    /// Hands the middleware a `MockWorldCupFeed` so tests can assert on the
+    /// feed lifecycle (start/stop) without driving the real network plumbing.
+    private func createSubject(feed: MockWorldCupFeed) -> WorldCupMiddleware {
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, feed: feed)
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    /// Dispatches `viewDidAppear` so the middleware treats the homepage as
+    /// visible — the precondition for `resolveShouldShowConfetti` to run. Also
+    /// re-dispatches the feed's latest snapshot, mirroring the real lifecycle.
+    private func bringHomepageOnScreen(_ subject: WorldCupMiddleware) {
+        subject.worldCupProvider(
+            appState,
+            HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewDidAppear)
+        )
     }
 
     /// Fires when at least one matches dispatch has landed (apiError nil and
@@ -951,6 +1347,32 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
                 standing: nil
             )
         })
+    }
+
+    /// A finished match (`statusType == "past"`) with a 2–1 result so
+    /// `winnerTeam` resolves to `winner`. `winner` is placed at home.
+    private func makeWinningMatch(id: Int,
+                                  winner: String,
+                                  loser: String,
+                                  date: String = "2026-06-12T18:00:00+00:00",
+                                  stage: WorldCupMatchesResponse.Match.Stage? = .groupStage)
+    -> WorldCupMatchesResponse.Match {
+        let homeTeam = WorldCupMatchesResponse.Team(
+            key: winner, name: winner, iconUrl: nil, group: "Group A", eliminated: false
+        )
+        let awayTeam = WorldCupMatchesResponse.Team(
+            key: loser, name: loser, iconUrl: nil, group: "Group A", eliminated: false
+        )
+        return WorldCupMatchesResponse.Match(
+            date: date,
+            globalEventId: id,
+            homeTeam: homeTeam,
+            awayTeam: awayTeam,
+            homeScore: 2,
+            awayScore: 1,
+            statusType: "past",
+            stage: stage
+        )
     }
 
     private func makeMatch(id: Int,

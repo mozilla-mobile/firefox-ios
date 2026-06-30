@@ -17,6 +17,7 @@ final class TopSitesMiddleware {
     private let featureFlagsProvider: FeatureFlagProviding
     private let logger: Logger
     private let profile: Profile
+    private var inFlightHomepageTopSitesFetchWindowIDs = Set<WindowUUID>()
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
@@ -48,21 +49,27 @@ final class TopSitesMiddleware {
         switch action.actionType {
         case HomepageActionType.initialize,
             ShortcutsLibraryActionType.initialize,
+            HomepageMiddlewareActionType.didBecomeActive,
             HomepageMiddlewareActionType.topSitesUpdated,
             TopSitesActionType.toggleShowSponsoredSettings:
-            Task { @MainActor in
-                await self.getTopSitesDataAndUpdateState(for: action)
-            }
+            self.fetchTopSitesDataAndUpdateState(for: action)
         case TopSitesActionType.topSitesSeen:
             self.handleSponsoredImpressionTracking(for: action)
 
         case TopSitesActionType.tapOnHomepageTopSitesCell:
             self.handleOpenTopSitesItemTelemetry(for: action)
 
+        case TopSitesActionType.shortcutPinned:
+            self.handleShortcutPinnedTelemetry(for: action)
+
+        case TopSitesActionType.shortcutUnpinned:
+            self.handleShortcutUnpinnedTelemetry(for: action)
+
         case ContextMenuActionType.tappedOnPinTopSite:
             guard let site = self.getSite(for: action) else { return }
             self.topSitesManager.pinTopSite(site)
             self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .pin)
+            self.homepageTelemetry.sendTopSitesShortcutPinnedEvent(source: .contextMenu)
 
         case ContextMenuActionType.tappedOnUnpinTopSite:
             self.handleTappedOnUnpinSites(for: action)
@@ -83,6 +90,38 @@ final class TopSitesMiddleware {
         }
     }
 
+    private func fetchTopSitesDataAndUpdateState(for action: Action) {
+        // We add an in-flight guard per window in TopSitesMiddleware so `initialize`,
+        // `didBecomeActive`, and top-site notifications do not fire parallel sponsored
+        // requests on launch/foreground. This is to address issues on slow-networks
+        // and not create unnecessary additional pressure.
+        let shouldCoalesceRefresh = shouldCoalesceHomepageRefresh(for: action)
+        if shouldCoalesceRefresh {
+            guard inFlightHomepageTopSitesFetchWindowIDs.insert(action.windowUUID).inserted else { return }
+        }
+
+        Task { @MainActor in
+            defer {
+                if shouldCoalesceRefresh {
+                    self.inFlightHomepageTopSitesFetchWindowIDs.remove(action.windowUUID)
+                }
+            }
+
+            await self.getTopSitesDataAndUpdateState(for: action)
+        }
+    }
+
+    private func shouldCoalesceHomepageRefresh(for action: Action) -> Bool {
+        switch action.actionType {
+        case HomepageActionType.initialize,
+            HomepageMiddlewareActionType.didBecomeActive,
+            HomepageMiddlewareActionType.topSitesUpdated:
+            return true
+        default:
+            return false
+        }
+    }
+
     private func handleTappedOnRemoveTopSites(for action: Action) {
         guard let site = self.getSite(for: action) else { return }
         Task { @MainActor in
@@ -97,6 +136,7 @@ final class TopSitesMiddleware {
             await self.topSitesManager.unpinTopSite(site)
         }
         self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .unpin)
+        self.homepageTelemetry.sendTopSitesShortcutUnpinnedEvent(source: .contextMenu)
     }
 
     private func getSite(for action: Action) -> Site? {
@@ -183,9 +223,38 @@ final class TopSitesMiddleware {
         sendBookmarkOpenTelemetry(with: config.site.url)
     }
 
+    private func handleShortcutPinnedTelemetry(for action: Action) {
+        guard let source = (action as? TopSitesAction)?.shortcutPinnedSource else {
+            self.logger.log(
+                "Unable to retrieve shortcut pinned source for \(action.actionType)",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+        homepageTelemetry.sendTopSitesShortcutPinnedEvent(source: source)
+    }
+
+    private func handleShortcutUnpinnedTelemetry(for action: Action) {
+        guard let source = (action as? TopSitesAction)?.shortcutUnpinnedSource else {
+            self.logger.log(
+                "Unable to retrieve shortcut unpinned source for \(action.actionType)",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+        homepageTelemetry.sendTopSitesShortcutUnpinnedEvent(source: source)
+    }
+
     private func sendBookmarkOpenTelemetry(with urlString: String) {
-        let isBookmarked = profile.places.isBookmarked(url: urlString).value.successValue ?? false
-        guard isBookmarked else { return }
-        bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
+        // Resolve the bookmark lookup off the main thread to avoid blocking it on a contended
+        // Places DB query (this runs on the homepage tap path).
+        profile.places.isBookmarked(url: urlString) { [weak self] result in
+            guard case .success(true) = result else { return }
+            Task { @MainActor in
+                self?.bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
+            }
+        }
     }
 }

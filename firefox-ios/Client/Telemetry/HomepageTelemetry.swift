@@ -33,6 +33,17 @@ struct HomepageTelemetry {
         }
     }
 
+    enum TopSitesShortcutPinnedSource: String {
+        case homescreenButton = "homescreen_button"
+        case contextMenu = "context_menu"
+        case appMenu = "app_menu"
+    }
+
+    enum TopSitesShortcutUnpinnedSource: String {
+        case contextMenu = "context_menu"
+        case appMenu = "app_menu"
+    }
+
     private enum EventValue: String {
         case fxHomepageOriginZeroSearch = "zero-search"
         case fxHomepageOriginOther = "origin-other"
@@ -82,6 +93,20 @@ struct HomepageTelemetry {
         gleanWrapper.recordEvent(
             for: GleanMetrics.TopSites.tilePressed,
             extras: GleanMetrics.TopSites.TilePressedExtra(position: "\(position)", tileType: tileType)
+        )
+    }
+
+    func sendTopSitesShortcutPinnedEvent(source: TopSitesShortcutPinnedSource) {
+        gleanWrapper.recordEvent(
+            for: GleanMetrics.TopSites.shortcutPinned,
+            extras: GleanMetrics.TopSites.ShortcutPinnedExtra(source: source.rawValue)
+        )
+    }
+
+    func sendTopSitesShortcutUnpinnedEvent(source: TopSitesShortcutUnpinnedSource) {
+        gleanWrapper.recordEvent(
+            for: GleanMetrics.TopSites.shortcutUnpinned,
+            extras: GleanMetrics.TopSites.ShortcutUnpinnedExtra(source: source.rawValue)
         )
     }
 

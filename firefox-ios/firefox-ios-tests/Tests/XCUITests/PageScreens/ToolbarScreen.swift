@@ -40,6 +40,14 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitForElementToExist(tabsButton)
     }
 
+    func assertToolbarIsVisible(timeout: TimeInterval = TIMEOUT) {
+        let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(settingsButton, timeout: timeout)
+        XCTAssertTrue(settingsButton.isHittable, "The toolbar is not visible")
+        BaseTestCase().mozWaitForElementToExist(tabsButton, timeout: timeout)
+        XCTAssertTrue(tabsButton.isHittable, "The toolbar is not visible")
+    }
+
     func pressTabsButton(duration: TimeInterval) {
         tabsButton.press(forDuration: duration)
     }

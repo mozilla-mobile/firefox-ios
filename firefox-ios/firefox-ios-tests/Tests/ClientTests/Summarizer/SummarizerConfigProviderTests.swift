@@ -12,7 +12,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
 
     func testReturnsEmptyConfigWhenNoSourcesProvided() async {
         let subject = createSubject(sources: [])
-        let config = subject.getConfig(summarizerModel: .appleSummarizer, contentType: .generic, locale: locale)
+        let config = await subject.getConfig(summarizerModel: .appleSummarizer, contentType: .generic, locale: locale)
         XCTAssertEqual(config.instructions, "")
         XCTAssertTrue(config.options.isEmpty)
     }
@@ -30,7 +30,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
         ]
 
         let subject = createSubject(sources: mockSources)
-        let config = subject.getConfig(summarizerModel: .appleSummarizer, contentType: .generic, locale: locale)
+        let config = await subject.getConfig(summarizerModel: .appleSummarizer, contentType: .generic, locale: locale)
         XCTAssertEqual(config.instructions, "")
         XCTAssertTrue(config.options.isEmpty)
     }
@@ -48,7 +48,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
         ]
 
         let subject = createSubject(sources: mockSources)
-        let config = subject.getConfig(summarizerModel: .liteLLMSummarizer, contentType: .recipe, locale: locale)
+        let config = await subject.getConfig(summarizerModel: .liteLLMSummarizer, contentType: .recipe, locale: locale)
         XCTAssertEqual(config.instructions, "Instructions")
         XCTAssertTrue(config.options.isEmpty)
     }
@@ -70,7 +70,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
         ]
 
         let subject = createSubject(sources: mockSources)
-        let config = subject.getConfig(summarizerModel: .appleSummarizer, contentType: .generic, locale: locale)
+        let config = await subject.getConfig(summarizerModel: .appleSummarizer, contentType: .generic, locale: locale)
 
         // Highest priority instructions
         XCTAssertEqual(config.instructions, "Instructions 1")
@@ -95,7 +95,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
         ]
 
         let subject = createSubject(sources: mockSources)
-        let config = subject.getConfig(summarizerModel: .liteLLMSummarizer, contentType: .recipe, locale: locale)
+        let config = await subject.getConfig(summarizerModel: .liteLLMSummarizer, contentType: .recipe, locale: locale)
 
         XCTAssertEqual(config.instructions, "Instructions 2")
         XCTAssertEqual(config.options["topP"] as? Int, 2)
@@ -104,7 +104,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
         XCTAssertEqual(config.options["model"] as? String, "foo")
     }
 
-    func testAppliesLocaleToInstructions() {
+    func testAppliesLocaleToInstructions() async {
         let mockSources = [
             MockSummarizerConfigSource(configToReturn: SummarizerConfig(
                 instructions: "Instructions with **{lang}**",
@@ -114,7 +114,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
         let enLocale = Locale(identifier: "en")
 
         let subject = createSubject(sources: mockSources)
-        let config = subject.getConfig(
+        let config = await subject.getConfig(
             summarizerModel: .appleSummarizer,
             contentType: .recipe,
             locale: locale

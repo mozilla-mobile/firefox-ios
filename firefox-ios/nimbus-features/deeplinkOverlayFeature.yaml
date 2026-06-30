@@ -1,0 +1,21 @@
+# The configuration for the deeplinkOverlayFeature feature
+features:
+  deeplink-overlay-feature:
+    description: >
+      Controls whether a privacy-style overlay is shown when the app moves to
+      the background, regardless of tab privacy state. Used to mask the
+      previously displayed tab while a deep link is being handled on resume.
+    variables:
+      enabled:
+        description: >
+          If true, show the background overlay for all tabs (private and
+          normal). If false, the overlay is only shown for private tabs.
+        type: Boolean
+        default: true
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true

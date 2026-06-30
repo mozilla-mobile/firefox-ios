@@ -36,23 +36,31 @@ final class TabTrayScreen {
         return cv.cells.containing(predicate).firstMatch
     }
 
+    // A tab cell is a single accessibility element whose label may be decorated with the
+    // "Currently selected tab" suffix (e.g. "Wikipedia. Currently selected tab"), so the
+    // selected tab can't be matched by the exact `cells[name]` subscript. Match the bare
+    // title or any label that begins with it.
+    private func cell(named name: String) -> XCUIElement {
+        let predicate = NSPredicate(format: "label == %@ OR label BEGINSWITH %@", name, "\(name).")
+        return collectionView.cells.matching(predicate).firstMatch
+    }
+
     func assertCellExists(named name: String, timeout: TimeInterval = TIMEOUT) {
-        let cell = collectionView.cells[name]
-        BaseTestCase().mozWaitForElementToExist(cell, timeout: timeout)
+        BaseTestCase().mozWaitForElementToExist(cell(named: name), timeout: timeout)
     }
 
     func tapOnCell(named name: String, timeout: TimeInterval = TIMEOUT) {
-        let cell = collectionView.cells[name]
+        let cell = cell(named: name)
         BaseTestCase().mozWaitForElementToExist(cell, timeout: timeout)
         cell.waitAndTap()
     }
 
     func assertTabCount(_ expected: Int, file: StaticString = #filePath, line: UInt = #line) {
         let cells = collectionView.cells
-        BaseTestCase().mozWaitForElementToExist(cells.firstMatch)
-        // The tab tray may still be populating after the first cell appears, so poll
-        // until the expected number of cells is rendered (bounded by TIMEOUT) before asserting.
-        BaseTestCase().waitForCondition { cells.count == expected }
+        // The tab tray may still be populating after the first cell appears, so wait until the
+        // expected cell is rendered (bounded by TIMEOUT) before asserting. failOnTimeout is false
+        // so the XCTAssertEqual below produces the single, descriptive failure.
+        BaseTestCase().mozWaitForElementToExist(cells.element(boundBy: expected - 1), failOnTimeout: false)
         XCTAssertEqual(cells.count, expected, "The number of tabs is not correct", file: file, line: line)
     }
 

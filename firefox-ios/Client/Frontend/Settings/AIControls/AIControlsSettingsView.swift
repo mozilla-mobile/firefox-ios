@@ -153,6 +153,13 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                 if aiControlsModel.pageSummariesVisible {
                     pageSummariesToggle
                 }
+                if aiControlsModel.quickAnswersVisible
+                    && (aiControlsModel.translationsVisible || aiControlsModel.pageSummariesVisible) {
+                    Divider().foregroundStyle(themeColors.textSecondary.color)
+                }
+                if aiControlsModel.quickAnswersVisible {
+                    quickAnswersToggle
+                }
             }
         }
     }
@@ -189,6 +196,24 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textSecondary.color)
                 aiFeatureToggleStatus(isEnabled: aiControlsModel.pageSummariesEnabled)
+            }
+        }.tint(themeColors.actionPrimary.color)
+    }
+
+    @ViewBuilder
+    var quickAnswersToggle: some View {
+        Toggle(isOn: Binding(
+            get: { aiControlsModel.quickAnswersEnabled },
+            set: { aiControlsModel.toggleQuickAnswersFeature(to: $0) }
+        )) {
+            VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
+                Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title)
+                    .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textPrimary.color)
+                Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message)
+                    .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textSecondary.color)
+                aiFeatureToggleStatus(isEnabled: aiControlsModel.quickAnswersEnabled)
             }
         }.tint(themeColors.actionPrimary.color)
     }

@@ -223,8 +223,12 @@ workflows:
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
         is_always_run: true
+    # Only push/release/epic builds save SPM cache. PRs read from the cache
+    # (via restore-spm-cache@3 above) but never write back, so they can't
+    # poison the cache for subsequent builds. main keeps the cache fresh.
     - save-spm-cache@1:
         is_always_run: true
+        run_if: '{{not .IsPR}}'
     - script@1:
         title: Clean before deploying
         timeout: 360
@@ -348,6 +352,7 @@ workflows:
             set -e
             set -x
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - xcode-build-for-test@3:
@@ -447,6 +452,7 @@ workflows:
             set -e
             set -x
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - xcode-build-for-test@3:
@@ -755,6 +761,7 @@ workflows:
         inputs:
         - content: |-
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
         title: Run bootstrap
@@ -932,6 +939,7 @@ workflows:
         inputs:
         - content: |-
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
         title: Run bootstrap
@@ -1001,6 +1009,7 @@ workflows:
         inputs:
         - content: |-
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
         title: Run bootstrap
@@ -1024,7 +1033,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.228.0
+            gem install fastlane -v 2.233.1
             fastlane -version
             xcodebuild -version
 
@@ -1112,6 +1121,7 @@ workflows:
             set -x
 
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - set-xcode-build-number@1:
@@ -1255,6 +1265,7 @@ workflows:
             set -x
 
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - set-xcode-build-number@1:
@@ -1984,6 +1995,7 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+    - skip_macro_validation
     steps:
     - xcode-build-for-test@3:
         title: "Build for Testing"
@@ -2238,6 +2250,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap -p focus
         title: ContentBlockerGen
@@ -2762,6 +2775,7 @@ workflows:
             set -xe
 
             brew tap mozilla-mobile/fxios
+            brew trust mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - set-xcode-build-number@1:
