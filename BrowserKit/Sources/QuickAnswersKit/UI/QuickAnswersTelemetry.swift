@@ -26,6 +26,9 @@ public protocol QuickAnswersTelemetry {
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
     func resultsCompleted(outcome: Bool, errorType: String?)
 
+    /// Fires when the user taps a citation source in the results.
+    func citationTapped()
+
     /// Fires when the Quick Answers screen is dismissed.
     func closed()
 

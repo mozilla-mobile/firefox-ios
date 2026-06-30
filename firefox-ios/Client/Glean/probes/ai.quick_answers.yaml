@@ -28,7 +28,7 @@ ai.quick_answers:
     description: |
       Recorded the instant the user initiates the Quick Answers flow (e.g. taps the button on the homepage).
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
     notification_emails:
@@ -39,7 +39,7 @@ ai.quick_answers:
     description: |
       Recorded when the Quick Answers service starts attempting to capture user audio.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
     notification_emails:
@@ -59,7 +59,7 @@ ai.quick_answers:
         description: |
           Optional. The error message if present.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
     notification_emails:
@@ -70,7 +70,7 @@ ai.quick_answers:
     description: |
       Recorded when the Quick Answers results service starts to fetch the results from the backend.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
     notification_emails:
@@ -92,7 +92,7 @@ ai.quick_answers:
         description: |
           Optional. The error message if present.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
     notification_emails:
@@ -103,7 +103,7 @@ ai.quick_answers:
     description: |
       Recorded when the user cancels or closes the Quick Answers screen at any point.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
     notification_emails:
@@ -117,7 +117,18 @@ ai.quick_answers:
       Starts when the request for fetching results starts.
       Ends when the user sees the results or an error.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  citation_tapped:
+    type: event
+    description: |
+      Recorded when the user taps a citation source in the Quick Answers results.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
     notification_emails:
@@ -133,7 +144,7 @@ ai.quick_answers:
         description: |
           Whether the consent prompt was accepted.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783  # TODO: replace with the Quick Answers telemetry ticket before merge
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
     notification_emails:

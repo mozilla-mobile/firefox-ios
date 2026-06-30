@@ -108,6 +108,10 @@ final class QuickAnswersViewModel {
         }
     }
 
+    func recordCitationTapped() {
+        telemetry.citationTapped()
+    }
+
     func recordConsentShown(_ agreed: Bool) {
         telemetry.consentShown(agreed: agreed)
     }

@@ -50,7 +50,7 @@ public final class QuickAnswersViewController: UIViewController,
         $0.configuration?.contentInsets = UX.closeButtonContentInset
         $0.addAction(
             UIAction(handler: { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+                self?.dismiss(with: nil)
             }),
             for: .touchUpInside
         )
@@ -68,7 +68,9 @@ public final class QuickAnswersViewController: UIViewController,
     private let learnMoreURL: URL?
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
-        navigationHandler: navigationHandler
+        onDismiss: { [weak self] in
+            self?.dismiss(with: nil)
+        }
     )
 
     public convenience init(
@@ -78,7 +80,7 @@ public final class QuickAnswersViewController: UIViewController,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         telemetry: QuickAnswersTelemetry,
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        configFetcher: QuickAnswersConfigFetcher,
         learnMoreURL: URL?,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
@@ -146,19 +148,6 @@ public final class QuickAnswersViewController: UIViewController,
         startFlow()
     }
 
-    override public func viewDidDisappear(_ animated: Bool) {
-        // if the optin is not completed at time of dismissal stopRecording triggers permission request, thus
-        // we'd show a permission alert on dismissal which we don't want.
-        if store.isOptInCompleted {
-            // TODO: FXIOS-14880 - Possibly investigate a better way to call this via view model
-            Task {
-                try await viewModel.stopRecordingVoice()
-            }
-        }
-        viewModel.recordClosed()
-        super.viewDidDisappear(animated)
-    }
-
     private func setupSubviews() {
         view.addSubviews(
             backgroundRecordEffect,
@@ -218,7 +207,8 @@ public final class QuickAnswersViewController: UIViewController,
                 } else {
                     self?.contentView.configureAnswer(result.resultText)
                     self?.contentView.configureSources(result.sources) { [weak self] url in
-                        self?.navigationHandler?.dismissQuickAnswers(with: .url(url))
+                        self?.viewModel.recordCitationTapped()
+                        self?.dismiss(with: url)
                     }
                 }
             case .initializationFailed:
@@ -235,14 +225,29 @@ public final class QuickAnswersViewController: UIViewController,
                 self?.startFlow()
             },
             onLearnMore: { [weak self] url in
-                self?.navigationHandler?.dismissQuickAnswers(with: .url(url))
+                self?.dismiss(with: url)
             }
         )
+    }
+    
+    private func dismiss(with url: URL?) {
+        // if the optin is not completed at time of dismissal stopRecording triggers permission request, thus
+        // we'd show a permission alert on dismissal which we don't want.
+        if store.isOptInCompleted {
+            // TODO: FXIOS-14880 - Possibly investigate a better way to call this via view model
+            Task {
+                try await viewModel.stopRecordingVoice()
+            }
+        } else {
+            viewModel.recordConsentShown(false)
+        }
+        viewModel.recordClosed()
+        navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        navigationHandler?.dismissQuickAnswers(with: nil)
+        dismiss(with: nil)
     }
 
     // MARK: - Themeable

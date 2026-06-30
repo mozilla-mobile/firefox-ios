@@ -121,6 +121,21 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
+    func testRecordEvent_WhenCitationTapped_ThenGleanIsCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.AiQuickAnswers.citationTapped
+
+        subject.citationTapped()
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     func testRecordEvent_WhenClosed_ThenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.closed

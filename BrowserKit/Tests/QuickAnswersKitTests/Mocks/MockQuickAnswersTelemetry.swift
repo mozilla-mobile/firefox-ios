@@ -12,6 +12,7 @@ final class MockQuickAnswersTelemetry: QuickAnswersTelemetry, @unchecked Sendabl
     var resultsStartedCalledCount = 0
     var resultsCompletedCalledCount = 0
     var displayedCalledCount = 0
+    var citationTappedCalledCount = 0
     var closedCalledCount = 0
     var consentShownCalledCount = 0
 
@@ -47,6 +48,10 @@ final class MockQuickAnswersTelemetry: QuickAnswersTelemetry, @unchecked Sendabl
 
     func displayed() {
         displayedCalledCount += 1
+    }
+
+    func citationTapped() {
+        citationTappedCalledCount += 1
     }
 
     func closed() {

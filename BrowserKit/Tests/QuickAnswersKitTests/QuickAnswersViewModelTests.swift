@@ -176,6 +176,14 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.lastConsentAgreed, true)
     }
 
+    func testRecordCitationTapped_recordsCitationTapped() {
+        let subject = createSubject()
+
+        subject.recordCitationTapped()
+
+        XCTAssertEqual(mockTelemetry.citationTappedCalledCount, 1)
+    }
+
     func testRecordClosed_recordsClosedOnlyOnce() {
         let subject = createSubject()
 

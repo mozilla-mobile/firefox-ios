@@ -46,6 +46,10 @@ final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.resultsCompleted, extras: extras)
     }
 
+    func citationTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.citationTapped)
+    }
+
     func closed() {
         if let resultsTimerId {
             gleanWrapper.cancelTiming(for: GleanMetrics.AiQuickAnswers.resultsTime, timerId: resultsTimerId)
