@@ -145,7 +145,7 @@ final class FXColors {
     static let Ink90 = UIColor(rgb: 0x1d1133)
 }
 
-// Accent ramp used only for legacy placeholder ("letter") favicons.
+// Accent colors for placeholder favicons
 extension FXColors {
     static let FaviconGreen1 = UIColor(rgb: 0x2e761a)
     static let FaviconGreen2 = UIColor(rgb: 0x399320)

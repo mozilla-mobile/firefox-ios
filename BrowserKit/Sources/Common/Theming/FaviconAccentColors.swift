@@ -89,8 +89,9 @@ final class NovaFaviconAccentColors {
                        iconAccentOrange5, iconAccentOrange6, iconAccentOrange7]
         let reds = [iconAccentRed1, iconAccentRed2, iconAccentRed3, iconAccentRed4,
                     iconAccentRed5, iconAccentRed6, iconAccentRed7]
+
+        // Lighter shades (1–4) use textOnLight token, darker shades (5–7) textOnDark
         let nova = NovaLightTheme().colors
-        // Lighter shades (1–4) take the on-light text token; darker shades (5–7) the on-dark one.
         return .make(families: [greens, cyans, blues, yellows, oranges, reds]) {
             $0 < 4 ? nova.textOnLight : nova.textOnDark
         }
