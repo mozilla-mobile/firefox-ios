@@ -47,6 +47,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         _ = app.wait(for: .notRunning, timeout: TIMEOUT)
         launchApp()
         setUpScreenGraph()
+        waitForTabsButton()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
