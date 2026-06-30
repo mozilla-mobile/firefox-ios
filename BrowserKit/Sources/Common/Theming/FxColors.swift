@@ -144,3 +144,54 @@ final class FXColors {
     static let Ink80 = UIColor(rgb: 0x20123a)
     static let Ink90 = UIColor(rgb: 0x1d1133)
 }
+
+// Accent ramp used only for legacy placeholder ("letter") favicons.
+extension FXColors {
+    static let FaviconGreen1 = UIColor(rgb: 0x2e761a)
+    static let FaviconGreen2 = UIColor(rgb: 0x399320)
+    static let FaviconGreen3 = UIColor(rgb: 0x40a624)
+    static let FaviconGreen4 = UIColor(rgb: 0x57bd35)
+    static let FaviconGreen5 = UIColor(rgb: 0x70cf5b)
+    static let FaviconGreen6 = UIColor(rgb: 0x90e07f)
+    static let FaviconGreen7 = UIColor(rgb: 0xb1eea5)
+
+    static let FaviconRed1 = UIColor(rgb: 0x881606)
+    static let FaviconRed2 = UIColor(rgb: 0xaa1b08)
+    static let FaviconRed3 = UIColor(rgb: 0xc21f09)
+    static let FaviconRed4 = UIColor(rgb: 0xd92215)
+    static let FaviconRed5 = UIColor(rgb: 0xee4b36)
+    static let FaviconRed6 = UIColor(rgb: 0xf67964)
+    static let FaviconRed7 = UIColor(rgb: 0xffa792)
+
+    static let FaviconBlue1 = UIColor(rgb: 0x025295)
+    static let FaviconBlue2 = UIColor(rgb: 0x0568ba)
+    static let FaviconBlue3 = UIColor(rgb: 0x0675d3)
+    static let FaviconBlue4 = UIColor(rgb: 0x0996f8)
+    static let FaviconBlue5 = UIColor(rgb: 0x2ea3ff)
+    static let FaviconBlue6 = UIColor(rgb: 0x61b4ff)
+    static let FaviconBlue7 = UIColor(rgb: 0x95cdff)
+
+    static let FaviconCyan1 = UIColor(rgb: 0x00736f)
+    static let FaviconCyan2 = UIColor(rgb: 0x01908b)
+    static let FaviconCyan3 = UIColor(rgb: 0x01a39d)
+    static let FaviconCyan4 = UIColor(rgb: 0x01bdad)
+    static let FaviconCyan5 = UIColor(rgb: 0x27d9d2)
+    static let FaviconCyan6 = UIColor(rgb: 0x58e7e6)
+    static let FaviconCyan7 = UIColor(rgb: 0x89f4f5)
+
+    static let FaviconOrange1 = UIColor(rgb: 0xc84510)
+    static let FaviconOrange2 = UIColor(rgb: 0xe35b0f)
+    static let FaviconOrange3 = UIColor(rgb: 0xf77100)
+    static let FaviconOrange4 = UIColor(rgb: 0xff9216)
+    static let FaviconOrange5 = UIColor(rgb: 0xffad2e)
+    static let FaviconOrange6 = UIColor(rgb: 0xffc446)
+    static let FaviconOrange7 = UIColor(rgb: 0xffdf81)
+
+    static let FaviconPink1 = UIColor(rgb: 0x911a2e)
+    static let FaviconPink2 = UIColor(rgb: 0xb7223b)
+    static let FaviconPink3 = UIColor(rgb: 0xcf2743)
+    static let FaviconPink4 = UIColor(rgb: 0xea385e)
+    static let FaviconPink5 = UIColor(rgb: 0xfa526e)
+    static let FaviconPink6 = UIColor(rgb: 0xff7a8d)
+    static let FaviconPink7 = UIColor(rgb: 0xffa7b3)
+}
