@@ -43,6 +43,32 @@ final class PhotoPickerCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(completionCalled, 1)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(router.dismissCalled, 1)
+    }
+
+    func test_interactiveDismissal_callsCompletionAndNotifiesParent() {
+        var completionResults: [PHPickerResult]?
+        let subject = createSubject(onComplete: { completionResults = $0 })
+
+        subject.start()
+        router.savedCompletion?()
+
+        XCTAssertEqual(completionResults?.count, 0)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func test_didFinishPickingThenDismissalCompletion_finishesOnlyOnce() {
+        var completionCalled = 0
+        let subject = createSubject(onComplete: { _ in completionCalled += 1 })
+        let picker = PHPickerViewController(configuration: PHPickerConfiguration(photoLibrary: .shared()))
+
+        subject.start()
+        let dismissalCompletion = router.savedCompletion
+        subject.picker(picker, didFinishPicking: [])
+        dismissalCompletion?()
+
+        XCTAssertEqual(completionCalled, 1)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
     // MARK: - Helper Methods
