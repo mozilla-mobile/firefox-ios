@@ -4564,6 +4564,118 @@ extension String {
     }
 }
 
+// MARK: - WebCompat Reporter
+extension String {
+    public struct WebCompatReporter {
+        public struct Category {
+            public static let SiteNotUsable = MZLocalizedString(
+                key: "", // WebCompatReporter.Category.SiteNotUsable.v152
+                tableName: "WebCompatReporter",
+                value: "Site is not usable",
+                comment: "Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form."
+            )
+            public static let DesignBroken = MZLocalizedString(
+                key: "", // WebCompatReporter.Category.DesignBroken.v152
+                tableName: "WebCompatReporter",
+                value: "Design is broken",
+                comment: "Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form."
+            )
+            public static let VideoOrAudio = MZLocalizedString(
+                key: "", // WebCompatReporter.Category.VideoOrAudio.v152
+                tableName: "WebCompatReporter",
+                value: "Video or audio does not play",
+                comment: "Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form."
+            )
+            public static let Other = MZLocalizedString(
+                key: "", // WebCompatReporter.Category.Other.v152
+                tableName: "WebCompatReporter",
+                value: "Other",
+                comment: "Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form."
+            )
+        }
+        public struct SubOption {
+            public static let BrowserBlocked = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.BrowserBlocked.v152
+                tableName: "WebCompatReporter",
+                value: "Browser is blocked or unsupported",
+                comment: "A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form."
+            )
+            public static let PageNotLoading = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.PageNotLoading.v152
+                tableName: "WebCompatReporter",
+                value: "Page not loading correctly",
+                comment: "A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form."
+            )
+            public static let MissingItems = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.MissingItems.v152
+                tableName: "WebCompatReporter",
+                value: "Missing items",
+                comment: "A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form."
+            )
+            public static let ButtonsNotWorking = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.ButtonsNotWorking.v152
+                tableName: "WebCompatReporter",
+                value: "Buttons or links not working",
+                comment: "A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form."
+            )
+            public static let ImagesNotLoaded = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.ImagesNotLoaded.v152
+                tableName: "WebCompatReporter",
+                value: "Images not loaded",
+                comment: "A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form."
+            )
+            public static let ItemsOverlapped = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.ItemsOverlapped.v152
+                tableName: "WebCompatReporter",
+                value: "Items are overlapped",
+                comment: "A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form."
+            )
+            public static let ItemsMisaligned = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.ItemsMisaligned.v152
+                tableName: "WebCompatReporter",
+                value: "Items are misaligned",
+                comment: "A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form."
+            )
+            public static let ItemsNotVisible = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.ItemsNotVisible.v152
+                tableName: "WebCompatReporter",
+                value: "Items not fully visible",
+                comment: "A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form."
+            )
+            public static let NoVideo = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.NoVideo.v152
+                tableName: "WebCompatReporter",
+                value: "There is no video",
+                comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
+            )
+            public static let NoAudio = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.NoAudio.v152
+                tableName: "WebCompatReporter",
+                value: "There is no audio",
+                comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
+            )
+            public static let MediaControlsBroken = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.MediaControlsBroken.v152
+                tableName: "WebCompatReporter",
+                value: "Media controls are broken or missing",
+                comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
+            )
+            public static let PlaybackFails = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.PlaybackFails.v152
+                tableName: "WebCompatReporter",
+                value: "The video or audio does not play",
+                comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
+            )
+            public static let CaptionsMissing = MZLocalizedString(
+                key: "", // WebCompatReporter.SubOption.CaptionsMissing.v152
+                tableName: "WebCompatReporter",
+                value: "Captions are missing",
+                comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
+            )
+        }
+    }
+}
+
 // MARK: - What's New
 extension String {
     /// The localizations for the custom implemented content on the WebView

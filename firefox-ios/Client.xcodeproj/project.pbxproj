@@ -24,6 +24,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		8C2FB1E22FF3D65C00C9A803 /* WebCompatIssueCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1E12FF3D65C00C9A803 /* WebCompatIssueCategory.swift */; };
+		8C2FB1E42FF3D66500C9A803 /* WebCompatReporterAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1E32FF3D66500C9A803 /* WebCompatReporterAction.swift */; };
+		8C2FB1E62FF3D67900C9A803 /* WebCompatReporterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1E52FF3D67900C9A803 /* WebCompatReporterState.swift */; };
+		8C2FB1E82FF3D68100C9A803 /* WebCompatReporterMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1E72FF3D68100C9A803 /* WebCompatReporterMiddleware.swift */; };
+		8C2FB1EB2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1EA2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift */; };
+		8C2FB1ED2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1EC2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift */; };
 		032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */; };
 		033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */; };
 		033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */; };
@@ -2686,6 +2692,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8C2FB1E12FF3D65C00C9A803 /* WebCompatIssueCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatIssueCategory.swift; sourceTree = "<group>"; };
+		8C2FB1E32FF3D66500C9A803 /* WebCompatReporterAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReporterAction.swift; sourceTree = "<group>"; };
+		8C2FB1E52FF3D67900C9A803 /* WebCompatReporterState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReporterState.swift; sourceTree = "<group>"; };
+		8C2FB1E72FF3D68100C9A803 /* WebCompatReporterMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReporterMiddleware.swift; sourceTree = "<group>"; };
+		8C2FB1EA2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReporterStateTests.swift; sourceTree = "<group>"; };
+		8C2FB1EC2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReporterMiddlewareTests.swift; sourceTree = "<group>"; };
 		001348F79CA80B94DCD3E535 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		00218A431FC749D7BC8EC05D /* homepageStoryCategoriesOn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = homepageStoryCategoriesOn.json; sourceTree = "<group>"; };
 		003141C6B19507C79B6C399C /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -12146,6 +12158,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C2FB1DF2FF3D64B00C9A803 /* WebCompatReporter */ = {
+			isa = PBXGroup;
+			children = (
+				8C2FB1E02FF3D64F00C9A803 /* Redux */,
+			);
+			path = WebCompatReporter;
+			sourceTree = "<group>";
+		};
+		8C2FB1E02FF3D64F00C9A803 /* Redux */ = {
+			isa = PBXGroup;
+			children = (
+				8C2FB1E12FF3D65C00C9A803 /* WebCompatIssueCategory.swift */,
+				8C2FB1E32FF3D66500C9A803 /* WebCompatReporterAction.swift */,
+				8C2FB1E52FF3D67900C9A803 /* WebCompatReporterState.swift */,
+				8C2FB1E72FF3D68100C9A803 /* WebCompatReporterMiddleware.swift */,
+			);
+			path = Redux;
+			sourceTree = "<group>";
+		};
+		8C2FB1E92FF3D69C00C9A803 /* WebCompatReporter */ = {
+			isa = PBXGroup;
+			children = (
+				8C2FB1EA2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift */,
+				8C2FB1EC2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift */,
+			);
+			path = WebCompatReporter;
+			sourceTree = "<group>";
+		};
 		033C94F32E2F839900C2382F /* TermsOfUse */ = {
 			isa = PBXGroup;
 			children = (
@@ -17120,6 +17160,7 @@
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */,
+				8C2FB1E92FF3D69C00C9A803 /* WebCompatReporter */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -17240,6 +17281,7 @@
 				D0FCF7EE1FE44E15004A7995 /* UserContent */,
 				8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */,
 				D38A1BEB1A9FA2CA00F6A386 /* Widgets */,
+				8C2FB1DF2FF3D64B00C9A803 /* WebCompatReporter */,
 			);
 			path = Frontend;
 			sourceTree = "<group>";
@@ -19208,6 +19250,7 @@
 				5A47D0002FCB000100AD5DB0 /* AdsClientDocumentsDirectoryMigration.swift in Sources */,
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedTableViewController.swift in Sources */,
+				8C2FB1E22FF3D65C00C9A803 /* WebCompatIssueCategory.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				21EEAA192D3852B300595119 /* BookmarksTelemetry.swift in Sources */,
 				8A9F4F072DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */,
@@ -19373,6 +19416,7 @@
 				AA25A7512FB4C9CE00A55859 /* QuickAnswersSettingsViewController.swift in Sources */,
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				8A0727462B4890B50071BB9F /* WebviewTelemetry.swift in Sources */,
+				8C2FB1E42FF3D66500C9A803 /* WebCompatReporterAction.swift in Sources */,
 				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
 				214099652DD295F5004881E1 /* ZoomLevelPickerView.swift in Sources */,
 				8C3B1A1B2F73C8D100E2C370 /* TranslationToggleCell.swift in Sources */,
@@ -19716,6 +19760,7 @@
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				21EA337F2EC65CC300D20D90 /* ToolbarViewProtocol.swift in Sources */,
 				81E9B6E82E2AB73400CE6FF6 /* MerinoStory.swift in Sources */,
+				8C2FB1E82FF3D68100C9A803 /* WebCompatReporterMiddleware.swift in Sources */,
 				E1442FD2294782D9003680B0 /* UIViewController+Extension.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
 				E127313C28B6AD99006F39D2 /* WallpaperSettingsViewController.swift in Sources */,
@@ -19960,6 +20005,7 @@
 				1DCEC3F62D600C4400129966 /* ASSearchEngineIconRecord.swift in Sources */,
 				D5D0532E2645B3A700759F85 /* ExperimentsTableView.swift in Sources */,
 				8A832A9029DC96C50025D5DD /* LaunchScreenView.swift in Sources */,
+				8C2FB1E62FF3D67900C9A803 /* WebCompatReporterState.swift in Sources */,
 				8AAAB05B2C1B7268008830B3 /* ClientTabsSearchWrapper.swift in Sources */,
 				214EF4152AC5D5D0005BCCDA /* TabDisplayView.swift in Sources */,
 				8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */,
@@ -20538,6 +20584,7 @@
 				C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */,
 				C2DFB1452ECE62EE004E20AB /* MockTranslationsService.swift in Sources */,
 				354F8FAB2E0985B9007DFFEB /* SearchBarStateTests.swift in Sources */,
+				8C2FB1EB2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift in Sources */,
 				399BA8002F901D9200CCC502 /* UserFeaturePreferenceManagerTests.swift in Sources */,
 				5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */,
 				AAD9D64B2EB25B3500BFECAF /* TranslationsMiddlewareTests.swift in Sources */,
@@ -20579,6 +20626,7 @@
 				ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */,
 				0A80C4262F3CD45900DB85AE /* MockLAContext.swift in Sources */,
 				C8C3FEA129F973C40038E3BA /* MockBrowserViewController.swift in Sources */,
+				8C2FB1ED2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift in Sources */,
 				8A93F86B29D39BDA004159D9 /* BaseCoordinatorTests.swift in Sources */,
 				8AF3B15A2AF99B86009BB262 /* HistoryPanelTests.swift in Sources */,
 				814A62462B587A3E00608195 /* DefaultThemeManagerTests.swift in Sources */,

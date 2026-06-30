@@ -24,6 +24,7 @@ enum ComponentState: Sendable, Equatable {
     case nativeErrorPage(NativeErrorPageState)
     case shortcutsLibrary(ShortcutsLibraryState)
     case translationSettings(TranslationSettingsState)
+    case webCompatReporter(WebCompatReporterState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
@@ -47,6 +48,8 @@ enum ComponentState: Sendable, Equatable {
         case .shortcutsLibrary(let state): return .shortcutsLibrary(ShortcutsLibraryState.reducer(state, action))
         case .translationSettings(let state):
             return .translationSettings(TranslationSettingsState.reducer(state, action))
+        case .webCompatReporter(let state):
+            return .webCompatReporter(WebCompatReporterState.reducer(state, action))
         }
     }
 
@@ -70,6 +73,7 @@ enum ComponentState: Sendable, Equatable {
         case .nativeErrorPage: return .nativeErrorPage
         case .shortcutsLibrary: return .shortcutsLibrary
         case .translationSettings: return .translationSettings
+        case .webCompatReporter: return .webCompatReporter
         }
     }
 
@@ -92,6 +96,7 @@ enum ComponentState: Sendable, Equatable {
         case .nativeErrorPage(let state): return state.windowUUID
         case .shortcutsLibrary(let state): return state.windowUUID
         case .translationSettings(let state): return state.windowUUID
+        case .webCompatReporter(let state): return state.windowUUID
         }
     }
 }
@@ -164,6 +169,8 @@ struct PresentedComponentsState: Sendable, Equatable {
                 components.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
             case .translationSettings:
                 components.append(.translationSettings(TranslationSettingsState(windowUUID: uuid)))
+            case .webCompatReporter:
+                components.append(.webCompatReporter(WebCompatReporterState(windowUUID: uuid)))
             }
         default:
             return components
