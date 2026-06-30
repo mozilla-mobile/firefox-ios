@@ -203,6 +203,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .videoIntroOnboarding:
             return checkVideoIntroOnboardingFeature()
 
+        case .waybackMachine:
+            return checkWaybackMachineFeature()
+
         case .worldCupWidget:
             return checkWorldCupWidgetFeature()
 
@@ -485,5 +488,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkAddressBarGestureToOpenTabTraySwipeFeature() -> Bool {
         return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledSwipe
+    }
+
+    private func checkWaybackMachineFeature() -> Bool {
+        return nimbus.features.waybackMachineFeature.value().enabled
     }
 }
