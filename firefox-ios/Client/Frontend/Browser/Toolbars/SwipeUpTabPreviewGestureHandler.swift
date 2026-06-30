@@ -70,7 +70,6 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         case .ended:
             let fingerLocation = gesture.location(in: tabPreview)
             switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
-
             // this case is unreachable for now
             case .closeTab:
                 UIView.animate(withDuration: 0.1) { [self] in

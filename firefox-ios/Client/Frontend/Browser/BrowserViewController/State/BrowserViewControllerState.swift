@@ -57,7 +57,7 @@ struct BrowserViewControllerState: ScreenState {
     var microsurveyState: MicrosurveyPromptState
     var autoTranslatePromptState: AutoTranslatePromptState
     var navigationDestination: NavigationDestination?
-    var cellBounds: CGRect? = nil
+    var cellBounds: CGRect?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = appState.componentState(
