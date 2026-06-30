@@ -38,9 +38,14 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         case noDataAvailable
     }
 
-    enum TileOrder: String {
+    enum TileOrder: String, CaseIterable {
         case position1 = "newtab_mobile_tile_1"
         case position2 = "newtab_mobile_tile_2"
+
+        /// Placement identifiers in the order tiles should be displayed.
+        static var placementOrder: [String] {
+            return allCases.map { $0.rawValue }
+        }
     }
 
     init(
@@ -103,10 +108,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
 
         let requestBody = RequestBody(
             context_id: contextId,
-            placements: [
-                AdPlacement(placement: TileOrder.position1.rawValue, count: 1),
-                AdPlacement(placement: TileOrder.position2.rawValue, count: 1)
-            ]
+            placements: TileOrder.placementOrder.map { AdPlacement(placement: $0, count: 1) }
         )
 
         var request = URLRequest(url: resourceEndpoint)
@@ -144,20 +146,15 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
 
     private func fetchTilesWithAdsClient(completion: @escaping (UnifiedTileResult) -> Void) {
         logger.log("Fetching tiles with ads client", level: .info, category: .homepage)
-        let mozAdRequests = [
-            MozAdsPlacementRequest(iabContent: nil, placementId: TileOrder.position1.rawValue),
-            MozAdsPlacementRequest(iabContent: nil, placementId: TileOrder.position2.rawValue)
-        ]
+        let mozAdRequests = TileOrder.placementOrder.map {
+            MozAdsPlacementRequest(iabContent: nil, placementId: $0)
+        }
         do {
             let mozAdsTiles = try adsClient.requestTileAds(
                 mozAdRequests: mozAdRequests,
                 options: nil
             )
-            // `requestTileAds` returns a dictionary keyed by placement, which has no
-            // guaranteed iteration order. Reconstruct the tiles following the placement
-            // order so the first sponsored tile is always shown first.
-            let placementOrder = [TileOrder.position1.rawValue, TileOrder.position2.rawValue]
-            let unifiedTiles: [UnifiedTile] = placementOrder.compactMap { placement in
+            let unifiedTiles: [UnifiedTile] = TileOrder.placementOrder.compactMap { placement in
                 guard let mozAdsTile = mozAdsTiles[placement] else { return nil }
                 return UnifiedTile.from(name: placement, mozAdsTile: mozAdsTile)
             }
@@ -175,8 +172,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             let tilesDictionary = try decoder.decode([String: [UnifiedTile]].self, from: data)
-            let placementOrder = [TileOrder.position1.rawValue, TileOrder.position2.rawValue]
-            let tiles = placementOrder.compactMap { tilesDictionary[$0] }.flatMap { $0 }
+            let tiles = TileOrder.placementOrder.compactMap { tilesDictionary[$0] }.flatMap { $0 }
 
             guard !tiles.isEmpty else {
                 completion(.failure(Error.noDataAvailable))
