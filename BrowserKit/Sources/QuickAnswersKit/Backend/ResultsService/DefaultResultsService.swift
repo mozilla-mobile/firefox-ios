@@ -13,18 +13,18 @@ protocol ResultsService: Sendable {
 
 final class DefaultResultsService: ResultsService {
     private let client: LiteLLMClientProtocol
-    private let config: LLMConfig
+    private let configFetcher: QuickAnswersConfigFetcher
 
-    init(client: LiteLLMClientProtocol, config: LLMConfig) {
+    init(client: LiteLLMClientProtocol, configFetcher: QuickAnswersConfigFetcher) {
         self.client = client
-        self.config = config
+        self.configFetcher = configFetcher
     }
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
-        let message: QuickAnswersMessage = LiteLLMMessage(role: .user, content: transcription)
-
         do {
-            let fullResponse = try await requestChatCompletion(for: message)
+            let config = try await configFetcher.fetch()
+            let messages = makeMessages(for: transcription, config: config)
+            let fullResponse = try await requestChatCompletion(for: messages, config: config)
             let citations = fullResponse.providerSpecificFields?.citations ?? []
             return formatResult(from: fullResponse.content, and: citations)
         } catch {
@@ -32,25 +32,40 @@ final class DefaultResultsService: ResultsService {
         }
     }
 
-    private func requestChatCompletion(for message: QuickAnswersMessage) async throws -> QuickAnswersMessage {
+    private func makeMessages(for transcription: String, config: LLMConfig) -> [QuickAnswersMessage] {
+        var messages: [QuickAnswersMessage] = []
+        if !config.instructions.isEmpty {
+            messages.append(LiteLLMMessage(role: .system, content: config.instructions))
+        }
+        messages.append(LiteLLMMessage(role: .user, content: transcription))
+        return messages
+    }
+
+    private func requestChatCompletion(
+        for messages: [QuickAnswersMessage],
+        config: LLMConfig
+    ) async throws -> QuickAnswersMessage {
         // TODO: FXIOS-15198 Handle errors appropriately
         // and may need to change type and not use String,
         // but waiting for what we get on server side
         return try await client.requestChatCompletion(
-            messages: [message],
+            messages: messages,
             config: config
         )
     }
 
     private func formatResult(from answer: String, and citations: [Citation]) -> SearchResult {
-        let sources = citations.map { citation in
+        // limit the citations to the first 3 in the array
+        let filteredCitations = citations.prefix(3)
+        let sources = filteredCitations.map { citation in
             SearchResult.Source(
                 title: citation.title ?? "",
+                url: URL(string: citation.url ?? ""),
                 thumbnailURL: URL(string: citation.image ?? ""),
                 faviconURL: URL(string: citation.favicon ?? "")
             )
         }
-        return SearchResult(resultText: answer, sources: sources)
+        return SearchResult(resultText: answer, sources: Array(sources))
     }
 
     /// Maps underlying errors to `ResultsServiceError` types.
