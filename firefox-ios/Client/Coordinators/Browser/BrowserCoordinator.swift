@@ -1133,7 +1133,15 @@ final class BrowserCoordinator: BaseCoordinator,
         let coordinator = PhotoPickerCoordinator(
             parentCoordinatorDelegate: self,
             router: router
-        ) { _ in
+        ) { [weak self] results in
+            // Empty results means the user dismissed the picker without choosing — leave the
+            // address bar's edit/overlay state only once a photo is actually selected.
+            guard let self, !results.isEmpty else { return }
+            store.dispatch(
+                GeneralBrowserAction(showOverlay: false,
+                                     windowUUID: self.windowUUID,
+                                     actionType: GeneralBrowserActionType.leaveOverlay)
+            )
             // TODO FXIOS-16064: Send the picked image to the Lens API and navigate to the result
         }
         add(child: coordinator)
