@@ -214,7 +214,7 @@ extension String {
                 key: "Bookmarks.Menu.EditBookmarkParentFolderBreadcrumbFormat.v154",
                 tableName: "Bookmarks",
                 value: "↳ %@",
-                comment: "Breadcrumb shown under a nested folder's title in the New/Edit Folder location picker. %@ is replaced with the immediate parent folder's name.")
+                comment: "Breadcrumb shown under a nested folder's title in the New/Edit Folder location picker. %@ is replaced with the immediate parent folder's name. RTL locales might want to use `%@ ↵` instead.")
             public static let EditBookmarkGroupExpandedValue = MZLocalizedString(
                 key: "Bookmarks.Menu.EditBookmarkGroupExpandedValue.v154",
                 tableName: "Bookmarks",
