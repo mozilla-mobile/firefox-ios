@@ -8,6 +8,7 @@ import UIKit
 import Common
 import Glean
 import TabDataStore
+import WebEngine
 
 import class MozillaAppServices.Viaduct
 import struct MozillaAppServices.RustAdsClient
@@ -60,6 +61,8 @@ class AppDelegate: UIResponder,
     private var menuBuilderHelper: MenuBuilderHelper?
     private lazy var metricKitWrapper = MetricKitWrapper()
     private let wallpaperMetadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
+
+    private static var testProxyEnabled = true
 
     func application(
         _ application: UIApplication,
@@ -123,6 +126,12 @@ class AppDelegate: UIResponder,
 
         // Fix iOS simulator builds for Fennec after running unit tests locally [FXIOS-10712]
         fixSimulatorDevBuild(application)
+
+        if #available(iOS 17.0, *) {
+            DefaultWKEngineConfigurationProvider.setTestProxyEnabled(Self.testProxyEnabled,
+                                                                     host: "127.0.0.1",
+                                                                     port: 9090)
+        }
 
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Network
 import WebKit
 
 @MainActor
@@ -56,7 +57,7 @@ public protocol WKEngineConfigurationProvider {
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
-    private static let defaultStore = WKWebsiteDataStore.default()
+    private static var defaultStore = WKWebsiteDataStore.default()
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
     private let configuration: WKWebViewConfiguration
 
@@ -95,5 +96,48 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
     public func endPrivateBrowsingSession() {
         Self.nonPersistentStore = .nonPersistent()
+    }
+
+    /// Test hook for a local HTTP CONNECT proxy. With `swapStore: false` it sets the proxy on
+    /// the existing shared stores — WebKit forwards this to the live network session, but
+    /// already-loaded content and pooled connections are not retroactively rerouted, so a
+    /// reload is needed to see it take effect. With `swapStore: true` it replaces the stores
+    /// with fresh ones carrying the proxy, so every webview later bound to them starts from a
+    /// clean session. New webviews created after this call pick up the swapped stores.
+    @available(iOS 17.0, *)
+    public static func applyTestProxy(host: String, port: UInt16, swapStore: Bool) {
+        let proxy = ProxyConfiguration(
+            httpCONNECTProxy: .hostPort(host: .init(host), port: .init(integerLiteral: port))
+        )
+
+        guard swapStore else {
+            defaultStore.proxyConfigurations = [proxy]
+            nonPersistentStore.proxyConfigurations = [proxy]
+            return
+        }
+
+        // `.default()` is a process-wide singleton, so a fresh persistent store has to come
+        // from a new identifier — otherwise the swap is a no-op and the proxy is still ignored.
+        let newDefault = WKWebsiteDataStore(forIdentifier: UUID())
+        newDefault.proxyConfigurations = [proxy]
+        defaultStore = newDefault
+
+        let newPrivate = WKWebsiteDataStore.nonPersistent()
+        newPrivate.proxyConfigurations = [proxy]
+        nonPersistentStore = newPrivate
+    }
+
+    /// Enables or disables the proxy on the existing shared stores in place, without swapping
+    /// them. Setting `enabled: false` assigns `[]`, which clears the proxy on the live session.
+    /// This is the mid-flow toggle used to observe whether already-running webviews actually
+    /// reroute (or keep bypassing) when the shared store's proxy changes after pages have loaded.
+    @available(iOS 17.0, *)
+    public static func setTestProxyEnabled(_ enabled: Bool, host: String, port: UInt16) {
+        let configs: [ProxyConfiguration] = enabled
+            ? [ProxyConfiguration(httpCONNECTProxy: .hostPort(host: .init(host),
+                                                              port: .init(integerLiteral: port)))]
+            : []
+        defaultStore.proxyConfigurations = configs
+        nonPersistentStore.proxyConfigurations = configs
     }
 }

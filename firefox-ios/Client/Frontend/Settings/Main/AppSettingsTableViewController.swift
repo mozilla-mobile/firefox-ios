@@ -6,6 +6,7 @@ import Common
 import UIKit
 import Shared
 import Glean
+import WebEngine
 
 import struct MozillaAppServices.VisitObservation
 
@@ -542,7 +543,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self),
             MerinoTestDataSetting(settings: self, settingsDelegate: self),
-            WorldCupResetDismissedSetting(settings: self)
+            WorldCupResetDismissedSetting(settings: self),
+            TestProxyToggleSetting(settings: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
@@ -660,5 +662,32 @@ class AppSettingsTableViewController: SettingsTableViewController,
             return UIView()
         }
         return headerView
+    }
+}
+
+/// Debug toggle that enables/disables the local test proxy on the existing shared website data
+/// stores in place, without swapping them. Used to observe whether already-running webviews
+/// reroute when the shared store's proxy changes mid-session.
+class TestProxyToggleSetting: HiddenSetting {
+    private static var isEnabled = true
+
+    override var accessibilityIdentifier: String? { return "TestProxyToggle.Setting" }
+
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        let state = TestProxyToggleSetting.isEnabled ? "ON" : "OFF"
+        return NSAttributedString(
+            string: "Test proxy (127.0.0.1:9090): \(state)",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        TestProxyToggleSetting.isEnabled.toggle()
+        if #available(iOS 17.0, *) {
+            DefaultWKEngineConfigurationProvider.setTestProxyEnabled(TestProxyToggleSetting.isEnabled,
+                                                                     host: "127.0.0.1",
+                                                                     port: 9090)
+        }
+        settings.tableView.reloadData()
     }
 }
