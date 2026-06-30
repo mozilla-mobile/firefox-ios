@@ -70,9 +70,8 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         case .ended:
             let fingerLocation = gesture.location(in: tabPreview)
             switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
-            // this case is unreachable for now
             case .closeTab:
-                UIView.animate(withDuration: 0.1) { [self] in
+                UIView.animate(withDuration: 0.3) { [self] in
                     tabPreview.tossPreview()
                 } completion: { [self] _ in
                     store.dispatch(
@@ -92,7 +91,9 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
                 }
             case .openTabTray:
                 let cellBounds = tabPreview.previewCardFrame
-                tabPreview.dismissForTabTray()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    self.tabPreview.dismissForTabTray()
+                }
                 store.dispatch(
                     GeneralBrowserAction(
                         cellBounds: cellBounds,

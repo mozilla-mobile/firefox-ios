@@ -155,7 +155,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         let bvcSnapshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
 
         // cropping the screenshot
-        let cellFrame = browserVC.tabTrayAnimationSourceFrame ?? browserVC.view.frame
+        var cellFrame = browserVC.tabTrayAnimationSourceFrame ?? browserVC.view.frame
         let tempCGImage = bvcSnapshot.image?.cgImage
         let croppedCGImage = tempCGImage?.cropping(to: cellFrame)
         bvcSnapshot.image = UIImage(cgImage: croppedCGImage!)
@@ -181,47 +181,45 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         destinationController.view.layoutIfNeeded()
 
         // Don't block the UI rendering with the animation to make the snapshotting code more performant
-        DispatchQueue.main.async {
-            let collectionView = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
-                  let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-            else {
-                context.containerView.addSubview(destinationController.view)
-                context.completeTransition(true)
-                return
-            }
-
-            var tabCell: ExperimentTabCell?
-            var cellFrame: CGRect?
-            let theme = self.retrieveTheme()
-
-            if let indexPath = dataSource.indexPath(for: item) {
-                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-                // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
-                collectionView.layoutIfNeeded()
-                if let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell {
-                    tabCell = cell
-                    cellFrame = cell.convert(cell.backgroundHolder.bounds, to: nil)
-                    cell.isHidden = true
-                    cell.setUnselectedState(theme: theme)
-                    cell.alpha = UX.clearAlpha
-                }
-            }
-            // Animate
-            collectionView.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            collectionView.alpha = UX.halfAlpha
-
-            self.performPresentationAnimation(
-                cellFrame: cellFrame,
-                tabCell: tabCell,
-                bvcSnapshot: bvcSnapshot,
-                collectionView: collectionView,
-                backgroundView: backgroundView,
-                context: context,
-                selectedTab: selectedTab,
-                theme: theme
-            )
+        
+        let collectionView = panelViewController.tabDisplayView.collectionView
+        guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
+              let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
+        else {
+            context.containerView.addSubview(destinationController.view)
+            context.completeTransition(true)
+            return
         }
+
+        var tabCell: ExperimentTabCell?
+        let theme = self.retrieveTheme()
+
+        if let indexPath = dataSource.indexPath(for: item) {
+            collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
+            collectionView.layoutIfNeeded()
+            if let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell {
+                tabCell = cell
+                cellFrame = cell.convert(cell.backgroundHolder.bounds, to: nil)
+                cell.isHidden = true
+                cell.setUnselectedState(theme: theme)
+                cell.alpha = UX.clearAlpha
+            }
+        }
+        // Animate
+        collectionView.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+        collectionView.alpha = UX.halfAlpha
+
+        self.performPresentationAnimation(
+            cellFrame: cellFrame,
+            tabCell: tabCell,
+            bvcSnapshot: bvcSnapshot,
+            collectionView: collectionView,
+            backgroundView: backgroundView,
+            context: context,
+            selectedTab: selectedTab,
+            theme: theme
+        )
     }
 
     private func performPresentationAnimation(

@@ -161,9 +161,9 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     func releaseOutcome(fingerLocation: CGPoint) -> ReleaseOutcome {
         guard bounds.height > 0 else { return .cancel }
         let fractionFromTop = fingerLocation.y / bounds.height
-        // if fractionFromTop <= UX.closeReleaseThreshold {
-            // return .closeTab
-        // } else
+        if fractionFromTop <= UX.closeReleaseThreshold {
+            return .closeTab
+        } else
         if fractionFromTop <= UX.tabTrayReleaseThreshold {
             return .openTabTray
         }
@@ -186,7 +186,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     }
 
     func tossPreview() {
-        screenshotViewContainer.transform = .identity.translatedBy(x: 0, y: -500).scaledBy(
+        screenshotViewContainer.transform = .identity.translatedBy(x: 0, y: -1000).scaledBy(
             x: 0.6,
             y: 0.6
         )
