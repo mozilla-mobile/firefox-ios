@@ -150,10 +150,18 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         ]
         do {
             let mozAdsTiles = try adsClient.requestTileAds(
-                mozAdRequests: mozAdRequests, options: nil)
-            let unifiedTiles: [UnifiedTile] = mozAdsTiles.map { name, mozAdsTile in
-                UnifiedTile.from(name: name, mozAdsTile: mozAdsTile)
+                mozAdRequests: mozAdRequests,
+                options: nil
+            )
+            // `requestTileAds` returns a dictionary keyed by placement, which has no
+            // guaranteed iteration order. Reconstruct the tiles following the placement
+            // order so the first sponsored tile is always shown first.
+            let placementOrder = [TileOrder.position1.rawValue, TileOrder.position2.rawValue]
+            let unifiedTiles: [UnifiedTile] = placementOrder.compactMap { placement in
+                guard let mozAdsTile = mozAdsTiles[placement] else { return nil }
+                return UnifiedTile.from(name: placement, mozAdsTile: mozAdsTile)
             }
+
             logger.log("Ads client request successful", level: .info, category: .homepage)
             completion(.success(unifiedTiles))
         } catch let error {
