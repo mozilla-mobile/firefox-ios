@@ -67,8 +67,6 @@ enum FeatureFlagID: String, CaseIterable {
     case unifiedSearch
     case videoIntroOnboarding
     case worldCupWidget
-    case toolbarTabTrayGestureEnableSwipe
-    case toolbarTabTrayGestureEnableInteractive
 
     /// The user preferences key for features that support user-togglable settings.
     /// Returns `nil` for features that are not user-configurable.
