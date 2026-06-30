@@ -375,6 +375,7 @@ class BrowserViewController: UIViewController,
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
+    var tabTrayAnimationSourceFrame: CGRect?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -2876,6 +2877,7 @@ class BrowserViewController: UIViewController,
             presentRefreshLongPressAction(from: button)
         case .tabTray:
             // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
+            tabTrayAnimationSourceFrame = state.cellBounds
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
             store.dispatch(

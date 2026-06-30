@@ -22,7 +22,7 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 
         static let dimmedWhiteValue = 0.0
 
-        static let presentDuration: TimeInterval = 0.2
+        static let presentDuration: TimeInterval = 0.5
         static let dismissDuration: TimeInterval = 0.2
         static let bvcScreenshotQuality: CGFloat = 1.0
 
@@ -153,8 +153,16 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         }
 
         let bvcSnapshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
+
+        // cropping the screenshot
+        let cellFrame = browserVC.tabTrayAnimationSourceFrame ?? browserVC.view.frame
+        let tempCGImage = bvcSnapshot.image?.cgImage
+        let croppedCGImage = tempCGImage?.cropping(to: cellFrame)
+        bvcSnapshot.image = UIImage(cgImage: croppedCGImage!)
+
         bvcSnapshot.contentMode = .scaleAspectFill
-        bvcSnapshot.frame = browserVC.view.frame
+        bvcSnapshot.frame = cellFrame
+        browserVC.tabTrayAnimationSourceFrame = nil
         bvcSnapshot.clipsToBounds = true
 
         // Dimmed background view

@@ -23,6 +23,7 @@ struct GeneralBrowserAction: Action {
     let translationLanguages: [String]?
     let isPageTranslated: Bool
     let translatedToLanguage: String?
+    let cellBounds: CGRect?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
@@ -35,6 +36,7 @@ struct GeneralBrowserAction: Action {
          translationLanguages: [String]? = nil,
          isPageTranslated: Bool = false,
          translatedToLanguage: String? = nil,
+         cellBounds: CGRect? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -51,6 +53,7 @@ struct GeneralBrowserAction: Action {
         self.translationLanguages = translationLanguages
         self.isPageTranslated = isPageTranslated
         self.translatedToLanguage = translatedToLanguage
+        self.cellBounds = cellBounds
     }
 }
 

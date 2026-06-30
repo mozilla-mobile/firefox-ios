@@ -65,10 +65,14 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         case .changed:
             tabPreview.addTabScreenshot(image: tab.screenshot)
             let translation = gesture.translation(in: gesture.view)
-            tabPreview.translate(translation)
+            let fingerLocation = gesture.location(in: tabPreview)
+            tabPreview.translate(translation, fingerLocation: fingerLocation)
         case .ended:
-            let translation = gesture.translation(in: tabPreview)
-            if tabPreview.shouldRemovePreview(translation: translation) {
+            let fingerLocation = gesture.location(in: tabPreview)
+            switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
+
+            // this case is unreachable for now
+            case .closeTab:
                 UIView.animate(withDuration: 0.1) { [self] in
                     tabPreview.tossPreview()
                 } completion: { [self] _ in
@@ -87,7 +91,17 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
                         self?.tabPreview.restore()
                     }
                 }
-            } else {
+            case .openTabTray:
+                let cellBounds = tabPreview.previewCardFrame
+                tabPreview.dismissForTabTray()
+                store.dispatch(
+                    GeneralBrowserAction(
+                        cellBounds: cellBounds,
+                        windowUUID: windowUUID,
+                        actionType: GeneralBrowserActionType.showTabTray
+                    )
+                )
+            case .cancel:
                 tabPreview.restore()
             }
         default:

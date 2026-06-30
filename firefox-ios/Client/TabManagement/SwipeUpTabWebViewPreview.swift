@@ -16,6 +16,9 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         static let screenshotViewContainerVerticalPadding: CGFloat = 100.0
         static let screenshotViewContainerShadowOffset = CGSize(width: 2, height: 4)
         static let triggerBoundsHeightPercentage: CGFloat = 0.25
+        static let fingerCardPositionRatio: CGFloat = 2.0 / 3.0
+        static let closeReleaseThreshold: CGFloat = 1.0 / 3.0
+        static let tabTrayReleaseThreshold: CGFloat = 2.0 / 3.0
     }
 
     private let backgroundView: UIVisualEffectView = .build {
@@ -50,6 +53,10 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private var screenshotViewContainerBottomConstraint: NSLayoutConstraint?
     private var tabBackgroundHoverTopConstraint: NSLayoutConstraint?
     private var tabBackgroundHoverBottomConstraint: NSLayoutConstraint?
+
+    var previewCardFrame: CGRect {
+        return screenshotViewContainer.frame
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -109,8 +116,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         }
     }
 
-    func translate(_ translation: CGPoint) {
-        let shouldShowCloseButton = shouldRemovePreview(translation: translation)
+    func translate(_ translation: CGPoint, fingerLocation: CGPoint) {
+        let shouldShowCloseButton = releaseOutcome(fingerLocation: fingerLocation) == .closeTab
         let shouldTriggerHaptic = closeButton.alpha != (shouldShowCloseButton ? 1 : 0)
         if shouldTriggerHaptic {
             addHaptics()
@@ -120,18 +127,47 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
                                                                                    y: -self.closeButton.bounds.height * 2)
             self.closeButton.alpha = shouldShowCloseButton ? 1.0 : 0.0
         }
+
+        // Shrink continuously during the gesture
         let scale = 1 - abs(translation.y) / bounds.height
+
+        // Transform that places the finger horizontally centered and `fingerCardPositionRatio` down the card.
+        let naturalCenter = screenshotViewContainer.center
+        let scaledHeight = scale * screenshotViewContainer.bounds.height
+        let centerOffsetFromFinger = (UX.fingerCardPositionRatio - 0.5) * scaledHeight
+        let targetTranslationX = fingerLocation.x - naturalCenter.x
+        let targetTranslationY = fingerLocation.y - centerOffsetFromFinger - naturalCenter.y
+
+        // Blend in from the full-screen start so the preview slides into place instead of jumping.
+        let clampDistance = bounds.height * UX.triggerBoundsHeightPercentage
+        let progress = min(1, abs(translation.y) / clampDistance)
+
         screenshotViewContainer.transform = .identity.translatedBy(
-            x: translation.x,
-            y: translation.y
+            x: targetTranslationX * progress,
+            y: targetTranslationY * progress
         ).scaledBy(
             x: scale,
             y: scale
         )
     }
 
-    func shouldRemovePreview(translation: CGPoint) -> Bool {
-        return translation.y < -(bounds.size.height * UX.triggerBoundsHeightPercentage)
+    /// The action to take when the gesture ends, based on where the finger is released on screen.
+    enum ReleaseOutcome {
+        case cancel
+        case openTabTray
+        case closeTab
+    }
+
+    func releaseOutcome(fingerLocation: CGPoint) -> ReleaseOutcome {
+        guard bounds.height > 0 else { return .cancel }
+        let fractionFromTop = fingerLocation.y / bounds.height
+        // if fractionFromTop <= UX.closeReleaseThreshold {
+            // return .closeTab
+        // } else
+        if fractionFromTop <= UX.tabTrayReleaseThreshold {
+            return .openTabTray
+        }
+        return .cancel
     }
 
     private func addHaptics() {
@@ -154,6 +190,17 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             x: 0.6,
             y: 0.6
         )
+    }
+
+    /// Fades the preview out in place (without snapping back to full screen) and resets it for reuse.
+    func dismissForTabTray() {
+        UIView.animate(withDuration: 0) { [self] in
+            alpha = 0.0
+        } completion: { [weak self] _ in
+            self?.screenshotViewContainer.transform = .identity
+            self?.screenshotView.layer.cornerRadius = 0
+            self?.layer.zPosition = 0
+        }
     }
 
     func applyTheme(theme: Theme) {
