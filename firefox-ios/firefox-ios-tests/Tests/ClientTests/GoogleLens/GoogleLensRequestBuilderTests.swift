@@ -22,7 +22,8 @@ final class GoogleLensRequestBuilderTests: XCTestCase {
     func test_makeUploadRequest_setsRequiredAndRecommendedQueryParams() throws {
         let input = makeInput(viewportSize: CGSize(width: 390, height: 844))
 
-        let request = makeSubject(locale: Locale(identifier: "en_US")).makeUploadRequest(for: input)
+        let request = makeSubject(localeProvider: MockLocaleProvider(languageCode: "en"))
+            .makeUploadRequest(for: input)
 
         let items = try queryItems(from: request)
         XCTAssertEqual(items["ep"], "fntpubb")
@@ -30,6 +31,13 @@ final class GoogleLensRequestBuilderTests: XCTestCase {
         XCTAssertEqual(items["vpw"], "390")
         XCTAssertEqual(items["vph"], "844")
         XCTAssertEqual(items["hl"], "en")
+    }
+
+    func test_makeUploadRequest_omitsLanguageParam_whenLocaleProviderHasNoLanguageCode() throws {
+        let request = makeSubject(localeProvider: MockLocaleProvider(languageCode: nil)).makeUploadRequest(for: makeInput())
+
+        let items = try queryItems(from: request)
+        XCTAssertNil(items["hl"])
     }
 
     func test_makeUploadRequest_setsMultipartContentTypeWithBoundary() {
@@ -55,9 +63,11 @@ final class GoogleLensRequestBuilderTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func makeSubject(locale: Locale = Locale(identifier: "en_US")) -> GoogleLensRequestBuilder {
+    private func makeSubject(
+        localeProvider: LocaleProvider = MockLocaleProvider(languageCode: "en")
+    ) -> GoogleLensRequestBuilder {
         return GoogleLensRequestBuilder(dateProvider: { self.fixedDate },
-                                        locale: locale,
+                                        localeProvider: localeProvider,
                                         boundaryProvider: { self.boundary })
     }
 

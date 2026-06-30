@@ -31,14 +31,14 @@ struct GoogleLensRequestBuilder: GoogleLensRequestBuilding {
     }
 
     private let dateProvider: () -> Date
-    private let locale: Locale
+    private let localeProvider: LocaleProvider
     private let boundaryProvider: () -> String
 
     init(dateProvider: @escaping () -> Date = Date.init,
-         locale: Locale = .current,
+         localeProvider: LocaleProvider = SystemLocaleProvider(),
          boundaryProvider: @escaping () -> String = { UUID().uuidString }) {
         self.dateProvider = dateProvider
-        self.locale = locale
+        self.localeProvider = localeProvider
         self.boundaryProvider = boundaryProvider
     }
 
@@ -59,7 +59,7 @@ struct GoogleLensRequestBuilder: GoogleLensRequestBuilding {
             URLQueryItem(name: "vpw", value: String(Int(input.viewportSize.width))),
             URLQueryItem(name: "vph", value: String(Int(input.viewportSize.height)))
         ]
-        if let languageCode = languageCode() {
+        if let languageCode = localeProvider.languageCode() {
             queryItems.append(URLQueryItem(name: "hl", value: languageCode))
         }
 
@@ -70,14 +70,6 @@ struct GoogleLensRequestBuilder: GoogleLensRequestBuilding {
 
     private func startTimeMilliseconds() -> Int {
         return Int(dateProvider().timeIntervalSince1970 * 1000)
-    }
-
-    private func languageCode() -> String? {
-        if #available(iOS 16.0, *) {
-            return locale.language.languageCode?.identifier
-        } else {
-            return locale.languageCode
-        }
     }
 
     private func multipartBody(for input: GoogleLensUploadInput, boundary: String) -> Data {
