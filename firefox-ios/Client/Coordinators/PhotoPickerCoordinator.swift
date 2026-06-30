@@ -12,6 +12,7 @@ import UIKit
 final class PhotoPickerCoordinator: BaseCoordinator, PHPickerViewControllerDelegate {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let onComplete: ([PHPickerResult]) -> Void
+    private var didFinish = false
 
     init(parentCoordinatorDelegate: ParentCoordinatorDelegate?,
          router: Router,
@@ -28,12 +29,20 @@ final class PhotoPickerCoordinator: BaseCoordinator, PHPickerViewControllerDeleg
 
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
-        router.present(picker)
+        router.present(picker, animated: true) { [weak self] in
+            self?.finish(with: [])
+        }
     }
 
     // MARK: - PHPickerViewControllerDelegate
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
+        router.dismiss(animated: true)
+        finish(with: results)
+    }
+
+    private func finish(with results: [PHPickerResult]) {
+        guard !didFinish else { return }
+        didFinish = true
         onComplete(results)
         parentCoordinatorDelegate?.didFinish(from: self)
     }

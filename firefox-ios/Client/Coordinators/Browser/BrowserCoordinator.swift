@@ -1134,7 +1134,7 @@ final class BrowserCoordinator: BaseCoordinator,
             parentCoordinatorDelegate: self,
             router: router
         ) { [weak self] results in
-            // Empty results means the user dismissed the picker without choosing — leave the
+            // Empty results means the user dismissed the picker without choosing, leave the
             // address bar's edit/overlay state only once a photo is actually selected.
             guard let self, !results.isEmpty else { return }
             store.dispatch(
