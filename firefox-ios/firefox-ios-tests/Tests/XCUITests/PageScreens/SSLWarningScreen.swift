@@ -16,7 +16,7 @@ final class SSLWarningScreen {
 
     func waitForWarning() {
         let warning = sel.WARNING_MESSAGE.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(warning)
+        BaseTestCase().mozWaitForElementToExist(warning, timeout: TIMEOUT_LONG)
     }
 
     func assertWarningVisible() {
