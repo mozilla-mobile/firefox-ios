@@ -12,7 +12,6 @@ import UIKit
 final class PhotoPickerCoordinator: BaseCoordinator, PHPickerViewControllerDelegate {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let onComplete: ([PHPickerResult]) -> Void
-    private var didFinish = false
 
     init(parentCoordinatorDelegate: ParentCoordinatorDelegate?,
          router: Router,
@@ -41,8 +40,6 @@ final class PhotoPickerCoordinator: BaseCoordinator, PHPickerViewControllerDeleg
     }
 
     private func finish(with results: [PHPickerResult]) {
-        guard !didFinish else { return }
-        didFinish = true
         onComplete(results)
         parentCoordinatorDelegate?.didFinish(from: self)
     }

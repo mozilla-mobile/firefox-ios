@@ -57,20 +57,6 @@ final class PhotoPickerCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    func test_didFinishPickingThenDismissalCompletion_finishesOnlyOnce() {
-        var completionCalled = 0
-        let subject = createSubject(onComplete: { _ in completionCalled += 1 })
-        let picker = PHPickerViewController(configuration: PHPickerConfiguration(photoLibrary: .shared()))
-
-        subject.start()
-        let dismissalCompletion = router.savedCompletion
-        subject.picker(picker, didFinishPicking: [])
-        dismissalCompletion?()
-
-        XCTAssertEqual(completionCalled, 1)
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
-    }
-
     // MARK: - Helper Methods
     private func createSubject(onComplete: @escaping ([PHPickerResult]) -> Void = { _ in },
                                file: StaticString = #filePath,
