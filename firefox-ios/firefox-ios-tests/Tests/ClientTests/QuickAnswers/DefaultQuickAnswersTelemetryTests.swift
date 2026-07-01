@@ -7,17 +7,18 @@ import QuickAnswersKit
 import XCTest
 @testable import Client
 
+@MainActor
 final class DefaultQuickAnswersTelemetryTests: XCTestCase {
     var mockGleanWrapper: MockGleanWrapper!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockGleanWrapper = MockGleanWrapper()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockGleanWrapper = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_recordEvent_whenQuickAnswersRequested_thenGleanIsCalled() throws {
