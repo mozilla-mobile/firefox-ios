@@ -42,6 +42,7 @@ include:
   - nimbus-features/quickAnswersFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
+  - nimbus-features/reportBrokenSiteFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/snapkitRemovalRefactor.yaml

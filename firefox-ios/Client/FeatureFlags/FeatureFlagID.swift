@@ -45,6 +45,7 @@ enum FeatureFlagID: String, CaseIterable {
     case quickAnswers
     case recentSearches
     case relayIntegration
+    case reportBrokenSite
     case reportSiteIssue
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
@@ -121,6 +122,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
+                .reportBrokenSite,
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,

@@ -232,6 +232,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .reportBrokenSite,
+                titleText: format(string: "Report Broken Site"),
+                statusText: format(string: "Toggle Report Broken Site")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .recentSearches,
                 titleText: format(string: "Search - Recent"),
                 statusText: format(string: "Toggle to enable the recent searches feature")
