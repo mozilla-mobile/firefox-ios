@@ -410,6 +410,25 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.first is QRCodeCoordinator)
     }
 
+    func testShowGoogleLensPhotoPicker_addsPhotoPickerCoordinator() {
+        let subject = createSubject()
+
+        subject.showGoogleLensPhotoPicker()
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is PhotoPickerCoordinator)
+    }
+
+    func testShowGoogleLensPhotoPicker_calledTwice_addsOnlyOnePhotoPickerCoordinator() {
+        let subject = createSubject()
+
+        subject.showGoogleLensPhotoPicker()
+        subject.showGoogleLensPhotoPicker()
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is PhotoPickerCoordinator)
+    }
+
     func testShowQRCode_presentsQRCodeNavigationController() {
         let subject = createSubject()
         let delegate = MockQRCodeViewControllerDelegate()

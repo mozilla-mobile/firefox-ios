@@ -87,6 +87,7 @@ enum GeneralBrowserActionType: ActionType {
     case didTapReaderModeBarSummarizerButton
     case shakeMotionEnded
     case showTranslationLanguagePicker
+    case showGoogleLensPhotoPicker
 }
 
 struct GeneralBrowserMiddlewareAction: Action {
