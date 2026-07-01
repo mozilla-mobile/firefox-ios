@@ -20,7 +20,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         super.tearDown()
     }
 
-    func testRecordEvent_WhenQuickAnswersRequested_ThenGleanIsCalled() throws {
+    func test_recordEvent_whenQuickAnswersRequested_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.requested
 
@@ -35,7 +35,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testRecordEvent_WhenRecordingStarted_ThenGleanIsCalled() throws {
+    func test_recordEvent_whenRecordingStarted_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.recordingStarted
 
@@ -50,7 +50,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testRecordEvent_WhenRecordingCompleted_ThenGleanIsCalled() throws {
+    func test_recordEvent_whenRecordingCompleted_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.recordingCompleted
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.RecordingCompletedExtra
@@ -71,7 +71,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testRecordEvent_WhenResultsStarted_ThenGleanIsCalled() throws {
+    func test_recordEvent_whenResultsStarted_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.resultsStarted
 
@@ -86,7 +86,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testRecordEvent_WhenResultsCompleted_ThenGleanIsCalled() throws {
+    func test_recordEvent_whenResultsCompleted_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.resultsCompleted
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.ResultsCompletedExtra
@@ -106,22 +106,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testRecordEvent_WhenDisplayed_ThenGleanIsCalled() throws {
-        let subject = createSubject()
-        let event = GleanMetrics.AiQuickAnswers.displayed
-
-        subject.displayed()
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
-        )
-
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
-        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-    }
-
-    func testRecordEvent_WhenCitationTapped_ThenGleanIsCalled() throws {
+    func test_recordEvent_whenCitationTapped_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.citationTapped
 
@@ -136,7 +121,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testRecordEvent_WhenClosed_ThenGleanIsCalled() throws {
+    func test_recordEvent_whenClosed_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.closed
 
@@ -151,7 +136,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testResultsTime_WhenResultsStartedThenCompleted_ThenTimingIsAccumulated() {
+    func test_resultsTime_whenResultsStartedThenCompleted_thenTimingIsAccumulated() {
         let subject = createSubject()
 
         subject.resultsStarted()
@@ -161,7 +146,7 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 1)
     }
 
-    func testResultsTime_WhenResultsStartedThenClosed_ThenTimingIsCancelled() {
+    func test_resultsTime_whenResultsStartedThenClosed_thenTimingIsCancelled() {
         let subject = createSubject()
 
         subject.resultsStarted()
@@ -172,10 +157,10 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 0)
     }
 
-    func testRecordEvent_WhenConsentShown_ThenGleanIsCalled() throws {
+    func test_recordEvent_whenConsentShown_thenGleanIsCalled() throws {
         let subject = createSubject()
-        let event = GleanMetrics.AiQuickAnswers.quickAnswersConsentShown
-        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.QuickAnswersConsentShownExtra
+        let event = GleanMetrics.AiQuickAnswers.consentShown
+        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.ConsentShownExtra
 
         let expectedAgreed = true
 
