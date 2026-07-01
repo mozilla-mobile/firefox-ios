@@ -30,7 +30,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -41,7 +41,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -61,7 +61,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -72,7 +72,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -94,7 +94,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -105,7 +105,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -118,7 +118,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -129,7 +129,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -145,7 +145,7 @@ ai.quick_answers:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453  # TODO: replace with the real data-review PR before merge
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
