@@ -9020,6 +9020,11 @@ extension String {
                 comment: "The label indicating the displaying match has ended after penalties.")
         }
         struct v153 {
+            public static let AppMenuReportSiteIssueTitleString = MZLocalizedString(
+                key: "Menu.ReportSiteIssueAction.Title",
+                tableName: "Menu",
+                value: "Report Site Issue",
+                comment: "Label for the button, displayed in the menu, used to report a compatibility issue with the current page.")
             public static let ProtectionStatusSecure = MZLocalizedString(
                 key: "ProtectionStatus.Secure",
                 tableName: nil,
