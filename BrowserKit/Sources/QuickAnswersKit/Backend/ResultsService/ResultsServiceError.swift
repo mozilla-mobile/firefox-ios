@@ -20,4 +20,19 @@ enum ResultsServiceError: Error, Equatable {
             return true
         }
     }
+
+    /// A bounded, PII-free label safe to record in telemetry.
+    /// The associated values (including `unknown`'s underlying error description) are intentionally dropped.
+    var telemetryLabel: String {
+        switch self {
+        case .invalidResponse: return "invalid_response"
+        case .noMessage: return "no_message"
+        case .rateLimited: return "rate_limited"
+        case .requestCreationFailed: return "request_creation_failed"
+        case .maxUsers: return "max_users"
+        case .payloadTooLarge: return "payload_too_large"
+        case .unableToCreateService: return "unable_to_create_service"
+        case .unknown: return "unknown"
+        }
+    }
 }

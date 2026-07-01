@@ -111,7 +111,6 @@ ai.quick_answers:
     expires: never
   results_time:
     type: timing_distribution
-    time_unit: millisecond
     description: |
       Records the total time for generating the results and showing them to the user.
       Starts when the request for fetching results starts.

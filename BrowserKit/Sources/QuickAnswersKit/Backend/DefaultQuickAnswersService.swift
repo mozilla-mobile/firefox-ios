@@ -106,7 +106,7 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         let authorizer = AuthorizationHandler()
 
         if #available(iOS 26.0, *) {
-            return SFSpeechRecognizerEngine(
+            return SpeechAnalyzerEngine(
                 audioManager: audioManager,
                 authorizer: authorizer
             )

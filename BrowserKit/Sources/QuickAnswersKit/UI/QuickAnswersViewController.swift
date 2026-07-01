@@ -64,7 +64,6 @@ public final class QuickAnswersViewController: UIViewController,
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
-    private let store: Store
     private let learnMoreURL: URL?
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
@@ -87,7 +86,6 @@ public final class QuickAnswersViewController: UIViewController,
         self.init(
             navigationHandler: navigationHandler,
             viewModel: QuickAnswersViewModel(prefs: prefs, telemetry: telemetry, configFetcher: configFetcher),
-            store: Store(prefs: prefs),
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -99,7 +97,6 @@ public final class QuickAnswersViewController: UIViewController,
     init(
         navigationHandler: QuickAnswersNavigationHandler?,
         viewModel: QuickAnswersViewModel,
-        store: Store,
         transitionType: QuickAnswersTransitionType,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
@@ -122,7 +119,6 @@ public final class QuickAnswersViewController: UIViewController,
             self.transitionAnimator = nil
         }
         self.viewModel = viewModel
-        self.store = store
         self.learnMoreURL = learnMoreURL
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
@@ -145,7 +141,7 @@ public final class QuickAnswersViewController: UIViewController,
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        startFlow()
+        viewModel.startFlow()
     }
 
     private func setupSubviews() {
@@ -180,20 +176,15 @@ public final class QuickAnswersViewController: UIViewController,
         backgroundBlur.pinToSuperview()
     }
 
-    private func startFlow() {
-        guard store.isOptInCompleted else {
-            contentView.showOptIn()
-            return
-        }
-        backgroundRecordEffect.startAnimating()
-        contentView.startAudioWaveformAnimation()
-        viewModel.startRecordingVoice()
-    }
-
     private func registerCallbacks() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
-            case .recordVoice(let result, let error):
+            case .showOptIn:
+                self?.contentView.showOptIn()
+            case .recordingStarted:
+                self?.backgroundRecordEffect.startAnimating()
+                self?.contentView.startAudioWaveformAnimation()
+            case .speechResult(let result, let error):
                 if let error {
                     self?.errorHandler.handleSpeechError(error)
                 } else {
@@ -211,18 +202,14 @@ public final class QuickAnswersViewController: UIViewController,
                         self?.dismiss(with: url)
                     }
                 }
-            case .initializationFailed:
-                self?.errorHandler.handleInitializationError()
             }
         }
         contentView.configureOptIn(
             learnMoreURL: learnMoreURL,
             theme: themeManager.getCurrentTheme(for: currentWindowUUID),
             onContinue: { [weak self] in
-                self?.viewModel.recordConsentShown(true)
-                self?.store.setOptInCompleted()
                 self?.contentView.hideOptIn()
-                self?.startFlow()
+                self?.viewModel.completeOptIn()
             },
             onLearnMore: { [weak self] url in
                 self?.dismiss(with: url)
@@ -231,17 +218,7 @@ public final class QuickAnswersViewController: UIViewController,
     }
     
     private func dismiss(with url: URL?) {
-        // if the optin is not completed at time of dismissal stopRecording triggers permission request, thus
-        // we'd show a permission alert on dismissal which we don't want.
-        if store.isOptInCompleted {
-            // TODO: FXIOS-14880 - Possibly investigate a better way to call this via view model
-            Task {
-                try await viewModel.stopRecordingVoice()
-            }
-        } else {
-            viewModel.recordConsentShown(false)
-        }
-        viewModel.recordClosed()
+        viewModel.dismiss()
         navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
     }
 
