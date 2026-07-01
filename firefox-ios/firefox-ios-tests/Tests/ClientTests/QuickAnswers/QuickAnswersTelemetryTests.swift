@@ -176,7 +176,12 @@ final class QuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    private func createSubject() -> DefaultQuickAnswersTelemetry {
-        return DefaultQuickAnswersTelemetry(gleanWrapper: mockGleanWrapper)
+    private func createSubject(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> DefaultQuickAnswersTelemetry {
+        let subject = DefaultQuickAnswersTelemetry(gleanWrapper: mockGleanWrapper)
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }
