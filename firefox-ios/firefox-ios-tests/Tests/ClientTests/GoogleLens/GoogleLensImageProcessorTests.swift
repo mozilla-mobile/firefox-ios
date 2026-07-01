@@ -26,6 +26,17 @@ final class GoogleLensImageProcessorTests: XCTestCase {
         XCTAssertEqual(result.dimensions, CGSize(width: 500, height: 1000))
     }
 
+    func test_process_downscalesRightOrientedImageUsingDisplayedDimensions() throws {
+        let subject = GoogleLensImageProcessor()
+        let baseImage = makeImage(width: 2000, height: 1000)
+        let cgImage = try XCTUnwrap(baseImage.cgImage)
+        let image = UIImage(cgImage: cgImage, scale: 1, orientation: .right)
+
+        let result = try XCTUnwrap(subject.process(image))
+
+        XCTAssertEqual(result.dimensions, CGSize(width: 500, height: 1000))
+    }
+
     func test_process_doesNotUpscaleImagesSmallerThanMax() throws {
         let subject = GoogleLensImageProcessor()
         let image = makeImage(width: 400, height: 300)
