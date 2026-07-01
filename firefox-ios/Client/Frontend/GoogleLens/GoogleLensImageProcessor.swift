@@ -21,9 +21,7 @@ protocol GoogleLensImageProcessing {
 /// (preserving aspect ratio) and JPEG-encode the result.
 struct GoogleLensImageProcessor: GoogleLensImageProcessing {
     private enum Constants {
-        /// The longest side, in pixels, an image is downscaled to before upload.
         static let maxDimension: CGFloat = 1000
-        /// JPEG compression quality
         static let compressionQuality: CGFloat = 0.4
     }
 
