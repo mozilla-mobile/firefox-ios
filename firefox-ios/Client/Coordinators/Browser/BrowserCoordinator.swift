@@ -1148,6 +1148,26 @@ final class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
     }
 
+    func showGoogleLensCamera() {
+        guard !childCoordinators.contains(where: { $0 is CameraCoordinator }) else { return }
+        let coordinator = CameraCoordinator(
+            parentCoordinatorDelegate: self,
+            router: router
+        ) { [weak self] image in
+            // A nil image means the user cancelled the capture (or no camera was available);
+            // leave the address bar's edit/overlay state only once a photo is actually taken.
+            guard let self, image != nil else { return }
+            store.dispatch(
+                GeneralBrowserAction(showOverlay: false,
+                                     windowUUID: self.windowUUID,
+                                     actionType: GeneralBrowserActionType.leaveOverlay)
+            )
+            // TODO FXIOS-16064: Send the captured image to the Lens API and navigate to the result
+        }
+        add(child: coordinator)
+        coordinator.start()
+    }
+
     func showPrivacyNoticeLink(url: URL) {
         let linkVC = TermsOfUseLinkViewController(
             url: url,
