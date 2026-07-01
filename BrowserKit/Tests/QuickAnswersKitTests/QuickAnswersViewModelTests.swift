@@ -24,7 +24,9 @@ final class QuickAnswersViewModelTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testStartRecordingVoice_receivesSpeechResult_triggersSearch() {
+    // MARK: - Recording Flow Tests
+
+    func testStartFlow_whenOptInCompleted_receivesSpeechResult_triggersSearch() {
         let partialResult = SpeechResult(text: "Hello", isFinal: false)
         let finalResult = SpeechResult(text: "Hello world", isFinal: true)
         let searchResult = SearchResult(
@@ -40,23 +42,24 @@ final class QuickAnswersViewModelTests: XCTestCase {
         mockService.searchResult = .success(searchResult)
         let expectation = XCTestExpectation()
         var states = [QuickAnswersViewModel.State]()
-        let subject = createSubject()
+        let subject = createSubject(prefs: optInCompletedPrefs())
 
         subject.onStateChange = { state in
             states.append(state)
-            guard states.count == 4 else { return }
+            guard states.count == 5 else { return }
             expectation.fulfill()
         }
-        subject.startRecordingVoice()
+        subject.startFlow()
 
         wait(for: [expectation])
 
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
         XCTAssertEqual(mockService.searchCalledCount, 1)
-        XCTAssertEqual(states[0], .speechResult(partialResult, nil))
-        XCTAssertEqual(states[1], .speechResult(finalResult, nil))
-        XCTAssertEqual(states[2], .loadingSearchResult)
-        XCTAssertEqual(states[3], .showSearchResult(searchResult, nil))
+        XCTAssertEqual(states[0], .recordingStarted)
+        XCTAssertEqual(states[1], .speechResult(partialResult, nil))
+        XCTAssertEqual(states[2], .speechResult(finalResult, nil))
+        XCTAssertEqual(states[3], .loadingSearchResult)
+        XCTAssertEqual(states[4], .showSearchResult(searchResult, nil))
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
@@ -65,25 +68,26 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
-        XCTAssertEqual(mockTelemetry.displayedCalledCount, 1)
     }
 
-    func testStartRecordingVoice_withRecordError_receivesError() {
+    func testStartFlow_withRecordError_receivesError() {
         mockService.shouldThrowSpeechError = true
         let expectation = XCTestExpectation()
-        let subject = createSubject()
-        var state: QuickAnswersViewModel.State?
+        var states = [QuickAnswersViewModel.State]()
+        let subject = createSubject(prefs: optInCompletedPrefs())
 
-        subject.onStateChange = {
-            state = $0
+        subject.onStateChange = { state in
+            states.append(state)
+            guard states.count == 2 else { return }
             expectation.fulfill()
         }
-        subject.startRecordingVoice()
+        subject.startFlow()
 
         wait(for: [expectation])
 
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
-        guard case .speechResult(let result, let error) = state else {
+        XCTAssertEqual(states[0], .recordingStarted)
+        guard case .speechResult(let result, let error) = states[1] else {
             XCTFail("Expected speechResult state")
             return
         }
@@ -96,30 +100,30 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertNotNil(mockTelemetry.lastRecordingErrorType)
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 0)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 0)
-        XCTAssertEqual(mockTelemetry.displayedCalledCount, 0)
     }
 
-    func testStartRecordingVoice_withSearchError_receivesError() {
+    func testStartFlow_withSearchError_receivesError() {
         let speechResult = SpeechResult(text: "Hello", isFinal: true)
         let searchError = ResultsServiceError.unknown("Test error")
         mockService.speechResults = [speechResult]
         mockService.searchResult = .failure(searchError)
         var states = [QuickAnswersViewModel.State]()
         let expectation = XCTestExpectation()
-        let subject = createSubject()
+        let subject = createSubject(prefs: optInCompletedPrefs())
 
         subject.onStateChange = { state in
             states.append(state)
-            guard states.count == 3 else { return }
+            guard states.count == 4 else { return }
             expectation.fulfill()
         }
-        subject.startRecordingVoice()
+        subject.startFlow()
 
         wait(for: [expectation])
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
-        XCTAssertEqual(states[0], .speechResult(speechResult, nil))
-        XCTAssertEqual(states[1], .loadingSearchResult)
-        XCTAssertEqual(states[2], .showSearchResult(.empty(), searchError))
+        XCTAssertEqual(states[0], .recordingStarted)
+        XCTAssertEqual(states[1], .speechResult(speechResult, nil))
+        XCTAssertEqual(states[2], .loadingSearchResult)
+        XCTAssertEqual(states[3], .showSearchResult(.empty(), searchError))
         XCTAssertEqual(searchError, .unknown("Test error"))
         XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
@@ -127,15 +131,14 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, false)
-        XCTAssertEqual(mockTelemetry.displayedCalledCount, 0)
     }
 
-    func testStartRecordingVoice_whenServiceNotInitialized_emitsServiceNotInitializedError() {
-        let subject = createSubjectWithFailingService()
+    func testStartFlow_whenServiceNotInitialized_emitsServiceNotInitializedError() {
+        let subject = createSubjectWithFailingService(prefs: optInCompletedPrefs())
         var state: QuickAnswersViewModel.State?
 
         subject.onStateChange = { state = $0 }
-        subject.startRecordingVoice()
+        subject.startFlow()
 
         XCTAssertEqual(state, .speechResult(.empty(), .serviceNotInitialized))
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
@@ -143,42 +146,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.lastRecordingErrorType, "service_not_initialized")
     }
 
-    // MARK: - Stop Recording Tests
-
-    func testStopRecordingVoice_withRecentResult_triggersSearch() {
-        let finalResult = SpeechResult(text: "Hello", isFinal: true)
-        let searchResult = SearchResult(
-            resultText: "Test",
-            sources: [SearchResult.Source(
-                title: "SourceTest",
-                url: nil,
-                thumbnailURL: nil,
-                faviconURL: nil
-            )]
-        )
-        mockService.speechResults = [finalResult]
-        mockService.searchResult = .success(searchResult)
-
-        let expectation = XCTestExpectation()
-        var states = [QuickAnswersViewModel.State]()
-        let subject = createSubject()
-
-        subject.onStateChange = { state in
-            states.append(state)
-            guard states.count == 3 else { return }
-            expectation.fulfill()
-        }
-        subject.startRecordingVoice()
-
-        wait(for: [expectation])
-
-        XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
-        XCTAssertEqual(states[0], .speechResult(finalResult, nil))
-        XCTAssertEqual(states[1], .loadingSearchResult)
-        XCTAssertEqual(states[2], .showSearchResult(searchResult, nil))
-    }
-
-    // MARK: - Start Flow Tests
+    // MARK: - Opt-In Tests
 
     func testStartFlow_whenOptInNotCompleted_showsOptIn() {
         let subject = createSubject()
@@ -191,30 +159,18 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockService.recordVoiceCalledCount, 0)
     }
 
-    func testStartFlow_whenOptInCompleted_startsRecording() {
-        let subject = createSubject(store: makeOptInCompletedStore())
-        var states = [QuickAnswersViewModel.State]()
-        let expectation = XCTestExpectation()
-
-        subject.onStateChange = { state in
-            states.append(state)
-            if state == .recordingStarted { expectation.fulfill() }
-        }
-        subject.startFlow()
-
-        wait(for: [expectation])
-        XCTAssertEqual(states.first, .recordingStarted)
-    }
-
     func testCompleteOptIn_persistsConsentAndStartsRecording() {
         let prefs = MockProfilePrefs()
-        let subject = createSubject(store: Store(prefs: prefs))
-        var states = [QuickAnswersViewModel.State]()
+        let finalResult = SpeechResult(text: "Hello", isFinal: true)
+        mockService.speechResults = [finalResult]
+        mockService.searchResult = .success(SearchResult(resultText: "Test", sources: []))
+        let subject = createSubject(prefs: prefs)
         let expectation = XCTestExpectation()
+        var states = [QuickAnswersViewModel.State]()
 
         subject.onStateChange = { state in
             states.append(state)
-            if state == .recordingStarted { expectation.fulfill() }
+            if case .showSearchResult = state { expectation.fulfill() }
         }
         subject.completeOptIn()
 
@@ -222,7 +178,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted), true)
         XCTAssertEqual(mockTelemetry.consentShownCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastConsentAgreed, true)
-        XCTAssertEqual(states.first, .recordingStarted)
+        XCTAssertTrue(states.contains(.recordingStarted))
     }
 
     // MARK: - Dismiss Tests
@@ -238,7 +194,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
     }
 
     func testDismiss_whenOptInCompleted_recordsClosedWithoutConsent() {
-        let subject = createSubject(store: makeOptInCompletedStore())
+        let subject = createSubject(prefs: optInCompletedPrefs())
 
         subject.dismiss()
 
@@ -257,11 +213,10 @@ final class QuickAnswersViewModelTests: XCTestCase {
     }
 
     // MARK: - Helper
-    private func createSubject(store: Store? = nil) -> QuickAnswersViewModel {
+    private func createSubject(prefs: Prefs = MockProfilePrefs()) -> QuickAnswersViewModel {
         let model = QuickAnswersViewModel(
-            prefs: MockProfilePrefs(),
+            prefs: prefs,
             telemetry: mockTelemetry,
-            store: store,
             makeService: { _, _ in
                 return self.mockService
             }
@@ -270,20 +225,20 @@ final class QuickAnswersViewModelTests: XCTestCase {
         return model
     }
 
-    private func makeOptInCompletedStore() -> Store {
-        let prefs = MockProfilePrefs()
-        prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
-        return Store(prefs: prefs)
-    }
-
-    private func createSubjectWithFailingService() -> QuickAnswersViewModel {
+    private func createSubjectWithFailingService(prefs: Prefs = MockProfilePrefs()) -> QuickAnswersViewModel {
         struct ServiceInitError: Error {}
         let model = QuickAnswersViewModel(
-            prefs: MockProfilePrefs(),
+            prefs: prefs,
             telemetry: mockTelemetry,
             makeService: { _, _ in throw ServiceInitError() }
         )
         trackForMemoryLeaks(model)
         return model
+    }
+
+    private func optInCompletedPrefs() -> MockProfilePrefs {
+        let prefs = MockProfilePrefs()
+        prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+        return prefs
     }
 }

@@ -17,15 +17,16 @@ public protocol QuickAnswersTelemetry {
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
     func recordingCompleted(outcome: Bool, errorType: String?)
     
-    @MainActor
     /// Fires when the results service starts to fetch results from the backend.
+    @MainActor
     func resultsStarted()
     
-    @MainActor
+    
     /// Fires when the results service returns the summary or errors out.
     /// - Parameters:
     ///   - outcome: `true` if the results were fetched successfully, `false` if it failed.
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
+    @MainActor
     func resultsCompleted(outcome: Bool, errorType: String?)
 
     /// Fires when the user taps a citation source in the results.

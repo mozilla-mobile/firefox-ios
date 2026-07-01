@@ -21,8 +21,6 @@ enum ResultsServiceError: Error, Equatable {
         }
     }
 
-    /// A bounded, PII-free label safe to record in telemetry.
-    /// The associated values (including `unknown`'s underlying error description) are intentionally dropped.
     var telemetryLabel: String {
         switch self {
         case .invalidResponse: return "invalid_response"
