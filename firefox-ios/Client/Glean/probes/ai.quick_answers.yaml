@@ -33,7 +33,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   recording_started:
     type: event
     description: |
@@ -44,7 +44,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   recording_completed:
     type: event
     description: |
@@ -64,7 +64,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   results_started:
     type: event
     description: |
@@ -75,7 +75,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   results_completed:
     type: event
     description: |
@@ -97,7 +97,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   closed:
     type: event
     description: |
@@ -108,7 +108,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   results_time:
     type: timing_distribution
     description: |
@@ -121,7 +121,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   citation_tapped:
     type: event
     description: |
@@ -132,7 +132,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   consent_shown:
     type: event
     description: |
@@ -148,4 +148,4 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
