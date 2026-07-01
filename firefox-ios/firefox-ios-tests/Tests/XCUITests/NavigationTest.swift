@@ -42,6 +42,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
         launchApp()
     }
 
+    private func restartTheApp() {
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        launchApp()
+        setUpScreenGraph()
+        waitForTabsButton()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
@@ -435,6 +443,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 
+        sslScreen.tapAdvanced()
+        sslScreen.tapVisitSiteAnyway()
+        sslScreen.waitForPageToLoadAfterBypass()
+
+        restartTheApp()
+        browserScreen.navigateToURL("https://expired.badssl.com/")
+        sslScreen.waitForWarning()
+        sslScreen.assertWarningVisible()
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
         sslScreen.waitForPageToLoadAfterBypass()
