@@ -23,10 +23,9 @@
  *       calling [`FirefoxAccount::from_json`].
  *
  * * When the user wants to sign in to your application, direct them through
- *   a web-based OAuth flow using [`begin_oauth_flow`](FirefoxAccount::begin_oauth_flow)
- *   or [`begin_pairing_flow`](FirefoxAccount::begin_pairing_flow); when they return
- *   to your registered `redirect_uri`, pass the resulting authorization state back to
- *   [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) to sign them in.
+ *   a web-based OAuth flow by sending the `BeginOAuthFlow` or `BeginPairingFlow`
+ *   state-machine event; when they return to your registered `redirect_uri`, pass the
+ *   resulting authorization state back via the `CompleteOAuthFlow` event to sign them in.
  *
  * * Display information about the signed-in user by using the data from
  *   [`get_profile`](FirefoxAccount::get_profile).
@@ -563,57 +562,6 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func authorizeCodeUsingSessionToken(params: AuthorizationParameters) throws  -> String
     
     /**
-     * Initiate a web-based OAuth sign-in flow.
-     *
-     * This method initializes some internal state and then returns a URL at which the
-     * user may perform a web-based authorization flow to connect the application to
-     * their account. The application should direct the user to the provided URL.
-     *
-     * When the resulting OAuth flow redirects back to the configured `redirect_uri`,
-     * the query parameters should be extracting from the URL and passed to the
-     * [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) method to finalize
-     * the signin.
-     *
-     * # Arguments
-     *
-     *   - `scopes` - list of OAuth scopes to request.
-     *       - The requested scopes will determine what account-related data
-     *         the application is able to access.
-     *   - `entrypoint` - metrics identifier for UX entrypoint.
-     *       - This parameter is used for metrics purposes, to identify the
-     *         UX entrypoint from which the user triggered the signin request.
-     *         For example, the application toolbar, on the onboarding flow.
-     *   - `service` - The service being signed up for.
-     */
-    func beginOauthFlow(scopes: [String], entrypoint: String, service: String) throws  -> String
-    
-    /**
-     * Initiate a device-pairing sign-in flow.
-     *
-     * Once the user has scanned a pairing QR code, pass the scanned value to this
-     * method. It will return a URL to which the application should redirect the user
-     * in order to continue the sign-in flow.
-     *
-     * When the resulting flow redirects back to the configured `redirect_uri`,
-     * the resulting OAuth parameters should be extracting from the URL and passed
-     * to [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) to finalize
-     * the signin.
-     *
-     * # Arguments
-     *
-     *   - `pairing_url` - the URL scanned from a QR code on another device.
-     *   - `scopes` - list of OAuth scopes to request.
-     *       - The requested scopes will determine what account-related data
-     *         the application is able to access.
-     *   - `entrypoint` - metrics identifier for UX entrypoint.
-     *       - This parameter is used for metrics purposes, to identify the
-     *         UX entrypoint from which the user triggered the signin request.
-     *         For example, the application toolbar, on the onboarding flow.
-     *   - `service` - The service being signed up for.
-     */
-    func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String, service: String) throws  -> String
-    
-    /**
      * Check authorization status for this application.
      *
      * **💾 This method alters the persisted account state.**
@@ -663,24 +611,6 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      * capability, this method can be used to close its tabs.
      */
     func closeTabs(targetDeviceId: String, urls: [String]) throws  -> CloseTabsResult
-    
-    /**
-     * Complete an OAuth flow.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * At the conclusion of an OAuth flow, the user will be redirect to the
-     * application's registered `redirect_uri`. It should extract the `code`
-     * and `state` parameters from the resulting URL and pass them to this
-     * method in order to complete the sign-in.
-     *
-     * # Arguments
-     *
-     *   - `code` - the OAuth authorization code obtained from the redirect URI.
-     *   - `state` - the OAuth state parameter obtained from the redirect URI.
-
-     */
-    func completeOauthFlow(code: String, state: String) throws 
     
     /**
      * Disconnect from the user's account.
@@ -887,7 +817,7 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      * If the user wants to sign in using device pairing, call this method and then
      * direct them to visit the resulting URL on an already-signed-in device. Doing
      * so will trigger the other device to show a QR code to be scanned, and the result
-     * from said QR code can be passed to [`begin_pairing_flow`](FirefoxAccount::begin_pairing_flow).
+     * from said QR code can be passed to the `BeginPairingFlow` state-machine event.
 
      */
     func getPairingAuthorityUrl() throws  -> String
@@ -1254,76 +1184,6 @@ open func authorizeCodeUsingSessionToken(params: AuthorizationParameters)throws 
 }
     
     /**
-     * Initiate a web-based OAuth sign-in flow.
-     *
-     * This method initializes some internal state and then returns a URL at which the
-     * user may perform a web-based authorization flow to connect the application to
-     * their account. The application should direct the user to the provided URL.
-     *
-     * When the resulting OAuth flow redirects back to the configured `redirect_uri`,
-     * the query parameters should be extracting from the URL and passed to the
-     * [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) method to finalize
-     * the signin.
-     *
-     * # Arguments
-     *
-     *   - `scopes` - list of OAuth scopes to request.
-     *       - The requested scopes will determine what account-related data
-     *         the application is able to access.
-     *   - `entrypoint` - metrics identifier for UX entrypoint.
-     *       - This parameter is used for metrics purposes, to identify the
-     *         UX entrypoint from which the user triggered the signin request.
-     *         For example, the application toolbar, on the onboarding flow.
-     *   - `service` - The service being signed up for.
-     */
-open func beginOauthFlow(scopes: [String], entrypoint: String, service: String = "")throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_begin_oauth_flow(
-            self.uniffiCloneHandle(),
-        FfiConverterSequenceString.lower(scopes),
-        FfiConverterString.lower(entrypoint),
-        FfiConverterString.lower(service),$0
-    )
-})
-}
-    
-    /**
-     * Initiate a device-pairing sign-in flow.
-     *
-     * Once the user has scanned a pairing QR code, pass the scanned value to this
-     * method. It will return a URL to which the application should redirect the user
-     * in order to continue the sign-in flow.
-     *
-     * When the resulting flow redirects back to the configured `redirect_uri`,
-     * the resulting OAuth parameters should be extracting from the URL and passed
-     * to [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) to finalize
-     * the signin.
-     *
-     * # Arguments
-     *
-     *   - `pairing_url` - the URL scanned from a QR code on another device.
-     *   - `scopes` - list of OAuth scopes to request.
-     *       - The requested scopes will determine what account-related data
-     *         the application is able to access.
-     *   - `entrypoint` - metrics identifier for UX entrypoint.
-     *       - This parameter is used for metrics purposes, to identify the
-     *         UX entrypoint from which the user triggered the signin request.
-     *         For example, the application toolbar, on the onboarding flow.
-     *   - `service` - The service being signed up for.
-     */
-open func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String, service: String = "")throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_begin_pairing_flow(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(pairingUrl),
-        FfiConverterSequenceString.lower(scopes),
-        FfiConverterString.lower(entrypoint),
-        FfiConverterString.lower(service),$0
-    )
-})
-}
-    
-    /**
      * Check authorization status for this application.
      *
      * **💾 This method alters the persisted account state.**
@@ -1396,31 +1256,6 @@ open func closeTabs(targetDeviceId: String, urls: [String])throws  -> CloseTabsR
         FfiConverterSequenceString.lower(urls),$0
     )
 })
-}
-    
-    /**
-     * Complete an OAuth flow.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * At the conclusion of an OAuth flow, the user will be redirect to the
-     * application's registered `redirect_uri`. It should extract the `code`
-     * and `state` parameters from the resulting URL and pass them to this
-     * method in order to complete the sign-in.
-     *
-     * # Arguments
-     *
-     *   - `code` - the OAuth authorization code obtained from the redirect URI.
-     *   - `state` - the OAuth state parameter obtained from the redirect URI.
-
-     */
-open func completeOauthFlow(code: String, state: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_complete_oauth_flow(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(code),
-        FfiConverterString.lower(state),$0
-    )
-}
 }
     
     /**
@@ -1699,7 +1534,7 @@ open func getManageDevicesUrl(entrypoint: String)throws  -> String  {
      * If the user wants to sign in using device pairing, call this method and then
      * direct them to visit the resulting URL on an already-signed-in device. Doing
      * so will trigger the other device to show a QR code to be scanned, and the result
-     * from said QR code can be passed to [`begin_pairing_flow`](FirefoxAccount::begin_pairing_flow).
+     * from said QR code can be passed to the `BeginPairingFlow` state-machine event.
 
      */
 open func getPairingAuthorityUrl()throws  -> String  {
@@ -4629,12 +4464,6 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_authorize_code_using_session_token() != 48815) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_oauth_flow() != 26724) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_pairing_flow() != 62325) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 26020) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4645,9 +4474,6 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_close_tabs() != 4607) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_complete_oauth_flow() != 12142) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_disconnect() != 2750) {
