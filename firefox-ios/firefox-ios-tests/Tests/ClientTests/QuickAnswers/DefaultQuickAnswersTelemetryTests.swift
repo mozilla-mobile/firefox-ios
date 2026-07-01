@@ -7,7 +7,7 @@ import QuickAnswersKit
 import XCTest
 @testable import Client
 
-final class QuickAnswersTelemetryTests: XCTestCase {
+final class DefaultQuickAnswersTelemetryTests: XCTestCase {
     var mockGleanWrapper: MockGleanWrapper!
 
     override func setUp() {
