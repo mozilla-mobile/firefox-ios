@@ -129,7 +129,7 @@ final class QuickAnswersViewModel {
             }
         }
     }
-    
+
     private func emitServiceNotInitialized() {
         let error = SpeechError.serviceNotInitialized
         telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)

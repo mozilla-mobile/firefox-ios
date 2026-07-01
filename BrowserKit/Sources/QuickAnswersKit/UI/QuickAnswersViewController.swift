@@ -216,7 +216,7 @@ public final class QuickAnswersViewController: UIViewController,
             }
         )
     }
-    
+
     private func dismiss(with url: URL?) {
         viewModel.dismiss()
         navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))

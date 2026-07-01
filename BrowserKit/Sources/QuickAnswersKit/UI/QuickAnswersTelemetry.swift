@@ -16,12 +16,11 @@ public protocol QuickAnswersTelemetry {
     ///   - outcome: `true` if the transcription succeeded, `false` if it failed.
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
     func recordingCompleted(outcome: Bool, errorType: String?)
-    
+
     /// Fires when the results service starts to fetch results from the backend.
     @MainActor
     func resultsStarted()
-    
-    
+
     /// Fires when the results service returns the summary or errors out.
     /// - Parameters:
     ///   - outcome: `true` if the results were fetched successfully, `false` if it failed.

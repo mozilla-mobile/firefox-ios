@@ -8,6 +8,11 @@ import TestKit
 
 @testable import QuickAnswersKit
 
+@MainActor
+final class DismissSpy {
+    var callCount = 0
+}
+
 @Suite
 @MainActor
 struct ErrorHandlerTests {
@@ -63,9 +68,4 @@ struct ErrorHandlerTests {
         testHelper.trackForMemoryLeaks(subject)
         return subject
     }
-}
-
-@MainActor
-final class DismissSpy {
-    var callCount = 0
 }
