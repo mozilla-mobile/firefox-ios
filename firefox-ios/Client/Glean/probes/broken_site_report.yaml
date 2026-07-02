@@ -47,7 +47,7 @@ broken_site_report:
       The URL of the site the user is reporting. The user may edit this before
       submitting. May contain PII.
     data_sensitivity:
-      - web_activity
+      - stored_content
     lifetime: ping
     send_in_pings:
       - broken-site-report
@@ -118,7 +118,7 @@ broken_site_report.tab_info:
       The user agent string the reported page actually saw
       (navigator.userAgent), read from the page context at report time.
     data_sensitivity:
-      - web_activity
+      - stored_content
     lifetime: ping
     send_in_pings:
       - broken-site-report
@@ -154,7 +154,7 @@ broken_site_report.tab_info.antitracking:
       included when the user keeps the "list of items blocked by tracking
       protection" option on.
     data_sensitivity:
-      - web_activity
+      - stored_content
     lifetime: ping
     send_in_pings:
       - broken-site-report
@@ -274,7 +274,7 @@ broken_site_report.browser_info.app:
       The app's default user agent string (the app-level UA, distinct from the
       per-page `tab_info.useragent_string`).
     data_sensitivity:
-      - web_activity
+      - stored_content
     lifetime: ping
     send_in_pings:
       - broken-site-report
