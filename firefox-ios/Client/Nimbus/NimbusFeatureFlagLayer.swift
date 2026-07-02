@@ -490,7 +490,7 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkNewBookmarkFolderTreeFeature() -> Bool {
         return nimbus.features.newBookmarkFolderTreeFeature.value().enabled
-    
+
     private func checkWaybackMachineFeature() -> Bool {
         return nimbus.features.waybackMachineFeature.value().enabled
     }
