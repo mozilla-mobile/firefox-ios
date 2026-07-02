@@ -27,10 +27,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let share = StandardImageIdentifiers.Large.share
     }
 
-    private var shouldShowReportSiteIssue: Bool {
-        featureFlagsProvider.isEnabled(.reportSiteIssue)
-    }
-
     private var isNewAppearanceMenuOn: Bool {
         featureFlagsProvider.isEnabled(.appearanceMenu)
     }

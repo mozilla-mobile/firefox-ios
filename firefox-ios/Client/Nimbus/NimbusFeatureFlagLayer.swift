@@ -143,9 +143,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .reportBrokenSite:
             return checkReportBrokenSiteFeature()
 
-        case .reportSiteIssue:
-            return checkGeneralFeature(for: featureID)
-
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature()
 
@@ -217,15 +214,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     // MARK: - Private methods
-    private func checkGeneralFeature(for featureID: FeatureFlagID) -> Bool {
-        let config = nimbus.features.generalAppFeatures.value()
-
-        switch featureID {
-        case .reportSiteIssue: return config.reportSiteIssue.status
-        default: return false
-        }
-    }
-
     private func checkSentFromFirefoxFeature() -> Bool {
         let config = nimbus.features.sentFromFirefoxFeature.value()
         return config.enabled

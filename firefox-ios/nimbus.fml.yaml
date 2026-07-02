@@ -25,7 +25,6 @@ include:
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/firefoxJpGuideDefaultSite.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
-  - nimbus-features/generalFeatures.yaml
   - nimbus-features/googleLensFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/homepageTrackerBlockerModuleFeature.yaml

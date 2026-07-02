@@ -46,7 +46,6 @@ enum FeatureFlagID: String, CaseIterable {
     case recentSearches
     case relayIntegration
     case reportBrokenSite
-    case reportSiteIssue
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
