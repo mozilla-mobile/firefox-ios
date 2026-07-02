@@ -185,6 +185,51 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Remove from Shortcuts",
                 comment: "The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button")
+            public static let EditBookmarkMobileGroupLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkMobileGroupLabel.v154",
+                tableName: "Bookmarks",
+                value: "Mobile",
+                comment: "Collapsible header for the group of mobile bookmark folders in the New/Edit Folder location picker.")
+            public static let EditBookmarkDesktopGroupLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkDesktopGroupLabel.v154",
+                tableName: "Bookmarks",
+                value: "Desktop",
+                comment: "Collapsible header for the group of desktop bookmark folders in the New/Edit Folder location picker.")
+            public static let EditBookmarkAllFoldersLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkAllFoldersLabel.v154",
+                tableName: "Bookmarks",
+                value: "All Folders",
+                comment: "Caption shown above the first collapsible folder group in the New/Edit Folder location picker.")
+            public static let EditBookmarkLocationLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkLocationLabel.v154",
+                tableName: "Bookmarks",
+                value: "Location",
+                comment: "Caption shown above the collapsed folder summary row in the New/Edit Folder location picker.")
+            public static let EditBookmarkChangeLocationLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkChangeLocationLabel.v154",
+                tableName: "Bookmarks",
+                value: "Change Location",
+                comment: "Link that expands the collapsed Location summary into the full folder picker in the New/Edit Folder screen.")
+            public static let EditBookmarkParentFolderBreadcrumbFormat = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkParentFolderBreadcrumbFormat.v154",
+                tableName: "Bookmarks",
+                value: "↳ %@",
+                comment: "Breadcrumb shown under a nested folder's title in the New/Edit Folder location picker. %@ is replaced with the immediate parent folder's name. RTL locales might want to use `%@ ↵` instead.")
+            public static let EditBookmarkGroupExpandedValue = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkGroupExpandedValue.v154",
+                tableName: "Bookmarks",
+                value: "Expanded",
+                comment: "VoiceOver accessibility value read for an expanded folder group header in the New/Edit Folder location picker.")
+            public static let EditBookmarkGroupCollapsedValue = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkGroupCollapsedValue.v154",
+                tableName: "Bookmarks",
+                value: "Collapsed",
+                comment: "VoiceOver accessibility value read for a collapsed folder group header in the New/Edit Folder location picker.")
+            public static let EditBookmarkMobileBookmarksLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkMobileBookmarksLabel.v154",
+                tableName: "Bookmarks",
+                value: "MOBILE BOOKMARKS",
+                comment: "Header denoting that the following folders in the parent folder selector table of the Edit Bookmarks Screen are mobile-only folders, shown alongside a 'DESKTOP BOOKMARKS' header so the two categories are clearly separated.")
         }
 
         public struct EmptyState {
