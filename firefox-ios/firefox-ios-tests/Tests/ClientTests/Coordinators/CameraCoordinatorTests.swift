@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import AVFoundation
 import Common
 import UIKit
 
@@ -135,13 +136,15 @@ final class CameraCoordinatorTests: XCTestCase {
 
     // MARK: - Helper Methods
     private func createSubject(isCameraAvailable: Bool = true,
+                               cameraAuthorizationStatus: AVAuthorizationStatus = .authorized,
                                requestCameraAccess: @escaping () async -> Bool = { false },
                                onComplete: @escaping (UIImage?) -> Void = { _ in },
                                file: StaticString = #filePath,
                                line: UInt = #line) -> CameraCoordinator {
         let subject = CameraCoordinator(parentCoordinatorDelegate: parentCoordinator,
                                         router: router,
-                                        isCameraAvailable: { isCameraAvailable },
+                                        isCameraAvailable: isCameraAvailable,
+                                        cameraAuthorizationStatus: cameraAuthorizationStatus,
                                         requestCameraAccess: requestCameraAccess,
                                         onComplete: onComplete)
         trackForMemoryLeaks(subject, file: file, line: line)

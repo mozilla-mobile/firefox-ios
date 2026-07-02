@@ -10,16 +10,14 @@ final class CameraCoordinator: BaseCoordinator,
                                UINavigationControllerDelegate {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let onComplete: (UIImage?) -> Void
-    private let isCameraAvailable: () -> Bool
-    private let cameraAuthorizationStatus: () -> AVAuthorizationStatus
+    private let isCameraAvailable: Bool
+    private let cameraAuthorizationStatus: AVAuthorizationStatus
     private let requestCameraAccess: () async -> Bool
 
     init(parentCoordinatorDelegate: ParentCoordinatorDelegate?,
          router: Router,
-         isCameraAvailable: @escaping () -> Bool = { UIImagePickerController.isSourceTypeAvailable(.camera) },
-         cameraAuthorizationStatus: @escaping () -> AVAuthorizationStatus = {
-             AVCaptureDevice.authorizationStatus(for: .video)
-         },
+         isCameraAvailable: Bool = UIImagePickerController.isSourceTypeAvailable(.camera),
+         cameraAuthorizationStatus: AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video),
          requestCameraAccess: @escaping () async -> Bool = {
              await AVCaptureDevice.requestAccess(for: .video)
          },
@@ -33,7 +31,7 @@ final class CameraCoordinator: BaseCoordinator,
     }
 
     func start() {
-        guard isCameraAvailable() else {
+        guard isCameraAvailable else {
             finish(with: nil)
             return
         }
@@ -45,13 +43,12 @@ final class CameraCoordinator: BaseCoordinator,
             self?.finish(with: nil)
         }
 
-        switch cameraAuthorizationStatus() {
+        switch cameraAuthorizationStatus {
         case .denied, .restricted:
-            // Access was refused in a previous session: surface the alert over the interface.
             presentCameraAccessDeniedAlert(over: picker)
         case .notDetermined:
-            // Presenting the interface triggers the system permission prompt; dismiss the
-            // interface if the user refuses access, without surfacing a second alert.
+            // If not determined, presenting the interface triggers the system permission prompt.
+            // Dismiss the interface if the user refuses access.
             Task { [weak self] in await self?.dismissCameraInterfaceIfAccessRefused() }
         default:
             break
@@ -70,6 +67,7 @@ final class CameraCoordinator: BaseCoordinator,
             self?.dismissCameraInterface()
         }
 
+        // Wait for picker to finish presenting before presenting alert over it (in the case of .denied and .restricted)
         if let transitionCoordinator = presenter.transitionCoordinator {
             transitionCoordinator.animate(alongsideTransition: nil) { [weak presenter] _ in
                 presenter?.present(alert, animated: true)
