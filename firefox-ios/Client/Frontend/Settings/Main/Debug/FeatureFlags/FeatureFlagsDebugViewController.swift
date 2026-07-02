@@ -337,6 +337,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .waybackMachine,
+                titleText: format(string: "Wayback Machine"),
+                statusText: format(string: "Toggle to show Wayback Machine fallback on native error pages")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .worldCupWidget,
                 titleText: format(string: "World Cup Widget"),
                 statusText: format(string: "Toggle to enable the World Cup widget feature on the Homepage")
