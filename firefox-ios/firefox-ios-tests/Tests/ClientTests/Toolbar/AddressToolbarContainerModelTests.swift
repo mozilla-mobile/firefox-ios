@@ -187,7 +187,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         let expectedMenuElements = [
             ToolbarMenuElement(
                 title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
-                imageName: StandardImageIdentifiers.Large.cameraLarge,
+                imageName: StandardImageIdentifiers.Large.camera,
                 a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction,
                 onSelected: { _ in }
             ),
@@ -201,7 +201,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
         XCTAssertEqual(state.addressToolbar.editingAccessoryAction?.actionType, .googleLens)
         let accessoryAction = model.addressToolbarConfig.locationViewConfiguration.editingAccessoryAction
-        XCTAssertEqual(accessoryAction?.iconName, StandardImageIdentifiers.Medium.googleLens)
+        XCTAssertEqual(accessoryAction?.iconName, StandardImageIdentifiers.Medium.logoGoogleLens)
         XCTAssertEqual(accessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
         XCTAssertEqual(accessoryAction?.menuElements, expectedMenuElements)
     }
@@ -333,7 +333,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
         return ToolbarActionConfiguration(
             actionType: .googleLens,
-            iconName: StandardImageIdentifiers.Medium.googleLens,
+            iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
             isEnabled: true,
             a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
             a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton,
@@ -341,7 +341,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                 ToolbarMenuElementConfiguration(
                     actionType: .googleLensTakePhoto,
                     title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
-                    imageName: StandardImageIdentifiers.Large.cameraLarge,
+                    imageName: StandardImageIdentifiers.Large.camera,
                     a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
                 ),
                 ToolbarMenuElementConfiguration(
