@@ -2,7 +2,7 @@
 features:
   wayback-machine-feature:
     description: >
-      This property determines weather we show the wayback entry point on the native error pages
+      This property determines whether we show the wayback entry point on the native error pages
     variables:
       enabled:
         description: >
