@@ -79,7 +79,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         subject.resultsStarted()
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
+            mockGleanWrapper.savedEvents.compactMap { $0 as? EventMetricType<NoExtras> }.first
         )
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)

@@ -21,7 +21,6 @@ final class QuickAnswersViewModel {
     private let store: Store
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
-    private var recentSpeechResult: SpeechResult?
     var onStateChange: ((State) -> Void)?
 
     init(
@@ -95,7 +94,6 @@ final class QuickAnswersViewModel {
             let stream = try await service.record()
             for try await result in stream {
                 try Task.checkCancellation()
-                recentSpeechResult = result
                 onStateChange?(.speechResult(result, nil))
                 guard result.isFinal else { continue }
                 telemetry.recordingCompleted(outcome: true, errorType: nil)
@@ -119,15 +117,6 @@ final class QuickAnswersViewModel {
         recordVoiceTask?.cancel()
         recordVoiceTask = nil
         try await service.stopRecording()
-        guard let recentSpeechResult, searchResultTask == nil else { return }
-        searchResultTask = Task { [weak self] in
-            do {
-                try Task.checkCancellation()
-                await self?.searchVoiceResult(recentSpeechResult, service: service)
-            } catch {
-                return
-            }
-        }
     }
 
     private func emitServiceNotInitialized() {
