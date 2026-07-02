@@ -1569,7 +1569,9 @@
 		BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */; };
 		C0FFE71000000000000000A3 /* worldCupConfetti.json in Resources */ = {isa = PBXBuildFile; fileRef = C0FFE71000000000000000A2 /* worldCupConfetti.json */; };
 		C209316E2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C209316D2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift */; };
+		FB16062200000000000000A2 /* CameraCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062200000000000000A1 /* CameraCoordinator.swift */; };
 		C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */; };
+		FB16062200000000000000B2 /* CameraCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062200000000000000B1 /* CameraCoordinatorTests.swift */; };
 		C2126EF82F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2126EF72F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift */; };
 		C2126EFA2F447A46001C01FE /* SummarizerNimbusUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */; };
 		C21326992F5713F000746393 /* SummarizerLanguageProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */; };
@@ -10514,7 +10516,9 @@
 		C1DF4F71AB33BAB7B199F361 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C1F24EFFB6E9B114849A4DB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C209316D2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersCoordinator.swift; sourceTree = "<group>"; };
+		FB16062200000000000000A1 /* CameraCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCoordinator.swift; sourceTree = "<group>"; };
 		C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersCoordinatorTests.swift; sourceTree = "<group>"; };
+		FB16062200000000000000B1 /* CameraCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2126EF72F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageExpansionConfiguration.swift; sourceTree = "<group>"; };
 		C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerNimbusUtilsTests.swift; sourceTree = "<group>"; };
 		C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageProviderTests.swift; sourceTree = "<group>"; };
@@ -14442,6 +14446,7 @@
 				0B6153DF2E24E316000D2FBD /* SummarizeCoordinator.swift */,
 				C209316D2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift */,
 				FB16062100000000000000A1 /* PhotoPickerCoordinator.swift */,
+				FB16062200000000000000A1 /* CameraCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -14473,6 +14478,7 @@
 				0B6153E12E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift */,
 				C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */,
 				FB16062100000000000000B1 /* PhotoPickerCoordinatorTests.swift */,
+				FB16062200000000000000B1 /* CameraCoordinatorTests.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -19594,6 +19600,7 @@
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				C209316E2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift in Sources */,
 				FB16062100000000000000A2 /* PhotoPickerCoordinator.swift in Sources */,
+				FB16062200000000000000A2 /* CameraCoordinator.swift in Sources */,
 				FB16062100000000000000E2 /* GoogleLensImageProcessor.swift in Sources */,
 				FB16062100000000000000E4 /* GoogleLensRequestBuilder.swift in Sources */,
 				FB16062100000000000000E6 /* GoogleLensService.swift in Sources */,
@@ -20936,6 +20943,7 @@
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */,
 				FB16062100000000000000B2 /* PhotoPickerCoordinatorTests.swift in Sources */,
+				FB16062200000000000000B2 /* CameraCoordinatorTests.swift in Sources */,
 				FB16062100000000000000D2 /* GoogleLensImageProcessorTests.swift in Sources */,
 				FB16062100000000000000D4 /* GoogleLensRequestBuilderTests.swift in Sources */,
 				FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */,

@@ -1133,19 +1133,29 @@ final class BrowserCoordinator: BaseCoordinator,
         let coordinator = PhotoPickerCoordinator(
             parentCoordinatorDelegate: self,
             router: router
-        ) { [weak self] results in
-            // Empty results means the user dismissed the picker without choosing, leave the
-            // address bar's edit/overlay state only once a photo is actually selected.
-            guard let self, !results.isEmpty else { return }
-            store.dispatch(
-                GeneralBrowserAction(showOverlay: false,
-                                     windowUUID: self.windowUUID,
-                                     actionType: GeneralBrowserActionType.leaveOverlay)
-            )
+        ) { _ in
             // TODO FXIOS-16064: Send the picked image to the Lens API and navigate to the result
         }
         add(child: coordinator)
         coordinator.start()
+        store.dispatch(GeneralBrowserAction(showOverlay: false,
+                                            windowUUID: self.windowUUID,
+                                            actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func showGoogleLensCamera() {
+        guard !childCoordinators.contains(where: { $0 is CameraCoordinator }) else { return }
+        let coordinator = CameraCoordinator(
+            parentCoordinatorDelegate: self,
+            router: router
+        ) { _ in
+            // TODO FXIOS-16064: Send the captured image to the Lens API and navigate to the result
+        }
+        add(child: coordinator)
+        coordinator.start()
+        store.dispatch(GeneralBrowserAction(showOverlay: false,
+                                            windowUUID: self.windowUUID,
+                                            actionType: GeneralBrowserActionType.leaveOverlay))
     }
 
     func showPrivacyNoticeLink(url: URL) {

@@ -675,6 +675,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                          expectedActionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
     }
 
+    func testDidTapButton_tapOnGoogleLensTakePhotoButton_dispatchesShowGoogleLensCamera() throws {
+        try didTapButton(buttonType: .googleLensTakePhoto,
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensCamera)
+    }
+
     func testDidTapButton_tapOnSearchButton_dispatchesDidStartEditingUrl() throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
