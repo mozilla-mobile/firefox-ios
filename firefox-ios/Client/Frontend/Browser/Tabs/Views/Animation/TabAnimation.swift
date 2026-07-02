@@ -22,7 +22,7 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 
         static let dimmedWhiteValue = 0.0
 
-        static let presentDuration: TimeInterval = 0.5
+        static let presentDuration: TimeInterval = 0.3
         static let dismissDuration: TimeInterval = 0.2
         static let bvcScreenshotQuality: CGFloat = 1.0
 
@@ -47,6 +47,10 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 }
 
 extension TabTrayViewController: BasicAnimationControllerDelegate {
+    static var screenshotViewContainerCornerRadius: CGFloat {
+        return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 25.0
+    }
+
     func animatePresentation(context: UIViewControllerContextTransitioning) {
         guard
             let containerController = context.viewController(forKey: .from) as? UINavigationController,
@@ -164,6 +168,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         bvcSnapshot.frame = cellFrame
         browserVC.tabTrayAnimationSourceFrame = nil
         bvcSnapshot.clipsToBounds = true
+        bvcSnapshot.layer.cornerRadius = TabTrayViewController.screenshotViewContainerCornerRadius
 
         // Dimmed background view
         let backgroundView = UIView()
