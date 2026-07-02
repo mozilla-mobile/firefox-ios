@@ -41,6 +41,7 @@ struct BrowserViewControllerState: ScreenState {
         case passwordGenerator
         case translationLanguagePicker(TranslationLanguagePickerData)
         case googleLensPhotoPicker
+        case googleLensCamera
     }
 
     let windowUUID: WindowUUID
@@ -396,6 +397,8 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowTranslationLanguagePickerAction(state: state, action: action)
         case GeneralBrowserActionType.showGoogleLensPhotoPicker:
             return handleShowGoogleLensPhotoPickerAction(state: state, action: action)
+        case GeneralBrowserActionType.showGoogleLensCamera:
+            return handleShowGoogleLensCameraAction(state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -757,6 +760,22 @@ struct BrowserViewControllerState: ScreenState {
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
             displayView: .googleLensPhotoPicker,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+    }
+
+    @MainActor
+    private static func handleShowGoogleLensCameraAction(
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
+            browserViewType: state.browserViewType,
+            displayView: .googleLensCamera,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
     }

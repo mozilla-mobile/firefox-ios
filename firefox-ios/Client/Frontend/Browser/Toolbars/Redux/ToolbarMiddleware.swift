@@ -319,6 +319,11 @@ final class ToolbarMiddleware {
                                               actionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
             store.dispatch(action)
 
+        case .googleLensTakePhoto:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showGoogleLensCamera)
+            store.dispatch(action)
+
         case .search:
             toolbarTelemetry.searchButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)

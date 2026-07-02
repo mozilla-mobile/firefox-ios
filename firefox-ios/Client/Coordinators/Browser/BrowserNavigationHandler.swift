@@ -125,9 +125,11 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     @MainActor
     func showWorldCupCountryPicker()
 
-    /// Shows the system photo-library picker and sends the picked image to the Lens API.
     @MainActor
     func showGoogleLensPhotoPicker()
+
+    @MainActor
+    func showGoogleLensCamera()
 
     @MainActor
     func showQuickAnswers(transitionType: QuickAnswersTransitionType)
