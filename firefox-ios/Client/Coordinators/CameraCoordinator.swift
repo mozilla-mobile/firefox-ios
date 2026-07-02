@@ -14,14 +14,16 @@ final class CameraCoordinator: BaseCoordinator,
     private let cameraAuthorizationStatus: AVAuthorizationStatus
     private let requestCameraAccess: () async -> Bool
 
-    init(parentCoordinatorDelegate: ParentCoordinatorDelegate?,
-         router: Router,
-         isCameraAvailable: Bool = UIImagePickerController.isSourceTypeAvailable(.camera),
-         cameraAuthorizationStatus: AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video),
-         requestCameraAccess: @escaping () async -> Bool = {
-             await AVCaptureDevice.requestAccess(for: .video)
-         },
-         onComplete: @escaping (UIImage?) -> Void) {
+    init(
+        parentCoordinatorDelegate: ParentCoordinatorDelegate?,
+        router: Router,
+        isCameraAvailable: Bool = UIImagePickerController.isSourceTypeAvailable(.camera),
+        cameraAuthorizationStatus: AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video),
+        requestCameraAccess: @escaping () async -> Bool = {
+            await AVCaptureDevice.requestAccess(for: .video)
+        },
+        onComplete: @escaping (UIImage?) -> Void
+    ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.onComplete = onComplete
         self.isCameraAvailable = isCameraAvailable
