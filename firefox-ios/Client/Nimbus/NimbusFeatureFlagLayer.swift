@@ -125,6 +125,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .needsReloadRefactor:
             return checkNeedsReloadRefactorFeature()
 
+        case .newBookmarkFolderTree:
+            return checkNewBookmarkFolderTreeFeature()
+
         case .novaDesign:
             return checkNovaDesignFeature()
 
@@ -483,6 +486,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkAddressBarGestureToOpenTabTraySwipeFeature() -> Bool {
         return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledSwipe
+    }
+
+    private func checkNewBookmarkFolderTreeFeature() -> Bool {
+        return nimbus.features.newBookmarkFolderTreeFeature.value().enabled
     }
 
     private func checkWaybackMachineFeature() -> Bool {
