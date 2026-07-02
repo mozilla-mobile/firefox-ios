@@ -422,7 +422,7 @@
 "Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Proseguendo, accetti le %@";
 
 /* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfService.Title.v135" = "Benvenuto in %@";
+"Onboarding.TermsOfService.Title.v135" = "Ti diamo il benvenuto in %@";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfUse.TermsOfUseLink.v136" = "Condizioni di utilizzo di %@.";
