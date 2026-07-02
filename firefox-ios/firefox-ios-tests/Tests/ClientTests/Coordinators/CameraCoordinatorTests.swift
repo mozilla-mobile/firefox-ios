@@ -29,10 +29,10 @@ final class CameraCoordinatorTests: XCTestCase {
     func test_start_whenCameraUnavailable_finishesWithNilAndNotifiesParent() {
         var completionCalled = 0
         var completionImage: UIImage?
-        let subject = createSubject(isCameraAvailable: false) { image in
+        let subject = createSubject(isCameraAvailable: false, onComplete: { image in
             completionCalled += 1
             completionImage = image
-        }
+        })
 
         subject.start()
 
