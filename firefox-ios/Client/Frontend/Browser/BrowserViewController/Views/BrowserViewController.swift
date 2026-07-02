@@ -2993,6 +2993,8 @@ class BrowserViewController: UIViewController,
             }
         case .translationLanguagePicker(let data):
             presentTranslationLanguagePicker(data: data, sourceButton: state.buttonTapped)
+        case .googleLensPhotoPicker:
+            navigationHandler?.showGoogleLensPhotoPicker()
         }
     }
 

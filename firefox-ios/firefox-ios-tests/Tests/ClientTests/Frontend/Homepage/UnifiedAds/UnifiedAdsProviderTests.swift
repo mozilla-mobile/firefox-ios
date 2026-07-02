@@ -305,12 +305,89 @@ class UnifiedAdsProviderTests: XCTestCase {
             switch result {
             case let .success(tiles):
                 XCTAssertEqual(tiles.count, 2)
-                let actual = Dictionary(uniqueKeysWithValues: tiles.map { ($0.name, $0.url) })
-                let expected = [
-                    "newtab_mobile_tile_1": "https://www.test1.com",
-                    "newtab_mobile_tile_2": "https://www.test5.com"
-                ]
-                XCTAssertEqual(actual, expected)
+                XCTAssertEqual(tiles[0].url, "https://www.test1.com")
+                XCTAssertEqual(tiles[1].url, "https://www.test5.com")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testFetchTilesWithAdsClient_whenInvertedOrder_thenReturnsProperTileOrder() {
+        setupNimbusAdsClientTesting(isEnabled: true)
+
+        let adTile1 = MozAdsTile(
+            blockKey: "12345",
+            callbacks: MozAdsCallbacks(
+                click: "https://www.test2.com",
+                impression: "https://www.test3.com",
+                report: nil
+            ),
+            format: "tile",
+            imageUrl: "https://www.test4.com",
+            name: "newtab_mobile_tile_1",
+            url: "https://www.test1.com"
+        )
+
+        let adTile2 = MozAdsTile(
+            blockKey: "6789",
+            callbacks: MozAdsCallbacks(
+                click: "https://www.test6.com",
+                impression: "https://www.test7.com",
+                report: nil
+            ),
+            format: "tile",
+            imageUrl: "https://www.test8.com",
+            name: "newtab_mobile_tile_2",
+            url: "https://www.test5.com"
+        )
+
+        // Insert position2 before position1 to verify the order does not depend
+        // on the dictionary's iteration order.
+        mockAdsClient.mockAdsTiles = [
+            "newtab_mobile_tile_2": adTile2,
+            "newtab_mobile_tile_1": adTile1
+        ]
+
+        let subject = createSubject()
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 2)
+                XCTAssertEqual(tiles[0].url, "https://www.test1.com")
+                XCTAssertEqual(tiles[1].url, "https://www.test5.com")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testFetchTilesWithAdsClient_whenOnlyFirstPlacement_thenReturnsSingleTile() {
+        setupNimbusAdsClientTesting(isEnabled: true)
+
+        let adTile1 = MozAdsTile(
+            blockKey: "12345",
+            callbacks: MozAdsCallbacks(
+                click: "https://www.test2.com",
+                impression: "https://www.test3.com",
+                report: nil
+            ),
+            format: "tile",
+            imageUrl: "https://www.test4.com",
+            name: "newtab_mobile_tile_1",
+            url: "https://www.test1.com"
+        )
+
+        mockAdsClient.mockAdsTiles = ["newtab_mobile_tile_1": adTile1]
+
+        let subject = createSubject()
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 1)
+                XCTAssertEqual(tiles[0].url, "https://www.test1.com")
             default:
                 XCTFail("Expected success, got \(result) instead")
             }

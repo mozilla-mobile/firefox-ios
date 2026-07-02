@@ -92,6 +92,42 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(newState.editingAccessoryAction)
     }
 
+    func test_didLoadToolbarsAction_withGoogleLensEnabled_seedsEditingAccessoryAction() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                addressBorderPosition: .top,
+                isGoogleLensEnabled: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didLoadToolbars
+            )
+        )
+
+        XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
+    }
+
+    func test_didLoadToolbarsAction_withGoogleLensDisabled_doesNotSeedEditingAccessoryAction() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                addressBorderPosition: .top,
+                isGoogleLensEnabled: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didLoadToolbars
+            )
+        )
+
+        XCTAssertNil(newState.editingAccessoryAction)
+    }
+
     func test_didUpdateDefaultSearchEngineAction_withGoogleLensDisabled_removesEditingAccessoryAction() {
         setupStore()
         let initialState = createSubject()
@@ -125,7 +161,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             ToolbarMenuElementConfiguration(
                 actionType: .googleLensTakePhoto,
                 title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
-                imageName: StandardImageIdentifiers.Large.cameraLarge,
+                imageName: StandardImageIdentifiers.Large.camera,
                 a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
             ),
             ToolbarMenuElementConfiguration(
@@ -146,7 +182,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
-        XCTAssertEqual(newState.editingAccessoryAction?.iconName, StandardImageIdentifiers.Medium.googleLens)
+        XCTAssertEqual(newState.editingAccessoryAction?.iconName, StandardImageIdentifiers.Medium.logoGoogleLens)
         XCTAssertEqual(newState.editingAccessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
         XCTAssertEqual(newState.editingAccessoryAction?.menuElements, expectedMenuElements)
     }

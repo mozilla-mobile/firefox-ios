@@ -130,6 +130,22 @@ final class SystemLocaleProviderTests: XCTestCase {
         XCTAssertEqual(logger.savedExtra, Optional(["Locale identifier": "fakeidentifier"]))
     }
 
+    // MARK: - languageCode
+
+    func test_languageCode_withEnglishUSLocale_returnsProperLanguageCode() {
+        let subject = createSubject(with: Locale(identifier: "en_US"))
+
+        XCTAssertEqual(subject.languageCode(), "en")
+        XCTAssertNil(logger.savedMessage, "No log expected for valid language extraction")
+    }
+
+    func test_languageCode_withFrenchCanadaLocale_returnsProperLanguageCode() {
+        let subject = createSubject(with: Locale(identifier: "fr_CA"))
+
+        XCTAssertEqual(subject.languageCode(), "fr")
+        XCTAssertNil(logger.savedMessage, "No log expected for valid language extraction")
+    }
+
     // MARK: - localizedLanguageName
 
     func test_localizedLanguageName_knownCode_returnsNameInCurrentLocale() {

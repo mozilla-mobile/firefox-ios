@@ -239,6 +239,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .reportBrokenSite,
+                titleText: format(string: "Report Broken Site"),
+                statusText: format(string: "Toggle Report Broken Site")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .recentSearches,
                 titleText: format(string: "Search - Recent"),
                 statusText: format(string: "Toggle to enable the recent searches feature")
@@ -333,6 +340,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .unifiedSearch,
                 titleText: format(string: "Unified Search"),
                 statusText: format(string: "Toggle to use unified search within the new toolbar")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .waybackMachine,
+                titleText: format(string: "Wayback Machine"),
+                statusText: format(string: "Toggle to show Wayback Machine fallback on native error pages")
             ) { [weak self] _ in
                 self?.reloadView()
             },

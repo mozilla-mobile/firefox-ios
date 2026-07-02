@@ -143,8 +143,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .relayIntegration:
             return checkRelayIntegration()
 
-        case .reportSiteIssue:
-            return checkGeneralFeature(for: featureID)
+        case .reportBrokenSite:
+            return checkReportBrokenSiteFeature()
 
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature()
@@ -206,6 +206,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .videoIntroOnboarding:
             return checkVideoIntroOnboardingFeature()
 
+        case .waybackMachine:
+            return checkWaybackMachineFeature()
+
         case .worldCupWidget:
             return checkWorldCupWidgetFeature()
 
@@ -217,15 +220,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     // MARK: - Private methods
-    private func checkGeneralFeature(for featureID: FeatureFlagID) -> Bool {
-        let config = nimbus.features.generalAppFeatures.value()
-
-        switch featureID {
-        case .reportSiteIssue: return config.reportSiteIssue.status
-        default: return false
-        }
-    }
-
     private func checkSentFromFirefoxFeature() -> Bool {
         let config = nimbus.features.sentFromFirefoxFeature.value()
         return config.enabled
@@ -482,6 +476,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.homepageTrackerBlockerModuleFeature.value().enabled
     }
 
+    private func checkReportBrokenSiteFeature() -> Bool {
+        return nimbus.features.reportBrokenSiteFeature.value().enabled
+    }
+
     private func checkAddressBarGestureToOpenTabTrayInteractiveFeature() -> Bool {
         return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledInteractive
     }
@@ -492,5 +490,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkNewBookmarkFolderTreeFeature() -> Bool {
         return nimbus.features.newBookmarkFolderTreeFeature.value().enabled
+    
+    private func checkWaybackMachineFeature() -> Bool {
+        return nimbus.features.waybackMachineFeature.value().enabled
     }
 }

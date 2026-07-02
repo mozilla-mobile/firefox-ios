@@ -46,7 +46,7 @@ enum FeatureFlagID: String, CaseIterable {
     case quickAnswers
     case recentSearches
     case relayIntegration
-    case reportSiteIssue
+    case reportBrokenSite
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -67,6 +67,7 @@ enum FeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case videoIntroOnboarding
+    case waybackMachine
     case worldCupWidget
 
     /// The user preferences key for features that support user-togglable settings.
@@ -123,6 +124,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
+                .reportBrokenSite,
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
@@ -135,6 +137,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
+                .waybackMachine,
                 .worldCupWidget:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:

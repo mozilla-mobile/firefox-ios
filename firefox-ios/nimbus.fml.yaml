@@ -25,7 +25,6 @@ include:
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/firefoxJpGuideDefaultSite.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
-  - nimbus-features/generalFeatures.yaml
   - nimbus-features/googleLensFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/homepageTrackerBlockerModuleFeature.yaml
@@ -43,6 +42,7 @@ include:
   - nimbus-features/quickAnswersFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
+  - nimbus-features/reportBrokenSiteFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/snapkitRemovalRefactor.yaml
@@ -58,4 +58,5 @@ include:
   - nimbus-features/touFeature.yaml
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
+  - nimbus-features/waybackMachineFeature.yaml
   - nimbus-features/worldCupWidgetFeature.yaml
