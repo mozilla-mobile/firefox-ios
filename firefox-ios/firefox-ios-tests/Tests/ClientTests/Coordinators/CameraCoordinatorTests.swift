@@ -71,7 +71,7 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
-    func test_dismissCameraAccessDeniedViewfinder_dismissesAndFinishesWithNil() {
+    func test_dismissCameraInterface_dismissesAndFinishesWithNil() {
         var completionCalled = 0
         var completionImage: UIImage?
         let subject = createSubject(onComplete: { image in
@@ -79,12 +79,41 @@ final class CameraCoordinatorTests: XCTestCase {
             completionImage = image
         })
 
-        subject.dismissCameraAccessDeniedViewfinder()
+        subject.dismissCameraInterface()
 
         XCTAssertEqual(router.dismissCalled, 1)
         XCTAssertEqual(completionCalled, 1)
         XCTAssertNil(completionImage)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func test_dismissCameraInterfaceIfAccessRefused_whenRefused_dismissesAndFinishesWithNil() async {
+        var completionCalled = 0
+        var completionImage: UIImage?
+        let subject = createSubject(requestCameraAccess: { false },
+                                    onComplete: { image in
+            completionCalled += 1
+            completionImage = image
+        })
+
+        await subject.dismissCameraInterfaceIfAccessRefused()
+
+        XCTAssertEqual(router.dismissCalled, 1)
+        XCTAssertEqual(completionCalled, 1)
+        XCTAssertNil(completionImage)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func test_dismissCameraInterfaceIfAccessRefused_whenGranted_keepsInterfacePresented() async {
+        var completionCalled = 0
+        let subject = createSubject(requestCameraAccess: { true },
+                                    onComplete: { _ in completionCalled += 1 })
+
+        await subject.dismissCameraInterfaceIfAccessRefused()
+
+        XCTAssertEqual(router.dismissCalled, 0)
+        XCTAssertEqual(completionCalled, 0)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 0)
     }
 
     func test_didCancel_callsCompletionWithNilAndNotifiesParent() {
@@ -106,12 +135,14 @@ final class CameraCoordinatorTests: XCTestCase {
 
     // MARK: - Helper Methods
     private func createSubject(isCameraAvailable: Bool = true,
+                               requestCameraAccess: @escaping () async -> Bool = { false },
                                onComplete: @escaping (UIImage?) -> Void = { _ in },
                                file: StaticString = #filePath,
                                line: UInt = #line) -> CameraCoordinator {
         let subject = CameraCoordinator(parentCoordinatorDelegate: parentCoordinator,
                                         router: router,
                                         isCameraAvailable: { isCameraAvailable },
+                                        requestCameraAccess: requestCameraAccess,
                                         onComplete: onComplete)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

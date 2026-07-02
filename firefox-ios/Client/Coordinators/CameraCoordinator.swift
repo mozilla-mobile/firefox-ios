@@ -12,6 +12,7 @@ final class CameraCoordinator: BaseCoordinator,
     private let onComplete: (UIImage?) -> Void
     private let isCameraAvailable: () -> Bool
     private let cameraAuthorizationStatus: () -> AVAuthorizationStatus
+    private let requestCameraAccess: () async -> Bool
 
     init(parentCoordinatorDelegate: ParentCoordinatorDelegate?,
          router: Router,
@@ -19,11 +20,15 @@ final class CameraCoordinator: BaseCoordinator,
          cameraAuthorizationStatus: @escaping () -> AVAuthorizationStatus = {
              AVCaptureDevice.authorizationStatus(for: .video)
          },
+         requestCameraAccess: @escaping () async -> Bool = {
+             await AVCaptureDevice.requestAccess(for: .video)
+         },
          onComplete: @escaping (UIImage?) -> Void) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.onComplete = onComplete
         self.isCameraAvailable = isCameraAvailable
         self.cameraAuthorizationStatus = cameraAuthorizationStatus
+        self.requestCameraAccess = requestCameraAccess
         super.init(router: router)
     }
 
@@ -40,19 +45,29 @@ final class CameraCoordinator: BaseCoordinator,
             self?.finish(with: nil)
         }
 
-        guard isCameraAccessDenied else { return }
-        presentCameraAccessDeniedAlert(over: picker)
+        switch cameraAuthorizationStatus() {
+        case .denied, .restricted:
+            // Access was refused in a previous session: surface the alert over the interface.
+            presentCameraAccessDeniedAlert(over: picker)
+        case .notDetermined:
+            // Presenting the interface triggers the system permission prompt; dismiss the
+            // interface if the user refuses access, without surfacing a second alert.
+            Task { [weak self] in await self?.dismissCameraInterfaceIfAccessRefused() }
+        default:
+            break
+        }
     }
 
     // MARK: - Camera permission
-    private var isCameraAccessDenied: Bool {
-        let status = cameraAuthorizationStatus()
-        return status == .denied || status == .restricted
+    func dismissCameraInterfaceIfAccessRefused() async {
+        let granted = await requestCameraAccess()
+        guard !granted else { return }
+        dismissCameraInterface()
     }
 
     private func presentCameraAccessDeniedAlert(over presenter: UIViewController) {
         let alert = UIAlertController.cameraAccessDisabledAlert { [weak self] _ in
-            self?.dismissCameraAccessDeniedViewfinder()
+            self?.dismissCameraInterface()
         }
 
         if let transitionCoordinator = presenter.transitionCoordinator {
@@ -64,7 +79,8 @@ final class CameraCoordinator: BaseCoordinator,
         }
     }
 
-    func dismissCameraAccessDeniedViewfinder() {
+    /// Dismisses the camera interface and ends the flow without a captured image.
+    func dismissCameraInterface() {
         router.dismiss(animated: true)
         finish(with: nil)
     }
