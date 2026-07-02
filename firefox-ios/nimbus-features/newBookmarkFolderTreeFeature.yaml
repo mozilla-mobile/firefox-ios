@@ -15,4 +15,4 @@ features:
           enabled: false
       - channel: developer
         value:
-          enabled: true
+          enabled: false
