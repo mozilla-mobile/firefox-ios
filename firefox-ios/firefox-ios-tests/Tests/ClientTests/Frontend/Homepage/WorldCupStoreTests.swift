@@ -206,6 +206,60 @@ final class WorldCupStoreTests: XCTestCase {
         XCTAssertFalse(subject.hasWorldCupStarted)
     }
 
+    func test_hasWorldCupEnded_whenNowIsAfterEndDate_returnsTrue() {
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-07-20T08:00:01Z"))
+        )
+
+        XCTAssertTrue(subject.hasWorldCupEnded)
+    }
+
+    func test_hasWorldCupEnded_atEndDate_returnsTrue() {
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date(WorldCupStore.worldCupEndDateString))
+        )
+
+        XCTAssertTrue(subject.hasWorldCupEnded)
+    }
+
+    func test_hasWorldCupEnded_whenNowIsBeforeEndDate_returnsFalse() {
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-07-20T07:59:59Z"))
+        )
+
+        XCTAssertFalse(subject.hasWorldCupEnded)
+    }
+
+    // MARK: - kill switch
+
+    func test_isFeatureEnabled_afterWorldCupEnded_returnsFalseEvenWhenNimbusEnabled() {
+        setNimbusFeature(enabled: true)
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-07-20T08:00:01Z"))
+        )
+
+        XCTAssertFalse(subject.isFeatureEnabled)
+    }
+
+    func test_isFeatureEnabledAndSectionEnabled_afterWorldCupEnded_returnsFalse() {
+        setNimbusFeature(enabled: true, milestone2EnableDate: "2026-05-10T19:00:00Z")
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-07-20T08:00:01Z"))
+        )
+
+        XCTAssertFalse(subject.isFeatureEnabledAndSectionEnabled)
+    }
+
+    func test_isFeatureEnabled_beforeWorldCupEnded_stillReflectsNimbus() {
+        setNimbusFeature(enabled: true)
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-07-20T07:59:59Z"))
+        )
+
+        XCTAssertTrue(subject.isFeatureEnabled)
+    }
+
     // MARK: - setIsHomepageSectionEnabled
 
     func test_setIsHomepageSectionEnabled_writesToPrefs() {
@@ -243,8 +297,13 @@ final class WorldCupStoreTests: XCTestCase {
 
     // MARK: - Helpers
 
+    /// A fixed instant during the tournament (after start, before the end
+    /// kill-switch) used as the default clock so tests are deterministic and do
+    /// not flip once the real date passes `WorldCupStore.worldCupEndDateString`.
+    private static let duringTournamentDate = ISO8601DateFormatter().date(from: "2026-06-15T00:00:00Z")!
+
     private func createSubject(
-        dateProvider: DateProvider = MockDateProvider(fixedDate: Date())
+        dateProvider: DateProvider = MockDateProvider(fixedDate: WorldCupStoreTests.duringTournamentDate)
     ) -> WorldCupStore {
         return WorldCupStore(
             profile: mockProfile,
