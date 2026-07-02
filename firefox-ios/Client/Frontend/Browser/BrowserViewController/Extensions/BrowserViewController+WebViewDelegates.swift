@@ -379,10 +379,11 @@ extension BrowserViewController: WKUIDelegate {
             actionBuilder.addOpenInNewPrivateTab(url: url, currentTab: currentTab, addTab: addTab)
         }
 
-        let isBookmarkedSite = profile.places
-            .isBookmarked(url: url.absoluteString)
-            .value
-            .successValue ?? false
+        // The context menu is built synchronously on the main thread, so we cap the bookmark
+        // lookup with a short timeout instead of blocking indefinitely on a contended Places
+        // DB (which could trip the watchdog). On timeout we default to "not bookmarked".
+        let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString)
+                               .value(timeout: .milliseconds(100))?.successValue ?? false
         if isBookmarkedSite {
             actionBuilder.addRemoveBookmarkLink(urlString: url.absoluteString,
                                                 title: title,

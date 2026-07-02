@@ -39,6 +39,23 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .addressBarGestureToOpenTabTrayInteractive,
+                titleText: format(string: "Address bar gesture interactive"),
+                statusText: format(string: "Toggle to enable fancier animations for address bar swipe gestures")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .addressBarGestureToOpenTabTraySwipe,
+                titleText: format(string: "Address bar gesture swipe"),
+                statusText: format(string: """
+                                            Toggle to enable swipe gestures for the address bar.
+                                            Overrides interactive animation if enabled
+                                            """)
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
                 statusText: format(string: "Toggle to enable the rust ads client")
@@ -211,6 +228,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .reportBrokenSite,
+                titleText: format(string: "Report Broken Site"),
+                statusText: format(string: "Toggle Report Broken Site")
             ) { [weak self] _ in
                 self?.reloadView()
             },

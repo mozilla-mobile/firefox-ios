@@ -16,6 +16,7 @@ struct SpeechResult: Equatable {
 struct SearchResult: Equatable {
     struct Source: Equatable {
         let title: String
+        let url: URL?
         let thumbnailURL: URL?
         let faviconURL: URL?
     }

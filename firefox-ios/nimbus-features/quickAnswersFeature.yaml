@@ -9,10 +9,26 @@ features:
           Enables the feature.
         type: Boolean
         default: false
+      model:
+        description: >
+          Which provider model backs Quick Answers.
+        type: QuickAnswersModel
+        default: exa
     defaults:
       - channel: beta
         value:
           enabled: false
+          model: exa
       - channel: developer
         value:
           enabled: false
+          model: exa
+
+enums:
+  QuickAnswersModel:
+    description: The provider model that backs the Quick Answers feature.
+    variants:
+      exa:
+        description: The Exa model provider.
+      liner:
+        description: The Liner model provider.

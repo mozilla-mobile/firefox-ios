@@ -121,12 +121,16 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
 
     func configureOptIn(
         learnMoreURL: URL?,
+        theme: Theme,
         onContinue: @escaping () -> Void,
         onLearnMore: @escaping (URL) -> Void
     ) {
-        optInView.learnMoreURL = learnMoreURL
-        optInView.onContinue = onContinue
-        optInView.onLearnMore = onLearnMore
+        optInView.configure(
+            learnMoreURL: learnMoreURL,
+            theme: theme,
+            onContinue: onContinue,
+            onLearnMore: onLearnMore
+        )
     }
 
     func showOptIn() {
@@ -188,8 +192,8 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureSources(_ items: [SearchResult.Source]) {
-        sourceView.configure(with: items)
+    func configureSources(_ items: [SearchResult.Source], onSourceTapped: @escaping (URL) -> Void) {
+        sourceView.configure(with: items, onSourceTapped: onSourceTapped)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             sourceView.alpha = 1.0
         }

@@ -103,6 +103,7 @@ final class ToolbarMiddleware {
                 displayNavBorder: displayBorder,
                 middleButton: middleButton,
                 isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
+                isGoogleLensEnabled: isGoogleLensToolbarEntryPointAvailable(),
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
@@ -311,6 +312,11 @@ final class ToolbarMiddleware {
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showShare)
+            store.dispatch(action)
+
+        case .googleLensPhotoLibrary:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
             store.dispatch(action)
 
         case .search:

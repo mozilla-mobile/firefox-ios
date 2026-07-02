@@ -8,12 +8,54 @@
 <body>
     <h2>Test WKWebView Window Open and Close</h2>
 
-    <!-- Link to open in a new window -->
-    <a href="https://www.mozilla.org/" target="_blank">Open in New Window</a>
-
-    <button onclick="window.open('https://www.mozilla.org/')">Open new pop up Window</button>
-
+    <!-- Issue #17911: about:blank popup redirect -->
+    <button id="blankRedirectBtn">Open blank popup → redirect</button>
     <br><br>
 
+    <!-- Issue #25031: popup with window features -->
+    <button id="featurePopupBtn">Open popup with window features</button>
+    <br><br>
+
+    <!-- Issue #30098: popup from cross-origin iframe -->
+    <iframe
+      src="https://example.org"
+      style="width:0;height:0;border:0;"
+      id="xframe">
+    </iframe>
+    <button id="iframePopupBtn">Trigger popup from cross-origin iframe</button>
+
+    <script>
+      // Issue #17911: about:blank → redirect
+      document.getElementById("blankRedirectBtn").onclick = () => {
+        const w = window.open('about:blank', 'blankRedirectTest');
+        setTimeout(() => {
+          w.location.replace('https://example.org/redirect-test');
+        }, 1000);
+      };
+
+      // Issue #25031: popup with window features
+      document.getElementById("featurePopupBtn").onclick = () => {
+        window.open(
+          'https://example.org/feature-test',
+          'featurePopup',
+          'width=400,height=400,left=100,top=100'
+        );
+      };
+
+      // Issue #30098: popup triggered from cross-origin iframe
+      window.addEventListener("message", (e) => {
+        if (e.data === "openPopupFromIframe") {
+          const w = window.open('about:blank', 'iframePopupTest');
+          setTimeout(() => {
+            w.location.replace('https://example.org/iframe-redirect');
+          }, 1000);
+        }
+      });
+
+      document.getElementById("iframePopupBtn").onclick = () => {
+        document.getElementById('xframe').contentWindow.postMessage('openPopupFromIframe', '*');
+      };
+    </script>
+    
 </body>
 </html>

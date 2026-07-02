@@ -1568,7 +1568,9 @@
 		BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */; };
 		C0FFE71000000000000000A3 /* worldCupConfetti.json in Resources */ = {isa = PBXBuildFile; fileRef = C0FFE71000000000000000A2 /* worldCupConfetti.json */; };
 		C209316E2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C209316D2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift */; };
+		FB16062100000000000000A2 /* PhotoPickerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000A1 /* PhotoPickerCoordinator.swift */; };
 		C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */; };
+		FB16062100000000000000B2 /* PhotoPickerCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000B1 /* PhotoPickerCoordinatorTests.swift */; };
 		C2126EF82F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2126EF72F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift */; };
 		C2126EFA2F447A46001C01FE /* SummarizerNimbusUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */; };
 		C21326992F5713F000746393 /* SummarizerLanguageProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */; };
@@ -2082,8 +2084,6 @@
 		E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1B18C782B5FFFA9009CD968 /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B18C772B5FFFA9009CD968 /* UIView+extension.swift */; };
 		E1B9A2C22CAD91EF00F6A0E9 /* ToolbarTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B9A2C12CAD91EF00F6A0E9 /* ToolbarTelemetry.swift */; };
-		E1BDAC812B9F5DE40063E6BF /* ReportSiteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BDAC802B9F5DE40063E6BF /* ReportSiteTests.swift */; };
-		E1BDAC832B9F65780063E6BF /* reportSiteIssueOff.json in Resources */ = {isa = PBXBuildFile; fileRef = E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */; };
 		E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
 		E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
@@ -2352,6 +2352,12 @@
 		FA6B2AC21D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		FA6B2AC41D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9293D31D6580E100AC8D33 /* QRCodeViewController.swift */; };
+		FB16062100000000000000E2 /* GoogleLensImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000E1 /* GoogleLensImageProcessor.swift */; };
+		FB16062100000000000000E4 /* GoogleLensRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000E3 /* GoogleLensRequestBuilder.swift */; };
+		FB16062100000000000000E6 /* GoogleLensService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000E5 /* GoogleLensService.swift */; };
+		FB16062100000000000000D2 /* GoogleLensImageProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */; };
+		FB16062100000000000000D4 /* GoogleLensRequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */; };
+		FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000D5 /* GoogleLensServiceTests.swift */; };
 		FF0001AA2F000007000AAAAA /* WorldCupSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0001AA2F000004000AAAAA /* WorldCupSectionState.swift */; };
 		FF0001AB2F000007000AAAAA /* WorldCupMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0001AB2F000004000AAAAA /* WorldCupMiddleware.swift */; };
 		FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0002AA2F000001000BBBBB /* ClearablesTests.swift */; };
@@ -10497,7 +10503,9 @@
 		C1DF4F71AB33BAB7B199F361 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C1F24EFFB6E9B114849A4DB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		C209316D2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersCoordinator.swift; sourceTree = "<group>"; };
+		FB16062100000000000000A1 /* PhotoPickerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerCoordinator.swift; sourceTree = "<group>"; };
 		C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersCoordinatorTests.swift; sourceTree = "<group>"; };
+		FB16062100000000000000B1 /* PhotoPickerCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2126EF72F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageExpansionConfiguration.swift; sourceTree = "<group>"; };
 		C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerNimbusUtilsTests.swift; sourceTree = "<group>"; };
 		C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageProviderTests.swift; sourceTree = "<group>"; };
@@ -11486,8 +11494,6 @@
 		E1B18C772B5FFFA9009CD968 /* UIView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+extension.swift"; sourceTree = "<group>"; };
 		E1B8412CB5BD748F7D81B41E /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		E1B9A2C12CAD91EF00F6A0E9 /* ToolbarTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarTelemetry.swift; sourceTree = "<group>"; };
-		E1BDAC802B9F5DE40063E6BF /* ReportSiteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportSiteTests.swift; sourceTree = "<group>"; };
-		E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reportSiteIssueOff.json; sourceTree = "<group>"; };
 		E1BE455FA65078F46476F88F /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewCell.swift; sourceTree = "<group>"; };
 		E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewHeaderCell.swift; sourceTree = "<group>"; };
@@ -11899,6 +11905,12 @@
 		FAE64251BDC58A94D5B49138 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		FB07463C8357A3CFE68CC8AA /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		FB08479DBB32F259EDD0F069 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FB16062100000000000000E1 /* GoogleLensImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensImageProcessor.swift; sourceTree = "<group>"; };
+		FB16062100000000000000E3 /* GoogleLensRequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensRequestBuilder.swift; sourceTree = "<group>"; };
+		FB16062100000000000000E5 /* GoogleLensService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensService.swift; sourceTree = "<group>"; };
+		FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensImageProcessorTests.swift; sourceTree = "<group>"; };
+		FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensRequestBuilderTests.swift; sourceTree = "<group>"; };
+		FB16062100000000000000D5 /* GoogleLensServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensServiceTests.swift; sourceTree = "<group>"; };
 		FB254B83B0B5E0487089B861 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Today.strings; sourceTree = "<group>"; };
 		FB4D447195CC566A034F89EE /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = "ca.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		FB634DAD901C5B1C29FF1E8C /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -13238,7 +13250,6 @@
 				B1F4FECB2E44D989008154B5 /* PrintTests.swift */,
 				2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */,
 				2C31A7A81E8BFB2200DAC646 /* ReadingListTests.swift */,
-				E1BDAC802B9F5DE40063E6BF /* ReportSiteTests.swift */,
 				39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */,
 				2CEA6F781E93E3A600D4100E /* SearchSettingsUITest.swift */,
 				2CA16FDD1E5F089100332277 /* SearchTest.swift */,
@@ -14419,6 +14430,7 @@
 				B236204E2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift */,
 				0B6153DF2E24E316000D2FBD /* SummarizeCoordinator.swift */,
 				C209316D2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift */,
+				FB16062100000000000000A1 /* PhotoPickerCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -14449,8 +14461,19 @@
 				61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */,
 				0B6153E12E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift */,
 				C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */,
+				FB16062100000000000000B1 /* PhotoPickerCoordinatorTests.swift */,
 			);
 			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		FB16062100000000000000E0 /* GoogleLens */ = {
+			isa = PBXGroup;
+			children = (
+				FB16062100000000000000E1 /* GoogleLensImageProcessor.swift */,
+				FB16062100000000000000E3 /* GoogleLensRequestBuilder.swift */,
+				FB16062100000000000000E5 /* GoogleLensService.swift */,
+			);
+			path = GoogleLens;
 			sourceTree = "<group>";
 		};
 		8A93F86E29D3A147004159D9 /* Router */ = {
@@ -16495,7 +16518,6 @@
 				0B84E7682DFC1471005103CA /* swipingTabsOff.json */,
 				0BF7FE412E09620900FD016A /* swipingTabsOn.json */,
 				E1AF27432A17BCF700CE5991 /* engagementNotificationWithoutConditions.json */,
-				E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */,
 				EDDC4F6C2F68637000E0B8FA /* legacyOnboardingOn.json */,
 				EDDC4F6D2F68637000E0B8FA /* modernKitOnboardingOn.json */,
 				EDDC4F6E2F68637000E0B8FA /* modernOrangeAndBlueOnboardingOn.json */,
@@ -17131,6 +17153,7 @@
 				8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */,
 				C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */,
 				8A93F86329D37314004159D9 /* Coordinators */,
+				FB16062100000000000000D0 /* GoogleLens */,
 				43B658D729CE249D00C9EF08 /* CreditCard */,
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */,
@@ -17303,6 +17326,7 @@
 			children = (
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				AA5E81452EB12BAB00919E60 /* Translations */,
+				FB16062100000000000000E0 /* GoogleLens */,
 				8A1A93572B757C7B0069C190 /* LottieFiles */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
@@ -17402,6 +17426,16 @@
 				E41A7D4A1A1BE04500245963 /* InitialViewController.swift */,
 			);
 			path = ShareTo;
+			sourceTree = "<group>";
+		};
+		FB16062100000000000000D0 /* GoogleLens */ = {
+			isa = PBXGroup;
+			children = (
+				FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */,
+				FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */,
+				FB16062100000000000000D5 /* GoogleLensServiceTests.swift */,
+			);
+			path = GoogleLens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -18487,7 +18521,6 @@
 				EDDC4F6F2F68637000E0B8FA /* legacyOnboardingOn.json in Resources */,
 				EDDC4F702F68637000E0B8FA /* modernKitOnboardingOn.json in Resources */,
 				EDDC4F712F68637000E0B8FA /* modernOrangeAndBlueOnboardingOn.json in Resources */,
-				E1BDAC832B9F65780063E6BF /* reportSiteIssueOff.json in Resources */,
 				1D91C17F2CF11EA500B24960 /* disconnect-block-cookies-content.json in Resources */,
 				E1AF3563286DE5F800960045 /* FullFunctionalTestPlan.xctestplan in Resources */,
 				E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */,
@@ -19147,7 +19180,6 @@
 				211FD2752DF38106003F60EF /* CookiePersistenceTests.swift in Sources */,
 				2CB56E3F1E926BFB00AF7586 /* ToolbarTest.swift in Sources */,
 				B10997432A97251D00CC8860 /* UrlBarTests.swift in Sources */,
-				E1BDAC812B9F5DE40063E6BF /* ReportSiteTests.swift in Sources */,
 				2C3406C81E719F00000FD889 /* SettingsTests.swift in Sources */,
 				2CF21D0920A4A163000D08B7 /* StoryTests.swift in Sources */,
 			);
@@ -19549,6 +19581,10 @@
 				AB4FB4D52C89FAFD005EF0CC /* BlockedTrackersTableController.swift in Sources */,
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				C209316E2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift in Sources */,
+				FB16062100000000000000A2 /* PhotoPickerCoordinator.swift in Sources */,
+				FB16062100000000000000E2 /* GoogleLensImageProcessor.swift in Sources */,
+				FB16062100000000000000E4 /* GoogleLensRequestBuilder.swift in Sources */,
+				FB16062100000000000000E6 /* GoogleLensService.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				0BDDB3442CA6E43100D501DF /* FolderHierarchyFetcher.swift in Sources */,
@@ -20886,6 +20922,10 @@
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */,
+				FB16062100000000000000B2 /* PhotoPickerCoordinatorTests.swift in Sources */,
+				FB16062100000000000000D2 /* GoogleLensImageProcessorTests.swift in Sources */,
+				FB16062100000000000000D4 /* GoogleLensRequestBuilderTests.swift in Sources */,
+				FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */,
 				8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
 				21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */,

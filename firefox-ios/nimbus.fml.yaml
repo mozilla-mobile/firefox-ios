@@ -15,6 +15,7 @@ channels:
 include:
   - nimbus-features/adBlockerFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/addressBarGestureToOpenTabTrayFeature.yaml
   - nimbus-features/adsClient.yaml
   - nimbus-features/aiKillSwitchFeature.yaml
   - nimbus-features/bookmarksSearchFeature.yaml
@@ -24,7 +25,6 @@ include:
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/firefoxJpGuideDefaultSite.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
-  - nimbus-features/generalFeatures.yaml
   - nimbus-features/googleLensFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/homepageTrackerBlockerModuleFeature.yaml
@@ -41,6 +41,7 @@ include:
   - nimbus-features/quickAnswersFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
+  - nimbus-features/reportBrokenSiteFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/snapkitRemovalRefactor.yaml

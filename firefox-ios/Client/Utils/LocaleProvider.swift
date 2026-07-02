@@ -8,6 +8,7 @@ import Common
 protocol LocaleProvider: Sendable {
     var current: Locale { get }
     var preferredLanguages: [String] { get }
+    func languageCode() -> String?
     func regionCode(fallback: String?) -> String
 }
 
@@ -84,5 +85,13 @@ struct SystemLocaleProvider: LocaleProvider {
         }
 
         return systemRegion
+    }
+
+    func languageCode() -> String? {
+        if #available(iOS 16, *) {
+            return current.language.languageCode?.identifier
+        } else {
+            return current.languageCode
+        }
     }
 }

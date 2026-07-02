@@ -9,6 +9,8 @@ import Shared
 enum FeatureFlagID: String, CaseIterable {
     case adBlocker
     case addressAutofillEdit
+    case addressBarGestureToOpenTabTrayInteractive
+    case addressBarGestureToOpenTabTraySwipe
     case adsClient
     case aiKillSwitch
     case appearanceMenu
@@ -43,7 +45,7 @@ enum FeatureFlagID: String, CaseIterable {
     case quickAnswers
     case recentSearches
     case relayIntegration
-    case reportSiteIssue
+    case reportBrokenSite
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -91,6 +93,8 @@ enum FeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .adBlocker,
+                .addressBarGestureToOpenTabTrayInteractive,
+                .addressBarGestureToOpenTabTraySwipe,
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
@@ -117,6 +121,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
+                .reportBrokenSite,
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,

@@ -28,14 +28,14 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     /// Creates a new service with a platform-appropriate transcription engine and results service.
     init(
         engine: TranscriptionEngine? = nil,
-        config: QuickAnswersConfig = QuickAnswersConfig(),
+        configFetcher: QuickAnswersConfigFetcher,
         resultsServiceFactory: ResultsServiceFactory = DefaultResultsServiceFactory(
             liteLLMCreator: LiteLLMCreator()
         ),
         prefs: Prefs
     ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
-        self.resultsService = try resultsServiceFactory.make(prefs: prefs, config: config)
+        self.resultsService = try resultsServiceFactory.make(prefs: prefs, configFetcher: configFetcher)
     }
 
     // MARK: Speech Service

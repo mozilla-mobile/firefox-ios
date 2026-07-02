@@ -36,6 +36,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
+        case .addressBarGestureToOpenTabTrayInteractive:
+            return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
+
+        case .addressBarGestureToOpenTabTraySwipe:
+            return checkAddressBarGestureToOpenTabTraySwipeFeature()
+
         case .adsClient:
             return checkAdsClientFeature()
 
@@ -134,8 +140,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .relayIntegration:
             return checkRelayIntegration()
 
-        case .reportSiteIssue:
-            return checkGeneralFeature(for: featureID)
+        case .reportBrokenSite:
+            return checkReportBrokenSiteFeature()
 
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature()
@@ -208,15 +214,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     // MARK: - Private methods
-    private func checkGeneralFeature(for featureID: FeatureFlagID) -> Bool {
-        let config = nimbus.features.generalAppFeatures.value()
-
-        switch featureID {
-        case .reportSiteIssue: return config.reportSiteIssue.status
-        default: return false
-        }
-    }
-
     private func checkSentFromFirefoxFeature() -> Bool {
         let config = nimbus.features.sentFromFirefoxFeature.value()
         return config.enabled
@@ -471,5 +468,17 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHomepageTrackerBlockerModuleFeature() -> Bool {
         return nimbus.features.homepageTrackerBlockerModuleFeature.value().enabled
+    }
+
+    private func checkReportBrokenSiteFeature() -> Bool {
+        return nimbus.features.reportBrokenSiteFeature.value().enabled
+    }
+
+    private func checkAddressBarGestureToOpenTabTrayInteractiveFeature() -> Bool {
+        return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledInteractive
+    }
+
+    private func checkAddressBarGestureToOpenTabTraySwipeFeature() -> Bool {
+        return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledSwipe
     }
 }

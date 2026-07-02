@@ -79,7 +79,6 @@ final class WorldCupFeed: WorldCupFeedProtocol {
     /// from.
     func start() {
         stop()
-        cachedLiveIDs = []
         lastMatchesResponse = nil
         cachedTeamsResponse = nil
         let stream = apiClient.matchesStream(team: nil)
