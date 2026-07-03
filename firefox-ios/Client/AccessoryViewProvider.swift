@@ -26,6 +26,8 @@ final class AccessoryViewProvider: UIView,
         static let spacerViewHeight: CGFloat = 4
         static let cornerRadius: CGFloat = 24.0
         static let buttonsWidth: CGFloat = 40
+        // Toolbar spacing around the autofill pill (insets + inter-item gaps).
+        static let autofillHorizontalPadding: CGFloat = 80
     }
 
     // MARK: - Properties
@@ -218,7 +220,24 @@ final class AccessoryViewProvider: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// Toolbar width left for the autofill pill once the side buttons and their spacing are removed,
+    /// recomputed each layout pass. iPhone-only (iOS 26); `nil` elsewhere so the pill sizes to content.
+    /// The pill caps this to a comfortable width around its content.
+    private var autofillFillWidth: CGFloat? {
+        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone else { return nil }
+
+        let sideButtonsWidth = (navigationButtonsBarItem.customView?.bounds.width ?? 0)
+                             + (doneButton.customView?.bounds.width ?? 0)
+        let available = toolbar.bounds.width - sideButtonsWidth - UX.autofillHorizontalPadding
+        return available > 0 ? available : nil
+    }
+
     // MARK: - Lifecycle
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        autofillAccessoryView?.applyFillWidth(autofillFillWidth)
+    }
+
     override func removeFromSuperview() {
         super.removeFromSuperview()
         // Reset showing of credit card when dismissing the view
