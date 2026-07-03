@@ -545,6 +545,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
             WorldCupResetDismissedSetting(settings: self)
         ]
 
+        // The legacy vs. iOS 26+ speech model toggle is only meaningful on iOS 26+,
+        // where both engines exist.
+        if #available(iOS 26.0, *) {
+            hiddenDebugOptions.append(QuickAnswersSpeechModelSetting(settings: self))
+        }
+
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
         hiddenDebugOptions.append(WorldCupBaseHostOverrideSetting(settings: self))
         hiddenDebugOptions.append(WorldCupPollIntervalOverrideSetting(settings: self))

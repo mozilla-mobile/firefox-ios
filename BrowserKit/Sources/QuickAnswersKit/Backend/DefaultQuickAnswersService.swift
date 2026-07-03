@@ -10,7 +10,8 @@ import Shared
 /// using an underlying `TranscriptionEngine`. As well as request results from the transcription via `ResultsService` flow.
 ///
 /// Engine selection
-/// - iOS 26+ uses `SpeechAnalyzerEngine`.
+/// - iOS 26+ uses `SpeechAnalyzerEngine`, unless the `QuickAnswers.useOldSpeechModel` debug
+///   preference forces the legacy engine.
 /// - Earlier versions use `SFSpeechRecognizerEngine`.
 @MainActor
 final class DefaultQuickAnswersService: QuickAnswersService {
@@ -34,7 +35,7 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         ),
         prefs: Prefs
     ) throws {
-        self.engine = engine ?? Self.makeDefaultEngine()
+        self.engine = engine ?? Self.makeDefaultEngine(prefs: prefs)
         self.resultsService = try resultsServiceFactory.make(prefs: prefs, configFetcher: configFetcher)
     }
 
@@ -101,11 +102,13 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         }
     }
 
-    private static func makeDefaultEngine() -> TranscriptionEngine {
+    private static func makeDefaultEngine(prefs: Prefs) -> TranscriptionEngine {
         let audioManager = AudioManager()
         let authorizer = AuthorizationHandler()
 
-        if #available(iOS 26.0, *) {
+        let useOldSpeechModel = prefs.boolForKey(PrefsKeys.QuickAnswers.useOldSpeechModel) ?? false
+
+        if #available(iOS 26.0, *), !useOldSpeechModel {
             return SpeechAnalyzerEngine(
                 audioManager: audioManager,
                 authorizer: authorizer

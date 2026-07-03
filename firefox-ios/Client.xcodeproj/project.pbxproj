@@ -1662,6 +1662,7 @@
 		C2BA6FFA2FF54B7D00AD1FBD /* DefaultQuickAnswersTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BA6FF92FF54B7D00AD1FBD /* DefaultQuickAnswersTelemetryTests.swift */; };
 		C2C6FF8E2ED9A79100B833D4 /* TestableUIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */; };
 		C2CD38EA2EE6D6AE0085F045 /* PrivateModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CD38E92EE6D6AE0085F045 /* PrivateModeButton.swift */; };
+		C2CF3D302FF7F67700DDEE5A /* QuickAnswersSpeechModelSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CF3D2F2FF7F67700DDEE5A /* QuickAnswersSpeechModelSetting.swift */; };
 		C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */; };
 		C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */; };
 		C2D3A8C22FDFF686008D5689 /* WorldCupLottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D3A8C12FDFF686008D5689 /* WorldCupLottieView.swift */; };
@@ -10597,6 +10598,7 @@
 		C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableUIToolbar.swift; sourceTree = "<group>"; };
 		C2CB4D369C756DA6836BC4A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C2CD38E92EE6D6AE0085F045 /* PrivateModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateModeButton.swift; sourceTree = "<group>"; };
+		C2CF3D2F2FF7F67700DDEE5A /* QuickAnswersSpeechModelSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersSpeechModelSetting.swift; sourceTree = "<group>"; };
 		C2D1A10C2A66C70000205DCC /* BookmarksCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinator.swift; sourceTree = "<group>"; };
 		C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksCoordinatorTests.swift; sourceTree = "<group>"; };
 		C2D3A8C12FDFF686008D5689 /* WorldCupLottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLottieView.swift; sourceTree = "<group>"; };
@@ -14009,6 +14011,7 @@
 		8A3EF7EE2A2FCF0000796E3A /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				C2CF3D2F2FF7F67700DDEE5A /* QuickAnswersSpeechModelSetting.swift */,
 				C28D67822F4491160032D0B2 /* DeleteAppAttestKeySetting.swift */,
 				F82F68B02E86EF4D002E42D1 /* DeleteAutofillKeysSetting.swift */,
 				033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */,
@@ -20229,6 +20232,7 @@
 				61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */,
 				AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */,
 				610216542FBFA7100091151F /* ConversionEventTracker.swift in Sources */,
+				C2CF3D302FF7F67700DDEE5A /* QuickAnswersSpeechModelSetting.swift in Sources */,
 				610216552FBFA7100091151F /* ConversionValueUpdater.swift in Sources */,
 				610216562FBFA7100091151F /* ConversionActivityLogger.swift in Sources */,
 				610216572FBFA7100091151F /* ConversionDataManager.swift in Sources */,
