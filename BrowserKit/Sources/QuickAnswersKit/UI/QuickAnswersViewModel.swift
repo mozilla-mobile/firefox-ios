@@ -97,10 +97,12 @@ final class QuickAnswersViewModel {
                 onStateChange?(.speechResult(result, nil))
                 guard result.isFinal else { continue }
                 telemetry.recordingCompleted(outcome: true, errorType: nil)
+                try? await service.stopRecording()
                 await searchVoiceResult(result, service: service)
                 break
             }
         } catch {
+            try? await service.stopRecording()
             let error = (error as? SpeechError) ?? SpeechError.unknown(error.localizedDescription)
             telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
             onStateChange?(.speechResult(.empty(), error))
