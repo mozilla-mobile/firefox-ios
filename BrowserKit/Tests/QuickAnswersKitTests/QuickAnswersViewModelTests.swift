@@ -54,6 +54,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         wait(for: [expectation])
 
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
+        XCTAssertEqual(mockService.stopRecordingCalledCount, 1)
         XCTAssertEqual(mockService.searchCalledCount, 1)
         XCTAssertEqual(states[0], .recordingStarted)
         XCTAssertEqual(states[1], .speechResult(partialResult, nil))
@@ -86,6 +87,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         wait(for: [expectation])
 
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
+        XCTAssertEqual(mockService.stopRecordingCalledCount, 1)
         XCTAssertEqual(states[0], .recordingStarted)
         guard case .speechResult(let result, let error) = states[1] else {
             XCTFail("Expected speechResult state")
