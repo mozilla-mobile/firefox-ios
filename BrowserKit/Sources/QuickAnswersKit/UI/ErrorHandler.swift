@@ -35,9 +35,8 @@ final class ErrorHandler {
                 title: "Change Settings to Use Quick Answers",
                 message: "Allow Firefox to access Speech Recognition."
             )
-        // TODO: - FXIOS-15572 Handle Speech errors that are not related to permissions
         default:
-            break
+            showCatchAllErrorAlert()
         }
     }
 
@@ -54,7 +53,7 @@ final class ErrorHandler {
 
     // MARK: - Search Errors
     func handleSearchError(_ error: ResultsServiceError) {
-        // TODO: - FXIOS-15573 Handle Search errors
+        showCatchAllErrorAlert()
     }
 
     // MARK: - Private
@@ -76,6 +75,21 @@ final class ErrorHandler {
         )
         alertController.addAction(
             UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+                self?.onDismiss?()
+            }
+        )
+        presenter?.present(alertController, animated: true)
+    }
+
+    // TODO: - FXIOS-14720 Add Strings and accessibility ids
+    private func showCatchAllErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Couldn't get an answer",
+            message: "Try asking again later",
+            preferredStyle: .alert
+        )
+        alertController.addAction(
+            UIAlertAction(title: "Ok", style: .default) { [weak self] _ in
                 self?.onDismiss?()
             }
         )
