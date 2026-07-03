@@ -221,7 +221,8 @@ broken_site_report.tab_info.frameworks:
   marfeel:
     type: boolean
     description: |
-      Whether the Marfeel framework was detected on the reported page.
+      Whether the Marfeel framework was detected on the reported page
+      (detected via injected JS at report time).
     data_sensitivity:
       - technical
     lifetime: ping
@@ -237,7 +238,8 @@ broken_site_report.tab_info.frameworks:
   mobify:
     type: boolean
     description: |
-      Whether the Mobify framework was detected on the reported page.
+      Whether the Mobify framework was detected on the reported page
+      (detected via injected JS at report time).
     data_sensitivity:
       - technical
     lifetime: ping
