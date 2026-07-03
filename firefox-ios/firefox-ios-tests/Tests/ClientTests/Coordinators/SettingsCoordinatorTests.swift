@@ -220,6 +220,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.viewControllers.last is UIHostingController<AppIconSelectionView>)
     }
 
+    func testAppIconSettingsRoute_calledTwice_pushesOnlyOnce() throws {
+        let subject = createSubject()
+
+        subject.start(with: .appIcon)
+        subject.start(with: .appIcon)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
     func testGeneralSettingsRoute_whenStackIsDeep_popsToRoot() throws {
         let subject = createSubject()
         let root = try XCTUnwrap(mockRouter.rootViewController)
