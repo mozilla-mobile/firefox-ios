@@ -4,8 +4,6 @@
       "schemaVersion": "1.12.0",
       "slug": "ios-japan-onboarding-with-video-release",
       "id": "ios-japan-onboarding-with-video-release",
-      "arguments": {},
-      "application": "org.mozilla.ios.FirefoxBeta",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.FirefoxBeta",
       "channel": "beta",
@@ -23,7 +21,6 @@
       "featureIds": [
         "onboarding-framework-feature"
       ],
-      "probeSets": [],
       "outcomes": [],
       "branches": [
         {
@@ -37,7 +34,6 @@
           "features": [
             {
               "featureId": "onboarding-framework-feature",
-              "enabled": true,
               "value": {
                 "enable-modern-ui": true,
                 "should-use-japan-configuration": true,
@@ -57,7 +53,6 @@
           "features": [
             {
               "featureId": "onboarding-framework-feature",
-              "enabled": true,
               "value": {
                 "enable-modern-ui": true,
                 "should-use-japan-configuration": true,
@@ -89,8 +84,6 @@
       "schemaVersion": "1.12.0",
       "slug": "ios-translations-phase-2",
       "id": "ios-translations-phase-2",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
@@ -108,7 +101,6 @@
       "featureIds": [
         "translations-feature"
       ],
-      "probeSets": [],
       "outcomes": [],
       "branches": [
         {
@@ -122,7 +114,6 @@
           "features": [
             {
               "featureId": "translations-feature",
-              "enabled": true,
               "value": {
                 "languagePickerEnabled": true
               }
@@ -152,8 +143,6 @@
       "schemaVersion": "1.12.0",
       "slug": "ios-worldcup-feature-1512",
       "id": "ios-worldcup-feature-1512",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
@@ -171,7 +160,6 @@
       "featureIds": [
         "world-cup-widget-feature"
       ],
-      "probeSets": [],
       "outcomes": [],
       "branches": [
         {
@@ -185,7 +173,6 @@
           "features": [
             {
               "featureId": "world-cup-widget-feature",
-              "enabled": true,
               "value": {
                 "enabled": false
               }
@@ -203,7 +190,6 @@
           "features": [
             {
               "featureId": "world-cup-widget-feature",
-              "enabled": true,
               "value": {
                 "enabled": true
               }
@@ -233,8 +219,6 @@
       "schemaVersion": "1.12.0",
       "slug": "long-term-holdback-2025-h1-growth-ios",
       "id": "long-term-holdback-2025-h1-growth-ios",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
@@ -252,7 +236,6 @@
       "featureIds": [
         "no-feature-ios"
       ],
-      "probeSets": [],
       "outcomes": [],
       "branches": [
         {
@@ -266,7 +249,6 @@
           "features": [
             {
               "featureId": "no-feature-ios",
-              "enabled": true,
               "value": {}
             }
           ]
@@ -282,7 +264,6 @@
           "features": [
             {
               "featureId": "no-feature-ios",
-              "enabled": true,
               "value": {}
             }
           ]
@@ -310,8 +291,6 @@
       "schemaVersion": "1.12.0",
       "slug": "shake-to-summarize-mistral-rollout-languages",
       "id": "shake-to-summarize-mistral-rollout-languages",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
@@ -331,7 +310,6 @@
         "summarizer-app-attest-auth-feature",
         "summarizer-language-expansion-feature"
       ],
-      "probeSets": [],
       "outcomes": [],
       "branches": [
         {
@@ -345,7 +323,6 @@
           "features": [
             {
               "featureId": "hosted-summarizer-feature",
-              "enabled": true,
               "value": {
                 "enabled": true,
                 "toolbarEntrypoint": true,
@@ -354,14 +331,12 @@
             },
             {
               "featureId": "summarizer-app-attest-auth-feature",
-              "enabled": true,
               "value": {
                 "enabled": true
               }
             },
             {
               "featureId": "summarizer-language-expansion-feature",
-              "enabled": true,
               "value": {
                 "enabled": true,
                 "supportedLocales": [
