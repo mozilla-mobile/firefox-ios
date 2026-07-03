@@ -156,6 +156,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
+        // Keep the selected tab cell hidden for the whole animation so it minimizes into an empty
+        // grid square
+        let tabDisplayView = panelViewController.tabDisplayView
+        tabDisplayView.minimizingTabUUID = selectedTab.tabUUID
+
         let bvcSnapshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
 
         // cropping the screenshot
@@ -187,16 +192,16 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         // Don't block the UI rendering with the animation to make the snapshotting code more performant
 
-        let collectionView = panelViewController.tabDisplayView.collectionView
+        let collectionView = tabDisplayView.collectionView
         guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
               let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
         else {
+            tabDisplayView.minimizingTabUUID = nil
             context.containerView.addSubview(destinationController.view)
             context.completeTransition(true)
             return
         }
 
-        var tabCell: ExperimentTabCell?
         let theme = self.retrieveTheme()
 
         if let indexPath = dataSource.indexPath(for: item) {
@@ -204,11 +209,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
             collectionView.layoutIfNeeded()
             if let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell {
-                tabCell = cell
                 cellFrame = cell.convert(cell.backgroundHolder.bounds, to: nil)
                 cell.isHidden = true
-                cell.setUnselectedState(theme: theme)
-                cell.alpha = UX.clearAlpha
             }
         }
         // Animate
@@ -217,24 +219,24 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         self.performPresentationAnimation(
             cellFrame: cellFrame,
-            tabCell: tabCell,
             bvcSnapshot: bvcSnapshot,
             collectionView: collectionView,
             backgroundView: backgroundView,
             context: context,
             selectedTab: selectedTab,
+            tabDisplayView: tabDisplayView,
             theme: theme
         )
     }
 
     private func performPresentationAnimation(
         cellFrame: CGRect?,
-        tabCell: ExperimentTabCell?,
-        bvcSnapshot: UIView,
+        bvcSnapshot: UIImageView,
         collectionView: UICollectionView,
         backgroundView: UIView,
         context: UIViewControllerContextTransitioning,
         selectedTab: Tab,
+        tabDisplayView: TabDisplayView,
         theme: Theme
     ) {
         let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
@@ -249,25 +251,36 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             backgroundView.alpha = UX.clearAlpha
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak tabCell] in
-            tabCell?.isHidden = false
-            UIView.animate(withDuration: 0.1) {
-                tabCell?.alpha = UX.opaqueAlpha
-            }
-        }
-
         animator.addCompletion { _ in
+            let settledImage = bvcSnapshot.image
             backgroundView.removeFromSuperview()
             bvcSnapshot.removeFromSuperview()
+            tabDisplayView.minimizingTabUUID = nil
+            self.revealSelectedCell(
+                in: collectionView,
+                selectedTab: selectedTab,
+                settledImage: settledImage,
+                theme: theme
+            )
             context.completeTransition(true)
-            self.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
         }
         animator.startAnimation()
     }
 
-    private func unhideCellBorder(tabCell: ExperimentTabCell?, isPrivate: Bool, theme: Theme) {
-        guard let tab = tabCell else { return }
-        tab.setSelectedState(isPrivate: isPrivate, theme: theme)
+    private func revealSelectedCell(
+        in collectionView: UICollectionView,
+        selectedTab: Tab,
+        settledImage: UIImage?,
+        theme: Theme
+    ) {
+        guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
+              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource),
+              let indexPath = dataSource.indexPath(for: item),
+              let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
+        else { return }
+        cell.syncScreenshotForAnimation(settledImage)
+        cell.isHidden = false
+        cell.setSelectedState(isPrivate: selectedTab.isPrivate, theme: theme)
     }
 
     private func runDismissalAnimation(
