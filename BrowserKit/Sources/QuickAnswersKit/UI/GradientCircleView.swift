@@ -47,10 +47,11 @@ final class GradientCircleView: UIView, ThemeApplicable {
             origin: .zero,
             size: CGSize(
                 width: bounds.width,
-                height: bounds.width
+                height: bounds.height
             )
         )
-        gradientLayer.cornerRadius = bounds.width / 2
+        let dimension = min(bounds.width, bounds.height)
+        gradientLayer.cornerRadius = dimension / 2.5
     }
 
     func startAnimating() {
