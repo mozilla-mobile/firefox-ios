@@ -19,7 +19,9 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
         static let faviconCornerRadius: CGFloat = faviconSize / 2.0
     }
 
-    private let thumbnailImageView: HeroImageView = .build()
+    private let thumbnailImageView: HeroImageView = .build {
+        $0.layer.cornerRadius = UX.thumbnailCornerRadius
+    }
     private let faviconImageView: FaviconImageView = .build {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -70,20 +72,18 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
 
     // MARK: - Configuration
     func configure(with item: SearchResult.Source) {
-        if let thumbnailURLString = item.thumbnailURL?.absoluteString {
-            let heroImageViewModel = DefaultHeroImageViewModel(
-                urlStringRequest: thumbnailURLString,
-                generalCornerRadius: UX.thumbnailCornerRadius,
-                faviconCornerRadius: UX.faviconCornerRadius,
-                faviconBorderWidth: UX.thumbnailBorderWidth,
-                heroImageSize: .zero,
-                fallbackFaviconSize: CGSize(width: UX.faviconSize, height: UX.faviconSize)
-            )
-            thumbnailImageView.setHeroImage(heroImageViewModel)
-        }
+        let heroImageViewModel = DefaultHeroImageViewModel(
+            urlStringRequest: item.thumbnailURL?.absoluteString ?? item.url?.absoluteString ?? "",
+            generalCornerRadius: UX.thumbnailCornerRadius,
+            faviconCornerRadius: UX.faviconCornerRadius,
+            faviconBorderWidth: UX.thumbnailBorderWidth,
+            heroImageSize: .zero,
+            fallbackFaviconSize: CGSize(width: UX.faviconSize, height: UX.faviconSize)
+        )
+        thumbnailImageView.setHeroImage(heroImageViewModel)
         faviconImageView.setFavicon(
             FaviconImageViewModel(
-                siteURLString: item.faviconURL?.absoluteString,
+                siteURLString: item.faviconURL?.absoluteString ?? item.url?.absoluteString,
                 faviconCornerRadius: UX.faviconCornerRadius
             )
         )
@@ -107,6 +107,7 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
             faviconBorderColor: theme.colors.shadowStrong
         )
         thumbnailImageView.updateHeroImageTheme(with: heroImageColors)
+        thumbnailImageView.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textSecondary
     }
 }
