@@ -161,14 +161,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         let tabDisplayView = panelViewController.tabDisplayView
         tabDisplayView.minimizingTabUUID = selectedTab.tabUUID
 
-        let bvcSnapshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
+        // Source from the tab screenshot so the full card survives going off screen
+        let sourceFrame = browserVC.tabTrayAnimationSourceFrame
+        let snapshotImage = sourceFrame != nil
+            ? (selectedTab.screenshot ?? browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
+            : browserVC.view.screenshot(quality: UX.bvcScreenshotQuality)
+        let bvcSnapshot = UIImageView(image: snapshotImage)
 
-        // cropping the screenshot
-        var cellFrame = browserVC.tabTrayAnimationSourceFrame ?? browserVC.view.frame
-        let tempCGImage = bvcSnapshot.image?.cgImage
-        let croppedCGImage = tempCGImage?.cropping(to: cellFrame)
-        bvcSnapshot.image = UIImage(cgImage: croppedCGImage!)
-
+        var cellFrame = sourceFrame ?? browserVC.view.frame
         bvcSnapshot.contentMode = .scaleAspectFill
         bvcSnapshot.frame = cellFrame
         browserVC.tabTrayAnimationSourceFrame = nil
