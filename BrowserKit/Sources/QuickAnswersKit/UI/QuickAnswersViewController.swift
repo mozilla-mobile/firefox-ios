@@ -224,7 +224,7 @@ public final class QuickAnswersViewController: UIViewController,
         viewModel.dismiss()
         navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
     }
-    
+
     private func triggerHaptic() {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.prepare()
