@@ -220,6 +220,7 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     private func dismiss(with url: URL?) {
+        triggerHaptic()
         viewModel.dismiss()
         navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
     }
