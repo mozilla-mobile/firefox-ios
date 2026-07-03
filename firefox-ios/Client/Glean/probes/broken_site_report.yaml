@@ -134,7 +134,9 @@ broken_site_report.tab_info.antitracking:
   block_list:
     type: string
     description: |
-      The active content-blocker list for the tab ("basic" or "strict").
+      Which content-blocking rule set is active for the tab: a single value,
+      one of "basic" or "strict" (not a list of blocked items; those are in
+      blocked_origins). Named block_list to match the cross-platform schema.
     data_sensitivity:
       - technical
     lifetime: ping
