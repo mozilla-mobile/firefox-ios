@@ -3,30 +3,39 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Foundation
+import Redux
 import Shared
 import UIKit
+import WebCompatReporterKit
 
-/// Placeholder bottom sheet presented from the main menu "Report a Website Issue" entry.
-/// The full reporting form is implemented in FXIOS-16180; this shell only establishes the
-/// navigation route and presentation so the menu entry has a destination.
-final class WebCompatReportViewController: UIViewController, Themeable {
+@MainActor
+protocol WebCompatReportCoordinatorDelegate: AnyObject {
+    /// The user asked to dismiss the report sheet; the coordinator owns the dismissal.
+    func webCompatReportViewControllerDidFinish()
+}
+
+/// Store-connected container for the "Report a Website Issue" bottom sheet.
+/// It presents the store-agnostic `WebCompatReportSheetViewController` from
+/// `WebCompatReporterKit` as its root, subscribes to `WebCompatReporterState`,
+/// maps the state to the sheet's view model, and forwards the sheet's close and
+/// preview intents to Redux and the coordinator. The sheet view controller never
+/// dismisses or navigates itself.
+final class WebCompatReportViewController: UINavigationController,
+                                           StoreSubscriber,
+                                           Themeable,
+                                           WebCompatReportSheetDelegate {
+    typealias SubscriberStateType = WebCompatReporterState
+
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
 
+    weak var reportCoordinator: WebCompatReportCoordinatorDelegate?
+
     private let windowUUID: WindowUUID
     private let reportedURL: URL?
-
-    private let titleLabel: UILabel = .build { label in
-        label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Bold.title3.scaledFont()
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.text = .MainMenu.ToolsSection.ReportBrokenSite
-        label.accessibilityTraits.insert(.header)
-    }
+    private let sheetViewController: WebCompatReportSheetViewController
 
     init(
         windowUUID: WindowUUID,
@@ -38,7 +47,14 @@ final class WebCompatReportViewController: UIViewController, Themeable {
         self.reportedURL = reportedURL
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        let initialState = WebCompatReporterState(windowUUID: windowUUID)
+        self.sheetViewController = WebCompatReportSheetViewController(
+            viewModel: WebCompatReportViewController.makeViewModel(from: initialState),
+            theme: themeManager.getCurrentTheme(for: windowUUID)
+        )
         super.init(nibName: nil, bundle: nil)
+        setViewControllers([sheetViewController], animated: false)
+        sheetViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -47,23 +63,84 @@ final class WebCompatReportViewController: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLayout()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        subscribeToRedux()
+        store.dispatch(WebCompatReporterViewAction(
+            url: reportedURL?.absoluteString,
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.viewDidLoad
+        ))
     }
 
-    private func setupLayout() {
-        view.addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
-        ])
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        unsubscribeFromRedux()
     }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ComponentAction(
+            windowUUID: windowUUID,
+            actionType: ComponentActionType.addComponent,
+            component: .webCompatReporter
+        ))
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            $0.select { appState in
+                WebCompatReporterState(appState: appState, uuid: uuid)
+            }
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(ComponentAction(
+            windowUUID: windowUUID,
+            actionType: ComponentActionType.removeComponent,
+            component: .webCompatReporter
+        ))
+        store.unsubscribe(self)
+    }
+
+    func newState(state: WebCompatReporterState) {
+        sheetViewController.configure(with: WebCompatReportViewController.makeViewModel(from: state))
+    }
+
+    // MARK: - View model
+
+    private static func makeViewModel(from state: WebCompatReporterState) -> WebCompatReportViewModel {
+        return WebCompatReportViewModel(
+            navigationTitle: .MainMenu.ToolsSection.ReportBrokenSite,
+            closeButtonAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
+            previewButtonTitle: .WebCompatReporter.Sheet.PreviewButton,
+            isPreviewEnabled: state.canPreview
+        )
+    }
+
+    // MARK: - WebCompatReportSheetDelegate
+
+    func webCompatReportSheetDidTapClose() {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.cancel
+        ))
+        reportCoordinator?.webCompatReportViewControllerDidFinish()
+    }
+
+    func webCompatReportSheetDidTapPreview() {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.preview
+        ))
+    }
+
+    // MARK: - Themeable
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
-        titleLabel.textColor = theme.colors.textPrimary
+        navigationBar.tintColor = theme.colors.actionPrimary
+        sheetViewController.applyTheme(theme: theme)
     }
 }
