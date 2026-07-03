@@ -865,6 +865,7 @@
 		81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */; };
 		81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F02C88F02500F4BE98 /* MainMenuViewControllerTests.swift */; };
 		81DAB2F32C88F14400F4BE98 /* MainMenuCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F22C88F14400F4BE98 /* MainMenuCoordinatorTests.swift */; };
+		FC16179B00000000000000B1 /* WebCompatReportViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */; };
 		81DAB2F72C89004D00F4BE98 /* MainMenuMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F62C89004D00F4BE98 /* MainMenuMiddlewareTests.swift */; };
 		81DAB2F92C8901AC00F4BE98 /* MainMenuStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F82C8901AC00F4BE98 /* MainMenuStateTests.swift */; };
 		81E9B6E82E2AB73400CE6FF6 /* MerinoStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */; };
@@ -9372,6 +9373,7 @@
 		81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerState.swift; sourceTree = "<group>"; };
 		81DAB2F02C88F02500F4BE98 /* MainMenuViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewControllerTests.swift; sourceTree = "<group>"; };
 		81DAB2F22C88F14400F4BE98 /* MainMenuCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuCoordinatorTests.swift; sourceTree = "<group>"; };
+		FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportViewControllerTests.swift; sourceTree = "<group>"; };
 		81DAB2F62C89004D00F4BE98 /* MainMenuMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuMiddlewareTests.swift; sourceTree = "<group>"; };
 		81DAB2F82C8901AC00F4BE98 /* MainMenuStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuStateTests.swift; sourceTree = "<group>"; };
 		81DF4C79AE53A2FCA08EEE9C /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = "da.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -11995,6 +11997,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		034784BA2E2690F600D04A84 /* TermsOfUse */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TermsOfUse; sourceTree = "<group>"; };
+		FC16179A00000000000000A1 /* WebCompat */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebCompat; sourceTree = "<group>"; };
 		5FE7F1852E781EB300B0AFEC /* Selectors */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Selectors; sourceTree = "<group>"; };
 		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PageScreens; sourceTree = "<group>"; };
 		8CF609282EA8D46E00F069B6 /* ActionExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ActionExtension; sourceTree = "<group>"; };
@@ -13819,6 +13822,7 @@
 			children = (
 				0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */,
 				81DAB2F22C88F14400F4BE98 /* MainMenuCoordinatorTests.swift */,
+				FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */,
 				81DAB2F62C89004D00F4BE98 /* MainMenuMiddlewareTests.swift */,
 				81DAB2F82C8901AC00F4BE98 /* MainMenuStateTests.swift */,
 				81DAB2F02C88F02500F4BE98 /* MainMenuViewControllerTests.swift */,
@@ -16267,6 +16271,7 @@
 			children = (
 				2140E4622E71FC240054173A /* RecordVisitObservationManager.swift */,
 				034784BA2E2690F600D04A84 /* TermsOfUse */,
+				FC16179A00000000000000A1 /* WebCompat */,
 				81A3F6EE2C2DAED500BDD86B /* MainMenu */,
 				1D7B78952ADF324E0011E9F2 /* Event Queue */,
 				8A1E3BE428CBBF1E003388C4 /* SearchEngines */,
@@ -17957,6 +17962,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				034784BA2E2690F600D04A84 /* TermsOfUse */,
+				FC16179A00000000000000A1 /* WebCompat */,
 				BCBE04E22E3A52D4004B6039 /* Summarize */,
 				ED85DD2C2DE669FF00487807 /* probes */,
 			);
@@ -20657,6 +20663,7 @@
 				C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */,
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
 				81DAB2F32C88F14400F4BE98 /* MainMenuCoordinatorTests.swift in Sources */,
+				FC16179B00000000000000B1 /* WebCompatReportViewControllerTests.swift in Sources */,
 				8A9E041F2D4D0B7A0022ED90 /* BookmarksSectionStateTests.swift in Sources */,
 				1D558A582BED7ECB001EF527 /* MockWindowManager.swift in Sources */,
 				C8DC90D22A067C6D0008832B /* MarkupAttributionUtilityTests.swift in Sources */,

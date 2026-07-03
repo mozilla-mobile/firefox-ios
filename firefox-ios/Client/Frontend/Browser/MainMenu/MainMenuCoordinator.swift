@@ -145,6 +145,9 @@ class MainMenuCoordinator: BaseCoordinator {
         case .printSheet:
             navigationHandler?.showPrintSheet()
 
+        case .reportBrokenSite:
+            presentReportBrokenSite(url: destination.url)
+
         case .shareSheet:
             navigationHandler?.showShareSheetForCurrentlySelectedTab()
 
@@ -211,6 +214,15 @@ class MainMenuCoordinator: BaseCoordinator {
     }
 
     // MARK: - Private helpers
+
+    private func presentReportBrokenSite(url: URL?) {
+        let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
+        if let sheetPresentationController = reportViewController.sheetPresentationController {
+            sheetPresentationController.detents = [.medium(), .large()]
+            sheetPresentationController.prefersGrabberVisible = true
+        }
+        router.present(reportViewController, animated: true, completion: nil)
+    }
 
     private func createMainMenuViewController() -> MainMenuViewController {
         let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID, profile: profile)

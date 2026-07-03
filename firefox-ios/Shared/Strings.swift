@@ -6104,6 +6104,11 @@ extension String {
                 value: "Off",
                 comment: "On the main menu, the label for the action that indicates that Reader view is turned off."
             )
+            public static let ReportBrokenSite = MZLocalizedString(
+                key: "", // MainMenu.ToolsSection.ReportBrokenSite.Title.v152
+                tableName: "MainMenu",
+                value: "Report a Website Issue",
+                comment: "On the main menu, the title for the action that lets the user report that the current website is broken or not working correctly.")
 
             public struct Translation {
                 public static let TranslatePageTitle = MZLocalizedString(
@@ -6182,6 +6187,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Summarize Page",
                     comment: "On the main menu, the accessibility label for the action that will summarize the content of the webpage.")
+                public static let ReportBrokenSite = MZLocalizedString(
+                    key: "", // MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v152
+                    tableName: "MainMenu",
+                    value: "Report a Website Issue",
+                    comment: "On the main menu, the accessibility label for the action that lets the user report that the current website is broken or not working correctly.")
                 public struct Translation {
                     public static let TranslatedPageTitle = MZLocalizedString(
                         key: "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145",
