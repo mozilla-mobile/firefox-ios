@@ -184,7 +184,7 @@ broken_site_report.tab_info.antitracking:
   is_private_browsing:
     type: boolean
     description: |
-      Whether the reported tab is in private browsing.
+      Whether the reported tab is in private browsing mode.
     data_sensitivity:
       - technical
     lifetime: ping
