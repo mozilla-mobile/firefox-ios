@@ -54,7 +54,8 @@ final class ErrorHandler {
 
     // MARK: - Search Errors
     func handleSearchError(_ error: ResultsServiceError) {
-        // TODO: - FXIOS-15573 Handle Search errors
+        guard error == .rateLimited else { return }
+        showPermissionAlert(title: "Rate Limited", message: "it woorks")
     }
 
     // MARK: - Private
