@@ -191,11 +191,13 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.contentView.configureTranscript(result.text)
                 }
             case .loadingSearchResult:
+                self?.triggerHaptic()
                 self?.contentView.configureSearching()
             case .showSearchResult(let result, let error):
                 if let error {
                     self?.errorHandler.handleSearchError(error)
                 } else {
+                    self?.triggerHaptic()
                     self?.contentView.configureAnswer(result.resultText)
                     self?.contentView.configureSources(result.sources) { [weak self] url in
                         self?.viewModel.recordCitationTapped()
@@ -220,6 +222,12 @@ public final class QuickAnswersViewController: UIViewController,
     private func dismiss(with url: URL?) {
         viewModel.dismiss()
         navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
+    }
+    
+    private func triggerHaptic() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.prepare()
+        generator.impactOccurred()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
