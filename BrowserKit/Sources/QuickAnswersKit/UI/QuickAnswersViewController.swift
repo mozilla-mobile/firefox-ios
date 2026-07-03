@@ -198,7 +198,7 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.contentView.configureAnswer(result.resultText)
+                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
                     self?.contentView.configureSources(result.sources) { [weak self] url in
                         self?.viewModel.recordCitationTapped()
                         self?.dismiss(with: url)

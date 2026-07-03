@@ -23,6 +23,9 @@ final class QuickAnswersViewModel {
     private var searchResultTask: Task<Void, Never>?
     var onStateChange: ((State) -> Void)?
 
+    /// The user-facing name of the model backing the request.
+    let modelDisplayName: String
+
     init(
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,
@@ -33,6 +36,7 @@ final class QuickAnswersViewModel {
     ) {
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
+        self.modelDisplayName = configFetcher.model.displayName
         do {
             self.service = try makeService(prefs, configFetcher)
         } catch {
