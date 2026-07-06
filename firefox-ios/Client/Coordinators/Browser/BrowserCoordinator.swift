@@ -36,6 +36,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
+                          WebCompatReportCoordinatorDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -632,6 +633,22 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func presentSiteProtections() {
         showETPMenu(sourceView: browserViewController.addressToolbarContainer)
+    }
+
+    func presentReportBrokenSite(url: URL?) {
+        let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
+        reportViewController.reportCoordinator = self
+        if let sheetPresentationController = reportViewController.sheetPresentationController {
+            sheetPresentationController.detents = [.large()]
+            sheetPresentationController.prefersGrabberVisible = true
+        }
+        router.present(reportViewController, animated: true, completion: nil)
+    }
+
+    // MARK: - WebCompatReportCoordinatorDelegate
+
+    func webCompatReportViewControllerDidFinish() {
+        router.dismiss(animated: true, completion: nil)
     }
 
     func presentSavePDFController() {
