@@ -1421,9 +1421,7 @@ class BrowserViewController: UIViewController,
                 return self?.newTabSettings
             }
         }
-        if true {
-            swipeUpTabWebViewPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
-        }
+        swipeUpTabWebViewPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
     }
 
     override func viewWillAppear(_ animated: Bool) {

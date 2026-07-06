@@ -4,9 +4,12 @@
 
 import UIKit
 import Common
+import Redux
 
 @MainActor
-class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
+class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber, FeatureFlaggable {
+    typealias SubscriberStateType = ToolbarState
+
     // MARK: - TODO make it weak
     private let tabPreview: SwipeUpTabWebViewPreview
     private let topBlurView: UIView
@@ -31,17 +34,58 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowUUID = windowUUID
+        super.init()
+        subscribeToRedux()
+    }
+
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("SwipeUpTabPreviewGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     func setupGesture(on view: UIView) {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
         view.addGestureRecognizer(gesture)
         gesture.delegate = self
+        gesture.isEnabled = isInteractiveGestureEnabled
         self.gesture = gesture
+    }
+
+    // MARK: - Redux
+    func subscribeToRedux() {
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return ToolbarState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    private func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: ToolbarState) {
+        gesture?.isEnabled = isInteractiveGestureEnabled
+    }
+
+    /// The interactive gesture is disabled when the swipe variant is enabled, since
+    /// `enabled_swipe` overrides the interactive gesture.
+    private var isInteractiveGestureEnabled: Bool {
+        return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayInteractive)
+            && !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
     }
 
     @objc
     private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        if !isInteractiveGestureEnabled { return }
         guard let tab = tabManager?.selectedTab else { return }
         switch gesture.state {
         case .began:
@@ -71,6 +115,9 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
             let fingerLocation = gesture.location(in: tabPreview)
             switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
             case .closeTab:
+                if !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayCloseTab) {
+                    fallthrough
+                }
                 UIView.animate(withDuration: 0.3) { [self] in
                     tabPreview.tossPreview()
                 } completion: { [self] _ in

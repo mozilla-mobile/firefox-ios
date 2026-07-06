@@ -65,6 +65,10 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
             for: addressToolbarContainer.semanticContentAttribute
         ) == .rightToLeft
     }
+    
+    private var isSwipeEnabled: Bool {
+        return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
+    }
 
     // MARK: - Init
     init(
@@ -153,7 +157,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
             enableSwipeDownGestureRecognizer()
         }
 
-        if !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
+        if !isSwipeEnabled {
             disableSwipeUpGestureRecognizer()
             disableSwipeDownGestureRecognizer()
         }
@@ -240,6 +244,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
     @objc
     @MainActor
     private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        if !isSwipeEnabled { return }
         let direction = gesture.direction
 
         if direction == .up && toolbarState?.toolbarPosition == .top {
