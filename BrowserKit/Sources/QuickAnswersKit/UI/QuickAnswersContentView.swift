@@ -49,7 +49,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.alpha = 0.0
     }
     private let footerLabel: UILabel = .build {
-        $0.font = FXFontStyles.Regular.body.scaledFont()
+        $0.font = FXFontStyles.Regular.footnote.scaledFont()
         $0.numberOfLines = 0
         $0.alpha = 0.0
         $0.adjustsFontForContentSizeCategory = true
