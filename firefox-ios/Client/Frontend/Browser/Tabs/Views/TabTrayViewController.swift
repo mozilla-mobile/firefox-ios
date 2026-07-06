@@ -457,7 +457,12 @@ final class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
         newTabButton.tintColor = theme.colors.iconPrimary
-        doneButton.tintColor = theme.colors.iconPrimary
+        // Nova uses iconInverted token for the iOS 26 glass checkmark, it is nil when Nova design is disabled
+        if #available(iOS 26, *) {
+            doneButton.tintColor = theme.colors.iconInverted ?? theme.colors.iconPrimary
+        } else {
+            doneButton.tintColor = theme.colors.iconPrimary
+        }
         syncTabButton.tintColor = theme.colors.iconPrimary
         panelContainer.backgroundColor = theme.colors.layer3
 
@@ -483,7 +488,12 @@ final class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
         deleteButton.tintColor = swipeTheme.colors.iconPrimary
         newTabButton.tintColor = swipeTheme.colors.iconPrimary
-        doneButton.tintColor = swipeTheme.colors.iconPrimary
+        // Nova uses iconInverted token for the iOS 26 glass checkmark, it is nil when Nova design is disabled
+        if #available(iOS 26, *) {
+            doneButton.tintColor = swipeTheme.colors.iconInverted ?? swipeTheme.colors.iconPrimary
+        } else {
+            doneButton.tintColor = swipeTheme.colors.iconPrimary
+        }
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
         panelContainer.backgroundColor = swipeTheme.colors.layer3
 

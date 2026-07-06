@@ -131,6 +131,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var iconSecondary: UIColor { base.iconSecondary }
     var iconAccent: UIColor { base.iconAccent }
     var iconOnColor: UIColor { base.iconOnColor }
+    var iconInverted: UIColor? { base.iconInverted }
     var iconCritical: UIColor { base.iconCritical }
     var iconSpinner: UIColor { base.iconSpinner }
     var iconAccentViolet: UIColor { base.iconAccentViolet }
