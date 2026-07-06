@@ -403,7 +403,7 @@ class ToolbarButton: UIButton,
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
-        //Nova uses iconPrivate token, it is nil when Nova design is disabled
+        // Nova uses iconPrivate token, it is nil when Nova design is disabled
         badgeImageView?.tintColor = maskImageView == nil ? .clear : (colors.iconPrivate ?? colors.actionInformation)
         maskImageView?.tintColor = colors.layer1
         setNeedsUpdateConfiguration()
