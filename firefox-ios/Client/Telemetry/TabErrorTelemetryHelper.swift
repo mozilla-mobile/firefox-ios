@@ -19,8 +19,8 @@ final class TabErrorTelemetryHelper {
     private let logger: Logger
 
     /// Threshold (≥) for which we fire a tab loss event.
-    private let tabLossCountThreshold = 3
-    private let significantLossPercentThreshold = 0.20
+    private static let tabLossCountThreshold = 3
+    private static let significantLossPercentThreshold = 0.20
 
     private enum EntryPoint {
         case backgroundForeground
@@ -47,11 +47,11 @@ final class TabErrorTelemetryHelper {
             }
         }
     }
-
-    private init(logger: Logger = DefaultLogger.shared,
-                 telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
-                 windowManager: WindowManager = AppContainer.shared.resolve(),
-                 defaults: UserDefaultsInterface = UserDefaults.standard) {
+    
+    init(logger: Logger = DefaultLogger.shared,
+         telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         defaults: UserDefaultsInterface = UserDefaults.standard) {
         self.telemetryWrapper = telemetryWrapper
         self.defaults = defaults
         self.windowManager = windowManager
@@ -112,9 +112,10 @@ final class TabErrorTelemetryHelper {
             return
         }
 
-        if isTabLossEvent(expectedTabCount: expectedTabCount, currentTabCount: currentTabCount) {
-            let significantEvent = isSignificantTabLossEvent(expectedTabCount: expectedTabCount,
-                                                             currentTabCount: currentTabCount)
+        if Self.tabDiscrepancyDetected(expectedTabCount: expectedTabCount,
+                                       currentTabCount: currentTabCount) {
+            let significantEvent = Self.isSignificantTabLossEvent(expectedTabCount: expectedTabCount,
+                                                                  currentTabCount: currentTabCount)
             sendTelemetryTabLossDetectedEvent(
                 expected: expectedTabCount,
                 actual: currentTabCount,
@@ -124,7 +125,7 @@ final class TabErrorTelemetryHelper {
         }
     }
 
-    func isTabLossEvent(expectedTabCount: Int, currentTabCount: Int) -> Bool {
+    static func tabDiscrepancyDetected(expectedTabCount: Int, currentTabCount: Int) -> Bool {
         if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
             // Potential tab loss bug detected. Log a MetricKit error.
             return true
@@ -132,7 +133,7 @@ final class TabErrorTelemetryHelper {
         return false
     }
 
-    func isSignificantTabLossEvent(expectedTabCount: Int, currentTabCount: Int) -> Bool {
+    static func isSignificantTabLossEvent(expectedTabCount: Int, currentTabCount: Int) -> Bool {
         // Here we determine whether the discrepancy is a minor deviation from the expected tab count
         // or a major loss of the user's tabs. The criteria for "major loss" is currently considered
         // a scenario where: the missing tab count is ≥ our threshold (3) _and_ comprises a significant
