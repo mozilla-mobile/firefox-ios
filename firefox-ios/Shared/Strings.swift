@@ -4718,6 +4718,20 @@ extension String {
                 comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
             )
         }
+        public struct IssueSection {
+            public static let Title = MZLocalizedString(
+                key: "", // WebCompatReporter.IssueSection.Title.v152
+                tableName: "WebCompatReporter",
+                value: "Site Issue",
+                comment: "Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form."
+            )
+            public static let CategoryPlaceholder = MZLocalizedString(
+                key: "", // WebCompatReporter.IssueSection.CategoryPlaceholder.v152
+                tableName: "WebCompatReporter",
+                value: "Choose issue type…",
+                comment: "Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form."
+            )
+        }
         public struct Sheet {
             public static let PreviewButton = MZLocalizedString(
                 key: "", // WebCompatReporter.Sheet.PreviewButton.v152

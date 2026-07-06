@@ -289,21 +289,21 @@ final class WebCompatReporterStateTests: XCTestCase {
 
     func test_category_subOptionIDs_matchGleanReasonKeys() {
         XCTAssertEqual(
-            WebCompatIssueCategory.siteNotUsable.subOptionIDs,
+            WebCompatIssueCategory.siteNotUsable.subOptions.map(\.rawValue),
             ["browser_blocked", "page_not_loading", "missing_items", "buttons_not_working"]
         )
         XCTAssertEqual(
-            WebCompatIssueCategory.designBroken.subOptionIDs,
+            WebCompatIssueCategory.designBroken.subOptions.map(\.rawValue),
             ["images_not_loaded", "items_overlapped", "items_misaligned", "items_not_visible"]
         )
         XCTAssertEqual(
-            WebCompatIssueCategory.videoOrAudio.subOptionIDs,
+            WebCompatIssueCategory.videoOrAudio.subOptions.map(\.rawValue),
             ["no_video", "no_audio", "media_controls_broken", "playback_fails", "captions_missing"]
         )
     }
 
     func test_category_other_hasNoSubOptions() {
-        XCTAssertTrue(WebCompatIssueCategory.other.subOptionIDs.isEmpty)
+        XCTAssertTrue(WebCompatIssueCategory.other.subOptions.isEmpty)
     }
 
     // MARK: - Private Helpers
