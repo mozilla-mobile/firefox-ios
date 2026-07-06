@@ -190,7 +190,7 @@ class WebContextMenuActionsProvider {
     func addGoogleLens() {
         actions.append(UIAction(
             title: .ContextMenuGoogleLens,
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Medium.logoGoogleLens),
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.logoGoogleLens),
             identifier: UIAction.Identifier("linkContextMenu.googleLens")
         ) { _ in })
     }
