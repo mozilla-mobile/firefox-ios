@@ -27,7 +27,8 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         static let accessoryImageViewSize: CGFloat = 24
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4
-        static let iPadPadding: CGFloat = 64
+        // Horizontal padding around the content used to cap the pill's fill width
+        static let contentHorizontalPadding: CGFloat = 64
     }
 
     // MARK: - Properties
@@ -121,31 +122,16 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         containerView.addSubview(contentStackView)
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        // Use idiom-specific constraints only; iPhone width is updated externally per layout pass.
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isiOS26 = if #available(iOS 26.0, *) { true } else { false }
-
-        if #available(iOS 26.0, *) {
-            sharesBackground = false
-            contentStackView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        }
-
         let leadingConstraint: NSLayoutConstraint
         let trailingConstraint: NSLayoutConstraint
-        if isiOS26, isiPad {
-            // iPad iOS 26: fixed horizontal padding inside the container.
-            leadingConstraint = contentStackView.leadingAnchor
-                .constraint(equalTo: containerView.leadingAnchor, constant: UX.iPadPadding)
-            trailingConstraint = contentStackView.trailingAnchor
-                .constraint(equalTo: containerView.trailingAnchor, constant: -UX.iPadPadding)
-        } else if isiOS26 {
-            // iPhone iOS 26: centered content clamped inside the externally-sized container.
-            leadingConstraint = contentStackView.leadingAnchor
-                .constraint(greaterThanOrEqualTo: containerView.leadingAnchor)
-            trailingConstraint = contentStackView.trailingAnchor
-                .constraint(lessThanOrEqualTo: containerView.trailingAnchor)
+        if #available(iOS 26.0, *) {
+            sharesBackground = false
+            // Content is centered and clamped inside a container whose width is set externally in `applyFillWidth`
+            contentStackView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+            leadingConstraint = contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor)
+            trailingConstraint = contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
         } else {
-            // Pre-iOS 26: content fills the container.
+            // Pre-iOS 26: content fills the container (centered by the toolbar's flexible spaces).
             leadingConstraint = contentStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
             trailingConstraint = contentStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         }
@@ -164,16 +150,15 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         self.customView = containerView
     }
 
-    /// Sizes the pill to the toolbar space reported by `AccessoryViewProvider`, capped so it stays a
-    /// comfortable width around its content. Passing `nil` (iPad / pre-26) sizes the pill to content via the setup
-    /// constraints. No-ops on unchanged values so it's safe to call every layout pass.
+    /// Sizes the pill to the toolbar space reported by `AccessoryViewProvider`, capped so it stays a comfortable
+    /// width around its content. Passing `nil` (pre-26) sizes the pill to content via the setup constraints.
     func applyFillWidth(_ availableWidth: CGFloat?) {
         guard let availableWidth, availableWidth > 0 else {
             fillWidthConstraint.isActive = false
             return
         }
 
-        let width = min(availableWidth, contentWidth + UX.iPadPadding * 2)
+        let width = min(availableWidth, contentWidth + UX.contentHorizontalPadding * 2)
         if fillWidthConstraint.constant != width {
             fillWidthConstraint.constant = width
         }

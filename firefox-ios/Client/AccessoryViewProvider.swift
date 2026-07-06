@@ -35,6 +35,7 @@ final class AccessoryViewProvider: UIView,
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     private var autofillAccessoryView: AutofillAccessoryViewButtonItem?
+    private var currentAccessoryViewWidth: CGFloat = 0
     let windowUUID: WindowUUID
 
     // Stub closures - these closures will be given as selectors in a future task
@@ -220,11 +221,10 @@ final class AccessoryViewProvider: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// Toolbar width left for the autofill pill once the side buttons and their spacing are removed,
-    /// recomputed each layout pass. iPhone-only (iOS 26); `nil` elsewhere so the pill sizes to content.
-    /// The pill caps this to a comfortable width around its content.
+    /// Toolbar width left for the autofill pill once the side buttons and their spacing are removed.
+    /// Driven by geometry rather than device type
     private var autofillFillWidth: CGFloat? {
-        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone else { return nil }
+        guard #available(iOS 26.0, *) else { return nil }
 
         let sideButtonsWidth = (navigationButtonsBarItem.customView?.bounds.width ?? 0)
                              + (doneButton.customView?.bounds.width ?? 0)
@@ -235,6 +235,9 @@ final class AccessoryViewProvider: UIView,
     // MARK: - Lifecycle
     override func layoutSubviews() {
         super.layoutSubviews()
+        guard bounds.width != currentAccessoryViewWidth else { return }
+
+        currentAccessoryViewWidth = bounds.width
         autofillAccessoryView?.applyFillWidth(autofillFillWidth)
     }
 
@@ -266,6 +269,9 @@ final class AccessoryViewProvider: UIView,
         }
         configureToolbarItems()
         layoutIfNeeded()
+
+        // Update pill width after reload view
+        autofillAccessoryView?.applyFillWidth(autofillFillWidth)
     }
 
     private func setupSpacer(_ spacer: UIView, width: CGFloat) {
