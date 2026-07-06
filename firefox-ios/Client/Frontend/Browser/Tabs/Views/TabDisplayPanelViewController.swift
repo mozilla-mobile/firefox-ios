@@ -119,7 +119,7 @@ final class TabDisplayPanelViewController: UIViewController,
 
         shouldShowFadeView()
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         unsubscribeFromRedux()
