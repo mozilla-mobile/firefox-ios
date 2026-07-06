@@ -8,7 +8,7 @@
 "New Tab" = "Նոր ներդիր";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox-ն օգտագործում է Ձեր տեսախցիկը՝ սկանավորելու QR կոդերը և լուսանկարելու ու տեսանկարելու համար:";
+"NSCameraUsageDescription" = "Firefox-ը կարող է օգտագործել Ձեր տեսախցիկը՝ սկանավորելու QR կոդերը և լուսանկարելու ու տեսանկարելու համար:";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox-ը պահանջում է Face ID՝ Ձեր պահված գաղտնաբառերին և վճարման եղանակներին հասանելիություն ունենալու համար:";

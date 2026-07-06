@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Ajuden a diagnosticar i solucionar problemes del navegador.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "El %@ millorarà les funcions, el rendiment i l’estabilitat entre actualitzacions. Els canvis apliquen de forma remota.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "El %@ enviarà al motor de cerca tot allò que escriviu a la barra d'adreces.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla s'esforça per recollir només les dades necessàries per oferir i millorar el %@ per a tothom.";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla s'esforça per recollir només les dades necessàries per oferir i millorar el %@ per a tothom.";
+
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "El %@ pot instal·lar i executar estudis de tant en tant.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "El %@ selecciona usuaris aleatòriament per a provar funcions i poder millorar-ne la qualitat per a tothom.";
 
 /* Title for section in settings menu */
 "Settings.general" = "General";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Mostra consells a la pantalla d'inici";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Permet les millores remotes";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Estudis";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Permet estudis de funcionalitat";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Utilitza el Touch ID per desblocar l'aplicació";

@@ -26,18 +26,47 @@ struct DefaultResultsServiceTests {
 
         let result = try await subject.fetchResults(for: "What is the weather?")
 
-        // Verify the request message
-        let firstMessage = client.lastMessages.first as? QuickAnswersMessage
-        #expect(client.lastMessages.count == 1)
-        #expect(firstMessage?.content == "What is the weather?")
-        #expect(firstMessage?.role == .user)
-
         // Verify the search result
         #expect(result.resultText == "This is a quick answer")
         #expect(result.sources.count == 1)
         let source = result.sources.first
         #expect(source?.title == "Weather Source")
         #expect(client.requestChatCompletionCallCount == 1)
+    }
+
+    @Test
+    func test_fetchResults_withInstructions_sendsSystemAndUserMessages() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWith = ["Answer"]
+        let instructions = "You are a helpful assistant."
+        let config = QuickAnswersConfig(model: .exa, instructions: instructions)
+        let subject = createSubject(client: client, config: config)
+
+        _ = try await subject.fetchResults(for: "What is the weather?")
+
+        let systemMessage = client.lastMessages.first as? QuickAnswersMessage
+        let userMessage = client.lastMessages.last as? QuickAnswersMessage
+
+        #expect(client.lastMessages.count == 2)
+        #expect(systemMessage?.role == .system)
+        #expect(systemMessage?.content == instructions)
+        #expect(userMessage?.role == .user)
+        #expect(userMessage?.content == "What is the weather?")
+    }
+
+    @Test
+    func test_fetchResults_withoutInstructions_sendsUserMessageOnly() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWith = ["Answer"]
+        let config = QuickAnswersConfig(model: .liner)
+        let subject = createSubject(client: client, config: config)
+
+        _ = try await subject.fetchResults(for: "What is the weather?")
+
+        let userMessage = client.lastMessages.first as? QuickAnswersMessage
+        #expect(client.lastMessages.count == 1)
+        #expect(userMessage?.role == .user)
+        #expect(userMessage?.content == "What is the weather?")
     }
 
     @Test
@@ -147,7 +176,8 @@ struct DefaultResultsServiceTests {
         client: LiteLLMClientProtocol,
         config: QuickAnswersConfig = QuickAnswersConfig()
     ) -> DefaultResultsService {
-        let subject = DefaultResultsService(client: client, config: config)
+        let configFetcher = MockQuickAnswersConfigFetcher(configToReturn: config)
+        let subject = DefaultResultsService(client: client, configFetcher: configFetcher)
         testHelper.trackForMemoryLeaks(subject)
         return subject
     }

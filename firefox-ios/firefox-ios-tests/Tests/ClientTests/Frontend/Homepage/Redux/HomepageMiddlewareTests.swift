@@ -33,8 +33,9 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_init_setsUpNotifications() {
         _ = createSubject()
 
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 9)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           UIApplication.didEnterBackgroundNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
                                                            .ProfileDidFinishSyncing,
@@ -64,6 +65,28 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionTypes = actionsCalled.compactMap { $0.actionType as? HomepageMiddlewareActionType }
 
         XCTAssertEqual(actionTypes, [.didBecomeActive])
+        XCTAssertEqual(actionsCalled.map(\.windowUUID), [.XCTestDefaultUUID])
+    }
+
+    func test_didEnterBackgroundNotification_dispatchesBackgroundAction() throws {
+        let mockWindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
+        mockWindowManager.overrideWindows = true
+        let subject = createSubject(windowManager: mockWindowManager)
+        mockNotificationCenter.notifiableListener = subject
+        let dispatchExpectation = XCTestExpectation(description: "Homepage background action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let actionTypes = actionsCalled.compactMap { $0.actionType as? HomepageMiddlewareActionType }
+
+        XCTAssertEqual(actionTypes, [.didEnterBackground])
         XCTAssertEqual(actionsCalled.map(\.windowUUID), [.XCTestDefaultUUID])
     }
 

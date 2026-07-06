@@ -397,6 +397,20 @@ class WindowManagerTests: XCTestCase {
         XCTAssertNil(tabManager)
     }
 
+    func test_isWindowConfigured_returnsTrueForConfiguredWindow() {
+        let subject = createSubject()
+        let uuid = WindowUUID.XCTestDefaultUUID
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: uuid)
+
+        XCTAssertTrue(subject.windows.keys.contains(uuid))
+    }
+
+    func test_isWindowConfigured_returnsFalseForUnconfiguredWindow() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.windows.keys.contains(.unavailable))
+    }
+
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {

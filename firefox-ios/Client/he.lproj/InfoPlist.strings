@@ -8,7 +8,7 @@
 "New Tab" = "לשונית חדשה";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "‏Firefox משתמש במצלמה שלך כדי לסרוק קודי QR, לצלם תמונות ולהקליט סרטונים.";
+"NSCameraUsageDescription" = "‏Firefox יכול להשתמש במצלמה שלך כדי לסרוק קודי QR או לצלם תמונות ולהסריט סרטונים.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox‏ דורש שימוש ב־Face ID כדי לגשת לססמאות ולאמצעי התשלום השמורים שלך.";

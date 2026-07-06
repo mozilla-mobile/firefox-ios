@@ -145,4 +145,29 @@ class BrowsingTest: BaseTestCase {
             waitForNoExistence(collapsedTruncatedurltextTextView)
         }
     }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4104980
+    func testXssAccountTakeover() {
+        loadWebPage("https://firefoxuxss.v12.sh")
+        waitForWebPageLoad()
+
+        waitForExistence(app.otherElements["Firefox Focus UXSS POC"])
+        let buttons = [ "Google", "X", "YouTube", "Reddit" ]
+        buttons.forEach { button in
+            waitForExistence(app.buttons[button])
+        }
+
+        for _ in 0...5 {
+            app.buttons["X"].tap()
+            waitForWebPageLoad()
+            app.buttons["Back"].tap()
+            waitForWebPageLoad()
+            waitForExistence(app.otherElements["Firefox Focus UXSS POC"])
+        }
+
+        app.buttons["Google"].tap()
+        waitForNoExistence(app.buttons["Google"])
+        waitForWebPageLoad()
+        waitForExistence(app.webViews.staticTexts["Redirecting you to https://qrshaka.fun/poc/b.php?redirect=1"])
+    }
 }

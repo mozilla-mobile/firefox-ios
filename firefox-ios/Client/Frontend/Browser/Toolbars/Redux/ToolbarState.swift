@@ -28,6 +28,10 @@ struct ToolbarState: ScreenState, Sendable {
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
 
+    var isAddressBarMinimized: Bool {
+        return scrollAlpha.isZero
+    }
+
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
             ToolbarState.self,
@@ -152,7 +156,7 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.cancelEditOnHomepage,
             ToolbarActionType.keyboardStateDidChange, ToolbarActionType.websiteLoadingStateDidChange,
-            ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
+            ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,

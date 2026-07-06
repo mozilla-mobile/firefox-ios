@@ -72,11 +72,162 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .newTab)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
 
         let savedValue = try XCTUnwrap(
             mockGleanWrapper.savedValues.first as? String
         )
         XCTAssertEqual(savedValue, "newTab")
+    }
+
+    func testBrowserDidLoad_withGoogleLensEnabledAndGoogleDefault_dispatchesWithGoogleLensEnabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testBrowserDidLoad_withGoogleLensEnabledAndNonGoogleDefault_dispatchesWithGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(searchEngines: [makeSearchEngine(engineID: "bing")])
+        )
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testDefaultSearchEngineDidChange_withGoogleDefault_dispatchesGoogleLensEnabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.searchEngineDidChange
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testDefaultSearchEngineDidChange_withRegionalGoogleDefault_dispatchesGoogleLensEnabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: "\(OpenSearchEngine.googleEngineID)-b-1-m")]
+            )
+        )
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.searchEngineDidChange
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testDefaultSearchEngineDidChange_withNonGoogleDefault_dispatchesGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(searchEngines: [makeSearchEngine(engineID: "bing")])
+        )
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.searchEngineDidChange
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testDefaultSearchEngineDidChange_withCustomGoogleDefault_dispatchesGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID, isCustomEngine: true)]
+            )
+        )
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.searchEngineDidChange
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testDefaultSearchEngineDidChange_withGoogleLensDisabled_dispatchesGoogleLensDisabled() throws {
+        let subject = createSubject(
+            manager: toolbarManager,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.searchEngineDidChange
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
     func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {
@@ -519,6 +670,16 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
+    func testDidTapButton_tapOnGoogleLensPhotoLibraryButton_dispatchesShowGoogleLensPhotoPicker() throws {
+        try didTapButton(buttonType: .googleLensPhotoLibrary,
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
+    }
+
+    func testDidTapButton_tapOnGoogleLensTakePhotoButton_dispatchesShowGoogleLensCamera() throws {
+        try didTapButton(buttonType: .googleLensTakePhoto,
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensCamera)
+    }
+
     func testDidTapButton_tapOnSearchButton_dispatchesDidStartEditingUrl() throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
@@ -892,14 +1053,32 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
-    private func createSubject(manager: ToolbarManager) -> ToolbarMiddleware {
+    private func createSubject(
+        manager: ToolbarManager,
+        featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags(),
+        searchEnginesManager: SearchEnginesManagerProvider = MockSearchEnginesManager()
+    ) -> ToolbarMiddleware {
         return ToolbarMiddleware(
             manager: manager,
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
             profile: profile,
             summarizerConfigFactory: summarizerConfigFactory,
             recentSearchProvider: mockRecentSearchProvider,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: searchEnginesManager,
             windowManager: windowManager,
+        )
+    }
+
+    private func makeSearchEngine(engineID: String, isCustomEngine: Bool = false) -> OpenSearchEngine {
+        return OpenSearchEngine(
+            engineID: engineID,
+            shortName: engineID.capitalized,
+            telemetrySuffix: nil,
+            image: UIImage(),
+            searchTemplate: "https://example.com/search?q={searchTerms}",
+            suggestTemplate: nil,
+            isCustomEngine: isCustomEngine
         )
     }
 

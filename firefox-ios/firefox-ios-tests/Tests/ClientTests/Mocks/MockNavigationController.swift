@@ -19,6 +19,7 @@ class MockNavigationController: NavigationController {
     var pushCalled = 0
     var popViewCalled = 0
     var popToViewControllerCalled = 0
+    var setViewControllersCalled = 0
 
     func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         presentCalled += 1
@@ -43,7 +44,9 @@ class MockNavigationController: NavigationController {
     }
 
     func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+        setViewControllersCalled += 1
         self.viewControllers = viewControllers
+        topViewController = viewControllers.last
     }
 
     func popToViewController(_ viewController: UIViewController, animated: Bool) -> [UIViewController]? {

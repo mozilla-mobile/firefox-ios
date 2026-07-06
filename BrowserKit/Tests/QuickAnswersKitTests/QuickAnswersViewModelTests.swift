@@ -28,6 +28,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
             resultText: "Test",
             sources: [SearchResult.Source(
                 title: "SourceTest",
+                url: nil,
                 thumbnailURL: nil,
                 faviconURL: nil
             )]
@@ -110,6 +111,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
             resultText: "Test",
             sources: [SearchResult.Source(
                 title: "SourceTest",
+                url: nil,
                 thumbnailURL: nil,
                 faviconURL: nil
             )]
@@ -138,7 +140,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
 
     // MARK: - Helper
     private func createSubject() -> QuickAnswersViewModel {
-        let model = QuickAnswersViewModel(prefs: MockProfilePrefs(), makeService: { _ in
+        let model = QuickAnswersViewModel(prefs: MockProfilePrefs(), makeService: { _, _ in
             return self.mockService
         })
         trackForMemoryLeaks(model)

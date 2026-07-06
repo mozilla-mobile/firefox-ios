@@ -140,13 +140,13 @@
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Jarraitu taldea";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTLabel.v151" = "(Partidaren amaiera)";
+"WorldCup.HomepageWidget.FTLabel.v151" = "(Amaituta)";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Partidaren amaiera";
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Amaituta";
 
 /* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
-"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Partidaren amaiera • Penaltiak (%@)";
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Amaituta • Penaltiak (%@)";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Lortu horma-paper pertsonalizatua";
@@ -185,16 +185,16 @@
 "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "FINALA";
 
 /* The label indicating the displaying match has ended after penalties. */
-"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Partidaren amaiera • Penaltiak";
+"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Amaituta • Penaltiak";
 
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "FINAL-LAURDENAK";
 
 /* The label for the 'Round of 16' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "FINAL HAMASEIRENAK";
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "FINAL ZORTZIRENAK";
 
 /* The label for the 'Round of 32' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "FINAL HOGEITA HAMABIRENAK";
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "FINAL HAMASEIRENAK";
 
 /* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Korritu aurreko eta hurrengo partidak ikusteko";

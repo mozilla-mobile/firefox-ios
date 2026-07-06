@@ -222,6 +222,7 @@ class CodeCoverageGate {
             !$0.contains("/AccessibilityIdentifiers.swift") &&
             !$0.contains("ImageIdentifiers.swift") &&
             !$0.contains("Protocol.swift") &&
+            !$0.contains("/Preview/") &&
             !$0.contains("Dangerfile.swift")
         }
     }
@@ -923,7 +924,7 @@ struct ReleaseBranchCheck {
         markdown("""
         # ‼️ ATTENTION ‼️
         ### 🎯 This PR targets a **release branch**.
-        Please ensure you've followed the [uplift request process](https://github.com/mozilla-mobile/firefox-ios/wiki/Requesting-an-uplift-to-a-release-branch).
+        Please ensure you've followed the [uplift request process](https://mozilla-hub.atlassian.net/wiki/x/OgAbog).
         """)
     }
 }

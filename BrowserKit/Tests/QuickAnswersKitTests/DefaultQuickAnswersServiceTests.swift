@@ -123,6 +123,7 @@ class DefaultQuickAnswersServiceTests {
     private func createSubject() throws -> DefaultQuickAnswersService {
         let subject = try DefaultQuickAnswersService(
             engine: engine,
+            configFetcher: MockQuickAnswersConfigFetcher(),
             resultsServiceFactory: resultsServiceFactory,
             prefs: MockProfilePrefs()
         )

@@ -17,6 +17,10 @@ public struct AddressToolbarUXConfiguration {
     /// Changes between 0 (hidden) and 1 (visible) based on scroll direction.
     let scrollAlpha: CGFloat
 
+    var isAddressBarMinimized: Bool {
+        return scrollAlpha.isZero
+    }
+
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
                                   scrollAlpha: CGFloat = 1.0,
                                   shouldBlur: Bool = false,
@@ -58,7 +62,7 @@ public struct AddressToolbarUXConfiguration {
     }
 
     func locationContainerBackgroundColor(theme: some Theme) -> UIColor {
-        guard !scrollAlpha.isZero else { return .clear }
+        guard !isAddressBarMinimized else { return .clear }
 
         if hasAlternativeLocationColor {
             return isLocationTextCentered ? theme.colors.layerSurfaceMediumAlt : theme.colors.layerEmphasis

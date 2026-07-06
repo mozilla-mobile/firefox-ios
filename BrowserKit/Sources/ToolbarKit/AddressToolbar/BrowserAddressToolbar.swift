@@ -140,10 +140,10 @@ public class BrowserAddressToolbar: UIView,
                           isUnifiedSearchEnabled: Bool,
                           animated: Bool) {
         [navigationActionStack, leadingPageActionStack, trailingPageActionStack, browserActionStack].forEach {
-            $0.isHidden = config.uxConfiguration.scrollAlpha.isZero
+            $0.isHidden = config.uxConfiguration.isAddressBarMinimized
         }
         if #available(iOS 26.0, *) {
-            toolbarTopBorderView.isHidden = config.uxConfiguration.scrollAlpha.isZero
+            toolbarTopBorderView.isHidden = config.uxConfiguration.isAddressBarMinimized
         }
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
@@ -180,7 +180,7 @@ public class BrowserAddressToolbar: UIView,
     private func configureUX(config: AddressToolbarUXConfiguration,
                              toolbarPosition: AddressToolbarPosition) {
         locationContainer.layer.cornerRadius = config.toolbarCornerRadius
-        locationContainer.updateShadowOpacityBasedOn(scrollAlpha: config.scrollAlpha)
+        locationContainer.updateShadowOpacityBasedOn(isAddressBarMinimized: config.isAddressBarMinimized)
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
         let locationViewPaddings = config.locationViewVerticalPaddings(addressBarPosition: toolbarPosition)
         toolbarBottomConstraint?.constant = -locationViewPaddings.bottom

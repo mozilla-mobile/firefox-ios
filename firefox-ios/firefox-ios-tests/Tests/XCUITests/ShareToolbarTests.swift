@@ -142,11 +142,17 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         app.launch()
         if #available(iOS 17, *) {
             tapToolbarShareButtonAndSelectOption(option: "Save to Files", url: pdfUrl)
-            if !iPad() {
-                mozWaitForElementToExist(app.staticTexts["On My iPhone"])
-            } else {
-                mozWaitForElementToExist(app.staticTexts["On My iPad"])
+            let saveLocation = iPad() ? app.staticTexts["On My iPad"] : app.staticTexts["On My iPhone"]
+            // The system "Save to Files" picker is slow to present on CI and the share-sheet tap
+            // does not always open it, so re-tap the option while the share sheet is still up.
+            var attempts = 2
+            while !saveLocation.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && attempts > 0 {
+                let saveToFilesCell = app.collectionViews.cells["Save to Files"]
+                guard saveToFilesCell.exists else { break }
+                saveToFilesCell.tapOnApp()
+                attempts -= 1
             }
+            mozWaitForElementToExist(saveLocation, timeout: TIMEOUT_LONG)
             app.buttons["Save"].waitAndTap()
             waitForTabsButton()
         }

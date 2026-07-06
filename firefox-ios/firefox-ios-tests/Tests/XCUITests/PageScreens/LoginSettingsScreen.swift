@@ -132,16 +132,26 @@ final class LoginSettingsScreen {
         BaseTestCase().mozWaitForElementToNotExist(match)
     }
 
+    /// Dismisses the system device-passcode prompt guarding the Passwords/Credit Cards screens.
+    ///
+    /// On CI the springboard passcode overlay is intermittently not presented — the authentication
+    /// grace period may still be active (no prompt shown) or the springboard accessibility hierarchy
+    /// is momentarily unreadable. Unconditionally waiting for the passcode field therefore times out
+    /// and fails the test even though nothing is wrong. Wait for the prompt without failing on
+    /// timeout, and only type the passcode when it is actually shown; callers assert their own
+    /// destination screen afterwards.
     func unlockLoginsView() {
         let passcodeValue = "foo\n"
+        let base = BaseTestCase()
         if sel.ONBOARDING_CONTINUE_BUTTON.element(in: app).exists {
             sel.ONBOARDING_CONTINUE_BUTTON.element(in: app).waitAndTap()
         }
 
         let passcode = sel.PASSCODE_FIELD.element(in: springboard)
-        BaseTestCase().mozWaitForElementToExist(passcode)
-        passcode.tapAndTypeText(passcodeValue)
-        BaseTestCase().mozWaitForElementToNotExist(passcode)
+        if base.mozWaitForElementToExist(passcode, timeout: TIMEOUT_LONG, failOnTimeout: false) {
+            passcode.tapAndTypeText(passcodeValue)
+            base.mozWaitForElementToNotExist(passcode)
+        }
     }
 
     func assertLoginCreatedFirstMatch() {

@@ -50,6 +50,12 @@ final class TabManagerImplementation: NSObject,
     var normalTabs: [Tab] { tabSplit().normal }
     var privateTabs: [Tab] { tabSplit().private }
 
+    /// The non-persistent data store is shared across all windows so private tabs can share cookies.
+    /// It must only be cleared once no window has any private tabs left open.
+    private var hasNoPrivateTabsAcrossWindows: Bool {
+        windowManager.allWindowTabManagers().allSatisfy { $0.privateTabs.isEmpty }
+    }
+
     var recentlyAccessedNormalTabs: [Tab] {
         var eligibleTabs = normalTabs
 
@@ -287,6 +293,10 @@ final class TabManagerImplementation: NSObject,
             $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished)
         }
         TabEvent.post(.didClose, for: tab)
+
+        if tab.isPrivate, hasNoPrivateTabsAcrossWindows {
+            tabConfigurationProvider.endPrivateBrowsingSession()
+        }
 
         if flushToDisk {
             // Only preserve tabs if restore has finished
@@ -1012,6 +1022,10 @@ final class TabManagerImplementation: NSObject,
         }
 
         tabs = normalTabs
+
+        if hasNoPrivateTabsAcrossWindows {
+            tabConfigurationProvider.endPrivateBrowsingSession()
+        }
     }
 
     private func willSelectTab(_ url: URL?) {

@@ -14,7 +14,7 @@ import Shared
 @MainActor
 final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
-    private let feed: WorldCupFeed?
+    private let feed: WorldCupFeedProtocol?
     private var lastWindowUUID: WindowUUID?
     /// Wether the homepage is currently displayed on screen
     private var homepageIsOnScreen = false
@@ -25,7 +25,7 @@ final class WorldCupMiddleware {
         self.init(worldCupStore: store, feed: feed)
     }
 
-    init(worldCupStore: WorldCupStoreProtocol, feed: WorldCupFeed?) {
+    init(worldCupStore: WorldCupStoreProtocol, feed: WorldCupFeedProtocol?) {
         self.worldCupStore = worldCupStore
         self.feed = feed
         feed?.onUpdate = { [weak self] snapshot in
@@ -40,12 +40,22 @@ final class WorldCupMiddleware {
              HomepageMiddlewareActionType.didBecomeActive,
              WorldCupActionType.retryMatchesFetch:
             self.startFeed(windowUUID: action.windowUUID)
+        case HomepageMiddlewareActionType.didEnterBackground:
+            // Stop polling when the app is backgrounded so the feed calling
+            // the network (and contending for shared resources) off-screen.
+            // It is restarted on the next `didBecomeActive`.
+            self.feed?.stop()
         case HomepageActionType.viewDidAppear:
             self.homepageIsOnScreen = true
         case HomepageActionType.viewWillDisappear:
             self.homepageIsOnScreen = false
         case WorldCupActionType.didChangeHomepageSettings:
             self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
+            if self.worldCupStore.isFeatureEnabledAndSectionEnabled {
+                self.startFeed(windowUUID: action.windowUUID)
+            } else {
+                self.feed?.stop()
+            }
         case WorldCupActionType.removeHomepageCard:
             self.worldCupStore.setIsHomepageSectionEnabled(false)
             self.feed?.stop()
@@ -63,6 +73,14 @@ final class WorldCupMiddleware {
 
     private func startFeed(windowUUID: WindowUUID) {
         guard worldCupStore.isMilestone2, let feed else {
+            dispatch(snapshot: .empty)
+            return
+        }
+        // Dispatch a hidden snapshot rather than bailing silently so that a
+        // foreground/initialize after the feature has been disabled (e.g. the
+        // World Cup end date has passed) clears any stale section still in the
+        // Redux state instead of waiting for the next feed poll to re-evaluate.
+        guard worldCupStore.isFeatureEnabledAndSectionEnabled else {
             dispatch(snapshot: .empty)
             return
         }

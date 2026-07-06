@@ -44,6 +44,9 @@ class SecurityTests: BaseTestCase {
         static let inputAppleIdText = "Please input your Apple ID here:"
         static let usernameField = "Username:"
         static let passwordField2 = "Password:"
+        static let spoofClickMeURL = "https://justluckidzz.github.io/clickme/poc-8f7d6e5c4b.html"
+        static let spoofClickMeHost = "justluckidzz.github.io"
+        static let clickHereButton = "CLICK HERE"
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395565
@@ -194,6 +197,52 @@ class SecurityTests: BaseTestCase {
         browserScreen.assertWebElements(
             app.webViews.firstMatch
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4104979
+    func testXssAccountTakeover() {
+        let progressIndicator = app.progressIndicators.element(boundBy: 0)
+        let endTime = Date().addingTimeInterval(TIMEOUT)
+        navigator.openURL("https://firefoxuxss.v12.sh")
+        browserScreen.assertWebViewLoaded()
+
+        browserScreen.assertWebElements(app.otherElements["Firefox Focus UXSS POC"])
+        [ "Google", "X", "YouTube", "Reddit" ].forEach { button in
+            browserScreen.assertWebElements(app.buttons[button])
+        }
+
+        for _ in 0...5 {
+            browserScreen.tapWebViewButton(buttonText: "X")
+            browserScreen.assertWebViewLoaded()
+            browserScreen.tapBackButton()
+            browserScreen.assertWebViewLoaded()
+            browserScreen.assertWebElements(app.otherElements["Firefox Focus UXSS POC"])
+        }
+
+        browserScreen.tapWebViewButton(buttonText: "Google")
+        browserScreen.assertAddressBarContains(value: "google.com")
+        browserScreen.assertWebViewHasContent()
+        waitUntilPageLoad()
+        while progressIndicator.exists && Date() < endTime {
+            browserScreen.assertWebPageText(with: "Redirecting you to https://qrshaka.fun/poc/b.php?redirect=1")
+            RunLoop.current.run(until: (Date().addingTimeInterval(2.5)))
+        }
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: "google.com")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4141080
+    func testSpoofClickHereLoadsRealAppleSite() {
+        navigator.openURL(WebStrings.spoofClickMeURL)
+        waitUntilPageLoad()
+        browserScreen.tapWebViewButton(buttonText: WebStrings.clickHereButton)
+        waitUntilPageLoad()
+        // The real apple.com should load after tapping.
+        browserScreen.assertAddressBarContains(value: WebStrings.appleDotCom)
+        // The attacker-controlled URL must not remain displayed or be the destination.
+        let addressValue = (browserScreen.getAddressBarElement().value as? String) ?? ""
+        XCTAssertFalse(addressValue.contains(WebStrings.spoofClickMeHost),
+                       "Attacker-controlled URL should not remain displayed after tapping.")
     }
 
     private func validateURLAndPageContent(URL: String, elementsShouldExists: Bool) {
