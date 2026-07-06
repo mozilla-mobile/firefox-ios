@@ -20,7 +20,7 @@ final class TabErrorTelemetryHelper {
 
     /// Threshold (≥) for which we fire a tab loss event.
     private let tabLossCountThreshold = 3
-    private let significantLossPercentThreshold = 0.75
+    private let significantLossPercentThreshold = 0.20
 
     private enum EntryPoint {
         case backgroundForeground
