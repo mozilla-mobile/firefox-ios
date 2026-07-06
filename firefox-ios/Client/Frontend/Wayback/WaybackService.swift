@@ -14,6 +14,10 @@ class WaybackService {
 
     private struct Response: Decodable {
         let archivedSnapshots: [String: Snapshot]
+
+        enum CodingKeys: String, CodingKey {
+            case archivedSnapshots = "archived_snapshots"
+        }
     }
 
     /// Returns the archived snapshot for a URL, or nil if none exists.
