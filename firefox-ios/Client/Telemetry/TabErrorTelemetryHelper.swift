@@ -124,7 +124,7 @@ final class TabErrorTelemetryHelper {
         }
     }
 
-    func isTabLossEvent(expectedTabCount: Int, currentTabCount: Int) ->  Bool {
+    func isTabLossEvent(expectedTabCount: Int, currentTabCount: Int) -> Bool {
         if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
             // Potential tab loss bug detected. Log a MetricKit error.
             return true
@@ -132,7 +132,7 @@ final class TabErrorTelemetryHelper {
         return false
     }
 
-    func isSignificantTabLossEvent(expectedTabCount: Int, currentTabCount: Int) ->  Bool {
+    func isSignificantTabLossEvent(expectedTabCount: Int, currentTabCount: Int) -> Bool {
         // Here we determine whether the discrepancy is a minor deviation from the expected tab count
         // or a major loss of the user's tabs. The criteria for "major loss" is currently considered
         // a scenario where: the missing tab count is ≥ our threshold (3) _and_ comprises a significant
