@@ -119,10 +119,11 @@ final class TabErrorTelemetryHelper {
             // or a major loss of the user's tabs. The criteria for "major loss" is currently considered
             // a scenario where: the missing tab count is ≥ our threshold (3) _and_ comprises a significant
             // percentage of the user's total tabs.
+            let missingCount = (expectedTabCount - currentTabCount)
             let percentLost: Double
-            percentLost = Double(currentTabCount) / Double(expectedTabCount)
+            percentLost = Double(missingCount) / Double(expectedTabCount)
 
-            let significantEvent = (expectedTabCount - currentTabCount) >= tabLossCountThreshold &&
+            let significantEvent = missingCount >= tabLossCountThreshold &&
             percentLost >= significantLossPercentThreshold
 
             sendTelemetryTabLossDetectedEvent(
