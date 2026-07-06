@@ -41,7 +41,10 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
         guard Thread.isMainThread else {
-            assertionFailure("SwipeUpTabPreviewGestureHandler was not deallocated on the main thread. Observer was not removed")
+            assertionFailure("""
+                             SwipeUpTabPreviewGestureHandler was not deallocated on the main thread.
+                             Observer was not removed
+                             """)
             return
         }
 

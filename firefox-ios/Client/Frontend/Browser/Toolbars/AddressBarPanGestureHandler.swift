@@ -65,7 +65,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
             for: addressToolbarContainer.semanticContentAttribute
         ) == .rightToLeft
     }
-    
+
     private var isSwipeEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
     }
