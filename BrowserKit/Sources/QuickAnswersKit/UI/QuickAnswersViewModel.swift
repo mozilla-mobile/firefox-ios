@@ -106,6 +106,8 @@ final class QuickAnswersViewModel {
                 telemetry.recordingCompleted(outcome: true, errorType: nil)
                 try? await service.stopRecording()
                 await searchVoiceResult(result, service: service)
+
+                break
             }
         } catch {
             try? await service.stopRecording()
