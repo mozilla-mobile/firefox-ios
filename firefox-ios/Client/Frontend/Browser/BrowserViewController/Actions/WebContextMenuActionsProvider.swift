@@ -187,6 +187,15 @@ class WebContextMenuActionsProvider {
     }
 
     @MainActor
+    func addGoogleLens() {
+        actions.append(UIAction(
+            title: .ContextMenuGoogleLens,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Medium.logoGoogleLens),
+            identifier: UIAction.Identifier("linkContextMenu.googleLens")
+        ) { _ in })
+    }
+
+    @MainActor
     func addCopyImage(url: URL) {
         actions.append(UIAction(
             title: .ContextMenuCopyImage,
