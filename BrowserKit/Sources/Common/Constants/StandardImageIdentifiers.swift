@@ -92,6 +92,7 @@ public struct StandardImageIdentifiers {
         public static let lockSlash = "lockSlashLarge"
         public static let login = "loginLarge"
         public static let logoFirefox = "logoFirefoxLarge"
+        public static let logoGoogleLens = "logoGoogleLensLarge"
         public static let microphone = "microphoneLarge"
         public static let moreHorizontalRound = "moreHorizontalRoundLarge"
         public static let newFolder = "newFolderLarge"
