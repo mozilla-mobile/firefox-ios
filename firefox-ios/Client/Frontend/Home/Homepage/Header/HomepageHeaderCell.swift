@@ -97,7 +97,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
             logoTextImage.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
             logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height),
-            
+
             logoContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             logoContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             logoContainerView.trailingAnchor.constraint(lessThanOrEqualTo: quickAnswersButton.leadingAnchor),
