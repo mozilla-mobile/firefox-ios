@@ -26,6 +26,6 @@ class WaybackService {
 
         let (data, _) = try await session.data(from: components.url!)
         let response = try JSONDecoder().decode(Response.self, from: data)
-        return response.archived_snapshots["closest"]
+        return response.archivedSnapshots["closest"]
     }
 }
