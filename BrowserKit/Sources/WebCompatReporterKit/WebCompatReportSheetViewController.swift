@@ -12,15 +12,13 @@ import UIKit
 public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidTapClose()
     func webCompatReportSheetDidTapPreview()
+    func webCompatReportSheetDidSelectCategory(id: String)
+    func webCompatReportSheetDidSelectSubOption(id: String)
 }
 
-/// The "Report a Website Issue" bottom-sheet content, presented inside a
-/// navigation controller by the Client and shown as an iOS-26 sheet
-/// (`.large` detent + grabber). It is store-agnostic: the Client configures it
-/// with a `WebCompatReportViewModel` and receives close/preview intents through
-/// `WebCompatReportSheetDelegate`. The list is a compositional inset-grouped
-/// collection view; the shell renders whatever sections the view model carries
-/// (empty for now — later PRs add the issue picker and the fields).
+/// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
+/// detent sheet inside a nav controller. Store-agnostic: configured with a
+/// `WebCompatReportViewModel`, emits intents via `WebCompatReportSheetDelegate`.
 public final class WebCompatReportSheetViewController: UIViewController,
                                                        ThemeApplicable,
                                                        UICollectionViewDelegate {
@@ -28,6 +26,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
 
     private var viewModel: WebCompatReportViewModel
     private var theme: Theme
+
+    /// The diffable data source keys on stable section/row `id`s (not content),
+    /// so content changes reconfigure a row in place instead of delete+insert.
+    /// The current values are looked up here by id.
+    private var rowsByID: [String: WebCompatReportViewModel.Row] = [:]
+    private var sectionsByID: [String: WebCompatReportViewModel.Section] = [:]
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
@@ -103,39 +107,127 @@ public final class WebCompatReportSheetViewController: UIViewController,
     }
 
     private func makeLayout(backgroundColor: UIColor? = nil) -> UICollectionViewCompositionalLayout {
-        var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-        config.headerMode = .none
-        config.footerMode = .none
-        config.backgroundColor = backgroundColor
-        return UICollectionViewCompositionalLayout.list(using: config)
+        return UICollectionViewCompositionalLayout { [weak self] index, environment in
+            var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+            let sections = self?.viewModel.sections ?? []
+            let hasHeader = index < sections.count && sections[index].title != nil
+            config.headerMode = hasHeader ? .supplementary : .none
+            config.footerMode = .none
+            config.backgroundColor = backgroundColor
+            return NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
+        }
     }
 
     // MARK: - Data source
 
-    private func makeDataSource()
-    -> UICollectionViewDiffableDataSource<WebCompatReportViewModel.Section, WebCompatReportViewModel.Row> {
-        let rowRegistration = UICollectionView.CellRegistration<
+    private func makeDataSource() -> UICollectionViewDiffableDataSource<String, String> {
+        let plainRegistration = UICollectionView.CellRegistration<
             UICollectionViewListCell, WebCompatReportViewModel.Row
         > { cell, _, row in
             var content = cell.defaultContentConfiguration()
             content.text = row.title
             cell.contentConfiguration = content
+            cell.accessories = []
         }
 
-        return UICollectionViewDiffableDataSource(
-            collectionView: collectionView
-        ) { collectionView, indexPath, row in
-            collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: row)
+        let subOptionRegistration = UICollectionView.CellRegistration<
+            WebCompatSubOptionCell, WebCompatReportViewModel.Row
+        > { [weak self] cell, _, row in
+            guard let self, case let .subOption(isSelected) = row.kind else { return }
+            cell.configure(title: row.title, isSelected: isSelected, theme: self.theme)
         }
+
+        let categoryRegistration = UICollectionView.CellRegistration<
+            WebCompatCategoryMenuCell, WebCompatReportViewModel.Row
+        > { [weak self] cell, _, row in
+            guard let self, case let .categoryMenu(isPlaceholder, options) = row.kind else { return }
+            cell.configure(
+                title: row.title,
+                isPlaceholder: isPlaceholder,
+                options: options,
+                theme: self.theme
+            ) { [weak self] optionID in
+                self?.delegate?.webCompatReportSheetDidSelectCategory(id: optionID)
+            }
+        }
+
+        let dataSource = UICollectionViewDiffableDataSource<String, String>(
+            collectionView: collectionView
+        ) { [weak self] collectionView, indexPath, rowID in
+            guard let self, let row = self.rowsByID[rowID] else { return UICollectionViewListCell() }
+            switch row.kind {
+            case .categoryMenu:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: categoryRegistration,
+                    for: indexPath,
+                    item: row
+                )
+            case .subOption:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: subOptionRegistration,
+                    for: indexPath,
+                    item: row
+                )
+            case .plain:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: plainRegistration,
+                    for: indexPath,
+                    item: row
+                )
+            }
+        }
+
+        let headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(
+            elementKind: UICollectionView.elementKindSectionHeader
+        ) { [weak self] header, _, indexPath in
+            guard let self,
+                  let sectionID = self.dataSource.sectionIdentifier(for: indexPath.section),
+                  let section = self.sectionsByID[sectionID] else { return }
+            var content = header.defaultContentConfiguration()
+            content.text = section.title
+            content.textProperties.color = self.theme.colors.textSecondary
+            header.contentConfiguration = content
+            header.accessibilityTraits.insert(.header)
+        }
+
+        dataSource.supplementaryViewProvider = { collectionView, _, indexPath in
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+        }
+        return dataSource
     }
 
-    private func applySnapshot(animated: Bool = false) {
-        var snapshot = NSDiffableDataSourceSnapshot<WebCompatReportViewModel.Section, WebCompatReportViewModel.Row>()
+    private func applySnapshot() {
+        rowsByID = [:]
+        sectionsByID = [:]
+        let previousItems = Set(dataSource.snapshot().itemIdentifiers)
+        var snapshot = NSDiffableDataSourceSnapshot<String, String>()
         for section in viewModel.sections {
-            snapshot.appendSections([section])
-            snapshot.appendItems(section.rows, toSection: section)
+            sectionsByID[section.id] = section
+            snapshot.appendSections([section.id])
+            for row in section.rows { rowsByID[row.id] = row }
+            snapshot.appendItems(section.rows.map { $0.id }, toSection: section.id)
         }
-        dataSource.apply(snapshot, animatingDifferences: animated)
+        // The data source keys on id, so rows that persist won't re-render on
+        // content change unless explicitly reconfigured.
+        snapshot.reconfigureItems(snapshot.itemIdentifiers.filter { previousItems.contains($0) })
+        dataSource.apply(snapshot, animatingDifferences: !previousItems.isEmpty)
+    }
+
+    private func reconfigureAllItems() {
+        var snapshot = dataSource.snapshot()
+        guard !snapshot.itemIdentifiers.isEmpty else { return }
+        snapshot.reconfigureItems(snapshot.itemIdentifiers)
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
+    // MARK: - UICollectionViewDelegate
+
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        guard let rowID = dataSource.itemIdentifier(for: indexPath),
+              let row = rowsByID[rowID],
+              case .subOption = row.kind else { return }
+        delegate?.webCompatReportSheetDidSelectSubOption(id: row.id)
     }
 
     // MARK: - Actions
@@ -154,9 +246,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
 
     public func applyTheme(theme: Theme) {
         self.theme = theme
+        guard isViewLoaded else { return }
         view.backgroundColor = theme.colors.layer1
         collectionView.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        reconfigureAllItems()
     }
 }
