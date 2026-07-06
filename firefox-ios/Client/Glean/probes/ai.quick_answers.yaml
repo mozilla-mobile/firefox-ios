@@ -80,8 +80,8 @@ ai.quick_answers:
     type: event
     description: |
       Recorded when the Quick Answers result service returns the response or errors out.
-      This events when success is true coincides to the display of the response to the user, 
-      while when the results error out to the display of an error message.
+      In the success case (when outcome is true), the response is displayed to the user.
+      In the failure case (when the search service errors out), an error message is displayed instead.
     extra_keys:
       outcome:
         type: boolean

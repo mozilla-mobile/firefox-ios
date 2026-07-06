@@ -199,8 +199,12 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
+<<<<<<< zazza/qa-add-footer-powered-by
                     self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
                     self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
+=======
+                    self?.contentView.configureAnswer(result.resultText)
+>>>>>>> zazza/qa-add-catch-all-error-alert
                     self?.contentView.configureSources(result.sources) { [weak self] url in
                         self?.viewModel.recordCitationTapped()
                         self?.dismiss(with: url)

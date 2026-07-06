@@ -65,8 +65,9 @@ final class QuickAnswersViewModel {
 
     /// Tears down the flow when the view is being dismissed, recording the relevant telemetry.
     func dismiss() {
-        // if the optin is not completed at time of dismissal stopRecording triggers permission request, thus
+        // if the opt-in is not completed at time of dismissal stopRecording triggers permission request, thus
         // we'd show a permission alert on dismissal which we don't want.
+        // TODO: FXIOS-16224 - add isRecording parameter to transcription engine to perform clean up only when needed
         if store.isOptInCompleted {
             // TODO: FXIOS-14880 - Possibly investigate a better way to call this via view model
             Task { [weak self] in
@@ -99,11 +100,12 @@ final class QuickAnswersViewModel {
             for try await result in stream {
                 try Task.checkCancellation()
                 onStateChange?(.speechResult(result, nil))
+
                 guard result.isFinal else { continue }
+
                 telemetry.recordingCompleted(outcome: true, errorType: nil)
                 try? await service.stopRecording()
                 await searchVoiceResult(result, service: service)
-                break
             }
         } catch {
             try? await service.stopRecording()
