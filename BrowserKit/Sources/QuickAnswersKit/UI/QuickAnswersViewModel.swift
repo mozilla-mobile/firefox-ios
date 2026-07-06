@@ -101,6 +101,7 @@ final class QuickAnswersViewModel {
 
                 telemetry.recordingCompleted(outcome: true, errorType: nil)
                 await searchVoiceResult(result, service: service)
+                break
             }
         } catch {
             let error = (error as? SpeechError) ?? SpeechError.unknown(error.localizedDescription)
