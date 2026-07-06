@@ -100,7 +100,6 @@ public struct StandardImageIdentifiers {
         public static let nightModeFill = "nightModeFillLarge"
         public static let notificationDot = "notificationDotLarge"
         public static let notificationDotFill = "notificationDotFillLarge"
-        public static let pageZoom = "pageZoomLarge"
         public static let pin = "pinLarge"
         public static let pinFill = "pinFillLarge"
         public static let pinSlash = "pinSlashLarge"
