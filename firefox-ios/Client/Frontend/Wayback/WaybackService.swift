@@ -13,7 +13,7 @@ class WaybackService {
     }
 
     private struct Response: Decodable {
-        let archived_snapshots: [String: Snapshot]
+        let archivedSnapshots: [String: Snapshot]
     }
 
     /// Returns the archived snapshot for a URL, or nil if none exists.
