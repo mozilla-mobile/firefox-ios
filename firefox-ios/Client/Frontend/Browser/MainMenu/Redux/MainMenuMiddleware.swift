@@ -213,6 +213,10 @@ final class MainMenuMiddleware {
         case .printSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
 
+        case .reportBrokenSite:
+            // Telemetry for the WebCompat reporter is added with the full sheet in FXIOS-16180.
+            break
+
         case .shareSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.share)
 

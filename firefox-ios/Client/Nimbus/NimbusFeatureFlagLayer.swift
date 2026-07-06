@@ -128,6 +128,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .needsReloadRefactor:
             return checkNeedsReloadRefactorFeature()
 
+        case .newBookmarkFolderTree:
+            return checkNewBookmarkFolderTreeFeature()
+
         case .novaDesign:
             return checkNovaDesignFeature()
 
@@ -143,8 +146,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .relayIntegration:
             return checkRelayIntegration()
 
-        case .reportSiteIssue:
-            return checkGeneralFeature(for: featureID)
+        case .reportBrokenSite:
+            return checkReportBrokenSiteFeature()
 
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature()
@@ -206,6 +209,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .videoIntroOnboarding:
             return checkVideoIntroOnboardingFeature()
 
+        case .waybackMachine:
+            return checkWaybackMachineFeature()
+
         case .worldCupWidget:
             return checkWorldCupWidgetFeature()
 
@@ -217,15 +223,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     // MARK: - Private methods
-    private func checkGeneralFeature(for featureID: FeatureFlagID) -> Bool {
-        let config = nimbus.features.generalAppFeatures.value()
-
-        switch featureID {
-        case .reportSiteIssue: return config.reportSiteIssue.status
-        default: return false
-        }
-    }
-
     private func checkSentFromFirefoxFeature() -> Bool {
         let config = nimbus.features.sentFromFirefoxFeature.value()
         return config.enabled
@@ -486,11 +483,23 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledClosetab
     }
 
+    private func checkReportBrokenSiteFeature() -> Bool {
+        return nimbus.features.reportBrokenSiteFeature.value().enabled
+    }
+
     private func checkAddressBarGestureToOpenTabTrayInteractiveFeature() -> Bool {
         return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledInteractive
     }
 
     private func checkAddressBarGestureToOpenTabTraySwipeFeature() -> Bool {
         return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledSwipe
+    }
+
+    private func checkNewBookmarkFolderTreeFeature() -> Bool {
+        return nimbus.features.newBookmarkFolderTreeFeature.value().enabled
+    }
+
+    private func checkWaybackMachineFeature() -> Bool {
+        return nimbus.features.waybackMachineFeature.value().enabled
     }
 }

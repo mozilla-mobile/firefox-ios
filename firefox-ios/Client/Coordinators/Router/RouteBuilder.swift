@@ -233,6 +233,8 @@ final class RouteBuilder: @unchecked Sendable {
             } else {
                 return nil
             }
+        case .appIcon:
+            return .settings(section: .appIcon)
         }
     }
 

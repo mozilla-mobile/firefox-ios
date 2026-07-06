@@ -42,6 +42,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
         launchApp()
     }
 
+    private func restartTheApp() {
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        launchApp()
+        setUpScreenGraph()
+        waitForTabsButton()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
@@ -438,6 +446,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
         sslScreen.waitForPageToLoadAfterBypass()
+
+        restartTheApp()
+        browserScreen.navigateToURL("https://expired.badssl.com/")
+        sslScreen.waitForWarning()
+        sslScreen.assertWarningVisible()
+        sslScreen.tapAdvanced()
+        sslScreen.tapVisitSiteAnyway()
+        sslScreen.waitForPageToLoadAfterBypass()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307022
@@ -626,6 +642,25 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen.assertAddressBarContains(value: website_1["value"]!)
         browserScreen.assertLinkExists(named: "Mozilla")
         browserScreen.assertWebViewLinkTextExists(text: "Legal")
+    }
+
+    func testLongTapFirefoxIconAppIcon() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        waitForTabsButton()
+        springBoardScreen.pressHomeButton()
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
+        springBoardScreen.assertAppIconButtonExists()
+        springBoardScreen.tapAppIconButton()
+        mozWaitForElementToExist(app.navigationBars["App Icon"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/edit/3408300

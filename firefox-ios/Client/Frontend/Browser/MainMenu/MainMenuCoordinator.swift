@@ -33,6 +33,9 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func presentSiteProtections()
 
     @MainActor
+    func presentReportBrokenSite(url: URL?)
+
+    @MainActor
     func showPrintSheet()
 
     @MainActor
@@ -144,6 +147,9 @@ class MainMenuCoordinator: BaseCoordinator {
 
         case .printSheet:
             navigationHandler?.showPrintSheet()
+
+        case .reportBrokenSite:
+            navigationHandler?.presentReportBrokenSite(url: destination.url)
 
         case .shareSheet:
             navigationHandler?.showShareSheetForCurrentlySelectedTab()

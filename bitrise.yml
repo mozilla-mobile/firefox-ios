@@ -982,7 +982,7 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
     - deploy-to-bitrise-io@2: {}
     - slack@4:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
@@ -994,7 +994,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-26.5.x-edge
+        stack: osx-xcode-27.0.x-edge
         machine_type_id: g2.mac.4large
   L10nBuild:
     before_run:

@@ -189,6 +189,34 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
+    func test_didBecomeActive_whenFeatureDisabledAfterMilestone2_dispatchesHiddenSectionWithoutStartingFeed() throws {
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.isFeatureEnabled = false
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        let feed = MockWorldCupFeed()
+        let subject = createSubject(feed: feed)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.didBecomeActive
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        let actionType = try XCTUnwrap(dispatched.actionType as? WorldCupMiddlewareActionType)
+
+        XCTAssertEqual(actionType, .didUpdate)
+        XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
+        XCTAssertTrue(dispatched.matches.isEmpty)
+        XCTAssertEqual(feed.startCalled, 0)
+        subject.worldCupProvider = { _, _ in }
+    }
+
     // MARK: - WorldCupActionType.selectTeam
 
     func test_selectTeam_persistsTeamAndKicksOffFetch() throws {

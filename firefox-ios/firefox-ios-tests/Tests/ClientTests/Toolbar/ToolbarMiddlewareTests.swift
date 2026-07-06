@@ -72,7 +72,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .newTab)
-        XCTAssertNil(actionCalled.isGoogleLensEnabled)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
 
         let savedValue = try XCTUnwrap(
             mockGleanWrapper.savedValues.first as? String
@@ -80,7 +80,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedValue, "newTab")
     }
 
-    func testBrowserDidLoad_withGoogleLensEnabledAndGoogleDefault_dispatchesWithoutGoogleLensPayload() throws {
+    func testBrowserDidLoad_withGoogleLensEnabledAndGoogleDefault_dispatchesWithGoogleLensEnabled() throws {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
@@ -98,7 +98,26 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.toolbarProvider(mockStore.state, action)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertNil(actionCalled.isGoogleLensEnabled)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testBrowserDidLoad_withGoogleLensEnabledAndNonGoogleDefault_dispatchesWithGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(searchEngines: [makeSearchEngine(engineID: "bing")])
+        )
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
     func testDefaultSearchEngineDidChange_withGoogleDefault_dispatchesGoogleLensEnabled() throws {
@@ -649,6 +668,16 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(savedExtras.isPrivate, false)
+    }
+
+    func testDidTapButton_tapOnGoogleLensPhotoLibraryButton_dispatchesShowGoogleLensPhotoPicker() throws {
+        try didTapButton(buttonType: .googleLensPhotoLibrary,
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
+    }
+
+    func testDidTapButton_tapOnGoogleLensTakePhotoButton_dispatchesShowGoogleLensCamera() throws {
+        try didTapButton(buttonType: .googleLensTakePhoto,
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensCamera)
     }
 
     func testDidTapButton_tapOnSearchButton_dispatchesDidStartEditingUrl() throws {

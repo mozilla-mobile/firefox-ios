@@ -48,6 +48,30 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.displayView, .newTabLongPressActions)
     }
 
+    func testShowGoogleLensPhotoPickerAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.displayView)
+
+        let action = getAction(for: .showGoogleLensPhotoPicker)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .googleLensPhotoPicker)
+    }
+
+    func testShowGoogleLensCameraAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.displayView)
+
+        let action = getAction(for: .showGoogleLensCamera)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .googleLensCamera)
+    }
+
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
