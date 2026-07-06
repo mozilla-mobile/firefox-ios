@@ -54,6 +54,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         button.configuration?.image = UIImage(systemName: "waveform")
         button.configuration?.cornerStyle = .capsule
         // TODO: - FXIOS-14720 Add Strings for accessibility label
+        button.accessibilityLabel = "Open Quick Answers"
         button.accessibilityIdentifier = a11y.quickAnswersButton
         button.adjustsImageSizeForAccessibilityContentSizeCategory = false
         button.addAction(UIAction(handler: { [weak self] _ in
@@ -91,7 +92,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
             logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
             logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
@@ -121,7 +121,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             : ImageIdentifiers.homeHeaderLogoBall
         logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
-//        quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
+        quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 
         // if the quick answers button is visible and we are on iPhone setup, align the logo to the leading
         let alignLogoToLeading = headerState.showQuickAnswersButton && !headerState.showiPadSetup
