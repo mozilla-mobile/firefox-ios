@@ -47,7 +47,7 @@ final class TabErrorTelemetryHelper {
             }
         }
     }
-    
+
     init(logger: Logger = DefaultLogger.shared,
          telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
