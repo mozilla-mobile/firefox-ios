@@ -21,13 +21,24 @@ final class WebCompatReportViewControllerTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testViewDidLoad_appliesThemeAndAddsSingleTitleElement() {
+    func testViewDidLoad_appliesThemeAndHostsSingleRootViewController() {
         let subject = createSubject(reportedURL: URL(string: "https://example.com"))
 
         subject.loadViewIfNeeded()
 
         XCTAssertNotNil(subject.view.backgroundColor, "applyTheme should set a background color")
-        XCTAssertEqual(subject.view.subviews.count, 1, "Placeholder shows only the title label")
+        XCTAssertEqual(subject.viewControllers.count, 1, "The report sheet is the single root view controller")
+    }
+
+    func testDidTapClose_notifiesCoordinatorToDismiss() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapClose()
+
+        XCTAssertEqual(coordinator.didFinishCallCount, 1)
     }
 
     func testSimpleCreation_hasNoLeaks() {
@@ -38,5 +49,13 @@ final class WebCompatReportViewControllerTests: XCTestCase {
 
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {
         return WebCompatReportViewController(windowUUID: windowUUID, reportedURL: reportedURL)
+    }
+}
+
+private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoordinatorDelegate {
+    var didFinishCallCount = 0
+
+    func webCompatReportViewControllerDidFinish() {
+        didFinishCallCount += 1
     }
 }
