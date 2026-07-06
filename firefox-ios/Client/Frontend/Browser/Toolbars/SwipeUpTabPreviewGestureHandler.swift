@@ -76,7 +76,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
     }
 
     func newState(state: ToolbarState) {
-        gesture?.isEnabled = isInteractiveGestureEnabled
+        setPanGestureHandler(toolbarState: state)
     }
 
     /// The interactive gesture is disabled when the swipe variant is enabled, since
@@ -84,6 +84,11 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
     private var isInteractiveGestureEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayInteractive)
             && !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
+    }
+
+    private func setPanGestureHandler(toolbarState: ToolbarState) {
+        let enabled = (toolbarState.toolbarPosition == .bottom && isInteractiveGestureEnabled)
+        gesture?.isEnabled = enabled
     }
 
     @objc
