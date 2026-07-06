@@ -4,8 +4,8 @@
 
 import Foundation
 
-public class WaybackService {
-    public struct Snapshot: Decodable {
+class WaybackService {
+    struct Snapshot: Decodable {
         public let available: Bool
         public let url: String
         public let timestamp: String
@@ -17,7 +17,7 @@ public class WaybackService {
     }
 
     /// Returns the archived snapshot for a URL, or nil if none exists.
-    public static func fetchSnapshot(
+    static func fetchSnapshot(
         for urlString: String,
         session: URLSession = .shared
     ) async throws -> Snapshot? {
