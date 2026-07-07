@@ -37,7 +37,6 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     private let useAccessoryTextLabel: UILabel
     private let tappedAccessoryButtonAction: (@MainActor () -> Void)?
 
-    /// Optional explicit width constraint so the pill can fill the available toolbar space on iOS 26 iPhone
     private lazy var fillWidthConstraint: NSLayoutConstraint = {
         let constraint = containerView.widthAnchor.constraint(equalToConstant: 0)
         constraint.priority = .defaultHigh
