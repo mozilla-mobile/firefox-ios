@@ -42,6 +42,18 @@ final class WebCompatReportViewControllerTests: XCTestCase {
         XCTAssertEqual(coordinator.didFinishCallCount, 1)
     }
 
+    func testDidTapLearnMore_notifiesCoordinator() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapLearnMore()
+
+        XCTAssertEqual(coordinator.didTapLearnMoreCallCount, 1)
+        XCTAssertEqual(coordinator.didFinishCallCount, 0)
+    }
+
     func testSimpleCreation_hasNoLeaks() {
         let subject = createSubject(reportedURL: nil)
         subject.loadViewIfNeeded()
@@ -102,6 +114,59 @@ final class WebCompatReportViewControllerTests: XCTestCase {
         XCTAssertEqual(sections.count, 1)
     }
 
+    // MARK: - makeSections
+
+    func testMakeSections_withoutCategory_omitsDetailsAndDisablesSend() {
+        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        // URL + category + advanced + send (no sub-options, no details).
+        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "advancedOptions", "send"])
+
+        guard case let .urlField(text, _) = sections.first?.rows.first?.kind else {
+            return XCTFail("Expected a URL field row")
+        }
+        XCTAssertEqual(text, "https://example.com")
+
+        let advanced = sections.first { $0.id == "advancedOptions" }
+        XCTAssertNotNil(advanced?.footer)
+        XCTAssertEqual(advanced?.footer?.linkText, .WebCompatReporter.AdditionalInfo.LearnMore)
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: true), .toggle(isOn: false)])
+
+        XCTAssertEqual(sections.last?.rows.first?.kind, .sendButton(isEnabled: false))
+    }
+
+    func testMakeSections_withCategory_showsDetailsAndEnablesSend() {
+        let state = WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .siteNotUsable,
+            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
+            additionalDetails: "Broken images",
+            includeScreenshot: false,
+            includeBlockedList: true
+        )
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        XCTAssertEqual(
+            sections.map(\.id),
+            ["url", "issueCategory", "issueSubOptions", "additionalDetails", "advancedOptions", "send"]
+        )
+
+        let details = sections.first { $0.id == "additionalDetails" }
+        guard case let .detailsField(text, _) = details?.rows.first?.kind else {
+            return XCTFail("Expected a details field row")
+        }
+        XCTAssertEqual(text, "Broken images")
+
+        let advanced = sections.first { $0.id == "advancedOptions" }
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false), .toggle(isOn: true)])
+
+        XCTAssertEqual(sections.last?.rows.first?.kind, .sendButton(isEnabled: true))
+    }
+
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {
         return WebCompatReportViewController(windowUUID: windowUUID, reportedURL: reportedURL)
     }
@@ -109,8 +174,13 @@ final class WebCompatReportViewControllerTests: XCTestCase {
 
 private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoordinatorDelegate {
     var didFinishCallCount = 0
+    var didTapLearnMoreCallCount = 0
 
     func webCompatReportViewControllerDidFinish() {
         didFinishCallCount += 1
+    }
+
+    func webCompatReportViewControllerDidTapLearnMore() {
+        didTapLearnMoreCallCount += 1
     }
 }

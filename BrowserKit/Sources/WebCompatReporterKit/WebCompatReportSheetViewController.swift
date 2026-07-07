@@ -14,6 +14,10 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidTapPreview()
     func webCompatReportSheetDidSelectCategory(id: String)
     func webCompatReportSheetDidSelectSubOption(id: String)
+    func webCompatReportSheetDidEditText(id: String, text: String)
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool)
+    func webCompatReportSheetDidTapButton(id: String)
+    func webCompatReportSheetDidTapLearnMore()
 }
 
 /// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
@@ -91,9 +95,10 @@ public final class WebCompatReportSheetViewController: UIViewController,
     // MARK: - Setup
 
     private func setupNavigationItem() {
+        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = closeButton
         navigationItem.rightBarButtonItem = previewButton
-        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.largeTitleDisplayMode = .always
     }
 
     private func setupCollectionView() {
@@ -111,8 +116,9 @@ public final class WebCompatReportSheetViewController: UIViewController,
             var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             let sections = self?.viewModel.sections ?? []
             let hasHeader = index < sections.count && sections[index].title != nil
+            let hasFooter = index < sections.count && sections[index].footer != nil
             config.headerMode = hasHeader ? .supplementary : .none
-            config.footerMode = .none
+            config.footerMode = hasFooter ? .supplementary : .none
             config.backgroundColor = backgroundColor
             return NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
         }
@@ -120,80 +126,145 @@ public final class WebCompatReportSheetViewController: UIViewController,
 
     // MARK: - Data source
 
-    private func makeDataSource() -> UICollectionViewDiffableDataSource<String, String> {
-        let plainRegistration = UICollectionView.CellRegistration<
-            UICollectionViewListCell, WebCompatReportViewModel.Row
-        > { cell, _, row in
-            var content = cell.defaultContentConfiguration()
-            content.text = row.title
-            cell.contentConfiguration = content
-            cell.accessories = []
-        }
+    private lazy var plainCellRegistration = UICollectionView.CellRegistration<
+        UICollectionViewListCell, WebCompatReportViewModel.Row
+    > { cell, _, row in
+        var content = cell.defaultContentConfiguration()
+        content.text = row.title
+        cell.contentConfiguration = content
+        cell.accessories = []
+    }
 
-        let subOptionRegistration = UICollectionView.CellRegistration<
-            WebCompatSubOptionCell, WebCompatReportViewModel.Row
-        > { [weak self] cell, _, row in
-            guard let self, case let .subOption(isSelected) = row.kind else { return }
-            cell.configure(title: row.title, isSelected: isSelected, theme: self.theme)
-        }
+    private lazy var subOptionCellRegistration = UICollectionView.CellRegistration<
+        WebCompatSubOptionCell, WebCompatReportViewModel.Row
+    > { [weak self] cell, _, row in
+        guard let self, case let .subOption(isSelected) = row.kind else { return }
+        cell.configure(title: row.title, isSelected: isSelected, theme: self.theme)
+    }
 
-        let categoryRegistration = UICollectionView.CellRegistration<
-            WebCompatCategoryMenuCell, WebCompatReportViewModel.Row
-        > { [weak self] cell, _, row in
-            guard let self, case let .categoryMenu(isPlaceholder, options) = row.kind else { return }
-            cell.configure(
-                title: row.title,
-                isPlaceholder: isPlaceholder,
-                options: options,
-                theme: self.theme
-            ) { [weak self] optionID in
-                self?.delegate?.webCompatReportSheetDidSelectCategory(id: optionID)
+    private lazy var categoryCellRegistration = UICollectionView.CellRegistration<
+        WebCompatCategoryMenuCell, WebCompatReportViewModel.Row
+    > { [weak self] cell, _, row in
+        guard let self, case let .categoryMenu(isPlaceholder, options) = row.kind else { return }
+        cell.configure(
+            title: row.title,
+            isPlaceholder: isPlaceholder,
+            options: options,
+            theme: self.theme
+        ) { [weak self] optionID in
+            self?.delegate?.webCompatReportSheetDidSelectCategory(id: optionID)
+        }
+    }
+
+    private lazy var urlCellRegistration = UICollectionView.CellRegistration<
+        WebCompatURLCell, WebCompatReportViewModel.Row
+    > { [weak self] cell, _, row in
+        guard let self, case let .urlField(text, placeholder) = row.kind else { return }
+        cell.configure(title: row.title, text: text, placeholder: placeholder, theme: self.theme) { [weak self] text in
+            self?.delegate?.webCompatReportSheetDidEditText(id: row.id, text: text)
+        }
+    }
+
+    private lazy var detailsCellRegistration = UICollectionView.CellRegistration<
+        WebCompatDetailsCell, WebCompatReportViewModel.Row
+    > { [weak self] cell, _, row in
+        guard let self, case let .detailsField(text, placeholder) = row.kind else { return }
+        cell.configure(
+            text: text,
+            placeholder: placeholder,
+            accessibilityLabel: row.title,
+            theme: self.theme,
+            onEditingEnded: { [weak self] text in
+                self?.delegate?.webCompatReportSheetDidEditText(id: row.id, text: text)
+            },
+            onHeightChange: { [weak self] in
+                self?.collectionView.performBatchUpdates(nil)
             }
-        }
+        )
+    }
 
+    private lazy var toggleCellRegistration = UICollectionView.CellRegistration<
+        WebCompatToggleCell, WebCompatReportViewModel.Row
+    > { [weak self] cell, _, row in
+        guard let self, case let .toggle(isOn) = row.kind else { return }
+        cell.configure(title: row.title, isOn: isOn, theme: self.theme) { [weak self] isOn in
+            self?.delegate?.webCompatReportSheetDidToggle(id: row.id, isOn: isOn)
+        }
+    }
+
+    private lazy var sendButtonCellRegistration = UICollectionView.CellRegistration<
+        WebCompatSendButtonCell, WebCompatReportViewModel.Row
+    > { [weak self] cell, _, row in
+        guard let self, case let .sendButton(isEnabled) = row.kind else { return }
+        cell.configure(title: row.title, isEnabled: isEnabled, theme: self.theme) { [weak self] in
+            self?.delegate?.webCompatReportSheetDidTapButton(id: row.id)
+        }
+    }
+
+    private lazy var headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(
+        elementKind: UICollectionView.elementKindSectionHeader
+    ) { [weak self] header, _, indexPath in
+        guard let self,
+              let sectionID = self.dataSource.sectionIdentifier(for: indexPath.section),
+              let section = self.sectionsByID[sectionID] else { return }
+        var content = header.defaultContentConfiguration()
+        content.text = section.title
+        content.textProperties.color = self.theme.colors.textSecondary
+        header.contentConfiguration = content
+        header.accessibilityTraits.insert(.header)
+    }
+
+    private lazy var footerRegistration = UICollectionView.SupplementaryRegistration<WebCompatLearnMoreFooterView>(
+        elementKind: UICollectionView.elementKindSectionFooter
+    ) { [weak self] footerView, _, indexPath in
+        guard let self,
+              let sectionID = self.dataSource.sectionIdentifier(for: indexPath.section),
+              let footer = self.sectionsByID[sectionID]?.footer else { return }
+        footerView.configure(footer: footer, theme: self.theme) { [weak self] in
+            self?.delegate?.webCompatReportSheetDidTapLearnMore()
+        }
+    }
+
+    private func makeDataSource() -> UICollectionViewDiffableDataSource<String, String> {
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
-        ) { [weak self] collectionView, indexPath, rowID in
-            guard let self, let row = self.rowsByID[rowID] else { return UICollectionViewListCell() }
-            switch row.kind {
-            case .categoryMenu:
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: categoryRegistration,
-                    for: indexPath,
-                    item: row
-                )
-            case .subOption:
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: subOptionRegistration,
-                    for: indexPath,
-                    item: row
-                )
-            case .plain:
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: plainRegistration,
-                    for: indexPath,
-                    item: row
-                )
-            }
+        ) { [weak self] _, indexPath, rowID in
+            return self?.dequeueCell(at: indexPath, rowID: rowID) ?? UICollectionViewListCell()
         }
-
-        let headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(
-            elementKind: UICollectionView.elementKindSectionHeader
-        ) { [weak self] header, _, indexPath in
-            guard let self,
-                  let sectionID = self.dataSource.sectionIdentifier(for: indexPath.section),
-                  let section = self.sectionsByID[sectionID] else { return }
-            var content = header.defaultContentConfiguration()
-            content.text = section.title
-            content.textProperties.color = self.theme.colors.textSecondary
-            header.contentConfiguration = content
-            header.accessibilityTraits.insert(.header)
-        }
-
-        dataSource.supplementaryViewProvider = { collectionView, _, indexPath in
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+        dataSource.supplementaryViewProvider = { [weak self] _, elementKind, indexPath in
+            return self?.dequeueSupplementary(ofKind: elementKind, at: indexPath)
         }
         return dataSource
+    }
+
+    private func dequeueCell(at indexPath: IndexPath, rowID: String) -> UICollectionViewCell {
+        guard let row = rowsByID[rowID] else { return UICollectionViewListCell() }
+        switch row.kind {
+        case .categoryMenu:
+            return collectionView.dequeueConfiguredReusableCell(using: categoryCellRegistration, for: indexPath, item: row)
+        case .subOption:
+            return collectionView.dequeueConfiguredReusableCell(using: subOptionCellRegistration, for: indexPath, item: row)
+        case .urlField:
+            return collectionView.dequeueConfiguredReusableCell(using: urlCellRegistration, for: indexPath, item: row)
+        case .detailsField:
+            return collectionView.dequeueConfiguredReusableCell(using: detailsCellRegistration, for: indexPath, item: row)
+        case .toggle:
+            return collectionView.dequeueConfiguredReusableCell(using: toggleCellRegistration, for: indexPath, item: row)
+        case .sendButton:
+            return collectionView.dequeueConfiguredReusableCell(using: sendButtonCellRegistration, for: indexPath, item: row)
+        case .plain:
+            return collectionView.dequeueConfiguredReusableCell(using: plainCellRegistration, for: indexPath, item: row)
+        }
+    }
+
+    private func dequeueSupplementary(
+        ofKind elementKind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        if elementKind == UICollectionView.elementKindSectionFooter {
+            return collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration, for: indexPath)
+        }
+        return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
     }
 
     private func applySnapshot() {
