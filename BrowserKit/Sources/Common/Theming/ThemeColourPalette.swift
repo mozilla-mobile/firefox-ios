@@ -107,9 +107,7 @@ public protocol ThemeColourPalette {
     var gradientAIStrongStop2: UIColor { get }
     var gradientAIStrongStop3: UIColor { get }
 
-    // MARK: - Nova-only tokens
-    // The Nova themes provide real values; the other themes assign `.clear`
-    // (never rendered — UI branches on `Theme.isNova`).
+    // MARK: - Nova tokens
     var layerAccentSubtle: UIColor { get }
     var layerInverse: UIColor { get }
     var layerGlassTintNova: UIColor { get }
