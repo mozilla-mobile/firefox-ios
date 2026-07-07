@@ -65,7 +65,7 @@ final class WebCompatReportViewControllerTests: XCTestCase {
     func testMakeIssueSections_withoutCategory_showsPlaceholderAndNoSubOptions() {
         let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
 
-        let sections = WebCompatReportViewController.makeIssueSections(from: state)
+        let sections = WebCompatReportViewModelMapper.makeIssueSections(from: state)
 
         XCTAssertEqual(sections.count, 1)
         XCTAssertEqual(sections.first?.title, .WebCompatReporter.IssueSection.Title)
@@ -86,7 +86,7 @@ final class WebCompatReportViewControllerTests: XCTestCase {
             selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue
         )
 
-        let sections = WebCompatReportViewController.makeIssueSections(from: state)
+        let sections = WebCompatReportViewModelMapper.makeIssueSections(from: state)
 
         XCTAssertEqual(sections.count, 2)
         XCTAssertEqual(sections[0].rows.first?.title, .WebCompatReporter.Category.SiteNotUsable)
@@ -109,7 +109,7 @@ final class WebCompatReportViewControllerTests: XCTestCase {
             selectedCategory: .other
         )
 
-        let sections = WebCompatReportViewController.makeIssueSections(from: state)
+        let sections = WebCompatReportViewModelMapper.makeIssueSections(from: state)
 
         XCTAssertEqual(sections.count, 1)
     }
@@ -119,7 +119,7 @@ final class WebCompatReportViewControllerTests: XCTestCase {
     func testMakeSections_withoutCategory_omitsDetailsAndDisablesSend() {
         let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
 
-        let sections = WebCompatReportViewController.makeSections(from: state)
+        let sections = WebCompatReportViewModelMapper.makeSections(from: state)
 
         // URL + category + advanced + send (no sub-options, no details).
         XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "advancedOptions", "send"])
@@ -148,7 +148,7 @@ final class WebCompatReportViewControllerTests: XCTestCase {
             includeBlockedList: true
         )
 
-        let sections = WebCompatReportViewController.makeSections(from: state)
+        let sections = WebCompatReportViewModelMapper.makeSections(from: state)
 
         XCTAssertEqual(
             sections.map(\.id),
