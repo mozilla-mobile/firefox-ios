@@ -94,7 +94,7 @@ class StoryTests: FeatureFlaggedTestBase {
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmark],
-                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.shareApple]
             ]
         )
     }

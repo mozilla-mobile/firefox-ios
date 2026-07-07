@@ -27,7 +27,7 @@ public struct StandardImageIdentifiers {
     // Icon size 20x20
     public struct Medium {
         public static let arrowClockwise = "arrowClockwiseMedium"
-        public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
+        public static let bookmarkBadgeFillViolet50 = "bookmarkBadgeFillMediumViolet50"
         public static let cross = "crossMedium"
         public static let lightning = "lightningMedium"
         public static let logoGoogleLens = "logoGoogleLensMedium"
@@ -100,7 +100,6 @@ public struct StandardImageIdentifiers {
         public static let nightModeFill = "nightModeFillLarge"
         public static let notificationDot = "notificationDotLarge"
         public static let notificationDotFill = "notificationDotFillLarge"
-        public static let pageZoom = "pageZoomLarge"
         public static let pin = "pinLarge"
         public static let pinFill = "pinFillLarge"
         public static let pinSlash = "pinSlashLarge"
@@ -114,7 +113,7 @@ public struct StandardImageIdentifiers {
         public static let saveFile = "saveFileLarge"
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"
-        public static let share = "shareLarge"
+        public static let shareApple = "shareAppleLarge"
         public static let shield = "shieldLarge"
         public static let shieldCheckmark = "shieldCheckmarkLarge"
         public static let shieldSlash = "shieldSlashLarge"
