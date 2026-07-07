@@ -117,7 +117,188 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         )
     }
 
+    func testConfigure_withFieldSections_dequeuesTypedCells() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: makeViewModel(sections: fieldSections()))
+        subject.view.layoutIfNeeded()
+
+        let collectionView = subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatURLCell)
+        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 1)) is WebCompatToggleCell)
+        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 2)) is WebCompatDetailsCell)
+        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 3)) is WebCompatSendButtonCell)
+    }
+
+    func testToggleCell_activation_notifiesDelegateWithRowIDAndValue() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let subject = createSubject()
+        subject.delegate = delegate
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: fieldSections()))
+        subject.view.layoutIfNeeded()
+
+        let collectionView = subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+        let toggleCell = collectionView?.cellForItem(at: IndexPath(item: 0, section: 1))
+        let toggle = firstSubview(ofType: UISwitch.self, in: toggleCell)
+        toggle?.isOn = true
+        fireActions(toggle, for: .valueChanged)
+
+        XCTAssertEqual(delegate.toggles.map(\.id), ["screenshot"])
+        XCTAssertEqual(delegate.toggles.map(\.isOn), [true])
+    }
+
+    func testSendButtonCell_tap_notifiesDelegateWithRowID() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let sendCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 3))
+        let button = firstSubview(ofType: UIButton.self, in: sendCell?.contentView)
+        fireActions(button, for: .touchUpInside)
+
+        XCTAssertEqual(delegate.tappedButtonIDs, ["send"])
+    }
+
+    func testURLCell_editingEnd_notifiesDelegateWithRowIDAndText() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let urlCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
+        let textField = firstSubview(ofType: UITextField.self, in: urlCell?.contentView)
+        textField?.becomeFirstResponder()
+        textField?.text = "https://changed.example.com"
+        textField?.resignFirstResponder()
+
+        XCTAssertEqual(delegate.editedText.map(\.id), ["url"])
+        XCTAssertEqual(delegate.editedText.map(\.text), ["https://changed.example.com"])
+    }
+
+    func testDetailsCell_editingEnd_notifiesDelegateWithRowIDAndText() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let detailsCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 2))
+        let textView = firstSubview(ofType: UITextView.self, in: detailsCell?.contentView)
+        textView?.becomeFirstResponder()
+        textView?.text = "The images never load"
+        textView?.resignFirstResponder()
+
+        XCTAssertEqual(delegate.editedText.map(\.id), ["details"])
+        XCTAssertEqual(delegate.editedText.map(\.text), ["The images never load"])
+    }
+
+    func testLearnMoreFooterLinkTap_notifiesDelegate() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let footer = collectionView(in: subject)?.supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionFooter,
+            at: IndexPath(item: 0, section: 1)
+        ) as? WebCompatLearnMoreFooterView
+        _ = footer?.textView(
+            UITextView(),
+            shouldInteractWith: URL(string: "webcompat-learn-more://")!,
+            in: NSRange(location: 0, length: 0),
+            interaction: .invokeDefaultAction
+        )
+
+        XCTAssertEqual(delegate.didTapLearnMoreCallCount, 1)
+    }
+
     // MARK: - Helpers
+
+    private func hostedFieldSubject(
+        delegate: MockWebCompatReportSheetDelegate
+    ) -> (WebCompatReportSheetViewController, UIWindow) {
+        let subject = createSubject()
+        subject.delegate = delegate
+        // A tall key window lays out every section (so the send cell exists) and
+        // gives text fields a real editing session for first-responder changes.
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 2000))
+        window.rootViewController = subject
+        window.makeKeyAndVisible()
+        subject.configure(with: makeViewModel(sections: fieldSections()))
+        subject.view.layoutIfNeeded()
+        return (subject, window)
+    }
+
+    private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
+        return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+    }
+
+    // UIControl.sendActions needs a running UIApplication, which logic tests lack,
+    // so invoke each registered target/action selector directly.
+    private func fireActions(_ control: UIControl?, for event: UIControl.Event) {
+        guard let control else { return }
+        for target in control.allTargets {
+            let object = target as NSObject
+            control.actions(forTarget: target, forControlEvent: event)?.forEach {
+                object.perform(Selector($0))
+            }
+        }
+    }
+
+    private func firstSubview<T: UIView>(ofType type: T.Type, in view: UIView?) -> T? {
+        guard let view else { return nil }
+        for subview in view.subviews {
+            if let match = subview as? T { return match }
+            if let match = firstSubview(ofType: type, in: subview) { return match }
+        }
+        return nil
+    }
+
+    private func fieldSections() -> [WebCompatReportViewModel.Section] {
+        return [
+            WebCompatReportViewModel.Section(id: "url", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "url",
+                    title: "URL",
+                    kind: .urlField(text: "https://example.com", placeholder: "Website address")
+                )
+            ]),
+            WebCompatReportViewModel.Section(
+                id: "advanced",
+                title: "Advanced Options",
+                footer: WebCompatReportViewModel.Footer(
+                    text: "Your report helps us. Learn More…",
+                    linkText: "Learn More…"
+                ),
+                rows: [
+                    WebCompatReportViewModel.Row(
+                        id: "screenshot",
+                        title: "Include screenshot",
+                        kind: .toggle(isOn: false)
+                    ),
+                    WebCompatReportViewModel.Row(
+                        id: "blocklist",
+                        title: "Include blocked list",
+                        kind: .toggle(isOn: true)
+                    )
+                ]
+            ),
+            WebCompatReportViewModel.Section(id: "details", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "details",
+                    title: "Additional details",
+                    kind: .detailsField(text: "", placeholder: "Additional Details (optional)")
+                )
+            ]),
+            WebCompatReportViewModel.Section(id: "send", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "send",
+                    title: "Send Report",
+                    kind: .sendButton(isEnabled: true)
+                )
+            ])
+        ]
+    }
 
     private func pickerSections() -> [WebCompatReportViewModel.Section] {
         let options = [
@@ -203,6 +384,10 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
     var didTapPreviewCallCount = 0
     var selectedCategoryIDs: [String] = []
     var selectedSubOptionIDs: [String] = []
+    var editedText: [(id: String, text: String)] = []
+    var toggles: [(id: String, isOn: Bool)] = []
+    var tappedButtonIDs: [String] = []
+    var didTapLearnMoreCallCount = 0
 
     func webCompatReportSheetDidTapClose() {
         didTapCloseCallCount += 1
@@ -218,5 +403,21 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
 
     func webCompatReportSheetDidSelectSubOption(id: String) {
         selectedSubOptionIDs.append(id)
+    }
+
+    func webCompatReportSheetDidEditText(id: String, text: String) {
+        editedText.append((id, text))
+    }
+
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool) {
+        toggles.append((id, isOn))
+    }
+
+    func webCompatReportSheetDidTapButton(id: String) {
+        tappedButtonIDs.append(id)
+    }
+
+    func webCompatReportSheetDidTapLearnMore() {
+        didTapLearnMoreCallCount += 1
     }
 }

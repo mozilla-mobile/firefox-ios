@@ -51,6 +51,12 @@ public struct SupportUtils {
         return URL(string: "https://support.mozilla.org/en-US/kb/what-does-your-connection-is-not-secure-mean")
     }
 
+    /// SUMO explainer opened from the "Learn More…" link in the Report a Website Issue form.
+    /// Article slug is a placeholder until content lands.
+    public static var URLForWebCompatReporterLearnMore: URL? {
+        return URLForTopic("report-website-issue")
+    }
+
     public static func URLForTopic(_ topic: String, useMobilePath: Bool = true) -> URL? {
         // Construct a NSURL pointing to a specific topic on SUMO. The topic should be a non-escaped string. It will
         // be properly escaped by this function.

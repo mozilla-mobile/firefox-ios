@@ -30,4 +30,9 @@ enum WebCompatReporterUX {
     enum Chevron {
         static let size: CGFloat = 10
     }
+
+    enum DetailsField {
+        /// Roughly three lines tall; grows with typed content.
+        static let minimumHeight: CGFloat = 88
+    }
 }
