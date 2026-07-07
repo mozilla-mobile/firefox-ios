@@ -629,7 +629,7 @@ final class HomepageViewController: UIViewController,
                 var state = state
                 // This work around is needed unfortunately to avoid lags when showing the quick answer button
                 // on iPad. The Header state starts always with showIpadSetup to false and that cause a flickering on iPad.
-                var shouldUseiPadLayout = shouldUseiPadSetup()
+                let shouldUseiPadLayout = shouldUseiPadSetup()
                 if state.showiPadSetup != shouldUseiPadLayout {
                     state.showiPadSetup = shouldUseiPadLayout
                 }
