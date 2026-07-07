@@ -146,8 +146,7 @@ class ButtonToast: Toast {
         titleLabel.textColor = theme.colors.textInverted
         descriptionLabel.textColor = theme.colors.textInverted
         imageView.tintColor = theme.colors.textInverted
-        // Nova uses textToast token, it is nil when Nova design is disabled
-        roundedButton.setTitleColor(theme.colors.textToast ?? theme.colors.textInverted, for: [])
+        roundedButton.setTitleColor(theme.isNova ? theme.colors.textToast : theme.colors.textInverted, for: [])
         roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
     }
 

@@ -131,7 +131,23 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var iconSecondary: UIColor { base.iconSecondary }
     var iconAccent: UIColor { base.iconAccent }
     var iconOnColor: UIColor { base.iconOnColor }
-    var iconInverted: UIColor? { base.iconInverted }
+    // MARK: - Nova-only tokens
+    var layerAccentSubtle: UIColor { base.layerAccentSubtle }
+    var layerInverse: UIColor { base.layerInverse }
+    var layerGlassTintNova: UIColor { base.layerGlassTintNova }
+    var textToast: UIColor { base.textToast }
+    var iconInverted: UIColor { base.iconInverted }
+    var iconOnColorDisabled: UIColor { base.iconOnColorDisabled }
+    var iconPrivate: UIColor { base.iconPrivate }
+    var borderStrong: UIColor { base.borderStrong }
+    var borderRadioButtonDefault: UIColor { base.borderRadioButtonDefault }
+    var gradient: Gradient { base.gradient }
+    var gradientAccent: Gradient { base.gradientAccent }
+    var gradientAccentSubtle: Gradient { base.gradientAccentSubtle }
+    var gradientAIStrong: Gradient { base.gradientAIStrong }
+    var gradientBorder: Gradient { base.gradientBorder }
+    var gradientPrivacy: Gradient { base.gradientPrivacy }
+    var gradientPrivacyMask: Gradient { base.gradientPrivacyMask }
     var iconCritical: UIColor { base.iconCritical }
     var iconSpinner: UIColor { base.iconSpinner }
     var iconAccentViolet: UIColor { base.iconAccentViolet }

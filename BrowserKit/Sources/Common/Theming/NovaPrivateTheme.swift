@@ -8,6 +8,7 @@ public struct NovaPrivateTheme: Theme {
     public var type: ThemeType = .privateMode
     private let palette = NovaPrivateColourPalette()
     public var colors: ThemeColourPalette { palette }
+    public var isNova = true
 
     public init() {}
 }
@@ -22,8 +23,8 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layerSurfaceLow = NovaColors.VioletDesaturated90
     var layerSurfaceMedium = NovaColors.VioletDesaturated80
     var layerSurfaceMediumAlpha = NovaColors.VioletDesaturated80.withAlphaComponent(0.4)
-    var layerAccentSubtle: UIColor? = NovaColors.Violet70
-    var layerInverse: UIColor? = NovaColors.Gray30.withAlphaComponent(0.9)
+    var layerAccentSubtle: UIColor = NovaColors.Violet70
+    var layerInverse: UIColor = NovaColors.Gray30.withAlphaComponent(0.9)
     var layerWarning: UIColor = NovaColors.Yellow70
     var layerSuccess: UIColor = NovaColors.Green70
     var layerCritical: UIColor = NovaColors.Red70
@@ -31,8 +32,8 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layerSepia: UIColor = NovaColors.Yellow0
     var layerAutofillText: UIColor = NovaColors.VioletDesaturated30.withAlphaComponent(0.55)
     var layerSelectedText: UIColor = NovaColors.Gray45.withAlphaComponent(0.81)
-    var layerGlassTintNova: UIColor? = .clear
-    var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle ?? NovaColors.Violet70 }
+    var layerGlassTintNova: UIColor = .clear
+    var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
 
     // MARK: - Action
 
@@ -64,7 +65,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var textOnDark: UIColor = NovaColors.VioletDesaturated0
     var textOnLight: UIColor = NovaColors.VioletDesaturated90
     var textColorPrimary: UIColor = NovaColors.VioletDesaturated0
-    var textToast: UIColor? = NovaColors.Violet70
+    var textToast: UIColor = NovaColors.Violet70
 
     // MARK: - Icon
 
@@ -73,18 +74,18 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var iconDisabled: UIColor = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
     var iconAccent: UIColor = NovaColors.Violet30
     var iconCritical: UIColor = NovaColors.Red30
-    var iconInverted: UIColor? = NovaColors.VioletDesaturated90
+    var iconInverted: UIColor = NovaColors.VioletDesaturated90
     var iconOnColor: UIColor = NovaColors.VioletDesaturated0
-    var iconOnColorDisabled: UIColor? = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
+    var iconOnColorDisabled: UIColor = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
     var iconSpinner: UIColor = NovaColors.Gray40
-    var iconPrivate: UIColor? = NovaColors.Violet50
+    var iconPrivate: UIColor = NovaColors.Violet50
 
     // MARK: - Border
 
     var borderPrimary: UIColor = NovaColors.VioletDesaturated70
-    var borderStrong: UIColor? = NovaColors.VioletDesaturated60
+    var borderStrong: UIColor = NovaColors.VioletDesaturated60
     var borderInverted: UIColor = NovaColors.Gray15
-    var borderRadioButtonDefault: UIColor? = NovaColors.Gray45
+    var borderRadioButtonDefault: UIColor = NovaColors.Gray45
 
     // MARK: - Shadow
 
@@ -95,23 +96,23 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
 
     // MARK: - Gradients
 
-    var gradient: Gradient? = Gradient(colors: [NovaColors.Violet60, NovaColors.Violet50])
-    var gradientAccent: Gradient? = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
-    var gradientAccentSubtle: Gradient? = Gradient(colors: [
+    var gradient: Gradient = Gradient(colors: [NovaColors.Violet60, NovaColors.Violet50])
+    var gradientAccent: Gradient = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
+    var gradientAccentSubtle: Gradient = Gradient(colors: [
         NovaColors.VioletDesaturated90,
         NovaColors.VioletDesaturated90
     ])
-    var gradientAIStrong: Gradient? = Gradient(colors: [
+    var gradientAIStrong: Gradient = Gradient(colors: [
         NovaColors.Violet50,
         NovaColors.Pink40,
         NovaColors.Orange30
     ])
-    var gradientBorder: Gradient? = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
-    var gradientPrivacy: Gradient? = Gradient(colors: [
+    var gradientBorder: Gradient = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
+    var gradientPrivacy: Gradient = Gradient(colors: [
         NovaColors.Purple40,
         NovaColors.Purple20
     ])
-    var gradientPrivacyMask: Gradient? = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
+    var gradientPrivacyMask: Gradient = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
     var gradientAIStrongStop1: UIColor = NovaColors.Violet50
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30

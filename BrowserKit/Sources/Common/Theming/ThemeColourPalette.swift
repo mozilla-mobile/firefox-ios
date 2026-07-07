@@ -108,41 +108,24 @@ public protocol ThemeColourPalette {
     var gradientAIStrongStop3: UIColor { get }
 
     // MARK: - Nova-only tokens
-    // Only the Nova themes provide values (nil otherwise)
-    var layerAccentSubtle: UIColor? { get }
-    var layerInverse: UIColor? { get }
-    var layerGlassTintNova: UIColor? { get }
-    var textToast: UIColor? { get }
-    var iconInverted: UIColor? { get }
-    var iconOnColorDisabled: UIColor? { get }
-    var iconPrivate: UIColor? { get }
-    var borderStrong: UIColor? { get }
-    var borderRadioButtonDefault: UIColor? { get }
+    // The Nova themes provide real values; the other themes assign `.clear`
+    // (never rendered — UI branches on `Theme.isNova`).
+    var layerAccentSubtle: UIColor { get }
+    var layerInverse: UIColor { get }
+    var layerGlassTintNova: UIColor { get }
+    var textToast: UIColor { get }
+    var iconInverted: UIColor { get }
+    var iconOnColorDisabled: UIColor { get }
+    var iconPrivate: UIColor { get }
+    var borderStrong: UIColor { get }
+    var borderRadioButtonDefault: UIColor { get }
     // TODO: FXIOS-16130 - Wire gradient tokens into the UI
-    var gradient: Gradient? { get }
-    var gradientAccent: Gradient? { get }
-    var gradientAccentSubtle: Gradient? { get }
-    var gradientAIStrong: Gradient? { get }
-    var gradientBorder: Gradient? { get }
-    var gradientPrivacy: Gradient? { get }
-    var gradientPrivacyMask: Gradient? { get }
+    var gradient: Gradient { get }
+    var gradientAccent: Gradient { get }
+    var gradientAccentSubtle: Gradient { get }
+    var gradientAIStrong: Gradient { get }
+    var gradientBorder: Gradient { get }
+    var gradientPrivacy: Gradient { get }
+    var gradientPrivacyMask: Gradient { get }
 }
 
-public extension ThemeColourPalette {
-    var layerAccentSubtle: UIColor? { nil }
-    var layerInverse: UIColor? { nil }
-    var layerGlassTintNova: UIColor? { nil }
-    var textToast: UIColor? { nil }
-    var iconInverted: UIColor? { nil }
-    var iconOnColorDisabled: UIColor? { nil }
-    var iconPrivate: UIColor? { nil }
-    var borderStrong: UIColor? { nil }
-    var borderRadioButtonDefault: UIColor? { nil }
-    var gradient: Gradient? { nil }
-    var gradientAccent: Gradient? { nil }
-    var gradientAccentSubtle: Gradient? { nil }
-    var gradientAIStrong: Gradient? { nil }
-    var gradientBorder: Gradient? { nil }
-    var gradientPrivacy: Gradient? { nil }
-    var gradientPrivacyMask: Gradient? { nil }
-}

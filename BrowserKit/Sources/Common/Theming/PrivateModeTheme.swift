@@ -124,4 +124,22 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var gradientAIStrongStop3: UIColor = FXColors.Yellow50
 
     var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
+
+    // MARK: - Nova tokens
+    var layerAccentSubtle: UIColor = .clear
+    var layerInverse: UIColor = .clear
+    var layerGlassTintNova: UIColor = .clear
+    var textToast: UIColor = .clear
+    var iconInverted: UIColor = .clear
+    var iconOnColorDisabled: UIColor = .clear
+    var iconPrivate: UIColor = .clear
+    var borderStrong: UIColor = .clear
+    var borderRadioButtonDefault: UIColor = .clear
+    var gradient: Gradient = Gradient(colors: [.clear])
+    var gradientAccent: Gradient = Gradient(colors: [.clear])
+    var gradientAccentSubtle: Gradient = Gradient(colors: [.clear])
+    var gradientAIStrong: Gradient = Gradient(colors: [.clear])
+    var gradientBorder: Gradient = Gradient(colors: [.clear])
+    var gradientPrivacy: Gradient = Gradient(colors: [.clear])
+    var gradientPrivacyMask: Gradient = Gradient(colors: [.clear])
 }

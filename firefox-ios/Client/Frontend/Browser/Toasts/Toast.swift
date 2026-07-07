@@ -136,8 +136,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
         if #available(iOS 26.0, *) {
             setupGlassEffect(theme: theme)
         } else {
-            // Nova uses layerInverse token, it is nil when Nova design is disabled
-            toastView.backgroundColor = theme.colors.layerInverse ?? theme.colors.actionPrimary
+            toastView.backgroundColor = theme.isNova ? theme.colors.layerInverse : theme.colors.actionPrimary
             setupShadow(theme: theme)
         }
     }
@@ -151,8 +150,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
 
         #if canImport(FoundationModels)
         let glassEffect = UIGlassEffect()
-        // Nova uses layerGlassTintNova token, it is nil when Nova design is disabled
-        glassEffect.tintColor = theme.colors.layerGlassTintNova ?? theme.colors.actionPrimary
+        glassEffect.tintColor = theme.isNova ? theme.colors.layerGlassTintNova : theme.colors.actionPrimary
         effectView.effect = glassEffect
         #else
         effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
