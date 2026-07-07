@@ -15,7 +15,7 @@ protocol AdBlockerListFetcherProtocol: Sendable {
 /// Fetches the single `ad-blocker` record (and its attachment) from the
 /// `tracking-protection-lists-ios` Remote Settings collection through Application Services.
 /// All other content blocking lists are loaded from local JSON and are unaffected by this fetcher.
-/// TODO(FXIOS-xxx): Migrate the existing ETP lists to also use the AS implementation of RS.
+/// TODO(FXIOS-16233): Migrate the existing ETP lists to also use the AS implementation of RS.
 final class ASAdBlockerListFetcher: AdBlockerListFetcherProtocol {
     /// Identifier of the ad-blocker record within the `tracking-protection-lists-ios` collection.
     static let adBlockerRecordID = "ad-block.json"
