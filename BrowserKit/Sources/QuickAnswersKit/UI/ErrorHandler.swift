@@ -7,14 +7,14 @@ import UIKit
 @MainActor
 final class ErrorHandler {
     private weak var presenter: UIViewController?
-    private weak var navigationHandler: QuickAnswersNavigationHandler?
+    private var onDismiss: (() -> Void)?
 
     init(
         presenter: UIViewController,
-        navigationHandler: QuickAnswersNavigationHandler?
+        onDismiss: (() -> Void)?
     ) {
         self.presenter = presenter
-        self.navigationHandler = navigationHandler
+        self.onDismiss = onDismiss
     }
 
     // MARK: - Speech Errors
@@ -43,7 +43,7 @@ final class ErrorHandler {
 
     private func handlePermissionDenied(isFirstTime: Bool, title: String, message: String) {
         if isFirstTime {
-            navigationHandler?.dismissQuickAnswers(with: nil)
+            onDismiss?()
         } else {
             showPermissionAlert(
                 title: title,
@@ -57,11 +57,6 @@ final class ErrorHandler {
         // TODO: - FXIOS-15573 Handle Search errors
     }
 
-    // MARK: - Other Errors
-    func handleInitializationError() {
-        // TODO: - FXIOS-15573 Handle errors
-    }
-
     // MARK: - Private
 
     // TODO: - FXIOS-14720 Add Strings and accessibility ids
@@ -73,7 +68,7 @@ final class ErrorHandler {
         )
         alertController.addAction(
             UIAlertAction(title: "Open Settings", style: .default) { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+                self?.onDismiss?()
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
                 }
@@ -81,7 +76,7 @@ final class ErrorHandler {
         )
         alertController.addAction(
             UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+                self?.onDismiss?()
             }
         )
         presenter?.present(alertController, animated: true)

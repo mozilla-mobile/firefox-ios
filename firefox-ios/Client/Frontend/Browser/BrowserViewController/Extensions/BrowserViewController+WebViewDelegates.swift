@@ -406,6 +406,8 @@ extension BrowserViewController: WKUIDelegate {
                                contentContainer: contentContainer)
 
         if let url = image {
+            actionBuilder.addGoogleLens()
+
             actionBuilder.addSaveImage(url: url,
                                        getImageData: getImageData,
                                        writeToPhotoAlbum: writeToPhotoAlbum)

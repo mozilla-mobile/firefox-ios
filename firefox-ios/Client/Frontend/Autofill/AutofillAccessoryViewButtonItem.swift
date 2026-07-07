@@ -27,13 +27,32 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         static let accessoryImageViewSize: CGFloat = 24
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4
-        static let iPadPadding: CGFloat = 80
+        // Horizontal padding around the content used to cap the pill's fill width
+        static let contentHorizontalPadding: CGFloat = 64
     }
 
     // MARK: - Properties
+    private let containerView = UIView()
     private let accessoryImageView: UIImageView
     private let useAccessoryTextLabel: UILabel
     private let tappedAccessoryButtonAction: (@MainActor () -> Void)?
+
+    private lazy var fillWidthConstraint: NSLayoutConstraint = {
+        let constraint = containerView.widthAnchor.constraint(equalToConstant: 0)
+        constraint.priority = .defaultHigh
+        return constraint
+    }()
+
+    private lazy var contentStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [accessoryImageView, useAccessoryTextLabel])
+        stackView.spacing = UX.accessoryButtonStackViewSpacing
+        return stackView
+    }()
+
+    /// Natural width of the icon + label, independent of the pill's fill width.
+    private var contentWidth: CGFloat {
+        contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).width
+    }
 
     /// Tint color for the accessory image view.
     var accessoryImageViewTintColor: UIColor? {
@@ -97,56 +116,30 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         configureAccessibility()
         let stackViewTapped = UITapGestureRecognizer(target: self, action: #selector(tappedAccessoryButton))
 
-        // Create a container view for the stack view
-        let containerView = UIView()
-
         // Add the stack view to the container view
-        let accessoryView = UIStackView(arrangedSubviews: [accessoryImageView, useAccessoryTextLabel])
-        accessoryView.spacing = UX.accessoryButtonStackViewSpacing
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(contentStackView)
+        contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        // Add the stack view to the container view
-        containerView.addSubview(accessoryView)
-
-        // Add constraints to provide padding
-        accessoryView.translatesAutoresizingMaskIntoConstraints = false
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-
+        let leadingConstraint: NSLayoutConstraint
+        let trailingConstraint: NSLayoutConstraint
         if #available(iOS 26.0, *) {
             sharesBackground = false
-            accessoryView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        }
-
-        let leadingConstraint = if #available(iOS 26.0, *), isiPad {
-            accessoryView.leadingAnchor
-                .constraint(
-                    equalTo: containerView.leadingAnchor,
-                    constant: UX.iPadPadding
-                )
+            // Content is centered and clamped inside a container whose width is set externally in `applyFillWidth`
+            contentStackView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+            leadingConstraint = contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor)
+            trailingConstraint = contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
         } else {
-            accessoryView.leadingAnchor
-                .constraint(
-                greaterThanOrEqualTo: containerView.leadingAnchor
-            )
-        }
-
-        let trailingConstraint = if #available(iOS 26.0, *), isiPad {
-            accessoryView.trailingAnchor
-                .constraint(
-                    equalTo: containerView.trailingAnchor,
-                    constant: -UX.iPadPadding
-                )
-        } else {
-            accessoryView.trailingAnchor
-                .constraint(
-                lessThanOrEqualTo: containerView.trailingAnchor
-            )
+            // Pre-iOS 26: content fills the container (centered by the toolbar's flexible spaces).
+            leadingConstraint = contentStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+            trailingConstraint = contentStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         }
 
         NSLayoutConstraint.activate([
             leadingConstraint,
             trailingConstraint,
-            accessoryView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            accessoryView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            contentStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
 
         containerView.layer.cornerRadius = UX.cornerRadius
@@ -154,6 +147,21 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
 
         // Set the custom view as the container view
         self.customView = containerView
+    }
+
+    /// Sizes the pill to the toolbar space reported by `AccessoryViewProvider`, capped so it stays a comfortable
+    /// width around its content. Passing `nil` (pre-26) sizes the pill to content via the setup constraints.
+    func applyFillWidth(_ availableWidth: CGFloat?) {
+        guard let availableWidth, availableWidth > 0 else {
+            fillWidthConstraint.isActive = false
+            return
+        }
+
+        let width = min(availableWidth, contentWidth + UX.contentHorizontalPadding * 2)
+        if fillWidthConstraint.constant != width {
+            fillWidthConstraint.constant = width
+        }
+        fillWidthConstraint.isActive = true
     }
 
     private func configureAccessibility() {

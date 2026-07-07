@@ -142,18 +142,20 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         app.launch()
         if #available(iOS 17, *) {
             tapToolbarShareButtonAndSelectOption(option: "Save to Files", url: pdfUrl)
-            let saveLocation = iPad() ? app.staticTexts["On My iPad"] : app.staticTexts["On My iPhone"]
-            // The system "Save to Files" picker is slow to present on CI and the share-sheet tap
-            // does not always open it, so re-tap the option while the share sheet is still up.
+            // Anchor on the Files picker's own Save button rather than a location label such as
+            // "On My iPhone": the picker opens on whichever location was last used (iCloud Drive,
+            // On My iPhone, …), so the label is not reliably present, whereas Save always is.
+            // The share-sheet tap does not always open the picker on CI, so re-tap it if needed.
+            let saveButton = app.buttons["Save"]
             var attempts = 2
-            while !saveLocation.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && attempts > 0 {
+            while !saveButton.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && attempts > 0 {
                 let saveToFilesCell = app.collectionViews.cells["Save to Files"]
                 guard saveToFilesCell.exists else { break }
                 saveToFilesCell.tapOnApp()
                 attempts -= 1
             }
-            mozWaitForElementToExist(saveLocation, timeout: TIMEOUT_LONG)
-            app.buttons["Save"].waitAndTap()
+            mozWaitForElementToExist(saveButton, timeout: TIMEOUT_LONG)
+            saveButton.waitAndTap()
             waitForTabsButton()
         }
     }
@@ -180,7 +182,14 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         // The Markup tool opens
         if #available(iOS 26, *) {
             if !iPad() {
-                app.navigationBars.buttons["More"].waitAndTap()
+                // iOS 26.3 renamed this navbar overflow button "More" -> "View More" (same rename
+                // as the share sheet, see MTE-5253). Tap whichever label is present.
+                let moreButton = app.navigationBars.buttons["More"]
+                if moreButton.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
+                    moreButton.waitAndTap()
+                } else {
+                    app.navigationBars.buttons["View More"].waitAndTap()
+                }
                 mozWaitForElementToExist(app.buttons["Markup"])
                 mozWaitForElementToExist(app.buttons["Close"])
                 mozWaitForElementToExist(app.otherElements["Drawing-Palette"])
@@ -201,15 +210,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
-        if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
-            app.scrollViews.cells["View More"].waitAndTap(timeout: 10)
-        }
-        if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.collectionViews.cells[option])
-            app.collectionViews.cells[option].tapOnApp()
-        } else {
-            app.buttons[option].waitAndTap()
-        }
+        selectShareSheetOption(option)
     }
 
     private func tapToolbarShareButtonAndSelectOption(option: String, url: String = url_3) {
@@ -220,8 +221,21 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         navigator.openURL(url)
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
-        if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
-            app.scrollViews.cells["View More"].waitAndTap(timeout: 10)
+        selectShareSheetOption(option)
+    }
+
+    /// Selects `option` from the system share sheet, expanding via "View More" only when needed.
+    ///
+    /// The instant `.exists` check used previously raced the share-sheet presentation animation:
+    /// when the option was about to appear directly, the check was still false and the helper went
+    /// hunting for a "View More" expander that never showed, timing out. Wait for the option first
+    /// and only fall back to expanding the sheet when it genuinely isn't in the collapsed layout.
+    private func selectShareSheetOption(_ option: String) {
+        if #available(iOS 26, *) {
+            let optionCell = app.collectionViews.cells[option]
+            if !optionCell.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
+                app.scrollViews.cells["View More"].waitAndTap(timeout: 10)
+            }
         }
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])

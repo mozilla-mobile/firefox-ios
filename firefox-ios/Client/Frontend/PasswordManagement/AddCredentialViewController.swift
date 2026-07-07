@@ -109,7 +109,12 @@ class AddCredentialViewController: UIViewController, Themeable {
     }
 
     @objc
-    func addCredential() {
+    private func addCredential() {
+        // Ensure any active fields are dismissed, so that things like
+        // the requisite https:// prefix are included before saving
+        [websiteField, usernameField, passwordField]
+            .forEach { $0?.resignFirstResponder() }
+
         guard let hostname = websiteField?.text,
               let username = usernameField?.text,
               let password = passwordField?.text else {
