@@ -5,12 +5,6 @@
 import Foundation
 import Shared
 
-enum ErrorPageType: Equatable {
-    case internetConnection
-    case badCertDomain
-    case generic
-}
-
 enum ErrorPageModel: Equatable {
     case internetConnection
     case badCertDomain(BadCertDomainModel)
@@ -58,14 +52,6 @@ enum ErrorPageModel: Equatable {
         switch self {
         case .internetConnection, .generic: return true
         case .badCertDomain: return false
-        }
-    }
-
-    var type: ErrorPageType {
-        switch self {
-        case .internetConnection: return .internetConnection
-        case .badCertDomain: return .badCertDomain
-        case .generic: return .generic
         }
     }
 

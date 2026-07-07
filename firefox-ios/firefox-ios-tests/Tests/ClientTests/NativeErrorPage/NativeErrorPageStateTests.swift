@@ -12,12 +12,6 @@ final class NativeErrorPageStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertNil(initialState.model)
-        XCTAssertEqual(initialState.title, "")
-        XCTAssertEqual(initialState.description, "")
-        XCTAssertEqual(initialState.foxImage, "")
-        XCTAssertNil(initialState.url)
-        XCTAssertNil(initialState.advancedSection)
-        XCTAssertFalse(initialState.isRegularUI)
     }
 
     @MainActor
@@ -30,12 +24,7 @@ final class NativeErrorPageStateTests: XCTestCase {
         let action = getAction(model: model, for: .initialize)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.title, model.title)
-        XCTAssertEqual(newState.description, model.description)
-        XCTAssertEqual(newState.foxImage, model.foxImageName)
-        XCTAssertNil(newState.url)
-        XCTAssertNil(newState.advancedSection)
-        XCTAssertTrue(newState.isRegularUI)
+        XCTAssertEqual(newState.model, model)
     }
 
     @MainActor
@@ -55,28 +44,18 @@ If you’re on a corporate network, your support team might have more info.
         )
 
         let model = ErrorPageModel.badCertDomain(BadCertDomainModel(
-            url: URL(string: "https://example.com"),
+            url: URL(string: "https://example.com")!,
             advancedSection: advancedSection
         ))
 
         let action = getAction(model: model, for: .initialize)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.title, model.title)
-        XCTAssertEqual(newState.description, model.description)
-        XCTAssertEqual(newState.foxImage, model.foxImageName)
-        XCTAssertEqual(newState.url, model.url)
-        XCTAssertFalse(newState.isRegularUI)
-        XCTAssertNotNil(newState.advancedSection)
-        XCTAssertEqual(newState.advancedSection?.buttonText, advancedSection.buttonText)
-        XCTAssertEqual(newState.advancedSection?.infoText, advancedSection.infoText)
-        XCTAssertEqual(newState.advancedSection?.warningText, advancedSection.warningText)
-        XCTAssertEqual(newState.advancedSection?.certificateErrorCode, advancedSection.certificateErrorCode)
-        XCTAssertEqual(newState.advancedSection?.showProceedButton, advancedSection.showProceedButton)
+        XCTAssertEqual(newState.model, model)
     }
 
     @MainActor
-    func testStateComputedProperties_withGenericModelWithURL() {
+    func testStateModel_withGenericModelWithURL() {
         let initialState = createSubject()
         let reducer = nativeErrorPageReducer()
 
@@ -86,16 +65,11 @@ If you’re on a corporate network, your support team might have more info.
         let action = getAction(model: model, for: .initialize)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.title, .NativeErrorPage.GenericError.TitleLabel)
-        XCTAssertEqual(newState.description, .NativeErrorPage.GenericError.Description)
-        XCTAssertEqual(newState.foxImage, ImageIdentifiers.NativeErrorPage.securityError)
-        XCTAssertEqual(newState.url, testURL)
-        XCTAssertNil(newState.advancedSection)
-        XCTAssertTrue(newState.isRegularUI)
+        XCTAssertEqual(newState.model, model)
     }
 
     @MainActor
-    func testStateComputedProperties_withGenericModelWithoutURL() {
+    func testStateModel_withGenericModelWithoutURL() {
         let initialState = createSubject()
         let reducer = nativeErrorPageReducer()
 
@@ -104,10 +78,7 @@ If you’re on a corporate network, your support team might have more info.
         let action = getAction(model: model, for: .initialize)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.title, .NativeErrorPage.GenericError.TitleLabel)
-        XCTAssertNil(newState.url)
-        XCTAssertNil(newState.advancedSection)
-        XCTAssertTrue(newState.isRegularUI)
+        XCTAssertEqual(newState.model, model)
     }
 
     @MainActor
@@ -122,8 +93,6 @@ If you’re on a corporate network, your support team might have more info.
         let defaultState = NativeErrorPageState.defaultState(from: state)
 
         XCTAssertEqual(defaultState.model, state.model)
-        XCTAssertEqual(defaultState.title, state.title)
-        XCTAssertEqual(defaultState.url, state.url)
     }
 
     // MARK: - Private

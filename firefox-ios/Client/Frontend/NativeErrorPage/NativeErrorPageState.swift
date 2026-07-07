@@ -9,13 +9,6 @@ struct NativeErrorPageState: ScreenState {
     var windowUUID: WindowUUID
     var model: ErrorPageModel?
 
-    var title: String { model?.title ?? "" }
-    var description: String { model?.description ?? "" }
-    var foxImage: String { model?.foxImageName ?? "" }
-    var url: URL? { model?.url }
-    var advancedSection: ErrorPageModel.AdvancedSectionConfig? { model?.advancedSection }
-    var isRegularUI: Bool { model?.isRegularUI ?? false }
-
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = appState.componentState(
             NativeErrorPageState.self,

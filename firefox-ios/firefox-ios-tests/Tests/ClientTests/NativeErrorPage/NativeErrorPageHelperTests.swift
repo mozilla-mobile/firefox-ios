@@ -161,7 +161,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
-        XCTAssertEqual(model.type, .internetConnection)
         XCTAssertTrue(model.isRegularUI)
     }
 
@@ -174,7 +173,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
-        XCTAssertEqual(model.type, .internetConnection)
     }
 
     func testParseErrorDetails_certError_withURL_returnsSecurityModel() {
@@ -189,7 +187,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = helper.parseErrorDetails()
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
-        XCTAssertEqual(model.type, .generic)
         XCTAssertTrue(model.isRegularUI)
     }
 
@@ -212,7 +209,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = helper.parseErrorDetails()
 
         XCTAssertNotNil(model.advancedSection)
-        XCTAssertEqual(model.type, .badCertDomain)
         XCTAssertFalse(model.isRegularUI)
     }
 
@@ -227,7 +223,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertNil(model.advancedSection)
-        XCTAssertEqual(model.type, .generic)
         XCTAssertTrue(model.isRegularUI)
     }
 
@@ -265,7 +260,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertNil(model.advancedSection)
-        XCTAssertEqual(model.type, .generic)
     }
 
     // MARK: - ErrorPageModel computed properties
@@ -279,7 +273,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
-        XCTAssertEqual(model.type, .internetConnection)
     }
 
     func testBadCertDomainModel_hasCorrectComputedProperties() {
@@ -307,7 +300,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertEqual(model.advancedSection?.certificateErrorCode, "SSL_ERROR_BAD_CERT_DOMAIN")
         XCTAssertTrue(model.advancedSection?.showProceedButton ?? false)
         XCTAssertFalse(model.isRegularUI)
-        XCTAssertEqual(model.type, .badCertDomain)
     }
 
     func testGenericErrorModel_withURL_hasCorrectComputedProperties() {
@@ -320,7 +312,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertEqual(model.url, testURL)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
-        XCTAssertEqual(model.type, .generic)
     }
 
     func testGenericErrorModel_withoutURL_hasNilURL() {
@@ -332,7 +323,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
-        XCTAssertEqual(model.type, .generic)
     }
 
     func testBadCertDomainModel_requiresNonOptionalURL() {
