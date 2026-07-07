@@ -230,6 +230,7 @@
 		1D7B789F2AE088930011E9F2 /* EventQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B789E2AE088930011E9F2 /* EventQueueTests.swift */; };
 		1D8487B42AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8487B32AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift */; };
 		1D8487B62AD6038100F7527C /* RemoteTabPanelStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8487B52AD6038100F7527C /* RemoteTabPanelStateTests.swift */; };
+		1D8956212FFD58E40041B982 /* TabErrorTelemetryHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8956202FFD58E40041B982 /* TabErrorTelemetryHelperTests.swift */; };
 		1D91C17E2CF11EA500B24960 /* disconnect-block-cookies-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1742CF11EA400B24960 /* disconnect-block-cookies-analytics.json */; };
 		1D91C17F2CF11EA500B24960 /* disconnect-block-cookies-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1752CF11EA400B24960 /* disconnect-block-cookies-content.json */; };
 		1D91C1802CF11EA500B24960 /* disconnect-block-cookies-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1762CF11EA400B24960 /* disconnect-block-cookies-social.json */; };
@@ -3083,6 +3084,7 @@
 		1D7B789E2AE088930011E9F2 /* EventQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventQueueTests.swift; sourceTree = "<group>"; };
 		1D8487B32AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelMiddleware.swift; sourceTree = "<group>"; };
 		1D8487B52AD6038100F7527C /* RemoteTabPanelStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabPanelStateTests.swift; sourceTree = "<group>"; };
+		1D8956202FFD58E40041B982 /* TabErrorTelemetryHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabErrorTelemetryHelperTests.swift; sourceTree = "<group>"; };
 		1D90440B860A503D4DBA4213 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Storage.strings; sourceTree = "<group>"; };
 		1D91C1742CF11EA400B24960 /* disconnect-block-cookies-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-analytics.json"; path = "attachments/tracking-protection-lists-ios/disconnect-block-cookies-analytics.json"; sourceTree = "<group>"; };
 		1D91C1752CF11EA400B24960 /* disconnect-block-cookies-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-content.json"; path = "attachments/tracking-protection-lists-ios/disconnect-block-cookies-content.json"; sourceTree = "<group>"; };
@@ -17275,6 +17277,7 @@
 				D525DFB225FBE5E000B18763 /* TabTests.swift */,
 				21D8EA942ABE0511003FF16E /* TabTray */,
 				8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */,
+				1D8956202FFD58E40041B982 /* TabErrorTelemetryHelperTests.swift */,
 				8AC225632B6D3F9600CDA7FD /* Telemetry */,
 				8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */,
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
@@ -20635,6 +20638,7 @@
 				B63BC8CE34524B98B781AE4C /* TranslationSettingsStateTests.swift in Sources */,
 				8AFC09572FA54A240070CA11 /* TabManagerPreserveTabsTests.swift in Sources */,
 				8AFC09582FA54A240070CA11 /* TabManagerRemoveTabTests.swift in Sources */,
+				1D8956212FFD58E40041B982 /* TabErrorTelemetryHelperTests.swift in Sources */,
 				8AFC09592FA54A240070CA11 /* TabManagerTestsBase.swift in Sources */,
 				8AFC095A2FA54A240070CA11 /* TabManagerOlderTabsTests.swift in Sources */,
 				8AFC095B2FA54A240070CA11 /* TabManagerRestoreTabsTests.swift in Sources */,
