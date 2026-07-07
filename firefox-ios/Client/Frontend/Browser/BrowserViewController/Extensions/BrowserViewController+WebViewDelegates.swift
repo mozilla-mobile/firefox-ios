@@ -424,6 +424,7 @@ extension BrowserViewController: WKUIDelegate {
 
     private func isGoogleLensActionAvailable() -> Bool {
         guard featureFlagsProvider.isEnabled(.googleLens),
+              userPreferences.getPreferenceFor(.googleLens),
               let defaultEngine = searchEnginesManager.defaultEngine,
               !defaultEngine.isCustomEngine
         else { return false }

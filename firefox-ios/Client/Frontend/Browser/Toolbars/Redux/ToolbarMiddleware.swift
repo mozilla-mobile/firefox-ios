@@ -20,6 +20,7 @@ final class ToolbarMiddleware {
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizerConfigFactory: SummarizerConfigFactory
     private let featureFlagsProvider: FeatureFlagProviding
+    private let userPreferences: UserFeaturePreferring
     private let searchEnginesManager: SearchEnginesManagerProvider
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
@@ -39,12 +40,14 @@ final class ToolbarMiddleware {
          summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          recentSearchProvider: RecentSearchProvider? = nil,
          featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
+         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
          searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.summarizerConfigFactory = summarizerConfigFactory
         self.featureFlagsProvider = featureFlagsProvider
+        self.userPreferences = userPreferences
         self.searchEnginesManager = searchEnginesManager
         self.manager = manager
         self.toolbarHelper = toolbarHelper
@@ -180,7 +183,7 @@ final class ToolbarMiddleware {
             )
             store.dispatch(action)
 
-        case ToolbarActionType.searchEngineDidChange:
+        case ToolbarActionType.searchEngineDidChange, ToolbarActionType.googleLensSettingDidChange:
             dispatchGoogleLensAvailability(for: action.windowUUID)
 
         case ToolbarActionType.urlDidChange:
@@ -581,6 +584,7 @@ final class ToolbarMiddleware {
 
     private func isGoogleLensAvailable(for windowUUID: WindowUUID) -> Bool {
         guard featureFlagsProvider.isEnabled(.googleLens),
+              userPreferences.getPreferenceFor(.googleLens),
               tabManager(for: windowUUID)?.selectedTab?.isPrivate != true,
               let defaultEngine = searchEnginesManager.defaultEngine,
               !defaultEngine.isCustomEngine

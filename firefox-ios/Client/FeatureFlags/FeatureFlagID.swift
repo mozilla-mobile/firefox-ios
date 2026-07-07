@@ -79,6 +79,7 @@ enum FeatureFlagID: String, CaseIterable {
         switch self {
         case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
         case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .googleLens: return FlagKeys.GoogleLens
         case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection

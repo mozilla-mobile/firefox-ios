@@ -128,6 +128,7 @@ enum ToolbarActionType: ActionType {
     case traitCollectionDidChange
     case websiteLoadingStateDidChange
     case searchEngineDidChange
+    case googleLensSettingDidChange
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
     case clearSearch

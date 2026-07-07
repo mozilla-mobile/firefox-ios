@@ -238,6 +238,48 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
+    func testGoogleLensSettingDidChange_withSettingEnabled_dispatchesGoogleLensEnabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            userPreferences: makeUserPreferences(googleLensEnabled: true),
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.googleLensSettingDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testGoogleLensSettingDidChange_withSettingDisabled_dispatchesGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            userPreferences: makeUserPreferences(googleLensEnabled: false),
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.googleLensSettingDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
     func testBrowserDidLoad_withGoogleLensEnabledInPrivateMode_dispatchesWithGoogleLensDisabled() throws {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
@@ -259,6 +301,28 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
                        ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testBrowserDidLoad_withGoogleLensSettingDisabled_dispatchesWithGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            userPreferences: makeUserPreferences(googleLensEnabled: false),
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
@@ -1121,6 +1185,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     private func createSubject(
         manager: ToolbarManager,
         featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags(),
+        userPreferences: UserFeaturePreferring? = nil,
         searchEnginesManager: SearchEnginesManagerProvider = MockSearchEnginesManager()
     ) -> ToolbarMiddleware {
         return ToolbarMiddleware(
@@ -1130,9 +1195,16 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             summarizerConfigFactory: summarizerConfigFactory,
             recentSearchProvider: mockRecentSearchProvider,
             featureFlagsProvider: featureFlagsProvider,
+            userPreferences: userPreferences ?? makeUserPreferences(),
             searchEnginesManager: searchEnginesManager,
             windowManager: windowManager,
         )
+    }
+
+    private func makeUserPreferences(googleLensEnabled: Bool = true) -> MockUserFeaturePreferences {
+        let preferences = MockUserFeaturePreferences()
+        preferences.setPreferenceFor(.googleLens, to: googleLensEnabled)
+        return preferences
     }
 
     private func makeSearchEngine(engineID: String, isCustomEngine: Bool = false) -> OpenSearchEngine {
