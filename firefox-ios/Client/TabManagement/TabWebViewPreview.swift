@@ -22,7 +22,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     /// Whether the next screenshot has invalid layout. When this is true we draw only the Favicon in the preview
     private var layoutWasInvalidated = false
     private var screenCornerRadius: CGFloat {
-        return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
+        return DeviceInfo.deviceCornerRadius ?? 0.0
     }
 
     // MARK: - Inits

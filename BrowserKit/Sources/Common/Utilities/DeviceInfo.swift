@@ -3,8 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 open class DeviceInfo {
+    @MainActor
+    public static var deviceCornerRadius: CGFloat? {
+        return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat
+    }
+
     open class func isSimulator() -> Bool {
         return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }

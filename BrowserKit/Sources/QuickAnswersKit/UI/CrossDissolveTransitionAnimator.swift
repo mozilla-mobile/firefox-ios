@@ -35,7 +35,7 @@ final class CrossDissolveTransitionAnimator: NSObject,
         static let crossDissolveInitialScale: CGFloat = 0.2
         @MainActor
         static let screenCornerRadius: CGFloat = {
-            return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
+            return DeviceInfo.deviceCornerRadius ?? 0.0
         }()
     }
     private let themeManager: any ThemeManager
