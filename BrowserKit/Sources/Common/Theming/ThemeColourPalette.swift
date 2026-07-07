@@ -128,4 +128,3 @@ public protocol ThemeColourPalette {
     var gradientPrivacy: Gradient { get }
     var gradientPrivacyMask: Gradient { get }
 }
-

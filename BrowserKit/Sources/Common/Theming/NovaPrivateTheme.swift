@@ -96,23 +96,23 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
 
     // MARK: - Gradients
 
-    var gradient: Gradient = Gradient(colors: [NovaColors.Violet60, NovaColors.Violet50])
-    var gradientAccent: Gradient = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
-    var gradientAccentSubtle: Gradient = Gradient(colors: [
+    var gradient = Gradient(colors: [NovaColors.Violet60, NovaColors.Violet50])
+    var gradientAccent = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
+    var gradientAccentSubtle = Gradient(colors: [
         NovaColors.VioletDesaturated90,
         NovaColors.VioletDesaturated90
     ])
-    var gradientAIStrong: Gradient = Gradient(colors: [
+    var gradientAIStrong = Gradient(colors: [
         NovaColors.Violet50,
         NovaColors.Pink40,
         NovaColors.Orange30
     ])
-    var gradientBorder: Gradient = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
-    var gradientPrivacy: Gradient = Gradient(colors: [
+    var gradientBorder = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
+    var gradientPrivacy = Gradient(colors: [
         NovaColors.Purple40,
         NovaColors.Purple20
     ])
-    var gradientPrivacyMask: Gradient = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
+    var gradientPrivacyMask = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
     var gradientAIStrongStop1: UIColor = NovaColors.Violet50
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30

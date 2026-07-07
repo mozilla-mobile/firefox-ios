@@ -144,11 +144,11 @@ private struct DarkColourPalette: ThemeColourPalette {
     var iconPrivate: UIColor = .clear
     var borderStrong: UIColor = .clear
     var borderRadioButtonDefault: UIColor = .clear
-    var gradient: Gradient = Gradient(colors: [.clear])
-    var gradientAccent: Gradient = Gradient(colors: [.clear])
-    var gradientAccentSubtle: Gradient = Gradient(colors: [.clear])
-    var gradientAIStrong: Gradient = Gradient(colors: [.clear])
-    var gradientBorder: Gradient = Gradient(colors: [.clear])
-    var gradientPrivacy: Gradient = Gradient(colors: [.clear])
-    var gradientPrivacyMask: Gradient = Gradient(colors: [.clear])
+    var gradient = Gradient(colors: [.clear])
+    var gradientAccent = Gradient(colors: [.clear])
+    var gradientAccentSubtle = Gradient(colors: [.clear])
+    var gradientAIStrong = Gradient(colors: [.clear])
+    var gradientBorder = Gradient(colors: [.clear])
+    var gradientPrivacy = Gradient(colors: [.clear])
+    var gradientPrivacyMask = Gradient(colors: [.clear])
 }
