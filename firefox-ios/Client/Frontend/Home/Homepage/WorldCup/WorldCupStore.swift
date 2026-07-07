@@ -24,6 +24,10 @@ protocol WorldCupStoreProtocol {
     /// Returns true when the World Cup countdown target date has been reached.
     var hasWorldCupStarted: Bool { get }
 
+    /// Returns true once the fixed World Cup end date has passed, after which the
+    /// feature is fully retired regardless of the Nimbus flag or user preference.
+    var hasWorldCupEnded: Bool { get }
+
     /// Whether the celebration (confetti) animation is enabled.
     var isCelebrationAnimationEnabled: Bool { get }
 
@@ -42,6 +46,9 @@ protocol WorldCupStoreProtocol {
 
 /// A Store for all the preferences and feature flags related to the WorldCup feature.
 struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
+    /// Fixed UTC instant at which the World Cup feature retires
+    static let worldCupEndDateString = "2026-07-20T08:00:00Z"
+
     private var iso8601Formatter: ISO8601DateFormatter {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
@@ -63,6 +70,7 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
     }
 
     var isFeatureEnabled: Bool {
+        guard !hasWorldCupEnded else { return false }
         return featureFlagsProvider.isEnabled(.worldCupWidget)
     }
 
@@ -102,6 +110,11 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
         return dateProvider.now() >= startDate
     }
 
+    var hasWorldCupEnded: Bool {
+        guard let endDate = worldCupEndDate else { return false }
+        return dateProvider.now() >= endDate
+    }
+
     var isCelebrationAnimationEnabled: Bool {
         return nimbusFeature.value().showCelebrationAnimation
     }
@@ -114,6 +127,10 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
     private var worldCupStartDate: Date? {
         let dateString = nimbusFeature.value().countdownTargetDate
         return iso8601Formatter.date(from: dateString)
+    }
+
+    private var worldCupEndDate: Date? {
+        return iso8601Formatter.date(from: Self.worldCupEndDateString)
     }
 
     func setIsHomepageSectionEnabled(_ isEnabled: Bool) {

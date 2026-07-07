@@ -2993,6 +2993,10 @@ class BrowserViewController: UIViewController,
             }
         case .translationLanguagePicker(let data):
             presentTranslationLanguagePicker(data: data, sourceButton: state.buttonTapped)
+        case .googleLensPhotoPicker:
+            navigationHandler?.showGoogleLensPhotoPicker()
+        case .googleLensCamera:
+            navigationHandler?.showGoogleLensCamera()
         }
     }
 
@@ -5133,7 +5137,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // When animation duration is zero the keyboard is already showing and we don't need
         // to update the toolbar again. This is the case when we are moving between fields in a form.
         if state.animationDuration > 0 {
-            updateToolbarDisplay()
+            UIView.performWithoutAnimation {
+                updateToolbarDisplay()
+            }
         }
     }
 
@@ -5171,8 +5177,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateBlurViews()
-        addOrUpdateMaskViewIfNeeded()
+        // Avoid leaking the keyboard animation context into toolbar translucency updates. (FXIOS-14985)
+        UIView.performWithoutAnimation {
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {

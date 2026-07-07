@@ -783,7 +783,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmarkSlash],
-                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.shareApple]
             ]
         )
         // Tap to "Open in New Tab"

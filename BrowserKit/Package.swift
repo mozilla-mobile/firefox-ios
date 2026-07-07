@@ -62,6 +62,9 @@ let package = Package(
         .library(
             name: "QuickAnswersKit",
             targets: ["QuickAnswersKit"]),
+        .library(
+            name: "WebCompatReporterKit",
+            targets: ["WebCompatReporterKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -207,6 +210,18 @@ let package = Package(
         .testTarget(
             name: "MenuKitTests",
             dependencies: ["MenuKit"],
+            swiftSettings: [
+            ]
+        ),
+        .target(
+            name: "WebCompatReporterKit",
+            dependencies: ["Common", "ComponentLibrary"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "WebCompatReporterKitTests",
+            dependencies: ["WebCompatReporterKit", "TestKit"],
             swiftSettings: [
             ]
         ),

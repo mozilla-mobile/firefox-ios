@@ -44,6 +44,9 @@ class SecurityTests: BaseTestCase {
         static let inputAppleIdText = "Please input your Apple ID here:"
         static let usernameField = "Username:"
         static let passwordField2 = "Password:"
+        static let spoofClickMeURL = "https://justluckidzz.github.io/clickme/poc-8f7d6e5c4b.html"
+        static let spoofClickMeHost = "justluckidzz.github.io"
+        static let clickHereButton = "CLICK HERE"
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395565
@@ -226,6 +229,20 @@ class SecurityTests: BaseTestCase {
         }
         waitUntilPageLoad()
         browserScreen.assertAddressBarContains(value: "google.com")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4141080
+    func testSpoofClickHereLoadsRealAppleSite() {
+        navigator.openURL(WebStrings.spoofClickMeURL)
+        waitUntilPageLoad()
+        browserScreen.tapWebViewButton(buttonText: WebStrings.clickHereButton)
+        waitUntilPageLoad()
+        // The real apple.com should load after tapping.
+        browserScreen.assertAddressBarContains(value: WebStrings.appleDotCom)
+        // The attacker-controlled URL must not remain displayed or be the destination.
+        let addressValue = (browserScreen.getAddressBarElement().value as? String) ?? ""
+        XCTAssertFalse(addressValue.contains(WebStrings.spoofClickMeHost),
+                       "Attacker-controlled URL should not remain displayed after tapping.")
     }
 
     private func validateURLAndPageContent(URL: String, elementsShouldExists: Bool) {
