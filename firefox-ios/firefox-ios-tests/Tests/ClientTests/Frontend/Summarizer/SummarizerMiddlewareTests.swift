@@ -68,7 +68,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 
@@ -100,7 +100,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 
@@ -131,7 +131,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -158,7 +158,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 
@@ -180,7 +180,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 
@@ -208,7 +208,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 
@@ -239,7 +239,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 
@@ -268,7 +268,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 
@@ -298,7 +298,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 
@@ -325,7 +325,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.summarizerProvider(AppState(), action)
+        subject.summarizerProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation], timeout: 1)
 

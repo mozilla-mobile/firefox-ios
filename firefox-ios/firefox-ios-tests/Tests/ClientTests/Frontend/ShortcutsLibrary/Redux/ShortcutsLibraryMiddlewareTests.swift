@@ -33,7 +33,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ShortcutsLibraryActionType.viewDidAppear
         )
 
-        subject.shortcutsLibraryProvider(initialState, action)
+        subject.shortcutsLibraryProvider.legacyMiddleware(initialState, action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let event = GleanMetrics.HomepageShortcutsLibrary.viewed
@@ -49,7 +49,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ShortcutsLibraryActionType.viewDidAppear
         )
 
-        subject.shortcutsLibraryProvider(AppState(), action)
+        subject.shortcutsLibraryProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
     }
@@ -61,7 +61,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ShortcutsLibraryActionType.viewDidDisappear
         )
 
-        subject.shortcutsLibraryProvider(AppState(), action)
+        subject.shortcutsLibraryProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let event = GleanMetrics.HomepageShortcutsLibrary.closed
@@ -77,7 +77,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ShortcutsLibraryActionType.tapOnShortcutCell
         )
 
-        subject.shortcutsLibraryProvider(AppState(), action)
+        subject.shortcutsLibraryProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let event = GleanMetrics.HomepageShortcutsLibrary.shortcutTapped

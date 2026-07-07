@@ -30,7 +30,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .findInPage)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -49,7 +49,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .bookmarks)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -68,7 +68,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .history)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -87,7 +87,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .downloads)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -106,7 +106,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .passwords)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -125,7 +125,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .settings)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -144,7 +144,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .printSheet)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -163,7 +163,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .shareSheet)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -182,7 +182,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .saveAsPDF)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -201,7 +201,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .syncSignIn)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -220,7 +220,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .editBookmark)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -239,7 +239,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .readerView)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -258,7 +258,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .zoom)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -277,7 +277,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .siteProtections)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -296,7 +296,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .defaultBrowser)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -319,7 +319,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -341,7 +341,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.CloseButtonExtra>
@@ -369,7 +369,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -396,7 +396,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -423,7 +423,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -451,7 +451,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -473,7 +473,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MenuDismissedExtra>
@@ -496,7 +496,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -519,7 +519,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -542,7 +542,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -565,7 +565,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -588,7 +588,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -611,7 +611,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -634,7 +634,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>

@@ -50,7 +50,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -81,7 +81,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -111,7 +111,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -140,7 +140,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -161,7 +161,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.saveLanguages
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
         let preferredLanguages = try XCTUnwrap(dispatched.preferredLanguages)
@@ -185,7 +185,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -209,7 +209,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         let expectation = XCTestExpectation(description: "wait for action to dispatch")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -235,7 +235,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
 
@@ -263,7 +263,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         wait(for: [expectation, resetExpectation], timeout: 1.0)
 
@@ -288,7 +288,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         wait(for: [expectation, resetExpectation], timeout: 2.0)
 
@@ -308,7 +308,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.toggleAutoTranslate
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         let firstAction = try XCTUnwrap(mockStore.dispatchedActions[0] as? TranslationSettingsMiddlewareAction)
@@ -332,7 +332,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.toggleAutoTranslate
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
@@ -354,7 +354,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.saveLanguages
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         let stored = mockProfile.prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
         XCTAssertEqual(stored, "en,fr")
@@ -376,7 +376,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.enterEditMode
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
 
@@ -390,7 +390,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.cancelEditMode
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
 
@@ -405,7 +405,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.reorderLanguages
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
 
@@ -420,7 +420,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.removeLanguage
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
 
@@ -436,7 +436,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: GeneralBrowserActionType.showToast
         )
 
-        subject.translationSettingsProvider(mockStore.state, action)
+        subject.translationSettingsProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
 
