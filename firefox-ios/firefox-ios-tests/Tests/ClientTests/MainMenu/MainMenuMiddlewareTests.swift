@@ -38,12 +38,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "find_in_page")
     }
 
@@ -59,12 +57,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "bookmarks")
     }
 
@@ -80,12 +76,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "history")
     }
 
@@ -101,12 +95,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "downloads")
     }
 
@@ -122,12 +114,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "passwords")
     }
 
@@ -143,12 +133,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "settings")
     }
 
@@ -164,12 +152,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "print")
     }
 
@@ -185,12 +171,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "share")
     }
 
@@ -206,12 +190,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "save_as_PDF")
     }
 
@@ -227,12 +209,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "sign_in_account")
     }
 
@@ -248,12 +228,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "edit_bookmark")
     }
 
@@ -269,12 +247,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "reader_view")
     }
 
@@ -290,12 +266,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "zoom")
     }
 
@@ -311,12 +285,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "site_protections")
     }
 
@@ -332,12 +304,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "default_browser_settings")
     }
 
@@ -357,12 +327,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "switch_to_mobile_site")
     }
 
@@ -381,12 +349,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.CloseButtonExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.closeButton)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.closeButton
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isHomepage, false)
     }
 
@@ -515,12 +481,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MenuDismissedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.menuDismissed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.menuDismissed
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isHomepage, false)
     }
 
@@ -540,12 +504,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "zoom")
     }
 
@@ -565,12 +527,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "bookmark_this_page")
     }
 
@@ -590,12 +550,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "edit_bookmark")
     }
 
@@ -615,12 +573,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "add_to_shortcuts")
     }
 
@@ -640,12 +596,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "remove_from_shortcuts")
     }
 
@@ -665,12 +619,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "night_mode_turn_on")
     }
 
@@ -690,12 +642,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "night_mode_turn_off")
     }
 
