@@ -830,7 +830,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
     private func longPressBookmarkCell() {
         let bookMarkCell = app.cells["BookmarksCell"]
-        scrollToElement(bookMarkCell)
+        // Scroll until the cell is actually hittable, not merely visible: in landscape the cell can
+        // be on-screen but not hittable, and press() then throws "Not hittable" on the first press.
+        scrollToElement(bookMarkCell, isHittable: true)
         let contextMenuTable = app.tables["Context Menu"]
         bookMarkCell.pressWithRetry(duration: 1.5, element: contextMenuTable)
     }

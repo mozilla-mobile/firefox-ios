@@ -135,11 +135,12 @@ final class LoginSettingsScreen {
     /// Dismisses the system device-passcode prompt guarding the Passwords/Credit Cards screens.
     ///
     /// On CI the springboard passcode overlay is intermittently not presented — the authentication
-    /// grace period may still be active (no prompt shown) or the springboard accessibility hierarchy
-    /// is momentarily unreadable. Unconditionally waiting for the passcode field therefore times out
-    /// and fails the test even though nothing is wrong. Wait for the prompt without failing on
-    /// timeout, and only type the passcode when it is actually shown; callers assert their own
-    /// destination screen afterwards.
+    /// grace period may still be active (no prompt shown) — and when it is presented the first
+    /// keystrokes are occasionally dropped, leaving the screen locked. This types the passcode and
+    /// retries until the prompt is dismissed, which is the "unlocked" signal for every screen this
+    /// guards, so it stays agnostic to the destination (Passwords list, Credit Cards list, …).
+    /// Callers assert their own destination screen afterwards. If the grace period is active the
+    /// prompt never appears and this returns immediately.
     func unlockLoginsView() {
         let passcodeValue = "foo\n"
         let base = BaseTestCase()
@@ -148,10 +149,18 @@ final class LoginSettingsScreen {
         }
 
         let passcode = sel.PASSCODE_FIELD.element(in: springboard)
-        if base.mozWaitForElementToExist(passcode, timeout: TIMEOUT_LONG, failOnTimeout: false) {
-            passcode.tapAndTypeText(passcodeValue)
-            base.mozWaitForElementToNotExist(passcode)
+        // First detection uses the long timeout because the prompt can be slow to present on CI.
+        guard base.mozWaitForElementToExist(passcode, timeout: TIMEOUT_LONG, failOnTimeout: false) else {
+            return
         }
+        var attempts = 3
+        repeat {
+            passcode.tapAndTypeText(passcodeValue)
+            if base.mozWaitForElementToNotExist(passcode, timeout: TIMEOUT, failOnTimeout: false) {
+                return
+            }
+            attempts -= 1
+        } while passcode.exists && attempts > 0
     }
 
     func assertLoginCreatedFirstMatch() {
