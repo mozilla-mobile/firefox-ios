@@ -268,7 +268,7 @@ final class QuickAnswersSourceView: UIView,
 
 /// The enlarged preview shown when long pressing a source cell: a larger thumbnail and the full,
 /// untruncated title. Tapping it commits the same navigation as tapping the cell.
-final private class SourcePreviewViewController: UIViewController {
+private final class SourcePreviewViewController: UIViewController {
     private struct UX {
         static let width: CGFloat = 260.0
         static let padding: CGFloat = 16.0
