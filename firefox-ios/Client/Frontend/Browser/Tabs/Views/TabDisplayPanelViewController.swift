@@ -84,6 +84,7 @@ final class TabDisplayPanelViewController: UIViewController,
         self.tabTrayUtils = tabTrayUtils
         super.init(nibName: nil, bundle: nil)
         tabDisplayView.dragAndDropDelegate = dragAndDropDelegate
+        subscribeToRedux()
     }
 
     required init?(coder: NSCoder) {
@@ -96,8 +97,7 @@ final class TabDisplayPanelViewController: UIViewController,
         super.viewDidLoad()
         view.accessibilityLabel = .TabsTray.TabTrayViewAccessibilityLabel
         setupView()
-        subscribeToRedux()
-
+        dispatchReduxLifecycleAction()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
@@ -118,11 +118,6 @@ final class TabDisplayPanelViewController: UIViewController,
         super.viewDidAppear(animated)
 
         shouldShowFadeView()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        unsubscribeFromRedux()
     }
 
     override func viewDidLayoutSubviews() {
@@ -183,6 +178,7 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     func removeTabPanel() {
+        unsubscribeFromRedux()
         guard isViewLoaded else { return }
         view.removeConstraints(view.constraints)
         view.subviews.forEach { $0.removeFromSuperview() }
@@ -303,17 +299,11 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     // MARK: - Redux
-
     func subscribeToRedux() {
         let screenAction = ComponentAction(windowUUID: windowUUID,
                                            actionType: ComponentActionType.addComponent,
                                            component: .tabsPanel)
         store.dispatch(screenAction)
-
-        let didLoadAction = TabPanelViewAction(panelType: panelType,
-                                               windowUUID: windowUUID,
-                                               actionType: TabPanelViewActionType.tabPanelDidLoad)
-        store.dispatch(didLoadAction)
 
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -328,6 +318,13 @@ final class TabDisplayPanelViewController: UIViewController,
                                      actionType: ComponentActionType.removeComponent,
                                      component: .tabsPanel)
         store.dispatch(action)
+    }
+
+    private func dispatchReduxLifecycleAction() {
+        let didLoadAction = TabPanelViewAction(panelType: panelType,
+                                               windowUUID: windowUUID,
+                                               actionType: TabPanelViewActionType.tabPanelDidLoad)
+        store.dispatch(didLoadAction)
     }
 
     func newState(state: TabsPanelState) {
