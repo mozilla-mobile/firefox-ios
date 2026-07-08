@@ -63,6 +63,26 @@ final class DocumentLoggerTests: XCTestCase {
         XCTAssertNil(logger.savedExtra?[subject.downloadExtraKey])
     }
 
+    func testRegisterDownloadFinish_missingDocument_logsWithoutExtra() {
+        let subject = createSubject()
+
+        subject.registerDownloadFinish(url: URL(string: "https://www.example.com")!)
+
+        XCTAssertEqual(logger.savedMessage, "Document is missing but finished downloading")
+        XCTAssertEqual(logger.savedLevel, .info)
+        XCTAssertNil(logger.savedExtra)
+    }
+
+    func testRegisterDownloadFinish_registeredDocument_doesntLog() {
+        let subject = createSubject()
+        let url = URL(string: "https://www.example.com")!
+
+        subject.registerDownloadStart(url: url)
+        subject.registerDownloadFinish(url: url)
+
+        XCTAssertNil(logger.savedMessage)
+    }
+
     private func createSubject() -> DocumentLogger {
         let logger = DocumentLogger(logger: logger)
         trackForMemoryLeaks(logger)

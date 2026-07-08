@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import TestKit
 import XCTest
 
 @testable import Client
@@ -224,6 +225,39 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
+    }
+
+    // MARK: - logCertificateErrorDetails
+
+    func testLogCertificateErrorDetails_withUnderlyingError_logsDiagnosticsInMessageWithoutExtra() throws {
+        let logger = MockLogger()
+        let error = makeBadCertDomainError()
+
+        NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
+
+        let message = try XCTUnwrap(logger.savedMessage)
+        XCTAssertEqual(logger.savedLevel, .debug)
+        XCTAssertTrue(message.contains("\(error.code)"))
+        XCTAssertTrue(message.contains("Has underlying error: true"))
+        XCTAssertTrue(message.contains("has cert error code: true"))
+        XCTAssertNil(logger.savedExtra)
+    }
+
+    func testLogCertificateErrorDetails_withoutUnderlyingError_logsFalseDiagnostics() throws {
+        let logger = MockLogger()
+        let error = NSError(
+            domain: NSURLErrorDomain,
+            code: NSURLErrorServerCertificateUntrusted,
+            userInfo: [:]
+        )
+
+        NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
+
+        let message = try XCTUnwrap(logger.savedMessage)
+        XCTAssertEqual(logger.savedLevel, .debug)
+        XCTAssertTrue(message.contains("Has underlying error: false"))
+        XCTAssertTrue(message.contains("has cert error code: false"))
+        XCTAssertNil(logger.savedExtra)
     }
 
     // MARK: - getCertDetails

@@ -676,13 +676,9 @@ final class TabManagerImplementation: NSObject,
         }
 
         if tab.url == nil {
-            logger.log("Tab restored has empty URL",
+            logger.log("Tab restored has empty URL. tabID: \(tabData.id.uuidString), lastUsedTime: \(tabData.lastUsedTime)",
                        level: .debug,
-                       category: .tabs,
-                       extra: [
-                        "tabID": tabData.id.uuidString,
-                        "lastUsedTime": tabData.lastUsedTime.description
-                       ])
+                       category: .tabs)
         }
     }
 

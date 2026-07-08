@@ -654,9 +654,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             tableView,
             viewForHeaderInSection: section
         ) as? ThemedTableSectionHeaderFooterView else {
-            logger.log("Failed to cast or retrieve ThemedTableSectionHeaderFooterView for section: \(section)",
+            logger.log("Failed to cast or retrieve ThemedTableSectionHeaderFooterView",
                        level: .fatal,
-                       category: .lifecycle)
+                       category: .lifecycle,
+                       extra: ["section": "\(section)"])
             return UIView()
         }
         return headerView

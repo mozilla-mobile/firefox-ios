@@ -1413,18 +1413,14 @@ class BrowserViewController: UIViewController,
 
     /// Logging current Nimbus state
     private func logCurrentNimbusExperimentsState() {
-        var currentExperimentsDictionary = [String: String]()
-        Experiments.shared.getAvailableExperiments()
-            .enumerated()
-            .forEach { index, experiment in
-                currentExperimentsDictionary["experiment \(index)"] = mirrorToString(experiment)
-            }
+        let currentExperiments = Experiments.shared.getAvailableExperiments()
+            .map { mirrorToString($0) }
+            .joined(separator: ", ")
 
         logger.log(
-            "Current Nimbus available experiments configuration",
+            "Current Nimbus available experiments configuration: \(currentExperiments)",
             level: .info,
-            category: .experiments,
-            extra: currentExperimentsDictionary,
+            category: .experiments
         )
     }
 
