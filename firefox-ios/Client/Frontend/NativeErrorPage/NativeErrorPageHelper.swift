@@ -152,7 +152,7 @@ class NativeErrorPageHelper {
                     .map { WaybackCodes.codesForWayback.contains($0) } == true:
                 ErrorPageModel(
                     errorTitle: .NativeErrorPage.Wayback.TitleLabel,
-                    errorDescription: .NativeErrorPage.Wayback.Description,
+                    errorDescription: String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description),
                     foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
                     url: url,
                     advancedSection: nil,

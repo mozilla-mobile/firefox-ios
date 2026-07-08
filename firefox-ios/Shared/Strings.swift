@@ -2117,8 +2117,8 @@ extension String {
             public static let Description = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Description.v154",
                 tableName: "NativeErrorPage",
-                value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. Firefox can also search the Wayback Machine for an earlier version of this page.",
-                comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+                value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. %@ can also search the Wayback Machine for an earlier version of this page.",
+                comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox).")
             public static let CheckingLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Checking.v154",
                 tableName: "NativeErrorPage",
