@@ -79,8 +79,13 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         return featureFlagsProvider.isEnabled(.recentSearches)
     }
 
-    private var isGoogleLensFeatureEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.googleLens)
+    private var shouldShowGoogleLensSetting: Bool {
+        guard featureFlagsProvider.isEnabled(.googleLens),
+              let defaultEngine = model.defaultEngine,
+              !defaultEngine.isCustomEngine
+        else { return false }
+
+        return defaultEngine.isGoogleEngine
     }
 
     private var isFirefoxSuggestFeatureEnabled: Bool {
@@ -519,7 +524,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         if isTrendingSearchesEnabled || isRecentSearchesEnabled {
             sectionsToDisplay.insert(.preSearch, at: 2)
         }
-        if isGoogleLensFeatureEnabled,
+        if shouldShowGoogleLensSetting,
            let alternateEnginesIndex = sectionsToDisplay.firstIndex(of: .alternateEngines) {
             sectionsToDisplay.insert(.googleLens, at: alternateEnginesIndex)
         }
