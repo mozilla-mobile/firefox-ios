@@ -110,6 +110,8 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
         onSelect: @escaping (String) -> Void
     ) {
         selectionHandler = onSelect
+        backgroundConfiguration = .listGroupedCell()
+        backgroundConfiguration?.backgroundColor = theme.colors.layer5
         var configuration = menuButton.configuration ?? UIButton.Configuration.plain()
         configuration.title = title
         configuration.baseForegroundColor = isPlaceholder ? theme.colors.textSecondary : theme.colors.textPrimary

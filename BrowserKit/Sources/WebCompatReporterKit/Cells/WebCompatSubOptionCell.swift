@@ -11,6 +11,8 @@ final class WebCompatSubOptionCell: UICollectionViewListCell {
         content.text = title
         content.textProperties.color = theme.colors.textPrimary
         contentConfiguration = content
+        backgroundConfiguration = .listGroupedCell()
+        backgroundConfiguration?.backgroundColor = theme.colors.layer5
         accessories = isSelected ? [checkmarkAccessory(theme: theme)] : []
         // The checkmark is decorative; the selected state rides on the cell so
         // VoiceOver announces it. Reset on reuse (the cell reconfigures in place).
