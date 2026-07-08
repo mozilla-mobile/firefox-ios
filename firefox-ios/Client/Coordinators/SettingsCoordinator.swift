@@ -79,6 +79,9 @@ final class SettingsCoordinator: BaseCoordinator,
         // We might already know the sub-settings page we want to show, but in some case we don't and
         // the flow decision needs to be figured out by the view controller
         if let viewController = getSettingsViewController(settingsSection: settingsSection) {
+            // FIXME: FXIOS-15967 We should pop to the root of the settings screen before pushing new screens from deeplinks,
+            // which might push a view controller to the wrong sub-settings nav hierarchy.
+            if isAlreadyOnTop(viewController) { return }
             // If Settings is already showing a subpage, reset to root before opening the routed destination.
             if shouldResetNavigationStack,
                let root = router.rootViewController,
@@ -94,6 +97,11 @@ final class SettingsCoordinator: BaseCoordinator,
             assert(settingsViewController != nil)
             settingsViewController?.handle(route: settingsSection)
         }
+    }
+
+    private func isAlreadyOnTop(_ vc: UIViewController) -> Bool {
+        guard let top = router.navigationController.topViewController else { return false }
+        return type(of: top) == type(of: vc)
     }
 
     override func canHandle(route: Route) -> Bool {

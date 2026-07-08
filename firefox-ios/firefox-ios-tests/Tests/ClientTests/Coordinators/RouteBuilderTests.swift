@@ -59,6 +59,23 @@ final class RouteBuilderTests: XCTestCase {
         }
     }
 
+    func test_makeRoute_AppIconShortcut_ReturnsAppIconSettingsRoute() {
+        let routeBuilder = createSubject(mainQueue: MockDispatchQueue())
+        let bundleId = Bundle.main.bundleIdentifier ?? ""
+        let shortcut = UIApplicationShortcutItem(
+            type: "\(bundleId).AppIcon",
+            localizedTitle: "App Icon"
+        )
+
+        let route = routeBuilder.makeRoute(shortcutItem: shortcut, tabSetting: .topSites)
+
+        guard case let .settings(section) = route else {
+            XCTFail("Expected .settings route, got \(String(describing: route))")
+            return
+        }
+        XCTAssertEqual(section, .appIcon)
+    }
+
     func test_makeRoute_ResetsShouldOpenNewTabAfterDelay() {
         let routeBuilder = createSubject(mainQueue: MockDispatchQueue())
         routeBuilder.shouldOpenNewTab = true

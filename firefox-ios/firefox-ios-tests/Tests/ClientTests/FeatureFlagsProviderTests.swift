@@ -140,7 +140,7 @@ final class FeatureFlagsProviderTests: XCTestCase {
         mock.enabledFlags = [.translation]
 
         XCTAssertTrue(mock.isEnabled(.translation))
-        XCTAssertFalse(mock.isEnabled(.reportSiteIssue))
+        XCTAssertFalse(mock.isEnabled(.reportBrokenSite))
     }
 }
 

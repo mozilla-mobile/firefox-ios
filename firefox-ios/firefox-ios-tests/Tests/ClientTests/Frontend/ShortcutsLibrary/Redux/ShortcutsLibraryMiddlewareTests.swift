@@ -36,12 +36,10 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.shortcutsLibraryProvider(initialState, action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.HomepageShortcutsLibrary.viewed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.HomepageShortcutsLibrary.viewed
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_viewDidAppearAction_doesNotSendTelemetryData_whenShouldRecordImpressionTelemetry_isFalse() throws {
@@ -66,12 +64,10 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.shortcutsLibraryProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.HomepageShortcutsLibrary.closed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.HomepageShortcutsLibrary.closed
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_tapOnShortcutCellAction_sendsTelemetryData() throws {
@@ -84,12 +80,10 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.shortcutsLibraryProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.HomepageShortcutsLibrary.shortcutTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.HomepageShortcutsLibrary.shortcutTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     // MARK: - Helpers

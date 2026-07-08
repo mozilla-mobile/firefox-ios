@@ -2409,11 +2409,22 @@ app_errors:
   tab_loss_detected:
     type: event
     description: |
-      Recorded when we detect potential tab loss
+      Recorded when we detect potential major tab loss
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/22180
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22221
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  tab_count_discrepancy:
+    type: event
+    description: |
+      Recorded when we detect a minor discrepancy in tab count between backgrounding and foregrounding
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/34546
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34541
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never

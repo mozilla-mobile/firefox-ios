@@ -67,7 +67,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable, WorldCupPagerView {
         )
         let shareAction = UIAction(
             title: .WorldCup.HomepageWidget.ShareLabel,
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
             handler: { [weak self] _ in self?.shareSchedule() }
         )
         let removeAction = UIAction(

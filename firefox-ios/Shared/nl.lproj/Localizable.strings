@@ -1514,7 +1514,7 @@
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Tabbladgroepen";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
-"Settings.Tabs.CustomizeTabsSection.Title" = "Tabbladvak aanpassen";
+"Settings.Tabs.CustomizeTabsSection.Title" = "Tabbladenvak aanpassen";
 
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "Tabbladen";

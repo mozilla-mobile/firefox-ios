@@ -26,6 +26,8 @@ final class AccessoryViewProvider: UIView,
         static let spacerViewHeight: CGFloat = 4
         static let cornerRadius: CGFloat = 24.0
         static let buttonsWidth: CGFloat = 40
+        // Toolbar spacing around the autofill pill (insets + inter-item gaps).
+        static let autofillHorizontalPadding: CGFloat = 80
     }
 
     // MARK: - Properties
@@ -33,6 +35,7 @@ final class AccessoryViewProvider: UIView,
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     private var autofillAccessoryView: AutofillAccessoryViewButtonItem?
+    private var currentAccessoryViewWidth: CGFloat = 0
     let windowUUID: WindowUUID
 
     // Stub closures - these closures will be given as selectors in a future task
@@ -218,7 +221,26 @@ final class AccessoryViewProvider: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// Toolbar width left for the autofill pill once the side buttons and their spacing are removed.
+    /// Driven by geometry rather than device type
+    private var autofillFillWidth: CGFloat? {
+        guard #available(iOS 26.0, *) else { return nil }
+
+        let sideButtonsWidth = (navigationButtonsBarItem.customView?.bounds.width ?? 0)
+                             + (doneButton.customView?.bounds.width ?? 0)
+        let available = toolbar.bounds.width - sideButtonsWidth - UX.autofillHorizontalPadding
+        return available > 0 ? available : nil
+    }
+
     // MARK: - Lifecycle
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard bounds.width != currentAccessoryViewWidth else { return }
+
+        currentAccessoryViewWidth = bounds.width
+        autofillAccessoryView?.applyFillWidth(autofillFillWidth)
+    }
+
     override func removeFromSuperview() {
         super.removeFromSuperview()
         // Reset showing of credit card when dismissing the view
@@ -247,6 +269,9 @@ final class AccessoryViewProvider: UIView,
         }
         configureToolbarItems()
         layoutIfNeeded()
+
+        // Update pill width after reload view
+        autofillAccessoryView?.applyFillWidth(autofillFillWidth)
     }
 
     private func setupSpacer(_ spacer: UIView, width: CGFloat) {

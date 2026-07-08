@@ -59,7 +59,7 @@
 "Authentication.reason" = "Autentiser for å gå tilbake til %@";
 
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "Legg til egendefinert nettadresse";
+"Autocomplete.addCustomUrl" = "Legg til tilpasset nettadresse";
 
 /* Label for error state when entering an invalid URL */
 "Autocomplete.addCustomUrlError" = "Dobbeltsjekk nettadressen du skrev inn.";
@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlPlaceholder" = "Lim inn eller skriv inn nettadresse";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ Legg til egendefinert nettadresse";
+"Autocomplete.addCustomUrlWithPlus" = "+ Legg til tilpasset nettadresse";
 
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Ny tilpasset nettadresse lagt til.";

@@ -132,16 +132,35 @@ final class LoginSettingsScreen {
         BaseTestCase().mozWaitForElementToNotExist(match)
     }
 
+    /// Dismisses the system device-passcode prompt guarding the Passwords/Credit Cards screens.
+    ///
+    /// On CI the springboard passcode overlay is intermittently not presented — the authentication
+    /// grace period may still be active (no prompt shown) — and when it is presented the first
+    /// keystrokes are occasionally dropped, leaving the screen locked. This types the passcode and
+    /// retries until the prompt is dismissed, which is the "unlocked" signal for every screen this
+    /// guards, so it stays agnostic to the destination (Passwords list, Credit Cards list, …).
+    /// Callers assert their own destination screen afterwards. If the grace period is active the
+    /// prompt never appears and this returns immediately.
     func unlockLoginsView() {
         let passcodeValue = "foo\n"
+        let base = BaseTestCase()
         if sel.ONBOARDING_CONTINUE_BUTTON.element(in: app).exists {
             sel.ONBOARDING_CONTINUE_BUTTON.element(in: app).waitAndTap()
         }
 
         let passcode = sel.PASSCODE_FIELD.element(in: springboard)
-        BaseTestCase().mozWaitForElementToExist(passcode)
-        passcode.tapAndTypeText(passcodeValue)
-        BaseTestCase().mozWaitForElementToNotExist(passcode)
+        // First detection uses the long timeout because the prompt can be slow to present on CI.
+        guard base.mozWaitForElementToExist(passcode, timeout: TIMEOUT_LONG, failOnTimeout: false) else {
+            return
+        }
+        var attempts = 3
+        repeat {
+            passcode.tapAndTypeText(passcodeValue)
+            if base.mozWaitForElementToNotExist(passcode, timeout: TIMEOUT, failOnTimeout: false) {
+                return
+            }
+            attempts -= 1
+        } while passcode.exists && attempts > 0
     }
 
     func assertLoginCreatedFirstMatch() {

@@ -112,28 +112,19 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         subject.pocketSectionProvider(AppState(), action)
 
+        let firstMetric = GleanMetrics.Pocket.openStoryOrigin
+        let secondMetric = GleanMetrics.Pocket.openStoryPosition
         let firstSavedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>
         )
-        let expectedFirstMetricType = type(of: GleanMetrics.Pocket.openStoryOrigin)
-        let firstResultMetricType = type(of: firstSavedMetric)
-        let debugMessage = TelemetryDebugMessage(
-            expectedMetric: expectedFirstMetricType,
-            resultMetric: firstResultMetricType
-        )
-
-        let secondSavedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>)
-        let expectedSecondMetricType = type(of: GleanMetrics.Pocket.openStoryPosition)
-        let secondResultMetricType = type(of: secondSavedMetric)
-        let secondDebugMessage = TelemetryDebugMessage(
-            expectedMetric: expectedSecondMetricType,
-            resultMetric: secondResultMetricType
+        let secondSavedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents[safe: 1] as? LabeledMetricType<CounterMetricType>
         )
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
         XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 2)
-        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
-        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
+        XCTAssert(firstSavedMetric === firstMetric, "Received \(firstSavedMetric) instead of \(firstMetric)")
+        XCTAssert(secondSavedMetric === secondMetric, "Received \(secondSavedMetric) instead of \(secondMetric)")
     }
 
     func test_tapOnHomepagePocketCell_doesNotSendTelemetryData() throws {
@@ -155,12 +146,10 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.pocketSectionProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? CounterMetricType)
-        let expectedMetricType = type(of: GleanMetrics.Pocket.sectionImpressions)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let metric = GleanMetrics.Pocket.sectionImpressions
 
         XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
     }
 
     func test_tappedOnOpenNewPrivateTabAction_sendTelemetryData() throws {
@@ -178,12 +167,10 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.pocketSectionProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.Pocket.openInPrivateTab)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Pocket.openInPrivateTab
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_tappedOnOpenNewPrivateTabAction_doesNotSendTelemetryData() {
