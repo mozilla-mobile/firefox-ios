@@ -30,12 +30,6 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
         $0.font = FXFontStyles.Regular.footnote.scaledFont()
         $0.lineBreakMode = .byTruncatingTail
         $0.adjustsFontForContentSizeCategory = true
-        $0.setContentCompressionResistancePriority(.required, for: .vertical)
-    }
-    private let titleStackView: UIStackView = .build {
-        $0.axis = .horizontal
-        $0.alignment = .center
-        $0.spacing = UX.titleRowSpacing
     }
 
     override init(frame: CGRect) {
@@ -50,23 +44,24 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
     // MARK: - Setup
 
     private func setupSubviews() {
-        titleStackView.addArrangedSubview(faviconImageView)
-        titleStackView.addArrangedSubview(titleLabel)
-        contentView.addSubviews(thumbnailImageView, titleStackView)
+        contentView.addSubviews(thumbnailImageView, faviconImageView, titleLabel)
 
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            titleStackView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
-                                                constant: UX.titleRowTopSpacing),
-            titleStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            titleStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
+            faviconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            faviconImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             faviconImageView.widthAnchor.constraint(equalToConstant: UX.faviconSize),
             faviconImageView.heightAnchor.constraint(equalToConstant: UX.faviconSize),
+
+            titleLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
+                                            constant: UX.titleRowTopSpacing),
+            titleLabel.leadingAnchor.constraint(equalTo: faviconImageView.trailingAnchor,
+                                                constant: UX.titleRowSpacing),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
 
@@ -248,7 +243,7 @@ final class QuickAnswersSourceView: UIView,
         let theme = self.theme
         // The URL is stashed on the identifier so the preview commit can navigate to it.
         return UIContextMenuConfiguration(identifier: url as NSURL, previewProvider: {
-            QuickAnswersSourcePreviewViewController(source: item, theme: theme)
+            SourcePreviewViewController(source: item, theme: theme)
         })
     }
 
@@ -273,7 +268,7 @@ final class QuickAnswersSourceView: UIView,
 
 /// The enlarged preview shown when long pressing a source cell: a larger thumbnail and the full,
 /// untruncated title. Tapping it commits the same navigation as tapping the cell.
-final class QuickAnswersSourcePreviewViewController: UIViewController {
+final private class SourcePreviewViewController: UIViewController {
     private struct UX {
         static let width: CGFloat = 260.0
         static let padding: CGFloat = 16.0

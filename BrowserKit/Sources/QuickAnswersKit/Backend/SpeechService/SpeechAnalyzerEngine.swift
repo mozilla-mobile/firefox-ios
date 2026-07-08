@@ -61,7 +61,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         let transcriber = SpeechTranscriber(
             locale: resolvedLocale,
             transcriptionOptions: [],
-            reportingOptions: [.volatileResults],
+            reportingOptions: [.volatileResults, .fastResults],
             attributeOptions: [.transcriptionConfidence]
         )
         self.transcriber = transcriber

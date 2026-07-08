@@ -67,6 +67,7 @@ protocol AudioManagerProtocol {
 }
 
 protocol SpeechRecognizerProvider: Sendable {
+    var supportsOnDeviceRecognition: Bool { get }
     var isAvailable: Bool { get }
     func recognitionTask(
         with request: SFSpeechRecognitionRequest,
