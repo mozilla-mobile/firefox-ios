@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 
 open class DeviceInfo {
+    // Should not be used on iOS 26+
     @MainActor
     public static var deviceCornerRadius: CGFloat? {
         return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat
@@ -13,9 +14,14 @@ open class DeviceInfo {
 
     @MainActor
     @available(iOS 26.0, *)
-    open class func deviceCornerConfiguration() -> UICornerConfiguration {
-        let cornerRadius = deviceCornerRadius ?? 0
-        return UICornerConfiguration.corners(radius: UICornerRadius.fixed(cornerRadius))
+    open class func deviceCornerConfiguration(minimumRadius: CGFloat) -> UICornerConfiguration {
+        return UICornerConfiguration.corners(radius: .containerConcentric(minimum: minimumRadius))
+    }
+
+    @MainActor
+    @available(iOS 26.0, *)
+    open class func deviceCornerConfigurtion(minimumRadius: CGFloat, view: UIView) {
+        view.cornerConfiguration = UICornerConfiguration.corners(radius: .containerConcentric(minimum: minimumRadius))
     }
 
     open class func isSimulator() -> Bool {
