@@ -265,7 +265,7 @@ workflows:
         is_always_run: true
     - script@1:
         title: Run Danger 2
-        timeout: 1500
+        timeout: 360
         inputs:
         - content: |
             #!/usr/bin/env bash
@@ -273,40 +273,15 @@ workflows:
             set -e
             # Extract .xcresult using xcrun xccov
             echo "Generating coverage.json from xcresult..."
-            xcrun xccov view --report --json "$BITRISE_XCRESULT_PATH" > coverage_app.json
-
-            # === TEMP EXPERIMENT (FXIOS-16181) — REMOVE AFTER VERIFYING ===
-            # The Fennec UnitTest xcresult doesn't reliably include the BrowserKit
-            # package test bundle, so WebCompatReporterKit files show as 0% in the
-            # coverage gate. Run those tests here and merge their coverage in
-            # (package entry wins on duplicate file names). Falls back to app-only
-            # coverage if anything fails, so Danger still runs.
-            PKG_COVERAGE_OK=true
-            rm -rf "$BITRISE_SOURCE_DIR/browserkit.xcresult"
-            ( cd "$BITRISE_SOURCE_DIR/BrowserKit" && xcodebuild test \
-                -scheme BrowserKit-Package \
-                -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' \
-                -only-testing:WebCompatReporterKitTests \
-                -enableCodeCoverage YES \
-                -resultBundlePath "$BITRISE_SOURCE_DIR/browserkit.xcresult" \
-                "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" ) || PKG_COVERAGE_OK=false
-
-            if [ "$PKG_COVERAGE_OK" = true ] && [ -e "$BITRISE_SOURCE_DIR/browserkit.xcresult" ]; then
-              echo "TEMP: merging WebCompatReporterKit coverage into coverage.json"
-              xcrun xccov view --report --json "$BITRISE_SOURCE_DIR/browserkit.xcresult" > coverage_pkg.json
-              jq -s 'reduce (.[0].targets[].files[], .[1].targets[].files[]) as $f ({}; .[$f.name] = $f) | {targets: [{name: "merged", files: [.[]]}]}' coverage_app.json coverage_pkg.json > coverage.json \
-                || cp coverage_app.json coverage.json
-            else
-              echo "TEMP: package coverage run failed; falling back to app-only coverage"
-              cp coverage_app.json coverage.json
-            fi
-            # === END TEMP EXPERIMENT ===
+            xcrun xccov view --report --json "$BITRISE_XCRESULT_PATH" > coverage.json
             echo "coverage.json created successfully"
 
             # Define a cleanup function to remove the file
             function cleanup_coverage {
-              rm -f coverage.json coverage_app.json coverage_pkg.json
-              rm -rf "$BITRISE_SOURCE_DIR/browserkit.xcresult"
+              if [ -f coverage.json ]; then
+                echo "Removing coverage.json"
+                rm coverage.json
+              fi
             }
             # Register it to run on script exit
             trap cleanup_coverage EXIT
