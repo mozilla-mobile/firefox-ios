@@ -401,9 +401,24 @@ class BaseTestCase: XCTestCase {
         }
 
         let passcodeInput = springboard.otherElements.secureTextFields.firstMatch
-        mozWaitForElementToExist(passcodeInput)
-        passcodeInput.tapAndTypeText("foo\n")
-        mozWaitForElementToNotExist(passcodeInput)
+
+        // On CI the springboard device-passcode overlay is intermittently not presented — the
+        // authentication grace period may still be active (no prompt shown) — and when it is
+        // presented the first keystrokes are occasionally dropped, leaving the screen locked. Type
+        // the passcode and retry until the prompt is dismissed (the "unlocked" signal for every
+        // screen this guards); callers assert their own destination afterwards. First detection
+        // uses the long timeout because the prompt can be slow to present on CI.
+        guard mozWaitForElementToExist(passcodeInput, timeout: TIMEOUT_LONG, failOnTimeout: false) else {
+            return
+        }
+        var attempts = 3
+        repeat {
+            passcodeInput.tapAndTypeText("foo\n")
+            if mozWaitForElementToNotExist(passcodeInput, timeout: TIMEOUT, failOnTimeout: false) {
+                return
+            }
+            attempts -= 1
+        } while passcodeInput.exists && attempts > 0
     }
 
     func scrollToElement(

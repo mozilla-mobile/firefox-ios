@@ -27,10 +27,8 @@ final class BookmarksTelemetryTests: XCTestCase {
         subject?.addBookmark(eventLabel: .bookmarksPanel)
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>)
-        let expectedMetricType = type(of: GleanMetrics.Bookmarks.add)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        let metric = GleanMetrics.Bookmarks.add
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
         XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
     }
 
@@ -38,10 +36,8 @@ final class BookmarksTelemetryTests: XCTestCase {
         subject?.deleteBookmark(eventLabel: .bookmarksPanel)
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>)
-        let expectedMetricType = type(of: GleanMetrics.Bookmarks.delete)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        let metric = GleanMetrics.Bookmarks.delete
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
         XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
     }
 
@@ -49,10 +45,8 @@ final class BookmarksTelemetryTests: XCTestCase {
         subject?.openBookmarksSite(eventLabel: .bookmarksPanel)
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>)
-        let expectedMetricType = type(of: GleanMetrics.Bookmarks.open)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        let metric = GleanMetrics.Bookmarks.open
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
         XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
     }
 
@@ -60,10 +54,8 @@ final class BookmarksTelemetryTests: XCTestCase {
         subject?.editBookmark(eventLabel: .bookmarksPanel)
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>)
-        let expectedMetricType = type(of: GleanMetrics.Bookmarks.edit)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        let metric = GleanMetrics.Bookmarks.edit
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
         XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
     }
 
@@ -71,10 +63,8 @@ final class BookmarksTelemetryTests: XCTestCase {
         subject?.addBookmarkFolder()
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.Bookmarks.folderAdd)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        let event = GleanMetrics.Bookmarks.folderAdd
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
     }
 }

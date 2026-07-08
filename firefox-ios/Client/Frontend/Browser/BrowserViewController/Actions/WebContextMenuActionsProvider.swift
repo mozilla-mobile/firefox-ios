@@ -138,7 +138,7 @@ class WebContextMenuActionsProvider {
                   contentContainer: ContentContainer) {
         actions.append(UIAction(
             title: .ContextMenuShareLink,
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
             identifier: UIAction.Identifier("linkContextMenu.share")
         ) { [weak self] _ in
             guard let tab = tabManager[webView],
@@ -184,6 +184,15 @@ class WebContextMenuActionsProvider {
             }
             self?.recordOptionSelectedTelemetry(option: .saveImage)
         })
+    }
+
+    @MainActor
+    func addGoogleLens() {
+        actions.append(UIAction(
+            title: .ContextMenuGoogleLens,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.logoGoogleLens),
+            identifier: UIAction.Identifier("linkContextMenu.googleLens")
+        ) { _ in })
     }
 
     @MainActor

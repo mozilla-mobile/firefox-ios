@@ -222,6 +222,7 @@ class CodeCoverageGate {
             !$0.contains("/AccessibilityIdentifiers.swift") &&
             !$0.contains("ImageIdentifiers.swift") &&
             !$0.contains("Protocol.swift") &&
+            !$0.contains("/Preview/") &&
             !$0.contains("Dangerfile.swift")
         }
     }

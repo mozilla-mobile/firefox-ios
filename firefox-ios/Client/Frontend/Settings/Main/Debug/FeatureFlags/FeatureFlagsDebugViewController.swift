@@ -204,6 +204,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .newBookmarkFolderTree,
+                titleText: format(string: "New Bookmarks Folder Tree"),
+                statusText: format(string: "Toggle to use new bookmarks folder tree UI")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .noInternetConnectionErrorPage,
                 titleText: format(string: "NIC Native Error Page"),
                 statusText: format(string: "Toggle to display natively created no internet connection error page")
@@ -228,6 +235,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .reportBrokenSite,
+                titleText: format(string: "Report Broken Site"),
+                statusText: format(string: "Toggle Report Broken Site")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -326,6 +340,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .unifiedSearch,
                 titleText: format(string: "Unified Search"),
                 statusText: format(string: "Toggle to use unified search within the new toolbar")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .waybackMachine,
+                titleText: format(string: "Wayback Machine"),
+                statusText: format(string: "Toggle to show Wayback Machine fallback on native error pages")
             ) { [weak self] _ in
                 self?.reloadView()
             },

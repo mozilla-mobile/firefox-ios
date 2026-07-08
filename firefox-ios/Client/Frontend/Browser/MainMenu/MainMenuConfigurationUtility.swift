@@ -24,11 +24,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let summarizer = StandardImageIdentifiers.Large.summarizer
         static let translate = StandardImageIdentifiers.Medium.translate
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
-        static let share = StandardImageIdentifiers.Large.share
+        static let share = StandardImageIdentifiers.Large.shareApple
+        static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
     }
 
-    private var shouldShowReportSiteIssue: Bool {
-        featureFlagsProvider.isEnabled(.reportSiteIssue)
+    private var isReportBrokenSiteOn: Bool {
+        featureFlagsProvider.isEnabled(.reportBrokenSite)
     }
 
     private var isNewAppearanceMenuOn: Bool {
@@ -342,8 +343,44 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     }
                 ),
             ])
+            if let reportBrokenSiteItem = configureReportBrokenSiteItem(with: uuid, tabInfo: tabInfo) {
+                options.append(reportBrokenSiteItem)
+            }
         }
         return MenuSection(isExpanded: isExpanded, options: options)
+    }
+
+    private func configureReportBrokenSiteItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement? {
+        guard isReportBrokenSiteOn,
+              tabInfo.url?.isWebPage(includeDataURIs: false) == true
+        else { return nil }
+
+        return MenuElement(
+            title: .MainMenu.ToolsSection.ReportBrokenSite,
+            iconName: Icons.reportBrokenSite,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
+            isOptional: true,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .reportBrokenSite,
+                            url: tabInfo.url
+                        ),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
     }
 
     private func configureBookmarkPageItem(

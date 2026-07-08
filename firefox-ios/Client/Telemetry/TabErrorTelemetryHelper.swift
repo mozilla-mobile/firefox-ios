@@ -18,6 +18,10 @@ final class TabErrorTelemetryHelper {
     private let windowManager: WindowManager
     private let logger: Logger
 
+    /// Threshold (≥) for which we fire a tab loss event.
+    private static let tabLossCountThreshold = 3
+    private static let significantLossPercentThreshold = 0.20
+
     private enum EntryPoint {
         case backgroundForeground
         case preserveRestore
@@ -44,10 +48,10 @@ final class TabErrorTelemetryHelper {
         }
     }
 
-    private init(logger: Logger = DefaultLogger.shared,
-                 telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
-                 windowManager: WindowManager = AppContainer.shared.resolve(),
-                 defaults: UserDefaultsInterface = UserDefaults.standard) {
+    init(logger: Logger = DefaultLogger.shared,
+         telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         defaults: UserDefaultsInterface = UserDefaults.standard) {
         self.telemetryWrapper = telemetryWrapper
         self.defaults = defaults
         self.windowManager = windowManager
@@ -108,14 +112,38 @@ final class TabErrorTelemetryHelper {
             return
         }
 
-        if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
-            // Potential tab loss bug detected. Log a MetricKit error.
+        if Self.tabDiscrepancyDetected(expectedTabCount: expectedTabCount,
+                                       currentTabCount: currentTabCount) {
+            let significantEvent = Self.isSignificantTabLossEvent(expectedTabCount: expectedTabCount,
+                                                                  currentTabCount: currentTabCount)
             sendTelemetryTabLossDetectedEvent(
                 expected: expectedTabCount,
                 actual: currentTabCount,
-                entryPoint: entryPoint
+                entryPoint: entryPoint,
+                significantLossDetected: significantEvent
             )
         }
+    }
+
+    static func tabDiscrepancyDetected(expectedTabCount: Int, currentTabCount: Int) -> Bool {
+        if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
+            // Potential tab loss bug detected. Log a MetricKit error.
+            return true
+        }
+        return false
+    }
+
+    static func isSignificantTabLossEvent(expectedTabCount: Int, currentTabCount: Int) -> Bool {
+        // Here we determine whether the discrepancy is a minor deviation from the expected tab count
+        // or a major loss of the user's tabs. The criteria for "major loss" is currently considered
+        // a scenario where: the missing tab count is ≥ our threshold (3) _and_ comprises a significant
+        // percentage of the user's total tabs.
+        let missingCount = (expectedTabCount - currentTabCount)
+        let percentLost: Double
+        percentLost = Double(missingCount) / Double(expectedTabCount)
+
+        return missingCount >= tabLossCountThreshold &&
+        percentLost >= significantLossPercentThreshold
     }
 
     private func invalidateTabCount(for window: WindowUUID, entryPoint: EntryPoint) {
@@ -132,25 +160,34 @@ final class TabErrorTelemetryHelper {
         return tabManager.normalTabs.count
     }
 
-    private func sendTelemetryTabLossDetectedEvent(expected: Int, actual: Int, entryPoint: EntryPoint) {
-        logger.log("Tab loss detected \(entryPoint.logInfo).",
-                   level: .fatal,
-                   category: .tabs,
-                   extra: [
-                    "expected": String(expected),
-                    "actual": String(actual),
-                    "windows": String(windowManager.windows.count)
-                   ]
-        )
+    private func sendTelemetryTabLossDetectedEvent(expected: Int,
+                                                   actual: Int,
+                                                   entryPoint: EntryPoint,
+                                                   significantLossDetected: Bool) {
+        let extras: [String: String] = [
+            "expected": String(expected),
+            "actual": String(actual),
+            "missing": String(expected - actual),
+            "windows": String(windowManager.windows.count)
+           ]
+
+        if significantLossDetected {
+            logger.log("Tab loss detected \(entryPoint.logInfo).",
+                       level: .fatal,
+                       category: .tabs,
+                       extra: extras)
+        }
 
         // Only send the telemetry event for the foregrounding log so we don't mess with our existing metrics
         // around tab loss
         if case .backgroundForeground = entryPoint {
+            let event: TelemetryWrapper.EventValue = significantLossDetected ? .tabLossDetected : .tabCountDiscrepancy
             telemetryWrapper.recordEvent(
                 category: .information,
                 method: .error,
                 object: .app,
-                value: .tabLossDetected
+                value: event,
+                extras: extras
             )
         }
     }

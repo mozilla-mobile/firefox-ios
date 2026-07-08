@@ -85,6 +85,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "สรุปเนื้อหาเว็บ";
 
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "จะไม่มีการบันทึกเสียง คำถาม และคำตอบของคุณ";
+
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
 "Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "คำตอบด่วน";
 
@@ -264,6 +267,9 @@
 
 /* In the Search settings, this is the description that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Description.v153" = "ส่งภาพไปยัง Google เพื่อค้นหา";
+
+/* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
+"Settings.Search.GoogleLens.Footnote.v153" = "ใช้งานได้เมื่อเปิดใช้ Google ข้างต้น และใช้เป็นเครื่องมือค้นหาหลักขณะท่องเว็บ";
 
 /* In the Search settings, this is the title that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Title.v153" = "Google Lens";

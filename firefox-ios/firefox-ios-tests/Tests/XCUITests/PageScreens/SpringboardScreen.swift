@@ -44,6 +44,10 @@ final class SpringboardScreen {
         sel.OPEN_LAST_BOOKMARK_BUTTON.element(in: springboard)
     }
 
+    private var appIconButton: XCUIElement {
+        sel.APP_ICON_BUTTON.element(in: springboard)
+    }
+
     // MARK: - System Actions
 
     func pressHomeButton() {
@@ -83,6 +87,10 @@ final class SpringboardScreen {
         openLastBookmarkButton.waitAndTap()
     }
 
+    func tapAppIconButton() {
+        appIconButton.waitAndTap()
+    }
+
     // MARK: - Assertions
 
     func assertFennecIconExists(at index: Int = 0, timeout: TimeInterval = TIMEOUT) {
@@ -103,7 +111,12 @@ final class SpringboardScreen {
         BaseTestCase().mozWaitForElementToExist(openLastBookmarkButton, timeout: timeout)
     }
 
+    func assertAppIconButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(appIconButton, timeout: timeout)
+    }
+
     func assertAllContextMenuOptionsExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(appIconButton, timeout: timeout)
         BaseTestCase().mozWaitForElementToExist(newTabButton, timeout: timeout)
         BaseTestCase().mozWaitForElementToExist(newPrivateButton, timeout: timeout)
         BaseTestCase().mozWaitForElementToExist(openLastBookmarkButton, timeout: timeout)

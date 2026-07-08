@@ -10,6 +10,7 @@ enum ShortcutType: String {
     case newTab = "NewTab"
     case newPrivateTab = "NewPrivateTab"
     case openLastBookmark = "OpenLastBookmark"
+    case appIcon = "AppIcon"
 
     var type: String {
         return Bundle.main.bundleIdentifier! + ".\(self.rawValue)"
