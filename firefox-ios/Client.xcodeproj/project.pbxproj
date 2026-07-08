@@ -323,6 +323,7 @@
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
 		215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */; };
 		215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215360642D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift */; };
+		BEEF00012F00000200000001 /* SearchSettingsTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF00012F00000100000001 /* SearchSettingsTableViewControllerTests.swift */; };
 		2154A0FB2F115E700067EA43 /* PasswordGeneratorScriptEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154A0FA2F115E700067EA43 /* PasswordGeneratorScriptEvaluator.swift */; };
 		2154A0FD2F115EEE0067EA43 /* MockPasswordGeneratorScriptEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154A0FC2F115EEE0067EA43 /* MockPasswordGeneratorScriptEvaluator.swift */; };
 		2154A4792F1AA3D40067EA43 /* SecurityContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154A4782F1AA3C00067EA43 /* SecurityContextManager.swift */; };
@@ -3189,6 +3190,7 @@
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
 		215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageStoreTests.swift; sourceTree = "<group>"; };
 		215360642D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsingSettingsViewControllerTests.swift; sourceTree = "<group>"; };
+		BEEF00012F00000100000001 /* SearchSettingsTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSettingsTableViewControllerTests.swift; sourceTree = "<group>"; };
 		2154A0FA2F115E700067EA43 /* PasswordGeneratorScriptEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorScriptEvaluator.swift; sourceTree = "<group>"; };
 		2154A0FC2F115EEE0067EA43 /* MockPasswordGeneratorScriptEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPasswordGeneratorScriptEvaluator.swift; sourceTree = "<group>"; };
 		2154A4782F1AA3C00067EA43 /* SecurityContextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityContextManager.swift; sourceTree = "<group>"; };
@@ -14242,6 +14244,7 @@
 				8ADEC6822A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift */,
 				21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */,
 				8AE1E1DA27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift */,
+				BEEF00012F00000100000001 /* SearchSettingsTableViewControllerTests.swift */,
 				EDADF7832D70DAF800C39295 /* SettingsTelemetryTests.swift */,
 				212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
@@ -20772,6 +20775,7 @@
 				8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */,
 				0B6AB0412DCA3CB900F03AF6 /* DocumentLoggerTests.swift in Sources */,
 				215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */,
+				BEEF00012F00000200000001 /* SearchSettingsTableViewControllerTests.swift in Sources */,
 				FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */,
 				8AFC1B792FAAAA3D0070CA11 /* TabManagerPrivacyModeTests.swift in Sources */,
 				C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */,
