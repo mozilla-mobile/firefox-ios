@@ -1171,7 +1171,7 @@ final class BrowserCoordinator: BaseCoordinator,
             router: router
         ) { [weak self] image in
             guard let image else { return }
-            self?.searchGoogleLens(with: image)
+            self?.searchGoogleLens(with: image, entryPoint: .addressToolbar)
         }
         add(child: coordinator)
         coordinator.start()
@@ -1180,7 +1180,7 @@ final class BrowserCoordinator: BaseCoordinator,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
     }
 
-    func searchGoogleLens(with image: UIImage) {
+    func searchGoogleLens(with image: UIImage, entryPoint: GoogleLensUploadEntryPoint) {
         guard let tab = tabManager.selectedTab else {
             logger.log("Google Lens: no selected tab to load the upload request",
                        level: .warning,
@@ -1188,7 +1188,9 @@ final class BrowserCoordinator: BaseCoordinator,
             return
         }
         let viewportSize = tab.webView?.bounds.size ?? browserViewController.view.bounds.size
-        guard let request = googleLensService.makeUploadRequest(for: image, viewportSize: viewportSize) else {
+        guard let request = googleLensService.makeUploadRequest(for: image,
+                                                                viewportSize: viewportSize,
+                                                                entryPoint: entryPoint) else {
             logger.log("Google Lens: failed to build upload request (image could not be processed)",
                        level: .warning,
                        category: .coordinator)
@@ -1210,7 +1212,7 @@ final class BrowserCoordinator: BaseCoordinator,
             DispatchQueue.main.async {
                 guard let self else { return }
                 if let image {
-                    self.searchGoogleLens(with: image)
+                    self.searchGoogleLens(with: image, entryPoint: .addressToolbar)
                 } else if let errorDescription {
                     self.logger.log("Google Lens: failed to load picked image: \(errorDescription)",
                                     level: .warning,
