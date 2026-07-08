@@ -53,6 +53,8 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
 
             faviconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             faviconImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            faviconImageView.topAnchor.constraint(greaterThanOrEqualTo: thumbnailImageView.bottomAnchor),
+            faviconImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
             faviconImageView.widthAnchor.constraint(equalToConstant: UX.faviconSize),
             faviconImageView.heightAnchor.constraint(equalToConstant: UX.faviconSize),
 
