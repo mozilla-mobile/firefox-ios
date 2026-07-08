@@ -40,10 +40,10 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
     }
 
     private lazy var waybackErrorIcon: UIImageView = .build { imageView in
-        // TODO: swap for a real asset once design provides one.
         imageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
         imageView.contentMode = .scaleAspectFit
         imageView.setContentHuggingPriority(.required, for: .horizontal)
+        imageView.isAccessibilityElement = false
     }
 
     private lazy var waybackErrorLabel: UILabel = .build { label in
@@ -51,6 +51,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
         label.text = .NativeErrorPage.Wayback.CouldNotReachLabel
+        label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackErrorLabel
     }
 
     private lazy var waybackErrorMessageRow: UIStackView = .build { stackView in
@@ -62,6 +63,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
     private lazy var waybackRetryButton: UIButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapWayback), for: .touchUpInside)
         button.contentHorizontalAlignment = .leading
+        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackRetryButton
     }
 
     private lazy var waybackErrorContentStack: UIStackView = .build { stackView in
@@ -75,6 +77,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
     private lazy var waybackErrorCard: UIView = .build { view in
         view.layer.cornerRadius = UX.cardCornerRadius
         view.isHidden = true
+        view.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackErrorCard
     }
 
     private lazy var buttonStack: UIStackView = .build { stackView in
@@ -176,6 +179,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         waybackButton.configuration?.showsActivityIndicator = showsSpinner
         waybackButton.configuration?.imagePadding = 8
         waybackButton.configuration?.imagePlacement = .leading
+        waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Wayback.WaybackButtonA11yHint : nil
     }
 
     private func configureRetryButtonTitle() {
@@ -183,7 +187,6 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
             .underlineStyle: NSUnderlineStyle.single.rawValue,
             .font: FXFontStyles.Regular.footnote.scaledFont()
         ]
-        // TODO: add .NativeErrorPage.Wayback.RetryButton to Strings.swift
         let title = NSAttributedString(string: .NativeErrorPage.Wayback.RetryButton, attributes: attributes)
         waybackRetryButton.setAttributedTitle(title, for: .normal)
     }

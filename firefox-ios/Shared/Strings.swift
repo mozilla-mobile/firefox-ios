@@ -2139,6 +2139,11 @@ extension String {
                 tableName: "NativeErrorPage",
                 value: "Retry",
                 comment: "Button label allowing the user to retry searching the Wayback Machine after a failed attempt.")
+            public static let WaybackButtonA11yHint = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154",
+                tableName: "NativeErrorPage",
+                value: "Searches the Wayback Machine for an archived version of this page.",
+                comment: "Accessibility hint read by VoiceOver describing what happens when the wayback button is activated.")
         }
     }
 }
