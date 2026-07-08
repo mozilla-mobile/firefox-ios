@@ -91,9 +91,10 @@ public final class WebCompatReportSheetViewController: UIViewController,
     // MARK: - Setup
 
     private func setupNavigationItem() {
+        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = closeButton
         navigationItem.rightBarButtonItem = previewButton
-        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.largeTitleDisplayMode = .always
     }
 
     private func setupCollectionView() {

@@ -6135,7 +6135,7 @@ extension String {
             public static let ReportBrokenSite = MZLocalizedString(
                 key: "", // MainMenu.ToolsSection.ReportBrokenSite.Title.v152
                 tableName: "MainMenu",
-                value: "Report a Website Issue",
+                value: "Report Broken Site",
                 comment: "On the main menu, the title for the action that lets the user report that the current website is broken or not working correctly.")
 
             public struct Translation {
@@ -6218,7 +6218,7 @@ extension String {
                 public static let ReportBrokenSite = MZLocalizedString(
                     key: "", // MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v152
                     tableName: "MainMenu",
-                    value: "Report a Website Issue",
+                    value: "Report Broken Site",
                     comment: "On the main menu, the accessibility label for the action that lets the user report that the current website is broken or not working correctly.")
                 public struct Translation {
                     public static let TranslatedPageTitle = MZLocalizedString(
