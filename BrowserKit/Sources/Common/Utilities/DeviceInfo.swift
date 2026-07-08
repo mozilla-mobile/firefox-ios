@@ -11,6 +11,13 @@ open class DeviceInfo {
         return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat
     }
 
+    @MainActor
+    @available(iOS 26.0, *)
+    open class func deviceCornerConfiguration() -> UICornerConfiguration {
+        let cornerRadius = deviceCornerRadius ?? 0
+        return UICornerConfiguration.corners(radius: UICornerRadius.fixed(cornerRadius))
+    }
+
     open class func isSimulator() -> Bool {
         return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }
