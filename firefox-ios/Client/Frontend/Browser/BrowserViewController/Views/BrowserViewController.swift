@@ -341,6 +341,10 @@ class BrowserViewController: UIViewController,
         return featureFlagsProvider.isEnabled(.improvedAppStoreReviewTriggerFeature)
     }
 
+    var isWaybackEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isWaybackEnabled
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -2248,12 +2252,16 @@ class BrowserViewController: UIViewController,
 
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
+        let isWaybackErrorCode = WaybackCodes.codesForWayback.contains {
+            url.absoluteString.contains(String(Int($0.rawValue)))
+        }
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
         let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isShowWayback = isWaybackErrorCode && isWaybackEnabled
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError) {
+        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError || isShowWayback) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -3017,6 +3025,8 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
             tabManager.selectedTab?.reload()
+        case .loadURL(let url):
+            tabManager.selectedTab?.loadRequest(URLRequest(url: url))
         case .stopLoading:
             tabManager.selectedTab?.stop()
             // There is an edge case in which calling stop on the webView doesn't update webView's isLoading var.

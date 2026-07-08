@@ -2208,6 +2208,7 @@
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
 		ECD8E56C2FF7EB69002092C6 /* WaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */; };
 		ECD8E56E2FF7ED79002092C6 /* WaybackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56D2FF7ED75002092C6 /* WaybackTests.swift */; };
+		ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */; };
 		ED07C0EB2CCADCD5006C0627 /* SearchEngineSelectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */; };
 		ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */; };
 		ED07C0EF2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */; };
@@ -11711,8 +11712,9 @@
 		EC724CF0B0021AE49EDC95DC /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EC734AD49E5483F11375E891 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		EC934F7BB2F8B247BC714BE2 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
-		ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackService.swift; sourceTree = "<group>"; };
-		ECD8E56D2FF7ED75002092C6 /* WaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackTests.swift; sourceTree = "<group>"; };
+        ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackService.swift; sourceTree = "<group>"; };
+        ECD8E56D2FF7ED75002092C6 /* WaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackTests.swift; sourceTree = "<group>"; };
+        ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackCodes.swift; sourceTree = "<group>"; };
 		ECDA4593850BA4E08FDAC5AF /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionState.swift; sourceTree = "<group>"; };
 		ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionAction.swift; sourceTree = "<group>"; };
@@ -16975,13 +16977,14 @@
 			path = InternalSchemeHandler;
 			sourceTree = "<group>";
 		};
-		ECD8E56A2FF7EB5B002092C6 /* Wayback */ = {
-			isa = PBXGroup;
-			children = (
-				ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */,
-			);
-			path = Wayback;
-			sourceTree = "<group>";
+        ECD8E56A2FF7EB5B002092C6 /* Wayback */ = {
+            isa = PBXGroup;
+            children = (
+                ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */,
+                ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */,
+            );
+            path = Wayback;
+            sourceTree = "<group>";
 		};
 		ED07C0EA2CCADCD5006C0627 /* Redux */ = {
 			isa = PBXGroup;
@@ -17399,7 +17402,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
-				ECD8E56A2FF7EB5B002092C6 /* Wayback */,
+                ECD8E56A2FF7EB5B002092C6 /* Wayback */,
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				AA5E81452EB12BAB00919E60 /* Translations */,
 				FB16062100000000000000E0 /* GoogleLens */,
@@ -19562,6 +19565,7 @@
 				5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
 				39E186DD2F7D98B600FD3FFA /* MerinoCategoryConfiguration.swift in Sources */,
+				ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */,
 				218208DC2F9C0D1D00A899D1 /* TabTrayIpadSelectorView.swift in Sources */,
 				C7F5331A2E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift in Sources */,
 				C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */,

@@ -147,6 +147,18 @@ class NativeErrorPageHelper {
                  NSURLErrorServerCertificateHasUnknownRoot,
                  NSURLErrorServerCertificateNotYetValid:
                 Self.buildCertificateErrorModel(for: error, url: url)
+            case _ where Int32(exactly: error.code)
+                    .flatMap { CFNetworkErrors(rawValue: $0) }
+                    .map { WaybackCodes.codesForWayback.contains($0) } == true:
+                ErrorPageModel(
+                    errorTitle: .NativeErrorPage.Wayback.TitleLabel,
+                    errorDescription: .NativeErrorPage.Wayback.Description,
+                    foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
+                    url: url,
+                    advancedSection: nil,
+                    showGoBackButton: false,
+                    type: .wayback
+                )
             default:
                 ErrorPageModel(
                     errorTitle: .NativeErrorPage.GenericError.TitleLabel,

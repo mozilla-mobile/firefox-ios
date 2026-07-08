@@ -8,10 +8,11 @@ enum ErrorPageType: Equatable {
     case internetConnection
     case badCertDomain
     case generic
+    case wayback
 
     var isRegularUI: Bool {
         switch self {
-        case .internetConnection, .generic: return true
+        case .internetConnection, .generic, .wayback: return true
         case .badCertDomain: return false
         }
     }

@@ -197,6 +197,10 @@ final class ErrorPageHandler: InternalSchemeResponse {
         return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
     }
 
+    var isWaybackEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isWaybackEnabled
+    }
+
     @MainActor
     func response(forRequest request: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)? {
         guard let url = request.url,
@@ -215,8 +219,14 @@ final class ErrorPageHandler: InternalSchemeResponse {
         let isBadCertDomainURL = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
         let isCertificateError = isBadCertDomainErrorPageEnabled && isBadCertDomainURL && !useOldErrorPage
 
+        /// Used for checking if current error code is one that should fall back to wayback
+        let isWaybackCode = Int32(exactly: errCode)
+            .flatMap { CFNetworkErrors(rawValue: $0) }
+            .map { WaybackCodes.codesForWayback.contains($0) } ?? false
+        let isWaybackError = isWaybackEnabled && isWaybackCode && !useOldErrorPage
+
         // Handle No internet access or certificate errors with native error page
-        if isNoInternetError || isCertificateError {
+        if isNoInternetError || isCertificateError || isWaybackError {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)

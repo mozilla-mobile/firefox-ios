@@ -207,6 +207,7 @@ final class NativeErrorPageViewController: UIViewController,
         } else {
             errorDescriptionLabel.text = nativeErrorPageState.description
         }
+        regularContentView.configure(showWaybackButton: nativeErrorPageState.type == .wayback)
         applyTheme()
     }
 
@@ -414,6 +415,34 @@ final class NativeErrorPageViewController: UIViewController,
 
     func regularContentViewDidTapReload() {
         dispatchBrowserAction(actionType: .reloadWebsite, isNativeErrorPage: true)
+    }
+
+    func regularContentViewDidTapSearchWayback() {
+        guard let failingURL = nativeErrorPageState.url?.baseURLWithPath else { return }
+        regularContentView.configureWaybackButton(isLoading: true)
+
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let snapshot = try await WaybackService.fetchSnapshot(for: failingURL.absoluteString)
+                guard let snapshot, snapshot.available, let archivedURL = URL(string: snapshot.url) else {
+                    await MainActor.run { self.regularContentView.configureWaybackButton(isLoading: false) }
+                    return
+                }
+                await MainActor.run {
+                    store.dispatch(
+                        GeneralBrowserAction(
+                            destinationURL: archivedURL,
+                            isNativeErrorPage: true,
+                            windowUUID: self.windowUUID,
+                            actionType: GeneralBrowserActionType.loadWaybackURL
+                        )
+                    )
+                }
+            } catch {
+                await MainActor.run { self.regularContentView.configureWaybackButton(isLoading: false) }
+            }
+        }
     }
 
     // MARK: - NativeErrorBadCertContentViewDelegate

@@ -2108,6 +2108,28 @@ extension String {
                 value: "Error code: %@",
                 comment: "On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN).")
         }
+        public struct Wayback {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.Title.v154",
+                tableName: "NativeErrorPage",
+                value: "Unable to connect",
+                comment: "Title of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.Description.v154",
+                tableName: "NativeErrorPage",
+                value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. Firefox can also search the Wayback Machine for an earlier version of this page.",
+                comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+            public static let CheckingLabel = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.Checking.v154",
+                tableName: "NativeErrorPage",
+                value: "Checking for page",
+                comment: "Checking label of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+            public static let SearchLabel = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.Search.v154",
+                tableName: "NativeErrorPage",
+                value: "Search for earlier version",
+                comment: "Search label of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+        }
     }
 }
 

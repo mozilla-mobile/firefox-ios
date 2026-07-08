@@ -1088,13 +1088,18 @@ extension BrowserViewController: WKNavigationDelegate {
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
+                let isWaybackCode = Int32(exactly: error.code)
+                    .flatMap { CFNetworkErrors(rawValue: $0) }
+                    .map { WaybackCodes.codesForWayback.contains($0) } ?? false
+
                 let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
                 let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
                     for: error,
                     isOtherErrorPagesEnabled: isBadCertDomainErrorPageEnabled
                 )
+                let isShowWayback = isWaybackEnabled && isWaybackCode
 
-                if isNoInternetError || isCertificateError {
+                if isNoInternetError || isCertificateError || isShowWayback {
                     if isCertificateError {
                         NativeErrorPageHelper.logCertificateErrorDetails(
                             error: error,
