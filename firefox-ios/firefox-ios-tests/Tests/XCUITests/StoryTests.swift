@@ -100,7 +100,10 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
-    func testNewsStoryCategoriesFilterStories() {
+    func testNewsStoryCategoriesFilterStories() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping testNewsStoryCategoriesFilterStories on Firefox or FirefoxBeta schemas")
+        }
         addLaunchArgument(jsonFileName: "homepageStoryCategoriesOn", featureName: "homepage-redesign-feature")
         app.launch()
 
