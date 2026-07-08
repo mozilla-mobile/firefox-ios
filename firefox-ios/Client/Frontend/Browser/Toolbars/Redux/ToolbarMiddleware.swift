@@ -586,12 +586,7 @@ final class ToolbarMiddleware {
               !defaultEngine.isCustomEngine
         else { return false }
 
-        let engineID = defaultEngine.engineID
-        let googleEngineID = OpenSearchEngine.googleEngineID
-
-        // App Services can return regional Google engine IDs such as "google-b-1-m".
-        let isGoogleDefaultEngine = engineID == googleEngineID || engineID.hasPrefix("\(googleEngineID)-")
-        return isGoogleDefaultEngine
+        return defaultEngine.isGoogleEngine
     }
 
     private func dispatchGoogleLensAvailability(for windowUUID: WindowUUID) {

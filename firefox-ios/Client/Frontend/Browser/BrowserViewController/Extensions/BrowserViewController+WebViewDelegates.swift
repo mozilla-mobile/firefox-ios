@@ -406,7 +406,9 @@ extension BrowserViewController: WKUIDelegate {
                                contentContainer: contentContainer)
 
         if let url = image {
-            actionBuilder.addSearchWithGoogleLens(url: url, searchGoogleLens: searchGoogleLens(forImageURL:))
+            if isGoogleLensActionAvailable() {
+                actionBuilder.addSearchWithGoogleLens(url: url, searchGoogleLens: searchGoogleLens(forImageURL:))
+            }
 
             actionBuilder.addSaveImage(url: url,
                                        getImageData: getImageData,
@@ -420,7 +422,16 @@ extension BrowserViewController: WKUIDelegate {
         return actionBuilder.build()
     }
 
-    func searchGoogleLens(forImageURL url: URL) {
+    private func isGoogleLensActionAvailable() -> Bool {
+        guard featureFlagsProvider.isEnabled(.googleLens),
+              let defaultEngine = searchEnginesManager.defaultEngine,
+              !defaultEngine.isCustomEngine
+        else { return false }
+
+        return defaultEngine.isGoogleEngine
+    }
+
+    private func searchGoogleLens(forImageURL url: URL) {
         getImageData(url) { [weak self] data in
             guard let image = UIImage(data: data) else { return }
             ensureMainThread {
