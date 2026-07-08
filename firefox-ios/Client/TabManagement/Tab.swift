@@ -589,13 +589,6 @@ class Tab: NSObject,
         }
         if let interactionState = interactionState {
             webView.interactionState = interactionState
-
-            // interactionState can restore a committed navigation to an internal error page
-            // (e.g. wayback/NIC/cert). Force a fresh load of the real URL afterward so it wins
-            // over whatever page interactionState silently restored.
-            if let url, let internalURL = InternalURL(webView.url ?? url), internalURL.isErrorPage {
-                webView.load(URLRequest(url: url))
-            }
         }
     }
 

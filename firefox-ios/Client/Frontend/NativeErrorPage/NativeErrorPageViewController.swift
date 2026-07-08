@@ -354,7 +354,8 @@ final class NativeErrorPageViewController: UIViewController,
 
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
-                constant: isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top
+                constant: (isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top) -
+                        (nativeErrorPageState.type == .wayback ? 40 : 0)
             ),
             scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
@@ -419,14 +420,14 @@ final class NativeErrorPageViewController: UIViewController,
 
     func regularContentViewDidTapSearchWayback() {
         guard let failingURL = nativeErrorPageState.url?.baseURLWithPath else { return }
-        regularContentView.configureWaybackButton(isLoading: true)
+        regularContentView.configureWaybackButton(state: .loading)
 
         Task { [weak self] in
             guard let self else { return }
             do {
                 let snapshot = try await WaybackService.fetchSnapshot(for: failingURL.absoluteString)
                 guard let snapshot, snapshot.available, let archivedURL = URL(string: snapshot.url) else {
-                    await MainActor.run { self.regularContentView.configureWaybackButton(isLoading: false) }
+                    await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed) }
                     return
                 }
                 await MainActor.run {
@@ -440,7 +441,7 @@ final class NativeErrorPageViewController: UIViewController,
                     )
                 }
             } catch {
-                await MainActor.run { self.regularContentView.configureWaybackButton(isLoading: false) }
+                await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed) }
             }
         }
     }

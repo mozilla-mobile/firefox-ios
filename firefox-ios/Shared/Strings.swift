@@ -2129,6 +2129,16 @@ extension String {
                 tableName: "NativeErrorPage",
                 value: "Search for earlier version",
                 comment: "Search label of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+            public static let CouldNotReachLabel = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.CouldNotReach.v154",
+                tableName: "NativeErrorPage",
+                value: "Couldn’t reach Wayback Machine",
+                comment: "Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page.")
+            public static let RetryButton = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.Retry.v154",
+                tableName: "NativeErrorPage",
+                value: "Retry",
+                comment: "Button label allowing the user to retry searching the Wayback Machine after a failed attempt.")
         }
     }
 }
