@@ -4,6 +4,8 @@
 
 /// Fetches the `QuickAnswersConfig` used to drive a Quick Answers request.
 public protocol QuickAnswersConfigFetcher: Sendable {
+    /// The provider model that backs the request, used to surface the model name in the UI.
+    var model: QuickAnswersModel { get }
     func fetch() async throws -> QuickAnswersConfig
 }
 
@@ -13,7 +15,7 @@ public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     Answer in 1 sentence. Remove any superscript numbers from the response.
     """.replacingOccurrences(of: "\n", with: " ")
 
-    private let model: QuickAnswersModel
+    public let model: QuickAnswersModel
 
     public init(model: QuickAnswersModel) {
         self.model = model

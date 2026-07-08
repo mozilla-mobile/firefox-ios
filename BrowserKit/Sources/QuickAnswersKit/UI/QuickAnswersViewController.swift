@@ -18,8 +18,9 @@ public final class QuickAnswersViewController: UIViewController,
             bottom: UX.closeButtonPadding,
             trailing: UX.closeButtonPadding
         )
-        static let recordWaveEffectSize: CGFloat = 400.0
-        static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
+        static let recordWaveEffectSize: CGFloat = 450.0
+        static let recordWaveEffectBottomPadding = 150.0
+        static let recordWaveEffectResultOpacity: CGFloat = 0.3
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
@@ -198,7 +199,8 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.contentView.configureAnswer(result.resultText)
+                    self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
+                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
                     self?.contentView.configureSources(result.sources) { [weak self] url in
                         self?.viewModel.recordCitationTapped()
                         self?.dismiss(with: url)
