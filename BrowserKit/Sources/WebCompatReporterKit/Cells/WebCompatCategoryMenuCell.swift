@@ -90,19 +90,16 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
 
     nonisolated func handleNotifications(_ notification: Notification) {
         guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
-        DispatchQueue.main.async { [self] in
-            applyScaledMetrics()
+        ensureMainThread { [weak self] in
+            self?.applyScaledMetrics()
         }
     }
 
     /// Keeps the chevron and the button's reserved trailing space in step with
     /// the current Dynamic Type size.
     private func applyScaledMetrics() {
-        let size = scaledChevronSize
-        chevronSizeConstraints.forEach { $0.constant = size }
-        var configuration = menuButton.configuration ?? UIButton.Configuration.plain()
-        configuration.contentInsets.trailing = size + WebCompatReporterUX.Spacing.interItem
-        menuButton.configuration = configuration
+        chevronSizeConstraints.forEach { $0.constant = scaledChevronSize }
+        menuButton.configuration?.contentInsets.trailing = scaledChevronSize + WebCompatReporterUX.Spacing.interItem
     }
 
     func configure(
