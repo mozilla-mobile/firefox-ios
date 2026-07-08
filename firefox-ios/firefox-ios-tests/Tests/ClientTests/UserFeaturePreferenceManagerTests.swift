@@ -71,7 +71,8 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testGoogleLens_defaultsToTrue_whenNoUserPrefSet() {
+    func testGoogleLens_defaultsToNimbus_whenNoUserPrefSet() {
+        mockLayer.enabledFlags = [.googleLens]
         let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
 
         XCTAssertTrue(subject.getPreferenceFor(.googleLens))
