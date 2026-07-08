@@ -520,8 +520,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
             sectionsToDisplay.insert(.preSearch, at: 2)
         }
         if isGoogleLensFeatureEnabled,
-           let suggestionsIndex = sectionsToDisplay.firstIndex(of: .searchEnginesSuggestions) {
-            sectionsToDisplay.insert(.googleLens, at: suggestionsIndex)
+           let alternateEnginesIndex = sectionsToDisplay.firstIndex(of: .alternateEngines) {
+            sectionsToDisplay.insert(.googleLens, at: alternateEnginesIndex)
         }
         return sectionsToDisplay.count
     }
@@ -695,7 +695,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         toProposedIndexPath proposedDestinationIndexPath: IndexPath
     ) -> IndexPath {
         // Make drag or drop available only for alternateEngines section
-        guard proposedDestinationIndexPath.section == Section.alternateEngines.rawValue else {
+        let proposedDestinationSection = Section(
+            rawValue: sectionsToDisplay[proposedDestinationIndexPath.section].rawValue
+        ) ?? .defaultEngine
+        guard proposedDestinationSection == .alternateEngines else {
             return sourceIndexPath
         }
 
