@@ -771,6 +771,37 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(tab2.tabDelegate === subject)
     }
 
+    // MARK: - Close all private tabs
+
+    @MainActor
+    func testCloseAllPrivateTabs_whenNotRestoringTabs_removesPrivateTabsImmediately() {
+        let subject = createSubject()
+        let privateTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
+        tabManager.privateTabs = [privateTab]
+        tabManager.isRestoringTabs = false
+
+        subject.closeAllPrivateTabs()
+
+        XCTAssertEqual(tabManager.removeTabsCalled, 1)
+        XCTAssertTrue(tabManager.removedTabs.first === privateTab)
+    }
+
+    @MainActor
+    func testCloseAllPrivateTabs_whileRestoringTabs_defersRemovalUntilRestoreCompletes() {
+        let subject = createSubject()
+        tabManager.isRestoringTabs = true
+        AppEventQueue.started(.tabRestoration(tabManager.windowUUID))
+
+        subject.closeAllPrivateTabs()
+
+        XCTAssertEqual(tabManager.removeTabsCalled, 0)
+
+        tabManager.isRestoringTabs = false
+        AppEventQueue.completed(.tabRestoration(tabManager.windowUUID))
+
+        XCTAssertEqual(tabManager.removeTabsCalled, 1)
+    }
+
     // MARK: - Private
 
     private func createSubject(file: StaticString = #filePath,

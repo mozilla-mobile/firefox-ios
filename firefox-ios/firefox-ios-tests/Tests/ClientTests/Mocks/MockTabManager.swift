@@ -37,6 +37,9 @@ class MockTabManager: TabManager {
 
     var removeTabsByURLCalled = 0
 
+    var removeTabsCalled = 0
+    var removedTabs = [Tab]()
+
     var addTabWasCalled = false
     var notifyCurrentTabDidFinishLoadingCalled = 0
     var commitChangesCalled = 0
@@ -84,7 +87,10 @@ class MockTabManager: TabManager {
 
     func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {}
 
-    func removeTabs(_ tabs: [Tab]) {}
+    func removeTabs(_ tabs: [Tab]) {
+        removeTabsCalled += 1
+        removedTabs = tabs
+    }
 
     func removeTab(_ tabUUID: TabUUID) {}
 
