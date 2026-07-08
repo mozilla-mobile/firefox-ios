@@ -2646,6 +2646,14 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // If the webview lands on an internal error page URL without going through a fresh
+        // navigation failure (e.g. back/forward navigation replaying it from history), rebuild
+        // the native error page state from the URL itself so it reflects what's actually on
+        // screen rather than stale data from whatever failure last occurred.
+        if let url, let internalURL = InternalURL(url), internalURL.isErrorPage {
+            rebuildNativeErrorPageStateIfNeeded(for: url)
+        }
+
         // To prevent spoofing, if the origins are equal update the UI always
         if tab.url?.origin == url?.origin {
             tab.url = url
@@ -2667,6 +2675,28 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    private func rebuildNativeErrorPageStateIfNeeded(for errorPageURL: URL) {
+        guard
+            let components = URLComponents(url: errorPageURL, resolvingAgainstBaseURL: false),
+            let originalURLString = components.queryItems?.first(where: { $0.name == "url" })?.value,
+            let originalURL = URL(string: originalURLString),
+            let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
+            let code = Int(codeString)
+        else { return }
+
+        let reconstitutedError = NSError(
+            domain: NSURLErrorDomain,
+            code: code,
+            userInfo: [NSURLErrorFailingURLErrorKey: originalURL]
+        )
+
+        let action = NativeErrorPageAction(
+            networkError: reconstitutedError,
+            windowUUID: windowUUID,
+            actionType: NativeErrorPageActionType.receivedError
+        )
+        store.dispatch(action)
+    }
     private func handleTitleChanged(tab: Tab) {
         // Ensure that the tab title *actually* changed to prevent repeated calls
         // to navigateInTab(tab:) except when ReaderModeState is active
