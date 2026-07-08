@@ -103,10 +103,10 @@ final class ToolbarMiddleware {
                 displayNavBorder: displayBorder,
                 middleButton: middleButton,
                 isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
-                isGoogleLensEnabled: isGoogleLensToolbarEntryPointAvailable(),
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
+            dispatchGoogleLensAvailability(for: uuid)
 
         case GeneralBrowserMiddlewareActionType.websiteDidScroll:
             guard let scrollOffset = action.scrollOffset else { return }
@@ -181,12 +181,10 @@ final class ToolbarMiddleware {
             store.dispatch(action)
 
         case ToolbarActionType.searchEngineDidChange:
-            let action = ToolbarMiddlewareAction(
-                isGoogleLensEnabled: isGoogleLensToolbarEntryPointAvailable(),
-                windowUUID: action.windowUUID,
-                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
-            )
-            store.dispatch(action)
+            dispatchGoogleLensAvailability(for: action.windowUUID)
+
+        case ToolbarActionType.urlDidChange:
+            updateGoogleLensAvailabilityIfBrowsingModeChanged(windowUUID: action.windowUUID, state: state)
 
         case ToolbarActionType.didSubmitSearchTerm:
             // After a user submits a search term, we want to record it in our history storage via recent search provider.
@@ -568,8 +566,22 @@ final class ToolbarMiddleware {
         return windowManager.tabManager(for: uuid)
     }
 
-    private func isGoogleLensToolbarEntryPointAvailable() -> Bool {
+    // Only re-dispatch when Google Lens availability would actually change (i.e. the browsing mode flipped it),
+    // to avoid churning on every URL.
+    private func updateGoogleLensAvailabilityIfBrowsingModeChanged(windowUUID: WindowUUID, state: AppState) {
+        guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else { return }
+
+        let shouldShow = isGoogleLensAvailable(for: windowUUID)
+        let isShowing = toolbarState.addressToolbar.editingAccessoryAction?.actionType == .googleLens
+        guard shouldShow != isShowing else { return }
+
+        dispatchGoogleLensAvailability(for: windowUUID)
+    }
+
+    private func isGoogleLensAvailable(for windowUUID: WindowUUID) -> Bool {
         guard featureFlagsProvider.isEnabled(.googleLens),
+              tabManager(for: windowUUID)?.selectedTab?.isPrivate != true,
               let defaultEngine = searchEnginesManager.defaultEngine,
               !defaultEngine.isCustomEngine
         else { return false }
@@ -580,5 +592,14 @@ final class ToolbarMiddleware {
         // App Services can return regional Google engine IDs such as "google-b-1-m".
         let isGoogleDefaultEngine = engineID == googleEngineID || engineID.hasPrefix("\(googleEngineID)-")
         return isGoogleDefaultEngine
+    }
+
+    private func dispatchGoogleLensAvailability(for windowUUID: WindowUUID) {
+        let action = ToolbarMiddlewareAction(
+            isGoogleLensEnabled: isGoogleLensAvailable(for: windowUUID),
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.googleLensAvailabilityDidChange
+        )
+        store.dispatch(action)
     }
 }

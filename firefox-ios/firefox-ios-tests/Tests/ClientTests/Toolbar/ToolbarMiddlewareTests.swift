@@ -66,13 +66,17 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
         let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .newTab)
-        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+
+        let lensAction = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(lensAction.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(lensAction.isGoogleLensEnabled, false)
 
         let savedValue = try XCTUnwrap(
             mockGleanWrapper.savedValues.first as? String
@@ -97,7 +101,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.toolbarProvider(mockStore.state, action)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
     }
 
@@ -116,7 +122,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.toolbarProvider(mockStore.state, action)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
@@ -139,7 +147,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
     }
 
@@ -162,7 +170,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
     }
 
@@ -183,7 +191,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
@@ -206,7 +214,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
@@ -226,8 +234,103 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testBrowserDidLoad_withGoogleLensEnabledInPrivateMode_dispatchesWithGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: true, windowUUID: windowUUID)
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testUrlDidChange_whenEnteringPrivateModeWithLensShowing_dispatchesGoogleLensDisabled() throws {
+        mockStore = MockStoreForMiddleware(state: setupAppState(isGoogleLensAccessoryShowing: true))
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: true, windowUUID: windowUUID)
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.urlDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testUrlDidChange_whenLeavingPrivateModeWithLensHidden_dispatchesGoogleLensEnabled() throws {
+        mockStore = MockStoreForMiddleware(state: setupAppState(isGoogleLensAccessoryShowing: false))
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: false, windowUUID: windowUUID)
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.urlDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testUrlDidChange_whenLensVisibilityUnchanged_doesNotDispatch() throws {
+        mockStore = MockStoreForMiddleware(state: setupAppState(isGoogleLensAccessoryShowing: true))
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: false, windowUUID: windowUUID)
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.urlDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
     }
 
     func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {
@@ -246,7 +349,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
         let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
@@ -1170,6 +1273,36 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                     )
                 ]
             )
+        )
+    }
+
+    private func setupAppState(isGoogleLensAccessoryShowing: Bool) -> AppState {
+        var addressBarState = AddressBarState(windowUUID: windowUUID)
+        addressBarState.editingAccessoryAction = isGoogleLensAccessoryShowing ? makeGoogleLensAccessoryAction() : nil
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.addressToolbar = addressBarState
+
+        return AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: windowUUID
+                        )
+                    ),
+                    .toolbar(toolbarState)
+                ]
+            )
+        )
+    }
+
+    private func makeGoogleLensAccessoryAction() -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .googleLens,
+            iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
+            isEnabled: true,
+            a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
+            a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton
         )
     }
 
