@@ -373,6 +373,7 @@ class BrowserViewController: UIViewController,
 
     let profile: Profile
     let tabManager: TabManager
+    var googleLensSearches = [TabUUID: GoogleLensSearchState]()
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?

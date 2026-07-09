@@ -1171,7 +1171,7 @@ final class BrowserCoordinator: BaseCoordinator,
             router: router
         ) { [weak self] image in
             guard let image else { return }
-            self?.searchGoogleLens(with: image, entryPoint: .addressToolbar)
+            self?.searchGoogleLens(with: image, source: .camera)
         }
         add(child: coordinator)
         coordinator.start()
@@ -1180,13 +1180,14 @@ final class BrowserCoordinator: BaseCoordinator,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
     }
 
-    func searchGoogleLens(with image: UIImage, entryPoint: GoogleLensUploadEntryPoint) {
+    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source) {
         guard let tab = tabManager.selectedTab else {
             logger.log("Google Lens: no selected tab to load the upload request",
                        level: .warning,
                        category: .coordinator)
             return
         }
+        let entryPoint: GoogleLensUploadEntryPoint = source == .contextMenu ? .webImageContextMenu : .addressToolbar
         let viewportSize = tab.webView?.bounds.size ?? browserViewController.view.bounds.size
         guard let request = googleLensService.makeUploadRequest(for: image,
                                                                 viewportSize: viewportSize,
@@ -1196,6 +1197,7 @@ final class BrowserCoordinator: BaseCoordinator,
                        category: .coordinator)
             return
         }
+        browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source)
         _ = tab.loadRequest(request)
     }
     private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
@@ -1212,7 +1214,7 @@ final class BrowserCoordinator: BaseCoordinator,
             DispatchQueue.main.async {
                 guard let self else { return }
                 if let image {
-                    self.searchGoogleLens(with: image, entryPoint: .addressToolbar)
+                    self.searchGoogleLens(with: image, source: .photoPicker)
                 } else if let errorDescription {
                     self.logger.log("Google Lens: failed to load picked image: \(errorDescription)",
                                     level: .warning,
