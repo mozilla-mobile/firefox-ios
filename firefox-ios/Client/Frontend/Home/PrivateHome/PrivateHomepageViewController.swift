@@ -118,7 +118,7 @@ final class PrivateHomepageViewController: UIViewController,
         updateConstraintsForMultitasking()
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            homepageHeaderCell.configure(headerState: HeaderState(windowUUID: windowUUID))
+            homepageHeaderCell.configure(headerState: HeaderState(windowUUID: windowUUID, isPrivate: true))
         }
         applyTheme()
     }
