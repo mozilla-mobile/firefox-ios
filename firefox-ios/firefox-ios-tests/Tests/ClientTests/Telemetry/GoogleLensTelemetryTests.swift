@@ -39,6 +39,17 @@ final class GoogleLensTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
+    func testSetBoolean_GoogleLensEnabled() throws {
+        let metric = GleanMetrics.UserSearch.googleLensEnabled
+
+        subject?.googleLensEnabled(true)
+
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? BooleanMetricType)
+
+        XCTAssertEqual(gleanWrapper.setBooleanCalled, 1)
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
+    }
+
     func testRecordEvent_SearchCompleted_withoutStatusCode() throws {
         typealias EventExtrasType = GleanMetrics.GoogleLens.SearchCompletedExtra
 

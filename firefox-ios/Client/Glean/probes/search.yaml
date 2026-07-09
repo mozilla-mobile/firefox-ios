@@ -127,6 +127,20 @@ search:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  google_lens_enabled:
+    type: boolean
+    description: |
+      Whether the user has the Google Lens image search feature enabled in the settings.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16208
+    data_reviews:
+      - TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - GoogleLens
 
 # Trending Searches
 search.trending_searches:

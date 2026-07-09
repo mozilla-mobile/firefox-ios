@@ -23,6 +23,10 @@ struct GoogleLensTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
+    func googleLensEnabled(_ enabled: Bool) {
+        gleanWrapper.setBoolean(for: GleanMetrics.Search.googleLensEnabled, value: enabled)
+    }
+
     func searchCompleted(source: Source, succeeded: Bool, httpStatusCode: Int?) {
         let extra = GleanMetrics.GoogleLens.SearchCompletedExtra(
             httpStatus: httpStatusCode.map(Int32.init),
