@@ -210,7 +210,7 @@ final class NativeErrorPageViewController: UIViewController,
         } else {
             errorDescriptionLabel.text = model.description
         }
-        regularContentView.configure(showWaybackButton: nativeErrorPageState.type == .wayback)
+        regularContentView.configure(showWaybackButton: model.isWayback)
         applyTheme()
     }
 
@@ -357,7 +357,7 @@ final class NativeErrorPageViewController: UIViewController,
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
                 constant: (isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top) -
-                        (nativeErrorPageState.type == .wayback ? 40 : 0)
+                        (model?.isWayback == true ? 40 : 0)
             ),
             scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
@@ -421,7 +421,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func regularContentViewDidTapSearchWayback() {
-        guard let failingURL = nativeErrorPageState.url?.baseURLWithPath else { return }
+        guard let failingURL = model?.url?.baseURLWithPath else { return }
         regularContentView.configureWaybackButton(state: .loading)
 
         Task { [weak self] in

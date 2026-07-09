@@ -9,12 +9,13 @@ enum ErrorPageModel: Equatable {
     case internetConnection
     case badCertDomain(BadCertDomainModel)
     case generic(GenericErrorModel)
-
+    case wayback(WaybackErrorModel)
     var title: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.TitleLabel
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.TitleLabel
         case .generic: return .NativeErrorPage.GenericError.TitleLabel
+        case .wayback: return .NativeErrorPage.Wayback.TitleLabel
         }
     }
 
@@ -23,6 +24,7 @@ enum ErrorPageModel: Equatable {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.Description
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
         case .generic: return .NativeErrorPage.GenericError.Description
+        case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
         }
     }
 
@@ -30,6 +32,7 @@ enum ErrorPageModel: Equatable {
         switch self {
         case .internetConnection: return ImageIdentifiers.NativeErrorPage.noInternetConnection
         case .badCertDomain, .generic: return ImageIdentifiers.NativeErrorPage.securityError
+        case .wayback: return ImageIdentifiers.NativeErrorPage.noInternetConnection
         }
     }
 
@@ -38,6 +41,7 @@ enum ErrorPageModel: Equatable {
         case .internetConnection: return nil
         case .badCertDomain(let model): return model.url
         case .generic(let model): return model.url
+        case .wayback(let model): return model.url
         }
     }
 
@@ -53,6 +57,11 @@ enum ErrorPageModel: Equatable {
         case .internetConnection, .generic, .wayback: return true
         case .badCertDomain: return false
         }
+    }
+
+    var isWayback: Bool {
+        if case .wayback = self { return true }
+        return false
     }
 
     struct AdvancedSectionConfig: Equatable {
@@ -71,4 +80,8 @@ struct BadCertDomainModel: Equatable {
 
 struct GenericErrorModel: Equatable {
     let url: URL?
+}
+
+struct WaybackErrorModel: Equatable {
+    let url: URL
 }

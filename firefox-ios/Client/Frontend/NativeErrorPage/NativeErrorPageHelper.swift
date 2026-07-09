@@ -139,6 +139,10 @@ class NativeErrorPageHelper {
                  NSURLErrorServerCertificateHasUnknownRoot,
                  NSURLErrorServerCertificateNotYetValid:
                 return Self.buildCertificateErrorModel(for: error, url: url)
+            case _ where Int32(exactly: error.code)
+                    .flatMap { CFNetworkErrors(rawValue: $0) }
+                    .map { WaybackCodes.codesForWayback.contains($0) } == true:
+                return .wayback(WaybackErrorModel(url: url))
             default:
                 return .generic(GenericErrorModel(url: url))
             }
