@@ -2143,7 +2143,7 @@ extension String {
                 key: "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154",
                 tableName: "NativeErrorPage",
                 value: "Searches the Wayback Machine for an archived version of this page.",
-                comment: "Accessibility hint read by VoiceOver describing what happens when the wayback button is activated.")
+                comment: "Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked.")
         }
     }
 }
