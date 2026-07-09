@@ -16,7 +16,7 @@ tasks:
         treeherder:
             symbol: firebase-perf
             kind: test
-            platform: ios-physical-iphone14pro-16-6/opt
+            platform: ios-physical-iphonese3-18-4/opt
             tier: 1
         worker-type: bitrise
         bitrise:

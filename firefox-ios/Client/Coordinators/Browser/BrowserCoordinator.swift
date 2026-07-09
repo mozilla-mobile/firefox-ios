@@ -1170,7 +1170,8 @@ final class BrowserCoordinator: BaseCoordinator,
             parentCoordinatorDelegate: self,
             router: router
         ) { [weak self] image in
-            self?.handleGoogleLensImage(image)
+            guard let image else { return }
+            self?.searchGoogleLens(with: image)
         }
         add(child: coordinator)
         coordinator.start()
@@ -1179,36 +1180,7 @@ final class BrowserCoordinator: BaseCoordinator,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
     }
 
-    private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
-        guard let provider = results.first?.itemProvider else { return }
-        guard provider.canLoadObject(ofClass: UIImage.self) else {
-            logger.log("Google Lens: picked item cannot be loaded as an image",
-                       level: .warning,
-                       category: .coordinator)
-            return
-        }
-        provider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
-            let image = object as? UIImage
-            let errorDescription = error?.localizedDescription
-            DispatchQueue.main.async {
-                guard let self else { return }
-                if let image {
-                    self.handleGoogleLensImage(image)
-                } else if let errorDescription {
-                    self.logger.log("Google Lens: failed to load picked image: \(errorDescription)",
-                                    level: .warning,
-                                    category: .coordinator)
-                } else {
-                    self.logger.log("Google Lens: picker returned a non-image object",
-                                    level: .warning,
-                                    category: .coordinator)
-                }
-            }
-        }
-    }
-
-    private func handleGoogleLensImage(_ image: UIImage?) {
-        guard let image else { return }
+    func searchGoogleLens(with image: UIImage) {
         guard let tab = tabManager.selectedTab else {
             logger.log("Google Lens: no selected tab to load the upload request",
                        level: .warning,
@@ -1223,6 +1195,33 @@ final class BrowserCoordinator: BaseCoordinator,
             return
         }
         _ = tab.loadRequest(request)
+    }
+    private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
+        guard let provider = results.first?.itemProvider else { return }
+        guard provider.canLoadObject(ofClass: UIImage.self) else {
+            logger.log("Google Lens: picked item cannot be loaded as an image",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        provider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
+            let image = object as? UIImage
+            let errorDescription = error?.localizedDescription
+            DispatchQueue.main.async {
+                guard let self else { return }
+                if let image {
+                    self.searchGoogleLens(with: image)
+                } else if let errorDescription {
+                    self.logger.log("Google Lens: failed to load picked image: \(errorDescription)",
+                                    level: .warning,
+                                    category: .coordinator)
+                } else {
+                    self.logger.log("Google Lens: picker returned a non-image object",
+                                    level: .warning,
+                                    category: .coordinator)
+                }
+            }
+        }
     }
 
     func showPrivacyNoticeLink(url: URL) {

@@ -8,12 +8,17 @@ import TestKit
 
 @testable import QuickAnswersKit
 
+@MainActor
+final class DismissSpy {
+    var callCount = 0
+}
+
 @Suite
 @MainActor
 struct ErrorHandlerTests {
     let testHelper = SwiftTestingHelper()
     let presenter = MockPresenter()
-    let navigationHandler = MockNavigationHandler()
+    let dismissSpy = DismissSpy()
 
     // MARK: - Microphone Permission Denied
     @Test
@@ -22,8 +27,7 @@ struct ErrorHandlerTests {
 
         subject.handleSpeechError(.microphonePermissionDenied(isFirstTime: true))
 
-        #expect(navigationHandler.dismissCallCount == 1)
-        #expect(navigationHandler.lastNavigationType == nil)
+        #expect(dismissSpy.callCount == 1)
         #expect(presenter.presentCallCount == 0)
     }
 
@@ -34,7 +38,7 @@ struct ErrorHandlerTests {
         subject.handleSpeechError(.microphonePermissionDenied(isFirstTime: false))
 
         #expect(presenter.presentCallCount == 1)
-        #expect(navigationHandler.dismissCallCount == 0)
+        #expect(dismissSpy.callCount == 0)
     }
 
     // MARK: - Speech Recognition Permission Denied
@@ -44,8 +48,7 @@ struct ErrorHandlerTests {
 
         subject.handleSpeechError(.speechRecognitionPermissionDenied(isFirstTime: true))
 
-        #expect(navigationHandler.dismissCallCount == 1)
-        #expect(navigationHandler.lastNavigationType == nil)
+        #expect(dismissSpy.callCount == 1)
         #expect(presenter.presentCallCount == 0)
     }
 
@@ -56,12 +59,33 @@ struct ErrorHandlerTests {
         subject.handleSpeechError(.speechRecognitionPermissionDenied(isFirstTime: false))
 
         #expect(presenter.presentCallCount == 1)
-        #expect(navigationHandler.dismissCallCount == 0)
+        #expect(dismissSpy.callCount == 0)
+    }
+
+    // MARK: - Catch-all Errors
+    @Test
+    func test_handleSpeechError_nonPermissionError_presentsCatchAllAlert() {
+        let subject = createSubject()
+
+        subject.handleSpeechError(.unknown("boom"))
+
+        #expect(presenter.presentCallCount == 1)
+        #expect(dismissSpy.callCount == 0)
+    }
+
+    @Test
+    func test_handleSearchError_presentsCatchAllAlert() {
+        let subject = createSubject()
+
+        subject.handleSearchError(.rateLimited)
+
+        #expect(presenter.presentCallCount == 1)
+        #expect(dismissSpy.callCount == 0)
     }
 
     // MARK: - Helper
     private func createSubject() -> ErrorHandler {
-        let subject = ErrorHandler(presenter: presenter, navigationHandler: navigationHandler)
+        let subject = ErrorHandler(presenter: presenter, onDismiss: { [dismissSpy] in dismissSpy.callCount += 1 })
         testHelper.trackForMemoryLeaks(subject)
         return subject
     }

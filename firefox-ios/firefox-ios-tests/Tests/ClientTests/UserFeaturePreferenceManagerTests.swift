@@ -71,6 +71,25 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
     }
 
     @MainActor
+    func testGoogleLens_defaultsToNimbus_whenNoUserPrefSet() {
+        mockLayer.enabledFlags = [.googleLens]
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        XCTAssertTrue(subject.getPreferenceFor(.googleLens))
+    }
+
+    @MainActor
+    func testGoogleLens_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.GoogleLens)
+        XCTAssertFalse(subject.getPreferenceFor(.googleLens))
+
+        prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.GoogleLens)
+        XCTAssertTrue(subject.getPreferenceFor(.googleLens))
+    }
+
+    @MainActor
     func testHomepageBookmarksSection_readsUserPref() {
         let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
 

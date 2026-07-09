@@ -86,7 +86,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     private lazy var bookmarkedBadge: UIImage = {
-        return UIImage(named: StandardImageIdentifiers.Medium.bookmarkBadgeFillBlue50)!
+        return UIImage(named: StandardImageIdentifiers.Medium.bookmarkBadgeFillViolet50)!
     }()
 
     private lazy var openAndSyncTabBadge: UIImage = {

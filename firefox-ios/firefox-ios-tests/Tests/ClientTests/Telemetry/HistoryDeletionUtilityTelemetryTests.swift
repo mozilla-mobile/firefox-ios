@@ -23,7 +23,6 @@ final class HistoryDeletionUtilityTelemetryTests: XCTestCase {
 
         let subject = createSubject()
         let expectedDateOption = HistoryDeletionUtilityDateOptions.lastHour
-        let expectedMetricType = type(of: event)
 
         subject.clearedHistory(expectedDateOption)
 
@@ -33,12 +32,10 @@ final class HistoryDeletionUtilityTelemetryTests: XCTestCase {
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
         )
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.timeframe, expectedDateOption.rawValue)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func createSubject() -> HistoryDeletionUtilityTelemetry {
