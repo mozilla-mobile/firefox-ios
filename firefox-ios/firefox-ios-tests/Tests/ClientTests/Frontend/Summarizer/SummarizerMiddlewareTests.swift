@@ -465,6 +465,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     /// empty closure, which does not strongly retain `self`.
     private func releaseMiddlewareProvidersFromMemory(_ subject: SummarizerMiddleware) {
         subject.summarizerProvider = emptyMiddlewareProviderFactory()
+        subject.legacyProvider = emptyLegacyMiddlewareMethodFactory()
+        subject.modernProvider = emptyMiddlewareMethodFactory()
     }
 
     private func setupWebViewForTabManager(isHomePage: Bool = false) {
