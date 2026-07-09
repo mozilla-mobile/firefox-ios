@@ -51,7 +51,7 @@ struct HeaderState: StateType, Equatable, Hashable {
 
         switch action.actionType {
         case HomepageActionType.initialize:
-            return state.copy(isPrivate: false)
+            return handleInitializeAction(for: state, with: action)
         case QuickAnswersMiddlewareActionType.didInitialize, QuickAnswersMiddlewareActionType.didUpdateSettings:
             return handleQuickAnswersAction(for: state, with: action)
         case WorldCupMiddlewareActionType.didUpdate:
@@ -59,6 +59,13 @@ struct HeaderState: StateType, Equatable, Hashable {
         default:
             return defaultState(from: state)
         }
+    }
+
+    private static func handleInitializeAction(for state: HeaderState, with action: Action) -> HeaderState {
+        guard action is HomepageAction else {
+            return defaultState(from: state)
+        }
+        return state.copy(isPrivate: false)
     }
 
     private static func handleQuickAnswersAction(for state: HeaderState, with action: Action) -> HeaderState {
