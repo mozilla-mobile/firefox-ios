@@ -1171,7 +1171,8 @@ final class BrowserCoordinator: BaseCoordinator,
             parentCoordinatorDelegate: self,
             router: router
         ) { [weak self] image in
-            self?.handleGoogleLensImage(image)
+            guard let image else { return }
+            self?.searchGoogleLens(with: image, entryPoint: .addressToolbar)
         }
         add(child: coordinator)
         coordinator.start()
@@ -1180,6 +1181,24 @@ final class BrowserCoordinator: BaseCoordinator,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
     }
 
+    func searchGoogleLens(with image: UIImage, entryPoint: GoogleLensUploadEntryPoint) {
+        guard let tab = tabManager.selectedTab else {
+            logger.log("Google Lens: no selected tab to load the upload request",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        let viewportSize = tab.webView?.bounds.size ?? browserViewController.view.bounds.size
+        guard let request = googleLensService.makeUploadRequest(for: image,
+                                                                viewportSize: viewportSize,
+                                                                entryPoint: entryPoint) else {
+            logger.log("Google Lens: failed to build upload request (image could not be processed)",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        _ = tab.loadRequest(request)
+    }
     private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
         guard let provider = results.first?.itemProvider else { return }
         guard provider.canLoadObject(ofClass: UIImage.self) else {
@@ -1194,7 +1213,7 @@ final class BrowserCoordinator: BaseCoordinator,
             DispatchQueue.main.async {
                 guard let self else { return }
                 if let image {
-                    self.handleGoogleLensImage(image)
+                    self.searchGoogleLens(with: image, entryPoint: .addressToolbar)
                 } else if let errorDescription {
                     self.logger.log("Google Lens: failed to load picked image: \(errorDescription)",
                                     level: .warning,
@@ -1206,24 +1225,6 @@ final class BrowserCoordinator: BaseCoordinator,
                 }
             }
         }
-    }
-
-    private func handleGoogleLensImage(_ image: UIImage?) {
-        guard let image else { return }
-        guard let tab = tabManager.selectedTab else {
-            logger.log("Google Lens: no selected tab to load the upload request",
-                       level: .warning,
-                       category: .coordinator)
-            return
-        }
-        let viewportSize = tab.webView?.bounds.size ?? browserViewController.view.bounds.size
-        guard let request = googleLensService.makeUploadRequest(for: image, viewportSize: viewportSize) else {
-            logger.log("Google Lens: failed to build upload request (image could not be processed)",
-                       level: .warning,
-                       category: .coordinator)
-            return
-        }
-        _ = tab.loadRequest(request)
     }
 
     func showPrivacyNoticeLink(url: URL) {

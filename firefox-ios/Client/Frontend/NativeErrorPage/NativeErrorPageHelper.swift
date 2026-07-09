@@ -130,58 +130,21 @@ class NativeErrorPageHelper {
     // MARK: - Instance Methods
 
     func parseErrorDetails() -> ErrorPageModel {
-        let model: ErrorPageModel = if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
+        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             switch error.code {
             case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
-                ErrorPageModel(
-                    errorTitle: .NativeErrorPage.NoInternetConnection.TitleLabel,
-                    errorDescription: .NativeErrorPage.NoInternetConnection.Description,
-                    foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
-                    url: nil,
-                    advancedSection: nil,
-                    showGoBackButton: false,
-                    type: .internetConnection
-                )
+                return .internetConnection
             case NSURLErrorServerCertificateUntrusted,
                  NSURLErrorServerCertificateHasBadDate,
                  NSURLErrorServerCertificateHasUnknownRoot,
                  NSURLErrorServerCertificateNotYetValid:
-                Self.buildCertificateErrorModel(for: error, url: url)
-            case _ where Int32(exactly: error.code)
-                    .flatMap { CFNetworkErrors(rawValue: $0) }
-                    .map { WaybackCodes.codesForWayback.contains($0) } == true:
-                ErrorPageModel(
-                    errorTitle: .NativeErrorPage.Wayback.TitleLabel,
-                    errorDescription: String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description),
-                    foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
-                    url: url,
-                    advancedSection: nil,
-                    showGoBackButton: false,
-                    type: .wayback
-                )
+                return Self.buildCertificateErrorModel(for: error, url: url)
             default:
-                ErrorPageModel(
-                    errorTitle: .NativeErrorPage.GenericError.TitleLabel,
-                    errorDescription: .NativeErrorPage.GenericError.Description,
-                    foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
-                    url: url,
-                    advancedSection: nil,
-                    showGoBackButton: false,
-                    type: .generic
-                )
+                return .generic(GenericErrorModel(url: url))
             }
         } else {
-            ErrorPageModel(
-                errorTitle: .NativeErrorPage.NoInternetConnection.TitleLabel,
-                errorDescription: .NativeErrorPage.NoInternetConnection.Description,
-                foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
-                url: nil,
-                advancedSection: nil,
-                showGoBackButton: false,
-                type: .internetConnection
-            )
+            return .internetConnection
         }
-        return model
     }
 
     /// Parses certificate details from the stored error.
@@ -237,15 +200,7 @@ class NativeErrorPageHelper {
         url: URL
     ) -> ErrorPageModel {
         guard error.domain == NSURLErrorDomain else {
-            return ErrorPageModel(
-                errorTitle: .NativeErrorPage.GenericError.TitleLabel,
-                errorDescription: .NativeErrorPage.GenericError.Description,
-                foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
-                url: url,
-                advancedSection: nil,
-                showGoBackButton: false,
-                type: .generic
-            )
+            return .generic(GenericErrorModel(url: url))
         }
 
         // TODO: FXIOS-14569 — Investigate using SecTrustEvaluateWithError to evaluate TLS trust
@@ -272,25 +227,12 @@ class NativeErrorPageHelper {
                 showProceedButton: true
             )
 
-            return ErrorPageModel(
-                errorTitle: String.NativeErrorPage.BadCertDomain.TitleLabel,
-                errorDescription: String.NativeErrorPage.BadCertDomain.Description,
-                foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
+            return .badCertDomain(BadCertDomainModel(
                 url: url,
-                advancedSection: advancedSection,
-                showGoBackButton: true,
-                type: .badCertDomain
-            )
+                advancedSection: advancedSection
+            ))
         } else {
-            return ErrorPageModel(
-                errorTitle: .NativeErrorPage.GenericError.TitleLabel,
-                errorDescription: .NativeErrorPage.GenericError.Description,
-                foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
-                url: url,
-                advancedSection: nil,
-                showGoBackButton: false,
-                type: .generic
-            )
+            return .generic(GenericErrorModel(url: url))
         }
     }
 }

@@ -44,7 +44,9 @@ func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
             // Workaround BB iOS13 be sure tap happens on url bar
             searchTextField.waitAndTap()
             searchTextField.waitAndTap()
-            searchTextField.typeText(url)
+            // On CI the field is occasionally focus-less after tapping, which makes typeText abort;
+            // wait for keyboard focus (re-tapping if needed) before typing.
+            searchTextField.tapAndTypeTextWhenFocused(url)
             searchTextField.typeText("\r")
         }
 

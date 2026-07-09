@@ -54,6 +54,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         wait(for: [expectation])
 
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
+        XCTAssertEqual(mockService.stopRecordingCalledCount, 1)
         XCTAssertEqual(mockService.searchCalledCount, 1)
         XCTAssertEqual(states[0], .recordingStarted)
         XCTAssertEqual(states[1], .speechResult(partialResult, nil))
@@ -86,6 +87,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         wait(for: [expectation])
 
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
+        XCTAssertEqual(mockService.stopRecordingCalledCount, 1)
         XCTAssertEqual(states[0], .recordingStarted)
         guard case .speechResult(let result, let error) = states[1] else {
             XCTFail("Expected speechResult state")
@@ -212,11 +214,29 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.citationTappedCalledCount, 1)
     }
 
+    // MARK: - Model Display Name Tests
+
+    func testModelDisplayName_withExaModel_returnsExa() {
+        let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .exa))
+
+        XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.exa.displayName)
+    }
+
+    func testModelDisplayName_withLinerModel_returnsLiner() {
+        let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
+
+        XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.liner.displayName)
+    }
+
     // MARK: - Helper
-    private func createSubject(prefs: Prefs = MockProfilePrefs()) -> QuickAnswersViewModel {
+    private func createSubject(
+        prefs: Prefs = MockProfilePrefs(),
+        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa)
+    ) -> QuickAnswersViewModel {
         let model = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
+            configFetcher: configFetcher,
             makeService: { _, _ in
                 return self.mockService
             }

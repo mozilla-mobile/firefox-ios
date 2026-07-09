@@ -30,6 +30,7 @@ final class NativeErrorPageViewController: UIViewController,
     private let logger: Logger
     var contentType: ContentType = .nativeErrorPage
     private var nativeErrorPageState: NativeErrorPageState
+    private var model: ErrorPageModel?
 
     // MARK: UI Elements
     private struct UX {
@@ -180,9 +181,10 @@ final class NativeErrorPageViewController: UIViewController,
 
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
-        guard !state.title.isEmpty else { return }
+        guard let model = state.model else { return }
+        self.model = model
 
-        if state.type.isRegularUI {
+        if model.isRegularUI {
             showRegularUI()
         } else {
             showBadCertUI()
@@ -190,6 +192,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private func showRegularUI() {
+        guard let model else { return }
         setActionView(regularContentView)
         scrollContainer.spacing = UX.mainStackSpacing
         contentStack.spacing = UX.textStackSpacing
@@ -197,21 +200,22 @@ final class NativeErrorPageViewController: UIViewController,
         foxImageWidthConstraint?.constant = UX.logoSizeWidth
         foxImageHeightConstraint?.isActive = false
 
-        titleLabel.text = nativeErrorPageState.title
-        foxImage.image = UIImage(named: nativeErrorPageState.foxImage)
-        if let validURL = nativeErrorPageState.url {
+        titleLabel.text = model.title
+        foxImage.image = UIImage(named: model.foxImageName)
+        if let validURL = model.url {
             errorDescriptionLabel.attributedText = getDescriptionWithHostName(
                 errorURL: validURL,
-                description: nativeErrorPageState.description
+                description: model.description
             )
         } else {
-            errorDescriptionLabel.text = nativeErrorPageState.description
+            errorDescriptionLabel.text = model.description
         }
         regularContentView.configure(showWaybackButton: nativeErrorPageState.type == .wayback)
         applyTheme()
     }
 
     private func showBadCertUI() {
+        guard let model else { return }
         setActionView(badCertContentView)
         scrollContainer.spacing = UX.badCertGapBetweenImageAndContent
         contentStack.spacing = UX.badCertContentGap
@@ -221,21 +225,19 @@ final class NativeErrorPageViewController: UIViewController,
         foxImageWidthConstraint?.constant = UX.badCertImageSize
         foxImageHeightConstraint?.isActive = true
 
-        foxImage.image = !nativeErrorPageState.foxImage.isEmpty
-            ? UIImage(named: nativeErrorPageState.foxImage)
-            : UIImage(named: ImageIdentifiers.NativeErrorPage.securityError)
+        foxImage.image = UIImage(named: model.foxImageName)
 
-        titleLabel.text = nativeErrorPageState.title
+        titleLabel.text = model.title
         titleLabel.font = FXFontStyles.Bold.title2.scaledFont()
-        errorDescriptionLabel.text = nativeErrorPageState.description
+        errorDescriptionLabel.text = model.description
         errorDescriptionLabel.font = FXFontStyles.Regular.body.scaledFont()
 
         applyTheme()
 
-        if let advancedSection = nativeErrorPageState.advancedSection {
+        if let advancedSection = model.advancedSection {
             badCertContentView.configure(
                 advancedSection: advancedSection,
-                url: nativeErrorPageState.url,
+                url: model.url,
                 goBackTitle: String.NativeErrorPage.GoBackButton
             )
         }
@@ -466,14 +468,14 @@ final class NativeErrorPageViewController: UIViewController,
               let errorURL = selectedTab.webView?.url,
               let internalURL = InternalURL(errorURL),
               internalURL.isErrorPage else { return }
-        let originalURL = nativeErrorPageState.url ?? internalURL.originalURLFromErrorPage ?? errorURL
+        let originalURL = model?.url ?? internalURL.originalURLFromErrorPage ?? errorURL
         guard !CertificateHelper.certificatesFromErrorURL(errorURL, logger: logger).isEmpty else { return }
 
         let destination = NavigationDestination(
             .certificatesFromErrorPage,
             url: originalURL,
             errorPageURL: errorURL,
-            certificateTitle: nativeErrorPageState.title
+            certificateTitle: model?.title ?? ""
         )
         store.dispatch(
             NavigationBrowserAction(

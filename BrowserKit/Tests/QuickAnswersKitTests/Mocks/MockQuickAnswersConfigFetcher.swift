@@ -5,6 +5,7 @@
 @testable import QuickAnswersKit
 
 final class MockQuickAnswersConfigFetcher: QuickAnswersConfigFetcher, @unchecked Sendable {
+    var model: QuickAnswersModel = .exa
     var configToReturn: QuickAnswersConfig
     var errorToThrow: Error?
     var fetchCallCount = 0

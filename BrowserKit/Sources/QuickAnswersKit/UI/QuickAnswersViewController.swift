@@ -18,8 +18,9 @@ public final class QuickAnswersViewController: UIViewController,
             bottom: UX.closeButtonPadding,
             trailing: UX.closeButtonPadding
         )
-        static let recordWaveEffectSize: CGFloat = 400.0
-        static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
+        static let recordWaveEffectSize: CGFloat = 450.0
+        static let recordWaveEffectBottomPadding = 150.0
+        static let recordWaveEffectResultOpacity: CGFloat = 0.3
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
@@ -191,12 +192,15 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.contentView.configureTranscript(result.text)
                 }
             case .loadingSearchResult:
+                self?.triggerHaptic()
                 self?.contentView.configureSearching()
             case .showSearchResult(let result, let error):
                 if let error {
                     self?.errorHandler.handleSearchError(error)
                 } else {
-                    self?.contentView.configureAnswer(result.resultText)
+                    self?.triggerHaptic()
+                    self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
+                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
                     self?.contentView.configureSources(result.sources) { [weak self] url in
                         self?.viewModel.recordCitationTapped()
                         self?.dismiss(with: url)
@@ -218,8 +222,15 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     private func dismiss(with url: URL?) {
+        triggerHaptic()
         viewModel.dismiss()
         navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
+    }
+
+    private func triggerHaptic() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.prepare()
+        generator.impactOccurred()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate

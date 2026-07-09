@@ -3,14 +3,17 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import CoreGraphics
 
-/// Everything needed to build a Google Lens upload request: the encoded image, its
-/// dimensions, and the viewport Lens should render its result UI for.
+enum GoogleLensUploadEntryPoint: String {
+    case addressToolbar = "fntpubb"
+    case webImageContextMenu = "fcm"
+}
+
 struct GoogleLensUploadInput: Equatable {
     let jpegData: Data
     let imageDimensions: CGSize
     let viewportSize: CGSize
+    let entryPoint: GoogleLensUploadEntryPoint
 }
 
 protocol GoogleLensRequestBuilding {
@@ -22,8 +25,6 @@ protocol GoogleLensRequestBuilding {
 struct GoogleLensRequestBuilder: GoogleLensRequestBuilding {
     private enum Constants {
         static let uploadURL = "https://lens.google.com/upload"
-        /// Entry-point value for the upload-by-bytes (`/upload`) integration, provided by Google.
-        static let entryPoint = "fntpubb"
         static let imageFieldName = "encoded_image"
         static let imageFileName = "image.jpg"
         static let imageMimeType = "image/jpeg"
@@ -54,7 +55,7 @@ struct GoogleLensRequestBuilder: GoogleLensRequestBuilding {
 
     private func uploadURL(for input: GoogleLensUploadInput) -> URL {
         var queryItems = [
-            URLQueryItem(name: "ep", value: Constants.entryPoint),
+            URLQueryItem(name: "ep", value: input.entryPoint.rawValue),
             URLQueryItem(name: "st", value: String(startTimeMilliseconds())),
             URLQueryItem(name: "vpw", value: String(Int(input.viewportSize.width))),
             URLQueryItem(name: "vph", value: String(Int(input.viewportSize.height)))

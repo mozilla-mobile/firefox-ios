@@ -163,7 +163,7 @@ class WebContextMenuActionsProvider {
 
     @MainActor
     func addSaveImage(url: URL,
-                      getImageData: @escaping (URL, @Sendable @escaping (Data) -> Void) -> Void,
+                      getImageData: @escaping (URL, @escaping @MainActor @Sendable (Data) -> Void) -> Void,
                       writeToPhotoAlbum: @escaping @MainActor (UIImage) -> Void) {
         actions.append(UIAction(
             title: .ContextMenuSaveImage,
@@ -183,6 +183,18 @@ class WebContextMenuActionsProvider {
                 }
             }
             self?.recordOptionSelectedTelemetry(option: .saveImage)
+        })
+    }
+
+    @MainActor
+    func addSearchWithGoogleLens(url: URL, searchGoogleLens: @escaping @MainActor (URL) -> Void) {
+        actions.append(UIAction(
+            title: .ContextMenuGoogleLens,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Medium.logoGoogleLens),
+            identifier: UIAction.Identifier("linkContextMenu.googleLens")
+        ) { [weak self] _ in
+            searchGoogleLens(url)
+            self?.recordOptionSelectedTelemetry(option: .googleLens)
         })
     }
 
