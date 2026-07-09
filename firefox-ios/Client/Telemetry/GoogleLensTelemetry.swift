@@ -24,7 +24,7 @@ struct GoogleLensTelemetry {
     }
 
     func googleLensEnabled(_ enabled: Bool) {
-        gleanWrapper.setBoolean(for: GleanMetrics.Search.googleLensEnabled, value: enabled)
+        gleanWrapper.setBoolean(for: GleanMetrics.UserSearch.googleLensEnabled, value: enabled)
     }
 
     func searchCompleted(source: Source, succeeded: Bool, httpStatusCode: Int?) {

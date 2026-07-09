@@ -344,7 +344,7 @@ toolbar.google_lens_button:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16208
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34604
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -367,7 +367,7 @@ toolbar.google_lens_button.context_menu:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16208
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34604
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
