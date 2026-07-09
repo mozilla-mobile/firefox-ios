@@ -436,7 +436,7 @@ extension BrowserViewController: WKUIDelegate {
         getImageData(url) { [weak self] data in
             guard let image = UIImage(data: data) else { return }
             ensureMainThread {
-                self?.navigationHandler?.searchGoogleLens(with: image)
+                self?.navigationHandler?.searchGoogleLens(with: image, entryPoint: .webImageContextMenu)
             }
         }
     }
