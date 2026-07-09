@@ -319,11 +319,13 @@ final class ToolbarMiddleware {
             toolbarTelemetry.googleLensButtonTapped()
 
         case .googleLensPhotoLibrary:
+            toolbarTelemetry.googleLensContextMenuOptionSelected(option: .photoPicker)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
             store.dispatch(action)
 
         case .googleLensTakePhoto:
+            toolbarTelemetry.googleLensContextMenuOptionSelected(option: .camera)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showGoogleLensCamera)
             store.dispatch(action)

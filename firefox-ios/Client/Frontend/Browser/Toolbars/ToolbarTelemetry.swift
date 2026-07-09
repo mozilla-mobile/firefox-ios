@@ -6,6 +6,11 @@ import Foundation
 import Glean
 
 struct ToolbarTelemetry {
+    enum GoogleLensContextMenuOption: String {
+        case photoPicker
+        case camera
+    }
+
     private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
@@ -71,6 +76,12 @@ struct ToolbarTelemetry {
 
     func googleLensButtonTapped() {
         gleanWrapper.recordEvent(for: GleanMetrics.ToolbarGoogleLensButton.tapped)
+    }
+
+    func googleLensContextMenuOptionSelected(option: GoogleLensContextMenuOption) {
+        let optionExtra = GleanMetrics.ToolbarGoogleLensButtonContextMenu.OptionSelectedExtra(option: option.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.ToolbarGoogleLensButtonContextMenu.optionSelected,
+                                 extras: optionExtra)
     }
 
     func tabTrayButtonTapped(isPrivate: Bool) {
