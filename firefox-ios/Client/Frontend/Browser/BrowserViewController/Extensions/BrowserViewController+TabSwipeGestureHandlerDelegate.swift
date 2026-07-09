@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-extension BrowserViewController: AddressBarPanGestureHandler.Delegate {
+extension BrowserViewController: TabSwipeGestureHandler.Delegate {
     func swipeGestureDidBegin() {
         updateZoomPageBarVisibility(visible: false)
         readerModeBar?.isHidden = true
