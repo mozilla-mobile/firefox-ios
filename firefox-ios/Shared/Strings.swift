@@ -6637,6 +6637,12 @@ extension String {
         value: "Open sms in an external application?",
         comment: "Question shown to user when tapping an SMS link that opens the external app for those."
     )
+    public static let ExternalOtherLinkConfirmation = MZLocalizedString(
+        key: "ExternalLink.ExternalOtherLinkConfirmation.v153",
+        tableName: "ExternalLink",
+        value: "Open %@ in an external application?",
+        comment: "Question shown to user when tapping a link that opens an external app. The %@ is the scheme of the link, for example a maps:// link to Apple's Maps application will show 'maps' for this value."
+    )
     public static let ExternalMailLinkConfirmation = MZLocalizedString(
         key: "ExternalLink.ExternalMailLinkConfirmation.v136",
         tableName: "ExternalLink",

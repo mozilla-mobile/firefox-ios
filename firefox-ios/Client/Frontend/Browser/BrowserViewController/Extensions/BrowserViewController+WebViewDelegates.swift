@@ -785,6 +785,14 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     private func handleCustomSchemeURLNavigation(url: URL, navigationAction: WKNavigationAction) {
+        guard let scheme = url.scheme else { return }
+        let alertText = String(format: .ExternalOtherLinkConfirmation, scheme)
+        showExternalAlert(withText: alertText) { [weak self] _ in
+            self?.openCustomSchemeURL(url: url, navigationAction: navigationAction)
+        }
+    }
+
+    private func openCustomSchemeURL(url: URL, navigationAction: WKNavigationAction) {
         // Try to open the custom scheme URL, if it doesn't work we show an error alert
         UIApplication.shared.open(url, options: [:]) { openedURL in
             // Do not show error message for JS navigated links or
