@@ -20,6 +20,7 @@ final class ToolbarMiddleware {
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizerConfigFactory: SummarizerConfigFactory
     private let featureFlagsProvider: FeatureFlagProviding
+    private let userPreferences: UserFeaturePreferring
     private let searchEnginesManager: SearchEnginesManagerProvider
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
@@ -39,12 +40,14 @@ final class ToolbarMiddleware {
          summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          recentSearchProvider: RecentSearchProvider? = nil,
          featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
+         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
          searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.summarizerConfigFactory = summarizerConfigFactory
         self.featureFlagsProvider = featureFlagsProvider
+        self.userPreferences = userPreferences
         self.searchEnginesManager = searchEnginesManager
         self.manager = manager
         self.toolbarHelper = toolbarHelper
@@ -106,6 +109,7 @@ final class ToolbarMiddleware {
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
+            dispatchGoogleLensAvailability(for: uuid)
 
         case GeneralBrowserMiddlewareActionType.websiteDidScroll:
             guard let scrollOffset = action.scrollOffset else { return }
@@ -179,13 +183,11 @@ final class ToolbarMiddleware {
             )
             store.dispatch(action)
 
-        case ToolbarActionType.searchEngineDidChange:
-            let action = ToolbarMiddlewareAction(
-                isGoogleLensEnabled: isGoogleLensToolbarEntryPointAvailable(),
-                windowUUID: action.windowUUID,
-                actionType: ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine
-            )
-            store.dispatch(action)
+        case ToolbarActionType.searchEngineDidChange, ToolbarActionType.googleLensSettingDidChange:
+            dispatchGoogleLensAvailability(for: action.windowUUID)
+
+        case ToolbarActionType.urlDidChange:
+            updateGoogleLensAvailabilityIfBrowsingModeChanged(windowUUID: action.windowUUID, state: state)
 
         case ToolbarActionType.didSubmitSearchTerm:
             // After a user submits a search term, we want to record it in our history storage via recent search provider.
@@ -311,6 +313,16 @@ final class ToolbarMiddleware {
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showShare)
+            store.dispatch(action)
+
+        case .googleLensPhotoLibrary:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
+            store.dispatch(action)
+
+        case .googleLensTakePhoto:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showGoogleLensCamera)
             store.dispatch(action)
 
         case .search:
@@ -557,17 +569,36 @@ final class ToolbarMiddleware {
         return windowManager.tabManager(for: uuid)
     }
 
-    private func isGoogleLensToolbarEntryPointAvailable() -> Bool {
+    // Only re-dispatch when Google Lens availability would actually change (i.e. the browsing mode flipped it),
+    // to avoid churning on every URL.
+    private func updateGoogleLensAvailabilityIfBrowsingModeChanged(windowUUID: WindowUUID, state: AppState) {
+        guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else { return }
+
+        let shouldShow = isGoogleLensAvailable(for: windowUUID)
+        let isShowing = toolbarState.addressToolbar.editingAccessoryAction?.actionType == .googleLens
+        guard shouldShow != isShowing else { return }
+
+        dispatchGoogleLensAvailability(for: windowUUID)
+    }
+
+    private func isGoogleLensAvailable(for windowUUID: WindowUUID) -> Bool {
         guard featureFlagsProvider.isEnabled(.googleLens),
+              userPreferences.getPreferenceFor(.googleLens),
+              tabManager(for: windowUUID)?.selectedTab?.isPrivate != true,
               let defaultEngine = searchEnginesManager.defaultEngine,
               !defaultEngine.isCustomEngine
         else { return false }
 
-        let engineID = defaultEngine.engineID
-        let googleEngineID = OpenSearchEngine.googleEngineID
+        return defaultEngine.isGoogleEngine
+    }
 
-        // App Services can return regional Google engine IDs such as "google-b-1-m".
-        let isGoogleDefaultEngine = engineID == googleEngineID || engineID.hasPrefix("\(googleEngineID)-")
-        return isGoogleDefaultEngine
+    private func dispatchGoogleLensAvailability(for windowUUID: WindowUUID) {
+        let action = ToolbarMiddlewareAction(
+            isGoogleLensEnabled: isGoogleLensAvailable(for: windowUUID),
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.googleLensAvailabilityDidChange
+        )
+        store.dispatch(action)
     }
 }

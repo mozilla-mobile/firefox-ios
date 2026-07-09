@@ -379,10 +379,11 @@ extension BrowserViewController: WKUIDelegate {
             actionBuilder.addOpenInNewPrivateTab(url: url, currentTab: currentTab, addTab: addTab)
         }
 
-        let isBookmarkedSite = profile.places
-            .isBookmarked(url: url.absoluteString)
-            .value
-            .successValue ?? false
+        // The context menu is built synchronously on the main thread, so we cap the bookmark
+        // lookup with a short timeout instead of blocking indefinitely on a contended Places
+        // DB (which could trip the watchdog). On timeout we default to "not bookmarked".
+        let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString)
+                               .value(timeout: .milliseconds(100))?.successValue ?? false
         if isBookmarkedSite {
             actionBuilder.addRemoveBookmarkLink(urlString: url.absoluteString,
                                                 title: title,
@@ -405,6 +406,10 @@ extension BrowserViewController: WKUIDelegate {
                                contentContainer: contentContainer)
 
         if let url = image {
+            if isGoogleLensActionAvailable() {
+                actionBuilder.addSearchWithGoogleLens(url: url, searchGoogleLens: searchGoogleLens(forImageURL:))
+            }
+
             actionBuilder.addSaveImage(url: url,
                                        getImageData: getImageData,
                                        writeToPhotoAlbum: writeToPhotoAlbum)
@@ -415,6 +420,25 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         return actionBuilder.build()
+    }
+
+    private func isGoogleLensActionAvailable() -> Bool {
+        guard featureFlagsProvider.isEnabled(.googleLens),
+              userPreferences.getPreferenceFor(.googleLens),
+              let defaultEngine = searchEnginesManager.defaultEngine,
+              !defaultEngine.isCustomEngine
+        else { return false }
+
+        return defaultEngine.isGoogleEngine
+    }
+
+    private func searchGoogleLens(forImageURL url: URL) {
+        getImageData(url) { [weak self] data in
+            guard let image = UIImage(data: data) else { return }
+            ensureMainThread {
+                self?.navigationHandler?.searchGoogleLens(with: image, entryPoint: .webImageContextMenu)
+            }
+        }
     }
 
     func assignWebView(_ webView: WKWebView?) {

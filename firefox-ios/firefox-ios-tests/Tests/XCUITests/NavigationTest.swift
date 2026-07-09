@@ -42,6 +42,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
         launchApp()
     }
 
+    private func restartTheApp() {
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        launchApp()
+        setUpScreenGraph()
+        waitForTabsButton()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
@@ -438,6 +446,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
         sslScreen.waitForPageToLoadAfterBypass()
+
+        restartTheApp()
+        browserScreen.navigateToURL("https://expired.badssl.com/")
+        sslScreen.waitForWarning()
+        sslScreen.assertWarningVisible()
+        sslScreen.tapAdvanced()
+        sslScreen.tapVisitSiteAnyway()
+        sslScreen.waitForPageToLoadAfterBypass()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307022
@@ -603,13 +619,13 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/3408299
     func testLongTapFirefoxIconNewPrivateTab() throws {
         guard #available(iOS 18, *) else {
-            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard context menu behavior")
         }
         let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
-        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
         waitForTabsButton()
-        app.terminate()
+        // Background instead of terminate: a SpringBoard cold-launch crashes on the simulator (code-sign kill).
+        springBoardScreen.pressHomeButton()
         if isFennec {
             springBoardScreen.assertFennecIconExists()
             springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
@@ -618,8 +634,6 @@ class NavigationTest: FeatureFlaggedTestSuite {
             springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
         }
         springBoardScreen.tapNewPrivateButton()
-        onboardingScreen.handleTermsOfService()
-        onboardingScreen.closeTour()
         browserScreen.assertPrivateModeMessageCardExists()
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
@@ -628,14 +642,32 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen.assertWebViewLinkTextExists(text: "Legal")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
-    func testLongTapFirefoxIconOpenLastBookmark() throws {
+    func testLongTapFirefoxIconAppIcon() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
         }
         let springBoardScreen = SpringboardScreen(springboard: springboard)
+        waitForTabsButton()
+        springBoardScreen.pressHomeButton()
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
+        springBoardScreen.assertAppIconButtonExists()
+        springBoardScreen.tapAppIconButton()
+        mozWaitForElementToExist(app.navigationBars["App Icon"])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
+    func testLongTapFirefoxIconOpenLastBookmark() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard context menu behavior")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
-        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
 
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -645,8 +677,8 @@ class NavigationTest: FeatureFlaggedTestSuite {
         waitUntilPageLoad()
         bookmark(isLockIconOff: false)
 
-        // Terminate app and go to springboard
-        app.terminate()
+        // Background instead of terminate: a SpringBoard cold-launch crashes on the simulator (code-sign kill).
+        springBoardScreen.pressHomeButton()
 
         if isFennec {
             springBoardScreen.assertFennecIconExists()
@@ -659,10 +691,6 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // Verify all context menu options are present
         springBoardScreen.assertAllContextMenuOptionsExist()
         springBoardScreen.tapOpenLastBookmarkButton()
-
-        // Close onboarding if it appears
-        onboardingScreen.handleTermsOfService()
-        onboardingScreen.closeTour()
 
         // Verify the bookmarked page opens
         waitUntilPageLoad()

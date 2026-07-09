@@ -239,86 +239,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(topSites.first?.isSponsored, false)
     }
 
-    func test_homepageInitializeAction_whenHomepageTopSitesEmpty_dispatchesLocalSitesFirst() throws {
-        let topSitesManager = SponsoredFallbackTopSitesManager()
-        let subject = createSubject(topSitesManager: topSitesManager)
-        let action = HomepageAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.initialize
-        )
-        let dispatchExpectation = XCTestExpectation(description: "Top sites middleware dispatches local sites")
-        let sponsoredFetchExpectation = XCTestExpectation(description: "Sponsored sites refresh starts")
-        topSitesManager.fetchSponsoredSitesCalled = {
-            sponsoredFetchExpectation.fulfill()
-        }
-
-        mockStore.dispatchCalled = {
-            dispatchExpectation.fulfill()
-        }
-
-        subject.topSitesProvider(appState, action)
-
-        wait(for: [dispatchExpectation, sponsoredFetchExpectation], timeout: 1)
-
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
-        let topSites = try XCTUnwrap(actionsCalled.last?.topSites)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(topSites.map(\.title), ["Local Site"])
-        XCTAssertEqual(topSitesManager.sponsoredSitesUsedForRecalculation, [0])
-    }
-
-    func test_homepageInitializeAction_whenHomepageTopSitesEmptyAndLocalSitesEmpty_dispatchesSponsoredSites() throws {
-        let topSitesManager = SponsoredFallbackTopSitesManager()
-        topSitesManager.otherSites = []
-        let subject = createSubject(topSitesManager: topSitesManager)
-        let action = HomepageAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.initialize
-        )
-        let dispatchExpectation = XCTestExpectation(description: "Top sites middleware dispatches sponsored sites")
-
-        mockStore.dispatchCalled = {
-            dispatchExpectation.fulfill()
-        }
-
-        subject.topSitesProvider(appState, action)
-
-        wait(for: [dispatchExpectation], timeout: 1)
-
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
-        let topSites = try XCTUnwrap(actionsCalled.last?.topSites)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(topSites.map(\.title), ["Sponsored Site"])
-        XCTAssertEqual(topSitesManager.sponsoredSitesUsedForRecalculation, [0, 1])
-    }
-
-    func test_homepageInitializeAction_whenHomepageTopSitesLoaded_dispatchesSponsoredSites() throws {
-        let topSitesManager = SponsoredFallbackTopSitesManager()
-        let subject = createSubject(topSitesManager: topSitesManager)
-        let action = HomepageAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.initialize
-        )
-        let dispatchExpectation = XCTestExpectation(description: "Top sites middleware dispatches full sites")
-
-        mockStore.dispatchCalled = {
-            dispatchExpectation.fulfill()
-        }
-
-        subject.topSitesProvider(appStateWithHomepageTopSites(), action)
-
-        wait(for: [dispatchExpectation], timeout: 1)
-
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
-        let topSites = try XCTUnwrap(actionsCalled.last?.topSites)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(topSites.map(\.title), ["Sponsored Site", "Local Site"])
-        XCTAssertEqual(topSitesManager.sponsoredSitesUsedForRecalculation, [1])
-    }
-
     func test_tappedOnHomepageTopSite_forSponsoredSites_withUnifiedAds_sendsTelemetry() throws {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
         let subject = createSubject(
@@ -417,20 +337,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         let pinnedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.last as? GleanMetrics.TopSites.ShortcutPinnedExtra
         )
-        let contextMenuDebugMessage = TelemetryDebugMessage(
-            expectedMetric: type(of: GleanMetrics.TopSites.contextualMenu),
-            resultMetric: type(of: contextMenuMetric)
-        )
-        let pinnedDebugMessage = TelemetryDebugMessage(
-            expectedMetric: type(of: GleanMetrics.TopSites.shortcutPinned),
-            resultMetric: type(of: pinnedMetric)
-        )
+        let contextMenuEvent = GleanMetrics.TopSites.contextualMenu
+        let pinnedEvent = GleanMetrics.TopSites.shortcutPinned
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
-        XCTAssert(type(of: contextMenuMetric)
-                  == type(of: GleanMetrics.TopSites.contextualMenu), contextMenuDebugMessage.text)
+        XCTAssert(contextMenuMetric === contextMenuEvent,
+                  "Received \(contextMenuMetric) instead of \(contextMenuEvent)")
         XCTAssertEqual(contextMenuExtras.type, "pin")
-        XCTAssert(type(of: pinnedMetric) == type(of: GleanMetrics.TopSites.shortcutPinned), pinnedDebugMessage.text)
+        XCTAssert(pinnedMetric === pinnedEvent, "Received \(pinnedMetric) instead of \(pinnedEvent)")
         XCTAssertEqual(pinnedExtras.source, "context_menu")
 
         XCTAssertEqual(mockTopSitesManager.pinTopSiteCalledCount, 1)
@@ -499,20 +413,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         let unpinnedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.last as? GleanMetrics.TopSites.ShortcutUnpinnedExtra
         )
-        let contextMenuDebugMessage = TelemetryDebugMessage(
-            expectedMetric: type(of: GleanMetrics.TopSites.contextualMenu),
-            resultMetric: type(of: contextMenuMetric)
-        )
-        let unpinnedDebugMessage = TelemetryDebugMessage(
-            expectedMetric: type(of: GleanMetrics.TopSites.shortcutUnpinned),
-            resultMetric: type(of: unpinnedMetric)
-        )
+        let contextMenuEvent = GleanMetrics.TopSites.contextualMenu
+        let unpinnedEvent = GleanMetrics.TopSites.shortcutUnpinned
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
-        XCTAssert(type(of: contextMenuMetric)
-                  == type(of: GleanMetrics.TopSites.contextualMenu), contextMenuDebugMessage.text)
+        XCTAssert(contextMenuMetric === contextMenuEvent,
+                  "Received \(contextMenuMetric) instead of \(contextMenuEvent)")
         XCTAssertEqual(contextMenuExtras.type, "unpin")
-        XCTAssert(type(of: unpinnedMetric) == type(of: GleanMetrics.TopSites.shortcutUnpinned), unpinnedDebugMessage.text)
+        XCTAssert(unpinnedMetric === unpinnedEvent, "Received \(unpinnedMetric) instead of \(unpinnedEvent)")
         XCTAssertEqual(unpinnedExtras.source, "context_menu")
 
         wait(for: [unpinTopSiteExpectation], timeout: 1)
@@ -626,12 +534,10 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.topSitesProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.TopSites.openInPrivateTab)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.TopSites.openInPrivateTab
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_tappedOnSettingsAction_sendTelemetryData() throws {
@@ -682,12 +588,10 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ShortcutPinnedExtra>
         )
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras as? [GleanMetrics.TopSites.ShortcutPinnedExtra])
-        let expectedMetricType = type(of: GleanMetrics.TopSites.shortcutPinned)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.TopSites.shortcutPinned
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 3)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.map(\.source), ["homescreen_button", "app_menu", "context_menu"])
     }
 
@@ -711,12 +615,10 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ShortcutUnpinnedExtra>
         )
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras as? [GleanMetrics.TopSites.ShortcutUnpinnedExtra])
-        let expectedMetricType = type(of: GleanMetrics.TopSites.shortcutUnpinned)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.TopSites.shortcutUnpinned
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.map(\.source), ["context_menu", "app_menu"])
     }
 
@@ -742,42 +644,28 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.TopSites.ContextualMenuExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.TopSites.contextualMenu)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.TopSites.contextualMenu
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.type, extra)
     }
 
     private func checkTopSitesPressedMetrics(label: String, position: String, tileType: String) throws {
+        let firstMetric = GleanMetrics.TopSites.pressedTileOrigin
+        let secondMetric = GleanMetrics.TopSites.tilePressed
         let firstSavedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>
         )
-
-        let expectedFirstMetricType = type(of: GleanMetrics.TopSites.pressedTileOrigin)
-        let firstResultMetricType = type(of: firstSavedMetric)
-        let debugMessage = TelemetryDebugMessage(
-            expectedMetric: expectedFirstMetricType,
-            resultMetric: firstResultMetricType
-        )
-
         let secondSavedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents[safe: 1] as? EventMetricType<GleanMetrics.TopSites.TilePressedExtra>
         )
         let secondSavedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.TopSites.TilePressedExtra
         )
-        let expectedSecondMetricType = type(of: GleanMetrics.TopSites.tilePressed)
-        let secondResultMetricType = type(of: secondSavedMetric)
-        let secondDebugMessage = TelemetryDebugMessage(
-            expectedMetric: expectedSecondMetricType,
-            resultMetric: secondResultMetricType
-        )
 
-        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
-        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
+        XCTAssert(firstSavedMetric === firstMetric, "Received \(firstSavedMetric) instead of \(firstMetric)")
+        XCTAssert(secondSavedMetric === secondMetric, "Received \(secondSavedMetric) instead of \(secondMetric)")
 
         XCTAssertEqual(mockGleanWrapper.savedLabel as? String, label)
         XCTAssertEqual(secondSavedExtras.position, position)
@@ -798,29 +686,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
     }
-
-    private func appStateWithHomepageTopSites() -> AppState {
-        let topSitesAction = TopSitesAction(
-            topSites: [
-                TopSiteConfiguration(
-                    site: Site.createBasicSite(url: "www.existing.com", title: "Existing Site")
-                )
-            ],
-            shouldShowAddShortcutTile: false,
-            windowUUID: .XCTestDefaultUUID,
-            actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
-        )
-        let homepageState = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
-            topSitesAction
-        )
-
-        return AppState(
-            presentedComponents: PresentedComponentsState(
-                components: [.homepage(homepageState)]
-            )
-        )
-    }
 }
 
 private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
@@ -839,47 +704,6 @@ private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecke
     @MainActor
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
         return otherSites
-    }
-
-    func removeTopSite(_ site: Site) async {}
-
-    func pinTopSite(_ site: Site) {}
-
-    func unpinTopSite(_ site: Site) async {}
-}
-
-private final class SponsoredFallbackTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
-    var fetchSponsoredSitesCalled: () -> Void = {}
-    var sponsoredSitesUsedForRecalculation = [Int]()
-    var otherSites = [
-        TopSiteConfiguration(
-            site: Site.createBasicSite(url: "www.example.com", title: "Local Site")
-        )
-    ]
-
-    func getOtherSites() async -> [TopSiteConfiguration] {
-        return otherSites
-    }
-
-    func fetchSponsoredSites() async -> [Site] {
-        fetchSponsoredSitesCalled()
-        return [
-            Site.createSponsoredSite(
-                url: "www.sponsored.com",
-                title: "Sponsored Site",
-                siteInfo: SponsoredSiteInfo(
-                    impressionURL: "https://example.com/impression",
-                    clickURL: "https://example.com/click",
-                    imageURL: "https://example.com/image"
-                )
-            )
-        ]
-    }
-
-    @MainActor
-    func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
-        sponsoredSitesUsedForRecalculation.append(sponsoredSites.count)
-        return sponsoredSites.map { TopSiteConfiguration(site: $0) } + otherSites
     }
 
     func removeTopSite(_ site: Site) async {}

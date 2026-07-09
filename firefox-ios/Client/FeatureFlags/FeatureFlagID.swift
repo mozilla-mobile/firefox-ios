@@ -9,6 +9,8 @@ import Shared
 enum FeatureFlagID: String, CaseIterable {
     case adBlocker
     case addressAutofillEdit
+    case addressBarGestureToOpenTabTrayInteractive
+    case addressBarGestureToOpenTabTraySwipe
     case adsClient
     case aiKillSwitch
     case appearanceMenu
@@ -38,12 +40,13 @@ enum FeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case needsReloadRefactor
+    case newBookmarkFolderTree
     case novaDesign
     case noInternetConnectionErrorPage
     case quickAnswers
     case recentSearches
     case relayIntegration
-    case reportSiteIssue
+    case reportBrokenSite
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -64,6 +67,7 @@ enum FeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case videoIntroOnboarding
+    case waybackMachine
     case worldCupWidget
 
     /// The user preferences key for features that support user-togglable settings.
@@ -75,6 +79,7 @@ enum FeatureFlagID: String, CaseIterable {
         switch self {
         case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
         case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .googleLens: return FlagKeys.GoogleLens
         case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
@@ -91,6 +96,8 @@ enum FeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .adBlocker,
+                .addressBarGestureToOpenTabTrayInteractive,
+                .addressBarGestureToOpenTabTraySwipe,
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
@@ -112,11 +119,13 @@ enum FeatureFlagID: String, CaseIterable {
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
+                .newBookmarkFolderTree,
                 .novaDesign,
                 .noInternetConnectionErrorPage,
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
+                .reportBrokenSite,
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
@@ -129,6 +138,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
+                .waybackMachine,
                 .worldCupWidget:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:

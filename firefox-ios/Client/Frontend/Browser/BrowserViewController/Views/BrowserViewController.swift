@@ -39,6 +39,7 @@ class BrowserViewController: UIViewController,
                              AddressToolbarContainerDelegate,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
+                             UserFeaturePreferenceProvider,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
                              LegacyTabScrollController.Delegate,
@@ -1163,59 +1164,101 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Notifiable
+
+    nonisolated private func shouldHandleNotificationSynchronously(_ notification: Notification.Name) -> Bool {
+        // Whether to respond to the notification synchronously. Main thread notifications will (by default)
+        // be handled in a Task which allows the concurrency engine to schedule the work asynchronously.
+        // If a notification returns `true` here, then it will instead be wrapped in an `ensureMainThread`
+        // which (if the notification arrives on the MT) will perform the notification handler immediately.
+        switch notification {
+        case UIApplication.willResignActiveNotification:
+            // Handle immediately since this is where we display the PBM privacy screen
+            return true
+        default:
+            return false
+        }
+    }
+
     func handleNotifications(_ notification: Notification) {
         let notificationName = notification.name
-
         let windowScene = notification.object as? UIWindowScene
         let announcementText = notification.userInfo?[UIAccessibility.announcementStringValueUserInfoKey] as? String
         let dictionary = notification.object as? NSDictionary
         let searchBarPosition = dictionary?[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
         let windowUUID = notification.windowUUID
         let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel
-        // swiftlint:disable:next closure_body_length
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            switch notificationName {
-            case UIApplication.willTerminateNotification:
-                applicationWillTerminate()
-            case UIApplication.willResignActiveNotification:
-                appWillResignActiveNotification()
-            case UIApplication.didBecomeActiveNotification:
-                appDidBecomeActiveNotification()
-            case UIApplication.didEnterBackgroundNotification:
-                appDidEnterBackgroundNotification()
-            case UIScene.didEnterBackgroundNotification:
-                sceneDidEnterBackgroundNotification(windowScene: windowScene)
-            case UIScene.didActivateNotification:
-                sceneDidActivateNotification()
-            case UIAccessibility.announcementDidFinishNotification:
-                didFinishAnnouncement(announcementText: announcementText)
-            case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
-                onReduceTransparencyStatusDidChange()
-            case .FirefoxAccountStateChange:
-                appMenuBadgeUpdate()
-            case .SearchBarPositionDidChange:
-                searchBarPositionDidChange(newSearchBarPosition: searchBarPosition)
-            case .DidTapUndoCloseAllTabToast:
-                didTapUndoCloseAllTabToast(notificationWindowUUID: windowUUID)
-            case .PendingBlobDownloadAddedToQueue:
-                didAddPendingBlobDownloadToQueue()
-            case .SearchSettingsDidUpdateDefaultSearchEngine:
-                updateForDefaultSearchEngineDidChange()
-            case .PageZoomLevelUpdated:
-                handlePageZoomLevelUpdated(notificationWindowUUID: windowUUID, zoomSetting: zoomSetting)
-            case .PageZoomSettingsChanged:
-                handlePageZoomSettingsChanged()
-            case .RemoteTabNotificationTapped:
-                openRecentlyClosedTabs()
-            case .StopDownloads:
-                onStopDownloads(notificationWindowUUID: windowUUID)
-            case .SettingsDismissed:
-                onSettingsDismissed()
-            case .ReadingListUpdated:
-                updateReaderModeBar()
-            default: break
+
+        if shouldHandleNotificationSynchronously(notificationName) {
+            ensureMainThread {
+                self.performNotificationHandler(notificationName,
+                                                windowScene: windowScene,
+                                                announcementText: announcementText,
+                                                zoomSetting: zoomSetting,
+                                                windowUUID: windowUUID,
+                                                searchBarPosition: searchBarPosition)
             }
+        } else {
+            // TODO: [FXIOS-16160] We should migrate all of our handlers to ensureMainThread. 
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                performNotificationHandler(notificationName,
+                                           windowScene: windowScene,
+                                           announcementText: announcementText,
+                                           zoomSetting: zoomSetting,
+                                           windowUUID: windowUUID,
+                                           searchBarPosition: searchBarPosition)
+            }
+        }
+    }
+
+    @MainActor
+    private func performNotificationHandler(_ notificationName: Notification.Name,
+                                            windowScene: UIWindowScene?,
+                                            announcementText: String?,
+                                            zoomSetting: DomainZoomLevel?,
+                                            windowUUID: WindowUUID?,
+                                            searchBarPosition: SearchBarPosition?) {
+        // swiftlint:disable:next closure_body_length
+        switch notificationName {
+        case UIApplication.willTerminateNotification:
+            applicationWillTerminate()
+        case UIApplication.willResignActiveNotification:
+            appWillResignActiveNotification()
+        case UIApplication.didBecomeActiveNotification:
+            appDidBecomeActiveNotification()
+        case UIApplication.didEnterBackgroundNotification:
+            appDidEnterBackgroundNotification()
+        case UIScene.didEnterBackgroundNotification:
+            sceneDidEnterBackgroundNotification(windowScene: windowScene)
+        case UIScene.didActivateNotification:
+            sceneDidActivateNotification()
+        case UIAccessibility.announcementDidFinishNotification:
+            didFinishAnnouncement(announcementText: announcementText)
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            onReduceTransparencyStatusDidChange()
+        case .FirefoxAccountStateChange:
+            appMenuBadgeUpdate()
+        case .SearchBarPositionDidChange:
+            searchBarPositionDidChange(newSearchBarPosition: searchBarPosition)
+        case .DidTapUndoCloseAllTabToast:
+            didTapUndoCloseAllTabToast(notificationWindowUUID: windowUUID)
+        case .PendingBlobDownloadAddedToQueue:
+            didAddPendingBlobDownloadToQueue()
+        case .SearchSettingsDidUpdateDefaultSearchEngine:
+            updateForDefaultSearchEngineDidChange()
+        case .PageZoomLevelUpdated:
+            handlePageZoomLevelUpdated(notificationWindowUUID: windowUUID, zoomSetting: zoomSetting)
+        case .PageZoomSettingsChanged:
+            handlePageZoomSettingsChanged()
+        case .RemoteTabNotificationTapped:
+            openRecentlyClosedTabs()
+        case .StopDownloads:
+            onStopDownloads(notificationWindowUUID: windowUUID)
+        case .SettingsDismissed:
+            onSettingsDismissed()
+        case .ReadingListUpdated:
+            updateReaderModeBar()
+        default: break
         }
     }
 
@@ -2926,7 +2969,6 @@ class BrowserViewController: UIViewController,
             guard let button = state.buttonTapped else { return }
             presentRefreshLongPressAction(from: button)
         case .tabTray:
-            // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
             store.dispatch(
@@ -2952,6 +2994,10 @@ class BrowserViewController: UIViewController,
             }
         case .translationLanguagePicker(let data):
             presentTranslationLanguagePicker(data: data, sourceButton: state.buttonTapped)
+        case .googleLensPhotoPicker:
+            navigationHandler?.showGoogleLensPhotoPicker()
+        case .googleLensCamera:
+            navigationHandler?.showGoogleLensCamera()
         }
     }
 
@@ -5037,14 +5083,16 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     /// Used to get the context menu save image in the context menu, shown from long press on webview links
-    func getImageData(_ url: URL, success: @Sendable @escaping (Data) -> Void) {
+    func getImageData(_ url: URL, success: @escaping @MainActor @Sendable (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
             ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {
-                success(data)
+                ensureMainThread {
+                    success(data)
+                }
             }
         }.resume()
     }
@@ -5092,7 +5140,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // When animation duration is zero the keyboard is already showing and we don't need
         // to update the toolbar again. This is the case when we are moving between fields in a form.
         if state.animationDuration > 0 {
-            updateToolbarDisplay()
+            UIView.performWithoutAnimation {
+                updateToolbarDisplay()
+            }
         }
     }
 
@@ -5130,8 +5180,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateBlurViews()
-        addOrUpdateMaskViewIfNeeded()
+        // Avoid leaking the keyboard animation context into toolbar translucency updates. (FXIOS-14985)
+        UIView.performWithoutAnimation {
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {

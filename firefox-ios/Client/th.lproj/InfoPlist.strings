@@ -8,7 +8,7 @@
 "New Tab" = "แท็บใหม่";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox ใช้กล้องของคุณเพื่อสแกนคิวอาร์โค้ด รวมทั้งถ่ายรูปและวิดีโอ";
+"NSCameraUsageDescription" = "Firefox สามารถใช้กล้องของคุณเพื่อสแกนคิวอาร์โค้ด หรือถ่ายภาพและวิดีโอได้";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox ต้องใช้ Face ID เพื่อเข้าถึงการเข้าสู่ระบบและวิธีการชำระเงินที่คุณบันทึกไว้";

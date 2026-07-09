@@ -344,7 +344,7 @@ struct ContextMenuState {
 
         return SingleActionViewModel(
             title: .ShareContextMenuTitle,
-            iconString: StandardImageIdentifiers.Large.share,
+            iconString: StandardImageIdentifiers.Large.shareApple,
             allowIconScaling: true,
             tapHandler: { _ in
                 guard let url = URL(string: siteURL) else {

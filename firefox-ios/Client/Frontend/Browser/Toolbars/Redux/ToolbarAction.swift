@@ -36,7 +36,6 @@ struct ToolbarAction: Action {
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
-    let isGoogleLensEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
     let previousTabScreenshot: UIImage?
     let nextTabScreenshot: UIImage?
@@ -68,7 +67,6 @@ struct ToolbarAction: Action {
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          isTranslationsEnabled: Bool? = nil,
-         isGoogleLensEnabled: Bool? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
          previousTabScreenshot: UIImage? = nil,
          nextTabScreenshot: UIImage? = nil,
@@ -103,7 +101,6 @@ struct ToolbarAction: Action {
         self.canSummarize = canSummarize
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
-        self.isGoogleLensEnabled = isGoogleLensEnabled
         self.translationConfiguration = translationConfiguration
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
@@ -131,6 +128,7 @@ enum ToolbarActionType: ActionType {
     case traitCollectionDidChange
     case websiteLoadingStateDidChange
     case searchEngineDidChange
+    case googleLensSettingDidChange
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
     case clearSearch
@@ -179,7 +177,7 @@ enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
     case urlDidChange
-    case didUpdateDefaultSearchEngine
+    case googleLensAvailabilityDidChange
     case didClearSearch
     case didStartDragInteraction
     case didSwipeToOpenTabTray

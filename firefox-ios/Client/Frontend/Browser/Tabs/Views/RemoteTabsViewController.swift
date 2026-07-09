@@ -280,12 +280,10 @@ class RemoteTabsViewController: UIViewController,
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        // TODO: Forthcoming as part of ongoing Redux refactors. [FXIOS-6942] & [FXIOS-7509]
         return nil
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        // TODO: Forthcoming as part of ongoing Redux refactors. [FXIOS-6942] & [FXIOS-7509]
         return nil
     }
 

@@ -184,6 +184,14 @@
 	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
+			<string>logoFirefoxLarge</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>App Icon</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).AppIcon</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
 			<string>plusLarge</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>New Tab</string>

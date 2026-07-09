@@ -2,194 +2,255 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
 import Glean
-@testable import Client
-import Common
+import XCTest
 import Shared
+@testable import Client
 
-// TODO: FXIOS-13746 - Migrate TermsOfUseTelemetryTests to use mock telemetry or GleanWrapper
-@MainActor
 final class TermsOfUseTelemetryTests: XCTestCase {
-    private var telemetry: TermsOfUseTelemetry!
+    var mockGleanWrapper: MockGleanWrapper!
 
-    override func setUp() async throws {
-        try await super.setUp()
-        telemetry = TermsOfUseTelemetry()
-        Self.setupTelemetry(with: MockProfile())
+    override func setUp() {
+        super.setUp()
+        mockGleanWrapper = MockGleanWrapper()
     }
 
-    override func tearDown() async throws {
-        telemetry = nil
-        Self.tearDownTelemetry()
-        try await super.tearDown()
+    override func tearDown() {
+        mockGleanWrapper = nil
+        super.tearDown()
     }
 
     func testTermsOfUseBottomSheetDisplayed() throws {
-        telemetry.termsOfUseDisplayed(surface: .bottomSheet)
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.shown.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.shown
+        let counter = GleanMetrics.UserTermsOfUse.shownCount
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.ShownExtra
 
-        // Test impression counter
-        let impressionCount = try XCTUnwrap(GleanMetrics.UserTermsOfUse.shownCount.testGetValue())
-        XCTAssertEqual(impressionCount, 1)
+        subject.termsOfUseDisplayed(surface: .bottomSheet)
+
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+
+        let savedCounter = try XCTUnwrap(mockGleanWrapper.savedEvents[0] as? CounterMetricType)
+        XCTAssert(savedCounter === counter, "Received \(savedCounter) instead of \(counter)")
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
     }
 
     func testPrivacyNoticeDisplayed() throws {
-        telemetry.termsOfUseDisplayed(surface: .privacyNotice)
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.shown.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.privacyNotice.rawValue)
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.shown
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.ShownExtra
 
-        // Test impression counter
-        XCTAssertNil(GleanMetrics.UserTermsOfUse.shownCount.testGetValue())
+        subject.termsOfUseDisplayed(surface: .privacyNotice)
+
+        // Privacy notice surface must not increment the shown counter
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.privacyNotice.rawValue)
     }
 
     func testTermsOfUseAcceptButtonTapped() throws {
-        telemetry.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: Date())
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.accepted
+        let dateMetric = GleanMetrics.UserTermsOfUse.dateAccepted
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.AcceptedExtra
+        let acceptedDate = Date()
 
-        // Test accepted event
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.accepted.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
-        // Test date metric
-        let dateMetric = try XCTUnwrap(GleanMetrics.UserTermsOfUse.dateAccepted.testGetValue())
-        let now = Date()
-        let timeDifference = abs(now.timeIntervalSince(dateMetric))
-        XCTAssertLessThan(timeDifference, 60)
+        subject.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: acceptedDate)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[0] as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
+
+        let savedDateMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? DatetimeMetricType)
+        XCTAssert(savedDateMetric === dateMetric, "Received \(savedDateMetric) instead of \(dateMetric)")
+
+        let savedDate = try XCTUnwrap(mockGleanWrapper.savedValues.first as? Date)
+        XCTAssertEqual(savedDate, acceptedDate)
     }
 
-    func testTermsOfUseBottomSheetDisplayed_doesNotRecordAcceptanceMetrics() {
-        telemetry.termsOfUseDisplayed(surface: .bottomSheet)
+    func testTermsOfUseBottomSheetDisplayed_doesNotRecordAcceptanceMetrics() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.shown
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.ShownExtra
 
-        // Impression should not record acceptance metrics
-        XCTAssertNil(GleanMetrics.UserTermsOfUse.dateAccepted.testGetValue())
+        subject.termsOfUseDisplayed(surface: .bottomSheet)
+
+        // Impression should not record acceptance date
+        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 0)
         // But impression event should be recorded
-        XCTAssertNotNil(GleanMetrics.TermsOfUse.shown.testGetValue())
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testTermsOfUseRemindMeLaterButtonTapped() throws {
-        telemetry.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.remindMeLaterButtonTapped
+        let counter = GleanMetrics.UserTermsOfUse.remindMeLaterCount
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.RemindMeLaterButtonTappedExtra
 
-        // Test remind me later event
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.remindMeLaterButtonTapped.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
+        subject.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
 
-        // Test remind me later counter
-        let remindMeLaterCount = try XCTUnwrap(GleanMetrics.UserTermsOfUse.remindMeLaterCount.testGetValue())
-        XCTAssertEqual(remindMeLaterCount, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[0] as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
+
+        let savedCounter = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? CounterMetricType)
+        XCTAssert(savedCounter === counter, "Received \(savedCounter) instead of \(counter)")
     }
 
     func testTermsOfUseLearnMoreButtonTapped() throws {
-        telemetry.termsOfUseLearnMoreButtonTapped(surface: .bottomSheet)
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.learnMoreButtonTapped
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.LearnMoreButtonTappedExtra
 
-        // Test learn more event
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.learnMoreButtonTapped.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
+        subject.termsOfUseLearnMoreButtonTapped(surface: .bottomSheet)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
     }
 
     func testTermsOfUsePrivacyNoticeLinkTapped() throws {
-        telemetry.termsOfUsePrivacyNoticeLinkTapped(surface: .bottomSheet)
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.privacyNoticeTapped
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.PrivacyNoticeTappedExtra
 
-        // Test privacy notice event
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.privacyNoticeTapped.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
+        subject.termsOfUsePrivacyNoticeLinkTapped(surface: .bottomSheet)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
     }
 
     func testTermsOfUseTermsOfUseLinkTapped() throws {
-        telemetry.termsOfUseTermsOfUseLinkTapped(surface: .bottomSheet)
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.termsOfUseLinkTapped
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.TermsOfUseLinkTappedExtra
 
-        // Test terms of use link event
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.termsOfUseLinkTapped.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
+        subject.termsOfUseTermsOfUseLinkTapped(surface: .bottomSheet)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
     }
 
     func testTermsOfUseDismissed() throws {
-        telemetry.termsOfUseDismissed(surface: .bottomSheet)
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.dismissed
+        let counter = GleanMetrics.UserTermsOfUse.dismissedCount
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.DismissedExtra
 
-        // Test dismiss event
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissed.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
+        subject.termsOfUseDismissed(surface: .bottomSheet)
 
-        // Test dismiss counter
-        let dismissCount = try XCTUnwrap(GleanMetrics.UserTermsOfUse.dismissedCount.testGetValue())
-        XCTAssertEqual(dismissCount, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+
+        let savedCounter = try XCTUnwrap(mockGleanWrapper.savedEvents[0] as? CounterMetricType)
+        XCTAssert(savedCounter === counter, "Received \(savedCounter) instead of \(counter)")
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[1] as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
     }
 
     func testPrivacyNoticeDismissed() throws {
-        telemetry.termsOfUseDismissed(surface: .privacyNotice)
+        let subject = createSubject()
+        let event = GleanMetrics.TermsOfUse.dismissed
+        typealias EventExtrasType = GleanMetrics.TermsOfUse.DismissedExtra
 
-        // Test dismiss event
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissed.testGetValue())
-        XCTAssertEqual(events.count, 1)
-        let event = events[0]
-        XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.privacyNotice.rawValue)
+        subject.termsOfUseDismissed(surface: .privacyNotice)
 
-        // Test dismiss counter
-        XCTAssertNil(GleanMetrics.UserTermsOfUse.dismissedCount.testGetValue())
+        // Privacy notice surface must not increment the dismissed counter
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.surface, TermsOfUseTelemetry.Surface.privacyNotice.rawValue)
     }
 
-    func testMultipleImpressions_incrementsCounter() throws {
-        // Test that multiple impressions increment the counter correctly
-        telemetry.termsOfUseDisplayed(surface: .bottomSheet)
-        telemetry.termsOfUseDisplayed(surface: .bottomSheet)
-        telemetry.termsOfUseDisplayed(surface: .bottomSheet)
+    func testMultipleImpressions_incrementsCounter() {
+        let subject = createSubject()
 
-        let impressionCount = try XCTUnwrap(GleanMetrics.UserTermsOfUse.shownCount.testGetValue())
-        XCTAssertEqual(impressionCount, 3)
+        subject.termsOfUseDisplayed(surface: .bottomSheet)
+        subject.termsOfUseDisplayed(surface: .bottomSheet)
+        subject.termsOfUseDisplayed(surface: .bottomSheet)
 
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.shown.testGetValue())
-        XCTAssertEqual(events.count, 3)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 3)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 3)
     }
 
-    func testMultipleRemindMeLater_incrementsCounter() throws {
-        // Test that multiple remind me later clicks increment the counter correctly
-        telemetry.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
-        telemetry.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
+    func testMultipleRemindMeLater_incrementsCounter() {
+        let subject = createSubject()
 
-        let remindMeLaterCount = try XCTUnwrap(GleanMetrics.UserTermsOfUse.remindMeLaterCount.testGetValue())
-        XCTAssertEqual(remindMeLaterCount, 2)
+        subject.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
+        subject.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
 
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.remindMeLaterButtonTapped.testGetValue())
-        XCTAssertEqual(events.count, 2)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 2)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
     }
 
-    func testMultipleDismisses_incrementsCounter() throws {
-        // Test that multiple dismisses increment the counter correctly
-        telemetry.termsOfUseDismissed(surface: .bottomSheet)
-        telemetry.termsOfUseDismissed(surface: .bottomSheet)
+    func testMultipleDismisses_incrementsCounter() {
+        let subject = createSubject()
 
-        let dismissCount = try XCTUnwrap(GleanMetrics.UserTermsOfUse.dismissedCount.testGetValue())
-        XCTAssertEqual(dismissCount, 2)
+        subject.termsOfUseDismissed(surface: .bottomSheet)
+        subject.termsOfUseDismissed(surface: .bottomSheet)
 
-        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissed.testGetValue())
-        XCTAssertEqual(events.count, 2)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 2)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
     }
 
-    func testSetUsageMetrics_ToU() throws {
+    func testSetUsageMetrics_ToU() {
         let mockProfile = MockProfile()
-        let mockGleanWrapper = MockGleanWrapper()
+        let acceptedDate = Date()
 
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        let acceptedDate = Date()
         mockProfile.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         TermsOfUseTelemetry.setUsageMetrics(gleanWrapper: mockGleanWrapper, profile: mockProfile)
 
         XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
+    }
+
+    private func createSubject() -> TermsOfUseTelemetry {
+        return TermsOfUseTelemetry(gleanWrapper: mockGleanWrapper)
     }
 }

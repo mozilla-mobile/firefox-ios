@@ -75,15 +75,33 @@ final class SettingsCoordinator: BaseCoordinator,
         router.setRootViewController(settingsViewController)
     }
 
-    func start(with settingsSection: Route.SettingsSection) {
+    func start(with settingsSection: Route.SettingsSection, shouldResetNavigationStack: Bool = false) {
         // We might already know the sub-settings page we want to show, but in some case we don't and
         // the flow decision needs to be figured out by the view controller
         if let viewController = getSettingsViewController(settingsSection: settingsSection) {
-            router.push(viewController)
+            // FIXME: FXIOS-15967 We should pop to the root of the settings screen before pushing new screens from deeplinks,
+            // which might push a view controller to the wrong sub-settings nav hierarchy.
+            if isAlreadyOnTop(viewController) { return }
+            // If Settings is already showing a subpage, reset to root before opening the routed destination.
+            if shouldResetNavigationStack,
+               let root = router.rootViewController,
+               router.navigationController.viewControllers.count > 1 {
+                router.navigationController.setViewControllers([root, viewController], animated: false)
+            } else {
+                router.push(viewController)
+            }
         } else {
+            if shouldResetNavigationStack, let root = router.rootViewController {
+                router.popToViewController(root, reason: .deeplink, animated: false)
+            }
             assert(settingsViewController != nil)
             settingsViewController?.handle(route: settingsSection)
         }
+    }
+
+    private func isAlreadyOnTop(_ vc: UIViewController) -> Bool {
+        guard let top = router.navigationController.topViewController else { return false }
+        return type(of: top) == type(of: vc)
     }
 
     override func canHandle(route: Route) -> Bool {
@@ -98,7 +116,7 @@ final class SettingsCoordinator: BaseCoordinator,
     override func handle(route: Route) {
         switch route {
         case let .settings(section):
-            start(with: section)
+            start(with: section, shouldResetNavigationStack: true)
         default:
             break
         }
@@ -198,7 +216,9 @@ final class SettingsCoordinator: BaseCoordinator,
             return contentBlockerVC
 
         case .browser:
-            return BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+            let viewController = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+            viewController.parentCoordinator = self
+            return viewController
 
         case .toolbar:
             // Toolbar position cannot be changed on iPad
@@ -337,11 +357,11 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedCreditCard() {
-        findAndHandle(route: .settings(section: .creditCard))
+        settingsViewController?.handle(route: .creditCard)
     }
 
     func pressedRelayMask() {
-        findAndHandle(route: .settings(section: .relayMask))
+        settingsViewController?.handle(route: .relayMask)
     }
 
     func pressedClearPrivateData() {
@@ -358,7 +378,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedPasswords() {
-        findAndHandle(route: .settings(section: .password))
+        settingsViewController?.handle(route: .password)
     }
 
     func pressedNotifications() {

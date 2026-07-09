@@ -22,4 +22,5 @@ enum AppComponent {
     case nativeErrorPage
     case shortcutsLibrary
     case translationSettings
+    case webCompatReporter
 }
