@@ -100,23 +100,7 @@ If no reference person is assigned, or you have not received a response to your 
 ---
 
 # Building the code
-- Fork and clone the project from the [repository](https://github.com/mozilla-mobile/firefox-ios).
 - Use the provided build instructions in the [Readme](https://github.com/mozilla-mobile/firefox-ios/blob/main/README.md) of the repository to build the project. 
-
-## Run on a Device with a Free Developer Account
-
-> [!IMPORTANT]  
-> Only follow these instructions if you are using the free personal developer accounts. Simply add your Apple ID as an account in Xcode.
-
-Since the bundle identifier we use for Firefox is tied to our developer account, you'll need to generate your own identifier and update the existing configuration.
-
-1. Open `firefox-ios/Client/Configuration/Fennec.xcconfig`
-2. Change MOZ_BUNDLE_ID to your own bundle identifier. Just think of something unique: e.g., com.your_github_id.Fennec
-3. Open the project editor in Xcode.
-4. For the 'Client' target, in the 'Capabilities' section, turn off the capabilities 'Push Notifications' and 'Wallet'.
-5. For each target, in the 'General' section, under 'Signing', select your personal development account.
-
-If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 
 ---
 
