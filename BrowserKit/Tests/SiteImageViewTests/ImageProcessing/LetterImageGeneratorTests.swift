@@ -8,14 +8,14 @@ import XCTest
 
 @MainActor
 final class LetterImageGeneratorTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         AppContainer.shared.reset()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testEmptyDomain_throws() async {
