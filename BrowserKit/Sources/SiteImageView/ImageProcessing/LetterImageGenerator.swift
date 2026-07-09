@@ -17,9 +17,9 @@ protocol LetterImageGenerator: Sendable {
 
 final class DefaultLetterImageGenerator: LetterImageGenerator, @unchecked Sendable {
     private let logger: Logger
-    private let themeManager: ThemeManager
+    private let themeManager: ThemeManager?
 
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(themeManager: ThemeManager? = nil,
          logger: Logger = DefaultLogger.shared) {
         self.themeManager = themeManager
         self.logger = logger
@@ -69,7 +69,8 @@ final class DefaultLetterImageGenerator: LetterImageGenerator, @unchecked Sendab
 
     @MainActor
     private var resolvedColorSet: FaviconLetterColorSet {
-        themeManager.windowNonspecificTheme().colors.faviconLetterColorSet
+        let manager = themeManager ?? AppContainer.shared.resolve()
+        return manager.windowNonspecificTheme().colors.faviconLetterColorSet
     }
 
     internal func colorIndex(forSite siteString: String, colorSet: FaviconLetterColorSet) -> Int {
