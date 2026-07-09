@@ -26,6 +26,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private var headerState: HeaderState?
     private var logoTextColor: UIColor?
+    private var showiPadSetup = false
     private lazy var logoContainerView: UIView = .build()
 
     private lazy var logoStackView: UIStackView = .build { view in
@@ -112,8 +113,10 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     func configure(headerState: HeaderState,
+                   showiPadSetup: Bool = false,
                    logoTextColor: UIColor? = nil) {
         self.headerState = headerState
+        self.showiPadSetup = showiPadSetup
         self.logoTextColor = logoTextColor
 
         let logoAsset = headerState.isWorldCupSectionEnabled
@@ -124,7 +127,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 
         // if the quick answers button is visible and we are on iPhone setup, align the logo to the leading
-        let alignLogoToLeading = headerState.showQuickAnswersButton && !headerState.showiPadSetup
+        let alignLogoToLeading = headerState.showQuickAnswersButton && !showiPadSetup
         logoCenterConstraint.isActive = !alignLogoToLeading
         logoLeadingConstraint.isActive = alignLogoToLeading
     }
@@ -132,7 +135,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     private func quickAnswerButtonTapped() {
         guard let headerState else { return }
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        let transitionType: QuickAnswersTransitionType = if headerState.showiPadSetup {
+        let transitionType: QuickAnswersTransitionType = if showiPadSetup {
             .formSheet
         } else {
             // convert the button frame to the parent window frame to have correct transition.

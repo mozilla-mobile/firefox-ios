@@ -12,7 +12,6 @@ import Redux
 struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
-    var showiPadSetup: Bool
     var showQuickAnswersButton: Bool
     var isWorldCupSectionEnabled: Bool
 
@@ -27,7 +26,6 @@ struct HeaderState: StateType, Equatable, Hashable {
         self.init(
             windowUUID: windowUUID,
             isPrivate: isPrivate,
-            showiPadSetup: false,
             showQuickAnswersButton: showQuickAnswersButton,
             isWorldCupSectionEnabled: isWorldCupSectionEnabled
         )
@@ -36,13 +34,11 @@ struct HeaderState: StateType, Equatable, Hashable {
     private init(
         windowUUID: WindowUUID,
         isPrivate: Bool,
-        showiPadSetup: Bool,
         showQuickAnswersButton: Bool,
         isWorldCupSectionEnabled: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
-        self.showiPadSetup = showiPadSetup
         self.showQuickAnswersButton = showQuickAnswersButton
         self.isWorldCupSectionEnabled = isWorldCupSectionEnabled
     }
@@ -55,28 +51,14 @@ struct HeaderState: StateType, Equatable, Hashable {
 
         switch action.actionType {
         case HomepageActionType.initialize:
-            return handleInitializeAction(for: state, with: action)
+            return state.copy(isPrivate: false)
         case QuickAnswersMiddlewareActionType.didInitialize, QuickAnswersMiddlewareActionType.didUpdateSettings:
             return handleQuickAnswersAction(for: state, with: action)
-        case HomepageActionType.traitCollectionDidChange,
-             HomepageActionType.viewWillAppear:
-            return handleTraitCollectionDidChangeAction(for: state, with: action)
         case WorldCupMiddlewareActionType.didUpdate:
             return handleWorldCupAction(for: state, with: action)
         default:
             return defaultState(from: state)
         }
-    }
-
-    private static func handleInitializeAction(for state: HeaderState, with action: Action) -> HeaderState {
-        guard let homepageAction = action as? HomepageAction,
-              let showiPadSetup = homepageAction.showiPadSetup
-        else {
-            return defaultState(from: state)
-        }
-        return state
-            .copy(isPrivate: false)
-            .copy(showiPadSetup: showiPadSetup)
     }
 
     private static func handleQuickAnswersAction(for state: HeaderState, with action: Action) -> HeaderState {
@@ -99,22 +81,10 @@ struct HeaderState: StateType, Equatable, Hashable {
         )
     }
 
-    private static func handleTraitCollectionDidChangeAction(for state: HeaderState, with action: Action) -> HeaderState {
-        guard let homepageAction = action as? HomepageAction,
-              let showiPadSetup = homepageAction.showiPadSetup
-        else {
-            return defaultState(from: state)
-        }
-        return state.copy(
-            showiPadSetup: showiPadSetup
-        )
-    }
-
     static func defaultState(from state: HeaderState) -> HeaderState {
         return HeaderState(
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
-            showiPadSetup: state.showiPadSetup,
             showQuickAnswersButton: state.showQuickAnswersButton,
             isWorldCupSectionEnabled: state.isWorldCupSectionEnabled
         )

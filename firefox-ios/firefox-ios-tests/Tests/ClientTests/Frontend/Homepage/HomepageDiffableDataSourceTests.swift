@@ -122,7 +122,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(
             snapshot.itemIdentifiers(inSection: .header).first,
-            HomepageItem.header(updatedState.headerState, .blue)
+            HomepageItem.header(updatedState.headerState, .blue, false)
         )
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
         let expectedSections: [HomepageSection] = [

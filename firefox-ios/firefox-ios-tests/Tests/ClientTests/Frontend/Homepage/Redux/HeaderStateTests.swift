@@ -29,7 +29,6 @@ final class HeaderStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(initialState.isPrivate)
-        XCTAssertFalse(initialState.showiPadSetup)
         XCTAssertTrue(initialState.isWorldCupSectionEnabled)
         XCTAssertFalse(initialState.showQuickAnswersButton)
     }
@@ -66,24 +65,6 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(newState.isWorldCupSectionEnabled)
     }
 
-    func test_viewWillAppearAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = headerReducer()
-
-        let newState = reducer(
-            initialState,
-            HomepageAction(
-                showiPadSetup: true,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.viewWillAppear
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.isPrivate)
-        XCTAssertTrue(newState.showiPadSetup)
-    }
-
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
@@ -91,7 +72,6 @@ final class HeaderStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             HomepageAction(
-                showiPadSetup: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -99,25 +79,6 @@ final class HeaderStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.isPrivate)
-        XCTAssertTrue(newState.showiPadSetup)
-    }
-
-    func test_initializeAction_withoutIpadSetup_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = headerReducer()
-
-        let newState = reducer(
-            initialState,
-            HomepageAction(
-                showiPadSetup: false,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.initialize
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.isPrivate)
-        XCTAssertFalse(newState.showiPadSetup)
     }
 
     func test_init_worldCupFeatureAndSectionEnabled_setsWorldCupFlagTrue() {
