@@ -267,6 +267,8 @@ class SearchViewModel: FeatureFlaggable,
         suggestClient?.query(searchQuery,
                              callback: { suggestions, error in
             ensureMainThread {
+                guard self.searchQuery == tempSearchQuery else { return }
+
                 if error == nil, self.shouldShowSearchEngineSuggestions {
                     self.suggestions = suggestions!
                     // Remove user searching term inside suggestions list
