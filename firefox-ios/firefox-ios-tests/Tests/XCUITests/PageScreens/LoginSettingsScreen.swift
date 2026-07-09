@@ -155,7 +155,7 @@ final class LoginSettingsScreen {
         }
         var attempts = 3
         repeat {
-            passcode.tapAndTypeText(passcodeValue)
+            passcode.tapAndTypeTextWhenFocused(passcodeValue)
             if base.mozWaitForElementToNotExist(passcode, timeout: TIMEOUT, failOnTimeout: false) {
                 return
             }
