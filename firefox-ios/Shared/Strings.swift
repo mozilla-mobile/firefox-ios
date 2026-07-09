@@ -2122,7 +2122,7 @@ extension String {
             public static let CheckingLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Checking.v154",
                 tableName: "NativeErrorPage",
-                value: "Checking for page",
+                value: "Checking for page…",
                 comment: "Checking label of the error page when the app is unable to connect to the server and will show a wayback fallback.")
             public static let SearchLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Search.v154",
