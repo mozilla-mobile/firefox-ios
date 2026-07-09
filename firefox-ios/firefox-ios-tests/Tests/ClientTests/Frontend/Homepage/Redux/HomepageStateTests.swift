@@ -38,7 +38,6 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
 
         XCTAssertFalse(initialState.headerState.isPrivate)
-        XCTAssertFalse(initialState.headerState.showiPadSetup)
         XCTAssertFalse(initialState.trackerBlockerModuleState.shouldShowSection)
         XCTAssertFalse(initialState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
@@ -54,7 +53,6 @@ final class HomepageStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             HomepageAction(
-                showiPadSetup: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -62,7 +60,6 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.headerState.isPrivate)
-        XCTAssertTrue(newState.headerState.showiPadSetup)
         XCTAssertFalse(newState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
