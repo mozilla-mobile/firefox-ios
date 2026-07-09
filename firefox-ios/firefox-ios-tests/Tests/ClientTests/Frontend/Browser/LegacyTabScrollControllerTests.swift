@@ -149,6 +149,37 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         XCTAssertNotNil(pullRefresh)
     }
 
+    func testContentSizeChange_WhenCollapsedAndContentBecomesNonScrollable_ShowsToolbar() throws {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
+        // Collapse while the content is still scrollable, as only a scroll gesture can.
+        subject.hideToolbars(animated: false)
+        XCTAssertTrue(subject.isToolbarStateCollapsed)
+
+        // Simulate an overlay shrinking the document so it can no longer be scrolled.
+        scrollView.contentSize = CGSize(width: 200, height: 10)
+        subject.observeValue(forKeyPath: "contentSize", of: scrollView, change: nil, context: nil)
+
+        XCTAssertFalse(subject.isToolbarStateCollapsed)
+    }
+
+    func testContentSizeChange_WhenCollapsedAndContentStaysScrollable_KeepsToolbarCollapsed() throws {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
+        subject.hideToolbars(animated: false)
+        XCTAssertTrue(subject.isToolbarStateCollapsed)
+
+        // Content grows but is still taller than the viewport, so the toolbar must stay collapsed.
+        scrollView.contentSize = CGSize(width: 200, height: 3000)
+        subject.observeValue(forKeyPath: "contentSize", of: scrollView, change: nil, context: nil)
+
+        XCTAssertTrue(subject.isToolbarStateCollapsed)
+    }
+
     // MARK: - overKeyboardScrollHeight Helper Method Tests
     func testOverKeyboardScrollHeight_minimalEnabledWithHomeIndicator_returnsZero() {
         let subject = createSubject()
