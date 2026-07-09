@@ -69,6 +69,10 @@ struct ToolbarTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.searchButtonTapped, extras: isPrivateExtra)
     }
 
+    func googleLensButtonTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.ToolbarGoogleLensButton.tapped)
+    }
+
     func tabTrayButtonTapped(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.TabTrayButtonTappedExtra(isPrivate: isPrivate)
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayButtonTapped, extras: isPrivateExtra)

@@ -335,6 +335,23 @@ toolbar:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
+toolbar.google_lens_button:
+  tapped:
+    type: event
+    description: |
+      Recorded when the user initiates the Google Lens flow by tapping
+      the Google Lens icon on the address toolbar.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16208
+    data_reviews:
+      - TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - GoogleLens
+
 # Awesomebar related telemetry
 awesomebar:
   location:

@@ -48,6 +48,9 @@ CreditCards:
 DownloadsPanel:
   description: Corresponds to the library screen's downloads panel where the user can view their downloads.
 
+GoogleLens:
+  description: Corresponds to the Google Lens image search feature and its entry points (toolbar button and web image context menu).
+
 History:
   description: Corresponds to the internal data store of history within the app. Not to be confused with `HistoryPanel`, which refers to the History screen in the library.
 

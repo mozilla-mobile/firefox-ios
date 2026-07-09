@@ -815,6 +815,25 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
+    func testDidTapButton_tapOnGoogleLensButton_recordsButtonTappedTelemetry() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            buttonType: .googleLens,
+            gestureType: .tap,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
+        )
+        let event = GleanMetrics.ToolbarGoogleLensButton.tapped
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     func testDidTapButton_tapOnGoogleLensPhotoLibraryButton_dispatchesShowGoogleLensPhotoPicker() throws {
         try didTapButton(buttonType: .googleLensPhotoLibrary,
                          expectedActionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
