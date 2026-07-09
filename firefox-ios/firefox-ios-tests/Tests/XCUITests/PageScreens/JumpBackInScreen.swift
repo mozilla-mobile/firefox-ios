@@ -55,6 +55,13 @@ final class JumpBackInScreen {
     func longPressFirstItem(duration: TimeInterval = 2, timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(firstItemCell, timeout: timeout)
         firstItemCell.press(forDuration: duration)
+        // Long-press intermittently fails to open the menu on iPad; re-press (not tap) until it
+        // appears. No extra press happens when the first one succeeds.
+        var attempts = 3
+        while !contextMenuTable.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && attempts > 0 {
+            firstItemCell.press(forDuration: duration)
+            attempts -= 1
+        }
     }
 
     func assertContextMenuExists() {
