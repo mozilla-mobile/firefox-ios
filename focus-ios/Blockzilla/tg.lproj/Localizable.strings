@@ -413,7 +413,7 @@
 "Settings.setAsDefaultBrowserDescription" = "Пайвандҳоеро, танзим кунед, то ки онҳо аз сомонаҳо, почтаи электронӣ ва паёмҳо дар браузери «%@» ба таври худкор кушода шаванд.";
 
 /* System value for theme section in settings menu */
-"Settings.systemTheme" = "Мавзуи низомӣ";
+"Settings.systemTheme" = "Мавзуи низоми компютерӣ";
 
 /* Theme section in settings menu */
 "Settings.theme" = "Мавзуъ";

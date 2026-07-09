@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import UIKit
 import WebKit
 import SummarizeKit
 import QuickAnswersKit
@@ -125,9 +126,14 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     @MainActor
     func showWorldCupCountryPicker()
 
-    /// Shows the system photo-library picker and sends the picked image to the Lens API.
     @MainActor
     func showGoogleLensPhotoPicker()
+
+    @MainActor
+    func showGoogleLensCamera()
+
+    @MainActor
+    func searchGoogleLens(with image: UIImage)
 
     @MainActor
     func showQuickAnswers(transitionType: QuickAnswersTransitionType)

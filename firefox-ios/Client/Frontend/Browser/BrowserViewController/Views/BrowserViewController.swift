@@ -39,6 +39,7 @@ class BrowserViewController: UIViewController,
                              AddressToolbarContainerDelegate,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
+                             UserFeaturePreferenceProvider,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
                              LegacyTabScrollController.Delegate,
@@ -2995,6 +2996,8 @@ class BrowserViewController: UIViewController,
             presentTranslationLanguagePicker(data: data, sourceButton: state.buttonTapped)
         case .googleLensPhotoPicker:
             navigationHandler?.showGoogleLensPhotoPicker()
+        case .googleLensCamera:
+            navigationHandler?.showGoogleLensCamera()
         }
     }
 
@@ -5080,14 +5083,16 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     /// Used to get the context menu save image in the context menu, shown from long press on webview links
-    func getImageData(_ url: URL, success: @Sendable @escaping (Data) -> Void) {
+    func getImageData(_ url: URL, success: @escaping @MainActor @Sendable (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
             ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {
-                success(data)
+                ensureMainThread {
+                    success(data)
+                }
             }
         }.resume()
     }
@@ -5135,7 +5140,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // When animation duration is zero the keyboard is already showing and we don't need
         // to update the toolbar again. This is the case when we are moving between fields in a form.
         if state.animationDuration > 0 {
-            updateToolbarDisplay()
+            UIView.performWithoutAnimation {
+                updateToolbarDisplay()
+            }
         }
     }
 
@@ -5173,8 +5180,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateBlurViews()
-        addOrUpdateMaskViewIfNeeded()
+        // Avoid leaking the keyboard animation context into toolbar translucency updates. (FXIOS-14985)
+        UIView.performWithoutAnimation {
+            updateBlurViews()
+            addOrUpdateMaskViewIfNeeded()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {

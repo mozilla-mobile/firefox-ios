@@ -18,8 +18,9 @@ public final class QuickAnswersViewController: UIViewController,
             bottom: UX.closeButtonPadding,
             trailing: UX.closeButtonPadding
         )
-        static let recordWaveEffectSize: CGFloat = 400.0
-        static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
+        static let recordWaveEffectSize: CGFloat = 450.0
+        static let recordWaveEffectBottomPadding = 150.0
+        static let recordWaveEffectResultOpacity: CGFloat = 0.3
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
@@ -50,7 +51,7 @@ public final class QuickAnswersViewController: UIViewController,
         $0.configuration?.contentInsets = UX.closeButtonContentInset
         $0.addAction(
             UIAction(handler: { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+                self?.dismiss(with: nil)
             }),
             for: .touchUpInside
         )
@@ -64,11 +65,12 @@ public final class QuickAnswersViewController: UIViewController,
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
-    private let store: Store
     private let learnMoreURL: URL?
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
-        navigationHandler: navigationHandler
+        onDismiss: { [weak self] in
+            self?.dismiss(with: nil)
+        }
     )
 
     public convenience init(
@@ -77,14 +79,14 @@ public final class QuickAnswersViewController: UIViewController,
         prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        telemetry: QuickAnswersTelemetry,
+        configFetcher: QuickAnswersConfigFetcher,
         learnMoreURL: URL?,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(prefs: prefs, configFetcher: configFetcher),
-            store: Store(prefs: prefs),
+            viewModel: QuickAnswersViewModel(prefs: prefs, telemetry: telemetry, configFetcher: configFetcher),
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -96,7 +98,6 @@ public final class QuickAnswersViewController: UIViewController,
     init(
         navigationHandler: QuickAnswersNavigationHandler?,
         viewModel: QuickAnswersViewModel,
-        store: Store,
         transitionType: QuickAnswersTransitionType,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
@@ -119,7 +120,6 @@ public final class QuickAnswersViewController: UIViewController,
             self.transitionAnimator = nil
         }
         self.viewModel = viewModel
-        self.store = store
         self.learnMoreURL = learnMoreURL
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
@@ -142,19 +142,7 @@ public final class QuickAnswersViewController: UIViewController,
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        startFlow()
-    }
-
-    override public func viewDidDisappear(_ animated: Bool) {
-        // if the optin is not completed at time of dismissal stopRecording triggers permission request, thus
-        // we'd show a permission alert on dismissal which we don't want.
-        if store.isOptInCompleted {
-            // TODO: FXIOS-14880 - Possibly investigate a better way to call this via view model
-            Task {
-                try await viewModel.stopRecordingVoice()
-            }
-        }
-        super.viewDidDisappear(animated)
+        viewModel.startFlow()
     }
 
     private func setupSubviews() {
@@ -189,57 +177,65 @@ public final class QuickAnswersViewController: UIViewController,
         backgroundBlur.pinToSuperview()
     }
 
-    private func startFlow() {
-        guard store.isOptInCompleted else {
-            contentView.showOptIn()
-            return
-        }
-        backgroundRecordEffect.startAnimating()
-        contentView.startAudioWaveformAnimation()
-        viewModel.startRecordingVoice()
-    }
-
     private func registerCallbacks() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
-            case .recordVoice(let result, let error):
+            case .showOptIn:
+                self?.contentView.showOptIn()
+            case .recordingStarted:
+                self?.backgroundRecordEffect.startAnimating()
+                self?.contentView.startAudioWaveformAnimation()
+            case .speechResult(let result, let error):
                 if let error {
                     self?.errorHandler.handleSpeechError(error)
                 } else {
                     self?.contentView.configureTranscript(result.text)
                 }
             case .loadingSearchResult:
+                self?.triggerHaptic()
                 self?.contentView.configureSearching()
             case .showSearchResult(let result, let error):
                 if let error {
                     self?.errorHandler.handleSearchError(error)
                 } else {
-                    self?.contentView.configureAnswer(result.resultText)
+                    self?.triggerHaptic()
+                    self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
+                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
                     self?.contentView.configureSources(result.sources) { [weak self] url in
-                        self?.navigationHandler?.dismissQuickAnswers(with: .url(url))
+                        self?.viewModel.recordCitationTapped()
+                        self?.dismiss(with: url)
                     }
                 }
-            case .initializationFailed:
-                self?.errorHandler.handleInitializationError()
             }
         }
         contentView.configureOptIn(
             learnMoreURL: learnMoreURL,
             theme: themeManager.getCurrentTheme(for: currentWindowUUID),
             onContinue: { [weak self] in
-                self?.store.setOptInCompleted()
                 self?.contentView.hideOptIn()
-                self?.startFlow()
+                self?.viewModel.completeOptIn()
             },
             onLearnMore: { [weak self] url in
-                self?.navigationHandler?.dismissQuickAnswers(with: .url(url))
+                self?.dismiss(with: url)
             }
         )
     }
 
+    private func dismiss(with url: URL?) {
+        triggerHaptic()
+        viewModel.dismiss()
+        navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
+    }
+
+    private func triggerHaptic() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.prepare()
+        generator.impactOccurred()
+    }
+
     // MARK: - UIAdaptivePresentationControllerDelegate
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        navigationHandler?.dismissQuickAnswers(with: nil)
+        dismiss(with: nil)
     }
 
     // MARK: - Themeable

@@ -88,6 +88,7 @@ enum GeneralBrowserActionType: ActionType {
     case shakeMotionEnded
     case showTranslationLanguagePicker
     case showGoogleLensPhotoPicker
+    case showGoogleLensCamera
 }
 
 struct GeneralBrowserMiddlewareAction: Action {

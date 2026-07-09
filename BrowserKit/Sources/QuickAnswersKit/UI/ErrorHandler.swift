@@ -7,14 +7,14 @@ import UIKit
 @MainActor
 final class ErrorHandler {
     private weak var presenter: UIViewController?
-    private weak var navigationHandler: QuickAnswersNavigationHandler?
+    private var onDismiss: (() -> Void)?
 
     init(
         presenter: UIViewController,
-        navigationHandler: QuickAnswersNavigationHandler?
+        onDismiss: (() -> Void)?
     ) {
         self.presenter = presenter
-        self.navigationHandler = navigationHandler
+        self.onDismiss = onDismiss
     }
 
     // MARK: - Speech Errors
@@ -35,15 +35,14 @@ final class ErrorHandler {
                 title: "Change Settings to Use Quick Answers",
                 message: "Allow Firefox to access Speech Recognition."
             )
-        // TODO: - FXIOS-15572 Handle Speech errors that are not related to permissions
         default:
-            break
+            showCatchAllErrorAlert()
         }
     }
 
     private func handlePermissionDenied(isFirstTime: Bool, title: String, message: String) {
         if isFirstTime {
-            navigationHandler?.dismissQuickAnswers(with: nil)
+            onDismiss?()
         } else {
             showPermissionAlert(
                 title: title,
@@ -54,12 +53,7 @@ final class ErrorHandler {
 
     // MARK: - Search Errors
     func handleSearchError(_ error: ResultsServiceError) {
-        // TODO: - FXIOS-15573 Handle Search errors
-    }
-
-    // MARK: - Other Errors
-    func handleInitializationError() {
-        // TODO: - FXIOS-15573 Handle errors
+        showCatchAllErrorAlert()
     }
 
     // MARK: - Private
@@ -73,7 +67,7 @@ final class ErrorHandler {
         )
         alertController.addAction(
             UIAlertAction(title: "Open Settings", style: .default) { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+                self?.onDismiss?()
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
                 }
@@ -81,7 +75,22 @@ final class ErrorHandler {
         )
         alertController.addAction(
             UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+                self?.onDismiss?()
+            }
+        )
+        presenter?.present(alertController, animated: true)
+    }
+
+    // TODO: - FXIOS-14720 Add Strings and accessibility ids
+    private func showCatchAllErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Couldn't get an answer",
+            message: "Try asking again later",
+            preferredStyle: .alert
+        )
+        alertController.addAction(
+            UIAlertAction(title: "Ok", style: .default) { [weak self] _ in
+                self?.onDismiss?()
             }
         )
         presenter?.present(alertController, animated: true)

@@ -27,7 +27,6 @@ final class AppIconSelectionTelemetryTests: XCTestCase {
         let subject = createSubject()
         let expectedNewAppIcon = AppIcon.darkPurple
         let expectedOldAppIcon = AppIcon.regular
-        let expectedMetricType = type(of: event)
 
         subject.selectedIcon(expectedNewAppIcon, previousIcon: expectedOldAppIcon)
 
@@ -37,13 +36,11 @@ final class AppIconSelectionTelemetryTests: XCTestCase {
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
         )
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.newName, expectedNewAppIcon.telemetryName)
         XCTAssertEqual(savedExtras.oldName, expectedOldAppIcon.telemetryName)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func createSubject() -> AppIconSelectionTelemetry {

@@ -40,6 +40,7 @@ enum FeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case needsReloadRefactor
+    case newBookmarkFolderTree
     case novaDesign
     case noInternetConnectionErrorPage
     case quickAnswers
@@ -66,6 +67,7 @@ enum FeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case videoIntroOnboarding
+    case waybackMachine
     case worldCupWidget
 
     /// The user preferences key for features that support user-togglable settings.
@@ -77,6 +79,7 @@ enum FeatureFlagID: String, CaseIterable {
         switch self {
         case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
         case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .googleLens: return FlagKeys.GoogleLens
         case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
@@ -116,6 +119,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
+                .newBookmarkFolderTree,
                 .novaDesign,
                 .noInternetConnectionErrorPage,
                 .quickAnswers,
@@ -134,6 +138,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
+                .waybackMachine,
                 .worldCupWidget:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:

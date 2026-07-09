@@ -64,6 +64,66 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Adressas";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "Disponibel";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**Disponibel**: Ti vegns a vesair la funcziun e vegns a pudair l’utilisar.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Bloccà";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Bloccà**: ti na vegns betg a vesair e na vegns betg a pudair utilisar la funcziun. Per l’IA sin l’apparat vegnan tut ils models telechargiads allontanads.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Bloccà**: Ti na vegns betg a vesair e na vegns betg a pudair utilisar la funcziun. Per l’IA sin l’apparat vegnan tut ils models telechargiads allontanads.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Las paginas e las resumaziuns na vegnan mai memorisadas.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Resumaziuns da paginas";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Tia vusch, dumondas e respostas na vegnan mai memorisadas.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Respostas sveltas";
+
+/* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "FUNCZIUNS IA";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "Las translaziuns restan privatas sin tes apparat.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "Translaziun";
+
+/* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Bloccar vul dir che ti na vesas betg funcziuns che sa basan sin IA (novas u existentas) en %@ – n’era betg ils messadis pop-up davart las funcziuns.";
+
+/* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
+"Settings.AIControls.BlockAIEnhancementsLink.v151" = "Vesair tge ch’è inclus e tge betg";
+
+/* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Bloccar meglieraziuns che sa basan sin l’IA";
+
+/* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
+"Settings.AIControls.BlockedInformation.v151" = "Funcziuns (novas ed actualas) che sa basan sin l’IA èn bloccadas en la configuraziun da standard. Deblochescha funcziuns specificas sutvart.";
+
+/* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
+"Settings.AIControls.HeaderCard.Link.v151" = "Ulteriuras infurmaziuns";
+
+/* This is the message for the Header Card under the AI Controls settings section. */
+"Settings.AIControls.HeaderCard.Message.v151" = "Quai includa la pussaivladad d’utilisar u betg utilisar funcziuns dad intelligenza artifiziala.";
+
+/* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.HeaderCard.Title.v151" = "Ti has adina la tscherna en %@";
+
+/* In the settings menu, in the General section, this is the title for the AI Controls settings section */
+"Settings.AIControls.Title.v150" = "Controllas IA";
+
 /* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
 "Settings.Appearance.NavigationToolbar.Description.v145" = "Mida il buttun amez la trav d’utensils.";
 
@@ -111,6 +171,12 @@
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Reproducziun automatica";
+
+/* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
+"Settings.Browsing.BlockAds.Title.v153" = "Bloccar reclamas";
+
+/* This is the title for the Content customization section under the Browsing settings page. */
+"Settings.Browsing.Content.v153" = "Cuntegn";
 
 /* This is the title for Links customization under the Browsing settings section. */
 "Settings.Browsing.Links.v137" = "Colliaziuns";
@@ -172,6 +238,15 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "Decleraziun davart la protecziun da datas";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Ulteriuras infurmaziuns";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ vegn a meglierar las funcziuns, la prestaziun e la stabilitad tranter las actualisaziuns. Las midadas vegnan applitgadas a distanza.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Permetter meglieraziuns a distanza";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Scrollar per zuppentar la trav da tabs e d’adressa";
 
@@ -189,6 +264,15 @@
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "Propostas da maschinas da tschertgar";
+
+/* In the Search settings, this is the description that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Description.v153" = "Trametter maletgs a Google per exequir tschertgas.";
+
+/* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
+"Settings.Search.GoogleLens.Footnote.v153" = "Mo disponibel sche Google è activà survart ed è definì sco maschina da tschertgar activa durant la navigaziun.";
+
+/* In the Search settings, this is the title that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Title.v153" = "Google Lens";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Tschertgar";
@@ -235,11 +319,20 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Ulteriuras infurmaziuns";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Ulteriuras infurmaziuns";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Emprova novas funcziuns ed ideas avant ch’ellas stettian a disposiziun a mintgin.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ tscherna casualmain utilisad:ras per testar funcziunalitads. Quai meglierescha la qualitad per ina e mintgin.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Installar ed exequir studis";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Permetter studis davart funcziuns";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Porscha access a la funcziun per resumar paginas.";
@@ -252,6 +345,18 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Gests";
+
+/* The accessibility label for the language picker button in the Summarize settings. */
+"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Tscherner ina lingua";
+
+/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
+"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "Lingua preferida per l’app";
+
+/* The title for the language choose section for the summarizer inside the Summarize settings. */
+"Settings.Summarize.LanguageSection.Title.v149" = "Lingua";
+
+/* The label for the picker option to select the website language for the summarizer inside the Summarize settings. */
+"Settings.Summarize.LanguageSection.WebsiteLanguageLabel.v149" = "Lingua da la website";
 
 /* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.SummarizePagesTitle.v142" = "Resumar paginas";
@@ -276,4 +381,19 @@
 
 /* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Nov tab";
+
+/* This is the section title text for the the Translation feature under the Translation settings section. */
+"Settings.Translation.SectionTitle.v145" = "Preferenzas da translaziun";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
+"Settings.Translation.SettingOff.v145" = "Deactivà";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
+"Settings.Translation.SettingOn.v145" = "Activà";
+
+/* In the settings menu, in the General section, this is the title for the Translation settings section. */
+"Settings.Translation.Title.v145" = "Translaziun";
+
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "Activar las translaziuns";
 

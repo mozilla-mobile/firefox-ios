@@ -14,6 +14,8 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
     private(set) var updateZoomPageBarVisibilityCalled = 0
     private(set) var presentSavePDFControllerCalled = 0
     private(set) var presentSiteProtectionsCalled = 0
+    private(set) var presentReportBrokenSiteCalled = 0
+    private(set) var presentReportBrokenSiteURL: URL?
     private(set) var showPrintSheetCalled = 0
     private(set) var showReaderModeCalled = 0
     private(set) var showShareSheetForCurrentlySelectedTabCalled = 0
@@ -50,6 +52,11 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
 
     func presentSiteProtections() {
         presentSiteProtectionsCalled += 1
+    }
+
+    func presentReportBrokenSite(url: URL?) {
+        presentReportBrokenSiteCalled += 1
+        presentReportBrokenSiteURL = url
     }
 
     func showPrintSheet() {
