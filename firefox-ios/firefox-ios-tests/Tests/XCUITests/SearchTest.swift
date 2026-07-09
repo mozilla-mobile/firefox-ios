@@ -420,11 +420,20 @@ class SearchTests: FeatureFlaggedTestBase {
         app.launch()
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
-        // Tap on the "Append Arrow button"
-        app.tables.cells.buttons.firstMatch.waitAndTap()
+        // Tap a specific suggestion row's append arrow (not .firstMatch), and capture
+        // its label first, so a wrong-row fill would be caught instead of masked
+        let targetRow = app.tables.cells.element(boundBy: 1)
+        let targetLabel = targetRow.staticTexts.firstMatch.label
+        XCTAssertFalse(targetLabel.isEmpty, "Expected the target suggestion row to have a non-empty label")
+        targetRow.buttons.firstMatch.waitAndTap()
 
-        // The search suggestion fills the URL bar but does not conduct the search
-        mozWaitForValueContains(urlBarAddress, value: "g")
+        // The tapped row's exact text (not just a substring) fills the URL bar but does not conduct the search
+        mozWaitForValueContains(urlBarAddress, value: targetLabel)
+        XCTAssertEqual(
+            urlBarAddress.value as? String,
+            targetLabel + " ",
+            "URL bar should contain exactly the tapped row's text"
+        )
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
         // Delete the text and type "g"
