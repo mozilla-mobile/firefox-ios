@@ -126,7 +126,6 @@ class AppDelegate: UIResponder,
 
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
-
         backgroundWorkUtility = BackgroundFetchAndProcessingUtility()
         backgroundWorkUtility?.registerUtility(BackgroundSyncUtility(profile: profile, application: application))
         backgroundWorkUtility?.registerUtility(BackgroundNotificationSurfaceUtility())
