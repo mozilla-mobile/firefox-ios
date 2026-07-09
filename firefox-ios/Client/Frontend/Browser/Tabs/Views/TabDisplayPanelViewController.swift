@@ -33,6 +33,7 @@ final class TabDisplayPanelViewController: UIViewController,
     /// Latest subscription generation per window. The `.tabsPanel` component is shared by window, so
     /// only the current owner should remove it: each `subscribeToRedux()` bumps the generation, and a
     /// stale panel whose `subscriptionGeneration` no longer matches skips `removeComponent`.
+    /// Fixes FXIOS-15973: https://mozilla-hub.atlassian.net/browse/FXIOS-15973
     @MainActor
     private static var latestSubscriptionGeneration = [WindowUUID: Int]()
     private var subscriptionGeneration = 0
