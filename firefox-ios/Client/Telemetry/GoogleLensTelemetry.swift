@@ -8,6 +8,11 @@ import Glean
 struct GoogleLensSearchState {
     let source: GoogleLensTelemetry.Source
     var httpStatusCode: Int?
+
+    init(source: GoogleLensTelemetry.Source, httpStatusCode: Int? = nil) {
+        self.source = source
+        self.httpStatusCode = httpStatusCode
+    }
 }
 
 struct GoogleLensTelemetry {
