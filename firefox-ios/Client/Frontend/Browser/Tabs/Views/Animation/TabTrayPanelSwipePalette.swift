@@ -157,6 +157,8 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientAIStrongStop2: UIColor { base.gradientAIStrongStop2 }
     var gradientAIStrongStop3: UIColor { base.gradientAIStrongStop3 }
 
+    var faviconLetterColorSet: FaviconLetterColorSet { base.faviconLetterColorSet }
+
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base
         self.partialOverrides = overrides

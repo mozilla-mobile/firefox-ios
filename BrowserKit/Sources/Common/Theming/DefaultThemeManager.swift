@@ -171,7 +171,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - Window specific functions
     public func windowNonspecificTheme() -> Theme {
         switch getUserManualTheme() {
-        case .dark, .nightMode, .privateMode: return DarkTheme()
+        case .dark, .nightMode, .privateMode: return getThemeFrom(type: .dark)
         case .light: return getThemeFrom(type: .light)
         }
     }

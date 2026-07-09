@@ -124,4 +124,6 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var gradientAIStrongStop3: UIColor = FXColors.Yellow50
 
     var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
+
+    var faviconLetterColorSet: FaviconLetterColorSet = StandardFaviconColorSet()
 }

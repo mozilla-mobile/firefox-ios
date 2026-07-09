@@ -106,4 +106,6 @@ public protocol ThemeColourPalette {
     var gradientAIStrongStop1: UIColor { get }
     var gradientAIStrongStop2: UIColor { get }
     var gradientAIStrongStop3: UIColor { get }
+
+    var faviconLetterColorSet: FaviconLetterColorSet { get }
 }

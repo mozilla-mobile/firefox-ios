@@ -15,13 +15,13 @@ protocol LetterImageGenerator: Sendable {
     func generateLetterImage(siteString: String) async throws -> UIImage
 }
 
-final class DefaultLetterImageGenerator: LetterImageGenerator {
+final class DefaultLetterImageGenerator: LetterImageGenerator, @unchecked Sendable {
     private let logger: Logger
-    private let colorSet: FaviconLetterColorSet
+    private let themeManager: ThemeManager
 
-    init(colorSet: FaviconLetterColorSet = .current,
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
-        self.colorSet = colorSet
+        self.themeManager = themeManager
         self.logger = logger
     }
 
@@ -29,7 +29,8 @@ final class DefaultLetterImageGenerator: LetterImageGenerator {
     func generateLetterImage(siteString: String) async throws -> UIImage {
         let capitalizedLetter = try generateLetter(fromSiteString: siteString)
 
-        let index = colorIndex(forSite: siteString)
+        let colorSet = resolvedColorSet
+        let index = colorIndex(forSite: siteString, colorSet: colorSet)
         let image = generateImage(fromLetter: capitalizedLetter,
                                   color: colorSet.backgroundColors[index],
                                   letterColor: colorSet.letterColors[index])
@@ -66,12 +67,17 @@ final class DefaultLetterImageGenerator: LetterImageGenerator {
         return image
     }
 
-    internal func colorIndex(forSite siteString: String) -> Int {
+    @MainActor
+    private var resolvedColorSet: FaviconLetterColorSet {
+        themeManager.windowNonspecificTheme().colors.faviconLetterColorSet
+    }
+
+    internal func colorIndex(forSite siteString: String, colorSet: FaviconLetterColorSet) -> Int {
         return abs(stableHash(siteString)) % colorSet.backgroundColors.count
     }
 
-    internal func generateBackgroundColor(forSite siteString: String) -> UIColor {
-        return colorSet.backgroundColors[colorIndex(forSite: siteString)]
+    internal func generateBackgroundColor(forSite siteString: String, colorSet: FaviconLetterColorSet) -> UIColor {
+        return colorSet.backgroundColors[colorIndex(forSite: siteString, colorSet: colorSet)]
     }
 
     // A stable hash (unlike hashValue), from https://useyourloaf.com/blog/swift-hashable/
