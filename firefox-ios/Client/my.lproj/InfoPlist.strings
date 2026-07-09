@@ -5,7 +5,7 @@
 "New Tab" = "တပ်ဗ်အသစ်";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "ဓါတ်ပုံရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox သည် သင်၏သိမ်းဆည်းထားသော စကားဝှက်များနှင့် ငွေပေးချေမှုနည်းလမ်းများကို အသုံးပြုရန်အတွက် Face ID လိုအပ်သည်။";

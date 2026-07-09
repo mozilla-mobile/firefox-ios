@@ -5,7 +5,7 @@
 "New Tab" = "Ivinell nevez";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Gant se e c’hallit kemer ha pellgas luc’hskeudennoù.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Face ID a zo rekis evit ma c’hallfe kaout Firefox ho kerioù-tremen enrollet hag ho toareoù paeañ.";

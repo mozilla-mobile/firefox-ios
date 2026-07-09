@@ -85,6 +85,12 @@
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Резимеи страница";
 
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Ваш глас, питања и одговори се никада не чувају.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Брзи одговори";
+
 /* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
 "Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "ФУНКЦИЈЕ ЗАСНОВАНЕ НА ВИ";
 
@@ -258,6 +264,15 @@
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "Предлози претраживача";
+
+/* In the Search settings, this is the description that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Description.v153" = "Пошаљите слике Google-у за претрагу.";
+
+/* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
+"Settings.Search.GoogleLens.Footnote.v153" = "Доступно само када је Google омогућен изнад и када је ваш активни претраживач током прегледања.";
+
+/* In the Search settings, this is the title that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Title.v153" = "Google објектив";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Претрага";
