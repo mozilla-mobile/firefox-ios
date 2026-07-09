@@ -88,8 +88,16 @@ class BaseTestCase: XCTestCase {
         }
         if icon.exists {
             if #available(iOS 26, *), iPad() {
-                iPadIcon.press(forDuration: 1.0)
-                springboard.buttons["Options"].tapWithRetry()
+                // iPad can match >1 icon and may lack the "Options" step. Press whichever icon
+                // opens the menu (fallback to primary) and tap "Options" only if present.
+                let removeAppButton = springboard.buttons["Remove App"]
+                for candidate in [iPadIcon, icon] where candidate.exists {
+                    candidate.press(forDuration: 1.0)
+                    springboard.buttons["Options"].tapIfExists()
+                    if removeAppButton.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
+                        break
+                    }
+                }
             } else {
                 icon.press(forDuration: 1.0)
             }
