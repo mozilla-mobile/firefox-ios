@@ -12,6 +12,7 @@ final class MockWorldCupStore: WorldCupStoreProtocol {
     var selectedTeam: String?
     var isMilestone2 = false
     var hasWorldCupStarted = false
+    var hasWorldCupEnded = false
     var isCelebrationAnimationEnabled = false
 
     var setIsHomepageSectionEnabledCalled = 0

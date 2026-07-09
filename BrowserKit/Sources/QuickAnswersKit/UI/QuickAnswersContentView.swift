@@ -48,6 +48,12 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private let sourceView: QuickAnswersSourceView = .build {
         $0.alpha = 0.0
     }
+    private let footerLabel: UILabel = .build {
+        $0.font = FXFontStyles.Regular.footnote.scaledFont()
+        $0.numberOfLines = 0
+        $0.alpha = 0.0
+        $0.adjustsFontForContentSizeCategory = true
+    }
     private let optInView: OptInView = .build()
     private var theme: Theme?
 
@@ -69,7 +75,8 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             transcriptLabel,
             searchingLabel,
             answerLabel,
-            sourceView
+            sourceView,
+            footerLabel
         )
         scrollView.addSubview(contentView)
         addSubview(scrollView)
@@ -106,7 +113,11 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             sourceView.topAnchor.constraint(equalTo: answerLabel.bottomAnchor, constant: UX.contentSpacing),
             sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            sourceView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+
+            footerLabel.topAnchor.constraint(equalTo: sourceView.bottomAnchor, constant: UX.contentSpacing),
+            footerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            footerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            footerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
@@ -121,12 +132,16 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
 
     func configureOptIn(
         learnMoreURL: URL?,
+        theme: Theme,
         onContinue: @escaping () -> Void,
         onLearnMore: @escaping (URL) -> Void
     ) {
-        optInView.learnMoreURL = learnMoreURL
-        optInView.onContinue = onContinue
-        optInView.onLearnMore = onLearnMore
+        optInView.configure(
+            learnMoreURL: learnMoreURL,
+            theme: theme,
+            onContinue: onContinue,
+            onLearnMore: onLearnMore
+        )
     }
 
     func showOptIn() {
@@ -179,17 +194,19 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureAnswer(_ text: String) {
+    func configureAnswer(_ text: String, modelName: String) {
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0
+        footerLabel.text = "Powered by \(modelName) · Answers can contain mistakes."
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             answerLabel.text = text
             answerLabel.alpha = 1.0
+            footerLabel.alpha = 1.0
         }
     }
 
-    func configureSources(_ items: [SearchResult.Source]) {
-        sourceView.configure(with: items)
+    func configureSources(_ items: [SearchResult.Source], onSourceTapped: @escaping (URL) -> Void) {
+        sourceView.configure(with: items, onSourceTapped: onSourceTapped)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             sourceView.alpha = 1.0
         }
@@ -203,6 +220,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         transcriptLabel.textColor = theme.colors.textPrimary
         searchingLabel.textColor = theme.colors.textSecondary
         answerLabel.textColor = theme.colors.textPrimary
+        footerLabel.textColor = theme.colors.textSecondary
         sourceView.applyTheme(theme: theme)
         optInView.applyTheme(theme: theme)
     }

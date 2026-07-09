@@ -55,6 +55,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var popToBVCCalled = 0
     var openLearnMoreFromNativeErrorPageCalled = 0
     var showQuickAnswersCalled = 0
+    var showGoogleLensPhotoPickerCalled = 0
+    var showGoogleLensCameraCalled = 0
+    var searchGoogleLensCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -180,6 +183,18 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         showQuickAnswersCalled += 1
+    }
+
+    func showGoogleLensPhotoPicker() {
+        showGoogleLensPhotoPickerCalled += 1
+    }
+
+    func showGoogleLensCamera() {
+        showGoogleLensCameraCalled += 1
+    }
+
+    func searchGoogleLens(with image: UIImage) {
+        searchGoogleLensCalled += 1
     }
 
     // MARK: - BrowserDelegate

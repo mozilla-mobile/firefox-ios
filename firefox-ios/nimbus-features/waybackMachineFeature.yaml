@@ -1,0 +1,18 @@
+# The configuration for the waybackMachineFeature feature
+features:
+  wayback-machine-feature:
+    description: >
+      This property determines whether we show the wayback entry point on the native error pages
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

@@ -756,7 +756,7 @@ public struct ClientSettings: Equatable, Hashable {
     public init(
         /**
          * Timeout for the entire request in ms (0 indicates no timeout).
-         */timeout: UInt32 = UInt32(0), 
+         */timeout: UInt32 = UInt32(60000), 
         /**
          * Maximum amount of redirects to follow (0 means redirects are not allowed)
          */redirectLimit: UInt32 = UInt32(10), 
@@ -1795,7 +1795,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_viaduct_checksum_func_send_ohttp_request() != 6311) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_init_backend() != 49860) {
+    if (uniffi_viaduct_checksum_func_init_backend() != 12274) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_viaduct_checksum_func_clear_ohttp_channels() != 2859) {
@@ -1816,7 +1816,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_viaduct_checksum_func_set_global_default_user_agent() != 45260) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_method_backend_send_request() != 64490) {
+    if (uniffi_viaduct_checksum_method_backend_send_request() != 47528) {
         return InitializationResult.apiChecksumMismatch
     }
 

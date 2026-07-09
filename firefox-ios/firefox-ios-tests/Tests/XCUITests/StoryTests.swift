@@ -94,13 +94,16 @@ class StoryTests: FeatureFlaggedTestBase {
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmark],
-                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.shareApple]
             ]
         )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
-    func testNewsStoryCategoriesFilterStories() {
+    func testNewsStoryCategoriesFilterStories() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping testNewsStoryCategoriesFilterStories on Firefox or FirefoxBeta schemas")
+        }
         addLaunchArgument(jsonFileName: "homepageStoryCategoriesOn", featureName: "homepage-redesign-feature")
         app.launch()
 

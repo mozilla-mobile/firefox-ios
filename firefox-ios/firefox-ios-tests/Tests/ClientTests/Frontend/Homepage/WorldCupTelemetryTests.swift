@@ -26,12 +26,10 @@ final class WorldCupTelemetryTests: XCTestCase {
         subject.closeCountdownWidgetButtonTapped()
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.WorldCupCountdownWidget.closeButton)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.WorldCupCountdownWidget.closeButton
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_viewScheduleTapped_recordsEvent() throws {
@@ -40,12 +38,10 @@ final class WorldCupTelemetryTests: XCTestCase {
         subject.viewScheduleTapped()
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.WorldCupCountdownWidget.viewSchedule)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.WorldCupCountdownWidget.viewSchedule
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_countrySelected_recordsEventWithFifaCodeExtra() throws {
@@ -54,18 +50,15 @@ final class WorldCupTelemetryTests: XCTestCase {
 
         let subject = createSubject()
         let expectedFifaCode = "USA"
-        let expectedMetricType = type(of: event)
 
         subject.countrySelected(fifaCode: expectedFifaCode)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.fifaCode, expectedFifaCode)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_countryDeselected_recordsEvent() throws {
@@ -74,12 +67,10 @@ final class WorldCupTelemetryTests: XCTestCase {
         subject.countryDeselected()
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.WorldCupWidget.countryDeselected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.WorldCupWidget.countryDeselected
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_widgetDismissed_recordsEvent() throws {
@@ -88,12 +79,10 @@ final class WorldCupTelemetryTests: XCTestCase {
         subject.widgetDismissed()
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.WorldCupWidget.widgetDismissed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.WorldCupWidget.widgetDismissed
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_errorRefreshButtonTapped_recordsEvent() throws {
@@ -102,12 +91,10 @@ final class WorldCupTelemetryTests: XCTestCase {
         subject.errorRefreshButtonTapped()
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.WorldCupWidget.errorRefreshButton)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.WorldCupWidget.errorRefreshButton
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_matchClicked_recordsEventWithMatchExtra() throws {
@@ -116,18 +103,15 @@ final class WorldCupTelemetryTests: XCTestCase {
 
         let subject = createSubject()
         let expectedMatch = "USA/MEX"
-        let expectedMetricType = type(of: event)
 
         subject.matchClicked(match: expectedMatch)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.match, expectedMatch)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_cardSwiped_recordsEventWithViewAndImpressionExtras() throws {
@@ -137,19 +121,16 @@ final class WorldCupTelemetryTests: XCTestCase {
         let subject = createSubject()
         let expectedView = "Round of 16"
         let expectedIsImpression = true
-        let expectedMetricType = type(of: event)
 
         subject.cardSwiped(view: expectedView, isImpression: expectedIsImpression)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.view, expectedView)
         XCTAssertEqual(savedExtras.isImpression, expectedIsImpression)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_countrySelectorDisplayed_recordsEvent() throws {
@@ -158,12 +139,10 @@ final class WorldCupTelemetryTests: XCTestCase {
         subject.countrySelectorDisplayed()
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.WorldCupWidget.countrySelectorDisplayed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.WorldCupWidget.countrySelectorDisplayed
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_wallpaperButtonTapped_recordsEvent() throws {
@@ -172,12 +151,10 @@ final class WorldCupTelemetryTests: XCTestCase {
         subject.wallpaperButtonTapped()
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.WorldCupWidget.wallpaperButton)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.WorldCupWidget.wallpaperButton
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_shareButtonTapped_recordsEvent() throws {
@@ -186,12 +163,10 @@ final class WorldCupTelemetryTests: XCTestCase {
         subject.shareButtonTapped()
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.WorldCupWidget.shareButton)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.WorldCupWidget.shareButton
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_multipleEvents_recordedIndependently() {

@@ -83,21 +83,15 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
 
         // Ensuring we call the right metrics type
+        let firstMetric = GleanMetrics.TopSites.contileImpression
         let firstSavedMetric = try XCTUnwrap(
             gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContileImpressionExtra>
         )
-        let expectedFirstMetricType = type(of: GleanMetrics.TopSites.contileImpression)
-        let firstResultMetricType = type(of: firstSavedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedFirstMetricType,
-                                                 resultMetric: firstResultMetricType)
-        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
+        XCTAssert(firstSavedMetric === firstMetric, "Received \(firstSavedMetric) instead of \(firstMetric)")
 
+        let secondMetric = GleanMetrics.TopSites.contileAdvertiser
         let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents[safe: 1] as? StringMetricType)
-        let expectedSecondMetricType = type(of: GleanMetrics.TopSites.contileAdvertiser)
-        let secondResultMetricType = type(of: secondSavedMetric)
-        let secondDebugMessage = TelemetryDebugMessage(expectedMetric: expectedSecondMetricType,
-                                                       resultMetric: secondResultMetricType)
-        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
+        XCTAssert(secondSavedMetric === secondMetric, "Received \(secondSavedMetric) instead of \(secondMetric)")
     }
 
     func testGleanClickTelemetry() throws {
@@ -117,21 +111,15 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
 
         // Ensuring we call the right metrics type
+        let firstMetric = GleanMetrics.TopSites.contileClick
         let firstSavedMetric = try XCTUnwrap(
             gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContileClickExtra>
         )
-        let expectedFirstMetricType = type(of: GleanMetrics.TopSites.contileClick)
-        let firstResultMetricType = type(of: firstSavedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedFirstMetricType,
-                                                 resultMetric: firstResultMetricType)
-        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
+        XCTAssert(firstSavedMetric === firstMetric, "Received \(firstSavedMetric) instead of \(firstMetric)")
 
+        let secondMetric = GleanMetrics.TopSites.contileAdvertiser
         let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents[safe: 1] as? StringMetricType)
-        let expectedSecondMetricType = type(of: GleanMetrics.TopSites.contileAdvertiser)
-        let secondResultMetricType = type(of: secondSavedMetric)
-        let secondDebugMessage = TelemetryDebugMessage(expectedMetric: expectedSecondMetricType,
-                                                       resultMetric: secondResultMetricType)
-        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
+        XCTAssert(secondSavedMetric === secondMetric, "Received \(secondSavedMetric) instead of \(secondMetric)")
     }
 
     func testImpressionTelemetry_whenAdsClientEnabled_callsRecordImpression() {

@@ -10,6 +10,7 @@ protocol SpringboardSelectorsSet {
     var NEW_TAB_BUTTON: Selector { get }
     var NEW_PRIVATE_TAB_BUTTON: Selector { get }
     var OPEN_LAST_BOOKMARK_BUTTON: Selector { get }
+    var APP_ICON_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -19,7 +20,10 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         static let firefoxIcon = "Firefox"
         static let newTabButton = "New Tab"
         static let newPrivateTabButton = "New Private Tab"
-        static let openLastBookmarkButton = "org.mozilla.ios.Fennec.OpenLastBookmark"
+        // Matched by identifier suffix so it works on every scheme's bundle id
+        // (org.mozilla.ios.Fennec / .Firefox / .FirefoxBeta).
+        static let openLastBookmarkSuffix = ".OpenLastBookmark"
+        static let appIconButton = "App Icon"
     }
 
     let FENNEC_ICONS = Selector(
@@ -52,9 +56,22 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         groups: ["springboard", "context-menu"]
     )
 
-    let OPEN_LAST_BOOKMARK_BUTTON = Selector.buttonId(
-        IDs.openLastBookmarkButton,
+    let OPEN_LAST_BOOKMARK_BUTTON = Selector(
+        strategy: .predicate(
+            NSPredicate(
+                format: "elementType == %d AND identifier ENDSWITH %@",
+                XCUIElement.ElementType.button.rawValue,
+                IDs.openLastBookmarkSuffix
+            )
+        ),
+        value: IDs.openLastBookmarkSuffix,
         description: "Open Last Bookmark button in springboard context menu",
+        groups: ["springboard", "context-menu"]
+    )
+
+    let APP_ICON_BUTTON = Selector.buttonId(
+        IDs.appIconButton,
+        description: "App Icon button in springboard context menu",
         groups: ["springboard", "context-menu"]
     )
 
@@ -62,6 +79,7 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         [
             FENNEC_ICONS,
             FIREFOX_ICON,
+            APP_ICON_BUTTON,
             NEW_TAB_BUTTON,
             NEW_PRIVATE_TAB_BUTTON,
             OPEN_LAST_BOOKMARK_BUTTON

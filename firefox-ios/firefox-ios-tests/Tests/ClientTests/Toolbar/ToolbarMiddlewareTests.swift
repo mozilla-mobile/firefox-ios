@@ -66,13 +66,17 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
         let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .newTab)
-        XCTAssertNil(actionCalled.isGoogleLensEnabled)
+
+        let lensAction = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(lensAction.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(lensAction.isGoogleLensEnabled, false)
 
         let savedValue = try XCTUnwrap(
             mockGleanWrapper.savedValues.first as? String
@@ -80,7 +84,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedValue, "newTab")
     }
 
-    func testBrowserDidLoad_withGoogleLensEnabledAndGoogleDefault_dispatchesWithoutGoogleLensPayload() throws {
+    func testBrowserDidLoad_withGoogleLensEnabledAndGoogleDefault_dispatchesWithGoogleLensEnabled() throws {
         let featureFlagsProvider = MockNimbusFeatureFlags()
         featureFlagsProvider.enabledFlags = [.googleLens]
         let subject = createSubject(
@@ -97,8 +101,31 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.toolbarProvider(mockStore.state, action)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertNil(actionCalled.isGoogleLensEnabled)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testBrowserDidLoad_withGoogleLensEnabledAndNonGoogleDefault_dispatchesWithGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(searchEngines: [makeSearchEngine(engineID: "bing")])
+        )
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
     func testDefaultSearchEngineDidChange_withGoogleDefault_dispatchesGoogleLensEnabled() throws {
@@ -120,7 +147,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
     }
 
@@ -143,7 +170,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
     }
 
@@ -164,7 +191,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
@@ -187,7 +214,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
     }
 
@@ -207,8 +234,167 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
-                       ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine)
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
         XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testGoogleLensSettingDidChange_withSettingEnabled_dispatchesGoogleLensEnabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            userPreferences: makeUserPreferences(googleLensEnabled: true),
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.googleLensSettingDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testGoogleLensSettingDidChange_withSettingDisabled_dispatchesGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            userPreferences: makeUserPreferences(googleLensEnabled: false),
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.googleLensSettingDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testBrowserDidLoad_withGoogleLensEnabledInPrivateMode_dispatchesWithGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: true, windowUUID: windowUUID)
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testBrowserDidLoad_withGoogleLensSettingDisabled_dispatchesWithGoogleLensDisabled() throws {
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            userPreferences: makeUserPreferences(googleLensEnabled: false),
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarMiddlewareAction)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testUrlDidChange_whenEnteringPrivateModeWithLensShowing_dispatchesGoogleLensDisabled() throws {
+        mockStore = MockStoreForMiddleware(state: setupAppState(isGoogleLensAccessoryShowing: true))
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: true, windowUUID: windowUUID)
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.urlDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, false)
+    }
+
+    func testUrlDidChange_whenLeavingPrivateModeWithLensHidden_dispatchesGoogleLensEnabled() throws {
+        mockStore = MockStoreForMiddleware(state: setupAppState(isGoogleLensAccessoryShowing: false))
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: false, windowUUID: windowUUID)
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.urlDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarMiddlewareActionType,
+                       ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        XCTAssertEqual(actionCalled.isGoogleLensEnabled, true)
+    }
+
+    func testUrlDidChange_whenLensVisibilityUnchanged_doesNotDispatch() throws {
+        mockStore = MockStoreForMiddleware(state: setupAppState(isGoogleLensAccessoryShowing: true))
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        featureFlagsProvider.enabledFlags = [.googleLens]
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: false, windowUUID: windowUUID)
+        let subject = createSubject(
+            manager: toolbarManager,
+            featureFlagsProvider: featureFlagsProvider,
+            searchEnginesManager: MockSearchEnginesManager(
+                searchEngines: [makeSearchEngine(engineID: OpenSearchEngine.googleEngineID)]
+            )
+        )
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.urlDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
     }
 
     func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {
@@ -227,7 +413,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
         let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
@@ -412,12 +598,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.HomeButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.homeButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.homeButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -430,12 +614,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.OneTapNewTabButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.oneTapNewTabButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.oneTapNewTabButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -448,12 +630,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.BackButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.backButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.backButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -466,12 +646,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ForwardButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.forwardButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.forwardButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -498,12 +676,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.tabTrayButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.tabTrayButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -518,12 +694,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.SiteInfoButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.siteInfoButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.siteInfoButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -551,12 +725,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.AppMenuButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.appMenuButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.appMenuButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -582,12 +754,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ReaderModeButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.readerModeButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.readerModeButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
         XCTAssertEqual(savedExtras.enabled, false)
     }
@@ -601,12 +771,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ReaderModeButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.readerModeButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.readerModeButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
         XCTAssertEqual(savedExtras.enabled, false)
     }
@@ -620,12 +788,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.RefreshButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.refreshButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.refreshButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -642,13 +808,21 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ShareButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.shareButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.shareButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
+    }
+
+    func testDidTapButton_tapOnGoogleLensPhotoLibraryButton_dispatchesShowGoogleLensPhotoPicker() throws {
+        try didTapButton(buttonType: .googleLensPhotoLibrary,
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
+    }
+
+    func testDidTapButton_tapOnGoogleLensTakePhotoButton_dispatchesShowGoogleLensCamera() throws {
+        try didTapButton(buttonType: .googleLensTakePhoto,
+                         expectedActionType: GeneralBrowserActionType.showGoogleLensCamera)
     }
 
     func testDidTapButton_tapOnSearchButton_dispatchesDidStartEditingUrl() throws {
@@ -673,12 +847,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.SearchButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.searchButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.searchButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -707,12 +879,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.BackLongPressExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.backLongPress)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.backLongPress
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -725,12 +895,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ForwardLongPressExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.forwardLongPress)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.forwardLongPress
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -743,12 +911,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayLongPressExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.tabTrayLongPress)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.tabTrayLongPress
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -785,12 +951,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.OneTapNewTabLongPressExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.oneTapNewTabLongPress)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.oneTapNewTabLongPress
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -856,12 +1020,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ClearSearchButtonTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.clearSearchButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.clearSearchButtonTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
@@ -877,12 +1039,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
-        let expectedMetricType = type(of: GleanMetrics.Awesomebar.dragLocationBar)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Awesomebar.dragLocationBar
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testDidSwipeToOpenTabTray_withTopToolbar_recordsIsAtBottomFalse() throws {
@@ -898,12 +1058,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.tabTrayOpenedViaSwipe)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Toolbar.tabTrayOpenedViaSwipe
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isAtBottom, false)
     }
 
@@ -1027,6 +1185,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     private func createSubject(
         manager: ToolbarManager,
         featureFlagsProvider: FeatureFlagProviding = MockNimbusFeatureFlags(),
+        userPreferences: UserFeaturePreferring? = nil,
         searchEnginesManager: SearchEnginesManagerProvider = MockSearchEnginesManager()
     ) -> ToolbarMiddleware {
         return ToolbarMiddleware(
@@ -1036,9 +1195,16 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             summarizerConfigFactory: summarizerConfigFactory,
             recentSearchProvider: mockRecentSearchProvider,
             featureFlagsProvider: featureFlagsProvider,
+            userPreferences: userPreferences ?? makeUserPreferences(),
             searchEnginesManager: searchEnginesManager,
             windowManager: windowManager,
         )
+    }
+
+    private func makeUserPreferences(googleLensEnabled: Bool = true) -> MockUserFeaturePreferences {
+        let preferences = MockUserFeaturePreferences()
+        preferences.setPreferenceFor(.googleLens, to: googleLensEnabled)
+        return preferences
     }
 
     private func makeSearchEngine(engineID: String, isCustomEngine: Bool = false) -> OpenSearchEngine {
@@ -1179,6 +1345,36 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                     )
                 ]
             )
+        )
+    }
+
+    private func setupAppState(isGoogleLensAccessoryShowing: Bool) -> AppState {
+        var addressBarState = AddressBarState(windowUUID: windowUUID)
+        addressBarState.editingAccessoryAction = isGoogleLensAccessoryShowing ? makeGoogleLensAccessoryAction() : nil
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.addressToolbar = addressBarState
+
+        return AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: windowUUID
+                        )
+                    ),
+                    .toolbar(toolbarState)
+                ]
+            )
+        )
+    }
+
+    private func makeGoogleLensAccessoryAction() -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .googleLens,
+            iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
+            isEnabled: true,
+            a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
+            a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton
         )
     }
 

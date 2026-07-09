@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import UIKit
 import WebKit
 import SummarizeKit
 import QuickAnswersKit
@@ -124,6 +125,15 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func showWorldCupCountryPicker()
+
+    @MainActor
+    func showGoogleLensPhotoPicker()
+
+    @MainActor
+    func showGoogleLensCamera()
+
+    @MainActor
+    func searchGoogleLens(with image: UIImage)
 
     @MainActor
     func showQuickAnswers(transitionType: QuickAnswersTransitionType)

@@ -58,7 +58,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     private static let googleLensAction = ToolbarActionConfiguration(
         actionType: .googleLens,
-        iconName: StandardImageIdentifiers.Medium.googleLens,
+        iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
         isEnabled: true,
         a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
         a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton,
@@ -66,7 +66,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             ToolbarMenuElementConfiguration(
                 actionType: .googleLensTakePhoto,
                 title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
-                imageName: StandardImageIdentifiers.Large.cameraLarge,
+                imageName: StandardImageIdentifiers.Large.camera,
                 a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
             ),
             ToolbarMenuElementConfiguration(
@@ -245,8 +245,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleDidClearAlternativeSearchEngine(state: state, action: action)
 
-        case ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine:
-            return handleSearchEngineDidChange(state: state, action: action)
+        case ToolbarMiddlewareActionType.googleLensAvailabilityDidChange:
+            return handleGoogleLensAvailabilityDidChange(state: state, action: action)
 
         default:
             return defaultState(from: state)
@@ -1138,7 +1138,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
-    private static func handleSearchEngineDidChange(state: Self, action: Action) -> Self {
+    private static func handleGoogleLensAvailabilityDidChange(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarMiddlewareAction,
               let isGoogleLensEnabled = toolbarAction.isGoogleLensEnabled else {
             return defaultState(from: state)

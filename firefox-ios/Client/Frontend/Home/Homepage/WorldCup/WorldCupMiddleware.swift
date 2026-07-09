@@ -76,7 +76,14 @@ final class WorldCupMiddleware {
             dispatch(snapshot: .empty)
             return
         }
-        guard worldCupStore.isFeatureEnabledAndSectionEnabled else { return }
+        // Dispatch a hidden snapshot rather than bailing silently so that a
+        // foreground/initialize after the feature has been disabled (e.g. the
+        // World Cup end date has passed) clears any stale section still in the
+        // Redux state instead of waiting for the next feed poll to re-evaluate.
+        guard worldCupStore.isFeatureEnabledAndSectionEnabled else {
+            dispatch(snapshot: .empty)
+            return
+        }
         feed.start()
     }
 

@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import PhotosUI
 import SwiftUI
 import UIKit
 import WebKit
@@ -35,6 +36,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
+                          WebCompatReportCoordinatorDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -58,6 +60,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let worldCupStore: WorldCupStoreProtocol
+    private let googleLensService: GoogleLensServicing
     private var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
@@ -77,7 +80,8 @@ final class BrowserCoordinator: BaseCoordinator,
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
+         worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
+         googleLensService: GoogleLensServicing = GoogleLensService()) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
@@ -90,6 +94,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.worldCupStore = worldCupStore
+        self.googleLensService = googleLensService
         super.init(router: router)
 
         browserViewController.browserDelegate = self
@@ -630,6 +635,22 @@ final class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: browserViewController.addressToolbarContainer)
     }
 
+    func presentReportBrokenSite(url: URL?) {
+        let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
+        reportViewController.reportCoordinator = self
+        if let sheetPresentationController = reportViewController.sheetPresentationController {
+            sheetPresentationController.detents = [.large()]
+            sheetPresentationController.prefersGrabberVisible = true
+        }
+        router.present(reportViewController, animated: true, completion: nil)
+    }
+
+    // MARK: - WebCompatReportCoordinatorDelegate
+
+    func webCompatReportViewControllerDidFinish() {
+        router.dismiss(animated: true, completion: nil)
+    }
+
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
 
@@ -1126,6 +1147,81 @@ final class BrowserCoordinator: BaseCoordinator,
         }
         add(child: coordinator)
         coordinator.start()
+    }
+
+    func showGoogleLensPhotoPicker() {
+        guard !childCoordinators.contains(where: { $0 is PhotoPickerCoordinator }) else { return }
+        let coordinator = PhotoPickerCoordinator(
+            parentCoordinatorDelegate: self,
+            router: router
+        ) { [weak self] results in
+            self?.handleGoogleLensPhotoPick(results)
+        }
+        add(child: coordinator)
+        coordinator.start()
+        store.dispatch(GeneralBrowserAction(showOverlay: false,
+                                            windowUUID: self.windowUUID,
+                                            actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func showGoogleLensCamera() {
+        guard !childCoordinators.contains(where: { $0 is CameraCoordinator }) else { return }
+        let coordinator = CameraCoordinator(
+            parentCoordinatorDelegate: self,
+            router: router
+        ) { [weak self] image in
+            guard let image else { return }
+            self?.searchGoogleLens(with: image)
+        }
+        add(child: coordinator)
+        coordinator.start()
+        store.dispatch(GeneralBrowserAction(showOverlay: false,
+                                            windowUUID: self.windowUUID,
+                                            actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func searchGoogleLens(with image: UIImage) {
+        guard let tab = tabManager.selectedTab else {
+            logger.log("Google Lens: no selected tab to load the upload request",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        let viewportSize = tab.webView?.bounds.size ?? browserViewController.view.bounds.size
+        guard let request = googleLensService.makeUploadRequest(for: image, viewportSize: viewportSize) else {
+            logger.log("Google Lens: failed to build upload request (image could not be processed)",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        _ = tab.loadRequest(request)
+    }
+    private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
+        guard let provider = results.first?.itemProvider else { return }
+        guard provider.canLoadObject(ofClass: UIImage.self) else {
+            logger.log("Google Lens: picked item cannot be loaded as an image",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        provider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
+            let image = object as? UIImage
+            let errorDescription = error?.localizedDescription
+            DispatchQueue.main.async {
+                guard let self else { return }
+                if let image {
+                    self.searchGoogleLens(with: image)
+                } else if let errorDescription {
+                    self.logger.log("Google Lens: failed to load picked image: \(errorDescription)",
+                                    level: .warning,
+                                    category: .coordinator)
+                } else {
+                    self.logger.log("Google Lens: picker returned a non-image object",
+                                    level: .warning,
+                                    category: .coordinator)
+                }
+            }
+        }
     }
 
     func showPrivacyNoticeLink(url: URL) {
