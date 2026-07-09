@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Shared
 import Kingfisher
+import WebKit
 
 import class MozillaAppServices.HardcodedNimbusFeatures
 
@@ -223,6 +224,15 @@ class UITestAppDelegate: AppDelegate {
         // If the app is running from a XCUITest reset all settings in the app
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
             resetApplication()
+        }
+
+        // Opt-in: WKWebView cookies/site data live in WKWebsiteDataStore, which ClearProfile does not
+        // clear. Only cleared when this argument is present so it doesn't reset web state for every test.
+        if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearWebData) {
+            WKWebsiteDataStore.default().removeData(
+                ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
+                modifiedSince: .distantPast
+            ) {}
         }
 
         Tab.ChangeUserAgent.clear()

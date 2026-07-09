@@ -14,6 +14,9 @@ public struct LaunchArguments {
     public static let SkipSponsoredShortcuts = "FIREFOX_SKIP_SPONSORED_SHORTCUTS"
     public static let SkipTermsOfUse = "FIREFOX_SKIP_TERMS_OF_USE"
     public static let ClearProfile = "FIREFOX_CLEAR_PROFILE"
+    /// Clears the WKWebView website data store (cookies, local storage, cache) on launch. Web data
+    /// lives in WKWebsiteDataStore, which ClearProfile does not touch.
+    public static let ClearWebData = "FIREFOX_CLEAR_WEB_DATA"
     public static let StageServer = "FIREFOX_USE_STAGE_SERVER"
     public static let FxAChinaServer = "FIREFOX_USE_FXA_CHINA_SERVER"
     public static let DeviceName = "DEVICE_NAME"
