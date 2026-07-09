@@ -135,6 +135,7 @@
 		0BCC26AB2CFF15F90072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AA2CFF15F90072CD5A /* Shared */; };
 		0BCC26AD2CFF16220072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AC2CFF16220072CD5A /* Shared */; };
 		0BCC26AF2CFF16FF0072CD5A /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AE2CFF16FF0072CD5A /* GCDWebServers */; };
+		A5163EFB4448DCBC295F4B00 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 3802E29A8D8E43B4A359EBC5 /* GCDWebServers */; };
 		0BCC26B12CFF17250072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26B02CFF17250072CD5A /* Shared */; };
 		0BCC26B32CFF18C40072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26B22CFF18C40072CD5A /* Shared */; };
 		0BD049CE2DFC4AAE00614E61 /* PopupHTMLSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD049CD2DFC4A9C00614E61 /* PopupHTMLSetting.swift */; };
@@ -12268,6 +12269,7 @@
 			files = (
 				C26B96D72F29188100D4B140 /* TestKit in Frameworks */,
 				EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */,
+				A5163EFB4448DCBC295F4B00 /* GCDWebServers in Frameworks */,
 				43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */,
 				E5C2BA922EA9054E001E3DEF /* Shared in Frameworks */,
 				8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */,
@@ -18048,6 +18050,7 @@
 				EDF5679F2C8B51DC00FDB09D /* SiteImageView */,
 				EDF567A12C8B51E100FDB09D /* Kingfisher */,
 				0BCC26AC2CFF16220072CD5A /* Shared */,
+				3802E29A8D8E43B4A359EBC5 /* GCDWebServers */,
 				C26B96D62F29188100D4B140 /* TestKit */,
 			);
 			productName = ClientTests;
@@ -33239,15 +33242,20 @@
 			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
 			productName = GCDWebServers;
 		};
+		3802E29A8D8E43B4A359EBC5 /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
+		};
+		0BCC26A62CFF15A20072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
 		0BCC26A22CFF13E50072CD5A /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
 		};
 		0BCC26A42CFF150C0072CD5A /* Shared */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
-		};
-		0BCC26A62CFF15A20072CD5A /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
 		};
