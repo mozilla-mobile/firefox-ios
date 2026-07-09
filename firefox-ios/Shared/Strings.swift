@@ -2128,7 +2128,7 @@ extension String {
                 key: "NativeErrorPage.Wayback.Error.Search.v154",
                 tableName: "NativeErrorPage",
                 value: "Check for earlier version",
-                comment: "Search label of the error page when the app is unable to connect to the server and will show a wayback fallback.")
+                comment: "Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine.")
             public static let CouldNotReachLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.CouldNotReach.v154",
                 tableName: "NativeErrorPage",
