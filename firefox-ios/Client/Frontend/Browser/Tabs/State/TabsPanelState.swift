@@ -24,10 +24,10 @@ struct TabsPanelState: ScreenState, Equatable {
         return tabs.isEmpty
     }
 
-    init(appState: AppState, uuid: WindowUUID) {
+    init(appState: AppState, isPrivate: Bool, uuid: WindowUUID) {
         guard let panelState = appState.componentState(
             TabsPanelState.self,
-            for: .tabsPanel,
+            for: isPrivate ? .privateTabsPanel : .normalTabsPanel,
             window: uuid
         ) else {
             self.init(windowUUID: uuid)

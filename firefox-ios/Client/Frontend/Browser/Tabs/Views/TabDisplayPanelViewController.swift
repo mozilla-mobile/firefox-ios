@@ -98,7 +98,8 @@ final class TabDisplayPanelViewController: UIViewController,
         }
 
         MainActor.assumeIsolated {
-            unsubscribeFromRedux()
+            // Don't need this deinit if the tab tray handles subscription/unsubscription to redux...
+//            unsubscribeFromRedux()
         }
     }
 
@@ -312,33 +313,59 @@ final class TabDisplayPanelViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        let screenAction = ComponentAction(windowUUID: windowUUID,
-                                           actionType: ComponentActionType.addComponent,
-                                           component: .tabsPanel)
-        store.dispatch(screenAction)
+        switch panelType {
+        case .tabs:
+            let screenAction = ComponentAction(windowUUID: windowUUID,
+                                               actionType: ComponentActionType.addComponent,
+                                               component: .normalTabsPanel)
+            store.dispatch(screenAction)
+        case .privateTabs:
+            let screenAction = ComponentAction(windowUUID: windowUUID,
+                                               actionType: ComponentActionType.addComponent,
+                                               component: .privateTabsPanel)
+            store.dispatch(screenAction)
+        case .syncedTabs:
+            // This is handled by a different view controller
+            break
+        }
 
         let didLoadAction = TabPanelViewAction(panelType: panelType,
                                                windowUUID: windowUUID,
                                                actionType: TabPanelViewActionType.tabPanelDidLoad)
         store.dispatch(didLoadAction)
 
+        print("🐉  - TABDISPLAYPANEL VC - subscribe \(panelType) \(self)")
+        let isPrivate = self.panelType == .privateTabs // Do not want to capture self in subscriptions **
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
-                return TabsPanelState(appState: appState, uuid: uuid)
+                return TabsPanelState(appState: appState, isPrivate: isPrivate, uuid: uuid)
             })
         })
     }
 
     func unsubscribeFromRedux() {
-        let action = ComponentAction(windowUUID: windowUUID,
-                                     actionType: ComponentActionType.removeComponent,
-                                     component: .tabsPanel)
-        store.dispatch(action)
+        print("🐉  - TABDISPLAYPANEL VC - UNsubscribe \(panelType) \(self)")
+        switch panelType {
+        case .tabs:
+            let action = ComponentAction(windowUUID: windowUUID,
+                                         actionType: ComponentActionType.removeComponent,
+                                         component: .normalTabsPanel)
+            store.dispatch(action)
+        case .privateTabs:
+            let action = ComponentAction(windowUUID: windowUUID,
+                                         actionType: ComponentActionType.removeComponent,
+                                         component: .privateTabsPanel)
+            store.dispatch(action)
+        case .syncedTabs:
+            // This is handled by a different view controller
+            break
+        }
     }
 
     func newState(state: TabsPanelState) {
         guard state != tabsState else { return }
+        print("🐉  - TabDisplayPanel \(self) newState \(panelType)  | tab count: \(state.tabs.count)")
 
         tabsState = state
         tabDisplayView.newState(state: tabsState)

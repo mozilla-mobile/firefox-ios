@@ -12,7 +12,8 @@ enum ComponentState: Sendable, Equatable {
     case mainMenu(MainMenuState)
     case microsurvey(MicrosurveyState)
     case remoteTabsPanel(RemoteTabsPanelState)
-    case tabsPanel(TabsPanelState)
+    case normalTabsPanel(TabsPanelState)
+    case privateTabsPanel(TabsPanelState)
     case tabPeek(TabPeekState)
     case tabsTray(TabTrayState)
     case themeSettings(ThemeSettingsState)
@@ -36,7 +37,8 @@ enum ComponentState: Sendable, Equatable {
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         case .tabPeek(let state): return .tabPeek(TabPeekState.reducer(state, action))
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
-        case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
+        case .normalTabsPanel(let state): return .normalTabsPanel(TabsPanelState.reducer(state, action))
+        case .privateTabsPanel(let state): return .privateTabsPanel(TabsPanelState.reducer(state, action))
         case .termsOfUse(let state): return .termsOfUse(TermsOfUseState.reducer(state, action))
         case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
         case .trackingProtection(let state): return .trackingProtection(TrackingProtectionState.reducer(state, action))
@@ -61,7 +63,8 @@ enum ComponentState: Sendable, Equatable {
         case .mainMenu: return .mainMenu
         case .microsurvey: return .microsurvey
         case .remoteTabsPanel: return .remoteTabsPanel
-        case .tabsPanel: return .tabsPanel
+        case .normalTabsPanel: return .normalTabsPanel
+        case .privateTabsPanel: return .privateTabsPanel
         case .tabPeek: return .tabPeek
         case .tabsTray: return .tabsTray
         case .themeSettings: return .themeSettings
@@ -84,7 +87,8 @@ enum ComponentState: Sendable, Equatable {
         case .mainMenu(let state): return state.windowUUID
         case .microsurvey(let state): return state.windowUUID
         case .remoteTabsPanel(let state): return state.windowUUID
-        case .tabsPanel(let state): return state.windowUUID
+        case .normalTabsPanel(let state): return state.windowUUID
+        case .privateTabsPanel(let state): return state.windowUUID
         case .tabPeek(let state): return state.windowUUID
         case .tabsTray(let state): return state.windowUUID
         case .themeSettings(let state): return state.windowUUID
@@ -129,10 +133,20 @@ struct PresentedComponentsState: Sendable, Equatable {
 
         switch action.actionType {
         case ComponentActionType.removeComponent:
+            switch action.component {
+            case .tabsTray, .normalTabsPanel, .privateTabsPanel:
+                print("🐉  - PresentedComponentState remove Component \(action.component)")
+            default: break
+            }
             components = components.filter({
                 return $0.associatedAppComponent != action.component || $0.windowUUID != action.windowUUID
             })
         case ComponentActionType.addComponent:
+            switch action.component {
+            case .tabsTray, .normalTabsPanel, .privateTabsPanel:
+                print("🐉  - PresentedComponentState add Component \(action.component)")
+            default: break
+            }
             let uuid = action.windowUUID
             switch action.component {
             case .browserViewController:
@@ -147,8 +161,10 @@ struct PresentedComponentsState: Sendable, Equatable {
                 components.append(.remoteTabsPanel(RemoteTabsPanelState(windowUUID: uuid)))
             case .tabsTray:
                 components.append(.tabsTray(TabTrayState(windowUUID: uuid)))
-            case .tabsPanel:
-                components.append(.tabsPanel(TabsPanelState(windowUUID: uuid)))
+            case .normalTabsPanel:
+                components.append(.normalTabsPanel(TabsPanelState(windowUUID: uuid)))
+            case .privateTabsPanel:
+                components.append(.privateTabsPanel(TabsPanelState(windowUUID: uuid)))
             case .tabPeek:
                 components.append(.tabPeek(TabPeekState(windowUUID: uuid)))
             case .themeSettings:

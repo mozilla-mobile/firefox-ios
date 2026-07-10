@@ -103,8 +103,10 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
         // Both screenshotTaken and screenshotRestored fall through here so the tab tray
         // rebinds with the new `tab.screenshot`
+        // FIXME: But which panel do we use? It's weird we are getting the tab state to do this. Maybe isPrivate
+        // should be passed in this closeTab action instead.
         guard let tabsState = state.componentState(TabsPanelState.self,
-                                                   for: .tabsPanel,
+                                                   for: .normalTabsPanel,
                                                    window: action.windowUUID) else { return }
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
@@ -125,8 +127,10 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             copyURL(tabID: tabUUID, uuid: action.windowUUID)
 
         case TabPeekActionType.closeTab:
+            // FIXME: But which panel do we use? It's weird we are getting the tab state to do this. Maybe isPrivate
+            // should be passed in this closeTab action instead.
             guard let tabsState = state.componentState(TabsPanelState.self,
-                                                       for: .tabsPanel,
+                                                       for: .normalTabsPanel,
                                                        window: action.windowUUID) else { return }
             tabPeekCloseTab(with: tabUUID,
                             uuid: action.windowUUID,
@@ -490,7 +494,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+        // FIXME: But which panel do we use? It's weird we are getting the tab state to do this. Maybe isPrivate
+        // should be passed in this closeTab action instead.
+        guard let tabsState = state.componentState(TabsPanelState.self, for: .normalTabsPanel, window: uuid) else { return }
 
         tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
         tabManager?.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)

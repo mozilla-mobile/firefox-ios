@@ -413,6 +413,15 @@ final class TabTrayViewController: UIViewController,
 
         segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
         if tabTrayState.shouldDismiss {
+            // FIXME: Something hacky like this works instead of the TabDisplayPanelViewController deinit to unsubscribe.
+            // However, we would need a better way than this to signal the tab tray is closing to all the child
+            // TabDisplayPanelViewControllers, however.
+            // For completion's sake, if we use a solution like this the TabTray should both tell the children when to
+            // unsubscribe AND when to subscribe, based on its own lifecycle.
+            for child in childPanelControllers {
+                // Tell every TabDisplayPanelViewController that the view is closing
+                (child.viewControllers.first as? TabDisplayPanelViewController)?.unsubscribeFromRedux()
+            }
             delegate?.didFinish()
         }
 

@@ -67,6 +67,8 @@ class TabTrayCoordinator: BaseCoordinator,
                                                              dragAndDropDelegate: dragAndDropDelegate)
         let syncTabs = RemoteTabsPanel(windowUUID: windowUUID)
 
+        print("🐉  - TabTrayCoordinator make panels:    normal \(regularTabsPanel)    private \(privateTabsPanel)")
+
         let panels: [UIViewController]
         // Panels order is different for the experiment
         if tabTrayUtils.shouldDisplayExperimentUI() {
@@ -119,12 +121,14 @@ class TabTrayCoordinator: BaseCoordinator,
 
     // MARK: - ParentCoordinatorDelegate
     func didFinish(from childCoordinator: Coordinator) {
+        print("🐉  - TabTrayCoordinator didFinish 1 \(self)")
         remove(child: childCoordinator)
         parentCoordinator?.didDismissTabTray(from: self)
     }
 
     // MARK: - TabTrayViewControllerDelegate
     func didFinish() {
+        print("🐉  - TabTrayCoordinator didFinish 2 \(self)")
         parentCoordinator?.didDismissTabTray(from: self)
     }
 }

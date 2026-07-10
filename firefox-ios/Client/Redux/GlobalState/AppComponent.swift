@@ -9,7 +9,8 @@ enum AppComponent {
     case homepage
     case themeSettings
     case tabsTray
-    case tabsPanel
+    case normalTabsPanel // FIXME: Or instead of 2 enums, one with an associated value?
+    case privateTabsPanel
     case remoteTabsPanel
     case tabPeek
     case mainMenu

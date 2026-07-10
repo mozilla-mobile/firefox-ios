@@ -26,7 +26,8 @@ struct AppState: StateType, Sendable {
                 case (.mainMenu(let state), .mainMenu): return state as? S
                 case (.microsurvey(let state), .microsurvey): return state as? S
                 case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
-                case (.tabsPanel(let state), .tabsPanel): return state as? S
+                case (.normalTabsPanel(let state), .normalTabsPanel): return state as? S
+                case (.privateTabsPanel(let state), .privateTabsPanel): return state as? S
                 case (.tabPeek(let state), .tabPeek): return state as? S
                 case (.tabsTray(let state), .tabsTray): return state as? S
                 case (.termsOfUse(let state), .termsOfUse): return state as? S

@@ -1002,6 +1002,7 @@ final class BrowserCoordinator: BaseCoordinator,
         }
         navigationController.modalPresentationStyle = modalPresentationStyle
 
+        print("🐉  - BrowserCoordinator - Create TabTrayCoordinator")
         let tabTrayCoordinator = TabTrayCoordinator(
             router: DefaultRouter(navigationController: navigationController),
             tabTraySection: selectedPanel,
@@ -1009,6 +1010,7 @@ final class BrowserCoordinator: BaseCoordinator,
             tabManager: tabManager
         )
         tabTrayCoordinator.parentCoordinator = self
+        print("🐉  - BrowserCoordinator - add TabTrayCoordinator")
         add(child: tabTrayCoordinator)
         tabTrayCoordinator.start(with: selectedPanel)
 
