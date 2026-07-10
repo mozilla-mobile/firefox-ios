@@ -815,14 +815,54 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
+    func testDidTapButton_tapOnGoogleLensButton_recordsButtonTappedTelemetry() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            buttonType: .googleLens,
+            gestureType: .tap,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
+        )
+        let event = GleanMetrics.ToolbarGoogleLensButton.tapped
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     func testDidTapButton_tapOnGoogleLensPhotoLibraryButton_dispatchesShowGoogleLensPhotoPicker() throws {
         try didTapButton(buttonType: .googleLensPhotoLibrary,
                          expectedActionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
+
+        try assertGoogleLensContextMenuOptionSelected(option: .photoPicker)
     }
 
     func testDidTapButton_tapOnGoogleLensTakePhotoButton_dispatchesShowGoogleLensCamera() throws {
         try didTapButton(buttonType: .googleLensTakePhoto,
                          expectedActionType: GeneralBrowserActionType.showGoogleLensCamera)
+
+        try assertGoogleLensContextMenuOptionSelected(option: .camera)
+    }
+
+    private func assertGoogleLensContextMenuOptionSelected(
+        option: ToolbarTelemetry.GoogleLensContextMenuOption
+    ) throws {
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first
+                as? EventMetricType<GleanMetrics.ToolbarGoogleLensButtonContextMenu.OptionSelectedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.ToolbarGoogleLensButtonContextMenu.OptionSelectedExtra
+        )
+        let event = GleanMetrics.ToolbarGoogleLensButtonContextMenu.optionSelected
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+        XCTAssertEqual(savedExtras.option, option.rawValue)
     }
 
     func testDidTapButton_tapOnSearchButton_dispatchesDidStartEditingUrl() throws {
