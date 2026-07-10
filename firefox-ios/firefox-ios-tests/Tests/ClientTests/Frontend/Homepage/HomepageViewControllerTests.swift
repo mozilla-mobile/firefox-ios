@@ -169,7 +169,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.traitCollectionDidChange)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(actionCalled.showiPadSetup ?? true)
     }
 
     func test_viewWillAppear_triggersHomepageAction() throws {

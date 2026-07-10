@@ -50,7 +50,7 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
         try audioManager.prepareAndStartEngine()
 
         // Start recognizer task if available
-        guard let speechRecognizer, speechRecognizer.isAvailable else {
+        guard let speechRecognizer, speechRecognizer.isAvailable, speechRecognizer.supportsOnDeviceRecognition else {
             throw SpeechError.recognizerNotAvailable
         }
 

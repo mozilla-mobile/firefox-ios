@@ -133,7 +133,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showGoogleLensCamera()
 
     @MainActor
-    func searchGoogleLens(with image: UIImage)
+    func searchGoogleLens(with image: UIImage, entryPoint: GoogleLensUploadEntryPoint)
 
     @MainActor
     func showQuickAnswers(transitionType: QuickAnswersTransitionType)

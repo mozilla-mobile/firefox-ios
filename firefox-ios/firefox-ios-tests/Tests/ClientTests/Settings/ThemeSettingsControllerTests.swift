@@ -28,17 +28,13 @@ class ThemeSettingsControllerTests: XCTestCase, StoreTestUtility {
     @MainActor
     func testUseSystemAppearance_WithRedux() {
         let subject = createSubject()
+        // Force viewDidLoad so the controller subscribes to Redux before we toggle
+        subject.loadViewIfNeeded()
         let themeSwitch = createUseSystemThemeSwitch(isOn: true)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
 
-        // Needed to wait for Redux action handled async in main thread
-        let expectation = self.expectation(description: "Redux Middleware")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            expectation.fulfill()
-            XCTAssertTrue(subject.isSystemThemeOn)
-            XCTAssertEqual(subject.tableView.numberOfSections, 1)
-        }
-        waitForExpectations(timeout: 1)
+        XCTAssertTrue(subject.isSystemThemeOn)
+        XCTAssertEqual(subject.tableView.numberOfSections, 1)
     }
 
     func testUseCustomAppearance_WithRedux() {

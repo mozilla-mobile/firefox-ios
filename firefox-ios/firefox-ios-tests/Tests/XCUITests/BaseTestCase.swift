@@ -88,8 +88,16 @@ class BaseTestCase: XCTestCase {
         }
         if icon.exists {
             if #available(iOS 26, *), iPad() {
-                iPadIcon.press(forDuration: 1.0)
-                springboard.buttons["Options"].tapWithRetry()
+                // iPad can match >1 icon and may lack the "Options" step. Press whichever icon
+                // opens the menu (fallback to primary) and tap "Options" only if present.
+                let removeAppButton = springboard.buttons["Remove App"]
+                for candidate in [iPadIcon, icon] where candidate.exists {
+                    candidate.press(forDuration: 1.0)
+                    springboard.buttons["Options"].tapIfExists()
+                    if removeAppButton.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
+                        break
+                    }
+                }
             } else {
                 icon.press(forDuration: 1.0)
             }
@@ -413,7 +421,7 @@ class BaseTestCase: XCTestCase {
         }
         var attempts = 3
         repeat {
-            passcodeInput.tapAndTypeText("foo\n")
+            passcodeInput.tapAndTypeTextWhenFocused("foo\n")
             if mozWaitForElementToNotExist(passcodeInput, timeout: TIMEOUT, failOnTimeout: false) {
                 return
             }
@@ -718,6 +726,48 @@ extension XCUIElement {
         self.mozWaitForElementToExist(timeout: timeout)
         self.tap()
         self.typeText(text)
+    }
+
+    /// Whether the element currently holds keyboard focus, read via KVC on the accessibility snapshot.
+    var hasKeyboardFocus: Bool {
+        return (self.value(forKey: "hasKeyboardFocus") as? Bool) ?? false
+    }
+
+    /// Waits until the element reports keyboard focus. Returns false on timeout instead of failing.
+    @discardableResult
+    func waitForKeyboardFocus(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let predicate = NSPredicate(format: "hasKeyboardFocus == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    /// Taps and types text, but only once the field has keyboard focus.
+    ///
+    /// On CI some fields (the springboard passcode overlay, the address bar) are occasionally
+    /// presented without keyboard focus, so a plain `typeText` raises "Neither element nor any
+    /// descendant has keyboard focus" and aborts the test. This re-taps up to `tapAttempts` times
+    /// until focus is acquired before typing, and returns false (rather than failing hard) if it
+    /// never is, so callers can retry.
+    @discardableResult
+    func tapAndTypeTextWhenFocused(
+        _ text: String,
+        timeout: TimeInterval? = TIMEOUT,
+        focusTimeout: TimeInterval = 5,
+        tapAttempts: Int = 3
+    ) -> Bool {
+        self.mozWaitForElementToExist(timeout: timeout)
+        var attempts = tapAttempts
+        repeat {
+            if !hasKeyboardFocus {
+                self.tap()
+            }
+            if waitForKeyboardFocus(timeout: focusTimeout) {
+                self.typeText(text)
+                return true
+            }
+            attempts -= 1
+        } while attempts > 0
+        return false
     }
 
     func tapWithRetry() {

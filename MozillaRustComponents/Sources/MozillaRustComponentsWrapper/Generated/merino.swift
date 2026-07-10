@@ -2432,11 +2432,14 @@ public enum CuratedRecommendationLocale: Equatable, Hashable, Codable {
     case en
     case enCa
     case enGb
+    case enIe
     case enUs
     case de
     case deDe
     case deAt
     case deCh
+    case pl
+    case plPl
 
 
 
@@ -2476,15 +2479,21 @@ public struct FfiConverterTypeCuratedRecommendationLocale: FfiConverterRustBuffe
         
         case 9: return .enGb
         
-        case 10: return .enUs
+        case 10: return .enIe
         
-        case 11: return .de
+        case 11: return .enUs
         
-        case 12: return .deDe
+        case 12: return .de
         
-        case 13: return .deAt
+        case 13: return .deDe
         
-        case 14: return .deCh
+        case 14: return .deAt
+        
+        case 15: return .deCh
+        
+        case 16: return .pl
+        
+        case 17: return .plPl
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -2530,24 +2539,36 @@ public struct FfiConverterTypeCuratedRecommendationLocale: FfiConverterRustBuffe
             writeInt(&buf, Int32(9))
         
         
-        case .enUs:
+        case .enIe:
             writeInt(&buf, Int32(10))
         
         
-        case .de:
+        case .enUs:
             writeInt(&buf, Int32(11))
         
         
-        case .deDe:
+        case .de:
             writeInt(&buf, Int32(12))
         
         
-        case .deAt:
+        case .deDe:
             writeInt(&buf, Int32(13))
         
         
-        case .deCh:
+        case .deAt:
             writeInt(&buf, Int32(14))
+        
+        
+        case .deCh:
+            writeInt(&buf, Int32(15))
+        
+        
+        case .pl:
+            writeInt(&buf, Int32(16))
+        
+        
+        case .plPl:
+            writeInt(&buf, Int32(17))
         
         }
     }
