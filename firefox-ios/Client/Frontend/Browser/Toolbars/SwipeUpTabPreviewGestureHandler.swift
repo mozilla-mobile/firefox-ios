@@ -92,6 +92,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
     }
 
     func setupGesture(on view: UIView) {
+        // TODO: FXIOS-16236 Gate creation of gesture recognizers behind feature flags
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
         view.addGestureRecognizer(panGesture)
         panGesture.delegate = self
@@ -136,8 +137,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
     }
 
     @objc
-    private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        if !isInteractiveGestureEnabled { return }
+    private func handleGestureState(_ gesture: UIPanGestureRecognizer) {
         guard let tab = tabManager?.selectedTab else { return }
         switch gesture.state {
         case .began:
@@ -169,26 +169,26 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
             case .closeTab:
                 // TODO: - FXIOS-16236 Uncomment when feature flags are properly set up
                 // if !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayCloseTab) {
-                    fallthrough
+                fallthrough
                 /* }
-                UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
-                    tabPreview.tossPreview()
-                } completion: { [self] _ in
-                    store.dispatch(
-                        TabPanelViewAction(
-                            panelType: .tabs,
-                            tabUUID: tabManager?.selectedTab?.tabUUID,
-                            windowUUID: windowUUID,
-                            actionType: TabPanelViewActionType.closeTab
-                        )
-                    )
-                    UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
-                        tabPreview.alpha = 0.0
-                        tabPreview.layer.zPosition = 0
-                    } completion: { [weak self] _ in
-                        self?.tabPreview.restore()
-                    }
-                }
+                 UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
+                 tabPreview.tossPreview()
+                 } completion: { [self] _ in
+                 store.dispatch(
+                 TabPanelViewAction(
+                 panelType: .tabs,
+                 tabUUID: tabManager?.selectedTab?.tabUUID,
+                 windowUUID: windowUUID,
+                 actionType: TabPanelViewActionType.closeTab
+                 )
+                 )
+                 UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
+                 tabPreview.alpha = 0.0
+                 tabPreview.layer.zPosition = 0
+                 } completion: { [weak self] _ in
+                 self?.tabPreview.restore()
+                 }
+                 }
                  */
             case .openTabTray:
                 // let cellBounds = tabPreview.previewCardFrame
@@ -208,6 +208,12 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
         default:
             break
         }
+    }
+
+    @objc
+    private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        if !isInteractiveGestureEnabled { return }
+        handleGestureState(gesture)
     }
 
     @objc
