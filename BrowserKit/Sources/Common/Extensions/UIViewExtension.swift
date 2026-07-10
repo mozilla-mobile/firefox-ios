@@ -82,4 +82,13 @@ extension UIView {
         layer.shadowRadius = shadow.blurRadius / 2
         layer.shadowOpacity = shadow.opacity
     }
+    
+    /// Sets the corner radius to the devices current corner radius
+    func applyScreenCornerRadius() {
+        if #available(iOS 26.0, *) {
+            self.cornerConfiguration = UICornerConfiguration.corners(radius: .containerConcentric(minimum: 0))
+        } else {
+            self.layer.cornerRadius = UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0
+        }
+    }
 }
