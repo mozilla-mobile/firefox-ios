@@ -33,10 +33,6 @@ final class CrossDissolveTransitionAnimator: NSObject,
         static let springAnimationDamping: CGFloat = 0.8
         static let springAnimationVelocity: CGFloat = 1.0
         static let crossDissolveInitialScale: CGFloat = 0.2
-        @MainActor
-        static let screenCornerRadius: CGFloat = {
-            return DeviceInfo.deviceCornerRadius ?? 0.0
-        }()
     }
     private let themeManager: any ThemeManager
     private let windowUUID: WindowUUID
@@ -96,7 +92,7 @@ final class CrossDissolveTransitionAnimator: NSObject,
         presentedController.view.transform = presentationInitialTransform(in: containerView)
         presentedController.view.alpha = 0.0
         presentedController.view.clipsToBounds = true
-        presentedController.view.layer.cornerRadius = UX.screenCornerRadius
+        presentedController.view.applyScreenCornerRadius()
 
         UIView.animate(
             withDuration: UX.springAnimationDuration,
