@@ -464,7 +464,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     /// As a work around for unit tests, we should release each middleware's provider closures from memory by assigning an
     /// empty closure, which does not strongly retain `self`.
     private func releaseMiddlewareProvidersFromMemory(_ subject: SummarizerMiddleware) {
-        subject.summarizerProvider = emptyLegacyMiddlewareMethodFactory()
+        subject.summarizerProvider = emptyMiddlewareProviderFactory()
     }
 
     private func setupWebViewForTabManager(isHomePage: Bool = false) {

@@ -1337,7 +1337,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     /// As a work around for unit tests, we should release each middleware's provider closures from memory by assigning an
     /// empty closure, which does not strongly retain `self`.
     private func releaseMiddlewareProvidersFromMemory(_ subject: WorldCupMiddleware) {
-        subject.worldCupProvider = emptyLegacyMiddlewareMethodFactory()
+        subject.worldCupProvider = emptyMiddlewareProviderFactory()
     }
 
     /// Hands the middleware a `MockWorldCupFeed` so tests can assert on the
