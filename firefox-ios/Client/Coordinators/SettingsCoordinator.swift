@@ -459,11 +459,6 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        let action = ComponentAction(windowUUID: windowUUID,
-                                     actionType: ComponentActionType.addComponent,
-                                     component: .themeSettings)
-        store.dispatch(action)
-
         let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
         let viewController = UIHostingController(rootView: appearanceView)
         viewController.title = .SettingsAppearanceTitle
