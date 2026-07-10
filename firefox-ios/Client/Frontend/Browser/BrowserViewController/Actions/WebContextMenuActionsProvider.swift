@@ -34,10 +34,10 @@ class WebContextMenuActionsProvider {
                 title: .ContextMenuOpenInNewTab,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
                 identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
-            ) { [weak self, weak currentTab] _ in
+            ) { [weak currentTab] _ in
                 guard let currentTab else { return }
                 addTab(url, false, currentTab)
-                self?.recordOptionSelectedTelemetry(option: .openInNewTab)
+                self.recordOptionSelectedTelemetry(option: .openInNewTab)
             })
     }
 
@@ -48,10 +48,10 @@ class WebContextMenuActionsProvider {
                 title: .ContextMenuOpenInNewPrivateTab,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode),
                 identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
-            ) { [weak self, weak currentTab] _ in
+            ) { [weak currentTab] _ in
                 guard let currentTab else { return }
                 addTab(url, true, currentTab)
-                self?.recordOptionSelectedTelemetry(option: .openInNewPrivateTab)
+                self.recordOptionSelectedTelemetry(option: .openInNewPrivateTab)
             })
     }
 
@@ -62,9 +62,9 @@ class WebContextMenuActionsProvider {
                 title: .ContextMenuBookmarkLink,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                 identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
-            ) { [weak self] _ in
+            ) { _ in
                 addBookmark(url.absoluteString, title, nil)
-                self?.recordOptionSelectedTelemetry(option: .bookmarkLink)
+                self.recordOptionSelectedTelemetry(option: .bookmarkLink)
                 BookmarksTelemetry().addBookmark(eventLabel: .pageActionMenu)
             }
         )
@@ -84,9 +84,9 @@ class WebContextMenuActionsProvider {
                 title: .RemoveBookmarkContextMenuTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
-            ) { [weak self] _ in
+            ) { _ in
                 removeBookmark(urlString, title, nil)
-                self?.recordOptionSelectedTelemetry(option: .removeBookmark)
+                self.recordOptionSelectedTelemetry(option: .removeBookmark)
                 BookmarksTelemetry().deleteBookmark(eventLabel: .pageActionMenu)
             }
         )
@@ -100,7 +100,7 @@ class WebContextMenuActionsProvider {
                 StandardImageIdentifiers.Large.download
             ),
             identifier: UIAction.Identifier("linkContextMenu.download")
-        ) { [weak self, weak currentTab] _ in
+        ) { [weak currentTab] _ in
             ensureMainThread {
                 guard let currentTab else { return }
                 // This checks if download is a blob, if yes, begin blob download process
@@ -111,7 +111,7 @@ class WebContextMenuActionsProvider {
                     assignWebView(currentTab.webView)
                     let request = URLRequest(url: url)
                     currentTab.webView?.load(request)
-                    self?.recordOptionSelectedTelemetry(option: .downloadLink)
+                    self.recordOptionSelectedTelemetry(option: .downloadLink)
                 }
             }
         })
@@ -123,9 +123,9 @@ class WebContextMenuActionsProvider {
             title: .ContextMenuCopyLink,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
             identifier: UIAction.Identifier("linkContextMenu.copyLink")
-        ) { [weak self] _ in
+        ) { _ in
             UIPasteboard.general.url = url
-            self?.recordOptionSelectedTelemetry(option: .copyLink)
+            self.recordOptionSelectedTelemetry(option: .copyLink)
         })
     }
 
@@ -140,7 +140,7 @@ class WebContextMenuActionsProvider {
             title: .ContextMenuShareLink,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
             identifier: UIAction.Identifier("linkContextMenu.share")
-        ) { [weak self] _ in
+        ) { _ in
             guard let tab = tabManager[webView],
                   let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
             else { return }
@@ -157,7 +157,7 @@ class WebContextMenuActionsProvider {
                 toastContainer: contentContainer,
                 popoverArrowDirection: .unknown
             )
-            self?.recordOptionSelectedTelemetry(option: .shareLink)
+            self.recordOptionSelectedTelemetry(option: .shareLink)
         })
     }
 
@@ -168,7 +168,7 @@ class WebContextMenuActionsProvider {
         actions.append(UIAction(
             title: .ContextMenuSaveImage,
             identifier: UIAction.Identifier("linkContextMenu.saveImage")
-        ) { [weak self] _ in
+        ) { _ in
             getImageData(url) { data in
                 if url.pathExtension.lowercased() == "gif" {
                     PHPhotoLibrary.shared().performChanges {
@@ -182,7 +182,7 @@ class WebContextMenuActionsProvider {
                     }
                 }
             }
-            self?.recordOptionSelectedTelemetry(option: .saveImage)
+            self.recordOptionSelectedTelemetry(option: .saveImage)
         })
     }
 
@@ -192,9 +192,9 @@ class WebContextMenuActionsProvider {
             title: .ContextMenuGoogleLens,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Medium.logoGoogleLens),
             identifier: UIAction.Identifier("linkContextMenu.googleLens")
-        ) { [weak self] _ in
+        ) { _ in
             searchGoogleLens(url)
-            self?.recordOptionSelectedTelemetry(option: .googleLens)
+            self.recordOptionSelectedTelemetry(option: .googleLens)
         })
     }
 
@@ -203,27 +203,24 @@ class WebContextMenuActionsProvider {
         actions.append(UIAction(
             title: .ContextMenuCopyImage,
             identifier: UIAction.Identifier("linkContextMenu.copyImage")
-        ) { [weak self] _ in
-            guard let self else { return }
+        ) { _ in
             // put the actual image on the clipboard
             // do this asynchronously just in case we're in a low bandwidth situation
             let pasteboard = UIPasteboard.general
             pasteboard.url = url as URL
             let changeCount = pasteboard.changeCount
             let application = UIApplication.shared
-            self.taskId = application.beginBackgroundTask(expirationHandler: { [weak self] in
-                guard let taskId = self?.taskId else { return }
-                application.endBackgroundTask(taskId)
+            self.taskId = application.beginBackgroundTask(expirationHandler: {
+                application.endBackgroundTask(self.taskId)
             })
 
             makeURLSession(
                 userAgent: UserAgent.fxaUserAgent,
                 configuration: URLSessionConfiguration.defaultMPTCP
-            ).dataTask(with: url) { [weak self] (data, response, error) in
+            ).dataTask(with: url) { (data, response, error) in
                 ensureMainThread {
-                    guard let taskId = self?.taskId else { return }
                     guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
-                        application.endBackgroundTask(taskId)
+                        application.endBackgroundTask(self.taskId)
                         return
                     }
 
@@ -236,7 +233,7 @@ class WebContextMenuActionsProvider {
                         pasteboard.addImageWithData(imageData, forURL: url)
                     }
 
-                    application.endBackgroundTask(taskId)
+                    application.endBackgroundTask(self.taskId)
                 }
             }.resume()
             self.recordOptionSelectedTelemetry(option: .copyImage)
@@ -248,9 +245,9 @@ class WebContextMenuActionsProvider {
         actions.append(UIAction(
             title: .ContextMenuCopyImageLink,
             identifier: UIAction.Identifier("linkContextMenu.copyImageLink")
-        ) { [weak self] _ in
+        ) { _ in
             UIPasteboard.general.url = url as URL
-            self?.recordOptionSelectedTelemetry(option: .copyImageLink)
+            self.recordOptionSelectedTelemetry(option: .copyImageLink)
         })
     }
 
