@@ -12,7 +12,7 @@ class FakeReduxMiddleware {
 
     lazy var fakeProvider: Middleware<FakeReduxState> = (legacyFakeProvider, modernFakeProvider)
 
-    lazy var modernFakeProvider: MiddlewareMethod<FakeReduxState> = { [self] state, action, windowUUID in
+    lazy var modernFakeProvider: MiddlewareClosure<FakeReduxState> = { [self] state, action, windowUUID in
         // Handles one type of action
         guard let action = action as? FakeReduxModernAction else { return }
 
@@ -45,7 +45,7 @@ class FakeReduxMiddleware {
         }
     }
 
-    lazy var legacyFakeProvider: LegacyMiddlewareMethod<FakeReduxState> = { [self] state, action in
+    lazy var legacyFakeProvider: LegacyMiddlewareClosure<FakeReduxState> = { [self] state, action in
         // Handles one type of action
         guard let actionType = action.actionType as? FakeReduxActionType else { return }
 

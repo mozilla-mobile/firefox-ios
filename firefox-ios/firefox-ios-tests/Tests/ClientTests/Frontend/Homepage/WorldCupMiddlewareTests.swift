@@ -1338,8 +1338,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     /// empty closure, which does not strongly retain `self`.
     private func releaseMiddlewareProvidersFromMemory(_ subject: WorldCupMiddleware) {
         subject.worldCupProvider = emptyMiddlewareProviderFactory()
-        subject.legacyProvider = emptyLegacyMiddlewareMethodFactory()
-        subject.modernProvider = emptyMiddlewareMethodFactory()
+        subject.legacyProvider = emptyLegacyMiddlewareFactory()
+        subject.modernProvider = emptyMiddlewareFactory()
     }
 
     /// Hands the middleware a `MockWorldCupFeed` so tests can assert on the

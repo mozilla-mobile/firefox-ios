@@ -11,21 +11,21 @@ import Redux
 /// - Returns: Returns an empty provider implementation which does not retain `self`.
 public func emptyMiddlewareProviderFactory<T>() -> Middleware<T> {
     let emptyProvider: Middleware<T> = (
-        legacyMiddleware: emptyLegacyMiddlewareMethodFactory(),
-        modernMiddleware: emptyMiddlewareMethodFactory()
+        legacyMiddleware: emptyLegacyMiddlewareFactory(),
+        modernMiddleware: emptyMiddlewareFactory()
     )
 
     return emptyProvider
 }
 
-public func emptyMiddlewareMethodFactory<T>() -> MiddlewareMethod<T> {
-    let emptyProvider: MiddlewareMethod<T> = { _, _, _ in }
+public func emptyMiddlewareFactory<T>() -> MiddlewareClosure<T> {
+    let emptyProvider: MiddlewareClosure<T> = { _, _, _ in }
 
     return emptyProvider
 }
 
-public func emptyLegacyMiddlewareMethodFactory<T>() -> LegacyMiddlewareMethod<T> {
-    let emptyProvider: LegacyMiddlewareMethod<T> = { _, _ in }
+public func emptyLegacyMiddlewareFactory<T>() -> LegacyMiddlewareClosure<T> {
+    let emptyProvider: LegacyMiddlewareClosure<T> = { _, _ in }
 
     return emptyProvider
 }

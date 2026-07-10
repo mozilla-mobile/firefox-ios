@@ -509,7 +509,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
     /// empty closure, which does not strongly retain `self`.
     private func releaseMiddlewareProvidersFromMemory(_ subject: TranslationSettingsMiddleware) {
         subject.translationSettingsProvider = emptyMiddlewareProviderFactory()
-        subject.legacyProvider = emptyLegacyMiddlewareMethodFactory()
-        subject.modernProvider = emptyMiddlewareMethodFactory()
+        subject.legacyProvider = emptyLegacyMiddlewareFactory()
+        subject.modernProvider = emptyMiddlewareFactory()
     }
 }

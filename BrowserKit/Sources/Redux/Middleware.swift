@@ -5,14 +5,14 @@
 import Foundation
 import Common
 
-/// Redux middlewares consume `Action`s and are designed to perform logic with side effects (e.g. API calls, logging, or
-/// accessing storage).
-/// Currently our middleware providers must implement a legacy provider and a modern provider as we migrate from consuming
-/// `Action`s to consuming `ModernAction`s.
+/// Redux middleware providers consume `Action`s and are designed to perform logic with side effects (e.g. API calls,
+/// logging, or accessing storage).
+/// Currently, our middleware providers must implement a legacy provider and a modern provider as we migrate from consuming
+/// legacy `Action`s to the new `ModernAction`s.
 public typealias Middleware<State> = (
-    legacyMiddleware: LegacyMiddlewareMethod<State>,
-    modernMiddleware: MiddlewareMethod<State>
+    legacyMiddleware: LegacyMiddlewareClosure<State>,
+    modernMiddleware: MiddlewareClosure<State>
 )
 
-public typealias MiddlewareMethod<State> = @MainActor (State, ModernAction, WindowUUID) -> Void
-public typealias LegacyMiddlewareMethod<State> = @MainActor (State, Action) -> Void
+public typealias MiddlewareClosure<State> = @MainActor (State, ModernAction, WindowUUID) -> Void
+public typealias LegacyMiddlewareClosure<State> = @MainActor (State, Action) -> Void

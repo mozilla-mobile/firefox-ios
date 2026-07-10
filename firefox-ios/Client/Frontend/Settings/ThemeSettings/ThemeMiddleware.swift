@@ -38,11 +38,11 @@ final class ThemeManagerMiddleware: ThemeManagerProvider {
 
     lazy var themeManagerProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
-    lazy var modernProvider: MiddlewareMethod<AppState> = { [self] state, action, windowUUID in
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
         // Does not test any modern actions
     }
 
-    lazy var legacyProvider: LegacyMiddlewareMethod<AppState> = { [self] state, action in
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         if let action = action as? ThemeSettingsViewAction {
             self.resolveThemeSettingsViewActionType(action: action)
         } else if let action = action as? PrivateModeAction {
