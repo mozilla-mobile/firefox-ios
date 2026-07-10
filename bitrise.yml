@@ -2094,6 +2094,10 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+    envs:
+    - opts:
+        is_expand: false
+      MAX_TEST_REPETITIONS: "3"
     steps:
     - xcode-test@6:
         timeout: 6000
@@ -2104,7 +2108,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
-        - maximum_test_repetitions: 3
+        - maximum_test_repetitions: $MAX_TEST_REPETITIONS
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2" -skipMacroValidation'
     - deploy-to-bitrise-io@2: {}
     - script@1:
@@ -2151,6 +2155,7 @@ workflows:
         - fields: |
             iOS Simulator | iPhone 17 (iOS 26.5)
             Branch | ${BITRISE_GIT_BRANCH}
+            Maximum Test Repetitions | ${MAX_TEST_REPETITIONS}
             Failed Tests | ${UNIT_TESTS_FAILED_LIST}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
