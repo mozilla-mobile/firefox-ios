@@ -2135,7 +2135,7 @@ workflows:
     - slack@4:
         is_always_run: true
         inputs:
-        - webhook_url: $WEBHOOK_SLACK_FIREFOX_IOS_UNIT_TESTS
+        - webhook_url: "$SLACK_WEBHOOK"
         - channel: "#mobile-alerts-sandbox"
         - author_name: ''
         - pretext: ":white_check_mark: Firefox iOS Unit Tests"
