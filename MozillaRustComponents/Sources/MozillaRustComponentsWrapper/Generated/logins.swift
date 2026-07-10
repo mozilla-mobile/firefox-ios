@@ -985,6 +985,17 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     
     func delete(id: String) throws  -> Bool
     
+    /**
+     * Delete all logins. Returns the ids of the deleted logins.
+     */
+    func deleteAll() throws  -> [String]
+    
+    /**
+     * Delete all logins except the FxA session-credentials login. Returns the
+     * ids of the deleted logins.
+     */
+    func deleteAllExceptFxa() throws  -> [String]
+    
     func deleteMany(ids: [String]) throws  -> [Bool]
     
     /**
@@ -1074,6 +1085,11 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
      * generated.
      */
     func wipeLocal() throws 
+    
+    /**
+     * Like `wipe_local`, but preserves the FxA session-credentials login.
+     */
+    func wipeLocalExceptFxa() throws 
     
 }
 open class LoginStore: LoginStoreProtocol, @unchecked Sendable {
@@ -1243,6 +1259,29 @@ open func delete(id: String)throws  -> Bool  {
     uniffi_logins_fn_method_loginstore_delete(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(id),$0
+    )
+})
+}
+    
+    /**
+     * Delete all logins. Returns the ids of the deleted logins.
+     */
+open func deleteAll()throws  -> [String]  {
+    return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_delete_all(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+    /**
+     * Delete all logins except the FxA session-credentials login. Returns the
+     * ids of the deleted logins.
+     */
+open func deleteAllExceptFxa()throws  -> [String]  {
+    return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_delete_all_except_fxa(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -1456,6 +1495,16 @@ open func update(id: String, login: LoginEntry)throws  -> Login  {
      */
 open func wipeLocal()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_wipe_local(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+    /**
+     * Like `wipe_local`, but preserves the FxA session-credentials login.
+     */
+open func wipeLocalExceptFxa()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_wipe_local_except_fxa(
             self.uniffiCloneHandle(),$0
     )
 }
@@ -3135,6 +3184,12 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_delete() != 30748) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_logins_checksum_method_loginstore_delete_all() != 45702) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_delete_all_except_fxa() != 40481) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_logins_checksum_method_loginstore_delete_many() != 49226) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -3193,6 +3248,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_wipe_local() != 53422) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_wipe_local_except_fxa() != 20250) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginsbridgedengine_apply() != 41329) {
