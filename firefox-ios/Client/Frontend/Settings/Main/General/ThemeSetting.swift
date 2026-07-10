@@ -20,14 +20,6 @@ class ThemeSetting: Setting {
     }
 
     override var status: NSAttributedString {
-        if themeManager.systemThemeIsOn {
-            return NSAttributedString(string: .SystemThemeSectionHeader)
-        } else if !themeManager.automaticBrightnessIsOn {
-            return NSAttributedString(string: .DisplayThemeManualStatusLabel)
-        } else if themeManager.automaticBrightnessIsOn {
-            return NSAttributedString(string: .DisplayThemeAutomaticStatusLabel)
-        }
-
         return NSAttributedString(string: "")
     }
 
