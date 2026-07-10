@@ -41,6 +41,9 @@ final class TabDisplayView: UIView,
     private var tabsSectionManager: TabsSectionManager
     private let windowUUID: WindowUUID
     var theme: Theme?
+
+    /// UUID of the tab currently minimizing into the tray during the open animation
+    var minimizingTabUUID: TabUUID?
     weak var dragAndDropDelegate: TabDisplayViewDragAndDropInteraction?
     private var tabTrayUtils: TabTrayUtils
 
@@ -62,6 +65,9 @@ final class TabDisplayView: UIView,
 
                     let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
                     cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId, newTabTitle: newTabTitle)
+                    if tab.tabUUID == self.minimizingTabUUID {
+                        cell.isHidden = true
+                    }
                     return cell
                 } else {
                     guard let cell = collectionView.dequeueReusableCell(

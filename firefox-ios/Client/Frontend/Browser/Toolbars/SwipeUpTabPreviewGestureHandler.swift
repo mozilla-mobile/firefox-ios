@@ -180,13 +180,13 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
                     }
                 }
             case .openTabTray:
-                // let cellBounds = tabPreview.previewCardFrame
+                let tabTrayAnimationSourceFrame = tabPreview.previewCardFrame
                 DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) {
                     self.tabPreview.dismissForTabTray()
                 }
                 store.dispatch(
                     GeneralBrowserAction(
-                        // cellBounds: cellBounds,
+                        tabTrayAnimationSourceFrame: tabTrayAnimationSourceFrame,
                         windowUUID: windowUUID,
                         actionType: GeneralBrowserActionType.showTabTray
                     )

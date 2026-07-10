@@ -102,6 +102,7 @@ class BrowserViewController: UIViewController,
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var searchController: SearchViewController?
+
     /// Bottom constraint of `searchController.view`. The anchor it targets depends on the search bar
     /// position (`overKeyboardContainer.top` for bottom bar, `view.bottom` for top bar)
     private var searchControllerBottomConstraint: NSLayoutConstraint?
@@ -112,6 +113,7 @@ class BrowserViewController: UIViewController,
     var tabSwipeGestureHandler: TabSwipeGestureHandler?
     var microsurvey: MicrosurveyPromptView?
     var autoTranslatePrompt: AutoTranslatePromptView?
+
     // TODO: FXIOS-14347 Remove this property as part of cleaning up the toolbar performance
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
@@ -390,6 +392,7 @@ class BrowserViewController: UIViewController,
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
+    var tabTrayAnimationSourceFrame: CGRect?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -1391,7 +1394,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        // TODO: - Replace with feature flag
+        // TODO: FXIOS-16236 Gate behind feature flag when refactor is done
         if true {
             view.addSubview(swipeUpTabWebViewPreview)
         }
@@ -1667,7 +1670,7 @@ class BrowserViewController: UIViewController,
         }
 
         if true {
-            // TODO: - Gate behind feature flag
+            // TODO: FXIOS-16236 Gate behind feature flag when refactor is done
             swipeUpTabWebViewPreview.pinToSuperview()
         }
         if isSnapKitRemovalEnabled {
@@ -2992,6 +2995,7 @@ class BrowserViewController: UIViewController,
             guard let button = state.buttonTapped else { return }
             presentRefreshLongPressAction(from: button)
         case .tabTray:
+            tabTrayAnimationSourceFrame = state.tabTrayAnimationSourceFrame
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
             store.dispatch(
