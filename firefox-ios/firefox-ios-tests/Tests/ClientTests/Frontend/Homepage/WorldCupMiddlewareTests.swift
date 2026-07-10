@@ -5,6 +5,7 @@
 import Common
 import Redux
 import Shared
+import TestKit
 import XCTest
 
 @testable import Client
@@ -60,7 +61,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.selectedCountryId, "BRA")
         XCTAssertTrue(dispatched.matches.isEmpty)
         XCTAssertEqual(apiClient.matchesFetchCount, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_homepageInitialize_whenMilestone2_fetchesMatchesAndDispatchesDidUpdate() throws {
@@ -88,7 +90,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.matches.count, 1)
         XCTAssertEqual(apiClient.matchesFetchCount, 1)
         XCTAssertEqual(apiClient.liveFetchCount, 1)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - WorldCupActionType.didChangeHomepageSettings
@@ -107,7 +110,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(feed.startCalled, 1)
         XCTAssertEqual(feed.stopCalled, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didChangeHomepageSettings_whenSectionDisabled_stopsFeed() throws {
@@ -125,7 +129,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(feed.stopCalled, 1)
         XCTAssertEqual(feed.startCalled, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - WorldCupActionType.removeHomepageCard
@@ -153,7 +158,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockWorldCupStore.lastSetIsHomepageSectionEnabledValue, false)
         XCTAssertEqual(actionType, .didUpdate)
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - HomepageMiddlewareActionType.didEnterBackground
@@ -171,7 +177,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(feed.stopCalled, 1)
         XCTAssertEqual(feed.startCalled, 0)
         XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didBecomeActive_whenMilestone2_startsFeed() throws {
@@ -186,7 +193,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider(appState, action)
 
         XCTAssertEqual(feed.startCalled, 1)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didBecomeActive_whenFeatureDisabledAfterMilestone2_dispatchesHiddenSectionWithoutStartingFeed() throws {
@@ -243,7 +251,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.matches.count, 1)
         XCTAssertEqual(apiClient.matchesFetchCount, 1)
         XCTAssertEqual(apiClient.liveFetchCount, 1)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_selectTeam_withNilCountryId_clearsTeam() throws {
@@ -264,7 +273,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockWorldCupStore.setSelectedTeamCalled, 1)
         XCTAssertNil(mockWorldCupStore.lastSetSelectedTeamCountryId)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - WorldCupActionType.retryMatchesFetch
@@ -291,7 +301,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(dispatched.apiError)
         XCTAssertEqual(apiClient.matchesFetchCount, 1)
         XCTAssertEqual(apiClient.liveFetchCount, 1)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_retryMatchesFetch_whenFetchFails_dispatchesDidUpdateWithApiError() throws {
@@ -318,7 +329,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertTrue(dispatched.matches.isEmpty)
         XCTAssertNotNil(dispatched.apiError)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Live endpoint
@@ -359,7 +371,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 1)
         XCTAssertTrue(dispatched.matches.first?.isLive ?? false)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_homepageInitialize_whenLiveEndpointEmpty_cardIsNotLive_evenWhenCurrentPopulated() throws {
@@ -392,7 +405,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 1)
         XCTAssertFalse(dispatched.matches.first?.isLive ?? true)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     /// Merino keeps recently-final matches in the `/live` response for a tail
@@ -426,7 +440,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 1)
         XCTAssertFalse(dispatched.matches.first?.isLive ?? true)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_homepageInitialize_whenLiveEndpointFails_stillReturnsMatchesAsNotLive() throws {
@@ -456,7 +471,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(dispatched.apiError)
         XCTAssertEqual(dispatched.matches.count, 1)
         XCTAssertFalse(dispatched.matches.first?.isLive ?? true)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     /// Smart-polling gate: when `/matches` shows nothing in its play window
@@ -479,7 +495,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(apiClient.matchesFetchCount, 1)
         XCTAssertEqual(apiClient.liveFetchCount, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Flattened grouping (no team selected)
@@ -520,7 +537,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(dispatched.matches[0].featuredMatch.isEmpty)
         XCTAssertEqual(dispatched.matches[1].upcomingMatches.count, 1)
         XCTAssertTrue(dispatched.matches[1].featuredMatch.isEmpty)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - M3 elimination branching
@@ -571,7 +589,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(apiClient.fetchTeamsCount, 1)
         XCTAssertNil(apiClient.lastTeamsTeam, "teams call should be unfiltered")
         XCTAssertNil(apiClient.lastMatchesTeam, "matches call should be unfiltered")
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_homepageInitialize_whenSelectedTeamAdvancesToKnockouts_addsKnockoutCard() throws {
@@ -619,7 +638,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
                        String.WorldCup.HomepageWidget.RoundPhase.Round32Label)
         // Lands on the latest stage (R32, index 1), not the group card.
         XCTAssertEqual(dispatched.defaultMatchIndex, 1)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_homepageInitialize_whenSelectedTeamEliminated_fallsBackToFlattenedAllTeams() throws {
@@ -660,7 +680,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
                        String.WorldCup.HomepageWidget.RoundPhase.Round16Label)
         XCTAssertEqual(dispatched.matches[1].phaseTitle,
                        String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_homepageInitialize_whenSelectedTeamNotInRoster_defaultsToSingleTeamCard() throws {
@@ -694,7 +715,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 1)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - WorldCupActionType.worldCupDidStart
@@ -721,7 +743,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionType, .didUpdate)
         XCTAssertTrue(dispatched.hasWorldCupStarted)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Unhandled actions
@@ -738,7 +761,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         XCTAssertEqual(mockWorldCupStore.setIsHomepageSectionEnabledCalled, 0)
         XCTAssertEqual(mockWorldCupStore.setSelectedTeamCalled, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Dev server timeline
@@ -778,7 +802,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(card.featuredMatch.first?.awayCode, "GER")
         XCTAssertEqual(card.upcomingMatches.map(\.homeCode), ["BRA"])
         XCTAssertEqual(card.upcomingMatches.first?.awayCode, "ARG")
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_initialize_acceptsFractionalSecondsInServerNow() throws {
@@ -828,7 +853,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(card.featuredMatch.map(\.homeCode), ["BRA"])
         XCTAssertEqual(card.featuredMatch.first?.awayCode, "ARG")
         XCTAssertEqual(card.upcomingMatches.first?.awayCode, "GER")
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_initialize_whenDevTimelineDisabled_ignoresResponseNow() throws {
@@ -861,7 +887,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let card = try XCTUnwrap(dispatched.matches.first)
         XCTAssertEqual(card.featuredMatch.count, 1)
         XCTAssertEqual(card.upcomingMatches.count, 1)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_initialize_whenDevTimelineEnabledButServerNowMalformed_fallsBackToDate() throws {
@@ -894,7 +921,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let card = try XCTUnwrap(dispatched.matches.first)
         XCTAssertEqual(card.featuredMatch.count, 1)
         XCTAssertEqual(card.upcomingMatches.count, 1)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_initialize_noTeam_dispatchesTimerAsDefaultPage() throws {
@@ -927,7 +955,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 2)
         XCTAssertEqual(dispatched.defaultMatchIndex, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Confetti
@@ -959,7 +988,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.defaultMatchIndex, 0)
         XCTAssertTrue(dispatched.shouldShowConfetti)
         XCTAssertFalse(mockWorldCupStore.seenWinningMatchIDs.isEmpty)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didUpdate_whenWinningMatchIsNotOnDefaultCard_doesNotSetConfetti() throws {
@@ -1009,7 +1039,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(dispatched.shouldShowConfetti)
         // The win is still recorded as seen even though it didn't celebrate.
         XCTAssertFalse(mockWorldCupStore.seenWinningMatchIDs.isEmpty)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didUpdate_whenWinAlreadySeen_doesNotReCelebrateOnRefetch() throws {
@@ -1047,7 +1078,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [secondExpectation])
 
         XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didUpdate_whenNoTeam_andDefaultCardIsNotAFinal_doesNotSetConfetti() throws {
@@ -1078,7 +1110,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertFalse(dispatched.shouldShowConfetti)
         XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didUpdate_whenNoTeam_andDefaultCardIsFinishedFinal_setsConfettiAndPersists() throws {
@@ -1116,7 +1149,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatched.defaultMatchIndex, 1)
         XCTAssertTrue(dispatched.shouldShowConfetti)
         XCTAssertFalse(mockWorldCupStore.seenWinningMatchIDs.isEmpty)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didUpdate_whenNoTeam_andDefaultCardIsFinishedBronzeFinal_setsConfetti() throws {
@@ -1151,7 +1185,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertTrue(dispatched.shouldShowConfetti)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didUpdate_whenNoTeam_andFinalIsLiveNotEnded_doesNotSetConfetti() throws {
@@ -1189,7 +1224,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertFalse(dispatched.shouldShowConfetti)
         XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_didUpdate_whenNoTeam_finalCelebratesOnceThenNotOnRefetch() throws {
@@ -1232,7 +1268,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         wait(for: [secondExpectation])
         XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_viewWillDisappear_suppressesConfettiWhileOffScreen() throws {
@@ -1264,7 +1301,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertFalse(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
         XCTAssertEqual(mockWorldCupStore.setSeenWinningMatchIDsCalled, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Helpers
@@ -1289,6 +1327,17 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = WorldCupMiddleware(worldCupStore: store, feed: feed)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    /// Our middleware providers always retain a strong reference to `self` for ease of use. Thus, `trackForMemoryLeaks` will
+    /// fail in our unit tests due to a strong circular reference to the middleware retained by its provider closures. In
+    /// practice, this is not a memory leak issue, as we permanently allocate and retain our middleware providers for the
+    /// entire app lifecycle.
+    ///
+    /// As a work around for unit tests, we should release each middleware's provider closures from memory by assigning an
+    /// empty closure, which does not strongly retain `self`.
+    private func releaseMiddlewareProvidersFromMemory(_ subject: WorldCupMiddleware) {
+        subject.worldCupProvider = { _, _ in }
     }
 
     /// Hands the middleware a `MockWorldCupFeed` so tests can assert on the
