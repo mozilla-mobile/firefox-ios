@@ -505,7 +505,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     // MARK: - Google Lens search completion
 
     @MainActor
-    func testWebViewDidFinish_reportsAndClearsPendingGoogleLensSearch() {
+    func testWebViewDidFinish_clearsPendingGoogleLensSearch() {
         let subject = createSubject()
         let tab = createTab()
         tabManager.tabs = [tab]
@@ -519,7 +519,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     @MainActor
-    func testWebViewDidFailProvisionalNavigation_reportsAndClearsPendingGoogleLensSearch() {
+    func testWebViewDidFailProvisionalNavigation_clearsPendingGoogleLensSearch() {
         let subject = createSubject()
         let tab = createTab()
         tabManager.tabs = [tab]
