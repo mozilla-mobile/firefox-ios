@@ -7347,11 +7347,6 @@ extension String {
 
 // MARK: - Display Theme
 extension String {
-    public static let SettingsDisplayThemeTitle = MZLocalizedString(
-        key: "Settings.DisplayTheme.Title.v2",
-        tableName: nil,
-        value: "Theme",
-        comment: "Title in main app settings for Theme settings")
     public static let SettingsAppearanceTitle = MZLocalizedString(
         key: "Settings.Appearance.Title.v137",
         tableName: nil,
@@ -9413,6 +9408,13 @@ extension String {
                 tableName: "Onboarding",
                 value: "Keep searches within reach.",
                 comment: "String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens.")
+        }
+        struct v154 {
+            public static let SettingsDisplayThemeTitle = MZLocalizedString(
+                key: "Settings.DisplayTheme.Title.v2",
+                tableName: nil,
+                value: "Theme",
+                comment: "Title in main app settings for Theme settings")
         }
     }
 }

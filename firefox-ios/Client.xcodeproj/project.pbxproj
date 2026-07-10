@@ -327,7 +327,6 @@
 		2154A0FD2F115EEE0067EA43 /* MockPasswordGeneratorScriptEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154A0FC2F115EEE0067EA43 /* MockPasswordGeneratorScriptEvaluator.swift */; };
 		2154A4792F1AA3D40067EA43 /* SecurityContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154A4782F1AA3C00067EA43 /* SecurityContextManager.swift */; };
 		2154E7D62E4D069400272F0D /* BrowserViewController+TabScrollHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154E7D52E4D068600272F0D /* BrowserViewController+TabScrollHandlerDelegate.swift */; };
-		21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A602A4201E500A5189E /* ThemeSettingsController.swift */; };
 		21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A622A422A3900A5189E /* ThemeMiddleware.swift */; };
 		21618A8A2A4389F700A5189E /* PresentedComponentsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A892A4389F700A5189E /* PresentedComponentsState.swift */; };
 		21618A8C2A438A0900A5189E /* ComponentAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A8B2A438A0900A5189E /* ComponentAction.swift */; };
@@ -3204,7 +3203,6 @@
 		2154A0FC2F115EEE0067EA43 /* MockPasswordGeneratorScriptEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPasswordGeneratorScriptEvaluator.swift; sourceTree = "<group>"; };
 		2154A4782F1AA3C00067EA43 /* SecurityContextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityContextManager.swift; sourceTree = "<group>"; };
 		2154E7D52E4D068600272F0D /* BrowserViewController+TabScrollHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+TabScrollHandlerDelegate.swift"; sourceTree = "<group>"; };
-		21618A602A4201E500A5189E /* ThemeSettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeSettingsController.swift; sourceTree = "<group>"; };
 		21618A622A422A3900A5189E /* ThemeMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMiddleware.swift; sourceTree = "<group>"; };
 		21618A892A4389F700A5189E /* PresentedComponentsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentedComponentsState.swift; sourceTree = "<group>"; };
 		21618A8B2A438A0900A5189E /* ComponentAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentAction.swift; sourceTree = "<group>"; };
@@ -12699,7 +12697,6 @@
 		216A0D772A40E83F008077BA /* ThemeSettings */ = {
 			isa = PBXGroup;
 			children = (
-				21618A602A4201E500A5189E /* ThemeSettingsController.swift */,
 				216A0D782A40E85A008077BA /* ThemeSettingsState.swift */,
 				216A0D7A2A40F08B008077BA /* ThemeSettingsAction.swift */,
 				21618A622A422A3900A5189E /* ThemeMiddleware.swift */,
@@ -20240,7 +20237,6 @@
 				C2D71B952A384F11003DEC7A /* ThemedTableViewCell.swift in Sources */,
 				8A5D1CBF2A30DC75005AD35C /* SyncNowSetting.swift in Sources */,
 				210E0EB8298D9D4500BB4F33 /* SearchEngineProvider.swift in Sources */,
-				21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */,
 				AB4FB4DB2C89FB10005EF0CC /* BlockedTrackersHeaderView.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				8A15AB752D5FDB80008BB03C /* AutoplaySettingsViewController.swift in Sources */,
