@@ -143,10 +143,8 @@ final class FXColors {
     static let Ink70 = UIColor(rgb: 0x241541)
     static let Ink80 = UIColor(rgb: 0x20123a)
     static let Ink90 = UIColor(rgb: 0x1d1133)
-}
 
-// Accent colors for placeholder favicons
-extension FXColors {
+    // MARK: - Accent colors for placeholder favicons
     static let FaviconGreen1 = UIColor(rgb: 0x2e761a)
     static let FaviconGreen2 = UIColor(rgb: 0x399320)
     static let FaviconGreen3 = UIColor(rgb: 0x40a624)
