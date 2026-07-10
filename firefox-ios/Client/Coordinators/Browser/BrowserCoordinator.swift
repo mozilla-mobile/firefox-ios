@@ -18,6 +18,7 @@ import QuickAnswersKit
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
 import ComponentLibrary
+import WebCompatReporterKit
 
 final class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
@@ -37,6 +38,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
                           WebCompatReportCoordinatorDelegate,
+                          WebCompatReportPreviewDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -46,6 +48,11 @@ final class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
+    /// The presented report form, used to present the preview sheet over it.
+    private weak var webCompatReportViewController: UIViewController?
+    /// The presented preview sheet, used to present the full-screen screenshot viewer over it.
+    private weak var webCompatReportPreviewViewController: UIViewController?
+    private var webCompatReportPreviewScreenshot: UIImage?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -642,6 +649,7 @@ final class BrowserCoordinator: BaseCoordinator,
             sheetPresentationController.detents = [.large()]
             sheetPresentationController.prefersGrabberVisible = true
         }
+        webCompatReportViewController = reportViewController
         router.present(reportViewController, animated: true, completion: nil)
     }
 
@@ -655,6 +663,59 @@ final class BrowserCoordinator: BaseCoordinator,
         // New tab instead of dismissing the sheet, so the in-progress draft survives.
         guard let url = SupportUtils.URLForWebCompatReporterLearnMore else { return }
         browserViewController.openURLInNewTab(url)
+    }
+
+    func webCompatReportViewControllerDidTapPreview(_ request: WebCompatPreviewRequest) {
+        let tab = browserViewController.tabManager.selectedTab
+        let enrichedPayload = WebCompatReportDataCollector.enrich(
+            request.payload,
+            tab: tab,
+            includeBlockedList: request.includeBlockedList
+        )
+        let viewModel = WebCompatReportViewController.makePreviewViewModel(payload: enrichedPayload)
+        // Show the instant viewport screenshot first, then upgrade to the full page.
+        let initialScreenshot = request.includeScreenshot ? tab?.screenshot : nil
+        let previewViewController = WebCompatReportPreviewViewController(
+            viewModel: viewModel.withScreenshot(initialScreenshot),
+            theme: themeManager.getCurrentTheme(for: windowUUID)
+        )
+        previewViewController.delegate = self
+        // Wrapped in a nav controller so the title and close button sit in a nav bar.
+        let previewNavigationController = UINavigationController(rootViewController: previewViewController)
+        if let sheetPresentationController = previewNavigationController.sheetPresentationController {
+            // Opens at medium; the user can drag it up to large to read the full payload.
+            sheetPresentationController.detents = [.medium(), .large()]
+            sheetPresentationController.prefersGrabberVisible = true
+        }
+        webCompatReportPreviewViewController = previewViewController
+        webCompatReportPreviewScreenshot = initialScreenshot
+        // Presented from the form (a navigation controller cannot present twice).
+        webCompatReportViewController?.present(previewNavigationController, animated: true, completion: nil)
+
+        guard request.includeScreenshot else { return }
+        WebCompatReportDataCollector.captureFullPage(from: tab) { [weak self, weak previewViewController] fullPage in
+            guard let self, let previewViewController, let fullPage else { return }
+            self.webCompatReportPreviewScreenshot = fullPage
+            previewViewController.configure(with: viewModel.withScreenshot(fullPage))
+        }
+    }
+
+    // MARK: - WebCompatReportPreviewDelegate
+
+    func webCompatReportPreviewDidTapClose() {
+        // Dismiss the preview sheet, returning to the report form underneath.
+        webCompatReportPreviewViewController?.dismiss(animated: true, completion: nil)
+    }
+
+    func webCompatReportPreviewDidTapScreenshot() {
+        let viewer = WebCompatScreenshotZoomViewController(
+            image: webCompatReportPreviewScreenshot,
+            closeAccessibilityLabel: .WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel,
+            theme: themeManager.getCurrentTheme(for: windowUUID)
+        ) { [weak self] in
+            self?.webCompatReportPreviewViewController?.dismiss(animated: true)
+        }
+        webCompatReportPreviewViewController?.present(viewer, animated: true, completion: nil)
     }
 
     func presentSavePDFController() {

@@ -167,6 +167,102 @@ final class WebCompatReportViewControllerTests: XCTestCase {
         XCTAssertEqual(sections.last?.rows.first?.kind, .sendButton(isEnabled: true))
     }
 
+    // MARK: - makePreviewViewModel
+
+    func testMakePreviewViewModel_rendersPayloadGroupsWithGleanKeys() {
+        let state = WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .siteNotUsable,
+            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
+            additionalDetails: "Broken images"
+        )
+
+        let viewModel = WebCompatReportViewController.makePreviewViewModel(from: state)
+
+        XCTAssertEqual(viewModel.title, .WebCompatReporter.Preview.Title)
+        XCTAssertNil(viewModel.screenshot)
+        XCTAssertFalse(viewModel.showsScreenshot)
+        // Sections/keys come straight from WebCompatReportPayload (the Glean-aligned model).
+        XCTAssertEqual(
+            viewModel.sections.map(\.id),
+            ["basic", "tabInfo", "antitracking", "frameworks", "app", "graphics", "system"]
+        )
+
+        let basic = viewModel.sections.first { $0.id == "basic" }
+        XCTAssertEqual(basic?.rows.map(\.label), ["url", "breakage_category", "description"])
+        XCTAssertEqual(basic?.rows.first { $0.id == "basic.url" }?.value, "\"https://example.com\"")
+        XCTAssertEqual(
+            basic?.rows.first { $0.id == "basic.breakage_category" }?.value,
+            "\"\(WebCompatSubOption.pageNotLoading.rawValue)\""
+        )
+        XCTAssertEqual(basic?.rows.first { $0.id == "basic.description" }?.value, "\"Broken images\"")
+        // Not-yet-collected fields render as null.
+        XCTAssertEqual(
+            viewModel.sections.first { $0.id == "tabInfo" }?.rows.first { $0.id == "tabInfo.languages" }?.value,
+            "null"
+        )
+    }
+
+    // MARK: - WebCompatReportPayload
+
+    func testPayloadMake_populatesOnlyUserSuppliedFields() {
+        let state = WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .siteNotUsable,
+            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
+            additionalDetails: "Broken images"
+        )
+
+        let payload = WebCompatReportPayload.make(from: state)
+
+        XCTAssertEqual(payload.url, "https://example.com")
+        XCTAssertEqual(payload.breakageCategory, WebCompatSubOption.pageNotLoading.rawValue)
+        XCTAssertEqual(payload.description, "Broken images")
+        XCTAssertNil(payload.languages)
+        XCTAssertNil(payload.isPrivateBrowsing)
+    }
+
+    func testPayloadMake_emptyFieldsBecomeNil_categoryUsedWhenNoSubOption() {
+        let state = WebCompatReporterState(windowUUID: windowUUID, url: "", selectedCategory: .other)
+
+        let payload = WebCompatReportPayload.make(from: state)
+
+        XCTAssertNil(payload.url)
+        XCTAssertNil(payload.description)
+        XCTAssertEqual(payload.breakageCategory, WebCompatIssueCategory.other.rawValue)
+    }
+
+    func testPayloadPreviewGroups_formatsJsonValuesAndNulls() {
+        var payload = WebCompatReportPayload()
+        payload.url = "https://example.com"
+        payload.languages = ["en-US", "fr"]
+        payload.mobify = false
+
+        let groups = payload.previewGroups
+
+        func value(_ title: String, _ key: String) -> String? {
+            return groups.first { $0.title == title }?.fields.first { $0.key == key }?.value
+        }
+        XCTAssertEqual(value("basic", "url"), "\"https://example.com\"")
+        XCTAssertEqual(value("basic", "description"), "null")
+        XCTAssertEqual(value("tabInfo", "languages"), "[\"en-US\", \"fr\"]")
+        XCTAssertEqual(value("frameworks", "mobify"), "false")
+        XCTAssertEqual(value("system", "memory"), "null")
+    }
+
+    func testDidTapPreview_forwardsPayloadToCoordinator() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapPreview()
+
+        XCTAssertEqual(coordinator.didTapPreviewPayloads.count, 1)
+    }
+
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {
         return WebCompatReportViewController(windowUUID: windowUUID, reportedURL: reportedURL)
     }
@@ -175,6 +271,7 @@ final class WebCompatReportViewControllerTests: XCTestCase {
 private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoordinatorDelegate {
     var didFinishCallCount = 0
     var didTapLearnMoreCallCount = 0
+    var didTapPreviewPayloads: [WebCompatReportPayload] = []
 
     func webCompatReportViewControllerDidFinish() {
         didFinishCallCount += 1
@@ -182,5 +279,9 @@ private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoord
 
     func webCompatReportViewControllerDidTapLearnMore() {
         didTapLearnMoreCallCount += 1
+    }
+
+    func webCompatReportViewControllerDidTapPreview(_ request: WebCompatPreviewRequest) {
+        didTapPreviewPayloads.append(request.payload)
     }
 }

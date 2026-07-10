@@ -4812,6 +4812,26 @@ extension String {
                 comment: "Title of the button that submits the website issue report, in the Report a Website Issue form."
             )
         }
+        public struct Preview {
+            public static let Title = MZLocalizedString(
+                key: "", // WebCompatReporter.Preview.Title.v154
+                tableName: "WebCompatReporter",
+                value: "Report Preview",
+                comment: "Title of the Report Preview screen, which shows the data that will be sent with a website issue report."
+            )
+            public static let ScreenshotAccessibilityLabel = MZLocalizedString(
+                key: "", // WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154
+                tableName: "WebCompatReporter",
+                value: "Screenshot of the page you are reporting. Double tap to view full screen.",
+                comment: "Accessibility label for the page screenshot thumbnail on the Report Preview screen."
+            )
+            public static let ScreenshotCloseAccessibilityLabel = MZLocalizedString(
+                key: "", // WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154
+                tableName: "WebCompatReporter",
+                value: "Close",
+                comment: "Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen."
+            )
+        }
     }
 }
 
