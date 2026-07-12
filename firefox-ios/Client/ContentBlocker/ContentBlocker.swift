@@ -118,6 +118,7 @@ class ContentBlocker {
     var blockImagesRule: WKContentRuleList?
     var setupCompleted = false
     let logger: Logger
+    var adBlockerListFetcher: AdBlockerListFetcherProtocol = ASAdBlockerListFetcher()
 
     static let shared = ContentBlocker()
 
@@ -280,6 +281,8 @@ extension ContentBlocker {
     }
 
     func removeAllRulesInStore(completion: @escaping () -> Void) {
+        // Drop the ad-blocker list's cached hash so `reloadAdBlockerList` recompiles it after a wipe.
+        UserDefaults.standard.removeObject(forKey: ASAdBlockerListFetcher.adBlockerRecordID)
         let dispatchGroup = DispatchGroup()
         let logger = self.logger
         ruleStore?.getAvailableContentRuleListIdentifiers { [weak self] available in
@@ -439,6 +442,45 @@ extension ContentBlocker {
             logger.log("Nil rule set for BlockList.", level: .warning, category: .adblock)
             assertionFailure()
             return
+        }
+    }
+
+    func reloadAdBlockerList() async {
+        guard let encoded = await fetchAdBlockerRuleJSON() else {
+            logger.log("Skipping ad-blocker list, none available.", level: .info, category: .adblock)
+            return
+        }
+        await compileAdBlockerList(encoded)
+    }
+
+    private func fetchAdBlockerRuleJSON() async -> String? {
+        guard let json = await adBlockerListFetcher.fetchAdBlockerListJSON(),
+              let range = json.range(of: "]", options: .backwards) else {
+            return nil
+        }
+        return json.replacingCharacters(in: range, with: safelistAsJSON() + "]")
+    }
+
+    private func compileAdBlockerList(_ encoded: String) async {
+        let identifier = ASAdBlockerListFetcher.adBlockerRecordID
+        // If the hash of the encoded list matches the cached hash, we can skip compilation and setup.
+        let hash = calculateHash(for: Data(encoded.utf8))
+        if let hash, hash == UserDefaults.standard.string(forKey: identifier) { 
+            return 
+        }
+
+        guard let ruleStore else { return }
+        do {
+            let rule = try await ruleStore.compileContentRuleList(
+                forIdentifier: identifier,
+                encodedContentRuleList: encoded
+            )
+            if rule != nil {
+                UserDefaults.standard.set(hash, forKey: identifier)
+            }
+        } catch {
+            logger.log("Ad-blocker list compile failed: \(error.localizedDescription)",
+                        level: .warning, category: .adblock)
         }
     }
 }
