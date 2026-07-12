@@ -465,8 +465,8 @@ extension ContentBlocker {
         let identifier = ASAdBlockerListFetcher.adBlockerRecordID
         // If the hash of the encoded list matches the cached hash, we can skip compilation and setup.
         let hash = calculateHash(for: Data(encoded.utf8))
-        if let hash, hash == UserDefaults.standard.string(forKey: identifier) { 
-            return 
+        if let hash, hash == UserDefaults.standard.string(forKey: identifier) {
+            return
         }
 
         guard let ruleStore else { return }
@@ -480,7 +480,8 @@ extension ContentBlocker {
             }
         } catch {
             logger.log("Ad-blocker list compile failed: \(error.localizedDescription)",
-                        level: .warning, category: .adblock)
+                       level: .warning,
+                       category: .adblock)
         }
     }
 }
