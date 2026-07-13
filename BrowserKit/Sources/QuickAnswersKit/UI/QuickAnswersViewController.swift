@@ -138,11 +138,12 @@ public final class QuickAnswersViewController: UIViewController,
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         registerCallbacks()
+        viewModel.startFlow()
     }
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.startFlow()
+        
     }
 
     private func setupSubviews() {

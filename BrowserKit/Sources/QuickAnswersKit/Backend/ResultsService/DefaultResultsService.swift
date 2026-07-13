@@ -55,8 +55,8 @@ final class DefaultResultsService: ResultsService {
     }
 
     private func formatResult(from answer: String, and citations: [Citation]) -> SearchResult {
-        // limit the citations to the first 3 in the array
-        let filteredCitations = citations.prefix(3)
+        // limit the citations to the first 2 in the array
+        let filteredCitations = citations.prefix(2)
         let sources = filteredCitations.map { citation in
             SearchResult.Source(
                 title: citation.title ?? "",

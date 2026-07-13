@@ -144,6 +144,7 @@ final class QuickAnswersSourceView: UIView,
     private var theme: Theme?
     private var contentSizeObservation: NSKeyValueObservation?
     private var onSourceTapped: ((URL) -> Void)?
+    private var lastLaidOutWidth: CGFloat = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -173,8 +174,8 @@ final class QuickAnswersSourceView: UIView,
             \.contentSize,
             options: [.new, .old]
         ) { [weak self] _, change in
-            guard change.newValue != change.oldValue else { return }
             DispatchQueue.main.async {
+                self?.collectionView.collectionViewLayout.invalidateLayout()
                 self?.invalidateIntrinsicContentSize()
             }
         }
