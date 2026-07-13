@@ -189,7 +189,10 @@ let package = Package(
             swiftSettings: [
             ]
         ),
-        .target(name: "TestKit", dependencies: ["Shared"]),
+        .target(
+            name: "TestKit",
+            dependencies: ["Shared", "Redux"]
+        ),
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],

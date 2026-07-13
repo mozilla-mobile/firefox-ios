@@ -4,6 +4,7 @@
 
 import Redux
 import Shared
+import TestKit
 import XCTest
 
 @testable import Client
@@ -61,9 +62,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedAction.isTranslationsEnabled, true)
         XCTAssertEqual(dispatchedAction.supportedLanguages, ["en", "fr", "de"])
         XCTAssertEqual(preferredCodes, ["en", "fr"])
-        // the translationSettingsProvider strong retains the middleware as per redux is designed
-        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_viewDidLoad_withTranslationsDisabled_dispatchesDisabledState() throws {
@@ -92,9 +92,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didLoadSettings)
         XCTAssertEqual(dispatchedAction.isTranslationsEnabled, false)
         XCTAssertEqual(preferredCodes, ["en"])
-        // the translationSettingsProvider strong retains the middleware as per redux is designed
-        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_viewDidLoad_deviceLanguage_firstItemHasDeviceLanguageSubtitle() throws {
@@ -122,7 +121,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(preferredLanguages[0].code, "en")
         XCTAssertEqual(preferredLanguages[0].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
         XCTAssertEqual(preferredLanguages[1].code, "fr")
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_viewDidLoad_deviceLanguage_notFirst_stillHasDeviceLanguageSubtitle() throws {
@@ -149,7 +149,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(preferredLanguages[1].code, "en")
         XCTAssertEqual(preferredLanguages[1].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_saveLanguages_deviceLanguage_notFirst_stillHasDeviceLanguageSubtitle() throws {
@@ -167,7 +168,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(preferredLanguages[1].code, "en")
         XCTAssertEqual(preferredLanguages[1].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_viewDidLoad_readsAutoTranslatePref_whenEnabled() throws {
@@ -189,7 +191,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
         XCTAssertEqual(dispatchedAction.isAutoTranslateEnabled, true)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - toggleTranslationsEnabled
@@ -219,7 +222,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, TranslationsActionType.didTranslationSettingsChange)
         XCTAssertNil(translationsAction.translationConfiguration?.state)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature), false)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_toggleTranslationsEnabled_whenDisabled_enablesAndDispatchesUpdate() throws {
@@ -240,7 +244,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, TranslationsActionType.didTranslationSettingsChange)
         XCTAssertNil(translationsAction.translationConfiguration?.state)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature), true)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_toggleTranslationsEnabled_whenEnabled_resetsStorage() {
@@ -264,7 +269,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
 
-        subject.translationSettingsProvider = { _, _ in }
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_toggleTranslationsEnabled_whenDisabled_doesNotResetStorage() {
@@ -288,7 +293,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation, resetExpectation], timeout: 2.0)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - toggleAutoTranslate
@@ -313,7 +319,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         let secondAction = try XCTUnwrap(mockStore.dispatchedActions[1] as? TranslationsAction)
         let secondActionType = try XCTUnwrap(secondAction.actionType as? TranslationsActionType)
         XCTAssertEqual(secondActionType, TranslationsActionType.didTranslationSettingsChange)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_toggleAutoTranslate_whenEnabled_disablesAndDispatches() throws {
@@ -333,7 +340,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
         XCTAssertEqual(dispatchedAction.isAutoTranslateEnabled, false)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate), false)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - saveLanguages
@@ -357,7 +365,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(dispatchedType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
         XCTAssertEqual(preferredCodes, ["en", "fr"])
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_enterEditMode_doesNotDispatchViaMiddleware() {
@@ -370,7 +379,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_cancelEditMode_doesNotDispatchViaMiddleware() {
@@ -383,7 +393,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_reorderLanguages_doesNotDispatchViaMiddleware() {
@@ -397,7 +408,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     func test_removeLanguage_doesNotDispatchViaMiddleware() {
@@ -411,7 +423,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Unrelated action
@@ -426,7 +439,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.translationSettingsProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - StoreTestUtility
@@ -484,5 +498,16 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    /// Our middleware providers always retain a strong reference to `self` for ease of use. Thus, `trackForMemoryLeaks` will
+    /// fail in our unit tests due to a strong circular reference to the middleware retained by its provider closures. In
+    /// practice, this is not a memory leak issue, as we permanently allocate and retain our middleware providers for the
+    /// entire app lifecycle.
+    ///
+    /// As a work around for unit tests, we should release each middleware's provider closures from memory by assigning an
+    /// empty closure, which does not strongly retain `self`.
+    private func releaseMiddlewareProvidersFromMemory(_ subject: TranslationSettingsMiddleware) {
+        subject.translationSettingsProvider = emptyLegacyMiddlewareMethodFactory()
     }
 }
