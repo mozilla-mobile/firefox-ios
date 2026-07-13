@@ -37,7 +37,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.pocketSectionProvider(AppState(), action)
+        subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation])
 
@@ -62,7 +62,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.pocketSectionProvider(AppState(), action)
+        subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation])
 
@@ -88,7 +88,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.pocketSectionProvider(AppState(), action)
+        subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation])
 
@@ -110,7 +110,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: MerinoActionType.tapOnHomepageMerinoCell
         )
-        subject.pocketSectionProvider(AppState(), action)
+        subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         let firstMetric = GleanMetrics.Pocket.openStoryOrigin
         let secondMetric = GleanMetrics.Pocket.openStoryPosition
@@ -133,7 +133,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: MerinoActionType.tapOnHomepageMerinoCell
         )
-        subject.pocketSectionProvider(AppState(), action)
+        subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
@@ -143,7 +143,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(merinoManager: merinoManager)
         let action = MerinoAction(windowUUID: .XCTestDefaultUUID, actionType: MerinoActionType.viewedSection)
 
-        subject.pocketSectionProvider(AppState(), action)
+        subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? CounterMetricType)
         let metric = GleanMetrics.Pocket.sectionImpressions
@@ -164,7 +164,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
         )
 
-        subject.pocketSectionProvider(AppState(), action)
+        subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let event = GleanMetrics.Pocket.openInPrivateTab
@@ -184,7 +184,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
         )
-        subject.pocketSectionProvider(AppState(), action)
+        subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)

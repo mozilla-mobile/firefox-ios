@@ -40,7 +40,7 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.remoteTabsPanelProvider(appState, action)
+        subject.remoteTabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -67,7 +67,7 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.remoteTabsPanelProvider(appState, action)
+        subject.remoteTabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -94,7 +94,7 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.remoteTabsPanelProvider(appState, action)
+        subject.remoteTabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -121,7 +121,7 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.remoteTabsPanelProvider(appState, action)
+        subject.remoteTabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -148,7 +148,7 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.remoteTabsPanelProvider(appState, action)
+        subject.remoteTabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 

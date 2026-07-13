@@ -19,7 +19,13 @@ final class SearchEngineSelectionMiddleware {
         self.searchEnginesManager = searchEnginesManager
     }
 
-    lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] state, action in
+    lazy var searchEngineSelectionProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         guard let action = action as? SearchEngineSelectionAction else { return }
 
         switch action.actionType {
