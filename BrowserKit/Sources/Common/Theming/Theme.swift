@@ -11,8 +11,8 @@ public protocol Theme {
     var type: ThemeType { get }
     var colors: ThemeColourPalette { get }
 
-    /// Reflects the novaDesign feature flag:
-    /// the theme manager only returns a Nova theme when the flag is on
+    /// Checks if the theme is a Nova type. The theme manager only returns a Nova theme
+    ///  when the novaDesign feature flag is on.
     var isNova: Bool { get }
 }
 
