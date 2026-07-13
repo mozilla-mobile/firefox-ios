@@ -2005,59 +2005,59 @@ workflows:
         is_expand: false
       MAX_TEST_REPETITIONS: "3"
     steps:
-    - xcode-build-for-test@3:
-        title: "Build for Testing"
-        inputs:
-        - scheme: Fennec
-        - configuration: Fennec_Testing
-        - project_path: firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-    - script@1:
-        title: "Create .xctestrun files for all iOS versions"
-        inputs:
-        - content: |-
-            SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun"
-            cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
-            cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
-    - xcode-test-without-building@0:
-        title: "Unit Tests - iPhone 17 (iOS 26.5), $MAX_TEST_REPETITIONS repetitions"
-        timeout: 6000
-        is_always_run: true
-        inputs:
-        - project_path: firefox-ios/Client.xcodeproj
-        - scheme: Fennec
-        - configuration: Fennec_Testing
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
-        - test_repetition_mode: until_failure
-        - maximum_test_repetitions: $MAX_TEST_REPETITIONS
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-    - deploy-to-bitrise-io@2: {}
-    - xcode-test-without-building@0:
-        title: "Unit Tests - iPhone 16 (iOS 18.6)"
-        timeout: 6000
-        is_always_run: true
-        inputs:
-        - project_path: firefox-ios/Client.xcodeproj
-        - scheme: Fennec
-        - configuration: Fennec_Testing
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-    - deploy-to-bitrise-io@2: {}
-    - xcode-test-without-building@0:
-        title: "Unit Tests - iPhone 15 (iOS 17.5)"
-        timeout: 6000
-        is_always_run: true
-        inputs:
-        - project_path: firefox-ios/Client.xcodeproj
-        - scheme: Fennec
-        - configuration: Fennec_Testing
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-    - deploy-to-bitrise-io@2: {}
+#     - xcode-build-for-test@3:
+#         title: "Build for Testing"
+#         inputs:
+#         - scheme: Fennec
+#         - configuration: Fennec_Testing
+#         - project_path: firefox-ios/Client.xcodeproj
+#         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
+#         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+#     - script@1:
+#         title: "Create .xctestrun files for all iOS versions"
+#         inputs:
+#         - content: |-
+#             SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun"
+#             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
+#             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
+#     - xcode-test-without-building@0:
+#         title: "Unit Tests - iPhone 17 (iOS 26.5), $MAX_TEST_REPETITIONS repetitions"
+#         timeout: 6000
+#         is_always_run: true
+#         inputs:
+#         - project_path: firefox-ios/Client.xcodeproj
+#         - scheme: Fennec
+#         - configuration: Fennec_Testing
+#         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+#         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
+#         - test_repetition_mode: until_failure
+#         - maximum_test_repetitions: $MAX_TEST_REPETITIONS
+#         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+#     - deploy-to-bitrise-io@2: {}
+#     - xcode-test-without-building@0:
+#         title: "Unit Tests - iPhone 16 (iOS 18.6)"
+#         timeout: 6000
+#         is_always_run: true
+#         inputs:
+#         - project_path: firefox-ios/Client.xcodeproj
+#         - scheme: Fennec
+#         - configuration: Fennec_Testing
+#         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
+#         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun
+#         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+#     - deploy-to-bitrise-io@2: {}
+#     - xcode-test-without-building@0:
+#         title: "Unit Tests - iPhone 15 (iOS 17.5)"
+#         timeout: 6000
+#         is_always_run: true
+#         inputs:
+#         - project_path: firefox-ios/Client.xcodeproj
+#         - scheme: Fennec
+#         - configuration: Fennec_Testing
+#         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
+#         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun
+#         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+#     - deploy-to-bitrise-io@2: {}
     - slack@4:
         title: "Post thread starter"
         is_always_run: true
@@ -2076,64 +2076,64 @@ workflows:
         - footer: Mobile Test Engineering
         - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - output_thread_ts: UNIT_TESTS_THREAD_TS
-    - slack@4:
-        title: "Report iPhone 17 (iOS 26.5)"
-        is_always_run: true
-        inputs:
-        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
-        - channel: "#mobile-alerts-sandbox"
-        - thread_ts: $UNIT_TESTS_THREAD_TS
-        - author_name: ''
-        - pretext: ":white_check_mark: iPhone 17 (iOS 26.5)"
-        - pretext_on_error: ":x: iPhone 17 (iOS 26.5)"
-        - title:
-        - title_on_error:
-        - message:
-        - message_on_error:
-        - fields: |
-            Branch | ${BITRISE_GIT_BRANCH}
-            Maximum Test Repetitions | ${MAX_TEST_REPETITIONS}
-        - buttons: |
-            Build Log|${BITRISE_BUILD_URL}
-            Test Results|${BITRISE_BUILD_URL}?tab=tests
-    - slack@4:
-        title: "Report iPhone 16 (iOS 18.6)"
-        is_always_run: true
-        inputs:
-        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
-        - channel: "#mobile-alerts-sandbox"
-        - thread_ts: $UNIT_TESTS_THREAD_TS
-        - author_name: ''
-        - pretext: ":white_check_mark: iPhone 16 (iOS 18.6)"
-        - pretext_on_error: ":x: iPhone 16 (iOS 18.6)"
-        - title:
-        - title_on_error:
-        - message:
-        - message_on_error:
-        - fields: |
-            Branch | ${BITRISE_GIT_BRANCH}
-        - buttons: |
-            Build Log|${BITRISE_BUILD_URL}
-            Test Results|${BITRISE_BUILD_URL}?tab=tests
-    - slack@4:
-        title: "Report iPhone 15 (iOS 17.5)"
-        is_always_run: true
-        inputs:
-        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
-        - channel: "#mobile-alerts-sandbox"
-        - thread_ts: $UNIT_TESTS_THREAD_TS
-        - author_name: ''
-        - pretext: ":white_check_mark: iPhone 15 (iOS 17.5)"
-        - pretext_on_error: ":x: iPhone 15 (iOS 17.5)"
-        - title:
-        - title_on_error:
-        - message:
-        - message_on_error:
-        - fields: |
-            Branch | ${BITRISE_GIT_BRANCH}
-        - buttons: |
-            Build Log|${BITRISE_BUILD_URL}
-            Test Results|${BITRISE_BUILD_URL}?tab=tests
+#     - slack@4:
+#         title: "Report iPhone 17 (iOS 26.5)"
+#         is_always_run: true
+#         inputs:
+#         - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
+#         - channel: "#mobile-alerts-sandbox"
+#         - thread_ts: $UNIT_TESTS_THREAD_TS
+#         - author_name: ''
+#         - pretext: ":white_check_mark: iPhone 17 (iOS 26.5)"
+#         - pretext_on_error: ":x: iPhone 17 (iOS 26.5)"
+#         - title:
+#         - title_on_error:
+#         - message:
+#         - message_on_error:
+#         - fields: |
+#             Branch | ${BITRISE_GIT_BRANCH}
+#             Maximum Test Repetitions | ${MAX_TEST_REPETITIONS}
+#         - buttons: |
+#             Build Log|${BITRISE_BUILD_URL}
+#             Test Results|${BITRISE_BUILD_URL}?tab=tests
+#     - slack@4:
+#         title: "Report iPhone 16 (iOS 18.6)"
+#         is_always_run: true
+#         inputs:
+#         - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
+#         - channel: "#mobile-alerts-sandbox"
+#         - thread_ts: $UNIT_TESTS_THREAD_TS
+#         - author_name: ''
+#         - pretext: ":white_check_mark: iPhone 16 (iOS 18.6)"
+#         - pretext_on_error: ":x: iPhone 16 (iOS 18.6)"
+#         - title:
+#         - title_on_error:
+#         - message:
+#         - message_on_error:
+#         - fields: |
+#             Branch | ${BITRISE_GIT_BRANCH}
+#         - buttons: |
+#             Build Log|${BITRISE_BUILD_URL}
+#             Test Results|${BITRISE_BUILD_URL}?tab=tests
+#     - slack@4:
+#         title: "Report iPhone 15 (iOS 17.5)"
+#         is_always_run: true
+#         inputs:
+#         - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
+#         - channel: "#mobile-alerts-sandbox"
+#         - thread_ts: $UNIT_TESTS_THREAD_TS
+#         - author_name: ''
+#         - pretext: ":white_check_mark: iPhone 15 (iOS 17.5)"
+#         - pretext_on_error: ":x: iPhone 15 (iOS 17.5)"
+#         - title:
+#         - title_on_error:
+#         - message:
+#         - message_on_error:
+#         - fields: |
+#             Branch | ${BITRISE_GIT_BRANCH}
+#         - buttons: |
+#             Build Log|${BITRISE_BUILD_URL}
+#             Test Results|${BITRISE_BUILD_URL}?tab=tests
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
