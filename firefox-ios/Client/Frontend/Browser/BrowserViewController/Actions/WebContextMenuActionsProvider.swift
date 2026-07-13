@@ -226,15 +226,17 @@ class WebContextMenuActionsProvider {
             let changeCount = pasteboard.changeCount
             let application = UIApplication.shared
 
-            var taskId = UIBackgroundTaskIdentifier.invalid
-            taskId = application.beginBackgroundTask(expirationHandler: {
-                application.endBackgroundTask(taskId)
+            // Confined to the main actor so the same identifier can be shared with the (@Sendable)
+            // expiration handler, and captured by value into the network completion below.
+            let backgroundTask = BackgroundTaskHolder()
+            backgroundTask.id = application.beginBackgroundTask(expirationHandler: {
+                application.endBackgroundTask(backgroundTask.id)
             })
 
             makeURLSession(
                 userAgent: UserAgent.fxaUserAgent,
                 configuration: URLSessionConfiguration.defaultMPTCP
-            ).dataTask(with: url) { [taskId] (data, response, error) in
+            ).dataTask(with: url) { [taskId = backgroundTask.id] (data, response, error) in
                 ensureMainThread {
                     guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
                         application.endBackgroundTask(taskId)
@@ -273,4 +275,9 @@ class WebContextMenuActionsProvider {
                                                       originExtra: ContextMenuTelemetry.OriginExtra) {
         ContextMenuTelemetry().optionSelected(option: option, origin: originExtra)
     }
+}
+
+@MainActor
+private final class BackgroundTaskHolder {
+    var id: UIBackgroundTaskIdentifier = .invalid
 }
