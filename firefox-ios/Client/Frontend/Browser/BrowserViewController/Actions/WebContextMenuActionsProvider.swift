@@ -226,21 +226,18 @@ class WebContextMenuActionsProvider {
             let changeCount = pasteboard.changeCount
             let application = UIApplication.shared
 
-            // Held in a reference so the same identifier is shared between the expiration
-            // handler and the network completion without capturing the (short-lived) provider.
-            let backgroundTask = BackgroundTaskHolder()
-            backgroundTask.id = application.beginBackgroundTask(expirationHandler: {
-                application.endBackgroundTask(backgroundTask.id)
-                backgroundTask.id = .invalid
+            var taskId = UIBackgroundTaskIdentifier.invalid
+            taskId = application.beginBackgroundTask(expirationHandler: {
+                application.endBackgroundTask(taskId)
             })
 
             makeURLSession(
                 userAgent: UserAgent.fxaUserAgent,
                 configuration: URLSessionConfiguration.defaultMPTCP
-            ).dataTask(with: url) { (data, response, error) in
+            ).dataTask(with: url) { [taskId] (data, response, error) in
                 ensureMainThread {
                     guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
-                        application.endBackgroundTask(backgroundTask.id)
+                        application.endBackgroundTask(taskId)
                         return
                     }
 
@@ -253,7 +250,7 @@ class WebContextMenuActionsProvider {
                         pasteboard.addImageWithData(imageData, forURL: url)
                     }
 
-                    application.endBackgroundTask(backgroundTask.id)
+                    application.endBackgroundTask(taskId)
                 }
             }.resume()
             Self.recordOptionSelectedTelemetry(option: .copyImage, originExtra: origin)
@@ -276,10 +273,4 @@ class WebContextMenuActionsProvider {
                                                       originExtra: ContextMenuTelemetry.OriginExtra) {
         ContextMenuTelemetry().optionSelected(option: option, origin: originExtra)
     }
-}
-
-/// Holds a background task identifier by reference so it can be shared between the
-/// `beginBackgroundTask` expiration handler and the network completion handler.
-private final class BackgroundTaskHolder: @unchecked Sendable {
-    var id: UIBackgroundTaskIdentifier = .invalid
 }
