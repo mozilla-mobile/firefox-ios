@@ -6,7 +6,7 @@ import UIKit
 import Common
 import SiteImageView
 
-class SwipeUpTabWebViewPreview: UIView, ThemeApplicable, FeatureFlaggable {
+class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private struct UX {
         @MainActor
         static var screenshotViewContainerCornerRadius: CGFloat {
@@ -165,13 +165,11 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable, FeatureFlaggable {
     func releaseOutcome(fingerLocation: CGPoint) -> ReleaseOutcome {
         guard bounds.height > 0 else { return .cancel }
         let fractionFromTop = fingerLocation.y / bounds.height
-        /* TODO: - FXIOS-16236 Uncomment when feature flags properly set up
         if fractionFromTop <= UX.closeReleaseThreshold {
-            if featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayCloseTab) {
+            if SwipeGestureFeatureFlagProvider().isCloseTabEnabled {
                 return .closeTab
             }
         }
-         */
         if fractionFromTop <= UX.tabTrayReleaseThreshold {
             return .openTabTray
         }
