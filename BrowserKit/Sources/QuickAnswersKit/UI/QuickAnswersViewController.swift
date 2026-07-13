@@ -141,11 +141,6 @@ public final class QuickAnswersViewController: UIViewController,
         viewModel.startFlow()
     }
 
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-
     private func setupSubviews() {
         view.addSubviews(
             backgroundRecordEffect,
