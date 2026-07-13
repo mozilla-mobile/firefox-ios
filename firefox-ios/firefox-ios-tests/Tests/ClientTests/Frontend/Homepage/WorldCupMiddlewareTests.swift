@@ -211,7 +211,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let expectation = XCTestExpectation(description: "didUpdate dispatched")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -222,7 +222,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
         XCTAssertTrue(dispatched.matches.isEmpty)
         XCTAssertEqual(feed.startCalled, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - WorldCupActionType.selectTeam
