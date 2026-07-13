@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import ComponentLibrary
 import Shared
 import XCTest
 
@@ -68,10 +69,10 @@ final class QuickAnswersSettingsViewControllerTests: XCTestCase {
         XCTAssertNil(section.title)
     }
 
-    func test_generateSettings_sectionHasNoFooter() throws {
+    func test_generateSettings_sectionHasFooter() throws {
         let subject = createSubject()
         let section = try XCTUnwrap(subject.generateSettings().first)
-        XCTAssertNil(section.footerTitle)
+        XCTAssertNotNil(section.footerTitle)
     }
 
     // MARK: - Preference Integration
@@ -93,6 +94,17 @@ final class QuickAnswersSettingsViewControllerTests: XCTestCase {
 
         let displayValue = profile.prefs.boolForKey(boolSetting.prefKey ?? "")
         XCTAssertEqual(displayValue, false)
+    }
+
+    func test_viewForFooterInSection_addsLearnMoreLinkButton() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.settings = subject.generateSettings()
+        let footer = try XCTUnwrap(
+            subject.tableView(subject.tableView, viewForFooterInSection: 0) as? ThemedTableSectionHeaderFooterView
+        )
+        let hasLinkButton = footer.stackView.arrangedSubviews.contains { $0 is LinkButton }
+        XCTAssertTrue(hasLinkButton)
     }
 
     // MARK: - Helpers

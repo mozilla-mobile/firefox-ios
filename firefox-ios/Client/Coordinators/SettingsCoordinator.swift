@@ -490,6 +490,7 @@ final class SettingsCoordinator: BaseCoordinator,
             prefs: profile.prefs,
             windowUUID: windowUUID
         )
+        viewController.settingsDelegate = self
         router.push(viewController)
     }
 
