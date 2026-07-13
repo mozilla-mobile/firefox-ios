@@ -19,12 +19,14 @@ final class FolderSectionHeaderView: UITableViewHeaderFooterView {
 
     lazy var captionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
-        label.numberOfLines = 1
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
     }
 
     lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.callout.scaledFont()
-        label.numberOfLines = 1
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
     }
 
     lazy var chevronImageView: UIImageView = .build { imageView in
@@ -43,6 +45,7 @@ final class FolderSectionHeaderView: UITableViewHeaderFooterView {
         backgroundView = UIView()
         backgroundView?.backgroundColor = .clear
         contentView.backgroundColor = .clear
+        accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.folderSectionHeader
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
     }

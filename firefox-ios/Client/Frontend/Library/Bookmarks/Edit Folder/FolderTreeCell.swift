@@ -31,12 +31,14 @@ final class FolderTreeCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
-        label.numberOfLines = 1
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
     }
 
     lazy var breadcrumbLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
-        label.numberOfLines = 1
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
     }
 
     private lazy var textStackView: UIStackView = .build { stack in
@@ -130,6 +132,8 @@ final class FolderTreeCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
         leftImageView.image = image?.withRenderingMode(.alwaysTemplate)
         accessoryType = isSelected ? .checkmark : .none
+        accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarkParentFolderCell
+        accessibilityLabel = [title, breadcrumb].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: ", ")
         accessibilityTraits = .button
     }
 

@@ -13,7 +13,8 @@ final class LinkActionCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
-        label.numberOfLines = 1
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         label.textAlignment = .center
     }
 
@@ -34,6 +35,7 @@ final class LinkActionCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private func setupLayout() {
         selectionStyle = .default
         accessibilityTraits = .button
+        accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.changeLocationCell
         contentView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalPadding),
