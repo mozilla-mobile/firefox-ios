@@ -6,6 +6,7 @@ import UIKit
 import Common
 import Shared
 
+// TODO: - FXIOS-16295 improve VoiceOver by adding notification announcement before and after recording.
 public final class QuickAnswersViewController: UIViewController,
                                                UIAdaptivePresentationControllerDelegate,
                                                Themeable {
@@ -46,6 +47,8 @@ public final class QuickAnswersViewController: UIViewController,
             }),
             for: .touchUpInside
         )
+        // TODO: - FXIOS-14720 add Strings
+        $0.accessibilityLabel = "Close"
     }
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: CrossDissolveTransitionAnimator?
@@ -183,6 +186,7 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.contentView.configureTranscript(result.text)
                 }
             case .loadingSearchResult:
+                UIAccessibility.post(notification: .screenChanged, argument: self?.contentView)
                 self?.triggerHaptic()
                 self?.contentView.configureSearching()
             case .showSearchResult(let result, let error):
