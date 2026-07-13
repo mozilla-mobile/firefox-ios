@@ -9,6 +9,7 @@ import Shared
 enum FeatureFlagID: String, CaseIterable {
     case adBlocker
     case addressAutofillEdit
+    case addressBarGestureToOpenTabTrayCloseTab
     case addressBarGestureToOpenTabTrayInteractive
     case addressBarGestureToOpenTabTraySwipe
     case adsClient
@@ -96,6 +97,7 @@ enum FeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .adBlocker,
+                .addressBarGestureToOpenTabTrayCloseTab,
                 .addressBarGestureToOpenTabTrayInteractive,
                 .addressBarGestureToOpenTabTraySwipe,
                 .adsClient,

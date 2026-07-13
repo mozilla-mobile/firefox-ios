@@ -56,6 +56,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                            with: .addressBarGestureToOpenTabTrayCloseTab,
+                            titleText: format(string: "Address bar gesture to close tab"),
+                            statusText: format(string: """
+                                                        Toggle to enable closing a tab by dragging it into the top 1/4
+                                                        of the screen. Requires the interactive gesture be enabled.
+                                                        """)
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
                 statusText: format(string: "Toggle to enable the rust ads client")

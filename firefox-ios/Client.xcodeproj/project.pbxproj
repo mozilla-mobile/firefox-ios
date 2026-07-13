@@ -13162,6 +13162,7 @@
 		39A359BD1BFCCE7B006B9E87 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				EEEA85A8300184260075F5B3 /* SwipeGestureFeatureFlagProvider.swift */,
 				8A83C58B2DDF87E400FF60EF /* ProfilePrefsReader.swift */,
 				8AC8841C2D525EFF0033ABF5 /* CrashTracker.swift */,
 				966E4B2529F2D4AC00299B8D /* AccessoryViewProvider.swift */,
@@ -20434,6 +20435,7 @@
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
 				2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */,
 				213B7AF02D779D2400DF0123 /* Download.swift in Sources */,
+				EEEA85A9300184310075F5B3 /* SwipeGestureFeatureFlagProvider.swift in Sources */,
 				BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */,
 				810FF3582B1784E7009F062C /* PrivateModeAction.swift in Sources */,
 				C7F5331E2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift in Sources */,
