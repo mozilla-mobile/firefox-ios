@@ -138,7 +138,7 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     private let injectedPinnedSites: MockablePinnedSites?
 
     init(
-        databasePrefix: String = "mock",
+        databasePrefix: String = "mock_\(UUID().uuidString.prefix(8))",
         firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
         remoteSettingsService: RemoteSettingsService = RemoteSettingsService(unsafeFromHandle: 0),
         injectedPinnedSites: MockablePinnedSites? = nil

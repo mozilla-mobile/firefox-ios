@@ -1,0 +1,48 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - GoogleLens
+
+###############################################################################
+# Documentation
+###############################################################################
+
+google_lens:
+  search_completed:
+    type: event
+    description: |
+      Recorded when the Google Lens results page is displayed to the user
+      (or fails to load) after an image search.
+    extra_keys:
+      source:
+        type: string
+        description: |
+          Where the Google Lens search was initiated from.
+          Options are listed in the GoogleLensTelemetry.Source enumeration.
+      succeeded:
+        type: boolean
+        description: |
+          Whether the Google Lens results page loaded successfully.
+      http_status:
+        type: quantity
+        description: |
+          The HTTP status code of the Google Lens upload response, when available.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16208
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34604
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

@@ -6,9 +6,11 @@ import UIKit
 
 protocol GoogleLensServicing {
     /// Preprocesses `image` and builds the Google Lens upload request for it.
+    /// - Parameter image: the image to upload to Google Lens.
     /// - Parameter viewportSize: the size Lens should render its result UI for.
+    /// - Parameter entryPoint: the Lens `ep` query value for the upload source.
     /// - Returns: the upload request, or `nil` if the image could not be processed.
-    func makeUploadRequest(for image: UIImage, viewportSize: CGSize) -> URLRequest?
+    func makeUploadRequest(for image: UIImage, viewportSize: CGSize, entryPoint: GoogleLensUploadEntryPoint) -> URLRequest?
 }
 
 /// Produces the Google Lens upload request for an image by composing the image
@@ -23,11 +25,14 @@ struct GoogleLensService: GoogleLensServicing {
         self.requestBuilder = requestBuilder
     }
 
-    func makeUploadRequest(for image: UIImage, viewportSize: CGSize) -> URLRequest? {
+    func makeUploadRequest( for image: UIImage,
+                            viewportSize: CGSize,
+                            entryPoint: GoogleLensUploadEntryPoint) -> URLRequest? {
         guard let processedImage = imageProcessor.process(image) else { return nil }
         let input = GoogleLensUploadInput(jpegData: processedImage.jpegData,
                                           imageDimensions: processedImage.dimensions,
-                                          viewportSize: viewportSize)
+                                          viewportSize: viewportSize,
+                                          entryPoint: entryPoint)
         return requestBuilder.makeUploadRequest(for: input)
     }
 }

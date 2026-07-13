@@ -18,7 +18,7 @@ final class UserTelemetryTests: XCTestCase {
     }
 
     func testSetFirefoxAccountID_recordsData() throws {
-        let expectedMetricType = type(of: GleanMetrics.UserClientAssociation.uid)
+        let metric = GleanMetrics.UserClientAssociation.uid
         let expectedValue = mockFirefoxAccountId
 
         let subject = createSubject()
@@ -30,12 +30,10 @@ final class UserTelemetryTests: XCTestCase {
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? StringMetricType
         )
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordStringCalled, 1)
         XCTAssertEqual(savedValue, expectedValue)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
     }
 
     func createSubject() -> UserTelemetry {

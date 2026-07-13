@@ -4718,6 +4718,20 @@ extension String {
                 comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
             )
         }
+        public struct Sheet {
+            public static let PreviewButton = MZLocalizedString(
+                key: "", // WebCompatReporter.Sheet.PreviewButton.v152
+                tableName: "WebCompatReporter",
+                value: "Preview",
+                comment: "Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form."
+            )
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "", // WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v152
+                tableName: "WebCompatReporter",
+                value: "Close",
+                comment: "Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report."
+            )
+        }
     }
 }
 

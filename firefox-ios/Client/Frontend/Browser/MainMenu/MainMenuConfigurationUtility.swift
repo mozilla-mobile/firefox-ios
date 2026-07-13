@@ -24,7 +24,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let summarizer = StandardImageIdentifiers.Large.summarizer
         static let translate = StandardImageIdentifiers.Medium.translate
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
-        static let share = StandardImageIdentifiers.Large.share
+        static let share = StandardImageIdentifiers.Large.shareApple
         static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
     }
 

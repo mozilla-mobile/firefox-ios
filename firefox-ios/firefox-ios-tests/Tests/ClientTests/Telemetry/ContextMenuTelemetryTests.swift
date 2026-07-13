@@ -30,19 +30,16 @@ final class ContextMenuTelemetryTests: XCTestCase {
 
         let expectedOption = ContextMenuTelemetry.OptionExtra.openInNewTab
         let expectedOrigin = ContextMenuTelemetry.OriginExtra.webLink
-        let expectedMetricType = type(of: event)
 
         subject?.optionSelected(option: expectedOption, origin: expectedOrigin)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.option, expectedOption.rawValue)
         XCTAssertEqual(savedExtras.origin, expectedOrigin.rawValue)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordEvent_Shown() throws {
@@ -50,18 +47,15 @@ final class ContextMenuTelemetryTests: XCTestCase {
         typealias EventExtrasType = GleanMetrics.ContextMenu.ShownExtra
 
         let expectedOrigin = ContextMenuTelemetry.OriginExtra.webLink
-        let expectedMetricType = type(of: event)
 
         subject?.shown(origin: expectedOrigin)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.origin, expectedOrigin.rawValue)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordEvent_Dismissed() throws {
@@ -69,17 +63,14 @@ final class ContextMenuTelemetryTests: XCTestCase {
         typealias EventExtrasType = GleanMetrics.ContextMenu.DismissedExtra
 
         let expectedOrigin = ContextMenuTelemetry.OriginExtra.webLink
-        let expectedMetricType = type(of: event)
 
         subject?.dismissed(origin: expectedOrigin)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.origin, expectedOrigin.rawValue)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 }

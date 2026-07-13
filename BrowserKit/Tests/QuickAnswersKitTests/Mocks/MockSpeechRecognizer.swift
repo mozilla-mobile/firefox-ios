@@ -7,6 +7,7 @@ import Speech
 @testable import QuickAnswersKit
 
 final class MockSpeechRecognizer: SpeechRecognizerProvider, @unchecked Sendable {
+    var supportsOnDeviceRecognition = true
     var isAvailable = true
     private(set) var recognitionTaskCallCount = 0
 
