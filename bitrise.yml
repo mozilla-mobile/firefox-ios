@@ -2062,9 +2062,17 @@ workflows:
         title: "Post thread starter"
         is_always_run: true
         inputs:
-        - webhook_url: "$WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX"
+        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
         - channel: "#mobile-alerts-sandbox"
         - message: "Firefox iOS weekly unit test results :thread:"
+        - message_on_error: "Firefox iOS weekly unit test results :thread:"
+        - pretext:
+        - pretext_on_error:
+        - author_name: ''
+        - title:
+        - title_on_error:
+        - fields:
+        - buttons:
         - footer: Mobile Test Engineering
         - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - output_thread_ts: UNIT_TESTS_THREAD_TS
@@ -2072,7 +2080,7 @@ workflows:
         title: "Report iPhone 17 (iOS 26.5)"
         is_always_run: true
         inputs:
-        - webhook_url: "$WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX"
+        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
         - channel: "#mobile-alerts-sandbox"
         - thread_ts: $UNIT_TESTS_THREAD_TS
         - author_name: ''
@@ -2092,7 +2100,7 @@ workflows:
         title: "Report iPhone 16 (iOS 18.6)"
         is_always_run: true
         inputs:
-        - webhook_url: "$WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX"
+        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
         - channel: "#mobile-alerts-sandbox"
         - thread_ts: $UNIT_TESTS_THREAD_TS
         - author_name: ''
@@ -2104,7 +2112,6 @@ workflows:
         - message_on_error:
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
-            Maximum Test Repetitions | ${MAX_TEST_REPETITIONS}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Results|${BITRISE_BUILD_URL}?tab=tests
@@ -2112,7 +2119,7 @@ workflows:
         title: "Report iPhone 15 (iOS 17.5)"
         is_always_run: true
         inputs:
-        - webhook_url: "$WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX"
+        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
         - channel: "#mobile-alerts-sandbox"
         - thread_ts: $UNIT_TESTS_THREAD_TS
         - author_name: ''
@@ -2124,7 +2131,6 @@ workflows:
         - message_on_error:
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
-            Maximum Test Repetitions | ${MAX_TEST_REPETITIONS}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Results|${BITRISE_BUILD_URL}?tab=tests
