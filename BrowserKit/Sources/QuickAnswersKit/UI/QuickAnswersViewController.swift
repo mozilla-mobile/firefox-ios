@@ -24,15 +24,6 @@ public final class QuickAnswersViewController: UIViewController,
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
-        static let privacyButtonContentInset = NSDirectionalEdgeInsets(
-            top: 8.0,
-            leading: 8.0,
-            bottom: 8.0,
-            trailing: 12.0
-        )
-        static let privacyButtonImagePadding: CGFloat = 4.0
-        static let privacyButtonCornerRadius: CGFloat = 16.0
-        static let privacyButtonImageName = "shield"
     }
 
     // MARK: - Properties
