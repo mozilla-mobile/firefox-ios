@@ -34,8 +34,7 @@ final class AudioManager: AudioManagerProtocol {
     }
 
     /// Stops the audio engine and deactivates the audio session, releasing audio focus so other clients
-    /// (e.g. VoiceOver) can resume. `.notifyOthersOnDeactivation` un-ducks audio ducked by the
-    /// `.duckOthers` option used on activation.
+    /// can resume.
     func stopEngine() throws {
         audioEngine.stop()
         audioEngine.audioInputNode.removeTap(onBus: 0)
