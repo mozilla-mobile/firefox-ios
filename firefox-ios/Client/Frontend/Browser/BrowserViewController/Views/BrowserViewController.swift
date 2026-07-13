@@ -311,6 +311,10 @@ class BrowserViewController: UIViewController,
         return toolbarHelper.isSwipingTabsEnabled
     }
 
+    var isSwipeUpGesturesEnabled: Bool {
+        return SwipeGestureFeatureFlagProvider().isAnyGestureEnabled
+    }
+
     var isNativeErrorPageEnabled: Bool {
         return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
     }
@@ -1394,8 +1398,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        // TODO: FXIOS-16236 Gate behind feature flag when refactor is done
-        if true {
+        if isSwipeUpGesturesEnabled {
             view.addSubview(swipeUpTabWebViewPreview)
         }
         if isSwipingTabsEnabled {
@@ -1669,8 +1672,7 @@ class BrowserViewController: UIViewController,
             ])
         }
 
-        if true {
-            // TODO: FXIOS-16236 Gate behind feature flag when refactor is done
+        if isSwipeUpGesturesEnabled {
             swipeUpTabWebViewPreview.pinToSuperview()
         }
         if isSnapKitRemovalEnabled {

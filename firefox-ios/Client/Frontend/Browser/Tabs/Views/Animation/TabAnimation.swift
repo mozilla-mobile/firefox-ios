@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 import Shared
 
-extension TabTrayViewController: UIViewControllerTransitioningDelegate, FeatureFlaggable {
+extension TabTrayViewController: UIViewControllerTransitioningDelegate {
     private struct UX {
         // Animation keyPaths
         static let lineWidthKeyPath = "lineWidth"
@@ -32,13 +32,6 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate, FeatureF
         static let initialBorderWidth = 0.0
 
         static let zeroCornerRadius = 0.0
-    }
-
-    private var interactiveEnabled: Bool {
-        // TODO: FXIOS-16236 Create feature flaggable class for all swipe related feature flags
-        let swipeFlag = featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
-        let interactiveFlag = featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayInteractive)
-        return interactiveFlag && !swipeFlag
     }
 
     func animationController(
@@ -164,7 +157,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
-        if interactiveEnabled {
+        if SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled {
             runInteractivePresentationAnimation(
                 context: context,
                 browserVC: browserVC,
@@ -359,7 +352,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             backgroundView.alpha = UX.clearAlpha
         }
 
-        if interactiveEnabled {
+        if SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled {
             animator.addCompletion { _ in
                 let settledImage = bvcSnapshot.image
                 backgroundView.removeFromSuperview()
