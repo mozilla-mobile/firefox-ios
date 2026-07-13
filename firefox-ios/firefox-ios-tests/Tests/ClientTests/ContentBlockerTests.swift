@@ -125,7 +125,7 @@ final class ContentBlockerTests: XCTestCase {
         XCTAssertNotNil(UserDefaults.standard.string(forKey: hashKey))
 
         let wipe = XCTestExpectation(description: "wipe rules")
-        await ContentBlocker.shared.removeAllRulesInStore { wipe.fulfill() }
+        ContentBlocker.shared.removeAllRulesInStore { wipe.fulfill() }
         await fulfillment(of: [wipe], timeout: 5)
 
         XCTAssertNil(
