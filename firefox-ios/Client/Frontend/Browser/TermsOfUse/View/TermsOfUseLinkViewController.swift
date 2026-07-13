@@ -108,6 +108,16 @@ final class TermsOfUseLinkViewController: UIViewController,
     }
 
     private func applyProgressBarTheme(theme: Theme) {
+        if theme.isNova {
+            let colors = theme.colors.gradientAccent.colors
+            progressBar.setGradientColors(
+                startColor: colors.first ?? theme.colors.borderAccent,
+                middleColor: nil,
+                endColor: colors.last ?? theme.colors.borderAccent
+            )
+            return
+        }
+
         let gradientStartColor = theme.colors.borderAccent
         let gradientMiddleColor = theme.colors.iconAccentPink
         let gradientEndColor = theme.colors.iconAccentYellow
