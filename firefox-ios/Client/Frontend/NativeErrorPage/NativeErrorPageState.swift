@@ -3,8 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import ModifiedCopy
 import Common
 
+@Copyable
 struct NativeErrorPageState: ScreenState {
     var windowUUID: WindowUUID
     var model: ErrorPageModel?
@@ -43,19 +45,13 @@ struct NativeErrorPageState: ScreenState {
             guard let action = action as? NativeErrorPageAction, let model = action.nativePageErrorModel else {
                 return defaultState(from: state)
             }
-            return NativeErrorPageState(
-                windowUUID: state.windowUUID,
-                model: model
-            )
+            return state.copy(model: model)
         default:
             return defaultState(from: state)
         }
     }
 
     static func defaultState(from state: NativeErrorPageState) -> NativeErrorPageState {
-        return NativeErrorPageState(
-            windowUUID: state.windowUUID,
-            model: state.model
-        )
+        return state.copy(model: state.model)
     }
 }
