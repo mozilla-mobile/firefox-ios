@@ -2064,8 +2064,8 @@ workflows:
         inputs:
         - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
         - channel: "#mobile-alerts-sandbox"
-        - message: "Firefox iOS weekly unit test results :thread:"
-        - message_on_error: "Firefox iOS weekly unit test results :thread:"
+        - message: ":white_check_mark: Firefox iOS weekly unit test results :thread:"
+        - message_on_error: ":x: Firefox iOS weekly unit test results :thread:"
         - pretext:
         - pretext_on_error:
         - author_name: ''
@@ -2073,9 +2073,25 @@ workflows:
         - title_on_error:
         - fields:
         - buttons:
+        - color:
+        - color_on_error:
         - footer: Mobile Test Engineering
         - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - output_thread_ts: UNIT_TESTS_THREAD_TS
+    - slack@4:
+        title: "Test threaded reply"
+        is_always_run: true
+        inputs:
+        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
+        - channel: "#mobile-alerts-sandbox"
+        - thread_ts: $UNIT_TESTS_THREAD_TS
+        - message: "Test message in thread"
+        - pretext:
+        - author_name: ''
+        - title:
+        - color:
+        - fields:
+        - buttons:
 #     - slack@4:
 #         title: "Report iPhone 17 (iOS 26.5)"
 #         is_always_run: true
@@ -2088,6 +2104,8 @@ workflows:
 #         - pretext_on_error: ":x: iPhone 17 (iOS 26.5)"
 #         - title:
 #         - title_on_error:
+#         - color:
+#         - color_on_error:
 #         - message:
 #         - message_on_error:
 #         - fields: |
@@ -2108,6 +2126,8 @@ workflows:
 #         - pretext_on_error: ":x: iPhone 16 (iOS 18.6)"
 #         - title:
 #         - title_on_error:
+#         - color:
+#         - color_on_error:
 #         - message:
 #         - message_on_error:
 #         - fields: |
@@ -2127,6 +2147,8 @@ workflows:
 #         - pretext_on_error: ":x: iPhone 15 (iOS 17.5)"
 #         - title:
 #         - title_on_error:
+#         - color:
+#         - color_on_error:
 #         - message:
 #         - message_on_error:
 #         - fields: |
