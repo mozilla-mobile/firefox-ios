@@ -333,7 +333,7 @@ final class BrowserCoordinator: BaseCoordinator,
             handle(homepanelSection: section)
 
         case let .settings(section):
-            handleSettings(with: section)
+            show(settings: section)
 
         case let .action(routeAction):
             switch routeAction {
