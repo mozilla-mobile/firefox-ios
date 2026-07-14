@@ -112,6 +112,7 @@ public struct StandardImageIdentifiers {
         public static let readerView = "readerViewLarge"
         public static let readingList = "readingListLarge"
         public static let readingListAdd = "readingListAddLarge"
+        public static let report = "reportLarge"
         public static let saveFile = "saveFileLarge"
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"

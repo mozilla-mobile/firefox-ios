@@ -4614,25 +4614,25 @@ extension String {
     public struct WebCompatReporter {
         public struct Category {
             public static let SiteNotUsable = MZLocalizedString(
-                key: "", // WebCompatReporter.Category.SiteNotUsable.v152
+                key: "", // WebCompatReporter.Category.SiteNotUsable.v154
                 tableName: "WebCompatReporter",
                 value: "Site is not usable",
                 comment: "Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form."
             )
             public static let DesignBroken = MZLocalizedString(
-                key: "", // WebCompatReporter.Category.DesignBroken.v152
+                key: "", // WebCompatReporter.Category.DesignBroken.v154
                 tableName: "WebCompatReporter",
                 value: "Design is broken",
                 comment: "Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form."
             )
             public static let VideoOrAudio = MZLocalizedString(
-                key: "", // WebCompatReporter.Category.VideoOrAudio.v152
+                key: "", // WebCompatReporter.Category.VideoOrAudio.v154
                 tableName: "WebCompatReporter",
                 value: "Video or audio does not play",
                 comment: "Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form."
             )
             public static let Other = MZLocalizedString(
-                key: "", // WebCompatReporter.Category.Other.v152
+                key: "", // WebCompatReporter.Category.Other.v154
                 tableName: "WebCompatReporter",
                 value: "Other",
                 comment: "Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form."
@@ -4640,93 +4640,107 @@ extension String {
         }
         public struct SubOption {
             public static let BrowserBlocked = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.BrowserBlocked.v152
+                key: "", // WebCompatReporter.SubOption.BrowserBlocked.v154
                 tableName: "WebCompatReporter",
                 value: "Browser is blocked or unsupported",
                 comment: "A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form."
             )
             public static let PageNotLoading = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.PageNotLoading.v152
+                key: "", // WebCompatReporter.SubOption.PageNotLoading.v154
                 tableName: "WebCompatReporter",
                 value: "Page not loading correctly",
                 comment: "A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form."
             )
             public static let MissingItems = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.MissingItems.v152
+                key: "", // WebCompatReporter.SubOption.MissingItems.v154
                 tableName: "WebCompatReporter",
                 value: "Missing items",
                 comment: "A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form."
             )
             public static let ButtonsNotWorking = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.ButtonsNotWorking.v152
+                key: "", // WebCompatReporter.SubOption.ButtonsNotWorking.v154
                 tableName: "WebCompatReporter",
                 value: "Buttons or links not working",
                 comment: "A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form."
             )
             public static let ImagesNotLoaded = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.ImagesNotLoaded.v152
+                key: "", // WebCompatReporter.SubOption.ImagesNotLoaded.v154
                 tableName: "WebCompatReporter",
                 value: "Images not loaded",
                 comment: "A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form."
             )
             public static let ItemsOverlapped = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.ItemsOverlapped.v152
+                key: "", // WebCompatReporter.SubOption.ItemsOverlapped.v154
                 tableName: "WebCompatReporter",
                 value: "Items are overlapped",
                 comment: "A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form."
             )
             public static let ItemsMisaligned = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.ItemsMisaligned.v152
+                key: "", // WebCompatReporter.SubOption.ItemsMisaligned.v154
                 tableName: "WebCompatReporter",
                 value: "Items are misaligned",
                 comment: "A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form."
             )
             public static let ItemsNotVisible = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.ItemsNotVisible.v152
+                key: "", // WebCompatReporter.SubOption.ItemsNotVisible.v154
                 tableName: "WebCompatReporter",
                 value: "Items not fully visible",
                 comment: "A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form."
             )
             public static let NoVideo = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.NoVideo.v152
+                key: "", // WebCompatReporter.SubOption.NoVideo.v154
                 tableName: "WebCompatReporter",
                 value: "There is no video",
                 comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
             )
             public static let NoAudio = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.NoAudio.v152
+                key: "", // WebCompatReporter.SubOption.NoAudio.v154
                 tableName: "WebCompatReporter",
                 value: "There is no audio",
                 comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
             )
             public static let MediaControlsBroken = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.MediaControlsBroken.v152
+                key: "", // WebCompatReporter.SubOption.MediaControlsBroken.v154
                 tableName: "WebCompatReporter",
                 value: "Media controls are broken or missing",
                 comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
             )
             public static let PlaybackFails = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.PlaybackFails.v152
+                key: "", // WebCompatReporter.SubOption.PlaybackFails.v154
                 tableName: "WebCompatReporter",
                 value: "The video or audio does not play",
                 comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
             )
             public static let CaptionsMissing = MZLocalizedString(
-                key: "", // WebCompatReporter.SubOption.CaptionsMissing.v152
+                key: "", // WebCompatReporter.SubOption.CaptionsMissing.v154
                 tableName: "WebCompatReporter",
                 value: "Captions are missing",
                 comment: "A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form."
             )
         }
+        public struct IssueSection {
+            public static let Title = MZLocalizedString(
+                key: "", // WebCompatReporter.IssueSection.Title.v154
+                tableName: "WebCompatReporter",
+                value: "Site Issue",
+                comment: "Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form."
+            )
+            public static let CategoryPlaceholder = MZLocalizedString(
+                key: "", // WebCompatReporter.IssueSection.CategoryPlaceholder.v154
+                tableName: "WebCompatReporter",
+                value: "Choose issue type…",
+                comment: "Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form."
+            )
+        }
         public struct Sheet {
             public static let PreviewButton = MZLocalizedString(
-                key: "", // WebCompatReporter.Sheet.PreviewButton.v152
+                key: "", // WebCompatReporter.Sheet.PreviewButton.v154
                 tableName: "WebCompatReporter",
                 value: "Preview",
                 comment: "Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form."
             )
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
-                key: "", // WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v152
+                key: "", // WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154
                 tableName: "WebCompatReporter",
                 value: "Close",
                 comment: "Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report."
@@ -6121,7 +6135,7 @@ extension String {
             public static let ReportBrokenSite = MZLocalizedString(
                 key: "", // MainMenu.ToolsSection.ReportBrokenSite.Title.v152
                 tableName: "MainMenu",
-                value: "Report a Website Issue",
+                value: "Report Broken Site",
                 comment: "On the main menu, the title for the action that lets the user report that the current website is broken or not working correctly.")
 
             public struct Translation {
@@ -6204,7 +6218,7 @@ extension String {
                 public static let ReportBrokenSite = MZLocalizedString(
                     key: "", // MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v152
                     tableName: "MainMenu",
-                    value: "Report a Website Issue",
+                    value: "Report Broken Site",
                     comment: "On the main menu, the accessibility label for the action that lets the user report that the current website is broken or not working correctly.")
                 public struct Translation {
                     public static let TranslatedPageTitle = MZLocalizedString(
