@@ -2222,9 +2222,9 @@
 		EC0FBD1F300530E9005CCA62 /* FolderSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD1E300530E3005CCA62 /* FolderSectionHeaderView.swift */; };
 		EC0FBD213005311A005CCA62 /* FolderTreeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2030053117005CCA62 /* FolderTreeCell.swift */; };
 		EC0FBD233005313B005CCA62 /* LinkActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2230053136005CCA62 /* LinkActionCell.swift */; };
-		EC0FBD253005324D005CCA62 /* LinkActionCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2430053248005CCA62 /* LinkActionCellTests.swift */; };
-		EC0FBD2730053268005CCA62 /* FolderSectionHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2630053263005CCA62 /* FolderSectionHeaderViewTests.swift */; };
-		EC0FBD2930053287005CCA62 /* FolderTreeCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2830053282005CCA62 /* FolderTreeCellTests.swift */; };
+		EC0FBD2D3006924A005CCA62 /* FolderTreeCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2C3006924A005CCA62 /* FolderTreeCellTests.swift */; };
+		EC0FBD2F30069252005CCA62 /* FolderSectionHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2E30069252005CCA62 /* FolderSectionHeaderViewTests.swift */; };
+		EC0FBD3130069258005CCA62 /* LinkActionCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */; };
 		ECD8E56C2FF7EB69002092C6 /* WaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */; };
 		ECD8E56E2FF7ED79002092C6 /* WaybackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56D2FF7ED75002092C6 /* WaybackServiceTests.swift */; };
 		ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */; };
@@ -11801,9 +11801,9 @@
 		EC0FBD1E300530E3005CCA62 /* FolderSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderView.swift; sourceTree = "<group>"; };
 		EC0FBD2030053117005CCA62 /* FolderTreeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCell.swift; sourceTree = "<group>"; };
 		EC0FBD2230053136005CCA62 /* LinkActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkActionCell.swift; sourceTree = "<group>"; };
-		EC0FBD2430053248005CCA62 /* LinkActionCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkActionCellTests.swift; sourceTree = "<group>"; };
-		EC0FBD2630053263005CCA62 /* FolderSectionHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderViewTests.swift; sourceTree = "<group>"; };
-		EC0FBD2830053282005CCA62 /* FolderTreeCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCellTests.swift; sourceTree = "<group>"; };
+		EC0FBD2C3006924A005CCA62 /* FolderTreeCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCellTests.swift; sourceTree = "<group>"; };
+		EC0FBD2E30069252005CCA62 /* FolderSectionHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderViewTests.swift; sourceTree = "<group>"; };
+		EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkActionCellTests.swift; sourceTree = "<group>"; };
 		EC184DB5A4191574BBE29140 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/Menu.strings; sourceTree = "<group>"; };
 		EC405C133007DED70003DE07 /* WaybackCodesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackCodesTests.swift; sourceTree = "<group>"; };
 		EC405C153007E3EC0003DE07 /* NativeErrorRegularContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorRegularContentViewTests.swift; sourceTree = "<group>"; };
@@ -12479,6 +12479,9 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */,
+				EC0FBD2E30069252005CCA62 /* FolderSectionHeaderViewTests.swift */,
+				EC0FBD2C3006924A005CCA62 /* FolderTreeCellTests.swift */,
 				8A9D31612D13545100171502 /* EditFolderViewModelTests.swift */,
 				8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */,
 				0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */,
@@ -15581,9 +15584,6 @@
 		C2D1A10E2A67E71300205DCC /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				EC0FBD2830053282005CCA62 /* FolderTreeCellTests.swift */,
-				EC0FBD2630053263005CCA62 /* FolderSectionHeaderViewTests.swift */,
-				EC0FBD2430053248005CCA62 /* LinkActionCellTests.swift */,
 				8A83B74B2A265061002FF9AC /* LibraryCoordinatorTests.swift */,
 				C2D1A10F2A67E73800205DCC /* BookmarksCoordinatorTests.swift */,
 				C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */,
@@ -20695,7 +20695,6 @@
 				C705FA782EF30C4F00AC5EE7 /* PrivacyNoticeHelperTests.swift in Sources */,
 				319478509A7F45D09CBCEC18 /* PrivacyWindowHelperTests.swift in Sources */,
 				8A7AE4472BAC78230072DAEC /* MockLibraryNavigationHandler.swift in Sources */,
-				EC0FBD2930053287005CCA62 /* FolderTreeCellTests.swift in Sources */,
 				C25020842ECDE75D0071506F /* MockTranslationsSchemeHandler.swift in Sources */,
 				8A7A26E829D4C0FE00EA76F1 /* IntroScreenManagerTests.swift in Sources */,
 				E1AEC17A286E0CF500062E29 /* WebViewNavigationHandlerTests.swift in Sources */,
@@ -20705,6 +20704,7 @@
 				F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */,
 				F00CA4022F00000000000003 /* WorldCupLiveResponseTests.swift in Sources */,
 				F00CA4022F0000000000000D /* WorldCupTeamsResponseTests.swift in Sources */,
+				EC0FBD2F30069252005CCA62 /* FolderSectionHeaderViewTests.swift in Sources */,
 				F00CA4022F0000000000000F /* WorldCupLoadErrorTests.swift in Sources */,
 				F00CA4022F00000000000013 /* WorldCupPollingFetchStrategyTests.swift in Sources */,
 				F00CA4032F00000000000007 /* WorldCupMatchesTests.swift in Sources */,
@@ -20731,6 +20731,7 @@
 				8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */,
 				8AE80BAF2891960300BC12EA /* MockTraitCollection.swift in Sources */,
 				C2F2C19B30044C9600F9B916 /* MockAdBlockerListFetcher.swift in Sources */,
+				EC0FBD3130069258005CCA62 /* LinkActionCellTests.swift in Sources */,
 				8A55E8042BFBA9BE006DBD85 /* MicrosurveyCoordinatorTests.swift in Sources */,
 				8A832A9729DCBD3C0025D5DD /* LaunchTypeTests.swift in Sources */,
 				219AEECE2E5E524300BF5F6F /* MockTabProviderProtocol.swift in Sources */,
@@ -20756,6 +20757,7 @@
 				ED33E3572D0A4CE9002265A7 /* URLActivityItemProviderTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				AA6A6F382EF57EC000D1912D /* SystemLocaleProviderTests.swift in Sources */,
+				EC0FBD2D3006924A005CCA62 /* FolderTreeCellTests.swift in Sources */,
 				C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
 				C296B6E92F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift in Sources */,
@@ -20929,7 +20931,6 @@
 				AA24AD342E7C3AD2008659A3 /* MockTrendingSearchEngine.swift in Sources */,
 				ED07C0F22CCAFED1006C0627 /* SearchEngineSelectionStateTests.swift in Sources */,
 				8A13FA8F2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift in Sources */,
-				EC0FBD253005324D005CCA62 /* LinkActionCellTests.swift in Sources */,
 				8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */,
 				0B6AB0412DCA3CB900F03AF6 /* DocumentLoggerTests.swift in Sources */,
 				215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */,
@@ -21217,7 +21218,6 @@
 				0B6153E22E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift in Sources */,
 				8A4EA0D42C01100200E4E4F1 /* MicrosurveySurfaceManagerTests.swift in Sources */,
 				C24E2D2A2ECF960000BBCFA7 /* MockTranslationsTelemetry.swift in Sources */,
-				EC0FBD2730053268005CCA62 /* FolderSectionHeaderViewTests.swift in Sources */,
 				8ADEC6832A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift in Sources */,
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
 				0B5CAF0D2E40DA89008B5D5A /* MockSummarizationChecker.swift in Sources */,
