@@ -42,9 +42,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressBarGestureToOpenTabTraySwipe:
             return checkAddressBarGestureToOpenTabTraySwipeFeature()
 
-        case .adsClient:
-            return checkAdsClientFeature()
-
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
 
@@ -330,11 +327,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkAddressAutofillEditing() -> Bool {
         let config = nimbus.features.addressAutofillEdit.value()
 
-        return config.status
-    }
-
-    private func checkAdsClientFeature() -> Bool {
-        let config = nimbus.features.adsClient.value()
         return config.status
     }
 
