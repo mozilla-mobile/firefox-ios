@@ -2070,7 +2070,7 @@ workflows:
             envman add --key XCODE_VERSION_INFO --value "$XCODE_VER ($BUILD_VER)"
     - slack@4:
         inputs:
-        - webhook_url: $WEBHOOK_SLACK_MOBILE_ALERTS_SANDBOX
+        - webhook_url: $WEBHOOK_SLACK_FIREFOX_IOS_UNIT_TESTS
         - author_name: ''
         - pretext: ":white_check_mark: Firefox iOS Unit Tests"
         - pretext_on_error: ":x: Firefox iOS Unit Tests"
