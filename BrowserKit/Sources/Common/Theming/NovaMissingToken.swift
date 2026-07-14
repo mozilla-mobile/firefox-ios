@@ -4,11 +4,14 @@
 
 import UIKit
 
-/// The old themes fill Nova only tokens with clear colors. Call this method everywhere we
-/// add the clear colors: it triggers an `assertionFailure` in debug to catch any wrong use.
+/// Flags a Nova only token used in a classic theme; `reportMisuse`
+/// defaults to `assertionFailure` and is overridden in tests.
 public struct NovaMissingToken {
+
+    nonisolated(unsafe) static var reportMisuse: (String) -> Void = { assertionFailure($0) }
+
     public static func color(_ color: UIColor) -> UIColor {
-        assertionFailure("Nova only token read from a non-Nova theme")
+        reportMisuse("Nova only token read from a classic theme")
         return color
     }
 }
