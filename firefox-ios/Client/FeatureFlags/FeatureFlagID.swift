@@ -11,7 +11,6 @@ enum FeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarGestureToOpenTabTrayInteractive
     case addressBarGestureToOpenTabTraySwipe
-    case adsClient
     case aiKillSwitch
     case appearanceMenu
     case badCertDomainErrorPage
@@ -98,7 +97,6 @@ enum FeatureFlagID: String, CaseIterable {
         case    .adBlocker,
                 .addressBarGestureToOpenTabTrayInteractive,
                 .addressBarGestureToOpenTabTraySwipe,
-                .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
                 .badCertDomainErrorPage,
