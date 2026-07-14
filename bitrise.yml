@@ -2018,7 +2018,7 @@ workflows:
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
     - xcode-test-without-building@0:
         title: "Unit Tests - iPhone 17 (iOS 26.5), 3 repetitions"
-        timeout: 6000
+        timeout: 1800
         is_always_run: true
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
