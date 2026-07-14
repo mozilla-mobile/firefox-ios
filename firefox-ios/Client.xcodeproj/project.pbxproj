@@ -1310,8 +1310,6 @@
 		8AF3B15C2AF99C77009BB262 /* ReadingListPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3B15B2AF99C77009BB262 /* ReadingListPanelTests.swift */; };
 		8AF3B15E2AF99D2F009BB262 /* DownloadsPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3B15D2AF99D2F009BB262 /* DownloadsPanelTests.swift */; };
 		8AF4E7712C45B98F00BAD91C /* RemotePasswordRules.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AF4E7702C45B98F00BAD91C /* RemotePasswordRules.json */; };
-		8AF6D4DF2A856A9000B0474B /* MockUnifiedTileNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6D4DE2A856A9000B0474B /* MockUnifiedTileNetworking.swift */; };
-		8AF6D4E12A856B4500B0474B /* UnifiedTileNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6D4E02A856B4500B0474B /* UnifiedTileNetworking.swift */; };
 		8AF99B4D29EF076800108DEC /* WebviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B4C29EF076800108DEC /* WebviewViewController.swift */; };
 		8AF99B4F29EF1BA700108DEC /* BrowserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */; };
 		8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */; };
@@ -9877,8 +9875,6 @@
 		8AF4E76B2C41D7C200BAD91C /* Update_Remote_Settings.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = Update_Remote_Settings.py; sourceTree = "<group>"; };
 		8AF4E76D2C41D86100BAD91C /* RemoteSettingsFetchConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = RemoteSettingsFetchConfig.json; sourceTree = "<group>"; };
 		8AF4E7702C45B98F00BAD91C /* RemotePasswordRules.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RemotePasswordRules.json; sourceTree = "<group>"; };
-		8AF6D4DE2A856A9000B0474B /* MockUnifiedTileNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUnifiedTileNetworking.swift; sourceTree = "<group>"; };
-		8AF6D4E02A856B4500B0474B /* UnifiedTileNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedTileNetworking.swift; sourceTree = "<group>"; };
 		8AF99B4C29EF076800108DEC /* WebviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewViewController.swift; sourceTree = "<group>"; };
 		8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserDelegate.swift; sourceTree = "<group>"; };
 		8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarBadge.swift; sourceTree = "<group>"; };
@@ -14624,7 +14620,6 @@
 		8AB8572A27D944B70075C173 /* DataManagement */ = {
 			isa = PBXGroup;
 			children = (
-				8AF6D4E02A856B4500B0474B /* UnifiedTileNetworking.swift */,
 				43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */,
 				43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */,
 				961577912A38FDB300391E8D /* SponsoredTileDataUtility.swift */,
@@ -15862,7 +15857,6 @@
 				C8C3FEA029F973C40038E3BA /* MockBrowserViewController.swift */,
 				219F27142EA2956100AE4536 /* MockBrowserViewControllerWebViewDelegates.swift */,
 				ED5BEBD52E2823F2001D731D /* MockLegacyResponder.swift */,
-				8AF6D4DE2A856A9000B0474B /* MockUnifiedTileNetworking.swift */,
 				8AABBD042A0041380089941E /* MockCoordinator.swift */,
 				0AFF7F632C7784D600265214 /* MockDataCleaner.swift */,
 				8AE80BB42891AE6700BC12EA /* MockDispatchGroup.swift */,
@@ -20358,7 +20352,6 @@
 				213778632980448C00D01309 /* DownloadFileFetcher.swift in Sources */,
 				F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */,
 				C27EF6132EBA28E100BED719 /* LanguageDetector.swift in Sources */,
-				8AF6D4E12A856B4500B0474B /* UnifiedTileNetworking.swift in Sources */,
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
 				8AC6F2262D6E263500D10A9F /* ExperimentRemoteTabsEmptyView.swift in Sources */,
 				CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */,
@@ -20957,7 +20950,6 @@
 				217C6F312F3BD5E00085D9B9 /* BrowserViewControllerConstraintTestsBase.swift in Sources */,
 				8A9D31622D13545A00171502 /* EditFolderViewModelTests.swift in Sources */,
 				ED6C23102DFB4F39005EDE1D /* UserTelemetryTests.swift in Sources */,
-				8AF6D4DF2A856A9000B0474B /* MockUnifiedTileNetworking.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				21FB441A2E7B3AE500A8818D /* MockRecordVisitObservationManager.swift in Sources */,
 				617D8ABD2FC8D27300E1C7A5 /* ConversionDataManagerTests.swift in Sources */,

@@ -17,14 +17,12 @@ protocol UnifiedAdsCallbackTelemetry {
 
 final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     private let adsClient: MozAdsClient
-    private let networking: UnifiedTileNetworking
     private let logger: Logger
     private let sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry
     private let adsClientCallbackQueue: DispatchQueueInterface
 
     init(
         adsClientFactory: MozAdsClientFactory = DefaultMozAdsClientFactory(),
-        networking: UnifiedTileNetworking = DefaultUnifiedTileNetwork(with: NetworkUtils.defaultURLSession()),
         logger: Logger = DefaultLogger.shared,
         sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry = DefaultSponsoredTileGleanTelemetry(),
         adsClientCallbackQueue: DispatchQueueInterface = DispatchQueue(
@@ -33,7 +31,6 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         )
     ) {
         self.adsClient = adsClientFactory.createClient()
-        self.networking = networking
         self.logger = logger
         self.sponsoredTileGleanTelemetry = sponsoredTileGleanTelemetry
         self.adsClientCallbackQueue = adsClientCallbackQueue
