@@ -66,13 +66,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .adsClient,
-                titleText: format(string: "Ads Client"),
-                statusText: format(string: "Toggle to enable the rust ads client")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .aiKillSwitch,
                 titleText: format(string: "Ai Kill Switch"),
                 statusText: format(string: "Toggle Ai Kill Switch")
