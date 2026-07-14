@@ -6,6 +6,7 @@ import AVFoundation
 
 enum MockAudioManagerError: Error {
     case configureAudioSession
+    case stopEngine
     case prepareAndStart
     case startCapture
 }
@@ -18,6 +19,7 @@ final class MockAudioManager: AudioManagerProtocol {
     private(set) var startCaptureWithFormatCallCount = 0
 
     var shouldThrowOnConfigure = false
+    var shouldThrowOnStopEngine = false
     var shouldThrowOnStart = false
     var shouldThrowOnCapture = false
 
@@ -35,8 +37,11 @@ final class MockAudioManager: AudioManagerProtocol {
         }
     }
 
-    func stopEngine() {
+    func stopEngine() throws {
         stopEngineCallCount += 1
+        if shouldThrowOnStopEngine {
+            throw MockAudioManagerError.stopEngine
+        }
     }
 
     func startCapture(

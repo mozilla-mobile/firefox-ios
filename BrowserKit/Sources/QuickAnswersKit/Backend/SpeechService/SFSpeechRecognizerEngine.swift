@@ -86,8 +86,8 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
         }
     }
 
-    func stop() {
-        audioManager.stopEngine()
+    func stop() throws {
+        try audioManager.stopEngine()
         request?.endAudio()
         recognitionTask?.finish()
     }
