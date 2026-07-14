@@ -33,7 +33,6 @@ include:
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
-  - nimbus-features/needsReloadRefactor.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/newBookmarkFolderTreeFeature.yaml
   - nimbus-features/novaDesignFeature.yaml

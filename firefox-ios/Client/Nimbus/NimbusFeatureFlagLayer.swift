@@ -119,9 +119,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .nativeErrorPage:
             return checkNativeErrorPageFeature()
 
-        case .needsReloadRefactor:
-            return checkNeedsReloadRefactorFeature()
-
         case .newBookmarkFolderTree:
             return checkNewBookmarkFolderTreeFeature()
 
@@ -430,10 +427,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkVideoIntroOnboardingFeature() -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().enableVideoIntro
-    }
-
-    private func checkNeedsReloadRefactorFeature() -> Bool {
-        return nimbus.features.needsReloadRefactor.value().enabled
     }
 
     private func checkNovaDesignFeature() -> Bool {
