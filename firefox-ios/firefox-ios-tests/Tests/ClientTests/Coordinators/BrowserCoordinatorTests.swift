@@ -1098,6 +1098,32 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(presentedVC.topViewController is AppSettingsTableViewController)
     }
 
+    func testSettingsRoute_whenModalIsPresented_dismissesModalBeforeShowingSettings() throws {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+        let presentedViewController = DismissSpyViewController()
+        presentedViewController.onDismiss = {
+            XCTAssertEqual(self.mockRouter.presentCalled, 0)
+        }
+        let navigationController = try XCTUnwrap(
+            mockRouter.navigationController as? MockNavigationController
+        )
+        navigationController.presentedViewController = presentedViewController
+
+        subject.handle(route: .settings(section: .appIcon))
+
+        XCTAssertEqual(presentedViewController.dismissCalled, 1)
+        let presentedNavigationController = try XCTUnwrap(
+            mockRouter.presentedViewController as? ThemedNavigationController
+        )
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(
+            presentedNavigationController.topViewController is UIHostingController<AppIconSelectionView>
+        )
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? SettingsCoordinator)
+    }
+
     func testSettingsRoute_addSettingsCoordinator() {
         let subject = createSubject()
         subject.browserHasLoaded()
@@ -1708,5 +1734,16 @@ final class BrowserCoordinatorTests: XCTestCase,
         }
 
         return URL(string: "http://localhost:\(webServer.port)")!
+    }
+}
+
+private final class DismissSpyViewController: UIViewController {
+    var dismissCalled = 0
+    var onDismiss: (() -> Void)?
+
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        dismissCalled += 1
+        onDismiss?()
+        completion?()
     }
 }

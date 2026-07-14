@@ -116,7 +116,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     }
 
     func stop() async throws {
-        audioManager.stopEngine()
+        try audioManager.stopEngine()
 
         inputContinuation?.finish()
         inputContinuation = nil

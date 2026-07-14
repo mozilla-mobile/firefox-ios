@@ -4,8 +4,9 @@
 
 import Foundation
 
-/// Issue categories for the "Report a Website Issue" form. Raw values and
-/// `subOptionIDs` are Glean `broken-site-report` reason keys, not display copy.
+/// Issue categories for the "Report a Website Issue" form — a grouping for the
+/// sub-options, not display copy. The Glean `broken-site-report` reason keys
+/// live on `WebCompatSubOption.rawValue`.
 enum WebCompatIssueCategory: String, CaseIterable, Identifiable {
     case siteNotUsable
     case designBroken
@@ -14,16 +15,36 @@ enum WebCompatIssueCategory: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var subOptionIDs: [String] {
+    var subOptions: [WebCompatSubOption] {
         switch self {
         case .siteNotUsable:
-            return ["browser_blocked", "page_not_loading", "missing_items", "buttons_not_working"]
+            return [.browserBlocked, .pageNotLoading, .missingItems, .buttonsNotWorking]
         case .designBroken:
-            return ["images_not_loaded", "items_overlapped", "items_misaligned", "items_not_visible"]
+            return [.imagesNotLoaded, .itemsOverlapped, .itemsMisaligned, .itemsNotVisible]
         case .videoOrAudio:
-            return ["no_video", "no_audio", "media_controls_broken", "playback_fails", "captions_missing"]
+            return [.noVideo, .noAudio, .mediaControlsBroken, .playbackFails, .captionsMissing]
         case .other:
             return []
         }
     }
+}
+
+/// A sub-option under a `WebCompatIssueCategory`. Raw values are Glean
+/// `broken-site-report` reason keys, not display copy.
+enum WebCompatSubOption: String, CaseIterable, Identifiable {
+    case browserBlocked = "browser_blocked"
+    case pageNotLoading = "page_not_loading"
+    case missingItems = "missing_items"
+    case buttonsNotWorking = "buttons_not_working"
+    case imagesNotLoaded = "images_not_loaded"
+    case itemsOverlapped = "items_overlapped"
+    case itemsMisaligned = "items_misaligned"
+    case itemsNotVisible = "items_not_visible"
+    case noVideo = "no_video"
+    case noAudio = "no_audio"
+    case mediaControlsBroken = "media_controls_broken"
+    case playbackFails = "playback_fails"
+    case captionsMissing = "captions_missing"
+
+    var id: String { rawValue }
 }

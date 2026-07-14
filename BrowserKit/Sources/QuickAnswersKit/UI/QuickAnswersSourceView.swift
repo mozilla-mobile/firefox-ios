@@ -46,6 +46,9 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
     private func setupSubviews() {
         contentView.addSubviews(thumbnailImageView, faviconImageView, titleLabel)
 
+        isAccessibilityElement = true
+        accessibilityTraits = .link
+
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -85,6 +88,7 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
             )
         )
         titleLabel.text = item.title
+        accessibilityLabel = item.title
     }
 
     // MARK: - ThemeApplicable

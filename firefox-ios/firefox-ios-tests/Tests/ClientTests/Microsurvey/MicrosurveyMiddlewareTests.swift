@@ -30,7 +30,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
         let subject = createSubject()
         let action = getAction(for: .closeSurvey)
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.dismissButtonTappedCalledCount, 1)
@@ -46,7 +46,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
         let subject = createSubject()
         let action = getAction(for: .tapPrivacyNotice)
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.privacyNoticeTappedCalledCount, 1)
@@ -62,7 +62,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
             actionType: MicrosurveyActionType.submitSurvey
         )
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.lastUserSelection, "Neutral")
@@ -79,7 +79,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
         let subject = createSubject()
         let action = getAction(for: .surveyDidAppear)
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.surveyViewedCalledCount, 1)
@@ -89,7 +89,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
         let subject = createSubject()
         let action = getAction(for: .confirmationViewed)
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.confirmationShownCalledCount, 1)

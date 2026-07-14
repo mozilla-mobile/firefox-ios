@@ -82,7 +82,13 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         }
     }
 
-    lazy var translationsProvider: Middleware<AppState> = { state, action in
+    lazy var translationsProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
         case ToolbarActionType.urlDidChange:
