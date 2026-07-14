@@ -87,7 +87,7 @@ class TabContentBlocker: Notifiable {
         switch notification.name {
         case .contentBlockerTabSetupRequired:
             ensureMainThread {
-                self.notifiedTabSetupRequired
+                self.notifiedTabSetupRequired()
             }
         default:
             return

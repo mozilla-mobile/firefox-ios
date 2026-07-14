@@ -1693,6 +1693,7 @@
 		C2EA23542FA1B8AE004B6340 /* WorldCupTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */; };
 		C2EA23542FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23552FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift */; };
 		C2EBB68F2E8181F20029E82C /* DismissableNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */; };
+		C2F2C19B30044C9600F9B916 /* MockAdBlockerListFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F2C19A30044C8700F9B916 /* MockAdBlockerListFetcher.swift */; };
 		C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335322ECE33720071588A /* translations-engine.worker.js */; };
 		C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335332ECE33720071588A /* TranslationsEngine.js */; };
 		C2F335372ECE339F0071588A /* TranslationsEngine.html in Resources */ = {isa = PBXBuildFile; fileRef = C2F335362ECE339F0071588A /* TranslationsEngine.html */; };
@@ -10665,6 +10666,7 @@
 		C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTelemetry.swift; sourceTree = "<group>"; };
 		C2EA23552FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupResetDismissedSetting.swift; sourceTree = "<group>"; };
 		C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableNavigationViewController.swift; sourceTree = "<group>"; };
+		C2F2C19A30044C8700F9B916 /* MockAdBlockerListFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdBlockerListFetcher.swift; sourceTree = "<group>"; };
 		C2F335322ECE33720071588A /* translations-engine.worker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "translations-engine.worker.js"; sourceTree = "<group>"; };
 		C2F335332ECE33720071588A /* TranslationsEngine.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TranslationsEngine.js; sourceTree = "<group>"; };
 		C2F335362ECE339F0071588A /* TranslationsEngine.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = TranslationsEngine.html; path = Client/Frontend/UserContent/UserScripts/TranslationsEngine/TranslationsEngine.html; sourceTree = "<group>"; };
@@ -17231,6 +17233,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				C2F2C19A30044C8700F9B916 /* MockAdBlockerListFetcher.swift */,
 				ECD8E56D2FF7ED75002092C6 /* WaybackTests.swift */,
 				EEB965152FBCCE7B00D6C232 /* ReaderTests */,
 				C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */,
@@ -20599,6 +20602,7 @@
 				8A4880802E68AF8400AD43D5 /* GleanHttpUploaderTests.swift in Sources */,
 				8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */,
 				8AE80BAF2891960300BC12EA /* MockTraitCollection.swift in Sources */,
+				C2F2C19B30044C9600F9B916 /* MockAdBlockerListFetcher.swift in Sources */,
 				8A55E8042BFBA9BE006DBD85 /* MicrosurveyCoordinatorTests.swift in Sources */,
 				8A832A9729DCBD3C0025D5DD /* LaunchTypeTests.swift in Sources */,
 				219AEECE2E5E524300BF5F6F /* MockTabProviderProtocol.swift in Sources */,

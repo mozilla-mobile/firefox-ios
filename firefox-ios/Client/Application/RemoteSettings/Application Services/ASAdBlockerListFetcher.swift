@@ -18,7 +18,7 @@ protocol AdBlockerListFetcherProtocol: Sendable {
 /// TODO(FXIOS-16233): Migrate the existing ETP lists to also use the AS implementation of RS.
 final class ASAdBlockerListFetcher: AdBlockerListFetcherProtocol {
     /// Identifier of the ad-blocker record within the `tracking-protection-lists-ios` collection.
-    static let adBlockerRecordID = "ad-block.json"
+    static let adBlockerRecordID = "ad-block"
 
     /// Dedicated queue for the blocking Remote Settings FFI calls. `getRecords(syncIfEmpty:)` and
     /// `getAttachment(record:)` are synchronous Rust calls that can sync over the network and hit

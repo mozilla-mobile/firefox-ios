@@ -83,7 +83,17 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                     theme: theme,
                     prefKey: PrefsKeys.BlockAds,
                     defaultValue: false,
-                    titleText: .Settings.Browsing.BlockAds
+                    titleText: .Settings.Browsing.BlockAds,
+                    settingDidChange: { isEnabled in
+                        if isEnabled {
+                            Task {
+                                await ContentBlocker.shared.reloadAdBlockerList()
+                                ContentBlocker.shared.prefsChanged()
+                            }
+                        } else {
+                            ContentBlocker.shared.prefsChanged()
+                        }
+                    }
                 ))
             }
             contentSection += [
