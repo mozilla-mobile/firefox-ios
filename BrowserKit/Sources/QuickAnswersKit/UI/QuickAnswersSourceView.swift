@@ -144,7 +144,6 @@ final class QuickAnswersSourceView: UIView,
     private var theme: Theme?
     private var contentSizeObservation: NSKeyValueObservation?
     private var onSourceTapped: ((URL) -> Void)?
-    private var lastLaidOutWidth: CGFloat = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
