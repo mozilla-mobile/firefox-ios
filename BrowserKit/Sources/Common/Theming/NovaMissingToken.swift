@@ -9,8 +9,16 @@ import UIKit
 public struct NovaMissingToken {
     nonisolated(unsafe) static var reportMisuse: (String) -> Void = { assertionFailure($0) }
 
-    public static func color(_ color: UIColor) -> UIColor {
-        reportMisuse("Nova only token read from a classic theme")
-        return color
+    public static func color(_ colorName: String) -> UIColor {
+        #if DEBUG
+        reportMisuse("Nova only token '\(colorName)' was used from a classic theme")
+        return FXColors.Red60
+        #else
+        return .clear
+        #endif
+    }
+
+    public static func gradient(_ gradientName: String) -> Gradient {
+        Gradient(colors: [color(gradientName)])
     }
 }

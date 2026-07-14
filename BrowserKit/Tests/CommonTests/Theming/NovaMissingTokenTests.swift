@@ -12,20 +12,25 @@ class NovaMissingTokenTests: XCTestCase {
         super.tearDown()
     }
 
-    func testColor_returnsThePassedColor() {
+    func testColor_returnsTheDebugColor() {
         NovaMissingToken.reportMisuse = { _ in }
 
-        XCTAssertEqual(NovaMissingToken.color(.clear), .clear)
-        XCTAssertEqual(NovaMissingToken.color(.red), .red)
+        XCTAssertEqual(NovaMissingToken.color("gradient"), FXColors.Red60)
     }
 
-    func testColor_flagsAWrongUse() {
+    func testGradient_returnsAGradientWithTheDebugColor() {
+        NovaMissingToken.reportMisuse = { _ in }
+
+        XCTAssertEqual(NovaMissingToken.gradient("gradient").colors, [FXColors.Red60])
+    }
+
+    func testColor_flagsAWrongUse_withTheTokenName() {
         var flaggedMessage: String?
         NovaMissingToken.reportMisuse = { flaggedMessage = $0 }
 
-        _ = NovaMissingToken.color(.clear)
+        _ = NovaMissingToken.color("textToast")
 
-        XCTAssertEqual(flaggedMessage, "Nova only token read from a classic theme")
+        XCTAssertEqual(flaggedMessage, "Nova only token 'textToast' was used from a classic theme")
     }
 
     /// Using a Nova only token in a classic theme should be flagged as a misuse.
