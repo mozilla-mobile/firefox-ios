@@ -4,7 +4,7 @@
 
 import Common
 
-public struct SwipeGestureFeatureFlagProvider {
+struct SwipeGestureFeatureFlagProvider {
     let featureFlagsProvider: FeatureFlagProviding
 
     // Defaults to the container-resolved provider; tests inject a mock instead.
@@ -14,18 +14,21 @@ public struct SwipeGestureFeatureFlagProvider {
 
     /// The interactive gesture is disabled when the swipe variant is enabled, since
     /// `enabled_swipe` overrides the interactive gesture.
-    public var isInteractiveGestureEnabled: Bool {
+    var isInteractiveGestureEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayInteractive)
             && !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
     }
-    public var isSwipeGestureEnabled: Bool {
+
+    var isSwipeGestureEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
     }
+
     /// Whether the interactive gesture supports closing tab too.
-    public var isCloseTabEnabled: Bool {
+    var isCloseTabEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayCloseTab)
     }
-    public var isAnyGestureEnabled: Bool {
+
+    var isAnyGestureEnabled: Bool {
         return isInteractiveGestureEnabled || isSwipeGestureEnabled
     }
 }
