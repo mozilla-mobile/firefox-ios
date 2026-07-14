@@ -67,9 +67,10 @@ public actor DefaultTabDataStore: TabDataStore {
                                 ? "Failed to open window data (including backup data) for UUID: \(uuid)"
                                 : "Failed to open window data (but backup recovery worked) for UUID: \(uuid)"
                 logger.log(
-                    "\(errorMessage) File Info: [\(fileInfoMessage)] Backup File Info: [\(backupInfoMessage)]",
+                    errorMessage,
                     level: .fatal,
-                    category: .tabs
+                    category: .tabs,
+                    extra: ["fileInfo": fileInfoMessage, "backupFileInfo": backupInfoMessage]
                 )
             }
         }
