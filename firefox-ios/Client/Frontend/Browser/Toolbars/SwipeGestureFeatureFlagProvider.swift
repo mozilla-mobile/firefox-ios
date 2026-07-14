@@ -12,7 +12,7 @@ public struct SwipeGestureFeatureFlagProvider: FeatureFlaggable {
     public var isSwipeGestureEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
     }
-    /// Never used if interactive gesture is not enabled
+    /// Whether the interactive gesture supports closing tab too.
     public var isCloseTabEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayCloseTab)
     }
