@@ -242,13 +242,13 @@ class EditAddressViewController: UIViewController,
     // MARK: - KeyboardHelperDelegate
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(view)
-        // Adjust stackView's bottom inset when the keyboard appears
-        stackView.layoutMargins.bottom = removeButton.isHidden ? 0 : coveredHeight
+        webView?.scrollView.contentInset.bottom = coveredHeight
+        webView?.scrollView.scrollIndicatorInsets.bottom = coveredHeight
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        // Reset the bottom inset when the keyboard hides
-        stackView.layoutMargins.bottom = 0
+        webView?.scrollView.contentInset.bottom = 0
+        webView?.scrollView.scrollIndicatorInsets.bottom = 0
     }
 }
 
