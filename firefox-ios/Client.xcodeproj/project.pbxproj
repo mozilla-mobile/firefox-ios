@@ -460,6 +460,7 @@
 		2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */; };
 		31286F788EBE4BDE9BB9FF21 /* AutoTranslatePromptState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E805FFBBD74D9BA77BD057 /* AutoTranslatePromptState.swift */; };
 		318FB6EB1DB5600D0004E40F /* SQLiteHistoryFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318FB6EA1DB5600D0004E40F /* SQLiteHistoryFactories.swift */; };
+		319478509A7F45D09CBCEC18 /* PrivacyWindowHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3C8A4CBEAC46E58A977BF8 /* PrivacyWindowHelperTests.swift */; };
 		31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */; };
 		354F8F612E098214007DFFEB /* SearchBarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354F8F602E09820B007DFFEB /* SearchBarState.swift */; };
 		354F8FAB2E0985B9007DFFEB /* SearchBarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354F8FAA2E0985A0007DFFEB /* SearchBarStateTests.swift */; };
@@ -8855,6 +8856,7 @@
 		4AF54675A51AABF86F0B3AA5 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		4B1546C89B425483D5765BFE /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		4B3443A4B0BF4562A3EC96C7 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Storage.strings; sourceTree = "<group>"; };
+		4B3C8A4CBEAC46E58A977BF8 /* PrivacyWindowHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyWindowHelperTests.swift; sourceTree = "<group>"; };
 		4BC842B9BC3F325C5CEFC8D4 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		4BE040A0A216E94E9BEC1162 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		4C034CC1BFF8900EC3C2AEC2 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Shared.strings"; sourceTree = "<group>"; };
@@ -14683,6 +14685,7 @@
 			children = (
 				EDD592462FC0FF690015EF9E /* ModifiedCopyMacroTests.swift */,
 				C705FA772EF30C4B00AC5EE7 /* PrivacyNoticeHelperTests.swift */,
+				4B3C8A4CBEAC46E58A977BF8 /* PrivacyWindowHelperTests.swift */,
 				8A83C58D2DDF887200FF60EF /* ProfilePrefsReaderTests.swift */,
 				8AC884202D5261FC0033ABF5 /* CrashTrackerTests.swift */,
 				8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */,
@@ -20557,6 +20560,7 @@
 				8AE65C052FE219A500CBBE66 /* TabManagerRestoreScreenshotTests.swift in Sources */,
 				C8CD80D42A1E268C0097C3AE /* MockGleanPlumbEvaluationUtility.swift in Sources */,
 				C705FA782EF30C4F00AC5EE7 /* PrivacyNoticeHelperTests.swift in Sources */,
+				319478509A7F45D09CBCEC18 /* PrivacyWindowHelperTests.swift in Sources */,
 				8A7AE4472BAC78230072DAEC /* MockLibraryNavigationHandler.swift in Sources */,
 				C25020842ECDE75D0071506F /* MockTranslationsSchemeHandler.swift in Sources */,
 				8A7A26E829D4C0FE00EA76F1 /* IntroScreenManagerTests.swift in Sources */,
