@@ -105,13 +105,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .deeplinkOverlay,
-                titleText: format(string: "Deeplink Overlay"),
-                statusText: format(string: "Toggle to show the background overlay for all tabs")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .downloadLiveActivities,
                 titleText: format(string: "Download Live Activities"),
                 statusText: format(string: "Toggle to enable download live activities")
