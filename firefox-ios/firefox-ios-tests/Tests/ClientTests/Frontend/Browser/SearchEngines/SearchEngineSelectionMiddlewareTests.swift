@@ -40,7 +40,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
         let action = getAction(for: .viewDidLoad)
 
-        subject.searchEngineSelectionProvider(AppState(), action)
+        subject.searchEngineSelectionProvider.legacyMiddleware(AppState(), action)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SearchEngineSelectionAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SearchEngineSelectionActionType)
@@ -54,7 +54,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
         let action = getAction(for: .didTapSearchEngine)
 
-        subject.searchEngineSelectionProvider(AppState(), action)
+        subject.searchEngineSelectionProvider.legacyMiddleware(AppState(), action)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)

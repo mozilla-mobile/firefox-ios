@@ -47,7 +47,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let expectation = XCTestExpectation(description: "didUpdate dispatched")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -78,7 +78,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -106,7 +106,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: WorldCupActionType.didChangeHomepageSettings
         )
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(feed.startCalled, 1)
         XCTAssertEqual(feed.stopCalled, 0)
@@ -125,7 +125,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: WorldCupActionType.didChangeHomepageSettings
         )
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(feed.stopCalled, 1)
         XCTAssertEqual(feed.startCalled, 0)
@@ -147,7 +147,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let expectation = XCTestExpectation(description: "didUpdate dispatched")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -172,7 +172,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageMiddlewareActionType.didEnterBackground
         )
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(feed.stopCalled, 1)
         XCTAssertEqual(feed.startCalled, 0)
@@ -190,7 +190,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageMiddlewareActionType.didBecomeActive
         )
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(feed.startCalled, 1)
 
@@ -211,7 +211,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let expectation = XCTestExpectation(description: "didUpdate dispatched")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -222,7 +222,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
         XCTAssertTrue(dispatched.matches.isEmpty)
         XCTAssertEqual(feed.startCalled, 0)
-        subject.worldCupProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - WorldCupActionType.selectTeam
@@ -241,7 +242,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -267,7 +268,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let expectation = XCTestExpectation(description: "didUpdate dispatched")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -292,7 +293,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -322,7 +323,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -364,7 +365,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -398,7 +399,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -433,7 +434,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -463,7 +464,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -490,7 +491,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let expectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
 
         XCTAssertEqual(apiClient.matchesFetchCount, 1)
@@ -527,7 +528,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -576,7 +577,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let teamsExpectation = expectation(description: "loadTeams called")
         apiClient.loadTeamsCalled = teamsExpectation
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [matchesExpectation, teamsExpectation])
 
@@ -628,7 +629,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchCardCount(2)
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -670,7 +671,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         // expect at least two dispatches with non-empty matches.
         let expectation = expectationForMatchCardCount(2)
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -709,7 +710,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -734,7 +735,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let expectation = XCTestExpectation(description: "didUpdate dispatched")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -756,7 +757,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
         )
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         XCTAssertEqual(mockWorldCupStore.setIsHomepageSectionEnabledCalled, 0)
@@ -792,7 +793,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -839,7 +840,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -879,7 +880,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -913,7 +914,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -948,7 +949,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let expectation = expectationForMatchesDispatch()
 
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -981,7 +982,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
 
         let expectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
@@ -1031,7 +1032,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
 
         let expectation = expectationForMatchCardCount(2)
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
@@ -1060,7 +1061,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         bringHomepageOnScreen(subject)
 
         let firstExpectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(
+        subject.worldCupProvider.legacyMiddleware(
             appState,
             HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
         )
@@ -1071,7 +1072,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         // persisted as seen, it must not celebrate again — this is the
         // cross-launch correlation behavior.
         let secondExpectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(
+        subject.worldCupProvider.legacyMiddleware(
             appState,
             WorldCupAction(windowUUID: .XCTestDefaultUUID, actionType: WorldCupActionType.retryMatchesFetch)
         )
@@ -1104,7 +1105,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
 
         let expectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
@@ -1141,7 +1142,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
 
         let expectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
@@ -1180,7 +1181,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
 
         let expectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
@@ -1218,7 +1219,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
 
         let expectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(appState, action)
+        subject.worldCupProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
@@ -1254,7 +1255,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         bringHomepageOnScreen(subject)
 
         let firstExpectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(
+        subject.worldCupProvider.legacyMiddleware(
             appState,
             HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
         )
@@ -1262,7 +1263,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(try XCTUnwrap(latestWorldCupAction()).shouldShowConfetti)
 
         let secondExpectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(
+        subject.worldCupProvider.legacyMiddleware(
             appState,
             WorldCupAction(windowUUID: .XCTestDefaultUUID, actionType: WorldCupActionType.retryMatchesFetch)
         )
@@ -1287,13 +1288,13 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
         let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
         bringHomepageOnScreen(subject)
-        subject.worldCupProvider(
+        subject.worldCupProvider.legacyMiddleware(
             appState,
             HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewWillDisappear)
         )
 
         let expectation = expectationForMatchesDispatch()
-        subject.worldCupProvider(
+        subject.worldCupProvider.legacyMiddleware(
             appState,
             HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
         )
@@ -1337,7 +1338,9 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     /// As a work around for unit tests, we should release each middleware's provider closures from memory by assigning an
     /// empty closure, which does not strongly retain `self`.
     private func releaseMiddlewareProvidersFromMemory(_ subject: WorldCupMiddleware) {
-        subject.worldCupProvider = emptyLegacyMiddlewareMethodFactory()
+        subject.worldCupProvider = emptyMiddlewareProviderFactory()
+        subject.legacyProvider = emptyLegacyMiddlewareFactory()
+        subject.modernProvider = emptyMiddlewareFactory()
     }
 
     /// Hands the middleware a `MockWorldCupFeed` so tests can assert on the
@@ -1352,7 +1355,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     /// visible — the precondition for `resolveShouldShowConfetti` to run. Also
     /// re-dispatches the feed's latest snapshot, mirroring the real lifecycle.
     private func bringHomepageOnScreen(_ subject: WorldCupMiddleware) {
-        subject.worldCupProvider(
+        subject.worldCupProvider.legacyMiddleware(
             appState,
             HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewDidAppear)
         )

@@ -26,4 +26,8 @@ enum WebCompatReporterUX {
     enum Control {
         static let minimumTapTarget: CGFloat = 44
     }
+
+    enum Chevron {
+        static let size: CGFloat = 10
+    }
 }

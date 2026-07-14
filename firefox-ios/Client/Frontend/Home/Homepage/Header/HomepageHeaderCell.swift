@@ -51,8 +51,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private lazy var quickAnswersButton: UIButton = .build { button in
         button.configuration = .filled()
-        // TODO: - FXIOS-15477 Add correct acorn icon
-        button.configuration?.image = UIImage(systemName: "waveform")
+        button.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.audioWave)?
+            .withRenderingMode(.alwaysTemplate)
         button.configuration?.cornerStyle = .capsule
         // TODO: - FXIOS-14720 Add Strings for accessibility label
         button.accessibilityLabel = "Open Quick Answers"

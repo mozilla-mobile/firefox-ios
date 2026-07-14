@@ -10,16 +10,13 @@ import WebCompatReporterKit
 
 @MainActor
 protocol WebCompatReportCoordinatorDelegate: AnyObject {
-    /// The user asked to dismiss the report sheet; the coordinator owns the dismissal.
+    /// Sheet asked to finish; the coordinator owns the dismissal.
     func webCompatReportViewControllerDidFinish()
 }
 
-/// Store-connected container for the "Report a Website Issue" bottom sheet.
-/// It presents the store-agnostic `WebCompatReportSheetViewController` from
-/// `WebCompatReporterKit` as its root, subscribes to `WebCompatReporterState`,
-/// maps the state to the sheet's view model, and forwards the sheet's close and
-/// preview intents to Redux and the coordinator. The sheet view controller never
-/// dismisses or navigates itself.
+/// Store-connected container that hosts the `WebCompatReporterKit` sheet, maps
+/// `WebCompatReporterState` to its view model, and forwards its intents to Redux
+/// and the coordinator.
 final class WebCompatReportViewController: UINavigationController,
                                            StoreSubscriber,
                                            Themeable,
@@ -114,8 +111,85 @@ final class WebCompatReportViewController: UINavigationController,
             navigationTitle: .MainMenu.ToolsSection.ReportBrokenSite,
             closeButtonAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             previewButtonTitle: .WebCompatReporter.Sheet.PreviewButton,
-            isPreviewEnabled: state.canPreview
+            isPreviewEnabled: state.canPreview,
+            sections: makeIssueSections(from: state)
         )
+    }
+
+    private enum SectionID: String {
+        case issueCategory
+        case issueSubOptions
+    }
+
+    static func makeIssueSections(
+        from state: WebCompatReporterState
+    ) -> [WebCompatReportViewModel.Section] {
+        let options = WebCompatIssueCategory.allCases.map { category in
+            WebCompatReportViewModel.Row.MenuOption(
+                id: category.id,
+                title: title(for: category),
+                isSelected: category == state.selectedCategory
+            )
+        }
+        let selectedTitle = state.selectedCategory.map(title(for:))
+        let categorySection = WebCompatReportViewModel.Section(
+            id: SectionID.issueCategory.rawValue,
+            title: .WebCompatReporter.IssueSection.Title,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: SectionID.issueCategory.rawValue,
+                    title: selectedTitle ?? .WebCompatReporter.IssueSection.CategoryPlaceholder,
+                    kind: .categoryMenu(isPlaceholder: selectedTitle == nil, options: options)
+                )
+            ]
+        )
+
+        guard let selectedCategory = state.selectedCategory,
+              !selectedCategory.subOptions.isEmpty else {
+            return [categorySection]
+        }
+
+        let subOptionRows = selectedCategory.subOptions.map { subOption in
+            WebCompatReportViewModel.Row(
+                id: subOption.rawValue,
+                title: title(for: subOption),
+                kind: .subOption(isSelected: subOption.rawValue == state.selectedSubOptionID)
+            )
+        }
+        let subOptionSection = WebCompatReportViewModel.Section(
+            id: SectionID.issueSubOptions.rawValue,
+            rows: subOptionRows
+        )
+        return [categorySection, subOptionSection]
+    }
+
+    // MARK: - Enum → localized title
+
+    private static func title(for category: WebCompatIssueCategory) -> String {
+        switch category {
+        case .siteNotUsable: return .WebCompatReporter.Category.SiteNotUsable
+        case .designBroken: return .WebCompatReporter.Category.DesignBroken
+        case .videoOrAudio: return .WebCompatReporter.Category.VideoOrAudio
+        case .other: return .WebCompatReporter.Category.Other
+        }
+    }
+
+    private static func title(for subOption: WebCompatSubOption) -> String {
+        switch subOption {
+        case .browserBlocked: return .WebCompatReporter.SubOption.BrowserBlocked
+        case .pageNotLoading: return .WebCompatReporter.SubOption.PageNotLoading
+        case .missingItems: return .WebCompatReporter.SubOption.MissingItems
+        case .buttonsNotWorking: return .WebCompatReporter.SubOption.ButtonsNotWorking
+        case .imagesNotLoaded: return .WebCompatReporter.SubOption.ImagesNotLoaded
+        case .itemsOverlapped: return .WebCompatReporter.SubOption.ItemsOverlapped
+        case .itemsMisaligned: return .WebCompatReporter.SubOption.ItemsMisaligned
+        case .itemsNotVisible: return .WebCompatReporter.SubOption.ItemsNotVisible
+        case .noVideo: return .WebCompatReporter.SubOption.NoVideo
+        case .noAudio: return .WebCompatReporter.SubOption.NoAudio
+        case .mediaControlsBroken: return .WebCompatReporter.SubOption.MediaControlsBroken
+        case .playbackFails: return .WebCompatReporter.SubOption.PlaybackFails
+        case .captionsMissing: return .WebCompatReporter.SubOption.CaptionsMissing
+        }
     }
 
     // MARK: - WebCompatReportSheetDelegate
@@ -132,6 +206,24 @@ final class WebCompatReportViewController: UINavigationController,
         store.dispatch(WebCompatReporterViewAction(
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.preview
+        ))
+    }
+
+    func webCompatReportSheetDidSelectCategory(id: String) {
+        guard let category = WebCompatIssueCategory(rawValue: id) else { return }
+        store.dispatch(WebCompatReporterViewAction(
+            category: category,
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.selectCategory
+        ))
+    }
+
+    func webCompatReportSheetDidSelectSubOption(id: String) {
+        guard let subOption = WebCompatSubOption(rawValue: id) else { return }
+        store.dispatch(WebCompatReporterViewAction(
+            subOptionID: subOption.rawValue,
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.selectSubOption
         ))
     }
 
