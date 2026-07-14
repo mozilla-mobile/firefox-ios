@@ -337,6 +337,19 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Tap and hold the arrows to jump between pages in this tab’s history.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history")
+
+            public struct GoogleLens {
+                public static let Title = MZLocalizedString(
+                    key: "ContextualHints.Toolbar.GoogleLens.Title.v154",
+                    tableName: "ContextualHints",
+                    value: "Search With Google Lens",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of the one that explains how to search with Google Lens from the address toolbar.")
+                public static let Description = MZLocalizedString(
+                    key: "ContextualHints.Toolbar.GoogleLens.Description.v154",
+                    tableName: "ContextualHints",
+                    value: "Use your camera or choose a photo to search what you see.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of the one that explains how to search with Google Lens from the address toolbar.")
+            }
         }
 
         public struct Summarize {
