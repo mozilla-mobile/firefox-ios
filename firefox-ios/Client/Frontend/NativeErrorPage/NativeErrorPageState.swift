@@ -52,6 +52,9 @@ struct NativeErrorPageState: ScreenState {
     }
 
     static func defaultState(from state: NativeErrorPageState) -> NativeErrorPageState {
-        return state.copy(model: state.model)
+        return NativeErrorPageState(
+            windowUUID: state.windowUUID,
+            model: state.model
+        )
     }
 }
