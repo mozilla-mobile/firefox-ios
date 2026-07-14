@@ -91,7 +91,9 @@ final class CameraCoordinatorTests: XCTestCase {
     func test_dismissCameraInterfaceIfAccessRefused_whenRefused_dismissesAndFinishesWithNil() async {
         var completionCalled = 0
         var completionImage: UIImage?
+        let cameraTelemetry = MockSystemCameraTelemetry()
         let subject = createSubject(requestCameraAccess: { false },
+                                    cameraTelemetry: cameraTelemetry,
                                     onComplete: { image in
             completionCalled += 1
             completionImage = image
@@ -103,11 +105,16 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(completionCalled, 1)
         XCTAssertNil(completionImage)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(cameraTelemetry.permissionRespondedCalled, 1)
+        XCTAssertEqual(cameraTelemetry.savedReason, .googleLens)
+        XCTAssertEqual(cameraTelemetry.savedGranted, false)
     }
 
     func test_dismissCameraInterfaceIfAccessRefused_whenGranted_keepsInterfacePresented() async {
         var completionCalled = 0
+        let cameraTelemetry = MockSystemCameraTelemetry()
         let subject = createSubject(requestCameraAccess: { true },
+                                    cameraTelemetry: cameraTelemetry,
                                     onComplete: { _ in completionCalled += 1 })
 
         await subject.dismissCameraInterfaceIfAccessRefused()
@@ -115,6 +122,9 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.dismissCalled, 0)
         XCTAssertEqual(completionCalled, 0)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 0)
+        XCTAssertEqual(cameraTelemetry.permissionRespondedCalled, 1)
+        XCTAssertEqual(cameraTelemetry.savedReason, .googleLens)
+        XCTAssertEqual(cameraTelemetry.savedGranted, true)
     }
 
     func test_didCancel_callsCompletionWithNilAndNotifiesParent() {
@@ -138,6 +148,7 @@ final class CameraCoordinatorTests: XCTestCase {
     private func createSubject(isCameraAvailable: Bool = true,
                                cameraAuthorizationStatus: AVAuthorizationStatus = .authorized,
                                requestCameraAccess: @escaping () async -> Bool = { false },
+                               cameraTelemetry: SystemCameraTelemetryProtocol = MockSystemCameraTelemetry(),
                                onComplete: @escaping (UIImage?) -> Void = { _ in },
                                file: StaticString = #filePath,
                                line: UInt = #line) -> CameraCoordinator {
@@ -146,6 +157,8 @@ final class CameraCoordinatorTests: XCTestCase {
                                         isCameraAvailable: isCameraAvailable,
                                         cameraAuthorizationStatus: cameraAuthorizationStatus,
                                         requestCameraAccess: requestCameraAccess,
+                                        cameraReason: .googleLens,
+                                        cameraTelemetry: cameraTelemetry,
                                         onComplete: onComplete)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

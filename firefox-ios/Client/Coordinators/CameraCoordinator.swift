@@ -4,6 +4,10 @@
 
 import AVFoundation
 
+enum CameraReason: String {
+    case googleLens
+}
+
 /// Presents the system camera capture UI and owns its delegate conformance.
 final class CameraCoordinator: BaseCoordinator,
                                UIImagePickerControllerDelegate,
@@ -13,6 +17,8 @@ final class CameraCoordinator: BaseCoordinator,
     private let isCameraAvailable: Bool
     private let cameraAuthorizationStatus: AVAuthorizationStatus
     private let requestCameraAccess: () async -> Bool
+    private let cameraReason: CameraReason
+    private let cameraTelemetry: SystemCameraTelemetryProtocol
 
     init(
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
@@ -22,6 +28,8 @@ final class CameraCoordinator: BaseCoordinator,
         requestCameraAccess: @escaping () async -> Bool = {
             await AVCaptureDevice.requestAccess(for: .video)
         },
+        cameraReason: CameraReason,
+        cameraTelemetry: SystemCameraTelemetryProtocol = SystemCameraTelemetry(),
         onComplete: @escaping (UIImage?) -> Void
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
@@ -29,6 +37,8 @@ final class CameraCoordinator: BaseCoordinator,
         self.isCameraAvailable = isCameraAvailable
         self.cameraAuthorizationStatus = cameraAuthorizationStatus
         self.requestCameraAccess = requestCameraAccess
+        self.cameraReason = cameraReason
+        self.cameraTelemetry = cameraTelemetry
         super.init(router: router)
     }
 
@@ -60,6 +70,7 @@ final class CameraCoordinator: BaseCoordinator,
     // MARK: - Camera permission
     func dismissCameraInterfaceIfAccessRefused() async {
         let granted = await requestCameraAccess()
+        cameraTelemetry.permissionResponded(reason: cameraReason, granted: granted)
         guard !granted else { return }
         dismissCameraInterface()
     }
