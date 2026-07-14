@@ -61,9 +61,6 @@ final class BrowserCoordinator: BaseCoordinator,
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let worldCupStore: WorldCupStoreProtocol
     private let googleLensService: GoogleLensServicing
-    private var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
-    }
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -299,7 +296,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        guard checkBrowserIsReady() else { return false }
+        guard isBrowserReady else { return false }
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
@@ -310,7 +307,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        guard checkBrowserIsReady() else { return }
+        guard isBrowserReady else { return }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
@@ -356,20 +353,17 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    /// Depending if we're using the deeplink refactor path or not, there's different checks to ensure we're properly
-    /// setup before we handle routes / deeplinks. `browserIsReady` can maybe be removed at a later point after the deeplink
-    /// refactor is shipped, but this will be a subsequent initiative just in case.
-    private func checkBrowserIsReady() -> Bool {
-        let isReady = isDeeplinkOptimizationRefactorEnabled
-        ? browserIsReady
-        : browserIsReady && !tabManager.isRestoringTabs
+    /// Ensures we're properly setup before we handle routes / deeplinks. `browserIsReady` can maybe be removed at a
+    /// later point after the deeplink refactor is shipped, but this will be a subsequent initiative just in case.
+    private var isBrowserReady: Bool {
+        // Is restoring tabs check is necessary for FXIOS-13351
+        let isReady = browserIsReady && !tabManager.isRestoringTabs
 
         guard isReady else {
             logger.log(
             """
             Not handling route. Browser ready: \(browserIsReady), \
-            restoring tabs: \(tabManager.isRestoringTabs) \
-            with refactor \(isDeeplinkOptimizationRefactorEnabled)
+            restoring tabs: \(tabManager.isRestoringTabs)
             """,
             level: .info,
             category: .coordinator

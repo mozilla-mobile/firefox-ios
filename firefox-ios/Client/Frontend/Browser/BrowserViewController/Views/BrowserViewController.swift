@@ -3577,16 +3577,6 @@ class BrowserViewController: UIViewController,
     }
 
     func closeAllPrivateTabs() {
-        // Avoid race condition; if we're restoring tabs, wait to close private tabs until completed. [FXIOS-13351]
-        guard !tabManager.isRestoringTabs else {
-            AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
-                ensureMainThread { [weak self] in
-                    self?.closeAllPrivateTabs()
-                }
-            }
-            return
-        }
-
         tabManager.removeTabs(tabManager.privateTabs)
         guard let tab = mostRecentTab(inTabs: tabManager.normalTabs) else {
             tabManager.selectTab(tabManager.addTab())

@@ -1507,8 +1507,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: canHandle(route:)
 
-    func testCanHandle_refactorEnabled_returnsFalse_beforeBrowserLoaded() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
+    func testCanHandle_returnsFalse_beforeBrowserLoaded() {
         let subject = createSubject()
 
         let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
@@ -1516,49 +1515,17 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertFalse(result)
     }
 
-    func testCanHandle_refactorEnabled_returnsTrue_afterBrowserLoaded() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
-        let subject = createSubject()
-        subject.browserHasLoaded()
-
-        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
-
-        XCTAssertTrue(result)
-    }
-
-    func testCanHandle_refactorEnabled_returnsTrue_whenTabsAreRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
+    func testCanHandle_returnsFalse_whenTabsAreRestoring() {
         tabManager.isRestoringTabs = true
         let subject = createSubject()
         subject.browserHasLoaded()
 
         let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
 
-        XCTAssertTrue(result, "With refactor enabled, isRestoringTabs should not block route handling")
+        XCTAssertFalse(result, "isRestoringTabs should block route handling (FXIOS-13351)")
     }
 
-    func testCanHandle_refactorDisabled_returnsFalse_beforeBrowserLoaded() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
-        let subject = createSubject()
-
-        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
-
-        XCTAssertFalse(result)
-    }
-
-    func testCanHandle_refactorDisabled_returnsFalse_whenTabsAreRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
-        tabManager.isRestoringTabs = true
-        let subject = createSubject()
-        subject.browserHasLoaded()
-
-        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
-
-        XCTAssertFalse(result, "With refactor disabled, isRestoringTabs should block route handling")
-    }
-
-    func testCanHandle_refactorDisabled_returnsTrue_whenBrowserReadyAndNotRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
+    func testCanHandle_returnsTrue_whenBrowserReadyAndNotRestoring() {
         tabManager.isRestoringTabs = false
         let subject = createSubject()
         subject.browserHasLoaded()
@@ -1570,20 +1537,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: handle(route:)
 
-    func testHandle_refactorEnabled_executesRoute_whenBrowserReady() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        subject.browserHasLoaded()
-
-        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
-
-        XCTAssertTrue(browserViewController.handleQueryCalled)
-        XCTAssertEqual(browserViewController.handleQuery, "firefox")
-    }
-
-    func testHandle_refactorEnabled_doesNotExecuteRoute_beforeBrowserLoaded() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
+    func testHandle_doesNotExecuteRoute_beforeBrowserLoaded() {
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
@@ -1592,21 +1546,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertFalse(browserViewController.handleQueryCalled)
     }
 
-    func testHandle_refactorEnabled_executesRoute_whenTabsAreRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
-        tabManager.isRestoringTabs = true
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        subject.browserHasLoaded()
-
-        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
-
-        XCTAssertTrue(browserViewController.handleQueryCalled,
-                      "With refactor enabled, route should execute even while tabs are restoring")
-    }
-
-    func testHandle_refactorDisabled_doesNotExecuteRoute_whenTabsAreRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
+    func testHandle_doesNotExecuteRoute_whenTabsAreRestoring() {
         tabManager.isRestoringTabs = true
         let subject = createSubject()
         subject.browserViewController = browserViewController
@@ -1615,11 +1555,10 @@ final class BrowserCoordinatorTests: XCTestCase,
         subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
 
         XCTAssertFalse(browserViewController.handleQueryCalled,
-                       "With refactor disabled, route should not execute while tabs are restoring")
+                       "Route should not execute while tabs are restoring (FXIOS-13351)")
     }
 
-    func testHandle_refactorDisabled_executesRoute_whenBrowserReadyAndNotRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
+    func testHandle_executesRoute_whenBrowserReadyAndNotRestoring() {
         tabManager.isRestoringTabs = false
         let subject = createSubject()
         subject.browserViewController = browserViewController
