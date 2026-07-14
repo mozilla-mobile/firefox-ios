@@ -12,16 +12,24 @@ class NovaMissingTokenTests: XCTestCase {
         super.tearDown()
     }
 
-    func testColor_returnsTheDebugColor() {
+    func testColor_returnsTheExpectedColor() {
         NovaMissingToken.reportMisuse = { _ in }
 
+        #if DEBUG
         XCTAssertEqual(NovaMissingToken.color("gradient"), FXColors.Red60)
+        #else
+        XCTAssertEqual(NovaMissingToken.color("gradient"), .clear)
+        #endif
     }
 
-    func testGradient_returnsAGradientWithTheDebugColor() {
+    func testGradient_returnsTheExpectedGradient() {
         NovaMissingToken.reportMisuse = { _ in }
 
+        #if DEBUG
         XCTAssertEqual(NovaMissingToken.gradient("gradient").colors, [FXColors.Red60])
+        #else
+        XCTAssertEqual(NovaMissingToken.gradient("gradient").colors, [.clear])
+        #endif
     }
 
     func testColor_flagsAWrongUse_withTheTokenName() {
@@ -30,7 +38,11 @@ class NovaMissingTokenTests: XCTestCase {
 
         _ = NovaMissingToken.color("textToast")
 
+        #if DEBUG
         XCTAssertEqual(flaggedMessage, "Nova only token 'textToast' was used from a classic theme")
+        #else
+        XCTAssertNil(flaggedMessage)
+        #endif
     }
 
     /// Using a Nova only token in a classic theme should be flagged as a misuse.
@@ -67,7 +79,11 @@ class NovaMissingTokenTests: XCTestCase {
 
                 token.read(classicTheme.theme.colors)
 
+                #if DEBUG
                 XCTAssertTrue(flagged, "\(token.name) on \(classicTheme.name) should be flagged as a Nova-only misuse")
+                #else
+                XCTAssertFalse(flagged, "\(token.name) on \(classicTheme.name) should not report outside DEBUG")
+                #endif
             }
         }
     }
