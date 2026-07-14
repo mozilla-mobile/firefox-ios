@@ -196,9 +196,16 @@ class BrowserViewController: UIViewController,
         $0.isHidden = true
     }
 
-    private lazy var swipeUpTabWebViewPreview: SwipeUpTabWebViewPreview = .build {
-        $0.alpha = 0.0
-    }
+    private lazy var swipeUpTabWebViewPreview: SwipeUpTabWebViewPreview = {
+        let view = SwipeUpTabWebViewPreview(
+            frame: .zero,
+            swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
+        )
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0.0
+        return view
+    }()
+
     private lazy var swipeUpTabWebViewPreviewGestureHandler = SwipeUpTabPreviewGestureHandler(
         tabPreview: swipeUpTabWebViewPreview,
         bottomBlurView: bottomBlurView,
@@ -206,7 +213,8 @@ class BrowserViewController: UIViewController,
         screenshotHelper: screenshotHelper,
         tabManager: tabManager,
         themeManager: themeManager,
-        windowUUID: windowUUID
+        windowUUID: windowUUID,
+        swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
     )
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
@@ -295,6 +303,8 @@ class BrowserViewController: UIViewController,
     var copyAddressAction: AccessibleAction?
 
     // MARK: Feature flags
+
+    private var swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         let featureFlagStatus = featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
@@ -481,6 +491,7 @@ class BrowserViewController: UIViewController,
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
         self.relayController = (UIApplication.shared.delegate as? AppDelegate)?.relayController ?? RelayController()
+        self.swipeGestureFeatureFlagProvider = SwipeGestureFeatureFlagProvider()
 
         super.init(nibName: nil, bundle: nil)
         didInit()

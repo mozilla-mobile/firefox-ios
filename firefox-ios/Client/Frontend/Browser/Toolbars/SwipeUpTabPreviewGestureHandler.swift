@@ -27,6 +27,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
     private weak var panGesture: UIPanGestureRecognizer?
     private weak var swipeUpGesture: UISwipeGestureRecognizer?
     private weak var swipeDownGesture: UISwipeGestureRecognizer?
+    private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
     init(tabPreview: SwipeUpTabWebViewPreview,
          bottomBlurView: UIView,
@@ -34,7 +35,8 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
          screenshotHelper: ScreenshotHelper,
          tabManager: TabManager,
          themeManager: ThemeManager,
-         windowUUID: WindowUUID) {
+         windowUUID: WindowUUID,
+         swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider) {
         self.tabPreview = tabPreview
         self.bottomBlurView = bottomBlurView
         self.topBlurView = topBlurView
@@ -42,6 +44,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
         super.init()
         subscribeToRedux()
     }
@@ -82,7 +85,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
 
     func setupGesture(on view: UIView) {
         // swipe gesture enabled implies interactive gesture is not enabled
-        if SwipeGestureFeatureFlagProvider().isSwipeGestureEnabled {
+        if swipeGestureFeatureFlagProvider.isSwipeGestureEnabled {
             let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture))
             swipeUpGesture.direction = .up
             view.addGestureRecognizer(swipeUpGesture)
@@ -92,11 +95,11 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
             swipeDownGesture.direction = .down
             view.addGestureRecognizer(swipeDownGesture)
             self.swipeDownGesture = swipeDownGesture
-        } else if SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled {
+        } else if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled {
             let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
             view.addGestureRecognizer(panGesture)
             panGesture.delegate = self
-            panGesture.isEnabled = SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled
+            panGesture.isEnabled = swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled
             self.panGesture = panGesture
         }
     }
@@ -114,11 +117,11 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
         }
 
         let panEnabled = (toolbarState.toolbarPosition == .bottom &&
-                          SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled)
+                          swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled)
         panGesture?.isEnabled = panEnabled
 
         let isBottom = toolbarState.toolbarPosition == .bottom
-        if SwipeGestureFeatureFlagProvider().isSwipeGestureEnabled {
+        if swipeGestureFeatureFlagProvider.isSwipeGestureEnabled {
             swipeUpGesture?.isEnabled = isBottom
             swipeDownGesture?.isEnabled = !isBottom
         } else {
@@ -158,7 +161,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
             let fingerLocation = gesture.location(in: tabPreview)
             switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
             case .closeTab:
-                if !SwipeGestureFeatureFlagProvider().isCloseTabEnabled {
+                if !swipeGestureFeatureFlagProvider.isCloseTabEnabled {
                     fallthrough
                 }
                 UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
@@ -201,7 +204,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
 
     @objc
     private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        if !SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled { return }
+        if !swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled { return }
         handleGestureState(gesture)
     }
 

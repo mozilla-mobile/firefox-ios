@@ -32,6 +32,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         case closeTab
     }
 
+    private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
+
     private let backgroundView: UIVisualEffectView = .build {
         if #available(iOS 26, *) {
             $0.effect = UIGlassEffect(style: .regular)
@@ -69,7 +71,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         return screenshotViewContainer.frame
     }
 
-    override init(frame: CGRect) {
+    init(frame: CGRect, swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider) {
+        self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
         super.init(frame: frame)
         setup()
     }
@@ -166,7 +169,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         guard bounds.height > 0 else { return .cancel }
         let fractionFromTop = fingerLocation.y / bounds.height
         if fractionFromTop <= UX.closeReleaseThreshold {
-            if SwipeGestureFeatureFlagProvider().isCloseTabEnabled {
+            if swipeGestureFeatureFlagProvider.isCloseTabEnabled {
                 return .closeTab
             }
         }
