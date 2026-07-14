@@ -2297,6 +2297,7 @@
 		EEB971C62FC48C5100D6C232 /* NewYorkMedium-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA763251A99E200A014BF /* NewYorkMedium-Regular.otf */; };
 		EEB971C72FC48C5100D6C232 /* NewYorkMedium-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA764251A99E200A014BF /* NewYorkMedium-RegularItalic.otf */; };
 		EECF6B61300682B5006FD44E /* SwipeGestureFeatureFlagProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECF6B60300682B5006FD44E /* SwipeGestureFeatureFlagProvider.swift */; };
+		EECF6B633006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECF6B623006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift */; };
 		F00CA4012F00000000000003 /* WorldCupMatchesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000004 /* WorldCupMatchesResponse.swift */; };
 		F00CA4012F00000000000005 /* WorldCupLiveResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000006 /* WorldCupLiveResponse.swift */; };
 		F00CA4012F00000000000007 /* WorldCupAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000008 /* WorldCupAPIClient.swift */; };
@@ -11812,6 +11813,7 @@
 		EEB965182FBCFD2B00D6C232 /* PageRouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRouteTests.swift; sourceTree = "<group>"; };
 		EEB96A212FBF4B8300D6C232 /* ReaderFileRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderFileRoute.swift; sourceTree = "<group>"; };
 		EECF6B60300682B5006FD44E /* SwipeGestureFeatureFlagProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeGestureFeatureFlagProvider.swift; sourceTree = "<group>"; };
+		EECF6B623006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeGestureFeatureFlagProviderTests.swift; sourceTree = "<group>"; };
 		EEE8476797612D908D23E6BC /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEF342E5A045117853806115 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EF0444EEBEA6A45A3E0F654C /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
@@ -17234,6 +17236,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				EECF6B623006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift */,
 				ECD8E56D2FF7ED75002092C6 /* WaybackTests.swift */,
 				EEB965152FBCCE7B00D6C232 /* ReaderTests */,
 				C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */,
@@ -21017,6 +21020,7 @@
 				0E9702742CC2F2FB00C357B7 /* PasswordGeneratorTelemetryTests.swift in Sources */,
 				CA7BD568248189E800A0A61B /* BreachAlertsTests.swift in Sources */,
 				C2BA6FFA2FF54B7D00AD1FBD /* DefaultQuickAnswersTelemetryTests.swift in Sources */,
+				EECF6B633006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift in Sources */,
 				253648E12B2111C100D5C2C5 /* SearchViewControllerTests.swift in Sources */,
 				4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */,
 				C2126EFA2F447A46001C01FE /* SummarizerNimbusUtilsTests.swift in Sources */,
