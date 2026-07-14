@@ -72,6 +72,7 @@ public final class QuickAnswersViewController: UIViewController,
             self?.dismiss(with: nil)
         }
     )
+    private var hasAppeared = false
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -138,6 +139,14 @@ public final class QuickAnswersViewController: UIViewController,
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         registerCallbacks()
+    }
+
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Workaround for iPad: with formSheet presentation, viewWillAppear can fire twice when the
+        // user attempts to dismiss the sheet but the dismissal fails, so guard the one-time flow start.
+        guard !hasAppeared else { return }
+        hasAppeared = true
         viewModel.startFlow()
     }
 

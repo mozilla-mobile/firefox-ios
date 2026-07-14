@@ -40,7 +40,6 @@ final class QuickAnswersViewModel {
         do {
             self.service = try makeService(prefs, configFetcher)
         } catch {
-            // TODO: FXIOS-15570 - Possibly add telemetry to capture service failing
             self.service = nil
         }
         telemetry.quickAnswersRequested()
@@ -81,7 +80,9 @@ final class QuickAnswersViewModel {
 
     private func startRecordingVoice() {
         guard let service else {
-            emitServiceNotInitialized()
+            let error = SpeechError.serviceNotInitialized
+            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
+            onStateChange?(.speechResult(.empty(), error))
             return
         }
         searchResultTask?.cancel()
@@ -91,7 +92,6 @@ final class QuickAnswersViewModel {
         }
     }
 
-    // TODO: FXIOS-14880 - Update view model
     private func recordVoiceTask(service: QuickAnswersService) async throws {
         onStateChange?(.recordingStarted)
         telemetry.recordingStarted()
@@ -117,22 +117,10 @@ final class QuickAnswersViewModel {
         }
     }
 
-    // TODO: FXIOS-14880 - Update view model
     private func stopRecordingVoice() async throws {
-        guard let service else {
-            emitServiceNotInitialized()
-            return
-        }
-
         recordVoiceTask?.cancel()
         recordVoiceTask = nil
-        try await service.stopRecording()
-    }
-
-    private func emitServiceNotInitialized() {
-        let error = SpeechError.serviceNotInitialized
-        telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
-        onStateChange?(.speechResult(.empty(), error))
+        try await service?.stopRecording()
     }
 
     private func searchVoiceResult(_ result: SpeechResult, service: QuickAnswersService) async {
