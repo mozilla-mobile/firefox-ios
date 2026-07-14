@@ -2054,96 +2054,82 @@ workflows:
 #         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
 #     - deploy-to-bitrise-io@2:
 #         is_always_run: true
+    - script@1:
+        title: "Build test results table"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            envman add --key XCRESULT_26_5 --value "$BITRISE_XCRESULT_PATH"
+            # envman add --key XCRESULT_18_6 --value "$BITRISE_XCRESULT_PATH"
+            # envman add --key XCRESULT_17_5 --value "$BITRISE_XCRESULT_PATH"
+
+            ROWS=""
+
+            add_row() {
+              local label="$1"
+              local xcresult_path="$2"
+
+              if [ -z "$xcresult_path" ]; then
+                return
+              fi
+
+              local test_result
+              test_result=$(xcrun xcresulttool get test-results summary --path "$xcresult_path" --compact | jq -r '.result')
+
+              local result
+              if [ "$test_result" = "Passed" ]; then
+                result=":white_check_mark:"
+              else
+                result=":x:"
+              fi
+
+              local row
+              row=$(printf '%-22s| %s' "$label" "$result")
+
+              if [ -z "$ROWS" ]; then
+                ROWS="$row"
+              else
+                ROWS=$(printf '%s\n%s' "$ROWS" "$row")
+              fi
+            }
+
+            add_row "iPhone 17 (iOS 26.5)" "${XCRESULT_26_5:-}"
+            add_row "iPhone 16 (iOS 18.6)" "${XCRESULT_18_6:-}"
+            add_row "iPhone 15 (iOS 17.5)" "${XCRESULT_17_5:-}"
+
+            envman add --key UNIT_TESTS_TABLE_ROWS --value "$ROWS"
     - slack@4:
-        title: "Post thread starter"
+        title: "Post test results"
         is_always_run: true
         inputs:
         - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
         - channel: "#mobile-alerts-sandbox"
-        - pretext: ":white_check_mark: Firefox iOS weekly unit test results :thread:"
-        - pretext_on_error: ":x: Firefox iOS weekly unit test results :thread:"
+        - pretext: "Firefox iOS weekly unit test results"
+        - pretext_on_error: "Firefox iOS weekly unit test results"
         - author_name: ''
-        - title:
-        - title_on_error:
-        - message:
-        - message_on_error:
-        - fields:
-        - buttons:
-        - color: "#CCCCCC"
-        - color_on_error: "#CCCCCC"
-        - footer: Mobile Test Engineering
-        - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
-        - output_thread_ts: UNIT_TESTS_THREAD_TS
-    - slack@4:
-        title: "Report iPhone 17 (iOS 26.5)"
-        is_always_run: true
-        inputs:
-        - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
-        - channel: "#mobile-alerts-sandbox"
-        - thread_ts: $UNIT_TESTS_THREAD_TS
-        - author_name: ''
-        - pretext: "iPhone 17 (iOS 26.5)"
-        - pretext_on_error: "iPhone 17 (iOS 26.5)"
         - title:
         - title_on_error:
         - color: "#CCCCCC"
         - color_on_error: "#CCCCCC"
-        - message:
-        - message_on_error:
-        - footer:
-        - footer_icon:
+        - message: |-
+            ```
+            ${UNIT_TESTS_TABLE_ROWS}
+            ```
+        - message_on_error: |-
+            ```
+            ${UNIT_TESTS_TABLE_ROWS}
+            ```
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
             Maximum Test Repetitions | ${MAX_TEST_REPETITIONS}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Results|${BITRISE_BUILD_URL}?tab=tests
-#     - slack@4:
-#         title: "Report iPhone 16 (iOS 18.6)"
-#         is_always_run: true
-#         inputs:
-#         - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
-#         - channel: "#mobile-alerts-sandbox"
-#         - thread_ts: $UNIT_TESTS_THREAD_TS
-#         - author_name: ''
-#         - pretext: ":white_check_mark: iPhone 16 (iOS 18.6)"
-#         - pretext_on_error: ":x: iPhone 16 (iOS 18.6)"
-#         - title:
-#         - title_on_error:
-#         - color: "#CCCCCC"
-#         - color_on_error: "#CCCCCC"
-#         - message:
-#         - message_on_error:
-#         - footer:
-#         - footer_icon:
-#         - fields: |
-#             Branch | ${BITRISE_GIT_BRANCH}
-#         - buttons: |
-#             Build Log|${BITRISE_BUILD_URL}
-#             Test Results|${BITRISE_BUILD_URL}?tab=tests
-#     - slack@4:
-#         title: "Report iPhone 15 (iOS 17.5)"
-#         is_always_run: true
-#         inputs:
-#         - api_token: "$SLACK_TESTOPS_BOT_TOKEN"
-#         - channel: "#mobile-alerts-sandbox"
-#         - thread_ts: $UNIT_TESTS_THREAD_TS
-#         - author_name: ''
-#         - pretext: ":white_check_mark: iPhone 15 (iOS 17.5)"
-#         - pretext_on_error: ":x: iPhone 15 (iOS 17.5)"
-#         - title:
-#         - title_on_error:
-#         - color: "#CCCCCC"
-#         - color_on_error: "#CCCCCC"
-#         - message:
-#         - message_on_error:
-#         - footer:
-#         - footer_icon:
-#         - fields: |
-#             Branch | ${BITRISE_GIT_BRANCH}
-#         - buttons: |
-#             Build Log|${BITRISE_BUILD_URL}
-#             Test Results|${BITRISE_BUILD_URL}?tab=tests
+        - footer: Mobile Test Engineering
+        - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
