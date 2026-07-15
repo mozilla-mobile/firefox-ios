@@ -5,9 +5,17 @@
 import Foundation
 
 class MockURLProtocol: URLProtocol {
-    var response: ((HTTPURLResponse, URLRequest) -> Void)?
-    var data: Data?
+    nonisolated(unsafe) private static var sharedResponse: ((HTTPURLResponse, URLRequest) -> Void)?
+    nonisolated(unsafe) private static var sharedData: Data?
 
+    var response: ((HTTPURLResponse, URLRequest) -> Void)? {
+        get { MockURLProtocol.sharedResponse }
+        set { MockURLProtocol.sharedResponse = newValue }
+    }
+    var data: Data? {
+        get { MockURLProtocol.sharedData }
+        set { MockURLProtocol.sharedData = newValue }
+    }
     override class func canInit(with request: URLRequest) -> Bool {
         return true
     }

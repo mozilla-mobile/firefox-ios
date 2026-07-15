@@ -86,7 +86,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     private lazy var bookmarkedBadge: UIImage = {
-        return UIImage(named: StandardImageIdentifiers.Medium.bookmarkBadgeFillBlue50)!
+        return UIImage(named: StandardImageIdentifiers.Medium.bookmarkBadgeFillViolet50)!
     }()
 
     private lazy var openAndSyncTabBadge: UIImage = {
@@ -879,15 +879,12 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var searchAppendImage: UIImage? {
-        var searchAppendImage = UIImage(named: StandardImageIdentifiers.Large.appendUpLeft)
-        if viewModel.isBottomSearchBar, let image = searchAppendImage, let cgImage = image.cgImage {
-            searchAppendImage = UIImage(
-                cgImage: cgImage,
-                scale: image.scale,
-                orientation: .downMirrored
-            )
+        let searchAppendImage = if viewModel.isBottomSearchBar {
+            UIImage(named: StandardImageIdentifiers.Large.appendDownLeft)
+        } else {
+            UIImage(named: StandardImageIdentifiers.Large.appendUpLeft)
         }
-        return searchAppendImage
+        return searchAppendImage?.imageFlippedForRightToLeftLayoutDirection()
     }
 
     // MARK: - Notifiable

@@ -58,7 +58,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.startAtHomeProvider(appState, action)
+        subject.startAtHomeProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -84,7 +84,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.startAtHomeProvider(appState, action)
+        subject.startAtHomeProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -110,7 +110,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.startAtHomeProvider(appState, action)
+        subject.startAtHomeProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 

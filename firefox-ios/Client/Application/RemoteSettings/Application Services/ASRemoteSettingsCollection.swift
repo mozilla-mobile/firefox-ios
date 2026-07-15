@@ -11,6 +11,7 @@ enum ASRemoteSettingsCollection: String {
     case summarizerModelsConfig = "summarizer-models-config"
     case translationsModels = "translations-models"
     case translationsWasm = "translations-wasm"
+    case trackingProtectionLists = "tracking-protection-lists-ios"
 }
 
 extension ASRemoteSettingsCollection {

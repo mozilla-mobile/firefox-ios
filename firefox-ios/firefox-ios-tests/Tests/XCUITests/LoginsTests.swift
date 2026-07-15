@@ -444,7 +444,10 @@ class LoginTest: BaseTestCase {
         let editButton = app.buttons["Edit"]
         savedCredentials.waitAndTap()
         editButton.waitAndTap()
-        // Focus the username field explicitly; relying on auto-focus after Edit is flaky on CI
+        // Focus the username field explicitly; relying on auto-focus after Edit is flaky on CI.
+        // Wait for the detail list to finish presenting first, otherwise the Username cell is
+        // queried mid edit-mode transition and the tap times out (matches testEditOneLoginEntry).
+        mozWaitForElementToExist(app.tables["Login Detail List"])
         app.tables["Login Detail List"].cells.elementContainingText("Username").waitAndTap()
         clearAndEnterText(text: "test")
         passwordCell.waitAndTap()

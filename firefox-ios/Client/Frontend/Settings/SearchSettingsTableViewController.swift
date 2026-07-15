@@ -29,6 +29,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         case defaultEngine
         case alternateEngines
         case preSearch
+        case googleLens
         case searchEnginesSuggestions
         case firefoxSuggestSettings
 
@@ -43,6 +44,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
                 // to introduce a new term such as pre-search for users.
                 // There should be some rework of the search settings in the future
                 // so that cross-platform we're more in sync.
+                return ""
+            case .googleLens:
                 return ""
             case .searchEnginesSuggestions:
                 return .Settings.Search.EnginesSuggestionsTitle
@@ -74,6 +77,15 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
 
     var isRecentSearchesEnabled: Bool {
         return featureFlagsProvider.isEnabled(.recentSearches)
+    }
+
+    private var shouldShowGoogleLensSetting: Bool {
+        guard featureFlagsProvider.isEnabled(.googleLens),
+              let defaultEngine = model.defaultEngine,
+              !defaultEngine.isCustomEngine
+        else { return false }
+
+        return defaultEngine.isGoogleEngine
     }
 
     private var isFirefoxSuggestFeatureEnabled: Bool {
@@ -231,6 +243,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
                 configureCellForRecentSearchesAction(cell: cell)
             }
 
+        case .googleLens:
+            configureCellForGoogleLensAction(cell: cell)
+
         case .searchEnginesSuggestions:
             switch indexPath.item {
             case SearchSuggestItem.defaultSuggestions.rawValue:
@@ -330,6 +345,29 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
             cell.textLabel?.text = .SettingsAddCustomEngine
             cell.applyTheme(theme: currentTheme)
         }
+    }
+
+    private func configureCellForGoogleLensAction(cell: ThemedSubtitleTableViewCell) {
+        // Backed by the `.googleLens` feature-flag user preference (defaults to on while the feature is enabled).
+        let setting = BoolSetting(
+            with: .googleLens,
+            titleText: NSAttributedString(
+                string: .Settings.Search.GoogleLens.Title,
+                attributes: [NSAttributedString.Key.foregroundColor: currentTheme.colors.textPrimary]
+            ),
+            statusText: NSAttributedString(
+                string: .Settings.Search.GoogleLens.Description,
+                attributes: [NSAttributedString.Key.foregroundColor: currentTheme.colors.textSecondary]
+            )
+        )
+        setting.onConfigureCell(cell, theme: currentTheme)
+        setting.control.switchView.addTarget(
+            self,
+            action: #selector(didToggleGoogleLens),
+            for: .valueChanged
+        )
+        cell.editingAccessoryView = setting.control
+        cell.selectionStyle = .none
     }
 
     private func configureCellForDefaultSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
@@ -486,6 +524,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         if isTrendingSearchesEnabled || isRecentSearchesEnabled {
             sectionsToDisplay.insert(.preSearch, at: 2)
         }
+        if shouldShowGoogleLensSetting,
+           let alternateEnginesIndex = sectionsToDisplay.firstIndex(of: .alternateEngines) {
+            sectionsToDisplay.insert(.googleLens, at: alternateEnginesIndex)
+        }
         return sectionsToDisplay.count
     }
 
@@ -500,6 +542,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
             return model.orderedEngines.count
         case .preSearch:
             return visiblePreSearchItems.count
+        case .googleLens:
+            return 1
         case .searchEnginesSuggestions:
             return SearchSuggestItem.allCases.count
         case .firefoxSuggestSettings:
@@ -526,7 +570,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
             let customSearchEngineForm = CustomSearchViewController(windowUUID: windowUUID)
             customSearchEngineForm.profile = self.profile
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
-        case .searchEnginesSuggestions, .preSearch:
+        case .searchEnginesSuggestions, .preSearch, .googleLens:
             return nil
         case .firefoxSuggestSettings:
             guard indexPath.item == FirefoxSuggestItem.suggestionLearnMore.rawValue else { return nil }
@@ -560,7 +604,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
     ) -> UITableViewCell.EditingStyle {
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
-        case .defaultEngine, .preSearch, .searchEnginesSuggestions, .firefoxSuggestSettings:
+        case .defaultEngine, .preSearch, .googleLens, .searchEnginesSuggestions, .firefoxSuggestSettings:
             return UITableViewCell.EditingStyle.none
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
@@ -597,7 +641,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
+        let section = Section(rawValue: sectionsToDisplay[section].rawValue) ?? .defaultEngine
+        return section == .googleLens ? UITableView.automaticDimension : 0
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -611,10 +656,23 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         return headerView
     }
 
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let sectionType = Section(rawValue: sectionsToDisplay[section].rawValue) ?? .defaultEngine
+        guard sectionType == .googleLens,
+              let footerView = super.tableView(
+                tableView,
+                viewForFooterInSection: section
+              ) as? ThemedTableSectionHeaderFooterView else { return nil }
+        footerView.titleLabel.text = .Settings.Search.GoogleLens.Footnote
+        footerView.titleAlignment = .top
+
+        return footerView
+    }
+
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
-        case .defaultEngine, .preSearch, .searchEnginesSuggestions, .firefoxSuggestSettings:
+        case .defaultEngine, .preSearch, .googleLens, .searchEnginesSuggestions, .firefoxSuggestSettings:
             return false
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
@@ -642,7 +700,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         toProposedIndexPath proposedDestinationIndexPath: IndexPath
     ) -> IndexPath {
         // Make drag or drop available only for alternateEngines section
-        guard proposedDestinationIndexPath.section == Section.alternateEngines.rawValue else {
+        let proposedDestinationSection = Section(
+            rawValue: sectionsToDisplay[proposedDestinationIndexPath.section].rawValue
+        ) ?? .defaultEngine
+        guard proposedDestinationSection == .alternateEngines else {
             return sourceIndexPath
         }
 
@@ -793,6 +854,13 @@ extension SearchSettingsTableViewController {
     func didToggleSearchSuggestions(_ toggle: ThemedSwitch) {
         // Setting the value in settings dismisses any opt-in.
         model.shouldShowSearchSuggestions = toggle.isOn
+    }
+
+    @objc
+    func didToggleGoogleLens(_ toggle: ThemedSwitch) {
+        userPreferences.setPreferenceFor(.googleLens, to: toggle.isOn)
+        store.dispatch(ToolbarAction(windowUUID: windowUUID,
+                                     actionType: ToolbarActionType.googleLensSettingDidChange))
     }
 
     @objc

@@ -156,7 +156,7 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.cancelEditOnHomepage,
             ToolbarActionType.keyboardStateDidChange, ToolbarActionType.websiteLoadingStateDidChange,
-            ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine, ToolbarActionType.clearSearch,
+            ToolbarMiddlewareActionType.googleLensAvailabilityDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,

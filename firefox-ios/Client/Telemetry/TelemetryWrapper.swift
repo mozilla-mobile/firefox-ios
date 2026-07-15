@@ -42,6 +42,7 @@ enum SearchLocation: String {
 // FIXME: FXIOS-13987 Make truly thread safe
 class TelemetryWrapper: TelemetryWrapperProtocol,
                         UserFeaturePreferenceProvider,
+                        FeatureFlaggable,
                         Notifiable,
                         @unchecked Sendable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
@@ -332,6 +333,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             let summarizerTelemetry = SummarizerTelemetry()
             summarizerTelemetry.summarizationEnabled(summarizerNimbusUtils.isSummarizeFeatureToggledOn)
             summarizerTelemetry.summarizationShakeGestureEnabled(summarizerNimbusUtils.isShakeGestureEnabled)
+        }
+
+        // Record Google Lens user preference
+        if featureFlagsProvider.isEnabled(.googleLens) {
+            GoogleLensTelemetry().googleLensEnabled(userPreferences.getPreferenceFor(.googleLens))
         }
     }
 
@@ -649,6 +655,7 @@ extension TelemetryWrapper {
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
         case tabLossDetected = "tab_loss_detected"
+        case tabCountDiscrepancy = "tab_count_discrepancy"
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
@@ -1526,6 +1533,8 @@ extension TelemetryWrapper {
             GleanMetrics.AppErrors.crashedLastLaunch.record()
         case(.information, .error, .app, .tabLossDetected, _):
             GleanMetrics.AppErrors.tabLossDetected.record()
+        case(.information, .error, .app, .tabCountDiscrepancy, _):
+            GleanMetrics.AppErrors.tabCountDiscrepancy.record()
         case(.information, .error, .app, .cpuException, let extras):
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)

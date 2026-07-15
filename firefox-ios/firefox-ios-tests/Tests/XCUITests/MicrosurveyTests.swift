@@ -18,6 +18,9 @@ final class MicrosurveyTests: BaseTestCase {
             LaunchArguments.ResetMicrosurveyExpirationCount
         ]
         try await super.setUp()
+        if !isFennec {
+            throw XCTSkip("Skipping MicrosurveyTests on Firefox or FirefoxBeta schemas")
+        }
         app.launch()
         microsurveyScreen = MicrosurveyScreen(app: app)
         browserScreen = BrowserScreen(app: app)

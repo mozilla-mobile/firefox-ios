@@ -97,7 +97,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.viewWillAppear
         )
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
@@ -111,15 +111,13 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.viewDidAppear
         )
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Homepage.viewed
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_tapOnBookmarksShowMoreButtonAction_sendTelemetryData() throws {
@@ -130,7 +128,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: NavigationBrowserActionType.tapOnBookmarksShowMoreButton
         )
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
@@ -138,12 +136,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Homepage.itemTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.type, "bookmarks_show_all_button")
         XCTAssertEqual(savedExtras.section, "bookmarks")
     }
@@ -156,7 +152,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
         )
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
@@ -164,12 +160,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Homepage.itemTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.type, "jump_back_in_show_all_button")
         XCTAssertEqual(savedExtras.section, "jump_back_in")
     }
@@ -182,7 +176,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
         )
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
@@ -190,12 +184,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Homepage.itemTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.type, "synced_show_all_button")
         XCTAssertEqual(savedExtras.section, "jump_back_in")
     }
@@ -208,7 +200,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.didSelectItem
         )
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
@@ -216,12 +208,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.Homepage.itemTapped
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.type, "top_site")
         XCTAssertEqual(savedExtras.section, "top_sites")
     }
@@ -234,15 +224,13 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.sectionSeen
         )
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>)
-        let expectedMetricType = type(of: GleanMetrics.Homepage.sectionViewed)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let metric = GleanMetrics.Homepage.sectionViewed
 
         XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === metric, "Received \(savedMetric) instead of \(metric)")
         XCTAssertEqual(mockGleanWrapper?.savedLabel as? String, "top_sites")
     }
 
@@ -261,7 +249,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -290,7 +278,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -319,7 +307,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -348,7 +336,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -377,7 +365,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -405,7 +393,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -434,7 +422,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -462,7 +450,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -491,7 +479,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -519,7 +507,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -550,7 +538,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -576,7 +564,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.initialize
         )
 
-        subject.homepageProvider(AppState(), action)
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
 
         let configuredPrivacyNoticeActions = mockStore.dispatchedActions.compactMap { $0 as? HomepageAction }
             .filter { ($0.actionType as? HomepageMiddlewareActionType) == .configuredPrivacyNotice }

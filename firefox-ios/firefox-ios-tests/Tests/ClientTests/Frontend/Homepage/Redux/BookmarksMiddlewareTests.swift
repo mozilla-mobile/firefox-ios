@@ -35,7 +35,7 @@ final class BookmarksMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.bookmarksProvider(AppState(), action)
+        subject.bookmarksProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation])
 
@@ -59,7 +59,7 @@ final class BookmarksMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.bookmarksProvider(AppState(), action)
+        subject.bookmarksProvider.legacyMiddleware(AppState(), action)
 
         wait(for: [expectation])
 

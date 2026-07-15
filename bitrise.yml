@@ -982,7 +982,7 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
     - deploy-to-bitrise-io@2: {}
     - slack@4:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
@@ -994,7 +994,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-26.5.x-edge
+        stack: osx-xcode-27.0.x-edge
         machine_type_id: g2.mac.4large
   L10nBuild:
     before_run:
@@ -1709,7 +1709,7 @@ workflows:
             GCLOUD_OUTPUT=$(gcloud beta firebase test ios run \
                 --type robo \
                 --app "$BITRISE_IPA_PATH" \
-                --device=model=iphone14pro,version=16.6 \
+                --device=model=iphonese3,version=18.4 \
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --timeout=10m \
@@ -1762,6 +1762,10 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.2.x
+        machine_type_id: g2.mac.4large
   Firebase_Performance_Test:
     before_run:
     - 1_git_clone_and_post_clone
@@ -1794,7 +1798,6 @@ workflows:
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
             SDK="iphoneos"
-            IOS_VERSION="18.2"
             DESTINATION="generic/platform=iOS"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
@@ -1804,7 +1807,7 @@ workflows:
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
             xcodebuild build-for-testing -project "$PROJECT" \
                 -scheme "$SCHEME" \
-                -sdk "$SDK$IOS_VERSION" \
+                -sdk "$SDK" \
                 -destination "$DESTINATION" \
                 -derivedDataPath "${DERIVED_DATA_DIR}" \
                 -skipMacroValidation
@@ -1877,8 +1880,9 @@ workflows:
         title: Pin Python version
         inputs:
         - content: |-
-            brew unlink python@3.12
-            brew unlink python@3.11
+            brew install python@3.11
+            brew unlink python@3.12 || true
+            brew unlink python@3.11 || true
             brew link --force python@3.11
     - cache-push@2:
         inputs:
@@ -1895,8 +1899,8 @@ workflows:
             TIMESTAMP=$(date "+%Y%m%d%H%M%S")
             RESULTS_DIR="firefox_ios_performance_tests_${TIMESTAMP}"
             GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
-            DEVICE_MODEL="iphone15pro" # if updating device model and version, also update firebase-performance.kind
-            DEVICE_VERSION="18.0"
+            DEVICE_MODEL="iphonese3" # if updating device model and version, also update firebase-performance.kind
+            DEVICE_VERSION="18.4"
             XCRESULT_PATH="gs://${GOOGLE_CLOUD_BUCKET}/${RESULTS_DIR}/${DEVICE_MODEL}-${DEVICE_VERSION}-en-portrait/TestLogs/"
             TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip" # this should be the same as the artifact created in the previous step
 
@@ -1907,7 +1911,7 @@ workflows:
 
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test "$TARGET_ARCHIVE" \
-                --xcode-version=16.2 \
+                --xcode-version=26.2 \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
@@ -1984,7 +1988,7 @@ workflows:
     - deploy-to-bitrise-io@2: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-26.2.x
         machine_type_id: g2.mac.large
 
   # Firefox_Unit_Tests_iOS_Versions ensures all unit tests pass on the supported iOS versions.
@@ -2013,8 +2017,8 @@ workflows:
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
     - xcode-test-without-building@0:
-        title: "Unit Tests - iPhone 17 (iOS 26.5)"
-        timeout: 6000
+        title: "Unit Tests - iPhone 17 (iOS 26.5), 3 repetitions"
+        timeout: 1800
         is_always_run: true
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
@@ -2022,6 +2026,8 @@ workflows:
         - configuration: Fennec_Testing
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
+        - test_repetition_mode: until_failure
+        - maximum_test_repetitions: "3"
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
     - xcode-test-without-building@0:
         title: "Unit Tests - iPhone 16 (iOS 18.6)"
@@ -2077,31 +2083,9 @@ workflows:
         - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - footer_icon_on_error: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - fields: |
-            iOS Simulators | iPhone 17 (iOS 26.5), iPhone 16 (iOS 18.6), iPhone 15 (iOS 17.5)
-            Branch | ${BITRISE_GIT_BRANCH}
+            iOS Simulators | iPhone 17 - iOS 26.5 (3 repetitions), iPhone 16 - iOS 18.6, iPhone 15 - iOS 17.5
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
-
-  # Firefox_Unit_Tests runs the unit tests multiple times on weekdays to identify flaky tests on the latest iOS version.
-  # The trends are reported on Bitrise Insights.
-  Firefox_Unit_Tests:
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    steps:
-    - xcode-test@6:
-        timeout: 6000
-        inputs:
-        - project_path: firefox-ios/Client.xcodeproj
-        - scheme: Fennec
-        - configuration: Fennec_Testing
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - test_plan: UnitTest
-        - test_repetition_mode: until_failure
-        - maximum_test_repetitions: 3
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
-    - deploy-to-bitrise-io@2: {}
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****

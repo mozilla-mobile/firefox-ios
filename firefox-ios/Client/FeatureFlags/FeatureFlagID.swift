@@ -9,9 +9,9 @@ import Shared
 enum FeatureFlagID: String, CaseIterable {
     case adBlocker
     case addressAutofillEdit
+    case addressBarGestureToOpenTabTrayCloseTab
     case addressBarGestureToOpenTabTrayInteractive
     case addressBarGestureToOpenTabTraySwipe
-    case adsClient
     case aiKillSwitch
     case appearanceMenu
     case badCertDomainErrorPage
@@ -79,6 +79,7 @@ enum FeatureFlagID: String, CaseIterable {
         switch self {
         case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
         case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .googleLens: return FlagKeys.GoogleLens
         case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
@@ -95,9 +96,9 @@ enum FeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .adBlocker,
+                .addressBarGestureToOpenTabTrayCloseTab,
                 .addressBarGestureToOpenTabTrayInteractive,
                 .addressBarGestureToOpenTabTraySwipe,
-                .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
                 .badCertDomainErrorPage,

@@ -61,7 +61,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         let transcriber = SpeechTranscriber(
             locale: resolvedLocale,
             transcriptionOptions: [],
-            reportingOptions: [.volatileResults],
+            reportingOptions: [.volatileResults, .fastResults],
             attributeOptions: [.transcriptionConfidence]
         )
         self.transcriber = transcriber
@@ -116,7 +116,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     }
 
     func stop() async throws {
-        audioManager.stopEngine()
+        try audioManager.stopEngine()
 
         inputContinuation?.finish()
         inputContinuation = nil
