@@ -14,19 +14,33 @@ struct SearchBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     let shouldShowSearchBar: Bool
 
+    /// FXIOS-11504 - This is mainly used for telemetry for top sites and merino and presenting CFRs.
+    /// At this time, we are keeping `isZeroSearch` the same as legacy. However, we should revisit this value
+    /// and confirm what the expectation is, as it seems inconsistent. See more details in ticket.
+    ///
+    /// FXIOS-6203 - Comment from legacy homepage:
+    /// `isZeroSearch` is true when the homepage is created from the tab tray, a long press
+    /// on the tab bar to open a new tab or by pressing the home page button on the tab bar.
+    /// The zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
+    /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
+    let isZeroSearch: Bool
+
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            shouldShowSearchBar: false
+            shouldShowSearchBar: false,
+            isZeroSearch: false
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        shouldShowSearchBar: Bool
+        shouldShowSearchBar: Bool,
+        isZeroSearch: Bool
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSearchBar = shouldShowSearchBar
+        self.isZeroSearch = isZeroSearch
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -38,6 +52,9 @@ struct SearchBarState: StateType, Equatable {
         switch action.actionType {
         case HomepageMiddlewareActionType.configuredSearchBar:
             return handleSearchBarInitialization(action: action, state: state)
+
+        case HomepageActionType.embeddedHomepage:
+            return handleEmbeddedHomepageAction(action: action, state: state)
 
         // Hide homepage search bar when entering zero search state or
         // when address toolbar is shown
@@ -66,10 +83,21 @@ struct SearchBarState: StateType, Equatable {
         )
     }
 
+    private static func handleEmbeddedHomepageAction(action: Action, state: Self) -> SearchBarState {
+        guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
+            return defaultState(from: state)
+        }
+
+        return state.copy(
+            isZeroSearch: isZeroSearch
+        )
+    }
+
     static func defaultState(from state: SearchBarState) -> SearchBarState {
         return SearchBarState(
             windowUUID: state.windowUUID,
-            shouldShowSearchBar: state.shouldShowSearchBar
+            shouldShowSearchBar: state.shouldShowSearchBar,
+            isZeroSearch: state.isZeroSearch
         )
     }
 }
