@@ -4,6 +4,7 @@
 
 import PhotosUI
 
+/// Identifies the app flow that prompted showing the system photo picker interface
 enum PhotoPickerReason: String {
     case googleLens
 }

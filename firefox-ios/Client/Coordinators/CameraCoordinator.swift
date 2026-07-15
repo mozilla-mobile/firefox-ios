@@ -4,6 +4,7 @@
 
 import AVFoundation
 
+/// Identifies the app flow that prompted showing the system camera interface
 enum CameraReason: String {
     case googleLens
 }
