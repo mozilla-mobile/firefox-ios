@@ -2681,7 +2681,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func rebuildNativeErrorPageStateIfNeeded(for errorPageURL: URL) {
+    func rebuildNativeErrorPageStateIfNeeded(for errorPageURL: URL) {
         guard
             let components = URLComponents(url: errorPageURL, resolvingAgainstBaseURL: false),
             let originalURLString = components.queryItems?.first(where: { $0.name == "url" })?.value,

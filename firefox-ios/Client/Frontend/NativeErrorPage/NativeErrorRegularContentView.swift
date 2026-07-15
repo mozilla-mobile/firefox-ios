@@ -34,7 +34,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         button.isEnabled = true
     }
 
-    private lazy var waybackButton: SecondaryRoundedButton = .build { button in
+    lazy var waybackButton: SecondaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapWayback), for: .touchUpInside)
         button.isEnabled = true
     }
@@ -74,7 +74,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
 
     /// Card container that gives the failure state a distinct background,
     /// matching the visual weight of the buttons above it.
-    private lazy var waybackErrorCard: UIView = .build { view in
+    lazy var waybackErrorCard: UIView = .build { view in
         view.layer.cornerRadius = UX.cardCornerRadius
         view.isHidden = true
         view.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackErrorCard
