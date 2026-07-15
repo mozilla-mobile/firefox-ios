@@ -21,21 +21,47 @@ $tags:
 ###############################################################################
 
 system.camera:
+  closed:
+    type: event
+    description: |
+      Recorded when the system camera interface is closed.
+    extra_keys:
+      reason: &camera_reason_extra
+        type: string
+        description: |
+          The reason associated with the system camera interaction.
+          Options are listed in the CameraReason enumeration.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
+    data_reviews:
+      - TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
   permission_responded:
     type: event
     description: |
       Recorded when the user responds to the system camera permission request.
     extra_keys:
-      reason:
-        type: string
-        description: |
-          The reason the system camera permission request was initiated.
-          Options are listed in the CameraReason enumeration.
+      reason: *camera_reason_extra
       granted:
         type: boolean
         description: |
           Whether the user granted camera access in response to the system
           permission request.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
+    data_reviews:
+      - TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  shown:
+    type: event
+    description: |
+      Recorded when the system camera interface is shown.
+    extra_keys:
+      reason: *camera_reason_extra
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
     data_reviews:

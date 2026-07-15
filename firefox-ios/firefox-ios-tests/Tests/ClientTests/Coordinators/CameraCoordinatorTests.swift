@@ -29,7 +29,10 @@ final class CameraCoordinatorTests: XCTestCase {
     func test_start_whenCameraUnavailable_finishesWithNilAndNotifiesParent() {
         var completionCalled = 0
         var completionImage: UIImage?
-        let subject = createSubject(isCameraAvailable: false, onComplete: { image in
+        let cameraTelemetry = MockSystemCameraTelemetry()
+        let subject = createSubject(isCameraAvailable: false,
+                                    cameraTelemetry: cameraTelemetry,
+                                    onComplete: { image in
             completionCalled += 1
             completionImage = image
         })
@@ -40,6 +43,8 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(completionCalled, 1)
         XCTAssertNil(completionImage)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(cameraTelemetry.shownCalled, 0)
+        XCTAssertEqual(cameraTelemetry.closedCalled, 0)
     }
 
     func test_didFinishPicking_withImage_callsCompletionAndNotifiesParent() {
@@ -75,10 +80,12 @@ final class CameraCoordinatorTests: XCTestCase {
     func test_dismissCameraInterface_dismissesAndFinishesWithNil() {
         var completionCalled = 0
         var completionImage: UIImage?
-        let subject = createSubject(onComplete: { image in
+        let cameraTelemetry = MockSystemCameraTelemetry()
+        let subject = createSubject(cameraTelemetry: cameraTelemetry, onComplete: { image in
             completionCalled += 1
             completionImage = image
         })
+        subject.start()
 
         subject.dismissCameraInterface()
 
@@ -86,6 +93,10 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(completionCalled, 1)
         XCTAssertNil(completionImage)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(cameraTelemetry.shownCalled, 1)
+        XCTAssertEqual(cameraTelemetry.savedShownReason, .googleLens)
+        XCTAssertEqual(cameraTelemetry.closedCalled, 1)
+        XCTAssertEqual(cameraTelemetry.savedClosedReason, .googleLens)
     }
 
     func test_dismissCameraInterfaceIfAccessRefused_whenRefused_dismissesAndFinishesWithNil() async {

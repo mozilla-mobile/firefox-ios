@@ -20,6 +20,34 @@ final class SystemCameraTelemetryTests: XCTestCase {
         super.tearDown()
     }
 
+    func testShown_recordsEventAndReason() throws {
+        typealias EventExtrasType = GleanMetrics.SystemCamera.ShownExtra
+        let event = GleanMetrics.SystemCamera.shown
+        let subject = SystemCameraTelemetry(gleanWrapper: gleanWrapper)
+
+        subject.shown(reason: .googleLens)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.reason, CameraReason.googleLens.rawValue)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func testClosed_recordsEventAndReason() throws {
+        typealias EventExtrasType = GleanMetrics.SystemCamera.ClosedExtra
+        let event = GleanMetrics.SystemCamera.closed
+        let subject = SystemCameraTelemetry(gleanWrapper: gleanWrapper)
+
+        subject.closed(reason: .googleLens)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.reason, CameraReason.googleLens.rawValue)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     func testPermissionResponded_whenGranted_recordsEventAndExtras() throws {
         let subject = SystemCameraTelemetry(gleanWrapper: gleanWrapper)
 

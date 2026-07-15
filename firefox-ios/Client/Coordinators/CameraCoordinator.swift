@@ -44,7 +44,7 @@ final class CameraCoordinator: BaseCoordinator,
 
     func start() {
         guard isCameraAvailable else {
-            finish(with: nil)
+            finish(with: nil, recordCameraClosed: false)
             return
         }
 
@@ -54,6 +54,7 @@ final class CameraCoordinator: BaseCoordinator,
         router.present(picker, animated: true) { [weak self] in
             self?.finish(with: nil)
         }
+        cameraTelemetry.shown(reason: cameraReason)
 
         switch cameraAuthorizationStatus {
         case .denied, .restricted:
@@ -96,7 +97,10 @@ final class CameraCoordinator: BaseCoordinator,
         finish(with: nil)
     }
 
-    private func finish(with image: UIImage?) {
+    private func finish(with image: UIImage?, recordCameraClosed: Bool = true) {
+        if recordCameraClosed {
+            cameraTelemetry.closed(reason: cameraReason)
+        }
         onComplete(image)
         parentCoordinatorDelegate?.didFinish(from: self)
     }
