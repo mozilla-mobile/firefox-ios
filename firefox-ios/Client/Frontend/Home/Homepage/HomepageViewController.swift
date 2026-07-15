@@ -1104,7 +1104,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
-        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
+        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.searchState.isZeroSearch, position: index)
         store.dispatch(
             MerinoAction(
                 telemetryConfig: config,
@@ -1116,7 +1116,7 @@ final class HomepageViewController: UIViewController,
 
     private func dispatchTopSitesAction(at index: Int, config: TopSiteConfiguration, actionType: ActionType) {
         let config = TopSitesTelemetryConfig(
-            isZeroSearch: homepageState.isZeroSearch,
+            isZeroSearch: homepageState.searchState.isZeroSearch,
             position: index,
             topSiteConfiguration: config
         )
@@ -1481,7 +1481,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private var canContextHintBePresented: Bool {
-        return presentedViewController == nil && homepageState.isZeroSearch
+        return presentedViewController == nil && homepageState.searchState.isZeroSearch
     }
 
     @objc

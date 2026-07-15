@@ -14,6 +14,43 @@ final class SearchBarStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(initialState.shouldShowSearchBar)
+        XCTAssertFalse(initialState.isZeroSearch)
+    }
+
+    @MainActor
+    func test_embeddedHomepageAction_withTrueZeroSearch_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = searchBarReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                isZeroSearch: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.embeddedHomepage
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertTrue(newState.isZeroSearch)
+    }
+
+    @MainActor
+    func test_embeddedHomepageAction_withFalseZeroSearch_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = searchBarReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                isZeroSearch: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.embeddedHomepage
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.isZeroSearch)
     }
 
     @MainActor
