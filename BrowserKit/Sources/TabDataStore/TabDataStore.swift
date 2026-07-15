@@ -64,13 +64,17 @@ public actor DefaultTabDataStore: TabDataStore {
             if shouldLogFileFailure {
                 let errorMessage: String
                 errorMessage = shouldLogBackupFailure
-                                ? "Failed to open window data (including backup data) for UUID: \(uuid)"
-                                : "Failed to open window data (but backup recovery worked) for UUID: \(uuid)"
+                                ? "Failed to open window data (including backup data)"
+                                : "Failed to open window data (but backup recovery worked)"
                 logger.log(
                     errorMessage,
                     level: .fatal,
                     category: .tabs,
-                    extra: ["fileInfo": fileInfoMessage, "backupFileInfo": backupInfoMessage]
+                    extra: [
+                        "windowUUID": uuid.uuidString,
+                        "fileInfo": fileInfoMessage,
+                        "backupFileInfo": backupInfoMessage
+                    ]
                 )
             }
         }
