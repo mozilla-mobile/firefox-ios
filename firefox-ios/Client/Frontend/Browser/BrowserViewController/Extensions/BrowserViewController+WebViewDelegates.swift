@@ -436,9 +436,18 @@ extension BrowserViewController: WKUIDelegate {
         getImageData(url) { [weak self] data in
             guard let image = UIImage(data: data) else { return }
             ensureMainThread {
-                self?.navigationHandler?.searchGoogleLens(with: image)
+                self?.navigationHandler?.searchGoogleLens(with: image, source: .contextMenu)
             }
         }
+    }
+
+    /// Reports the completion of an in-flight Google Lens image search (see `googleLensSearches`)
+    /// once its results page finishes loading or fails, then clears the tracked state.
+    private func recordGoogleLensSearchCompletedIfNeeded(for tab: Tab?, succeeded: Bool) {
+        guard let tab, let search = googleLensSearches.removeValue(forKey: tab.tabUUID) else { return }
+        GoogleLensTelemetry().searchCompleted(source: search.source,
+                                              succeeded: succeeded,
+                                              httpStatusCode: search.httpStatusCode)
     }
 
     func assignWebView(_ webView: WKWebView?) {
@@ -819,6 +828,15 @@ extension BrowserViewController: WKNavigationDelegate {
         tabManager[webView]?.mimeType = response.mimeType
         notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
 
+        // Check for google lens web navigation response to record http status code extra
+        if let tab = tabManager[webView],
+           googleLensSearches[tab.tabUUID] != nil,
+           navigationResponse.isForMainFrame,
+           let httpResponse = response as? HTTPURLResponse,
+           responseURL?.host?.contains("google.com") == true {
+            googleLensSearches[tab.tabUUID]?.httpStatusCode = httpResponse.statusCode
+        }
+
         var request: URLRequest?
         if let url = responseURL {
             request = pendingRequests.removeValue(forKey: url.absoluteString)
@@ -1044,6 +1062,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                             value: .webviewFail)
 
         webviewTelemetry.cancel()
+        recordGoogleLensSearchCompletedIfNeeded(for: tabManager[webView], succeeded: false)
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
@@ -1062,6 +1081,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                             value: .webviewFailProvisional)
 
         webviewTelemetry.cancel()
+        recordGoogleLensSearchCompletedIfNeeded(for: tabManager[webView], succeeded: false)
 
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
@@ -1247,6 +1267,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
+        recordGoogleLensSearchCompletedIfNeeded(for: tabManager[webView], succeeded: true)
 
         if let url = webView.url, InternalURL(url) == nil {
             if let title = webView.title,

@@ -46,7 +46,7 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
             actionType: MicrosurveyPromptActionType.showPrompt
         )
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         XCTAssertEqual(mockMicrosurveyManager.handleMessageDisplayedCount, 0)
@@ -59,7 +59,7 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
             actionType: MicrosurveyPromptActionType.showPrompt
         )
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MicrosurveyPromptMiddlewareAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? MicrosurveyPromptMiddlewareActionType)
@@ -76,7 +76,7 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
             actionType: MicrosurveyPromptActionType.closePrompt
         )
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         XCTAssertEqual(mockMicrosurveyManager.handleMessageDismissCount, 1)
@@ -89,7 +89,7 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
             actionType: MicrosurveyPromptActionType.continueToSurvey
         )
 
-        subject.microsurveyProvider(AppState(), action)
+        subject.microsurveyProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         XCTAssertEqual(mockMicrosurveyManager.handleMessagePressedCount, 1)

@@ -15,12 +15,15 @@ final class GoogleLensServiceTests: XCTestCase {
         let builder = MockRequestBuilder()
         let subject = GoogleLensService(imageProcessor: processor, requestBuilder: builder)
 
-        _ = subject.makeUploadRequest(for: UIImage(), viewportSize: CGSize(width: 390, height: 844))
+        _ = subject.makeUploadRequest(for: UIImage(),
+                                      viewportSize: CGSize(width: 390, height: 844),
+                                      entryPoint: .webImageContextMenu)
 
         XCTAssertEqual(builder.receivedInput,
                        GoogleLensUploadInput(jpegData: processed.jpegData,
                                              imageDimensions: processed.dimensions,
-                                             viewportSize: CGSize(width: 390, height: 844)))
+                                             viewportSize: CGSize(width: 390, height: 844),
+                                             entryPoint: .webImageContextMenu))
     }
 
     func test_makeUploadRequest_returnsBuilderRequest() {
@@ -29,7 +32,9 @@ final class GoogleLensServiceTests: XCTestCase {
         let builder = MockRequestBuilder()
         let subject = GoogleLensService(imageProcessor: processor, requestBuilder: builder)
 
-        let request = subject.makeUploadRequest(for: UIImage(), viewportSize: .zero)
+        let request = subject.makeUploadRequest(for: UIImage(),
+                                                viewportSize: .zero,
+                                                entryPoint: .addressToolbar)
 
         XCTAssertEqual(request, builder.stubbedRequest)
     }
@@ -39,7 +44,9 @@ final class GoogleLensServiceTests: XCTestCase {
         let builder = MockRequestBuilder()
         let subject = GoogleLensService(imageProcessor: processor, requestBuilder: builder)
 
-        let request = subject.makeUploadRequest(for: UIImage(), viewportSize: .zero)
+        let request = subject.makeUploadRequest(for: UIImage(),
+                                                viewportSize: .zero,
+                                                entryPoint: .addressToolbar)
 
         XCTAssertNil(request)
         XCTAssertNil(builder.receivedInput, "Builder should not be called when processing fails")

@@ -53,7 +53,15 @@ final class ErrorHandler {
 
     // MARK: - Search Errors
     func handleSearchError(_ error: ResultsServiceError) {
-        showCatchAllErrorAlert()
+        switch error {
+        case .rateLimited:
+            showCatchAllErrorAlert(
+                title: "Daily Limit Reached",
+                message: "Try Quick Answers again tomorrow."
+            )
+        default:
+            showCatchAllErrorAlert()
+        }
     }
 
     // MARK: - Private
@@ -82,10 +90,13 @@ final class ErrorHandler {
     }
 
     // TODO: - FXIOS-14720 Add Strings and accessibility ids
-    private func showCatchAllErrorAlert() {
+    private func showCatchAllErrorAlert(
+        title: String = "Couldn't get an answer",
+        message: String = "Try asking again later."
+    ) {
         let alertController = UIAlertController(
-            title: "Couldn't get an answer",
-            message: "Try asking again later",
+            title: title,
+            message: message,
             preferredStyle: .alert
         )
         alertController.addAction(

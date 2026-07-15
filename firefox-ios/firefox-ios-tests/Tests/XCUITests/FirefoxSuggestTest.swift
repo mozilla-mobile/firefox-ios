@@ -14,17 +14,14 @@ class FirefoxSuggestTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2360075
     func testFirefoxSuggestExists() {
+        // Firefox Suggest only appears once a search has been performed for the same text,
+        // so perform the search first and then search again with the same text.
+        navigator.goto(URLBarOpen)
+        urlBarAddress.typeText("sho\n")
+        navigator.nowAt(BrowserTab)
+
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("sho")
-        // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/28166
-        // Workaround: Press delete to trigger suggestions
-        let suggestCell = app.tables["SiteTable"].staticTexts["Firefox Suggest"]
-        if !suggestCell.mozWaitForElementToExist(timeout: 3, failOnTimeout: false) {
-            urlBarAddress.typeText(XCUIKeyboardKey.delete.rawValue)
-            XCTAssertTrue(suggestCell.mozWaitForElementToExist(timeout: 1, failOnTimeout: false),
-                          "Firefox Suggest did not appear even after workaround")
-        }
-        // End of workaround
         waitForElementsToExist(
             [
             app.tables["SiteTable"],

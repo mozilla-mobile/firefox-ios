@@ -28,7 +28,7 @@ class WallpaperMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = WallpaperMiddleware(wallpaperManager: wallpaperManager)
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
 
-        subject.wallpaperProvider(appState, action)
+        subject.wallpaperProvider.legacyMiddleware(appState, action)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? WallpaperAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? WallpaperMiddlewareActionType)
@@ -47,7 +47,7 @@ class WallpaperMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: WallpaperActionType.wallpaperSelected
         )
 
-        subject.wallpaperProvider(appState, action)
+        subject.wallpaperProvider.legacyMiddleware(appState, action)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? WallpaperAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? WallpaperMiddlewareActionType)

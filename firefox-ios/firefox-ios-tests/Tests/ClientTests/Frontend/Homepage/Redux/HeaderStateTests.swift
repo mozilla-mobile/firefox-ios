@@ -7,17 +7,21 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class HeaderStateTests: XCTestCase {
     private var mockWorldCupStore: MockWorldCupStore!
+    private var mockQuickAnswersStore: MockQuickAnswersStore!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockWorldCupStore = MockWorldCupStore()
+        mockQuickAnswersStore = MockQuickAnswersStore()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockWorldCupStore = nil
-        super.tearDown()
+        mockQuickAnswersStore = nil
+        try await super.tearDown()
     }
 
     func tests_initialState_returnsExpectedState() {
@@ -25,11 +29,10 @@ final class HeaderStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(initialState.isPrivate)
-        XCTAssertFalse(initialState.showiPadSetup)
         XCTAssertTrue(initialState.isWorldCupSectionEnabled)
+        XCTAssertFalse(initialState.showQuickAnswersButton)
     }
 
-    @MainActor
     func test_worldCupDidUpdate_sectionEnabled_setsFlagTrue() {
         let initialState = createSubject()
         let reducer = headerReducer()
@@ -46,7 +49,6 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertTrue(newState.isWorldCupSectionEnabled)
     }
 
-    @MainActor
     func test_worldCupDidUpdate_sectionDisabled_setsFlagFalse() {
         let initialState = createSubject()
         let reducer = headerReducer()
@@ -63,26 +65,6 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(newState.isWorldCupSectionEnabled)
     }
 
-    @MainActor
-    func test_viewWillAppearAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = headerReducer()
-
-        let newState = reducer(
-            initialState,
-            HomepageAction(
-                showiPadSetup: true,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.viewWillAppear
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.isPrivate)
-        XCTAssertTrue(newState.showiPadSetup)
-    }
-
-    @MainActor
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
@@ -90,7 +72,6 @@ final class HeaderStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             HomepageAction(
-                showiPadSetup: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -98,26 +79,6 @@ final class HeaderStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.isPrivate)
-        XCTAssertTrue(newState.showiPadSetup)
-    }
-
-    @MainActor
-    func test_initializeAction_withoutIpadSetup_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = headerReducer()
-
-        let newState = reducer(
-            initialState,
-            HomepageAction(
-                showiPadSetup: false,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.initialize
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.isPrivate)
-        XCTAssertFalse(newState.showiPadSetup)
     }
 
     func test_init_worldCupFeatureAndSectionEnabled_setsWorldCupFlagTrue() {
@@ -157,12 +118,86 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(state.isWorldCupSectionEnabled)
     }
 
+    func test_init_quickAnswersEnabled_setsShowQuickAnswersButtonTrue() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+
+        let state = createSubject()
+
+        XCTAssertTrue(state.showQuickAnswersButton)
+    }
+
+    func test_init_quickAnswersDisabled_setsShowQuickAnswersButtonFalse() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = false
+
+        let state = createSubject()
+
+        XCTAssertFalse(state.showQuickAnswersButton)
+    }
+
+    func test_init_privateMode_forcesShowQuickAnswersButtonFalse_evenWhenStoreEnabled() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+
+        let state = createSubject(isPrivate: true)
+
+        XCTAssertTrue(state.isPrivate)
+        XCTAssertFalse(state.showQuickAnswersButton)
+    }
+
+    func test_quickAnswersDidUpdateSettings_enabled_setsShowQuickAnswersButtonTrue() {
+        let initialState = createSubject()
+        let reducer = headerReducer()
+
+        let newState = reducer(
+            initialState,
+            QuickAnswersMiddlewareAction(
+                isQuickAnswersEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
+            )
+        )
+
+        XCTAssertTrue(newState.showQuickAnswersButton)
+    }
+
+    func test_quickAnswersDidUpdateSettings_disabled_setsShowQuickAnswersButtonFalse() {
+        let initialState = createSubject()
+        let reducer = headerReducer()
+
+        let newState = reducer(
+            initialState,
+            QuickAnswersMiddlewareAction(
+                isQuickAnswersEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
+            )
+        )
+
+        XCTAssertFalse(newState.showQuickAnswersButton)
+    }
+
+    func test_quickAnswersDidUpdateSettings_enabledInPrivateMode_setsShowQuickAnswersButtonFalse() {
+        let initialState = createSubject(isPrivate: true)
+        let reducer = headerReducer()
+
+        let newState = reducer(
+            initialState,
+            QuickAnswersMiddlewareAction(
+                isQuickAnswersEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
+            )
+        )
+
+        XCTAssertFalse(newState.showQuickAnswersButton)
+    }
+
     // MARK: - Private
     private func createSubject(isPrivate: Bool = false) -> HeaderState {
         return HeaderState(
             windowUUID: .XCTestDefaultUUID,
             isPrivate: isPrivate,
-            worldCupStore: mockWorldCupStore
+            worldCupStore: mockWorldCupStore,
+            quickAnswersStore: mockQuickAnswersStore
         )
     }
 

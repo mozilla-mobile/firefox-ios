@@ -42,6 +42,7 @@ enum SearchLocation: String {
 // FIXME: FXIOS-13987 Make truly thread safe
 class TelemetryWrapper: TelemetryWrapperProtocol,
                         UserFeaturePreferenceProvider,
+                        FeatureFlaggable,
                         Notifiable,
                         @unchecked Sendable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
@@ -332,6 +333,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             let summarizerTelemetry = SummarizerTelemetry()
             summarizerTelemetry.summarizationEnabled(summarizerNimbusUtils.isSummarizeFeatureToggledOn)
             summarizerTelemetry.summarizationShakeGestureEnabled(summarizerNimbusUtils.isShakeGestureEnabled)
+        }
+
+        // Record Google Lens user preference
+        if featureFlagsProvider.isEnabled(.googleLens) {
+            GoogleLensTelemetry().googleLensEnabled(userPreferences.getPreferenceFor(.googleLens))
         }
     }
 

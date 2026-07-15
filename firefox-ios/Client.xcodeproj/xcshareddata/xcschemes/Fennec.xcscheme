@@ -239,6 +239,20 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WebCompatReporterKit"
+               BuildableName = "WebCompatReporterKit"
+               BlueprintName = "WebCompatReporterKit"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
                BuildableName = "SyncTelemetryTests.xctest"
                BlueprintName = "SyncTelemetryTests"
@@ -548,6 +562,13 @@
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
+            BlueprintIdentifier = "WebCompatReporterKit"
+            BuildableName = "WebCompatReporterKit"
+            BlueprintName = "WebCompatReporterKit"
+            ReferencedContainer = "container:../BrowserKit">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "MozillaAppServices"
             BuildableName = "MozillaAppServices"
             BlueprintName = "MozillaAppServices"
@@ -753,6 +774,16 @@
                BlueprintIdentifier = "WebEngineTests"
                BuildableName = "WebEngineTests"
                BlueprintName = "WebEngineTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WebCompatReporterKitTests"
+               BuildableName = "WebCompatReporterKitTests"
+               BlueprintName = "WebCompatReporterKitTests"
                ReferencedContainer = "container:../BrowserKit">
             </BuildableReference>
          </TestableReference>

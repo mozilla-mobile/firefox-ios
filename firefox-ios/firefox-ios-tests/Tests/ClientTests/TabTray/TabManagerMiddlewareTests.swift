@@ -61,7 +61,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         mockWindowManager.overrideWindows = true
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPanelMiddlewareAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? TabPanelMiddlewareActionType)
@@ -85,7 +85,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
         wait(for: [expectation], timeout: 0.1)
         XCTAssertTrue(mockWindowManager.windowsWereAccessed)
     }
@@ -107,7 +107,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         mockWindowManager.overrideWindows = true
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
         wait(for: [expectation])
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPanelMiddlewareAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? TabPanelMiddlewareActionType)
@@ -132,7 +132,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TabPanelViewActionType.prefetchScreenshots
         )
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(
             mockTabManager.restoreScreenshotCalls.map { $0.tabUUID },
@@ -151,7 +151,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TabPanelViewActionType.prefetchScreenshots
         )
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         XCTAssertTrue(mockTabManager.restoreScreenshotCalls.isEmpty)
     }
@@ -170,7 +170,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -195,7 +195,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -220,7 +220,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -245,7 +245,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -270,7 +270,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -295,7 +295,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -320,7 +320,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -345,7 +345,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
         mockTabManager?.selectTabExpectation = expectation
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -370,7 +370,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             guard self?.mockStore.dispatchedActions.count == 2 else { return }
             expectation.fulfill()
         }
-        subject.tabsPanelProvider(
+        subject.tabsPanelProvider.legacyMiddleware(
             appState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -395,7 +395,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
-        subject.tabsPanelProvider(
+        subject.tabsPanelProvider.legacyMiddleware(
             appState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -419,7 +419,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
-        subject.tabsPanelProvider(
+        subject.tabsPanelProvider.legacyMiddleware(
             appState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -443,7 +443,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
-        subject.tabsPanelProvider(
+        subject.tabsPanelProvider.legacyMiddleware(
             appState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -467,7 +467,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
-        subject.tabsPanelProvider(
+        subject.tabsPanelProvider.legacyMiddleware(
             appState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -493,7 +493,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
-        subject.tabsPanelProvider(
+        subject.tabsPanelProvider.legacyMiddleware(
             appState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -516,7 +516,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ShortcutsLibraryActionType.switchTabToastButtonTapped
         )
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
         let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
 
         XCTAssertEqual(selectedTab, tab)
@@ -531,7 +531,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ShortcutsLibraryActionType.initialize
         )
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
         let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID)!.selectedTab
 
         XCTAssertNotEqual(selectedTab, tab)
@@ -547,7 +547,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             tabID: tab.tabUUID
         )
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TopSitesAction)
         let actionType = try XCTUnwrap(dispatchedAction.actionType as? TopSitesActionType)
@@ -563,7 +563,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: MainMenuActionType.tapAddToShortcuts
         )
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
     }
@@ -578,7 +578,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             tabID: tab.tabUUID
         )
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TopSitesAction)
         let actionType = try XCTUnwrap(dispatchedAction.actionType as? TopSitesActionType)
@@ -594,7 +594,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: MainMenuActionType.tapRemoveFromShortcuts
         )
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
     }
@@ -616,7 +616,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -641,7 +641,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -671,7 +671,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -696,7 +696,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -721,7 +721,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -746,7 +746,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -771,7 +771,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 
@@ -796,7 +796,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        subject.tabsPanelProvider(appState, action)
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
 
         wait(for: [expectation])
 

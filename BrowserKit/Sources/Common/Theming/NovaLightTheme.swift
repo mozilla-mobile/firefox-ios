@@ -8,12 +8,12 @@ public struct NovaLightTheme: Theme {
     public var type: ThemeType = .light
     private let palette = NovaLightColourPalette()
     public var colors: ThemeColourPalette { palette }
-    public var novaColors: NovaThemeColourPalette { palette }
+    public var isNova = true
 
     public init() {}
 }
 
-private struct NovaLightColourPalette: NovaThemeColourPalette {
+private struct NovaLightColourPalette: ThemeColourPalette {
     // MARK: - Layer
 
     var layer1: UIColor = NovaColors.Gray5
@@ -33,8 +33,6 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var layerAutofillText: UIColor = NovaColors.VioletDesaturated30
     var layerSelectedText: UIColor = NovaColors.Gray35
     var layerGlassTintNova: UIColor = NovaColors.VioletDesaturated10.withAlphaComponent(0.45)
-
-    // TODO: Check if layerAccentPrivateNonOpaque should be renamed
     var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
 
     // MARK: - Action
@@ -81,13 +79,11 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var iconOnColorDisabled: UIColor = NovaColors.VioletDesaturated0.withAlphaComponent(0.4)
     var iconSpinner: UIColor = NovaColors.Gray40
     var iconPrivate: UIColor = NovaColors.Violet50
-    var iconPrivateOutline: UIColor = NovaColors.VioletDesaturated80
 
     // MARK: - Border
 
     var borderPrimary: UIColor = NovaColors.Gray15
     var borderStrong: UIColor = NovaColors.Gray20
-    var borderOnColor: UIColor = NovaColors.Gray15
     var borderInverted: UIColor = NovaColors.Gray60
     var borderRadioButtonDefault: UIColor = NovaColors.Gray35
 
@@ -111,11 +107,6 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
         NovaColors.Pink40,
         NovaColors.Orange30
     ])
-    var gradientAISubtle = Gradient(colors: [
-        NovaColors.Gray5,
-        NovaColors.Violet20,
-        NovaColors.Orange10
-    ])
     var gradientBorder = Gradient(colors: [NovaColors.Violet30, NovaColors.Violet50])
     var gradientPrivacy = Gradient(colors: [
         NovaColors.Purple40,
@@ -126,37 +117,35 @@ private struct NovaLightColourPalette: NovaThemeColourPalette {
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30
 
-    // TODO: FXIOS - 16130 Map gradient properties to Nova gradient tokens.
+    // Default values from LightTheme
     var layerGradient: Gradient = LightTheme().colors.layerGradient
-    var layerGradientOverlay: Gradient = LightTheme().colors.layerGradientOverlay
     var layerGradientURL: Gradient = LightTheme().colors.layerGradientURL
     var layerGradientSummary: Gradient = LightTheme().colors.layerGradientSummary
-    var layerHomepage: Gradient = LightTheme().colors.layerHomepage
-    var gradientOnboardingStop1: UIColor = LightTheme().colors.gradientOnboardingStop1
-    var gradientOnboardingStop2: UIColor = LightTheme().colors.gradientOnboardingStop2
-    var gradientOnboardingStop3: UIColor = LightTheme().colors.gradientOnboardingStop3
-    var gradientOnboardingStop4: UIColor = LightTheme().colors.gradientOnboardingStop4
-
-    // MARK: - Light theme defaults
-    // TODO: Check if some tokens should be replaced by Nova tokens or deprecated
     var layerScrim: UIColor = LightTheme().colors.layerScrim
-    var layerAccentNonOpaque: UIColor = LightTheme().colors.layerAccentNonOpaque
-    var layerAccentPrivate: UIColor = LightTheme().colors.layerAccentPrivate
     var layerCriticalSubdued: UIColor = LightTheme().colors.layerCriticalSubdued
     var layerEmphasis: UIColor = LightTheme().colors.layerEmphasis
-    var layer5: UIColor = LightTheme().colors.layer5
     var layer5Hover: UIColor = LightTheme().colors.layer5Hover
     var layerSurfaceMediumAlt: UIColor = LightTheme().colors.layerSurfaceMediumAlt
-
     var indicatorActive: UIColor = LightTheme().colors.indicatorActive
     var indicatorInactive: UIColor = LightTheme().colors.indicatorInactive
-    var iconRatingNeutral: UIColor = LightTheme().colors.iconRatingNeutral
     var iconAccentViolet: UIColor = LightTheme().colors.iconAccentViolet
     var iconAccentBlue: UIColor = LightTheme().colors.iconAccentBlue
     var iconAccentPink: UIColor = LightTheme().colors.iconAccentPink
     var iconAccentGreen: UIColor = LightTheme().colors.iconAccentGreen
     var iconAccentYellow: UIColor = LightTheme().colors.iconAccentYellow
 
+    // MARK: - Deprecated
+    // TODO: Deprecated for Nova; replace call sites with Nova values (FXIOS-16131)
+    var layer5: UIColor = LightTheme().colors.layer5
+    var layerGradientOverlay: Gradient = LightTheme().colors.layerGradientOverlay
+    var layerHomepage: Gradient = LightTheme().colors.layerHomepage
+    var layerAccentNonOpaque: UIColor = LightTheme().colors.layerAccentNonOpaque
+    var layerAccentPrivate: UIColor = LightTheme().colors.layerAccentPrivate
+    var gradientOnboardingStop1: UIColor = LightTheme().colors.gradientOnboardingStop1
+    var gradientOnboardingStop2: UIColor = LightTheme().colors.gradientOnboardingStop2
+    var gradientOnboardingStop3: UIColor = LightTheme().colors.gradientOnboardingStop3
+    var gradientOnboardingStop4: UIColor = LightTheme().colors.gradientOnboardingStop4
+    var iconRatingNeutral: UIColor = LightTheme().colors.iconRatingNeutral
     var borderSecondary: UIColor = LightTheme().colors.borderSecondary
     var borderAccent: UIColor = LightTheme().colors.borderAccent
     var borderAccentNonOpaque: UIColor = LightTheme().colors.borderAccentNonOpaque

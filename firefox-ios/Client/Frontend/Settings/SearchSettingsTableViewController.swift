@@ -860,9 +860,7 @@ extension SearchSettingsTableViewController {
     func didToggleGoogleLens(_ toggle: ThemedSwitch) {
         userPreferences.setPreferenceFor(.googleLens, to: toggle.isOn)
         store.dispatch(ToolbarAction(windowUUID: windowUUID,
-                                     actionType: ToolbarActionType.googleLensSettingDidChange
-                                    )
-        )
+                                     actionType: ToolbarActionType.googleLensSettingDidChange))
     }
 
     @objc

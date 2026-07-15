@@ -58,6 +58,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showGoogleLensPhotoPickerCalled = 0
     var showGoogleLensCameraCalled = 0
     var searchGoogleLensCalled = 0
+    var searchGoogleLensSource: GoogleLensTelemetry.Source?
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -193,8 +194,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showGoogleLensCameraCalled += 1
     }
 
-    func searchGoogleLens(with image: UIImage) {
+    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source) {
         searchGoogleLensCalled += 1
+        searchGoogleLensSource = source
     }
 
     // MARK: - BrowserDelegate

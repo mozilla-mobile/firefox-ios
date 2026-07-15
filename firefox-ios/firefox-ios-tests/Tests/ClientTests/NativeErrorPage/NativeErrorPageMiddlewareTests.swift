@@ -48,7 +48,7 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: NativeErrorPageActionType.bypassCertificateWarning
         )
 
-        subject.nativeErrorPageProvider(mockStore.state, action)
+        subject.nativeErrorPageProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockLogger.savedLevel, .warning)
         XCTAssertEqual(mockLogger.savedCategory, .certificate)
@@ -62,7 +62,7 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: NativeErrorPageActionType.bypassCertificateWarning
         )
 
-        subject.nativeErrorPageProvider(mockStore.state, action)
+        subject.nativeErrorPageProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockLogger.savedLevel, .warning)
         XCTAssertEqual(mockLogger.savedCategory, .certificate)

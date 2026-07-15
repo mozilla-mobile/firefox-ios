@@ -901,6 +901,16 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func handleWebChannelPasswordChange(jsonPayload: String) throws 
     
     /**
+     * Check whether the account has already been granted the given OAuth scope(s).
+     *
+     * This checks whether the refresh token has *every* specified scope.
+     *
+     * # Arguments
+     *    - `scope` - space-separated list of OAuth scopes. Order is not significant.
+     */
+    func hasScope(scope: String)  -> Bool
+    
+    /**
      * Create a new device record for this application.
      *
      * **💾 This method alters the persisted account state.**
@@ -1665,6 +1675,23 @@ open func handleWebChannelPasswordChange(jsonPayload: String)throws   {try rustC
         FfiConverterString.lower(jsonPayload),$0
     )
 }
+}
+    
+    /**
+     * Check whether the account has already been granted the given OAuth scope(s).
+     *
+     * This checks whether the refresh token has *every* specified scope.
+     *
+     * # Arguments
+     *    - `scope` - space-separated list of OAuth scopes. Order is not significant.
+     */
+open func hasScope(scope: String) -> Bool  {
+    return try!  FfiConverterBool.lift(try! rustCall() {
+    uniffi_fxa_client_fn_method_firefoxaccount_has_scope(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(scope),$0
+    )
+})
 }
     
     /**
@@ -4531,6 +4558,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_password_change() != 5890) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_has_scope() != 48753) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_initialize_device() != 52372) {

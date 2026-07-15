@@ -10,4 +10,12 @@ import Foundation
 public protocol Theme {
     var type: ThemeType { get }
     var colors: ThemeColourPalette { get }
+
+    /// Checks if the theme is a Nova type. The theme manager only returns a Nova theme
+    ///  when the novaDesign feature flag is on.
+    var isNova: Bool { get }
+}
+
+public extension Theme {
+    var isNova: Bool { false }
 }

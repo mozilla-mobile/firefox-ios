@@ -36,14 +36,14 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
+        case .addressBarGestureToOpenTabTrayCloseTab:
+                    return checkAddressBarGestureToOpenTabTrayCloseTabFeature()
+
         case .addressBarGestureToOpenTabTrayInteractive:
             return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
 
         case .addressBarGestureToOpenTabTraySwipe:
             return checkAddressBarGestureToOpenTabTraySwipeFeature()
-
-        case .adsClient:
-            return checkAdsClientFeature()
 
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
@@ -333,11 +333,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return config.status
     }
 
-    private func checkAdsClientFeature() -> Bool {
-        let config = nimbus.features.adsClient.value()
-        return config.status
-    }
-
     private func checkAppearanceMenuFeature() -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
         return config.status
@@ -479,6 +474,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkReportBrokenSiteFeature() -> Bool {
         return nimbus.features.reportBrokenSiteFeature.value().enabled
     }
+
+    private func checkAddressBarGestureToOpenTabTrayCloseTabFeature() -> Bool {
+           return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledClosetab
+       }
 
     private func checkAddressBarGestureToOpenTabTrayInteractiveFeature() -> Bool {
         return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledInteractive

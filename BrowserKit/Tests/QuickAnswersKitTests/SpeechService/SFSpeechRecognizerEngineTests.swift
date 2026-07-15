@@ -97,11 +97,11 @@ struct SFSpeechRecognizerEngineTests {
     }
 
     @Test
-    func test_stop_callsStopEngine() {
+    func test_stop_callsStopEngine() throws {
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
 
-        subject.stop()
+        try subject.stop()
 
         #expect(audioManager.stopEngineCallCount == 1)
     }
