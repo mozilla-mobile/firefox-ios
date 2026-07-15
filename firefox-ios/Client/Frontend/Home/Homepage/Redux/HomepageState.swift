@@ -166,7 +166,6 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
@@ -184,7 +183,6 @@ struct HomepageState: ScreenState, Equatable {
                                                      action: Action,
                                                      isZeroSearch: Bool) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
@@ -209,7 +207,6 @@ struct HomepageState: ScreenState, Equatable {
         let availableWallpaperHeight = homepageAction.availableWallpaperHeight ?? state.availableWallpaperHeight
 
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
@@ -227,7 +224,6 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handlePrivacyNoticeCloseButtonTappedAction(state: HomepageState, action: Action) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
@@ -244,7 +240,6 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
@@ -260,7 +255,6 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handlePrivacyNoticeInitialization(action: Action, state: Self) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
@@ -277,7 +271,6 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func passthroughState(from state: HomepageState, action: Action) -> HomepageState {
         return state
-            .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
