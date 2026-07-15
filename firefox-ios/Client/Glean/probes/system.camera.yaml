@@ -34,7 +34,7 @@ system.camera:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -52,7 +52,7 @@ system.camera:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -65,7 +65,7 @@ system.camera:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -78,7 +78,7 @@ system.camera:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
