@@ -642,6 +642,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen.assertWebViewLinkTextExists(text: "Legal")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4221455
     func testLongTapFirefoxIconAppIcon() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
