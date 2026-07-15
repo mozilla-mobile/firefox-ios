@@ -54,6 +54,7 @@ final class NativeErrorPageViewController: UIViewController,
         static let badCertContentGap: CGFloat = 16
         static let badCertImageSize: CGFloat = 160
         static let badCertGapBetweenImageAndContent: CGFloat = 40
+        static let waybackTopPaddingReduction: CGFloat = 40
     }
 
     private lazy var scrollView: UIScrollView = .build()
@@ -357,7 +358,7 @@ final class NativeErrorPageViewController: UIViewController,
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
                 constant: (isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top) -
-                        (model?.isWayback == true ? 40 : 0)
+                          (model?.isWayback == true ? UX.waybackTopPaddingReduction : 0)
             ),
             scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
