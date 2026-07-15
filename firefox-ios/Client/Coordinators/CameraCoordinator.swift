@@ -108,6 +108,7 @@ final class CameraCoordinator: BaseCoordinator,
     // MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        cameraTelemetry.photoSelected(reason: cameraReason)
         router.dismiss(animated: true)
         finish(with: info[.originalImage] as? UIImage)
     }

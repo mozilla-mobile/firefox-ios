@@ -50,7 +50,8 @@ final class CameraCoordinatorTests: XCTestCase {
     func test_didFinishPicking_withImage_callsCompletionAndNotifiesParent() {
         let expectedImage = UIImage()
         var completionImage: UIImage?
-        let subject = createSubject(onComplete: { completionImage = $0 })
+        let cameraTelemetry = MockSystemCameraTelemetry()
+        let subject = createSubject(cameraTelemetry: cameraTelemetry, onComplete: { completionImage = $0 })
         let picker = UIImagePickerController()
 
         subject.imagePickerController(picker, didFinishPickingMediaWithInfo: [.originalImage: expectedImage])
@@ -58,6 +59,8 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertIdentical(completionImage, expectedImage)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
+        XCTAssertEqual(cameraTelemetry.photoSelectedCalled, 1)
+        XCTAssertEqual(cameraTelemetry.savedPhotoSelectedReason, .googleLens)
     }
 
     func test_didFinishPicking_withoutImage_callsCompletionWithNil() {

@@ -64,6 +64,20 @@ final class SystemCameraTelemetryTests: XCTestCase {
         try assertPermissionRespondedEvent(granted: false)
     }
 
+    func testPhotoSelected_recordsEventAndReason() throws {
+        typealias EventExtrasType = GleanMetrics.SystemCamera.PhotoSelectedExtra
+        let event = GleanMetrics.SystemCamera.photoSelected
+        let subject = SystemCameraTelemetry(gleanWrapper: gleanWrapper)
+
+        subject.photoSelected(reason: .googleLens)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.reason, CameraReason.googleLens.rawValue)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     private func assertPermissionRespondedEvent(granted: Bool,
                                                 file: StaticString = #filePath,
                                                 line: UInt = #line) throws {
