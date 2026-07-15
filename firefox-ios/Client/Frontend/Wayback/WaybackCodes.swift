@@ -8,8 +8,6 @@ enum WaybackCodes {
         .cfurlErrorCannotFindHost,
         .cfurlErrorCannotConnectToHost,
         .cfurlErrorDNSLookupFailed,
-        .cfurlErrorNetworkConnectionLost,
-        .cfurlErrorNotConnectedToInternet,
         .cfurlErrorResourceUnavailable
     ]
 
