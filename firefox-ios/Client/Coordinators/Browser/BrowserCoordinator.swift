@@ -1153,7 +1153,8 @@ final class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is PhotoPickerCoordinator }) else { return }
         let coordinator = PhotoPickerCoordinator(
             parentCoordinatorDelegate: self,
-            router: router
+            router: router,
+            photoPickerReason: .googleLens
         ) { [weak self] results in
             self?.handleGoogleLensPhotoPick(results)
         }

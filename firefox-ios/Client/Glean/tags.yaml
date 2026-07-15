@@ -81,6 +81,9 @@ Passwords:
 PasswordGenerator:
   description: Corresponds to the generation of strong passwords for logins and autofill.
 
+PhotoPicker:
+  description: Corresponds to features that use the system photo picker.
+
 QuickAnswers:
   description: Corresponds to the AI-powered Quick Answers feature that returns answers to spoken questions.
 
