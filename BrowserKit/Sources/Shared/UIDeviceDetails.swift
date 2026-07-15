@@ -20,7 +20,7 @@ public struct UIDeviceDetails {
 
 /// Lazily computes a `@MainActor` value and caches it. Safe to read from any thread.
 /// The main-thread hop happens outside the lock so this utility class avoids the deadlock
-/// we had with the previous implementatino of UIDeviceDetails.
+/// we had with the previous implementation of UIDeviceDetails.
 final class MainActorCachedValue<T: Sendable>: @unchecked Sendable {
     private let lock = NSLock()
     private var cachedValue: T?
