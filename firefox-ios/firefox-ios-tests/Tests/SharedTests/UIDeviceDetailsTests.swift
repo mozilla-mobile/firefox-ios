@@ -5,6 +5,9 @@
 import XCTest
 @testable import Shared
 
+/// These tests attempt to call the `UIDeviceDetails` helper from multiple different threading contexts. The purpose is to
+/// ensure that calling this helper can't result in a deadlock or hang.
+/// See FXIOS-16307 for more context on app hangs that called into `UIDeviceDetails` code from our uniFFI rust layer.
 final class UIDeviceDetailsTests: XCTestCase {
     static func getSystemInfo() -> String {
         let device = UIDeviceDetails.model
@@ -12,7 +15,8 @@ final class UIDeviceDetailsTests: XCTestCase {
         return "(\(device); \(system) OS 18_7 like Mac OS X)"
     }
 
-    // MARK: Test calling a function that uses UIDeviceDetails from the main thread
+    // MARK: The following tests check if calling UIDeviceDetails from multiple threading contexts causes any problems.
+
     func testUIDeviceDetails_onMainThreadGCDAsync_callsUIDeviceDetails_getMainThreadDataSynchronously() {
         let exp = expectation(description: "Main thread work completed")
 
