@@ -43,7 +43,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -71,7 +71,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -98,7 +98,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.topSitesSeen
         )
 
-        subject.topSitesProvider(AppState(), action)
+        subject.topSitesProvider.legacyMiddleware(AppState(), action)
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 1)
     }
 
@@ -115,7 +115,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -142,7 +142,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -169,9 +169,9 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
-        subject.topSitesProvider(appState, action)
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -199,9 +199,9 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
-        subject.topSitesProvider(appState, action)
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -227,7 +227,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -254,7 +254,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.tapOnHomepageTopSitesCell
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         try checkTopSitesPressedMetrics(label: "zero-search", position: "0", tileType: "sponsored")
 
@@ -283,7 +283,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.tapOnHomepageTopSitesCell
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         try checkTopSitesPressedMetrics(label: "origin-other", position: "1", tileType: "suggested")
 
@@ -304,7 +304,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.tapOnHomepageTopSitesCell
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
@@ -323,7 +323,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnPinTopSite
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         let contextMenuMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContextualMenuExtra>
@@ -337,20 +337,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         let pinnedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.last as? GleanMetrics.TopSites.ShortcutPinnedExtra
         )
-        let contextMenuDebugMessage = TelemetryDebugMessage(
-            expectedMetric: type(of: GleanMetrics.TopSites.contextualMenu),
-            resultMetric: type(of: contextMenuMetric)
-        )
-        let pinnedDebugMessage = TelemetryDebugMessage(
-            expectedMetric: type(of: GleanMetrics.TopSites.shortcutPinned),
-            resultMetric: type(of: pinnedMetric)
-        )
+        let contextMenuEvent = GleanMetrics.TopSites.contextualMenu
+        let pinnedEvent = GleanMetrics.TopSites.shortcutPinned
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
-        XCTAssert(type(of: contextMenuMetric)
-                  == type(of: GleanMetrics.TopSites.contextualMenu), contextMenuDebugMessage.text)
+        XCTAssert(contextMenuMetric === contextMenuEvent,
+                  "Received \(contextMenuMetric) instead of \(contextMenuEvent)")
         XCTAssertEqual(contextMenuExtras.type, "pin")
-        XCTAssert(type(of: pinnedMetric) == type(of: GleanMetrics.TopSites.shortcutPinned), pinnedDebugMessage.text)
+        XCTAssert(pinnedMetric === pinnedEvent, "Received \(pinnedMetric) instead of \(pinnedEvent)")
         XCTAssertEqual(pinnedExtras.source, "context_menu")
 
         XCTAssertEqual(mockTopSitesManager.pinTopSiteCalledCount, 1)
@@ -363,7 +357,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnPinTopSite
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
@@ -380,7 +374,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnPinTopSite
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         let pinnedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.last as? GleanMetrics.TopSites.ShortcutPinnedExtra
@@ -405,7 +399,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             unpinTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         let contextMenuMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContextualMenuExtra>
@@ -419,20 +413,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         let unpinnedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.last as? GleanMetrics.TopSites.ShortcutUnpinnedExtra
         )
-        let contextMenuDebugMessage = TelemetryDebugMessage(
-            expectedMetric: type(of: GleanMetrics.TopSites.contextualMenu),
-            resultMetric: type(of: contextMenuMetric)
-        )
-        let unpinnedDebugMessage = TelemetryDebugMessage(
-            expectedMetric: type(of: GleanMetrics.TopSites.shortcutUnpinned),
-            resultMetric: type(of: unpinnedMetric)
-        )
+        let contextMenuEvent = GleanMetrics.TopSites.contextualMenu
+        let unpinnedEvent = GleanMetrics.TopSites.shortcutUnpinned
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
-        XCTAssert(type(of: contextMenuMetric)
-                  == type(of: GleanMetrics.TopSites.contextualMenu), contextMenuDebugMessage.text)
+        XCTAssert(contextMenuMetric === contextMenuEvent,
+                  "Received \(contextMenuMetric) instead of \(contextMenuEvent)")
         XCTAssertEqual(contextMenuExtras.type, "unpin")
-        XCTAssert(type(of: unpinnedMetric) == type(of: GleanMetrics.TopSites.shortcutUnpinned), unpinnedDebugMessage.text)
+        XCTAssert(unpinnedMetric === unpinnedEvent, "Received \(unpinnedMetric) instead of \(unpinnedEvent)")
         XCTAssertEqual(unpinnedExtras.source, "context_menu")
 
         wait(for: [unpinTopSiteExpectation], timeout: 1)
@@ -450,7 +438,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             unpinTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
@@ -473,7 +461,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             unpinTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         let unpinnedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.last as? GleanMetrics.TopSites.ShortcutUnpinnedExtra
@@ -500,7 +488,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             removeTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         try checkContextMenuMetricsCalled(withExtra: "remove")
 
@@ -520,7 +508,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             removeTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
@@ -543,15 +531,13 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
         )
 
-        subject.topSitesProvider(AppState(), action)
+        subject.topSitesProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.TopSites.openInPrivateTab)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.TopSites.openInPrivateTab
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_tappedOnSettingsAction_sendTelemetryData() throws {
@@ -560,7 +546,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnSettingsAction
         )
-        subject.topSitesProvider(AppState(), action)
+        subject.topSitesProvider.legacyMiddleware(AppState(), action)
 
         try checkContextMenuMetricsCalled(withExtra: "settings")
     }
@@ -571,7 +557,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnSponsoredAction
         )
-        subject.topSitesProvider(AppState(), action)
+        subject.topSitesProvider.legacyMiddleware(AppState(), action)
 
         try checkContextMenuMetricsCalled(withExtra: "sponsoredSupport")
     }
@@ -594,20 +580,18 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.shortcutPinned
         )
 
-        subject.topSitesProvider(AppState(), homeScreenAction)
-        subject.topSitesProvider(AppState(), appMenuAction)
-        subject.topSitesProvider(AppState(), contextMenuAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), homeScreenAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), appMenuAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), contextMenuAction)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ShortcutPinnedExtra>
         )
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras as? [GleanMetrics.TopSites.ShortcutPinnedExtra])
-        let expectedMetricType = type(of: GleanMetrics.TopSites.shortcutPinned)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.TopSites.shortcutPinned
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 3)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.map(\.source), ["homescreen_button", "app_menu", "context_menu"])
     }
 
@@ -624,19 +608,17 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.shortcutUnpinned
         )
 
-        subject.topSitesProvider(AppState(), contextMenuAction)
-        subject.topSitesProvider(AppState(), appMenuAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), contextMenuAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), appMenuAction)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ShortcutUnpinnedExtra>
         )
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras as? [GleanMetrics.TopSites.ShortcutUnpinnedExtra])
-        let expectedMetricType = type(of: GleanMetrics.TopSites.shortcutUnpinned)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.TopSites.shortcutUnpinned
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.map(\.source), ["context_menu", "app_menu"])
     }
 
@@ -662,42 +644,28 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.TopSites.ContextualMenuExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.TopSites.contextualMenu)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.TopSites.contextualMenu
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.type, extra)
     }
 
     private func checkTopSitesPressedMetrics(label: String, position: String, tileType: String) throws {
+        let firstMetric = GleanMetrics.TopSites.pressedTileOrigin
+        let secondMetric = GleanMetrics.TopSites.tilePressed
         let firstSavedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>
         )
-
-        let expectedFirstMetricType = type(of: GleanMetrics.TopSites.pressedTileOrigin)
-        let firstResultMetricType = type(of: firstSavedMetric)
-        let debugMessage = TelemetryDebugMessage(
-            expectedMetric: expectedFirstMetricType,
-            resultMetric: firstResultMetricType
-        )
-
         let secondSavedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents[safe: 1] as? EventMetricType<GleanMetrics.TopSites.TilePressedExtra>
         )
         let secondSavedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.TopSites.TilePressedExtra
         )
-        let expectedSecondMetricType = type(of: GleanMetrics.TopSites.tilePressed)
-        let secondResultMetricType = type(of: secondSavedMetric)
-        let secondDebugMessage = TelemetryDebugMessage(
-            expectedMetric: expectedSecondMetricType,
-            resultMetric: secondResultMetricType
-        )
 
-        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
-        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
+        XCTAssert(firstSavedMetric === firstMetric, "Received \(firstSavedMetric) instead of \(firstMetric)")
+        XCTAssert(secondSavedMetric === secondMetric, "Received \(secondSavedMetric) instead of \(secondMetric)")
 
         XCTAssertEqual(mockGleanWrapper.savedLabel as? String, label)
         XCTAssertEqual(secondSavedExtras.position, position)

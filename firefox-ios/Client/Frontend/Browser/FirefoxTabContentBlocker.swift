@@ -64,8 +64,20 @@ extension BlockingStrength {
 
 /// Firefox-specific implementation of tab content blocking.
 @MainActor
-final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
+final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript, FeatureFlaggable {
     let userPrefs: Prefs
+
+    private var isAdBlockingEnabled: Bool {
+        return featureFlagsProvider.isEnabled(.adBlocker) && (userPrefs.boolForKey(PrefsKeys.BlockAds) ?? false)
+    }
+
+    private func currentRules() -> [String] {
+        var rules = isEnabled ? BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict) : []
+        if isAdBlockingEnabled {
+            rules.append(ASAdBlockerListFetcher.adBlockerRecordID)
+        }
+        return rules
+    }
 
     class func name() -> String {
         return "TrackingProtectionStats"
@@ -104,11 +116,11 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 
     func setupForTab(completion: (() -> Void)? = nil) {
         guard let tab = tab else { return }
-        let rules = BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
+        let rules = currentRules()
         logger.log("Setup tracking protection for tab: \(tab)", level: .info, category: .adblock)
         ContentBlocker.shared.setupTrackingProtection(
             forTab: tab,
-            isEnabled: isEnabled,
+            isEnabled: isEnabled || isAdBlockingEnabled,
             rules: rules,
             completion: completion
         )
@@ -122,7 +134,7 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     }
 
     override func currentlyEnabledLists() -> [String] {
-        return BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
+        return currentRules()
     }
 
     override func notifyContentBlockingChanged() {

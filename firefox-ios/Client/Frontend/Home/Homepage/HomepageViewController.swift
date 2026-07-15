@@ -184,7 +184,6 @@ final class HomepageViewController: UIViewController,
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
             HomepageAction(
-                showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillAppear
             )
@@ -232,7 +231,6 @@ final class HomepageViewController: UIViewController,
             store.dispatch(
                 HomepageAction(
                     numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
-                    showiPadSetup: shouldUseiPadSetup(),
                     windowUUID: windowUUID,
                     actionType: HomepageActionType.initialize
                 )
@@ -624,9 +622,9 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header(let state, let logoTextColor):
+        case .header(let state, let logoTextColor, let showiPadSetup):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state, logoTextColor: logoTextColor)
+                cell.configure(headerState: state, showiPadSetup: showiPadSetup, logoTextColor: logoTextColor)
                 cell.applyTheme(theme: currentTheme)
             }
         case .privacyNotice:
@@ -973,7 +971,6 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
-                showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.traitCollectionDidChange
             )
@@ -1169,6 +1166,7 @@ final class HomepageViewController: UIViewController,
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
+            showiPadSetup: shouldUseiPadSetup(),
             animatingDifferences: animatingDifferences
         ) {
             completion?()

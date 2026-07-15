@@ -70,6 +70,17 @@ final class MainMenuCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 
+    func testHandleNavigation_reportBrokenSite_callsPresentReportBrokenSiteOnDelegate() {
+        let subject = createSubject()
+        let mockDelegate = MockMainMenuCoordinatorDelegate()
+        subject.navigationHandler = mockDelegate
+
+        subject.navigateTo(MenuNavigationDestination(.reportBrokenSite), animated: false)
+        mockRouter.savedCompletion?()
+
+        XCTAssertEqual(mockDelegate.presentReportBrokenSiteCalled, 1)
+    }
+
     func testHandleNavigation_webpageSummary_callsDelegate() {
         let subject = createSubject()
         let mockDelegate = MockMainMenuCoordinatorDelegate()

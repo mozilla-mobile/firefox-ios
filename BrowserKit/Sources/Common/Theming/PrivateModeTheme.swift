@@ -126,20 +126,20 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
 
     // MARK: - Nova tokens
-    var layerAccentSubtle: UIColor = .clear
-    var layerInverse: UIColor = .clear
-    var layerGlassTintNova: UIColor = .clear
-    var textToast: UIColor = .clear
-    var iconInverted: UIColor = .clear
-    var iconOnColorDisabled: UIColor = .clear
-    var iconPrivate: UIColor = .clear
-    var borderStrong: UIColor = .clear
-    var borderRadioButtonDefault: UIColor = .clear
-    var gradient = Gradient(colors: [.clear])
-    var gradientAccent = Gradient(colors: [.clear])
-    var gradientAccentSubtle = Gradient(colors: [.clear])
-    var gradientAIStrong = Gradient(colors: [.clear])
-    var gradientBorder = Gradient(colors: [.clear])
-    var gradientPrivacy = Gradient(colors: [.clear])
-    var gradientPrivacyMask = Gradient(colors: [.clear])
+    var layerAccentSubtle: UIColor { NovaMissingToken.color("layerAccentSubtle") }
+    var layerInverse: UIColor { NovaMissingToken.color("layerInverse") }
+    var layerGlassTintNova: UIColor { NovaMissingToken.color("layerGlassTintNova") }
+    var textToast: UIColor { NovaMissingToken.color("textToast") }
+    var iconInverted: UIColor { NovaMissingToken.color("iconInverted") }
+    var iconOnColorDisabled: UIColor { NovaMissingToken.color("iconOnColorDisabled") }
+    var iconPrivate: UIColor { NovaMissingToken.color("iconPrivate") }
+    var borderStrong: UIColor { NovaMissingToken.color("borderStrong") }
+    var borderRadioButtonDefault: UIColor { NovaMissingToken.color("borderRadioButtonDefault") }
+    var gradient: Gradient { NovaMissingToken.gradient("gradient") }
+    var gradientAccent: Gradient { NovaMissingToken.gradient("gradientAccent") }
+    var gradientAccentSubtle: Gradient { NovaMissingToken.gradient("gradientAccentSubtle") }
+    var gradientAIStrong: Gradient { NovaMissingToken.gradient("gradientAIStrong") }
+    var gradientBorder: Gradient { NovaMissingToken.gradient("gradientBorder") }
+    var gradientPrivacy: Gradient { NovaMissingToken.gradient("gradientPrivacy") }
+    var gradientPrivacyMask: Gradient { NovaMissingToken.gradient("gradientPrivacyMask") }
 }

@@ -245,8 +245,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleDidClearAlternativeSearchEngine(state: state, action: action)
 
-        case ToolbarMiddlewareActionType.didUpdateDefaultSearchEngine:
-            return handleSearchEngineDidChange(state: state, action: action)
+        case ToolbarMiddlewareActionType.googleLensAvailabilityDidChange:
+            return handleGoogleLensAvailabilityDidChange(state: state, action: action)
 
         default:
             return defaultState(from: state)
@@ -265,7 +265,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: [ToolbarActionConfiguration](),
             trailingPageActions: [ToolbarActionConfiguration](),
             browserActions: [ToolbarActionConfiguration](),
-            editingAccessoryAction: editingAccessoryAction(isGoogleLensEnabled: toolbarAction.isGoogleLensEnabled ?? false),
+            editingAccessoryAction: nil,
             borderPosition: borderPosition,
             url: nil,
             searchTerm: nil,
@@ -1138,7 +1138,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
-    private static func handleSearchEngineDidChange(state: Self, action: Action) -> Self {
+    private static func handleGoogleLensAvailabilityDidChange(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarMiddlewareAction,
               let isGoogleLensEnabled = toolbarAction.isGoogleLensEnabled else {
             return defaultState(from: state)

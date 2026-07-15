@@ -20,7 +20,8 @@ final class GoogleLensRequestBuilderTests: XCTestCase {
     }
 
     func test_makeUploadRequest_setsRequiredAndRecommendedQueryParams() throws {
-        let input = makeInput(viewportSize: CGSize(width: 390, height: 844))
+        let input = makeInput(viewportSize: CGSize(width: 390, height: 844),
+                              entryPoint: .addressToolbar)
 
         let request = makeSubject(localeProvider: MockLocaleProvider(languageCode: "en"))
             .makeUploadRequest(for: input)
@@ -31,6 +32,15 @@ final class GoogleLensRequestBuilderTests: XCTestCase {
         XCTAssertEqual(items["vpw"], "390")
         XCTAssertEqual(items["vph"], "844")
         XCTAssertEqual(items["hl"], "en")
+    }
+
+    func test_makeUploadRequest_usesWebImageContextMenuEntryPoint() throws {
+        let input = makeInput(entryPoint: .webImageContextMenu)
+
+        let request = makeSubject().makeUploadRequest(for: input)
+
+        let items = try queryItems(from: request)
+        XCTAssertEqual(items["ep"], "fcm")
     }
 
     func test_makeUploadRequest_omitsLanguageParam_whenLocaleProviderHasNoLanguageCode() throws {
@@ -72,10 +82,12 @@ final class GoogleLensRequestBuilderTests: XCTestCase {
     }
 
     private func makeInput(imageDimensions: CGSize = CGSize(width: 800, height: 600),
-                           viewportSize: CGSize = CGSize(width: 390, height: 844)) -> GoogleLensUploadInput {
+                           viewportSize: CGSize = CGSize(width: 390, height: 844),
+                           entryPoint: GoogleLensUploadEntryPoint = .addressToolbar) -> GoogleLensUploadInput {
         return GoogleLensUploadInput(jpegData: jpegData,
                                      imageDimensions: imageDimensions,
-                                     viewportSize: viewportSize)
+                                     viewportSize: viewportSize,
+                                     entryPoint: entryPoint)
     }
 
     private func data(_ string: String) -> Data {

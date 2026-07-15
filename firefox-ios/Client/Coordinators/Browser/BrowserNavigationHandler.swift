@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import UIKit
 import WebKit
 import SummarizeKit
 import QuickAnswersKit
@@ -130,6 +131,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func showGoogleLensCamera()
+
+    @MainActor
+    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source)
 
     @MainActor
     func showQuickAnswers(transitionType: QuickAnswersTransitionType)

@@ -501,4 +501,49 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertTrue(screenshotHelper.takeScreenshotCalled)
     }
+
+    // MARK: - Google Lens search completion
+
+    @MainActor
+    func testWebViewDidFinish_clearsPendingGoogleLensSearch() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .camera)
+
+        subject.webView(tab.webView!, didFinish: nil)
+
+        XCTAssertNil(subject.googleLensSearches[tab.tabUUID],
+                     "Finishing navigation should report and clear the pending Google Lens search")
+    }
+
+    @MainActor
+    func testWebViewDidFailProvisionalNavigation_clearsPendingGoogleLensSearch() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .contextMenu)
+
+        // Code 102 ("Frame load interrupted") makes the delegate return early right after the
+        // Google Lens reporting, keeping the test free of error-page side effects.
+        subject.webView(tab.webView!,
+                        didFailProvisionalNavigation: nil,
+                        withError: NSError(domain: "WebKitErrorDomain", code: 102))
+
+        XCTAssertNil(subject.googleLensSearches[tab.tabUUID],
+                     "A failed navigation should report and clear the pending Google Lens search")
+    }
+
+    @MainActor
+    func testWebViewDidFinish_withoutPendingGoogleLensSearch_doesNothing() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+
+        subject.webView(tab.webView!, didFinish: nil)
+
+        XCTAssertTrue(subject.googleLensSearches.isEmpty)
+    }
 }

@@ -48,7 +48,7 @@ protocol AudioSessionProvider: Sendable {
 protocol AudioManagerProtocol {
     func configureAudioSession() throws
     func prepareAndStartEngine() throws
-    func stopEngine()
+    func stopEngine() throws
 
     /// Starts capturing microphone audio without format conversion.
     func startCapture(
@@ -67,6 +67,7 @@ protocol AudioManagerProtocol {
 }
 
 protocol SpeechRecognizerProvider: Sendable {
+    var supportsOnDeviceRecognition: Bool { get }
     var isAvailable: Bool { get }
     func recognitionTask(
         with request: SFSpeechRecognitionRequest,

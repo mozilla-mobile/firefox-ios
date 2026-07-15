@@ -431,9 +431,13 @@ final class LegacyTabScrollController: NSObject,
     ) {
         if keyPath == "contentSize" {
             ensureMainThread { [weak self] in
-                guard let self, self.shouldUpdateUIWhenScrolling, self.toolbarsShowing else { return }
+                guard let self else { return }
 
-                self.showToolbars(animated: true)
+                // When the content is no longer scrollable example a page adds an overlay that shrinks the
+                // document, the user can't reveal the toolbars by scrolling, force them visible if collapsed.
+                if !self.hasScrollableContent, self.isToolbarStateCollapsed {
+                    self.showToolbars(animated: false)
+                }
             }
         }
     }

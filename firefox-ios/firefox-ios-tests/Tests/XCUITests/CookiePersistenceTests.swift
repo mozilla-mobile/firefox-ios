@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 final class CookiePersistenceTests: BaseTestCase {
@@ -13,13 +14,9 @@ final class CookiePersistenceTests: BaseTestCase {
     let topSitesTitle = ["Facebook", "YouTube", "Wikipedia"]
 
     override func setUp() async throws {
-        // Fresh install the app
-        // removeApp() does not work on iOS 15 and 16 intermittently
-        if #available(iOS 17, *) {
-            removeApp()
-        }
-
-        // The app is correctly installed
+        // Start each test with a clean WKWebView cookie store (ClearProfile alone doesn't clear it)
+        // instead of relying on a fragile fresh install via removeApp().
+        launchArguments.append(LaunchArguments.ClearWebData)
         try await super.setUp()
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
@@ -102,13 +99,10 @@ final class CookiePersistenceTests: BaseTestCase {
     }
 
     private func relaunchApp() {
-        // Restart the app
         app.terminate()
-
-        // Wait a moment if needed (optional but sometimes helpful)
         _ = app.wait(for: .notRunning, timeout: TIMEOUT)
-
-        // Launch it again
+        // Relaunch without ClearWebData so the web cookie store persists — this is what the test verifies.
+        app.launchArguments = app.launchArguments.filter { $0 != LaunchArguments.ClearWebData }
         app.launch()
     }
 

@@ -18,6 +18,8 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
+    /// The SUMO link for quick answer.
+    static let learnMoreURL = SupportUtils.URLForTopic("quick-answers-mobile")
 
     init(
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
@@ -44,8 +46,9 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             prefs: prefs,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            telemetry: DefaultQuickAnswersTelemetry(),
             configFetcher: DefaultQuickAnswersConfigFetcher(model: nimbusModel()),
-            learnMoreURL: SupportUtils.URLForTopic("quick-answers-mobile"),
+            learnMoreURL: Self.learnMoreURL,
         )
         router.present(controller, animated: shouldAnimateTransition)
     }

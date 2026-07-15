@@ -4,16 +4,18 @@
 
 /// Fetches the `QuickAnswersConfig` used to drive a Quick Answers request.
 public protocol QuickAnswersConfigFetcher: Sendable {
+    /// The provider model that backs the request, used to surface the model name in the UI.
+    var model: QuickAnswersModel { get }
     func fetch() async throws -> QuickAnswersConfig
 }
 
 public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     // TODO: FXIOS-15123 - Replace with the real Exa system prompt once it is finalized.
     private static let exaInstructions = """
-    Answer in 1 sentence. Remove any superscript numbers from the response.
+    Answer in 1 sentence. Remove any superscript numbers from the response like [1], [2] and other citations numbers.
     """.replacingOccurrences(of: "\n", with: " ")
 
-    private let model: QuickAnswersModel
+    public let model: QuickAnswersModel
 
     public init(model: QuickAnswersModel) {
         self.model = model
