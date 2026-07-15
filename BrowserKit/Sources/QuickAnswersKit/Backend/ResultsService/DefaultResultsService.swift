@@ -12,6 +12,9 @@ protocol ResultsService: Sendable {
 }
 
 final class DefaultResultsService: ResultsService {
+    private struct Constants {
+        static let maxCitationsCount = 2
+    }
     private let client: LiteLLMClientProtocol
     private let configFetcher: QuickAnswersConfigFetcher
 
@@ -55,8 +58,8 @@ final class DefaultResultsService: ResultsService {
     }
 
     private func formatResult(from answer: String, and citations: [Citation]) -> SearchResult {
-        // limit the citations to the first 2 in the array
-        let filteredCitations = citations.prefix(2)
+        // limit the citations in the array to maximum allowed
+        let filteredCitations = citations.prefix(Constants.maxCitationsCount)
         let sources = filteredCitations.map { citation in
             SearchResult.Source(
                 title: citation.title ?? "",
