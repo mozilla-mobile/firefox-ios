@@ -177,8 +177,8 @@ final class QuickAnswersSourceView: UIView,
             \.contentSize,
             options: [.new, .old]
         ) { [weak self] _, change in
-            guard change.newValue != change.oldValue else { return }
             DispatchQueue.main.async {
+                self?.collectionView.collectionViewLayout.invalidateLayout()
                 self?.invalidateIntrinsicContentSize()
             }
         }
