@@ -793,6 +793,7 @@ struct AccessibilityIdentifiers {
 
         struct QuickAnswers {
             static let title = "Settings.QuickAnswers.Title"
+            static let learnMoreButton = "Settings.QuickAnswers.LearnMoreButton"
         }
 
         struct BlockImages {

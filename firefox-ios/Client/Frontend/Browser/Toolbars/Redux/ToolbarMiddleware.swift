@@ -58,7 +58,13 @@ final class ToolbarMiddleware {
         self.logger = logger
     }
 
-    lazy var toolbarProvider: Middleware<AppState> = { state, action in
+    lazy var toolbarProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         if let action = action as? GeneralBrowserMiddlewareAction {
             self.resolveGeneralBrowserMiddlewareActions(action: action, state: state)
         } else if let action = action as? MicrosurveyPromptMiddlewareAction {
@@ -315,12 +321,17 @@ final class ToolbarMiddleware {
                                               actionType: GeneralBrowserActionType.showShare)
             store.dispatch(action)
 
+        case .googleLens:
+            toolbarTelemetry.googleLensButtonTapped()
+
         case .googleLensPhotoLibrary:
+            toolbarTelemetry.googleLensContextMenuOptionSelected(option: .photoPicker)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
             store.dispatch(action)
 
         case .googleLensTakePhoto:
+            toolbarTelemetry.googleLensContextMenuOptionSelected(option: .camera)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showGoogleLensCamera)
             store.dispatch(action)

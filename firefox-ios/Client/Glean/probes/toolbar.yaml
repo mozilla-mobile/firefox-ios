@@ -335,6 +335,46 @@ toolbar:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
+toolbar.google_lens_button:
+  tapped:
+    type: event
+    description: |
+      Recorded when the user initiates the Google Lens flow by tapping
+      the Google Lens icon on the address toolbar.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16208
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34604
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - GoogleLens
+
+toolbar.google_lens_button.context_menu:
+  option_selected:
+    type: event
+    description: |
+      Recorded when the user selects an option from the Google Lens address toolbar
+      button context menu.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The option selected from the context menu.
+          Options are listed in the ToolbarTelemetry.GoogleLensContextMenuOption enumeration.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16208
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34604
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - GoogleLens
+
 # Awesomebar related telemetry
 awesomebar:
   location:

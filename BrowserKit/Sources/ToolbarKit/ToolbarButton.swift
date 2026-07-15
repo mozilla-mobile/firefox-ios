@@ -115,15 +115,18 @@ class ToolbarButton: UIButton,
         accessibilityLabel = element.a11yLabel
         accessibilityHint = element.a11yHint
 
-        // Remove all existing actions for .touchUpInside before adding the new one
-        // This ensures that we do not accumulate multiple actions for the same event,
-        // which can cause the action to be called multiple times when the button is tapped.
-        // By removing all existing actions first, we guarantee that only the new action
-        // will be associated with the .touchUpInside event.
+        // Remove all existing actions before adding the new one. This ensures that we do
+        // not accumulate multiple actions for the same event, which can cause the action to
+        // be called multiple times when the button is tapped. A button uses either
+        // .touchUpInside (regular buttons) or .menuActionTriggered (menu buttons), so we
+        // clear both to guarantee that only the new action remains.
         removeTarget(nil, action: nil, for: .touchUpInside)
+        removeTarget(nil, action: nil, for: .menuActionTriggered)
         configureMenuIfNeeded(for: element)
         if element.menuElements.isEmpty {
             addAction(action, for: .touchUpInside)
+        } else {
+            addAction(action, for: .menuActionTriggered)
         }
 
         showsLargeContentViewer = true
@@ -403,7 +406,8 @@ class ToolbarButton: UIButton,
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
-        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
+        badgeImageView?.tintColor = maskImageView == nil ?
+                                    .clear : (theme.isNova ? colors.iconPrivate : colors.actionInformation)
         maskImageView?.tintColor = colors.layer1
         setNeedsUpdateConfiguration()
     }

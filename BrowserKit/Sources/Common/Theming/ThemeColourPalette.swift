@@ -106,4 +106,22 @@ public protocol ThemeColourPalette {
     var gradientAIStrongStop1: UIColor { get }
     var gradientAIStrongStop2: UIColor { get }
     var gradientAIStrongStop3: UIColor { get }
+
+    // MARK: - Nova tokens
+    var layerAccentSubtle: UIColor { get }
+    var layerInverse: UIColor { get }
+    var layerGlassTintNova: UIColor { get }
+    var textToast: UIColor { get }
+    var iconInverted: UIColor { get }
+    var iconOnColorDisabled: UIColor { get }
+    var iconPrivate: UIColor { get }
+    var borderStrong: UIColor { get }
+    var borderRadioButtonDefault: UIColor { get }
+    var gradient: Gradient { get }
+    var gradientAccent: Gradient { get }
+    var gradientAccentSubtle: Gradient { get }
+    var gradientAIStrong: Gradient { get }
+    var gradientBorder: Gradient { get }
+    var gradientPrivacy: Gradient { get }
+    var gradientPrivacyMask: Gradient { get }
 }

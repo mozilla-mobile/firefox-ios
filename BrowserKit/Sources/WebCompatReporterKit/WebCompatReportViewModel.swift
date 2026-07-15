@@ -8,25 +8,50 @@ import Foundation
 /// The Client maps `WebCompatReporterState` onto this so the package never
 /// imports Redux; previews build one with a mock.
 public struct WebCompatReportViewModel: Equatable, Sendable {
-    /// A grouped section in the sheet's list. Later PRs (the issue picker, the
-    /// URL/details/advanced fields) populate `rows`; the shell leaves it empty.
+    /// A list section, optionally preceded by a header title (e.g. "Site Issue").
     public struct Section: Hashable, Sendable {
         public let id: String
+        public let title: String?
         public let rows: [Row]
 
-        public init(id: String, rows: [Row]) {
+        public init(id: String, title: String? = nil, rows: [Row]) {
             self.id = id
+            self.title = title
             self.rows = rows
         }
     }
 
     public struct Row: Hashable, Sendable {
+        /// A selectable entry in a `categoryMenu` pull-down. `id` is the opaque
+        /// key the Client maps back to a category.
+        public struct MenuOption: Hashable, Sendable {
+            public let id: String
+            public let title: String
+            public let isSelected: Bool
+
+            public init(id: String, title: String, isSelected: Bool) {
+                self.id = id
+                self.title = title
+                self.isSelected = isSelected
+            }
+        }
+
+        /// How a row renders: a plain title row, the category pull-down, or a
+        /// selectable sub-option row.
+        public enum Kind: Hashable, Sendable {
+            case plain
+            case categoryMenu(isPlaceholder: Bool, options: [MenuOption])
+            case subOption(isSelected: Bool)
+        }
+
         public let id: String
         public let title: String
+        public let kind: Kind
 
-        public init(id: String, title: String) {
+        public init(id: String, title: String, kind: Kind = .plain) {
             self.id = id
             self.title = title
+            self.kind = kind
         }
     }
 

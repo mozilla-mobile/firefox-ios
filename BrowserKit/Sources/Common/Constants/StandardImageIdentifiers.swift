@@ -42,10 +42,12 @@ public struct StandardImageIdentifiers {
 
     // Icon size 24x24
     public struct Large {
+        public static let appendDownLeft = "appendDownLeftLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
         public static let arrowCounterClockwise = "arrowCounterClockwiseLarge"
         public static let arrowTrending = "arrowTrendingLarge"
+        public static let audioWave = "audioWaveLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let avatarWarningCircleFillMulticolorDark = "avatarWarningCircleFillMulticolorLargeDark"
         public static let avatarWarningCircleFillMulticolorLight = "avatarWarningCircleFillMulticolorLargeLight"
@@ -111,6 +113,7 @@ public struct StandardImageIdentifiers {
         public static let readerView = "readerViewLarge"
         public static let readingList = "readingListLarge"
         public static let readingListAdd = "readingListAddLarge"
+        public static let report = "reportLarge"
         public static let saveFile = "saveFileLarge"
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"

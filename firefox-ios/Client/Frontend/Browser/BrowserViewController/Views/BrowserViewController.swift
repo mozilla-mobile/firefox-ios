@@ -377,6 +377,7 @@ class BrowserViewController: UIViewController,
 
     let profile: Profile
     let tabManager: TabManager
+    var googleLensSearches = [TabUUID: GoogleLensSearchState]()
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
@@ -821,11 +822,7 @@ class BrowserViewController: UIViewController,
               currentWindowScene === windowScene else { return }
         guard canShowPrivacyWindow else { return }
 
-        privacyWindowHelper.showWindow(
-            windowScene: currentWindowScene,
-            withThemedColor: currentTheme().colors.layer3,
-            showLogo: shouldShowOverlayLogo
-        )
+        privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
     func sceneDidActivateNotification() {
@@ -852,27 +849,12 @@ class BrowserViewController: UIViewController,
         }
 
         guard canShowPrivacyWindow else { return }
-        privacyWindowHelper.showWindow(
-            windowScene: view.window?.windowScene,
-            withThemedColor: currentTheme().colors.layer3,
-            showLogo: shouldShowOverlayLogo
-        )
-    }
-
-    /// Show the Firefox logo on the overlay only for normal-mode tabs when the
-    /// deeplinkOverlay flag is on. Private-mode overlay stays a plain color.
-    private var shouldShowOverlayLogo: Bool {
-        guard let selectedTab = tabManager.selectedTab, !selectedTab.isPrivate else { return false }
-        return featureFlagsProvider.isEnabled(.deeplinkOverlay)
+        privacyWindowHelper.showWindow(windowScene: view.window?.windowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
     private var canShowPrivacyWindow: Bool {
-        // The overlay is shown for private tabs (privacy) or for any tab when the
-        // deeplinkOverlay flag is enabled (to mask the stale tab while a deep link
-        // is being handled on resume).
-        guard let selectedTab = tabManager.selectedTab else { return false }
-        let isDeeplinkOverlayEnabled = featureFlagsProvider.isEnabled(.deeplinkOverlay)
-        guard selectedTab.isPrivate || isDeeplinkOverlayEnabled else { return false }
+        // Ensure the selected tab is private and determine if the privacy window can be shown.
+        guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else { return false }
         // Show privacy window if no view controller is presented
         // or if the presented view is a PhotonActionSheet.
         return self.presentedViewController == nil || presentedViewController is PhotonActionSheet

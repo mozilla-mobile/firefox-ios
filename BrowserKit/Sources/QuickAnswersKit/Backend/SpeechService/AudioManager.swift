@@ -33,9 +33,12 @@ final class AudioManager: AudioManagerProtocol {
         try audioEngine.start()
     }
 
-    func stopEngine() {
+    /// Stops the audio engine and deactivates the audio session, releasing audio focus so other clients
+    /// can resume.
+    func stopEngine() throws {
         audioEngine.stop()
         audioEngine.audioInputNode.removeTap(onBus: 0)
+        try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
     }
 
     /// Starts capturing microphone audio without format conversion.

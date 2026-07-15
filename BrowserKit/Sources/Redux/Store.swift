@@ -126,11 +126,9 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         middlewares.forEach { middleware in
             switch action {
             case .legacy(let legacyAction):
-                middleware(newState, legacyAction)
-            case .modern:
-                // TODO: FXIOS-16140 Part 3 - Middleware migration
-                //  middleware.modernMiddleware(newState, modernAction, windowUUID)
-                break
+                middleware.legacyMiddleware(newState, legacyAction)
+            case .modern(let modernAction):
+                middleware.modernMiddleware(newState, modernAction, windowUUID)
             }
         }
 

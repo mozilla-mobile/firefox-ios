@@ -9,6 +9,7 @@ $(PROJECT_DIR)/Client/Glean/probes/autofill.credit_cards.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.email_mask.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.password_generator.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.passwords.yaml
+$(PROJECT_DIR)/Client/Glean/probes/google_lens.yaml
 $(PROJECT_DIR)/Client/Glean/probes/history.yaml
 $(PROJECT_DIR)/Client/Glean/probes/homepage.shortcuts_library.yaml
 $(PROJECT_DIR)/Client/Glean/probes/library.bookmarks_panel.yaml

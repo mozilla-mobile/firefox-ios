@@ -327,15 +327,24 @@ final class TabManagerImplementation: NSObject,
 
         guard !tabsToRemove.isEmpty else { return }
 
-        let selectedTab = selectedTab
+        let previouslySelectedTab = selectedTab
+        let selectedTabWillBeRemoved = previouslySelectedTab.map { selectedTab in
+            tabsToRemove.contains { $0 === selectedTab }
+        } ?? false
+
         for tab in tabsToRemove {
             // Remove each tab without persisting changes
             removeTab(tab, flushToDisk: false)
         }
-        // We need to reselect the tab and adjust the selected index after tabs removal.
-        // The selected tab will not be removed with `removeNormalTabsOlderThan` since it's
-        // `lastExecutedTime` won't be less than the `cutoffDate`.
-        selectTab(selectedTab)
+
+        if normalTabs.isEmpty {
+            selectTab(addTab())
+        } else if selectedTabWillBeRemoved {
+            selectTab(mostRecentTab(inTabs: normalTabs))
+        } else {
+            selectTab(previouslySelectedTab)
+        }
+
         commitChanges()
     }
 

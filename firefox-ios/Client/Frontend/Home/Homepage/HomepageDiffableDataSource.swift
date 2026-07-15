@@ -13,6 +13,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
     typealias ShouldShowSectionHeader = Bool
+    typealias ShowiPadSetup = Bool
 
     private struct TopSitesSnapshotData {
         let items: [HomeItem]
@@ -44,7 +45,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
     }
 
     enum HomeItem: Hashable, Sendable {
-        case header(HeaderState, TextColor?)
+        case header(HeaderState, TextColor?, ShowiPadSetup)
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
@@ -114,6 +115,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
+        showiPadSetup: ShowiPadSetup = false,
         animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
@@ -121,7 +123,8 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
         let headerItem = HomeItem.header(state.headerState,
-                                         state.wallpaperState.wallpaperConfiguration.logoTextColor)
+                                         state.wallpaperState.wallpaperConfiguration.logoTextColor,
+                                         showiPadSetup)
 
         snapshot.appendSections([.header])
         snapshot.appendItems([headerItem], toSection: .header)
