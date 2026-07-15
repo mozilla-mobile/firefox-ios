@@ -12,4 +12,11 @@ enum WaybackCodes {
         .cfurlErrorNotConnectedToInternet,
         .cfurlErrorResourceUnavailable
     ]
+
+    /// Returns whether the given error code qualifies for a wayback fallback.
+    static func isWaybackCode(_ code: Int) -> Bool {
+        return Int32(exactly: code)
+            .flatMap { CFNetworkErrors(rawValue: $0) }
+            .map { codesForWayback.contains($0) } ?? false
+    }
 }

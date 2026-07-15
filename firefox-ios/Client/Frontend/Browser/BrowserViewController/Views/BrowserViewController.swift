@@ -2253,9 +2253,14 @@ class BrowserViewController: UIViewController,
 
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
-        let isWaybackErrorCode = WaybackCodes.codesForWayback.contains {
-            url.absoluteString.contains(String(Int($0.rawValue)))
-        }
+        let isWaybackErrorCode: Bool = {
+            guard
+                let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
+                let code = Int(codeString)
+            else { return false }
+            return WaybackCodes.isWaybackCode(code)
+        }()
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
         let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isBadCertDomainErrorURL(url)
         let isShowWayback = isWaybackErrorCode && isWaybackEnabled

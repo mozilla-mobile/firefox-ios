@@ -220,9 +220,7 @@ final class ErrorPageHandler: InternalSchemeResponse {
         let isCertificateError = isBadCertDomainErrorPageEnabled && isBadCertDomainURL && !useOldErrorPage
 
         /// Used for checking if current error code is one that should fall back to wayback
-        let isWaybackCode = Int32(exactly: errCode)
-            .flatMap { CFNetworkErrors(rawValue: $0) }
-            .map { WaybackCodes.codesForWayback.contains($0) } ?? false
+        let isWaybackCode = WaybackCodes.isWaybackCode(errCode)
         let isWaybackError = isWaybackEnabled && isWaybackCode && !useOldErrorPage
 
         // Handle No internet access or certificate errors with native error page

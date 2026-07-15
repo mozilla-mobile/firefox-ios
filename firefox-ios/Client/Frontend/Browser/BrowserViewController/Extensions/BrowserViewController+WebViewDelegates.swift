@@ -1111,9 +1111,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
-                let isWaybackCode = Int32(exactly: error.code)
-                    .flatMap { CFNetworkErrors(rawValue: $0) }
-                    .map { WaybackCodes.codesForWayback.contains($0) } ?? false
+                let isWaybackCode = WaybackCodes.isWaybackCode(error.code)
 
                 let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
                 let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
