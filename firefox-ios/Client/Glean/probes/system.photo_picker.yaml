@@ -38,6 +38,19 @@ system.photo_picker:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  photo_selected:
+    type: event
+    description: |
+      Recorded when the user selects a photo from the system photo picker.
+    extra_keys:
+      reason: *photo_picker_reason_extra
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
+    data_reviews:
+      - TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
   shown:
     type: event
     description: |

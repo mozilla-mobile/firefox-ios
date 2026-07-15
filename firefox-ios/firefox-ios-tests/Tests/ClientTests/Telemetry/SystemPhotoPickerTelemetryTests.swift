@@ -47,4 +47,18 @@ final class SystemPhotoPickerTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.reason, PhotoPickerReason.googleLens.rawValue)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
+
+    func testPhotoSelected_recordsEventAndReason() throws {
+        typealias EventExtrasType = GleanMetrics.SystemPhotoPicker.PhotoSelectedExtra
+        let event = GleanMetrics.SystemPhotoPicker.photoSelected
+        let subject = SystemPhotoPickerTelemetry(gleanWrapper: gleanWrapper)
+
+        subject.photoSelected(reason: .googleLens)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.reason, PhotoPickerReason.googleLens.rawValue)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
 }

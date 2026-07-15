@@ -7,8 +7,10 @@
 final class MockSystemPhotoPickerTelemetry: SystemPhotoPickerTelemetryProtocol {
     private(set) var shownCalled = 0
     private(set) var closedCalled = 0
+    private(set) var photoSelectedCalled = 0
     private(set) var savedShownReason: PhotoPickerReason?
     private(set) var savedClosedReason: PhotoPickerReason?
+    private(set) var savedPhotoSelectedReason: PhotoPickerReason?
 
     func shown(reason: PhotoPickerReason) {
         shownCalled += 1
@@ -18,5 +20,10 @@ final class MockSystemPhotoPickerTelemetry: SystemPhotoPickerTelemetryProtocol {
     func closed(reason: PhotoPickerReason) {
         closedCalled += 1
         savedClosedReason = reason
+    }
+
+    func photoSelected(reason: PhotoPickerReason) {
+        photoSelectedCalled += 1
+        savedPhotoSelectedReason = reason
     }
 }

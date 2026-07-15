@@ -7,6 +7,7 @@ import Glean
 protocol SystemPhotoPickerTelemetryProtocol {
     func shown(reason: PhotoPickerReason)
     func closed(reason: PhotoPickerReason)
+    func photoSelected(reason: PhotoPickerReason)
 }
 
 struct SystemPhotoPickerTelemetry: SystemPhotoPickerTelemetryProtocol {
@@ -24,5 +25,10 @@ struct SystemPhotoPickerTelemetry: SystemPhotoPickerTelemetryProtocol {
     func closed(reason: PhotoPickerReason) {
         let extra = GleanMetrics.SystemPhotoPicker.ClosedExtra(reason: reason.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.SystemPhotoPicker.closed, extras: extra)
+    }
+
+    func photoSelected(reason: PhotoPickerReason) {
+        let extra = GleanMetrics.SystemPhotoPicker.PhotoSelectedExtra(reason: reason.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.SystemPhotoPicker.photoSelected, extras: extra)
     }
 }
