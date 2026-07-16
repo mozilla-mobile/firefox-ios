@@ -366,10 +366,9 @@ class ErrorPageHelper {
 
         components.queryItems = queryItems
         if let urlWithQuery = components.url {
-            logger.log("An error page will show.",
+            logger.log("An error page will show. Error code: \(error.code)",
                        level: .info,
-                       category: .webview,
-                       extra: ["Error code": "\(error.code)"])
+                       category: .webview)
 
             TelemetryWrapper.shared.recordEvent(
                 category: .information,

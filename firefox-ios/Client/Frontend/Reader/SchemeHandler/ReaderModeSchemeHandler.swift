@@ -106,10 +106,9 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
                                 category: .library)
             } catch {
                 urlSchemeTask.didFailWithError(TinyRouterError.mapError(error))
-                self.logger.log("Reader-mode scheme task failed.",
+                self.logger.log("Reader-mode scheme task failed with error type: \(TinyRouterError.mapError(error))",
                                 level: .warning,
-                                category: .library,
-                                extra: ["error type": "\(TinyRouterError.mapError(error))"])
+                                category: .library)
             }
         }
         requestTasks[id] = requestTask
