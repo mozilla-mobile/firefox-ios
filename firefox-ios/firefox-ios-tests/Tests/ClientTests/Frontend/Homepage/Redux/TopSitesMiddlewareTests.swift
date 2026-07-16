@@ -43,7 +43,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -71,7 +71,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -98,7 +98,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.topSitesSeen
         )
 
-        subject.topSitesProvider(AppState(), action)
+        subject.topSitesProvider.legacyMiddleware(AppState(), action)
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 1)
     }
 
@@ -115,7 +115,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -142,7 +142,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -169,9 +169,9 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
-        subject.topSitesProvider(appState, action)
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -199,9 +199,9 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
-        subject.topSitesProvider(appState, action)
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -227,7 +227,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             dispatchExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         wait(for: [dispatchExpectation], timeout: 1)
 
@@ -254,7 +254,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.tapOnHomepageTopSitesCell
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         try checkTopSitesPressedMetrics(label: "zero-search", position: "0", tileType: "sponsored")
 
@@ -283,7 +283,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.tapOnHomepageTopSitesCell
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         try checkTopSitesPressedMetrics(label: "origin-other", position: "1", tileType: "suggested")
 
@@ -304,7 +304,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.tapOnHomepageTopSitesCell
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
@@ -323,7 +323,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnPinTopSite
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         let contextMenuMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContextualMenuExtra>
@@ -357,7 +357,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnPinTopSite
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
@@ -374,7 +374,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnPinTopSite
         )
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         let pinnedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.last as? GleanMetrics.TopSites.ShortcutPinnedExtra
@@ -399,7 +399,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             unpinTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         let contextMenuMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContextualMenuExtra>
@@ -438,7 +438,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             unpinTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
@@ -461,7 +461,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             unpinTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         let unpinnedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.last as? GleanMetrics.TopSites.ShortcutUnpinnedExtra
@@ -488,7 +488,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             removeTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         try checkContextMenuMetricsCalled(withExtra: "remove")
 
@@ -508,7 +508,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             removeTopSiteExpectation.fulfill()
         }
 
-        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
@@ -531,7 +531,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
         )
 
-        subject.topSitesProvider(AppState(), action)
+        subject.topSitesProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let event = GleanMetrics.TopSites.openInPrivateTab
@@ -546,7 +546,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnSettingsAction
         )
-        subject.topSitesProvider(AppState(), action)
+        subject.topSitesProvider.legacyMiddleware(AppState(), action)
 
         try checkContextMenuMetricsCalled(withExtra: "settings")
     }
@@ -557,7 +557,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnSponsoredAction
         )
-        subject.topSitesProvider(AppState(), action)
+        subject.topSitesProvider.legacyMiddleware(AppState(), action)
 
         try checkContextMenuMetricsCalled(withExtra: "sponsoredSupport")
     }
@@ -580,9 +580,9 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.shortcutPinned
         )
 
-        subject.topSitesProvider(AppState(), homeScreenAction)
-        subject.topSitesProvider(AppState(), appMenuAction)
-        subject.topSitesProvider(AppState(), contextMenuAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), homeScreenAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), appMenuAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), contextMenuAction)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ShortcutPinnedExtra>
@@ -608,8 +608,8 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TopSitesActionType.shortcutUnpinned
         )
 
-        subject.topSitesProvider(AppState(), contextMenuAction)
-        subject.topSitesProvider(AppState(), appMenuAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), contextMenuAction)
+        subject.topSitesProvider.legacyMiddleware(AppState(), appMenuAction)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ShortcutUnpinnedExtra>

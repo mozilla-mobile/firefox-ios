@@ -73,7 +73,104 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.didTapCloseCallCount, 0)
     }
 
+    func testSelectingSubOptionRow_notifiesDelegateWithRowID() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let subject = createSubject()
+        subject.delegate = delegate
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: pickerSections()))
+
+        selectItem(in: subject, at: IndexPath(item: 1, section: 1))
+
+        XCTAssertEqual(delegate.selectedSubOptionIDs, ["page_not_loading"])
+        XCTAssertTrue(delegate.selectedCategoryIDs.isEmpty)
+    }
+
+    func testSelectingCategoryMenuRow_doesNotNotifySubOptionDelegate() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let subject = createSubject()
+        subject.delegate = delegate
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: pickerSections()))
+
+        selectItem(in: subject, at: IndexPath(item: 0, section: 0))
+
+        XCTAssertTrue(delegate.selectedSubOptionIDs.isEmpty)
+    }
+
+    func testConfigure_withPickerSections_dequeuesTypedCells() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: makeViewModel(sections: pickerSections()))
+        subject.view.layoutIfNeeded()
+
+        let collectionView = subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+        XCTAssertEqual(collectionView?.numberOfSections, 2)
+        XCTAssertEqual(collectionView?.numberOfItems(inSection: 1), 4)
+        XCTAssertTrue(
+            collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatCategoryMenuCell
+        )
+        XCTAssertTrue(
+            collectionView?.cellForItem(at: IndexPath(item: 0, section: 1)) is WebCompatSubOptionCell
+        )
+    }
+
     // MARK: - Helpers
+
+    private func pickerSections() -> [WebCompatReportViewModel.Section] {
+        let options = [
+            WebCompatReportViewModel.Row.MenuOption(
+                id: "siteNotUsable",
+                title: "Site is not usable",
+                isSelected: true
+            ),
+            WebCompatReportViewModel.Row.MenuOption(
+                id: "designBroken",
+                title: "Design is broken",
+                isSelected: false
+            )
+        ]
+        return [
+            WebCompatReportViewModel.Section(id: "issue-category", title: "Site Issue", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "issue-category",
+                    title: "Site is not usable",
+                    kind: .categoryMenu(isPlaceholder: false, options: options)
+                )
+            ]),
+            WebCompatReportViewModel.Section(id: "issue-suboptions", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "browser_blocked",
+                    title: "Browser is blocked",
+                    kind: .subOption(isSelected: false)
+                ),
+                WebCompatReportViewModel.Row(
+                    id: "page_not_loading",
+                    title: "Page not loading correctly",
+                    kind: .subOption(isSelected: false)
+                ),
+                WebCompatReportViewModel.Row(
+                    id: "missing_items",
+                    title: "Missing items",
+                    kind: .subOption(isSelected: false)
+                ),
+                WebCompatReportViewModel.Row(
+                    id: "buttons_not_working",
+                    title: "Buttons or links not working",
+                    kind: .subOption(isSelected: false)
+                )
+            ])
+        ]
+    }
+
+    private func selectItem(in subject: WebCompatReportSheetViewController, at indexPath: IndexPath) {
+        guard let collectionView = subject.view.subviews.compactMap({ $0 as? UICollectionView }).first else {
+            return XCTFail("Expected a collection view")
+        }
+        subject.collectionView(collectionView, didSelectItemAt: indexPath)
+    }
 
     private func makeViewModel(
         isPreviewEnabled: Bool = false,
@@ -104,6 +201,8 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
 private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelegate {
     var didTapCloseCallCount = 0
     var didTapPreviewCallCount = 0
+    var selectedCategoryIDs: [String] = []
+    var selectedSubOptionIDs: [String] = []
 
     func webCompatReportSheetDidTapClose() {
         didTapCloseCallCount += 1
@@ -111,5 +210,13 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
 
     func webCompatReportSheetDidTapPreview() {
         didTapPreviewCallCount += 1
+    }
+
+    func webCompatReportSheetDidSelectCategory(id: String) {
+        selectedCategoryIDs.append(id)
+    }
+
+    func webCompatReportSheetDidSelectSubOption(id: String) {
+        selectedSubOptionIDs.append(id)
     }
 }

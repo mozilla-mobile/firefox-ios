@@ -177,7 +177,7 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
         closeButton.tintColor = theme.colors.textOnDark
         titleLabel.textColor = theme.colors.textOnDark
         descriptionLabel.textColor = theme.colors.textOnDark
-        gradient.colors = theme.colors.layerGradient.cgColors
+        gradient.colors = (theme.isNova ? theme.colors.gradient : theme.colors.layerGradient).cgColors
     }
 
     private func updateButtonSizeForDynamicFont() {

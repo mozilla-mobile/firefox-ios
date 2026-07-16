@@ -198,9 +198,16 @@ class BrowserViewController: UIViewController,
         $0.isHidden = true
     }
 
-    private lazy var swipeUpTabWebViewPreview: SwipeUpTabWebViewPreview = .build {
-        $0.alpha = 0.0
-    }
+    private lazy var swipeUpTabWebViewPreview: SwipeUpTabWebViewPreview = {
+        let view = SwipeUpTabWebViewPreview(
+            frame: .zero,
+            swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
+        )
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0.0
+        return view
+    }()
+
     private lazy var swipeUpTabWebViewPreviewGestureHandler = SwipeUpTabPreviewGestureHandler(
         tabPreview: swipeUpTabWebViewPreview,
         bottomBlurView: bottomBlurView,
@@ -208,7 +215,8 @@ class BrowserViewController: UIViewController,
         screenshotHelper: screenshotHelper,
         tabManager: tabManager,
         themeManager: themeManager,
-        windowUUID: windowUUID
+        windowUUID: windowUUID,
+        swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
     )
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
@@ -298,6 +306,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: Feature flags
 
+    private var swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
+
     private var isTabTrayUIExperimentsEnabled: Bool {
         let featureFlagStatus = featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
@@ -309,10 +319,6 @@ class BrowserViewController: UIViewController,
 
     var isSwipingTabsEnabled: Bool {
         return toolbarHelper.isSwipingTabsEnabled
-    }
-
-    var isSwipeUpGesturesEnabled: Bool {
-        return SwipeGestureFeatureFlagProvider().isAnyGestureEnabled
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -488,6 +494,7 @@ class BrowserViewController: UIViewController,
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
         self.relayController = (UIApplication.shared.delegate as? AppDelegate)?.relayController ?? RelayController()
+        self.swipeGestureFeatureFlagProvider = SwipeGestureFeatureFlagProvider()
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -838,11 +845,7 @@ class BrowserViewController: UIViewController,
               currentWindowScene === windowScene else { return }
         guard canShowPrivacyWindow else { return }
 
-        privacyWindowHelper.showWindow(
-            windowScene: currentWindowScene,
-            withThemedColor: currentTheme().colors.layer3,
-            showLogo: shouldShowOverlayLogo
-        )
+        privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
     func sceneDidActivateNotification() {
@@ -869,27 +872,12 @@ class BrowserViewController: UIViewController,
         }
 
         guard canShowPrivacyWindow else { return }
-        privacyWindowHelper.showWindow(
-            windowScene: view.window?.windowScene,
-            withThemedColor: currentTheme().colors.layer3,
-            showLogo: shouldShowOverlayLogo
-        )
-    }
-
-    /// Show the Firefox logo on the overlay only for normal-mode tabs when the
-    /// deeplinkOverlay flag is on. Private-mode overlay stays a plain color.
-    private var shouldShowOverlayLogo: Bool {
-        guard let selectedTab = tabManager.selectedTab, !selectedTab.isPrivate else { return false }
-        return featureFlagsProvider.isEnabled(.deeplinkOverlay)
+        privacyWindowHelper.showWindow(windowScene: view.window?.windowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
     private var canShowPrivacyWindow: Bool {
-        // The overlay is shown for private tabs (privacy) or for any tab when the
-        // deeplinkOverlay flag is enabled (to mask the stale tab while a deep link
-        // is being handled on resume).
-        guard let selectedTab = tabManager.selectedTab else { return false }
-        let isDeeplinkOverlayEnabled = featureFlagsProvider.isEnabled(.deeplinkOverlay)
-        guard selectedTab.isPrivate || isDeeplinkOverlayEnabled else { return false }
+        // Ensure the selected tab is private and determine if the privacy window can be shown.
+        guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else { return false }
         // Show privacy window if no view controller is presented
         // or if the presented view is a PhotonActionSheet.
         return self.presentedViewController == nil || presentedViewController is PhotonActionSheet
@@ -1392,13 +1380,14 @@ class BrowserViewController: UIViewController,
             tabManager: tabManager,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper,
-            prefs: profile.prefs
+            prefs: profile.prefs,
+            swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
         )
         tabSwipeGestureHandler?.delegate = self
     }
 
     func addSubviews() {
-        if isSwipeUpGesturesEnabled {
+        if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled {
             view.addSubview(swipeUpTabWebViewPreview)
         }
         if isSwipingTabsEnabled {
@@ -1429,7 +1418,9 @@ class BrowserViewController: UIViewController,
                 return self?.newTabSettings
             }
         }
-        swipeUpTabWebViewPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
+        if swipeGestureFeatureFlagProvider.isAnyGestureEnabled {
+            swipeUpTabWebViewPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -1672,7 +1663,7 @@ class BrowserViewController: UIViewController,
             ])
         }
 
-        if isSwipeUpGesturesEnabled {
+        if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled {
             swipeUpTabWebViewPreview.pinToSuperview()
         }
         if isSnapKitRemovalEnabled {
@@ -2083,18 +2074,6 @@ class BrowserViewController: UIViewController,
               let webView = selectedTab.webView else {
             logger.log("Webview of selected tab was not available", level: .debug, category: .lifecycle)
             return
-        }
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
-            if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
-                // The web view can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-                if selectedTab.temporaryDocument == nil {
-                    selectedTab.reload()
-                }
-            }
         }
 
         browserDelegate?.show(webView: webView)
@@ -4838,7 +4817,6 @@ extension BrowserViewController: TabManagerDelegate {
             previousWebView.removeFromSuperview()
         }
 
-        let needsReloadRefactorEnabled = featureFlagsProvider.isEnabled(.needsReloadRefactor)
         var needsReload = false
         if let webView = selectedTab.webView {
             webView.accessibilityLabel = .WebViewAccessibilityLabel
@@ -4846,16 +4824,6 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityElementsHidden = false
 
             updateSelectedTabWebview(selectedTab: selectedTab, previousTab: previousTab, webView: webView)
-
-            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-            if !needsReloadRefactorEnabled {
-                if selectedTab.isFxHomeTab {
-                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
-                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
-                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
-                    needsReload = true
-                }
-            }
 
             // Do not reload if it's an about:blank page [FXIOS-14782]
             if webView.url == nil && selectedTab.url?.absoluteString != "about:blank" {
@@ -4867,23 +4835,6 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateUIAfterTabSelection(selectedTab: selectedTab, previousTab: previousTab)
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        /// If the selectedTab is showing an error page trigger a reload
-        if !needsReloadRefactorEnabled,
-           let url = selectedTab.url,
-           let internalUrl = InternalURL(url),
-           internalUrl.isErrorPage {
-            needsReload = true
-        }
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !needsReloadRefactorEnabled {
-            // Do not reload when it's an about:blank page or has a temporary document
-            if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
-                needsReload = false
-            }
-        }
 
         if needsReload {
             selectedTab.reload()

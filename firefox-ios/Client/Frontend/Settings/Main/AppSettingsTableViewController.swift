@@ -436,7 +436,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
                     defaultValue: true,
                     titleText: .AppSettingsClosePrivateTabsTitle,
                     statusText: .AppSettingsClosePrivateTabsDescription
-                ) { _ in
+                ) { [weak self] _ in
+                    guard let self else { return }
                     let action = TabTrayAction(windowUUID: self.windowUUID,
                                                actionType: TabTrayActionType.closePrivateTabsSettingToggled)
                     store.dispatch(action)

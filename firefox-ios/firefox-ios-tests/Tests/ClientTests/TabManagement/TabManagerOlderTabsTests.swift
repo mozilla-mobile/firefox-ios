@@ -27,7 +27,9 @@ final class TabManagerOlderTabsTests: TabManagerTestsBase {
 
         tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
 
-        XCTAssertEqual(tabManager.normalTabs.count, 0)
+        XCTAssertEqual(tabManager.normalTabs.count, 1)
+        XCTAssertTrue(tabManager.selectedTab?.isURLStartingPage == true)
+        XCTAssertFalse(tabs.contains { $0 === tabManager.selectedTab })
     }
 
     @MainActor
@@ -49,7 +51,9 @@ final class TabManagerOlderTabsTests: TabManagerTestsBase {
 
         tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
-        XCTAssertEqual(tabManager.normalTabs.count, 0)
+        XCTAssertEqual(tabManager.normalTabs.count, 1)
+        XCTAssertTrue(tabManager.selectedTab?.isURLStartingPage == true)
+        XCTAssertFalse(tabs.contains { $0 === tabManager.selectedTab })
     }
 
     @MainActor
@@ -82,7 +86,9 @@ final class TabManagerOlderTabsTests: TabManagerTestsBase {
 
         tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
-        XCTAssertEqual(tabManager.normalTabs.count, 0)
+        XCTAssertEqual(tabManager.normalTabs.count, 1)
+        XCTAssertTrue(tabManager.selectedTab?.isURLStartingPage == true)
+        XCTAssertFalse(tabs.contains { $0 === tabManager.selectedTab })
     }
 
     @MainActor
@@ -93,7 +99,9 @@ final class TabManagerOlderTabsTests: TabManagerTestsBase {
 
         tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
 
-        XCTAssertEqual(tabManager.normalTabs.count, 0)
+        XCTAssertEqual(tabManager.normalTabs.count, 1)
+        XCTAssertTrue(tabManager.selectedTab?.isURLStartingPage == true)
+        XCTAssertFalse(tabs.contains { $0 === tabManager.selectedTab })
     }
 
     @MainActor

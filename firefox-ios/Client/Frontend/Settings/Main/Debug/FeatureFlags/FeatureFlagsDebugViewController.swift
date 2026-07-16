@@ -66,13 +66,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .adsClient,
-                titleText: format(string: "Ads Client"),
-                statusText: format(string: "Toggle to enable the rust ads client")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .aiKillSwitch,
                 titleText: format(string: "Ai Kill Switch"),
                 statusText: format(string: "Toggle Ai Kill Switch")
@@ -118,13 +111,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .deeplinkOptimizationRefactor,
                 titleText: format(string: "Deeplink Optimization Refactor"),
                 statusText: format(string: "Toggle to enable deeplink optimization refactor")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .deeplinkOverlay,
-                titleText: format(string: "Deeplink Overlay"),
-                statusText: format(string: "Toggle to show the background overlay for all tabs")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -203,13 +189,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .nativeErrorPage,
                 titleText: format(string: "Native Error Page"),
                 statusText: format(string: "Toggle to display natively created error pages")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .needsReloadRefactor,
-                titleText: format(string: "Needs Reload Refactor"),
-                statusText: format(string: "Toggle to enable the needs reload refactor")
             ) { [weak self] _ in
                 self?.reloadView()
             },

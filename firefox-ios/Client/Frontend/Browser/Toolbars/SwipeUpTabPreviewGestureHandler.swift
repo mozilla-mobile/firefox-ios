@@ -7,15 +7,12 @@ import Common
 import Redux
 
 @MainActor
-class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber {
+class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
     private struct UX {
         static let closeTabAnimationsDuration: CGFloat = 0.3
         static let dismissPreviewDelay: CGFloat = 0.4
     }
 
-    typealias SubscriberStateType = ToolbarState
-
-    // MARK: - TODO make it weak
     private let tabPreview: SwipeUpTabWebViewPreview
     private let topBlurView: UIView
     private let bottomBlurView: UIView
@@ -27,14 +24,17 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
     private weak var panGesture: UIPanGestureRecognizer?
     private weak var swipeUpGesture: UISwipeGestureRecognizer?
     private weak var swipeDownGesture: UISwipeGestureRecognizer?
+    private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
+    // MARK: - Inits
     init(tabPreview: SwipeUpTabWebViewPreview,
          bottomBlurView: UIView,
          topBlurView: UIView,
          screenshotHelper: ScreenshotHelper,
          tabManager: TabManager,
          themeManager: ThemeManager,
-         windowUUID: WindowUUID) {
+         windowUUID: WindowUUID,
+         swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider) {
         self.tabPreview = tabPreview
         self.bottomBlurView = bottomBlurView
         self.topBlurView = topBlurView
@@ -42,8 +42,8 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
         super.init()
-        subscribeToRedux()
     }
 
     deinit {
@@ -55,34 +55,12 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
                              """)
             return
         }
-
-        MainActor.assumeIsolated {
-            unsubscribeFromRedux()
-        }
     }
 
-    // MARK: - Redux
-    func subscribeToRedux() {
-        let uuid = windowUUID
-        store.subscribe(self, transform: {
-            $0.select({ appState in
-                return ToolbarState(appState: appState, uuid: uuid)
-            })
-        })
-    }
-
-    private func unsubscribeFromRedux() {
-        store.unsubscribe(self)
-    }
-
-    func newState(state: ToolbarState) {
-        toolbarState = state
-        setGestureHandlers(toolbarState: state)
-    }
-
+    // MARK: - Public functions
     func setupGesture(on view: UIView) {
         // swipe gesture enabled implies interactive gesture is not enabled
-        if SwipeGestureFeatureFlagProvider().isSwipeGestureEnabled {
+        if swipeGestureFeatureFlagProvider.isSwipeGestureEnabled {
             let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture))
             swipeUpGesture.direction = .up
             view.addGestureRecognizer(swipeUpGesture)
@@ -92,20 +70,32 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
             swipeDownGesture.direction = .down
             view.addGestureRecognizer(swipeDownGesture)
             self.swipeDownGesture = swipeDownGesture
-        } else if SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled {
+        } else if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled {
             let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
             view.addGestureRecognizer(panGesture)
             panGesture.delegate = self
-            panGesture.isEnabled = SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled
+            panGesture.isEnabled = swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled
             self.panGesture = panGesture
         }
     }
 
+    // MARK: - UIGestureRecognizerDelegate
+
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
+            return false
+        }
+        let velocity = panGesture.velocity(in: gestureRecognizer.view)
+        // Begin this gesture only if the velocity is higher on the y axis otherwise cancel it.
+        // We need this check otherwise the gesture collides with swipe tabs gesture.
+        return abs(velocity.y) > abs(velocity.x)
+    }
+
+    // MARK: - Private functions
     private func setGestureHandlers(toolbarState: ToolbarState) {
         // While the address bar is in editing mode (for example, when the user is
-        // typing on the homepage with a keyboard), the swipe gesture
-        // that switches between tabs should be disabled. Once editing ends we can
-        // safely re-enable the gesture
+        // typing on the homepage with a keyboard), the gestures should be disabled.
+        // Once editing ends we can safely re-enable the gestures
         if toolbarState.addressToolbar.isEditing {
             panGesture?.isEnabled = false
             swipeUpGesture?.isEnabled = false
@@ -113,12 +103,15 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
             return
         }
 
+        // There is no collision between panGesture and the swipe gesture handlers below,
+        // if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled is true, then by definition
+        // swipeGestureFeatureFlagProvider.isSwipeGestureEnabled must be false, so the code in the if statement wouldn't run
         let panEnabled = (toolbarState.toolbarPosition == .bottom &&
-                          SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled)
+                          swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled)
         panGesture?.isEnabled = panEnabled
 
         let isBottom = toolbarState.toolbarPosition == .bottom
-        if SwipeGestureFeatureFlagProvider().isSwipeGestureEnabled {
+        if swipeGestureFeatureFlagProvider.isSwipeGestureEnabled {
             swipeUpGesture?.isEnabled = isBottom
             swipeDownGesture?.isEnabled = !isBottom
         } else {
@@ -132,18 +125,20 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
         guard let tab = tabManager?.selectedTab else { return }
         switch gesture.state {
         case .began:
+            let screenshotBounds = CGRect(origin: .zero,
+                                          size: CGSize(
+                                            width: tabPreview.bounds.width,
+                                            // The sum returns the content container viewport height
+                                            height: tabPreview.bounds.height -
+                                            topBlurView.bounds.height -
+                                            bottomBlurView.bounds.height
+                                          )
+                                    )
             tabPreview.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             screenshotHelper.takeScreenshot(
                 tab,
                 windowUUID: windowUUID,
-                screenshotBounds: CGRect(
-                    origin: .zero,
-                    size: CGSize(
-                        width: tabPreview.bounds.width,
-                        // The sum returns the content container viewport height
-                        height: tabPreview.bounds.height - topBlurView.bounds.height - bottomBlurView.bounds.height
-                    )
-                )
+                screenshotBounds: screenshotBounds
             )
             tabPreview.setInitialTransform(
                 topPadding: topBlurView.bounds.height,
@@ -155,53 +150,53 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
             let fingerLocation = gesture.location(in: tabPreview)
             tabPreview.translate(translation, fingerLocation: fingerLocation)
         case .ended:
-            let fingerLocation = gesture.location(in: tabPreview)
-            switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
-            case .closeTab:
-                if !SwipeGestureFeatureFlagProvider().isCloseTabEnabled {
-                    fallthrough
-                }
-                UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
-                tabPreview.tossPreview()
-                } completion: { [self] _ in
-                    store.dispatch(
-                        TabPanelViewAction(
-                            panelType: .tabs,
-                            tabUUID: tabManager?.selectedTab?.tabUUID,
-                            windowUUID: windowUUID,
-                            actionType: TabPanelViewActionType.closeTab
-                        )
-                    )
-                    UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
-                        tabPreview.alpha = 0.0
-                        tabPreview.layer.zPosition = 0
-                    } completion: { [weak self] _ in
-                        self?.tabPreview.restore()
-                    }
-                }
-            case .openTabTray:
-                let tabTrayAnimationSourceFrame = tabPreview.previewCardFrame
-                DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) {
-                    self.tabPreview.dismissForTabTray()
-                }
-                store.dispatch(
-                    GeneralBrowserAction(
-                        tabTrayAnimationSourceFrame: tabTrayAnimationSourceFrame,
-                        windowUUID: windowUUID,
-                        actionType: GeneralBrowserActionType.showTabTray
-                    )
-                )
-            case .cancel:
-                tabPreview.restore()
-            }
+            handleGestureEnded(gesture: gesture)
         default:
             break
         }
     }
 
     @objc
+    private func handleGestureEnded(gesture: UIGestureRecognizer) {
+        let fingerLocation = gesture.location(in: tabPreview)
+        switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
+        case .closeTab:
+            UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
+                tabPreview.tossPreview()
+            } completion: { [weak self, windowUUID] _ in
+                store.dispatch(
+                    TabPanelViewAction(
+                        panelType: .tabs,
+                        tabUUID: self?.tabManager?.selectedTab?.tabUUID,
+                        windowUUID: windowUUID,
+                        actionType: TabPanelViewActionType.closeTab
+                    )
+                )
+                UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
+                    self?.tabPreview.alpha = 0.0
+                    self?.tabPreview.layer.zPosition = 0
+                } completion: { [weak self] _ in
+                    self?.tabPreview.restore()
+                }
+            }
+        case .openTabTray:
+            DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) {
+                self.tabPreview.dismissForTabTray()
+            }
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.showTabTray
+                )
+            )
+        case .cancel:
+            tabPreview.restore()
+        }
+    }
+
+    @objc
     private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        if !SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled { return }
+        if !swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled { return }
         handleGestureState(gesture)
     }
 
@@ -217,17 +212,5 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, St
 
         store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
                                                actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
-    }
-
-    // MARK: - UIGestureRecognizerDelegate
-
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
-            return false
-        }
-        let velocity = panGesture.velocity(in: gestureRecognizer.view)
-        // Begin this gesture only if the velocity is higher on the y axis otherwise cancel it.
-        // We need this check otherwise the gesture collides with swipe tabs gesture.
-        return abs(velocity.y) > abs(velocity.x)
     }
 }

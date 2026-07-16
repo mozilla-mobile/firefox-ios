@@ -24,6 +24,10 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.print],
             to: PrintPage)
+        // Share
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.share],
+            forAction: Action.ShareBrowserTabMenuOption)
         // Turn on night mode
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction(for: app)

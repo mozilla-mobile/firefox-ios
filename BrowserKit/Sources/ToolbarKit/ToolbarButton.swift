@@ -406,7 +406,8 @@ class ToolbarButton: UIButton,
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
-        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
+        badgeImageView?.tintColor = maskImageView == nil ?
+                                    .clear : (theme.isNova ? colors.iconPrivate : colors.actionInformation)
         maskImageView?.tintColor = colors.layer1
         setNeedsUpdateConfiguration()
     }

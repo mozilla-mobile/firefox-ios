@@ -4,6 +4,7 @@
 
 import Common
 import Redux
+import TestKit
 import XCTest
 
 @testable import Client
@@ -34,14 +35,15 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: WebCompatReporterViewActionType.viewDidLoad
         )
 
-        subject.webCompatReporterProvider(mockStore.state, action)
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
         XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didLoadInitialDraft)
         XCTAssertEqual(dispatched.url, "https://example.com")
-        subject.webCompatReporterProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - submit
@@ -53,10 +55,11 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: WebCompatReporterViewActionType.submit
         )
 
-        subject.webCompatReporterProvider(mockStore.state, action)
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.webCompatReporterProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Pure view actions are not handled by the middleware
@@ -69,10 +72,11 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: WebCompatReporterViewActionType.selectCategory
         )
 
-        subject.webCompatReporterProvider(mockStore.state, action)
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.webCompatReporterProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Unrelated action
@@ -84,10 +88,11 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: WebCompatReporterMiddlewareActionType.didLoadInitialDraft
         )
 
-        subject.webCompatReporterProvider(mockStore.state, action)
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.webCompatReporterProvider = { _, _ in }
+
+        releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - StoreTestUtility
@@ -117,5 +122,18 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = WebCompatReporterMiddleware()
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    /// Our middleware providers always retain a strong reference to `self` for ease of use. Thus, `trackForMemoryLeaks` will
+    /// fail in our unit tests due to a strong circular reference to the middleware retained by its provider closures. In
+    /// practice, this is not a memory leak issue, as we permanently allocate and retain our middleware providers for the
+    /// entire app lifecycle.
+    ///
+    /// As a work around for unit tests, we should release each middleware's provider closures from memory by assigning an
+    /// empty closure, which does not strongly retain `self`.
+    private func releaseMiddlewareProvidersFromMemory(_ subject: WebCompatReporterMiddleware) {
+        subject.webCompatReporterProvider = emptyMiddlewareProviderFactory()
+        subject.legacyProvider = emptyLegacyMiddlewareFactory()
+        subject.modernProvider = emptyMiddlewareFactory()
     }
 }

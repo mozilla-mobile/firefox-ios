@@ -2,21 +2,33 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-public struct SwipeGestureFeatureFlagProvider: FeatureFlaggable {
+import Common
+
+struct SwipeGestureFeatureFlagProvider {
+    let featureFlagsProvider: FeatureFlagProviding
+
+    // Defaults to the container-resolved provider; tests inject a mock instead.
+    init(featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()) {
+        self.featureFlagsProvider = featureFlagsProvider
+    }
+
     /// The interactive gesture is disabled when the swipe variant is enabled, since
     /// `enabled_swipe` overrides the interactive gesture.
-    public var isInteractiveGestureEnabled: Bool {
+    var isInteractiveGestureEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayInteractive)
             && !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
     }
-    public var isSwipeGestureEnabled: Bool {
+
+    var isSwipeGestureEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe)
     }
-    /// Never used if interactive gesture is not enabled
-    public var isCloseTabEnabled: Bool {
+
+    /// Whether the interactive gesture supports closing tab too.
+    var isCloseTabEnabled: Bool {
         return featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTrayCloseTab)
     }
-    public var isAnyGestureEnabled: Bool {
+
+    var isAnyGestureEnabled: Bool {
         return isInteractiveGestureEnabled || isSwipeGestureEnabled
     }
 }

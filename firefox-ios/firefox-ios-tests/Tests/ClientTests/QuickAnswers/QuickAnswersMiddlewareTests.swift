@@ -47,7 +47,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: QuickAnswersActionType.didSettingsChange
         )
 
-        subject.quickAnswersProvider(mockStore.state, action)
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
@@ -67,7 +67,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: QuickAnswersActionType.didSettingsChange
         )
 
-        subject.quickAnswersProvider(mockStore.state, action)
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, false)
@@ -83,7 +83,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: QuickAnswersActionType.didSettingsChange
         )
 
-        subject.quickAnswersProvider(mockStore.state, action)
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, false)
@@ -99,7 +99,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: QuickAnswersActionType.didSettingsChange
         )
 
-        subject.quickAnswersProvider(mockStore.state, action)
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, false)
@@ -116,7 +116,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.initialize
         )
 
-        subject.quickAnswersProvider(mockStore.state, action)
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
@@ -136,7 +136,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.initialize
         )
 
-        subject.quickAnswersProvider(mockStore.state, action)
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, false)
@@ -152,7 +152,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageActionType.initialize
         )
 
-        subject.quickAnswersProvider(mockStore.state, action)
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, false)

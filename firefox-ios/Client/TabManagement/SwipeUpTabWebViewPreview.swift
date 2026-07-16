@@ -8,10 +8,6 @@ import SiteImageView
 
 class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private struct UX {
-        @MainActor
-        static var screenshotViewContainerCornerRadius: CGFloat {
-            return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 25.0
-        }
         static let screenshotViewContainerShadowCornerRadius: CGFloat = 25.0
         static let screenshotViewContainerVerticalPadding: CGFloat = 100.0
         static let screenshotViewContainerShadowOffset = CGSize(width: 2, height: 4)
@@ -23,14 +19,13 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         static let restoreDuration: CGFloat = 0.2
         static let translateDuration: CGFloat = 0.15
         static let initialTransformDuration: CGFloat = 0.2
+        static let tossPreviewEndingHeight: CGFloat = -1000.0
+        static let minimumTabPreviewScale: CGFloat = 0.33
+        static let tossPreviewXScale: CGFloat = 0.6
+        static let tossPreviewYScale: CGFloat = 0.6
     }
 
-    /// The action to take when the gesture ends, based on where the finger is released on screen.
-    enum ReleaseOutcome {
-        case cancel
-        case openTabTray
-        case closeTab
-    }
+    private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
     private let backgroundView: UIVisualEffectView = .build {
         if #available(iOS 26, *) {
@@ -43,12 +38,12 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private let screenshotViewContainer: UIView = .build {
         $0.layer.masksToBounds = false
         $0.layer.shadowOffset = UX.screenshotViewContainerShadowOffset
-        $0.layer.shadowRadius = UX.screenshotViewContainerCornerRadius
+        $0.applyScreenCornerRadius()
     }
     private let screenshotView: UIImageView = .build {
         $0.contentMode = .top
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = UX.screenshotViewContainerCornerRadius
+        $0.applyScreenCornerRadius()
     }
     private let closeButton: UIButton = .build {
         if #available(iOS 26, *) {
@@ -69,15 +64,25 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         return screenshotViewContainer.frame
     }
 
-    override init(frame: CGRect) {
+    /// The action to take when the pan gesture ends, based on where the finger is released on screen.
+    enum ReleaseOutcome {
+        case cancel
+        case openTabTray
+        case closeTab
+    }
+
+    // MARK: - Inits
+    init(frame: CGRect, swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider) {
+        self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
         super.init(frame: frame)
         setup()
     }
 
     required init?(coder: NSCoder) {
-        fatalError()
+        fatalError("init(coder:) is not implemented")
     }
 
+    // MARK: - Layout
     private func setup() {
         addSubviews(tabBackgroundHover, backgroundView, screenshotViewContainer, closeButton)
         screenshotViewContainer.addSubview(screenshotView)
@@ -105,6 +110,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         backgroundView.pinToSuperview()
     }
 
+    // MARK: - Public Functions
     func addTabScreenshot(image: UIImage?) {
         screenshotView.image = image
     }
@@ -113,12 +119,18 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         screenshotView.layer.cornerRadius = 0
         tabBackgroundHoverTopConstraint?.constant = topPadding
         tabBackgroundHoverBottomConstraint?.constant = -bottomPadding
-        closeButton.transform = .identity.translatedBy(x: 0.0, y: -closeButton.bounds.height * 2.0)
-        closeButton.alpha = 0.0
+
+        if swipeGestureFeatureFlagProvider.isCloseTabEnabled {
+            closeButton.transform = .identity.translatedBy(x: 0.0, y: -closeButton.bounds.height * 2.0)
+            closeButton.alpha = 0.0
+        } else {
+            closeButton.isHidden = true
+        }
+
         UIView.animate(withDuration: UX.initialTransformDuration) { [self] in
             alpha = 1.0
             layer.zPosition = 1000
-            screenshotView.layer.cornerRadius = UX.screenshotViewContainerCornerRadius
+            screenshotView.applyScreenCornerRadius()
             guard screenshotViewContainerTopConstraint?.constant != topPadding ||
                   screenshotViewContainerBottomConstraint?.constant != bottomPadding else { return }
             screenshotViewContainerTopConstraint?.constant = topPadding
@@ -128,21 +140,26 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     }
 
     func translate(_ translation: CGPoint, fingerLocation: CGPoint) {
-        let shouldShowCloseButton = releaseOutcome(fingerLocation: fingerLocation) == .closeTab
+        let shouldShowCloseButton = (
+            releaseOutcome(fingerLocation: fingerLocation) == .closeTab &&
+            swipeGestureFeatureFlagProvider.isCloseTabEnabled
+        )
+
         let shouldTriggerHaptic = closeButton.alpha != (shouldShowCloseButton ? 1 : 0)
         if shouldTriggerHaptic {
             addHaptics()
         }
         UIView.animate(withDuration: UX.translateDuration) {
-            self.closeButton.transform = shouldShowCloseButton ? .identity : .init(translationX: 0.0,
-                                                                                   y: -self.closeButton.bounds.height * 2)
+            self.closeButton.transform = shouldShowCloseButton ?
+                .identity :
+                .init(translationX: 0.0, y: -self.closeButton.bounds.height * 2)
             self.closeButton.alpha = shouldShowCloseButton ? 1.0 : 0.0
         }
 
         // Shrink continuously during the gesture
-        let scale = 1 - abs(translation.y) / bounds.height
+        let scale = max((1 - abs(translation.y) / bounds.height), UX.minimumTabPreviewScale)
 
-        // Transform that places the finger horizontally centered and `fingerCardPositionRatio` down the card.
+        // Transform that places the finger horizontally centered and <fingerCardPositionRatio> down the card.
         let naturalCenter = screenshotViewContainer.center
         let scaledHeight = scale * screenshotViewContainer.bounds.height
         let centerOffsetFromFinger = (UX.fingerCardPositionRatio - 0.5) * scaledHeight
@@ -166,7 +183,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         guard bounds.height > 0 else { return .cancel }
         let fractionFromTop = fingerLocation.y / bounds.height
         if fractionFromTop <= UX.closeReleaseThreshold {
-            if SwipeGestureFeatureFlagProvider().isCloseTabEnabled {
+            if swipeGestureFeatureFlagProvider.isCloseTabEnabled {
                 return .closeTab
             }
         }
@@ -174,12 +191,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             return .openTabTray
         }
         return .cancel
-    }
-
-    private func addHaptics() {
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.prepare()
-        impactFeedback.impactOccurred()
     }
 
     func restore() {
@@ -192,9 +203,9 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     }
 
     func tossPreview() {
-        screenshotViewContainer.transform = .identity.translatedBy(x: 0, y: -1000).scaledBy(
-            x: 0.6,
-            y: 0.6
+        screenshotViewContainer.transform = .identity.translatedBy(x: 0, y: UX.tossPreviewEndingHeight).scaledBy(
+            x: UX.tossPreviewXScale,
+            y: UX.tossPreviewYScale
         )
     }
 
@@ -216,5 +227,12 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         screenshotViewContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
+    }
+
+    // MARK: - Private Functions
+    private func addHaptics() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.prepare()
+        impactFeedback.impactOccurred()
     }
 }
