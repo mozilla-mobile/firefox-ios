@@ -5,7 +5,7 @@
 import XCTest
 @testable import Client
 
-final class WaybackTests: XCTestCase {
+final class WaybackServiceTests: XCTestCase {
     private var mockURLSession: URLSession!
     private var mockURLProtocol: MockURLProtocol!
 

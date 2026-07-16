@@ -107,6 +107,29 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigateTo, .reload)
     }
 
+    func testLoadWaybackURLAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigateTo)
+
+        let archivedURL = URL(string: "https://web.archive.org/web/20130919044612/http://example.com/")!
+        let action = getGeneralBrowserAction(destinationURL: archivedURL, for: .loadWaybackURL)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigateTo, .loadURL(archivedURL))
+    }
+
+    func test_loadWaybackURLAction_withNilURL_doesNotNavigate() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = getGeneralBrowserAction(destinationURL: nil, for: .loadWaybackURL)
+        let newState = reducer(initialState, action)
+
+        XCTAssertNil(newState.navigateTo)
+    }
+
     func testShowSummarizerAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
@@ -598,13 +621,15 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     }
 
     func getGeneralBrowserAction(selectedTabURL: URL? = nil,
+                                 destinationURL: URL? = nil,
                                  isNativeErrorPage: Bool? = nil,
                                  for actionType: GeneralBrowserActionType) -> GeneralBrowserAction {
         return  GeneralBrowserAction(selectedTabURL: selectedTabURL,
+                                     destinationURL: destinationURL,
                                      isNativeErrorPage: isNativeErrorPage,
                                      windowUUID: .XCTestDefaultUUID,
                                      actionType: actionType)
-    }
+        }
 
     /// We need to set up the state for the homepage search bar in order to test method that relies on this state
     func setupStoreForSearchBar() {
