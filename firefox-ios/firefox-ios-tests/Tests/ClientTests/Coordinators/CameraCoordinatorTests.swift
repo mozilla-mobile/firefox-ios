@@ -49,6 +49,7 @@ final class CameraCoordinatorTests: XCTestCase {
 
     func test_start_whenPermissionNotDetermined_doesNotRecordShownBeforeResponse() async {
         let requestStarted = expectation(description: "Camera access request started")
+        let requestFinished = expectation(description: "Camera access request finished")
         var accessContinuation: CheckedContinuation<Bool, Never>?
         let cameraTelemetry = MockSystemCameraTelemetry()
         let requestCameraAccess: () async -> Bool = {
@@ -59,7 +60,8 @@ final class CameraCoordinatorTests: XCTestCase {
         }
         let subject = createSubject(cameraAuthorizationStatus: .notDetermined,
                                     requestCameraAccess: requestCameraAccess,
-                                    cameraTelemetry: cameraTelemetry)
+                                    cameraTelemetry: cameraTelemetry,
+                                    onComplete: { _ in requestFinished.fulfill() })
 
         subject.start()
         await fulfillment(of: [requestStarted], timeout: 1)
@@ -68,7 +70,8 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(cameraTelemetry.closedCalled, 0)
 
         accessContinuation?.resume(returning: false)
-        await Task.yield()
+        await fulfillment(of: [requestFinished], timeout: 1)
+        releasePresentedCamera()
     }
 
     func test_didFinishPicking_withImage_callsCompletionAndNotifiesParent() {
@@ -126,6 +129,7 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(cameraTelemetry.closedCalled, 1)
         XCTAssertEqual(cameraTelemetry.savedClosedReason, .googleLens)
         XCTAssertEqual(cameraTelemetry.savedClosedPhotoSelected, false)
+        releasePresentedCamera()
     }
 
     func test_dismissCameraInterface_whenPermissionDenied_doesNotRecordCameraLifecycle() {
@@ -138,6 +142,7 @@ final class CameraCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(cameraTelemetry.shownCalled, 0)
         XCTAssertEqual(cameraTelemetry.closedCalled, 0)
+        releasePresentedCamera()
     }
 
     func test_dismissCameraInterfaceIfAccessRefused_whenRefused_dismissesAndFinishesWithNil() async {
@@ -208,6 +213,11 @@ final class CameraCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Helper Methods
+    private func releasePresentedCamera() {
+        (router.presentedViewController as? UIImagePickerController)?.delegate = nil
+        router.presentedViewController = nil
+    }
+
     private func createSubject(isCameraAvailable: Bool = true,
                                cameraAuthorizationStatus: AVAuthorizationStatus = .authorized,
                                requestCameraAccess: @escaping () async -> Bool = { false },
