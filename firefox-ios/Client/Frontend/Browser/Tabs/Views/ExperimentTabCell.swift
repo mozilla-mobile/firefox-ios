@@ -85,6 +85,8 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
     private var borderLayer = CAShapeLayer()
 
+    private var borderGradientLayer: CAGradientLayer?
+
     override func layoutSubviews() {
         super.layoutSubviews()
         smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
@@ -296,6 +298,34 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         view.layer.addSublayer(borderLayer)
     }
 
+    // A gradient border can't be a flat `strokeColor`, so the stroke masks a `CAGradientLayer`.
+    private func addGradientBorder(to view: UIView, gradient: Gradient, width: CGFloat) {
+        borderLayer = CAShapeLayer()
+
+        let borderRect = view.bounds.insetBy(dx: -width / 3, dy: -width / 3)
+        borderLayer.path = UIBezierPath(
+            roundedRect: borderRect,
+            cornerRadius: UX.cornerRadius
+        ).cgPath
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = UIColor.black.cgColor
+        borderLayer.lineWidth = width
+        borderLayer.frame = view.bounds
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradient.cgColors
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.frame = view.bounds
+        gradientLayer.mask = borderLayer
+        gradientLayer.name = UX.borderLayerName
+
+        view.clipsToBounds = false
+        removeExternalBorder(from: view)
+        view.layer.addSublayer(gradientLayer)
+        borderGradientLayer = gradientLayer
+    }
+
     private func redrawExternalBorder() {
         let width = borderLayer.lineWidth
         let borderRect = backgroundHolder.bounds.insetBy(dx: -width / 3, dy: -width / 3)
@@ -306,18 +336,27 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         ).cgPath
 
         borderLayer.frame = backgroundHolder.bounds
+        borderGradientLayer?.frame = backgroundHolder.bounds
     }
 
     private func removeExternalBorder(from view: UIView) {
         view.layer.sublayers?.removeAll(where: { $0.name == UX.borderLayerName })
+        borderGradientLayer = nil
     }
 
     func setSelectedState(isPrivate: Bool, theme: Theme) {
         // We are using a non-CALayer borderWidth for unselected cells for reduced graphics processing
         // we zero that value here when we are in the selected state to assign the CAShapeLayer
         backgroundHolder.layer.borderWidth = UX.zeroBorderWidth
-        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
 
+        if theme.isNova {
+            addGradientBorder(to: backgroundHolder,
+                              gradient: theme.colors.gradientBorder,
+                              width: UX.selectedBorderWidth)
+            return
+        }
+
+        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
         addExternalBorder(to: backgroundHolder, color: borderColor, width: UX.selectedBorderWidth)
     }
 

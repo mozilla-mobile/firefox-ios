@@ -85,6 +85,8 @@ final class TabCell: UICollectionViewCell,
         button.configuration = configuration
     }
 
+    private var borderGradientLayer: CAGradientLayer?
+
     // MARK: - Initializer
 
     override init(frame: CGRect) {
@@ -176,7 +178,36 @@ final class TabCell: UICollectionViewCell,
         smallFaviconView.tintColor = theme.colors.textPrimary
 
         let isPrivate = tabModel?.isPrivate ?? false
-        layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
+        updateBorder(theme: theme, isSelected: isSelectedTab, isPrivate: isPrivate)
+    }
+
+    private func updateBorder(theme: Theme, isSelected: Bool, isPrivate: Bool) {
+        borderGradientLayer?.removeFromSuperlayer()
+        borderGradientLayer = nil
+
+        guard theme.isNova else {
+            let accent = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+            layer.borderColor = (isSelected ? accent : UIColor.clear).cgColor
+            layer.borderWidth = isSelected ? UX.borderWidth : 0
+            return
+        }
+
+        layer.borderColor = UIColor.clear.cgColor
+        layer.borderWidth = 0
+        guard isSelected else { return }
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = theme.colors.gradientBorder.cgColors
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        let mask = CAShapeLayer()
+        mask.fillColor = UIColor.clear.cgColor
+        mask.strokeColor = UIColor.black.cgColor
+        mask.lineWidth = UX.borderWidth
+        gradientLayer.mask = mask
+        layer.addSublayer(gradientLayer)
+        borderGradientLayer = gradientLayer
+        setNeedsLayout()
     }
 
     // MARK: - Configuration
@@ -231,18 +262,31 @@ final class TabCell: UICollectionViewCell,
                                          left: UX.borderWidth,
                                          bottom: UX.borderWidth,
                                          right: UX.borderWidth)
-            layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
-            layer.borderWidth = UX.borderWidth
             layer.cornerRadius = UX.cornerRadius
         } else {
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            layer.borderColor = UIColor.clear.cgColor
-            layer.borderWidth = 0
             layer.cornerRadius = UX.cornerRadius
         }
+        updateBorder(theme: theme, isSelected: selected, isPrivate: isPrivate)
     }
 
     // MARK: - UICollectionViewCell
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard let borderGradientLayer,
+              let mask = borderGradientLayer.mask as? CAShapeLayer else { return }
+        // Disable implicit animations so the border tracks bounds changes instantly.
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        borderGradientLayer.frame = bounds
+        mask.frame = bounds
+        mask.path = UIBezierPath(
+            roundedRect: bounds.insetBy(dx: UX.borderWidth / 2, dy: UX.borderWidth / 2),
+            cornerRadius: UX.cornerRadius
+        ).cgPath
+        CATransaction.commit()
+    }
 
     override func prepareForReuse() {
         // Reset any close animations.
@@ -253,6 +297,8 @@ final class TabCell: UICollectionViewCell,
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
         faviconBG.isHidden = true
+        borderGradientLayer?.removeFromSuperlayer()
+        borderGradientLayer = nil
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
