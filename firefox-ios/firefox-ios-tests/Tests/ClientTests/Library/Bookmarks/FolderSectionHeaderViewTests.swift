@@ -8,19 +8,8 @@ import XCTest
 
 @MainActor
 final class FolderSectionHeaderViewTests: XCTestCase {
-    private var subject: FolderSectionHeaderView!
-
-    override func setUp() async throws {
-        try await super.setUp()
-        subject = FolderSectionHeaderView(reuseIdentifier: nil)
-    }
-
-    override func tearDown() async throws {
-        subject = nil
-        try await super.tearDown()
-    }
-
     func testConfigure_captionOnly_showsCaptionAndHidesTitle() {
+        let subject = createSubject()
         subject.configure(title: nil, caption: "Location", showsChevron: false, titleColor: .black)
 
         XCTAssertEqual(subject.captionLabel.text, "Location")
@@ -29,6 +18,7 @@ final class FolderSectionHeaderViewTests: XCTestCase {
     }
 
     func testConfigure_captionOnly_disablesInteractionAndExpandAccessibility() {
+        let subject = createSubject()
         subject.configure(title: nil, caption: "Location", showsChevron: false, titleColor: .black)
 
         XCTAssertFalse(subject.isUserInteractionEnabled)
@@ -38,6 +28,7 @@ final class FolderSectionHeaderViewTests: XCTestCase {
     }
 
     func testConfigure_captionAndTitleWithChevron_showsBoth() {
+        let subject = createSubject()
         subject.configure(title: "Mobile", caption: "All Folders", showsChevron: true, isExpanded: true, titleColor: .black)
 
         XCTAssertEqual(subject.captionLabel.text, "All Folders")
@@ -47,6 +38,7 @@ final class FolderSectionHeaderViewTests: XCTestCase {
     }
 
     func testConfigure_withChevron_enablesInteractionAndButtonTrait() {
+        let subject = createSubject()
         subject.configure(title: "Mobile", showsChevron: true, isExpanded: true, titleColor: .black)
 
         XCTAssertTrue(subject.isUserInteractionEnabled)
@@ -54,16 +46,19 @@ final class FolderSectionHeaderViewTests: XCTestCase {
     }
 
     func testConfigure_whenExpanded_setsExpandedAccessibilityValue() {
+        let subject = createSubject()
         subject.configure(title: "Mobile", showsChevron: true, isExpanded: true, titleColor: .black)
         XCTAssertEqual(subject.accessibilityValue, .Bookmarks.Menu.EditBookmarkGroupExpandedValue)
     }
 
     func testConfigure_whenCollapsed_setsCollapsedAccessibilityValue() {
+        let subject = createSubject()
         subject.configure(title: "Mobile", showsChevron: true, isExpanded: false, titleColor: .black)
         XCTAssertEqual(subject.accessibilityValue, .Bookmarks.Menu.EditBookmarkGroupCollapsedValue)
     }
 
     func testConfigure_titleWithChevronNoCaption_hidesCaption() {
+        let subject = createSubject()
         subject.configure(title: "Desktop", showsChevron: true, isExpanded: false, titleColor: .black)
 
         XCTAssertNil(subject.captionLabel.text)
@@ -72,22 +67,26 @@ final class FolderSectionHeaderViewTests: XCTestCase {
     }
 
     func testConfigure_withEmptyCaption_treatedAsNoCaption() {
+        let subject = createSubject()
         subject.configure(title: "Desktop", caption: "", showsChevron: true, titleColor: .black)
         XCTAssertNil(subject.captionLabel.text)
     }
 
     func testConfigure_withEmptyTitle_treatedAsNoTitle() {
+        let subject = createSubject()
         subject.configure(title: "", caption: "Location", showsChevron: false, titleColor: .black)
         XCTAssertNil(subject.titleLabel.text)
     }
 
     func testSetExpanded_animatedAndNonAnimated_doesNotCrash() {
+        let subject = createSubject()
         subject.setExpanded(true, animated: false)
         subject.setExpanded(false, animated: false)
         subject.setExpanded(true, animated: true)
     }
 
     func testOnTap_firesWhenHandleTapIsInvoked() {
+        let subject = createSubject()
         let expectation = expectation(description: "onTap should be called")
         subject.onTap = {
             expectation.fulfill()
@@ -99,6 +98,7 @@ final class FolderSectionHeaderViewTests: XCTestCase {
     }
 
     func testPrepareForReuse_resetsAllState() {
+        let subject = createSubject()
         subject.configure(title: "Mobile", caption: "All Folders", showsChevron: true, isExpanded: true, titleColor: .black)
         subject.onTap = {}
 
@@ -111,5 +111,11 @@ final class FolderSectionHeaderViewTests: XCTestCase {
         XCTAssertTrue(subject.accessibilityTraits.isEmpty)
         XCTAssertNil(subject.accessibilityValue)
         XCTAssertNil(subject.onTap)
+    }
+
+    private func createSubject() -> FolderSectionHeaderView {
+        let view = FolderSectionHeaderView(reuseIdentifier: nil)
+        trackForMemoryLeaks(view)
+        return view
     }
 }

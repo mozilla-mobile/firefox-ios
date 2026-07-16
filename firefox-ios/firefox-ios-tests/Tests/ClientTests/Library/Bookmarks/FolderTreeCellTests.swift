@@ -8,24 +8,14 @@ import XCTest
 
 @MainActor
 final class FolderTreeCellTests: XCTestCase {
-    private var subject: FolderTreeCell!
-
-    override func setUp() async throws {
-        try await super.setUp()
-        subject = FolderTreeCell(style: .default, reuseIdentifier: nil)
-    }
-
-    override func tearDown() async throws {
-        subject = nil
-        try await super.tearDown()
-    }
-
     func testConfigure_setsTitle() {
+        let subject = createSubject()
         subject.configure(title: "Bookmarks", breadcrumb: nil, image: nil, isSelected: false)
         XCTAssertEqual(subject.titleLabel.text, "Bookmarks")
     }
 
     func testConfigure_withBreadcrumb_showsBreadcrumbLabel() {
+        let subject = createSubject()
         subject.configure(title: "Level 1", breadcrumb: "↳ Root Folder", image: nil, isSelected: false)
 
         XCTAssertFalse(subject.breadcrumbLabel.isHidden)
@@ -33,49 +23,58 @@ final class FolderTreeCellTests: XCTestCase {
     }
 
     func testConfigure_withoutBreadcrumb_hidesBreadcrumbLabel() {
+        let subject = createSubject()
         subject.configure(title: "Bookmarks", breadcrumb: nil, image: nil, isSelected: false)
         XCTAssertTrue(subject.breadcrumbLabel.isHidden)
     }
 
     func testConfigure_withEmptyBreadcrumb_hidesBreadcrumbLabel() {
+        let subject = createSubject()
         subject.configure(title: "Bookmarks", breadcrumb: "", image: nil, isSelected: false)
         XCTAssertTrue(subject.breadcrumbLabel.isHidden)
     }
 
     func testConfigure_whenSelected_setsCheckmarkAccessory() {
+        let subject = createSubject()
         subject.configure(title: "Bookmarks", breadcrumb: nil, image: nil, isSelected: true)
         XCTAssertEqual(subject.accessoryType, .checkmark)
     }
 
     func testConfigure_whenNotSelected_setsNoneAccessory() {
+        let subject = createSubject()
         subject.configure(title: "Bookmarks", breadcrumb: nil, image: nil, isSelected: false)
         XCTAssertEqual(subject.accessoryType, .none)
     }
 
     func testConfigure_setsLeftImageView() {
+        let subject = createSubject()
         let image = UIImage()
         subject.configure(title: "Bookmarks", breadcrumb: nil, image: image, isSelected: false)
         XCTAssertNotNil(subject.leftImageView.image)
     }
 
     func testConfigure_withNilImage_clearsLeftImageView() {
+        let subject = createSubject()
         subject.configure(title: "Bookmarks", breadcrumb: nil, image: UIImage(), isSelected: false)
         subject.configure(title: "Bookmarks", breadcrumb: nil, image: nil, isSelected: false)
         XCTAssertNil(subject.leftImageView.image)
     }
 
     func testConfigure_setsAccessibilityButtonTrait() {
+        let subject = createSubject()
         subject.configure(title: "Bookmarks", breadcrumb: nil, image: nil, isSelected: false)
         XCTAssertTrue(subject.accessibilityTraits.contains(.button))
     }
 
     func testIndentationLevel_zeroAndNonZero_doesNotCrash() {
+        let subject = createSubject()
         subject.indentationLevel = 0
         subject.indentationLevel = 1
         subject.indentationLevel = 3
     }
 
     func testPrepareForReuse_resetsAllState() {
+        let subject = createSubject()
         subject.configure(title: "Bookmarks", breadcrumb: "↳ Root Folder", image: UIImage(), isSelected: true)
         subject.indentationLevel = 2
 
@@ -87,5 +86,11 @@ final class FolderTreeCellTests: XCTestCase {
         XCTAssertEqual(subject.accessoryType, .none)
         XCTAssertEqual(subject.selectionStyle, .default)
         XCTAssertEqual(subject.indentationLevel, 0)
+    }
+
+    private func createSubject() -> FolderTreeCell {
+        let cell = FolderTreeCell(style: .default, reuseIdentifier: nil)
+        trackForMemoryLeaks(cell)
+        return cell
     }
 }

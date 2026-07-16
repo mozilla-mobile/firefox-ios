@@ -9,32 +9,24 @@ import Common
 
 @MainActor
 final class LinkActionCellTests: XCTestCase {
-    private var subject: LinkActionCell!
-
-    override func setUp() async throws {
-        try await super.setUp()
-        subject = LinkActionCell(style: .default, reuseIdentifier: nil)
-    }
-
-    override func tearDown() async throws {
-        subject = nil
-        try await super.tearDown()
-    }
-
     func testConfigure_setsTitle() {
+        let subject = createSubject()
         subject.configure(title: "Change Location...")
         XCTAssertEqual(subject.titleLabel.text, "Change Location...")
     }
 
     func testInit_setsButtonAccessibilityTrait() {
+        let subject = createSubject()
         XCTAssertTrue(subject.accessibilityTraits.contains(.button))
     }
 
     func testInit_setsDefaultSelectionStyle() {
+        let subject = createSubject()
         XCTAssertEqual(subject.selectionStyle, .default)
     }
 
     func testApplyTheme_setsTitleColorAndBackground() {
+        let subject = createSubject()
         let theme = LightTheme()
         subject.applyTheme(theme: theme)
 
@@ -43,8 +35,15 @@ final class LinkActionCellTests: XCTestCase {
     }
 
     func testPrepareForReuse_clearsTitle() {
+        let subject = createSubject()
         subject.configure(title: "Change Location...")
         subject.prepareForReuse()
         XCTAssertNil(subject.titleLabel.text)
+    }
+
+    private func createSubject() -> LinkActionCell {
+        let cell = LinkActionCell(style: .default, reuseIdentifier: nil)
+        trackForMemoryLeaks(cell)
+        return cell
     }
 }
