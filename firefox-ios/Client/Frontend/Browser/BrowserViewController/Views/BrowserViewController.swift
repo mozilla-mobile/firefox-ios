@@ -1383,8 +1383,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        // TODO: - Replace with feature flag
-        if true {
+        if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled {
             view.addSubview(swipeUpTabWebViewPreview)
         }
         if isSwipingTabsEnabled {
@@ -1415,7 +1414,9 @@ class BrowserViewController: UIViewController,
                 return self?.newTabSettings
             }
         }
-        swipeUpTabWebViewPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
+        if swipeGestureFeatureFlagProvider.isAnyGestureEnabled {
+            swipeUpTabWebViewPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -1658,8 +1659,7 @@ class BrowserViewController: UIViewController,
             ])
         }
 
-        if true {
-            // TODO: - Gate behind feature flag
+        if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled {
             swipeUpTabWebViewPreview.pinToSuperview()
         }
         if isSnapKitRemovalEnabled {
