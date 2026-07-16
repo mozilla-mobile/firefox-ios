@@ -9,10 +9,8 @@ import Shared
 
 typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
 
-/// Used only for sponsored tiles content and telemetry. This is aiming to be a temporary API
-/// as we'll migrate to using A-S for this at some point in 2025
 protocol UnifiedAdsProviderInterface: Sendable {
-    /// Fetch tiles either from cache or backend
+    /// Fetch unififed ads tiles
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
     ///   - completion: Returns an array of Tiles, can be empty
@@ -25,14 +23,9 @@ extension UnifiedAdsProviderInterface {
     }
 }
 
-final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable, Sendable {
+final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
     private let adsClient: MozAdsClient
-    private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
-    static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
-    let maxCacheAge: Shared.Timestamp = OneMinuteInMilliseconds * 30
-    let urlCache: URLCache
     private let logger: Logger
-    private let networking: UnifiedTileNetworking
 
     enum Error: Swift.Error {
         case noDataAvailable
@@ -50,14 +43,10 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
 
     init(
         adsClientFactory: MozAdsClientFactory = DefaultMozAdsClientFactory(),
-        networking: UnifiedTileNetworking = DefaultUnifiedTileNetwork(with: NetworkUtils.defaultURLSession()),
-        urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {
         self.adsClient = adsClientFactory.createClient()
         self.logger = logger
-        self.networking = networking
-        self.urlCache = urlCache
     }
 
     private struct AdPlacement: Codable {
@@ -72,80 +61,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
 
     func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
                     completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        if featureFlagsProvider.isEnabled(.adsClient) {
-            fetchTilesWithAdsClient(completion: completion)
-        } else {
-            guard let request = buildRequest() else {
-                completion(.failure(Error.noDataAvailable))
-                return
-            }
-
-            // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
-            var cacheRequest = request
-            cacheRequest.httpBody = nil
-            if let cachedData = findCachedData(for: cacheRequest, timestamp: timestamp, maxCacheAge: maxCacheAge) {
-                decode(data: cachedData, completion: completion)
-            } else {
-                fetchTiles(request: request, completion: completion)
-            }
-        }
-    }
-
-    private func buildRequest() -> URLRequest? {
-        guard let resourceEndpoint = resourceEndpoint else {
-            logger.log("The resource URL is invalid: \(String(describing: resourceEndpoint))",
-                       level: .warning,
-                       category: .homepage)
-            return nil
-        }
-
-        guard let contextId = TelemetryContextualIdentifier.contextId else {
-            logger.log("No context id: \(String(describing: TelemetryContextualIdentifier.contextId))",
-                       level: .warning,
-                       category: .homepage)
-            return nil
-        }
-
-        let requestBody = RequestBody(
-            context_id: contextId,
-            placements: TileOrder.placementOrder.map { AdPlacement(placement: $0, count: 1) }
-        )
-
-        var request = URLRequest(url: resourceEndpoint)
-        request.httpMethod = HTTPMethod.post.rawValue
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.cachePolicy = .reloadIgnoringLocalCacheData
-
-        do {
-            let jsonData = try JSONEncoder().encode(requestBody)
-            request.httpBody = jsonData
-        } catch {
-            logger.log("The request body is invalid: \(String(describing: requestBody))",
-                       level: .warning,
-                       category: .homepage)
-            return nil
-        }
-        return request
-    }
-
-    private func fetchTiles(request: URLRequest, completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        networking.data(from: request) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let result):
-                // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
-                var cacheRequest = request
-                cacheRequest.httpBody = nil
-                self.cache(response: result.response, for: cacheRequest, with: result.data)
-                self.decode(data: result.data, completion: completion)
-            case .failure:
-                completion(.failure(Error.noDataAvailable))
-            }
-        }
-    }
-
-    private func fetchTilesWithAdsClient(completion: @escaping (UnifiedTileResult) -> Void) {
-        logger.log("Fetching tiles with ads client", level: .info, category: .homepage)
+        logger.log("Fetching tiles with ads client", level: .debug, category: .homepage)
         let mozAdRequests = TileOrder.placementOrder.map {
             MozAdsPlacementRequest(iabContent: nil, placementId: $0)
         }
@@ -165,32 +81,5 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
-    }
-
-    private func decode(data: Data, completion: @escaping (UnifiedTileResult) -> Void) {
-        do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let tilesDictionary = try decoder.decode([String: [UnifiedTile]].self, from: data)
-            let tiles = TileOrder.placementOrder.compactMap { tilesDictionary[$0] }.flatMap { $0 }
-
-            guard !tiles.isEmpty else {
-                completion(.failure(Error.noDataAvailable))
-                return
-            }
-            completion(.success(tiles))
-        } catch let error {
-            logger.log("Unable to parse with error: \(error)",
-                       level: .warning,
-                       category: .homepage)
-            completion(.failure(Error.noDataAvailable))
-        }
-    }
-
-    private var resourceEndpoint: URL? {
-        if CoreBuildFlags.isUsingStagingUnifiedAdsAPI {
-            return URL(string: UnifiedAdsProvider.stagingResourceEndpoint)
-        }
-        return URL(string: UnifiedAdsProvider.prodResourceEndpoint)
     }
 }

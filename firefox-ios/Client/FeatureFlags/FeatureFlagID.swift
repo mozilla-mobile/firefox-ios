@@ -12,14 +12,12 @@ enum FeatureFlagID: String, CaseIterable {
     case addressBarGestureToOpenTabTrayCloseTab
     case addressBarGestureToOpenTabTrayInteractive
     case addressBarGestureToOpenTabTraySwipe
-    case adsClient
     case aiKillSwitch
     case appearanceMenu
     case badCertDomainErrorPage
     case bookmarksSearchFeature
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
-    case deeplinkOverlay
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
@@ -40,7 +38,6 @@ enum FeatureFlagID: String, CaseIterable {
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
-    case needsReloadRefactor
     case newBookmarkFolderTree
     case novaDesign
     case noInternetConnectionErrorPage
@@ -100,14 +97,12 @@ enum FeatureFlagID: String, CaseIterable {
                 .addressBarGestureToOpenTabTrayCloseTab,
                 .addressBarGestureToOpenTabTrayInteractive,
                 .addressBarGestureToOpenTabTraySwipe,
-                .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
-                .deeplinkOverlay,
                 .downloadLiveActivities,
                 .googleLens,
                 .homepageAddShortcutTile,
@@ -120,7 +115,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
                 .nativeErrorPage,
-                .needsReloadRefactor,
                 .newBookmarkFolderTree,
                 .novaDesign,
                 .noInternetConnectionErrorPage,
