@@ -3367,8 +3367,8 @@ class BrowserViewController: UIViewController,
         let availableContentHeight = getAvailableHomepageContentHeight()
         let availableWallpaperHeight = getAvailableHomepageWallpaperHeight(availableContentHeight: availableContentHeight)
 
-        guard homepageState.availableContentHeight != availableContentHeight
-              || homepageState.availableWallpaperHeight != availableWallpaperHeight
+        guard homepageState.wallpaperState.availableContentHeight != availableContentHeight
+              || homepageState.wallpaperState.availableWallpaperHeight != availableWallpaperHeight
         else { return }
 
         store.dispatch(

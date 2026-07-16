@@ -931,7 +931,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         let collectionViewHeight = environment.container.contentSize.height
 
-        let availableContentHeight = homepageState?.availableContentHeight ?? 0
+        let availableContentHeight = homepageState?.wallpaperState.availableContentHeight ?? 0
         let height = availableContentHeight > 0 ? availableContentHeight : collectionViewHeight
 
         let headerLogoHeight = getHeaderLogoHeight(environment: environment)
