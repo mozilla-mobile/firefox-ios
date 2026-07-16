@@ -4,6 +4,9 @@
 /* Accessibility label describing the Google Lens button on the address toolbar that prompts a menu to allow the user to take a new photo or select an existing photo from their photo library to search with Google Lens. */
 "AddressToolbar.GoogleLens.A11yLabel.v153.v2" = "Resmi Google Lens ile ara";
 
+/* Action title in the Google Lens address toolbar context menu. Opens the photo library picker so the user can choose an existing photo to search with Google Lens. */
+"AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle.v153" = "Fotoğraf arşivi";
+
 /* Action title in the Google Lens address toolbar context menu. Opens the camera so the user can take a new photo to search with Google Lens. */
 "AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle.v153" = "Fotoğraf çek";
 

@@ -80,7 +80,7 @@
 "Back" = "戻る";
 
 /* Block pop-up windows setting */
-"Block Pop-up Windows" = "ポップアップをブロック";
+"Block Pop-up Windows" = "ポップアップをブロックする";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "タイトル";
@@ -1418,7 +1418,7 @@
 "Settings.NewTab.TopSectionNameFooter" = "新規タブを開いたときに読み込む内容を選択します";
 
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
-"Settings.NoImageModeBlockImages.Label.v99" = "画像をブロック";
+"Settings.NoImageModeBlockImages.Label.v99" = "画像をブロックする";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Firefox 起動時";
@@ -1472,7 +1472,7 @@
 "Settings.ShowLinkPreviews.StatusV2" = "リンクを長押しした時";
 
 /* Title of setting to enable link previews when long-pressing links. */
-"Settings.ShowLinkPreviews.Title" = "リンク先のプレビューを表示";
+"Settings.ShowLinkPreviews.Title" = "リンク先のプレビューを表示する";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "アプリメニューに表示する";

@@ -1,21 +1,21 @@
 /* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
-"Add to Bookmarks" = "أضِف إلى العلامات";
+"Add to Bookmarks" = "إضافة إلى العلامات المرجعية";
 
 /* Label for preview action on Tab Tray Tab to close the current tab */
-"Close Tab" = "أغلق اللسان";
+"Close Tab" = "إغلاق التبويب";
 
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
-"Copy URL" = "انسخ الرابط";
+"Copy URL" = "نسخ الرابط";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
-"Menu.SendLinkToDevice" = "أرسِل الرابط إلى جهاز";
+"Menu.SendLinkToDevice" = "إرسال الرابط إلى جهاز";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
-"Open Last Bookmark" = "افتح العلامة الأخيرة";
+"Open Last Bookmark" = "فتح آخر علامة مرجعية";
 
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
-"Send to Device" = "أرسِل إلى جهاز";
+"Send to Device" = "إرسال إلى جهاز";
 
 /* Label for preview action on Tab Tray Tab to remove current tab from Bookmarks */
-"TabPeek.RemoveBookmark.v146" = "أزل العلامة";
+"TabPeek.RemoveBookmark.v146" = "إزالة العلامة المرجعية";
 

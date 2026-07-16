@@ -34,6 +34,39 @@
 /* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
 "WorldCup.CountryPicker.Title.v151" = "តាមដានក្រុមរបស់អ្នក";
 
+/* The title of the Group C group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupC.Title.v151" = "ក្រុម ​C";
+
+/* The title of the Group D group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupD.Title.v151" = "ក្រុម ​D";
+
+/* The title of the Group E group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupE.Title.v151" = "ក្រុម ​E";
+
+/* The title of the Group F group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupF.Title.v151" = "ក្រុម ​F";
+
+/* The title of the Group G group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupG.Title.v151" = "ក្រុម ​G";
+
+/* The title of the Group H group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupH.Title.v151" = "ក្រុម ​H";
+
+/* The title of the Group I group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupI.Title.v151" = "ក្រុម ​I";
+
+/* The title of the Group J group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupJ.Title.v151" = "ក្រុម ​J";
+
+/* The title of the Group K group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupK.Title.v151" = "ក្រុម ​K";
+
+/* The title of the Group L group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupL.Title.v151" = "ក្រុម ​L";
+
+/* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "ប្ដូរក្រុម";
+
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "ពេញម៉ោង";
 
