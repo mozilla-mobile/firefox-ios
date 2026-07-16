@@ -47,6 +47,30 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(cameraTelemetry.closedCalled, 0)
     }
 
+    func test_start_whenPermissionNotDetermined_doesNotRecordShownBeforeResponse() async {
+        let requestStarted = expectation(description: "Camera access request started")
+        var accessContinuation: CheckedContinuation<Bool, Never>?
+        let cameraTelemetry = MockSystemCameraTelemetry()
+        let requestCameraAccess: () async -> Bool = {
+            await withCheckedContinuation { continuation in
+                accessContinuation = continuation
+                requestStarted.fulfill()
+            }
+        }
+        let subject = createSubject(cameraAuthorizationStatus: .notDetermined,
+                                    requestCameraAccess: requestCameraAccess,
+                                    cameraTelemetry: cameraTelemetry)
+
+        subject.start()
+        await fulfillment(of: [requestStarted], timeout: 1)
+
+        XCTAssertEqual(cameraTelemetry.shownCalled, 0)
+        XCTAssertEqual(cameraTelemetry.closedCalled, 0)
+
+        accessContinuation?.resume(returning: false)
+        await Task.yield()
+    }
+
     func test_didFinishPicking_withImage_callsCompletionAndNotifiesParent() {
         let expectedImage = UIImage()
         var completionImage: UIImage?
@@ -102,11 +126,24 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(cameraTelemetry.savedClosedReason, .googleLens)
     }
 
+    func test_dismissCameraInterface_whenPermissionDenied_doesNotRecordCameraLifecycle() {
+        let cameraTelemetry = MockSystemCameraTelemetry()
+        let subject = createSubject(cameraAuthorizationStatus: .denied,
+                                    cameraTelemetry: cameraTelemetry)
+        subject.start()
+
+        subject.dismissCameraInterface()
+
+        XCTAssertEqual(cameraTelemetry.shownCalled, 0)
+        XCTAssertEqual(cameraTelemetry.closedCalled, 0)
+    }
+
     func test_dismissCameraInterfaceIfAccessRefused_whenRefused_dismissesAndFinishesWithNil() async {
         var completionCalled = 0
         var completionImage: UIImage?
         let cameraTelemetry = MockSystemCameraTelemetry()
-        let subject = createSubject(requestCameraAccess: { false },
+        let subject = createSubject(cameraAuthorizationStatus: .notDetermined,
+                                    requestCameraAccess: { false },
                                     cameraTelemetry: cameraTelemetry,
                                     onComplete: { image in
             completionCalled += 1
@@ -122,6 +159,8 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(cameraTelemetry.permissionRespondedCalled, 1)
         XCTAssertEqual(cameraTelemetry.savedReason, .googleLens)
         XCTAssertEqual(cameraTelemetry.savedGranted, false)
+        XCTAssertEqual(cameraTelemetry.shownCalled, 0)
+        XCTAssertEqual(cameraTelemetry.closedCalled, 0)
     }
 
     func test_dismissCameraInterfaceIfAccessRefused_whenGranted_keepsInterfacePresented() async {
@@ -139,6 +178,13 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(cameraTelemetry.permissionRespondedCalled, 1)
         XCTAssertEqual(cameraTelemetry.savedReason, .googleLens)
         XCTAssertEqual(cameraTelemetry.savedGranted, true)
+        XCTAssertEqual(cameraTelemetry.shownCalled, 1)
+        XCTAssertEqual(cameraTelemetry.savedShownReason, .googleLens)
+
+        subject.dismissCameraInterface()
+
+        XCTAssertEqual(cameraTelemetry.closedCalled, 1)
+        XCTAssertEqual(cameraTelemetry.savedClosedReason, .googleLens)
     }
 
     func test_didCancel_callsCompletionWithNilAndNotifiesParent() {
@@ -169,7 +215,7 @@ final class CameraCoordinatorTests: XCTestCase {
         let subject = CameraCoordinator(parentCoordinatorDelegate: parentCoordinator,
                                         router: router,
                                         isCameraAvailable: isCameraAvailable,
-                                        cameraAuthorizationStatus: cameraAuthorizationStatus,
+                                        cameraAuthorizationStatus: { cameraAuthorizationStatus },
                                         requestCameraAccess: requestCameraAccess,
                                         cameraReason: .googleLens,
                                         cameraTelemetry: cameraTelemetry,
