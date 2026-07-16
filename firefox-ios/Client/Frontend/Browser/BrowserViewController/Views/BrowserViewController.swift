@@ -1377,7 +1377,8 @@ class BrowserViewController: UIViewController,
             tabManager: tabManager,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper,
-            prefs: profile.prefs
+            prefs: profile.prefs,
+            swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
         )
         tabSwipeGestureHandler?.delegate = self
     }

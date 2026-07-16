@@ -8,7 +8,7 @@ import Redux
 import Shared
 
 @MainActor
-final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber, FeatureFlaggable {
+final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber {
     /// Delegate protocol for handling address bar pan gesture events.
     /// Allows external objects to respond to swipe gesture state changes during tab switching.
     protocol Delegate: AnyObject {
@@ -57,6 +57,7 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
     private var homepageScreenshot: UIImage?
     private var toolbarState: ToolbarState?
     private let prefs: Prefs
+    private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
     private var isRTL: Bool {
         return UIView.userInterfaceLayoutDirection(
@@ -73,7 +74,8 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
         tabManager: TabManager,
         windowUUID: WindowUUID,
         screenshotHelper: ScreenshotHelper?,
-        prefs: Prefs
+        prefs: Prefs,
+        swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
     ) {
         self.addressToolbarContainer = addressToolbarContainer
         self.contentContainer = contentContainer
@@ -83,6 +85,7 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
         self.screenshotHelper = screenshotHelper
         self.statusBarOverlay = statusBarOverlay
         self.prefs = prefs
+        self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
         super.init()
         subscribeToRedux()
         setupGesture()
@@ -102,7 +105,9 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
 
     private func setupGesture() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        panGesture.delegate = self
+        if swipeGestureFeatureFlagProvider.isAnyGestureEnabled {
+            panGesture.delegate = self
+        }
         addressToolbarContainer.addGestureRecognizer(panGesture)
         panGestureRecognizer = panGesture
     }
