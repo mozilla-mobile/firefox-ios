@@ -31,8 +31,33 @@ final class MainActorCachedValueTests: XCTestCase {
         testCounter(counter, expectedValue: 1)
     }
 
+    func testMainActorCachedValue_multipleAsyncCalls_onlyEvluateOnMainThread() {
+        let expectation = XCTestExpectation(description: "Completed")
+        expectation.expectedFulfillmentCount = 5
+        let evaluation: @MainActor @Sendable () -> String = {
+            XCTAssert(Thread.isMainThread)
+            return "value"
+        }
+
+        let cachedValue = MainActorCachedValue(evaluation)
+
+        let callCount = 5
+        for x in 0..<callCount {
+            // Alternate dispatches between background and main queue
+            // We expect everything to ultimately resolve on MT
+            let queue = x % 2 == 0 ? DispatchQueue.global() : DispatchQueue.main
+            queue.async {
+                XCTAssertEqual(cachedValue.value, "value")
+                expectation.fulfill()
+            }
+        }
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
     func testMainActorCachedValue_multipleAsyncCalls_doNotDeadlock() {
         let expectation = XCTestExpectation(description: "Completed")
+        expectation.expectedFulfillmentCount = 5
         let delay: TimeInterval = 0.25
         let evaluation: @MainActor @Sendable () -> String = {
             // For this test, delay evaluation to coerce
@@ -44,17 +69,10 @@ final class MainActorCachedValueTests: XCTestCase {
         let cachedValue = MainActorCachedValue(evaluation)
 
         let callCount = 5
-        let lock = NSLock()
-        nonisolated(unsafe) var resolved = 0
         for _ in 0..<callCount {
             DispatchQueue.global().async {
                 XCTAssertEqual(cachedValue.value, "value")
-                lock.lock()
-                resolved += 1
-                if resolved == callCount {
-                    expectation.fulfill()
-                }
-                lock.unlock()
+                expectation.fulfill()
             }
         }
 
