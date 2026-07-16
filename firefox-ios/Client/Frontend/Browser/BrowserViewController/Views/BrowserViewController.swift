@@ -296,18 +296,6 @@ class BrowserViewController: UIViewController,
         return toolbarHelper.isSwipingTabsEnabled
     }
 
-    var isNativeErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
-    }
-
-    var isNICErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
-    }
-
-    var isBadCertDomainErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
-    }
-
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
@@ -340,10 +328,6 @@ class BrowserViewController: UIViewController,
 
     var isAppStoreReviewTriggerEnabled: Bool {
         return featureFlagsProvider.isEnabled(.improvedAppStoreReviewTriggerFeature)
-    }
-
-    var isWaybackEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isWaybackEnabled
     }
 
     // MARK: Computed vars
@@ -2243,9 +2227,12 @@ class BrowserViewController: UIViewController,
             else { return false }
             return WaybackCodes.isWaybackCode(code)
         }()
-        let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
-        let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isBadCertDomainErrorURL(url)
-        let isShowWayback = isWaybackErrorCode && isWaybackEnabled
+        let noInternetConnectionEnabled = isNICErrorCode &&
+            NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
+        let isCertificateError = NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled &&
+            NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isShowWayback = isWaybackErrorCode &&
+            NativeErrorPageFeatureFlag().isWaybackEnabled
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
