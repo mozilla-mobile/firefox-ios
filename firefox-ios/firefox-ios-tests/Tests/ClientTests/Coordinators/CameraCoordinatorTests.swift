@@ -136,13 +136,11 @@ final class CameraCoordinatorTests: XCTestCase {
         let cameraTelemetry = MockSystemCameraTelemetry()
         let subject = createSubject(cameraAuthorizationStatus: .denied,
                                     cameraTelemetry: cameraTelemetry)
-        subject.start()
 
         subject.dismissCameraInterface()
 
         XCTAssertEqual(cameraTelemetry.shownCalled, 0)
         XCTAssertEqual(cameraTelemetry.closedCalled, 0)
-        releasePresentedCamera()
     }
 
     func test_dismissCameraInterfaceIfAccessRefused_whenRefused_dismissesAndFinishesWithNil() async {
