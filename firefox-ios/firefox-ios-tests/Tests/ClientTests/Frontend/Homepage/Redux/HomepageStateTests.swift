@@ -45,6 +45,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(initialState.wallpaperState.availableWallpaperHeight, 0)
     }
 
+    // swiftlint:disable line_length
     @MainActor
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
@@ -127,6 +128,8 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.wallpaperState.availableContentHeight, initialState.wallpaperState.availableContentHeight)
         XCTAssertEqual(newState.wallpaperState.availableWallpaperHeight, initialState.wallpaperState.availableWallpaperHeight)
     }
+
+    // swiftlint:enable line_length
 
     @MainActor
     func test_handleAvailableContentHeightChangeAction_returnsExpectedState() {
