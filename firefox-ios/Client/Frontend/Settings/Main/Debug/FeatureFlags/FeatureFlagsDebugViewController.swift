@@ -193,13 +193,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .needsReloadRefactor,
-                titleText: format(string: "Needs Reload Refactor"),
-                statusText: format(string: "Toggle to enable the needs reload refactor")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .newBookmarkFolderTree,
                 titleText: format(string: "New Bookmarks Folder Tree"),
                 statusText: format(string: "Toggle to use new bookmarks folder tree UI")

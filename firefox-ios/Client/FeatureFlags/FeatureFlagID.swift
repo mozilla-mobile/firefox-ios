@@ -38,7 +38,6 @@ enum FeatureFlagID: String, CaseIterable {
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
-    case needsReloadRefactor
     case newBookmarkFolderTree
     case novaDesign
     case noInternetConnectionErrorPage
@@ -116,7 +115,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
                 .nativeErrorPage,
-                .needsReloadRefactor,
                 .newBookmarkFolderTree,
                 .novaDesign,
                 .noInternetConnectionErrorPage,

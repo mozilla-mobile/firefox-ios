@@ -737,18 +737,11 @@ class Tab: NSObject,
         }
 
         if let webView, webView.url != nil {
-            // FXIOS-14783: Experimentation on removing the isAboutHome check
-            // isAboutHome: Do not reload from origin for homepage internal URLs should not be needed anymore
-            let isAboutHome = InternalURL(url)?.isAboutHomeURL ?? false
-            let experimentEnabled = featureFlagsProvider.isEnabled(.needsReloadRefactor)
-
-            if experimentEnabled || !isAboutHome {
-                webView.reloadFromOrigin()
-                logger.log("Reloaded zombified tab from origin",
-                           level: .debug,
-                           category: .tabs)
-                return
-            }
+            webView.reloadFromOrigin()
+            logger.log("Reloaded zombified tab from origin",
+                       level: .debug,
+                       category: .tabs)
+            return
         }
 
         if let webView = self.webView {
