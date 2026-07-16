@@ -624,11 +624,11 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
                                  destinationURL: URL? = nil,
                                  isNativeErrorPage: Bool? = nil,
                                  for actionType: GeneralBrowserActionType) -> GeneralBrowserAction {
-            return  GeneralBrowserAction(selectedTabURL: selectedTabURL,
-                                         destinationURL: destinationURL,
-                                         isNativeErrorPage: isNativeErrorPage,
-                                         windowUUID: .XCTestDefaultUUID,
-                                         actionType: actionType)
+        return  GeneralBrowserAction(selectedTabURL: selectedTabURL,
+                                     destinationURL: destinationURL,
+                                     isNativeErrorPage: isNativeErrorPage,
+                                     windowUUID: .XCTestDefaultUUID,
+                                     actionType: actionType)
         }
 
     /// We need to set up the state for the homepage search bar in order to test method that relies on this state
