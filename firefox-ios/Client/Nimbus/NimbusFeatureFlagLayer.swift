@@ -48,9 +48,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
 
-        case .appearanceMenu:
-            return checkAppearanceMenuFeature()
-
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
 
@@ -324,11 +321,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkAddressAutofillEditing() -> Bool {
         let config = nimbus.features.addressAutofillEdit.value()
 
-        return config.status
-    }
-
-    private func checkAppearanceMenuFeature() -> Bool {
-        let config = nimbus.features.appearanceMenuFeature.value()
         return config.status
     }
 

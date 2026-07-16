@@ -73,13 +73,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .appearanceMenu,
-                titleText: format(string: "Appearance Menu"),
-                statusText: format(string: "Toggle to show the new appearance menu")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .httpsUpgrade,
                 titleText: format(string: "Automatic HTTPS upgrade"),
                 statusText: format(string: "Toggle to enable automatic HTTPS upgrade.")
