@@ -296,7 +296,6 @@
         "SettingsTests\/testImageOnOff_tabTrayExperimentOn()",
         "SettingsTests\/testSettingsOptionSubtitles()",
         "SettingsTests\/testSettingsOptionSubtitles_TAE()",
-        "ShareMenuTests",
         "SiteLoadTest",
         "SyncUITests\/testAccountManagementPage()",
         "TabTraySearchTabsTests\/testSearchTabs()",
