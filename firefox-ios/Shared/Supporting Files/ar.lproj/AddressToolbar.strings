@@ -1,3 +1,15 @@
+/* Label for button in the address toolbar, that cancels editing the address field when tapped. */
+"AddressToolbar.CancelEdit.Label.v138" = "إلغاء";
+
+/* Accessibility label describing the Google Lens button on the address toolbar that prompts a menu to allow the user to take a new photo or select an existing photo from their photo library to search with Google Lens. */
+"AddressToolbar.GoogleLens.A11yLabel.v153.v2" = "البحث بالصورة باستخدام عدسة جوجل";
+
+/* Action title in the Google Lens address toolbar context menu. Opens the photo library picker so the user can choose an existing photo to search with Google Lens. */
+"AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle.v153" = "مكتبة الصور";
+
+/* Action title in the Google Lens address toolbar context menu. Opens the camera so the user can take a new photo to search with Google Lens. */
+"AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle.v153" = "التقط صورة";
+
 /* Accessibility label for the address field in the address toolbar. */
 "AddressToolbar.Location.A11y.Label.v128" = "ابحث عن أو أدخل عنوانا";
 
@@ -6,6 +18,9 @@
 
 /* Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings. */
 "AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "إعدادات الخصوصية والأمان";
+
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does. */
+"AddressToolbar.SearchEngine.A11y.Hint.v133" = "يفتح قائمة اختيار محرك البحث";
 
 /* Accessibility label for the search engine icon in the address bar. %@ is the name of the search engine (e.g. Google). */
 "AddressToolbar.SearchEngine.A11y.Label.v128" = "محرك البحث: %@";

@@ -16,3 +16,6 @@
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
 "LibraryPanel.History.LastTwentyFourHoursOption.v138" = "آخر 24 ساعة";
 
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "يحذف السجل (بما في ذلك السجل المُزامَن من الأجهزة الأخرى)، وملفات تعريف الارتباط، وبيانات التصفح الأخرى.";
+

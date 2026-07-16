@@ -89,7 +89,7 @@
 "Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Uw spraak, vragen en antwoorden worden nooit opgeslagen.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
-"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Snelle antwoorden";
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Snelle Antwoorden";
 
 /* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
 "Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "AI-AANGEDREVEN FUNCTIES";
