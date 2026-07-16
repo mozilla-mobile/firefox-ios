@@ -35,7 +35,7 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     }
 
     public init(state: State,
-                reducer: @escaping Reducer<State>,
+                reducer: Reducer<State>,
                 middlewares: [Middleware<State>] = [],
                 logger: Logger = DefaultLogger.shared) {
         self.state = state
@@ -113,10 +113,9 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         let newState: State
         switch action {
         case .legacy(let legacyAction):
-            newState = reducer(state, legacyAction)
-        case .modern:
-            // TODO: FXIOS-16140 Part 2 - Reducer migration
-            // newState = reducer.modernReducer(state, modernAction, windowUUID)
+            newState = reducer.legacyReducer(state, legacyAction)
+        case .modern(let modernAction):
+             newState = reducer.modernReducer(state, modernAction, windowUUID)
             return
         }
 
