@@ -1018,7 +1018,7 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-        if isNativeErrorPageEnabled {
+        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
             store.dispatch(NativeErrorPageAction(
                 networkError: nsError,
                 windowUUID: windowUUID,
@@ -1133,12 +1133,13 @@ extension BrowserViewController: WKNavigationDelegate {
                 )
                 let isWaybackCode = WaybackCodes.isWaybackCode(error.code)
 
-                let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
+                let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
+                    error.code == noInternetErrorCode
                 let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
                     for: error,
-                    isOtherErrorPagesEnabled: isBadCertDomainErrorPageEnabled
+                    isOtherErrorPagesEnabled: NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
                 )
-                let isShowWayback = isWaybackEnabled && isWaybackCode
+                let isShowWayback = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode
 
                 if isNoInternetError || isCertificateError || isShowWayback {
                     if isCertificateError {
