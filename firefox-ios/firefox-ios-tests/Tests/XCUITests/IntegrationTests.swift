@@ -138,7 +138,6 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895148
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
     // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncBookmarkDesktop() {
