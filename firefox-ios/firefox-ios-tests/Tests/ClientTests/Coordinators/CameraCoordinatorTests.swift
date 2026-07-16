@@ -83,8 +83,9 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertIdentical(completionImage, expectedImage)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
-        XCTAssertEqual(cameraTelemetry.photoSelectedCalled, 1)
-        XCTAssertEqual(cameraTelemetry.savedPhotoSelectedReason, .googleLens)
+        XCTAssertEqual(cameraTelemetry.closedCalled, 1)
+        XCTAssertEqual(cameraTelemetry.savedClosedReason, .googleLens)
+        XCTAssertEqual(cameraTelemetry.savedClosedPhotoSelected, true)
     }
 
     func test_didFinishPicking_withoutImage_callsCompletionWithNil() {
@@ -124,6 +125,7 @@ final class CameraCoordinatorTests: XCTestCase {
         XCTAssertEqual(cameraTelemetry.savedShownReason, .googleLens)
         XCTAssertEqual(cameraTelemetry.closedCalled, 1)
         XCTAssertEqual(cameraTelemetry.savedClosedReason, .googleLens)
+        XCTAssertEqual(cameraTelemetry.savedClosedPhotoSelected, false)
     }
 
     func test_dismissCameraInterface_whenPermissionDenied_doesNotRecordCameraLifecycle() {
@@ -185,6 +187,7 @@ final class CameraCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(cameraTelemetry.closedCalled, 1)
         XCTAssertEqual(cameraTelemetry.savedClosedReason, .googleLens)
+        XCTAssertEqual(cameraTelemetry.savedClosedPhotoSelected, false)
     }
 
     func test_didCancel_callsCompletionWithNilAndNotifiesParent() {

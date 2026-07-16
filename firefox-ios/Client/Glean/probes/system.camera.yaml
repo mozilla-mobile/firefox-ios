@@ -31,6 +31,10 @@ system.camera:
         description: |
           The reason associated with the system camera interaction.
           Options are listed in the CameraReason enumeration.
+      photo_selected:
+        type: boolean
+        description: |
+          Whether the user selected a photo before the camera interface closed.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
     data_reviews:
@@ -49,19 +53,6 @@ system.camera:
         description: |
           Whether the user granted camera access in response to the system
           permission request.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  photo_selected:
-    type: event
-    description: |
-      Recorded when the user selects Use Photo from the system camera interface.
-    extra_keys:
-      reason: *camera_reason_extra
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
     data_reviews:

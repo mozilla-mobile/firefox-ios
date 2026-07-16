@@ -103,9 +103,9 @@ final class CameraCoordinator: BaseCoordinator,
         finish(with: nil)
     }
 
-    private func finish(with image: UIImage?) {
+    private func finish(with image: UIImage?, photoSelected: Bool = false) {
         if isCameraAvailable && cameraAuthorizationStatus() == .authorized {
-            cameraTelemetry.closed(reason: cameraReason)
+            cameraTelemetry.closed(reason: cameraReason, photoSelected: photoSelected)
         }
         onComplete(image)
         parentCoordinatorDelegate?.didFinish(from: self)
@@ -114,9 +114,8 @@ final class CameraCoordinator: BaseCoordinator,
     // MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        cameraTelemetry.photoSelected(reason: cameraReason)
         router.dismiss(animated: true)
-        finish(with: info[.originalImage] as? UIImage)
+        finish(with: info[.originalImage] as? UIImage, photoSelected: true)
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

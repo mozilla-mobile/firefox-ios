@@ -43,15 +43,12 @@ final class PhotoPickerCoordinator: BaseCoordinator, PHPickerViewControllerDeleg
 
     // MARK: - PHPickerViewControllerDelegate
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        if !results.isEmpty {
-            photoPickerTelemetry.photoSelected(reason: photoPickerReason)
-        }
         router.dismiss(animated: true)
         finish(with: results)
     }
 
     private func finish(with results: [PHPickerResult]) {
-        photoPickerTelemetry.closed(reason: photoPickerReason)
+        photoPickerTelemetry.closed(reason: photoPickerReason, photoSelected: !results.isEmpty)
         onComplete(results)
         parentCoordinatorDelegate?.didFinish(from: self)
     }

@@ -31,19 +31,10 @@ system.photo_picker:
         description: |
           The reason associated with the system photo picker interaction.
           Options are listed in the PhotoPickerReason enumeration.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  photo_selected:
-    type: event
-    description: |
-      Recorded when the user selects a photo from the system photo picker.
-    extra_keys:
-      reason: *photo_picker_reason_extra
+      photo_selected:
+        type: boolean
+        description: |
+          Whether the user selected a photo before the photo picker closed.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
     data_reviews:

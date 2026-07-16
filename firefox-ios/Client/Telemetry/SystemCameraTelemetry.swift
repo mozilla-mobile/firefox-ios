@@ -6,9 +6,8 @@ import Glean
 
 protocol SystemCameraTelemetryProtocol {
     func shown(reason: CameraReason)
-    func closed(reason: CameraReason)
+    func closed(reason: CameraReason, photoSelected: Bool)
     func permissionResponded(reason: CameraReason, granted: Bool)
-    func photoSelected(reason: CameraReason)
 }
 
 struct SystemCameraTelemetry: SystemCameraTelemetryProtocol {
@@ -23,8 +22,11 @@ struct SystemCameraTelemetry: SystemCameraTelemetryProtocol {
         gleanWrapper.recordEvent(for: GleanMetrics.SystemCamera.shown, extras: extra)
     }
 
-    func closed(reason: CameraReason) {
-        let extra = GleanMetrics.SystemCamera.ClosedExtra(reason: reason.rawValue)
+    func closed(reason: CameraReason, photoSelected: Bool) {
+        let extra = GleanMetrics.SystemCamera.ClosedExtra(
+            photoSelected: photoSelected,
+            reason: reason.rawValue
+        )
         gleanWrapper.recordEvent(for: GleanMetrics.SystemCamera.closed, extras: extra)
     }
 
@@ -34,10 +36,5 @@ struct SystemCameraTelemetry: SystemCameraTelemetryProtocol {
             reason: reason.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.SystemCamera.permissionResponded, extras: extra)
-    }
-
-    func photoSelected(reason: CameraReason) {
-        let extra = GleanMetrics.SystemCamera.PhotoSelectedExtra(reason: reason.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.SystemCamera.photoSelected, extras: extra)
     }
 }

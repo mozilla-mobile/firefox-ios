@@ -34,30 +34,17 @@ final class SystemPhotoPickerTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func testClosed_recordsEventAndReason() throws {
+    func testClosed_recordsEventAndExtras() throws {
         typealias EventExtrasType = GleanMetrics.SystemPhotoPicker.ClosedExtra
         let event = GleanMetrics.SystemPhotoPicker.closed
         let subject = SystemPhotoPickerTelemetry(gleanWrapper: gleanWrapper)
 
-        subject.closed(reason: .googleLens)
+        subject.closed(reason: .googleLens, photoSelected: true)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.reason, PhotoPickerReason.googleLens.rawValue)
-        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-    }
-
-    func testPhotoSelected_recordsEventAndReason() throws {
-        typealias EventExtrasType = GleanMetrics.SystemPhotoPicker.PhotoSelectedExtra
-        let event = GleanMetrics.SystemPhotoPicker.photoSelected
-        let subject = SystemPhotoPickerTelemetry(gleanWrapper: gleanWrapper)
-
-        subject.photoSelected(reason: .googleLens)
-
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.photoSelected, true)
         XCTAssertEqual(savedExtras.reason, PhotoPickerReason.googleLens.rawValue)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }

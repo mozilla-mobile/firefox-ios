@@ -37,7 +37,7 @@ final class PhotoPickerCoordinatorTests: XCTestCase {
         XCTAssertEqual(photoPickerTelemetry.savedShownReason, .googleLens)
     }
 
-    func test_didFinishPicking_withoutResults_doesNotRecordPhotoSelected() {
+    func test_didFinishPicking_withoutResults_recordsPhotoSelectedFalse() {
         var completionCalled = 0
         let photoPickerTelemetry = MockSystemPhotoPickerTelemetry()
         let subject = createSubject(photoPickerTelemetry: photoPickerTelemetry,
@@ -51,7 +51,7 @@ final class PhotoPickerCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.dismissCalled, 1)
         XCTAssertEqual(photoPickerTelemetry.closedCalled, 1)
         XCTAssertEqual(photoPickerTelemetry.savedClosedReason, .googleLens)
-        XCTAssertEqual(photoPickerTelemetry.photoSelectedCalled, 0)
+        XCTAssertEqual(photoPickerTelemetry.savedClosedPhotoSelected, false)
     }
 
     func test_interactiveDismissal_callsCompletionAndNotifiesParent() {
@@ -67,6 +67,7 @@ final class PhotoPickerCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(photoPickerTelemetry.closedCalled, 1)
         XCTAssertEqual(photoPickerTelemetry.savedClosedReason, .googleLens)
+        XCTAssertEqual(photoPickerTelemetry.savedClosedPhotoSelected, false)
     }
 
     // MARK: - Helper Methods

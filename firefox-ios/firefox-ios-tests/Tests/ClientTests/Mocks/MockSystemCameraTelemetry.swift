@@ -8,11 +8,10 @@ final class MockSystemCameraTelemetry: SystemCameraTelemetryProtocol {
     private(set) var shownCalled = 0
     private(set) var closedCalled = 0
     private(set) var permissionRespondedCalled = 0
-    private(set) var photoSelectedCalled = 0
     private(set) var savedShownReason: CameraReason?
     private(set) var savedClosedReason: CameraReason?
+    private(set) var savedClosedPhotoSelected: Bool?
     private(set) var savedReason: CameraReason?
-    private(set) var savedPhotoSelectedReason: CameraReason?
     private(set) var savedGranted: Bool?
 
     func shown(reason: CameraReason) {
@@ -20,19 +19,15 @@ final class MockSystemCameraTelemetry: SystemCameraTelemetryProtocol {
         savedShownReason = reason
     }
 
-    func closed(reason: CameraReason) {
+    func closed(reason: CameraReason, photoSelected: Bool) {
         closedCalled += 1
         savedClosedReason = reason
+        savedClosedPhotoSelected = photoSelected
     }
 
     func permissionResponded(reason: CameraReason, granted: Bool) {
         permissionRespondedCalled += 1
         savedReason = reason
         savedGranted = granted
-    }
-
-    func photoSelected(reason: CameraReason) {
-        photoSelectedCalled += 1
-        savedPhotoSelectedReason = reason
     }
 }
