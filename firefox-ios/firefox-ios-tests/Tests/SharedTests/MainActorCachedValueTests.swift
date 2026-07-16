@@ -8,12 +8,12 @@ import XCTest
 final class MainActorCachedValueTests: XCTestCase {
     @MainActor private final class Counter { var value = 0 }
 
+    @MainActor
     private func testCounter(_ counter: Counter, expectedValue: Int) {
-        MainActor.assumeIsolated {
-            XCTAssertEqual(counter.value, expectedValue)
-        }
+        XCTAssertEqual(counter.value, expectedValue)
     }
 
+    @MainActor
     func testMainActorCachedValue_repeatedCalls_onlyEvaluateValueOnce() {
         let counter = Counter()
 
