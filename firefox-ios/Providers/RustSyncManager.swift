@@ -590,15 +590,20 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         let deferred = Deferred<Maybe<SyncResult>>()
 
         logger.log("Syncing \(engines)", level: .info, category: .sync)
-        if let accountManager = RustFirefoxAccounts.shared.accountManager {
-            // Prefer accountState over deviceConstellation for the current
-            // device ID to avoid a possible server round-trip.
-            guard case .success(let deviceId) = accountManager.getCurrentDeviceId() else {
+        guard let accountManager = RustFirefoxAccounts.shared.accountManager else {
+            return deferred
+        }
+
+        // Prefer accountState over deviceConstellation for the current
+        // device ID to avoid a possible server round-trip. This runs off the
+        // main thread so the blocking FFI call can't hang the UI.
+        accountManager.getCurrentDeviceId { deviceIDResult in
+            guard case .success(let deviceId) = deviceIDResult else {
                 self.logger.log("Device Id could not be retrieved",
                                 level: .warning,
                                 category: .sync)
                 deferred.fill(Maybe(failure: DeviceIdError()))
-                return deferred
+                return
             }
 
             accountManager.getAccessToken(scope: OAuthScope.oldSync) { result in
