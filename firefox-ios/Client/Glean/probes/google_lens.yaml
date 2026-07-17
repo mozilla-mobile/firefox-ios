@@ -54,9 +54,9 @@ google_lens:
       Starts when the request for fetching results starts.
       Ends when the user sees the results or an error.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16313
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
+      - TBD
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -68,9 +68,9 @@ google_lens:
       Starts when the user selects the Google Lens context menu action.
       Ends when the user sees the results or an error.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16313
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
+      - TBD
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
