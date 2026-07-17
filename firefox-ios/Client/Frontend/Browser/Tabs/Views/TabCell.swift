@@ -182,17 +182,20 @@ final class TabCell: UICollectionViewCell,
     }
 
     private func updateBorder(theme: Theme, isSelected: Bool, isPrivate: Bool) {
+        borderGradientColors = nil
         layer.borderWidth = isSelected ? UX.borderWidth : 0
 
-        guard theme.isNova, isSelected else {
-            borderGradientColors = nil
-            let accent = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-            layer.borderColor = (!theme.isNova && isSelected ? accent : UIColor.clear).cgColor
+        guard isSelected else {
+            layer.borderColor = UIColor.clear.cgColor
             return
         }
 
-        borderGradientColors = theme.colors.gradientBorder.cgColors
-        setNeedsLayout()
+        if theme.isNova {
+            borderGradientColors = theme.colors.gradientBorder.cgColors
+            setNeedsLayout()
+        } else {
+            layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
+        }
     }
 
     private func gradientBorderImage(size: CGSize, colors: [CGColor]) -> UIImage {
