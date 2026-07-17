@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import LLMKit
+import Shared
 
 /// A concrete `QuickAnswersService` that records speech and emits transcription results
 /// using an underlying `TranscriptionEngine`. As well as request results from the transcription via `ResultsService` flow.
@@ -26,10 +28,14 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     /// Creates a new service with a platform-appropriate transcription engine and results service.
     init(
         engine: TranscriptionEngine? = nil,
-        resultsService: ResultsService? = nil
-    ) {
+        configFetcher: QuickAnswersConfigFetcher,
+        resultsServiceFactory: ResultsServiceFactory = DefaultResultsServiceFactory(
+            liteLLMCreator: LiteLLMCreator()
+        ),
+        prefs: Prefs
+    ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
-        self.resultsService = resultsService ?? Self.makeResultsService()
+        self.resultsService = try resultsServiceFactory.make(prefs: prefs, configFetcher: configFetcher)
     }
 
     // MARK: Speech Service
@@ -54,18 +60,15 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         state = .idle
     }
 
-    // MARK: Results Service
-    // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
-    // also remove search terminology while we are here
-
     /// Performs a search for the given transcription using the ResultsService.
-    func search(text: String) async -> Result<SearchResult, SearchResultError> {
+    func search(text: String) async -> Result<SearchResult, ResultsServiceError> {
         do {
             let result = try await resultsService.fetchResults(for: text)
             return .success(result)
         } catch {
-            // TODO: FXIOS-15198 Handle errors appropriately
-            return .failure(.unknown)
+            let error = (error as? ResultsServiceError) ?? ResultsServiceError.unknown(error.localizedDescription)
+            // TODO: FXIOS-15579 Possibly add telemetry
+            return .failure(error)
         }
     }
 
@@ -113,12 +116,5 @@ final class DefaultQuickAnswersService: QuickAnswersService {
                 authorizer: authorizer
             )
         }
-    }
-
-    private static func makeResultsService() -> ResultsService {
-        let factory = DefaultResultsServiceFactory(
-            config: QuickAnswersConfig()
-        )
-        return factory.make()
     }
 }

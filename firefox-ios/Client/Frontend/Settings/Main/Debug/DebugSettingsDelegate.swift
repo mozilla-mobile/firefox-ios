@@ -14,4 +14,5 @@ protocol DebugSettingsDelegate: AnyObject, SharedSettingsDelegate {
     func pressedOpenFiftyTabs()
     func pressedDebugFeatureFlags()
     func pressedAddShortcuts()
+    func pressedOffloadBackgroundWebViews()
 }

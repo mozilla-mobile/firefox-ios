@@ -90,7 +90,6 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         withConditions conditionTable: [String: String]
     ) -> [OnboardingKitCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
-        let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
 
         // If `NimbusMessagingHelper` creation fails, we cannot continue with
         // evaluating card triggers based on their JEXL prerequisites.
@@ -114,7 +113,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                     buttons: getOnboardingCardButtons(from: cardData.buttons),
                     multipleChoiceButtons: getOnboardingMultipleChoiceButtons_(from: cardData.multipleChoiceButtons),
                     onboardingType: cardData.onboardingType,
-                    a11yIdRoot: cardData.onboardingType == .freshInstall ? a11yOnboarding : a11yUpgrade,
+                    a11yIdRoot: a11yOnboarding,
                     imageID: getOnboardingHeaderImageID(from: cardData.image),
                     instructionsPopup: getPopupInfoModel(
                         from: cardData.instructionsPopup,

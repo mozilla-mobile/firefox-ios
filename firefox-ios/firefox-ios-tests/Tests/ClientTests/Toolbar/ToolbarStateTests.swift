@@ -249,6 +249,22 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
+    func test_googleLensAvailabilityDidChangeAction_updatesAddressToolbarGoogleLensAvailability() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarMiddlewareAction(
+                isGoogleLensEnabled: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.googleLensAvailabilityDidChange)
+        )
+
+        XCTAssertEqual(newState.addressToolbar.editingAccessoryAction?.actionType, .googleLens)
+        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
+    }
+
     func test_clearSearchAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()

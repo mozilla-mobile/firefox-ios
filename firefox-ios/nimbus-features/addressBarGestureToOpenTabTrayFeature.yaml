@@ -1,0 +1,32 @@
+# The configuration for the addressBarGestureToOpenTabTrayFeature feature
+features:
+  address-bar-gesture-to-open-tab-tray-feature:
+    description: >
+      Decides if the address bar interactive gesture to open the tab tray is enabled
+    variables:
+      enabled_swipe:
+        description: >
+          Decides if the swipe version of this feature is enabled. This will override the interactive gesture
+        type: Boolean
+        default: false
+      enabled_interactive:
+        description: >
+          Decides if the interactive (fancier) version of this feature is enabled.
+        type: Boolean
+        default: false
+      enabled_closetab:
+        description: >
+          Decides if the interactive gesture can close tabs by dragging the tab up to the top edge of the screen
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled_swipe: false
+          enabled_interactive: false
+          enabled_closetab: false
+      - channel: developer
+        value:
+          enabled_swipe: true
+          enabled_interactive: false
+          enabled_closetab: false

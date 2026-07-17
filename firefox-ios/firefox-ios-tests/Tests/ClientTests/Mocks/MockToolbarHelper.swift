@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
+import UIKit
 
 @testable import Client
 
@@ -11,11 +13,14 @@ class MockToolbarHelper: ToolbarHelperInterface {
         static let backgroundAlphaForBlur: CGFloat = 0.85
     }
 
-    var isReduceTransparencyEnabled = false
+    var reduceTransparencyEnabled = false
     var isSwipingTabsEnabled = true
     var userInterfaceIdiom: UIUserInterfaceIdiom = .phone
     var shouldShowNavigationToolbar = true
     var shouldShowTopTabs = false
+
+    @MainActor
+    var isReduceTransparencyEnabled: Bool { reduceTransparencyEnabled }
 
     @MainActor
     var glassEffectAlpha: CGFloat {
@@ -36,10 +41,7 @@ class MockToolbarHelper: ToolbarHelperInterface {
         return !isReduceTransparencyEnabled
     }
 
-    @MainActor
-    func backgroundAlpha() -> CGFloat {
-        guard shouldBlur() else { return 1.0 }
-
-        return UX.backgroundAlphaForBlur
+    func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
+        return ToolbarHelper.computeLockIconState(hasOnlySecureContent: hasOnlySecureContent, isWebsiteMode: isWebsiteMode)
     }
 }

@@ -6,7 +6,9 @@ import Foundation
 import Shared
 import Common
 
-class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureFlaggable {
+class HomePageSettingViewController: SettingsTableViewController,
+                                     FeatureFlaggable,
+                                     UserFeaturePreferenceProvider {
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
@@ -14,6 +16,7 @@ class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureF
     var currentStartAtHomeSetting: StartAtHomeSetting?
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
+    private let worldCupStore: WorldCupStoreProtocol
 
     var isWallpaperSectionEnabled: Bool {
         return wallpaperManager.canSettingsBeShown
@@ -27,9 +30,11 @@ class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureF
     init(prefs: Prefs,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          settingsDelegate: SettingsDelegate? = nil,
-         tabManager: TabManager) {
+         tabManager: TabManager,
+         worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
+        self.worldCupStore = worldCupStore
         super.init(style: .grouped, windowUUID: tabManager.windowUUID)
         super.settingsDelegate = settingsDelegate
         self.tabManager = tabManager
@@ -132,7 +137,7 @@ class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureF
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
-                defaultValue: featureFlags.isFeatureEnabled(.homepageJumpBackinSectionDefault, checking: .userOnly),
+                defaultValue: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatch(
@@ -145,11 +150,49 @@ class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureF
             }
             sectionItems.append(jumpBackInSetting)
 
+            if featureFlagsProvider.isEnabled(.homepageTrackerBlockerModule) {
+                let trackerBlockerModuleSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.TrackerBlockerSection,
+                    defaultValue: userPreferences.getPreferenceFor(.homepageTrackerBlockerModule),
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.PrivacyReport
+                ) { value in
+                    store.dispatch(
+                        TrackerBlockerModuleAction(
+                            isEnabled: value,
+                            windowUUID: self.windowUUID,
+                            actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+                        )
+                    )
+                }
+                sectionItems.append(trackerBlockerModuleSetting)
+            }
+
+            if worldCupStore.isFeatureEnabled {
+                let windowUUID = self.windowUUID
+                let worldCupSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
+                    defaultValue: true,
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
+                ) { _ in
+                    store.dispatch(
+                        WorldCupAction(
+                            windowUUID: windowUUID,
+                            actionType: WorldCupActionType.didChangeHomepageSettings,
+                        )
+                    )
+                }
+                sectionItems.append(worldCupSetting)
+            }
+
             let bookmarksSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: featureFlags.isFeatureEnabled(.homepageBookmarksSectionDefault, checking: .userOnly),
+                defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatch(
@@ -203,7 +246,7 @@ class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureF
     }
 
     private func setupStartAtHomeSection() -> SettingSection {
-        let pref: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+        let pref = userPreferences.startAtHomeSetting
         currentStartAtHomeSetting = StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
@@ -270,7 +313,7 @@ class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureF
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, LegacyFeatureFlaggable {
+    class TopSitesSettings: Setting {
         var profile: Profile?
         let windowUUID: WindowUUID
 
@@ -304,7 +347,7 @@ extension HomePageSettingViewController {
 
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
-    class WallpaperSettings: Setting, LegacyFeatureFlaggable {
+    class WallpaperSettings: Setting {
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface

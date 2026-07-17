@@ -17,7 +17,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
         homepageTabStateStore = HomepageTabStateStore()
         setupStore()
@@ -170,7 +169,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.traitCollectionDidChange)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(actionCalled.showiPadSetup ?? true)
     }
 
     func test_viewWillAppear_triggersHomepageAction() throws {
@@ -382,6 +380,31 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(collectionView.contentOffset, CGPoint(x: 0, y: -collectionView.adjustedContentInset.top))
     }
 
+    func test_restoreContentOffset_whenNotForcedAndSameTab_doesNotRestoreStoredOffset() {
+        let tabManager = HomepageRestoreContentOffsetTabManager()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
+        let subject = createSubject(tabManager: tabManager)
+
+        subject.loadViewIfNeeded()
+        subject.viewWillAppear(false)
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        collectionView.contentOffset = CGPoint(x: 0, y: 75)
+
+        subject.restoreVerticalScrollOffset(force: false)
+
+        XCTAssertEqual(collectionView.contentOffset.y, 75)
+    }
+
     func test_viewDidDisappear_savesVerticalScrollOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
@@ -402,6 +425,30 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         collectionView.contentOffset = CGPoint(x: 0, y: 140)
 
         subject.viewWillDisappear(false)
+
+        XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
+    }
+
+    func test_stopScrollingAndSaveVerticalScrollOffset_savesCurrentOffset() {
+        let tabManager = HomepageRestoreContentOffsetTabManager()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(tabManager: tabManager)
+
+        subject.loadViewIfNeeded()
+        subject.viewWillAppear(false)
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        collectionView.contentOffset = CGPoint(x: 0, y: 140)
+
+        subject.stopScrollingAndSaveVerticalScrollOffset()
 
         XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
     }

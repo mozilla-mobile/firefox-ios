@@ -15,7 +15,6 @@ import enum MozillaAppServices.MozAdsEnvironment
 
 class AppDelegate: UIResponder,
                    UIApplicationDelegate,
-                   LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                    FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -32,7 +31,7 @@ class AppDelegate: UIResponder,
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNewAppearanceMenuOnClosure: { self.featureFlagsProvider.isEnabled(.appearanceMenu) }
+        isNovaDesignOnClosure: { self.featureFlagsProvider.isEnabled(.novaDesign) }
     )
     lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
@@ -54,6 +53,8 @@ class AppDelegate: UIResponder,
     private var suggestBackgroundUtility: BackgroundFirefoxSuggestIngestUtility?
     private var suggestBackgroundTaskID: UIBackgroundTaskIdentifier = .invalid
     private static let suggestBackgroundTaskName = "SuggestIngest"
+    private var webServerShutdownTaskID: UIBackgroundTaskIdentifier = .invalid
+    private static let webServerShutdownTaskName = "WebServerShutdown"
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
     private lazy var metricKitWrapper = MetricKitWrapper()
@@ -64,7 +65,7 @@ class AppDelegate: UIResponder,
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        startRecordingStartupOpenURLTime()
+        shareTelemetry.recordOpenDeeplinkTime()
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,
@@ -87,11 +88,6 @@ class AppDelegate: UIResponder,
             .browserIsReady
         ])
 
-        // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Unified ads, Adjust.
-        // i.e. this must be run before initializing those systems.
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
 
@@ -113,28 +109,6 @@ class AppDelegate: UIResponder,
         Tab.ChangeUserAgent.performMigration()
 
         return true
-    }
-
-    private func startRecordingStartupOpenURLTime() {
-        shareTelemetry.recordOpenDeeplinkTime()
-        nonisolated(unsafe) var recordCompleteToken: ActionToken?
-        nonisolated(unsafe) var recordCancelledToken: ActionToken?
-        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkComplete) { [weak self] in
-            ensureMainThread { [weak self] in
-                self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
-                guard let recordCancelledToken, let recordCompleteToken  else { return }
-                AppEventQueue.cancelAction(token: recordCancelledToken)
-                AppEventQueue.cancelAction(token: recordCompleteToken)
-            }
-        }
-        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkCancelled) { [weak self] in
-            ensureMainThread { [weak self] in
-                self?.shareTelemetry.cancelOpenURLTimeRecord()
-                guard let recordCancelledToken, let recordCompleteToken  else { return }
-                AppEventQueue.cancelAction(token: recordCancelledToken)
-                AppEventQueue.cancelAction(token: recordCompleteToken)
-            }
-        }
     }
 
     func application(
@@ -174,7 +148,7 @@ class AppDelegate: UIResponder,
         /// Prewarm translation resources off the main thread
         /// This will fetch the translator WASM and model attachments for the device language.
         /// Running this on a utility QoS to avoid impacting app launch time.
-        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translation) {
             Task(priority: .utility) {
                 await ASTranslationModelsFetcher().prewarmResourcesForStartup()
             }
@@ -250,15 +224,35 @@ class AppDelegate: UIResponder,
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
         // <500ms is expected on newer devices.
         singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
-        singleShotTimer.setEventHandler {
-            WebServer.sharedInstance.server.stop()
+        singleShotTimer.setEventHandler { [weak self] in
+            guard let self else { return }
             self.shutdownWebServer = nil
+            // Stop the server off the main thread so a slow shutdown can't trip the watchdog.
+            // Hold a background task so iOS lets the stop finish while we're backgrounded, and
+            // end it both when the stop completes and if the OS deadline expires first.
+            // End any task still outstanding from a previous, slow shutdown so we don't clobber
+            // and leak its identifier.
+            self.endWebServerShutdownTask()
+            self.webServerShutdownTaskID = application.beginBackgroundTask(
+                withName: Self.webServerShutdownTaskName) { [weak self] in
+                self?.endWebServerShutdownTask()
+            }
+            WebServer.sharedInstance.stop { [weak self] in
+                Task { @MainActor in self?.endWebServerShutdownTask() }
+            }
         }
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
         backgroundWorkUtility?.scheduleOnAppBackground()
 
         logger.log("applicationDidEnterBackground end", level: .info, category: .lifecycle)
+    }
+
+    @MainActor
+    private func endWebServerShutdownTask() {
+        guard webServerShutdownTaskID != .invalid else { return }
+        UIApplication.shared.endBackgroundTask(webServerShutdownTaskID)
+        webServerShutdownTaskID = .invalid
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -270,6 +264,11 @@ class AppDelegate: UIResponder,
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         logger.log("Received memory warning", level: .info, category: .lifecycle)
+        Task {
+            for uuid in windowManager.allWindowUUIDs(includingReserved: false) {
+                await windowManager.tabManager(for: uuid)?.offloadBackgroundWebViews()
+            }
+        }
     }
 
     private func updateTopSitesWidget() {

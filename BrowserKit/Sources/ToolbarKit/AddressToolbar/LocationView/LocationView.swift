@@ -40,9 +40,9 @@ final class LocationView: UIView,
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
-    private var scrollAlpha: CGFloat = 1
     private var hasAlternativeLocationColor = false
     private var config: LocationViewConfiguration?
+    private(set) var isAddressBarMinimized = false
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -60,12 +60,13 @@ final class LocationView: UIView,
     /// Determines if the URL text field's content is wider than the visible area, accounting for a safe offset.
     /// An additional offset (default is 0) used when reader mode is available,
     /// to ensure the text does not overlap the icon when the view is constrained to its superview.
-    private func isURLTextFieldWiderThanVisibleArea(safeOffset offset: CGFloat = 0) -> Bool {
-        guard let text = urlTextField.text, let font = urlTextField.font, !scrollAlpha.isZero else {
+    private func isNormalizedHostWiderThanVisibleArea(safeOffset offset: CGFloat = 0) -> Bool {
+        guard let text = urlTextField.text, let font = urlTextField.font, !isAddressBarMinimized else {
             return false
         }
+        let (_, normalizedHost) = URL.getSubdomainAndHost(from: text)
         let locationViewVisibleWidth = frame.width - iconContainerStackView.frame.width - UX.horizontalSpace - offset
-        let urlTextFieldWidth = text.size(withAttributes: [.font: font]).width
+        let urlTextFieldWidth = normalizedHost.size(withAttributes: [.font: font]).width
 
         return urlTextFieldWidth >= locationViewVisibleWidth
     }
@@ -189,7 +190,7 @@ final class LocationView: UIView,
         )
 
         applyToolbarAlphaIfNeeded(
-            alpha: uxConfig.scrollAlpha,
+            isAddressBarMinimized: uxConfig.isAddressBarMinimized,
             barPosition: addressBarPosition
         )
         configureLockIconButton(config)
@@ -200,6 +201,7 @@ final class LocationView: UIView,
         // urlTextField.text to determine layout; without this call the text still holds the raw URL instead
         // of the normalized host, causing overflow to trigger incorrectly in reader mode
         // and producing a visible shift when the lock icon is hidden.
+
         formatAndTruncateURLTextField()
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
@@ -220,19 +222,19 @@ final class LocationView: UIView,
 
     private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
         var newConstraints: [NSLayoutConstraint] = []
-        if isEditing || !isURLTextFieldCentered || isURLTextFieldWiderThanVisibleArea() {
+        if isEditing || !isURLTextFieldCentered || isNormalizedHostWiderThanVisibleArea() {
             // leading alignment configuration
             newConstraints = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
-        } else if isURLTextFieldWiderThanVisibleArea(safeOffset: UX.safeOffset) {
+        } else if isNormalizedHostWiderThanVisibleArea(safeOffset: UX.safeOffset) {
             newConstraints = [
                 containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
                 containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
             ]
-        } else if let superview, !isURLTextFieldWiderThanVisibleArea(safeOffset: UX.safeOffset) {
+        } else if let superview, !isNormalizedHostWiderThanVisibleArea(safeOffset: UX.safeOffset) {
             newConstraints = [
                 containerView.leadingAnchor.constraint(greaterThanOrEqualTo: superview.leadingAnchor),
                 containerView.trailingAnchor.constraint(lessThanOrEqualTo: superview.trailingAnchor),
@@ -325,7 +327,7 @@ final class LocationView: UIView,
     }
 
     private func updateGradient() {
-        let showGradientForLongURL = isURLTextFieldWiderThanVisibleArea() && !isEditing
+        let showGradientForLongURL = isNormalizedHostWiderThanVisibleArea() && !isEditing
         gradientView.isHidden = !showGradientForLongURL
         // Use the containerView height since gradient's view height could be still not updated here
         // This can avoid to call containerView.layoutIfNeeded() which is an expensive call.
@@ -334,7 +336,7 @@ final class LocationView: UIView,
     }
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
-        let shouldAdjustForOverflow = isURLTextFieldWiderThanVisibleArea() && !isEditing
+        let shouldAdjustForOverflow = isNormalizedHostWiderThanVisibleArea() && !isEditing
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
         func handleOverflowAdjustment() {
@@ -437,6 +439,9 @@ final class LocationView: UIView,
 
     // MARK: - LocationView Scaling
     private func shrinkLocationView(barPosition: AddressToolbarPosition) {
+        urlTextField.isUserInteractionEnabled = false
+        isUserInteractionEnabled = false
+
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let bottomAddressBarYoffset = if #available(iOS 26.0, *) {
             UX.bottomAddressBarYoffset
@@ -452,24 +457,19 @@ final class LocationView: UIView,
                 let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
                     .translatedBy(x: 0, y: yOffset)
                 self.transform = scaledTransformation
-            }, completion: { [unowned self] _ in
-                urlTextField.isUserInteractionEnabled = false
-                isUserInteractionEnabled = false
             })
     }
 
     private func restoreLocationViewSize() {
+        urlTextField.isUserInteractionEnabled = true
+        isUserInteractionEnabled = true
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
             delay: 0,
             options: [.curveEaseInOut],
             animations: { [unowned self] in
                 transform = .identity
-            }, completion: { [unowned self] _ in
-                urlTextField.isUserInteractionEnabled = true
-                isUserInteractionEnabled = true
-            }
-        )
+            })
     }
 
     private func removeGlassEffectImmediately() {
@@ -480,10 +480,9 @@ final class LocationView: UIView,
         effectView.effect = nil
     }
 
-    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
-        guard scrollAlpha != alpha else { return }
-        scrollAlpha = alpha
-        if scrollAlpha.isZero {
+    private func applyToolbarAlphaIfNeeded(isAddressBarMinimized: Bool, barPosition: AddressToolbarPosition) {
+        self.isAddressBarMinimized = isAddressBarMinimized
+        if isAddressBarMinimized {
             shrinkLocationView(barPosition: barPosition)
             if #available(iOS 26.0, *), barPosition == .bottom {
                 effectView.effect = glassEffect
@@ -508,6 +507,9 @@ final class LocationView: UIView,
         // causing the keyboard to hide.
         // TODO: FXIOS-14618 don't fire the `keyboardWillHide` notification on device rotation
         let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
+        urlTextField.editingAccessoryAction = configurationIsEditing ?
+            config.editingAccessoryAction :
+            nil
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Remove the default drop interaction from the URL text field so that our
@@ -761,7 +763,7 @@ final class LocationView: UIView,
         ).cgColors
         searchEngineContentView.applyTheme(theme: theme)
         lockIconButton.tintColor = secondaryColor
-        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
+        lockIconButton.backgroundColor = isAddressBarMinimized ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.textColor = primaryColor
         setTextFieldPlaceholder(color: colors.textPrimary)
@@ -773,7 +775,7 @@ final class LocationView: UIView,
     }
 
     private func getPrimaryAndSecondaryColors() -> (primary: UIColor, secondary: UIColor) {
-        if #available(iOS 26.0, *), scrollAlpha.isZero {
+        if #available(iOS 26.0, *), isAddressBarMinimized {
             // We want to use system colors when the location view is fully transparent
             // To make sure it blends well with the background when using glass effect.
             return (.label, .label)

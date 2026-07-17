@@ -20,20 +20,15 @@ protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
 
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              TrackingProtectionMenuDelegate,
-                                             EnhancedTrackingProtectionMenuDelegate,
-                                             LegacyFeatureFlaggable {
+                                             FeatureFlaggable {
     private struct UX {
         static let popoverPreferredSize = CGSize(width: 480, height: 540)
     }
 
     private let profile: Profile
     private let tabManager: TabManager
-    private var legacyEnhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC?
-    private var enhancedTrackingProtectionMenuVC: TrackingProtectionViewController?
+    private var trackingProtectionMenuVC: TrackingProtectionViewController?
     weak var parentCoordinator: EnhancedTrackingProtectionCoordinatorDelegate?
-    private var trackingProtectionRefactorStatus: Bool {
-        featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
-    }
     private var trackingProtectionNavController: UINavigationController?
 
     init(router: Router,
@@ -50,82 +45,58 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
-        if self.trackingProtectionRefactorStatus {
-            let etpViewModel = TrackingProtectionModel(
-                userDefaults: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier),
-                url: url,
-                displayTitle: displayTitle,
-                connectionSecure: connectionSecure,
-                globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-                contentBlockerStatus: contentBlockerStatus,
-                contentBlockerStats: contentBlockerStats,
-                selectedTab: tabManager.selectedTab
-            )
 
-            enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
-                                                                                profile: profile,
-                                                                                windowUUID: tabManager.windowUUID)
-            enhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
-            trackingProtectionNavController = UINavigationController(
-                rootViewController: enhancedTrackingProtectionMenuVC ?? UIViewController()
-            )
-            trackingProtectionNavController?.isNavigationBarHidden = true
-        } else {
-            let oldEtpViewModel = EnhancedTrackingProtectionMenuVM(
-                url: url,
-                displayTitle: displayTitle,
-                connectionSecure: connectionSecure,
-                globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-                contentBlockerStatus: contentBlockerStatus
-            )
+        let etpViewModel = TrackingProtectionModel(
+            userDefaults: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier),
+            url: url,
+            displayTitle: displayTitle,
+            connectionSecure: connectionSecure,
+            globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
+            contentBlockerStatus: contentBlockerStatus,
+            contentBlockerStats: contentBlockerStats,
+            selectedTab: tabManager.selectedTab
+        )
 
-            legacyEnhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: oldEtpViewModel,
-                                                                                      windowUUID: tabManager.windowUUID)
-            legacyEnhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
-        }
+        trackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
+                                                                    profile: profile,
+                                                                    windowUUID: tabManager.windowUUID)
+        trackingProtectionMenuVC?.trackingProtectionMenuDelegate = self
+        trackingProtectionNavController = UINavigationController(
+            rootViewController: trackingProtectionMenuVC ?? UIViewController()
+        )
+        trackingProtectionNavController?.isNavigationBarHidden = true
     }
 
     func start(sourceView: UIView) {
-        if trackingProtectionRefactorStatus, let enhancedTrackingProtectionMenuVC {
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                if let sheetPresentationController = enhancedTrackingProtectionMenuVC.sheetPresentationController {
-                    sheetPresentationController.detents = [.medium(), .large()]
-                    sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
-                    sheetPresentationController.preferredCornerRadius = TPMenuUX.UX.modalMenuCornerRadius
-                }
-                enhancedTrackingProtectionMenuVC.asPopover = true
-                guard let trackingProtectionNavController = trackingProtectionNavController else { return }
-                trackingProtectionNavController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
-                router.present(trackingProtectionNavController, animated: true) { [weak self] in
-                    // Ensures the VC gets deinit when we dismiss through `UIAdaptivePresentationControllerDelegate`
-                    self?.didFinish()
-                }
-            } else {
-                guard let trackingProtectionNavController = trackingProtectionNavController else { return }
-                trackingProtectionNavController.preferredContentSize = UX.popoverPreferredSize
-                trackingProtectionNavController.modalPresentationStyle = .popover
-                trackingProtectionNavController.popoverPresentationController?.sourceView = sourceView
-                trackingProtectionNavController.popoverPresentationController?.permittedArrowDirections = .up
-                router.present(trackingProtectionNavController, animated: true) { [weak self] in
-                    // Ensures the VC gets deinit when we dismiss through `UIAdaptivePresentationControllerDelegate`
-                    self?.didFinish()
-                }
+        guard let trackingProtectionMenuVC else { return }
+
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            if let sheetPresentationController = trackingProtectionMenuVC.sheetPresentationController {
+                sheetPresentationController.detents = [.medium(), .large()]
+                sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
+                sheetPresentationController.preferredCornerRadius = TPMenuUX.UX.modalMenuCornerRadius
             }
-        } else if let legacyEnhancedTrackingProtectionMenuVC {
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                legacyEnhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
-                legacyEnhancedTrackingProtectionMenuVC.transitioningDelegate = self
-            } else {
-                legacyEnhancedTrackingProtectionMenuVC.asPopover = true
-                legacyEnhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
-                legacyEnhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
-                legacyEnhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
+            trackingProtectionMenuVC.asPopover = true
+            guard let trackingProtectionNavController = trackingProtectionNavController else { return }
+            trackingProtectionNavController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
+            router.present(trackingProtectionNavController, animated: true) { [weak self] in
+                // Ensures the VC gets deinit when we dismiss through `UIAdaptivePresentationControllerDelegate`
+                self?.didFinish()
             }
-            router.present(legacyEnhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+        } else {
+            guard let trackingProtectionNavController = trackingProtectionNavController else { return }
+            trackingProtectionNavController.preferredContentSize = UX.popoverPreferredSize
+            trackingProtectionNavController.modalPresentationStyle = .popover
+            trackingProtectionNavController.popoverPresentationController?.sourceView = sourceView
+            trackingProtectionNavController.popoverPresentationController?.permittedArrowDirections = .up
+            router.present(trackingProtectionNavController, animated: true) { [weak self] in
+                // Ensures the VC gets deinit when we dismiss through `UIAdaptivePresentationControllerDelegate`
+                self?.didFinish()
+            }
         }
     }
 
-    // MARK: - EnhancedTrackingProtectionMenuDelegate
+    // MARK: - TrackingProtectionMenuDelegate
     func settingsOpenPage(settings: Route.SettingsSection) {
         parentCoordinator?.didFinishEnhancedTrackingProtection(from: self)
         parentCoordinator?.settingsOpenPage(settings: settings)
@@ -133,21 +104,5 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
 
     func didFinish() {
         parentCoordinator?.didFinishEnhancedTrackingProtection(from: self)
-    }
-}
-
-extension EnhancedTrackingProtectionCoordinator: UIViewControllerTransitioningDelegate {
-    func presentationController(
-        forPresented presented: UIViewController,
-        presenting: UIViewController?,
-        source: UIViewController
-    ) -> UIPresentationController? {
-        let globalETPStatus = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
-        let slideOverPresentationController = SlideOverPresentationController(presentedViewController: presented,
-                                                                              presenting: presenting,
-                                                                              withGlobalETPStatus: globalETPStatus)
-        slideOverPresentationController.enhancedTrackingProtectionMenuDelegate = self
-
-        return slideOverPresentationController
     }
 }

@@ -12,7 +12,6 @@ final class TopsSitesSectionStateTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() async throws {
@@ -27,6 +26,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.topSitesData, [])
         XCTAssertEqual(TopSitesSectionState.Constants.sectionHeaderConfiguration.isButtonHidden, false)
         XCTAssertFalse(initialState.shouldShowSectionHeader)
+        XCTAssertFalse(initialState.shouldShowAddShortcutTile)
     }
 
     @MainActor
@@ -90,6 +90,26 @@ final class TopsSitesSectionStateTests: XCTestCase {
         )
 
         XCTAssertFalse(newState.shouldShowSectionHeader)
+    }
+
+    @MainActor
+    func test_retrievedUpdatedSitesAction_withAddShortcutTileAndVisibleSitesOnly_showsSectionHeader() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+        let visibleTopSites = initialState.numberOfRows * initialState.numberOfTilesPerRow
+
+        let newState = reducer(
+            initialState,
+            TopSitesAction(
+                topSites: createSites(count: visibleTopSites),
+                shouldShowAddShortcutTile: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        XCTAssertTrue(newState.shouldShowSectionHeader)
+        XCTAssertTrue(newState.shouldShowAddShortcutTile)
     }
 
     @MainActor

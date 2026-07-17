@@ -12,6 +12,7 @@ public protocol HeroImageViewModel {
     var faviconBorderWidth: CGFloat { get }
     var heroImageSize: CGSize { get }
     var fallbackFaviconSize: CGSize { get }
+    var ignoresAspectRatio: Bool { get }
 }
 
 public struct DefaultHeroImageViewModel: HeroImageViewModel {
@@ -22,6 +23,7 @@ public struct DefaultHeroImageViewModel: HeroImageViewModel {
     public var faviconBorderWidth: CGFloat
     public var heroImageSize: CGSize
     public var fallbackFaviconSize: CGSize
+    public var ignoresAspectRatio: Bool
 
     public init(
         urlStringRequest: String,
@@ -29,7 +31,8 @@ public struct DefaultHeroImageViewModel: HeroImageViewModel {
         faviconCornerRadius: CGFloat,
         faviconBorderWidth: CGFloat,
         heroImageSize: CGSize,
-        fallbackFaviconSize: CGSize
+        fallbackFaviconSize: CGSize,
+        ignoresAspectRatio: Bool = false
     ) {
         self.type = .heroImage
         self.urlStringRequest = urlStringRequest
@@ -38,5 +41,6 @@ public struct DefaultHeroImageViewModel: HeroImageViewModel {
         self.faviconBorderWidth = faviconBorderWidth
         self.heroImageSize = heroImageSize
         self.fallbackFaviconSize = fallbackFaviconSize
+        self.ignoresAspectRatio = ignoresAspectRatio
     }
 }

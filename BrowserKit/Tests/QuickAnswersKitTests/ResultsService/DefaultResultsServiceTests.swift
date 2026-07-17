@@ -12,34 +12,163 @@ struct DefaultResultsServiceTests {
     let testHelper = SwiftTestingHelper()
 
     @Test
-    func test_fetchResults_returnsResultFromSingleChunk() async throws {
+    func test_fetchResults_returnsResult() async throws {
         let client = MockLiteLLMClient()
         client.respondWith = ["This is a quick answer"]
+        client.respondWithCitations = [
+            Citation(
+                id: "1",
+                title: "Weather Source",
+                url: "https://example.com"
+            )
+        ]
         let subject = createSubject(client: client)
 
         let result = try await subject.fetchResults(for: "What is the weather?")
 
-        #expect(result.body == "This is a quick answer")
-        #expect(result.title == "Quick Answer")
-        #expect(client.requestChatCompletionStreamedCallCount == 1)
-        #expect(client.lastMessages?.count == 1)
-        #expect(client.lastMessages?.first?.content == "What is the weather?")
-        #expect(client.lastMessages?.first?.role == .user)
+        // Verify the search result
+        #expect(result.resultText == "This is a quick answer")
+        #expect(result.sources.count == 1)
+        let source = result.sources.first
+        #expect(source?.title == "Weather Source")
+        #expect(client.requestChatCompletionCallCount == 1)
     }
 
     @Test
-    func test_fetchResults_accumulatesMultipleChunks() async throws {
+    func test_fetchResults_withInstructions_sendsSystemAndUserMessages() async throws {
         let client = MockLiteLLMClient()
-        client.respondWith = ["The ", "weather ", "is ", "sunny"]
+        client.respondWith = ["Answer"]
+        let instructions = "You are a helpful assistant."
+        let config = QuickAnswersConfig(model: .exa, instructions: instructions)
+        let subject = createSubject(client: client, config: config)
+
+        _ = try await subject.fetchResults(for: "What is the weather?")
+
+        let systemMessage = client.lastMessages.first as? QuickAnswersMessage
+        let userMessage = client.lastMessages.last as? QuickAnswersMessage
+
+        #expect(client.lastMessages.count == 2)
+        #expect(systemMessage?.role == .system)
+        #expect(systemMessage?.content == instructions)
+        #expect(userMessage?.role == .user)
+        #expect(userMessage?.content == "What is the weather?")
+    }
+
+    @Test
+    func test_fetchResults_withoutInstructions_sendsUserMessageOnly() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWith = ["Answer"]
+        let config = QuickAnswersConfig(model: .liner)
+        let subject = createSubject(client: client, config: config)
+
+        _ = try await subject.fetchResults(for: "What is the weather?")
+
+        let userMessage = client.lastMessages.first as? QuickAnswersMessage
+        #expect(client.lastMessages.count == 1)
+        #expect(userMessage?.role == .user)
+        #expect(userMessage?.content == "What is the weather?")
+    }
+
+    @Test
+    func test_fetchResults_handlesNoCitations() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWith = ["Answer without citations"]
+        client.respondWithCitations = nil
         let subject = createSubject(client: client)
 
-        let result = try await subject.fetchResults(for: "weather today")
+        let result = try await subject.fetchResults(for: "Query")
 
-        #expect(result.body == "The weather is sunny")
-        #expect(client.requestChatCompletionStreamedCallCount == 1)
-        #expect(client.lastMessages?.count == 1)
-        #expect(client.lastMessages?.first?.content == "weather today")
-        #expect(client.lastMessages?.first?.role == .user)
+        #expect(result.resultText == "Answer without citations")
+        #expect(result.sources.isEmpty)
+    }
+
+    @Test
+    func test_fetchResults_mapsRequestCreationFailedError() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWithError = LiteLLMClientError.requestCreationFailed
+        let subject = createSubject(client: client)
+
+        await #expect(throws: ResultsServiceError.requestCreationFailed) {
+            try await subject.fetchResults(for: "Query")
+        }
+    }
+
+    @Test
+    func test_fetchResults_mapsRateLimitedError() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWithError = LiteLLMClientError.invalidResponse(statusCode: 429)
+        let subject = createSubject(client: client)
+
+        await #expect(throws: ResultsServiceError.rateLimited) {
+            try await subject.fetchResults(for: "Query")
+        }
+    }
+
+    @Test
+    func test_fetchResults_mapsMaxUsersError() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWithError = LiteLLMClientError.invalidResponse(statusCode: 403)
+        let subject = createSubject(client: client)
+
+        await #expect(throws: ResultsServiceError.maxUsers) {
+            try await subject.fetchResults(for: "Query")
+        }
+    }
+
+    @Test
+    func test_fetchResults_mapsPayloadTooLargeError() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWithError = LiteLLMClientError.invalidResponse(statusCode: 413)
+        let subject = createSubject(client: client)
+
+        await #expect(throws: ResultsServiceError.payloadTooLarge) {
+            try await subject.fetchResults(for: "Query")
+        }
+    }
+
+    @Test
+    func test_fetchResults_mapsInvalidResponseError() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWithError = LiteLLMClientError.invalidResponse(statusCode: 500)
+        let subject = createSubject(client: client)
+
+        await #expect(throws: ResultsServiceError.invalidResponse(statusCode: 500)) {
+            try await subject.fetchResults(for: "Query")
+        }
+    }
+
+    @Test
+    func test_fetchResults_mapsNoContentError() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWithError = LiteLLMClientError.noContent
+        let subject = createSubject(client: client)
+
+        await #expect(throws: ResultsServiceError.noMessage) {
+            try await subject.fetchResults(for: "Query")
+        }
+    }
+
+    @Test
+    func test_fetchResults_mapsOtherLiteLLMClientError() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWithError = LiteLLMClientError.decodingFailed
+        let subject = createSubject(client: client)
+
+        await #expect(throws: ResultsServiceError.self) {
+            try await subject.fetchResults(for: "Query")
+        }
+    }
+
+    @Test
+    func test_fetchResults_mapsGenericError() async throws {
+        let client = MockLiteLLMClient()
+        struct TestError: Error {}
+        client.respondWithError = TestError()
+        let subject = createSubject(client: client)
+
+        await #expect(throws: ResultsServiceError.self) {
+            try await subject.fetchResults(for: "Query")
+        }
     }
 
     // MARK: - Helper
@@ -47,7 +176,8 @@ struct DefaultResultsServiceTests {
         client: LiteLLMClientProtocol,
         config: QuickAnswersConfig = QuickAnswersConfig()
     ) -> DefaultResultsService {
-        let subject = DefaultResultsService(client: client, config: config)
+        let configFetcher = MockQuickAnswersConfigFetcher(configToReturn: config)
+        let subject = DefaultResultsService(client: client, configFetcher: configFetcher)
         testHelper.trackForMemoryLeaks(subject)
         return subject
     }

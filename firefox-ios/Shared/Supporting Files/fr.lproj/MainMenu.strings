@@ -65,7 +65,7 @@
 "MainMenu.HeaderBanner.Subtitle.v142" = "Quelques secondes suffisent. Vous pouvez changer d’avis à tout moment.";
 
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
-"MainMenu.HeaderBanner.Title.v142" = "Définir %@ comme navigateur par défaut";
+"MainMenu.HeaderBanner.Title.v142" = "Définissez %@ comme navigateur par défaut";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Marque-pages";
@@ -115,8 +115,14 @@
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Nouveau dans %@";
 
+/* On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting. */
+"MainMenu.SiteProtection.AdBlocker.Title.v153" = "Bloqueur de publicités";
+
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
 "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "Connexion non sécurisée";
+
+/* On the main menu, at the top, title for a badge that opens site protection settings. */
+"MainMenu.SiteProtection.Protections.Title.v153" = "Protections";
 
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
 "MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "Les protections sont désactivées";

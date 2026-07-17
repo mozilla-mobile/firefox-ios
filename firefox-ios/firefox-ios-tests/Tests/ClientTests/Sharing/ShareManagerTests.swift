@@ -5,6 +5,7 @@
 import UniformTypeIdentifiers
 import XCTest
 import Shared
+import Common
 
 @testable import Client
 
@@ -19,14 +20,17 @@ final class ShareManagerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
-        testTab = MockShareTab(title: testWebpageDisplayTitle, url: testWebURL, canonicalURL: testWebURL)
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: MockProfile())
+        testTab = MockShareTab(
+            title: testWebpageDisplayTitle,
+            url: testWebURL,
+            canonicalURL: testWebURL
+        )
     }
 
     override func tearDown() async throws {
         testTab = nil
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -649,7 +653,8 @@ final class ShareManagerTests: XCTestCase {
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
 
         // Simulate the user having disabled the Sent from Firefox toggle in the Settings
-        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        let prefs: UserFeaturePreferring = AppContainer.shared.resolve()
+        prefs.setPreferenceFor(.sentFromFirefox, to: false)
 
         let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
         let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
@@ -708,7 +713,8 @@ final class ShareManagerTests: XCTestCase {
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
 
         // Simulate the user having enabled the Sent from Firefox toggle in the Settings
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        let prefs: UserFeaturePreferring = AppContainer.shared.resolve()
+        prefs.setPreferenceFor(.sentFromFirefox, to: true)
 
         let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
         let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)

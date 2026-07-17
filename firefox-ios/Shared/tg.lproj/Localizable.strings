@@ -1241,7 +1241,7 @@
 "Settings.DisplayTheme.SwitchTitle" = "Ба таври худкор";
 
 /* System theme settings section title */
-"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Мавзуи низомӣ";
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Мавзуи низоми компютерӣ";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
 "Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Истифодаи реҷаи низомии торик/равшан";

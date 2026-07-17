@@ -12,41 +12,82 @@ protocol ResultsService: Sendable {
 }
 
 final class DefaultResultsService: ResultsService {
-    // TODO: FXIOS-15196 - Remove optional when creating the appropriate client
-    private let client: LiteLLMClientProtocol?
-    private let config: QuickAnswersConfig
+    private struct Constants {
+        static let maxCitationsCount = 2
+    }
+    private let client: LiteLLMClientProtocol
+    private let configFetcher: QuickAnswersConfigFetcher
 
-    init(client: LiteLLMClientProtocol?, config: QuickAnswersConfig) {
+    init(client: LiteLLMClientProtocol, configFetcher: QuickAnswersConfigFetcher) {
         self.client = client
-        self.config = config
+        self.configFetcher = configFetcher
     }
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
-        let message = LiteLLMMessage(role: .user, content: transcription)
-        guard let stream = try await requestChatCompletion(for: message) else {
-            // TODO: FXIOS-15196 - Remove error once LLMCLient is not nil
-            throw SpeechError.unknown
+        do {
+            let config = try await configFetcher.fetch()
+            let messages = makeMessages(for: transcription, config: config)
+            let fullResponse = try await requestChatCompletion(for: messages, config: config)
+            let citations = fullResponse.providerSpecificFields?.citations ?? []
+            return formatResult(from: fullResponse.content, and: citations)
+        } catch {
+            throw mapError(error)
         }
-
-        var fullResponse = ""
-        for try await chunk in stream {
-            fullResponse += chunk
-        }
-
-        return try formatResult(from: fullResponse)
     }
 
-    private func requestChatCompletion(for message: LiteLLMMessage) async throws -> AsyncThrowingStream<String, Error>? {
-        // TODO: FXIOS-15196 - Remove optional when creating the appropriate client
-        return try await client?.requestChatCompletionStreamed(
-            messages: [message],
+    private func makeMessages(for transcription: String, config: LLMConfig) -> [QuickAnswersMessage] {
+        var messages: [QuickAnswersMessage] = []
+        if !config.instructions.isEmpty {
+            messages.append(LiteLLMMessage(role: .system, content: config.instructions))
+        }
+        messages.append(LiteLLMMessage(role: .user, content: transcription))
+        return messages
+    }
+
+    private func requestChatCompletion(
+        for messages: [QuickAnswersMessage],
+        config: LLMConfig
+    ) async throws -> QuickAnswersMessage {
+        // TODO: FXIOS-15198 Handle errors appropriately
+        // and may need to change type and not use String,
+        // but waiting for what we get on server side
+        return try await client.requestChatCompletion(
+            messages: messages,
             config: config
         )
     }
 
-    private func formatResult(from response: String) throws -> SearchResult {
-        // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
-        // depending on UI to be a stream instead. For now, return the full response as the body.
-        return SearchResult(title: "Quick Answer", body: response, url: nil)
+    private func formatResult(from answer: String, and citations: [Citation]) -> SearchResult {
+        // limit the citations in the array to maximum allowed
+        let filteredCitations = citations.prefix(Constants.maxCitationsCount)
+        let sources = filteredCitations.map { citation in
+            SearchResult.Source(
+                title: citation.title ?? "",
+                url: URL(string: citation.url ?? ""),
+                thumbnailURL: URL(string: citation.image ?? ""),
+                faviconURL: URL(string: citation.favicon ?? "")
+            )
+        }
+        return SearchResult(resultText: answer, sources: Array(sources))
+    }
+
+    /// Maps underlying errors to `ResultsServiceError` types.
+    private func mapError(_ error: Error) -> ResultsServiceError {
+        switch error {
+        case LiteLLMClientError.requestCreationFailed:
+            return .requestCreationFailed
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 429:
+            return .rateLimited
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 403:
+            return .maxUsers
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 413:
+            return .payloadTooLarge
+        case LiteLLMClientError.invalidResponse(let statusCode):
+            return .invalidResponse(statusCode: statusCode)
+        case LiteLLMClientError.noContent:
+            return .noMessage
+        case let e as LiteLLMClientError: return .unknown(e.localizedDescription)
+        default: return .unknown(error.localizedDescription)
+        }
     }
 }

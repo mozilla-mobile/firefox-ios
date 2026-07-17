@@ -116,9 +116,10 @@ final class CreditCardBottomSheetViewModel {
                         completion(nil)
                         return
                     }
-                    logger.log("Unable to save credit card with error: \(error)",
+                    logger.log("Unable to save credit card",
                                level: .fatal,
-                               category: .autofill)
+                               category: .autofill,
+                               description: "\(error)")
                     completion(error)
                 }
             }
@@ -130,9 +131,10 @@ final class CreditCardBottomSheetViewModel {
                         completion(nil)
                         return
                     }
-                    logger.log("Unable to save credit card with error: \(error)",
+                    logger.log("Unable to save credit card",
                                level: .fatal,
-                               category: .autofill)
+                               category: .autofill,
+                               description: "\(error)")
                     completion(error)
                 }
             }

@@ -9,12 +9,11 @@ typealias HomepageSection = HomepageDiffableDataSource.HomeSection
 typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class HomepageDiffableDataSource:
-    UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>,
-    LegacyFeatureFlaggable {
+final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
     typealias ShouldShowSectionHeader = Bool
+    typealias ShowiPadSetup = Bool
 
     private struct TopSitesSnapshotData {
         let items: [HomeItem]
@@ -29,8 +28,10 @@ final class HomepageDiffableDataSource:
         case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
+        case trackerBlockerModule
         case bookmarks(TextColor?)
         case pocket(TextColor?)
+        case worldcup
         case spacer
 
         var canHandleLongPress: Bool {
@@ -44,20 +45,23 @@ final class HomepageDiffableDataSource:
     }
 
     enum HomeItem: Hashable, Sendable {
-        case header(HeaderState)
+        case header(HeaderState, TextColor?, ShowiPadSetup)
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
+        case addShortcutTile(TextColor?)
         case topSiteEmpty
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
+        case trackerBlockerModule
         case bookmark(BookmarkConfiguration)
         /// FXIOS-15423: Include the selected category in the item's identity so category transitions are treated as
         /// a presentation-context change. Without the category context, diffable treats the same story in
         /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
         /// that story's on-screen position as stories are inserted above it.
         case merino(MerinoStoryConfiguration, String?)
+        case worldcupCard
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -70,8 +74,10 @@ final class HomepageDiffableDataSource:
                 SearchBarCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
+                TrackerBlockerModuleCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
+                WorldCupCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -88,8 +94,19 @@ final class HomepageDiffableDataSource:
                 return .bookmark
             case .merino:
                 return .story
+            case .worldcupCard:
+                return .worldCupWidget
             default:
                 return nil
+            }
+        }
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .addShortcutTile:
+                return false
+            default:
+                return true
             }
         }
     }
@@ -98,14 +115,19 @@ final class HomepageDiffableDataSource:
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
+        showiPadSetup: ShowiPadSetup = false,
+        animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
+        let headerItem = HomeItem.header(state.headerState,
+                                         state.wallpaperState.wallpaperConfiguration.logoTextColor,
+                                         showiPadSetup)
 
         snapshot.appendSections([.header])
-        snapshot.appendItems([.header(state.headerState)], toSection: .header)
+        snapshot.appendItems([headerItem], toSection: .header)
 
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
@@ -125,6 +147,20 @@ final class HomepageDiffableDataSource:
             )
             snapshot.appendSections([topSitesSection])
             snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
+        }
+
+        if state.worldcupState.shouldShowSection {
+            snapshot.appendSections([.worldcup])
+            snapshot.appendItems(
+                [.worldcupCard],
+                toSection: .worldcup
+            )
+            snapshot.reconfigureItems([.worldcupCard])
+        }
+
+        if state.trackerBlockerModuleState.shouldShowSection {
+            snapshot.appendSections([.trackerBlockerModule])
+            snapshot.appendItems([.trackerBlockerModule], toSection: .trackerBlockerModule)
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
@@ -151,7 +187,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: pocketSection)
         }
 
-        apply(snapshot, animatingDifferences: true, completion: completion)
+        apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
     }
 
     /// Gets the proper amount of top sites based on layout configuration
@@ -164,14 +200,22 @@ final class HomepageDiffableDataSource:
         and textColor: TextColor?
     ) -> TopSitesSnapshotData? {
         guard topSitesState.shouldShowSection else { return nil }
-        let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
-            topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        let maxVisibleItemCount = topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        guard maxVisibleItemCount > 0 else { return nil }
+
+        let topSitesItems: [HomeItem] = topSitesState.topSitesData.prefix(
+            maxVisibleItemCount
         ).compactMap {
             .topSite($0, textColor)
         }
-        guard !topSites.isEmpty else { return nil }
+        let allItems = topSitesState.shouldShowAddShortcutTile
+            ? topSitesItems + [.addShortcutTile(textColor)]
+            : topSitesItems
+        let visibleItems = Array(allItems.prefix(maxVisibleItemCount))
+        guard !visibleItems.isEmpty else { return nil }
+
         return TopSitesSnapshotData(
-            items: topSites,
+            items: visibleItems,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
             shouldShowSectionHeader: topSitesState.shouldShowSectionHeader
         )

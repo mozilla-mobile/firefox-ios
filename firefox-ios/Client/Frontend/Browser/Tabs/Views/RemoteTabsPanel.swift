@@ -21,12 +21,12 @@ protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
 }
 
-class RemoteTabsPanel: UIViewController,
+final class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemoteTabsEmptyViewDelegate,
                        StoreSubscriber,
-                       LegacyFeatureFlaggable,
+                       FeatureFlaggable,
                        TabTrayThemeable,
                        Notifiable {
     typealias SubscriberStateType = RemoteTabsPanelState
@@ -42,7 +42,7 @@ class RemoteTabsPanel: UIViewController,
     var notificationCenter: NotificationProtocol
     private let windowUUID: WindowUUID
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 
@@ -232,10 +232,6 @@ class RemoteTabsPanel: UIViewController,
         handleCloseRemoteTab(deviceId, url: url)
     }
 
-    func remoteTabsClientAndTabsDataSourceDidUndo(deviceId: String, url: URL) {
-        handleUndoCloseTab(deviceId, url: url)
-    }
-
     func remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: String) {
         handleTabCommandsFlush(deviceId)
     }
@@ -271,16 +267,6 @@ class RemoteTabsPanel: UIViewController,
         refreshTabs(useCache: true)
     }
 
-    private func handleUndoCloseTab(_ deviceId: String, url: URL) {
-        let action = RemoteTabsPanelAction(url: url,
-                                           targetDeviceId: deviceId,
-                                           windowUUID: windowUUID,
-                                           actionType: RemoteTabsPanelActionType.undoCloseSelectedRemoteURL)
-        store.dispatch(action)
-
-        refreshTabs(useCache: true)
-    }
-
     private func handleTabCommandsFlush(_ deviceId: String) {
         let action = RemoteTabsPanelAction(targetDeviceId: deviceId,
                                            windowUUID: windowUUID,
@@ -305,7 +291,7 @@ class RemoteTabsPanel: UIViewController,
             }
         case .ProfileDidFinishSyncing:
             ensureMainThread {
-                self.refreshTabs()
+                self.refreshTabs(useCache: true)
             }
         default: return
         }

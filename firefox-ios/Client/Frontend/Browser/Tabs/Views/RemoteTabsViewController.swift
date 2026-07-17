@@ -17,7 +17,7 @@ class RemoteTabsViewController: UIViewController,
                                 Themeable,
                                 CollapsibleTableViewSection,
                                 LibraryPanelContextMenu,
-                                LegacyFeatureFlaggable,
+                                FeatureFlaggable,
                                 UITableViewDelegate,
                                 UITableViewDataSource {
     struct UX {
@@ -31,7 +31,7 @@ class RemoteTabsViewController: UIViewController,
     private let logger: Logger
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 
@@ -41,6 +41,7 @@ class RemoteTabsViewController: UIViewController,
     weak var remoteTabsPanel: RemoteTabsPanel?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private let tabTrayUtils: TabTrayUtils
 
     var tableView: UITableView = .build()
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
@@ -56,8 +57,6 @@ class RemoteTabsViewController: UIViewController,
         }
     }()
 
-    private var closeTabRemoteDeviceId: String?
-    private var closeTab: RemoteTab?
     private var tabCommandsFlushTimer: Timer?
     private let tabCommandsFlushDelay = 6.0
 
@@ -73,13 +72,15 @@ class RemoteTabsViewController: UIViewController,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()
     ) {
         self.state = state
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
+        self.tabTrayUtils = tabTrayUtils
         super.init(nibName: nil, bundle: nil)
 
         tableView.dataSource = self
@@ -208,26 +209,6 @@ class RemoteTabsViewController: UIViewController,
         emptyView.applyTheme(theme: retrieveTheme())
     }
 
-    private func show(toast: Toast,
-                      afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
-                      duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
-        guard !isTabTrayUIExperimentsEnabled else { return }
-
-        if let buttonToast = toast as? ButtonToast {
-            self.buttonToast = buttonToast
-        }
-
-        toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
-            [
-                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                               constant: Toast.UX.toastSidePadding),
-                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                                constant: -Toast.UX.toastSidePadding),
-                toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-            ]
-        }
-    }
-
     // MARK: - Refreshing TableView
 
     func addRefreshControl() {
@@ -299,12 +280,10 @@ class RemoteTabsViewController: UIViewController,
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        // TODO: Forthcoming as part of ongoing Redux refactors. [FXIOS-6942] & [FXIOS-7509]
         return nil
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        // TODO: Forthcoming as part of ongoing Redux refactors. [FXIOS-6942] & [FXIOS-7509]
         return nil
     }
 
@@ -382,24 +361,6 @@ class RemoteTabsViewController: UIViewController,
             }
             let tab = clientAndTabs.tabs[indexPath.item]
 
-            // Setting the two private variables below so that the toast button action function has access to them
-            // since that function cannot have any parameters.
-            self.closeTabRemoteDeviceId = fxaDeviceId
-            self.closeTab = tab
-
-            // Creating a modal with an undo button that will allow the user to undo closing the last remote tab
-            // they attempted to close
-            let viewModel = ButtonToastViewModel(labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
-                                                 buttonText: .UndoString)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: retrieveTheme(),
-                                    completion: { didTapUndoButton in
-                                        if didTapUndoButton {
-                                            self.undo()
-                                        }
-                                    })
-            show(toast: toast)
-
             self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidCloseURL(deviceId: fxaDeviceId, url: tab.URL)
 
             // Initiating the process of sending (i.e. executing) any unsent commands
@@ -469,18 +430,6 @@ class RemoteTabsViewController: UIViewController,
         return headerView
     }
 
-    private func undo() {
-        guard let tabUrl = self.closeTab?.URL, let deviceId = self.closeTabRemoteDeviceId else {
-            return
-        }
-
-        // Removing the close tab command from the command queue
-        remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidUndo(deviceId: deviceId, url: tabUrl)
-
-        // Initiating the process of sending any unsent commands
-        self.flushTabCommands(deviceId: deviceId)
-    }
-
     private func flushTabCommands(deviceId: String) {
         // If the timer property is set and is valid, we reset it. This will prevent flush
         // from being executed too often. It will run `self.tabCommandsFlushDelay` seconds
@@ -515,12 +464,13 @@ class RemoteTabsViewController: UIViewController,
             emptyView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
         } else {
             let bottomInset = if emptyView.needsSafeArea {
-                DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
+                tabTrayUtils.segmentedControlHeight + view.safeAreaInsets.bottom
             } else {
-                DefaultTabTrayUtils().segmentedControlHeight
+                tabTrayUtils.segmentedControlHeight
             }
 
             emptyView.updateInsets(top: 0, bottom: bottomInset)
+            tableView.contentInset.bottom = view.safeAreaInsets.bottom
         }
     }
 }

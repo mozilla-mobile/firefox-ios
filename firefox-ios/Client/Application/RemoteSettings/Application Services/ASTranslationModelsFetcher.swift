@@ -98,10 +98,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
         }
 
         logger.log(
-            "Translator record selected",
+            "Translator record selected with record id \(record.id)",
             level: .info,
-            category: .translations,
-            extra: ["recordId": record.id]
+            category: .translations
         )
 
         return try? await getAttachment(record: record)
@@ -186,8 +185,12 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
     /// and model attachments for `Constants.pivotLanguage` -> deviceLanguage (e.g. `en` -> `fr`).
     /// NOTE: We don't fetch the reverse direction since for phase 1 we only support translating into device language.
     func prewarmResourcesForStartup() async {
-        guard let deviceLanguage = Locale.current.languageCode,
-          !deviceLanguage.isEmpty else {
+        let supported = Set(await fetchSupportedTargetLanguages())
+        let deviceLanguage = Locale.preferredLanguages.lazy.compactMap { tag in
+            PreferredTranslationLanguagesManager.matchingSupportedCode(for: tag, in: supported)
+        }.first
+
+        guard let deviceLanguage, !deviceLanguage.isEmpty else {
             logger.log("Device language code is unavailable.", level: .warning, category: .translations)
             return
         }
@@ -298,10 +301,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             }
 
             logger.log(
-                "Model record selected",
+                "Model record selected with record id \(record.id)",
                 level: .info,
-                category: .translations,
-                extra: ["recordId": "\(record.id)"]
+                category: .translations
             )
 
             languageModelFiles[fields.fileType] = [
@@ -379,10 +381,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
 
         guard !buckets.isEmpty else {
             logger.log(
-                "No model records found",
+                "No model records found for source language \(sourceLang) and target language \(targetLang)",
                 level: .warning,
-                category: .translations,
-                extra: ["sourceLang": sourceLang, "targetLang": targetLang]
+                category: .translations
             )
             return []
         }
@@ -392,10 +393,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             else { return [] }
 
         logger.log(
-            "Selected model version",
+            "Selected model version \(bestVersion) for source language \(sourceLang) and target language \(targetLang)",
             level: .info,
-            category: .translations,
-            extra: ["version": bestVersion, "sourceLang": sourceLang, "targetLang": targetLang]
+            category: .translations
         )
 
         return buckets[bestVersion] ?? []

@@ -1,6 +1,15 @@
 /* Label for button in the address toolbar, that cancels editing the address field when tapped. */
 "AddressToolbar.CancelEdit.Label.v138" = "Бекор кардан";
 
+/* Accessibility label describing the Google Lens button on the address toolbar that prompts a menu to allow the user to take a new photo or select an existing photo from their photo library to search with Google Lens. */
+"AddressToolbar.GoogleLens.A11yLabel.v153.v2" = "Ҷустуҷӯи тасвир ба воситаи «Google Lens»";
+
+/* Action title in the Google Lens address toolbar context menu. Opens the photo library picker so the user can choose an existing photo to search with Google Lens. */
+"AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle.v153" = "Китобхонаи аксҳо";
+
+/* Action title in the Google Lens address toolbar context menu. Opens the camera so the user can take a new photo to search with Google Lens. */
+"AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle.v153" = "Гирифтани акс";
+
 /* Accessibility label for the address field in the address toolbar. */
 "AddressToolbar.Location.A11y.Label.v128" = "Нишониеро ҷустуҷӯ кунед ё ворид намоед";
 

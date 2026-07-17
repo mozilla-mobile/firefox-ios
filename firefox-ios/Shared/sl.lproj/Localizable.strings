@@ -104,7 +104,7 @@
 "Bookmarks.Folder.Label" = "Mapa";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "Namizni zaznamki";
+"Bookmarks.Menu.DesktopBookmarks" = "Zaznamki na namizju";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Nov zaznamek";
@@ -1394,13 +1394,13 @@
 "Settings.NewTab.CustomURL" = "URL po meri";
 
 /* Option in settings to show a blank page when you open a new tab */
-"Settings.NewTab.Option.BlankPage" = "Prazno stran";
+"Settings.NewTab.Option.BlankPage" = "Prazna stran";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.Custom" = "Po meri";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Domačo stran Firefoxa";
+"Settings.NewTab.Option.FirefoxHome" = "Domača stran Firefoxa";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Domača stran";

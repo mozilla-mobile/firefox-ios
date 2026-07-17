@@ -134,7 +134,7 @@
 "Addresses.Toast.AddressSaveError.v130" = "A cím nem távolítható el";
 
 /* Suggestion to try again after an error occurred while trying to save an address. */
-"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Próbálja újra";
+"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Újrapróbálkozás";
 
 /* Toast message confirming that an address has been successfully updated. */
 "Addresses.Toast.AddressUpdatedConfirmation.v129" = "A címinformációk frissítve";

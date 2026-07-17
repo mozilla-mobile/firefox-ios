@@ -6,18 +6,8 @@
 
 final class MockResultsService: ResultsService, @unchecked Sendable {
     var fetchResultsCallCount = 0
-    var lastTranscription: String?
-    var resultToReturn: SearchResult = .empty()
-    var errorToThrow: Error?
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
-        fetchResultsCallCount += 1
-        lastTranscription = transcription
-
-        if let error = errorToThrow {
-            throw error
-        }
-
-        return resultToReturn
+        return SearchResult.empty()
     }
 }

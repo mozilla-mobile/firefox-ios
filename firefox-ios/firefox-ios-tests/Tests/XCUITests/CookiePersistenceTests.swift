@@ -2,21 +2,25 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 final class CookiePersistenceTests: BaseTestCase {
-    let cookieSiteURL = "http://localhost:\(serverPort)/test-fixture/test-cookie-store.html"
+    private var browserScreen: BrowserScreen!
+    private var toolbarScreen: ToolbarScreen!
+    private var tabTrayScreen: TabTrayScreen!
+
+    let cookieSiteURL = "http://localhost:\(serverPort)/test-fixture/\(TestPages.cookieStore)"
     let topSitesTitle = ["Facebook", "YouTube", "Wikipedia"]
 
     override func setUp() async throws {
-        // Fresh install the app
-        // removeApp() does not work on iOS 15 and 16 intermittently
-        if #available(iOS 17, *) {
-            removeApp()
-        }
-
-        // The app is correctly installed
+        // Start each test with a clean WKWebView cookie store (ClearProfile alone doesn't clear it)
+        // instead of relying on a fragile fresh install via removeApp().
+        launchArguments.append(LaunchArguments.ClearWebData)
         try await super.setUp()
+        browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     func testCookiePersistenceBasic() {
@@ -50,11 +54,9 @@ final class CookiePersistenceTests: BaseTestCase {
 
         // Open a few tabs
         topSitesTitle.forEach { title in
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            navigator.nowAt(NewTabScreen)
+            toolbarScreen.openNewTabFromTabTray()
             app.collectionViews.links.staticTexts[title].waitAndTap()
             waitUntilPageLoad()
-            navigator.nowAt(BrowserTab)
         }
 
         // Relaunch app
@@ -67,11 +69,9 @@ final class CookiePersistenceTests: BaseTestCase {
 
     func testCookiePersistenceOpenRegularTabAfterPrivateTab() {
         // Go to private tab
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        if userState.isPrivate {
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-            navigator.nowAt(BrowserTab)
-        }
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.switchToPrivateBrowsing()
+        tabTrayScreen.tapOnNewTabButton()
 
         // Open URL for Cookie login
         openCookieSite()
@@ -85,38 +85,30 @@ final class CookiePersistenceTests: BaseTestCase {
 
         // Open regular tabs
         // navigate to website and expect not to be login
-        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+        toolbarScreen.tapOnTabsButton()
         mozWaitForElementToExist(app.buttons["Private"])
         if iPad() {
             app.segmentedControls.buttons.firstMatch.waitAndTap()
         } else {
             app.buttons["Tabs"].tap()
         }
-        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        tabTrayScreen.tapOnNewTabButton()
 
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
     }
 
     private func relaunchApp() {
-        // Restart the app
         app.terminate()
-
-        // Wait a moment if needed (optional but sometimes helpful)
         _ = app.wait(for: .notRunning, timeout: TIMEOUT)
-
-        // Launch it again
+        // Relaunch without ClearWebData so the web cookie store persists — this is what the test verifies.
+        app.launchArguments = app.launchArguments.filter { $0 != LaunchArguments.ClearWebData }
         app.launch()
     }
 
     private func openCookieSite() {
-        navigator.openURL(path(forTestPage: "test-cookie-store.html"))
+        browserScreen.navigateToURL(cookieSiteURL)
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        let webview = app.webViews.firstMatch
-        mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])
-        mozWaitForElementToExist(webview.textFields.firstMatch)
-        mozWaitForElementToExist(webview.buttons["Login"])
-        mozWaitForElementToExist(webview.buttons["Logout"])
+        browserScreen.assertCookiePageLoaded()
     }
 }

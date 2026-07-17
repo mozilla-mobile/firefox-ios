@@ -8,7 +8,7 @@ import Account
 import Shared
 
 @MainActor
-final class MainMenuMiddleware: LegacyFeatureFlaggable {
+final class MainMenuMiddleware {
     private enum TelemetryAction {
         static let addToShortcuts = "add_to_shortcuts"
         static let bookmarks = "bookmarks"
@@ -44,7 +44,13 @@ final class MainMenuMiddleware: LegacyFeatureFlaggable {
         self.logger = logger
     }
 
-    lazy var mainMenuProvider: Middleware<AppState> = { state, action in
+    lazy var mainMenuProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         guard let action = action as? MainMenuAction else { return }
         let isHomepage = action.telemetryInfo?.isHomepage ?? false
         self.handleMainMenuActions(action: action, isHomepage: isHomepage)
@@ -212,6 +218,10 @@ final class MainMenuMiddleware: LegacyFeatureFlaggable {
 
         case .printSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
+
+        case .reportBrokenSite:
+            // Telemetry for the WebCompat reporter is added with the full sheet in FXIOS-16180.
+            break
 
         case .shareSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.share)

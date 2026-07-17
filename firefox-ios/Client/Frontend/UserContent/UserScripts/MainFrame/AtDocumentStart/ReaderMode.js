@@ -11,7 +11,8 @@ import { findRecipeJSONLD } from "./JSONLD.js";
 const DEBUG = false;
 
 var readabilityResult = null;
-const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
+// Matches both localhost and readermode:// implementations of Reader mode
+const readerModeURL = /^(http:\/\/localhost:\d+\/reader-mode\/page|readermode:\/\/app\/page)/;
 
 const BLOCK_IMAGES_SELECTOR =
   ".content p > img:only-child, " +
@@ -105,7 +106,8 @@ function readerize() {
   // when summarizing a reader view web page. 
   const recipeJSON = findRecipeJSONLD();
   if (readabilityResult) {
-    readabilityResult.jsonld = JSON.stringify(recipeJSON ?? "");
+    const serializedJSONLD = JSON.stringify(recipeJSON ?? "");
+    readabilityResult.jsonld = escapeForScriptBlock(serializedJSONLD);
   }
   return readabilityResult;
 }
@@ -196,6 +198,14 @@ function escapeHTML(string) {
     .replace(/\>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/\'/g, "&#039;");
+}
+
+function escapeForScriptBlock(jsonString) {
+  if (typeof jsonString !== "string") { return ""; }
+  return jsonString
+    .replace(/\//g, "\\/") 
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e");
 }
 
 Object.defineProperty(window.__firefox__, "reader", {

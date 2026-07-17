@@ -9,7 +9,7 @@ import Shared
 import Common
 
 // TODO: FXIOS-14155 - RouteBuilder should not be @unchecked Sendable due to shouldOpenNewTab usage
-final class RouteBuilder: LegacyFeatureFlaggable, @unchecked Sendable {
+final class RouteBuilder: @unchecked Sendable {
     private var isPrivate = false
     private var prefs: Prefs?
     private var mainQueue: DispatchQueueInterface
@@ -233,6 +233,8 @@ final class RouteBuilder: LegacyFeatureFlaggable, @unchecked Sendable {
             } else {
                 return nil
             }
+        case .appIcon:
+            return .settings(section: .appIcon)
         }
     }
 

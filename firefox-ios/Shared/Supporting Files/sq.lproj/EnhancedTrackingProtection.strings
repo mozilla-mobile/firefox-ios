@@ -82,10 +82,10 @@
 /* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Gjurmues të bllokuar: %@";
 
-/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Standardi bllokom gjurmues të rëndomtë pasi faqja fillon të ngarkohet, ndaj mund të shihni një numër më të lartë gjurmuesish. %@";
 
-/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Strikti bllokon më tepër gjurmues, duke i ndaluar ata para se faqja të fillojë të ngarkohet, ndaj mund të shihni një numër më të ulët gjurmuesish. %@";
 
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */

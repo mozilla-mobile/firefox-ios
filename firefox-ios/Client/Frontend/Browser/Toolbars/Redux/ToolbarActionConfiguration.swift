@@ -5,7 +5,14 @@
 import Foundation
 import ToolbarKit
 
-struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
+struct ToolbarMenuElementConfiguration: Equatable {
+    let actionType: ToolbarActionConfiguration.ActionType
+    let title: String
+    let imageName: String?
+    let a11yIdentifier: String?
+}
+
+struct ToolbarActionConfiguration: Equatable {
     enum ActionType {
         case back
         case forward
@@ -19,6 +26,9 @@ struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
         case stopLoading
         case trackingProtection
         case locationView
+        case googleLens
+        case googleLensPhotoLibrary
+        case googleLensTakePhoto
         case readerMode
         case readerModeWithSummarizer
         case summarizer
@@ -48,7 +58,9 @@ struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String
+    var cacheId: String?
     var a11yCustomActionName: String?
+    var menuElements: [ToolbarMenuElementConfiguration] = []
 
     func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {
         return actionType == .back ||
@@ -58,7 +70,7 @@ struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
                actionType == .readerMode ||
                actionType == .readerModeWithSummarizer ||
                actionType == .summarizer ||
-               (actionType == .translate && isSelected) ||
+               actionType == .translate ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }

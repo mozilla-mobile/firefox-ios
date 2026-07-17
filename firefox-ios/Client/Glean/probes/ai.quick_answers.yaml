@@ -1,0 +1,151 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Ai
+  - QuickAnswers
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+
+ai.quick_answers:
+  requested:
+    type: event
+    description: |
+      Recorded the instant the user initiates the Quick Answers flow (e.g. taps the button on the homepage).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  recording_started:
+    type: event
+    description: |
+      Recorded when the Quick Answers service starts attempting to capture user audio.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  recording_completed:
+    type: event
+    description: |
+      Recorded when the transcription completes.
+    extra_keys:
+      outcome:
+        type: boolean
+        description: |
+          True for success, false otherwise.
+      error_type:
+        type: string
+        description: |
+          Optional. The error message if present.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  results_started:
+    type: event
+    description: |
+      Recorded when the Quick Answers results service starts to fetch the results from the backend.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  results_completed:
+    type: event
+    description: |
+      Recorded when the Quick Answers result service returns the response or errors out.
+      In the success case (when outcome is true), the response is displayed to the user.
+      In the failure case (when the search service errors out), an error message is displayed instead.
+    extra_keys:
+      outcome:
+        type: boolean
+        description: |
+          True for success, false otherwise.
+      error_type:
+        type: string
+        description: |
+          Optional. The error message if present.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  closed:
+    type: event
+    description: |
+      Recorded when the user cancels or closes the Quick Answers screen at any point.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  results_time:
+    type: timing_distribution
+    description: |
+      Records the total time for generating the results and showing them to the user.
+      Starts when the request for fetching results starts.
+      Ends when the user sees the results or an error.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  citation_tapped:
+    type: event
+    description: |
+      Recorded when the user taps a citation source in the Quick Answers results.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  consent_shown:
+    type: event
+    description: |
+      Recorded when the user is shown the Use Quick Answers consent dialogue.
+    extra_keys:
+      agreed:
+        type: boolean
+        description: |
+          Whether the consent prompt was accepted.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"

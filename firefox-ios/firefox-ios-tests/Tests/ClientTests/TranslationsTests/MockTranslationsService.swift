@@ -37,11 +37,12 @@ final class MockTranslationsService: TranslationsServiceProtocol {
 
     func translateCurrentPage(
         for windowUUID: WindowUUID,
+        from sourceLanguage: String? = nil,
         to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
         try translateResult.get()
-        onLanguageIdentified?("en", targetLanguage)
+        onLanguageIdentified?(sourceLanguage ?? "en", targetLanguage)
     }
 
     func firstResponseReceived(for windowUUID: WindowUUID) async throws {

@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
+class MockMozAdsClient: MozAdsClient, @unchecked Sendable {
     var mockAdsImages: [String: MozAdsImage]?
     var mockAdsTiles: [String: MozAdsTile]?
     var mockError: Error?
@@ -16,25 +16,27 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
     var recordClickCalledWith: String?
     var recordImpressionCalledWith: String?
 
-    func clearCache() throws {}
-
-    func cycleContextId() throws -> String {
-        return "test-context-id"
+    init() {
+        super.init(noHandle: MozAdsClient.NoHandle())
     }
 
-    func recordClick(clickUrl: String) throws {
+    required init(unsafeFromHandle handle: UInt64) {
+        super.init(unsafeFromHandle: handle)
+    }
+
+    override func recordClick(clickUrl: String, options: MozAdsCallbackOptions?) throws {
         if let error = mockError { throw error }
         recordClickCalledWith = clickUrl
     }
 
-    func recordImpression(impressionUrl: String) throws {
+    override func recordImpression(impressionUrl: String, options: MozAdsCallbackOptions?) throws {
         if let error = mockError { throw error }
         recordImpressionCalledWith = impressionUrl
     }
 
-    func reportAd(reportUrl: String, reason: MozAdsReportReason) throws {}
+    override func reportAd(reportUrl: String, reason: MozAdsReportReason, options: MozAdsCallbackOptions?) throws {}
 
-    func requestImageAds(
+    override func requestImageAds(
         mozAdRequests: [MozAdsPlacementRequest],
         options: MozAdsRequestOptions?
     ) throws -> [String: MozAdsImage] {
@@ -42,16 +44,16 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
         return mockAdsImages ?? [:]
     }
 
-    func requestSpocAds(
-        mozAdRequests: [MozillaAppServices.MozAdsPlacementRequestWithCount],
-        options: MozillaAppServices.MozAdsRequestOptions?
-    ) throws -> [String: [MozillaAppServices.MozAdsSpoc]] {
+    override func requestSpocAds(
+        mozAdRequests: [MozAdsPlacementRequestWithCount],
+        options: MozAdsRequestOptions?
+    ) throws -> [String: [MozAdsSpoc]] {
         return [:]
     }
 
-    func requestTileAds(
-        mozAdRequests: [MozillaAppServices.MozAdsPlacementRequest],
-        options: MozillaAppServices.MozAdsRequestOptions?
+    override func requestTileAds(
+        mozAdRequests: [MozAdsPlacementRequest],
+        options: MozAdsRequestOptions?
     ) throws -> [String: MozillaAppServices.MozAdsTile] {
         if let error = mockError { throw error }
         return mockAdsTiles ?? [:]
@@ -61,195 +63,21 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
 @MainActor
 class UnifiedAdsProviderTests: XCTestCase {
     private var mockAdsClient: MockMozAdsClient!
-    private var networking: MockUnifiedTileNetworking!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        setupNimbusAdsClientTesting(isEnabled: false)
         TelemetryContextualIdentifier.setupContextId()
         mockAdsClient = MockMozAdsClient()
-        networking = MockUnifiedTileNetworking()
     }
 
     override func tearDown() async throws {
         mockAdsClient = nil
-        networking = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
-    private func setupNimbusAdsClientTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.adsClient.with { _, _ in
-            AdsClient(status: isEnabled)
-        }
-    }
-
-    func testFetchTile_givenErrorResponse_thenFailsWithError() {
-        networking.error = UnifiedTileNetworkingError.dataUnavailable
-        let subject = createSubject()
-
-        subject.fetchTiles { result in
-            switch result {
-            case let .failure(error as UnifiedAdsProvider.Error):
-                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-        }
-    }
-
-    func testFetchTile_whenEmptyResponseAndData_thenFailsWithError() {
-        networking.data = getData(from: emptyResponse)
-        networking.response = getResponse(from: 200)
-        let subject = createSubject()
-
-        subject.fetchTiles { result in
-            switch result {
-            case let .failure(error as UnifiedAdsProvider.Error):
-                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-        }
-    }
-
-    func testFetchTile_whenWrongResponseAndData_thenFailsWithError() {
-        networking.data = getData(from: emptyWrongResponse)
-        networking.response = getResponse(from: 200)
-        let subject = createSubject()
-
-        subject.fetchTiles { result in
-            switch result {
-            case let .failure(error as UnifiedAdsProvider.Error):
-                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-        }
-    }
-
-    func testFetchTile_whenEmptyArrayResponseAndData_thenFailsWithError() {
-        networking.data = getData(from: emptyArrayResponse)
-        networking.response = getResponse(from: 200)
-        let subject = createSubject()
-
-        subject.fetchTiles { result in
-            switch result {
-            case let .failure(error as UnifiedAdsProvider.Error):
-                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-        }
-    }
-
-    func testfetchTiles_whenProperTiles_thenSucceedsWithDecodedTiles() {
-        networking.data = getData(from: tiles)
-        networking.response = getResponse(from: 200)
-        let subject = createSubject()
-
-        subject.fetchTiles { result in
-            switch result {
-            case let .success(tiles):
-                XCTAssertEqual(tiles.count, 2)
-            default:
-                XCTFail("Expected success, got \(result) instead")
-            }
-        }
-    }
-
-    func testfetchTiles_whenInvertedOrder_thenReturnsProperTileOrder() {
-        networking.data = getData(from: invertedTiles)
-        networking.response = getResponse(from: 200)
-        let subject = createSubject()
-
-        subject.fetchTiles { result in
-            switch result {
-            case let .success(tiles):
-                XCTAssertEqual(tiles[0].name, "Test1")
-                XCTAssertEqual(tiles[1].name, "Test2")
-            default:
-                XCTFail("Expected success, got \(result) instead")
-            }
-        }
-    }
-
-    // MARK: - Cache
-
-    func testCaching_whenCacheData_thenSucceedsFromCache() {
-        let data = getData(from: tiles)
-        let response = getResponse(from: 200)
-        let request = getRequest()
-        let subject = createSubject()
-        subject.cache(response: response, for: request, with: data)
-
-        subject.fetchTiles { result in
-            switch result {
-            case let .success(tiles):
-                XCTAssertEqual(tiles.count, 2)
-            default:
-                XCTFail("Expected success, got \(result) instead")
-            }
-        }
-    }
-
-    func testCaching_whenEmptyResponse_thenSucceedsFromCache() {
-        let data = getData(from: emptyResponse)
-        let response = getResponse(from: 200)
-        let request = getRequest()
-        let subject = createSubject()
-        subject.cache(response: response, for: request, with: data)
-
-        subject.fetchTiles { result in
-            switch result {
-            case let .failure(error as UnifiedAdsProvider.Error):
-                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-        }
-    }
-
-    func testCaching_whenExpiredData_thenFailsWhenCacheIsTooOld() {
-        let data = getData(from: tiles)
-        let response = getResponse(from: 200)
-        let request = getRequest()
-        let subject = createSubject()
-        subject.cache(response: response, for: request, with: data)
-
-        subject.fetchTiles(timestamp: Date.tomorrow.toTimestamp()) { result in
-            switch result {
-            case let .failure(error as UnifiedAdsProvider.Error):
-                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-        }
-    }
-
-    func testCaching_whenExpired_thenFailsIfCacheIsNewerThanCurrentDate() {
-        let data = getData(from: tiles)
-        let response = getResponse(from: 200)
-        let request = getRequest()
-        let subject = createSubject()
-        subject.cache(response: response, for: request, with: data)
-
-        subject.fetchTiles(timestamp: Date.yesterday.toTimestamp()) { result in
-            switch result {
-            case let .failure(error as UnifiedAdsProvider.Error):
-                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-        }
-    }
-
-    // MARK: - Ads Client Tests
-
-    func testFetchTilesWithAdsClient_whenSuccessful_thenReturnsTiles() {
-        setupNimbusAdsClientTesting(isEnabled: true)
-
+    func testFetchTiles_whenSuccessful_thenReturnsTiles() {
         let adTile1 = MozAdsTile(
             blockKey: "12345",
             callbacks: MozAdsCallbacks(
@@ -287,21 +115,92 @@ class UnifiedAdsProviderTests: XCTestCase {
             switch result {
             case let .success(tiles):
                 XCTAssertEqual(tiles.count, 2)
-                let actual = Dictionary(uniqueKeysWithValues: tiles.map { ($0.name, $0.url) })
-                let expected = [
-                    "newtab_mobile_tile_1": "https://www.test1.com",
-                    "newtab_mobile_tile_2": "https://www.test5.com"
-                ]
-                XCTAssertEqual(actual, expected)
+                XCTAssertEqual(tiles[0].url, "https://www.test1.com")
+                XCTAssertEqual(tiles[1].url, "https://www.test5.com")
             default:
                 XCTFail("Expected success, got \(result) instead")
             }
         }
     }
 
-    func testFetchTilesWithAdsClient_whenError_thenFailsWithError() {
-        setupNimbusAdsClientTesting(isEnabled: true)
+    func testFetchTiles_whenInvertedOrder_thenReturnsProperTileOrder() {
+        let adTile1 = MozAdsTile(
+            blockKey: "12345",
+            callbacks: MozAdsCallbacks(
+                click: "https://www.test2.com",
+                impression: "https://www.test3.com",
+                report: nil
+            ),
+            format: "tile",
+            imageUrl: "https://www.test4.com",
+            name: "newtab_mobile_tile_1",
+            url: "https://www.test1.com"
+        )
 
+        let adTile2 = MozAdsTile(
+            blockKey: "6789",
+            callbacks: MozAdsCallbacks(
+                click: "https://www.test6.com",
+                impression: "https://www.test7.com",
+                report: nil
+            ),
+            format: "tile",
+            imageUrl: "https://www.test8.com",
+            name: "newtab_mobile_tile_2",
+            url: "https://www.test5.com"
+        )
+
+        // Insert position2 before position1 to verify the order does not depend
+        // on the dictionary's iteration order.
+        mockAdsClient.mockAdsTiles = [
+            "newtab_mobile_tile_2": adTile2,
+            "newtab_mobile_tile_1": adTile1
+        ]
+
+        let subject = createSubject()
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 2)
+                XCTAssertEqual(tiles[0].url, "https://www.test1.com")
+                XCTAssertEqual(tiles[1].url, "https://www.test5.com")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testFetchTiles_whenOnlyFirstPlacement_thenReturnsSingleTile() {
+        let adTile1 = MozAdsTile(
+            blockKey: "12345",
+            callbacks: MozAdsCallbacks(
+                click: "https://www.test2.com",
+                impression: "https://www.test3.com",
+                report: nil
+            ),
+            format: "tile",
+            imageUrl: "https://www.test4.com",
+            name: "newtab_mobile_tile_1",
+            url: "https://www.test1.com"
+        )
+
+        mockAdsClient.mockAdsTiles = ["newtab_mobile_tile_1": adTile1]
+
+        let subject = createSubject()
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 1)
+                XCTAssertEqual(tiles[0].url, "https://www.test1.com")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testFetchTiles_whenError_thenFailsWithError() {
         mockAdsClient.mockError = NSError(domain: "test", code: 1)
 
         let subject = createSubject()
@@ -319,111 +218,11 @@ class UnifiedAdsProviderTests: XCTestCase {
     // MARK: - Helper functions
 
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsProvider {
-        let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
         let factory = MockMozAdsClientFactory(mockClient: mockAdsClient)
-        let subject = UnifiedAdsProvider(
-            adsClientFactory: factory,
-            networking: networking,
-            urlCache: cache
-        )
+        let subject = UnifiedAdsProvider(adsClientFactory: factory)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
-    }
-
-    func getData(from string: String) -> Data {
-        return string.data(using: .utf8)!
-    }
-
-    func getResponse(from statusCode: Int) -> HTTPURLResponse {
-        return HTTPURLResponse(url: URL(string: UnifiedAdsProvider.stagingResourceEndpoint)!,
-                               statusCode: statusCode,
-                               httpVersion: nil,
-                               headerFields: nil)!
-    }
-
-    func getRequest() -> URLRequest {
-        return URLRequest(url: URL(string: UnifiedAdsProvider.stagingResourceEndpoint)!)
-    }
-
-    // MARK: - Mock responses
-
-    var emptyArrayResponse: String {
-        return "{\"newtab_mobile_tile_1\":[]}"
-    }
-
-    var emptyWrongResponse: String {
-        return "{\"newtab_mobile_tile_1\":[{\"answer\":\"isBad\"}]}"
-    }
-
-    var emptyResponse: String {
-        return "{}"
-    }
-
-    let tiles = """
-{
-    "newtab_mobile_tile_1": [
-        {
-            "format": "tile",
-            "url": "https://www.test1.com",
-            "callbacks": {
-                "click": "https://www.test2.com",
-                "impression": "https://www.test3.com"
-            },
-            "image_url": "https://www.test4.com",
-            "name": "Test1",
-            "block_key": "12345"
-        }
-    ],
-    "newtab_mobile_tile_2": [
-        {
-            "format": "tile",
-            "url": "https://www.test5.com",
-            "callbacks": {
-                "click": "https://www.test6.com",
-                "impression": "https://www.test7.com"
-            },
-            "image_url": "https://www.test8.com",
-            "name": "Test2",
-            "block_key": "6789"
-        }
-    ]
-}
-"""
-
-    let invertedTiles = """
-{
-    "newtab_mobile_tile_2": [
-        {
-            "format": "tile",
-            "url": "https://www.test5.com",
-            "callbacks": {
-                "click": "https://www.test6.com",
-                "impression": "https://www.test7.com"
-            },
-            "image_url": "https://www.test8.com",
-            "name": "Test2",
-            "block_key": "6789"
-        }
-    ],
-    "newtab_mobile_tile_1": [
-        {
-            "format": "tile",
-            "url": "https://www.test1.com",
-            "callbacks": {
-                "click": "https://www.test2.com",
-                "impression": "https://www.test3.com"
-            },
-            "image_url": "https://www.test4.com",
-            "name": "Test1",
-            "block_key": "12345"
-        }
-    ]
-}
-"""
-
-    var anError: NSError {
-        return NSError(domain: "test error", code: 0)
     }
 }

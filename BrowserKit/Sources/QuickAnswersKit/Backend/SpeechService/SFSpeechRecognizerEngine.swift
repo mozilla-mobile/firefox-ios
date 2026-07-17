@@ -32,9 +32,8 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
     }
 
     func prepare() async throws {
-        guard await isPermissionGranted() else {
-            throw SpeechError.permissionDenied
-        }
+        try await authorizer.requestMicrophonePermission()
+        try await authorizer.requestSpeechPermission()
         try audioManager.configureAudioSession()
     }
 
@@ -51,7 +50,7 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
         try audioManager.prepareAndStartEngine()
 
         // Start recognizer task if available
-        guard let speechRecognizer, speechRecognizer.isAvailable else {
+        guard let speechRecognizer, speechRecognizer.isAvailable, speechRecognizer.supportsOnDeviceRecognition else {
             throw SpeechError.recognizerNotAvailable
         }
 
@@ -87,15 +86,9 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
         }
     }
 
-    func stop() {
-        audioManager.stopEngine()
+    func stop() throws {
+        try audioManager.stopEngine()
         request?.endAudio()
         recognitionTask?.finish()
-    }
-
-    private func isPermissionGranted() async -> Bool {
-        let isMicAuthorized = await authorizer.isMicrophonePermissionAuthorized()
-        let isSpeechAuthorized = await authorizer.isSpeechPermissionAuthorized()
-        return isMicAuthorized && isSpeechAuthorized
     }
 }

@@ -17,22 +17,31 @@ struct TopSitesAction: Action {
     let topSites: [TopSiteConfiguration]?
     let numberOfRows: Int?
     let isEnabled: Bool?
+    let shouldShowAddShortcutTile: Bool?
     let telemetryConfig: TopSitesTelemetryConfig?
+    let shortcutPinnedSource: HomepageTelemetry.TopSitesShortcutPinnedSource?
+    let shortcutUnpinnedSource: HomepageTelemetry.TopSitesShortcutUnpinnedSource?
 
     init(
         topSites: [TopSiteConfiguration]? = nil,
         numberOfRows: Int? = nil,
         isEnabled: Bool? = nil,
+        shouldShowAddShortcutTile: Bool? = nil,
         telemetryConfig: TopSitesTelemetryConfig? = nil,
+        shortcutPinnedSource: HomepageTelemetry.TopSitesShortcutPinnedSource? = nil,
+        shortcutUnpinnedSource: HomepageTelemetry.TopSitesShortcutUnpinnedSource? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isEnabled = isEnabled
+        self.shouldShowAddShortcutTile = shouldShowAddShortcutTile
         self.topSites = topSites
         self.numberOfRows = numberOfRows
         self.telemetryConfig = telemetryConfig
+        self.shortcutPinnedSource = shortcutPinnedSource
+        self.shortcutUnpinnedSource = shortcutUnpinnedSource
     }
 }
 
@@ -42,6 +51,8 @@ enum TopSitesActionType: ActionType {
     case toggleShowSponsoredSettings
     case tapOnHomepageTopSitesCell
     case topSitesSeen
+    case shortcutPinned
+    case shortcutUnpinned
 }
 
 enum TopSitesMiddlewareActionType: ActionType {

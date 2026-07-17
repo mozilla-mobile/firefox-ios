@@ -4,6 +4,7 @@
 
 import Foundation
 import enum MozillaAppServices.VisitType
+import QuickAnswersKit
 import SummarizeKit
 
 /// View types that the browser coordinator can navigate to
@@ -17,7 +18,8 @@ enum BrowserNavigationDestination: Equatable {
     case homepageZeroSearch
     case zeroSearch
     case shortcutsLibrary
-    case quickAnswers
+    case worldCupCountryPicker
+    case quickAnswers(transitionType: QuickAnswersTransitionType)
     case privacyNoticeLink(URL)
     case summarizer(config: SummarizerConfig, trigger: SummarizerTrigger)
     case certificatesFromErrorPage
@@ -26,6 +28,7 @@ enum BrowserNavigationDestination: Equatable {
     // Webpage views
     case link
     case newTab
+    case searchQuery(String)
 
     // System views
     case shareSheet(ShareSheetConfiguration)

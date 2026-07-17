@@ -5,20 +5,10 @@
 import Common
 import Foundation
 
-class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, LegacyFeatureFlaggable {
+class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable {
     private lazy var launchScreen = LaunchScreenView.fromNib()
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
-
-    private lazy var splashScreenAnimation = SplashScreenAnimation()
-    private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
-
-    private var shouldTriggerSplashScreenExperiment: Bool {
-        return featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly)
-        && !viewModel.getSplashScreenExperimentHasShown()
-    }
-
-    private var isViewSetupComplete = false
 
     init(windowUUID: WindowUUID,
          coordinator: LaunchFinishedLoadingDelegate,
@@ -42,27 +32,19 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-
-        Task {
-            try await delayStart()
-            startLoading()
-        }
+        startLoading()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        if !isViewSetupComplete {
-            setupLaunchScreen()
-            isViewSetupComplete = true
-        }
-
         viewModel.loadNextLaunchType()
     }
 
     // MARK: - Loading
-    func startLoading() {
+
+    private func startLoading() {
         viewModel.startLoading()
+        setupLayout()
     }
 
     // MARK: - Setup
@@ -95,22 +77,5 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
 
     func finishedLoadingLaunchOrder() {
         viewModel.loadNextLaunchType()
-    }
-
-    // MARK: - Splash Screen
-
-    private func delayStart() async throws {
-        guard shouldTriggerSplashScreenExperiment else { return }
-        viewModel.setSplashScreenExperimentHasShown()
-        let position: Int = nimbusSplashScreenFeatureLayer.maximumDurationMs
-        try await Task.sleep(nanoseconds: UInt64(position * 1_000_000))
-    }
-
-    private func setupLaunchScreen() {
-        setupLayout()
-        guard shouldTriggerSplashScreenExperiment else { return }
-        if !UIAccessibility.isReduceMotionEnabled {
-            splashScreenAnimation.configureAnimation(with: launchScreen!)
-        }
     }
 }

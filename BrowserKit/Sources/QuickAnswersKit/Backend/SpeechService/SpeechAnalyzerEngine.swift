@@ -39,9 +39,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     }
 
     func prepare() async throws {
-        guard await isPermissionGranted() else {
-            throw SpeechError.permissionDenied
-        }
+        try await authorizer.requestMicrophonePermission()
         try audioManager.configureAudioSession()
     }
 
@@ -63,7 +61,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         let transcriber = SpeechTranscriber(
             locale: resolvedLocale,
             transcriptionOptions: [],
-            reportingOptions: [.volatileResults],
+            reportingOptions: [.volatileResults, .fastResults],
             attributeOptions: [.transcriptionConfidence]
         )
         self.transcriber = transcriber
@@ -118,7 +116,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     }
 
     func stop() async throws {
-        audioManager.stopEngine()
+        try audioManager.stopEngine()
 
         inputContinuation?.finish()
         inputContinuation = nil
@@ -129,13 +127,6 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
 
         transcriber = nil
         analyzer = nil
-    }
-
-    // We only care about microphone permissions for the newer speech APIs, since
-    // we are able to build successfully without the check.
-    private func isPermissionGranted() async -> Bool {
-        let isMicAuthorized = await authorizer.isMicrophonePermissionAuthorized()
-        return isMicAuthorized
     }
 
     private func resolveLocale(with currentLocale: Locale) async throws -> Locale {

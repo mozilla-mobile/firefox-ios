@@ -8,7 +8,7 @@ import MozillaAppServices
 @testable import Client
 
 @MainActor
-class StoryProviderTests: XCTestCase, LegacyFeatureFlaggable {
+class StoryProviderTests: XCTestCase {
     func testFetchingStories_forHomepage_returnsList() async {
         let stories: [RecommendationDataItem] = (0..<150).map { .makeItem("feed\($0)") }
         let response = CuratedRecommendationsResponse.makeResponse(items: stories)

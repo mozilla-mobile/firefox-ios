@@ -237,8 +237,46 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // snapshot("HomeDefaultBrowserLearnMore")
     }
 
+    // Maps screen graph node names to the Settings cell identifier MappaMundi will tap.
+    // For multi-hop paths (e.g. MailAppSettings via BrowsingSettings), use the first-hop cell.
+    private static let settingsCellId: [String: String] = [
+        SearchSettings: AccessibilityIdentifiers.Settings.Search.searchNavigationBar,
+        NewTabSettings: "NewTab",
+        MailAppSettings: AccessibilityIdentifiers.Settings.Browsing.title,
+        DisplaySettings: "DisplayThemeOption",
+        ClearPrivateDataSettings: AccessibilityIdentifiers.Settings.ClearData.title,
+        TrackingProtectionSettings: AccessibilityIdentifiers.Settings.ContentBlocker.title,
+        NotificationsSettings: AccessibilityIdentifiers.Settings.Notifications.title,
+        BrowsingSettings: AccessibilityIdentifiers.Settings.Browsing.title,
+        SummarizeSettings: AccessibilityIdentifiers.Settings.Summarize.title,
+        SiriSettings: "SiriSettings",
+        AutofillPasswordSettings: AccessibilityIdentifiers.Settings.AutofillsPasswords.title,
+        AppIconSettings: AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle,
+        ToolbarSettings: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting,
+        HomeSettings: AccessibilityIdentifiers.Settings.Homepage.homeSettings,
+        AddCustomSearchSettings: AccessibilityIdentifiers.Settings.Search.searchNavigationBar,
+    ]
+
+    private func scrollCellIntoView(_ cell: XCUIElement, in scrollView: XCUIElement) {
+        if cell.isHittable { return }
+        for _ in 0..<8 {
+            scrollView.swipeUp()
+            if cell.isHittable { return }
+        }
+        for _ in 0..<16 {
+            scrollView.swipeDown()
+            if cell.isHittable { return }
+        }
+    }
+
     @MainActor
     func testSettings() {
+        // Allow failures on individual settings nodes without aborting the entire test.
+        // A single unreachable node previously wiped all remaining screenshots.
+        let savedContinueAfterFailure = continueAfterFailure
+        continueAfterFailure = true
+        defer { continueAfterFailure = savedContinueAfterFailure }
+
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
@@ -248,6 +286,12 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         }
 
         allSettingsScreens.forEach { nodeName in
+            // Scroll to top before each node so the target cell is reachable
+            self.navigator.goto(SettingsScreen)
+            scrollToTop(table)
+            if let cellId = Self.settingsCellId[nodeName] {
+                scrollCellIntoView(table.cells[cellId], in: table)
+            }
             self.navigator.goto(nodeName)
             if nodeName == "DisplaySettings" {
                 snapshot("Settings-\(nodeName)")
@@ -261,6 +305,18 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
                     snapshot("Settings-\(nodeName)-\(i)")
                 }
             }
+        }
+    }
+
+    private func scrollToTop(_ table: XCUIElement) {
+        // Swipe down repeatedly to scroll back to the top of the settings list
+        for _ in 0..<10 {
+            guard table.exists else { return }
+            let firstCell = table.cells.element(boundBy: 0)
+            if firstCell.exists && firstCell.isHittable {
+                return
+            }
+            table.swipeDown()
         }
     }
 

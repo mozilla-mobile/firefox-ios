@@ -127,10 +127,17 @@ private func checkFirefoxShortcutsOptions() {
 
 @MainActor
 private func skipOnboardingIfNeeded(app: XCUIApplication) {
-    if app.buttons["Continue"].waitForExistence(timeout: TIMEOUT) {
-        app.buttons["Continue"].waitAndTap()
-        app.buttons["CloseButton"].waitAndTap()
+    // Tapping a widget cold-starts the production app (not the UI-test app delegate), so the
+    // SkipIntro launch argument never runs and the full production onboarding (Terms of Service
+    // + tour) appears. Reuse the OnboardingScreen page object: handleTermsOfService() taps the
+    // ToS primary button and re-taps if the cross-dissolve transition absorbed the first tap
+    // (a single tap is what makes these tests flake), then closeTour() dismisses the tour.
+    guard app.buttons["Continue"].mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) else {
+        return
     }
+    let onboardingScreen = OnboardingScreen(app: app, flowType: .modernKit)
+    onboardingScreen.handleTermsOfService()
+    onboardingScreen.closeTour()
 }
 
 // swiftlint:disable:next type_body_length
@@ -348,6 +355,41 @@ class TodayWidgetTests: BaseTestCase {
         cells.element.waitAndTap()
     }
 
+    private func handleAllowPasteIfPresent() {
+        // The paste alert can take a while to surface after the widget launches the app, so wait
+        // the longer timeout before giving up rather than moving on and leaving it undismissed.
+        let allowPaste = springboard.alerts.buttons["Allow Paste"]
+        if allowPaste.mozWaitForElementToExist(timeout: TIMEOUT_LONG, failOnTimeout: false) {
+            mozWaitElementHittable(element: allowPaste, timeout: TIMEOUT)
+            allowPaste.waitAndTap()
+        }
+    }
+
+    /// Verifies a copied-link widget opens the copied URL. The first widget launch cold-starts the
+    /// production app, which shows onboarding and drops the deep link, leaving the app on an empty
+    /// new tab. Dismissing onboarding persists `IntroSeen`, so relaunching from the widget skips
+    /// onboarding and honors the deep link.
+    private func openCopiedLinkAndVerify(copiedString: String, widgetLabel: String) {
+        // First launch: clear the paste alert and complete onboarding so `IntroSeen` is persisted.
+        handleAllowPasteIfPresent()
+        skipOnboardingIfNeeded(app: app)
+        // Relaunch from the widget; with onboarding gone the deep link is honored.
+        UIPasteboard.general.string = copiedString
+        app.terminate()
+        goToTodayWidgetPage()
+        tapOnWidget(widgetType: widgetLabel)
+        handleAllowPasteIfPresent()
+        skipOnboardingIfNeeded(app: app)
+        // Verify the copied string is in the URL field
+        mozWaitForElementToExist(urlBarAddress, timeout: TIMEOUT)
+        mozWaitForValueContains(urlBarAddress, value: copiedString, timeout: TIMEOUT)
+        guard let urlField = urlBarAddress.value as? String else {
+            XCTFail("Expected value to be a String but found \(type(of: urlBarAddress.value))")
+            return
+        }
+        XCTAssertTrue(urlField.contains(copiedString), "URL does not contain the copied string.")
+    }
+
     // TESTS
     // https://mozilla.testrail.io/index.php?/cases/view/2769289
     func testNewSearchWidget() throws {
@@ -504,23 +546,7 @@ class TodayWidgetTests: BaseTestCase {
         // Copy the string to the clipboard
         UIPasteboard.general.string = copiedString
         tapOnWidget(widgetType: "Copied Link")
-        // Handle paste alert
-        if #available(iOS 16, *) {
-            mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
-            springboard.alerts.buttons["Allow Paste"].waitAndTap()
-        }
-
-        skipOnboardingIfNeeded(app: app)
-
-        // Verify the copied string is in the URL field
-        mozWaitForElementToExist(urlBarAddress, timeout: TIMEOUT)
-        mozWaitForValueContains(urlBarAddress, value: copiedString, timeout: TIMEOUT)
-        guard let urlField = urlBarAddress.value as? String else {
-            XCTFail("Expected value to be a String but found \(type(of: urlBarAddress.value))")
-            return
-        }
-        XCTAssertTrue(urlField.contains(copiedString),
-                      "URL does not contain the copied string.")
+        openCopiedLinkAndVerify(copiedString: copiedString, widgetLabel: "Copied Link")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783001
@@ -614,24 +640,7 @@ class TodayWidgetTests: BaseTestCase {
         springboard.swipeDown()
         springboard.buttons["Done"].waitAndTap()
         checkFirefoxShortcutsOptions()
-        mozWaitElementHittable(element: springboard.buttons.matching(
-            NSPredicate(format: "label CONTAINS[c] %@", "Copied Link")
-        ).element, timeout: TIMEOUT)
-        springboard.buttons.matching(NSPredicate(
-            format: "label CONTAINS[c] %@", "Copied Link")
-        ).element.waitAndTap()
-
-        mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
-        springboard.alerts.buttons["Allow Paste"].waitAndTap()
-        skipOnboardingIfNeeded(app: app)
-        // Verify the copied string is in the URL field
-        mozWaitForElementToExist(urlBarAddress, timeout: TIMEOUT)
-        mozWaitForValueContains(urlBarAddress, value: copiedString, timeout: TIMEOUT)
-        guard let urlField = urlBarAddress.value as? String else {
-            XCTFail("Expected value to be a String but found \(type(of: urlBarAddress.value))")
-            return
-        }
-        XCTAssertTrue(urlField.contains(copiedString),
-                      "URL does not contain the copied string.")
+        tapOnWidget(widgetType: "Copied Link")
+        openCopiedLinkAndVerify(copiedString: copiedString, widgetLabel: "Copied Link")
     }
 }

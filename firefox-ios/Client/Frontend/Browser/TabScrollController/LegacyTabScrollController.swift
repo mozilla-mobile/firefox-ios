@@ -15,6 +15,11 @@ protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     var overKeyboardContainerConstraint: ConstraintReference? { get set }
     var bottomContainerConstraint: ConstraintReference? { get set }
 
+    /// `true` when the toolbars are collapsed because the user scrolled the page (not when the
+    /// address bar was minimized for the keyboard accessory). Lets the keyboard-dismiss path keep
+    /// the collapsed/pill state instead of forcing the address bar back to fully shown.
+    var isToolbarStateCollapsed: Bool { get }
+
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
                                bottomContainer: BaseAlphaStackView?,
                                headerContainer: BaseAlphaStackView?)
@@ -91,7 +96,11 @@ final class LegacyTabScrollController: NSObject,
     private var lastPanTranslation: CGFloat = 0
     private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
-    var toolbarState: ToolbarState = .visible
+    private var toolbarState: ToolbarState = .visible
+
+    var isToolbarStateCollapsed: Bool {
+        return toolbarState == .collapsed
+    }
 
     private let windowUUID: WindowUUID
     private let logger: Logger
@@ -422,9 +431,13 @@ final class LegacyTabScrollController: NSObject,
     ) {
         if keyPath == "contentSize" {
             ensureMainThread { [weak self] in
-                guard let self, self.shouldUpdateUIWhenScrolling, self.toolbarsShowing else { return }
+                guard let self else { return }
 
-                self.showToolbars(animated: true)
+                // When the content is no longer scrollable example a page adds an overlay that shrinks the
+                // document, the user can't reveal the toolbars by scrolling, force them visible if collapsed.
+                if !self.hasScrollableContent, self.isToolbarStateCollapsed {
+                    self.showToolbars(animated: false)
+                }
             }
         }
     }
@@ -677,6 +690,10 @@ private extension LegacyTabScrollController {
 
             zoomPageBar?.updateAlphaForSubviews(alpha)
             zoomPageBar?.superview?.layoutIfNeeded()
+
+            if isBottomSearchBar && overKeyboardOffset == 0 {
+                overKeyboardContainer?.updateAlphaForSubviews(alpha)
+            }
         }
     }
 

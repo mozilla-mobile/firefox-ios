@@ -7,83 +7,119 @@ import Shared
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum FeatureFlagID: String, CaseIterable {
+    case adBlocker
     case addressAutofillEdit
-    case addressBarMenu
-    case adsClient
+    case addressBarGestureToOpenTabTrayCloseTab
+    case addressBarGestureToOpenTabTrayInteractive
+    case addressBarGestureToOpenTabTraySwipe
     case aiKillSwitch
-    case appearanceMenu
-    case appIconSelection
     case badCertDomainErrorPage
     case bookmarksSearchFeature
+    case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
+    case googleLens
     case hntSponsoredShortcuts
+    case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
+    case homepagePinnedHeader
     case homepageSearchBar
     case homepageStoryCategories
-    case needsReloadRefactor
-    case shouldUseBrandRefreshConfiguration
-    case shouldUseJapanConfiguration
+    case homepageTrackerBlockerModule
+    case hostedSummarizer
+    case hostedSummarizerShakeGesture
+    case hostedSummarizerToolbarEntrypoint
+    case httpsUpgrade
+    case improvedAppStoreReviewTriggerFeature
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
+    case newBookmarkFolderTree
+    case novaDesign
     case noInternetConnectionErrorPage
+    case quickAnswers
     case recentSearches
-    case reportSiteIssue
     case relayIntegration
+    case reportBrokenSite
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
+    case shouldUseBrandRefreshConfiguration
+    case shouldUseJapanConfiguration
     case snapkitRemovalRefactor
-    case splashScreen
     case startAtHome
-    case hostedSummarizer
-    case hostedSummarizerToolbarEntrypoint
-    case hostedSummarizerShakeGesture
-    case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
-    case tabTrayUIExperiments
     case tabTrayTranslucency
-    case toolbarUpdateHint
+    case tabTrayUIExperiments
     case tosFeature
     case touFeature
-    case trackingProtectionRefactor
     case translation
     case translationLanguagePicker
     case trendingSearches
     case unifiedSearch
     case videoIntroOnboarding
-    case quickAnswers
+    case waybackMachine
+    case worldCupWidget
 
-    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
+    /// The user preferences key for features that support user-togglable settings.
+    /// Returns `nil` for features that are not user-configurable.
+    var userPrefsKey: String? {
+        typealias FlagKeys = PrefsKeys.FeatureFlags
+        typealias HomepageKeys = PrefsKeys.HomepageSettings
+
+        switch self {
+        case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
+        case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .googleLens: return FlagKeys.GoogleLens
+        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
+        case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
+        case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
+        case .homepageTrackerBlockerModule: return HomepageKeys.TrackerBlockerSection
+        case .sentFromFirefox: return FlagKeys.SentFromFirefox
+        case .startAtHome: return FlagKeys.StartAtHome
+        case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
+        default: return nil
+        }
+    }
+
+    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`.
+    // Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .aiKillSwitch,
-                .appearanceMenu,
-                .appIconSelection,
-                .addressBarMenu,
-                .adsClient,
+        case    .adBlocker,
+                .addressBarGestureToOpenTabTrayCloseTab,
+                .addressBarGestureToOpenTabTrayInteractive,
+                .addressBarGestureToOpenTabTraySwipe,
+                .aiKillSwitch,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
+                .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
+                .googleLens,
+                .homepageAddShortcutTile,
+                .homepagePinnedHeader,
                 .homepageSearchBar,
                 .homepageStoryCategories,
+                .homepageTrackerBlockerModule,
                 .hostedSummarizer,
+                .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
                 .nativeErrorPage,
-                .needsReloadRefactor,
+                .newBookmarkFolderTree,
+                .novaDesign,
                 .noInternetConnectionErrorPage,
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
+                .reportBrokenSite,
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
@@ -92,20 +128,15 @@ enum FeatureFlagID: String, CaseIterable {
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .touFeature,
-                .trackingProtectionRefactor,
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,
-                .unifiedSearch:
+                .unifiedSearch,
+                .waybackMachine,
+                .worldCupWidget:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
         }
     }
-}
-
-/// This enum is a constraint for any feature flag options that have more than
-/// just an ON or OFF setting. These option must also be added to `FeatureFlagID`
-enum FeatureFlagIDWithCustomOptions {
-    case startAtHome
 }

@@ -18,7 +18,6 @@ struct HomepageAction: Action {
     let actionType: ActionType
     let isSearchBarEnabled: Bool?
     let shouldShowSpacer: Bool?
-    let showiPadSetup: Bool?
     let numberOfTopSitesPerRow: Int?
     let telemetryExtras: HomepageTelemetryExtras?
     let isZeroSearch: Bool?
@@ -29,7 +28,6 @@ struct HomepageAction: Action {
         isSearchBarEnabled: Bool? = nil,
         shouldShowSpacer: Bool? = nil,
         numberOfTopSitesPerRow: Int? = nil,
-        showiPadSetup: Bool? = nil,
         telemetryExtras: HomepageTelemetryExtras? = nil,
         isZeroSearch: Bool? = nil,
         availableContentHeight: CGFloat? = nil,
@@ -42,7 +40,6 @@ struct HomepageAction: Action {
         self.isSearchBarEnabled = isSearchBarEnabled
         self.shouldShowSpacer = shouldShowSpacer
         self.numberOfTopSitesPerRow = numberOfTopSitesPerRow
-        self.showiPadSetup = showiPadSetup
         self.telemetryExtras = telemetryExtras
         self.isZeroSearch = isZeroSearch
         self.availableContentHeight = availableContentHeight
@@ -56,6 +53,7 @@ enum HomepageActionType: ActionType {
     case viewWillTransition
     case viewWillAppear
     case viewDidAppear
+    case viewWillDisappear
     case viewDidLayoutSubviews
     case didSelectItem
     case embeddedHomepage
@@ -69,7 +67,8 @@ enum HomepageMiddlewareActionType: ActionType {
     case jumpBackInLocalTabsUpdated
     case jumpBackInRemoteTabsUpdated
     case bookmarksUpdated
-    case enteredForeground
+    case didBecomeActive
+    case didEnterBackground
     case configuredPrivacyNotice
     case configuredSearchBar
     case configuredSpacer

@@ -111,6 +111,7 @@ private struct DarkColourPalette: ThemeColourPalette {
 
     // MARK: - Border
     var borderPrimary: UIColor = FXColors.DarkGrey05
+    var borderSecondary: UIColor = FXColors.DarkGrey10
     var borderAccent: UIColor = FXColors.Blue30
     var borderAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var borderAccentPrivate: UIColor = FXColors.Purple60
@@ -132,4 +133,22 @@ private struct DarkColourPalette: ThemeColourPalette {
     var gradientAIStrongStop3: UIColor = FXColors.Yellow50
 
     var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
+
+    // MARK: - Nova tokens
+    var layerAccentSubtle: UIColor { NovaMissingToken.color("layerAccentSubtle") }
+    var layerInverse: UIColor { NovaMissingToken.color("layerInverse") }
+    var layerGlassTintNova: UIColor { NovaMissingToken.color("layerGlassTintNova") }
+    var textToast: UIColor { NovaMissingToken.color("textToast") }
+    var iconInverted: UIColor { NovaMissingToken.color("iconInverted") }
+    var iconOnColorDisabled: UIColor { NovaMissingToken.color("iconOnColorDisabled") }
+    var iconPrivate: UIColor { NovaMissingToken.color("iconPrivate") }
+    var borderStrong: UIColor { NovaMissingToken.color("borderStrong") }
+    var borderRadioButtonDefault: UIColor { NovaMissingToken.color("borderRadioButtonDefault") }
+    var gradient: Gradient { NovaMissingToken.gradient("gradient") }
+    var gradientAccent: Gradient { NovaMissingToken.gradient("gradientAccent") }
+    var gradientAccentSubtle: Gradient { NovaMissingToken.gradient("gradientAccentSubtle") }
+    var gradientAIStrong: Gradient { NovaMissingToken.gradient("gradientAIStrong") }
+    var gradientBorder: Gradient { NovaMissingToken.gradient("gradientBorder") }
+    var gradientPrivacy: Gradient { NovaMissingToken.gradient("gradientPrivacy") }
+    var gradientPrivacyMask: Gradient { NovaMissingToken.gradient("gradientPrivacyMask") }
 }

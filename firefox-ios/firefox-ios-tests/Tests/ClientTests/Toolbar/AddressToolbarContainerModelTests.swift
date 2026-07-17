@@ -14,7 +14,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: MockNimbusFeatureFlags())
 
         mockProfile = MockProfile()
         searchEnginesManager = await SearchEnginesManager(
@@ -181,6 +181,41 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     @MainActor
+    func testAddressToolbarConfig_withGoogleLensFeatureEnabled_configuresEditingAccessoryButton() {
+        let state = createToolbarState(isGoogleLensEnabled: true)
+        let model = createSubject(withState: state)
+        let expectedMenuElements = [
+            ToolbarMenuElement(
+                title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
+                imageName: StandardImageIdentifiers.Large.camera,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction,
+                onSelected: { _ in }
+            ),
+            ToolbarMenuElement(
+                title: .AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle,
+                imageName: StandardImageIdentifiers.Large.image,
+                a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensPhotoLibraryAction,
+                onSelected: { _ in }
+            )
+        ]
+
+        XCTAssertEqual(state.addressToolbar.editingAccessoryAction?.actionType, .googleLens)
+        let accessoryAction = model.addressToolbarConfig.locationViewConfiguration.editingAccessoryAction
+        XCTAssertEqual(accessoryAction?.iconName, StandardImageIdentifiers.Medium.logoGoogleLens)
+        XCTAssertEqual(accessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
+        XCTAssertEqual(accessoryAction?.menuElements, expectedMenuElements)
+    }
+
+    @MainActor
+    func testAddressToolbarConfig_withGoogleLensFeatureDisabled_doesNotConfigureEditingAccessoryButton() {
+        let state = createToolbarState()
+        let model = createSubject(withState: state)
+
+        XCTAssertNil(state.addressToolbar.editingAccessoryAction)
+        XCTAssertNil(model.addressToolbarConfig.locationViewConfiguration.editingAccessoryAction)
+    }
+
+    @MainActor
     func testConfigureSkeletonAddressBar_uxConfiguration() {
         let model = createSubject(withState: createToolbarState())
         let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
@@ -262,12 +297,18 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                             windowUUID: windowUUID)
     }
 
-    private func createAddressBarState(withSearchEngine: SearchEngineModel?) -> AddressBarState {
+    private func createAddressBarState(
+        withSearchEngine: SearchEngineModel?,
+        isGoogleLensEnabled: Bool = false
+    ) -> AddressBarState {
         return AddressBarState(windowUUID: windowUUID,
                                navigationActions: [],
                                leadingPageActions: [],
                                trailingPageActions: [],
                                browserActions: [],
+                               editingAccessoryAction: makeEditingAccessoryAction(
+                                   isGoogleLensEnabled: isGoogleLensEnabled
+                               ),
                                borderPosition: nil,
                                url: nil,
                                searchTerm: nil,
@@ -287,6 +328,31 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                alternativeSearchEngine: withSearchEngine)
     }
 
+    private func makeEditingAccessoryAction(isGoogleLensEnabled: Bool) -> ToolbarActionConfiguration? {
+        guard isGoogleLensEnabled else { return nil }
+
+        return ToolbarActionConfiguration(
+            actionType: .googleLens,
+            iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
+            isEnabled: true,
+            a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
+            a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton,
+            menuElements: [
+                ToolbarMenuElementConfiguration(
+                    actionType: .googleLensTakePhoto,
+                    title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
+                    imageName: StandardImageIdentifiers.Large.camera,
+                    a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
+                ),
+                ToolbarMenuElementConfiguration(
+                    actionType: .googleLensPhotoLibrary,
+                    title: .AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle,
+                    imageName: StandardImageIdentifiers.Large.image,
+                    a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensPhotoLibraryAction
+                )
+            ])
+    }
+
     private func createBasicNavigationBarState() -> NavigationBarState {
         return NavigationBarState(windowUUID: windowUUID,
                                   actions: [],
@@ -296,13 +362,17 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
     private func createToolbarState(toolbarPosition: AddressToolbarPosition = .top,
                                     isShowingNavigationToolbar: Bool = true,
-                                    isShowingTopTabs: Bool = true) -> ToolbarState {
+                                    isShowingTopTabs: Bool = true,
+                                    isGoogleLensEnabled: Bool = false) -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: toolbarPosition,
                             toolbarLayout: .version1,
                             tabTrayButtonStyle: .number,
                             isPrivateMode: false,
-                            addressToolbar: createAddressBarState(withSearchEngine: nil),
+                            addressToolbar: createAddressBarState(
+                                withSearchEngine: nil,
+                                isGoogleLensEnabled: isGoogleLensEnabled
+                            ),
                             navigationToolbar: createBasicNavigationBarState(),
                             isShowingNavigationToolbar: isShowingNavigationToolbar,
                             isShowingTopTabs: isShowingTopTabs,

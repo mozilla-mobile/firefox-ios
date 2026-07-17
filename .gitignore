@@ -145,3 +145,7 @@ shavar-*
 
 # Licenses.html generation
 LicensePlistTemp
+
+# Claude Code
+.claude/settings.local.json
+.mcp.json

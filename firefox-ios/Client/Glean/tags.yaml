@@ -48,6 +48,9 @@ CreditCards:
 DownloadsPanel:
   description: Corresponds to the library screen's downloads panel where the user can view their downloads.
 
+GoogleLens:
+  description: Corresponds to the Google Lens image search feature and its entry points (toolbar button and web image context menu).
+
 History:
   description: Corresponds to the internal data store of history within the app. Not to be confused with `HistoryPanel`, which refers to the History screen in the library.
 
@@ -75,8 +78,14 @@ Passwords:
 PasswordGenerator:
   description: Corresponds to the generation of strong passwords for logins and autofill.
 
+QuickAnswers:
+  description: Corresponds to the AI-powered Quick Answers feature that returns answers to spoken questions.
+
 ReaderMode:
   description: Corresponds to the reading mode viewer for webpages.
+
+ReadingList:
+  description: Corresponds to the internal data store of reading list within the app. Not to be confused with `ReadingListPanel`, which refers to the Reading List screen in the library.
 
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
@@ -133,6 +142,12 @@ TrendingSearches:
 
 User:
   description: Corresponds to user properties and settings.
+
+WebCompat:
+  description: Corresponds to the in-app "Report Broken Site" (WebCompat) reporting tool.
+
+WorldCupWidget:
+  description: Corresponds to the World Cup widget shown on the homepage.
 
 ZoomBar:
   description: Corresponds to any event around zoom bar. Shown from the app menu.

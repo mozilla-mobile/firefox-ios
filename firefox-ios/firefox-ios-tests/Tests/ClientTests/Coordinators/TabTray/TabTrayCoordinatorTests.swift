@@ -20,7 +20,6 @@ final class TabTrayCoordinatorTests: XCTestCase {
         profile = MockProfile()
         parentCoordinator = MockTabTrayCoordinatorDelegate()
         tabManager = mockTabManager
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() async throws {

@@ -11,12 +11,7 @@ final class NativeErrorPageStateTests: XCTestCase {
     func testInitialState() {
         let initialState = createSubject()
 
-        XCTAssertEqual(initialState.title, "")
-        XCTAssertEqual(initialState.description, "")
-        XCTAssertEqual(initialState.foxImage, "")
-        XCTAssertNil(initialState.url)
-        XCTAssertNil(initialState.advancedSection)
-        XCTAssertFalse(initialState.showGoBackButton)
+        XCTAssertNil(initialState.model)
     }
 
     @MainActor
@@ -24,26 +19,12 @@ final class NativeErrorPageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = nativeErrorPageReducer()
 
-        let mockModel = ErrorPageModel(
-            errorTitle: "NoInternetConnection",
-            errorDescription: "There’s a problem with your internet connection.",
-            foxImageName: "foxLogo",
-            url: URL(
-                string: "url.com"
-            ),
-            advancedSection: nil,
-            showGoBackButton: false
-        )
+        let model = ErrorPageModel.internetConnection
 
-        let action = getAction(model: mockModel, for: .initialize)
+        let action = getAction(model: model, for: .initialize)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.title, mockModel.errorTitle)
-        XCTAssertEqual(newState.description, mockModel.errorDescription)
-        XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
-        XCTAssertEqual(newState.url, mockModel.url)
-        XCTAssertNil(newState.advancedSection)
-        XCTAssertFalse(newState.showGoBackButton)
+        XCTAssertEqual(newState.model, model)
     }
 
     @MainActor
@@ -62,29 +43,56 @@ If you’re on a corporate network, your support team might have more info.
             showProceedButton: true
         )
 
-        let mockModel = ErrorPageModel(
-            errorTitle: "Be careful. Something doesn’t look right.",
-            errorDescription: "Someone pretending to be the site could try to steal your personal info.",
-            foxImageName: "securityError",
-            url: URL(string: "https://example.com"),
-            advancedSection: advancedSection,
-            showGoBackButton: true
-        )
+        let model = ErrorPageModel.badCertDomain(BadCertDomainModel(
+            url: URL(string: "https://example.com")!,
+            advancedSection: advancedSection
+        ))
 
-        let action = getAction(model: mockModel, for: .initialize)
+        let action = getAction(model: model, for: .initialize)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.title, mockModel.errorTitle)
-        XCTAssertEqual(newState.description, mockModel.errorDescription)
-        XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
-        XCTAssertEqual(newState.url, mockModel.url)
-        XCTAssertTrue(newState.showGoBackButton)
-        XCTAssertNotNil(newState.advancedSection)
-        XCTAssertEqual(newState.advancedSection?.buttonText, advancedSection.buttonText)
-        XCTAssertEqual(newState.advancedSection?.infoText, advancedSection.infoText)
-        XCTAssertEqual(newState.advancedSection?.warningText, advancedSection.warningText)
-        XCTAssertEqual(newState.advancedSection?.certificateErrorCode, advancedSection.certificateErrorCode)
-        XCTAssertEqual(newState.advancedSection?.showProceedButton, advancedSection.showProceedButton)
+        XCTAssertEqual(newState.model, model)
+    }
+
+    @MainActor
+    func testStateModel_withGenericModelWithURL() {
+        let initialState = createSubject()
+        let reducer = nativeErrorPageReducer()
+
+        let testURL = URL(string: "https://example.com/page")!
+        let model = ErrorPageModel.generic(GenericErrorModel(url: testURL))
+
+        let action = getAction(model: model, for: .initialize)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.model, model)
+    }
+
+    @MainActor
+    func testStateModel_withGenericModelWithoutURL() {
+        let initialState = createSubject()
+        let reducer = nativeErrorPageReducer()
+
+        let model = ErrorPageModel.generic(GenericErrorModel(url: nil))
+
+        let action = getAction(model: model, for: .initialize)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.model, model)
+    }
+
+    @MainActor
+    func testStateDefaultStatePreservesModel() {
+        let initialState = createSubject()
+        let reducer = nativeErrorPageReducer()
+
+        let model = ErrorPageModel.generic(GenericErrorModel(url: URL(string: "https://example.com")!))
+        let action = getAction(model: model, for: .initialize)
+        let state = reducer(initialState, action)
+
+        let defaultState = NativeErrorPageState.defaultState(from: state)
+
+        XCTAssertEqual(defaultState.model, state.model)
     }
 
     // MARK: - Private

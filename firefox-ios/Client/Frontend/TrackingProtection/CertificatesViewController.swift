@@ -191,9 +191,10 @@ class CertificatesViewController: UIViewController,
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: CertificatesHeaderView.cellIdentifier) as? CertificatesHeaderView else {
-            logger.log("Failed to dequeue CertificatesHeaderView with identifier \(CertificatesHeaderView.cellIdentifier)",
+            logger.log("Failed to dequeue CertificatesHeaderView",
                        level: .fatal,
-                       category: .certificate)
+                       category: .certificate,
+                       extra: ["identifier": CertificatesHeaderView.cellIdentifier])
             return UIView()
         }
         var items: [CertificatesHeaderItem] = []
@@ -317,9 +318,20 @@ class CertificatesViewController: UIViewController,
 extension CertificatesViewController {
     func applyTheme() {
         let theme = currentTheme()
+        overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer3
         titleLabel.textColor = theme.colors.textPrimary
         titleLabel.backgroundColor = theme.colors.layer5
         headerView.applyTheme(theme: theme)
+
+        certificatesTableView.backgroundColor = theme.colors.layer3
+        certificatesTableView.separatorColor = theme.colors.borderPrimary
+
+        for case let cell as CertificatesCell in certificatesTableView.visibleCells {
+            cell.applyTheme(theme: theme)
+        }
+        for section in 0..<certificatesTableView.numberOfSections {
+            (certificatesTableView.headerView(forSection: section) as? CertificatesHeaderView)?.applyTheme(theme: theme)
+        }
     }
 }

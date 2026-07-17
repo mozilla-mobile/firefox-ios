@@ -56,7 +56,7 @@ final class AddressToolbarContainer: UIView,
                                      AddressToolbarDelegate,
                                      Autocompletable,
                                      URLBarViewProtocol,
-                                     LegacyFeatureFlaggable,
+                                     FeatureFlaggable,
                                      PrivateModeUI {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
@@ -119,6 +119,9 @@ final class AddressToolbarContainer: UIView,
     private var addNewTabLeadingConstraint: NSLayoutConstraint?
     private var addNewTabTopConstraint: NSLayoutConstraint?
     private var addNewTabBottomConstraint: NSLayoutConstraint?
+
+    private var toolbarLeadingConstraint: NSLayoutConstraint?
+    private var toolbarTrailingConstraint: NSLayoutConstraint?
 
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
@@ -241,6 +244,7 @@ final class AddressToolbarContainer: UIView,
             let height = frame.height + UX.accessoryViewGradientOffset
             accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
+            // Dispatch action to change address bar to minimized state
             store.dispatch(
                 ToolbarAction(
                     scrollAlpha: 0,
@@ -259,6 +263,11 @@ final class AddressToolbarContainer: UIView,
             return
         }
 
+        if leftSkeletonAddressBar.superview == nil {
+            applyBottomLayoutConstraints()
+            setupSkeletonAddressBarsLayout(isBottomSearchBar: true)
+        }
+
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
@@ -268,6 +277,34 @@ final class AddressToolbarContainer: UIView,
         configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
         leftSkeletonAddressBar.isHidden = previousTab == nil
         rightSkeletonAddressBar.isHidden = forwardTab == nil
+    }
+
+    private func applyBottomLayoutConstraints() {
+        insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
+        insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
+
+        toolbarLeadingConstraint?.isActive = false
+        toolbarTrailingConstraint?.isActive = false
+
+        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor)
+        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor)
+
+        toolbarLeadingConstraint?.isActive = true
+        toolbarTrailingConstraint?.isActive = true
+    }
+
+    private func applyTopLayoutConstraints() {
+        leftSkeletonAddressBar.removeFromSuperview()
+        rightSkeletonAddressBar.removeFromSuperview()
+
+        toolbarLeadingConstraint?.isActive = false
+        toolbarTrailingConstraint?.isActive = false
+
+        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(equalTo: leadingAnchor)
+        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
+
+        toolbarLeadingConstraint?.isActive = true
+        toolbarTrailingConstraint?.isActive = true
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -336,7 +373,7 @@ final class AddressToolbarContainer: UIView,
         guard self.model != newModel else { return }
 
         updateSkeletonAddressBarsAlpha(to: CGFloat(newModel.scrollAlpha))
-        if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.scrollAlpha.isZero {
+        if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.isAddressBarMinimized {
             accessoryViewGradient.opacity = 0
         }
         // in case we are in edit mode but overlay is not active yet we have to activate it
@@ -424,14 +461,9 @@ final class AddressToolbarContainer: UIView,
     private func setupToolbarConstraints(isBottomSearchBar: Bool) {
         addSubview(toolbar)
         if toolbarHelper.isSwipingTabsEnabled && isBottomSearchBar {
-            insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
-            insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
-
-            toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor).isActive = true
-            toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor).isActive = true
+            applyBottomLayoutConstraints()
         } else {
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+            applyTopLayoutConstraints()
         }
 
         NSLayoutConstraint.activate([
@@ -568,8 +600,8 @@ final class AddressToolbarContainer: UIView,
 
         // We want to show suggestions if we turn on the trending searches or recent searches
         // which displays the zero search state. Only if not in private mode.
-        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isTrendingSearchEnabled = featureFlagsProvider.isEnabled(.trendingSearches)
+        let isRecentSearchEnabled = featureFlagsProvider.isEnabled(.recentSearches)
         let isRecentOrTrendingSearchEnabled = isTrendingSearchEnabled || isRecentSearchEnabled
         let isPrivateMode = model?.isPrivateMode ?? false
         let isZeroSearchEnabled = isRecentOrTrendingSearchEnabled && !isPrivateMode
@@ -658,6 +690,13 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func applyProgressBarTheme(isPrivateMode: Bool, theme: Theme) {
+        if theme.isNova,
+           let startColor = theme.colors.gradientAccent.colors.first,
+           let endColor = theme.colors.gradientAccent.colors.last {
+            progressBar.setGradientColors(startColor: startColor, middleColor: nil, endColor: endColor)
+            return
+        }
+
         let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
         let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
         let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
@@ -672,5 +711,33 @@ final class AddressToolbarContainer: UIView,
     // MARK: - PrivateModeUI
     func applyUIMode(isPrivate: Bool, theme: Theme) {
         applyProgressBarTheme(isPrivateMode: isPrivate, theme: theme)
+    }
+
+    // MARK: - Key Command Utilities
+
+    override var keyCommands: [UIKeyCommand]? {
+        let defaultCommands: [UIKeyCommand]? = super.keyCommands
+        guard UIDevice.current.userInterfaceIdiom == .pad else { return defaultCommands }
+
+        return (defaultCommands ?? []) + [
+            UIKeyCommand(
+                action: #selector(escapeKeyCommand),
+                input: UIKeyCommand.inputEscape,
+                modifierFlags: []
+            )
+        ]
+    }
+
+    @objc
+    private func escapeKeyCommand() {
+        guard let windowUUID else { return }
+        guard state?.addressToolbar.isEditing ?? false else { return }
+
+        store.dispatch(ToolbarMiddlewareAction(
+            buttonType: .cancelEdit,
+            gestureType: .tap,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton
+        ))
     }
 }

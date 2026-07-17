@@ -21,7 +21,6 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.tabManager = MockTabManager()
         self.appAuthenticator = MockAppAuthenticator()
         self.delegate = MockSettingsFlowDelegate()
@@ -130,6 +129,14 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         // duration, or else they will deallocate before the following assertion checks.
         XCTAssertNotNil(subject.settingsDelegate)
         XCTAssertNotNil(subject.parentCoordinator)
+    }
+
+    func testGenerateSettings_whenRetainedBySubject_subjectDeallocates() {
+        let subject = createSubject()
+
+        subject.settings = subject.generateSettings()
+
+        XCTAssertFalse(subject.settings.isEmpty)
     }
 
     // MARK: - Helper

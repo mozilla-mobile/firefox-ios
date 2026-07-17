@@ -51,4 +51,10 @@ class RequestHandlerTests: XCTestCase {
         sut = reguestHandler.handle(request: urlRequest, alertCallback: alertCallback)
         XCTAssertFalse(sut)
     }
+
+    func testJavascriptSchemeIsNotInternalScheme() {
+        let urlRequest = URLRequest(url: URL(string: "javascript:alert(1)")!)
+        let sut = reguestHandler.handle(request: urlRequest, alertCallback: alertCallback)
+        XCTAssertFalse(sut)
+    }
 }

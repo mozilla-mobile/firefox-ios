@@ -4,6 +4,8 @@
 
 import Common
 import Foundation
+import PhotosUI
+import SwiftUI
 import UIKit
 import WebKit
 import Shared
@@ -11,6 +13,7 @@ import Storage
 import Redux
 import PDFKit
 import SummarizeKit
+import QuickAnswersKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -33,7 +36,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
-                          LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                          WebCompatReportCoordinatorDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -42,6 +45,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
+    private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
 
     private var profile: Profile
@@ -56,7 +60,9 @@ final class BrowserCoordinator: BaseCoordinator,
     private let homepageTabStateStore: HomepageTabStateStore
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
-    private var isDeeplinkOptimiziationRefactorEnabled: Bool {
+    private let worldCupStore: WorldCupStoreProtocol
+    private let googleLensService: GoogleLensServicing
+    private var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
     private var isSummarizerOn: Bool {
@@ -74,7 +80,9 @@ final class BrowserCoordinator: BaseCoordinator,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
+         googleLensService: GoogleLensServicing = GoogleLensService()) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
@@ -86,6 +94,8 @@ final class BrowserCoordinator: BaseCoordinator,
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
+        self.worldCupStore = worldCupStore
+        self.googleLensService = googleLensService
         super.init(router: router)
 
         browserViewController.browserDelegate = self
@@ -161,7 +171,7 @@ final class BrowserCoordinator: BaseCoordinator,
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
         }
         self.homepageViewController = homepageController
-        homepageController.restoreVerticalScrollOffset()
+        homepageController.restoreVerticalScrollOffset(force: didEmbed)
 
         if didEmbed {
             // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
@@ -270,16 +280,14 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func browserHasLoaded() {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            browserIsReady = true
-            logger.log("Browser has loaded", level: .info, category: .coordinator)
+        browserIsReady = true
+        logger.log("Browser has loaded", level: .info, category: .coordinator)
 
-            if let savedRoute {
-                logger.log("Find and handle route called after browserHasLoaded",
-                           level: .info,
-                           category: .coordinator)
-                findAndHandle(route: savedRoute)
-            }
+        if let savedRoute {
+            logger.log("Find and handle route called after browserHasLoaded",
+                       level: .info,
+                       category: .coordinator)
+            findAndHandle(route: savedRoute)
         }
     }
 
@@ -292,16 +300,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            guard browserIsReady, !tabManager.isRestoringTabs else {
-                let readyMessage = "browser is ready? \(browserIsReady)"
-                let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
-                logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
-                           level: .info,
-                           category: .coordinator)
-                return false
-            }
-        }
+        guard checkBrowserIsReady() else { return false }
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
@@ -312,14 +311,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            guard browserIsReady, !tabManager.isRestoringTabs else {
-                logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
-                           level: .info,
-                           category: .coordinator)
-                return
-            }
-        }
+        guard checkBrowserIsReady() else { return }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
@@ -342,7 +334,7 @@ final class BrowserCoordinator: BaseCoordinator,
             handle(homepanelSection: section)
 
         case let .settings(section):
-            handleSettings(with: section)
+            show(settings: section)
 
         case let .action(routeAction):
             switch routeAction {
@@ -363,6 +355,30 @@ final class BrowserCoordinator: BaseCoordinator,
                 startLaunch(with: .defaultBrowser)
             }
         }
+    }
+
+    /// Depending if we're using the deeplink refactor path or not, there's different checks to ensure we're properly
+    /// setup before we handle routes / deeplinks. `browserIsReady` can maybe be removed at a later point after the deeplink
+    /// refactor is shipped, but this will be a subsequent initiative just in case.
+    private func checkBrowserIsReady() -> Bool {
+        let isReady = isDeeplinkOptimizationRefactorEnabled
+        ? browserIsReady
+        : browserIsReady && !tabManager.isRestoringTabs
+
+        guard isReady else {
+            logger.log(
+            """
+            Not handling route. Browser ready: \(browserIsReady), \
+            restoring tabs: \(tabManager.isRestoringTabs) \
+            with refactor \(isDeeplinkOptimizationRefactorEnabled)
+            """,
+            level: .info,
+            category: .coordinator
+            )
+            return false
+        }
+
+        return true
     }
 
     private func showIntroOnboarding() {
@@ -620,6 +636,22 @@ final class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: browserViewController.addressToolbarContainer)
     }
 
+    func presentReportBrokenSite(url: URL?) {
+        let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
+        reportViewController.reportCoordinator = self
+        if let sheetPresentationController = reportViewController.sheetPresentationController {
+            sheetPresentationController.detents = [.large()]
+            sheetPresentationController.prefersGrabberVisible = true
+        }
+        router.present(reportViewController, animated: true, completion: nil)
+    }
+
+    // MARK: - WebCompatReportCoordinatorDelegate
+
+    func webCompatReportViewControllerDidFinish() {
+        router.dismiss(animated: true, completion: nil)
+    }
+
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
 
@@ -661,14 +693,20 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showPrintSheet() {
-        if let tab = browserViewController.tabManager.selectedTab, let webView = tab.webView {
-            let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.jobName = tab.displayTitle
-            let printController = UIPrintInteractionController.shared
+        guard let tab = browserViewController.tabManager.selectedTab, let webView = tab.webView else { return }
+
+        let printInfo = UIPrintInfo(dictionary: nil)
+        printInfo.jobName = tab.displayTitle
+        let printController = UIPrintInteractionController.shared
+        printController.printInfo = printInfo
+
+        if tab.mimeType == MIMEType.PDF, let url = webView.url {
+            printController.printingItem = url
+        } else {
             printController.printFormatter = webView.viewPrintFormatter()
-            printController.printInfo = printInfo
-            printController.present(animated: true, completionHandler: nil)
         }
+
+        printController.present(animated: true, completionHandler: nil)
     }
 
     func showSignInView(fxaParameters: FxASignInViewParameters?) {
@@ -817,11 +855,10 @@ final class BrowserCoordinator: BaseCoordinator,
         if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
             // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
             logger.log(
-                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet",
+                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet."
+                + " Existing coordinator UUID: \(coordinator.windowUUID), BrowserCoordinator UUID: \(windowUUID)",
                 level: .info,
-                category: .shareSheet,
-                extra: ["existing ShareSheetCoordinator UUID": "\(coordinator.windowUUID)",
-                        "BrowserCoordinator windowUUID": "\(windowUUID)"]
+                category: .shareSheet
             )
 
             coordinator.dismiss()
@@ -958,7 +995,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let navigationController = DismissableNavigationViewController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) {
             modalPresentationStyle = .fullScreen
         } else {
             modalPresentationStyle = isPad ? .fullScreen: .formSheet
@@ -987,7 +1024,7 @@ final class BrowserCoordinator: BaseCoordinator,
         }
 
         // FXIOS-13305: We don't handle animations properly for synced tabs, so we will use default presentation
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
+        if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) &&
             UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
@@ -1080,23 +1117,115 @@ final class BrowserCoordinator: BaseCoordinator,
         router.push(shortcutsLibraryViewController)
     }
 
-    func showQuickAnswers() {
+    func showWorldCupCountryPicker() {
+        let selectedTeam = worldCupStore.selectedTeam
+        let pickerView = WorldCupCountryPickerView(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            selectedTeam: selectedTeam
+        )
+        let viewController = UIHostingController(rootView: pickerView)
+        present(viewController)
+    }
+
+    func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
+            prefs: profile.prefs,
             windowUUID: windowUUID,
             themeManager: themeManager,
-            router: router
+            router: router,
+            transitionType: transitionType,
         ) { [weak self] navigationType in
             switch navigationType {
             case .url(let url):
-                self?.openURLinNewTab(url)
+                self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
             case .searchResult(let query):
                 self?.browserViewController.openSearchNewTab(query)
             }
         }
         add(child: coordinator)
         coordinator.start()
+    }
+
+    func showGoogleLensPhotoPicker() {
+        guard !childCoordinators.contains(where: { $0 is PhotoPickerCoordinator }) else { return }
+        let coordinator = PhotoPickerCoordinator(
+            parentCoordinatorDelegate: self,
+            router: router
+        ) { [weak self] results in
+            self?.handleGoogleLensPhotoPick(results)
+        }
+        add(child: coordinator)
+        coordinator.start()
+        store.dispatch(GeneralBrowserAction(showOverlay: false,
+                                            windowUUID: self.windowUUID,
+                                            actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func showGoogleLensCamera() {
+        guard !childCoordinators.contains(where: { $0 is CameraCoordinator }) else { return }
+        let coordinator = CameraCoordinator(
+            parentCoordinatorDelegate: self,
+            router: router
+        ) { [weak self] image in
+            guard let image else { return }
+            self?.searchGoogleLens(with: image, source: .camera)
+        }
+        add(child: coordinator)
+        coordinator.start()
+        store.dispatch(GeneralBrowserAction(showOverlay: false,
+                                            windowUUID: self.windowUUID,
+                                            actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source) {
+        guard let tab = tabManager.selectedTab else {
+            logger.log("Google Lens: no selected tab to load the upload request",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        let entryPoint: GoogleLensUploadEntryPoint = source == .contextMenu ? .webImageContextMenu : .addressToolbar
+        let viewportSize = tab.webView?.bounds.size ?? browserViewController.view.bounds.size
+        guard let request = googleLensService.makeUploadRequest(for: image,
+                                                                viewportSize: viewportSize,
+                                                                entryPoint: entryPoint) else {
+            logger.log("Google Lens: failed to build upload request (image could not be processed)",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source)
+        _ = tab.loadRequest(request)
+    }
+    private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
+        guard let provider = results.first?.itemProvider else { return }
+        guard provider.canLoadObject(ofClass: UIImage.self) else {
+            logger.log("Google Lens: picked item cannot be loaded as an image",
+                       level: .warning,
+                       category: .coordinator)
+            return
+        }
+        provider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
+            let image = object as? UIImage
+            let errorDescription = error?.localizedDescription
+            DispatchQueue.main.async {
+                guard let self else { return }
+                if let image {
+                    self.searchGoogleLens(with: image, source: .photoPicker)
+                } else if let errorDescription {
+                    self.logger.log("Google Lens: failed to load picked image: \(errorDescription)",
+                                    level: .warning,
+                                    category: .coordinator)
+                } else {
+                    self.logger.log("Google Lens: picker returned a non-image object",
+                                    level: .warning,
+                                    category: .coordinator)
+                }
+            }
+        }
     }
 
     func showPrivacyNoticeLink(url: URL) {
@@ -1167,16 +1296,22 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
+        if nativeErrorPageViewController != nil {
+            // Already showing a native error page, the existing instance will
+            // pick up the new error state via its Redux subscription.
+            return
+        }
+
         let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
             tabManager: tabManager,
             overlayManager: overlayManager
         )
-
         guard browserViewController.embedContent(errorPageController) else {
             logger.log("Unable to embed error page", level: .debug, category: .coordinator)
             return
         }
+        nativeErrorPageViewController = errorPageController
     }
 
     private func setiPadLayoutDetents(for controller: UIViewController) {

@@ -435,6 +435,22 @@ fileprivate struct FfiConverterUInt16: FfiConverterPrimitive {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterUInt32: FfiConverterPrimitive {
+    typealias FfiType = UInt32
+    typealias SwiftType = UInt32
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt32 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterInt32: FfiConverterPrimitive {
     typealias FfiType = Int32
     typealias SwiftType = Int32
@@ -675,6 +691,339 @@ public func FfiConverterTypeCuratedRecommendationsClient_lift(_ handle: UInt64) 
 #endif
 public func FfiConverterTypeCuratedRecommendationsClient_lower(_ value: CuratedRecommendationsClient) -> UInt64 {
     return FfiConverterTypeCuratedRecommendationsClient.lower(value)
+}
+
+
+
+
+
+
+/**
+ * A client for the merino suggest endpoint.
+ *
+ * Use [`SuggestClient::new`] to create an instance, then call
+ * [`SuggestClient::get_suggestions`] to fetch suggestions for a query.
+ */
+public protocol SuggestClientProtocol: AnyObject, Sendable {
+    
+    /**
+     * Fetches suggestions from the merino suggest endpoint for the given query.
+     *
+     * Returns the raw JSON response body as a string, or `None` if the server
+     * returned HTTP 204 (no suggestions available for weather).
+     */
+    func getSuggestions(query: String, options: SuggestOptions) throws  -> String?
+    
+}
+/**
+ * A client for the merino suggest endpoint.
+ *
+ * Use [`SuggestClient::new`] to create an instance, then call
+ * [`SuggestClient::get_suggestions`] to fetch suggestions for a query.
+ */
+open class SuggestClient: SuggestClientProtocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_merino_fn_clone_suggestclient(self.handle, $0) }
+    }
+    /**
+     * Creates a new `SuggestClient` from the given configuration.
+     */
+public convenience init(config: SuggestConfig)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeMerinoSuggestApiError_lift) {
+    uniffi_merino_fn_constructor_suggestclient_new(
+        FfiConverterTypeSuggestConfig_lower(config),$0
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_merino_fn_free_suggestclient(handle, $0) }
+    }
+
+    
+
+    
+    /**
+     * Fetches suggestions from the merino suggest endpoint for the given query.
+     *
+     * Returns the raw JSON response body as a string, or `None` if the server
+     * returned HTTP 204 (no suggestions available for weather).
+     */
+open func getSuggestions(query: String, options: SuggestOptions)throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeMerinoSuggestApiError_lift) {
+    uniffi_merino_fn_method_suggestclient_get_suggestions(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(query),
+        FfiConverterTypeSuggestOptions_lower(options),$0
+    )
+})
+}
+    
+
+    
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSuggestClient: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = SuggestClient
+
+    public static func lift(_ handle: UInt64) throws -> SuggestClient {
+        return SuggestClient(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: SuggestClient) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SuggestClient {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: SuggestClient, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestClient_lift(_ handle: UInt64) throws -> SuggestClient {
+    return try FfiConverterTypeSuggestClient.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestClient_lower(_ value: SuggestClient) -> UInt64 {
+    return FfiConverterTypeSuggestClient.lower(value)
+}
+
+
+
+
+
+
+/**
+ * A client for the merino wcs endpoint.
+ *
+ * Use [`WorldCupClient::new`] to create an instance, then call
+ * [`WordCupClient::get_*`] to fetch wcs content.
+ */
+public protocol WorldCupClientProtocol: AnyObject, Sendable {
+    
+    /**
+     * Fetches live info from merino wcs endpoint
+     */
+    func getLive(options: WorldCupOptions) throws  -> String?
+    
+    /**
+     * Fetches matches from merino wcs endpoint
+     */
+    func getMatches(options: WorldCupOptions) throws  -> String?
+    
+    /**
+     * Fetches teams from the merino wcs endpoint
+     */
+    func getTeams(options: WorldCupOptions) throws  -> String?
+    
+}
+/**
+ * A client for the merino wcs endpoint.
+ *
+ * Use [`WorldCupClient::new`] to create an instance, then call
+ * [`WordCupClient::get_*`] to fetch wcs content.
+ */
+open class WorldCupClient: WorldCupClientProtocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_merino_fn_clone_worldcupclient(self.handle, $0) }
+    }
+    /**
+     * Creates a new `WorldCupClient` from the given configuration.
+     */
+public convenience init(config: WorldCupConfig)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeMerinoWorldCupApiError_lift) {
+    uniffi_merino_fn_constructor_worldcupclient_new(
+        FfiConverterTypeWorldCupConfig_lower(config),$0
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_merino_fn_free_worldcupclient(handle, $0) }
+    }
+
+    
+
+    
+    /**
+     * Fetches live info from merino wcs endpoint
+     */
+open func getLive(options: WorldCupOptions)throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeMerinoWorldCupApiError_lift) {
+    uniffi_merino_fn_method_worldcupclient_get_live(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeWorldCupOptions_lower(options),$0
+    )
+})
+}
+    
+    /**
+     * Fetches matches from merino wcs endpoint
+     */
+open func getMatches(options: WorldCupOptions)throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeMerinoWorldCupApiError_lift) {
+    uniffi_merino_fn_method_worldcupclient_get_matches(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeWorldCupOptions_lower(options),$0
+    )
+})
+}
+    
+    /**
+     * Fetches teams from the merino wcs endpoint
+     */
+open func getTeams(options: WorldCupOptions)throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeMerinoWorldCupApiError_lift) {
+    uniffi_merino_fn_method_worldcupclient_get_teams(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeWorldCupOptions_lower(options),$0
+    )
+})
+}
+    
+
+    
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWorldCupClient: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = WorldCupClient
+
+    public static func lift(_ handle: UInt64) throws -> WorldCupClient {
+        return WorldCupClient(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: WorldCupClient) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WorldCupClient {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: WorldCupClient, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWorldCupClient_lift(_ handle: UInt64) throws -> WorldCupClient {
+    return try FfiConverterTypeWorldCupClient.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWorldCupClient_lower(_ value: WorldCupClient) -> UInt64 {
+    return FfiConverterTypeWorldCupClient.lower(value)
 }
 
 
@@ -1643,6 +1992,199 @@ public func FfiConverterTypeSectionSettings_lower(_ value: SectionSettings) -> R
 
 
 /**
+ * Configuration for the merino suggest client.
+ */
+public struct SuggestConfig: Equatable, Hashable, Codable {
+    /**
+     * The base host for the merino endpoint. Defaults to the production host if not set.
+     */
+    public var baseHost: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * The base host for the merino endpoint. Defaults to the production host if not set.
+         */baseHost: String?) {
+        self.baseHost = baseHost
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension SuggestConfig: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSuggestConfig: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SuggestConfig {
+        return
+            try SuggestConfig(
+                baseHost: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: SuggestConfig, into buf: inout [UInt8]) {
+        FfiConverterOptionString.write(value.baseHost, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestConfig_lift(_ buf: RustBuffer) throws -> SuggestConfig {
+    return try FfiConverterTypeSuggestConfig.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestConfig_lower(_ value: SuggestConfig) -> RustBuffer {
+    return FfiConverterTypeSuggestConfig.lower(value)
+}
+
+
+/**
+ * Options for a suggest request, mapped to merino suggest endpoint query parameters.
+ * All fields are optional — omitted fields are not sent to merino.
+ */
+public struct SuggestOptions: Equatable, Hashable, Codable {
+    /**
+     * List of suggestion providers to query (e.g. `["wikipedia", "adm"]`).
+     */
+    public var providers: [String]?
+    /**
+     * Identifier of which part of firefox the request comes from (e.g. `"urlbar"`, `"newtab"`).
+     */
+    public var source: String?
+    /**
+     * ISO 3166-1 country code (e.g. `"US"`).
+     */
+    public var country: String?
+    /**
+     * Comma separated string of subdivision code(s) (e.g. `"CA"`).
+     */
+    public var region: String?
+    /**
+     * City name (e.g. `"San Francisco"`).
+     */
+    public var city: String?
+    /**
+     * List of any experiments or rollouts that are affecting the client's Suggest experience.
+     * If Merino recognizes any of them it will modify its behavior accordingly.
+     */
+    public var clientVariants: [String]?
+    /**
+     * For AccuWeather provider, the request type should be either a "location" or "weather" string. For "location" it will get location completion suggestion. For "weather" it will return weather suggestions.
+     * If omitted, it defaults to weather suggestions.
+     */
+    public var requestType: String?
+    /**
+     * The `Accept-Language` header value to forward to Merino (e.g. `"en-US"`).
+     */
+    public var acceptLanguage: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * List of suggestion providers to query (e.g. `["wikipedia", "adm"]`).
+         */providers: [String]?, 
+        /**
+         * Identifier of which part of firefox the request comes from (e.g. `"urlbar"`, `"newtab"`).
+         */source: String?, 
+        /**
+         * ISO 3166-1 country code (e.g. `"US"`).
+         */country: String?, 
+        /**
+         * Comma separated string of subdivision code(s) (e.g. `"CA"`).
+         */region: String?, 
+        /**
+         * City name (e.g. `"San Francisco"`).
+         */city: String?, 
+        /**
+         * List of any experiments or rollouts that are affecting the client's Suggest experience.
+         * If Merino recognizes any of them it will modify its behavior accordingly.
+         */clientVariants: [String]?, 
+        /**
+         * For AccuWeather provider, the request type should be either a "location" or "weather" string. For "location" it will get location completion suggestion. For "weather" it will return weather suggestions.
+         * If omitted, it defaults to weather suggestions.
+         */requestType: String?, 
+        /**
+         * The `Accept-Language` header value to forward to Merino (e.g. `"en-US"`).
+         */acceptLanguage: String?) {
+        self.providers = providers
+        self.source = source
+        self.country = country
+        self.region = region
+        self.city = city
+        self.clientVariants = clientVariants
+        self.requestType = requestType
+        self.acceptLanguage = acceptLanguage
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension SuggestOptions: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSuggestOptions: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SuggestOptions {
+        return
+            try SuggestOptions(
+                providers: FfiConverterOptionSequenceString.read(from: &buf), 
+                source: FfiConverterOptionString.read(from: &buf), 
+                country: FfiConverterOptionString.read(from: &buf), 
+                region: FfiConverterOptionString.read(from: &buf), 
+                city: FfiConverterOptionString.read(from: &buf), 
+                clientVariants: FfiConverterOptionSequenceString.read(from: &buf), 
+                requestType: FfiConverterOptionString.read(from: &buf), 
+                acceptLanguage: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: SuggestOptions, into buf: inout [UInt8]) {
+        FfiConverterOptionSequenceString.write(value.providers, into: &buf)
+        FfiConverterOptionString.write(value.source, into: &buf)
+        FfiConverterOptionString.write(value.country, into: &buf)
+        FfiConverterOptionString.write(value.region, into: &buf)
+        FfiConverterOptionString.write(value.city, into: &buf)
+        FfiConverterOptionSequenceString.write(value.clientVariants, into: &buf)
+        FfiConverterOptionString.write(value.requestType, into: &buf)
+        FfiConverterOptionString.write(value.acceptLanguage, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestOptions_lift(_ buf: RustBuffer) throws -> SuggestOptions {
+    return try FfiConverterTypeSuggestOptions.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestOptions_lower(_ value: SuggestOptions) -> RustBuffer {
+    return FfiConverterTypeSuggestOptions.lower(value)
+}
+
+
+/**
  * Properties for a single tile within a responsive layout.
  */
 public struct Tile: Equatable, Hashable, Codable {
@@ -1730,6 +2272,146 @@ public func FfiConverterTypeTile_lower(_ value: Tile) -> RustBuffer {
     return FfiConverterTypeTile.lower(value)
 }
 
+
+public struct WorldCupConfig: Equatable, Hashable, Codable {
+    public var baseHost: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(baseHost: String?) {
+        self.baseHost = baseHost
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension WorldCupConfig: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWorldCupConfig: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WorldCupConfig {
+        return
+            try WorldCupConfig(
+                baseHost: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: WorldCupConfig, into buf: inout [UInt8]) {
+        FfiConverterOptionString.write(value.baseHost, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWorldCupConfig_lift(_ buf: RustBuffer) throws -> WorldCupConfig {
+    return try FfiConverterTypeWorldCupConfig.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWorldCupConfig_lower(_ value: WorldCupConfig) -> RustBuffer {
+    return FfiConverterTypeWorldCupConfig.lower(value)
+}
+
+
+/**
+ * Options for world cup endpoint requests.
+ * All fields are optional — omitted fields are not sent to merino.
+ */
+public struct WorldCupOptions: Equatable, Hashable, Codable {
+    /**
+     * Maximum number of results to return.
+     */
+    public var limit: UInt32?
+    /**
+     * Filter results by team(s) (e.g. `["FRA", "ENG"]`).
+     */
+    public var teams: [String]?
+    /**
+     * Language for results (e.g. `"en-US"`). (Not supported yet)
+     */
+    public var acceptLanguage: String?
+    /**
+     * ISO 8601 date string to filter matches by date (e.g. `"2026-06-14"`).
+     */
+    public var date: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * Maximum number of results to return.
+         */limit: UInt32?, 
+        /**
+         * Filter results by team(s) (e.g. `["FRA", "ENG"]`).
+         */teams: [String]?, 
+        /**
+         * Language for results (e.g. `"en-US"`). (Not supported yet)
+         */acceptLanguage: String?, 
+        /**
+         * ISO 8601 date string to filter matches by date (e.g. `"2026-06-14"`).
+         */date: String?) {
+        self.limit = limit
+        self.teams = teams
+        self.acceptLanguage = acceptLanguage
+        self.date = date
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension WorldCupOptions: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWorldCupOptions: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WorldCupOptions {
+        return
+            try WorldCupOptions(
+                limit: FfiConverterOptionUInt32.read(from: &buf), 
+                teams: FfiConverterOptionSequenceString.read(from: &buf), 
+                acceptLanguage: FfiConverterOptionString.read(from: &buf), 
+                date: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: WorldCupOptions, into buf: inout [UInt8]) {
+        FfiConverterOptionUInt32.write(value.limit, into: &buf)
+        FfiConverterOptionSequenceString.write(value.teams, into: &buf)
+        FfiConverterOptionString.write(value.acceptLanguage, into: &buf)
+        FfiConverterOptionString.write(value.date, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWorldCupOptions_lift(_ buf: RustBuffer) throws -> WorldCupOptions {
+    return try FfiConverterTypeWorldCupOptions.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWorldCupOptions_lower(_ value: WorldCupOptions) -> RustBuffer {
+    return FfiConverterTypeWorldCupOptions.lower(value)
+}
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -1750,11 +2432,14 @@ public enum CuratedRecommendationLocale: Equatable, Hashable, Codable {
     case en
     case enCa
     case enGb
+    case enIe
     case enUs
     case de
     case deDe
     case deAt
     case deCh
+    case pl
+    case plPl
 
 
 
@@ -1794,15 +2479,21 @@ public struct FfiConverterTypeCuratedRecommendationLocale: FfiConverterRustBuffe
         
         case 9: return .enGb
         
-        case 10: return .enUs
+        case 10: return .enIe
         
-        case 11: return .de
+        case 11: return .enUs
         
-        case 12: return .deDe
+        case 12: return .de
         
-        case 13: return .deAt
+        case 13: return .deDe
         
-        case 14: return .deCh
+        case 14: return .deAt
+        
+        case 15: return .deCh
+        
+        case 16: return .pl
+        
+        case 17: return .plPl
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -1848,24 +2539,36 @@ public struct FfiConverterTypeCuratedRecommendationLocale: FfiConverterRustBuffe
             writeInt(&buf, Int32(9))
         
         
-        case .enUs:
+        case .enIe:
             writeInt(&buf, Int32(10))
         
         
-        case .de:
+        case .enUs:
             writeInt(&buf, Int32(11))
         
         
-        case .deDe:
+        case .de:
             writeInt(&buf, Int32(12))
         
         
-        case .deAt:
+        case .deDe:
             writeInt(&buf, Int32(13))
         
         
-        case .deCh:
+        case .deAt:
             writeInt(&buf, Int32(14))
+        
+        
+        case .deCh:
+            writeInt(&buf, Int32(15))
+        
+        
+        case .pl:
+            writeInt(&buf, Int32(16))
+        
+        
+        case .plPl:
+            writeInt(&buf, Int32(17))
         
         }
     }
@@ -1985,6 +2688,190 @@ public func FfiConverterTypeCuratedRecommendationsApiError_lower(_ value: Curate
     return FfiConverterTypeCuratedRecommendationsApiError.lower(value)
 }
 
+
+public enum MerinoSuggestApiError: Swift.Error, Equatable, Hashable, Codable, Foundation.LocalizedError {
+
+    
+    
+    /**
+     * A network-level failure.
+     */
+    case Network(reason: String
+    )
+    /**
+     * Any other error, e.g. HTTP errors, validation errors.
+     */
+    case Other(code: UInt16?, reason: String
+    )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
+}
+
+#if compiler(>=6)
+extension MerinoSuggestApiError: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMerinoSuggestApiError: FfiConverterRustBuffer {
+    typealias SwiftType = MerinoSuggestApiError
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MerinoSuggestApiError {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+
+        
+
+        
+        case 1: return .Network(
+            reason: try FfiConverterString.read(from: &buf)
+            )
+        case 2: return .Other(
+            code: try FfiConverterOptionUInt16.read(from: &buf), 
+            reason: try FfiConverterString.read(from: &buf)
+            )
+
+         default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: MerinoSuggestApiError, into buf: inout [UInt8]) {
+        switch value {
+
+        
+
+        
+        
+        case let .Network(reason):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(reason, into: &buf)
+            
+        
+        case let .Other(code,reason):
+            writeInt(&buf, Int32(2))
+            FfiConverterOptionUInt16.write(code, into: &buf)
+            FfiConverterString.write(reason, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMerinoSuggestApiError_lift(_ buf: RustBuffer) throws -> MerinoSuggestApiError {
+    return try FfiConverterTypeMerinoSuggestApiError.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMerinoSuggestApiError_lower(_ value: MerinoSuggestApiError) -> RustBuffer {
+    return FfiConverterTypeMerinoSuggestApiError.lower(value)
+}
+
+
+public enum MerinoWorldCupApiError: Swift.Error, Equatable, Hashable, Codable, Foundation.LocalizedError {
+
+    
+    
+    /**
+     * A network-level failure.
+     */
+    case Network(reason: String
+    )
+    /**
+     * Any other error, e.g. HTTP errors, validation errors.
+     */
+    case Other(code: UInt16?, reason: String
+    )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
+}
+
+#if compiler(>=6)
+extension MerinoWorldCupApiError: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMerinoWorldCupApiError: FfiConverterRustBuffer {
+    typealias SwiftType = MerinoWorldCupApiError
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MerinoWorldCupApiError {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+
+        
+
+        
+        case 1: return .Network(
+            reason: try FfiConverterString.read(from: &buf)
+            )
+        case 2: return .Other(
+            code: try FfiConverterOptionUInt16.read(from: &buf), 
+            reason: try FfiConverterString.read(from: &buf)
+            )
+
+         default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: MerinoWorldCupApiError, into buf: inout [UInt8]) {
+        switch value {
+
+        
+
+        
+        
+        case let .Network(reason):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(reason, into: &buf)
+            
+        
+        case let .Other(code,reason):
+            writeInt(&buf, Int32(2))
+            FfiConverterOptionUInt16.write(code, into: &buf)
+            FfiConverterString.write(reason, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMerinoWorldCupApiError_lift(_ buf: RustBuffer) throws -> MerinoWorldCupApiError {
+    return try FfiConverterTypeMerinoWorldCupApiError.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMerinoWorldCupApiError_lower(_ value: MerinoWorldCupApiError) -> RustBuffer {
+    return FfiConverterTypeMerinoWorldCupApiError.lower(value)
+}
+
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
@@ -2004,6 +2891,30 @@ fileprivate struct FfiConverterOptionUInt16: FfiConverterRustBuffer {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterUInt16.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionUInt32: FfiConverterRustBuffer {
+    typealias SwiftType = UInt32?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterUInt32.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterUInt32.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -2422,7 +3333,25 @@ private let initializationResult: InitializationResult = {
     if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 52246) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_merino_checksum_method_suggestclient_get_suggestions() != 55159) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_method_worldcupclient_get_live() != 64653) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_method_worldcupclient_get_matches() != 628) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_method_worldcupclient_get_teams() != 5980) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 18166) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_constructor_suggestclient_new() != 14568) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_constructor_worldcupclient_new() != 28302) {
         return InitializationResult.apiChecksumMismatch
     }
 

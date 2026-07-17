@@ -1,0 +1,238 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Common
+import Redux
+import Shared
+import UIKit
+import WebCompatReporterKit
+
+@MainActor
+protocol WebCompatReportCoordinatorDelegate: AnyObject {
+    /// Sheet asked to finish; the coordinator owns the dismissal.
+    func webCompatReportViewControllerDidFinish()
+}
+
+/// Store-connected container that hosts the `WebCompatReporterKit` sheet, maps
+/// `WebCompatReporterState` to its view model, and forwards its intents to Redux
+/// and the coordinator.
+final class WebCompatReportViewController: UINavigationController,
+                                           StoreSubscriber,
+                                           Themeable,
+                                           WebCompatReportSheetDelegate {
+    typealias SubscriberStateType = WebCompatReporterState
+
+    var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
+    var notificationCenter: NotificationProtocol
+    var currentWindowUUID: UUID? { windowUUID }
+
+    weak var reportCoordinator: WebCompatReportCoordinatorDelegate?
+
+    private let windowUUID: WindowUUID
+    private let reportedURL: URL?
+    private let sheetViewController: WebCompatReportSheetViewController
+
+    init(
+        windowUUID: WindowUUID,
+        reportedURL: URL?,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
+        self.windowUUID = windowUUID
+        self.reportedURL = reportedURL
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        let initialState = WebCompatReporterState(windowUUID: windowUUID)
+        self.sheetViewController = WebCompatReportSheetViewController(
+            viewModel: WebCompatReportViewController.makeViewModel(from: initialState),
+            theme: themeManager.getCurrentTheme(for: windowUUID)
+        )
+        super.init(nibName: nil, bundle: nil)
+        setViewControllers([sheetViewController], animated: false)
+        sheetViewController.delegate = self
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
+        subscribeToRedux()
+        store.dispatch(WebCompatReporterViewAction(
+            url: reportedURL?.absoluteString,
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.viewDidLoad
+        ))
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        unsubscribeFromRedux()
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ComponentAction(
+            windowUUID: windowUUID,
+            actionType: ComponentActionType.addComponent,
+            component: .webCompatReporter
+        ))
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            $0.select { appState in
+                WebCompatReporterState(appState: appState, uuid: uuid)
+            }
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(ComponentAction(
+            windowUUID: windowUUID,
+            actionType: ComponentActionType.removeComponent,
+            component: .webCompatReporter
+        ))
+        store.unsubscribe(self)
+    }
+
+    func newState(state: WebCompatReporterState) {
+        sheetViewController.configure(with: WebCompatReportViewController.makeViewModel(from: state))
+    }
+
+    // MARK: - View model
+
+    private static func makeViewModel(from state: WebCompatReporterState) -> WebCompatReportViewModel {
+        return WebCompatReportViewModel(
+            navigationTitle: .MainMenu.ToolsSection.ReportBrokenSite,
+            closeButtonAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
+            previewButtonTitle: .WebCompatReporter.Sheet.PreviewButton,
+            isPreviewEnabled: state.canPreview,
+            sections: makeIssueSections(from: state)
+        )
+    }
+
+    private enum SectionID: String {
+        case issueCategory
+        case issueSubOptions
+    }
+
+    static func makeIssueSections(
+        from state: WebCompatReporterState
+    ) -> [WebCompatReportViewModel.Section] {
+        let options = WebCompatIssueCategory.allCases.map { category in
+            WebCompatReportViewModel.Row.MenuOption(
+                id: category.id,
+                title: title(for: category),
+                isSelected: category == state.selectedCategory
+            )
+        }
+        let selectedTitle = state.selectedCategory.map(title(for:))
+        let categorySection = WebCompatReportViewModel.Section(
+            id: SectionID.issueCategory.rawValue,
+            title: .WebCompatReporter.IssueSection.Title,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: SectionID.issueCategory.rawValue,
+                    title: selectedTitle ?? .WebCompatReporter.IssueSection.CategoryPlaceholder,
+                    kind: .categoryMenu(isPlaceholder: selectedTitle == nil, options: options)
+                )
+            ]
+        )
+
+        guard let selectedCategory = state.selectedCategory,
+              !selectedCategory.subOptions.isEmpty else {
+            return [categorySection]
+        }
+
+        let subOptionRows = selectedCategory.subOptions.map { subOption in
+            WebCompatReportViewModel.Row(
+                id: subOption.rawValue,
+                title: title(for: subOption),
+                kind: .subOption(isSelected: subOption.rawValue == state.selectedSubOptionID)
+            )
+        }
+        let subOptionSection = WebCompatReportViewModel.Section(
+            id: SectionID.issueSubOptions.rawValue,
+            rows: subOptionRows
+        )
+        return [categorySection, subOptionSection]
+    }
+
+    // MARK: - Enum → localized title
+
+    private static func title(for category: WebCompatIssueCategory) -> String {
+        switch category {
+        case .siteNotUsable: return .WebCompatReporter.Category.SiteNotUsable
+        case .designBroken: return .WebCompatReporter.Category.DesignBroken
+        case .videoOrAudio: return .WebCompatReporter.Category.VideoOrAudio
+        case .other: return .WebCompatReporter.Category.Other
+        }
+    }
+
+    private static func title(for subOption: WebCompatSubOption) -> String {
+        switch subOption {
+        case .browserBlocked: return .WebCompatReporter.SubOption.BrowserBlocked
+        case .pageNotLoading: return .WebCompatReporter.SubOption.PageNotLoading
+        case .missingItems: return .WebCompatReporter.SubOption.MissingItems
+        case .buttonsNotWorking: return .WebCompatReporter.SubOption.ButtonsNotWorking
+        case .imagesNotLoaded: return .WebCompatReporter.SubOption.ImagesNotLoaded
+        case .itemsOverlapped: return .WebCompatReporter.SubOption.ItemsOverlapped
+        case .itemsMisaligned: return .WebCompatReporter.SubOption.ItemsMisaligned
+        case .itemsNotVisible: return .WebCompatReporter.SubOption.ItemsNotVisible
+        case .noVideo: return .WebCompatReporter.SubOption.NoVideo
+        case .noAudio: return .WebCompatReporter.SubOption.NoAudio
+        case .mediaControlsBroken: return .WebCompatReporter.SubOption.MediaControlsBroken
+        case .playbackFails: return .WebCompatReporter.SubOption.PlaybackFails
+        case .captionsMissing: return .WebCompatReporter.SubOption.CaptionsMissing
+        }
+    }
+
+    // MARK: - WebCompatReportSheetDelegate
+
+    func webCompatReportSheetDidTapClose() {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.cancel
+        ))
+        reportCoordinator?.webCompatReportViewControllerDidFinish()
+    }
+
+    func webCompatReportSheetDidTapPreview() {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.preview
+        ))
+    }
+
+    func webCompatReportSheetDidSelectCategory(id: String) {
+        guard let category = WebCompatIssueCategory(rawValue: id) else { return }
+        store.dispatch(WebCompatReporterViewAction(
+            category: category,
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.selectCategory
+        ))
+    }
+
+    func webCompatReportSheetDidSelectSubOption(id: String) {
+        guard let subOption = WebCompatSubOption(rawValue: id) else { return }
+        store.dispatch(WebCompatReporterViewAction(
+            subOptionID: subOption.rawValue,
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.selectSubOption
+        ))
+    }
+
+    // MARK: - Themeable
+
+    func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer1
+        navigationBar.tintColor = theme.colors.actionPrimary
+        sheetViewController.applyTheme(theme: theme)
+    }
+}

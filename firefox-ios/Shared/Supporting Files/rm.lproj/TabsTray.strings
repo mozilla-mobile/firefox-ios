@@ -16,6 +16,9 @@
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Sincronisar ils tabs";
 
+/* When user choose to have Blank Page as homepage, this will be displayed as tab title. */
+"TabTray.TabsSelectorBlankTabsTitle.v149" = "Nov tab";
+
 /* The title on the button to look at regular tabs. */
 "TabTray.TabsSelectorNormalTabsTitle.v140" = "Tabs";
 
@@ -24,6 +27,9 @@
 
 /* Text for a button in the tabs tray used to open another menu to close older tabs. */
 "TabTrayCloseOldTabsTitle.v140" = "Serrar tabs vegls…";
+
+/* Text for a button in the tabs tray used delete current active tabs. %@ is for the number of tabs that will be going to be closed. */
+"TabTrayCloseOneTabTitle.v145" = "Serrar ils tabs (%@)";
 
 /* Text for the menu title under the tabs tray in which users can close tabs older than a certain period of time. */
 "TabTrayCloseTabsOlderThanTitle.v140" = "Serrar tabs pli vegls che…";

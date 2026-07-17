@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "Піктограма програми";
+
 /* (No Comment) */
 "New Private Tab" = "Приватна вкладка";
 
@@ -5,7 +8,7 @@
 "New Tab" = "Нова вкладка";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox використовує вашу камеру для сканування QR-кодів і зйомки фотографій і відео.";
+"NSCameraUsageDescription" = "Firefox може використовувати вашу камеру для сканування QR-кодів або зйомки фотографій і відео.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox потребує Face ID для доступу до ваших збережених паролів та способів оплати.";
@@ -18,6 +21,9 @@
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Це дозволяє вам зберігати фотографії.";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox використовує розпізнавання мовлення, щоб перетворювати ваш голос на текст для голосового пошуку.";
 
 /* (No Comment) */
 "Scan QR Code" = "Сканувати QR-код";

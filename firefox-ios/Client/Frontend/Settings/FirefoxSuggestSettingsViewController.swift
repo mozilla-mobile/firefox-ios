@@ -34,7 +34,8 @@ class FirefoxSuggestSettingsViewController: SettingsTableViewController,
         }
 
         var sections: [SettingSection] = [SettingSection(title: nil, children: [enabled])]
-        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
+        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+            && userPreferences.getPreferenceFor(.firefoxSuggestFeature) {
             sections.append(SettingSection(
                 title: nil,
                 children: [

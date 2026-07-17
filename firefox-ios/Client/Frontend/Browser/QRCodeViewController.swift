@@ -172,12 +172,9 @@ class QRCodeViewController: UIViewController {
     }
 
     private func presentAlert() {
-        let alert = UIAlertController(title: "", message: .ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton,
-                                      style: .default,
-                                      handler: { _ in
+        let alert = UIAlertController.cameraAccessDisabledAlert { _ in
             self.dismissController()
-        }))
+        }
         present(alert, animated: true)
     }
 

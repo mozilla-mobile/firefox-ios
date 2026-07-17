@@ -69,6 +69,7 @@ To help reviewers give useful feedback and keep the project maintainable, pull r
 Pull requests that do not meet this baseline may be closed until they meet our code quality expectations.
 
 ## Pull Requests
+* Please avoid having more than 3 open PRs at a time. Keeping the number of active PRs small helps ensure each one receives proper attention, makes feedback easier to manage, and reduces pressure on the team.
 * All pull requests must be associated with a specific issue. If an issue doesn't exist, please create it first.
 * Before you submit your pull request, search the repository for open or closed PRs that relate to your submission. We don't want to duplicate effort. 
 * PRs should be made from a branch on your personal fork to the `mozilla-mobile:main` branch. Please see the [Pull Request Naming Guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide) for how to name PRs.
@@ -99,23 +100,7 @@ If no reference person is assigned, or you have not received a response to your 
 ---
 
 # Building the code
-- Fork and clone the project from the [repository](https://github.com/mozilla-mobile/firefox-ios).
 - Use the provided build instructions in the [Readme](https://github.com/mozilla-mobile/firefox-ios/blob/main/README.md) of the repository to build the project. 
-
-## Run on a Device with a Free Developer Account
-
-> [!IMPORTANT]  
-> Only follow these instructions if you are using the free personal developer accounts. Simply add your Apple ID as an account in Xcode.
-
-Since the bundle identifier we use for Firefox is tied to our developer account, you'll need to generate your own identifier and update the existing configuration.
-
-1. Open `firefox-ios/Client/Configuration/Fennec.xcconfig`
-2. Change MOZ_BUNDLE_ID to your own bundle identifier. Just think of something unique: e.g., com.your_github_id.Fennec
-3. Open the project editor in Xcode.
-4. For the 'Client' target, in the 'Capabilities' section, turn off the capabilities 'Push Notifications' and 'Wallet'.
-5. For each target, in the 'General' section, under 'Signing', select your personal development account.
-
-If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 
 ---
 

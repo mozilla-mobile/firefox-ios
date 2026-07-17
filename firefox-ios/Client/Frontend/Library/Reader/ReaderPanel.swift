@@ -359,9 +359,10 @@ class ReadingListPanel: UITableViewController,
             withIdentifier: "ReadingListTableViewCell",
             for: indexPath
         ) as? ReadingListTableViewCell else {
-            logger.log("Failed to dequeue ReadingListTableViewCell at indexPath: \(indexPath)",
+            logger.log("Failed to dequeue ReadingListTableViewCell",
                        level: .fatal,
-                       category: .library)
+                       category: .library,
+                       extra: ["indexPath": "\(indexPath)"])
             return UITableViewCell()
         }
         if let record = records?[indexPath.row] {
@@ -411,7 +412,7 @@ class ReadingListPanel: UITableViewController,
         tableView.deselectRow(at: indexPath, animated: false)
         if let record = records?[indexPath.row],
             let url = URL(string: record.url),
-            let encodedURL = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+            let encodedURL = url.encodeReaderModeURL(ReaderModeSchemeHandler.currentBaseURL) {
             // Mark the item as read
             profile.readingList.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.

@@ -144,7 +144,7 @@ class IntegrationTests: BaseTestCase {
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
         navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts[TestLabels.exampleDomain])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3895151
@@ -266,7 +266,7 @@ class IntegrationTests: BaseTestCase {
         // Check Bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
         mozWaitForElementToExist(app.tables["Bookmarks List"])
-        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts[TestLabels.exampleDomain])
 
         // Check Login
         navigator.performAction(Action.CloseBookmarkPanel)
@@ -316,7 +316,7 @@ class IntegrationTests: BaseTestCase {
 
         // Check Bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts[TestLabels.exampleDomain])
 
         // Check Logins
         navigator.performAction(Action.CloseBookmarkPanel)

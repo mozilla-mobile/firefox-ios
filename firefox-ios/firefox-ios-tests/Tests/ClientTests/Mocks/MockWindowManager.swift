@@ -37,7 +37,7 @@ final class MockWindowManager: WindowManager {
         wrappedManager.newBrowserWindowConfigured(windowInfo, uuid: uuid)
     }
 
-    func tabManager(for windowUUID: WindowUUID) -> TabManager {
+    func tabManager(for windowUUID: WindowUUID) -> TabManager? {
         return tabManager
     }
 
@@ -71,11 +71,7 @@ final class MockWindowManager: WindowManager {
         wrappedManager.performMultiWindowAction(action)
     }
 
-    func window(for tab: TabUUID) -> WindowUUID? {
-        wrappedManager.window(for: tab)
-    }
-
-    func windowExists(uuid: Common.WindowUUID) -> Bool {
-        wrappedManager.windowExists(uuid: uuid)
+    func windowUUID(forTab tab: TabUUID) -> WindowUUID? {
+        wrappedManager.windowUUID(forTab: tab)
     }
 }

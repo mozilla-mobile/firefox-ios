@@ -15,7 +15,7 @@ protocol IntroScreenManagerProtocol {
     func didSeeIntroScreen()
 }
 
-struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
+struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     var prefs: Prefs
 
     var shouldShowIntroScreen: Bool {
@@ -27,19 +27,19 @@ struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
     }
 
     var isModernOnboardingEnabled: Bool {
-        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.modernOnboardingUI)
     }
 
     var shouldShowVideoIntro: Bool {
-        featureFlags.isFeatureEnabled(.videoIntroOnboarding, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.videoIntroOnboarding)
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseBrandRefreshConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseBrandRefreshConfiguration)
     }
 
     var shouldUseJapanConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseJapanConfiguration)
     }
 
     /// Determines the onboarding variant based on feature flags.
@@ -47,8 +47,7 @@ struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
     /// Priority order (if multiple flags are enabled):
     /// 1. Japan configuration (highest priority)
     /// 2. Brand refresh configuration
-    /// 3. Modern onboarding
-    /// 4. Legacy onboarding (lowest priority)
+    /// 3. Onboarding (default fallback)
     ///
     /// Note: If both `shouldUseJapanConfiguration` and `shouldUseBrandRefreshConfiguration`
     /// are enabled, Japan configuration takes precedence.
@@ -57,16 +56,16 @@ struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
             return .japan
         } else if isModernOnboardingEnabled && shouldUseBrandRefreshConfiguration {
             return .brandRefresh
-        } else if isModernOnboardingEnabled {
-            return .modern
         } else {
-            return .legacy
+            // `.modern` is the Nimbus `uiVariant` / Glean `onboarding_variant` wire value and
+            // stays as-is; the OnboardingKit-side identifier is `.base` (FXIOS-16008).
+            return .modern
         }
     }
 
     /// Returns the OnboardingKit variant corresponding to the onboarding variant.
     /// This avoids duplication of conversion logic across the codebase.
     var onboardingKitVariant: OnboardingKit.OnboardingVariant {
-        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
+        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .base
     }
 }

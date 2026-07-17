@@ -11,12 +11,10 @@ enum ComponentState: Sendable, Equatable {
     case homepage(HomepageState)
     case mainMenu(MainMenuState)
     case microsurvey(MicrosurveyState)
-    case onboardingViewController(OnboardingViewControllerState)
     case remoteTabsPanel(RemoteTabsPanelState)
     case tabsPanel(TabsPanelState)
     case tabPeek(TabPeekState)
     case tabsTray(TabTrayState)
-    case themeSettings(ThemeSettingsState)
     case termsOfUse(TermsOfUseState)
     case trackingProtection(TrackingProtectionState)
     case toolbar(ToolbarState)
@@ -25,6 +23,7 @@ enum ComponentState: Sendable, Equatable {
     case nativeErrorPage(NativeErrorPageState)
     case shortcutsLibrary(ShortcutsLibraryState)
     case translationSettings(TranslationSettingsState)
+    case webCompatReporter(WebCompatReporterState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
@@ -33,14 +32,11 @@ enum ComponentState: Sendable, Equatable {
         case .homepage(let state): return .homepage(HomepageState.reducer(state, action))
         case .mainMenu(let state): return .mainMenu(MainMenuState.reducer(state, action))
         case .microsurvey(let state): return .microsurvey(MicrosurveyState.reducer(state, action))
-        case .onboardingViewController(let state):
-            return .onboardingViewController(OnboardingViewControllerState.reducer(state, action))
         case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         case .tabPeek(let state): return .tabPeek(TabPeekState.reducer(state, action))
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
         case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
         case .termsOfUse(let state): return .termsOfUse(TermsOfUseState.reducer(state, action))
-        case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
         case .trackingProtection(let state): return .trackingProtection(TrackingProtectionState.reducer(state, action))
         case .toolbar(let state): return .toolbar(ToolbarState.reducer(state, action))
         case .searchEngineSelection(let state):
@@ -50,6 +46,8 @@ enum ComponentState: Sendable, Equatable {
         case .shortcutsLibrary(let state): return .shortcutsLibrary(ShortcutsLibraryState.reducer(state, action))
         case .translationSettings(let state):
             return .translationSettings(TranslationSettingsState.reducer(state, action))
+        case .webCompatReporter(let state):
+            return .webCompatReporter(WebCompatReporterState.reducer(state, action))
         }
     }
 
@@ -60,12 +58,10 @@ enum ComponentState: Sendable, Equatable {
         case .homepage: return .homepage
         case .mainMenu: return .mainMenu
         case .microsurvey: return .microsurvey
-        case .onboardingViewController: return .onboardingViewController
         case .remoteTabsPanel: return .remoteTabsPanel
         case .tabsPanel: return .tabsPanel
         case .tabPeek: return .tabPeek
         case .tabsTray: return .tabsTray
-        case .themeSettings: return .themeSettings
         case .termsOfUse: return .termsOfUse
         case .trackingProtection: return .trackingProtection
         case .toolbar: return .toolbar
@@ -74,6 +70,7 @@ enum ComponentState: Sendable, Equatable {
         case .nativeErrorPage: return .nativeErrorPage
         case .shortcutsLibrary: return .shortcutsLibrary
         case .translationSettings: return .translationSettings
+        case .webCompatReporter: return .webCompatReporter
         }
     }
 
@@ -83,12 +80,10 @@ enum ComponentState: Sendable, Equatable {
         case .homepage(let state): return state.windowUUID
         case .mainMenu(let state): return state.windowUUID
         case .microsurvey(let state): return state.windowUUID
-        case .onboardingViewController(let state): return state.windowUUID
         case .remoteTabsPanel(let state): return state.windowUUID
         case .tabsPanel(let state): return state.windowUUID
         case .tabPeek(let state): return state.windowUUID
         case .tabsTray(let state): return state.windowUUID
-        case .themeSettings(let state): return state.windowUUID
         case .termsOfUse(let state): return state.windowUUID
         case .trackingProtection(let state): return state.windowUUID
         case .toolbar(let state): return state.windowUUID
@@ -97,6 +92,7 @@ enum ComponentState: Sendable, Equatable {
         case .nativeErrorPage(let state): return state.windowUUID
         case .shortcutsLibrary(let state): return state.windowUUID
         case .translationSettings(let state): return state.windowUUID
+        case .webCompatReporter(let state): return state.windowUUID
         }
     }
 }
@@ -143,8 +139,6 @@ struct PresentedComponentsState: Sendable, Equatable {
                 components.append(.mainMenu(MainMenuState(windowUUID: uuid)))
             case .microsurvey:
                 components.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
-            case .onboardingViewController:
-                components.append(.onboardingViewController(OnboardingViewControllerState(windowUUID: uuid)))
             case .remoteTabsPanel:
                 components.append(.remoteTabsPanel(RemoteTabsPanelState(windowUUID: uuid)))
             case .tabsTray:
@@ -153,8 +147,6 @@ struct PresentedComponentsState: Sendable, Equatable {
                 components.append(.tabsPanel(TabsPanelState(windowUUID: uuid)))
             case .tabPeek:
                 components.append(.tabPeek(TabPeekState(windowUUID: uuid)))
-            case .themeSettings:
-                components.append(.themeSettings(ThemeSettingsState(windowUUID: uuid)))
             case .termsOfUse:
                 components.append(.termsOfUse(TermsOfUseState(windowUUID: uuid)))
             case .trackingProtection:
@@ -171,6 +163,8 @@ struct PresentedComponentsState: Sendable, Equatable {
                 components.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
             case .translationSettings:
                 components.append(.translationSettings(TranslationSettingsState(windowUUID: uuid)))
+            case .webCompatReporter:
+                components.append(.webCompatReporter(WebCompatReporterState(windowUUID: uuid)))
             }
         default:
             return components

@@ -4,8 +4,12 @@
 
 import UIKit
 import Common
+import Shared
 
-public final class QuickAnswersViewController: UIViewController, Themeable {
+// TODO: - FXIOS-16295 improve VoiceOver by adding notification announcement before and after recording.
+public final class QuickAnswersViewController: UIViewController,
+                                               UIAdaptivePresentationControllerDelegate,
+                                               Themeable {
     private struct UX {
         static let closeButtonSidePadding: CGFloat = 16.0
         static let closeButtonPadding: CGFloat = 13.0
@@ -15,21 +19,12 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             bottom: UX.closeButtonPadding,
             trailing: UX.closeButtonPadding
         )
-        static let recordWaveEffectSize: CGFloat = 400.0
-        static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
-        static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
+        static let recordWaveEffectSize: CGFloat = 450.0
+        static let recordWaveEffectBottomPadding = 150.0
+        static let recordWaveEffectResultOpacity: CGFloat = 0.3
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
-        static let privacyButtonContentInset = NSDirectionalEdgeInsets(
-            top: 8.0,
-            leading: 8.0,
-            bottom: 8.0,
-            trailing: 12.0
-        )
-        static let privacyButtonImagePadding: CGFloat = 4.0
-        static let privacyButtonCornerRadius: CGFloat = 16.0
-        static let privacyButtonImageName = "shield"
     }
 
     // MARK: - Properties
@@ -37,7 +32,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
-    private let audioWaveform: AudioWaveformView = .build()
     private lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
@@ -49,34 +43,15 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.configuration?.contentInsets = UX.closeButtonContentInset
         $0.addAction(
             UIAction(handler: { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+                self?.dismiss(with: nil)
             }),
             for: .touchUpInside
         )
-    }
-    private let privacyButton: UIButton = .build {
-        if #available(iOS 26, *) {
-            $0.configuration = .prominentGlass()
-        } else {
-            $0.configuration = .filled()
-        }
-        $0.configuration?.image = UIImage(
-            named: UX.privacyButtonImageName,
-            in: .module,
-            with: nil
-        )
-        // TODO: - FXIOS-14720 Add Strings and accessibility ids
-        $0.configuration?.attributedTitle = AttributedString(
-            "Protected by Firefox",
-            attributes: AttributeContainer([.font: FXFontStyles.Regular.body.scaledFont()])
-        )
-        $0.configuration?.imagePadding = UX.privacyButtonImagePadding
-        $0.configuration?.contentInsets = UX.privacyButtonContentInset
-        $0.configuration?.cornerStyle = .fixed
-        $0.configuration?.background.cornerRadius = UX.privacyButtonCornerRadius
+        // TODO: - FXIOS-14720 add Strings
+        $0.accessibilityLabel = "Close"
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionAnimator: TransitionAnimator
+    private let transitionAnimator: CrossDissolveTransitionAnimator?
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -84,21 +59,33 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
+    private let learnMoreURL: URL?
+    private lazy var errorHandler = ErrorHandler(
+        presenter: self,
+        onDismiss: { [weak self] in
+            self?.dismiss(with: nil)
+        }
+    )
+    private var hasAppeared = false
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
-        presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
+        transitionType: QuickAnswersTransitionType,
+        prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        telemetry: QuickAnswersTelemetry,
+        configFetcher: QuickAnswersConfigFetcher,
+        learnMoreURL: URL?,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            // TODO: - FXIOS-15245 Add real QuickAnswersService instead of MockQuickAnswersService
-            viewModel: QuickAnswersViewModel(service: MockQuickAnswersService()),
-            presentationTransitionType: presentationTransitionType,
+            viewModel: QuickAnswersViewModel(prefs: prefs, telemetry: telemetry, configFetcher: configFetcher),
+            transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            learnMoreURL: learnMoreURL,
             notificationCenter: notificationCenter
         )
     }
@@ -106,23 +93,31 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     init(
         navigationHandler: QuickAnswersNavigationHandler?,
         viewModel: QuickAnswersViewModel,
-        presentationTransitionType: QuickAnswersTransitionType,
+        transitionType: QuickAnswersTransitionType,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
+        learnMoreURL: URL?,
         notificationCenter: NotificationProtocol
     ) {
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.transitionAnimator = TransitionAnimator(
-            presentationTransitionType: presentationTransitionType,
-            themeManager: themeManager,
-            windowUUID: windowUUID
-        )
+        // The custom transition animator is only used for the cross dissolve transition; the form sheet
+        // relies on the system presentation.
+        if case let .crossDissolve(sourceRect) = transitionType {
+            self.transitionAnimator = CrossDissolveTransitionAnimator(
+                themeManager: themeManager,
+                windowUUID: windowUUID,
+                sourceRect: sourceRect
+            )
+        } else {
+            self.transitionAnimator = nil
+        }
         self.viewModel = viewModel
+        self.learnMoreURL = learnMoreURL
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .custom
+        modalPresentationStyle = transitionType.modalPresentationStyle
         transitioningDelegate = transitionAnimator
     }
 
@@ -133,27 +128,28 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
         setupSubviews()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
-        backgroundRecordEffect.startAnimating()
-        audioWaveform.startAnimating()
-        registerViewModelUpdates()
+        registerCallbacks()
     }
 
-    override public func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        contentView.adjustBottomInsets(for: privacyButton.frame.height)
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Workaround for iPad: with formSheet presentation, viewWillAppear can fire twice when the
+        // user attempts to dismiss the sheet but the dismissal fails, so guard the one-time flow start.
+        guard !hasAppeared else { return }
+        hasAppeared = true
+        viewModel.startFlow()
     }
 
     private func setupSubviews() {
         view.addSubviews(
             backgroundRecordEffect,
             backgroundBlur,
-            audioWaveform,
             contentView,
             closeButton,
-            privacyButton
         )
 
         NSLayoutConstraint.activate([
@@ -162,12 +158,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                   constant: -UX.closeButtonSidePadding),
 
-            audioWaveform.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
-            audioWaveform.heightAnchor.constraint(equalToConstant: UX.audioWaveformSize.height),
-            audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
-            audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
-            contentView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
+            contentView.topAnchor.constraint(equalTo: closeButton.bottomAnchor,
                                              constant: UX.contentViewTopPadding),
             contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                                                  constant: UX.contentViewHorizontalPadding),
@@ -181,30 +172,70 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                            constant: UX.recordWaveEffectBottomPadding),
-
-            privacyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            privacyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            privacyButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
-                                                   constant: UX.closeButtonSidePadding),
-            privacyButton.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
-                                                    constant: -UX.closeButtonSidePadding),
         ])
         backgroundBlur.pinToSuperview()
     }
 
-    private func registerViewModelUpdates() {
+    private func registerCallbacks() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
-            case .recordVoice(let result, _):
-                self?.contentView.configureTranscript(result.text)
+            case .showOptIn:
+                self?.contentView.showOptIn()
+            case .recordingStarted:
+                self?.backgroundRecordEffect.startAnimating()
+                self?.contentView.startAudioWaveformAnimation()
+            case .speechResult(let result, let error):
+                if let error {
+                    self?.errorHandler.handleSpeechError(error)
+                } else {
+                    self?.contentView.configureTranscript(result.text)
+                }
             case .loadingSearchResult:
-                self?.audioWaveform.stopAnimating()
+                UIAccessibility.post(notification: .screenChanged, argument: self?.contentView)
+                self?.triggerHaptic()
                 self?.contentView.configureSearching()
-            case .showSearchResult(let result, _):
-                self?.contentView.configureAnswer(result.body)
+            case .showSearchResult(let result, let error):
+                if let error {
+                    self?.errorHandler.handleSearchError(error)
+                } else {
+                    self?.triggerHaptic()
+                    self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
+                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
+                    self?.contentView.configureSources(result.sources) { [weak self] url in
+                        self?.viewModel.recordCitationTapped()
+                        self?.dismiss(with: url)
+                    }
+                }
             }
         }
-        viewModel.startRecordingVoice()
+        contentView.configureOptIn(
+            learnMoreURL: learnMoreURL,
+            theme: themeManager.getCurrentTheme(for: currentWindowUUID),
+            onContinue: { [weak self] in
+                self?.contentView.hideOptIn()
+                self?.viewModel.completeOptIn()
+            },
+            onLearnMore: { [weak self] url in
+                self?.dismiss(with: url)
+            }
+        )
+    }
+
+    private func dismiss(with url: URL?) {
+        triggerHaptic()
+        viewModel.dismiss()
+        navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
+    }
+
+    private func triggerHaptic() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.prepare()
+        generator.impactOccurred()
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        dismiss(with: nil)
     }
 
     // MARK: - Themeable
@@ -213,10 +244,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         view.backgroundColor = theme.colors.layer2
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
-        privacyButton.configuration?.baseBackgroundColor = theme.colors.layerAccentPrivateNonOpaque
-        privacyButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         backgroundRecordEffect.applyTheme(theme: theme)
-        audioWaveform.applyTheme(theme: theme)
         contentView.applyTheme(theme: theme)
     }
 }

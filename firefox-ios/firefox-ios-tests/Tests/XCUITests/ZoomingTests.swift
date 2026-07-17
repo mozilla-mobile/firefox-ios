@@ -119,7 +119,7 @@ final class ZoomingTests: BaseTestCase {
 
     // Helpers
     private func openURLAndNavigateToZoom(index: Int) {
-        let websites: [String] = ["http://localhost:\(serverPort)/test-fixture/find-in-page-test.html",
+        let websites: [String] = ["http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)",
                                   "www.mozilla.org",
                                   "www.google.com"
         ]

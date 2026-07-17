@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "Symbol nałoženja";
+
 /* (No Comment) */
 "New Private Tab" = "Nowy priwatny rajtark";
 
@@ -5,7 +8,7 @@
 "New Tab" = "Nowy rajtark";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox wašu kameru wužiwa, zo by QR-kody skenował a fota činił a wideja natočił.";
+"NSCameraUsageDescription" = "Firefox móže wašu kameru wužiwać, zo by QR-kody skenował abo fota činił a wideja natočił.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox Face ID trjeba, zo by přistup k wašim składowanym hesłam a płaćenskim metodam měł.";

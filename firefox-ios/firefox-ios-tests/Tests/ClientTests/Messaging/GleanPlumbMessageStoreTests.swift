@@ -83,6 +83,7 @@ class MockMessageData: MessageDataProtocol {
     var title: String?
     var text: String
     var buttonLabel: String?
+    var shouldRandomizeOptions: Bool
     var experiment: String?
     var actionParams: [String: String]
     var microsurveyConfig: MicrosurveyConfig?
@@ -93,6 +94,7 @@ class MockMessageData: MessageDataProtocol {
         title: String? = "Title",
         text: String = "text",
         buttonLabel: String? = "Tap",
+        shouldRandomizeOptions: Bool = false,
         actionParams: [String: String] = [:],
         microsurveyConfig: MicrosurveyConfig? = nil
     ) {
@@ -101,6 +103,7 @@ class MockMessageData: MessageDataProtocol {
         self.title = title
         self.text = text
         self.buttonLabel = buttonLabel
+        self.shouldRandomizeOptions = shouldRandomizeOptions
         self.actionParams = actionParams
         self.microsurveyConfig = microsurveyConfig
     }

@@ -4,6 +4,7 @@
 
 import Common
 import WebKit
+import Storage
 
 protocol TabWebViewDelegate: AnyObject {
     @MainActor
@@ -17,7 +18,7 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, LegacyFeatureFlaggable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     lazy var accessoryView: AccessoryViewProvider = .build(nil, {
         AccessoryViewProvider(windowUUID: self.windowUUID)
     })
@@ -27,6 +28,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Legacy
     private var pullRefresh: PullRefreshView?
     private var theme: Theme?
     private var uiTestLeakView: UIView? // Used for automation
+    private var certStore: CertStore
 
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
@@ -48,7 +50,12 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Legacy
         if let url, url.isFileURL, url.lastPathComponent.hasSuffix(".pdf") {
             return true
         }
-        return super.hasOnlySecureContent
+
+        guard let url, let origin = CertStore.origin(for: url) else {
+            return super.hasOnlySecureContent
+        }
+
+        return super.hasOnlySecureContent && !certStore.hasCertificate(forOrigin: origin)
     }
 
     override var inputAccessoryView: UIView? {
@@ -81,8 +88,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Legacy
         }
     }
 
-    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
+    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, certStore: CertStore) {
         self.windowUUID = windowUUID
+        self.certStore = certStore
         super.init(frame: frame, configuration: configuration)
     }
 

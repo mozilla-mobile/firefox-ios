@@ -42,6 +42,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
         launchApp()
     }
 
+    private func restartTheApp() {
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        launchApp()
+        setUpScreenGraph()
+        waitForTabsButton()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
@@ -61,7 +69,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
             navigator.nowAt(NewTabScreen)
         }
         navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: "localhost")
@@ -69,7 +77,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: "localhost")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
@@ -302,7 +310,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         navigator.performAction(Action.AcceptClearPrivateData)
 
         navigator.goto(HomePanelsScreen)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         app.buttons[optionSelected].waitAndTap()
@@ -438,6 +446,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
         sslScreen.tapAdvanced()
         sslScreen.tapVisitSiteAnyway()
         sslScreen.waitForPageToLoadAfterBypass()
+
+        restartTheApp()
+        browserScreen.navigateToURL("https://expired.badssl.com/")
+        sslScreen.waitForWarning()
+        sslScreen.assertWarningVisible()
+        sslScreen.tapAdvanced()
+        sslScreen.tapVisitSiteAnyway()
+        sslScreen.waitForPageToLoadAfterBypass()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307022
@@ -451,21 +467,10 @@ class NavigationTest: FeatureFlaggedTestSuite {
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
         navigator.goto(HomePanelsScreen)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         mozWaitForElementToExist(app.links["link-created-by-parent"])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307020
-    // Smoketest
-    func testVerifyBrowserTabMenu() {
-        let toolbarScreen = ToolbarScreen(app: app)
-        let mainMenuScreen = MainMenuScreen(app: app)
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
-        mainMenuScreen.waitForMenuOptionsToExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
@@ -494,7 +499,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // A new tab loading the article page should open
         waitForTabsButton()
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
+        mozWaitForElementToExist(app.cells.elementContainingText(TestLabels.exampleDomain))
         let numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
@@ -544,7 +549,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         closeFromAppSwitcherAndRelaunch()
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
         app.links[website_2["link"]!].waitAndTap()
         waitUntilPageLoad()
@@ -614,13 +619,13 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/3408299
     func testLongTapFirefoxIconNewPrivateTab() throws {
         guard #available(iOS 18, *) else {
-            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard context menu behavior")
         }
         let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
-        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
         waitForTabsButton()
-        app.terminate()
+        // Background instead of terminate: a SpringBoard cold-launch crashes on the simulator (code-sign kill).
+        springBoardScreen.pressHomeButton()
         if isFennec {
             springBoardScreen.assertFennecIconExists()
             springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
@@ -629,9 +634,6 @@ class NavigationTest: FeatureFlaggedTestSuite {
             springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
         }
         springBoardScreen.tapNewPrivateButton()
-        onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
-        onboardingScreen.closeTourIfNeeded()
         browserScreen.assertPrivateModeMessageCardExists()
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
@@ -640,14 +642,33 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen.assertWebViewLinkTextExists(text: "Legal")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
-    func testLongTapFirefoxIconOpenLastBookmark() throws {
+    // https://mozilla.testrail.io/index.php?/cases/view/4221455
+    func testLongTapFirefoxIconAppIcon() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
         }
         let springBoardScreen = SpringboardScreen(springboard: springboard)
+        waitForTabsButton()
+        springBoardScreen.pressHomeButton()
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
+        springBoardScreen.assertAppIconButtonExists()
+        springBoardScreen.tapAppIconButton()
+        mozWaitForElementToExist(app.navigationBars["App Icon"])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
+    func testLongTapFirefoxIconOpenLastBookmark() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard context menu behavior")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
-        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
 
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -657,8 +678,8 @@ class NavigationTest: FeatureFlaggedTestSuite {
         waitUntilPageLoad()
         bookmark(isLockIconOff: false)
 
-        // Terminate app and go to springboard
-        app.terminate()
+        // Background instead of terminate: a SpringBoard cold-launch crashes on the simulator (code-sign kill).
+        springBoardScreen.pressHomeButton()
 
         if isFennec {
             springBoardScreen.assertFennecIconExists()
@@ -671,11 +692,6 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // Verify all context menu options are present
         springBoardScreen.assertAllContextMenuOptionsExist()
         springBoardScreen.tapOpenLastBookmarkButton()
-
-        // Close onboarding if it appears
-        onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
-        onboardingScreen.closeTourIfNeeded()
 
         // Verify the bookmarked page opens
         waitUntilPageLoad()
@@ -700,7 +716,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
     private func openContextMenuForArticleLink() {
         navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))

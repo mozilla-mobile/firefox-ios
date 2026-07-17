@@ -149,7 +149,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "განაგრძეთ";
 
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "სწრაფია, უსაფრთხო და თქვენით არ ვაჭრობს. მხოლოდ გვერდების უკეთ მონახულება.";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "სწრაფია, უსაფრთხოა და თქვენით არ ვაჭრობს. მხოლოდ გვერდების უკეთ მონახულებისთვის.";
 
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "პარამეტრების მართვა";

@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-enum DiskImageStoreErrorCase: Error {
+public enum DiskImageStoreErrorCase: Error, Equatable {
     case notFound(description: String)
     case invalidImageData(description: String)
     case cannotWrite(description: String)
@@ -44,9 +44,10 @@ public actor DefaultDiskImageStore: DiskImageStore {
         do {
             self.filesDir = try files.getAndEnsureDirectory(namespace)
         } catch {
-            logger.log("Could not create directory at root path: \(error)",
+            logger.log("Could not create directory at root path",
                        level: .fatal,
-                       category: .storage)
+                       category: .storage,
+                       extra: ["error": "\(error)"])
             fatalError("Could not create directory at root path: \(error)")
         }
 
@@ -94,19 +95,22 @@ public actor DefaultDiskImageStore: DiskImageStore {
     private func scaleImageFrom3xTo1x(_ image: UIImage) -> UIImage {
         let targetScale: CGFloat = 1.0
 
-        if image.scale > targetScale {
-            let newSize = CGSize(
-                width: image.size.width * (targetScale / image.scale),
-                height: image.size.height * (targetScale / image.scale)
-            )
-
-            return UIGraphicsImageRenderer(size: newSize)
-                .image { context in
-                    image.draw(in: CGRect(origin: .zero, size: newSize))
-                }
+        // FXIOS-15902 - Guard against invalid images that would crash UIGraphicsImageRenderer
+        guard image.scale > targetScale,
+              image.size.width > 0,
+              image.size.height > 0,
+              image.cgImage != nil else {
+            return image
         }
 
-        return image
+        let newSize = CGSize(
+            width: image.size.width * (targetScale / image.scale),
+            height: image.size.height * (targetScale / image.scale)
+        )
+
+        return UIGraphicsImageRenderer(size: newSize).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
     }
 
     public func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {

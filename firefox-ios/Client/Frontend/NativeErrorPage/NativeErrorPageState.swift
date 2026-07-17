@@ -3,16 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import ModifiedCopy
 import Common
 
+@Copyable
 struct NativeErrorPageState: ScreenState {
     var windowUUID: WindowUUID
-    var title: String
-    var description: String
-    var foxImage: String
-    var url: URL?
-    var advancedSection: ErrorPageModel.AdvancedSectionConfig?
-    var showGoBackButton: Bool
+    var model: ErrorPageModel?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = appState.componentState(
@@ -26,31 +23,16 @@ struct NativeErrorPageState: ScreenState {
 
         self.init(
             windowUUID: nativeErrorPageState.windowUUID,
-            title: nativeErrorPageState.title,
-            description: nativeErrorPageState.description,
-            foxImage: nativeErrorPageState.foxImage,
-            url: nativeErrorPageState.url,
-            advancedSection: nativeErrorPageState.advancedSection,
-            showGoBackButton: nativeErrorPageState.showGoBackButton
+            model: nativeErrorPageState.model
         )
     }
 
     init(
         windowUUID: WindowUUID,
-        title: String = "",
-        description: String = "",
-        foxImage: String = "",
-        url: URL? = nil,
-        advancedSection: ErrorPageModel.AdvancedSectionConfig? = nil,
-        showGoBackButton: Bool = false
+        model: ErrorPageModel? = nil
     ) {
         self.windowUUID = windowUUID
-        self.title = title
-        self.description = description
-        self.foxImage = foxImage
-        self.url = url
-        self.advancedSection = advancedSection
-        self.showGoBackButton = showGoBackButton
+        self.model = model
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -63,15 +45,7 @@ struct NativeErrorPageState: ScreenState {
             guard let action = action as? NativeErrorPageAction, let model = action.nativePageErrorModel else {
                 return defaultState(from: state)
             }
-            return NativeErrorPageState(
-                windowUUID: state.windowUUID,
-                title: model.errorTitle,
-                description: model.errorDescription,
-                foxImage: model.foxImageName,
-                url: model.url,
-                advancedSection: model.advancedSection,
-                showGoBackButton: model.showGoBackButton
-            )
+            return state.copy(model: model)
         default:
             return defaultState(from: state)
         }
@@ -80,12 +54,7 @@ struct NativeErrorPageState: ScreenState {
     static func defaultState(from state: NativeErrorPageState) -> NativeErrorPageState {
         return NativeErrorPageState(
             windowUUID: state.windowUUID,
-            title: state.title,
-            description: state.description,
-            foxImage: state.foxImage,
-            url: state.url,
-            advancedSection: state.advancedSection,
-            showGoBackButton: state.showGoBackButton
+            model: state.model
         )
     }
 }

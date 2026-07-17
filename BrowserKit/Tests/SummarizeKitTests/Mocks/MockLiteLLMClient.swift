@@ -13,16 +13,17 @@ public final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable
     var respondWith: [String] = [""]
     var respondWithError: Error?
 
-    public func requestChatCompletion(
-        messages: [LiteLLMMessage],
+    public func requestChatCompletion<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) async throws -> String {
+    ) async throws -> LiteLLMMessage<ProviderFields> {
         if let error = respondWithError { throw error }
-        return respondWith.joined(separator: " ")
+        let content = respondWith.joined(separator: " ")
+        return LiteLLMMessage(role: .assistant, content: content, providerSpecificFields: nil)
     }
 
-    public func requestChatCompletionStreamed(
-        messages: [LiteLLMMessage],
+    public func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
     ) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream<String, Error> { continuation in

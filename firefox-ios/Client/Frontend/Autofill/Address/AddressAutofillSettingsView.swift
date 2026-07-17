@@ -64,3 +64,37 @@ struct AddressAutofillSettingsView: View {
         viewBackground = Color(color.layer1)
     }
 }
+
+struct ListHeaderPadding: ViewModifier {
+    let isLandscape: Bool
+    let paddingSize: CGFloat
+
+    func body(content: Content) -> some View {
+        let isPad = UIDevice().userInterfaceIdiom == .pad
+        let shouldAddPadding = !isLandscape || (isPad && isLandscape)
+        if #available(iOS 26.0, *) {
+            if shouldAddPadding {
+                content.padding(.leading, paddingSize)
+            } else {
+                content
+            }
+        } else {
+            content
+        }
+    }
+}
+
+struct ListItemIconPadding: ViewModifier {
+    let isLandscape: Bool
+    let paddingSize: CGFloat
+
+    func body(content: Content) -> some View {
+        let isPad = UIDevice().userInterfaceIdiom == .pad
+        let shouldAddPadding = !isLandscape || (isPad && isLandscape)
+        if #available(iOS 26.0, *), shouldAddPadding {
+            content.padding(.leading, paddingSize)
+        } else {
+            content
+        }
+    }
+}

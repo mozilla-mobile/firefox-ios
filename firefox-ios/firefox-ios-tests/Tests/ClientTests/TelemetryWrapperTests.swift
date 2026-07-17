@@ -123,7 +123,6 @@ class TelemetryWrapperTests: XCTestCase {
     @MainActor
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
         TelemetryWrapper.shared.setup(profile: profile)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         let defaultWallpaper = Wallpaper(id: "fxDefault",
                                          textColor: nil,
@@ -142,7 +141,6 @@ class TelemetryWrapperTests: XCTestCase {
 
     @MainActor
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         TelemetryWrapper.shared.setup(profile: profile)
 
         let themedWallpaper = Wallpaper(id: "amethyst",
@@ -820,6 +818,15 @@ class TelemetryWrapperTests: XCTestCase {
                                      value: .tabLossDetected)
 
         try testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.tabLossDetected)
+    }
+
+    func test_error_tabDiscrepancyIsCalled() throws {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .tabCountDiscrepancy)
+
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.tabCountDiscrepancy)
     }
 
     // MARK: - RecordSearch

@@ -32,10 +32,32 @@ extension URL {
         return self
     }
 
+    /// Returns just the scheme, host, and path of the URL — stripping query
+    /// parameters, fragment, and any embedded credentials. Used when sending
+    /// the failing URL to external services (e.g. WaybackService) so we don't
+    /// leak query params or tokens.
+    public var baseURLWithPath: URL? {
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
+            return nil
+        }
+        components.user = nil
+        components.password = nil
+        components.query = nil
+        components.fragment = nil
+        return components.url
+    }
+
     /// Creates a short domain version of a link's url
     /// e.g. url: http://www.foosite.com  =>  "foosite"
     public var shortDomain: String? {
         return host.flatMap { shortDomain($0, etld: publicSuffix ?? "") }
+    }
+
+    /// Returns true if the URL belongs to the given domain entity,
+    /// regardless of subdomain or TLD (e.g. "google" matches google.com, google.de, mail.google.com)
+    public func isDomain(_ domain: String) -> Bool {
+        guard let base = baseDomain else { return false }
+        return base.split(separator: ".").first == domain[...]
     }
 
     /// Returns the base domain from a given hostname. The base domain name is defined as the public domain suffix
@@ -73,6 +95,15 @@ extension URL {
 
     var normalizedHostAndPath: String? {
         return normalizedHost.flatMap { $0 + self.path }
+    }
+
+    // Isolates the domain in a left-to-right context
+    // by using Left-to-Right Isolate (U+2066) to prevent RTL characters from reordering the display url.
+    // We use Pop Directional Isolate (U+2069) to close the range.
+    // (Bugzilla #2029371)
+    public var normalizedHostWithLRI: String? {
+        guard let normalizedHost else { return nil }
+        return "\u{2066}\(normalizedHost)\u{2069}"
     }
 
     /// Extracts the subdomain and host from a given URL string and appends a dot to the subdomain.
@@ -312,7 +343,10 @@ extension URL {
 
     public var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
-        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
+        // Accept both the localhost form and the new custom-scheme form
+        let isLocalhost = scheme == "http" && host == "localhost" && path == "/reader-mode/page"
+        let isReadermode = scheme == "readermode" && host == "app" && path == "/page"
+        return isLocalhost || isReadermode
     }
 
     public var decodeReaderModeURL: URL? {

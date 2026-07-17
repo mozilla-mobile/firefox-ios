@@ -462,7 +462,7 @@ fileprivate struct FfiConverterString: FfiConverter {
  * Named `viaduct_init_backend_hyper` since that reads better on iOS/Swift where there aren't any
  * namespaces.  Once we move to UniFII 0.31 we can use the renaming feature to do this instead.
  */
-public func viaductInitBackendHyper()throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
+public func viaductInitBackendHyper()  {try! rustCall() {
     uniffi_viaduct_hyper_fn_func_viaduct_init_backend_hyper($0
     )
 }
@@ -483,11 +483,10 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_viaduct_hyper_checksum_func_viaduct_init_backend_hyper() != 51717) {
+    if (uniffi_viaduct_hyper_checksum_func_viaduct_init_backend_hyper() != 22167) {
         return InitializationResult.apiChecksumMismatch
     }
 
-    uniffiEnsureViaductInitialized()
     return InitializationResult.ok
 }()
 

@@ -7,9 +7,7 @@ import Foundation
 import MenuKit
 import Shared
 
-struct MainMenuConfigurationUtility: Equatable,
-                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
-                                     FeatureFlaggable {
+struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private struct Icons {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let bookmarksTray = StandardImageIdentifiers.Large.bookmarkTray
@@ -26,15 +24,12 @@ struct MainMenuConfigurationUtility: Equatable,
         static let summarizer = StandardImageIdentifiers.Large.summarizer
         static let translate = StandardImageIdentifiers.Medium.translate
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
-        static let share = StandardImageIdentifiers.Large.share
+        static let share = StandardImageIdentifiers.Large.shareApple
+        static let reportBrokenSite = StandardImageIdentifiers.Large.report
     }
 
-    private var shouldShowReportSiteIssue: Bool {
-        featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
-    }
-
-    private var isNewAppearanceMenuOn: Bool {
-        featureFlagsProvider.isEnabled(.appearanceMenu)
+    private var isReportBrokenSiteOn: Bool {
+        featureFlagsProvider.isEnabled(.reportBrokenSite)
     }
 
     private var isSummarizerOn: Bool {
@@ -344,8 +339,44 @@ struct MainMenuConfigurationUtility: Equatable,
                     }
                 ),
             ])
+            if let reportBrokenSiteItem = configureReportBrokenSiteItem(with: uuid, tabInfo: tabInfo) {
+                options.append(reportBrokenSiteItem)
+            }
         }
         return MenuSection(isExpanded: isExpanded, options: options)
+    }
+
+    private func configureReportBrokenSiteItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement? {
+        guard isReportBrokenSiteOn,
+              tabInfo.url?.isWebPage(includeDataURIs: false) == true
+        else { return nil }
+
+        return MenuElement(
+            title: .MainMenu.ToolsSection.ReportBrokenSite,
+            iconName: Icons.reportBrokenSite,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
+            isOptional: true,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .reportBrokenSite,
+                            url: tabInfo.url
+                        ),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
     }
 
     private func configureBookmarkPageItem(
@@ -414,7 +445,7 @@ struct MainMenuConfigurationUtility: Equatable,
         tabInfo: MainMenuTabInfo,
         localeProvider: LocaleProvider
     ) -> MenuElement? {
-        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
+        guard featureFlagsProvider.isEnabled(.translationLanguagePicker),
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil
@@ -423,7 +454,7 @@ struct MainMenuConfigurationUtility: Equatable,
         let isActive = translationConfig.state == .active
         let infoTitle: String
         if isActive, let langCode = translationConfig.translatedToLanguage {
-            infoTitle = localeProvider.current.localizedString(forLanguageCode: langCode) ?? langCode
+            infoTitle = localeProvider.current.localizedString(forIdentifier: langCode) ?? langCode
         } else {
             infoTitle = .MainMenu.ToolsSection.Translation.Off
         }
@@ -450,7 +481,7 @@ struct MainMenuConfigurationUtility: Equatable,
             isEnabled: true,
             isActive: isActive,
             a11yLabel: a11yLabel,
-            a11yHint: nil,
+            a11yHint: infoTitle,
             a11yId: AccessibilityIdentifiers.MainMenu.translatePage,
             infoTitle: infoTitle,
             action: {

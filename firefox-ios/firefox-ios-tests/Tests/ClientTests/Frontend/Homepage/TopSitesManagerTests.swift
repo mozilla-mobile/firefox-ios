@@ -17,7 +17,6 @@ final class TopSitesManagerTests: XCTestCase {
         try await super.setUp()
         profile = MockProfile()
         mockNotificationCenter = MockNotificationCenter()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
@@ -105,6 +104,16 @@ final class TopSitesManagerTests: XCTestCase {
             unifiedAdsProvider: MockUnifiedAdsProvider(
                 result: .failure(MockSponsoredTileData.MockError.testError)
             )
+        )
+
+        let topSites = await subject.fetchSponsoredSites()
+        XCTAssertEqual(topSites.count, 0)
+    }
+
+    func test_fetchSponsoredSites_forUnifiedAds_whenProviderDoesNotComplete_returnNoSponsoredSites() async throws {
+        let subject = try createSubject(
+            unifiedAdsProvider: MockUnifiedAdsProvider(result: nil),
+            sponsoredTilesFetchTimeoutNanoseconds: 1_000_000
         )
 
         let topSites = await subject.fetchSponsoredSites()
@@ -389,8 +398,6 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     func test_sponsoredShortcutsFlagEnabled_withoutUserPref_returnsSponsoredSites() throws {
-        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: true)
-
         let subject = try createSubject()
 
         let topSites = subject.recalculateTopSites(
@@ -399,24 +406,10 @@ final class TopSitesManagerTests: XCTestCase {
         )
 
         XCTAssertEqual(topSites.count, 2)
-    }
-
-    func test_sponsoredShorcutsFlagDisabled_withoutUserPref_returnsNoSponsoredSites() throws {
-        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: false)
-
-        let subject = try createSubject()
-
-        let topSites = subject.recalculateTopSites(
-            otherSites: [],
-            sponsoredSites: createSponsoredSites()
-        )
-
-        XCTAssertEqual(topSites.count, 0)
     }
 
     func test_sponsoredShortcutsFlagEnabled_withUserPref_returnsNoSponsoredSites() throws {
         profile?.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
-        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: true)
 
         let subject = try createSubject()
 
@@ -426,20 +419,6 @@ final class TopSitesManagerTests: XCTestCase {
         )
 
         XCTAssertEqual(topSites.count, 0)
-    }
-
-    func test_sponsoredShortcutsFlagDisabled_withUserPref_returnsSponsoredSites() throws {
-        profile?.prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
-        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: false)
-
-        let subject = try createSubject()
-
-        let topSites = subject.recalculateTopSites(
-            otherSites: [],
-            sponsoredSites: createSponsoredSites()
-        )
-
-        XCTAssertEqual(topSites.count, 2)
     }
 
     private func createSubject(
@@ -451,6 +430,7 @@ final class TopSitesManagerTests: XCTestCase {
         topSiteHistoryManager: TopSiteHistoryManagerProvider = MockTopSiteHistoryManager(sites: []),
         searchEngineManager: SearchEnginesManagerProvider = MockSearchEnginesManager(),
         maxCount: Int = 10,
+        sponsoredTilesFetchTimeoutNanoseconds: UInt64 = 3_000_000_000,
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws -> TopSitesManager {
@@ -463,7 +443,8 @@ final class TopSitesManagerTests: XCTestCase {
             topSiteHistoryManager: topSiteHistoryManager,
             searchEnginesManager: searchEngineManager,
             notification: mockNotificationCenter,
-            maxTopSites: maxCount
+            maxTopSites: maxCount,
+            sponsoredTilesFetchTimeoutNanoseconds: sponsoredTilesFetchTimeoutNanoseconds
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
@@ -496,13 +477,5 @@ final class TopSitesManagerTests: XCTestCase {
             sponsoredSites.append(Site.createSponsoredSite(fromUnifiedTile: tile))
         }
         return sponsoredSites
-    }
-
-    private func setupNimbusHNTSponsoredShortcutsTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hntSponsoredShortcutsFeature.with { _, _ in
-            return HntSponsoredShortcutsFeature(
-                enabled: isEnabled
-            )
-        }
     }
 }

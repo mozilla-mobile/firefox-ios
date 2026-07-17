@@ -16,10 +16,10 @@ class MockTabManager: TabManager {
     var selectedIndex = 0
     var selectedTab: Tab?
     var selectedTabUUID: UUID?
-    var backupCloseTab: BackupCloseTab?
-    var backupCloseTabs = [Tab]()
     // Use to return in getTabForUUID()
     var tabForUUID: Tab?
+    // Maps tabUUID → Tab; takes precedence over `tabForUUID` for callers that need per-UUID lookups.
+    var tabsByUUID: [TabUUID: Tab] = [:]
 
     var recentlyAccessedNormalTabs = [Tab]()
 
@@ -96,8 +96,6 @@ class MockTabManager: TabManager {
 
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {}
 
-    func undoCloseTab() {}
-
     func clearAllTabsHistory() {}
 
     func commitChanges() {
@@ -113,6 +111,7 @@ class MockTabManager: TabManager {
     func restoreTabs() {}
 
     func getTabForUUID(uuid: String) -> Tab? {
+        if let match = tabsByUUID[uuid] { return match }
         return tabForUUID
     }
 
@@ -158,5 +157,14 @@ class MockTabManager: TabManager {
         notifyCurrentTabDidFinishLoadingCalled += 1
     }
 
-    func tabDidSetScreenshot(_ tab: Client.Tab) {}
+    var tabDidSetScreenshotCalls = 0
+    func tabDidSetScreenshot(_ tab: Client.Tab) {
+        tabDidSetScreenshotCalls += 1
+    }
+    func offloadBackgroundWebViews() async {}
+
+    var restoreScreenshotCalls: [Tab] = []
+    func restoreScreenshot(for tab: Tab) {
+        restoreScreenshotCalls.append(tab)
+    }
 }

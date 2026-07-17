@@ -22,7 +22,6 @@ final class StatusBarOverlayTests: XCTestCase {
         self.profile = MockProfile()
         self.wallpaperManager = WallpaperManagerMock()
         self.notificationCenter = MockNotificationCenter()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
@@ -395,7 +394,7 @@ final class StatusBarOverlayTests: XCTestCase {
 
     private func createToolbarMock(isReduceTransparencyEnabled: Bool = false) -> ToolbarHelperInterface {
         let toolbarHelper = MockToolbarHelper()
-        toolbarHelper.isReduceTransparencyEnabled = isReduceTransparencyEnabled
+        toolbarHelper.reduceTransparencyEnabled = isReduceTransparencyEnabled
         return toolbarHelper
     }
 }

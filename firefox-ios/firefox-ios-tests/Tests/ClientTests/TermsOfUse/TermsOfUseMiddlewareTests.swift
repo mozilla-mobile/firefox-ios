@@ -30,13 +30,13 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_termsAccepted_updatesAcceptedPref() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsAccepted)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
         XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true)
     }
 
     func testMiddleware_gestureDismiss_updatesPrefsWithDate() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNotNil(dismissedTimestamp)
 
@@ -48,7 +48,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_remindMeLaterTapped_updatesPrefsWithDate() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNotNil(dismissedTimestamp)
 
@@ -60,7 +60,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_termsShown_setsShownPref() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
 
         // Should set the first shown preference
         XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
@@ -71,7 +71,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_termsAccepted_recordsDatePref() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsAccepted)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
 
         let dateTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate)
         XCTAssertNotNil(dateTimestamp)
@@ -83,7 +83,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_remindMeLaterTapped_tracksTapTimestamp() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
 
         let timestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseRemindMeLaterTapDate)
         XCTAssertNotNil(timestamp)
@@ -91,7 +91,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_learnMoreLinkTapped_tracksTapTimestamp() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.learnMoreLinkTapped)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
 
         let timestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseLearnMoreTapDate)
         XCTAssertNotNil(timestamp)
@@ -99,7 +99,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_privacyLinkTapped_tracksTapTimestamp() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.privacyLinkTapped)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
 
         let timestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUsePrivacyNoticeTapDate)
         XCTAssertNotNil(timestamp)
@@ -107,7 +107,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_termsLinkTapped_tracksTapTimestamp() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsLinkTapped)
-        middleware.termsOfUseProvider(AppState(), action)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), action)
 
         let timestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseTermsLinkTapDate)
         XCTAssertNotNil(timestamp)
@@ -115,10 +115,10 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_firstDismissal_doesNotIncrementRemindersCount() {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction)
 
         let dismissAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), dismissAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), dismissAction)
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         XCTAssertEqual(remindersCount, 0, "First gesture dismissal should not increment reminders count")
@@ -127,15 +127,15 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_secondDismissal_incrementsRemindersCount() {
         let shownAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction1)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction1)
 
         let dismissAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
                                               actionType: TermsOfUseActionType.gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), dismissAction1)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), dismissAction1)
 
         let dismissAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
                                               actionType: TermsOfUseActionType.gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), dismissAction2)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), dismissAction2)
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         XCTAssertEqual(remindersCount, 1, "Second gesture dismissal should increment reminders count to 1")
@@ -143,11 +143,11 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_remindMeLaterTapped_firstDismissal_doesNotIncrementCount() {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction)
 
         let remindAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
                                             actionType: TermsOfUseActionType.remindMeLaterTapped)
-        middleware.termsOfUseProvider(AppState(), remindAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), remindAction)
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         XCTAssertEqual(remindersCount, 0, "First 'Remind Me Later' should not increment reminders count")
@@ -155,15 +155,15 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_remindMeLaterTapped_secondDismissal_incrementsCount() {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction)
 
         let remindAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
                                              actionType: TermsOfUseActionType.remindMeLaterTapped)
-        middleware.termsOfUseProvider(AppState(), remindAction1)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), remindAction1)
 
         let remindAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
                                              actionType: TermsOfUseActionType.remindMeLaterTapped)
-        middleware.termsOfUseProvider(AppState(), remindAction2)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), remindAction2)
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         XCTAssertEqual(remindersCount, 1, "Second 'Remind Me Later' should increment reminders count to 1")
@@ -171,45 +171,45 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
     func testMiddleware_mixedDismissalTypes_incrementsCorrectly() {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction)
 
         let gestureAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), gestureAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), gestureAction)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 0)
 
         let remindAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
                                             actionType: TermsOfUseActionType.remindMeLaterTapped)
-        middleware.termsOfUseProvider(AppState(), remindAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), remindAction)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 1)
 
         let gestureAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
                                               actionType: TermsOfUseActionType.gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), gestureAction2)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), gestureAction2)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 2)
     }
 
     func testMiddleware_termsShown_firstAppearance_incrementsShownCountOnce() {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction)
 
         XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }
 
     func testMiddleware_termsShown_whenReminderIsShown_incrementsShownCountAgain() {
         let dismissAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), dismissAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), dismissAction)
 
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction)
         XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 2)
     }
 
     func testMiddleware_termsShown_onResumeFromBackgroundOrLinks_doesNotIncrementShownCount() {
         let shownAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction1)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction1)
 
         let shownAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
-        middleware.termsOfUseProvider(AppState(), shownAction2)
+        middleware.termsOfUseProvider.legacyMiddleware(AppState(), shownAction2)
 
         XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }

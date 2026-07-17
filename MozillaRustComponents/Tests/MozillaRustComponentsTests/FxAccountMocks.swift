@@ -46,9 +46,9 @@ class MockFxAccount: PersistedFirefoxAccount {
         case .initialize:
             return initializeResult
         case .beginOAuthFlow:
-            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo")
+            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo", initialState: .disconnected)
         case .beginPairingFlow:
-            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo")
+            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo", initialState: .disconnected)
         case let .completeOAuthFlow(_, state):
             // Simulate Rust's OAuth state validation
             return state == "bobo" ? .connected : .disconnected
@@ -59,7 +59,7 @@ class MockFxAccount: PersistedFirefoxAccount {
             return info.active ? .connected : .authIssues
         case .disconnect:
             return .disconnected
-        case .callGetProfile:
+        case .callGetProfile, .webChannelPasswordChange:
             return .connected
         }
     }
@@ -98,13 +98,6 @@ class MockFxAccount: PersistedFirefoxAccount {
     override func getProfile(ignoreCache _: Bool) throws -> Profile {
         queue.sync { invocations.append(.getProfile) }
         return Profile(uid: "uid", email: "foo@bar.bobo", displayName: "Bobo the Foo", avatar: "https://example.com/avatar.png", isDefaultAvatar: false)
-    }
-
-    override func beginOAuthFlow(
-        scopes _: [String],
-        entrypoint _: String
-    ) throws -> URL {
-        return URL(string: "https://foo.bar/oauth?state=bobo")!
     }
 }
 

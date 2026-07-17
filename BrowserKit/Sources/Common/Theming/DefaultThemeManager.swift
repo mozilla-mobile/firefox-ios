@@ -11,7 +11,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     enum ThemeKeys {
         static let themeName = "prefKeyThemeName"
         static let systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
-        static let hasMigratedToNewAppearanceMenu = "prefKeyhasMigratedToNewAppearanceMenu"
 
         enum AutomaticBrightness {
             static let isOn = "prefKeyAutomaticSwitchOnOff"
@@ -34,7 +33,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var mainQueue: DispatchQueueInterface
     private var sharedContainerIdentifier: String
 
-    private var isNewAppearanceMenuOnClosure: () -> Bool
+    private var isNovaDesignOnClosure: () -> Bool
 
     private var nightModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
@@ -52,12 +51,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
     }
 
-    public var isNewAppearanceMenuOn: Bool {
-        return isNewAppearanceMenuOnClosure()
-    }
-
-    public var hasMigratedToNewAppearanceMenu: Bool {
-        return userDefaults.bool(forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
+    public var isNovaDesignOn: Bool {
+        return isNovaDesignOnClosure()
     }
 
     // MARK: - Initializers
@@ -67,13 +62,13 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
         sharedContainerIdentifier: String,
-        isNewAppearanceMenuOnClosure: @escaping () -> Bool = { false }
+        isNovaDesignOnClosure: @escaping () -> Bool = { false }
     ) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
-        self.isNewAppearanceMenuOnClosure = isNewAppearanceMenuOnClosure
+        self.isNovaDesignOnClosure = isNovaDesignOnClosure
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -165,7 +160,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func windowNonspecificTheme() -> Theme {
         switch getUserManualTheme() {
         case .dark, .nightMode, .privateMode: return DarkTheme()
-        case .light: return LightTheme()
+        case .light: return getThemeFrom(type: .light)
         }
     }
 
@@ -208,11 +203,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func determineUserTheme() -> ThemeType {
-        // Check if a migration override should be applied. This is mainly done because the new behaviour splits
-        // dark theme appearance of the app and web content. Once FXIOS-11655, both this check and nightMode
-        // in general will be removed.
-        if let migratedTheme = migratedTheme() { return migratedTheme }
-        if !isNewAppearanceMenuOn && nightModeIsOn { return .nightMode }
+        if nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
@@ -220,6 +211,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func getThemeFrom(type: ThemeType) -> Theme {
+        if isNovaDesignOn, let novaTheme = novaTheme(for: type) {
+            return novaTheme
+        }
+
         switch type {
         case .light:
             return LightTheme()
@@ -229,6 +224,19 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return NightModeTheme()
         case .privateMode:
             return PrivateModeTheme()
+        }
+    }
+
+    private func novaTheme(for type: ThemeType) -> Theme? {
+        switch type {
+        case .light:
+            return NovaLightTheme()
+        case .dark:
+            return NovaDarkTheme()
+        case .nightMode:
+            return NovaNightModeTheme()
+        case .privateMode:
+            return NovaPrivateTheme()
         }
     }
 
@@ -244,34 +252,5 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         default:
             return
         }
-    }
-
-    /// Checks if theme migration should override the current theme selection.
-    /// Returns:
-    /// - .dark if migration conditions are met and NightMode is active.
-    /// - nil otherwise.
-    /// NOTE(FXIOS-11655): This code will be removed once the new appearance menu experiment ends.
-    @MainActor
-    private func migratedTheme() -> ThemeType? {
-        if isNewAppearanceMenuOn && !hasMigratedToNewAppearanceMenu {
-            // Mark that migration has been performed to avoid repeating the process.
-            userDefaults.set(true, forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
-            if nightModeIsOn {
-                // If nightMode was on, force dark mode in the new UI and update all other themes.
-                updateSavedTheme(to: .dark)
-                setSystemTheme(isOn: false)
-                setAutomaticBrightness(isOn: false)
-                return .dark
-            } else if automaticBrightnessIsOn {
-                // If automaticBrightness was on, apply the computed theme.
-                updateSavedTheme(to: getThemeTypeBasedOnBrightness())
-                setSystemTheme(isOn: false)
-                setAutomaticBrightness(isOn: false)
-            }
-        } else if !isNewAppearanceMenuOn && hasMigratedToNewAppearanceMenu {
-            // Reset the migration flag (mostly for debugging or rare cases).
-            userDefaults.set(false, forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
-        }
-        return nil
     }
 }

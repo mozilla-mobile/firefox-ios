@@ -23,10 +23,9 @@
  *       calling [`FirefoxAccount::from_json`].
  *
  * * When the user wants to sign in to your application, direct them through
- *   a web-based OAuth flow using [`begin_oauth_flow`](FirefoxAccount::begin_oauth_flow)
- *   or [`begin_pairing_flow`](FirefoxAccount::begin_pairing_flow); when they return
- *   to your registered `redirect_uri`, pass the resulting authorization state back to
- *   [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) to sign them in.
+ *   a web-based OAuth flow by sending the `BeginOAuthFlow` or `BeginPairingFlow`
+ *   state-machine event; when they return to your registered `redirect_uri`, pass the
+ *   resulting authorization state back via the `CompleteOAuthFlow` event to sign them in.
  *
  * * Display information about the signed-in user by using the data from
  *   [`get_profile`](FirefoxAccount::get_profile).
@@ -563,61 +562,6 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func authorizeCodeUsingSessionToken(params: AuthorizationParameters) throws  -> String
     
     /**
-     * Initiate a web-based OAuth sign-in flow.
-     *
-     * This method initializes some internal state and then returns a URL at which the
-     * user may perform a web-based authorization flow to connect the application to
-     * their account. The application should direct the user to the provided URL.
-     *
-     * When the resulting OAuth flow redirects back to the configured `redirect_uri`,
-     * the query parameters should be extracting from the URL and passed to the
-     * [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) method to finalize
-     * the signin.
-     *
-     * # Arguments
-     *
-     *   - `scopes` - list of OAuth scopes to request.
-     *       - The requested scopes will determine what account-related data
-     *         the application is able to access.
-     *   - `entrypoint` - metrics identifier for UX entrypoint.
-     *       - This parameter is used for metrics purposes, to identify the
-     *         UX entrypoint from which the user triggered the signin request.
-     *         For example, the application toolbar, on the onboarding flow.
-     *   - `metrics` - optionally, additional metrics tracking parameters.
-     *       - These will be included as query parameters in the resulting URL.
-
-     */
-    func beginOauthFlow(scopes: [String], entrypoint: String) throws  -> String
-    
-    /**
-     * Initiate a device-pairing sign-in flow.
-     *
-     * Once the user has scanned a pairing QR code, pass the scanned value to this
-     * method. It will return a URL to which the application should redirect the user
-     * in order to continue the sign-in flow.
-     *
-     * When the resulting flow redirects back to the configured `redirect_uri`,
-     * the resulting OAuth parameters should be extracting from the URL and passed
-     * to [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) to finalize
-     * the signin.
-     *
-     * # Arguments
-     *
-     *   - `pairing_url` - the URL scanned from a QR code on another device.
-     *   - `scopes` - list of OAuth scopes to request.
-     *       - The requested scopes will determine what account-related data
-     *         the application is able to access.
-     *   - `entrypoint` - metrics identifier for UX entrypoint.
-     *       - This parameter is used for metrics purposes, to identify the
-     *         UX entrypoint from which the user triggered the signin request.
-     *         For example, the application toolbar, on the onboarding flow.
-     *   - `metrics` - optionally, additional metrics tracking parameters.
-     *       - These will be included as query parameters in the resulting URL.
-
-     */
-    func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String) throws  -> String
-    
-    /**
      * Check authorization status for this application.
      *
      * **💾 This method alters the persisted account state.**
@@ -667,24 +611,6 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      * capability, this method can be used to close its tabs.
      */
     func closeTabs(targetDeviceId: String, urls: [String]) throws  -> CloseTabsResult
-    
-    /**
-     * Complete an OAuth flow.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * At the conclusion of an OAuth flow, the user will be redirect to the
-     * application's registered `redirect_uri`. It should extract the `code`
-     * and `state` parameters from the resulting URL and pass them to this
-     * method in order to complete the sign-in.
-     *
-     * # Arguments
-     *
-     *   - `code` - the OAuth authorization code obtained from the redirect URI.
-     *   - `state` - the OAuth state parameter obtained from the redirect URI.
-
-     */
-    func completeOauthFlow(code: String, state: String) throws 
     
     /**
      * Disconnect from the user's account.
@@ -757,9 +683,13 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *
      * # Arguments
      *
-     *    - `scope` - the OAuth scope to be granted by the token.
-     *        - This must be one of the scopes requested during the signin flow.
-     *        - Only a single scope is supported; for multiple scopes request multiple tokens.
+     *    - `scope` - space-separated list of OAuth scopes to be granted by the token.
+     *        - Each scope must have been requested during the signin flow, or be a scope
+     *          which the server might offer automatically in some account-specific cases.
+     *        - Scope order is not significant; `"a b"` and `"b a"` are equivalent.
+     *        - When a single scope is requested and it has an associated scoped key
+     *          (e.g. `https://identity.mozilla.com/apps/oldsync`), the returned
+     *          `AccessTokenInfo.key` will be populated; for multi-scope requests it is `null`.
      *    - `use_cache` - optionally set to false to force a new token request.  The fetched
      *       token will still be cached for later `get_access_token` calls.
      *
@@ -887,7 +817,7 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      * If the user wants to sign in using device pairing, call this method and then
      * direct them to visit the resulting URL on an already-signed-in device. Doing
      * so will trigger the other device to show a QR code to be scanned, and the result
-     * from said QR code can be passed to [`begin_pairing_flow`](FirefoxAccount::begin_pairing_flow).
+     * from said QR code can be passed to the `BeginPairingFlow` state-machine event.
 
      */
     func getPairingAuthorityUrl() throws  -> String
@@ -918,24 +848,11 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func getProfile(ignoreCache: Bool) throws  -> Profile
     
     /**
-     * Get the session token for the user's account, if one is available.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * Applications that function as a web browser may need to hold on to a session token
-     * on behalf of Firefox Accounts web content. This method exists so that they can retrieve
-     * it an pass it back to said web content when required.
-     *
-     * # Notes
-     *
-     *    - Please do not attempt to use the resulting token to directly make calls to the
-     *      Firefox Accounts servers! All account management functionality should be performed
-     *      in web content.
-     *    - A session token is only available to applications that have requested the
-     *      `https:///identity.mozilla.com/tokens/session` scope.
-
+     * Returns a complete signedInUser JSON object for a WebChannel fxaccounts:fxa_status response,
+     * embedding the session token privately. Email and uid come from the cached profile in internal
+     * state. Returns null if no session token is set.
      */
-    func getSessionToken() throws  -> String
+    func getSignedInUserForWebChannel()  -> String?
     
     /**
      * Get the current state
@@ -968,21 +885,30 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func handlePushMessage(payload: String) throws  -> AccountEvent
     
     /**
-     * Update the stored session token for the user's account.
+     * Stores anything necessary from a WebChannel login JSON payload. This includes the session
+     * token, but that is abstracted because the consuming apps should not be aware of the
+     * specific payload format returned, nor should they get access to the session token
+     * directly if possible.
+     * The [json_payload] is the `data` object from the `fxaccounts:login` WebChannel command.
+     */
+    func handleWebChannelLogin(jsonPayload: String) throws 
+    
+    /**
+     * Handle a WebChannel password-change notification by exchanging the new session token
+     * for a new refresh token via a network call.
+     * The [json_payload] is the `data` object from the `fxaccounts:change_password` WebChannel command.
+     */
+    func handleWebChannelPasswordChange(jsonPayload: String) throws 
+    
+    /**
+     * Check whether the account has already been granted the given OAuth scope(s).
      *
-     * **💾 This method alters the persisted account state.**
-     *
-     * Applications that function as a web browser may need to hold on to a session token
-     * on behalf of Firefox Accounts web content. This method exists so that said web content
-     * signals that it has generated a new session token, the stored value can be updated
-     * to match.
+     * This checks whether the refresh token has *every* specified scope.
      *
      * # Arguments
-     *
-     *    - `session_token` - the new session token value provided from web content.
-
+     *    - `scope` - space-separated list of OAuth scopes. Order is not significant.
      */
-    func handleSessionTokenChange(sessionToken: String) throws 
+    func hasScope(scope: String)  -> Bool
     
     /**
      * Create a new device record for this application.
@@ -1113,14 +1039,6 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
 
      */
     func setPushSubscription(subscription: DevicePushSubscription) throws  -> LocalDevice
-    
-    /**
-     * Sets the users information based on the web content's login information
-     * This is intended to only be used by user agents (eg: Firefox) to set the users
-     * session token and tie it to the refresh token that will be issued at the end of the
-     * oauth flow.
-     */
-    func setUserData(userData: UserData) 
     
     /**
      * Used by the application to test auth token issues
@@ -1276,78 +1194,6 @@ open func authorizeCodeUsingSessionToken(params: AuthorizationParameters)throws 
 }
     
     /**
-     * Initiate a web-based OAuth sign-in flow.
-     *
-     * This method initializes some internal state and then returns a URL at which the
-     * user may perform a web-based authorization flow to connect the application to
-     * their account. The application should direct the user to the provided URL.
-     *
-     * When the resulting OAuth flow redirects back to the configured `redirect_uri`,
-     * the query parameters should be extracting from the URL and passed to the
-     * [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) method to finalize
-     * the signin.
-     *
-     * # Arguments
-     *
-     *   - `scopes` - list of OAuth scopes to request.
-     *       - The requested scopes will determine what account-related data
-     *         the application is able to access.
-     *   - `entrypoint` - metrics identifier for UX entrypoint.
-     *       - This parameter is used for metrics purposes, to identify the
-     *         UX entrypoint from which the user triggered the signin request.
-     *         For example, the application toolbar, on the onboarding flow.
-     *   - `metrics` - optionally, additional metrics tracking parameters.
-     *       - These will be included as query parameters in the resulting URL.
-
-     */
-open func beginOauthFlow(scopes: [String], entrypoint: String)throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_begin_oauth_flow(
-            self.uniffiCloneHandle(),
-        FfiConverterSequenceString.lower(scopes),
-        FfiConverterString.lower(entrypoint),$0
-    )
-})
-}
-    
-    /**
-     * Initiate a device-pairing sign-in flow.
-     *
-     * Once the user has scanned a pairing QR code, pass the scanned value to this
-     * method. It will return a URL to which the application should redirect the user
-     * in order to continue the sign-in flow.
-     *
-     * When the resulting flow redirects back to the configured `redirect_uri`,
-     * the resulting OAuth parameters should be extracting from the URL and passed
-     * to [`complete_oauth_flow`](FirefoxAccount::complete_oauth_flow) to finalize
-     * the signin.
-     *
-     * # Arguments
-     *
-     *   - `pairing_url` - the URL scanned from a QR code on another device.
-     *   - `scopes` - list of OAuth scopes to request.
-     *       - The requested scopes will determine what account-related data
-     *         the application is able to access.
-     *   - `entrypoint` - metrics identifier for UX entrypoint.
-     *       - This parameter is used for metrics purposes, to identify the
-     *         UX entrypoint from which the user triggered the signin request.
-     *         For example, the application toolbar, on the onboarding flow.
-     *   - `metrics` - optionally, additional metrics tracking parameters.
-     *       - These will be included as query parameters in the resulting URL.
-
-     */
-open func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String)throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_begin_pairing_flow(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(pairingUrl),
-        FfiConverterSequenceString.lower(scopes),
-        FfiConverterString.lower(entrypoint),$0
-    )
-})
-}
-    
-    /**
      * Check authorization status for this application.
      *
      * **💾 This method alters the persisted account state.**
@@ -1420,31 +1266,6 @@ open func closeTabs(targetDeviceId: String, urls: [String])throws  -> CloseTabsR
         FfiConverterSequenceString.lower(urls),$0
     )
 })
-}
-    
-    /**
-     * Complete an OAuth flow.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * At the conclusion of an OAuth flow, the user will be redirect to the
-     * application's registered `redirect_uri`. It should extract the `code`
-     * and `state` parameters from the resulting URL and pass them to this
-     * method in order to complete the sign-in.
-     *
-     * # Arguments
-     *
-     *   - `code` - the OAuth authorization code obtained from the redirect URI.
-     *   - `state` - the OAuth state parameter obtained from the redirect URI.
-
-     */
-open func completeOauthFlow(code: String, state: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_complete_oauth_flow(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(code),
-        FfiConverterString.lower(state),$0
-    )
-}
 }
     
     /**
@@ -1536,9 +1357,13 @@ open func gatherTelemetry()throws  -> String  {
      *
      * # Arguments
      *
-     *    - `scope` - the OAuth scope to be granted by the token.
-     *        - This must be one of the scopes requested during the signin flow.
-     *        - Only a single scope is supported; for multiple scopes request multiple tokens.
+     *    - `scope` - space-separated list of OAuth scopes to be granted by the token.
+     *        - Each scope must have been requested during the signin flow, or be a scope
+     *          which the server might offer automatically in some account-specific cases.
+     *        - Scope order is not significant; `"a b"` and `"b a"` are equivalent.
+     *        - When a single scope is requested and it has an associated scoped key
+     *          (e.g. `https://identity.mozilla.com/apps/oldsync`), the returned
+     *          `AccessTokenInfo.key` will be populated; for multi-scope requests it is `null`.
      *    - `use_cache` - optionally set to false to force a new token request.  The fetched
      *       token will still be cached for later `get_access_token` calls.
      *
@@ -1719,7 +1544,7 @@ open func getManageDevicesUrl(entrypoint: String)throws  -> String  {
      * If the user wants to sign in using device pairing, call this method and then
      * direct them to visit the resulting URL on an already-signed-in device. Doing
      * so will trigger the other device to show a QR code to be scanned, and the result
-     * from said QR code can be passed to [`begin_pairing_flow`](FirefoxAccount::begin_pairing_flow).
+     * from said QR code can be passed to the `BeginPairingFlow` state-machine event.
 
      */
 open func getPairingAuthorityUrl()throws  -> String  {
@@ -1763,26 +1588,13 @@ open func getProfile(ignoreCache: Bool)throws  -> Profile  {
 }
     
     /**
-     * Get the session token for the user's account, if one is available.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * Applications that function as a web browser may need to hold on to a session token
-     * on behalf of Firefox Accounts web content. This method exists so that they can retrieve
-     * it an pass it back to said web content when required.
-     *
-     * # Notes
-     *
-     *    - Please do not attempt to use the resulting token to directly make calls to the
-     *      Firefox Accounts servers! All account management functionality should be performed
-     *      in web content.
-     *    - A session token is only available to applications that have requested the
-     *      `https:///identity.mozilla.com/tokens/session` scope.
-
+     * Returns a complete signedInUser JSON object for a WebChannel fxaccounts:fxa_status response,
+     * embedding the session token privately. Email and uid come from the cached profile in internal
+     * state. Returns null if no session token is set.
      */
-open func getSessionToken()throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_session_token(
+open func getSignedInUserForWebChannel() -> String?  {
+    return try!  FfiConverterOptionString.lift(try! rustCall() {
+    uniffi_fxa_client_fn_method_firefoxaccount_get_signed_in_user_for_web_channel(
             self.uniffiCloneHandle(),$0
     )
 })
@@ -1838,26 +1650,48 @@ open func handlePushMessage(payload: String)throws  -> AccountEvent  {
 }
     
     /**
-     * Update the stored session token for the user's account.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * Applications that function as a web browser may need to hold on to a session token
-     * on behalf of Firefox Accounts web content. This method exists so that said web content
-     * signals that it has generated a new session token, the stored value can be updated
-     * to match.
-     *
-     * # Arguments
-     *
-     *    - `session_token` - the new session token value provided from web content.
-
+     * Stores anything necessary from a WebChannel login JSON payload. This includes the session
+     * token, but that is abstracted because the consuming apps should not be aware of the
+     * specific payload format returned, nor should they get access to the session token
+     * directly if possible.
+     * The [json_payload] is the `data` object from the `fxaccounts:login` WebChannel command.
      */
-open func handleSessionTokenChange(sessionToken: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_handle_session_token_change(
+open func handleWebChannelLogin(jsonPayload: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+    uniffi_fxa_client_fn_method_firefoxaccount_handle_web_channel_login(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(sessionToken),$0
+        FfiConverterString.lower(jsonPayload),$0
     )
 }
+}
+    
+    /**
+     * Handle a WebChannel password-change notification by exchanging the new session token
+     * for a new refresh token via a network call.
+     * The [json_payload] is the `data` object from the `fxaccounts:change_password` WebChannel command.
+     */
+open func handleWebChannelPasswordChange(jsonPayload: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+    uniffi_fxa_client_fn_method_firefoxaccount_handle_web_channel_password_change(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(jsonPayload),$0
+    )
+}
+}
+    
+    /**
+     * Check whether the account has already been granted the given OAuth scope(s).
+     *
+     * This checks whether the refresh token has *every* specified scope.
+     *
+     * # Arguments
+     *    - `scope` - space-separated list of OAuth scopes. Order is not significant.
+     */
+open func hasScope(scope: String) -> Bool  {
+    return try!  FfiConverterBool.lift(try! rustCall() {
+    uniffi_fxa_client_fn_method_firefoxaccount_has_scope(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(scope),$0
+    )
+})
 }
     
     /**
@@ -2038,20 +1872,6 @@ open func setPushSubscription(subscription: DevicePushSubscription)throws  -> Lo
         FfiConverterTypeDevicePushSubscription_lower(subscription),$0
     )
 })
-}
-    
-    /**
-     * Sets the users information based on the web content's login information
-     * This is intended to only be used by user agents (eg: Firefox) to set the users
-     * session token and tie it to the refresh token that will be issued at the end of the
-     * oauth flow.
-     */
-open func setUserData(userData: UserData)  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_set_user_data(
-            self.uniffiCloneHandle(),
-        FfiConverterTypeUserData_lower(userData),$0
-    )
-}
 }
     
     /**
@@ -3334,68 +3154,6 @@ public func FfiConverterTypeTabHistoryEntry_lower(_ value: TabHistoryEntry) -> R
     return FfiConverterTypeTabHistoryEntry.lower(value)
 }
 
-
-public struct UserData: Equatable, Hashable {
-    public var sessionToken: String
-    public var uid: String
-    public var email: String
-    public var verified: Bool
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(sessionToken: String, uid: String, email: String, verified: Bool) {
-        self.sessionToken = sessionToken
-        self.uid = uid
-        self.email = email
-        self.verified = verified
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension UserData: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeUserData: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UserData {
-        return
-            try UserData(
-                sessionToken: FfiConverterString.read(from: &buf), 
-                uid: FfiConverterString.read(from: &buf), 
-                email: FfiConverterString.read(from: &buf), 
-                verified: FfiConverterBool.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: UserData, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.sessionToken, into: &buf)
-        FfiConverterString.write(value.uid, into: &buf)
-        FfiConverterString.write(value.email, into: &buf)
-        FfiConverterBool.write(value.verified, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeUserData_lift(_ buf: RustBuffer) throws -> UserData {
-    return try FfiConverterTypeUserData.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeUserData_lower(_ value: UserData) -> RustBuffer {
-    return FfiConverterTypeUserData.lower(value)
-}
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3758,6 +3516,14 @@ public enum FxaError: Swift.Error, Equatable, Hashable, Foundation.LocalizedErro
     case Authentication(message: String)
     
     /**
+     * Thrown when an authenticated account isn't allowed to perform some operation. Unlike
+     * `Authentication`, there's no problem with the account status. In some cases it
+     * might be possible to request additional scopes, and once granted, the operation
+     * may succeed.
+     */
+    case Forbidden(message: String)
+    
+    /**
      * Thrown if an operation fails due to network access problems.
      * The application may retry at a later time once connectivity is restored.
      */
@@ -3838,31 +3604,35 @@ public struct FfiConverterTypeFxaError: FfiConverterRustBuffer {
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 2: return .Network(
+        case 2: return .Forbidden(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 3: return .NoExistingAuthFlow(
+        case 3: return .Network(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 4: return .WrongAuthFlow(
+        case 4: return .NoExistingAuthFlow(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 5: return .OriginMismatch(
+        case 5: return .WrongAuthFlow(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 6: return .SyncScopedKeyMissingInServerResponse(
+        case 6: return .OriginMismatch(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 7: return .Panic(
+        case 7: return .SyncScopedKeyMissingInServerResponse(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 8: return .Other(
+        case 8: return .Panic(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 9: return .Other(
             message: try FfiConverterString.read(from: &buf)
         )
         
@@ -3879,20 +3649,22 @@ public struct FfiConverterTypeFxaError: FfiConverterRustBuffer {
         
         case .Authentication(_ /* message is ignored*/):
             writeInt(&buf, Int32(1))
-        case .Network(_ /* message is ignored*/):
+        case .Forbidden(_ /* message is ignored*/):
             writeInt(&buf, Int32(2))
-        case .NoExistingAuthFlow(_ /* message is ignored*/):
+        case .Network(_ /* message is ignored*/):
             writeInt(&buf, Int32(3))
-        case .WrongAuthFlow(_ /* message is ignored*/):
+        case .NoExistingAuthFlow(_ /* message is ignored*/):
             writeInt(&buf, Int32(4))
-        case .OriginMismatch(_ /* message is ignored*/):
+        case .WrongAuthFlow(_ /* message is ignored*/):
             writeInt(&buf, Int32(5))
-        case .SyncScopedKeyMissingInServerResponse(_ /* message is ignored*/):
+        case .OriginMismatch(_ /* message is ignored*/):
             writeInt(&buf, Int32(6))
-        case .Panic(_ /* message is ignored*/):
+        case .SyncScopedKeyMissingInServerResponse(_ /* message is ignored*/):
             writeInt(&buf, Int32(7))
-        case .Other(_ /* message is ignored*/):
+        case .Panic(_ /* message is ignored*/):
             writeInt(&buf, Int32(8))
+        case .Other(_ /* message is ignored*/):
+            writeInt(&buf, Int32(9))
 
         
         }
@@ -3921,14 +3693,16 @@ public enum FxaEvent: Equatable, Hashable {
     
     case initialize(deviceConfig: DeviceConfig
     )
-    case beginOAuthFlow(scopes: [String], entrypoint: String
+    case beginOAuthFlow(service: String, scopes: [String], entrypoint: String
     )
-    case beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String
+    case beginPairingFlow(pairingUrl: String, service: String, scopes: [String], entrypoint: String
     )
     case completeOAuthFlow(code: String, state: String
     )
     case cancelOAuthFlow
     case checkAuthorizationStatus
+    case webChannelPasswordChange(jsonPayload: String
+    )
     case disconnect
     case callGetProfile
 
@@ -3955,10 +3729,10 @@ public struct FfiConverterTypeFxaEvent: FfiConverterRustBuffer {
         case 1: return .initialize(deviceConfig: try FfiConverterTypeDeviceConfig.read(from: &buf)
         )
         
-        case 2: return .beginOAuthFlow(scopes: try FfiConverterSequenceString.read(from: &buf), entrypoint: try FfiConverterString.read(from: &buf)
+        case 2: return .beginOAuthFlow(service: try FfiConverterString.read(from: &buf), scopes: try FfiConverterSequenceString.read(from: &buf), entrypoint: try FfiConverterString.read(from: &buf)
         )
         
-        case 3: return .beginPairingFlow(pairingUrl: try FfiConverterString.read(from: &buf), scopes: try FfiConverterSequenceString.read(from: &buf), entrypoint: try FfiConverterString.read(from: &buf)
+        case 3: return .beginPairingFlow(pairingUrl: try FfiConverterString.read(from: &buf), service: try FfiConverterString.read(from: &buf), scopes: try FfiConverterSequenceString.read(from: &buf), entrypoint: try FfiConverterString.read(from: &buf)
         )
         
         case 4: return .completeOAuthFlow(code: try FfiConverterString.read(from: &buf), state: try FfiConverterString.read(from: &buf)
@@ -3968,9 +3742,12 @@ public struct FfiConverterTypeFxaEvent: FfiConverterRustBuffer {
         
         case 6: return .checkAuthorizationStatus
         
-        case 7: return .disconnect
+        case 7: return .webChannelPasswordChange(jsonPayload: try FfiConverterString.read(from: &buf)
+        )
         
-        case 8: return .callGetProfile
+        case 8: return .disconnect
+        
+        case 9: return .callGetProfile
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -3985,15 +3762,17 @@ public struct FfiConverterTypeFxaEvent: FfiConverterRustBuffer {
             FfiConverterTypeDeviceConfig.write(deviceConfig, into: &buf)
             
         
-        case let .beginOAuthFlow(scopes,entrypoint):
+        case let .beginOAuthFlow(service,scopes,entrypoint):
             writeInt(&buf, Int32(2))
+            FfiConverterString.write(service, into: &buf)
             FfiConverterSequenceString.write(scopes, into: &buf)
             FfiConverterString.write(entrypoint, into: &buf)
             
         
-        case let .beginPairingFlow(pairingUrl,scopes,entrypoint):
+        case let .beginPairingFlow(pairingUrl,service,scopes,entrypoint):
             writeInt(&buf, Int32(3))
             FfiConverterString.write(pairingUrl, into: &buf)
+            FfiConverterString.write(service, into: &buf)
             FfiConverterSequenceString.write(scopes, into: &buf)
             FfiConverterString.write(entrypoint, into: &buf)
             
@@ -4012,12 +3791,17 @@ public struct FfiConverterTypeFxaEvent: FfiConverterRustBuffer {
             writeInt(&buf, Int32(6))
         
         
-        case .disconnect:
+        case let .webChannelPasswordChange(jsonPayload):
             writeInt(&buf, Int32(7))
+            FfiConverterString.write(jsonPayload, into: &buf)
+            
+        
+        case .disconnect:
+            writeInt(&buf, Int32(8))
         
         
         case .callGetProfile:
-            writeInt(&buf, Int32(8))
+            writeInt(&buf, Int32(9))
         
         }
     }
@@ -4221,7 +4005,7 @@ public enum FxaState: Equatable, Hashable {
     
     case uninitialized
     case disconnected
-    case authenticating(oauthUrl: String
+    case authenticating(oauthUrl: String, initialState: FxaRustAuthState
     )
     case connected
     case authIssues
@@ -4250,7 +4034,7 @@ public struct FfiConverterTypeFxaState: FfiConverterRustBuffer {
         
         case 2: return .disconnected
         
-        case 3: return .authenticating(oauthUrl: try FfiConverterString.read(from: &buf)
+        case 3: return .authenticating(oauthUrl: try FfiConverterString.read(from: &buf), initialState: try FfiConverterTypeFxaRustAuthState.read(from: &buf)
         )
         
         case 4: return .connected
@@ -4273,9 +4057,10 @@ public struct FfiConverterTypeFxaState: FfiConverterRustBuffer {
             writeInt(&buf, Int32(2))
         
         
-        case let .authenticating(oauthUrl):
+        case let .authenticating(oauthUrl,initialState):
             writeInt(&buf, Int32(3))
             FfiConverterString.write(oauthUrl, into: &buf)
+            FfiConverterTypeFxaRustAuthState.write(initialState, into: &buf)
             
         
         case .connected:
@@ -4706,12 +4491,6 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_authorize_code_using_session_token() != 48815) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_oauth_flow() != 16472) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_pairing_flow() != 53426) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 26020) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4722,9 +4501,6 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_close_tabs() != 4607) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_complete_oauth_flow() != 12142) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_disconnect() != 2750) {
@@ -4766,7 +4542,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_get_profile() != 18322) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_session_token() != 45605) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_signed_in_user_for_web_channel() != 36302) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_get_state() != 11194) {
@@ -4778,7 +4554,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_push_message() != 12910) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_session_token_change() != 61407) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_login() != 61652) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_password_change() != 5890) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_has_scope() != 48753) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_initialize_device() != 52372) {
@@ -4800,9 +4582,6 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_set_push_subscription() != 27852) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_user_data() != 31422) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_network_error() != 31630) {

@@ -32,6 +32,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     private func typeOnSearchBar(text: String) {
         browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
         browserScreen.getAddressBarElement().tapAndTypeText(text)
     }
 
@@ -151,7 +152,7 @@ class SearchTests: FeatureFlaggedTestBase {
         } else {
             urlBarAddress.press(forDuration: 1)
         }
-        if !app.menuItems["Select All"].waitForExistence(timeout: 3) {
+        if !app.menuItems["Select All"].mozWaitForElementToExist(timeout: 3, failOnTimeout: false) {
             urlBarAddress.waitAndTap()
         }
         app.menuItems["Select All"].waitAndTap()
@@ -227,18 +228,10 @@ class SearchTests: FeatureFlaggedTestBase {
         changeSearchEngine(searchEngine: "eBay")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2353246
-    func testDefaultSearchEngine() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SearchSettings)
-        XCTAssert(app.tables.staticTexts["Google"].exists)
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
     func testSearchWithFirefoxOption() {
         app.launch()
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["cloud"])
         // Select some text and long press to find the option
@@ -349,7 +342,7 @@ class SearchTests: FeatureFlaggedTestBase {
             throw XCTSkip("Test fails intermittently for iOS 15")
         }
         // Go to localhost website and check the page displays correctly
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
         // Open new tab
         validateSearchSuggestionText(typeText: "localhost")
@@ -397,7 +390,7 @@ class SearchTests: FeatureFlaggedTestBase {
             validateUrlHasFocusAndKeyboardIsDisplayed()
 
             // Open a website
-            navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+            navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
 
             // The keyboard is dismissed and page is correctly loaded
             let keyboardCount = app.keyboards.count
@@ -428,10 +421,10 @@ class SearchTests: FeatureFlaggedTestBase {
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
-        app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft].firstMatch.waitAndTap()
+        app.tables.cells.buttons.firstMatch.waitAndTap()
 
         // The search suggestion fills the URL bar but does not conduct the search
-        waitForValueContains(urlBarAddress, value: "g")
+        mozWaitForValueContains(urlBarAddress, value: "g")
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
         // Delete the text and type "g"
@@ -444,7 +437,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
         // The search is conducted through the default search engine
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        waitForValueContains(urlBar, value: "google.com")
+        mozWaitForValueContains(urlBar, value: "google.com")
 
         // Disable "Show search suggestions" from Settings and type text in a new tab
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)
@@ -473,7 +466,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
         // Bookmark The Book of Mozilla (on localhost)
         navigator.createNewTab()
-        navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
+        navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
@@ -523,7 +516,7 @@ class SearchTests: FeatureFlaggedTestBase {
     private func typeTextAndValidateSearchSuggestions(text: String, isSwitchOn: Bool) {
         typeOnSearchBar(text: text)
         // Search suggestions are shown
-        let appendArrowBtn = app.tables.cells.buttons.matching(identifier: "appendUpLeftLarge")
+        let appendArrowBtn = app.tables.cells.buttons
         if isSwitchOn {
             mozWaitForElementToExist(app.staticTexts.elementContainingText("google"))
             mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])
@@ -547,6 +540,7 @@ class SearchTests: FeatureFlaggedTestBase {
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2753105
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
         app.launch()
         navigator.goto(SearchSettings)

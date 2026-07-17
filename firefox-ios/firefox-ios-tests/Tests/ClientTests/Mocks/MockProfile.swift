@@ -138,7 +138,7 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     private let injectedPinnedSites: MockablePinnedSites?
 
     init(
-        databasePrefix: String = "mock",
+        databasePrefix: String = "mock_\(UUID().uuidString.prefix(8))",
         firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
         remoteSettingsService: RemoteSettingsService = RemoteSettingsService(unsafeFromHandle: 0),
         injectedPinnedSites: MockablePinnedSites? = nil
@@ -316,10 +316,6 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     }
 
     public func addTabToCommandQueue(_ deviceId: String, url: URL) {
-        return
-    }
-
-    public func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
         return
     }
 

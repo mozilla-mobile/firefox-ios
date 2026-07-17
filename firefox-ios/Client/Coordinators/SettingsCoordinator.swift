@@ -32,7 +32,6 @@ final class SettingsCoordinator: BaseCoordinator,
                                  BrowsingSettingsDelegate,
                                  AppearanceSettingsDelegate,
                                  TranslationPickerSettingsDelegate,
-                                 LegacyFeatureFlaggable, // TODO: ROUX remove post Feature Flag Migration
                                  FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
@@ -76,15 +75,33 @@ final class SettingsCoordinator: BaseCoordinator,
         router.setRootViewController(settingsViewController)
     }
 
-    func start(with settingsSection: Route.SettingsSection) {
+    func start(with settingsSection: Route.SettingsSection, shouldResetNavigationStack: Bool = false) {
         // We might already know the sub-settings page we want to show, but in some case we don't and
         // the flow decision needs to be figured out by the view controller
         if let viewController = getSettingsViewController(settingsSection: settingsSection) {
-            router.push(viewController)
+            // FIXME: FXIOS-15967 We should pop to the root of the settings screen before pushing new screens from deeplinks,
+            // which might push a view controller to the wrong sub-settings nav hierarchy.
+            if isAlreadyOnTop(viewController) { return }
+            // If Settings is already showing a subpage, reset to root before opening the routed destination.
+            if shouldResetNavigationStack,
+               let root = router.rootViewController,
+               router.navigationController.viewControllers.count > 1 {
+                router.navigationController.setViewControllers([root, viewController], animated: false)
+            } else {
+                router.push(viewController)
+            }
         } else {
+            if shouldResetNavigationStack, let root = router.rootViewController {
+                router.popToViewController(root, reason: .deeplink, animated: false)
+            }
             assert(settingsViewController != nil)
             settingsViewController?.handle(route: settingsSection)
         }
+    }
+
+    private func isAlreadyOnTop(_ vc: UIViewController) -> Bool {
+        guard let top = router.navigationController.topViewController else { return false }
+        return type(of: top) == type(of: vc)
     }
 
     override func canHandle(route: Route) -> Bool {
@@ -99,7 +116,7 @@ final class SettingsCoordinator: BaseCoordinator,
     override func handle(route: Route) {
         switch route {
         case let .settings(section):
-            start(with: section)
+            start(with: section, shouldResetNavigationStack: true)
         default:
             break
         }
@@ -167,12 +184,8 @@ final class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .theme:
-            if themeManager.isNewAppearanceMenuOn {
-                let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
-                return UIHostingController(rootView: appearanceView)
-            } else {
-                return ThemeSettingsController(windowUUID: windowUUID)
-            }
+            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
+            return UIHostingController(rootView: appearanceView)
 
         case .wallpaper:
             if wallpaperManager.canSettingsBeShown {
@@ -199,19 +212,21 @@ final class SettingsCoordinator: BaseCoordinator,
             return contentBlockerVC
 
         case .browser:
-            return BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+            let viewController = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+            viewController.parentCoordinator = self
+            return viewController
 
         case .toolbar:
+            // Toolbar position cannot be changed on iPad
+            guard UIDeviceDetails.userInterfaceIdiom != .pad else { return nil }
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-            return featureFlagsProvider.isEnabled(.addressBarMenu)
-            ? UIHostingController(
+            return UIHostingController(
                 rootView: AddressBarSettingsView(
                     windowUUID: windowUUID,
                     viewModel: viewModel,
                     prefs: profile.prefs
                 )
             )
-               : SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
 
         case .topSites:
             let viewController = TopSitesSettingsViewController(windowUUID: windowUUID)
@@ -338,11 +353,11 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedCreditCard() {
-        findAndHandle(route: .settings(section: .creditCard))
+        settingsViewController?.handle(route: .creditCard)
     }
 
     func pressedRelayMask() {
-        findAndHandle(route: .settings(section: .relayMask))
+        settingsViewController?.handle(route: .relayMask)
     }
 
     func pressedClearPrivateData() {
@@ -359,7 +374,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedPasswords() {
-        findAndHandle(route: .settings(section: .password))
+        settingsViewController?.handle(route: .password)
     }
 
     func pressedNotifications() {
@@ -431,41 +446,37 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedToolbar() {
+        // Toolbar position cannot be changed on iPad
+        guard UIDeviceDetails.userInterfaceIdiom != .pad else { return }
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-        if featureFlagsProvider.isEnabled(.addressBarMenu) {
-            let viewController = UIHostingController(
-                rootView: AddressBarSettingsView(
+        let viewController = UIHostingController(
+            rootView: AddressBarSettingsView(
                 windowUUID: windowUUID,
                 viewModel: viewModel,
                 prefs: profile.prefs))
-            viewController.title = .Settings.AddressBar.AddressBarMenuTitle
-            router.push(viewController)
-        } else {
-            let viewController = SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
-            router.push(viewController)
-        }
+        viewController.title = .Settings.AddressBar.AddressBarMenuTitle
+        router.push(viewController)
     }
 
     func pressedTheme() {
-        let action = ComponentAction(windowUUID: windowUUID,
-                                     actionType: ComponentActionType.addComponent,
-                                     component: .themeSettings)
-        store.dispatch(action)
-
-        if themeManager.isNewAppearanceMenuOn {
-            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
-            let viewController = UIHostingController(rootView: appearanceView)
-            viewController.title = .SettingsAppearanceTitle
-            router.push(viewController)
-        } else {
-            router.push(ThemeSettingsController(windowUUID: windowUUID))
-        }
+        let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
+        let viewController = UIHostingController(rootView: appearanceView)
+        viewController.title = .SettingsAppearanceTitle
+        router.push(viewController)
     }
 
     func pressedBrowsing() {
         let viewController = BrowsingSettingsViewController(profile: profile,
                                                             windowUUID: windowUUID)
         viewController.parentCoordinator = self
+        router.push(viewController)
+    }
+
+    func pressedQuickAnswers() {
+        let viewController = QuickAnswersSettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID
+        )
         router.push(viewController)
     }
 
@@ -482,7 +493,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     private func translationSettingsViewController() -> UIViewController {
-        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
             let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
             viewController.coordinator = self
             return viewController

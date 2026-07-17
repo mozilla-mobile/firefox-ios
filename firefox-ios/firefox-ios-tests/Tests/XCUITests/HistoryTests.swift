@@ -14,15 +14,15 @@ let webpage = [
 let oldHistoryEntries: [String] = [
     "Internet for people, not profit — Mozilla (US)",
     "Explore / Twitter",
-    "Example Domain"
+    TestLabels.exampleDomain
 ]
 let emptyRecentlyClosedMesg = "Websites you’ve visited recently will show up here."
 // This is part of the info the user will see in recent closed tabs once the default
 // visited website (https://www.mozilla.org/en-US/book/) is closed
 let bookOfMozilla = [
-    "file": "test-mozilla-book.html",
+    "file": TestPages.mozillaBook,
     "title": "The Book of Mozilla",
-    "label": "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"
+    "label": "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)"
 ]
 
 class HistoryTests: BaseTestCase {
@@ -95,58 +95,54 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307487
     func testClearHistoryFromSettings() throws {
-        XCTExpectFailure("The app was not launched", strict: false) {
-            navigator.nowAt(NewTabScreen)
-            // Browse to have an item in history list
-            navigator.goto(LibraryPanel_History)
-            waitForElementsToExist(
-                [
-                    app.tables.cells[HistoryPanelA11y.recentlyClosedCell],
-                    app.tables.cells.staticTexts[oldHistoryEntries[0]]
-                ]
-            )
-            mozWaitForElementToNotExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        navigator.nowAt(NewTabScreen)
+        // Browse to have an item in history list
+        navigator.goto(LibraryPanel_History)
+        waitForElementsToExist(
+            [
+                app.tables.cells[HistoryPanelA11y.recentlyClosedCell],
+                app.tables.cells.staticTexts[oldHistoryEntries[0]]
+            ]
+        )
+        mozWaitForElementToNotExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
 
-            // Clear all private data via the settings
-            navigator.goto(HomePanelsScreen)
-            navigator.nowAt(NewTabScreen)
-            navigator.goto(ClearPrivateDataSettings)
-            app.tables.cells["ClearPrivateData"].waitAndTap()
-            app.alerts.buttons["OK"].waitAndTap()
+        // Clear all private data via the settings
+        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(ClearPrivateDataSettings)
+        app.tables.cells["ClearPrivateData"].waitAndTap()
+        app.alerts.buttons["OK"].waitAndTap()
 
-            // Back on History panel view check that there is not any item
-            navigator.goto(LibraryPanel_History)
-            waitForElementsToExist(
-                [
-                    app.tables[HistoryPanelA11y.tableView],
-                    app.tables.cells[HistoryPanelA11y.recentlyClosedCell]
-                ]
-            )
-            mozWaitForElementToNotExist(app.tables.cells.staticTexts[oldHistoryEntries[0]])
-            mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
-        }
+        // Back on History panel view check that there is not any item
+        navigator.goto(LibraryPanel_History)
+        waitForElementsToExist(
+            [
+                app.tables[HistoryPanelA11y.tableView],
+                app.tables.cells[HistoryPanelA11y.recentlyClosedCell]
+            ]
+        )
+        mozWaitForElementToNotExist(app.tables.cells.staticTexts[oldHistoryEntries[0]])
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307014
     // Smoketest
     func testClearPrivateData() throws {
-        XCTExpectFailure("The app was not launched", strict: false) {
-            navigator.nowAt(NewTabScreen)
-            toolbarScreen.assertSettingsButtonExists()
-            // Clear private data from settings and confirm
-            navigator.goto(ClearPrivateDataSettings)
-            settingScreen.clearPrivateDataAndConfirm()
+        navigator.nowAt(NewTabScreen)
+        toolbarScreen.assertSettingsButtonExists()
+        // Clear private data from settings and confirm
+        navigator.goto(ClearPrivateDataSettings)
+        settingScreen.clearPrivateDataAndConfirm()
 
-            // Wait for OK pop-up to disappear after confirming
-            settingScreen.assertConfirmationAlertNotPresent()
-            // Try to tap on the disabled Clear Private Data button
-            settingScreen.tryTapClearPrivateDataButton()
+        // Wait for OK pop-up to disappear after confirming
+        settingScreen.assertConfirmationAlertNotPresent()
+        // Try to tap on the disabled Clear Private Data button
+        settingScreen.tryTapClearPrivateDataButton()
 
-            // If the button is disabled, the confirmation pop-up should not exist
-            // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
-            // After this issue is clarified the assertion will be re-enabled or changed.
-            // XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
-        }
+        // If the button is disabled, the confirmation pop-up should not exist
+        // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
+        // After this issue is clarified the assertion will be re-enabled or changed.
+        // XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307357
@@ -385,7 +381,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: bookOfMozilla["file"]!))
         waitUntilPageLoad()
-        navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
+        navigator.openNewURL(urlString: path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
 
         // Close the private tab "Book of Mozilla" by tapping 'x' button
@@ -448,7 +444,7 @@ class HistoryTests: BaseTestCase {
     }
 
     private func navigateToPage(isTabTrayOff: Bool = true) {
-        navigator.openURL("example.com")
+        navigator.openURL("https://example.com")
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -464,7 +460,7 @@ class HistoryTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.tables[HistoryPanelA11y.tableView],
-                app.tables.cells.staticTexts["Example Domain"]
+                app.tables.cells.staticTexts[TestLabels.exampleDomain]
             ]
         )
     }

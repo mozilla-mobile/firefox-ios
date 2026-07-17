@@ -31,7 +31,6 @@ final class TranslationsServiceTests: XCTestCase {
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
         )
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() async throws {

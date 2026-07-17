@@ -110,7 +110,6 @@ let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
 
 let allSettingsScreens = [
     SearchSettings,
-    AddCustomSearchSettings,
     NewTabSettings,
     MailAppSettings,
     DisplaySettings,
@@ -123,7 +122,8 @@ let allSettingsScreens = [
     AutofillPasswordSettings,
     AppIconSettings,
     ToolbarSettings,
-    HomeSettings
+    HomeSettings,
+    AddCustomSearchSettings,
 ]
 
 let allHomePanels = [
@@ -376,6 +376,7 @@ extension XCUIElement {
         }
 
         var cellNum: UInt = 0
+        var previousCellNum = UInt.max
         var screenNum = 0
 
         while true {
@@ -386,7 +387,20 @@ extension XCUIElement {
             if cellNum == UInt.min {
                 return
             }
-            firstCell.swipeUp()
+
+            // No-progress guard: if cellNum hasn't advanced, the list can't scroll further
+            if cellNum == previousCellNum {
+                return
+            }
+            previousCellNum = cellNum
+
+            // Swipe on the cell if it's hittable; fall back to swiping the table itself
+            // (cell.swipeUp() throws "visible frame is empty" when the cell is offscreen)
+            if firstCell.isHittable {
+                firstCell.swipeUp()
+            } else {
+                self.swipeUp()
+            }
             screenNum += 1
         }
     }

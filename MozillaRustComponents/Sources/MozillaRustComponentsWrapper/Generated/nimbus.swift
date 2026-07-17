@@ -554,6 +554,258 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
+public protocol GeckoPrefHandler: AnyObject, Sendable {
+    
+    func getPrefsWithState()  -> [String: [String: GeckoPrefState]]
+    
+    func setGeckoPrefsOriginalValues(originalGeckoPrefs: [OriginalGeckoPref]) 
+    
+    func setGeckoPrefsState(newPrefsState: [GeckoPrefState]) 
+    
+}
+open class GeckoPrefHandlerImpl: GeckoPrefHandler, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_nimbus_fn_clone_geckoprefhandler(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_nimbus_fn_free_geckoprefhandler(handle, $0) }
+    }
+
+    
+
+    
+open func getPrefsWithState() -> [String: [String: GeckoPrefState]]  {
+    return try!  FfiConverterDictionaryStringDictionaryStringTypeGeckoPrefState.lift(try! rustCall() {
+    uniffi_nimbus_fn_method_geckoprefhandler_get_prefs_with_state(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func setGeckoPrefsOriginalValues(originalGeckoPrefs: [OriginalGeckoPref])  {try! rustCall() {
+    uniffi_nimbus_fn_method_geckoprefhandler_set_gecko_prefs_original_values(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeOriginalGeckoPref.lower(originalGeckoPrefs),$0
+    )
+}
+}
+    
+open func setGeckoPrefsState(newPrefsState: [GeckoPrefState])  {try! rustCall() {
+    uniffi_nimbus_fn_method_geckoprefhandler_set_gecko_prefs_state(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeGeckoPrefState.lower(newPrefsState),$0
+    )
+}
+}
+    
+
+    
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceGeckoPrefHandler {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // This creates 1-element array, since this seems to be the only way to construct a const
+    // pointer that we can pass to the Rust code.
+    static let vtable: [UniffiVTableCallbackInterfaceGeckoPrefHandler] = [UniffiVTableCallbackInterfaceGeckoPrefHandler(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterTypeGeckoPrefHandler.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface GeckoPrefHandler: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterTypeGeckoPrefHandler.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface GeckoPrefHandler: handle missing in uniffiClone")
+            }
+        },
+        getPrefsWithState: { (
+            uniffiHandle: UInt64,
+            uniffiOutReturn: UnsafeMutablePointer<RustBuffer>,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> [String: [String: GeckoPrefState]] in
+                guard let uniffiObj = try? FfiConverterTypeGeckoPrefHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.getPrefsWithState(
+                )
+            }
+
+            
+            let writeReturn = { uniffiOutReturn.pointee = FfiConverterDictionaryStringDictionaryStringTypeGeckoPrefState.lower($0) }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        setGeckoPrefsOriginalValues: { (
+            uniffiHandle: UInt64,
+            originalGeckoPrefs: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeGeckoPrefHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.setGeckoPrefsOriginalValues(
+                     originalGeckoPrefs: try FfiConverterSequenceTypeOriginalGeckoPref.lift(originalGeckoPrefs)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        setGeckoPrefsState: { (
+            uniffiHandle: UInt64,
+            newPrefsState: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeGeckoPrefHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.setGeckoPrefsState(
+                     newPrefsState: try FfiConverterSequenceTypeGeckoPrefState.lift(newPrefsState)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        }
+    )]
+}
+
+private func uniffiCallbackInitGeckoPrefHandler() {
+    uniffi_nimbus_fn_init_callback_vtable_geckoprefhandler(UniffiCallbackInterfaceGeckoPrefHandler.vtable)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeGeckoPrefHandler: FfiConverter {
+    fileprivate static let handleMap = UniffiHandleMap<GeckoPrefHandler>()
+
+    typealias FfiType = UInt64
+    typealias SwiftType = GeckoPrefHandler
+
+    public static func lift(_ handle: UInt64) throws -> GeckoPrefHandler {
+        if ((handle & 1) == 0) {
+            // Rust-generated handle, construct a new class that uses the handle to implement the
+            // interface
+            return GeckoPrefHandlerImpl(unsafeFromHandle: handle)
+        } else {
+            // Swift-generated handle, get the object from the handle map
+            return try handleMap.remove(handle: handle)
+        }
+    }
+
+    public static func lower(_ value: GeckoPrefHandler) -> UInt64 {
+         if let rustImpl = value as? GeckoPrefHandlerImpl {
+             // Rust-implemented object.  Clone the handle and return it
+            return rustImpl.uniffiCloneHandle()
+         } else {
+            // Swift object, generate a new vtable handle and return that.
+            return handleMap.insert(obj: value)
+         }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> GeckoPrefHandler {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: GeckoPrefHandler, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeGeckoPrefHandler_lift(_ handle: UInt64) throws -> GeckoPrefHandler {
+    return try FfiConverterTypeGeckoPrefHandler.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeGeckoPrefHandler_lower(_ value: GeckoPrefHandler) -> UInt64 {
+    return FfiConverterTypeGeckoPrefHandler.lower(value)
+}
+
+
+
+
+
+
 public protocol MetricsHandler: AnyObject, Sendable {
     
     func recordDatabaseLoad(event: DatabaseLoadExtraDef) 
@@ -982,6 +1234,8 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
     
     func dumpStateToLog() throws 
     
+    func enrollInFirefoxLab(slug: String) throws  -> FirefoxLabsEnrollResult
+    
     /**
      * Fetches the list of experiments from the server. This does not affect the list
      * of active experiments or experiment enrolment.
@@ -999,6 +1253,8 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
      * It is not intended to be used to be used for user facing applications.
      */
     func getAvailableExperiments() throws  -> [AvailableExperiment]
+    
+    func getAvailableFirefoxLabs() throws  -> [FirefoxLabsMetadata]
     
     /**
      * Returns the branch allocated for a given slug or id.
@@ -1141,6 +1397,10 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
     
     func unenrollForGeckoPref(prefState: GeckoPrefState, prefUnenrollReason: PrefUnenrollReason) throws  -> [EnrollmentChangeEvent]
     
+    func unenrollFromAllFirefoxLabs() throws  -> [EnrollmentChangeEvent]
+    
+    func unenrollFromFirefoxLab(slug: String) throws  -> FirefoxLabsUnenrollResult
+    
 }
 open class NimbusClient: NimbusClientProtocol, @unchecked Sendable {
     fileprivate let handle: UInt64
@@ -1190,7 +1450,7 @@ public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, c
         FfiConverterSequenceString.lower(coenrollingFeatureIds),
         FfiConverterString.lower(dbpath),
         FfiConverterTypeMetricsHandler_lower(metricsHandler),
-        FfiConverterOptionCallbackInterfaceGeckoPrefHandler.lower(geckoPrefHandler),
+        FfiConverterOptionTypeGeckoPrefHandler.lower(geckoPrefHandler),
         FfiConverterOptionTypeNimbusServerSettings.lower(remoteSettingsInfo),$0
     )
 }
@@ -1276,6 +1536,15 @@ open func dumpStateToLog()throws   {try rustCallWithError(FfiConverterTypeNimbus
 }
 }
     
+open func enrollInFirefoxLab(slug: String)throws  -> FirefoxLabsEnrollResult  {
+    return try  FfiConverterTypeFirefoxLabsEnrollResult_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbusclient_enroll_in_firefox_lab(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(slug),$0
+    )
+})
+}
+    
     /**
      * Fetches the list of experiments from the server. This does not affect the list
      * of active experiments or experiment enrolment.
@@ -1306,6 +1575,14 @@ open func getActiveExperiments()throws  -> [EnrolledExperiment]  {
 open func getAvailableExperiments()throws  -> [AvailableExperiment]  {
     return try  FfiConverterSequenceTypeAvailableExperiment.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
     uniffi_nimbus_fn_method_nimbusclient_get_available_experiments(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func getAvailableFirefoxLabs()throws  -> [FirefoxLabsMetadata]  {
+    return try  FfiConverterSequenceTypeFirefoxLabsMetadata.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbusclient_get_available_firefox_labs(
             self.uniffiCloneHandle(),$0
     )
 })
@@ -1594,6 +1871,23 @@ open func unenrollForGeckoPref(prefState: GeckoPrefState, prefUnenrollReason: Pr
             self.uniffiCloneHandle(),
         FfiConverterTypeGeckoPrefState_lower(prefState),
         FfiConverterTypePrefUnenrollReason_lower(prefUnenrollReason),$0
+    )
+})
+}
+    
+open func unenrollFromAllFirefoxLabs()throws  -> [EnrollmentChangeEvent]  {
+    return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbusclient_unenroll_from_all_firefox_labs(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func unenrollFromFirefoxLab(slug: String)throws  -> FirefoxLabsUnenrollResult  {
+    return try  FfiConverterTypeFirefoxLabsUnenrollResult_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_method_nimbusclient_unenroll_from_firefox_lab(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(slug),$0
     )
 })
 }
@@ -2584,15 +2878,17 @@ public struct EnrolledExperiment: Equatable, Hashable {
     public var userFacingName: String
     public var userFacingDescription: String
     public var branchSlug: String
+    public var isRollout: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(featureIds: [String], slug: String, userFacingName: String, userFacingDescription: String, branchSlug: String) {
+    public init(featureIds: [String], slug: String, userFacingName: String, userFacingDescription: String, branchSlug: String, isRollout: Bool) {
         self.featureIds = featureIds
         self.slug = slug
         self.userFacingName = userFacingName
         self.userFacingDescription = userFacingDescription
         self.branchSlug = branchSlug
+        self.isRollout = isRollout
     }
 
     
@@ -2615,7 +2911,8 @@ public struct FfiConverterTypeEnrolledExperiment: FfiConverterRustBuffer {
                 slug: FfiConverterString.read(from: &buf), 
                 userFacingName: FfiConverterString.read(from: &buf), 
                 userFacingDescription: FfiConverterString.read(from: &buf), 
-                branchSlug: FfiConverterString.read(from: &buf)
+                branchSlug: FfiConverterString.read(from: &buf), 
+                isRollout: FfiConverterBool.read(from: &buf)
         )
     }
 
@@ -2625,6 +2922,7 @@ public struct FfiConverterTypeEnrolledExperiment: FfiConverterRustBuffer {
         FfiConverterString.write(value.userFacingName, into: &buf)
         FfiConverterString.write(value.userFacingDescription, into: &buf)
         FfiConverterString.write(value.branchSlug, into: &buf)
+        FfiConverterBool.write(value.isRollout, into: &buf)
     }
 }
 
@@ -2649,14 +2947,16 @@ public struct EnrollmentChangeEvent: Equatable, Hashable {
     public var branchSlug: String
     public var reason: String?
     public var change: EnrollmentChangeEventType
+    public var featureIds: [String]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(experimentSlug: String, branchSlug: String, reason: String?, change: EnrollmentChangeEventType) {
+    public init(experimentSlug: String, branchSlug: String, reason: String?, change: EnrollmentChangeEventType, featureIds: [String]) {
         self.experimentSlug = experimentSlug
         self.branchSlug = branchSlug
         self.reason = reason
         self.change = change
+        self.featureIds = featureIds
     }
 
     
@@ -2678,7 +2978,8 @@ public struct FfiConverterTypeEnrollmentChangeEvent: FfiConverterRustBuffer {
                 experimentSlug: FfiConverterString.read(from: &buf), 
                 branchSlug: FfiConverterString.read(from: &buf), 
                 reason: FfiConverterOptionString.read(from: &buf), 
-                change: FfiConverterTypeEnrollmentChangeEventType.read(from: &buf)
+                change: FfiConverterTypeEnrollmentChangeEventType.read(from: &buf), 
+                featureIds: FfiConverterSequenceString.read(from: &buf)
         )
     }
 
@@ -2687,6 +2988,7 @@ public struct FfiConverterTypeEnrollmentChangeEvent: FfiConverterRustBuffer {
         FfiConverterString.write(value.branchSlug, into: &buf)
         FfiConverterOptionString.write(value.reason, into: &buf)
         FfiConverterTypeEnrollmentChangeEventType.write(value.change, into: &buf)
+        FfiConverterSequenceString.write(value.featureIds, into: &buf)
     }
 }
 
@@ -2889,6 +3191,184 @@ public func FfiConverterTypeFeatureExposureExtraDef_lift(_ buf: RustBuffer) thro
 #endif
 public func FfiConverterTypeFeatureExposureExtraDef_lower(_ value: FeatureExposureExtraDef) -> RustBuffer {
     return FfiConverterTypeFeatureExposureExtraDef.lower(value)
+}
+
+
+public struct FirefoxLabsEnrollResult: Equatable, Hashable {
+    public var status: FirefoxLabsEnrollStatus
+    public var enrollmentChangeEvents: [EnrollmentChangeEvent]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(status: FirefoxLabsEnrollStatus, enrollmentChangeEvents: [EnrollmentChangeEvent]) {
+        self.status = status
+        self.enrollmentChangeEvents = enrollmentChangeEvents
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension FirefoxLabsEnrollResult: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsEnrollResult: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsEnrollResult {
+        return
+            try FirefoxLabsEnrollResult(
+                status: FfiConverterTypeFirefoxLabsEnrollStatus.read(from: &buf), 
+                enrollmentChangeEvents: FfiConverterSequenceTypeEnrollmentChangeEvent.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FirefoxLabsEnrollResult, into buf: inout [UInt8]) {
+        FfiConverterTypeFirefoxLabsEnrollStatus.write(value.status, into: &buf)
+        FfiConverterSequenceTypeEnrollmentChangeEvent.write(value.enrollmentChangeEvents, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsEnrollResult_lift(_ buf: RustBuffer) throws -> FirefoxLabsEnrollResult {
+    return try FfiConverterTypeFirefoxLabsEnrollResult.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsEnrollResult_lower(_ value: FirefoxLabsEnrollResult) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsEnrollResult.lower(value)
+}
+
+
+public struct FirefoxLabsMetadata: Equatable, Hashable {
+    public var slug: String
+    public var enrolled: Bool
+    public var titleStringId: String
+    public var descriptionStringId: String
+    public var requiresRestart: Bool
+    public var feedbackUrl: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(slug: String, enrolled: Bool, titleStringId: String, descriptionStringId: String, requiresRestart: Bool, feedbackUrl: String?) {
+        self.slug = slug
+        self.enrolled = enrolled
+        self.titleStringId = titleStringId
+        self.descriptionStringId = descriptionStringId
+        self.requiresRestart = requiresRestart
+        self.feedbackUrl = feedbackUrl
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension FirefoxLabsMetadata: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsMetadata: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsMetadata {
+        return
+            try FirefoxLabsMetadata(
+                slug: FfiConverterString.read(from: &buf), 
+                enrolled: FfiConverterBool.read(from: &buf), 
+                titleStringId: FfiConverterString.read(from: &buf), 
+                descriptionStringId: FfiConverterString.read(from: &buf), 
+                requiresRestart: FfiConverterBool.read(from: &buf), 
+                feedbackUrl: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FirefoxLabsMetadata, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.slug, into: &buf)
+        FfiConverterBool.write(value.enrolled, into: &buf)
+        FfiConverterString.write(value.titleStringId, into: &buf)
+        FfiConverterString.write(value.descriptionStringId, into: &buf)
+        FfiConverterBool.write(value.requiresRestart, into: &buf)
+        FfiConverterOptionString.write(value.feedbackUrl, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsMetadata_lift(_ buf: RustBuffer) throws -> FirefoxLabsMetadata {
+    return try FfiConverterTypeFirefoxLabsMetadata.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsMetadata_lower(_ value: FirefoxLabsMetadata) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsMetadata.lower(value)
+}
+
+
+public struct FirefoxLabsUnenrollResult: Equatable, Hashable {
+    public var status: FirefoxLabsUnenrollStatus
+    public var enrollmentChangeEvents: [EnrollmentChangeEvent]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(status: FirefoxLabsUnenrollStatus, enrollmentChangeEvents: [EnrollmentChangeEvent]) {
+        self.status = status
+        self.enrollmentChangeEvents = enrollmentChangeEvents
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension FirefoxLabsUnenrollResult: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsUnenrollResult: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsUnenrollResult {
+        return
+            try FirefoxLabsUnenrollResult(
+                status: FfiConverterTypeFirefoxLabsUnenrollStatus.read(from: &buf), 
+                enrollmentChangeEvents: FfiConverterSequenceTypeEnrollmentChangeEvent.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FirefoxLabsUnenrollResult, into buf: inout [UInt8]) {
+        FfiConverterTypeFirefoxLabsUnenrollStatus.write(value.status, into: &buf)
+        FfiConverterSequenceTypeEnrollmentChangeEvent.write(value.enrollmentChangeEvents, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsUnenrollResult_lift(_ buf: RustBuffer) throws -> FirefoxLabsUnenrollResult {
+    return try FfiConverterTypeFirefoxLabsUnenrollResult.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsUnenrollResult_lower(_ value: FirefoxLabsUnenrollResult) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsUnenrollResult.lower(value)
 }
 
 
@@ -3389,6 +3869,189 @@ public func FfiConverterTypeEnrollmentChangeEventType_lower(_ value: EnrollmentC
 }
 
 
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum FirefoxLabsEnrollStatus: Equatable, Hashable {
+    
+    case enrolled
+    case alreadyEnrolled
+    case noExperiment
+    case notFirefoxLabsOptIn
+    case featureConflict
+    case error
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension FirefoxLabsEnrollStatus: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsEnrollStatus: FfiConverterRustBuffer {
+    typealias SwiftType = FirefoxLabsEnrollStatus
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsEnrollStatus {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .enrolled
+        
+        case 2: return .alreadyEnrolled
+        
+        case 3: return .noExperiment
+        
+        case 4: return .notFirefoxLabsOptIn
+        
+        case 5: return .featureConflict
+        
+        case 6: return .error
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: FirefoxLabsEnrollStatus, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .enrolled:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .alreadyEnrolled:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .noExperiment:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .notFirefoxLabsOptIn:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .featureConflict:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .error:
+            writeInt(&buf, Int32(6))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsEnrollStatus_lift(_ buf: RustBuffer) throws -> FirefoxLabsEnrollStatus {
+    return try FfiConverterTypeFirefoxLabsEnrollStatus.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsEnrollStatus_lower(_ value: FirefoxLabsEnrollStatus) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsEnrollStatus.lower(value)
+}
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum FirefoxLabsUnenrollStatus: Equatable, Hashable {
+    
+    case unenrolled
+    case alreadyUnenrolled
+    case noExperiment
+    case notFirefoxLabsOptIn
+    case error
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension FirefoxLabsUnenrollStatus: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFirefoxLabsUnenrollStatus: FfiConverterRustBuffer {
+    typealias SwiftType = FirefoxLabsUnenrollStatus
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FirefoxLabsUnenrollStatus {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .unenrolled
+        
+        case 2: return .alreadyUnenrolled
+        
+        case 3: return .noExperiment
+        
+        case 4: return .notFirefoxLabsOptIn
+        
+        case 5: return .error
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: FirefoxLabsUnenrollStatus, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .unenrolled:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .alreadyUnenrolled:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .noExperiment:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .notFirefoxLabsOptIn:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .error:
+            writeInt(&buf, Int32(5))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsUnenrollStatus_lift(_ buf: RustBuffer) throws -> FirefoxLabsUnenrollStatus {
+    return try FfiConverterTypeFirefoxLabsUnenrollStatus.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFirefoxLabsUnenrollStatus_lower(_ value: FirefoxLabsUnenrollStatus) -> RustBuffer {
+    return FfiConverterTypeFirefoxLabsUnenrollStatus.lower(value)
+}
+
+
 
 public enum NimbusError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
@@ -3797,180 +4460,6 @@ public func FfiConverterTypePrefUnenrollReason_lower(_ value: PrefUnenrollReason
 }
 
 
-
-
-
-public protocol GeckoPrefHandler: AnyObject, Sendable {
-    
-    func getPrefsWithState()  -> [String: [String: GeckoPrefState]]
-    
-    func setGeckoPrefsState(newPrefsState: [GeckoPrefState]) 
-    
-    func setGeckoPrefsOriginalValues(originalGeckoPrefs: [OriginalGeckoPref]) 
-    
-}
-
-
-// Put the implementation in a struct so we don't pollute the top-level namespace
-fileprivate struct UniffiCallbackInterfaceGeckoPrefHandler {
-
-    // Create the VTable using a series of closures.
-    // Swift automatically converts these into C callback functions.
-    //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceGeckoPrefHandler] = [UniffiVTableCallbackInterfaceGeckoPrefHandler(
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            do {
-                try FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.remove(handle: uniffiHandle)
-            } catch {
-                print("Uniffi callback interface GeckoPrefHandler: handle missing in uniffiFree")
-            }
-        },
-        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
-            do {
-                return try FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.clone(handle: uniffiHandle)
-            } catch {
-                fatalError("Uniffi callback interface GeckoPrefHandler: handle missing in uniffiClone")
-            }
-        },
-        getPrefsWithState: { (
-            uniffiHandle: UInt64,
-            uniffiOutReturn: UnsafeMutablePointer<RustBuffer>,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> [String: [String: GeckoPrefState]] in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.getPrefsWithState(
-                )
-            }
-
-            
-            let writeReturn = { uniffiOutReturn.pointee = FfiConverterDictionaryStringDictionaryStringTypeGeckoPrefState.lower($0) }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        setGeckoPrefsState: { (
-            uniffiHandle: UInt64,
-            newPrefsState: RustBuffer,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.setGeckoPrefsState(
-                     newPrefsState: try FfiConverterSequenceTypeGeckoPrefState.lift(newPrefsState)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        setGeckoPrefsOriginalValues: { (
-            uniffiHandle: UInt64,
-            originalGeckoPrefs: RustBuffer,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceGeckoPrefHandler.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.setGeckoPrefsOriginalValues(
-                     originalGeckoPrefs: try FfiConverterSequenceTypeOriginalGeckoPref.lift(originalGeckoPrefs)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        }
-    )]
-}
-
-private func uniffiCallbackInitGeckoPrefHandler() {
-    uniffi_nimbus_fn_init_callback_vtable_geckoprefhandler(UniffiCallbackInterfaceGeckoPrefHandler.vtable)
-}
-
-// FfiConverter protocol for callback interfaces
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterCallbackInterfaceGeckoPrefHandler {
-    fileprivate static let handleMap = UniffiHandleMap<GeckoPrefHandler>()
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-extension FfiConverterCallbackInterfaceGeckoPrefHandler : FfiConverter {
-    typealias SwiftType = GeckoPrefHandler
-    typealias FfiType = UInt64
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func lift(_ handle: UInt64) throws -> SwiftType {
-        try handleMap.get(handle: handle)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        let handle: UInt64 = try readInt(&buf)
-        return try lift(handle)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func lower(_ v: SwiftType) -> UInt64 {
-        return handleMap.insert(obj: v)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(v))
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterCallbackInterfaceGeckoPrefHandler_lift(_ handle: UInt64) throws -> GeckoPrefHandler {
-    return try FfiConverterCallbackInterfaceGeckoPrefHandler.lift(handle)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterCallbackInterfaceGeckoPrefHandler_lower(_ v: GeckoPrefHandler) -> UInt64 {
-    return FfiConverterCallbackInterfaceGeckoPrefHandler.lower(v)
-}
-
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
@@ -4094,6 +4583,30 @@ fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionTypeGeckoPrefHandler: FfiConverterRustBuffer {
+    typealias SwiftType = GeckoPrefHandler?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeGeckoPrefHandler.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeGeckoPrefHandler.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionTypeRecordedContext: FfiConverterRustBuffer {
     typealias SwiftType = RecordedContext?
 
@@ -4158,30 +4671,6 @@ fileprivate struct FfiConverterOptionTypePrefEnrollmentData: FfiConverterRustBuf
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterTypePrefEnrollmentData.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionCallbackInterfaceGeckoPrefHandler: FfiConverterRustBuffer {
-    typealias SwiftType = GeckoPrefHandler?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterCallbackInterfaceGeckoPrefHandler.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterCallbackInterfaceGeckoPrefHandler.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -4404,6 +4893,31 @@ fileprivate struct FfiConverterSequenceTypeExperimentBranch: FfiConverterRustBuf
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeExperimentBranch.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeFirefoxLabsMetadata: FfiConverterRustBuffer {
+    typealias SwiftType = [FirefoxLabsMetadata]
+
+    public static func write(_ value: [FirefoxLabsMetadata], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeFirefoxLabsMetadata.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [FirefoxLabsMetadata] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [FirefoxLabsMetadata]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeFirefoxLabsMetadata.read(from: &buf))
         }
         return seq
     }
@@ -4720,6 +5234,15 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_func_validate_event_queries() != 42746) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 27063) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_original_values() != 37179) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_state() != 3765) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_nimbus_checksum_method_metricshandler_record_database_load() != 41701) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4759,6 +5282,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_dump_state_to_log() != 11961) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_nimbus_checksum_method_nimbusclient_enroll_in_firefox_lab() != 36090) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_nimbus_checksum_method_nimbusclient_fetch_experiments() != 19471) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4766,6 +5292,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_get_available_experiments() != 65080) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_available_firefox_labs() != 58220) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branch() != 54188) {
@@ -4834,6 +5363,12 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_for_gecko_pref() != 63205) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_from_all_firefox_labs() != 48425) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_from_firefox_lab() != 47442) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_nimbus_checksum_method_nimbusstringhelper_get_uuid() != 61733) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4858,22 +5393,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_recordedcontext_to_json() != 52035) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 38342) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 27063) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_state() != 3765) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_original_values() != 37179) {
+    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 58824) {
         return InitializationResult.apiChecksumMismatch
     }
 
+    uniffiCallbackInitGeckoPrefHandler()
     uniffiCallbackInitMetricsHandler()
     uniffiCallbackInitRecordedContext()
-    uniffiCallbackInitGeckoPrefHandler()
     uniffiEnsureRemoteSettingsInitialized()
     return InitializationResult.ok
 }()

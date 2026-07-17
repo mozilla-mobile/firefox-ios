@@ -21,8 +21,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
     override func setUpExperimentVariables() {
         launchArguments = [
             LaunchArguments.ClearProfile,
-            LaunchArguments.DisableAnimations,
-            LaunchArguments.SkipSplashScreenExperiment
+            LaunchArguments.DisableAnimations
         ]
 
         jsonFileName = flowType.jsonFeatureOverrideFileName
@@ -70,6 +69,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Individual Screen Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3129572
     func testModernTermsOfServiceScreen() throws {
         launchApp()
 
@@ -83,7 +83,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertModernWelcomeScreen()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2575175
+    // https://mozilla.testrail.io/index.php?/cases/view/3129580
     func testModernOnboardingToolbarPlacementTop() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -120,7 +120,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2575176
+    // https://mozilla.testrail.io/index.php?/cases/view/3129579
     func testModernOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -180,8 +180,6 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertModernThemeCustomizationScreen()
 
         onboardingScreen.selectThemeButtons()
-
-        onboardingScreen.selectTheme("System Auto")
         onboardingScreen.goToNextScreenViaPrimary()
     }
 
@@ -210,7 +208,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
         // Screen 3: Choose theme - Continue (primary button)
         onboardingScreen.assertTitle()
-        onboardingScreen.selectTheme("System Auto")
+        onboardingScreen.selectThemeButtons()
         onboardingScreen.goToNextScreenViaPrimary()
 
         // Screen 4: Sign in to sync - Not now (secondary button)
@@ -238,7 +236,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
             onboardingScreen.currentScreen += 1
         }
 
-        onboardingScreen.selectTheme("System Auto")
+        onboardingScreen.selectThemeButtons()
         onboardingScreen.goToNextScreenViaPrimary()
 
         onboardingScreen.assertSyncScreen()
@@ -253,6 +251,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Navigation Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3174469
     func testModernOnboardingSkipButton() throws {
         launchApp()
 

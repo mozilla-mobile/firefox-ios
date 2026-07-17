@@ -6,15 +6,16 @@ import Shared
 import Common
 
 class AIControlsModel: ObservableObject,
-                       LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                        FeatureFlaggable,
                        UserFeaturePreferenceProvider {
     let windowUUID: WindowUUID
     @Published var killSwitchIsOn = false
-    @Published var translationEnabled: Bool
-    @Published var pageSummariesEnabled: Bool
+    @Published var translationEnabled = false
+    @Published var pageSummariesEnabled = false
+    @Published var quickAnswersEnabled = false
     @Published var translationsVisible = false
-    @Published var pageSummariesVisible: Bool
+    @Published var pageSummariesVisible = false
+    @Published var quickAnswersVisible = false
 
     let headerLinkInfo = LinkInfo(
         label: .Settings.AIControls.HeaderCard.Link,
@@ -53,13 +54,15 @@ class AIControlsModel: ObservableObject,
     }()
 
     var hasVisibleAIFeatures: Bool {
-        return translationsVisible || pageSummariesVisible
+        return translationsVisible || pageSummariesVisible || quickAnswersVisible
     }
 
     private static let topicString = "ios-ai-controls"
     private let translationConfiguration: TranslationConfiguration
     private let summarizerConfiguration: SummarizerNimbusUtils
     private let prefs: Prefs
+    private let settingsTelemetry: SettingsTelemetry
+    private let logger: Logger
 
     struct LinkInfo {
         let label: String
@@ -70,39 +73,135 @@ class AIControlsModel: ObservableObject,
         prefs: Prefs,
         windowUUID: WindowUUID,
         translationConfiguration: TranslationConfiguration? = nil,
-        summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+        summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
+        settingsTelemetry: SettingsTelemetry = SettingsTelemetry(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.prefs = prefs
         self.windowUUID = windowUUID
-        self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(prefs: prefs)
+        self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(
+            prefs: prefs,
+            isUserSettingEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
+        )
         self.summarizerConfiguration = summarizerConfiguration
+        self.settingsTelemetry = settingsTelemetry
+        self.logger = logger
 
         translationEnabled = self.translationConfiguration.isTranslationFeatureEnabled
         pageSummariesEnabled = self.summarizerConfiguration.isSummarizeFeatureToggledOn
+        quickAnswersEnabled = userPreferences.getPreferenceFor(.quickAnswers)
 
         pageSummariesVisible = self.summarizerConfiguration.isSummarizeFeatureEnabled
-        translationsVisible = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
+        translationsVisible = featureFlagsProvider.isEnabled(.translation)
+        quickAnswersVisible = featureFlagsProvider.isEnabled(.quickAnswers)
 
-        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.isAIKillSwitchEnabled
+        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.getPreferenceFor(.aiKillSwitch)
     }
 
     @MainActor
     func toggleKillSwitch(to newValue: Bool) {
-        prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-        pageSummariesEnabled = !newValue
-        translationEnabled = !newValue
+        guard killSwitchIsOn != newValue else {
+            logger.log(
+                "Not toggling AI control, toggle value is unchanged",
+                level: .warning,
+                category: .settings
+            )
+            return
+        }
+
+        killSwitchIsOn = newValue
+        userPreferences.setPreferenceFor(.aiKillSwitch, to: newValue)
+        updatePageSummariesFeature(to: !newValue)
+        updateTranslationsFeature(to: !newValue)
+        updateQuickAnswersFeature(to: !newValue)
+        settingsTelemetry.changedSetting(
+            PrefsKeys.Settings.aiKillSwitchFeature,
+            to: String(newValue),
+            from: String(!newValue)
+        )
     }
 
     @MainActor
     func toggleTranslationsFeature(to newValue: Bool) {
+        updateTranslationsFeature(to: newValue)
+        settingsTelemetry.changedSetting(
+            PrefsKeys.Settings.translationsFeature,
+            to: String(newValue),
+            from: String(!newValue)
+        )
+    }
+
+    @MainActor
+    func togglePageSummariesFeature(to newValue: Bool) {
+        updatePageSummariesFeature(to: newValue)
+        settingsTelemetry.changedSetting(
+            PrefsKeys.Summarizer.summarizeContentFeature,
+            to: String(newValue),
+            from: String(!newValue)
+        )
+    }
+
+    @MainActor
+    func toggleQuickAnswersFeature(to newValue: Bool) {
+        updateQuickAnswersFeature(to: newValue)
+        settingsTelemetry.changedSetting(
+            PrefsKeys.Settings.quickAnswersFeature,
+            to: String(newValue),
+            from: String(!newValue)
+        )
+    }
+
+    @MainActor
+    private func updateTranslationsFeature(to newValue: Bool) {
+        guard translationEnabled != newValue else {
+            logger.log(
+                "Not toggling translations feature control, toggle value is unchanged",
+                level: .warning,
+                category: .settings
+            )
+            return
+        }
+
+        translationEnabled = newValue
         store.dispatch(TranslationSettingsViewAction(
             newSettingValue: newValue,
+            toggledViaAIControls: true,
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         ))
     }
 
-    func togglePageSummariesFeature(to newValue: Bool) {
+    @MainActor
+    private func updatePageSummariesFeature(to newValue: Bool) {
+        guard pageSummariesEnabled != newValue else {
+            logger.log(
+                "Not toggling page summaries feature control, toggle value is unchanged",
+                level: .warning,
+                category: .settings
+            )
+            return
+        }
+
+        pageSummariesEnabled = newValue
         prefs.setBool(newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
+    }
+
+    @MainActor
+    private func updateQuickAnswersFeature(to newValue: Bool) {
+        guard quickAnswersEnabled != newValue else {
+            logger.log(
+                "Not toggling quick answers feature control, toggle value is unchanged",
+                level: .warning,
+                category: .settings
+            )
+            return
+        }
+
+        quickAnswersEnabled = newValue
+        userPreferences.setPreferenceFor(.quickAnswers, to: newValue)
+        store.dispatch(QuickAnswersAction(
+            windowUUID: windowUUID,
+            actionType: QuickAnswersActionType.didSettingsChange
+        ))
     }
 }

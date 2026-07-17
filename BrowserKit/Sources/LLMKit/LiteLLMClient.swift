@@ -33,10 +33,10 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
     ///   - config: inference options ( includes model name, max tokens, temperature...).
-    public func requestChatCompletion(
-        messages: [LiteLLMMessage],
+    public func requestChatCompletion<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) async throws -> String {
+    ) async throws -> LiteLLMMessage<ProviderFields> {
         let request: URLRequest
         do {
             request = try await makeRequest(messages: messages, config: config)
@@ -50,8 +50,8 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
     ///   - config: inference options ( includes model name, max tokens, ...).
-    public func requestChatCompletionStreamed(
-        messages: [LiteLLMMessage],
+    public func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
     ) async throws -> AsyncThrowingStream<String, Error> {
         let request: URLRequest
@@ -63,12 +63,14 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
         return handleStreamingRequest(request: request)
     }
 
-    private func handleNonStreamingRequest(request: URLRequest) async throws -> String {
+    private func handleNonStreamingRequest<ProviderFields: Codable & Sendable>(
+        request: URLRequest
+    ) async throws -> LiteLLMMessage<ProviderFields> {
         let (data, response) = try await session.data(for: request)
         try validate(response: response)
-        let decodedResponse = try JSONDecoder().decode(LiteLLMResponse.self, from: data)
-        guard let content = decodedResponse.choices.first?.message?.content else { throw LiteLLMClientError.noContent }
-        return content
+        let decodedResponse = try JSONDecoder().decode(LiteLLMResponse<ProviderFields>.self, from: data)
+        guard let message = decodedResponse.choices.first?.message else { throw LiteLLMClientError.noContent }
+        return message
     }
 
     /// TODO(FXIOS-12994): Add tests for streaming requests.
@@ -101,8 +103,8 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
 
     // MARK: - Helpers
 
-    func makeRequest(
-        messages: [LiteLLMMessage],
+    func makeRequest<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
     ) async throws -> URLRequest {
         let endpoint = baseURL.appendingPathComponent("chat/completions")

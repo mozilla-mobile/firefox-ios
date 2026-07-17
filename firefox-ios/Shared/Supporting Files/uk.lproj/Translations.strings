@@ -1,3 +1,9 @@
+/* Button label on the auto-translate prompt that enables the auto-translate feature when tapped. */
+"Translations.AutoTranslatePrompt.EnableButton.v151" = "Увімкнути";
+
+/* Persistent prompt shown above the address bar after the user's first manual translation, asking if they want to enable auto-translate. */
+"Translations.AutoTranslatePrompt.Message.v151" = "Автоматично перекладати сторінки, коли це можливо?";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
 "Translations.Banner.Close.Button.AccessibilityLabel.v145" = "Закрити панель перекладу";
 
@@ -21,6 +27,18 @@
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage. */
 "Translations.Banner.TranslateButton.v145" = "Перекласти";
+
+/* Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English'). */
+"Translations.LanguagePicker.PageTranslatedTitle.v151" = "Сторінку перекладено: %@";
+
+/* Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen. */
+"Translations.LanguagePicker.PreferredLanguages.v151" = "Бажані мови…";
+
+/* Button in the translation action sheet to restore the page to its original language. */
+"Translations.LanguagePicker.ShowOriginal.v151" = "Показати оригінал";
+
+/* Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into. */
+"Translations.LanguagePicker.Title.v151" = "Перекласти сторінку…";
 
 /* This is the text on the button used to translate a page from one language to another and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.Button.v145" = "Перекласти";

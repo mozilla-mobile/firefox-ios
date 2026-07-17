@@ -15,6 +15,7 @@ struct HomepageLayoutMeasurementCache {
             let containerWidth: Double
             let isLandscape: Bool
             let shouldShowSection: Bool
+            let shouldShowAddShortcutTile: Bool
             let contentSizeCategory: UIContentSizeCategory
         }
 

@@ -6,6 +6,11 @@ import Foundation
 import Glean
 
 struct ToolbarTelemetry {
+    enum GoogleLensContextMenuOption: String {
+        case photoPicker
+        case camera
+    }
+
     private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
@@ -69,6 +74,16 @@ struct ToolbarTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.searchButtonTapped, extras: isPrivateExtra)
     }
 
+    func googleLensButtonTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.ToolbarGoogleLensButton.tapped)
+    }
+
+    func googleLensContextMenuOptionSelected(option: GoogleLensContextMenuOption) {
+        let optionExtra = GleanMetrics.ToolbarGoogleLensButtonContextMenu.OptionSelectedExtra(option: option.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.ToolbarGoogleLensButtonContextMenu.optionSelected,
+                                 extras: optionExtra)
+    }
+
     func tabTrayButtonTapped(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.TabTrayButtonTappedExtra(isPrivate: isPrivate)
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayButtonTapped, extras: isPrivateExtra)
@@ -98,6 +113,11 @@ struct ToolbarTelemetry {
     func tabTrayButtonLongPressed(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.TabTrayLongPressExtra(isPrivate: isPrivate)
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayLongPress, extras: isPrivateExtra)
+    }
+
+    func tabTrayOpenedViaSwipe(isAtBottom: Bool) {
+        let isAtBottomExtra = GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra(isAtBottom: isAtBottom)
+        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayOpenedViaSwipe, extras: isAtBottomExtra)
     }
 
     // Other

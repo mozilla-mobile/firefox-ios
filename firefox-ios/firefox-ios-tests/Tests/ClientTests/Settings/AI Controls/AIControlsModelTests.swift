@@ -10,23 +10,27 @@ import Shared
 class AIControlsModelTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     var mockPrefs: MockProfilePrefs!
+    var mockProfile: MockProfile!
+    var mockGleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
-        setupStore()
-        let mockProfile = MockProfile(databasePrefix: "test")
+        mockProfile = MockProfile(databasePrefix: "test")
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.quickAnswersFeature: true,
             PrefsKeys.Settings.aiKillSwitchFeature: true
         ], prefix: "")
         mockProfile.prefs = mockPrefs
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+        mockGleanWrapper = MockGleanWrapper()
+        setupStore()
     }
 
     override func tearDown() async throws {
         resetStore()
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -50,81 +54,190 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testHasVisibleAIFeatures() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: false)
+        setupNimbusSentFromFirefoxTesting(
+            isTranslationsEnabled: true,
+            isSummariesEnabled: false,
+            isQuickAnswersEnabled: false
+        )
         let aiControlsModel1 = createSubject(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel1.hasVisibleAIFeatures)
 
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
+        setupNimbusSentFromFirefoxTesting(
+            isTranslationsEnabled: false,
+            isSummariesEnabled: true,
+            isQuickAnswersEnabled: false
+        )
         let aiControlsModel2 = createSubject(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel2.hasVisibleAIFeatures)
 
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: false)
+        setupNimbusSentFromFirefoxTesting(
+            isTranslationsEnabled: false,
+            isSummariesEnabled: false,
+            isQuickAnswersEnabled: true
+        )
         let aiControlsModel3 = createSubject(prefs: mockPrefs)
-        XCTAssertFalse(aiControlsModel3.hasVisibleAIFeatures)
+        XCTAssertTrue(aiControlsModel3.hasVisibleAIFeatures)
+
+        setupNimbusSentFromFirefoxTesting(
+            isTranslationsEnabled: false,
+            isSummariesEnabled: false,
+            isQuickAnswersEnabled: false
+        )
+        let aiControlsModel4 = createSubject(
+            prefs: mockPrefs,
+            summarizeFeatureEnabled: false
+        )
+        XCTAssertFalse(aiControlsModel4.hasVisibleAIFeatures)
     }
 
     @MainActor
     func testInitialize() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: true)
+        setupNimbusSentFromFirefoxTesting(
+            isTranslationsEnabled: true,
+            isSummariesEnabled: true,
+            isQuickAnswersEnabled: true
+        )
         let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel.killSwitchIsOn)
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
         XCTAssertFalse(aiControlsModel.translationEnabled)
+        XCTAssertTrue(aiControlsModel.quickAnswersEnabled)
     }
 
     @MainActor
     func testInitializeWithTranslationFeatureFlagDisabled() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
+        setupNimbusSentFromFirefoxTesting(
+            isTranslationsEnabled: false,
+            isSummariesEnabled: true,
+            isQuickAnswersEnabled: true
+        )
         let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel.pageSummariesVisible)
+        XCTAssertTrue(aiControlsModel.quickAnswersVisible)
         XCTAssertFalse(aiControlsModel.translationsVisible)
     }
 
     @MainActor
     func testInitializeWithPageSummariesFeatureFlagDisabled() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: false)
-        let aiControlsModel = createSubject(prefs: mockPrefs)
+        setupNimbusSentFromFirefoxTesting(
+            isTranslationsEnabled: true,
+            isSummariesEnabled: false,
+            isQuickAnswersEnabled: true
+        )
+        let aiControlsModel = createSubject(
+            prefs: mockPrefs,
+            summarizeFeatureEnabled: false
+        )
         XCTAssertFalse(aiControlsModel.pageSummariesVisible)
         XCTAssertTrue(aiControlsModel.translationsVisible)
+        XCTAssertTrue(aiControlsModel.quickAnswersVisible)
+    }
+
+    @MainActor
+    func testInitializeWithQuickAnswersFeatureFlagDisabled() {
+        setupNimbusSentFromFirefoxTesting(
+            isTranslationsEnabled: true,
+            isSummariesEnabled: true,
+            isQuickAnswersEnabled: false
+        )
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        XCTAssertTrue(aiControlsModel.pageSummariesVisible)
+        XCTAssertTrue(aiControlsModel.translationsVisible)
+        XCTAssertFalse(aiControlsModel.quickAnswersVisible)
     }
 
     @MainActor
     func testToggleKillSwitchOn() throws {
-        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
-        expectation.expectedFulfillmentCount = 1
-        mockStore.dispatchCalled = { expectation.fulfill() }
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
-            PrefsKeys.Settings.translationsFeature: false,
-            PrefsKeys.Settings.aiKillSwitchFeature: false
+            PrefsKeys.Settings.translationsFeature: true,
+            PrefsKeys.Settings.aiKillSwitchFeature: false,
+            PrefsKeys.Settings.quickAnswersFeature: true
         ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: true)
 
         XCTAssertFalse(aiControlsModel.pageSummariesEnabled)
         XCTAssertFalse(aiControlsModel.translationEnabled)
+        XCTAssertFalse(aiControlsModel.quickAnswersEnabled)
 
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) {
             XCTAssertTrue(prefVal)
         } else {
-            XCTFail("No pref value for ai kill switch feature")
+            XCTFail("No pref value for AI kill switch feature")
         }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
+    }
+
+    @MainActor
+    func testToggleKillSwitchOnWithFeaturesOffLeavesThemOff() throws {
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: false,
+            PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.quickAnswersFeature: false,
+            PrefsKeys.Settings.aiKillSwitchFeature: false
+        ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        aiControlsModel.toggleKillSwitch(to: true)
+
+        XCTAssertFalse(aiControlsModel.pageSummariesEnabled)
+        XCTAssertFalse(aiControlsModel.translationEnabled)
+        XCTAssertFalse(aiControlsModel.quickAnswersEnabled)
     }
 
     @MainActor
     func testToggleKillSwitchOff() throws {
-        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
-        expectation.expectedFulfillmentCount = 1
-        mockStore.dispatchCalled = { expectation.fulfill() }
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: false,
+            PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.quickAnswersFeature: false,
+            PrefsKeys.Settings.aiKillSwitchFeature: true
+        ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
 
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: false)
 
+        XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
+        XCTAssertTrue(aiControlsModel.translationEnabled)
+        XCTAssertTrue(aiControlsModel.quickAnswersEnabled)
+
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) {
             XCTAssertFalse(prefVal)
         } else {
-            XCTFail("No pref value for ai kill switch feature")
+            XCTFail("No pref value for AI kill switch feature")
         }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
+    }
+
+    @MainActor
+    func testToggleKillSwitchOffWithFeaturesOnLeavesThemOn() throws {
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: true,
+            PrefsKeys.Settings.translationsFeature: true,
+            PrefsKeys.Settings.quickAnswersFeature: true,
+            PrefsKeys.Settings.aiKillSwitchFeature: true
+        ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        aiControlsModel.toggleKillSwitch(to: false)
+
+        XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
+        XCTAssertTrue(aiControlsModel.translationEnabled)
+        XCTAssertTrue(aiControlsModel.quickAnswersEnabled)
     }
 
     @MainActor
@@ -138,10 +251,20 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1.0)
         let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
         XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
+        XCTAssertTrue(try XCTUnwrap(action.toggledViaAIControls))
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
     }
 
     @MainActor
     func testTogglePageSummariesFeatureOn() {
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: false,
+            PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.quickAnswersFeature: true,
+            PrefsKeys.Settings.aiKillSwitchFeature: true
+        ], prefix: "")
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.togglePageSummariesFeature(to: true)
 
@@ -150,10 +273,19 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for translations feature")
         }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
     }
 
     @MainActor
     func testTogglePageSummariesFeatureOff() {
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: true,
+            PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.quickAnswersFeature: true,
+            PrefsKeys.Settings.aiKillSwitchFeature: true
+        ], prefix: "")
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.togglePageSummariesFeature(to: false)
 
@@ -162,9 +294,46 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for translations feature")
         }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
     }
 
-    private func setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: Bool, isSummariesEnabled: Bool) {
+    @MainActor
+    func testToggleQuickAnswersFeatureOn() {
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        aiControlsModel.toggleQuickAnswersFeature(to: true)
+
+        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.quickAnswersFeature) {
+            XCTAssertTrue(prefVal)
+        } else {
+            XCTFail("No pref value for translations feature")
+        }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
+    }
+
+    @MainActor
+    func testToggleQuickAnswersFeatureOff() {
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        aiControlsModel.toggleQuickAnswersFeature(to: false)
+
+        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.quickAnswersFeature) {
+            XCTAssertFalse(prefVal)
+        } else {
+            XCTFail("No pref value for translations feature")
+        }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
+    }
+
+    private func setupNimbusSentFromFirefoxTesting(
+        isTranslationsEnabled: Bool,
+        isSummariesEnabled: Bool,
+        isQuickAnswersEnabled: Bool
+    ) {
         FxNimbus.shared.features.translationsFeature.with { _, _ in
             return TranslationsFeature(enabled: isTranslationsEnabled)
         }
@@ -172,11 +341,26 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature(enabled: isSummariesEnabled)
         }
+
+        FxNimbus.shared.features.quickAnswersFeature.with { _, _ in
+            return QuickAnswersFeature(enabled: isQuickAnswersEnabled)
+        }
     }
 
     @MainActor
-    private func createSubject(prefs: Prefs) -> AIControlsModel {
-        let subject = AIControlsModel(prefs: prefs, windowUUID: .XCTestDefaultUUID)
+    private func createSubject(prefs: Prefs, summarizeFeatureEnabled: Bool = true) -> AIControlsModel {
+        let summarizeFeatureDefaultValue = prefs.boolForKey(
+            PrefsKeys.Summarizer.summarizeContentFeature
+        ) ?? true
+        let subject = AIControlsModel(
+            prefs: prefs,
+            windowUUID: .XCTestDefaultUUID,
+            summarizerConfiguration: MockNimbusUtils(
+                summarizeFeatureToggledOn: summarizeFeatureDefaultValue,
+                summarizeFeatureEnabled: summarizeFeatureEnabled
+            ),
+            settingsTelemetry: SettingsTelemetry(gleanWrapper: mockGleanWrapper)
+        )
         trackForMemoryLeaks(subject)
         return subject
     }

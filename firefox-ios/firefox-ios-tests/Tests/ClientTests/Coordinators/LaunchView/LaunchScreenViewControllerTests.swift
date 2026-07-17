@@ -17,9 +17,8 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
-        viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: MockProfile())
+        viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: profile)
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
 
@@ -42,7 +41,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() {
         viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
         let subject = createSubject()
-        subject.startLoading()
+        subject.loadViewIfNeeded()
 
         guard case .intro = coordinatorDelegate.savedLaunchType else {
             XCTFail("Expected intro, but was \(String(describing: coordinatorDelegate.savedLaunchType))")
@@ -57,7 +56,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     func testViewDidLoad_whenNilLaunchType_callsCoordinatorBrowser() {
         viewModel.mockLaunchType = nil
         let subject = createSubject()
-        subject.startLoading()
+        subject.loadViewIfNeeded()
 
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 0)
         XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
@@ -65,13 +64,55 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     }
 
     @MainActor
-    func testAddLaunchView_whenViewWillAppear() {
-        let subject = LaunchScreenViewController(windowUUID: windowUUID,
-                                                 coordinator: coordinatorDelegate,
-                                                 viewModel: viewModel)
-        XCTAssertTrue(subject.view.subviews.isEmpty)
+    func testViewDidLoad_addsLaunchScreenSubview() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        XCTAssertFalse(subject.view.subviews.isEmpty)
+    }
+
+    @MainActor
+    func testViewWillAppear_callsLoadNextLaunchType() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        XCTAssertEqual(viewModel.loadNextLaunchTypeCalled, 0)
+
         subject.viewWillAppear(false)
-        XCTAssertNotNil(subject.view.subviews[0])
+
+        XCTAssertEqual(viewModel.loadNextLaunchTypeCalled, 1)
+    }
+
+    @MainActor
+    func testLaunchWith_forwardsToCoordinator() {
+        let subject = createSubject()
+        let launchType: LaunchType = .intro(manager: viewModel.introScreenManager)
+
+        subject.launchWith(launchType: launchType)
+
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+        guard case .intro = coordinatorDelegate.savedLaunchType else {
+            XCTFail("Expected intro launch type")
+            return
+        }
+    }
+
+    @MainActor
+    func testLaunchBrowser_forwardsToCoordinator() {
+        let subject = createSubject()
+
+        subject.launchBrowser()
+
+        XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 0)
+    }
+
+    @MainActor
+    func testFinishedLoadingLaunchOrder_callsLoadNextLaunchType() {
+        let subject = createSubject()
+
+        subject.finishedLoadingLaunchOrder()
+
+        XCTAssertEqual(viewModel.loadNextLaunchTypeCalled, 1)
     }
 
     // MARK: - Helpers

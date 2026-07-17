@@ -31,7 +31,6 @@ final class TabTrayViewController: UIViewController,
                                    UIPageViewControllerDelegate,
                                    UIScrollViewDelegate,
                                    StoreSubscriber,
-                                   LegacyFeatureFlaggable,
                                    TabTraySelectorDelegate,
                                    TabTrayAnimationDelegate,
                                    TabDisplayViewDragAndDropInteraction,
@@ -40,6 +39,7 @@ final class TabTrayViewController: UIViewController,
     private struct UX {
         struct NavigationMenu {
             static let width: CGFloat = 343
+            static let iPadWidth: CGFloat = 500
         }
 
         static let fixedSpaceWidth: CGFloat = 32
@@ -137,6 +137,25 @@ final class TabTrayViewController: UIViewController,
         didSelectSection(panelType: tabTrayState.selectedPanel)
         return selector
     }()
+
+    private lazy var experimentiPadSegmentControl: TabTrayiPadSelectorView = {
+        let selectedIndex = experimentConvertSelectedIndex()
+        let titles = [TabTrayPanelType.privateTabs.label,
+                     TabTrayPanelType.tabs.label,
+                     TabTrayPanelType.syncedTabs.label]
+        let selector = TabTrayiPadSelectorView(selectedIndex: selectedIndex,
+                                               theme: retrieveTheme(),
+                                               buttonTitles: titles)
+        selector.delegate = self
+        selector.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
+
+        didSelectSection(panelType: tabTrayState.selectedPanel)
+        return selector
+    }()
+
+    private var activeExperimentSegmentControl: TabTraySelectorView {
+        shouldUseiPadSetup() ? experimentiPadSegmentControl : experimentSegmentControl
+    }
 
     private func experimentConvertSelectedIndex() -> Int {
         // Temporary offset of numbers to account for the different order in the experiment - tabTrayUIExperiments
@@ -345,9 +364,16 @@ final class TabTrayViewController: UIViewController,
                 navigationItem.rightBarButtonItems = [doneButton]
             }
         case .regular:
-            navigationItem.titleView = segmentedControl
+
+            navigationItem.titleView = getSegmentedControl()
         }
         updateToolbarItems()
+    }
+
+    func getSegmentedControl() -> UIView {
+        guard tabTrayUtils.shouldDisplayExperimentUI() else { return segmentedControl }
+
+        return shouldUseiPadSetup() ? experimentiPadSegmentControl : experimentSegmentControl
     }
 
     // MARK: - Redux
@@ -431,12 +457,16 @@ final class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
         newTabButton.tintColor = theme.colors.iconPrimary
-        doneButton.tintColor = theme.colors.iconPrimary
+        if #available(iOS 26, *) {
+            doneButton.tintColor = theme.isNova ? theme.colors.iconInverted : theme.colors.iconPrimary
+        } else {
+            doneButton.tintColor = theme.colors.iconPrimary
+        }
         syncTabButton.tintColor = theme.colors.iconPrimary
         panelContainer.backgroundColor = theme.colors.layer3
 
         if shouldUsePrivateOverride {
-            experimentSegmentControl.applyTheme(theme: theme)
+            activeExperimentSegmentControl.applyTheme(theme: theme)
 
             let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
             navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
@@ -457,11 +487,15 @@ final class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
         deleteButton.tintColor = swipeTheme.colors.iconPrimary
         newTabButton.tintColor = swipeTheme.colors.iconPrimary
-        doneButton.tintColor = swipeTheme.colors.iconPrimary
+        if #available(iOS 26, *) {
+            doneButton.tintColor = swipeTheme.isNova ? swipeTheme.colors.iconInverted : swipeTheme.colors.iconPrimary
+        } else {
+            doneButton.tintColor = swipeTheme.colors.iconPrimary
+        }
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
         panelContainer.backgroundColor = swipeTheme.colors.layer3
 
-        experimentSegmentControl.applyTheme(theme: swipeTheme)
+        activeExperimentSegmentControl.applyTheme(theme: swipeTheme)
         setupToolBarAppearance(theme: swipeTheme)
         setupNavigationBarAppearance(theme: swipeTheme)
     }
@@ -620,6 +654,11 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupForiPad() {
+        guard !tabTrayUtils.shouldDisplayExperimentUI() else {
+            setupForiPadExperiment()
+            return
+        }
+
         navigationItem.titleView = segmentedControl
         view.addSubviews(containerView)
         setupBlurView()
@@ -637,6 +676,25 @@ final class TabTrayViewController: UIViewController,
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    private func setupForiPadExperiment() {
+        navigationItem.titleView = getSegmentedControl()
+        view.addSubviews(containerView)
+        containerView.addSubview(panelContainer)
+        setupBlurView()
+
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: view.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
     }
 

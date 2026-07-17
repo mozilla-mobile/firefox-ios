@@ -53,7 +53,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 #if targetEnvironment(simulator) && MOZ_CHANNEL_developer
         return true
 #else
-        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.relayIntegration, checking: .buildOnly)
+        return (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.relayIntegration)
 #endif
     }()
 

@@ -202,6 +202,8 @@ class ContextualHintViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         hintView.applyTheme(theme: theme)
+        let gradient = theme.isNova ? theme.colors.gradient : theme.colors.layerGradient
+        popoverPresentationController?.backgroundColor = gradient.colors.last
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate

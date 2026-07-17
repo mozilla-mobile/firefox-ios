@@ -22,7 +22,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = MockTabManager()
         fileManager = MockFileManager()
     }
@@ -412,7 +411,10 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     private func anyWebView(url: URL? = nil) -> MockTabWebView {
-        let tab = MockTabWebView(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTabWebView(frame: .zero,
+                                 configuration: WKWebViewConfiguration(),
+                                 windowUUID: .XCTestDefaultUUID,
+                                 certStore: MockProfile().certStore)
         tab.loadedURL = url
         return tab
     }
@@ -450,6 +452,38 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         return SecCertificateCreateWithData(nil, data! as CFData)!
     }
 
+    // MARK: - didCommit
+
+    @MainActor
+    func testWebViewDidCommit_withNoHandler_clearsTranslationConfiguration() {
+        let subject = createSubject()
+        let tab = createTab()
+        tab.translationConfiguration = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
+        (tab.webView as? MockTabWebView)?.loadedURL = URL(string: "https://example.com")
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didCommit: nil)
+
+        XCTAssertNil(tab.translationConfiguration)
+    }
+
+    @MainActor
+    func testWebViewDidCommit_withOnNextCommit_callsHandlerAndPreservesTranslationConfiguration() {
+        let subject = createSubject()
+        let tab = createTab()
+        tab.translationConfiguration = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
+        var handlerCalled = false
+        tab.onNextCommit = { handlerCalled = true }
+        (tab.webView as? MockTabWebView)?.loadedURL = URL(string: "https://example.com")
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didCommit: nil)
+
+        XCTAssertTrue(handlerCalled)
+        XCTAssertNil(tab.onNextCommit)
+        XCTAssertNotNil(tab.translationConfiguration)
+    }
+
     // This test is being skipped because there are some very strange side effects
     // in webView didFinish because the profile database is not being stubbed out
     // TODO: FXIOS-13435 to look in to this
@@ -466,5 +500,50 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         subject.webView(tab.webView!, didFinish: nil)
 
         XCTAssertTrue(screenshotHelper.takeScreenshotCalled)
+    }
+
+    // MARK: - Google Lens search completion
+
+    @MainActor
+    func testWebViewDidFinish_clearsPendingGoogleLensSearch() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .camera)
+
+        subject.webView(tab.webView!, didFinish: nil)
+
+        XCTAssertNil(subject.googleLensSearches[tab.tabUUID],
+                     "Finishing navigation should report and clear the pending Google Lens search")
+    }
+
+    @MainActor
+    func testWebViewDidFailProvisionalNavigation_clearsPendingGoogleLensSearch() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .contextMenu)
+
+        // Code 102 ("Frame load interrupted") makes the delegate return early right after the
+        // Google Lens reporting, keeping the test free of error-page side effects.
+        subject.webView(tab.webView!,
+                        didFailProvisionalNavigation: nil,
+                        withError: NSError(domain: "WebKitErrorDomain", code: 102))
+
+        XCTAssertNil(subject.googleLensSearches[tab.tabUUID],
+                     "A failed navigation should report and clear the pending Google Lens search")
+    }
+
+    @MainActor
+    func testWebViewDidFinish_withoutPendingGoogleLensSearch_doesNothing() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+
+        subject.webView(tab.webView!, didFinish: nil)
+
+        XCTAssertTrue(subject.googleLensSearches.isEmpty)
     }
 }

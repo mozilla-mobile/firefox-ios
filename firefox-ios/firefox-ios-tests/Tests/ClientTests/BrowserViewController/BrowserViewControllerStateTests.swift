@@ -5,6 +5,7 @@
 import Redux
 import XCTest
 import SummarizeKit
+import QuickAnswersKit
 
 @testable import Client
 
@@ -47,6 +48,30 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.displayView, .newTabLongPressActions)
     }
 
+    func testShowGoogleLensPhotoPickerAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.displayView)
+
+        let action = getAction(for: .showGoogleLensPhotoPicker)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .googleLensPhotoPicker)
+    }
+
+    func testShowGoogleLensCameraAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.displayView)
+
+        let action = getAction(for: .showGoogleLensCamera)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .googleLensCamera)
+    }
+
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
@@ -80,6 +105,29 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.navigateTo, .reload)
+    }
+
+    func testLoadWaybackURLAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigateTo)
+
+        let archivedURL = URL(string: "https://web.archive.org/web/20130919044612/http://example.com/")!
+        let action = getGeneralBrowserAction(destinationURL: archivedURL, for: .loadWaybackURL)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigateTo, .loadURL(archivedURL))
+    }
+
+    func test_loadWaybackURLAction_withNilURL_doesNotNavigate() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = getGeneralBrowserAction(destinationURL: nil, for: .loadWaybackURL)
+        let newState = reducer(initialState, action)
+
+        XCTAssertNil(newState.navigateTo)
     }
 
     func testShowSummarizerAction() {
@@ -295,6 +343,30 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(navigationDestination.selectNewTab ?? false)
     }
 
+    func test_searchQuery_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.searchQuery("Test")),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: NavigationBrowserActionType.tapOnCell
+        )
+        let newState = reducer(initialState, action)
+
+        let navigationDestination = try XCTUnwrap(newState.navigationDestination)
+        switch navigationDestination.destination {
+        case .searchQuery(let query):
+            XCTAssertEqual(query, "Test")
+        default:
+            XCTFail("destination is not the right type")
+        }
+
+        XCTAssertNil(navigationDestination.url)
+    }
+
     func test_tapOnSettingsSection_navigationBrowserAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
@@ -487,22 +559,31 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        let action = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
+        let action = getNavigationBrowserAction(
+            for: .tapOnQuickAnswersButton,
+            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+        )
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .quickAnswers)
+        XCTAssertEqual(
+            newState.navigationDestination?.destination,
+            .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+        )
     }
 
     func test_navigationDestinationHandled_clearsNavigationDestination() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        let navigateAction = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
+        let navigateAction = getNavigationBrowserAction(
+            for: .tapOnQuickAnswersButton,
+            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+        )
         let navigatedState = reducer(initialState, navigateAction)
 
         let handledAction = getNavigationBrowserAction(
             for: .navigationDestinationHandled,
-            destination: .quickAnswers
+            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
         )
         let handledState = reducer(navigatedState, handledAction)
 
@@ -540,13 +621,15 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     }
 
     func getGeneralBrowserAction(selectedTabURL: URL? = nil,
+                                 destinationURL: URL? = nil,
                                  isNativeErrorPage: Bool? = nil,
                                  for actionType: GeneralBrowserActionType) -> GeneralBrowserAction {
         return  GeneralBrowserAction(selectedTabURL: selectedTabURL,
+                                     destinationURL: destinationURL,
                                      isNativeErrorPage: isNativeErrorPage,
                                      windowUUID: .XCTestDefaultUUID,
                                      actionType: actionType)
-    }
+        }
 
     /// We need to set up the state for the homepage search bar in order to test method that relies on this state
     func setupStoreForSearchBar() {

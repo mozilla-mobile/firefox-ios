@@ -8,7 +8,7 @@ import Redux
 import Shared
 
 @MainActor
-final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlaggable {
     /// Delegate protocol for handling address bar pan gesture events.
     /// Allows external objects to respond to swipe gesture state changes during tab switching.
     protocol Delegate: AnyObject {
@@ -47,6 +47,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     private let addressToolbarContainer: AddressToolbarContainer
     private let statusBarOverlay: StatusBarOverlay
     private var panGestureRecognizer: UIPanGestureRecognizer?
+    private var swipeUpGestureRecognizer: UISwipeGestureRecognizer?
+    private var swipeDownGestureRecognizer: UISwipeGestureRecognizer?
 
     // MARK: - Properties
     private let tabManager: TabManager
@@ -101,9 +103,21 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     private func setupGesture() {
-        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        addressToolbarContainer.addGestureRecognizer(gesture)
-        panGestureRecognizer = gesture
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        addressToolbarContainer.addGestureRecognizer(panGesture)
+        panGestureRecognizer = panGesture
+
+        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeUpGesture.direction = .up
+        addressToolbarContainer.addGestureRecognizer(swipeUpGesture)
+        swipeUpGestureRecognizer = swipeUpGesture
+
+        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeDownGesture.direction = .down
+        addressToolbarContainer.addGestureRecognizer(swipeDownGesture)
+        swipeDownGestureRecognizer = swipeDownGesture
+
+        panGesture.require(toFail: swipeUpGesture)
     }
 
     // MARK: - Redux
@@ -130,9 +144,18 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         // safely re-enable the gesture
         if state.addressToolbar.isEditing {
             disablePanGestureRecognizer()
+            disableSwipeUpGestureRecognizer()
+            disableSwipeDownGestureRecognizer()
         } else {
             enablePanGestureRecognizer()
             enablePanGestureOnHomepageIfNeeded()
+            enableSwipeUpGestureRecognizer()
+            enableSwipeDownGestureRecognizer()
+        }
+
+        if !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
+            disableSwipeUpGestureRecognizer()
+            disableSwipeDownGestureRecognizer()
         }
     }
 
@@ -142,8 +165,24 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         panGestureRecognizer?.isEnabled = true
     }
 
+    private func enableSwipeUpGestureRecognizer() {
+        swipeUpGestureRecognizer?.isEnabled = true
+    }
+
+    private func enableSwipeDownGestureRecognizer() {
+        swipeDownGestureRecognizer?.isEnabled = true
+    }
+
     func disablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = false
+    }
+
+    private func disableSwipeUpGestureRecognizer() {
+        swipeUpGestureRecognizer?.isEnabled = false
+    }
+
+    private func disableSwipeDownGestureRecognizer() {
+        swipeDownGestureRecognizer?.isEnabled = false
     }
 
     private func disablePanGestureIfTopAddressBar() {
@@ -196,6 +235,21 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             handleGestureEndedState(translation: translation, velocity: velocity, nextTab: nextTab)
         default: break
         }
+    }
+
+    @objc
+    @MainActor
+    private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        let direction = gesture.direction
+
+        if direction == .up && toolbarState?.toolbarPosition == .top {
+            return
+        } else if direction == .down && toolbarState?.toolbarPosition == .bottom {
+            return
+        }
+
+        store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                               actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
     }
 
     private func handleGestureChangedState(translation: CGPoint, nextTab: Tab?) {

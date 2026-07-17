@@ -3,29 +3,46 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import LLMKit
+import MLPAKit
+import Shared
 import Testing
 import TestKit
 
 @testable import QuickAnswersKit
 
 struct ResultsServiceFactoryTests {
-    // TODO: FXIOS-15196 - Improve testing to be more valuable
     @Test
-    func test_make_storesConfig() {
-        let config = QuickAnswersConfig()
-        let subject = createSubject(config: config)
+    func test_make_withValidClient_returnsConfiguredService() throws {
+        let mockLLMCreator = MockLLMClientCreator()
+        mockLLMCreator.clientToReturn = MockLiteLLMClient()
+        let prefs = MockProfilePrefs()
+        let configFetcher = MockQuickAnswersConfigFetcher()
+        let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
-        _ = subject.make()
+        let result = try subject.make(prefs: prefs, configFetcher: configFetcher)
 
-        #expect(subject.config.instructions.isEmpty)
-        #expect(subject.config.options.isEmpty)
+        #expect(result is DefaultResultsService, "Factory should return configured service when LLM client is available")
+        #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should call createAppAttestLiteLLM once")
+    }
+
+    @Test
+    func test_make_withNilLLMClient_throwsError() {
+        let mockLLMCreator = MockLLMClientCreator()
+        mockLLMCreator.shouldReturnNil = true
+        let prefs = MockProfilePrefs()
+        let configFetcher = MockQuickAnswersConfigFetcher()
+        let subject = createSubject(liteLLMCreator: mockLLMCreator)
+
+        #expect(throws: ResultsServiceError.unableToCreateService) {
+            try subject.make(prefs: prefs, configFetcher: configFetcher)
+        }
+        #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should attempt to create LLM client")
     }
 
     // MARK: - Helper
     private func createSubject(
-        config: QuickAnswersConfig = QuickAnswersConfig()
+        liteLLMCreator: LiteLLMCreating = MockLLMClientCreator(),
     ) -> DefaultResultsServiceFactory {
-        let subject = DefaultResultsServiceFactory(config: config)
-        return subject
+        return DefaultResultsServiceFactory(liteLLMCreator: liteLLMCreator)
     }
 }

@@ -15,6 +15,7 @@ struct HomepageTelemetry {
         case bookmark = "bookmark"
         case bookmarkShowAll = "bookmarks_show_all_button"
         case story = "story"
+        case worldCupWidget = "world_cup_widget"
 
         var sectionName: String {
             switch self {
@@ -26,8 +27,21 @@ struct HomepageTelemetry {
                 return "bookmarks"
             case .story:
                 return "stories"
+            case .worldCupWidget:
+                return self.rawValue
             }
         }
+    }
+
+    enum TopSitesShortcutPinnedSource: String {
+        case homescreenButton = "homescreen_button"
+        case contextMenu = "context_menu"
+        case appMenu = "app_menu"
+    }
+
+    enum TopSitesShortcutUnpinnedSource: String {
+        case contextMenu = "context_menu"
+        case appMenu = "app_menu"
     }
 
     private enum EventValue: String {
@@ -79,6 +93,20 @@ struct HomepageTelemetry {
         gleanWrapper.recordEvent(
             for: GleanMetrics.TopSites.tilePressed,
             extras: GleanMetrics.TopSites.TilePressedExtra(position: "\(position)", tileType: tileType)
+        )
+    }
+
+    func sendTopSitesShortcutPinnedEvent(source: TopSitesShortcutPinnedSource) {
+        gleanWrapper.recordEvent(
+            for: GleanMetrics.TopSites.shortcutPinned,
+            extras: GleanMetrics.TopSites.ShortcutPinnedExtra(source: source.rawValue)
+        )
+    }
+
+    func sendTopSitesShortcutUnpinnedEvent(source: TopSitesShortcutUnpinnedSource) {
+        gleanWrapper.recordEvent(
+            for: GleanMetrics.TopSites.shortcutUnpinned,
+            extras: GleanMetrics.TopSites.ShortcutUnpinnedExtra(source: source.rawValue)
         )
     }
 

@@ -52,44 +52,24 @@ class PersistedFirefoxAccount {
         try inner.toJson()
     }
 
-    func setUserData(userData: UserData) {
+    func handleWebChannelLogin(jsonPayload: String) throws {
         defer { tryPersistState() }
-        inner.setUserData(userData: userData)
+        try inner.handleWebChannelLogin(jsonPayload: jsonPayload)
     }
 
-    func beginOAuthFlow(
-        scopes: [String],
-        entrypoint: String
-    ) throws -> URL {
-        return try notifyAuthErrors {
-            try URL(string: self.inner.beginOauthFlow(
-                scopes: scopes,
-                entrypoint: entrypoint
-            ))!
+    func getSignedInUserForWebChannel() -> String? {
+        return inner.getSignedInUserForWebChannel()
+    }
+
+    func handleWebChannelPasswordChange(jsonPayload: String) throws {
+        defer { tryPersistState() }
+        try notifyAuthErrors {
+            try self.inner.handleWebChannelPasswordChange(jsonPayload: jsonPayload)
         }
     }
 
     func getPairingAuthorityURL() throws -> URL {
         return try URL(string: inner.getPairingAuthorityUrl())!
-    }
-
-    func beginPairingFlow(
-        pairingUrl: String,
-        scopes: [String],
-        entrypoint: String
-    ) throws -> URL {
-        return try notifyAuthErrors {
-            try URL(string: self.inner.beginPairingFlow(pairingUrl: pairingUrl,
-                                                        scopes: scopes,
-                                                        entrypoint: entrypoint))!
-        }
-    }
-
-    func completeOAuthFlow(code: String, state: String) throws {
-        defer { tryPersistState() }
-        try notifyAuthErrors {
-            try self.inner.completeOauthFlow(code: code, state: state)
-        }
     }
 
     func checkAuthorizationStatus() throws -> AuthorizationInfo {
@@ -220,20 +200,6 @@ class PersistedFirefoxAccount {
         defer { tryPersistState() }
         return try notifyAuthErrors {
             try self.inner.getAccessToken(scope: scope, useCache: useCache)
-        }
-    }
-
-    func getSessionToken() throws -> String {
-        defer { tryPersistState() }
-        return try notifyAuthErrors {
-            try self.inner.getSessionToken()
-        }
-    }
-
-    func handleSessionTokenChange(sessionToken: String) throws {
-        defer { tryPersistState() }
-        return try notifyAuthErrors {
-            try self.inner.handleSessionTokenChange(sessionToken: sessionToken)
         }
     }
 

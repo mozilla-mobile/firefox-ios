@@ -107,12 +107,15 @@ open class FxAccountManager: @unchecked Sendable {
         return state == .authIssues
     }
 
-    /// Set the user data before completing their authentication
-    public func setUserData(userData: UserData, completion: @Sendable @escaping () -> Void) {
+    public func handleWebChannelLogin(jsonPayload: String, completion: @Sendable @escaping () -> Void) {
         DispatchQueue.global().async {
-            self.account?.setUserData(userData: userData)
+            try? self.account?.handleWebChannelLogin(jsonPayload: jsonPayload)
             completion()
         }
+    }
+
+    public func getSignedInUserForWebChannel() -> String? {
+        return account?.getSignedInUserForWebChannel()
     }
 
     /// Begins a new authentication flow.
@@ -130,9 +133,9 @@ open class FxAccountManager: @unchecked Sendable {
         FxALog.info("beginAuthentication")
         fxaFsmQueue.async {
             let actualScopes = scopes.isEmpty ? self.applicationScopes : scopes
-            self.processEvent(.beginOAuthFlow(scopes: actualScopes, entrypoint: entrypoint))
+            self.processEvent(.beginOAuthFlow(service: "", scopes: actualScopes, entrypoint: entrypoint))
             let result: Result<URL, Error>
-            if case let .authenticating(oauthUrl) = self.state, let url = URL(string: oauthUrl) {
+            if case let .authenticating(oauthUrl, _) = self.state, let url = URL(string: oauthUrl) {
                 result = .success(url)
             } else {
                 result = .failure(FxaError.Other(message: "beginAuthentication: unexpected state \(self.state)"))
@@ -158,9 +161,9 @@ open class FxAccountManager: @unchecked Sendable {
     ) {
         fxaFsmQueue.async {
             let actualScopes = scopes.isEmpty ? self.applicationScopes : scopes
-            self.processEvent(.beginPairingFlow(pairingUrl: pairingUrl, scopes: actualScopes, entrypoint: entrypoint))
+            self.processEvent(.beginPairingFlow(pairingUrl: pairingUrl, service: "", scopes: actualScopes, entrypoint: entrypoint))
             let result: Result<URL, Error>
-            if case let .authenticating(oauthUrl) = self.state, let url = URL(string: oauthUrl) {
+            if case let .authenticating(oauthUrl, _) = self.state, let url = URL(string: oauthUrl) {
                 result = .success(url)
             } else {
                 result = .failure(FxaError.Other(message: "beginPairingAuthentication: unexpected state \(self.state)"))
@@ -225,16 +228,6 @@ open class FxAccountManager: @unchecked Sendable {
         }
     }
 
-    /// Get the session token associated with this account.
-    /// Note that you should have requested the `.session` scope earlier to be able to get this token.
-    public func getSessionToken() -> Result<String, Error> {
-        do {
-            return try .success(requireAccount().getSessionToken())
-        } catch {
-            return .failure(error)
-        }
-    }
-
     /// Clear the access token cache for reauthentication.
     public func clearAccessTokenCache() {
         account?.clearAccessTokenCache()
@@ -249,14 +242,15 @@ open class FxAccountManager: @unchecked Sendable {
         }
     }
 
-    /// The account password has been changed locally and a new session token has been sent to us through WebChannel.
+    /// The account password has been changed locally; give the fxa component the data
+    /// we got so it can update the account state appopriately.
     public func handlePasswordChanged(
-        newSessionToken: String,
+        jsonPayload: String,
         completionHandler: @escaping @MainActor @Sendable () -> Void
     ) {
         fxaFsmQueue.async {
             do {
-                try self.requireAccount().handleSessionTokenChange(sessionToken: newSessionToken)
+                try self.requireAccount().handleWebChannelPasswordChange(jsonPayload: jsonPayload)
                 // handleSessionTokenChange invalidates the old refresh token so the device
                 // record on the server is stale. Re-register the device.
                 self.requireConstellation().initDevice(

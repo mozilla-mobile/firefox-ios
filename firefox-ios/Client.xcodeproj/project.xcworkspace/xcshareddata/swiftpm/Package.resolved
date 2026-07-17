@@ -1,5 +1,5 @@
 {
-  "originHash" : "e7d8931d67761f37e7664664586e08ff85dd2fa89878e390b6c48f85c6b6e85c",
+  "originHash" : "56d50f70c44bb02c8f2972562e3a84aad337eee653481c4beca45f9b889ea42d",
   "pins" : [
     {
       "identity" : "a-star",
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "8470fb7d0ff00d1d0f845ec445fbc70b4c6cbab3",
-        "version" : "66.3.0"
+        "revision" : "afd55ed0bea2aeefc1394f06ab02ad3c6d9178dc",
+        "version" : "69.0.0"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "c152c1915f60c51e4afa0752656993ee5b3c63db",
-        "version" : "8.8.1"
+        "revision" : "ac632bd26a1c00f139ff62fd01806f21cf67325e",
+        "version" : "8.10.0"
       }
     },
     {
@@ -89,6 +89,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "f56a6e483163a761adc8cd25c337db0ed1eac524"
+      }
+    },
+    {
+      "identity" : "modifiedcopymacro",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/WilhelmOks/ModifiedCopyMacro.git",
+      "state" : {
+        "revision" : "13dee3de60d4614ac268ec822325a19812e6c6f6",
+        "version" : "2.2.0"
       }
     },
     {
@@ -139,7 +148,7 @@
     {
       "identity" : "swift-syntax",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax.git",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
         "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
         "version" : "509.1.1"

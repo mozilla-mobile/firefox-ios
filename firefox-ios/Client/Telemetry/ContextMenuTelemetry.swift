@@ -17,6 +17,7 @@ struct ContextMenuTelemetry {
         case saveImage
         case copyImage
         case copyImageLink
+        case googleLens
     }
 
     enum OriginExtra: String {

@@ -20,7 +20,6 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         navigationDelegate = MockNavigationDelegate()
         tabWebViewDelegate = MockTabWebViewDelegate()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() async throws {
@@ -109,7 +108,8 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
                        line: UInt = #line) async throws -> TabWebView {
         let subject = TabWebView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)),
                                  configuration: .init(),
-                                 windowUUID: windowUUID)
+                                 windowUUID: windowUUID,
+                                 certStore: MockProfile().certStore)
         try await Task.sleep(nanoseconds: sleepTime)
         subject.configure(delegate: tabWebViewDelegate, navigationDelegate: navigationDelegate)
         trackForMemoryLeaks(subject)

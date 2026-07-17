@@ -5,11 +5,12 @@
 import Foundation
 import Redux
 import Common
+import Shared
 
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
 @MainActor
-final class HomepageMiddleware: LegacyFeatureFlaggable, Notifiable {
+final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private let profile: Profile
     private let homepageTelemetry: HomepageTelemetry
     private let privacyNoticeHelper: PrivacyNoticeHelperProtocol
@@ -29,7 +30,13 @@ final class HomepageMiddleware: LegacyFeatureFlaggable, Notifiable {
         observeNotifications()
     }
 
-    lazy var homepageProvider: Middleware<AppState> = { state, action in
+    lazy var homepageProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         switch action.actionType {
         case HomepageActionType.viewDidAppear:
             self.homepageTelemetry.sendHomepageImpressionEvent()
@@ -102,7 +109,7 @@ final class HomepageMiddleware: LegacyFeatureFlaggable, Notifiable {
         for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
         and isLandscape: Bool = UIWindow.isLandscape
     ) -> Bool {
-        let isHomepageSearchEnabled = featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+        let isHomepageSearchEnabled = featureFlagsProvider.isEnabled(.homepageSearchBar)
         let isCompact = device == .phone && !isLandscape
 
         guard isHomepageSearchEnabled, isCompact else {
@@ -115,6 +122,7 @@ final class HomepageMiddleware: LegacyFeatureFlaggable, Notifiable {
     private func observeNotifications() {
         let notifications: [Notification.Name] = [
             UIApplication.didBecomeActiveNotification,
+            UIApplication.didEnterBackgroundNotification,
             .FirefoxAccountChanged,
             .PrivateDataClearedHistory,
             .ProfileDidFinishSyncing,
@@ -142,12 +150,19 @@ final class HomepageMiddleware: LegacyFeatureFlaggable, Notifiable {
         ensureMainThread {
             self.windowManager.windows.forEach { windowUUID, _ in
                 switch notificationName {
-                case UIApplication.willEnterForegroundNotification:
+                case UIApplication.didBecomeActiveNotification:
                     let storiesAction = HomepageAction(
                         windowUUID: windowUUID,
-                        actionType: HomepageMiddlewareActionType.enteredForeground
+                        actionType: HomepageMiddlewareActionType.didBecomeActive
                     )
                     store.dispatch(storiesAction)
+
+                case UIApplication.didEnterBackgroundNotification:
+                    let backgroundAction = HomepageAction(
+                        windowUUID: windowUUID,
+                        actionType: HomepageMiddlewareActionType.didEnterBackground
+                    )
+                    store.dispatch(backgroundAction)
 
                 case .PrivateDataClearedHistory,
                         .TopSitesUpdated,

@@ -140,6 +140,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var iconAccentYellow: UIColor { base.iconAccentYellow }
     var iconRatingNeutral: UIColor { base.iconRatingNeutral }
 
+    var borderSecondary: UIColor { base.borderSecondary }
     var borderAccentNonOpaque: UIColor { base.borderAccentNonOpaque }
     var borderInverted: UIColor { base.borderInverted }
     var borderToolbarDivider: UIColor { base.borderToolbarDivider }
@@ -155,6 +156,24 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientAIStrongStop1: UIColor { base.gradientAIStrongStop1 }
     var gradientAIStrongStop2: UIColor { base.gradientAIStrongStop2 }
     var gradientAIStrongStop3: UIColor { base.gradientAIStrongStop3 }
+
+    // MARK: - Nova only tokens
+    var layerAccentSubtle: UIColor { base.layerAccentSubtle }
+    var layerInverse: UIColor { base.layerInverse }
+    var layerGlassTintNova: UIColor { base.layerGlassTintNova }
+    var textToast: UIColor { base.textToast }
+    var iconInverted: UIColor { base.iconInverted }
+    var iconOnColorDisabled: UIColor { base.iconOnColorDisabled }
+    var iconPrivate: UIColor { base.iconPrivate }
+    var borderStrong: UIColor { base.borderStrong }
+    var borderRadioButtonDefault: UIColor { base.borderRadioButtonDefault }
+    var gradient: Gradient { base.gradient }
+    var gradientAccent: Gradient { base.gradientAccent }
+    var gradientAccentSubtle: Gradient { base.gradientAccentSubtle }
+    var gradientAIStrong: Gradient { base.gradientAIStrong }
+    var gradientBorder: Gradient { base.gradientBorder }
+    var gradientPrivacy: Gradient { base.gradientPrivacy }
+    var gradientPrivacyMask: Gradient { base.gradientPrivacyMask }
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base

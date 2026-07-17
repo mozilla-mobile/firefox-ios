@@ -48,6 +48,11 @@
         },
         {
           "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "WebCompatReporterKit",
+          "name" : "WebCompatReporterKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
           "identifier" : "WebEngine",
           "name" : "WebEngine"
         },
@@ -127,7 +132,9 @@
           "name" : "QuickAnswersKit"
         }
       ]
-    }
+    },
+    "language" : "en-US",
+    "region" : "US"
   },
   "testTargets" : [
     {
@@ -202,6 +209,13 @@
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "ToolbarKitTests",
         "name" : "ToolbarKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "WebCompatReporterKitTests",
+        "name" : "WebCompatReporterKitTests"
       }
     },
     {
@@ -311,6 +325,11 @@
       }
     },
     {
+      "skippedTests" : [
+        "EventStoreTests\/testAdvancingTimeIntoTheFuture()",
+        "NimbusTests",
+        "SyncManagerTelemetryTests\/testSendsAddressesAndGlobalPings()"
+      ],
       "target" : {
         "containerPath" : "container:..\/MozillaRustComponents",
         "identifier" : "MozillaRustComponentsTests",

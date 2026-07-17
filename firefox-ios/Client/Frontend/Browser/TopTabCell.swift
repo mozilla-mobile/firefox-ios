@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import SiteImageView
 
-class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, LegacyFeatureFlaggable {
+class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         // MARK: - Favicon and Title Constants
         static let faviconSize: CGFloat = 20

@@ -128,7 +128,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
             waitForElementsToExist(
                 [
                     app.navigationBars["Reminders"],
-                    app.links.elementContainingText("test-mozilla-book.html")
+                    app.links.elementContainingText(TestPages.mozillaBook)
                 ]
             )
         }
@@ -158,7 +158,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         app.launch()
         longPressReadingListAndReachShareOptions(option: "Copy")
         app.buttons["Done"].waitAndTap()
-        openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
+        openNewTabAndValidateURLisPaste(url: TestPages.mozillaBook)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864476
@@ -184,9 +184,9 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressLinkAndSelectShareOption(option: String) {
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         waitUntilPageLoad()
-        app.webViews["contentView"].links.element(boundBy: 0).press(forDuration: 1.5)
+        app.webViews[AccessibilityIdentifiers.Browser.WebView.contentView].links.element(boundBy: 0).press(forDuration: 1.5)
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
         app.buttons["Share Link"].waitAndTap()
         if #available(iOS 16, *) {
@@ -198,7 +198,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressReadingListAndReachShareOptions(option: String) {
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
@@ -209,7 +209,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         // Long-press on a website
         app.tables.cells.staticTexts.firstMatch.press(forDuration: 1.0)
         // Tap the Share button in the context menu
-        app.tables["Context Menu"].buttons["shareLarge"].waitAndTap()
+        app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
@@ -228,7 +228,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         // Long-press on a website
         app.tables.cells.staticTexts.element(boundBy: 1).press(forDuration: 1.0)
         // Tap the Share button in the context menu
-        app.tables["Context Menu"].buttons["shareLarge"].waitAndTap()
+        app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
@@ -248,9 +248,9 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         navigator.goto(LibraryPanel_Bookmarks)
         // Long-press on a bookmarked website
         let contextMenu = app.tables["Context Menu"]
-        app.tables.cells.staticTexts["Example Domain"].pressWithRetry(duration: 1.5, element: contextMenu)
+        app.tables.cells.staticTexts[TestLabels.exampleDomain].pressWithRetry(duration: 1.5, element: contextMenu)
         // Tap the Share button in the context menu
-        contextMenu.buttons["shareLarge"].waitAndTap()
+        contextMenu.buttons["shareAppleLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
@@ -265,7 +265,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         navigator.goto(NewTabScreen)
         // Long tap on the first Pocket element
         app.collectionViews["FxCollectionView"].links.element(boundBy: 0).press(forDuration: 1.5)
-        app.tables["Context Menu"].buttons["shareLarge"].waitAndTap()
+        app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
             mozWaitElementHittable(element: app.collectionViews.cells[option], timeout: 10)

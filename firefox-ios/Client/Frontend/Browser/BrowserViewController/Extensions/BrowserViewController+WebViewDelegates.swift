@@ -92,7 +92,7 @@ extension BrowserViewController: WKUIDelegate {
                 alertController.delegate = self
                 present(alertController, animated: true)
             }
-        } else if let promptingTab = tabManager[webView] {
+        } else if let promptingTab = tabManager[webView], !alertCouldFreezeSelectedTab(webView) {
             logger.log("JavaScript \(messageAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
 
             await withCheckedContinuation { (continuation: CheckedContinuation<Void?, Never>) in
@@ -121,7 +121,7 @@ extension BrowserViewController: WKUIDelegate {
                 alertController.delegate = self
                 present(alertController, animated: true)
             }
-        } else if let promptingTab = tabManager[webView] {
+        } else if let promptingTab = tabManager[webView], !alertCouldFreezeSelectedTab(webView) {
             logger.log("JavaScript \(confirmAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
 
             return await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
@@ -129,9 +129,15 @@ extension BrowserViewController: WKUIDelegate {
                 promptingTab.queueJavascriptAlertPrompt(confirmAlert)
             }
         } else {
-            logger.log("JavaScript \(confirmAlert.type.rawValue) not shown. This shouldn't happen.",
-                       level: .warning,
-                       category: .webview)
+            if alertCouldFreezeSelectedTab(webView) {
+                // Alert is from tab sharing the visible tab's WebContent process (window.open
+                // popup); we drop it rather than block, which would freeze the visible tab
+                // and allow for potential spoofing.
+            } else {
+                logger.log("JavaScript \(confirmAlert.type.rawValue) not shown. This shouldn't happen.",
+                           level: .warning,
+                           category: .webview)
+            }
             return false
         }
     }
@@ -156,7 +162,7 @@ extension BrowserViewController: WKUIDelegate {
                 alertController.delegate = self
                 present(alertController, animated: true)
             }
-        } else if let promptingTab = tabManager[webView] {
+        } else if let promptingTab = tabManager[webView], !alertCouldFreezeSelectedTab(webView) {
             logger.log("JavaScript \(textInputAlert.type.rawValue) panel is queued.", level: .info, category: .webview)
 
             return await withCheckedContinuation { (continuation: CheckedContinuation<String?, Never>) in
@@ -164,9 +170,15 @@ extension BrowserViewController: WKUIDelegate {
                 promptingTab.queueJavascriptAlertPrompt(textInputAlert)
             }
         } else {
-            logger.log("JavaScript \(textInputAlert.type.rawValue) not shown. This shouldn't happen.",
-                       level: .warning,
-                       category: .webview)
+            if alertCouldFreezeSelectedTab(webView) {
+                // Alert is from tab sharing the visible tab's WebContent process (window.open
+                // popup); we drop it rather than block, which would freeze the visible tab
+                // and allow for potential spoofing.
+            } else {
+                logger.log("JavaScript \(textInputAlert.type.rawValue) not shown. This shouldn't happen.",
+                           level: .warning,
+                           category: .webview)
+            }
             return nil
         }
     }
@@ -260,7 +272,7 @@ extension BrowserViewController: WKUIDelegate {
                                         image: elements.image,
                                         currentTab: currentTab,
                                         webView: webView)
-            return UIMenu(title: url.normalizedHost ?? url.absoluteString, children: actions)
+            return UIMenu(title: url.normalizedHostWithLRI ?? url.absoluteString, children: actions)
         }
     }
 
@@ -270,7 +282,14 @@ extension BrowserViewController: WKUIDelegate {
 
             let previewViewController = ContextMenuPreviewViewController()
             previewViewController.view.isUserInteractionEnabled = false
-            let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+
+            let configuration = webView.configuration
+            // Ensures the preview doesn't autoplay media [FXIOS-15375]
+            configuration.allowsInlineMediaPlayback = false
+            configuration.allowsPictureInPictureMediaPlayback = false
+            configuration.mediaTypesRequiringUserActionForPlayback = .all
+            configuration.allowsAirPlayForMediaPlayback = false
+            let clonedWebView = WKWebView(frame: webView.frame, configuration: configuration)
 
             previewViewController.view.addSubview(clonedWebView)
             clonedWebView.pinToSuperview()
@@ -333,10 +352,10 @@ extension BrowserViewController: WKUIDelegate {
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: self.currentTheme(),
-                                completion: { buttonPressed in
-            if buttonPressed {
-                self.tabManager.selectTab(tab)
-                self.overlayManager.switchTab(shouldCancelLoading: true)
+                                completion: { [weak self, weak tab] buttonPressed in
+            if buttonPressed, let tab {
+                self?.tabManager.selectTab(tab)
+                self?.overlayManager.switchTab(shouldCancelLoading: true)
             }
         })
         show(toast: toast)
@@ -360,10 +379,11 @@ extension BrowserViewController: WKUIDelegate {
             actionBuilder.addOpenInNewPrivateTab(url: url, currentTab: currentTab, addTab: addTab)
         }
 
-        let isBookmarkedSite = profile.places
-            .isBookmarked(url: url.absoluteString)
-            .value
-            .successValue ?? false
+        // The context menu is built synchronously on the main thread, so we cap the bookmark
+        // lookup with a short timeout instead of blocking indefinitely on a contended Places
+        // DB (which could trip the watchdog). On timeout we default to "not bookmarked".
+        let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString)
+                               .value(timeout: .milliseconds(100))?.successValue ?? false
         if isBookmarkedSite {
             actionBuilder.addRemoveBookmarkLink(urlString: url.absoluteString,
                                                 title: title,
@@ -386,6 +406,10 @@ extension BrowserViewController: WKUIDelegate {
                                contentContainer: contentContainer)
 
         if let url = image {
+            if isGoogleLensActionAvailable() {
+                actionBuilder.addSearchWithGoogleLens(url: url, searchGoogleLens: searchGoogleLens(forImageURL:))
+            }
+
             actionBuilder.addSaveImage(url: url,
                                        getImageData: getImageData,
                                        writeToPhotoAlbum: writeToPhotoAlbum)
@@ -396,6 +420,34 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         return actionBuilder.build()
+    }
+
+    private func isGoogleLensActionAvailable() -> Bool {
+        guard featureFlagsProvider.isEnabled(.googleLens),
+              userPreferences.getPreferenceFor(.googleLens),
+              let defaultEngine = searchEnginesManager.defaultEngine,
+              !defaultEngine.isCustomEngine
+        else { return false }
+
+        return defaultEngine.isGoogleEngine
+    }
+
+    private func searchGoogleLens(forImageURL url: URL) {
+        getImageData(url) { [weak self] data in
+            guard let image = UIImage(data: data) else { return }
+            ensureMainThread {
+                self?.navigationHandler?.searchGoogleLens(with: image, source: .contextMenu)
+            }
+        }
+    }
+
+    /// Reports the completion of an in-flight Google Lens image search (see `googleLensSearches`)
+    /// once its results page finishes loading or fails, then clears the tracked state.
+    private func recordGoogleLensSearchCompletedIfNeeded(for tab: Tab?, succeeded: Bool) {
+        guard let tab, let search = googleLensSearches.removeValue(forKey: tab.tabUUID) else { return }
+        GoogleLensTelemetry().searchCompleted(source: search.source,
+                                              succeeded: succeeded,
+                                              httpStatusCode: search.httpStatusCode)
     }
 
     func assignWebView(_ webView: WKWebView?) {
@@ -437,10 +489,9 @@ extension BrowserViewController: WKNavigationDelegate {
             // Only automatically attempt to reload the crashed
             // tab three times before giving up.
             if tab.consecutiveCrashes < 3 {
-                logger.log("The webview has crashed, trying to reload.",
+                logger.log("The webview has crashed, trying to reload. Attempt number: \(tab.consecutiveCrashes)",
                            level: .warning,
-                           category: .webview,
-                           extra: ["Attempt number": "\(tab.consecutiveCrashes)"])
+                           category: .webview)
 
                 tabsTelemetry.trackConsecutiveCrashTelemetry(attemptNumber: tab.consecutiveCrashes)
 
@@ -527,18 +578,6 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Disabled due to https://bugzilla.mozilla.org/show_bug.cgi?id=1588928
-//                if url.scheme == "javascript", navigationAction.request.isPrivileged {
-//                    decisionHandler(.cancel)
-//                    if let javaScriptString = url.absoluteString.replaceFirstOccurrence(
-//                        of: "javascript:",
-//                        with: ""
-//                    ).removingPercentEncoding {
-//                        webView.evaluateJavaScript(javaScriptString)
-//                    }
-//                    return
-//                }
-
         if isStoreURL(url) {
             decisionHandler(.cancel)
             handleStoreURLNavigation(url: url)
@@ -595,6 +634,11 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if let scheme = url.scheme, !scheme.contains("firefox"), !shouldBlockExternalApps, !tab.isPrivate {
             handleCustomSchemeURLNavigation(url: url, navigationAction: navigationAction)
+        }
+
+        if url.scheme == ReaderModeSchemeHandler.scheme {
+            decisionHandler(.allow)
+            return
         }
 
         decisionHandler(.cancel)
@@ -783,6 +827,15 @@ extension BrowserViewController: WKNavigationDelegate {
         tabManager[webView]?.mimeType = response.mimeType
         notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
 
+        // Check for google lens web navigation response to record http status code extra
+        if let tab = tabManager[webView],
+           googleLensSearches[tab.tabUUID] != nil,
+           navigationResponse.isForMainFrame,
+           let httpResponse = response as? HTTPURLResponse,
+           responseURL?.host?.contains("google.com") == true {
+            googleLensSearches[tab.tabUUID]?.httpStatusCode = httpResponse.statusCode
+        }
+
         var request: URLRequest?
         if let url = responseURL {
             request = pendingRequests.removeValue(forKey: url.absoluteString)
@@ -827,9 +880,9 @@ extension BrowserViewController: WKNavigationDelegate {
             // We don't have a temporary document, fallthrough
         }
 
-        /// FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
-        /// This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
-        /// In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
+        // FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
+        // This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
+        // In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
         if let url = responseURL,
            ["http", "https"].contains(url.scheme),
            tabManager[webView]?.mimeType == MIMEType.Calendar {
@@ -951,29 +1004,25 @@ extension BrowserViewController: WKNavigationDelegate {
 
     private func handleDownloadError(tab: Tab?, request: URLRequest, error: (any Error)?) {
         navigationHandler?.removeDocumentLoading()
-        logger.log("Failed to download Document",
+        logger.log("Failed to download Document: \(error?.localizedDescription ?? "Unknown error")",
                    level: .warning,
-                   category: .webview,
-                   extra: [
-                    "error": error?.localizedDescription ?? "",
-                    "url": request.url?.absoluteString ?? "Unknown URL"])
+                   category: .webview)
         guard let error, let webView = tab?.webView else { return }
         showErrorPage(webView: webView, error: error)
     }
 
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
-        if isNativeErrorPageEnabled {
-            let action = NativeErrorPageAction(networkError: error as NSError,
-                                               windowUUID: windowUUID,
-                                               actionType: NativeErrorPageActionType.receivedError
-            )
-            store.dispatch(action)
+        let nsError = error as NSError
+        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
+            store.dispatch(NativeErrorPageAction(
+                networkError: nsError,
+                windowUUID: windowUUID,
+                actionType: NativeErrorPageActionType.receivedError
+            ))
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
-            ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
-                                                                   forUrl: url,
-                                                                   inWebView: webView)
+            ErrorPageHelper(certStore: profile.certStore).loadPage(nsError, forUrl: url, inWebView: webView)
         }
     }
 
@@ -1009,6 +1058,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                             value: .webviewFail)
 
         webviewTelemetry.cancel()
+        recordGoogleLensSearchCompletedIfNeeded(for: tabManager[webView], succeeded: false)
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
@@ -1027,6 +1077,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                             value: .webviewFailProvisional)
 
         webviewTelemetry.cancel()
+        recordGoogleLensSearchCompletedIfNeeded(for: tabManager[webView], succeeded: false)
 
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
@@ -1076,18 +1127,21 @@ extension BrowserViewController: WKNavigationDelegate {
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
-                let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
-                let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(error.code)
+                let isWaybackCode = WaybackCodes.isWaybackCode(error.code)
 
-                if isNoInternetError || isCertificateError {
+                let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
+                    error.code == noInternetErrorCode
+                let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
+                    for: error,
+                    isOtherErrorPagesEnabled: NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
+                )
+                let isShowWayback = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode
+
+                if isNoInternetError || isCertificateError || isShowWayback {
                     if isCertificateError {
-                        NativeErrorPageHelper.logCertificateErrorDetails(
-                            error: error,
-                            url: url,
-                            errorPageURL: errorPageURL,
-                            logger: logger
-                        )
+                        NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
                     }
+                    // TODO: FXIOS-15800 Move error type determination to NativeErrorPageMiddleware
                     let action = NativeErrorPageAction(
                         networkError: error,
                         windowUUID: windowUUID,
@@ -1167,6 +1221,12 @@ extension BrowserViewController: WKNavigationDelegate {
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
+        if let handler = tab.onNextCommit {
+            tab.onNextCommit = nil
+            handler()
+        } else {
+            tab.translationConfiguration = nil
+        }
 
         if !tab.adsTelemetryRedirectUrlList.isEmpty,
            !tab.adsProviderName.isEmpty,
@@ -1202,6 +1262,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
+        recordGoogleLensSearchCompletedIfNeeded(for: tabManager[webView], succeeded: true)
 
         if let url = webView.url, InternalURL(url) == nil {
             if let title = webView.title,
@@ -1243,6 +1304,33 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
         }
+    }
+}
+
+// MARK: - Javascript alert utilities
+extension BrowserViewController {
+    /// Whether blocking a JS dialog from `webView`'s tab could freeze the visible tab's
+    /// rendering. An enqueued alert suspends its tab's JS thread; if that process is shared
+    /// with the selected tab, the visible page stops updating while a committed URL is
+    /// already shown, which can lead to spoofing. Independent tabs run separately and so
+    /// their alerts can still be queued safely.
+    func alertCouldFreezeSelectedTab(_ webView: WKWebView) -> Bool {
+        guard let requestingTab = tabManager[webView],
+              let selectedTab = tabManager.selectedTab,
+              requestingTab !== selectedTab
+        else { return false }
+
+        return sharesPopupProcessGroup(requestingTab, selectedTab)
+            || sharesPopupProcessGroup(selectedTab, requestingTab)
+    }
+
+    private func sharesPopupProcessGroup(_ ancestor: Tab, _ descendant: Tab) -> Bool {
+        var current: Tab? = descendant
+        while let tab = current, tab.requiredPopupConfiguration != nil, let parent = tab.parent {
+            if parent === ancestor { return true }
+            current = parent
+        }
+        return false
     }
 }
 

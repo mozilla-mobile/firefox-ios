@@ -6,17 +6,12 @@ import Common
 import Shared
 import UIKit
 
-extension LibraryViewController: UIToolbarDelegate {
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
-}
-
 class LibraryViewController: UIViewController, Themeable {
     struct UX {
         struct NavigationMenu {
-            static let height: CGFloat = 32
-            static let width: CGFloat = 343
+            static let height: CGFloat = 40
+            static let horizontalPadding: CGFloat = 15
+            static let bottomPadding: CGFloat = 12
         }
     }
 
@@ -35,15 +30,7 @@ class LibraryViewController: UIViewController, Themeable {
     private var controllerContainerView: UIView = .build { view in }
 
     // UI Elements
-    private lazy var librarySegmentControl: UISegmentedControl = .build { librarySegmentControl in
-        librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
-        librarySegmentControl.selectedSegmentIndex = 1
-    }
-
-    private lazy var segmentControlToolbar: TestableUIToolbar = .build { [weak self] toolbar in
-        guard let self = self else { return }
-        toolbar.delegate = self
-    }
+    private lazy var librarySegmentControl: UISegmentedControl = makeSegmentControl()
 
     private lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
@@ -102,27 +89,9 @@ class LibraryViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        recreateSegmentedControl()
-        applyTheme()
-    }
-
-    private func recreateSegmentedControl() {
-        let newSegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
-        newSegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
-        newSegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
-        newSegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
-        newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
-        librarySegmentControl = newSegmentControl
-
-        let newItem = UIBarButtonItem(customView: newSegmentControl)
-
+        setupSegmentControl()
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
-        segmentControlToolbar.setItems([newItem], animated: false)
-
-        NSLayoutConstraint.activate([
-            librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
-            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
-        ])
+        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {
@@ -133,20 +102,46 @@ class LibraryViewController: UIViewController, Themeable {
 
     private func viewSetup() {
         navigationItem.rightBarButtonItem = topRightButton
-        view.addSubviews(controllerContainerView, segmentControlToolbar)
+        view.addSubview(controllerContainerView)
 
         NSLayoutConstraint.activate([
-            segmentControlToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            segmentControlToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            segmentControlToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
-            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
-
-            controllerContainerView.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    private func makeSegmentControl() -> UISegmentedControl {
+        let segmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+        segmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
+        segmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
+        segmentControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentControl
+    }
+
+    private func setupSegmentControl() {
+        librarySegmentControl.removeFromSuperview()
+
+        // makeSegmentControl() makes a new UISegmentedControl.
+        // We need to do this in viewWillAppear (calls setupSegmentControl) to avoid a
+        // liquid glass animation bug that was fixed in iOS 26.4
+        librarySegmentControl = makeSegmentControl()
+
+        view.addSubview(librarySegmentControl)
+
+        NSLayoutConstraint.activate([
+            librarySegmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            librarySegmentControl.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: UX.NavigationMenu.horizontalPadding),
+            librarySegmentControl.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -UX.NavigationMenu.horizontalPadding),
+            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
+
+            controllerContainerView.topAnchor.constraint(
+                equalTo: librarySegmentControl.bottomAnchor,
+                constant: UX.NavigationMenu.bottomPadding)
         ])
     }
 
@@ -257,7 +252,7 @@ class LibraryViewController: UIViewController, Themeable {
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
-        view.bringSubviewToFront(segmentControlToolbar)
+        view.bringSubviewToFront(librarySegmentControl)
         libraryPanel.endAppearanceTransition()
 
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
@@ -302,26 +297,18 @@ class LibraryViewController: UIViewController, Themeable {
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textAccent
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .bookmarks(state: .itemEditModeInvalidField):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textAccent
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = false
         default:
             topRightButton.title = String.AppSettingsDone
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textPrimary
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
+        applyThemeToButtons()
     }
 
     // MARK: - Toolbar Button Actions
@@ -334,7 +321,10 @@ class LibraryViewController: UIViewController, Themeable {
         }
 
         navController.popViewController(animated: true)
-        currentPanel.handleLeftTopButton()
+        // After popping, notify the newly revealed panel so it can update its state
+        if let newPanel = getCurrentPanel() {
+            newPanel.handleLeftTopButton()
+        }
     }
 
     @objc
@@ -420,19 +410,32 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.backgroundColor = theme.colors.layer1
         navigationController?.toolbar.barTintColor = theme.colors.layer1
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
-        segmentControlToolbar.barTintColor = theme.colors.layer1
-        segmentControlToolbar.tintColor = theme.colors.textPrimary
-        segmentControlToolbar.isTranslucent = false
+        librarySegmentControl.tintColor = theme.colors.textPrimary
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
+        applyThemeToButtons()
+    }
+
+    private func applyThemeToButtons() {
+        guard #available(iOS 26.0, *) else { return }
+
+        let panelState = getCurrentPanelState()
+        switch panelState {
+        case .bookmarks(state: .itemEditMode):
+            topRightButton.tintColor = currentTheme().colors.textAccent
+        case .bookmarks(state: .itemEditModeInvalidField):
+            topRightButton.tintColor = currentTheme().colors.textAccent
+        default:
+            topRightButton.tintColor = currentTheme().colors.textPrimary
+        }
     }
 
     func setNavigationBarHidden(_ value: Bool) {
         navigationController?.setToolbarHidden(value, animated: true)
         navigationController?.setNavigationBarHidden(value, animated: false)
-        let controlbarHeight = segmentControlToolbar.frame.height
-        segmentControlToolbar.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
+        let controlbarHeight = librarySegmentControl.frame.height
+        librarySegmentControl.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
         controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
 
         // Reload the current panel

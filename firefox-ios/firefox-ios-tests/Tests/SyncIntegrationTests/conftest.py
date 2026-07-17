@@ -75,7 +75,7 @@ def tps_log(pytestconfig, tmpdir):
 
 @pytest.fixture(scope='session')
 def fxa_ci_addon(tmpdir_factory):
-    secret = os.getenv('FXA_CI_SECRET', '')
+    secret = os.getenv('CI_WAF_TOKEN', '')
     addon_dir = tmpdir_factory.mktemp('fxa_ci_addon')
     addon_dir.join('manifest.json').write(json.dumps({
         'manifest_version': 2,

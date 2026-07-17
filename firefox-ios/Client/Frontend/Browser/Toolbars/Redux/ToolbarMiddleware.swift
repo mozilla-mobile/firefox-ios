@@ -9,7 +9,7 @@ import SummarizeKit
 import Shared
 
 @MainActor
-final class ToolbarMiddleware: LegacyFeatureFlaggable {
+final class ToolbarMiddleware {
     private let manager: ToolbarManager
     private let toolbarHelper: ToolbarHelperInterface
     private let windowManager: WindowManager
@@ -19,6 +19,9 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
     private let recentSearchProvider: RecentSearchProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizerConfigFactory: SummarizerConfigFactory
+    private let featureFlagsProvider: FeatureFlagProviding
+    private let userPreferences: UserFeaturePreferring
+    private let searchEnginesManager: SearchEnginesManagerProvider
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -36,10 +39,16 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          recentSearchProvider: RecentSearchProvider? = nil,
+         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
+         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
+         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.summarizerConfigFactory = summarizerConfigFactory
+        self.featureFlagsProvider = featureFlagsProvider
+        self.userPreferences = userPreferences
+        self.searchEnginesManager = searchEnginesManager
         self.manager = manager
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
@@ -49,7 +58,13 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
         self.logger = logger
     }
 
-    lazy var toolbarProvider: Middleware<AppState> = { state, action in
+    lazy var toolbarProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         if let action = action as? GeneralBrowserMiddlewareAction {
             self.resolveGeneralBrowserMiddlewareActions(action: action, state: state)
         } else if let action = action as? MicrosurveyPromptMiddlewareAction {
@@ -96,9 +111,11 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
                 middleButton: middleButton,
+                isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
+            dispatchGoogleLensAvailability(for: uuid)
 
         case GeneralBrowserMiddlewareActionType.websiteDidScroll:
             guard let scrollOffset = action.scrollOffset else { return }
@@ -146,6 +163,14 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
         case ToolbarMiddlewareActionType.didStartDragInteraction:
             toolbarTelemetry.dragInteractionStarted()
 
+        case ToolbarMiddlewareActionType.didSwipeToOpenTabTray:
+            guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+            else { return }
+            toolbarTelemetry.tabTrayOpenedViaSwipe(isAtBottom: toolbarState.toolbarPosition == .bottom)
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showTabTray)
+            store.dispatch(action)
+
         case ToolbarMiddlewareActionType.loadSummaryState:
             checkPageCanSummarize(action: action)
 
@@ -163,6 +188,12 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
                 actionType: SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine
             )
             store.dispatch(action)
+
+        case ToolbarActionType.searchEngineDidChange, ToolbarActionType.googleLensSettingDidChange:
+            dispatchGoogleLensAvailability(for: action.windowUUID)
+
+        case ToolbarActionType.urlDidChange:
+            updateGoogleLensAvailabilityIfBrowsingModeChanged(windowUUID: action.windowUUID, state: state)
 
         case ToolbarActionType.didSubmitSearchTerm:
             // After a user submits a search term, we want to record it in our history storage via recent search provider.
@@ -290,6 +321,21 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
                                               actionType: GeneralBrowserActionType.showShare)
             store.dispatch(action)
 
+        case .googleLens:
+            toolbarTelemetry.googleLensButtonTapped()
+
+        case .googleLensPhotoLibrary:
+            toolbarTelemetry.googleLensContextMenuOptionSelected(option: .photoPicker)
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showGoogleLensPhotoPicker)
+            store.dispatch(action)
+
+        case .googleLensTakePhoto:
+            toolbarTelemetry.googleLensContextMenuOptionSelected(option: .camera)
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showGoogleLensCamera)
+            store.dispatch(action)
+
         case .search:
             toolbarTelemetry.searchButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
@@ -297,7 +343,7 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
 
         case .summarizer:
             Task { @MainActor in
-                guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
+                guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView else { return }
                 let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
                 let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
                                                   summarizerTrigger: .toolbarIcon,
@@ -361,7 +407,7 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
             store.dispatch(action)
         case .readerModeWithSummarizer:
             Task {
-                guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
+                guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView else { return }
                 let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
                 let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
                                                   summarizerTrigger: .toolbarIcon,
@@ -469,7 +515,7 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
 
     @MainActor
     private func checkPageCanSummarize(action: ToolbarMiddlewareAction) {
-        guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView,
+        guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView,
               isSummarizerOn
         else { return }
 
@@ -489,7 +535,7 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
     // MARK: - Helper
     @MainActor
     private func cancelEditMode(windowUUID: WindowUUID) {
-        var url = tabManager(for: windowUUID).selectedTab?.url
+        var url = tabManager(for: windowUUID)?.selectedTab?.url
         if let currentURL = url {
             url = (currentURL.isWebPage() && !currentURL.isReaderModeURL) ? url : nil
         }
@@ -530,7 +576,40 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
         toolbarTelemetry.readerModeButtonTapped(isPrivate: toolbarState.isPrivateMode, isEnabled: isReaderModeEnabled)
     }
 
-    private func tabManager(for uuid: WindowUUID) -> TabManager {
+    private func tabManager(for uuid: WindowUUID) -> TabManager? {
         return windowManager.tabManager(for: uuid)
+    }
+
+    // Only re-dispatch when Google Lens availability would actually change (i.e. the browsing mode flipped it),
+    // to avoid churning on every URL.
+    private func updateGoogleLensAvailabilityIfBrowsingModeChanged(windowUUID: WindowUUID, state: AppState) {
+        guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else { return }
+
+        let shouldShow = isGoogleLensAvailable(for: windowUUID)
+        let isShowing = toolbarState.addressToolbar.editingAccessoryAction?.actionType == .googleLens
+        guard shouldShow != isShowing else { return }
+
+        dispatchGoogleLensAvailability(for: windowUUID)
+    }
+
+    private func isGoogleLensAvailable(for windowUUID: WindowUUID) -> Bool {
+        guard featureFlagsProvider.isEnabled(.googleLens),
+              userPreferences.getPreferenceFor(.googleLens),
+              tabManager(for: windowUUID)?.selectedTab?.isPrivate != true,
+              let defaultEngine = searchEnginesManager.defaultEngine,
+              !defaultEngine.isCustomEngine
+        else { return false }
+
+        return defaultEngine.isGoogleEngine
+    }
+
+    private func dispatchGoogleLensAvailability(for windowUUID: WindowUUID) {
+        let action = ToolbarMiddlewareAction(
+            isGoogleLensEnabled: isGoogleLensAvailable(for: windowUUID),
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.googleLensAvailabilityDidChange
+        )
+        store.dispatch(action)
     }
 }

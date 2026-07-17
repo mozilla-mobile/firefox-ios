@@ -8,7 +8,7 @@ import WebKit
 import Redux
 
 final class TabPeekViewController: UIViewController,
-                             StoreSubscriber {
+                                   StoreSubscriber {
     typealias SubscriberStateType = TabPeekState
 
     var tabPeekState: TabPeekState

@@ -20,8 +20,7 @@ protocol PrivateHomepageDelegate: AnyObject {
 final class PrivateHomepageViewController: UIViewController,
                                            ContentContainable,
                                            Screenshotable,
-                                           Themeable,
-                                           LegacyFeatureFlaggable {
+                                           Themeable {
     enum UX {
         static let scrollContainerStackSpacing: CGFloat = 24
         static let scrollContainerTopPadding: CGFloat = 32
@@ -119,7 +118,7 @@ final class PrivateHomepageViewController: UIViewController,
         updateConstraintsForMultitasking()
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            homepageHeaderCell.configure(headerState: HeaderState(windowUUID: windowUUID))
+            homepageHeaderCell.configure(headerState: HeaderState(windowUUID: windowUUID, isPrivate: true))
         }
         applyTheme()
     }
@@ -181,6 +180,17 @@ final class PrivateHomepageViewController: UIViewController,
         gradient.locations = [0, 0.5, 1]
     }
 
+    private func applyBackgroundGradient(to gradient: CAGradientLayer, theme: Theme) {
+        if theme.isNova {
+            gradient.colors = theme.colors.gradientPrivacy.cgColors
+            // Not using 3 stop locations, since gradientPrivacy has 2 colors
+            gradient.locations = nil
+        } else {
+            gradient.colors = theme.colors.layerHomepage.cgColors
+            gradient.locations = [0, 0.5, 1]
+        }
+    }
+
     // Constraints for trailing and leading padding on iPad (regular) should be larger than that of compact layout
     private func setupConstraintsForMultitasking() {
         let contentLayoutGuide = scrollView.contentLayoutGuide
@@ -218,7 +228,7 @@ final class PrivateHomepageViewController: UIViewController,
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        gradient.colors = theme.colors.layerHomepage.cgColors
+        applyBackgroundGradient(to: gradient, theme: theme)
         homepageHeaderCell.applyTheme(theme: theme)
         privateMessageCardCell.applyTheme(theme: theme)
     }
@@ -258,7 +268,8 @@ final class PrivateHomepageViewController: UIViewController,
             // gradient
             let renderedGradient = CAGradientLayer()
             setupGradient(renderedGradient)
-            renderedGradient.colors = themeManager.getCurrentTheme(for: windowUUID).colors.layerHomepage.cgColors
+            applyBackgroundGradient(to: renderedGradient,
+                                    theme: themeManager.getCurrentTheme(for: windowUUID))
             renderedGradient.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
             renderedGradient.render(in: context.cgContext)
 

@@ -10,81 +10,127 @@ import XCTest
 
 final class UserFeaturePreferenceManagerTests: XCTestCase {
     private var prefs: MockProfilePrefs!
-    private var subject: UserFeaturePreferenceManager!
+    private var mockLayer: MockNimbusFeatureFlagLayer!
 
     override func setUp() {
         super.setUp()
         prefs = MockProfilePrefs()
-        subject = UserFeaturePreferenceManager(prefs: prefs)
+        mockLayer = MockNimbusFeatureFlagLayer()
     }
 
     override func tearDown() {
+        mockLayer = nil
         prefs = nil
-        subject = nil
         super.tearDown()
     }
 
     // MARK: - Bool preferences: defaults from Nimbus
 
+    @MainActor
     func testBoolDefaults_returnNimbusValues_whenNoUserPrefSet() {
-        // With no prefs set, each property should return the Nimbus default.
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        // With no prefs set, each flag should return the Nimbus default.
         // We just verify they return without crashing — the actual Nimbus defaults
         // may vary by config, so we check the type is correct.
-        _ = subject.isAIKillSwitchEnabled
-        _ = subject.isFirefoxSuggestEnabled
-        _ = subject.isSentFromFirefoxEnabled
-        _ = subject.isSponsoredShortcutsEnabled
-        _ = subject.isHomepageBookmarksSectionEnabled
-        _ = subject.isHomepageJumpBackInSectionEnabled
+        _ = subject.getPreferenceFor(.aiKillSwitch)
+        _ = subject.getPreferenceFor(.firefoxSuggestFeature)
+        _ = subject.getPreferenceFor(.sentFromFirefox)
+        _ = subject.getPreferenceFor(.hntSponsoredShortcuts)
+        _ = subject.getPreferenceFor(.homepageBookmarksSectionDefault)
+        _ = subject.getPreferenceFor(.homepageJumpBackinSectionDefault)
     }
 
     // MARK: - Bool preferences: user overrides
 
+    @MainActor
     func testFirefoxSuggest_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.FirefoxSuggest)
-        XCTAssertFalse(subject.isFirefoxSuggestEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.firefoxSuggestFeature))
 
         prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.FirefoxSuggest)
-        XCTAssertTrue(subject.isFirefoxSuggestEnabled)
+        XCTAssertTrue(subject.getPreferenceFor(.firefoxSuggestFeature))
     }
 
+    @MainActor
     func testSentFromFirefox_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.SentFromFirefox)
-        XCTAssertTrue(subject.isSentFromFirefoxEnabled)
+        XCTAssertTrue(subject.getPreferenceFor(.sentFromFirefox))
     }
 
+    @MainActor
     func testSponsoredShortcuts_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
-        XCTAssertFalse(subject.isSponsoredShortcutsEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.hntSponsoredShortcuts))
     }
 
+    @MainActor
+    func testGoogleLens_defaultsToNimbus_whenNoUserPrefSet() {
+        mockLayer.enabledFlags = [.googleLens]
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        XCTAssertTrue(subject.getPreferenceFor(.googleLens))
+    }
+
+    @MainActor
+    func testGoogleLens_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.GoogleLens)
+        XCTAssertFalse(subject.getPreferenceFor(.googleLens))
+
+        prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.GoogleLens)
+        XCTAssertTrue(subject.getPreferenceFor(.googleLens))
+    }
+
+    @MainActor
     func testHomepageBookmarksSection_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
-        XCTAssertFalse(subject.isHomepageBookmarksSectionEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.homepageBookmarksSectionDefault))
     }
 
+    @MainActor
     func testHomepageJumpBackInSection_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
-        XCTAssertFalse(subject.isHomepageJumpBackInSectionEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.homepageJumpBackinSectionDefault))
     }
 
+    @MainActor
     func testAIKillSwitch_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         prefs.setBool(true, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-        XCTAssertTrue(subject.isAIKillSwitchEnabled)
+        XCTAssertTrue(subject.getPreferenceFor(.aiKillSwitch))
 
         prefs.setBool(false, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-        XCTAssertFalse(subject.isAIKillSwitchEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.aiKillSwitch))
     }
 
     // MARK: - Typed preferences
 
+    @MainActor
     func testSearchBarPosition_defaultsToNimbus() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         let position = subject.searchBarPosition
         // Default from NimbusSearchBarLayer — just verify it's a valid value
         XCTAssertTrue(position == .top || position == .bottom)
     }
 
+    @MainActor
     func testSearchBarPosition_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         prefs.setString(SearchBarPosition.bottom.rawValue,
                         forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         XCTAssertEqual(subject.searchBarPosition, .bottom)
@@ -94,13 +140,56 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
         XCTAssertEqual(subject.searchBarPosition, .top)
     }
 
+    @MainActor
+    func testSearchBarPosition_returnsTopOnIPad_whenStoredIsBottom() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .pad)
+
+        prefs.setString(SearchBarPosition.bottom.rawValue,
+                        forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+
+        XCTAssertEqual(subject.searchBarPosition, .top)
+    }
+
+    @MainActor
+    func testSearchBarPosition_returnsTopOnIPad_whenStoredIsTop() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .pad)
+
+        prefs.setString(SearchBarPosition.top.rawValue,
+                        forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+
+        XCTAssertEqual(subject.searchBarPosition, .top)
+    }
+
+    @MainActor
+    func testSearchBarPosition_returnsTopOnIPad_whenNothingStored() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .pad)
+
+        XCTAssertEqual(subject.searchBarPosition, .top)
+    }
+
+    @MainActor
+    func testSearchBarPosition_readsStoredValueOnIPhone() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        prefs.setString(SearchBarPosition.bottom.rawValue,
+                        forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+
+        XCTAssertEqual(subject.searchBarPosition, .bottom)
+    }
+
+    @MainActor
     func testStartAtHomeSetting_defaultsToNimbus() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         let setting = subject.startAtHomeSetting
         // Verify it's a valid StartAtHome value
         XCTAssertTrue([.afterFourHours, .always, .disabled].contains(setting))
     }
 
+    @MainActor
     func testStartAtHomeSetting_readsUserPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         prefs.setString(StartAtHome.always.rawValue,
                         forKey: PrefsKeys.FeatureFlags.StartAtHome)
         XCTAssertEqual(subject.startAtHomeSetting, .always)
@@ -112,40 +201,61 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
 
     // MARK: - Setters
 
+    @MainActor
     func testSetFirefoxSuggestEnabled_writesPref() {
-        subject.setFirefoxSuggestEnabled(true)
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        subject.setPreferenceFor(.firefoxSuggestFeature, to: true)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.FeatureFlags.FirefoxSuggest), true)
 
-        subject.setFirefoxSuggestEnabled(false)
+        subject.setPreferenceFor(.firefoxSuggestFeature, to: false)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.FeatureFlags.FirefoxSuggest), false)
     }
 
+    @MainActor
     func testSetSentFromFirefoxEnabled_writesPref() {
-        subject.setSentFromFirefoxEnabled(true)
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        subject.setPreferenceFor(.sentFromFirefox, to: true)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.FeatureFlags.SentFromFirefox), true)
     }
 
+    @MainActor
     func testSetSponsoredShortcutsEnabled_writesPref() {
-        subject.setSponsoredShortcutsEnabled(false)
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        subject.setPreferenceFor(.hntSponsoredShortcuts, to: false)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.FeatureFlags.SponsoredShortcuts), false)
     }
 
+    @MainActor
     func testSetHomepageBookmarksSectionEnabled_writesPref() {
-        subject.setHomepageBookmarksSectionEnabled(true)
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        subject.setPreferenceFor(.homepageBookmarksSectionDefault, to: true)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection), true)
     }
 
+    @MainActor
     func testSetHomepageJumpBackInSectionEnabled_writesPref() {
-        subject.setHomepageJumpBackInSectionEnabled(false)
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        subject.setPreferenceFor(.homepageJumpBackinSectionDefault, to: false)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.HomepageSettings.JumpBackInSection), false)
     }
 
+    @MainActor
     func testSetAIKillSwitchEnabled_writesPref() {
-        subject.setAIKillSwitchEnabled(true)
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        subject.setPreferenceFor(.aiKillSwitch, to: true)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature), true)
     }
 
+    @MainActor
     func testSetSearchBarPosition_writesPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         subject.setSearchBarPosition(.bottom)
         XCTAssertEqual(prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition),
                        SearchBarPosition.bottom.rawValue)
@@ -155,7 +265,10 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
                        SearchBarPosition.top.rawValue)
     }
 
+    @MainActor
     func testSetStartAtHomeSetting_writesPref() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         subject.setStartAtHomeSetting(.always)
         XCTAssertEqual(prefs.stringForKey(PrefsKeys.FeatureFlags.StartAtHome),
                        StartAtHome.always.rawValue)
@@ -163,15 +276,21 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
 
     // MARK: - Roundtrip: set then read
 
+    @MainActor
     func testRoundtrip_boolPreferences() {
-        subject.setFirefoxSuggestEnabled(false)
-        XCTAssertFalse(subject.isFirefoxSuggestEnabled)
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
 
-        subject.setFirefoxSuggestEnabled(true)
-        XCTAssertTrue(subject.isFirefoxSuggestEnabled)
+        subject.setPreferenceFor(.firefoxSuggestFeature, to: false)
+        XCTAssertFalse(subject.getPreferenceFor(.firefoxSuggestFeature))
+
+        subject.setPreferenceFor(.firefoxSuggestFeature, to: true)
+        XCTAssertTrue(subject.getPreferenceFor(.firefoxSuggestFeature))
     }
 
+    @MainActor
     func testRoundtrip_searchBarPosition() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         subject.setSearchBarPosition(.bottom)
         XCTAssertEqual(subject.searchBarPosition, .bottom)
 
@@ -179,7 +298,10 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
         XCTAssertEqual(subject.searchBarPosition, .top)
     }
 
+    @MainActor
     func testRoundtrip_startAtHome() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
         subject.setStartAtHomeSetting(.always)
         XCTAssertEqual(subject.startAtHomeSetting, .always)
 
@@ -187,12 +309,45 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
         XCTAssertEqual(subject.startAtHomeSetting, .disabled)
     }
 
+    // MARK: - Generic API: flag with no userPrefsKey falls back to Nimbus
+
+    @MainActor
+    func testGetPreference_flagWithNoUserPrefsKey_fallsBackToNimbus() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        // .microsurvey has no userPrefsKey, so should return the Nimbus value
+        _ = subject.getPreferenceFor(.microsurvey)
+    }
+
+    @MainActor
+    func testGetPreference_flagWithNoUserPrefsKey_passesPrefsToNimbusLayer() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        _ = subject.getPreferenceFor(.microsurvey)
+
+        XCTAssertEqual(mockLayer.checkedFlags, [.microsurvey])
+        guard let receivedPrefs = mockLayer.checkedPrefs.first as? MockProfilePrefs else {
+            XCTFail("Expected layer to receive MockProfilePrefs")
+            return
+        }
+        XCTAssertTrue(receivedPrefs === prefs)
+    }
+
+    @MainActor
+    func testSetPreference_flagWithNoUserPrefsKey_isNoOp() {
+        let subject = createSubject(prefs: prefs, backendLayer: mockLayer, userInterfaceIdiom: .phone)
+
+        // .microsurvey has no userPrefsKey, so set should be a no-op
+        subject.setPreferenceFor(.microsurvey, to: true)
+        // No crash, no pref written
+    }
+
     // MARK: - Mock protocol conformance
 
     func testMockConformance() {
         let mock = MockUserFeaturePreferences()
-        mock.isFirefoxSuggestEnabled = false
-        XCTAssertFalse(mock.isFirefoxSuggestEnabled)
+        mock.setPreferenceFor(.firefoxSuggestFeature, to: false)
+        XCTAssertFalse(mock.getPreferenceFor(.firefoxSuggestFeature))
 
         mock.searchBarPosition = .bottom
         XCTAssertEqual(mock.searchBarPosition, .bottom)
@@ -200,26 +355,42 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
         mock.setSearchBarPosition(.top)
         XCTAssertEqual(mock.searchBarPosition, .top)
     }
+
+    // MARK: - Helpers
+    @MainActor
+    private func createSubject(
+        prefs: Prefs,
+        backendLayer: NimbusFeatureFlagLayerProviding,
+        userInterfaceIdiom: UIUserInterfaceIdiom,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> UserFeaturePreferenceManager {
+        let subject = UserFeaturePreferenceManager(
+            prefs: prefs,
+            backendLayer: backendLayer,
+            userInterfaceIdiom: userInterfaceIdiom
+        )
+        trackForMemoryLeaks(subject, file: file, line: line)
+
+        return subject
+    }
 }
 
 // MARK: - Test Helpers
 
 final class MockUserFeaturePreferences: UserFeaturePreferring, @unchecked Sendable {
-    var isAIKillSwitchEnabled = true
-    var isFirefoxSuggestEnabled = true
-    var isSentFromFirefoxEnabled = false
-    var isSponsoredShortcutsEnabled = true
-    var isHomepageBookmarksSectionEnabled = true
-    var isHomepageJumpBackInSectionEnabled = true
+    var boolPreferences: [FeatureFlagID: Bool] = [:]
     var searchBarPosition = SearchBarPosition.bottom
     var startAtHomeSetting = StartAtHome.afterFourHours
 
-    func setAIKillSwitchEnabled(_ enabled: Bool) { isAIKillSwitchEnabled = enabled }
-    func setFirefoxSuggestEnabled(_ enabled: Bool) { isFirefoxSuggestEnabled = enabled }
-    func setSentFromFirefoxEnabled(_ enabled: Bool) { isSentFromFirefoxEnabled = enabled }
-    func setSponsoredShortcutsEnabled(_ enabled: Bool) { isSponsoredShortcutsEnabled = enabled }
-    func setHomepageBookmarksSectionEnabled(_ enabled: Bool) { isHomepageBookmarksSectionEnabled = enabled }
-    func setHomepageJumpBackInSectionEnabled(_ enabled: Bool) { isHomepageJumpBackInSectionEnabled = enabled }
+    func getPreferenceFor(_ flag: FeatureFlagID) -> Bool {
+        return boolPreferences[flag] ?? false
+    }
+
+    func setPreferenceFor(_ flag: FeatureFlagID, to value: Bool) {
+        boolPreferences[flag] = value
+    }
+
     func setSearchBarPosition(_ position: SearchBarPosition) { searchBarPosition = position }
     func setStartAtHomeSetting(_ setting: StartAtHome) { startAtHomeSetting = setting }
 }

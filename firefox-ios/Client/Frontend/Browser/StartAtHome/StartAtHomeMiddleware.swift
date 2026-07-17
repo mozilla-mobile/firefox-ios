@@ -23,7 +23,13 @@ final class StartAtHomeMiddleware {
         self.dateProvider = dateProvider
     }
 
-    lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
+    lazy var startAtHomeProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         switch action.actionType {
         case StartAtHomeActionType.didBrowserBecomeActive:
             let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
@@ -38,15 +44,6 @@ final class StartAtHomeMiddleware {
         }
     }
 
-    private func fetchTabManager(for uuid: WindowUUID) -> TabManager {
-        guard uuid != .unavailable else {
-            assertionFailure()
-            logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
-            return windowManager.allWindowTabManagers().first!
-        }
-        return windowManager.tabManager(for: uuid)
-    }
-
     /// Checks whether the app should start at the homepage and initiates the process if applicable.
     /// This method uses `StartAtHomeHelper` to determine if the app should launch with a homepage tab,
     /// based on user preferences and session state.
@@ -54,7 +51,7 @@ final class StartAtHomeMiddleware {
     /// - Returns: `true` if a homepage tab was selected and displayed, `false` otherwise.
     @MainActor
     private func startAtHomeCheck(windowUUID: WindowUUID) -> Bool {
-        let tabManager = fetchTabManager(for: windowUUID)
+        guard let tabManager = windowManager.tabManager(for: windowUUID) else { return false }
         let startAtHomeManager = StartAtHomeHelper(
             prefs: prefs,
             isRestoringTabs: !tabManager.tabRestoreHasFinished

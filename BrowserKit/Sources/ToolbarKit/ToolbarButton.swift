@@ -82,7 +82,6 @@ class ToolbarButton: UIButton,
         // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
         if let isLoading = element.loadingConfig?.isLoading, isLoading {
             makeLoadingButton()
-            loadingA11yLabel = element.loadingConfig?.a11yLabel
         } else {
             hideLoadingIcon()
         }
@@ -116,13 +115,19 @@ class ToolbarButton: UIButton,
         accessibilityLabel = element.a11yLabel
         accessibilityHint = element.a11yHint
 
-        // Remove all existing actions for .touchUpInside before adding the new one
-        // This ensures that we do not accumulate multiple actions for the same event,
-        // which can cause the action to be called multiple times when the button is tapped.
-        // By removing all existing actions first, we guarantee that only the new action
-        // will be associated with the .touchUpInside event.
+        // Remove all existing actions before adding the new one. This ensures that we do
+        // not accumulate multiple actions for the same event, which can cause the action to
+        // be called multiple times when the button is tapped. A button uses either
+        // .touchUpInside (regular buttons) or .menuActionTriggered (menu buttons), so we
+        // clear both to guarantee that only the new action remains.
         removeTarget(nil, action: nil, for: .touchUpInside)
-        addAction(action, for: .touchUpInside)
+        removeTarget(nil, action: nil, for: .menuActionTriggered)
+        configureMenuIfNeeded(for: element)
+        if element.menuElements.isEmpty {
+            addAction(action, for: .touchUpInside)
+        } else {
+            addAction(action, for: .menuActionTriggered)
+        }
 
         showsLargeContentViewer = true
         largeContentTitle = element.a11yLabel
@@ -158,11 +163,14 @@ class ToolbarButton: UIButton,
             updatedConfiguration.baseForegroundColor = isTextButton ?
                                                         foregroundTitleColorHighlighted :
                                                         foregroundColorHighlighted
+            bottomBadgeImageView?.tintColor = isTextButton ? foregroundTitleColorHighlighted : foregroundColorHighlighted
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
+            bottomBadgeImageView?.tintColor = foregroundColorDisabled
         default:
             let iconButtonColor = isSelected ? foregroundColorHighlighted : foregroundColorNormal
             let textButtonColor = isSelected ? foregroundTitleColorHighlighted : foregroundTitleColorNormal
+            bottomBadgeImageView?.tintColor = isTextButton ? textButtonColor : iconButtonColor
             updatedConfiguration.baseForegroundColor = isTextButton ? textButtonColor : iconButtonColor
         }
 
@@ -251,6 +259,32 @@ class ToolbarButton: UIButton,
         accessibilityCustomActions = [a11yAction]
     }
 
+    private func configureMenuIfNeeded(for element: ToolbarElement) {
+        guard !element.menuElements.isEmpty else {
+            showsMenuAsPrimaryAction = false
+            menu = nil
+            return
+        }
+
+        let actions: [UIMenuElement] = element.menuElements.map { menuElement in
+            let action = UIAction(
+                title: menuElement.title,
+                image: menuElement.imageName.flatMap {
+                    UIImage(named: $0)?.withRenderingMode(.alwaysTemplate)
+                },
+                handler: { [weak self] _ in
+                    guard let self else { return }
+                    menuElement.onSelected?(self)
+                }
+            )
+            action.accessibilityIdentifier = menuElement.a11yIdentifier
+            return action
+        }
+
+        menu = UIMenu(children: actions)
+        showsMenuAsPrimaryAction = true
+    }
+
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
         // Avoid creating a new image if existing image exists and the icon name is the same
         if element.iconName == lastIconName, let existingImage = configuration?.image {
@@ -286,12 +320,13 @@ class ToolbarButton: UIButton,
     // MARK: - Loading Icon for Translation Button
     // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
     private var spinner: UIActivityIndicatorView?
-    private var loadingA11yLabel: String?
 
     private func makeLoadingButton(style: UIActivityIndicatorView.Style = .medium) {
+        let isNewSpinner = spinner == nil
         if spinner == nil {
             let loadingView = UIActivityIndicatorView(style: style)
             loadingView.translatesAutoresizingMaskIntoConstraints = false
+            loadingView.isAccessibilityElement = false
             addSubview(loadingView)
             NSLayoutConstraint.activate([
                 loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -300,15 +335,19 @@ class ToolbarButton: UIButton,
             spinner = loadingView
         }
         spinner?.startAnimating()
+        if isNewSpinner && UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: self)
+        }
     }
 
     private func hideLoadingIcon() {
-        if let loadingA11yLabel, spinner != nil && UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .announcement, argument: loadingA11yLabel)
-        }
+        let hadSpinner = spinner != nil
         spinner?.stopAnimating()
         spinner?.removeFromSuperview()
         spinner = nil
+        if hadSpinner && UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: self)
+        }
     }
 
     private func removeLongPressGestureRecognizer() {
@@ -367,7 +406,8 @@ class ToolbarButton: UIButton,
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
-        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
+        badgeImageView?.tintColor = maskImageView == nil ?
+                                    .clear : (theme.isNova ? colors.iconPrivate : colors.actionInformation)
         maskImageView?.tintColor = colors.layer1
         setNeedsUpdateConfiguration()
     }

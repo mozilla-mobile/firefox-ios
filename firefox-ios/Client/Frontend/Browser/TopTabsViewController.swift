@@ -18,11 +18,9 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidChangeTab()
     @MainActor
     func topTabsDidPressPrivateMode()
-    @MainActor
-    func topTabsShowCloseTabsToast()
 }
 
-class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeatureFlaggable {
+class TopTabsViewController: UIViewController, Themeable, Notifiable {
     private struct UX {
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44
@@ -289,7 +287,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeat
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
 
-        NSLayoutConstraint.activate([
+        var constraints = [
             view.heightAnchor.constraint(equalToConstant: UX.topTabsViewHeight),
 
             newTab.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -297,7 +295,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeat
             newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
 
             privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
             privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
 
@@ -310,7 +307,21 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeat
             collectionView.bottomAnchor.constraint(equalTo: topTabFader.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: topTabFader.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
-        ])
+        ]
+
+        if #available(iOS 26.0, *) {
+            constraints.append(
+                privateModeButton.leadingAnchor.constraint(
+                    equalTo: view.layoutGuide(for: .margins(cornerAdaptation: .horizontal)).leadingAnchor
+                )
+            )
+        } else {
+            constraints.append(
+                privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)
+            )
+        }
+
+        NSLayoutConstraint.activate(constraints)
 
         newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.trailingEdgeSpace).isActive = true
     }
@@ -373,7 +384,6 @@ extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
         store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit))
         topTabDisplayManager.closeActionPerformed(forCell: cell)
-        delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
         store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
 

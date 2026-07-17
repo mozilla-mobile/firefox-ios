@@ -87,6 +87,24 @@ open class Deferred<T: Sendable>: @unchecked Sendable {
         return result
     }
 
+    /// Blocks the calling thread until the receiver is filled or `timeout` elapses,
+    /// returning the value if it became available in time and `nil` otherwise.
+    ///
+    /// Prefer the non-blocking `upon`/`uponQueue` for accessing a `Deferred`. Use this
+    /// only when a synchronous read is unavoidable and an indefinite block on the calling
+    /// thread (e.g. the main thread, where it can trip the watchdog) must be prevented.
+    public func value(timeout: DispatchTimeInterval) -> T? {
+        // If already filled, return early to prevent delay.
+        if let v = peek() { return v }
+
+        let group = DispatchGroup()
+        group.enter()
+        self.upon { _ in group.leave() }
+        _ = group.wait(timeout: .now() + timeout)
+        // `peek()` reads under the lock, so this is safe even if the timeout races the fill.
+        return peek()
+    }
+
     public func bindQueue<U>(_ queue: DispatchQueue, f: @escaping @Sendable (T) -> Deferred<U>) -> Deferred<U> {
         let d = Deferred<U>()
         self.uponQueue(queue) {
@@ -120,7 +138,7 @@ open class Deferred<T: Sendable>: @unchecked Sendable {
 
 // FIXME: FXIOS-13242 We want to remove this function for the sake of proper Swift Concurrency
 public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
-    if deferreds.count == 0 {
+    if deferreds.isEmpty {
         return Deferred(value: [])
     }
 

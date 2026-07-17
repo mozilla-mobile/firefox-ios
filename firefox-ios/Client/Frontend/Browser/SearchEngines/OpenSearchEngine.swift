@@ -36,12 +36,16 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
     private let trendingTemplate: String?
     private let searchTermComponent = "{searchTerms}"
     private let searchQueryComponentKey: String?
-    private let googleEngineID = {
-        return "google"
-    }()
+    static let googleEngineID = "google"
+
+    /// Whether this engine is Google, including regional variants.
+    /// App Services can return regional Google engine IDs such as "google-b-1-m".
+    var isGoogleEngine: Bool {
+        engineID == Self.googleEngineID || engineID.hasPrefix("\(Self.googleEngineID)-")
+    }
 
     var headerSearchTitle: String {
-        guard engineID != googleEngineID else {
+        guard engineID != Self.googleEngineID else {
             return .Search.GoogleEngineSectionTitle
         }
 

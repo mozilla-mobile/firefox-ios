@@ -11,7 +11,7 @@ protocol MerinoStoriesProviding: Sendable {
     func fetchContent() async throws -> CuratedRecommendationsResponse
 }
 
-final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unchecked Sendable {
+final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
     private struct Constants {
         static let merinoServicesBaseURL = "https://merino.services.mozilla.com"
         static let numberOfStoriesToFetchForCaching = 100
@@ -59,8 +59,10 @@ final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unc
         else { throw Error.failure }
 
         if let cachedResponse = cache.loadResponse(),
-           cacheUpdateThresholdHasNotPassed(),
-           cachedResponseMatchesCurrentHomepageStoriesMode(cachedResponse) {
+           responseHasDisplayableContent(cachedResponse) {
+            if !cacheUpdateThresholdHasNotPassed() {
+                refreshCacheInBackground()
+            }
             return cachedResponse
         }
 
@@ -68,6 +70,10 @@ final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unc
             throw Error.failure
         }
         return response
+    }
+
+    private func refreshCacheInBackground() {
+        _ = createTask()
     }
 
     static func isLocaleSupported(_ locale: String) -> Bool {
@@ -99,7 +105,7 @@ final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unc
                 // Only cache items if we have a response, and it has some sort
                 // of data we'd like to actually save
                 if let response,
-                   !response.data.isEmpty || response.feeds != nil {
+                   responseHasDisplayableContent(response) {
                     cache.clearCache()
                     cache.save(response)
                 }
@@ -117,7 +123,7 @@ final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unc
     }
 
     private var isHomepageStoryCategoriesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.homepageStoryCategories)
     }
 
     private func iOSToMerinoLocale(from locale: String) -> CuratedRecommendationLocale? {
@@ -132,15 +138,8 @@ final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unc
         return Date() < lastUpdate.addingTimeInterval(thresholdInSeconds)
     }
 
-    /// Returns whether the cached response shape matches the current homepage stories mode.
-    /// When categories are enabled we require non-empty `feeds`, otherwise we require
-    /// non-empty top-level story `data`. If the shapes do not match, we bypass the cache
-    /// and fetch again so a mode switch is reflected immediately.
-    private func cachedResponseMatchesCurrentHomepageStoriesMode(_ response: CuratedRecommendationsResponse) -> Bool {
-        if isHomepageStoryCategoriesEnabled {
-            return !(response.feeds?.isEmpty ?? true)
-        }
-
-        return !response.data.isEmpty
+    private func responseHasDisplayableContent(_ response: CuratedRecommendationsResponse) -> Bool {
+        let hasCategoryRecommendations = response.feeds?.contains { !$0.recommendations.isEmpty } == true
+        return hasCategoryRecommendations || !response.data.isEmpty
     }
 }

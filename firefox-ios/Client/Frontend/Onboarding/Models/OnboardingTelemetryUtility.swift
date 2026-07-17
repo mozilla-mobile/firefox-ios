@@ -15,20 +15,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     private let onboardingReason: OnboardingReason
     private let gleanWrapper: GleanWrapper
 
-    // MARK: - Initializer (Legacy)
-    init(
-        with model: OnboardingKitViewModel,
-        onboardingReason: OnboardingReason,
-        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
-    ) {
-        self.cardOrder = model.cards.map { $0.name }
-        self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
-        self.onboardingVariant = .legacy
-        self.onboardingReason = onboardingReason
-        self.gleanWrapper = gleanWrapper
-    }
-
-    // MARK: - Initializer (Modern)
+    // MARK: - Initializer
     init(
         with model: OnboardingKitViewModel,
         onboardingVariant: OnboardingVariant,
@@ -218,8 +205,8 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     }
 
     /// If the card is not available in the original card order, return 0 (zero) to indicate an error in telemetry. Given how
-    /// `NimbusOnboardingFeatureLayer` is built & tested, this should never happen, but we want eyes on it, in the case that
-    /// it does.
+    /// `NimbusOnboardingKitFeatureLayer` is built & tested, this should never happen, but we want eyes on it,
+    /// in the case that it does.
     private func sequencePosition(
         for cardName: String,
         from sequence: [String]

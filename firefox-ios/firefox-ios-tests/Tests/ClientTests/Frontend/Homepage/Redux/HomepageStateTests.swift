@@ -8,13 +8,27 @@ import XCTest
 @testable import Client
 
 final class HomepageStateTests: XCTestCase {
+    private var profile: MockProfile!
+    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
+
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        profile = MockProfile()
+        mockNimbusLayer = MockNimbusFeatureFlagLayer()
+        let featureFlagProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+        let userFeaturePreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+
+        await DependencyHelperMock().bootstrapDependencies(
+            injectedProfile: profile,
+            injectedFeatureFlagProvider: featureFlagProvider,
+            injectedUserFeaturePreferences: userFeaturePreferences
+        )
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        profile = nil
+        mockNimbusLayer = nil
         try await super.tearDown()
     }
 
@@ -24,7 +38,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
 
         XCTAssertFalse(initialState.headerState.isPrivate)
-        XCTAssertFalse(initialState.headerState.showiPadSetup)
+        XCTAssertFalse(initialState.trackerBlockerModuleState.shouldShowSection)
         XCTAssertFalse(initialState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
         XCTAssertEqual(initialState.availableContentHeight, 0)
@@ -39,7 +53,6 @@ final class HomepageStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             HomepageAction(
-                showiPadSetup: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -47,7 +60,6 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.headerState.isPrivate)
-        XCTAssertTrue(newState.headerState.showiPadSetup)
         XCTAssertFalse(newState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
@@ -172,6 +184,58 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
     }
 
+    @MainActor
+    func test_trackerBlockerModuleToggleAction_withToggleOn_returnsExpectedState() {
+        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            TrackerBlockerModuleAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertTrue(newState.trackerBlockerModuleState.shouldShowSection)
+    }
+
+    func test_trackerBlockerModuleState_withFeatureDisabledAndPreferenceEnabled_returnsExpectedState() {
+        let profile = MockProfile()
+        let mockNimbusLayer = MockNimbusFeatureFlagLayer()
+        let userPreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+        userPreferences.setPreferenceFor(.homepageTrackerBlockerModule, to: true)
+        let featureFlagsProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
+
+        let state = TrackerBlockerModuleState(
+            userPreferences: userPreferences,
+            featureFlagsProvider: featureFlagsProvider,
+            windowUUID: .XCTestDefaultUUID
+        )
+
+        XCTAssertFalse(state.shouldShowSection)
+    }
+
+    @MainActor
+    func test_trackerBlockerModuleToggleAction_withToggleOff_returnsExpectedState() {
+        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            TrackerBlockerModuleAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertFalse(newState.trackerBlockerModuleState.shouldShowSection)
+    }
+
     // MARK: - Private
     private func createSubject() -> HomepageState {
         return HomepageState(windowUUID: .XCTestDefaultUUID)
@@ -179,5 +243,13 @@ final class HomepageStateTests: XCTestCase {
 
     private func homepageReducer() -> Reducer<HomepageState> {
         return HomepageState.reducer
+    }
+
+    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
+        if isEnabled {
+            mockNimbusLayer.enabledFlags.insert(flag)
+        } else {
+            mockNimbusLayer.enabledFlags.remove(flag)
+        }
     }
 }

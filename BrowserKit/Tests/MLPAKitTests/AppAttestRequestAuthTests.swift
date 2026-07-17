@@ -18,7 +18,7 @@ final class AppAttestRequestAuthTests: XCTestCase {
         XCTAssertTrue(auth?.hasPrefix(MLPAConstants.bearerPrefix) == true)
     }
 
-    func test_authenticate_setsServiceTypeHeader() async throws {
+    func test_authenticate_withS2S_setsServiceTypeHeader() async throws {
         let subject = try createSubject()
         var request = try makeRequest()
 
@@ -26,7 +26,7 @@ final class AppAttestRequestAuthTests: XCTestCase {
 
         XCTAssertEqual(
             request.value(forHTTPHeaderField: MLPAConstants.serviceTypeHeader),
-            MLPAConstants.serviceTypeValue
+            MLPAServiceType.s2s.rawValue
         )
     }
 
@@ -102,7 +102,8 @@ final class AppAttestRequestAuthTests: XCTestCase {
 
         return AppAttestRequestAuth(
             appAttestClient: client,
-            bundleIdentifier: bundleIdentifier
+            bundleIdentifier: bundleIdentifier,
+            serviceType: .s2s
         )
     }
 

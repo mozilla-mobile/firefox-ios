@@ -32,13 +32,14 @@ extension HistoryPanel: UISearchBarDelegate {
 
         bottomStackView.isHidden = true
         searchBar.resignFirstResponder()
+		updateBottomSearchBarLayout(isHidden: true)
     }
 
     func startSearchState() {
         logger.log("User initiated history search", level: .info, category: .library)
 
         updatePanelState(newState: .history(state: .search))
-        bottomStackView.isHidden = false
+		updateBottomSearchBarLayout(isHidden: false)
         searchbar.becomeFirstResponder()
     }
 
@@ -47,7 +48,8 @@ extension HistoryPanel: UISearchBarDelegate {
         applySnapshot()
         self.searchbar.text = ""
         self.searchbar.resignFirstResponder()
-        bottomStackView.isHidden = true
+		updatePanelState(newState: .history(state: .mainView))
+		updateBottomSearchBarLayout(isHidden: true)
     }
 
     func performSearch(term: String) {

@@ -11,6 +11,7 @@ public struct StandardImageIdentifiers {
     // Icon size 8x8
     public struct ExtraSmall {
         public static let chevronDown = "chevronDownExtraSmall"
+        public static let pin = "pinExtraSmall"
     }
 
     // Icon size 16x16
@@ -26,9 +27,10 @@ public struct StandardImageIdentifiers {
     // Icon size 20x20
     public struct Medium {
         public static let arrowClockwise = "arrowClockwiseMedium"
-        public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
+        public static let bookmarkBadgeFillViolet50 = "bookmarkBadgeFillMediumViolet50"
         public static let cross = "crossMedium"
         public static let lightning = "lightningMedium"
+        public static let logoGoogleLens = "logoGoogleLensMedium"
         public static let nightMode = "nightModeMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
         public static let readerView = "readerViewMedium"
@@ -40,10 +42,12 @@ public struct StandardImageIdentifiers {
 
     // Icon size 24x24
     public struct Large {
+        public static let appendDownLeft = "appendDownLeftLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
         public static let arrowCounterClockwise = "arrowCounterClockwiseLarge"
         public static let arrowTrending = "arrowTrendingLarge"
+        public static let audioWave = "audioWaveLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let avatarWarningCircleFillMulticolorDark = "avatarWarningCircleFillMulticolorLargeDark"
         public static let avatarWarningCircleFillMulticolorLight = "avatarWarningCircleFillMulticolorLargeLight"
@@ -52,6 +56,7 @@ public struct StandardImageIdentifiers {
         public static let bookmarkSlash = "bookmarkSlashLarge"
         public static let bookmarkTray = "bookmarkTrayLarge"
         public static let bookmarkTrayFill = "bookmarkTrayFillLarge"
+        public static let camera = "cameraLarge"
         public static let checkmark = "checkmarkLarge"
         public static let chevronDown = "chevronDownLarge"
         public static let chevronLeft = "chevronLeftLarge"
@@ -79,6 +84,7 @@ public struct StandardImageIdentifiers {
         public static let history = "historyLarge"
         public static let home = "homeLarge"
         public static let image = "imageLarge"
+        public static let information = "informationLarge"
         public static let lightbulb = "lightbulbLarge"
         public static let lightning = "lightningLarge"
         public static let lightningFill = "lightningFillLarge"
@@ -88,6 +94,7 @@ public struct StandardImageIdentifiers {
         public static let lockSlash = "lockSlashLarge"
         public static let login = "loginLarge"
         public static let logoFirefox = "logoFirefoxLarge"
+        public static let logoGoogleLens = "logoGoogleLensLarge"
         public static let microphone = "microphoneLarge"
         public static let moreHorizontalRound = "moreHorizontalRoundLarge"
         public static let newFolder = "newFolderLarge"
@@ -96,7 +103,6 @@ public struct StandardImageIdentifiers {
         public static let nightModeFill = "nightModeFillLarge"
         public static let notificationDot = "notificationDotLarge"
         public static let notificationDotFill = "notificationDotFillLarge"
-        public static let pageZoom = "pageZoomLarge"
         public static let pin = "pinLarge"
         public static let pinFill = "pinFillLarge"
         public static let pinSlash = "pinSlashLarge"
@@ -107,13 +113,15 @@ public struct StandardImageIdentifiers {
         public static let readerView = "readerViewLarge"
         public static let readingList = "readingListLarge"
         public static let readingListAdd = "readingListAddLarge"
+        public static let report = "reportLarge"
         public static let saveFile = "saveFileLarge"
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"
-        public static let share = "shareLarge"
+        public static let shareApple = "shareAppleLarge"
         public static let shield = "shieldLarge"
         public static let shieldCheckmark = "shieldCheckmarkLarge"
         public static let shieldSlash = "shieldSlashLarge"
+        public static let soccerBall = "soccerBallLarge"
         public static let socialMedia = "socialMediaLarge"
         public static let subtract = "subtractLarge"
         public static let summarizer = "summarizerLarge"

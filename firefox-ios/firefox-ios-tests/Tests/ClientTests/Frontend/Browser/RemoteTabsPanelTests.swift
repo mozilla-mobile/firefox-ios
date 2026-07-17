@@ -109,19 +109,6 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, RemoteTabsPanelActionType.closeSelectedRemoteURL)
     }
 
-    func testRemoteTabsClientAndTabsDataSourceDidUndo_dispatchesUndoCloseSelectedRemoteURL() throws {
-        let subject = createSubject()
-        subject.remoteTabsClientAndTabsDataSourceDidUndo(
-            deviceId: Constants.testDeviceId,
-            url: URL(string: Constants.testUrlString)!
-        )
-
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first)
-        let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
-
-        XCTAssertEqual(actionType, RemoteTabsPanelActionType.undoCloseSelectedRemoteURL)
-    }
-
     func testRemoteTabsClientAndTabsDataSourceDidTabCommandsFlush_dispatchesFlushTabCommands() throws {
         let subject = createSubject()
         subject.remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: Constants.testDeviceId)

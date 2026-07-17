@@ -18,6 +18,16 @@ protocol LocationTextFieldDelegate: AnyObject {
 }
 
 final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
+    private enum UX {
+        static let editingAccessoryRightViewSize = CGSize(width: 44, height: 44)
+        static let editingAccessoryContentInsets = NSDirectionalEdgeInsets(
+            top: 12,
+            leading: 12,
+            bottom: 12,
+            trailing: 12
+        )
+    }
+
     public var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private var tintedClearImage: UIImage?
@@ -42,6 +52,23 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         return value(forKey: "_clearButton") as? UIButton
     }
 
+    var editingAccessoryAction: ToolbarElement? {
+        didSet {
+            configureEditingAccessoryButton()
+            updateRightView()
+        }
+    }
+
+    private lazy var editingAccessoryRightView: ToolbarButton = {
+        let button = ToolbarButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: UX.editingAccessoryRightViewSize.width),
+            button.heightAnchor.constraint(equalToConstant: UX.editingAccessoryRightViewSize.height)
+        ])
+        return button
+    }()
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -65,11 +92,6 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         smartDashesType = .no
         returnKeyType = .go
         tintAdjustmentMode = .normal
-
-        // Setting the content type to a field that is not related to AutoFill functionality
-        // like email and password, should disable the Operating system to load those content,
-        // hence having a faster keyboard start up the first time
-        textContentType = .URL
         delegate = self
 
         // Disable dragging urls on iPhones because it conflicts with editing the text
@@ -185,6 +207,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         let colors = theme.colors
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
+        editingAccessoryRightView.applyTheme(theme: theme)
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
 
         // Force marked text to refresh with new style
@@ -209,6 +232,29 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
             notifyTextChanged?()
         } else {
             hideCursor = false
+        }
+        updateRightView()
+    }
+
+    private func configureEditingAccessoryButton() {
+        guard let editingAccessoryAction, editingAccessoryAction.iconName != nil else { return }
+
+        editingAccessoryRightView.configure(element: editingAccessoryAction)
+        var configuration = editingAccessoryRightView.configuration
+        configuration?.contentInsets = UX.editingAccessoryContentInsets
+        editingAccessoryRightView.configuration = configuration
+    }
+
+    private func updateRightView() {
+        let textIsEmpty = textWithoutSuggestion()?.isEmpty ?? true
+        if editingAccessoryAction?.iconName != nil, isEditing, textIsEmpty {
+            rightView = editingAccessoryRightView
+            rightViewMode = .whileEditing
+            clearButtonMode = .never
+        } else {
+            rightView = nil
+            rightViewMode = .never
+            clearButtonMode = .whileEditing
         }
     }
 
@@ -250,6 +296,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private func clear() {
         text = ""
         removeCompletion()
+        updateRightView()
         autocompleteDelegate?.locationTextFieldDidEnterText("")
     }
 
@@ -280,6 +327,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
+        updateRightView()
         autocompleteDelegate?.locationTextFieldDidBeginEditing(self)
     }
 
@@ -291,6 +339,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     public func textFieldDidEndEditing(_ textField: UITextField) {
         lastReplacement = nil
         textField.selectedTextRange = nil
+        updateRightView()
         autocompleteDelegate?.locationTextFieldDidEndEditing()
     }
 
@@ -323,6 +372,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         text = ""
         removeCompletion()
+        updateRightView()
         return autocompleteDelegate?.locationTextFieldShouldClear() ?? true
     }
 

@@ -8,28 +8,32 @@ import Shared
 /// Protocol for checking whether a feature is enabled via Nimbus remote config.
 protocol FeatureFlagProviding: Sendable {
     func isEnabled(_ flag: FeatureFlagID) -> Bool
+    func setDebugOverride(_ flag: FeatureFlagID, to value: Bool)
 }
 
 /// Wraps NimbusFeatureFlagLayer with debug override support for beta/dev builds.
 /// Registered in AppContainer; accessed via `FeatureFlagProviding` protocol.
 final class FeatureFlagsProvider: FeatureFlagProviding, @unchecked Sendable {
-    private let layer: NimbusFeatureFlagLayer
     private let prefs: Prefs
+    private let backendLayer: NimbusFeatureFlagLayerProviding
 
-    init(layer: NimbusFeatureFlagLayer = NimbusManager.shared.featureFlagLayer,
-         prefs: Prefs) {
-        self.layer = layer
+    init(
+        prefs: Prefs,
+        backendLayer: NimbusFeatureFlagLayerProviding = NimbusManager.shared.featureFlagLayer
+    ) {
         self.prefs = prefs
+        self.backendLayer = backendLayer
     }
 
+    /// Used for checking the status of a feature flag from the feature flag backend
     func isEnabled(_ flag: FeatureFlagID) -> Bool {
-        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
-        if let debugKey = flag.debugKey,
-           let override = prefs.boolForKey(debugKey) {
-            return override
-        }
-        #endif
-        return layer.checkNimbusConfigFor(flag)
+        return backendLayer.checkNimbusConfigFor(flag, with: prefs)
+    }
+
+    /// Used specifically for overriding the status of a feature flag from the backend.
+    func setDebugOverride(_ flag: FeatureFlagID, to value: Bool) {
+        guard let debugKey = flag.debugKey else { return }
+        prefs.setBool(value, forKey: debugKey)
     }
 }
 

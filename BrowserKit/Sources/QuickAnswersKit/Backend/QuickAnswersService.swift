@@ -14,17 +14,19 @@ struct SpeechResult: Equatable {
 }
 
 struct SearchResult: Equatable {
-    let title: String
-    let body: String
-    let url: URL?
+    struct Source: Equatable {
+        let title: String
+        let url: URL?
+        let thumbnailURL: URL?
+        let faviconURL: URL?
+    }
+
+    let resultText: String
+    let sources: [SearchResult.Source]
 
     static func empty() -> Self {
-        return SearchResult(title: "", body: "", url: nil)
+        return SearchResult(resultText: "", sources: [])
     }
-}
-
-enum SearchResultError: Error, Equatable {
-    case unknown
 }
 
 protocol QuickAnswersService: Sendable {
@@ -34,5 +36,5 @@ protocol QuickAnswersService: Sendable {
     func stopRecording() async throws
 
     /// Performs a search with the provided query text parameter.
-    func search(text: String) async -> Result<SearchResult, SearchResultError>
+    func search(text: String) async -> Result<SearchResult, ResultsServiceError>
 }

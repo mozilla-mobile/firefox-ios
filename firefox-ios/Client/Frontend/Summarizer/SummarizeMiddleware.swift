@@ -46,7 +46,13 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         self.summarizerConfigProvider = summarizerConfigProvider
     }
 
-    lazy var summarizerProvider: Middleware<AppState> = { state, action in
+    lazy var summarizerProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         if let action = action as? GeneralBrowserAction {
             self.handleGeneralBrowserAction(action: action)
         } else if let action = action as? ToolbarAction {
@@ -82,7 +88,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     }
 
     private func fetchSummarizerConfig(windowUUID: WindowUUID, completion: @escaping (SummarizerConfig?) -> Void) {
-        guard let webView = windowManager.tabManager(for: windowUUID).selectedTab?.webView else { return }
+        guard let webView = windowManager.tabManager(for: windowUUID)?.selectedTab?.webView else { return }
         Task {
             let configuration = await makeConfiguration(from: webView)
             completion(configuration)
@@ -130,7 +136,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     }
 
     private func dispatchShakeToSummarizeNotAvailable(windowUUID: WindowUUID) {
-        let isHomePage = windowManager.tabManager(for: windowUUID).selectedTab?.isFxHomeTab ?? false
+        let isHomePage = windowManager.tabManager(for: windowUUID)?.selectedTab?.isFxHomeTab ?? false
         guard summarizerNimbusUtils.isShakeGestureEnabled, !isHomePage else { return }
         store.dispatch(
             GeneralBrowserAction(
@@ -179,7 +185,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         let summarizerModel: SummarizerModel =
             summarizerNimbusUtils.isAppleSummarizerEnabled() ? .appleSummarizer : .liteLLMSummarizer
 
-        return summarizerConfigProvider.getConfig(
+        return await summarizerConfigProvider.getConfig(
             summarizerModel: summarizerModel,
             contentType: contentType,
             locale: summarizerLocale

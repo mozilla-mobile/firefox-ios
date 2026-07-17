@@ -14,6 +14,9 @@ public struct LaunchArguments {
     public static let SkipSponsoredShortcuts = "FIREFOX_SKIP_SPONSORED_SHORTCUTS"
     public static let SkipTermsOfUse = "FIREFOX_SKIP_TERMS_OF_USE"
     public static let ClearProfile = "FIREFOX_CLEAR_PROFILE"
+    /// Clears the WKWebView website data store (cookies, local storage, cache) on launch. Web data
+    /// lives in WKWebsiteDataStore, which ClearProfile does not touch.
+    public static let ClearWebData = "FIREFOX_CLEAR_WEB_DATA"
     public static let StageServer = "FIREFOX_USE_STAGE_SERVER"
     public static let FxAChinaServer = "FIREFOX_USE_FXA_CHINA_SERVER"
     public static let DeviceName = "DEVICE_NAME"
@@ -23,7 +26,6 @@ public struct LaunchArguments {
     public static let LoadExperiment = "LOAD_EXPERIMENT"
     public static let ExperimentFeatureName = "EXPERIMENT_FEATURE_NAME"
     public static let DisableAnimations = "DISABLE_ANIMATIONS"
-    public static let SkipSplashScreenExperiment = "SKIP_SPLASH_SCREEN_EXPERIMENT"
     public static let ResetMicrosurveyExpirationCount = "RESET_MICROSURVEY_EXPIRATION_COUNT"
     public static let SkipAppleIntelligence = "SKIP_APPLE_INTELLIGENCE"
 

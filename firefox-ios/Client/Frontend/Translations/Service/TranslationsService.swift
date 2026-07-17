@@ -56,10 +56,16 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Initiates translation of the current page to the specified target language.
     func translateCurrentPage(
         for windowUUID: WindowUUID,
+        from sourceLanguage: String? = nil,
         to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
-        let pageLanguage = try await detectPageLanguage(for: windowUUID)
+        let pageLanguage: String
+        if let sourceLanguage {
+            pageLanguage = sourceLanguage
+        } else {
+            pageLanguage = try await detectPageLanguage(for: windowUUID)
+        }
         onLanguageIdentified?(pageLanguage, targetLanguage)
         let webView = try currentWebView(for: windowUUID)
         // Prewarm resources prior to calling the JS translation API.
@@ -82,7 +88,8 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Tells the engine to discard translations for a document.
     func discardTranslations(for windowUUID: WindowUUID) async throws {
         let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        guard let deviceLanguage = deviceLanguageCode() else {
+        let supported = await fetchSupportedTargetLanguages()
+        guard let deviceLanguage = deviceLanguageCode(supportedTargetLanguages: supported) else {
             throw TranslationsServiceError.deviceLanguageUnavailable
         }
 
@@ -150,7 +157,7 @@ final class TranslationsService: TranslationsServiceProtocol {
 
     /// Returns the current WebView for a given window, or throws if it is unavailable.
     private func currentWebView(for windowUUID: WindowUUID) throws -> WKWebView {
-        guard let tab = windowManager.tabManager(for: windowUUID).selectedTab,
+        guard let tab = windowManager.tabManager(for: windowUUID)?.selectedTab,
               let webView = tab.webView else {
             throw TranslationsServiceError.missingWebView
         }
@@ -162,8 +169,19 @@ final class TranslationsService: TranslationsServiceProtocol {
         return await modelsFetcher.fetchSupportedTargetLanguages()
     }
 
-    /// Returns the device language code for a given locale, if available.
-    private func deviceLanguageCode(using locale: Locale = .current) -> String? {
-        return locale.languageCode
+    /// Returns the best device-language code present in `supportedTargetLanguages`.
+    /// Walks `Locale.preferredLanguages` so script subtags (e.g. `zh-Hans`) are preserved
+    /// when they appear in the supported set.
+    private func deviceLanguageCode(supportedTargetLanguages: [String]) -> String? {
+        let supportedSet = Set(supportedTargetLanguages)
+        for tag in Locale.preferredLanguages {
+            if let match = PreferredTranslationLanguagesManager.matchingSupportedCode(
+                for: tag,
+                in: supportedSet
+            ) {
+                return match
+            }
+        }
+        return nil
     }
 }

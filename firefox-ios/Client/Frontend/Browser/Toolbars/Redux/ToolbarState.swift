@@ -24,8 +24,13 @@ struct ToolbarState: ScreenState, Sendable {
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
     var isTranslucent: Bool
+    var isTranslationsEnabled: Bool
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
+
+    var isAddressBarMinimized: Bool {
+        return scrollAlpha.isZero
+    }
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
@@ -54,6 +59,7 @@ struct ToolbarState: ScreenState, Sendable {
                   canShowNavigationHint: toolbarState.canShowNavigationHint,
                   shouldAnimate: toolbarState.shouldAnimate,
                   isTranslucent: toolbarState.isTranslucent,
+                  isTranslationsEnabled: toolbarState.isTranslationsEnabled,
                   previousTabScreenshot: toolbarState.previousTabScreenshot,
                   nextTabScreenshot: toolbarState.nextTabScreenshot
         )
@@ -78,6 +84,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: false,
             shouldAnimate: true,
             isTranslucent: false,
+            isTranslationsEnabled: true,
             previousTabScreenshot: nil,
             nextTabScreenshot: nil
         )
@@ -101,6 +108,7 @@ struct ToolbarState: ScreenState, Sendable {
         canShowNavigationHint: Bool,
         shouldAnimate: Bool,
         isTranslucent: Bool,
+        isTranslationsEnabled: Bool = true,
         previousTabScreenshot: UIImage?,
         nextTabScreenshot: UIImage?
     ) {
@@ -121,6 +129,7 @@ struct ToolbarState: ScreenState, Sendable {
         self.canShowNavigationHint = canShowNavigationHint
         self.shouldAnimate = shouldAnimate
         self.isTranslucent = isTranslucent
+        self.isTranslationsEnabled = isTranslationsEnabled
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
     }
@@ -142,21 +151,22 @@ struct ToolbarState: ScreenState, Sendable {
             return handleDidLoadToolbars(state: state, action: action)
 
         case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
+            ToolbarActionType.lockIconChanged,
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.cancelEditOnHomepage,
             ToolbarActionType.keyboardStateDidChange, ToolbarActionType.websiteLoadingStateDidChange,
-            ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
+            ToolbarMiddlewareActionType.googleLensAvailabilityDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
             ToolbarActionType.scrollAlphaNeedsUpdate, ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
-            ToolbarActionType.didStartTranslatingPage,
-            ToolbarActionType.translationCompleted,
-            ToolbarActionType.receivedTranslationLanguage,
-            ToolbarActionType.didReceiveErrorTranslating,
-            ToolbarActionType.didTranslationSettingsChange,
+            TranslationsActionType.didStartTranslatingPage,
+            TranslationsActionType.translationCompleted,
+            TranslationsActionType.receivedTranslationLanguage,
+            TranslationsActionType.didReceiveErrorTranslating,
+            TranslationsActionType.didTranslationSettingsChange,
             ToolbarActionType.didSummarizeSettingsChange:
             return handleToolbarUpdates(state: state, action: action)
 
@@ -221,6 +231,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: isTranslucent,
+            isTranslationsEnabled: toolbarAction.isTranslationsEnabled ?? state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -228,26 +239,32 @@ struct ToolbarState: ScreenState, Sendable {
 
     @MainActor
     private static func handleToolbarUpdates(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+        // Both `ToolbarAction` (lifecycle) and `TranslationsAction` (translation events) reach this
+        // handler — translation actions carry only `isTranslationsEnabled` + payload, so every other
+        // ToolbarAction-only field falls back to state when the action is not a `ToolbarAction`.
+        let toolbarAction = action as? ToolbarAction
+        let translationsAction = action as? TranslationsAction
+        let actionIsTranslationsEnabled = toolbarAction?.isTranslationsEnabled ?? translationsAction?.isTranslationsEnabled
 
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
             tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: toolbarAction.isPrivate ?? state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
-            isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
-            canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
-            canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
+            isPrivateMode: toolbarAction?.isPrivate ?? state.isPrivateMode,
+            addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
+            isShowingNavigationToolbar: toolbarAction?.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
+            isShowingTopTabs: toolbarAction?.isShowingTopTabs ?? state.isShowingTopTabs,
+            canGoBack: toolbarAction?.canGoBack ?? state.canGoBack,
+            canGoForward: toolbarAction?.canGoForward ?? state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            scrollAlpha: toolbarAction.scrollAlpha ?? state.scrollAlpha,
+            scrollAlpha: toolbarAction?.scrollAlpha ?? state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
-            isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent,
+            shouldAnimate: toolbarAction?.shouldAnimate ?? state.shouldAnimate,
+            isTranslucent: toolbarAction?.isTranslucent ?? state.isTranslucent,
+            isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -274,6 +291,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -300,6 +318,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -326,6 +345,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: toolbarAction.previousTabScreenshot,
             nextTabScreenshot: toolbarAction.nextTabScreenshot
         )
@@ -357,6 +377,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -383,6 +404,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -409,6 +431,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -435,6 +458,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: true,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -461,6 +485,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: false,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -490,6 +515,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -521,6 +547,7 @@ struct ToolbarState: ScreenState, Sendable {
                             canShowNavigationHint: state.canShowNavigationHint,
                             shouldAnimate: state.shouldAnimate,
                             isTranslucent: state.isTranslucent,
+                            isTranslationsEnabled: state.isTranslationsEnabled,
                             previousTabScreenshot: state.previousTabScreenshot,
                             nextTabScreenshot: state.nextTabScreenshot)
     }

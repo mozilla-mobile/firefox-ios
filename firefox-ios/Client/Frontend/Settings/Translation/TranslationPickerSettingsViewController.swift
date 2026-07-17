@@ -174,6 +174,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             cell.configure(
                 title: .Settings.Translation.ToggleTitle,
                 isOn: state.isTranslationsEnabled,
+                accessibilityIdentifier: AccessibilityIdentifiers.Settings.Translation.toggleSwitch,
                 target: self,
                 action: #selector(didToggleTranslations(_:)),
                 theme: themeManager.getCurrentTheme(for: windowUUID)
@@ -187,6 +188,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             cell.configure(
                 title: .Settings.Translation.AutoTranslate.Title,
                 isOn: state.isAutoTranslateEnabled,
+                accessibilityIdentifier: AccessibilityIdentifiers.Settings.Translation.autoTranslateSwitch,
                 target: self,
                 action: #selector(didToggleAutoTranslate(_:)),
                 theme: themeManager.getCurrentTheme(for: windowUUID)
@@ -303,6 +305,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
     // MARK: - Toggle actions
 
     @objc private func didToggleTranslations(_ sender: UISwitch) {
+        guard !state.isEditing else {
+            sender.setOn(state.isTranslationsEnabled, animated: false)
+            return
+        }
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
@@ -310,6 +316,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     @objc private func didToggleAutoTranslate(_ sender: UISwitch) {
+        guard !state.isEditing else {
+            sender.setOn(state.isAutoTranslateEnabled, animated: false)
+            return
+        }
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleAutoTranslate

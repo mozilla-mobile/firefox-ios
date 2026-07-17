@@ -13,36 +13,35 @@ channels:
   - beta
   - release
 include:
-
-
+  - nimbus-features/adBlockerFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
-  - nimbus-features/adsClient.yaml
+  - nimbus-features/addressBarGestureToOpenTabTrayFeature.yaml
   - nimbus-features/aiKillSwitchFeature.yaml
-  - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/bookmarksSearchFeature.yaml
+  - nimbus-features/customReaderModeSchemeFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/firefoxJpGuideDefaultSite.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
-  - nimbus-features/generalFeatures.yaml
-  - nimbus-features/hntSponsoredShortcutsFeature.yaml
+  - nimbus-features/googleLensFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
+  - nimbus-features/homepageTrackerBlockerModuleFeature.yaml
   - nimbus-features/hostedSummarizerFeature.yaml
+  - nimbus-features/httpsUpgradeFeature.yaml
   - nimbus-features/improvedAppStoreReviewTriggerFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
-  - nimbus-features/needsReloadRefactor.yaml
-  - nimbus-features/newAddressBarMenu.yaml
-  - nimbus-features/newAppearanceMenu.yaml
+  - nimbus-features/newBookmarkFolderTreeFeature.yaml
+  - nimbus-features/novaDesignFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/quickAnswersFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
+  - nimbus-features/reportBrokenSiteFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/snapkitRemovalRefactor.yaml
-  - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml
   - nimbus-features/summarizerAppAttestAuthFeature.yaml
@@ -53,6 +52,7 @@ include:
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/tosFeature.yaml
   - nimbus-features/touFeature.yaml
-  - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
+  - nimbus-features/waybackMachineFeature.yaml
+  - nimbus-features/worldCupWidgetFeature.yaml

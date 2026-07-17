@@ -1,0 +1,18 @@
+# The configuration for the automatic https upgrade feature
+features:
+  https-upgrade-feature:
+    description: >
+      This feature enables automatic https upgrade. This is only available for 18.2+.
+    variables:
+      enabled:
+        description: >
+          Enables automatic https upgrade.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true

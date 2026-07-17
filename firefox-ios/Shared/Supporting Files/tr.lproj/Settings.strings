@@ -76,11 +76,20 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Engellendi**: Bu özelliği görmeyecek ve kullanamayacaksınız. Cihaza indirilmiş yapay zekâ modelleri kaldırılacaktır.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Engellendi**: Bu özelliği görmeyecek ve kullanamayacaksınız. Cihaza indirilmiş yapay zekâ modelleri kaldırılacaktır.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Sayfalar ve özetler asla depolanmaz.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Sayfa özetleri";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Sesiniz, sorularınız ve cevaplarınız asla saklanmaz.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Hızlı cevaplar";
 
 /* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
 "Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "YAPAY ZEKÂ ÖZELLİKLERİ";
@@ -107,7 +116,7 @@
 "Settings.AIControls.HeaderCard.Link.v151" = "Daha fazla bilgi al";
 
 /* This is the message for the Header Card under the AI Controls settings section. */
-"Settings.AIControls.HeaderCard.Message.v151" = "Yapay zekâ sayesinde çalışan özelliklerin kullanılması da dahildir.";
+"Settings.AIControls.HeaderCard.Message.v151" = "Yapay zekâyla çalışan özellikleri kullanıp kullanmayacağınızı da seçebilirsiniz.";
 
 /* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
 "Settings.AIControls.HeaderCard.Title.v151" = "%@ ile tercih daima sizin";
@@ -161,7 +170,13 @@
 "Settings.Autoplay.Footer.v137" = "Otomatik oynatma ayarları yalnızca yeni açılan sekmeler için geçerli olur. Uygulama yeniden başlatılmadıkça değişiklikler mevcut sekmelere uygulanamaz.";
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
-"Settings.Autoplay.SettingsTitle.v137" = "Otomatik oynatma";
+"Settings.Autoplay.SettingsTitle.v137" = "Otomatik oynat";
+
+/* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
+"Settings.Browsing.BlockAds.Title.v153" = "Reklamları engelle";
+
+/* This is the title for the Content customization section under the Browsing settings page. */
+"Settings.Browsing.Content.v153" = "İçerik";
 
 /* This is the title for Links customization under the Browsing settings section. */
 "Settings.Browsing.Links.v137" = "Bağlantılar";
@@ -249,6 +264,15 @@
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "Arama motorlarından öneriler";
+
+/* In the Search settings, this is the description that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Description.v153" = "Arama yapmak için resimleri Google’a gönder.";
+
+/* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
+"Settings.Search.GoogleLens.Footnote.v153" = "Yalnızca yukarıdan Google etkinleştirildiğinde ve aktif arama motorunuz olarak ayarlandığında kullanılabilir.";
+
+/* In the Search settings, this is the title that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Title.v153" = "Google Lens";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Arama";

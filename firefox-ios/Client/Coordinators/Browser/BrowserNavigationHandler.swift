@@ -4,8 +4,10 @@
 
 import Foundation
 import Storage
+import UIKit
 import WebKit
 import SummarizeKit
+import QuickAnswersKit
 
 import struct MozillaAppServices.CreditCard
 import enum MozillaAppServices.VisitType
@@ -122,7 +124,19 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showShortcutsLibrary()
 
     @MainActor
-    func showQuickAnswers()
+    func showWorldCupCountryPicker()
+
+    @MainActor
+    func showGoogleLensPhotoPicker()
+
+    @MainActor
+    func showGoogleLensCamera()
+
+    @MainActor
+    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source)
+
+    @MainActor
+    func showQuickAnswers(transitionType: QuickAnswersTransitionType)
 
     @MainActor
     func showPrivacyNoticeLink(url: URL)

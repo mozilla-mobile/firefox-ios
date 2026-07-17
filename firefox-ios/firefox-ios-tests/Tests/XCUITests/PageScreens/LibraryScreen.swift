@@ -17,10 +17,16 @@ final class LibraryScreen {
     private var editButton: XCUIElement { sel.EDIT_BUTTON.element(in: app) }
     private var doneButton: XCUIElement { sel.DONE_BUTTON.element(in: app) }
     private var bottmLeftButton: XCUIElement { sel.BOTTOM_LEFT_BUTTON.element(in: app) }
+    private var bottomSearchButton: XCUIElement { sel.BOTTOM_SEARCH_BUTTON.element(in: app) }
     private var titleTextField: XCUIElement { sel.TITLE_TEXT_FIELD.element(in: app) }
     private var saveButton: XCUIElement { sel.SAVE_BUTTON.element(in: app) }
     private var bookmarkFolderCell: XCUIElement { sel.BOOKMARKS_FOLDER.element(in: app) }
     private var deleteButton: XCUIElement { sel.DELETE_BUTTON.element(in: app) }
+    private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app) }
+    private var backButtoniOS18: XCUIElement { sel.BACK_BUTTON_iOS18.element(in: app) }
+    private var generalBackButton: XCUIElement { sel.GENERAL_BACK_BUTTON.element(in: app) }
+    private var contextMenu: XCUIElement { app.tables["Context Menu"] }
+    private var bookmarksNavigationBar: XCUIElement { sel.BOOKMARK_BACK_BUTTON.element(in: app) }
 
     func assertBookmarkExists(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
@@ -42,7 +48,7 @@ final class LibraryScreen {
         XCTAssertEqual(bookmarksTable.cells.count, numberOfEntries)
     }
 
-    func swipeBookmarkEntry(entryName: String) {
+    func swipeBookmarkListEntry(entryName: String) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
         bookmarksTable.cells.staticTexts[entryName].swipeLeft()
     }
@@ -52,7 +58,7 @@ final class LibraryScreen {
     }
 
     func swipeAndDeleteBookmark(entryName: String) {
-        swipeBookmarkEntry(entryName: entryName)
+        swipeBookmarkListEntry(entryName: entryName)
         tapDeleteBookmarkButton()
     }
 
@@ -73,6 +79,15 @@ final class LibraryScreen {
         }
     }
 
+    func assertIdenticalFoldersNamesCreated(identifier: String, nrOfFolders: Int) {
+        let elements = app.staticTexts.matching(identifier: identifier)
+        XCTAssertEqual(elements.count, nrOfFolders, "Expected \(nrOfFolders) identical folder names")
+    }
+
+    func tapSaveButton() {
+        saveButton.waitAndTap()
+    }
+
     func tapEditButton() {
         editButton.firstMatch.waitAndTap()
     }
@@ -83,6 +98,48 @@ final class LibraryScreen {
 
     func tapBottomLeftButton() {
         bottmLeftButton.waitAndTap()
+    }
+
+    func tapBottomSearchButton() {
+        bottomSearchButton.waitAndTap()
+    }
+
+    func tapBookmarksNavigationBar() {
+        bookmarksNavigationBar.waitAndTap()
+    }
+
+    func searchInBookmarksPanel(text: String) {
+        let searchField = app.searchFields.firstMatch
+        BaseTestCase().mozWaitForElementToExist(searchField)
+        searchField.waitAndTap()
+        searchField.typeText(text)
+    }
+
+    func closeBookmarksSearch() {
+        app.buttons["Clear text"].waitAndTap()
+    }
+
+    func longPressBookmarkInList(name: String) {
+        let cell = app.tables.cells.staticTexts[name]
+        BaseTestCase().mozWaitForElementToExist(cell)
+        cell.press(forDuration: 1)
+    }
+
+    func tapContextMenuOption(option: String) {
+        contextMenu.cells.buttons[option].waitAndTap()
+    }
+
+    func tapBookmarkDisclosureButton(at index: Int = 0) {
+        let id = "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(index)" +
+                 AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCellDisclosureButton
+        app.buttons[id].waitAndTap()
+    }
+
+    func assertContextMenuOptions(_ options: [String]) {
+        BaseTestCase().mozWaitForElementToExist(contextMenu)
+        for option in options {
+            BaseTestCase().mozWaitForElementToExist(contextMenu.cells.buttons[option])
+        }
     }
 
     func assertEditButtonExists() {
@@ -97,6 +154,14 @@ final class LibraryScreen {
         }
     }
 
+    func assertBottomSearchButtonExists(shouldExist: Bool = true) {
+        if shouldExist {
+            BaseTestCase().mozWaitForElementToExist(bottomSearchButton)
+        } else {
+            BaseTestCase().mozWaitForElementToNotExist(bottomSearchButton)
+        }
+    }
+
     func addFreshNewFolder(text: String) {
         // This function adds a new first folder in the bookmark list
         tapEditButton()
@@ -108,7 +173,12 @@ final class LibraryScreen {
                        "Bookmarks",
                        "The first folder should be the default Bookmarks folder")
         XCTAssertEqual(app.tables.cells.staticTexts.count, 1, "Folder structure should contain only the Bookmarks folder")
-        saveButton.waitAndTap()
+        tapSaveButton()
+    }
+
+    func addNewFolder(text: String) {
+        titleTextField.typeText(text)
+        tapSaveButton()
     }
 
     func assertNewFreshFolderCreated(folderName: String) {
@@ -118,8 +188,63 @@ final class LibraryScreen {
         BaseTestCase().mozWaitForElementToExist(app.staticTexts[folderName])
     }
 
+    func assertFolderNameDisplayedOnSingleLine(folderName: String) {
+        let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(bookmarksTable)
+        let folderLabel = bookmarksTable.staticTexts[folderName]
+        BaseTestCase().mozWaitForElementToExist(folderLabel)
+        // A truncated label fits within one line of system body text (~20pt). A 2-line wrap
+        // would roughly double the rendered height, so this bound catches multi-line display.
+        let singleLineMaxHeight: CGFloat = 30
+        XCTAssertLessThanOrEqual(
+            folderLabel.frame.height,
+            singleLineMaxHeight,
+            "Folder label height (\(folderLabel.frame.height)) exceeds single-line bound " +
+            "(\(singleLineMaxHeight)); name was not trimmed to a single line"
+        )
+    }
+
+    func tapOnFolder(folderName: String) {
+        app.staticTexts[folderName].waitAndTap()
+    }
+
+    func assertSavedFolder(folderName: String) {
+        BaseTestCase().mozWaitForElementToExist(app.staticTexts[folderName])
+    }
+
+    func assertSelectedFolderOpens(folderName: String) {
+        BaseTestCase().mozWaitForElementToExist(app.navigationBars[folderName])
+    }
+
     func deleteFolder(folderName: String) {
         app.tables.cells.buttons["Remove \(folderName)"].waitAndTap()
         deleteButton.waitAndTap()
+    }
+
+    func assertNewFolderScreen() {
+        BaseTestCase().mozWaitForElementToExist(app.navigationBars["New Folder"])
+    }
+
+    func assertParentFolder(parentFolderName: String) {
+        BaseTestCase().mozWaitForElementToExist(bookmarkFolderCell)
+        BaseTestCase().mozWaitForElementToExist(app.staticTexts[parentFolderName])
+    }
+
+    func tapBackButton(isInsideFolder: Bool = false) {
+        if #available(iOS 26, *) {
+            backButton.waitAndTap()
+        } else {
+            if !isInsideFolder {
+                backButtoniOS18.firstMatch.waitAndTap()
+            } else {
+                generalBackButton.waitAndTap()
+            }
+        }
+    }
+
+    func longPressAndSelectContextMenuOption(option: String) {
+        app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
+        BaseTestCase().mozWaitForElementToExist(contextMenu)
+        contextMenu.cells.buttons[option].waitAndTap()
     }
 }

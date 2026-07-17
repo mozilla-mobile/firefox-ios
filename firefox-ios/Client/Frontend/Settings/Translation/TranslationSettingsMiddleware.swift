@@ -12,6 +12,8 @@ final class TranslationSettingsMiddleware {
     private let manager: PreferredTranslationLanguagesManager
     private let modelsFetcher: TranslationModelsFetcherProtocol
     private let localeProvider: LocaleProvider
+    private var resetStorageTask: Task<Void, Never>?
+    private var loadSettingsTask: Task<Void, Never>?
 
     private var isAutoTranslateEnabled: Bool {
         prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
@@ -27,7 +29,18 @@ final class TranslationSettingsMiddleware {
         self.localeProvider = localeProvider
     }
 
-    lazy var translationSettingsProvider: Middleware<AppState> = { state, action in
+    deinit {
+        resetStorageTask?.cancel()
+        loadSettingsTask?.cancel()
+    }
+
+    lazy var translationSettingsProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         guard let action = action as? TranslationSettingsViewAction else { return }
         self.handleAction(action, state: state)
     }
@@ -49,36 +62,34 @@ final class TranslationSettingsMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
             ))
-            Task { await self.loadSettings(windowUUID: action.windowUUID) }
+            loadSettingsTask?.cancel()
+            loadSettingsTask = Task { [weak self] in
+                await self?.loadSettings(windowUUID: action.windowUUID)
+            }
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
             let current = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
             // TODO: FXIOS-15421 Always configure new setting value instead of toggling pref
             let newValue = action.newSettingValue ?? !current
             prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
-            SettingsTelemetry().changedSetting(
-                PrefsKeys.Settings.translationsFeature,
-                to: "\(newValue)",
-                from: "\(current)"
-            )
-            store.dispatch(ToolbarAction(
-                translationConfiguration: TranslationConfiguration(prefs: prefs),
-                windowUUID: action.windowUUID,
-                actionType: ToolbarActionType.didTranslationSettingsChange
-            ))
-            store.dispatch(TranslationSettingsMiddlewareAction(
+            // If coming from AI Controls don't log telemetry, we are handling telemetry there
+            if !(action.toggledViaAIControls ?? false) {
+                SettingsTelemetry().changedSetting(
+                    PrefsKeys.Settings.translationsFeature,
+                    to: "\(newValue)",
+                    from: "\(current)"
+                )
+            }
+            store.dispatch(TranslationsAction(
                 isTranslationsEnabled: newValue,
+                translationConfiguration: TranslationConfiguration(prefs: prefs, isUserSettingEnabled: newValue),
                 windowUUID: action.windowUUID,
-                actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
+                actionType: TranslationsActionType.didTranslationSettingsChange
             ))
             if !newValue {
-                Task {
+                resetStorageTask?.cancel()
+                resetStorageTask = Task { [modelsFetcher] in
                     await modelsFetcher.resetStorage()
-                    store.dispatch(TranslationSettingsMiddlewareAction(
-                        isTranslationsEnabled: newValue,
-                        windowUUID: action.windowUUID,
-                        actionType: TranslationSettingsMiddlewareActionType.didResetStorage
-                    ))
                 }
             }
         case TranslationSettingsViewActionType.toggleAutoTranslate:
@@ -94,6 +105,13 @@ final class TranslationSettingsMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
+            if newValue {
+                store.dispatch(TranslationsAction(
+                    translationConfiguration: TranslationConfiguration(prefs: prefs),
+                    windowUUID: action.windowUUID,
+                    actionType: TranslationsActionType.didTranslationSettingsChange
+                ))
+            }
 
         case TranslationSettingsViewActionType.addLanguage:
             guard let code = action.languageCode else { break }

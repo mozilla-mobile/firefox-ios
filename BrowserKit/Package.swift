@@ -62,6 +62,9 @@ let package = Package(
         .library(
             name: "QuickAnswersKit",
             targets: ["QuickAnswersKit"]),
+        .library(
+            name: "WebCompatReporterKit",
+            targets: ["WebCompatReporterKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -72,7 +75,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "8.8.1"),
+            exact: "8.10.0"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -186,7 +189,10 @@ let package = Package(
             swiftSettings: [
             ]
         ),
-        .target(name: "TestKit", dependencies: ["Shared"]),
+        .target(
+            name: "TestKit",
+            dependencies: ["Shared", "Redux"]
+        ),
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
@@ -207,6 +213,18 @@ let package = Package(
         .testTarget(
             name: "MenuKitTests",
             dependencies: ["MenuKit"],
+            swiftSettings: [
+            ]
+        ),
+        .target(
+            name: "WebCompatReporterKit",
+            dependencies: ["Common", "ComponentLibrary"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "WebCompatReporterKitTests",
+            dependencies: ["WebCompatReporterKit", "TestKit"],
             swiftSettings: [
             ]
         ),
@@ -278,7 +296,7 @@ let package = Package(
         ),
         .testTarget(
             name: "QuickAnswersKitTests",
-            dependencies: ["QuickAnswersKit", "TestKit"]
+            dependencies: ["QuickAnswersKit", "Shared", "TestKit"]
         ),
         .target(
             name: "ContentBlockingGenerator",

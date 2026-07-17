@@ -24,6 +24,7 @@ struct BrowserViewControllerState: ScreenState {
         case reloadNoCache
         case stopLoading
         case newTab
+        case loadURL(URL)
     }
 
     enum DisplayType: Equatable {
@@ -40,6 +41,8 @@ struct BrowserViewControllerState: ScreenState {
         case readerModeLongPressAction
         case passwordGenerator
         case translationLanguagePicker(TranslationLanguagePickerData)
+        case googleLensPhotoPicker
+        case googleLensCamera
     }
 
     let windowUUID: WindowUUID
@@ -377,6 +380,8 @@ struct BrowserViewControllerState: ScreenState {
             return handleReloadWebsiteAction(state: state, action: action)
         case GeneralBrowserActionType.reloadWebsiteNoCache:
             return handleReloadWebsiteNoCacheAction(state: state, action: action)
+        case GeneralBrowserActionType.loadWaybackURL:
+            return handleLoadWaybackURLAction(state: state, action: action)
         case GeneralBrowserActionType.stopLoadingWebsite:
             return handleStopLoadingWebsiteAction(state: state, action: action)
         case GeneralBrowserActionType.showShare:
@@ -393,6 +398,10 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowSummarizerAction(state: state, action: action)
         case GeneralBrowserActionType.showTranslationLanguagePicker:
             return handleShowTranslationLanguagePickerAction(state: state, action: action)
+        case GeneralBrowserActionType.showGoogleLensPhotoPicker:
+            return handleShowGoogleLensPhotoPickerAction(state: state, action: action)
+        case GeneralBrowserActionType.showGoogleLensCamera:
+            return handleShowGoogleLensCameraAction(state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -616,6 +625,23 @@ struct BrowserViewControllerState: ScreenState {
     }
 
     @MainActor
+    private static func handleLoadWaybackURLAction(state: BrowserViewControllerState,
+                                                   action: GeneralBrowserAction) -> BrowserViewControllerState {
+        guard let url = action.destinationURL else {
+            return passthroughState(from: state, action: action)
+        }
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
+            browserViewType: state.browserViewType,
+            navigateTo: .loadURL(url),
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+    }
+
+    @MainActor
     private static func handleStopLoadingWebsiteAction(state: BrowserViewControllerState,
                                                        action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -734,10 +760,42 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .translationLanguagePicker(TranslationLanguagePickerData(
                 languages: action.translationLanguages ?? [],
-                isTranslated: action.isPageTranslated ?? false,
+                isTranslated: action.isPageTranslated,
                 translatedToLanguage: action.translatedToLanguage
             )),
             buttonTapped: action.buttonTapped,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+    }
+
+    @MainActor
+    private static func handleShowGoogleLensPhotoPickerAction(
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
+            browserViewType: state.browserViewType,
+            displayView: .googleLensPhotoPicker,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+    }
+
+    @MainActor
+    private static func handleShowGoogleLensCameraAction(
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
+            browserViewType: state.browserViewType,
+            displayView: .googleLensCamera,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
     }

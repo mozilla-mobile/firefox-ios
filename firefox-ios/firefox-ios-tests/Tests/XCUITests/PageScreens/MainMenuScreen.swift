@@ -29,6 +29,27 @@ final class MainMenuScreen {
         BaseTestCase().waitForElementsToExist(elements)
     }
 
+	func assertMenuOptionsExist() {
+		let elements = [
+			sel.SETTINGS_CELL.element(in: app),
+			sel.BOOKMARKS_BUTTON.element(in: app),
+			sel.HISTORY_BUTTON.element(in: app),
+			sel.DOWNLOADS_BUTTON.element(in: app),
+			sel.PASSWORDS_BUTTON.element(in: app),
+			sel.SIGN_IN_CELL.element(in: app)
+		]
+		BaseTestCase().waitForElementsToExist(elements)
+	}
+
+	func dismissMenu() {
+		app.otherElements["PopoverDismissRegion"].firstMatch.tap()
+	}
+
+	func assertMenuIsDismissed(timeout: TimeInterval = TIMEOUT) {
+		let settings = sel.SETTINGS_CELL.element(in: app)
+		BaseTestCase().mozWaitForElementToNotExist(settings, timeout: timeout)
+	}
+
     func assertMainMenuSettingsExist() {
         let settings = sel.SETTINGS_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settings)
@@ -38,5 +59,23 @@ final class MainMenuScreen {
         let settings = sel.SETTINGS_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settings)
         settings.waitAndTap()
+    }
+
+    func tapBookmarks() {
+        let bookmarks = sel.BOOKMARKS_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(bookmarks)
+        bookmarks.waitAndTap()
+    }
+
+    func tapBookmarkPage() {
+        let bookmarkPage = sel.BOOKMARK_PAGE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(bookmarkPage)
+        bookmarkPage.waitAndTap()
+    }
+
+    func tapHistory() {
+        let history = sel.HISTORY_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(history)
+        history.waitAndTap()
     }
 }

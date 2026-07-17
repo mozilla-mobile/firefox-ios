@@ -56,14 +56,14 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
             let remoteSettingsEnvironmentKey =
                 profile.prefs.stringForKey(PrefsKeys.RemoteSettings.remoteSettingsEnvironment) ?? ""
             let remoteSettingsEnv = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
-            let isProd = remoteSettingsEnv == .prod
+            let isProd = remoteSettingsEnv == .prod || remoteSettingsEnv == .prodV2
             if !isProd {
                 _ = try? profile.remoteSettingsService.sync()
             }
 
             var searchResultsConfig = try engineSelector.filterEngineConfiguration(userEnvironment: env)
 
-            let serverName = remoteSettingsEnv == .stage ? "STAGE" : "PROD"
+            let serverName: String = remoteSettingsEnv.rawValue.uppercased()
             let engineLogList = searchResultsConfig.engines.map {
                 let isOptional = $0.optional ? " (OPTIONAL)" : ""
                 return $0.name + isOptional

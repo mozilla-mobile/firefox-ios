@@ -74,7 +74,10 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Blokkert";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Blokkert**: du vil ikkje sjå eller kunne bruke funksjonen. For AI på eininga blir alle nedlasta modellar fjerna.";
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Blokkert**: du vil ikkje sjå eller kunne bruke funksjonen. For KI på eininga blir alle nedlasta modellar fjerna.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blokkert**: Du vil ikkje sjå eller kunne bruke funksjonen. For KI på eininga blir alle nedlasta modellar fjerna.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Sider og samandrag blir aldri lagra.";
@@ -82,8 +85,14 @@
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Sidesamandrag";
 
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Stemma di, spørsmåla og svara dine blir aldri lagra.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Raske svar";
+
 /* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
-"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "AI-DRIVNE FUNKSJONAR";
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "KI-DRIVNE FUNKSJONAR";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
 "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "Omsettingar held fram med å vere private på eininga di.";
@@ -92,22 +101,22 @@
 "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "Omsetting";
 
 /* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
-"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Blokkering betyr at du ikkje vil sjå nye eller noverande AI-forbetringar i %@, eller sprettoppvindauge om dei.";
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Blokkering betyr at du ikkje vil sjå nye eller noverande KI-forbetringar i %@, eller sprettoppvindauge om dei.";
 
 /* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
 "Settings.AIControls.BlockAIEnhancementsLink.v151" = "Sjå kva som er og ikkje er inkludert";
 
 /* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
-"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Blokker AI-forbetringar";
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Blokker KI-forbetringar";
 
 /* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
-"Settings.AIControls.BlockedInformation.v151" = "Nye og eksisterande AI-forbetringar er blokkerte som standard. Opphev blokkeringa av spesifikke funksjonar nedanfor.";
+"Settings.AIControls.BlockedInformation.v151" = "Nye og eksisterande KI-forbetringar er blokkerte som standard. Opphev blokkeringa av spesifikke funksjonar nedanfor.";
 
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "Les meir";
 
 /* This is the message for the Header Card under the AI Controls settings section. */
-"Settings.AIControls.HeaderCard.Message.v151" = "Det inkluderer om du vil bruke funksjonar som er forbetra med AI.";
+"Settings.AIControls.HeaderCard.Message.v151" = "Det inkluderer om du vil bruke funksjonar som er forbetra med KI.";
 
 /* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
 "Settings.AIControls.HeaderCard.Title.v151" = "Du har alltid eit val i %@";
@@ -162,6 +171,12 @@
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Automatisk avspeling";
+
+/* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
+"Settings.Browsing.BlockAds.Title.v153" = "Blokker reklame";
+
+/* This is the title for the Content customization section under the Browsing settings page. */
+"Settings.Browsing.Content.v153" = "Innhald";
 
 /* This is the title for Links customization under the Browsing settings section. */
 "Settings.Browsing.Links.v137" = "Lenker";
@@ -249,6 +264,15 @@
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "Forslag frå søkjemotorar";
+
+/* In the Search settings, this is the description that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Description.v153" = "Send bilde til Google for å søkje.";
+
+/* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
+"Settings.Search.GoogleLens.Footnote.v153" = "Berre tilgjengeleg når Google er aktivert ovanfor og er den aktive søkjemotoren din medan du surfar.";
+
+/* In the Search settings, this is the title that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Title.v153" = "Google Lens";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Søk";

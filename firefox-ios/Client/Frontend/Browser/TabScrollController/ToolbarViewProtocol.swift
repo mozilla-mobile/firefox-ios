@@ -132,6 +132,10 @@ final class ToolbarAnimator {
         updateBottomToolbarConstraints(bottomContainerOffset: bottomContainerOffset,
                                        overKeyboardContainerOffset: overKeyboardContainerOffset)
 
+        if overKeyboardContainerOffset == 0 {
+            view?.overKeyboardContainer.updateAlphaForSubviews(alpha)
+        }
+
         delegate?.dispatchScrollAlphaChange(alpha: alpha)
     }
 
@@ -184,6 +188,9 @@ final class ToolbarAnimator {
             }
             self.updateBottomToolbarConstraints(bottomContainerOffset: bottomOffset,
                                                 overKeyboardContainerOffset: overkeyboardOffset)
+            if overkeyboardOffset == 0 {
+                view.overKeyboardContainer.updateAlphaForSubviews(alpha)
+            }
         }
 
         self.delegate?.dispatchScrollAlphaChange(alpha: alpha)

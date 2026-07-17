@@ -1,24 +1,30 @@
-/* (No Comment) */
-"New Private Tab" = "لسان خاص جديد";
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "أيقونة التطبيق";
 
 /* (No Comment) */
-"New Tab" = "لسان جديد";
+"New Private Tab" = "تبويب خاص جديد";
+
+/* (No Comment) */
+"New Tab" = "تبويب جديد";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "يستعمل Firefox كاميراتك لمسح رموز QR رقميًا ولالتقاط الصور والڤِديوهات.";
+"NSCameraUsageDescription" = "يمكن لفايرفوكس استخدام كاميرتك لمسح رموز الاستجابة السريعة أو التقاط الصور وتسجيل الفيديو.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "يتطلب Firefox تفعيل بصمة الوجه للوصول إلى كلمات المرور وطرق الدفع المحفوظة لديك.";
+"NSFaceIDUsageDescription" = "يتطلب فايرفوكس معرف الوجه للوصول إلى كلمات المرور المحفوظة لديك وطرق الدفع.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "يمكن أن تطلب منك المواقع التي تزورها معرفة مكانك.";
+"NSLocationWhenInUseUsageDescription" = "قد تطلب مواقع الويب التي تزورها موقعك.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "يستعمل Firefox الميكروفون لتسجيل الصوت ورفعه.";
+"NSMicrophoneUsageDescription" = "يستخدم فايرفوكس ميكروفونك لتسجيل الصوت ورفعه.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "يتيح لك هذا حفظ الصور.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "يستخدم فايرفوكس التعرف على الصوت لتحويل صوتك إلى نص للبحث الصوتي.";
+
 /* (No Comment) */
-"Scan QR Code" = "امسح رمز QR ضوئيا";
+"Scan QR Code" = "مسح رمز الاستجابة السريعة";
 

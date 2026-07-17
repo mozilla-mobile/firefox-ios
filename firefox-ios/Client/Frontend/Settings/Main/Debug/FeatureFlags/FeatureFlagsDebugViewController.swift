@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
-final class FeatureFlagsDebugViewController: SettingsTableViewController, LegacyFeatureFlaggable {
+final class FeatureFlagsDebugViewController: SettingsTableViewController, FeatureFlaggable {
     init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
@@ -28,12 +28,40 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
 
     // swiftlint:disable:next function_body_length
     private func generateFeatureFlagToggleSettings() -> SettingSection {
-        // For better code readability and parsability in-app, please keep in alphabetical order by title
+        // For better code readability and parsability in-app, please keep in alphabetical
+        // order by titleText
         let children: [Setting] =  [
             FeatureFlagsBoolSetting(
-                with: .adsClient,
-                titleText: format(string: "Ads Client"),
-                statusText: format(string: "Toggle to enable the rust ads client")
+                with: .adBlocker,
+                titleText: format(string: "Ad Blocker"),
+                statusText: format(string: "Toggle to show the Ad Blocker feature.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .addressBarGestureToOpenTabTrayInteractive,
+                titleText: format(string: "Address bar gesture interactive"),
+                statusText: format(string: "Toggle to enable fancier animations for address bar swipe gestures")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .addressBarGestureToOpenTabTraySwipe,
+                titleText: format(string: "Address bar gesture swipe"),
+                statusText: format(string: """
+                                            Toggle to enable swipe gestures for the address bar.
+                                            Overrides interactive animation if enabled
+                                            """)
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                            with: .addressBarGestureToOpenTabTrayCloseTab,
+                            titleText: format(string: "Address bar gesture to close tab"),
+                            statusText: format(string: """
+                                                        Toggle to enable closing a tab by dragging it into the top 1/4
+                                                        of the screen. Requires the interactive gesture be enabled.
+                                                        """)
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -45,9 +73,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .appearanceMenu,
-                titleText: format(string: "Appearance Menu"),
-                statusText: format(string: "Toggle to show the new appearance menu")
+                with: .httpsUpgrade,
+                titleText: format(string: "Automatic HTTPS upgrade"),
+                statusText: format(string: "Toggle to enable automatic HTTPS upgrade.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .badCertDomainErrorPage,
+                titleText: format(string: "Bad Cert Domain Native Error Page"),
+                statusText: format(string: "Toggle to display the natively created bad cert domain error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -55,6 +90,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 with: .bookmarksSearchFeature,
                 titleText: format(string: "Bookmarks Search"),
                 statusText: format(string: "Toggle to enable bookmarks panel search feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .customReaderModeScheme,
+                titleText: format(string: "Custom Reader Mode Scheme"),
+                statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -73,9 +115,23 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .trackingProtectionRefactor,
-                titleText: format(string: "Enhanced Tracking Protection"),
-                statusText: format(string: "Toggle to use enhanced tracking protection")
+                with: .googleLens,
+                titleText: format(string: "Google Lens"),
+                statusText: format(string: "Toggle to enable Google Lens entry points")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepageAddShortcutTile,
+                titleText: format(string: "Homepage Add Shortcut"),
+                statusText: format(string: "Toggle to enable the homepage add shortcut tile")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepagePinnedHeader,
+                titleText: format(string: "Homepage Pinned Header"),
+                statusText: format(string: "Toggle to enable the pinned homepage newsfeed header")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -90,6 +146,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 with: .homepageStoryCategories,
                 titleText: format(string: "Homepage Story Categories"),
                 statusText: format(string: "Toggle to enable homepage story categories")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepageTrackerBlockerModule,
+                titleText: format(string: "Homepage Tracker Blocker Module"),
+                statusText: format(string: "Toggle homepage Tracker Blocker module")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .hostedSummarizer,
+                titleText: format(string: "Hosted Summarizer Feature"),
+                statusText: format(string: "Toggle to enable the hosted summarizer feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -116,9 +186,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .addressBarMenu,
-                titleText: format(string: "New AddressBar Menu"),
-                statusText: format(string: "Toggle to show the new address bar menu")
+                with: .newBookmarkFolderTree,
+                titleText: format(string: "New Bookmarks Folder Tree"),
+                statusText: format(string: "Toggle to use new bookmarks folder tree UI")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -130,9 +200,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .badCertDomainErrorPage,
-                titleText: format(string: "Bad Cert Domain Native Error Page"),
-                statusText: format(string: "Toggle to display the natively created bad cert domain error page")
+                with: .novaDesign,
+                titleText: format(string: "Nova Design"),
+                statusText: format(string: "Toggle to enable Nova design")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .quickAnswers,
+                titleText: format(string: "Quick Answers"),
+                statusText: format(string: "Toggle to enable the Quick Answers feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -140,6 +217,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .reportBrokenSite,
+                titleText: format(string: "Report Broken Site"),
+                statusText: format(string: "Toggle Report Broken Site")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -172,9 +256,23 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .summarizerAppAttestAuth,
+                titleText: format(string: "Summarizer App Attest Auth Feature"),
+                statusText: format(string: "Toggle to enable the app attest authentication for the summarizer feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .summarizerLanguageExpansion,
                 titleText: format(string: "Summarizer Language Expansion"),
                 statusText: format(string: "Toggle to enable Summarizer language expansion feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .summarizerPermissiveGuardrails,
+                titleText: format(string: "Summarizer Permissive Guardrails Feature"),
+                statusText: format(string: "Toggle to enable the permissive guardrails for the summarizer feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -186,16 +284,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .tabTrayUIExperiments,
-                titleText: format(string: "Tab Tray UI Experiment"),
-                statusText: format(string: "Toggle to use the new tab tray UI")
+                with: .tabTrayiPadUIExperiments,
+                titleText: format(string: "Tab Tray iPad UI Experiment"),
+                statusText: format(string: "Toggle to use the new tab tray UI on iPad")
             ) { [weak self] _ in
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .tabTrayiPadUIExperiments,
-                titleText: format(string: "Tab Tray iPad UI Experiment"),
-                statusText: format(string: "Toggle to use the new tab tray UI on iPad")
+                with: .tabTrayUIExperiments,
+                titleText: format(string: "Tab Tray UI Experiment"),
+                statusText: format(string: "Toggle to use the new tab tray UI")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -207,16 +305,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .translation,
-                titleText: format(string: "Translations"),
-                statusText: format(string: "Toggle to enable translations feature")
+                with: .translationLanguagePicker,
+                titleText: format(string: "Translation Language Picker"),
+                statusText: format(string: "Toggle to enable language picker for translations")
             ) { [weak self] _ in
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .translationLanguagePicker,
-                titleText: format(string: "Translation Language Picker"),
-                statusText: format(string: "Toggle to enable language picker for translations")
+                with: .translation,
+                titleText: format(string: "Translations"),
+                statusText: format(string: "Toggle to enable translations feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -228,37 +326,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .quickAnswers,
-                titleText: format(string: "Quick Answers"),
-                statusText: format(string: "Toggle to enable the Quick Answers feature")
+                with: .waybackMachine,
+                titleText: format(string: "Wayback Machine"),
+                statusText: format(string: "Toggle to show Wayback Machine fallback on native error pages")
             ) { [weak self] _ in
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .hostedSummarizer,
-                titleText: format(string: "Hosted Summarizer Feature"),
-                statusText: format(string: "Toggle to enable the hosted summarizer feature")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .summarizerAppAttestAuth,
-                titleText: format(string: "Summarizer App Attest Auth Feature"),
-                statusText: format(string: "Toggle to enable the app attest authentication for the summarizer feature")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .needsReloadRefactor,
-                titleText: format(string: "Needs Reload Refactor"),
-                statusText: format(string: "Toggle to enable the needs reload refactor")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .summarizerPermissiveGuardrails,
-                titleText: format(string: "Summarizer Permissive Guardrails Feature"),
-                statusText: format(string: "Toggle to enable the permissive guardrails for the summarizer feature")
+                with: .worldCupWidget,
+                titleText: format(string: "World Cup Widget"),
+                statusText: format(string: "Toggle to enable the World Cup widget feature on the Homepage")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -280,9 +357,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
     }
 
     private func generateFeatureFlagList() -> SettingSection {
-        let flags = FeatureFlagID.allCases
+        let flags = FeatureFlagID.allCases.filter { $0.debugKey != nil }
         let settingsList = flags.compactMap { flagID in
-            return Setting(title: format(string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))"))
+            return Setting(title: format(string: "\(flagID): \(featureFlagsProvider.isEnabled(flagID))"))
         }
         return SettingSection(
             title: NSAttributedString(string: "Build only status"),

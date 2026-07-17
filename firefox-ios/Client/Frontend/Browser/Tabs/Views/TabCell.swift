@@ -57,9 +57,16 @@ final class TabCell: UICollectionViewCell,
         view.isHidden = true
     }
 
-    private lazy var screenshotView: UIImageView = .build { view in
+    private lazy var screenshotViewPhone: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+    }
+
+    private lazy var screenshotViewPad: TabCellCustomImage = .build()
+
+    private var screenshotView: UIImageView {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        return isPad ? screenshotViewPad : screenshotViewPhone
     }
 
     private lazy var titleText: UILabel = .build { label in
@@ -196,6 +203,10 @@ final class TabCell: UICollectionViewCell,
         } else if let tabScreenshot = tabModel.screenshot {
             // Use Tab screenshot when available
             screenshotView.image = tabScreenshot
+        } else if tabModel.hasScreenshotOnDisk {
+            // A screenshot exists on disk and is being loaded asynchronously. Keep the cell blank
+            // until it arrives to avoid a brief favicon-to-screenshot flash after tab restoration.
+            screenshotView.image = nil
         } else {
             // Favicon or letter image when tab screenshot isn't available
             faviconBG.isHidden = false
@@ -236,6 +247,8 @@ final class TabCell: UICollectionViewCell,
     override func prepareForReuse() {
         // Reset any close animations.
         super.prepareForReuse()
+        tabModel = nil
+        accessibilityLabel = nil
         screenshotView.image = nil
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
