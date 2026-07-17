@@ -5,47 +5,44 @@
 import UIKit
 
 /// Contains static, unchanging information about the current `UIDevice`, like the model and system version.
-///
-/// This makes it easier for code that runs on a background thread (without an asynchronous context) to use these values.
-///
-/// **Never put values in here that might change during runtime.**
 public struct UIDeviceDetails {
-    /// The model of the device.
-    public static let model = {
-        getMainThreadDataSynchronously { UIDevice.current.model }
-    }()
+    public static var model: String { cachedModel.value }
+    private static let cachedModel = MainActorCachedValue { UIDevice.current.model }
 
-    /// The style of interface to use on the current device.
-    public static let userInterfaceIdiom = {
-        getMainThreadDataSynchronously { UIDevice.current.userInterfaceIdiom }
-    }()
+    public static var userInterfaceIdiom: UIUserInterfaceIdiom { cachedUserInterfaceIdiom.value }
+    private static let cachedUserInterfaceIdiom = MainActorCachedValue { UIDevice.current.userInterfaceIdiom }
 
-    /// The current version of the operating system.
-    public static let systemVersion = {
-        getMainThreadDataSynchronously { UIDevice.current.systemVersion }
-    }()
+    public static var systemVersion: String { cachedSystemVersion.value }
+    private static let cachedSystemVersion = MainActorCachedValue { UIDevice.current.systemVersion }
 
-    /// Never instantiate this type.
     private init() {}
+}
 
-    // MARK: Helper method
+/// Lazily computes a `@MainActor` value and caches it. Safe to read from any thread.
+/// The main-thread hop happens outside the lock so this utility class avoids the deadlock
+/// we had with the previous implementation of UIDeviceDetails.
+final class MainActorCachedValue<T: Sendable>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var cachedValue: T?
+    private let evaluate: @MainActor () -> T
 
-    /// This nonisolated function will execute the `work` closure on the main thread to return a value outside an
-    /// asynchronous or main actor context. It will synchronously suspend if necessary to wait for the MT.
-    ///
-    /// **DO NOT USE THIS METHOD ELSEWHERE IN THE CODE BASE.**
-    /// This is a workaround to access unchanging `UIDevice.current` values that Apple has needlessly main actor-isolated.
-    private static func getMainThreadDataSynchronously<T: Sendable>(
-        work: @MainActor () -> (T)
-    ) -> T {
-        if Thread.isMainThread {
-            MainActor.assumeIsolated {
-                work()
-            }
-        } else {
-            DispatchQueue.main.sync {
-                work()
-            }
-        }
+    init(_ compute: @escaping @MainActor () -> T) {
+        self.evaluate = compute
+    }
+
+    var value: T {
+        // Fast path, lock held only for the in-memory read.
+        lock.lock()
+        if let cachedValue { lock.unlock(); return cachedValue }
+        lock.unlock()
+
+        // Compute without holding the lock
+        let value = Thread.isMainThread ? MainActor.assumeIsolated { evaluate() } : DispatchQueue.main.sync { evaluate() }
+
+        // Lock only for in-memory write. Constant value so last-writer-wins is Ok.
+        lock.lock()
+        cachedValue = value
+        lock.unlock()
+        return value
     }
 }
