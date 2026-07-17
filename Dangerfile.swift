@@ -567,6 +567,7 @@ class CodeUsageDetector {
         case notifiable
         case unsafe
         case cspHeader
+        case userInterfaceIdiom
 
         var bundledHeader: String {
             switch self {
@@ -589,6 +590,13 @@ class CodeUsageDetector {
                 return "### 🔒 Security: CSP `unsafe-` detected\nPlease request a security review."
             case .cspHeader:
                 return "### 🔒 Security: `Content-Security-Policy` change detected\nPlease request a security review."
+            case .userInterfaceIdiom:
+                return """
+                ### ⚠️ `userInterfaceIdiom` usage detected
+                Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid checking `userInterfaceIdiom` for layout \
+                decisions. iPhone apps running on iPad or in iPhone Mirroring on Mac still report the phone idiom. \
+                Prefer size classes or trait-based layout instead.
+                """
             }
         }
 
@@ -612,6 +620,8 @@ class CodeUsageDetector {
                 return "unsafe-"
             case .cspHeader:
                 return "Content-Security-Policy"
+            case .userInterfaceIdiom:
+                return "userInterfaceIdiom"
             }
         }
 
@@ -637,7 +647,7 @@ class CodeUsageDetector {
         // Decide if we want to `warn` instead of `fail` on the pull request.
         var shouldWarn: Bool {
             switch self {
-            case .deferred, .notifiable:
+            case .deferred, .notifiable, .userInterfaceIdiom:
                 return true
             default:
                 return false
