@@ -48,10 +48,6 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 }
 
 extension TabTrayViewController: BasicAnimationControllerDelegate {
-    static var screenshotViewContainerCornerRadius: CGFloat {
-            return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 25.0
-        }
-
     func animatePresentation(context: UIViewControllerContextTransitioning) {
         guard
             let containerController = context.viewController(forKey: .from) as? UINavigationController,
@@ -201,16 +197,19 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         // Source from the tab screenshot so the full card survives going off screen
         let sourceFrame = browserVC.tabTrayAnimationSourceFrame
-        let snapshotImage = sourceFrame != nil
-        ? (selectedTab.screenshot ?? browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
-        : browserVC.view.screenshot(quality: UX.bvcScreenshotQuality)
+        var snapshotImage: UIImage?
+        if sourceFrame != nil {
+            snapshotImage = (selectedTab.screenshot ?? browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
+        } else {
+            snapshotImage = browserVC.view.screenshot(quality: UX.bvcScreenshotQuality)
+        }
         let bvcSnapshot = UIImageView(image: snapshotImage)
         var cellFrame = sourceFrame ?? browserVC.view.frame
         bvcSnapshot.contentMode = .scaleAspectFill
         bvcSnapshot.frame = cellFrame
         browserVC.tabTrayAnimationSourceFrame = nil
         bvcSnapshot.clipsToBounds = true
-        bvcSnapshot.layer.cornerRadius = TabTrayViewController.screenshotViewContainerCornerRadius
+        bvcSnapshot.applyScreenCornerRadius()
 
         let backgroundView = makePresentationBackgroundView(finalFrame: finalFrame)
 
@@ -224,7 +223,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         destinationController.view.frame = finalFrame
         destinationController.view.layoutIfNeeded()
 
-        // Don't block the UI rendering with the animation to make the snapshotting code more performant
         let collectionView = tabDisplayView.collectionView
         guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
               let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
@@ -391,20 +389,20 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     }
 
     private func revealSelectedCell(
-            in collectionView: UICollectionView,
-            selectedTab: Tab,
-            settledImage: UIImage?,
-            theme: Theme
+        in collectionView: UICollectionView,
+        selectedTab: Tab,
+        settledImage: UIImage?,
+        theme: Theme
         ) {
-            guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
-                  let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource),
-                  let indexPath = dataSource.indexPath(for: item),
-                  let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
-            else { return }
-            cell.syncScreenshotForAnimation(settledImage)
-            cell.isHidden = false
-            cell.setSelectedState(isPrivate: selectedTab.isPrivate, theme: theme)
-        }
+        guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
+                let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource),
+                let indexPath = dataSource.indexPath(for: item),
+                let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
+        else { return }
+        cell.syncScreenshotForAnimation(settledImage)
+        cell.isHidden = false
+        cell.setSelectedState(isPrivate: selectedTab.isPrivate, theme: theme)
+    }
 
     private func runDismissalAnimation(
         context: UIViewControllerContextTransitioning,
