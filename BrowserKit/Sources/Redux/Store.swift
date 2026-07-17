@@ -116,7 +116,6 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
             newState = reducer.legacyReducer(state, legacyAction)
         case .modern(let modernAction):
              newState = reducer.modernReducer(state, modernAction, windowUUID)
-            return
         }
 
         // Middlewares are all given an opportunity to respond to the action. This is only done once

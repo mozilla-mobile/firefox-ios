@@ -652,8 +652,8 @@ struct BrowserViewControllerState: ScreenState {
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
             navigateTo: .loadURL(url),
-            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+            microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
+            autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action))
     }
 
     @MainActor
