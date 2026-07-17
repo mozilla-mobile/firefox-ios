@@ -34,7 +34,7 @@ final class WallpaperStateTests: XCTestCase {
             logoTextColor: .black
         )
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             WallpaperAction(
                 wallpaperConfiguration: testWallpaper,
@@ -64,7 +64,7 @@ final class WallpaperStateTests: XCTestCase {
             logoTextColor: .black
         )
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             WallpaperAction(
                 wallpaperConfiguration: testWallpaper,

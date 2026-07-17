@@ -33,7 +33,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = shortcutsLibraryReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             ShortcutsLibraryAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -51,7 +51,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = shortcutsLibraryReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             ShortcutsLibraryAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -77,7 +77,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
             )
         )
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             TopSitesAction(
                 topSites: [exampleShortcut],
@@ -98,7 +98,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = shortcutsLibraryReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             TopSitesAction(
                 topSites: nil,

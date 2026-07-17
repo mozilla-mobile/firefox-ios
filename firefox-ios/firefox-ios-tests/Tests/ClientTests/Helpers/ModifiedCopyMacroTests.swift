@@ -36,7 +36,7 @@ final class ModifiedCopyMacroTests: XCTestCase {
             lastName: "Jones"
         )
 
-        let newState = PersonReduxState.reducer(state, action)
+        let newState = PersonReduxState.reducer.legacyReducer(state, action)
 
         XCTAssertEqual(newState.windowUUID, testWindowUUID)
         XCTAssertEqual(newState.firstName, "Bob")
@@ -66,7 +66,7 @@ final class ModifiedCopyMacroTests: XCTestCase {
             favoriteColor: "green"
         )
 
-        let newState = PersonReduxState.reducer(state, action)
+        let newState = PersonReduxState.reducer.legacyReducer(state, action)
 
         XCTAssertEqual(newState.windowUUID, testWindowUUID)
         XCTAssertEqual(newState.firstName, testFirstName)
@@ -96,7 +96,7 @@ final class ModifiedCopyMacroTests: XCTestCase {
             favoriteColor: nil
         )
 
-        let newState = PersonReduxState.reducer(state, action)
+        let newState = PersonReduxState.reducer.legacyReducer(state, action)
 
         XCTAssertEqual(newState.windowUUID, testWindowUUID)
         XCTAssertEqual(newState.firstName, testFirstName)
@@ -152,7 +152,14 @@ fileprivate extension ModifiedCopyMacroTests {
             self.favoriteColor = favoriteColor
         }
 
-        static let reducer: Reducer<Self> = { state, action in
+        static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+        static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+            // Does not handle any modern actions
+            return defaultState(from: state)
+        }
+
+        static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
             // Handles only PersonReduxActions
             guard let action = action as? PersonReduxAction,
                   let actionType = action.actionType as? PersonReduxActionType else {
