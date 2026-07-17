@@ -2220,6 +2220,12 @@
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
 		EC405C143007DEE10003DE07 /* WaybackCodesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC405C133007DED70003DE07 /* WaybackCodesTests.swift */; };
 		EC405C163007E3F60003DE07 /* NativeErrorRegularContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC405C153007E3EC0003DE07 /* NativeErrorRegularContentViewTests.swift */; };
+		EC0FBD1F300530E9005CCA62 /* FolderSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD1E300530E3005CCA62 /* FolderSectionHeaderView.swift */; };
+		EC0FBD213005311A005CCA62 /* FolderTreeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2030053117005CCA62 /* FolderTreeCell.swift */; };
+		EC0FBD233005313B005CCA62 /* LinkActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2230053136005CCA62 /* LinkActionCell.swift */; };
+		EC0FBD2D3006924A005CCA62 /* FolderTreeCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2C3006924A005CCA62 /* FolderTreeCellTests.swift */; };
+		EC0FBD2F30069252005CCA62 /* FolderSectionHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD2E30069252005CCA62 /* FolderSectionHeaderViewTests.swift */; };
+		EC0FBD3130069258005CCA62 /* LinkActionCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */; };
 		ECD8E56C2FF7EB69002092C6 /* WaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */; };
 		ECD8E56E2FF7ED79002092C6 /* WaybackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56D2FF7ED75002092C6 /* WaybackServiceTests.swift */; };
 		ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */; };
@@ -11794,6 +11800,12 @@
 		EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapper.swift; sourceTree = "<group>"; };
 		EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+FindInPage.swift"; sourceTree = "<group>"; };
 		EC094E459CE942F341423C1B /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
+		EC0FBD1E300530E3005CCA62 /* FolderSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderView.swift; sourceTree = "<group>"; };
+		EC0FBD2030053117005CCA62 /* FolderTreeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCell.swift; sourceTree = "<group>"; };
+		EC0FBD2230053136005CCA62 /* LinkActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkActionCell.swift; sourceTree = "<group>"; };
+		EC0FBD2C3006924A005CCA62 /* FolderTreeCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeCellTests.swift; sourceTree = "<group>"; };
+		EC0FBD2E30069252005CCA62 /* FolderSectionHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionHeaderViewTests.swift; sourceTree = "<group>"; };
+		EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkActionCellTests.swift; sourceTree = "<group>"; };
 		EC184DB5A4191574BBE29140 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/Menu.strings; sourceTree = "<group>"; };
 		EC405C133007DED70003DE07 /* WaybackCodesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackCodesTests.swift; sourceTree = "<group>"; };
 		EC405C153007E3EC0003DE07 /* NativeErrorRegularContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorRegularContentViewTests.swift; sourceTree = "<group>"; };
@@ -12469,6 +12481,9 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */,
+				EC0FBD2E30069252005CCA62 /* FolderSectionHeaderViewTests.swift */,
+				EC0FBD2C3006924A005CCA62 /* FolderTreeCellTests.swift */,
 				8A9D31612D13545100171502 /* EditFolderViewModelTests.swift */,
 				8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */,
 				0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */,
@@ -12515,6 +12530,9 @@
 		0BDDB33B2CA6B19B00D501DF /* Edit Folder */ = {
 			isa = PBXGroup;
 			children = (
+				EC0FBD2230053136005CCA62 /* LinkActionCell.swift */,
+				EC0FBD2030053117005CCA62 /* FolderTreeCell.swift */,
+				EC0FBD1E300530E3005CCA62 /* FolderSectionHeaderView.swift */,
 				0BDDB33C2CA6B1DA00D501DF /* EditFolderViewController.swift */,
 				0BDDB33E2CA6B1F000D501DF /* EditFolderViewModel.swift */,
 				0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */,
@@ -20108,6 +20126,7 @@
 				5AD3B67E2CF665B400AFA1FE /* UIApplicationInterface.swift in Sources */,
 				0A44ABAC2D6DC2520034FA86 /* ThemedLearnMoreTableViewCell.swift in Sources */,
 				C855728429AEA3C300AF32B0 /* SurveySurfaceViewModel.swift in Sources */,
+				EC0FBD233005313B005CCA62 /* LinkActionCell.swift in Sources */,
 				CA4ACE4924C8C91600F55894 /* BreachAlertsDetailView.swift in Sources */,
 				C834ACD128D3ACA900203AD1 /* Blurrable.swift in Sources */,
 				C84655E22887388F00861B4A /* Wallpaper.swift in Sources */,
@@ -20296,6 +20315,7 @@
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
 				8A9F4EF62DC8F164004644B9 /* AutofillProvider.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
+				EC0FBD213005311A005CCA62 /* FolderTreeCell.swift in Sources */,
 				8A454D362CB86993009436D9 /* MerinoStoryConfiguration.swift in Sources */,
 				61CEFF5E2DA8BC78000B88A7 /* TabsPanelTelemetry.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
@@ -20401,6 +20421,7 @@
 				4347B398298D6D7B0045F677 /* CreditCardTableViewModel.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				EDADF77A2D70BD3E00C39295 /* AppIconSelectionTelemetry.swift in Sources */,
+				EC0FBD1F300530E9005CCA62 /* FolderSectionHeaderView.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				742BD99E2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift in Sources */,
 				9636D92C27F9E50100771F5E /* GleanPlumbMessageStore.swift in Sources */,
@@ -20687,6 +20708,7 @@
 				F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */,
 				F00CA4022F00000000000003 /* WorldCupLiveResponseTests.swift in Sources */,
 				F00CA4022F0000000000000D /* WorldCupTeamsResponseTests.swift in Sources */,
+				EC0FBD2F30069252005CCA62 /* FolderSectionHeaderViewTests.swift in Sources */,
 				F00CA4022F0000000000000F /* WorldCupLoadErrorTests.swift in Sources */,
 				F00CA4022F00000000000013 /* WorldCupPollingFetchStrategyTests.swift in Sources */,
 				F00CA4032F00000000000007 /* WorldCupMatchesTests.swift in Sources */,
@@ -20713,6 +20735,7 @@
 				8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */,
 				8AE80BAF2891960300BC12EA /* MockTraitCollection.swift in Sources */,
 				C2F2C19B30044C9600F9B916 /* MockAdBlockerListFetcher.swift in Sources */,
+				EC0FBD3130069258005CCA62 /* LinkActionCellTests.swift in Sources */,
 				8A55E8042BFBA9BE006DBD85 /* MicrosurveyCoordinatorTests.swift in Sources */,
 				8A832A9729DCBD3C0025D5DD /* LaunchTypeTests.swift in Sources */,
 				219AEECE2E5E524300BF5F6F /* MockTabProviderProtocol.swift in Sources */,
@@ -20738,6 +20761,7 @@
 				ED33E3572D0A4CE9002265A7 /* URLActivityItemProviderTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				AA6A6F382EF57EC000D1912D /* SystemLocaleProviderTests.swift in Sources */,
+				EC0FBD2D3006924A005CCA62 /* FolderTreeCellTests.swift in Sources */,
 				C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
 				C296B6E92F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift in Sources */,
