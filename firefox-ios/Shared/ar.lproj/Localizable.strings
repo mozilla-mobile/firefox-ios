@@ -281,7 +281,7 @@
 "Downloads.Toast.MultipleFiles.DescriptionText" = "1 من أصل %d ملفات";
 
 /* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
-"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%2$@ %1$@";
 
 /* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
@@ -345,6 +345,9 @@
 
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "أزِل";
+
+/* On each Story on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Stories.Minutes.v140" = "دق: %d";
 
 /* Label showing how many pages there is in a search group. %d represents a number */
 "FirefoxHomepage.Common.PagesCount.v112" = "الصفحات: %d";
@@ -455,7 +458,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "لِج لعرض قائمة بالألسنة من أجهزتك الأخرى.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "مزامنة فايرفوكس";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "التأريخ";
@@ -1100,7 +1103,7 @@
 "SentTab.NoTabArrivingNotification.body" = "اضغط ليبدأ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "مزامنة فايرفوكس";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "اعرض";
@@ -1155,6 +1158,9 @@
 
 /* Website Appearance settings section title in Appearance settings */
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "مظهر الموقع";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "يمنح مواقع الويب مظهرًا داكنًا. قد لا تبدو بعض المواقع بشكل صحيح.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
 "Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "الوضع الداكن للمواقع";
@@ -1258,6 +1264,12 @@
 /* General settings section title */
 "Settings.General.SectionName" = "عام";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "اختر ما يُعرض كصفحة رئيسية.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "اختر ما يتم تضمينه في صفحة فايرفوكس الرئيسية.";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "عُد إلى حيث كنت";
 
@@ -1288,11 +1300,71 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "شاشة الفتح";
 
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "تضمين في الصفحة الرئيسية";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "خلفية";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "خلفية فايرفوكس، نقش جمشت.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "خلفية فايرفوكس، نقش تلال الشاطئ.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "خلفية فايرفوكس، نقش سماوي.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "خلفية شفافة افتراضية.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "خلفية فايرفوكس، نقش شروق الشمس.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "مفتاح تبديل تدوير خلفية الصفحة الرئيسية";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "خلفية فايرفوكس، نقش تلال الشفق.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "كلاسيكي %@";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "شاشة الفتح";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "تعرّف على المزيد";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "جرّب المجموعة الجديدة.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "مجموعة الأصوات المستقلة الجديدة.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "إصدار محدود";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "تغيير الخلفية بالنقر على شعار صفحة فايرفوكس الرئيسية";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "الخلفية";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "تم تحديث الخلفية!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "عرض";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "صفحة البداية";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "صفوف";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "صفوف";
 
 /* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
 "Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "الاختصارات";
@@ -1591,6 +1663,9 @@
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "أظهر الألسنة غير النشطة";
 
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "إخفاء التبويبات غير النشطة";
+
 /* Accessibility Label for the tab toolbar Search button */
 "TabToolbar.Accessibility.Search.v106" = "ابحث";
 
@@ -1638,6 +1713,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "هذا الأسبوع";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "أمس";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "ليس الآن";
@@ -1689,6 +1767,24 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "اسم المستخدم";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "حدث خطأ ما مع هذه الخلفية.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "تعذّر تغيير الخلفية";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "حدث خطأ ما مع التنزيل الخاص بك.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "تعذّر تنزيل الخلفية";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "إلغاء";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "حاول مرة أخرى";
 
 /* Accessibility label for the main web content view */
 "Web content" = "محتوى الوِب";

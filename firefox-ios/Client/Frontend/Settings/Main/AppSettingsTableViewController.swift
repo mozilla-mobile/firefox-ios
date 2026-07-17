@@ -436,7 +436,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
                     defaultValue: true,
                     titleText: .AppSettingsClosePrivateTabsTitle,
                     statusText: .AppSettingsClosePrivateTabsDescription
-                ) { _ in
+                ) { [weak self] _ in
+                    guard let self else { return }
                     let action = TabTrayAction(windowUUID: self.windowUUID,
                                                actionType: TabTrayActionType.closePrivateTabsSettingToggled)
                     store.dispatch(action)
@@ -654,9 +655,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             tableView,
             viewForHeaderInSection: section
         ) as? ThemedTableSectionHeaderFooterView else {
-            logger.log("Failed to cast or retrieve ThemedTableSectionHeaderFooterView for section: \(section)",
+            logger.log("Failed to cast or retrieve ThemedTableSectionHeaderFooterView",
                        level: .fatal,
-                       category: .lifecycle)
+                       category: .lifecycle,
+                       extra: ["section": "\(section)"])
             return UIView()
         }
         return headerView

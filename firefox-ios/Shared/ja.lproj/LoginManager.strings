@@ -26,7 +26,7 @@
 "DeleteLoginAlert.Message.Local.v122" = "この操作は取り消すことができません。";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"DeleteLoginAlert.Message.Synced.v122" = "これにより、同期しているすべての端末からパスワードが削除されます。";
+"DeleteLoginAlert.Message.Synced.v122" = "この操作は、同期しているすべての端末からパスワードを削除します。";
 
 /* Title for the prompt that appears when the user deletes a login. */
 "DeleteLoginsAlert.Title.v122" = "パスワードを削除しますか？";

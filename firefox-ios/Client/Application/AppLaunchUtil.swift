@@ -238,10 +238,9 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
 
             browserProfile?.migrateHistoryToPlaces(
                 callback: { result in
-                    self.logger.log("Successfully migrated history",
+                    self.logger.log("Successfully migrated history in \(result.totalDuration / 1000) seconds",
                                     level: .info,
-                                    category: .sync,
-                                    extra: ["durationSeconds": "\(result.totalDuration / 1000)"])
+                                    category: .sync)
 
                     UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
                     NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)

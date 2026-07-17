@@ -272,7 +272,7 @@
 "Settings.Search.GoogleLens.Footnote.v153" = "Disponível apenas quando o Google está ativado acima e é o seu motor de pesquisa ativo enquanto navega.";
 
 /* In the Search settings, this is the title that describes the Google Lens feature */
-"Settings.Search.GoogleLens.Title.v153" = "Google Lente";
+"Settings.Search.GoogleLens.Title.v153" = "Google Lens";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Pesquisar";

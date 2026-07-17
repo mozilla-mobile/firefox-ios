@@ -45,6 +45,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
+    private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
 
     private var profile: Profile
@@ -854,11 +855,10 @@ final class BrowserCoordinator: BaseCoordinator,
         if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
             // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
             logger.log(
-                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet",
+                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet."
+                + " Existing coordinator UUID: \(coordinator.windowUUID), BrowserCoordinator UUID: \(windowUUID)",
                 level: .info,
-                category: .shareSheet,
-                extra: ["existing ShareSheetCoordinator UUID": "\(coordinator.windowUUID)",
-                        "BrowserCoordinator windowUUID": "\(windowUUID)"]
+                category: .shareSheet
             )
 
             coordinator.dismiss()
@@ -1296,16 +1296,22 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
+        if nativeErrorPageViewController != nil {
+            // Already showing a native error page, the existing instance will
+            // pick up the new error state via its Redux subscription.
+            return
+        }
+
         let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
             tabManager: tabManager,
             overlayManager: overlayManager
         )
-
         guard browserViewController.embedContent(errorPageController) else {
             logger.log("Unable to embed error page", level: .debug, category: .coordinator)
             return
         }
+        nativeErrorPageViewController = errorPageController
     }
 
     private func setiPadLayoutDetents(for controller: UIViewController) {

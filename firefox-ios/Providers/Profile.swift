@@ -224,9 +224,10 @@ open class BrowserProfile: Profile,
         do {
             return try self.files.getAndEnsureDirectory()
         } catch {
-            logger.log("Could not create directory at root path: \(error)",
+            logger.log("Could not create directory at root path",
                        level: .fatal,
-                       category: .setup)
+                       category: .setup,
+                       extra: ["error": "\(error)"])
             fatalError("Could not create directory at root path: \(error)")
         }
     }()
