@@ -10,13 +10,14 @@ enum ErrorPageModel: Equatable {
     case cellularDataRestricted
     case badCertDomain(BadCertDomainModel)
     case generic(GenericErrorModel)
-
+    case wayback(WaybackErrorModel)
     var title: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.TitleLabel
         case .cellularDataRestricted: return .NativeErrorPage.CellularDataRestricted.TitleLabel
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.TitleLabel
         case .generic: return .NativeErrorPage.GenericError.TitleLabel
+        case .wayback: return .NativeErrorPage.Wayback.TitleLabel
         }
     }
 
@@ -26,6 +27,7 @@ enum ErrorPageModel: Equatable {
         case .cellularDataRestricted: return .NativeErrorPage.CellularDataRestricted.Description
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
         case .generic: return .NativeErrorPage.GenericError.Description
+        case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
         }
     }
 
@@ -34,6 +36,7 @@ enum ErrorPageModel: Equatable {
         case .internetConnection, .cellularDataRestricted:
             return ImageIdentifiers.NativeErrorPage.noInternetConnection
         case .badCertDomain, .generic: return ImageIdentifiers.NativeErrorPage.securityError
+        case .wayback: return ImageIdentifiers.NativeErrorPage.noInternetConnection
         }
     }
 
@@ -42,6 +45,7 @@ enum ErrorPageModel: Equatable {
         case .internetConnection, .cellularDataRestricted: return nil
         case .badCertDomain(let model): return model.url
         case .generic(let model): return model.url
+        case .wayback(let model): return model.url
         }
     }
 
@@ -54,9 +58,14 @@ enum ErrorPageModel: Equatable {
 
     var isRegularUI: Bool {
         switch self {
-        case .internetConnection, .cellularDataRestricted, .generic: return true
+        case .internetConnection, .cellularDataRestricted, .generic, .wayback: return true
         case .badCertDomain: return false
         }
+    }
+
+    var isWayback: Bool {
+        if case .wayback = self { return true }
+        return false
     }
 
     struct AdvancedSectionConfig: Equatable {
@@ -75,4 +84,8 @@ struct BadCertDomainModel: Equatable {
 
 struct GenericErrorModel: Equatable {
     let url: URL?
+}
+
+struct WaybackErrorModel: Equatable {
+    let url: URL
 }

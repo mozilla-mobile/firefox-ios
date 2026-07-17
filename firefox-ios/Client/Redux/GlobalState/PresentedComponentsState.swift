@@ -15,7 +15,6 @@ enum ComponentState: Sendable, Equatable {
     case tabsPanel(TabsPanelState)
     case tabPeek(TabPeekState)
     case tabsTray(TabTrayState)
-    case themeSettings(ThemeSettingsState)
     case termsOfUse(TermsOfUseState)
     case trackingProtection(TrackingProtectionState)
     case toolbar(ToolbarState)
@@ -38,7 +37,6 @@ enum ComponentState: Sendable, Equatable {
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
         case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
         case .termsOfUse(let state): return .termsOfUse(TermsOfUseState.reducer(state, action))
-        case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
         case .trackingProtection(let state): return .trackingProtection(TrackingProtectionState.reducer(state, action))
         case .toolbar(let state): return .toolbar(ToolbarState.reducer(state, action))
         case .searchEngineSelection(let state):
@@ -64,7 +62,6 @@ enum ComponentState: Sendable, Equatable {
         case .tabsPanel: return .tabsPanel
         case .tabPeek: return .tabPeek
         case .tabsTray: return .tabsTray
-        case .themeSettings: return .themeSettings
         case .termsOfUse: return .termsOfUse
         case .trackingProtection: return .trackingProtection
         case .toolbar: return .toolbar
@@ -87,7 +84,6 @@ enum ComponentState: Sendable, Equatable {
         case .tabsPanel(let state): return state.windowUUID
         case .tabPeek(let state): return state.windowUUID
         case .tabsTray(let state): return state.windowUUID
-        case .themeSettings(let state): return state.windowUUID
         case .termsOfUse(let state): return state.windowUUID
         case .trackingProtection(let state): return state.windowUUID
         case .toolbar(let state): return state.windowUUID
@@ -151,8 +147,6 @@ struct PresentedComponentsState: Sendable, Equatable {
                 components.append(.tabsPanel(TabsPanelState(windowUUID: uuid)))
             case .tabPeek:
                 components.append(.tabPeek(TabPeekState(windowUUID: uuid)))
-            case .themeSettings:
-                components.append(.themeSettings(ThemeSettingsState(windowUUID: uuid)))
             case .termsOfUse:
                 components.append(.termsOfUse(TermsOfUseState(windowUUID: uuid)))
             case .trackingProtection:

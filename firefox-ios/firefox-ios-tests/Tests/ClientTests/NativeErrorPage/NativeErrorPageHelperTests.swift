@@ -204,7 +204,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
     func testParseErrorDetails_otherError_whenCellularDataRestricted_returnsGenericModel() {
         let url = URL(string: "https://example.com")!
-        let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut, userInfo: [
+        let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [
             NSURLErrorFailingURLErrorKey: url
         ])
         let helper = NativeErrorPageHelper(

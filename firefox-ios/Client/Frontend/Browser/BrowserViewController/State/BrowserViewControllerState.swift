@@ -24,6 +24,7 @@ struct BrowserViewControllerState: ScreenState {
         case reloadNoCache
         case stopLoading
         case newTab
+        case loadURL(URL)
     }
 
     enum DisplayType: Equatable {
@@ -379,6 +380,8 @@ struct BrowserViewControllerState: ScreenState {
             return handleReloadWebsiteAction(state: state, action: action)
         case GeneralBrowserActionType.reloadWebsiteNoCache:
             return handleReloadWebsiteNoCacheAction(state: state, action: action)
+        case GeneralBrowserActionType.loadWaybackURL:
+            return handleLoadWaybackURLAction(state: state, action: action)
         case GeneralBrowserActionType.stopLoadingWebsite:
             return handleStopLoadingWebsiteAction(state: state, action: action)
         case GeneralBrowserActionType.showShare:
@@ -617,6 +620,23 @@ struct BrowserViewControllerState: ScreenState {
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
             navigateTo: .reloadNoCache,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+    }
+
+    @MainActor
+    private static func handleLoadWaybackURLAction(state: BrowserViewControllerState,
+                                                   action: GeneralBrowserAction) -> BrowserViewControllerState {
+        guard let url = action.destinationURL else {
+            return passthroughState(from: state, action: action)
+        }
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
+            browserViewType: state.browserViewType,
+            navigateTo: .loadURL(url),
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
     }

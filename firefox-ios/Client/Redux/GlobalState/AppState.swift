@@ -30,7 +30,6 @@ struct AppState: StateType, Sendable {
                 case (.tabPeek(let state), .tabPeek): return state as? S
                 case (.tabsTray(let state), .tabsTray): return state as? S
                 case (.termsOfUse(let state), .termsOfUse): return state as? S
-                case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
                 case (.searchEngineSelection(let state), .searchEngineSelection): return state as? S
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
