@@ -21,7 +21,13 @@ final class NativeErrorPageMiddleware {
         self.logger = logger
     }
 
-    lazy var nativeErrorPageProvider: Middleware<AppState> = { [self] state, action in
+    lazy var nativeErrorPageProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
         case NativeErrorPageActionType.receivedError:
@@ -30,6 +36,7 @@ final class NativeErrorPageMiddleware {
                 let error = action.networkError
             else { return }
             nativeErrorPageHelper = NativeErrorPageHelper(error: error)
+            self.initializeNativeErrorPage(windowUUID: windowUUID)
         case NativeErrorPageActionType.errorPageLoaded:
             self.initializeNativeErrorPage(windowUUID: windowUUID)
         case NativeErrorPageActionType.bypassCertificateWarning:

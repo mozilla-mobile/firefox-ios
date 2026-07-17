@@ -182,13 +182,15 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         // The Markup tool opens
         if #available(iOS 26, *) {
             if !iPad() {
-                // iOS 26.3 renamed this navbar overflow button "More" -> "View More" (same rename
-                // as the share sheet, see MTE-5253). Tap whichever label is present.
-                let moreButton = app.navigationBars.buttons["More"]
-                if moreButton.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
-                    moreButton.waitAndTap()
-                } else {
-                    app.navigationBars.buttons["View More"].waitAndTap()
+                // The navbar overflow label varies ("More" -> "View More", MTE-5253) and the
+                // palette sometimes opens without one; only tap the label that's actually present.
+                if !app.buttons["Markup"].mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
+                    let overflow = app.navigationBars.buttons["More"].exists
+                        ? app.navigationBars.buttons["More"]
+                        : app.navigationBars.buttons["View More"]
+                    if overflow.exists {
+                        overflow.waitAndTap()
+                    }
                 }
                 mozWaitForElementToExist(app.buttons["Markup"])
                 mozWaitForElementToExist(app.buttons["Close"])

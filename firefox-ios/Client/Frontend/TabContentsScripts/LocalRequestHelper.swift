@@ -27,9 +27,10 @@ class LocalRequestHelper: TabContentScript {
         else { return }
 
         guard let params = message.body as? [String: String] else {
-            logger.log("Invalid data message body in LocalRequestHelper: \(message.body)",
+            logger.log("Invalid data message body in LocalRequestHelper",
                        level: .fatal,
-                       category: .library)
+                       category: .library,
+                       extra: ["messageBody": "\(message.body)"])
             return
         }
 

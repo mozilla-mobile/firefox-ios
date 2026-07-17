@@ -25,15 +25,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let translate = StandardImageIdentifiers.Medium.translate
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
         static let share = StandardImageIdentifiers.Large.shareApple
-        static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
+        static let reportBrokenSite = StandardImageIdentifiers.Large.report
     }
 
     private var isReportBrokenSiteOn: Bool {
         featureFlagsProvider.isEnabled(.reportBrokenSite)
-    }
-
-    private var isNewAppearanceMenuOn: Bool {
-        featureFlagsProvider.isEnabled(.appearanceMenu)
     }
 
     private var isSummarizerOn: Bool {

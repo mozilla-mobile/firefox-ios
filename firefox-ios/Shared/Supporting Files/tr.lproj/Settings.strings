@@ -268,6 +268,9 @@
 /* In the Search settings, this is the description that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Description.v153" = "Arama yapmak için resimleri Google’a gönder.";
 
+/* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
+"Settings.Search.GoogleLens.Footnote.v153" = "Yalnızca yukarıdan Google etkinleştirildiğinde ve aktif arama motorunuz olarak ayarlandığında kullanılabilir.";
+
 /* In the Search settings, this is the title that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Title.v153" = "Google Lens";
 

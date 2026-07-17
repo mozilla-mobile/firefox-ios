@@ -36,20 +36,17 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
+        case .addressBarGestureToOpenTabTrayCloseTab:
+                    return checkAddressBarGestureToOpenTabTrayCloseTabFeature()
+
         case .addressBarGestureToOpenTabTrayInteractive:
             return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
 
         case .addressBarGestureToOpenTabTraySwipe:
             return checkAddressBarGestureToOpenTabTraySwipeFeature()
 
-        case .adsClient:
-            return checkAdsClientFeature()
-
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
-
-        case .appearanceMenu:
-            return checkAppearanceMenuFeature()
 
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
@@ -62,9 +59,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature()
-
-        case .deeplinkOverlay:
-            return checkDeeplinkOverlayFeature()
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature()
@@ -121,9 +115,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .nativeErrorPage:
             return checkNativeErrorPageFeature()
-
-        case .needsReloadRefactor:
-            return checkNeedsReloadRefactorFeature()
 
         case .newBookmarkFolderTree:
             return checkNewBookmarkFolderTreeFeature()
@@ -333,23 +324,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return config.status
     }
 
-    private func checkAdsClientFeature() -> Bool {
-        let config = nimbus.features.adsClient.value()
-        return config.status
-    }
-
-    private func checkAppearanceMenuFeature() -> Bool {
-        let config = nimbus.features.appearanceMenuFeature.value()
-        return config.status
-    }
-
     private func checkDeeplinkOptimizationRefactorFeature() -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
-    }
-
-    private func checkDeeplinkOverlayFeature() -> Bool {
-        return nimbus.features.deeplinkOverlayFeature.value().enabled
     }
 
     private func checkDownloadLiveActivitiesFeature() -> Bool {
@@ -440,10 +417,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.onboardingFrameworkFeature.value().enableVideoIntro
     }
 
-    private func checkNeedsReloadRefactorFeature() -> Bool {
-        return nimbus.features.needsReloadRefactor.value().enabled
-    }
-
     private func checkNovaDesignFeature() -> Bool {
         return nimbus.features.novaDesignFeature.value().enabled
     }
@@ -479,6 +452,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkReportBrokenSiteFeature() -> Bool {
         return nimbus.features.reportBrokenSiteFeature.value().enabled
     }
+
+    private func checkAddressBarGestureToOpenTabTrayCloseTabFeature() -> Bool {
+           return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledClosetab
+       }
 
     private func checkAddressBarGestureToOpenTabTrayInteractiveFeature() -> Bool {
         return nimbus.features.addressBarGestureToOpenTabTrayFeature.value().enabledInteractive

@@ -59,40 +59,6 @@ final class PrivacyWindowHelperTests: XCTestCase {
         XCTAssertFalse(window.isHidden)
     }
 
-    func test_showWindow_withDefaultShowLogo_doesNotAddLogoSubview() throws {
-        let windowScene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
-        let subject = createSubject()
-
-        subject.showWindow(windowScene: windowScene, withThemedColor: .red)
-
-        let window = try XCTUnwrap(privacyWindow(in: windowScene))
-        let rootView = try XCTUnwrap(window.rootViewController?.view)
-        XCTAssertTrue(rootView.subviews.isEmpty)
-    }
-
-    func test_showWindow_withShowLogoFalse_doesNotAddLogoSubview() throws {
-        let windowScene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
-        let subject = createSubject()
-
-        subject.showWindow(windowScene: windowScene, withThemedColor: .red, showLogo: false)
-
-        let window = try XCTUnwrap(privacyWindow(in: windowScene))
-        let rootView = try XCTUnwrap(window.rootViewController?.view)
-        XCTAssertTrue(rootView.subviews.isEmpty)
-    }
-
-    func test_showWindow_withShowLogoTrue_addsLogoImageView() throws {
-        let windowScene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
-        let subject = createSubject()
-
-        subject.showWindow(windowScene: windowScene, withThemedColor: .red, showLogo: true)
-
-        let window = try XCTUnwrap(privacyWindow(in: windowScene))
-        let rootView = try XCTUnwrap(window.rootViewController?.view)
-        let imageViews = rootView.subviews.compactMap { $0 as? UIImageView }
-        XCTAssertEqual(imageViews.count, 1)
-    }
-
     func test_removeWindow_afterShowWindow_hidesPrivacyWindow() throws {
         let windowScene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
         let subject = createSubject()

@@ -296,18 +296,6 @@ class BrowserViewController: UIViewController,
         return toolbarHelper.isSwipingTabsEnabled
     }
 
-    var isNativeErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
-    }
-
-    var isNICErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
-    }
-
-    var isBadCertDomainErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
-    }
-
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
@@ -818,11 +806,7 @@ class BrowserViewController: UIViewController,
               currentWindowScene === windowScene else { return }
         guard canShowPrivacyWindow else { return }
 
-        privacyWindowHelper.showWindow(
-            windowScene: currentWindowScene,
-            withThemedColor: currentTheme().colors.layer3,
-            showLogo: shouldShowOverlayLogo
-        )
+        privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
     func sceneDidActivateNotification() {
@@ -849,27 +833,12 @@ class BrowserViewController: UIViewController,
         }
 
         guard canShowPrivacyWindow else { return }
-        privacyWindowHelper.showWindow(
-            windowScene: view.window?.windowScene,
-            withThemedColor: currentTheme().colors.layer3,
-            showLogo: shouldShowOverlayLogo
-        )
-    }
-
-    /// Show the Firefox logo on the overlay only for normal-mode tabs when the
-    /// deeplinkOverlay flag is on. Private-mode overlay stays a plain color.
-    private var shouldShowOverlayLogo: Bool {
-        guard let selectedTab = tabManager.selectedTab, !selectedTab.isPrivate else { return false }
-        return featureFlagsProvider.isEnabled(.deeplinkOverlay)
+        privacyWindowHelper.showWindow(windowScene: view.window?.windowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
     private var canShowPrivacyWindow: Bool {
-        // The overlay is shown for private tabs (privacy) or for any tab when the
-        // deeplinkOverlay flag is enabled (to mask the stale tab while a deep link
-        // is being handled on resume).
-        guard let selectedTab = tabManager.selectedTab else { return false }
-        let isDeeplinkOverlayEnabled = featureFlagsProvider.isEnabled(.deeplinkOverlay)
-        guard selectedTab.isPrivate || isDeeplinkOverlayEnabled else { return false }
+        // Ensure the selected tab is private and determine if the privacy window can be shown.
+        guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else { return false }
         // Show privacy window if no view controller is presented
         // or if the presented view is a PhotonActionSheet.
         return self.presentedViewController == nil || presentedViewController is PhotonActionSheet
@@ -1432,18 +1401,14 @@ class BrowserViewController: UIViewController,
 
     /// Logging current Nimbus state
     private func logCurrentNimbusExperimentsState() {
-        var currentExperimentsDictionary = [String: String]()
-        Experiments.shared.getAvailableExperiments()
-            .enumerated()
-            .forEach { index, experiment in
-                currentExperimentsDictionary["experiment \(index)"] = mirrorToString(experiment)
-            }
+        let currentExperiments = Experiments.shared.getAvailableExperiments()
+            .map { mirrorToString($0) }
+            .joined(separator: ", ")
 
         logger.log(
-            "Current Nimbus available experiments configuration",
+            "Current Nimbus available experiments configuration: \(currentExperiments)",
             level: .info,
-            category: .experiments,
-            extra: currentExperimentsDictionary,
+            category: .experiments
         )
     }
 
@@ -2058,18 +2023,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
-            if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
-                // The web view can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-                if selectedTab.temporaryDocument == nil {
-                    selectedTab.reload()
-                }
-            }
-        }
-
         browserDelegate?.show(webView: webView)
     }
 
@@ -2250,12 +2203,24 @@ class BrowserViewController: UIViewController,
 
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
-        let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
-        let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isWaybackErrorCode: Bool = {
+            guard
+                let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
+                let code = Int(codeString)
+            else { return false }
+            return WaybackCodes.isWaybackCode(code)
+        }()
+        let noInternetConnectionEnabled = isNICErrorCode &&
+            NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
+        let isCertificateError = NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled &&
+            NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isShowWayback = isWaybackErrorCode &&
+            NativeErrorPageFeatureFlag().isWaybackEnabled
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError) {
+        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError || isShowWayback) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -2640,6 +2605,14 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // If the webview lands on an internal error page URL without going through a fresh
+        // navigation failure (e.g. back/forward navigation replaying it from history), rebuild
+        // the native error page state from the URL itself so it reflects what's actually on
+        // screen rather than stale data from whatever failure last occurred.
+        if let url, let internalURL = InternalURL(url), internalURL.isErrorPage {
+            rebuildNativeErrorPageStateIfNeeded(for: url)
+        }
+
         // To prevent spoofing, if the origins are equal update the UI always
         if tab.url?.origin == url?.origin {
             tab.url = url
@@ -2661,6 +2634,28 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    func rebuildNativeErrorPageStateIfNeeded(for errorPageURL: URL) {
+        guard
+            let components = URLComponents(url: errorPageURL, resolvingAgainstBaseURL: false),
+            let originalURLString = components.queryItems?.first(where: { $0.name == "url" })?.value,
+            let originalURL = URL(string: originalURLString),
+            let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
+            let code = Int(codeString)
+        else { return }
+
+        let reconstitutedError = NSError(
+            domain: NSURLErrorDomain,
+            code: code,
+            userInfo: [NSURLErrorFailingURLErrorKey: originalURL]
+        )
+
+        let action = NativeErrorPageAction(
+            networkError: reconstitutedError,
+            windowUUID: windowUUID,
+            actionType: NativeErrorPageActionType.receivedError
+        )
+        store.dispatch(action)
+    }
     private func handleTitleChanged(tab: Tab) {
         // Ensure that the tab title *actually* changed to prevent repeated calls
         // to navigateInTab(tab:) except when ReaderModeState is active
@@ -3019,6 +3014,8 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
             tabManager.selectedTab?.reload()
+        case .loadURL(let url):
+            tabManager.selectedTab?.loadRequest(URLRequest(url: url))
         case .stopLoading:
             tabManager.selectedTab?.stop()
             // There is an edge case in which calling stop on the webView doesn't update webView's isLoading var.
@@ -4810,7 +4807,6 @@ extension BrowserViewController: TabManagerDelegate {
             previousWebView.removeFromSuperview()
         }
 
-        let needsReloadRefactorEnabled = featureFlagsProvider.isEnabled(.needsReloadRefactor)
         var needsReload = false
         if let webView = selectedTab.webView {
             webView.accessibilityLabel = .WebViewAccessibilityLabel
@@ -4818,16 +4814,6 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityElementsHidden = false
 
             updateSelectedTabWebview(selectedTab: selectedTab, previousTab: previousTab, webView: webView)
-
-            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-            if !needsReloadRefactorEnabled {
-                if selectedTab.isFxHomeTab {
-                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
-                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
-                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
-                    needsReload = true
-                }
-            }
 
             // Do not reload if it's an about:blank page [FXIOS-14782]
             if webView.url == nil && selectedTab.url?.absoluteString != "about:blank" {
@@ -4839,23 +4825,6 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateUIAfterTabSelection(selectedTab: selectedTab, previousTab: previousTab)
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        /// If the selectedTab is showing an error page trigger a reload
-        if !needsReloadRefactorEnabled,
-           let url = selectedTab.url,
-           let internalUrl = InternalURL(url),
-           internalUrl.isErrorPage {
-            needsReload = true
-        }
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !needsReloadRefactorEnabled {
-            // Do not reload when it's an about:blank page or has a temporary document
-            if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
-                needsReload = false
-            }
-        }
 
         if needsReload {
             selectedTab.reload()

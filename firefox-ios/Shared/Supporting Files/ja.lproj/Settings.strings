@@ -268,6 +268,12 @@
 /* In the Search settings, this is the description that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Description.v153" = "画像を Google に送信して検索します。";
 
+/* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
+"Settings.Search.GoogleLens.Footnote.v153" = "これは、上記で Google が有効になっており、閲覧中に Google がアクティブな検索エンジンとして設定されている場合のみ利用可能です。";
+
+/* In the Search settings, this is the title that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Title.v153" = "Google レンズ";
+
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "検索";
 
@@ -335,7 +341,7 @@
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "端末を左右に振ってページを要約します。";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "振って要約";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "振って要約する";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "ジェスチャー";
@@ -353,7 +359,7 @@
 "Settings.Summarize.LanguageSection.WebsiteLanguageLabel.v149" = "ウェブサイトの言語";
 
 /* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.SummarizePagesTitle.v142" = "ページを要約";
+"Settings.Summarize.SummarizePagesTitle.v142" = "ページを要約する";
 
 /* In the settings menu, in the General section, this is the title for the Summarize settings section. */
 "Settings.Summarize.Title.v142" = "ページ要約";

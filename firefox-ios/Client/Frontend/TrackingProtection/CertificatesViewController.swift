@@ -191,9 +191,10 @@ class CertificatesViewController: UIViewController,
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: CertificatesHeaderView.cellIdentifier) as? CertificatesHeaderView else {
-            logger.log("Failed to dequeue CertificatesHeaderView with identifier \(CertificatesHeaderView.cellIdentifier)",
+            logger.log("Failed to dequeue CertificatesHeaderView",
                        level: .fatal,
-                       category: .certificate)
+                       category: .certificate,
+                       extra: ["identifier": CertificatesHeaderView.cellIdentifier])
             return UIView()
         }
         var items: [CertificatesHeaderItem] = []

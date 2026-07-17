@@ -7,7 +7,13 @@ import Redux
 
 @MainActor
 final class WebCompatReporterMiddleware {
-    lazy var webCompatReporterProvider: Middleware<AppState> = { state, action in
+    lazy var webCompatReporterProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         guard let action = action as? WebCompatReporterViewAction else { return }
         self.handleAction(action, state: state)
     }

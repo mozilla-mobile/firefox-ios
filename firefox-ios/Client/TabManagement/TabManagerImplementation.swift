@@ -327,15 +327,24 @@ final class TabManagerImplementation: NSObject,
 
         guard !tabsToRemove.isEmpty else { return }
 
-        let selectedTab = selectedTab
+        let previouslySelectedTab = selectedTab
+        let selectedTabWillBeRemoved = previouslySelectedTab.map { selectedTab in
+            tabsToRemove.contains { $0 === selectedTab }
+        } ?? false
+
         for tab in tabsToRemove {
             // Remove each tab without persisting changes
             removeTab(tab, flushToDisk: false)
         }
-        // We need to reselect the tab and adjust the selected index after tabs removal.
-        // The selected tab will not be removed with `removeNormalTabsOlderThan` since it's
-        // `lastExecutedTime` won't be less than the `cutoffDate`.
-        selectTab(selectedTab)
+
+        if normalTabs.isEmpty {
+            selectTab(addTab())
+        } else if selectedTabWillBeRemoved {
+            selectTab(mostRecentTab(inTabs: normalTabs))
+        } else {
+            selectTab(previouslySelectedTab)
+        }
+
         commitChanges()
     }
 
@@ -667,13 +676,9 @@ final class TabManagerImplementation: NSObject,
         }
 
         if tab.url == nil {
-            logger.log("Tab restored has empty URL",
+            logger.log("Tab restored has empty URL. tabID: \(tabData.id.uuidString), lastUsedTime: \(tabData.lastUsedTime)",
                        level: .debug,
-                       category: .tabs,
-                       extra: [
-                        "tabID": tabData.id.uuidString,
-                        "lastUsedTime": tabData.lastUsedTime.description
-                       ])
+                       category: .tabs)
         }
     }
 
@@ -871,9 +876,18 @@ final class TabManagerImplementation: NSObject,
                            category: .tabs)
             }
 
+            // Never persist a raw internal error-page URL as a tab's restorable siteUrl,
+            // substitute the original failing URL so restoration points at the real site.
+            let persistedUrl: URL?
+            if let tabUrl = tab.url, let internalUrl = InternalURL(tabUrl), internalUrl.isErrorPage {
+                persistedUrl = internalUrl.originalURLFromErrorPage
+            } else {
+                persistedUrl = tab.url
+            }
+
             return TabData(id: tabId,
                            title: tab.lastTitle,
-                           siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
+                           siteUrl: persistedUrl?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
                            lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime),

@@ -26,7 +26,13 @@ final class MessageCardMiddleware {
         self.logger = logger
     }
 
-    lazy var messageCardProvider: Middleware<AppState> = { state, action in
+    lazy var messageCardProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
 
         switch action.actionType {

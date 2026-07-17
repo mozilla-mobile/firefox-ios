@@ -43,22 +43,24 @@ struct AddressBarSettingsView: View, UserFeaturePreferenceProvider {
     }
 
     var body: some View {
-        VStack {
-            GenericSectionView(theme: currentTheme,
-                               title: .Settings.AddressBar.AddressBarSectionTitle,
-                               identifier: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting) {
-                AddressBarSelectionView(
-                    theme: currentTheme,
-                    selectedAddressBarPosition: addressBarPosition,
-                    onSelected: viewModel.saveSearchBarPosition)
-                .modifier(SectionStyle(theme: currentTheme, cornerRadius: UX.cornerRadius))
-            }
+        ScrollView {
+            VStack {
+                GenericSectionView(theme: currentTheme,
+                                   title: .Settings.AddressBar.AddressBarSectionTitle,
+                                   identifier: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting) {
+                    AddressBarSelectionView(
+                        theme: currentTheme,
+                        selectedAddressBarPosition: addressBarPosition,
+                        onSelected: viewModel.saveSearchBarPosition)
+                    .modifier(SectionStyle(theme: currentTheme, cornerRadius: UX.cornerRadius))
+                }
 
-            NavigationToolbarSection(theme: currentTheme,
-                                     selectedOption: selectedMiddleButtonType,
-                                     onChange: updateMiddleNavigationToolbarButton,
-                                     cornerRadius: UX.cornerRadius)
-            Spacer()
+                NavigationToolbarSection(theme: currentTheme,
+                                         selectedOption: selectedMiddleButtonType,
+                                         onChange: updateMiddleNavigationToolbarButton,
+                                         cornerRadius: UX.cornerRadius)
+                Spacer()
+            }
         }
         .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))
         .background(viewBackground)

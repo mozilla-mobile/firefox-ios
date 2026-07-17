@@ -21,7 +21,7 @@ protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
 }
 
-class RemoteTabsPanel: UIViewController,
+final class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemoteTabsEmptyViewDelegate,
@@ -291,7 +291,7 @@ class RemoteTabsPanel: UIViewController,
             }
         case .ProfileDidFinishSyncing:
             ensureMainThread {
-                self.refreshTabs()
+                self.refreshTabs(useCache: true)
             }
         default: return
         }

@@ -82,7 +82,13 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         }
     }
 
-    lazy var translationsProvider: Middleware<AppState> = { state, action in
+    lazy var translationsProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
         case ToolbarActionType.urlDidChange:
@@ -522,10 +528,10 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                     errorType: serviceError.telemetryDescription
                 )
                 logger.log(
-                    "Unable to detect language from page to determine if eligible for translations.",
+                    "Unable to detect language from page to determine if eligible for translations."
+                    + " LanguageDetector error: \(error.localizedDescription)",
                     level: .warning,
-                    category: .translations,
-                    extra: ["LanguageDetector error": "\(error.localizedDescription)"]
+                    category: .translations
                 )
             }
         }
@@ -614,10 +620,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                 errorType: serviceError.telemetryDescription
             )
             logger.log(
-                "Unable to translate page, so translation failed.",
+                "Unable to translate page, so translation failed. Translations error: \(error.localizedDescription)",
                 level: .warning,
-                category: .translations,
-                extra: ["Translations error": "\(error.localizedDescription)"]
+                category: .translations
             )
             self.handleErrorFromTranslatingPage(windowUUID: windowUUID, on: tab)
         }
@@ -747,10 +752,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         }
 
         logger.log(
-            "Missing translationFlowId for this window; generating fallback UUID.",
+            "Missing translationFlowId for window \(windowUUID); generating fallback UUID.",
             level: .warning,
-            category: .translations,
-            extra: ["windowUUID": "\(windowUUID)"]
+            category: .translations
         )
 
         return UUID()

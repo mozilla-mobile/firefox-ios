@@ -50,13 +50,16 @@ struct AudioManagerTests {
     }
 
     @Test
-    func test_stopEngine_callsStop() {
+    func test_stopEngine_stopsEngineAndDeactivatesSession() throws {
         let subject = createSubject()
 
-        subject.stopEngine()
+        try subject.stopEngine()
 
         #expect(engine.stopCallCount == 1)
         #expect(engine.mockInputNode.removeTapCallCount == 1)
+        #expect(session.setActiveCalls.count == 1)
+        #expect(session.setActiveCalls[0].active == false)
+        #expect(session.setActiveCalls[0].options.contains(.notifyOthersOnDeactivation))
     }
 
     // MARK: - Start Capture Tests

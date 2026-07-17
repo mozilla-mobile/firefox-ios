@@ -33,7 +33,15 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
     }
 
     @MainActor
-    lazy var quickAnswersProvider: Middleware<AppState> = { state, action in
+    lazy var quickAnswersProvider: Middleware<AppState> = (legacyProvider, modernProvider)
+
+    @MainActor
+    lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
+        // Does not test any modern actions
+    }
+
+    @MainActor
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
         switch action.actionType {
         case HomepageActionType.initialize, HomepageActionType.viewWillAppear:
             self.handleInitializeAction(action: action)

@@ -793,6 +793,7 @@ struct AccessibilityIdentifiers {
 
         struct QuickAnswers {
             static let title = "Settings.QuickAnswers.Title"
+            static let learnMoreButton = "Settings.QuickAnswers.LearnMoreButton"
         }
 
         struct BlockImages {
@@ -926,6 +927,10 @@ struct AccessibilityIdentifiers {
         static let titleLabel = "NativeErrorPage.titleLabel"
         static let errorDescriptionLabel = "NativeErrorPage.errorDescriptionLabel"
         static let reloadButton = "NativeErrorPage.reloadButton"
+        static let waybackButton = "NativeErrorPage.waybackButton"
+        static let waybackErrorCard = "NativeErrorPage.waybackErrorCard"
+        static let waybackErrorLabel = "NativeErrorPage.waybackErrorLabel"
+        static let waybackRetryButton = "NativeErrorPage.waybackRetryButton"
         static let goBackButton = "NativeErrorPage.goBackButton"
         static let proceedButton = "NativeErrorPage.proceedButton"
         static let advancedSectionHeader = "NativeErrorPage.advancedSectionHeader"

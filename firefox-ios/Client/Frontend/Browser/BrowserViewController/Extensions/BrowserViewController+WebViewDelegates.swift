@@ -489,10 +489,9 @@ extension BrowserViewController: WKNavigationDelegate {
             // Only automatically attempt to reload the crashed
             // tab three times before giving up.
             if tab.consecutiveCrashes < 3 {
-                logger.log("The webview has crashed, trying to reload.",
+                logger.log("The webview has crashed, trying to reload. Attempt number: \(tab.consecutiveCrashes)",
                            level: .warning,
-                           category: .webview,
-                           extra: ["Attempt number": "\(tab.consecutiveCrashes)"])
+                           category: .webview)
 
                 tabsTelemetry.trackConsecutiveCrashTelemetry(attemptNumber: tab.consecutiveCrashes)
 
@@ -1005,12 +1004,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
     private func handleDownloadError(tab: Tab?, request: URLRequest, error: (any Error)?) {
         navigationHandler?.removeDocumentLoading()
-        logger.log("Failed to download Document",
+        logger.log("Failed to download Document: \(error?.localizedDescription ?? "Unknown error")",
                    level: .warning,
-                   category: .webview,
-                   extra: [
-                    "error": error?.localizedDescription ?? "",
-                    "url": request.url?.absoluteString ?? "Unknown URL"])
+                   category: .webview)
         guard let error, let webView = tab?.webView else { return }
         showErrorPage(webView: webView, error: error)
     }
@@ -1018,7 +1014,7 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-        if isNativeErrorPageEnabled {
+        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
             store.dispatch(NativeErrorPageAction(
                 networkError: nsError,
                 windowUUID: windowUUID,
@@ -1131,20 +1127,19 @@ extension BrowserViewController: WKNavigationDelegate {
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
-                let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
+                let isWaybackCode = WaybackCodes.isWaybackCode(error.code)
+
+                let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
+                    error.code == noInternetErrorCode
                 let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
                     for: error,
-                    isOtherErrorPagesEnabled: isBadCertDomainErrorPageEnabled
+                    isOtherErrorPagesEnabled: NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
                 )
+                let isShowWayback = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode
 
-                if isNoInternetError || isCertificateError {
+                if isNoInternetError || isCertificateError || isShowWayback {
                     if isCertificateError {
-                        NativeErrorPageHelper.logCertificateErrorDetails(
-                            error: error,
-                            url: url,
-                            errorPageURL: errorPageURL,
-                            logger: logger
-                        )
+                        NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
                     }
                     // TODO: FXIOS-15800 Move error type determination to NativeErrorPageMiddleware
                     let action = NativeErrorPageAction(
