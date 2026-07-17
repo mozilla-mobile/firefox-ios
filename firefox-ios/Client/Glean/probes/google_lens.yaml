@@ -56,7 +56,7 @@ google_lens:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16313
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34719
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -70,7 +70,7 @@ google_lens:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16313
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34719
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
