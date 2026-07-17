@@ -85,8 +85,6 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
     private var borderLayer = CAShapeLayer()
 
-    private var borderGradientLayer: CAGradientLayer?
-
     override func layoutSubviews() {
         super.layoutSubviews()
         smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
@@ -298,32 +296,17 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         view.layer.addSublayer(borderLayer)
     }
 
-    // A gradient border can't be a flat `strokeColor`, so the stroke masks a `CAGradientLayer`.
-    private func addGradientBorder(to view: UIView, gradient: Gradient, width: CGFloat) {
-        borderLayer = CAShapeLayer()
-
-        let borderRect = view.bounds.insetBy(dx: -width / 3, dy: -width / 3)
-        borderLayer.path = UIBezierPath(
-            roundedRect: borderRect,
-            cornerRadius: UX.cornerRadius
-        ).cgPath
-        borderLayer.fillColor = UIColor.clear.cgColor
-        borderLayer.strokeColor = UIColor.black.cgColor
-        borderLayer.lineWidth = width
-        borderLayer.frame = view.bounds
-
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = gradient.cgColors
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        gradientLayer.frame = view.bounds
-        gradientLayer.mask = borderLayer
-        gradientLayer.name = UX.borderLayerName
-
-        view.clipsToBounds = false
-        removeExternalBorder(from: view)
-        view.layer.addSublayer(gradientLayer)
-        borderGradientLayer = gradientLayer
+    private func gradientBorderImage(size: CGSize, colors: [CGColor]) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            guard let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                            colors: colors as CFArray,
+                                            locations: nil) else { return }
+            context.cgContext.drawLinearGradient(gradient,
+                                                 start: .zero,
+                                                 end: CGPoint(x: size.width, y: size.height),
+                                                 options: [])
+        }
     }
 
     private func redrawExternalBorder() {
@@ -336,12 +319,10 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         ).cgPath
 
         borderLayer.frame = backgroundHolder.bounds
-        borderGradientLayer?.frame = backgroundHolder.bounds
     }
 
     private func removeExternalBorder(from view: UIView) {
         view.layer.sublayers?.removeAll(where: { $0.name == UX.borderLayerName })
-        borderGradientLayer = nil
     }
 
     func setSelectedState(isPrivate: Bool, theme: Theme) {
@@ -350,9 +331,9 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         backgroundHolder.layer.borderWidth = UX.zeroBorderWidth
 
         if theme.isNova {
-            addGradientBorder(to: backgroundHolder,
-                              gradient: theme.colors.gradientBorder,
-                              width: UX.selectedBorderWidth)
+            let gradientColor = UIColor(patternImage: gradientBorderImage(size: backgroundHolder.bounds.size,
+                                                                          colors: theme.colors.gradientBorder.cgColors))
+            addExternalBorder(to: backgroundHolder, color: gradientColor, width: UX.selectedBorderWidth)
             return
         }
 

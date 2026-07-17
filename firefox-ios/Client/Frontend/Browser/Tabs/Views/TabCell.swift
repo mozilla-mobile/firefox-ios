@@ -85,7 +85,7 @@ final class TabCell: UICollectionViewCell,
         button.configuration = configuration
     }
 
-    private var borderGradientLayer: CAGradientLayer?
+    private var borderGradientColors: [CGColor]?
 
     // MARK: - Initializer
 
@@ -182,32 +182,30 @@ final class TabCell: UICollectionViewCell,
     }
 
     private func updateBorder(theme: Theme, isSelected: Bool, isPrivate: Bool) {
-        borderGradientLayer?.removeFromSuperlayer()
-        borderGradientLayer = nil
+        layer.borderWidth = isSelected ? UX.borderWidth : 0
 
-        guard theme.isNova else {
+        guard theme.isNova, isSelected else {
+            borderGradientColors = nil
             let accent = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-            layer.borderColor = (isSelected ? accent : UIColor.clear).cgColor
-            layer.borderWidth = isSelected ? UX.borderWidth : 0
+            layer.borderColor = (!theme.isNova && isSelected ? accent : UIColor.clear).cgColor
             return
         }
 
-        layer.borderColor = UIColor.clear.cgColor
-        layer.borderWidth = 0
-        guard isSelected else { return }
-
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = theme.colors.gradientBorder.cgColors
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        let mask = CAShapeLayer()
-        mask.fillColor = UIColor.clear.cgColor
-        mask.strokeColor = UIColor.black.cgColor
-        mask.lineWidth = UX.borderWidth
-        gradientLayer.mask = mask
-        layer.addSublayer(gradientLayer)
-        borderGradientLayer = gradientLayer
+        borderGradientColors = theme.colors.gradientBorder.cgColors
         setNeedsLayout()
+    }
+
+    private func gradientBorderImage(size: CGSize, colors: [CGColor]) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            guard let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                            colors: colors as CFArray,
+                                            locations: nil) else { return }
+            context.cgContext.drawLinearGradient(gradient,
+                                                 start: .zero,
+                                                 end: CGPoint(x: size.width, y: size.height),
+                                                 options: [])
+        }
     }
 
     // MARK: - Configuration
@@ -274,18 +272,9 @@ final class TabCell: UICollectionViewCell,
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard let borderGradientLayer,
-              let mask = borderGradientLayer.mask as? CAShapeLayer else { return }
-        // Disable implicit animations so the border tracks bounds changes instantly.
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        borderGradientLayer.frame = bounds
-        mask.frame = bounds
-        mask.path = UIBezierPath(
-            roundedRect: bounds.insetBy(dx: UX.borderWidth / 2, dy: UX.borderWidth / 2),
-            cornerRadius: UX.cornerRadius
-        ).cgPath
-        CATransaction.commit()
+        guard let borderGradientColors, bounds.width > 0, bounds.height > 0 else { return }
+        layer.borderColor = UIColor(patternImage: gradientBorderImage(size: bounds.size,
+                                                                      colors: borderGradientColors)).cgColor
     }
 
     override func prepareForReuse() {
@@ -297,8 +286,9 @@ final class TabCell: UICollectionViewCell,
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
         faviconBG.isHidden = true
-        borderGradientLayer?.removeFromSuperlayer()
-        borderGradientLayer = nil
+        borderGradientColors = nil
+        layer.borderColor = UIColor.clear.cgColor
+        layer.borderWidth = 0
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
