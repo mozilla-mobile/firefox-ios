@@ -85,10 +85,7 @@ extension UIView {
 
     /// Sets the corner radius to the devices current corner radius
     public func applyScreenCornerRadius() {
-        if #available(iOS 26.0, *) {
-            cornerConfiguration = UICornerConfiguration.corners(radius: .containerConcentric(minimum: 0))
-        } else {
-            layer.cornerRadius = UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0
-        }
+        // TODO: FXIOS-14817 FXIOS-16327 Centralize a way to query device corner radius without the private api
+        layer.cornerRadius = UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0
     }
 }
