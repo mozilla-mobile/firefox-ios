@@ -21,6 +21,14 @@ public struct UIDeviceDetails {
 /// Lazily computes a `@MainActor` value and caches it. Safe to read from any thread.
 /// The main-thread hop happens outside the lock so this utility class avoids the deadlock
 /// we had with the previous implementation of UIDeviceDetails.
+///
+/// **CAUTION** If you make use of this class, you must ensure that the `evaluate` closure
+/// returns a consistent value, and can be safely called more than once. In a scenario in which
+/// multiple threads attempt to hit the same cache instance quickly before the value is cached,
+/// it's possible for `evaluate` to be called several times (they will never be executed concurrently,
+/// because they're isolated to the MainActor, but `evluate` may be called multiple times sequentially).
+/// For our current usage with `UIDeviceDetails` for properties like the iOS device or model
+/// this is not problematic because these values are constant and do not change. 
 final class MainActorCachedValue<T: Sendable>: @unchecked Sendable {
     private let lock = NSLock()
     private var cachedValue: T?
