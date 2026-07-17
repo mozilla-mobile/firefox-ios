@@ -35,6 +35,9 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
         toolBarScreen.tapTranslateButton(with: .inactive)
 
+        // A language picker may appear before translating; select English if it does
+        toolBarScreen.selectTranslationLanguageIfPresented()
+
         // Check that translation icon switches to loading (spinner) and eventually active mode (blue button)
         toolBarScreen.assertTranslateButtonExists(with: .loading)
         toolBarScreen.assertTranslateButtonExists(with: .active)
