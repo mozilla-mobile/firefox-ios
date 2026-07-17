@@ -56,7 +56,14 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         self.shouldShowConfetti = shouldShowConfetti
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         guard let action = action as? WorldCupAction else {
             return state
         }
