@@ -105,6 +105,9 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
 
     private func setupGesture() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        // If there is any other gesture enabled on the address bar, setting panGesture.delegate = self
+        // will cause gestureRecognizerShouldBegin() to run on every gesture. We do this with every address bar
+        // gesture so that they only activate during their respective gestures (i.e., only on horizontal/vertical pan)
         if swipeGestureFeatureFlagProvider.isAnyGestureEnabled {
             panGesture.delegate = self
         }
