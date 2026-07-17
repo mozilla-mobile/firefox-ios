@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Glean
 import PhotosUI
 import SwiftUI
 import UIKit
@@ -1184,8 +1185,12 @@ final class BrowserCoordinator: BaseCoordinator,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
     }
 
-    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source) {
+    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source, searchTimerId: GleanTimerId? = nil) {
+        let googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: glean)
         guard let tab = tabManager.selectedTab else {
+            if let searchTimerId {
+                googleLensTelemetry.cancelSearchTimer(source: source, timerId: searchTimerId)
+            }
             logger.log("Google Lens: no selected tab to load the upload request",
                        level: .warning,
                        category: .coordinator)
@@ -1196,15 +1201,17 @@ final class BrowserCoordinator: BaseCoordinator,
         guard let request = googleLensService.makeUploadRequest(for: image,
                                                                 viewportSize: viewportSize,
                                                                 entryPoint: entryPoint) else {
+            if let searchTimerId {
+                googleLensTelemetry.cancelSearchTimer(source: source, timerId: searchTimerId)
+            }
             logger.log("Google Lens: failed to build upload request (image could not be processed)",
                        level: .warning,
                        category: .coordinator)
             return
         }
-        let googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: glean)
-        let timerId = source == .contextMenu ? nil : googleLensTelemetry.startToolbarButtonSearch()
+        let timerId = searchTimerId ?? googleLensTelemetry.startSearchTimer(source: source)
         browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source,
-                                                                                      toolbarButtonSearchTimerId: timerId)
+                                                                                      searchTimerId: timerId)
         _ = tab.loadRequest(request)
     }
     private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {

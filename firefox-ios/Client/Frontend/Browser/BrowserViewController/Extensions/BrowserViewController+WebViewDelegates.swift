@@ -433,20 +433,29 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     private func searchGoogleLens(forImageURL url: URL) {
-        getImageData(url) { [weak self] data in
-            guard let image = UIImage(data: data) else { return }
-            ensureMainThread {
-                self?.navigationHandler?.searchGoogleLens(with: image, source: .contextMenu)
+        let telemetry = googleLensTelemetry
+        let source: GoogleLensTelemetry.Source = .contextMenu
+        let timerId = telemetry.startSearchTimer(source: source)
+        getImageData(url,
+                     success: { [weak self] data in
+            guard let image = UIImage(data: data), let navigationHandler = self?.navigationHandler else {
+                telemetry.cancelSearchTimer(source: source, timerId: timerId)
+                return
             }
-        }
+            navigationHandler.searchGoogleLens(with: image,
+                                               source: source,
+                                               searchTimerId: timerId)
+        }, failure: {
+            telemetry.cancelSearchTimer(source: source, timerId: timerId)
+        })
     }
 
     /// Reports the completion of an in-flight Google Lens image search (see `googleLensSearches`)
     /// once its results page finishes loading or fails, then clears the tracked state.
     private func recordGoogleLensSearchCompletedIfNeeded(for tab: Tab?, succeeded: Bool) {
         guard let tab, let search = googleLensSearches.removeValue(forKey: tab.tabUUID) else { return }
-        if let timerId = search.toolbarButtonSearchTimerId {
-            googleLensTelemetry.stopToolbarButtonSearch(timerId: timerId)
+        if let timerId = search.searchTimerId {
+            googleLensTelemetry.stopSearchTimer(source: search.source, timerId: timerId)
         }
         googleLensTelemetry.searchCompleted(source: search.source,
                                             succeeded: succeeded,

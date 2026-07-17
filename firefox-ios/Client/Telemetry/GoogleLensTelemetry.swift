@@ -7,19 +7,19 @@ import Glean
 
 struct GoogleLensSearchState {
     let source: GoogleLensTelemetry.Source
-    let toolbarButtonSearchTimerId: GleanTimerId?
+    let searchTimerId: GleanTimerId?
     var httpStatusCode: Int?
 
     init(source: GoogleLensTelemetry.Source,
-         toolbarButtonSearchTimerId: GleanTimerId? = nil,
+         searchTimerId: GleanTimerId? = nil,
          httpStatusCode: Int? = nil) {
         self.source = source
-        self.toolbarButtonSearchTimerId = toolbarButtonSearchTimerId
+        self.searchTimerId = searchTimerId
         self.httpStatusCode = httpStatusCode
     }
 }
 
-struct GoogleLensTelemetry {
+struct GoogleLensTelemetry: Sendable {
     enum Source: String {
         case camera
         case photoPicker
@@ -45,12 +45,26 @@ struct GoogleLensTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.GoogleLens.searchCompleted, extras: extra)
     }
 
-    func startToolbarButtonSearch() -> GleanTimerId {
-        return gleanWrapper.startTiming(for: GleanMetrics.GoogleLens.toolbarButtonSearchTime)
+    func startSearchTimer(source: Source) -> GleanTimerId {
+        return gleanWrapper.startTiming(for: searchTimeMetric(for: source))
     }
 
-    func stopToolbarButtonSearch(timerId: GleanTimerId) {
-        gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.GoogleLens.toolbarButtonSearchTime,
+    func cancelSearchTimer(source: Source, timerId: GleanTimerId) {
+        gleanWrapper.cancelTiming(for: searchTimeMetric(for: source),
+                                  timerId: timerId)
+    }
+
+    func stopSearchTimer(source: Source, timerId: GleanTimerId) {
+        gleanWrapper.stopAndAccumulateTiming(for: searchTimeMetric(for: source),
                                              timerId: timerId)
+    }
+
+    private func searchTimeMetric(for source: Source) -> TimingDistributionMetricType {
+        switch source {
+        case .camera, .photoPicker:
+            return GleanMetrics.GoogleLens.toolbarButtonSearchTime
+        case .contextMenu:
+            return GleanMetrics.GoogleLens.webpageImageSearchTime
+        }
     }
 }

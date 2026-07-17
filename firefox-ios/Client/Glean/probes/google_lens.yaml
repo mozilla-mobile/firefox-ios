@@ -60,3 +60,17 @@ google_lens:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  webpage_image_search_time:
+    type: timing_distribution
+    description: |
+      Records the total time for generating Google Lens results and showing
+      them to the user after a search initiated from a webpage image context menu.
+      Starts when the user selects the Google Lens context menu action.
+      Ends when the user sees the results or an error.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16297
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34671
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

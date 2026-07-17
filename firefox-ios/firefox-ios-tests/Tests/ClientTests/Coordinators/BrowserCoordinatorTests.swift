@@ -464,21 +464,23 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
         XCTAssertEqual(glean.startTimingCalled, 1)
-        XCTAssertNotNil(search.toolbarButtonSearchTimerId)
+        XCTAssertNotNil(search.searchTimerId)
     }
 
-    func testSearchGoogleLens_fromWebImageContextMenu_doesNotStartSearchTimer() throws {
+    func testSearchGoogleLens_fromWebImageContextMenu_usesExistingSearchTimer() throws {
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(googleLensService: MockGoogleLensService())
 
-        subject.searchGoogleLens(with: UIImage(), source: .contextMenu)
+        subject.searchGoogleLens(with: UIImage(),
+                                 source: .contextMenu,
+                                 searchTimerId: glean.savedTimerId)
 
         let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
         XCTAssertEqual(glean.startTimingCalled, 0)
-        XCTAssertNil(search.toolbarButtonSearchTimerId)
+        XCTAssertNotNil(search.searchTimerId)
     }
 
     func testShowQRCode_presentsQRCodeNavigationController() {

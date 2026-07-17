@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import Glean
 import WebKit
 import Shared
 
@@ -511,7 +512,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .camera,
-                                                                       toolbarButtonSearchTimerId: gleanWrapper.savedTimerId)
+                                                                        searchTimerId: gleanWrapper.savedTimerId)
 
         subject.webView(tab.webView!, didFinish: nil)
 
@@ -527,7 +528,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let tab = createTab()
         tabManager.tabs = [tab]
         subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .photoPicker,
-                                                                       toolbarButtonSearchTimerId: gleanWrapper.savedTimerId)
+                                                                        searchTimerId: gleanWrapper.savedTimerId)
 
         // Code 102 ("Frame load interrupted") makes the delegate return early right after the
         // Google Lens reporting, keeping the test free of error-page side effects.
@@ -538,6 +539,42 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         XCTAssertNil(subject.googleLensSearches[tab.tabUUID],
                      "A failed navigation should report and clear the pending Google Lens search")
         XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
+    }
+
+    @MainActor
+    func testWebViewDidFinish_withWebpageImageSearch_stopsSearchTimer() {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .contextMenu,
+                                                                        searchTimerId: gleanWrapper.savedTimerId)
+
+        subject.webView(tab.webView!, didFinish: nil)
+
+        let savedMetrics = gleanWrapper.savedEvents.compactMap { $0 as? TimingDistributionMetricType }
+        XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
+        XCTAssertTrue(savedMetrics.contains { $0 === GleanMetrics.GoogleLens.webpageImageSearchTime })
+    }
+
+    @MainActor
+    func testWebViewDidFail_withWebpageImageSearch_stopsSearchTimer() {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .contextMenu,
+                                                                        searchTimerId: gleanWrapper.savedTimerId)
+
+        subject.webView(tab.webView!,
+                        didFailProvisionalNavigation: nil,
+                        withError: NSError(domain: "WebKitErrorDomain", code: 102))
+
+        let savedMetrics = gleanWrapper.savedEvents.compactMap { $0 as? TimingDistributionMetricType }
+        XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
+        XCTAssertTrue(savedMetrics.contains { $0 === GleanMetrics.GoogleLens.webpageImageSearchTime })
     }
 
     @MainActor
