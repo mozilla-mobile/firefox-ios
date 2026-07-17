@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CoreTelephony
 import Foundation
 import WebKit
 import GCDWebServers
@@ -15,8 +16,31 @@ private let MessageOpenInSafari = "openInSafari"
 private let MessageCertVisitOnce = "certVisitOnce"
 private let ErrorPageBadCertParam = "badcert"
 private let ErrorPageCertErrorParam = "certerror"
+private let ErrorPageCellularDataRestrictedParam = "cellularDataRestricted"
 private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
 private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
+
+protocol CellularDataStateProvider {
+    var isRestricted: Bool { get }
+}
+
+struct SystemCellularDataStateProvider: CellularDataStateProvider {
+    private let cellularData = CTCellularData()
+
+    var isRestricted: Bool {
+        return cellularData.restrictedState == .restricted
+    }
+}
+
+enum CellularDataErrorHelper {
+    static func isRestrictedOfflineError(
+        _ error: NSError,
+        provider: any CellularDataStateProvider
+    ) -> Bool {
+        let offlineErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        return error.domain == NSURLErrorDomain && error.code == offlineErrorCode && provider.isRestricted
+    }
+}
 
 struct CertErrorsMapping {
     // Error codes copied from Gecko. The ints corresponding to these codes were determined
@@ -262,6 +286,14 @@ final class ErrorPageHandler: InternalSchemeResponse {
             "short_description": errDomain,
             ]
 
+        let offlineErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let isCellularDataRestricted = errCode == offlineErrorCode
+            && components.valueForQuery(ErrorPageCellularDataRestrictedParam) == "true"
+        if isCellularDataRestricted {
+            variables["error_title"] = .NativeErrorPage.CellularDataRestricted.TitleLabel
+            variables["short_description"] = .NativeErrorPage.CellularDataRestricted.Description
+        }
+
         let tryAgain: String = .ErrorPageTryAgain
         // swiftlint:disable line_length
         var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
@@ -317,11 +349,14 @@ final class ErrorPageHandler: InternalSchemeResponse {
 class ErrorPageHelper {
     fileprivate weak var certStore: CertStore?
     private var logger: Logger
+    private let cellularDataStateProvider: any CellularDataStateProvider
 
     init(certStore: CertStore?,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider()) {
         self.certStore = certStore
         self.logger = logger
+        self.cellularDataStateProvider = cellularDataStateProvider
     }
 
     @MainActor
@@ -343,6 +378,10 @@ class ErrorPageHelper {
             // 'timestamp' is used for the js reload logic
             URLQueryItem(name: "timestamp", value: "\(Int(Date().timeIntervalSince1970 * 1000))")
         ]
+
+        if CellularDataErrorHelper.isRestrictedOfflineError(error, provider: cellularDataStateProvider) {
+            queryItems.append(URLQueryItem(name: ErrorPageCellularDataRestrictedParam, value: "true"))
+        }
 
         // If this is an invalid certificate, show a certificate error allowing the
         // user to go back or continue. The certificate itself is encoded and added as
