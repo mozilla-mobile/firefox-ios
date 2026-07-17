@@ -511,7 +511,8 @@ struct ToolbarState: ScreenState, Sendable {
             tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, searchEngineSelectionAction),
-            navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, searchEngineSelectionAction),
+            navigationToolbar: NavigationBarState.reducer
+                               .legacyReducer(state.navigationToolbar, searchEngineSelectionAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,
