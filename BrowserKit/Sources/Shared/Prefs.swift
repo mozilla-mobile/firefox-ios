@@ -10,6 +10,12 @@ public struct PrefsKeys {
     public static let KeyEnableChinaSyncService = "useChinaSyncService"
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
 
+    // Long-term blocked-tracker stats (non-private), bucketed by ISO week and category.
+    // The current week is stored separately from completed weeks so the hot-path
+    // write only ever touches a small, fixed-size value.
+    public static let TrackerBlockStatsCurrentWeek = "trackerBlockStatsCurrentWeek"
+    public static let TrackerBlockStatsArchive = "trackerBlockStatsArchive"
+
     // Global sync state for rust sync manager
     public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
     public static let LoginsHaveBeenVerified = "loginsHaveBeenVerified"
