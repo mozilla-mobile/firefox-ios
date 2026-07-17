@@ -174,7 +174,8 @@ struct BrowserViewControllerState: ScreenState {
                 shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
-                autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action),
+                autoTranslatePromptState: AutoTranslatePromptState.reducer
+                                         .legacyReducer(state.autoTranslatePromptState, action),
                 navigationDestination: nil)
         }
     }
@@ -207,7 +208,8 @@ struct BrowserViewControllerState: ScreenState {
                 shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
-                autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action),
+                autoTranslatePromptState: AutoTranslatePromptState.reducer
+                                         .legacyReducer(state.autoTranslatePromptState, action),
                 navigationDestination: action.navigationDestination
             )
         case NavigationBrowserActionType.navigationDestinationHandled:
@@ -217,7 +219,8 @@ struct BrowserViewControllerState: ScreenState {
                 shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
-                autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action),
+                autoTranslatePromptState: AutoTranslatePromptState.reducer
+                                          .legacyReducer(state.autoTranslatePromptState, action),
                 navigationDestination: nil
             )
         default:
@@ -253,7 +256,8 @@ struct BrowserViewControllerState: ScreenState {
                 shouldShowReaderModeBarSummarizerButton: true,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
-                autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action)
+                autoTranslatePromptState: AutoTranslatePromptState.reducer
+                                          .legacyReducer(state.autoTranslatePromptState, action)
             )
         case SummarizeMiddlewareActionType.summaryNotAvailable:
             return BrowserViewControllerState(
@@ -262,7 +266,8 @@ struct BrowserViewControllerState: ScreenState {
                 shouldShowReaderModeBarSummarizerButton: false,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
-                autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action)
+                autoTranslatePromptState: AutoTranslatePromptState.reducer
+                                          .legacyReducer(state.autoTranslatePromptState, action)
             )
         default:
             return passthroughState(from: state, action: action)
@@ -500,7 +505,8 @@ struct BrowserViewControllerState: ScreenState {
                 displayView: .trackingProtectionDetails,
                 buttonTapped: action.buttonTapped,
                 microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
-                autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action))
+                autoTranslatePromptState: AutoTranslatePromptState.reducer
+                                          .legacyReducer(state.autoTranslatePromptState, action))
         }
 
     @MainActor
@@ -559,7 +565,8 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 displayView: .locationViewLongPressAction,
                 microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
-                autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action))
+                autoTranslatePromptState: AutoTranslatePromptState.reducer
+                                          .legacyReducer(state.autoTranslatePromptState, action))
         }
 
     @MainActor

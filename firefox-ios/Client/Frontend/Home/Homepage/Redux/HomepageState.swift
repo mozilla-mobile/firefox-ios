@@ -178,7 +178,8 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
+                                             .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
@@ -196,7 +197,8 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
+                                             .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
@@ -221,7 +223,8 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
+                                             .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
@@ -239,7 +242,8 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
+                                             .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
@@ -256,7 +260,8 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
+                                             .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
@@ -272,7 +277,8 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
+                                             .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
@@ -289,7 +295,8 @@ struct HomepageState: ScreenState, Equatable {
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer.legacyReducer(state.trackerBlockerModuleState, action))
+            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
+                                             .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
