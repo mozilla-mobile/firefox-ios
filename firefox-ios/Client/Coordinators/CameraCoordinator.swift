@@ -64,7 +64,7 @@ final class CameraCoordinator: BaseCoordinator,
         case .notDetermined:
             // If not determined, presenting the interface triggers the system permission prompt.
             // Dismiss the interface if the user refuses access.
-            Task { [weak self] in await self?.dismissCameraInterfaceIfAccessRefused() }
+            Task { [weak self] in await self?.handleCameraAccessRequest() }
         case .authorized:
             cameraTelemetry.shown(reason: cameraReason)
         @unknown default:
@@ -73,7 +73,7 @@ final class CameraCoordinator: BaseCoordinator,
     }
 
     // MARK: - Camera permission
-    func dismissCameraInterfaceIfAccessRefused() async {
+    func handleCameraAccessRequest() async {
         let granted = await requestCameraAccess()
         cameraTelemetry.permissionResponded(reason: cameraReason, granted: granted)
         if granted {

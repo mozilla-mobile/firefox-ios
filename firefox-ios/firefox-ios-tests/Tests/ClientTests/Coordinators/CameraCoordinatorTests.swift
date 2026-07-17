@@ -62,7 +62,7 @@ final class CameraCoordinatorTests: XCTestCase {
                                     cameraTelemetry: cameraTelemetry)
 
         let permissionTask = Task {
-            await subject.dismissCameraInterfaceIfAccessRefused()
+            await subject.handleCameraAccessRequest()
         }
         await fulfillment(of: [requestStarted], timeout: 1)
 
@@ -150,7 +150,7 @@ final class CameraCoordinatorTests: XCTestCase {
             completionImage = image
         })
 
-        await subject.dismissCameraInterfaceIfAccessRefused()
+        await subject.handleCameraAccessRequest()
 
         XCTAssertEqual(router.dismissCalled, 1)
         XCTAssertEqual(completionCalled, 1)
@@ -170,7 +170,7 @@ final class CameraCoordinatorTests: XCTestCase {
                                     cameraTelemetry: cameraTelemetry,
                                     onComplete: { _ in completionCalled += 1 })
 
-        await subject.dismissCameraInterfaceIfAccessRefused()
+        await subject.handleCameraAccessRequest()
 
         XCTAssertEqual(router.dismissCalled, 0)
         XCTAssertEqual(completionCalled, 0)
