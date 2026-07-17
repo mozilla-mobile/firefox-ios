@@ -115,7 +115,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let archivedURL = URL(string: "https://web.archive.org/web/20130919044612/http://example.com/")!
         let action = getGeneralBrowserAction(destinationURL: archivedURL, for: .loadWaybackURL)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.navigateTo, .loadURL(archivedURL))
     }
@@ -125,7 +125,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let reducer = browserViewControllerReducer()
 
         let action = getGeneralBrowserAction(destinationURL: nil, for: .loadWaybackURL)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertNil(newState.navigateTo)
     }

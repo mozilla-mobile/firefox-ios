@@ -42,7 +42,7 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
         isInPrivateMode = state.isInPrivateMode
     }
 
-    // MARK: - Helper functions
+    // MARK: - Helper functions (Legacy Actions)
 
     func increaseCounter() {
         let action = FakeReduxAction(windowUUID: windowUUID, actionType: FakeReduxActionType.increaseCounter)
@@ -59,5 +59,19 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
                                      windowUUID: windowUUID,
                                      actionType: FakeReduxActionType.setPrivateModeTo)
         store.dispatch(action)
+    }
+
+    // MARK: - Helper functions (Modern Actions)
+
+    func increaseCounter_ModernAction() {
+        store.dispatch(FakeReduxModernAction.increaseCounter, forWindowUUID: windowUUID)
+    }
+
+    func decreaseCounter_ModernAction() {
+        store.dispatch(FakeReduxModernAction.decreaseCounter, forWindowUUID: windowUUID)
+    }
+
+    func setPrivateMode_ModernAction(to value: Bool) {
+        store.dispatch(FakeReduxModernAction.setPrivateModeTo(isPrivate: value), forWindowUUID: windowUUID)
     }
 }
