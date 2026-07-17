@@ -44,7 +44,11 @@ struct ThemeSelectionView: View {
     var body: some View {
         HStack(spacing: UX.spacing) {
             ForEach(ThemeOption.allCases, id: \.rawValue) { themeOption in
-                ThemeOptionView(theme: themeOption, isSelected: selectedThemeOption == themeOption) {
+                ThemeOptionView(
+                    theme: themeOption,
+                    isSelected: selectedThemeOption == themeOption,
+                    isNova: theme?.isNova ?? false
+                ) {
                     selectedThemeOption = themeOption
                     onThemeSelected?(themeOption)
                 }

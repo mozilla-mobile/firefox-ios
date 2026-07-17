@@ -10,6 +10,7 @@ struct ThemeOptionView: View {
     let theme: ThemeSelectionView.ThemeOption
     /// A flag indicating whether this option is currently selected.
     let isSelected: Bool
+    let isNova: Bool
     /// Callback executed when a new theme option is selected.
     let onSelected: (() -> Void)?
 
@@ -19,7 +20,8 @@ struct ThemeOptionView: View {
             onSelected: onSelected,
             label: theme.rawValue,
             imageName: imageName(for: theme),
-            a11yIdentifier: identifierName(for: theme)
+            a11yIdentifier: identifierName(for: theme),
+            isNova: isNova
         )
     }
 

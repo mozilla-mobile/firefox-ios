@@ -20,6 +20,8 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
         struct Images {
             static let selected = ImageIdentifiers.radioButtonSelected
             static let notSelected = ImageIdentifiers.radioButtonNotSelected
+            static let selectedNova = ImageIdentifiers.radioButtonSelectedNova
+            static let notSelectedNova = ImageIdentifiers.radioButtonNotSelectedNova
         }
     }
 
@@ -50,13 +52,19 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
         optionLabel.text
     }
 
+    private var isNova = false
+
     var checked = false {
         didSet {
-            let checkedButton = UIImage(named: UX.Images.selected)
-            let uncheckedButton = UIImage(named: UX.Images.notSelected)
-            self.radioButton.image = checked ? checkedButton : uncheckedButton
+            updateRadioButtonImage()
             accessibilityValue = optionA11yValue
         }
+    }
+
+    private func updateRadioButtonImage() {
+        let selectedName = isNova ? UX.Images.selectedNova : UX.Images.selected
+        let notSelectedName = isNova ? UX.Images.notSelectedNova : UX.Images.notSelected
+        radioButton.image = UIImage(named: checked ? selectedName : notSelectedName)
     }
 
     var optionA11yValue: String {
@@ -144,5 +152,7 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
         optionLabel.textColor = colors.textPrimary
         backgroundColor = theme.colors.layer2
         topSeparatorView.backgroundColor = theme.colors.borderPrimary
+        isNova = theme.isNova
+        updateRadioButtonImage()
     }
 }

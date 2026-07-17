@@ -30,6 +30,7 @@ struct GenericImageOption: View {
     let label: String
     let imageName: String
     let a11yIdentifier: String
+    let isNova: Bool
 
     var body: some View {
         VStack(spacing: UX.spacing) {
@@ -74,7 +75,10 @@ struct GenericImageOption: View {
 
     /// The radio button image indicating selection state.
     private var selectableOptionRadioButton: some View {
-        Image(isSelected ? ImageIdentifiers.radioButtonSelected : ImageIdentifiers.radioButtonNotSelected)
+        let selectedName = isNova ? ImageIdentifiers.radioButtonSelectedNova : ImageIdentifiers.radioButtonSelected
+        let notSelectedName = isNova ? ImageIdentifiers.radioButtonNotSelectedNova
+                                     : ImageIdentifiers.radioButtonNotSelected
+        return Image(isSelected ? selectedName : notSelectedName)
             .resizable()
             .scaledToFit()
             .frame(width: UX.radioSize, height: UX.radioSize)

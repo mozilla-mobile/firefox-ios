@@ -34,7 +34,8 @@ struct AddressBarSelectionView: View {
                     },
                     label: addressBarPosition.label,
                     imageName: addressBarPosition.imageName,
-                    a11yIdentifier: identifierName(for: addressBarPosition)
+                    a11yIdentifier: identifierName(for: addressBarPosition),
+                    isNova: theme?.isNova ?? false
                 )
             }
         }
