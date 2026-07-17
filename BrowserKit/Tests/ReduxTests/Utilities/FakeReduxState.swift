@@ -10,7 +10,14 @@ struct FakeReduxState: StateType, Equatable {
     var counter = 0
     var isInPrivateMode = false
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         guard let action = action as? FakeReduxAction else { return defaultState(from: state) }
 
         switch action.actionType {
