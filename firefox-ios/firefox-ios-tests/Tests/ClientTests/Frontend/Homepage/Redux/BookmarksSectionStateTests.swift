@@ -38,7 +38,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = bookmarksSectionReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -55,7 +55,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = bookmarksSectionReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             BookmarksAction(
                 bookmarks: [BookmarkConfiguration(
@@ -81,7 +81,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = bookmarksSectionReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             BookmarksAction(
                 isEnabled: true,
@@ -99,7 +99,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = bookmarksSectionReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             BookmarksAction(
                 isEnabled: false,
@@ -149,7 +149,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         let reducer = bookmarksSectionReducer()
 
         // Updates the bookmarks section user pref
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             BookmarksAction(
                 isEnabled: false,
@@ -168,7 +168,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         let reducer = bookmarksSectionReducer()
 
         // Updates the bookmarks section user pref
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             BookmarksAction(
                 isEnabled: true,

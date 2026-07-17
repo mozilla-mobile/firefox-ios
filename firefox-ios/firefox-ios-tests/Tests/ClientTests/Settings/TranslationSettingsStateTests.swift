@@ -51,7 +51,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.isTranslationsEnabled)
         XCTAssertEqual(newState.preferredLanguages, languages)
@@ -73,7 +73,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.isTranslationsEnabled)
         XCTAssertEqual(newState.preferredLanguages, languages)
@@ -92,7 +92,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.isAutoTranslateEnabled)
     }
@@ -112,7 +112,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.isAutoTranslateEnabled)
     }
@@ -134,7 +134,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsViewActionType.enterEditMode
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.isEditing)
         XCTAssertEqual(newState.pendingLanguages, languages)
@@ -159,7 +159,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsViewActionType.cancelEditMode
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.isEditing)
         XCTAssertNil(newState.pendingLanguages)
@@ -186,7 +186,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsViewActionType.reorderLanguages
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.pendingLanguages, reordered)
         XCTAssertEqual(newState.preferredLanguages, makeLanguages(["en", "fr"]))
@@ -211,7 +211,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsViewActionType.removeLanguage
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.pendingLanguages?.map { $0.code }, ["en", "de"])
         XCTAssertEqual(newState.preferredLanguages, makeLanguages(["en", "fr", "de"]))
@@ -233,7 +233,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsViewActionType.removeLanguage
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.pendingLanguages?.map { $0.code }, ["fr"])
     }
@@ -250,7 +250,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.isTranslationsEnabled)
         XCTAssertEqual(newState.preferredLanguages, initialState.preferredLanguages)
@@ -273,7 +273,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.isTranslationsEnabled)
         XCTAssertEqual(newState.preferredLanguages, languages)
@@ -299,7 +299,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationsActionType.didTranslationSettingsChange
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.isTranslationsEnabled)
     }
@@ -376,7 +376,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState, initialState)
     }
@@ -391,7 +391,7 @@ final class TranslationSettingsStateTests: XCTestCase {
             actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState, initialState)
     }

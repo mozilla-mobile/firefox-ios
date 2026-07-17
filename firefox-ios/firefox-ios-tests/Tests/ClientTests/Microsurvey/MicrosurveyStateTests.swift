@@ -26,7 +26,7 @@ final class MicrosurveyStateTests: XCTestCase {
         XCTAssertEqual(initialState.shouldDismiss, false)
 
         let action = getAction(for: .closeSurvey)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.shouldDismiss, true)
         XCTAssertEqual(newState.showPrivacy, false)
@@ -40,7 +40,7 @@ final class MicrosurveyStateTests: XCTestCase {
         XCTAssertEqual(initialState.showPrivacy, false)
 
         let action = getAction(for: .tapPrivacyNotice)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showPrivacy, true)
         XCTAssertEqual(newState.shouldDismiss, false)

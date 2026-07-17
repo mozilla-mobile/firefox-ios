@@ -67,7 +67,7 @@ final class TabTrayStateTests: XCTestCase {
                                  enableDeleteTabsButton: false)
 
         let action = getAction(for: .didLoadTabTray, with: model)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.selectedPanel, .privateTabs)
         XCTAssertTrue(newState.isPrivateMode)
@@ -91,7 +91,7 @@ final class TabTrayStateTests: XCTestCase {
                                  enableDeleteTabsButton: false)
 
         let action = getAction(for: .didLoadTabTray, with: model)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.selectedPanel, .syncedTabs)
         XCTAssertFalse(newState.isPrivateMode)
@@ -105,7 +105,7 @@ final class TabTrayStateTests: XCTestCase {
 
         let action = TabTrayAction(windowUUID: .XCTestDefaultUUID,
                                    actionType: TabTrayActionType.didLoadTabTray)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         // Should return defaultState when tabTrayModel is nil
         XCTAssertEqual(newState, TabTrayState.defaultState(from: initialState))
@@ -124,7 +124,7 @@ final class TabTrayStateTests: XCTestCase {
         let action = TabTrayAction(panelType: .privateTabs,
                                    windowUUID: .XCTestDefaultUUID,
                                    actionType: TabTrayActionType.changePanel)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.selectedPanel, .privateTabs)
         XCTAssertTrue(newState.isPrivateMode)
@@ -141,7 +141,7 @@ final class TabTrayStateTests: XCTestCase {
         let action = TabTrayAction(panelType: .syncedTabs,
                                    windowUUID: .XCTestDefaultUUID,
                                    actionType: TabTrayActionType.changePanel)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.selectedPanel, .syncedTabs)
         XCTAssertFalse(newState.isPrivateMode)
@@ -154,7 +154,7 @@ final class TabTrayStateTests: XCTestCase {
 
         let action = TabTrayAction(windowUUID: .XCTestDefaultUUID,
                                    actionType: TabTrayActionType.changePanel)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState, TabTrayState.defaultState(from: initialState))
     }
@@ -170,7 +170,7 @@ final class TabTrayStateTests: XCTestCase {
 
         let action = TabTrayAction(windowUUID: .XCTestDefaultUUID,
                                    actionType: TabTrayActionType.dismissTabTray)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.shouldDismiss)
     }
@@ -185,7 +185,7 @@ final class TabTrayStateTests: XCTestCase {
         let action = TabTrayAction(hasSyncableAccount: true,
                                    windowUUID: .XCTestDefaultUUID,
                                    actionType: TabTrayActionType.firefoxAccountChanged)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.hasSyncableAccount)
     }
@@ -211,7 +211,7 @@ final class TabTrayStateTests: XCTestCase {
         let action = TabPanelMiddlewareAction(tabDisplayModel: displayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didChangeTabPanel)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.normalTabsCount, "5")
         XCTAssertEqual(newState.privateTabsCount, "1")
@@ -240,7 +240,7 @@ final class TabTrayStateTests: XCTestCase {
         let action = TabPanelMiddlewareAction(tabDisplayModel: displayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.refreshTabs)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.privateTabsCount, "2")
         XCTAssertEqual(newState.normalTabsCount, "0")
@@ -264,7 +264,7 @@ final class TabTrayStateTests: XCTestCase {
         let action = TabPanelMiddlewareAction(tabDisplayModel: displayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.refreshTabs)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.normalTabsCount, "10") // Should update for normal tabs
         XCTAssertEqual(newState.privateTabsCount, "3")
@@ -282,7 +282,7 @@ final class TabTrayStateTests: XCTestCase {
         let action = TabPanelViewAction(panelType: .tabs,
                                         windowUUID: .XCTestDefaultUUID,
                                         actionType: TabPanelViewActionType.closeAllTabs)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.showCloseConfirmation)
     }

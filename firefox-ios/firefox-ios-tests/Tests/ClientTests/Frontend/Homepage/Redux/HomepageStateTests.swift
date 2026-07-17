@@ -50,7 +50,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -71,7 +71,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 isZeroSearch: true,
@@ -92,7 +92,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 isZeroSearch: false,
@@ -113,7 +113,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             GeneralBrowserAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -133,7 +133,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 availableContentHeight: 500,
@@ -155,7 +155,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -172,7 +172,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -190,7 +190,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             TrackerBlockerModuleAction(
                 isEnabled: true,
@@ -224,7 +224,7 @@ final class HomepageStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             TrackerBlockerModuleAction(
                 isEnabled: false,

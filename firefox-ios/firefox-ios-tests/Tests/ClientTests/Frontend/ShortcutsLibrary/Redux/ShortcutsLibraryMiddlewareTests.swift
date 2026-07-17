@@ -106,7 +106,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ShortcutsLibraryActionType.initialize
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         return AppState(
             presentedComponents: PresentedComponentsState(

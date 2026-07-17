@@ -66,7 +66,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withWorldCupSectionEnabled_includesWorldCupSection() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = HomepageState.reducer(
+        let state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -96,7 +96,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             logoTextColor: .blue
         )
 
-        let state = HomepageState.reducer(
+        let state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
                 merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
@@ -105,7 +105,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        let updatedState = HomepageState.reducer(
+        let updatedState = HomepageState.reducer.legacyReducer(
             state,
             WallpaperAction(
                 wallpaperConfiguration: wallpaperConfig,
@@ -137,7 +137,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withOverflowingTopSites_returnTopSitesWithHeader() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = HomepageState.reducer(
+        let state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 topSites: createSites(),
@@ -146,7 +146,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        let updatedState = HomepageState.reducer(
+        let updatedState = HomepageState.reducer.legacyReducer(
             state,
             TopSitesAction(
                 numberOfRows: 2,
@@ -174,7 +174,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let dataSource = try XCTUnwrap(diffableDataSource)
         let numberOfRows = 2
 
-        let stateWithRows = HomepageState.reducer(
+        let stateWithRows = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 numberOfRows: numberOfRows,
@@ -184,7 +184,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
         let topSitesCount = numberOfRows * stateWithRows.topSitesState.numberOfTilesPerRow
 
-        let updatedState = HomepageState.reducer(
+        let updatedState = HomepageState.reducer.legacyReducer(
             stateWithRows,
             TopSitesAction(
                 topSites: createSites(count: topSitesCount),
@@ -210,7 +210,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withAddShortcutTileFlagEnabled_appendsTileWhenThereIsRoom() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let stateWithRows = HomepageState.reducer(
+        let stateWithRows = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 numberOfRows: 1,
@@ -220,7 +220,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
         let numberOfTilesPerRow = stateWithRows.topSitesState.numberOfTilesPerRow
 
-        let updatedState = HomepageState.reducer(
+        let updatedState = HomepageState.reducer.legacyReducer(
             stateWithRows,
             TopSitesAction(
                 topSites: createSites(count: numberOfTilesPerRow - 1),
@@ -246,7 +246,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withAddShortcutTileFlagEnabled_displacesTileWhenShortcutsFillVisibleSlots() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let stateWithRows = HomepageState.reducer(
+        let stateWithRows = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 numberOfRows: 1,
@@ -256,7 +256,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
         let numberOfTilesPerRow = stateWithRows.topSitesState.numberOfTilesPerRow
 
-        let updatedState = HomepageState.reducer(
+        let updatedState = HomepageState.reducer.legacyReducer(
             stateWithRows,
             TopSitesAction(
                 topSites: createSites(count: numberOfTilesPerRow),
@@ -282,7 +282,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withAddShortcutTileFlagEnabledAndNoTopSites_showsAddShortcutTile() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        var state = HomepageState.reducer(
+        var state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 topSites: [],
@@ -291,7 +291,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
                 actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
             )
         )
-        state = HomepageState.reducer(
+        state = HomepageState.reducer.legacyReducer(
             state,
             TopSitesAction(
                 numberOfRows: 1,
@@ -314,7 +314,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withValidState_returnPocketStories() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = HomepageState.reducer(
+        let state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
                 merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
@@ -339,7 +339,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withCategorizedStoriesAndNoSelection_returnsFlattenedStories() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = HomepageState.reducer(
+        let state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
                 merinoStoryResponse: MerinoStoryResponse(categories: createCategories()),
@@ -361,7 +361,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withCategorizedStoriesAndSelectedCategory_returnsSelectedCategoryStories() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let categorizedState = HomepageState.reducer(
+        let categorizedState = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
                 merinoStoryResponse: MerinoStoryResponse(categories: createCategories()),
@@ -387,7 +387,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withCategorizedStoriesAndMissingSelectedCategory_omitsPocketSection() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let categorizedState = HomepageState.reducer(
+        let categorizedState = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
                 merinoStoryResponse: MerinoStoryResponse(categories: createCategories()),
@@ -416,7 +416,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             buttonLabel: "Example Button"
         )
 
-        let state = HomepageState.reducer(
+        let state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MessageCardAction(
                 messageCardConfiguration: configuration,
@@ -442,7 +442,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withValidState_returnBookmarks() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        var state = HomepageState.reducer(
+        var state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             BookmarksAction(
                 bookmarks: [BookmarkConfiguration(
@@ -458,7 +458,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         // Enable the bookmarks section of the homepage since it's off by default
-        state = HomepageState.reducer(
+        state = HomepageState.reducer.legacyReducer(
             state,
             BookmarksAction(isEnabled: true,
                             windowUUID: .XCTestDefaultUUID,
@@ -481,7 +481,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withValidState_returnJumpBackInSection() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        var state = HomepageState.reducer(
+        var state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TabManagerAction(
                 recentTabs: [createTab(urlString: "www.mozilla.org")],
@@ -491,7 +491,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         // Enable the bookmarks section of the homepage since it's off by default
-        state = HomepageState.reducer(
+        state = HomepageState.reducer.legacyReducer(
             state,
             JumpBackInAction(isEnabled: true,
                              windowUUID: .XCTestDefaultUUID,
@@ -515,7 +515,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = HomepageState.reducer(
+        let state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TrackerBlockerModuleAction(
                 isEnabled: true,
@@ -542,7 +542,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        var state = HomepageState.reducer(
+        var state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 topSites: createSites(),
@@ -550,7 +550,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
                 actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
             )
         )
-        state = HomepageState.reducer(
+        state = HomepageState.reducer.legacyReducer(
             state,
             TrackerBlockerModuleAction(
                 isEnabled: true,
@@ -558,7 +558,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
                 actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
             )
         )
-        state = HomepageState.reducer(
+        state = HomepageState.reducer.legacyReducer(
             state,
             TabManagerAction(
                 recentTabs: [createTab(urlString: "www.mozilla.org")],
@@ -566,7 +566,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
                 actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
             )
         )
-        state = HomepageState.reducer(
+        state = HomepageState.reducer.legacyReducer(
             state,
             JumpBackInAction(
                 isEnabled: true,
@@ -574,7 +574,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
                 actionType: JumpBackInActionType.toggleShowSectionSetting
             )
         )
-        state = HomepageState.reducer(
+        state = HomepageState.reducer.legacyReducer(
             state,
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -600,7 +600,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withValidState_returnsPrivacyNoticeSection() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = HomepageState.reducer(
+        let state = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             HomepageAction(
                 windowUUID: .XCTestDefaultUUID,

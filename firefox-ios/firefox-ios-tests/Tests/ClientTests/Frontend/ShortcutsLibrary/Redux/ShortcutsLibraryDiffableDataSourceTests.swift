@@ -44,7 +44,7 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withValidState_returnsShortcuts() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = ShortcutsLibraryState.reducer(
+        let state = ShortcutsLibraryState.reducer.legacyReducer(
             ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 topSites: createSites(count: 10),
@@ -65,7 +65,7 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withValidState_returnsMaxShortcuts() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = ShortcutsLibraryState.reducer(
+        let state = ShortcutsLibraryState.reducer.legacyReducer(
             ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 topSites: createSites(count: 20),
@@ -86,7 +86,7 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withAddShortcutTileFlagEnabled_appendsTileToShortcuts() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = ShortcutsLibraryState.reducer(
+        let state = ShortcutsLibraryState.reducer.legacyReducer(
             ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 topSites: createSites(count: 10),
@@ -110,7 +110,7 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withAddShortcutTileFlagEnabled_returnsMaxItemsIncludingTile() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        let state = ShortcutsLibraryState.reducer(
+        let state = ShortcutsLibraryState.reducer.legacyReducer(
             ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 topSites: createSites(count: 20),
@@ -133,7 +133,7 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
     @MainActor
     func test_updateSnapshot_withAddShortcutTileFlagEnabledAndNoShortcuts_showsAddShortcutTile() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
-        let state = ShortcutsLibraryState.reducer(
+        let state = ShortcutsLibraryState.reducer.legacyReducer(
             ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
                 topSites: [],

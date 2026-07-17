@@ -361,7 +361,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func test_tapOnHomepageSearchBarAction_withBVCState_triggersGeneralBrowserAction() throws {
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.homepageZeroSearch),
@@ -383,7 +383,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupStoreForSearchBar()
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             ToolbarMiddlewareAction(
                 buttonType: .search,
@@ -405,7 +405,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupStoreForSearchBar()
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             ToolbarMiddlewareAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -429,7 +429,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andSearchButtonType_doesNotTriggersGeneralBrowserAction() {
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             ToolbarMiddlewareAction(
                 buttonType: .search,
@@ -454,7 +454,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andNoSearchButtonType_doesNotTriggersGeneralBrowserAction() {
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             ToolbarMiddlewareAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -478,7 +478,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func testNewState_whenSummarizeDisplayRequested() {
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             GeneralBrowserAction(
                 summarizerConfig: .defaultConfig,
@@ -580,7 +580,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         let action = GeneralBrowserAction(windowUUID: .XCTestDefaultUUID,
                                           actionType: GeneralBrowserActionType.addNewTab)
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID), action)
         subject.newState(state: newState)
 
@@ -884,7 +884,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     /// We need to set up the state for the homepage search bar in order to test method that relies on this state.
     func setupStoreForSearchBar() {
         let initialHomepageState = HomepageState
-            .reducer(
+            .reducer.legacyReducer(
                 HomepageState(windowUUID: .XCTestDefaultUUID),
                 HomepageAction(
                     windowUUID: .XCTestDefaultUUID,
@@ -892,7 +892,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 )
             )
         let newHomepageState = HomepageState
-            .reducer(
+            .reducer.legacyReducer(
                 initialHomepageState,
                 HomepageAction(
                     isSearchBarEnabled: true,
