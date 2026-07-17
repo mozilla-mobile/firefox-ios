@@ -2047,6 +2047,18 @@ extension String {
                 value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
                 comment: "On error page, this is the description for no internet connection.")
         }
+        public struct CellularDataRestricted {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v154",
+                tableName: "NativeErrorPage",
+                value: "Cellular data is turned off for Firefox.",
+                comment: "On the error page, this title explains that iOS is preventing Firefox from using cellular data.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.CellularDataRestricted.Description.v154",
+                tableName: "NativeErrorPage",
+                value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for Firefox.",
+                comment: "On the error page, this description tells users how to browse after iOS has prevented Firefox from using cellular data.")
+        }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.GenericError.TitleLabel.v131",

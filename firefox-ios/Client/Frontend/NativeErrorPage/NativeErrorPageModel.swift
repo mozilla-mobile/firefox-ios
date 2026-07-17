@@ -7,12 +7,14 @@ import Shared
 
 enum ErrorPageModel: Equatable {
     case internetConnection
+    case cellularDataRestricted
     case badCertDomain(BadCertDomainModel)
     case generic(GenericErrorModel)
 
     var title: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.TitleLabel
+        case .cellularDataRestricted: return .NativeErrorPage.CellularDataRestricted.TitleLabel
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.TitleLabel
         case .generic: return .NativeErrorPage.GenericError.TitleLabel
         }
@@ -21,6 +23,7 @@ enum ErrorPageModel: Equatable {
     var description: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.Description
+        case .cellularDataRestricted: return .NativeErrorPage.CellularDataRestricted.Description
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
         case .generic: return .NativeErrorPage.GenericError.Description
         }
@@ -28,14 +31,15 @@ enum ErrorPageModel: Equatable {
 
     var foxImageName: String {
         switch self {
-        case .internetConnection: return ImageIdentifiers.NativeErrorPage.noInternetConnection
+        case .internetConnection, .cellularDataRestricted:
+            return ImageIdentifiers.NativeErrorPage.noInternetConnection
         case .badCertDomain, .generic: return ImageIdentifiers.NativeErrorPage.securityError
         }
     }
 
     var url: URL? {
         switch self {
-        case .internetConnection: return nil
+        case .internetConnection, .cellularDataRestricted: return nil
         case .badCertDomain(let model): return model.url
         case .generic(let model): return model.url
         }
@@ -50,7 +54,7 @@ enum ErrorPageModel: Equatable {
 
     var isRegularUI: Bool {
         switch self {
-        case .internetConnection, .generic: return true
+        case .internetConnection, .cellularDataRestricted, .generic: return true
         case .badCertDomain: return false
         }
     }
