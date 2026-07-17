@@ -597,6 +597,7 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         // Prefer accountState over deviceConstellation for the current
         // device ID to avoid a possible server round-trip. This runs off the
         // main thread so the blocking FFI call can't hang the UI.
+        // swiftlint:disable closure_body_length
         accountManager.getCurrentDeviceId { deviceIDResult in
             guard case .success(let deviceId) = deviceIDResult else {
                 self.logger.log("Device Id could not be retrieved",
@@ -644,6 +645,7 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                 }
             }
         }
+        // swiftlint:enable closure_body_length
         return deferred
     }
 
