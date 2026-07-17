@@ -48,8 +48,6 @@ enum ComponentState: Sendable, Equatable {
             return .tabsPanel(TabsPanelState.reducer.modernReducer(state, action, actionWindowUUID))
         case .termsOfUse(let state):
             return .termsOfUse(TermsOfUseState.reducer.modernReducer(state, action, actionWindowUUID))
-        case .themeSettings(let state):
-            return .themeSettings(ThemeSettingsState.reducer.modernReducer(state, action, actionWindowUUID))
         case .trackingProtection(let state):
             return .trackingProtection(TrackingProtectionState.reducer.modernReducer(state, action, actionWindowUUID))
         case .toolbar(let state):
@@ -89,8 +87,6 @@ enum ComponentState: Sendable, Equatable {
             return .tabsPanel(TabsPanelState.reducer.legacyReducer(state, action))
         case .termsOfUse(let state):
             return .termsOfUse(TermsOfUseState.reducer.legacyReducer(state, action))
-        case .themeSettings(let state):
-            return .themeSettings(ThemeSettingsState.reducer.legacyReducer(state, action))
         case .trackingProtection(let state):
             return .trackingProtection(TrackingProtectionState.reducer.legacyReducer(state, action))
         case .toolbar(let state):
