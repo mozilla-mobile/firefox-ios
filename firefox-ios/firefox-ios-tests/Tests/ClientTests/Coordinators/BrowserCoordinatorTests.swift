@@ -443,7 +443,8 @@ final class BrowserCoordinatorTests: XCTestCase,
     func testShowGoogleLensCamera_whenCameraCoordinatorAlreadyPresent_doesNotAddDuplicate() {
         let subject = createSubject()
         let existing = CameraCoordinator(parentCoordinatorDelegate: subject,
-                                         router: mockRouter) { _ in }
+                                         router: mockRouter,
+                                         cameraReason: .googleLens) { _ in }
         subject.add(child: existing)
 
         subject.showGoogleLensCamera()
