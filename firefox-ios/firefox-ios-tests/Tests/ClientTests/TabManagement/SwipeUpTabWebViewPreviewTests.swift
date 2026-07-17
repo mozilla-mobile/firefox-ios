@@ -6,25 +6,26 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class SwipeUpTabWebViewPreviewTests: XCTestCase {
     private var mockFlags: MockNimbusFeatureFlags!
 
     // closeReleaseThreshold (1/3) y = 200, tabTrayReleaseThreshold (2/3) y = 400.
     private let frame = CGRect(x: 0, y: 0, width: 300, height: 600)
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockFlags = MockNimbusFeatureFlags()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockFlags = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - releaseOutcome
 
-    @MainActor func testReleaseOutcome_whenFingerInTopThirdAndCloseTabEnabled_returnsCloseTab() {
+    func testReleaseOutcome_whenFingerInTopThirdAndCloseTabEnabled_returnsCloseTab() {
         let subject = createSubject(closeTabEnabled: true)
 
         let outcome = subject.releaseOutcome(fingerLocation: CGPoint(x: 150, y: 100))
@@ -32,7 +33,7 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
         XCTAssertEqual(outcome, .closeTab)
     }
 
-    @MainActor func testReleaseOutcome_whenFingerInTopThirdAndCloseTabDisabled_returnsOpenTabTray() {
+    func testReleaseOutcome_whenFingerInTopThirdAndCloseTabDisabled_returnsOpenTabTray() {
         let subject = createSubject(closeTabEnabled: false)
 
         let outcome = subject.releaseOutcome(fingerLocation: CGPoint(x: 150, y: 100))
@@ -40,7 +41,7 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
         XCTAssertEqual(outcome, .openTabTray)
     }
 
-    @MainActor func testReleaseOutcome_whenFingerAtCloseThresholdAndCloseTabEnabled_returnsCloseTab() {
+    func testReleaseOutcome_whenFingerAtCloseThresholdAndCloseTabEnabled_returnsCloseTab() {
         let subject = createSubject(closeTabEnabled: true)
 
         let outcome = subject.releaseOutcome(fingerLocation: CGPoint(x: 150, y: 200))
@@ -48,7 +49,7 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
         XCTAssertEqual(outcome, .closeTab)
     }
 
-    @MainActor func testReleaseOutcome_whenFingerInMiddle_returnsOpenTabTray() {
+    func testReleaseOutcome_whenFingerInMiddle_returnsOpenTabTray() {
         let subject = createSubject(closeTabEnabled: true)
 
         let outcome = subject.releaseOutcome(fingerLocation: CGPoint(x: 150, y: 300))
@@ -56,7 +57,7 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
         XCTAssertEqual(outcome, .openTabTray)
     }
 
-    @MainActor func testReleaseOutcome_whenFingerAtTabTrayThreshold_returnsOpenTabTray() {
+    func testReleaseOutcome_whenFingerAtTabTrayThreshold_returnsOpenTabTray() {
         let subject = createSubject(closeTabEnabled: false)
 
         let outcome = subject.releaseOutcome(fingerLocation: CGPoint(x: 150, y: 400))
@@ -64,7 +65,7 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
         XCTAssertEqual(outcome, .openTabTray)
     }
 
-    @MainActor func testReleaseOutcome_whenFingerInBottomThird_returnsCancel() {
+    func testReleaseOutcome_whenFingerInBottomThird_returnsCancel() {
         let subject = createSubject(closeTabEnabled: true)
 
         let outcome = subject.releaseOutcome(fingerLocation: CGPoint(x: 150, y: 500))
@@ -74,7 +75,7 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
 
     // MARK: - previewCardFrame
 
-    @MainActor func testPreviewCardFrame_afterLayout_matchesBounds() {
+    func testPreviewCardFrame_afterLayout_matchesBounds() {
         let subject = createSubject()
         subject.layoutIfNeeded()
 
@@ -83,10 +84,10 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
 
     // MARK: - Helpers
 
-    @MainActor private func createSubject(frame: CGRect? = nil,
-                                          closeTabEnabled: Bool = false,
-                                          file: StaticString = #filePath,
-                                          line: UInt = #line) -> SwipeUpTabWebViewPreview {
+    private func createSubject(frame: CGRect? = nil,
+                               closeTabEnabled: Bool = false,
+                               file: StaticString = #filePath,
+                               line: UInt = #line) -> SwipeUpTabWebViewPreview {
         if closeTabEnabled {
             mockFlags.enabledFlags = [.addressBarGestureToOpenTabTrayCloseTab]
         }
