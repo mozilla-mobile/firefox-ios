@@ -61,4 +61,17 @@ final class GoogleLensTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.succeeded, false)
         XCTAssertNil(savedExtras.httpStatus)
     }
+
+    func testToolbarButtonSearchTime_whenStartedThenStopped_accumulatesTiming() throws {
+        let metric = GleanMetrics.GoogleLens.toolbarButtonSearchTime
+
+        let timerId = try XCTUnwrap(subject?.startToolbarButtonSearch())
+        subject?.stopToolbarButtonSearch(timerId: timerId)
+
+        let savedMetrics = gleanWrapper.savedEvents.compactMap { $0 as? TimingDistributionMetricType }
+        XCTAssertEqual(gleanWrapper.startTimingCalled, 1)
+        XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
+        XCTAssertEqual(savedMetrics.count, 2)
+        XCTAssertTrue(savedMetrics.allSatisfy { $0 === metric })
+    }
 }

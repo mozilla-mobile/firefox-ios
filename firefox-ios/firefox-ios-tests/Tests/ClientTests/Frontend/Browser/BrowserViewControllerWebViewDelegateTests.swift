@@ -399,12 +399,11 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     @MainActor
-    private func createSubject() -> BrowserViewController {
-        let subject = BrowserViewController(
-            profile: profile,
-            tabManager: tabManager,
-            userInitiatedQueue: MockDispatchQueue()
-        )
+    private func createSubject(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) -> BrowserViewController {
+        let subject = BrowserViewController(profile: profile,
+                                            tabManager: tabManager,
+                                            gleanWrapper: gleanWrapper,
+                                            userInitiatedQueue: MockDispatchQueue())
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -506,24 +505,29 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testWebViewDidFinish_clearsPendingGoogleLensSearch() {
-        let subject = createSubject()
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
         let tab = createTab()
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
-        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .camera)
+        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .camera,
+                                                                       toolbarButtonSearchTimerId: gleanWrapper.savedTimerId)
 
         subject.webView(tab.webView!, didFinish: nil)
 
         XCTAssertNil(subject.googleLensSearches[tab.tabUUID],
                      "Finishing navigation should report and clear the pending Google Lens search")
+        XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
     }
 
     @MainActor
     func testWebViewDidFailProvisionalNavigation_clearsPendingGoogleLensSearch() {
-        let subject = createSubject()
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
         let tab = createTab()
         tabManager.tabs = [tab]
-        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .contextMenu)
+        subject.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: .photoPicker,
+                                                                       toolbarButtonSearchTimerId: gleanWrapper.savedTimerId)
 
         // Code 102 ("Frame load interrupted") makes the delegate return early right after the
         // Google Lens reporting, keeping the test free of error-page side effects.
@@ -533,6 +537,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertNil(subject.googleLensSearches[tab.tabUUID],
                      "A failed navigation should report and clear the pending Google Lens search")
+        XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
     }
 
     @MainActor

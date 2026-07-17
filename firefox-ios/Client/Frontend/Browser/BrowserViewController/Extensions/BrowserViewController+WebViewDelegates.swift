@@ -445,9 +445,12 @@ extension BrowserViewController: WKUIDelegate {
     /// once its results page finishes loading or fails, then clears the tracked state.
     private func recordGoogleLensSearchCompletedIfNeeded(for tab: Tab?, succeeded: Bool) {
         guard let tab, let search = googleLensSearches.removeValue(forKey: tab.tabUUID) else { return }
-        GoogleLensTelemetry().searchCompleted(source: search.source,
-                                              succeeded: succeeded,
-                                              httpStatusCode: search.httpStatusCode)
+        if let timerId = search.toolbarButtonSearchTimerId {
+            googleLensTelemetry.stopToolbarButtonSearch(timerId: timerId)
+        }
+        googleLensTelemetry.searchCompleted(source: search.source,
+                                            succeeded: succeeded,
+                                            httpStatusCode: search.httpStatusCode)
     }
 
     func assignWebView(_ webView: WKWebView?) {

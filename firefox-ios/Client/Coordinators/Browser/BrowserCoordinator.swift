@@ -91,7 +91,9 @@ final class BrowserCoordinator: BaseCoordinator,
         self.windowManager = windowManager
         self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
         self.homepageTabStateStore = homepageTabStateStore
-        self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        self.browserViewController = BrowserViewController(profile: profile,
+                                                           tabManager: tabManager,
+                                                           gleanWrapper: glean)
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.worldCupStore = worldCupStore
@@ -1199,7 +1201,10 @@ final class BrowserCoordinator: BaseCoordinator,
                        category: .coordinator)
             return
         }
-        browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source)
+        let googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: glean)
+        let timerId = source == .contextMenu ? nil : googleLensTelemetry.startToolbarButtonSearch()
+        browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source,
+                                                                                      toolbarButtonSearchTimerId: timerId)
         _ = tab.loadRequest(request)
     }
     private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {

@@ -362,6 +362,7 @@ class BrowserViewController: UIViewController,
     let profile: Profile
     let tabManager: TabManager
     var googleLensSearches = [TabUUID: GoogleLensSearchState]()
+    let googleLensTelemetry: GoogleLensTelemetry
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
@@ -449,6 +450,7 @@ class BrowserViewController: UIViewController,
         self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
         self.searchEnginesManager = searchEnginesManager
+        self.googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: gleanWrapper)
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)

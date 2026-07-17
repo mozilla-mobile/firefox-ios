@@ -7,10 +7,14 @@ import Glean
 
 struct GoogleLensSearchState {
     let source: GoogleLensTelemetry.Source
+    let toolbarButtonSearchTimerId: GleanTimerId?
     var httpStatusCode: Int?
 
-    init(source: GoogleLensTelemetry.Source, httpStatusCode: Int? = nil) {
+    init(source: GoogleLensTelemetry.Source,
+         toolbarButtonSearchTimerId: GleanTimerId? = nil,
+         httpStatusCode: Int? = nil) {
         self.source = source
+        self.toolbarButtonSearchTimerId = toolbarButtonSearchTimerId
         self.httpStatusCode = httpStatusCode
     }
 }
@@ -39,5 +43,14 @@ struct GoogleLensTelemetry {
             succeeded: succeeded
         )
         gleanWrapper.recordEvent(for: GleanMetrics.GoogleLens.searchCompleted, extras: extra)
+    }
+
+    func startToolbarButtonSearch() -> GleanTimerId {
+        return gleanWrapper.startTiming(for: GleanMetrics.GoogleLens.toolbarButtonSearchTime)
+    }
+
+    func stopToolbarButtonSearch(timerId: GleanTimerId) {
+        gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.GoogleLens.toolbarButtonSearchTime,
+                                             timerId: timerId)
     }
 }

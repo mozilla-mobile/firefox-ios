@@ -453,6 +453,34 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.first is CameraCoordinator)
     }
 
+    func testSearchGoogleLens_fromToolbarButton_startsSearchTimer() throws {
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+
+        subject.searchGoogleLens(with: UIImage(), source: .camera)
+
+        let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
+        XCTAssertEqual(glean.startTimingCalled, 1)
+        XCTAssertNotNil(search.toolbarButtonSearchTimerId)
+    }
+
+    func testSearchGoogleLens_fromWebImageContextMenu_doesNotStartSearchTimer() throws {
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+
+        subject.searchGoogleLens(with: UIImage(), source: .contextMenu)
+
+        let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
+        XCTAssertEqual(glean.startTimingCalled, 0)
+        XCTAssertNil(search.toolbarButtonSearchTimerId)
+    }
+
     func testShowQRCode_presentsQRCodeNavigationController() {
         let subject = createSubject()
         let delegate = MockQRCodeViewControllerDelegate()
@@ -1673,7 +1701,8 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #filePath,
+    private func createSubject(googleLensService: GoogleLensServicing = GoogleLensService(),
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
@@ -1682,7 +1711,8 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
-                                         worldCupStore: mockWorldCupStore)
+                                         worldCupStore: mockWorldCupStore,
+                                         googleLensService: googleLensService)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
@@ -1735,6 +1765,14 @@ final class BrowserCoordinatorTests: XCTestCase,
         }
 
         return URL(string: "http://localhost:\(webServer.port)")!
+    }
+}
+
+private struct MockGoogleLensService: GoogleLensServicing {
+    func makeUploadRequest(for image: UIImage,
+                           viewportSize: CGSize,
+                           entryPoint: GoogleLensUploadEntryPoint) -> URLRequest? {
+        return URLRequest(url: URL(string: "https://lens.google.com/upload")!)
     }
 }
 
