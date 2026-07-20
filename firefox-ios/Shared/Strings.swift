@@ -4769,7 +4769,7 @@ extension String {
                 key: "", // WebCompatReporter.Fields.DetailsAccessibilityLabel.v154
                 tableName: "WebCompatReporter",
                 value: "Describe the issue in detail",
-                comment: "Accessibility label for the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form."
+                comment: "Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form."
             )
         }
         public struct AdditionalInfo {
