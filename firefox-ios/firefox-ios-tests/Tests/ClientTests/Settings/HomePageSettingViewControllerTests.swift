@@ -129,7 +129,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertTrue(trackerBlockerModuleSettingValue)
     }
 
-    func testHomepageSettings_generateSettings_worldCupSectionDefaultValue_whenFFEnabled_isTrue() throws {
+    func testHomepageSettings_generateSettings_worldCupSection_whenTournamentEnded_isHidden() throws {
         setFeatureFlag(.worldCupWidget, isEnabled: true)
         let subject = createSubject()
         subject.profile = profile
@@ -146,9 +146,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
                 ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.WorldCupSection
             }) as? BoolSetting
 
-        let worldCupSectionSettingValue = try XCTUnwrap(worldCupSectionSetting?.getDefaultValue())
-
-        XCTAssertTrue(worldCupSectionSettingValue)
+        XCTAssertNil(worldCupSectionSetting)
     }
 
     // MARK: - Helper
