@@ -4796,6 +4796,92 @@ extension String {
                 comment: "Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report."
             )
         }
+        public struct Fields {
+            public static let URLLabel = MZLocalizedString(
+                key: "", // WebCompatReporter.Fields.URLLabel.v154
+                tableName: "WebCompatReporter",
+                value: "URL",
+                comment: "Leading label of the editable row showing the web address being reported, in the Report a Website Issue form."
+            )
+            public static let URLPlaceholder = MZLocalizedString(
+                key: "", // WebCompatReporter.Fields.URLPlaceholder.v154
+                tableName: "WebCompatReporter",
+                value: "Website address",
+                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form."
+            )
+            public static let DetailsPlaceholder = MZLocalizedString(
+                key: "", // WebCompatReporter.Fields.DetailsPlaceholder.v154
+                tableName: "WebCompatReporter",
+                value: "Describe the issue in detail (optional)",
+                comment: "Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form."
+            )
+            public static let DetailsAccessibilityLabel = MZLocalizedString(
+                key: "", // WebCompatReporter.Fields.DetailsAccessibilityLabel.v154
+                tableName: "WebCompatReporter",
+                value: "Describe the issue in detail",
+                comment: "Accessibility label for the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form."
+            )
+        }
+        public struct AdditionalInfo {
+            public static let Title = MZLocalizedString(
+                key: "", // WebCompatReporter.AdditionalInfo.Title.v154
+                tableName: "WebCompatReporter",
+                value: "Additional Info",
+                comment: "Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form."
+            )
+            public static let IncludeScreenshot = MZLocalizedString(
+                key: "", // WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154
+                tableName: "WebCompatReporter",
+                value: "Automatically include a screenshot to show the problem",
+                comment: "Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form."
+            )
+            public static let IncludeBlockedList = MZLocalizedString(
+                key: "", // WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154
+                tableName: "WebCompatReporter",
+                value: "Send list of items blocked by tracking protection",
+                comment: "Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form."
+            )
+            public static let FooterText = MZLocalizedString(
+                key: "", // WebCompatReporter.AdditionalInfo.FooterText.v154
+                tableName: "WebCompatReporter",
+                value: "Your report helps us understand and fix issues in Firefox to make it better for everyone. %@",
+                comment: "Explanatory caption below the Additional Info section. %@ is replaced by the tappable 'Learn More' link, in the Report a Website Issue form."
+            )
+            public static let LearnMore = MZLocalizedString(
+                key: "", // WebCompatReporter.AdditionalInfo.LearnMore.v154
+                tableName: "WebCompatReporter",
+                value: "Learn More",
+                comment: "Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form."
+            )
+        }
+        public struct SendButton {
+            public static let Title = MZLocalizedString(
+                key: "", // WebCompatReporter.SendButton.Title.v154
+                tableName: "WebCompatReporter",
+                value: "Send Report",
+                comment: "Title of the button that submits the website issue report, in the Report a Website Issue form."
+            )
+        }
+        public struct Preview {
+            public static let Title = MZLocalizedString(
+                key: "", // WebCompatReporter.Preview.Title.v154
+                tableName: "WebCompatReporter",
+                value: "Report Preview",
+                comment: "Title of the Report Preview screen, which shows the data that will be sent with a website issue report."
+            )
+            public static let ScreenshotAccessibilityLabel = MZLocalizedString(
+                key: "", // WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154
+                tableName: "WebCompatReporter",
+                value: "Screenshot of the page you are reporting. Double tap to view full screen.",
+                comment: "Accessibility label for the page screenshot thumbnail on the Report Preview screen."
+            )
+            public static let ScreenshotCloseAccessibilityLabel = MZLocalizedString(
+                key: "", // WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154
+                tableName: "WebCompatReporter",
+                value: "Close",
+                comment: "Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen."
+            )
+        }
     }
 }
 
@@ -6183,7 +6269,7 @@ extension String {
                 comment: "On the main menu, the label for the action that indicates that Reader view is turned off."
             )
             public static let ReportBrokenSite = MZLocalizedString(
-                key: "", // MainMenu.ToolsSection.ReportBrokenSite.Title.v152
+                key: "", // MainMenu.ToolsSection.ReportBrokenSite.Title.v154
                 tableName: "MainMenu",
                 value: "Report Broken Site",
                 comment: "On the main menu, the title for the action that lets the user report that the current website is broken or not working correctly.")
@@ -6266,7 +6352,7 @@ extension String {
                     value: "Summarize Page",
                     comment: "On the main menu, the accessibility label for the action that will summarize the content of the webpage.")
                 public static let ReportBrokenSite = MZLocalizedString(
-                    key: "", // MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v152
+                    key: "", // MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v154
                     tableName: "MainMenu",
                     value: "Report Broken Site",
                     comment: "On the main menu, the accessibility label for the action that lets the user report that the current website is broken or not working correctly.")

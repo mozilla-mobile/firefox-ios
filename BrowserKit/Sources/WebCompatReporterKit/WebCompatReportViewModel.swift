@@ -8,15 +8,29 @@ import Foundation
 /// The Client maps `WebCompatReporterState` onto this so the package never
 /// imports Redux; previews build one with a mock.
 public struct WebCompatReportViewModel: Equatable, Sendable {
-    /// A list section, optionally preceded by a header title (e.g. "Site Issue").
+    /// Caption shown below a section, with one substring rendered as a tappable
+    /// link (e.g. "Learn More…" under Advanced Options).
+    public struct Footer: Hashable, Sendable {
+        public let text: String
+        public let linkText: String
+
+        public init(text: String, linkText: String) {
+            self.text = text
+            self.linkText = linkText
+        }
+    }
+
+    /// A list section, with an optional header title (e.g. "Site Issue") and optional `Footer` caption.
     public struct Section: Hashable, Sendable {
         public let id: String
         public let title: String?
+        public let footer: Footer?
         public let rows: [Row]
 
-        public init(id: String, title: String? = nil, rows: [Row]) {
+        public init(id: String, title: String? = nil, footer: Footer? = nil, rows: [Row]) {
             self.id = id
             self.title = title
+            self.footer = footer
             self.rows = rows
         }
     }
@@ -36,12 +50,15 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
             }
         }
 
-        /// How a row renders: a plain title row, the category pull-down, or a
-        /// selectable sub-option row.
+        /// How a row renders in the list.
         public enum Kind: Hashable, Sendable {
             case plain
             case categoryMenu(isPlaceholder: Bool, options: [MenuOption])
             case subOption(isSelected: Bool)
+            case urlField(text: String, placeholder: String)
+            case detailsField(text: String, placeholder: String)
+            case toggle(isOn: Bool)
+            case sendButton(isEnabled: Bool)
         }
 
         public let id: String
