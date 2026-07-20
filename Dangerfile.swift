@@ -569,6 +569,7 @@ class CodeUsageDetector {
         case cspHeader
         case userInterfaceIdiom
         case screenBounds
+        case screenScale
 
         var bundledHeader: String {
             switch self {
@@ -605,6 +606,12 @@ class CodeUsageDetector {
                 adaptive environment, your scene may not span the full screen. Use the view's or window's bounds, \
                 size classes, or trait-based layout instead.
                 """
+            case .screenScale:
+                return """
+                ### ⚠️ `UIScreen.main.scale` usage detected
+                Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid using `UIScreen.main.scale`. \
+                Use the trait collection's `displayScale` instead.
+                """
             }
         }
 
@@ -632,6 +639,8 @@ class CodeUsageDetector {
                 return "userInterfaceIdiom"
             case .screenBounds:
                 return "UIScreen.main.bounds"
+            case .screenScale:
+                return "UIScreen.main.scale"
             }
         }
 
@@ -657,7 +666,7 @@ class CodeUsageDetector {
         // Decide if we want to `warn` instead of `fail` on the pull request.
         var shouldWarn: Bool {
             switch self {
-            case .deferred, .notifiable, .userInterfaceIdiom, .screenBounds:
+            case .deferred, .notifiable, .userInterfaceIdiom, .screenBounds, .screenScale:
                 return true
             default:
                 return false
