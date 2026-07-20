@@ -12,6 +12,7 @@ struct GeneralBrowserAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let selectedTabURL: URL?
+    let destinationURL: URL?
     let isPrivateBrowsing: Bool?
     let toastType: ToastType?
     let showOverlay: Bool?
@@ -24,6 +25,7 @@ struct GeneralBrowserAction: Action {
     let isPageTranslated: Bool
     let translatedToLanguage: String?
     init(selectedTabURL: URL? = nil,
+         destinationURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
@@ -40,6 +42,7 @@ struct GeneralBrowserAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.selectedTabURL = selectedTabURL
+        self.destinationURL = destinationURL
         self.isPrivateBrowsing = isPrivateBrowsing
         self.toastType = toastType
         self.buttonTapped = buttonTapped
@@ -73,6 +76,7 @@ enum GeneralBrowserActionType: ActionType {
     case stopLoadingWebsite
     case reloadWebsite
     case reloadWebsiteNoCache
+    case loadWaybackURL
     case showShare
     case showReaderMode
     case startAtHome

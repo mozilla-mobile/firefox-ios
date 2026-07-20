@@ -17,6 +17,7 @@ protocol ToolbarSelectorsSet {
     var TRANSLATE_BUTTON: Selector { get }
     var TRANSLATE_LOADING_BUTTON: Selector { get }
     var TRANSLATE_ACTIVE_BUTTON: Selector { get }
+    var TRANSLATE_LANGUAGE_ENGLISH_OPTION: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -34,6 +35,7 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let translateButton = AccessibilityIdentifiers.Toolbar.translateButton
         static let translateLoadingButton = AccessibilityIdentifiers.Toolbar.translateLoadingButton
         static let translateActiveButton = AccessibilityIdentifiers.Toolbar.translateActiveButton
+        static let translateLanguageEnglishOption = "English"
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -108,6 +110,13 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["browser", "toolbar", "translation"]
     )
 
+    // Language option in the translation language picker action sheet, matched by its title.
+    let TRANSLATE_LANGUAGE_ENGLISH_OPTION = Selector.buttonId(
+        IDs.translateLanguageEnglishOption,
+        description: "English option in the translation language picker",
+        groups: ["translation"]
+    )
+
     var all: [Selector] { [
         SETTINGS_MENU_BUTTON,
         TABS_BUTTON,
@@ -120,6 +129,7 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         HOME_BUTTON,
         TRANSLATE_BUTTON,
         TRANSLATE_LOADING_BUTTON,
-        TRANSLATE_ACTIVE_BUTTON
+        TRANSLATE_ACTIVE_BUTTON,
+        TRANSLATE_LANGUAGE_ENGLISH_OPTION
     ] }
 }

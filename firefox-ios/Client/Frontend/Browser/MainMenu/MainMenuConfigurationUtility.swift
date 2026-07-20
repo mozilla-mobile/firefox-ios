@@ -32,10 +32,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         featureFlagsProvider.isEnabled(.reportBrokenSite)
     }
 
-    private var isNewAppearanceMenuOn: Bool {
-        featureFlagsProvider.isEnabled(.appearanceMenu)
-    }
-
     private var isSummarizerOn: Bool {
         return DefaultSummarizerNimbusUtils().isSummarizeFeatureToggledOn
     }

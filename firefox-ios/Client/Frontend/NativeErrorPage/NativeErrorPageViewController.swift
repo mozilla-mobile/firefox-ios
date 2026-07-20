@@ -54,6 +54,7 @@ final class NativeErrorPageViewController: UIViewController,
         static let badCertContentGap: CGFloat = 16
         static let badCertImageSize: CGFloat = 160
         static let badCertGapBetweenImageAndContent: CGFloat = 40
+        static let waybackTopPaddingReduction: CGFloat = 40
     }
 
     private lazy var scrollView: UIScrollView = .build()
@@ -210,6 +211,7 @@ final class NativeErrorPageViewController: UIViewController,
         } else {
             errorDescriptionLabel.text = model.description
         }
+        regularContentView.configure(showWaybackButton: model.isWayback)
         applyTheme()
     }
 
@@ -355,7 +357,8 @@ final class NativeErrorPageViewController: UIViewController,
 
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
-                constant: isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top
+                constant: (isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top) -
+                          (model?.isWayback == true ? UX.waybackTopPaddingReduction : 0)
             ),
             scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
@@ -416,6 +419,34 @@ final class NativeErrorPageViewController: UIViewController,
 
     func regularContentViewDidTapReload() {
         dispatchBrowserAction(actionType: .reloadWebsite, isNativeErrorPage: true)
+    }
+
+    func regularContentViewDidTapSearchWayback() {
+        guard let failingURL = model?.url?.baseURLWithPath else { return }
+        regularContentView.configureWaybackButton(state: .loading)
+
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let snapshot = try await WaybackService.fetchSnapshot(for: failingURL.absoluteString)
+                guard let snapshot, snapshot.available, let archivedURL = URL(string: snapshot.url) else {
+                    await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed) }
+                    return
+                }
+                await MainActor.run {
+                    store.dispatch(
+                        GeneralBrowserAction(
+                            destinationURL: archivedURL,
+                            isNativeErrorPage: true,
+                            windowUUID: self.windowUUID,
+                            actionType: GeneralBrowserActionType.loadWaybackURL
+                        )
+                    )
+                }
+            } catch {
+                await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed) }
+            }
+        }
     }
 
     // MARK: - NativeErrorBadCertContentViewDelegate

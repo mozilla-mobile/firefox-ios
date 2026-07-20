@@ -185,17 +185,6 @@ final class ErrorPageHandler: InternalSchemeResponse {
     // When nativeErrorPage feature flag is true, only create
     // html page with gray background similar to homepage or private homepage.
     // TODO: responseForErrorWebPage() will be removed in future with rest of the old error page code.
-    var isNativeErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
-    }
-
-    var isNICErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
-    }
-
-    var isBadCertDomainErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
-    }
 
     @MainActor
     func response(forRequest request: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)? {
@@ -206,17 +195,22 @@ final class ErrorPageHandler: InternalSchemeResponse {
             return nil
         }
 
-        /// Used for checking if current error code is for no internet connection
+        // Used for checking if current error code is for no internet connection
         let noInternetErrorCode = Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
         )
 
-        let isNoInternetError = isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage
-        let isBadCertDomainURL = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
-        let isCertificateError = isBadCertDomainErrorPageEnabled && isBadCertDomainURL && !useOldErrorPage
+        let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
+            (errCode == noInternetErrorCode) && !useOldErrorPage
+        let isCertificateError = NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled &&
+            NativeErrorPageHelper.isBadCertDomainErrorURL(url) && !useOldErrorPage
+
+        // Used for checking if current error code is one that should fall back to wayback
+        let isWaybackCode = WaybackCodes.isWaybackCode(errCode)
+        let isWaybackError = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode && !useOldErrorPage
 
         // Handle No internet access or certificate errors with native error page
-        if isNoInternetError || isCertificateError {
+        if isNoInternetError || isCertificateError || isWaybackError {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)

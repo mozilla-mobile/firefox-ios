@@ -13,7 +13,6 @@ enum FeatureFlagID: String, CaseIterable {
     case addressBarGestureToOpenTabTrayInteractive
     case addressBarGestureToOpenTabTraySwipe
     case aiKillSwitch
-    case appearanceMenu
     case badCertDomainErrorPage
     case bookmarksSearchFeature
     case customReaderModeScheme
@@ -98,7 +97,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .addressBarGestureToOpenTabTrayInteractive,
                 .addressBarGestureToOpenTabTraySwipe,
                 .aiKillSwitch,
-                .appearanceMenu,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,

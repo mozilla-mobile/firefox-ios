@@ -1,0 +1,33 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+@testable import Client
+
+final class MockSystemCameraTelemetry: SystemCameraTelemetryProtocol {
+    private(set) var shownCalled = 0
+    private(set) var closedCalled = 0
+    private(set) var permissionRespondedCalled = 0
+    private(set) var savedShownReason: CameraReason?
+    private(set) var savedClosedReason: CameraReason?
+    private(set) var savedClosedPhotoSelected: Bool?
+    private(set) var savedReason: CameraReason?
+    private(set) var savedGranted: Bool?
+
+    func shown(reason: CameraReason) {
+        shownCalled += 1
+        savedShownReason = reason
+    }
+
+    func closed(reason: CameraReason, photoSelected: Bool) {
+        closedCalled += 1
+        savedClosedReason = reason
+        savedClosedPhotoSelected = photoSelected
+    }
+
+    func permissionResponded(reason: CameraReason, granted: Bool) {
+        permissionRespondedCalled += 1
+        savedReason = reason
+        savedGranted = granted
+    }
+}

@@ -296,18 +296,6 @@ class BrowserViewController: UIViewController,
         return toolbarHelper.isSwipingTabsEnabled
     }
 
-    var isNativeErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
-    }
-
-    var isNICErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
-    }
-
-    var isBadCertDomainErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
-    }
-
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
@@ -2215,12 +2203,24 @@ class BrowserViewController: UIViewController,
 
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
-        let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
-        let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isWaybackErrorCode: Bool = {
+            guard
+                let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
+                let code = Int(codeString)
+            else { return false }
+            return WaybackCodes.isWaybackCode(code)
+        }()
+        let noInternetConnectionEnabled = isNICErrorCode &&
+            NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
+        let isCertificateError = NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled &&
+            NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isShowWayback = isWaybackErrorCode &&
+            NativeErrorPageFeatureFlag().isWaybackEnabled
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError) {
+        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError || isShowWayback) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -2605,6 +2605,14 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // If the webview lands on an internal error page URL without going through a fresh
+        // navigation failure (e.g. back/forward navigation replaying it from history), rebuild
+        // the native error page state from the URL itself so it reflects what's actually on
+        // screen rather than stale data from whatever failure last occurred.
+        if let url, let internalURL = InternalURL(url), internalURL.isErrorPage {
+            rebuildNativeErrorPageStateIfNeeded(for: url)
+        }
+
         // To prevent spoofing, if the origins are equal update the UI always
         if tab.url?.origin == url?.origin {
             tab.url = url
@@ -2626,6 +2634,28 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    func rebuildNativeErrorPageStateIfNeeded(for errorPageURL: URL) {
+        guard
+            let components = URLComponents(url: errorPageURL, resolvingAgainstBaseURL: false),
+            let originalURLString = components.queryItems?.first(where: { $0.name == "url" })?.value,
+            let originalURL = URL(string: originalURLString),
+            let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
+            let code = Int(codeString)
+        else { return }
+
+        let reconstitutedError = NSError(
+            domain: NSURLErrorDomain,
+            code: code,
+            userInfo: [NSURLErrorFailingURLErrorKey: originalURL]
+        )
+
+        let action = NativeErrorPageAction(
+            networkError: reconstitutedError,
+            windowUUID: windowUUID,
+            actionType: NativeErrorPageActionType.receivedError
+        )
+        store.dispatch(action)
+    }
     private func handleTitleChanged(tab: Tab) {
         // Ensure that the tab title *actually* changed to prevent repeated calls
         // to navigateInTab(tab:) except when ReaderModeState is active
@@ -2984,6 +3014,8 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
             tabManager.selectedTab?.reload()
+        case .loadURL(let url):
+            tabManager.selectedTab?.loadRequest(URLRequest(url: url))
         case .stopLoading:
             tabManager.selectedTab?.stop()
             // There is an edge case in which calling stop on the webView doesn't update webView's isLoading var.

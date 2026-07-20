@@ -36,6 +36,7 @@ final class NativeErrorPageMiddleware {
                 let error = action.networkError
             else { return }
             nativeErrorPageHelper = NativeErrorPageHelper(error: error)
+            self.initializeNativeErrorPage(windowUUID: windowUUID)
         case NativeErrorPageActionType.errorPageLoaded:
             self.initializeNativeErrorPage(windowUUID: windowUUID)
         case NativeErrorPageActionType.bypassCertificateWarning:
