@@ -1280,14 +1280,19 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertNil(coordinator)
     }
 
-    func testSavedRouteCalled_whenRestoredTabsIsCalled() {
+    func testSavedRouteCalled_whenRestoredTabsIsCalled() async {
         tabManager.isRestoringTabs = true
         let subject = createSubject()
         subject.browserHasLoaded()
         subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+        let exp = expectation(description: "Saved route handled")
+        mockRouter.onPresent = { exp.fulfill() }
+
+        subject.tabManagerDidRestoreTabs(tabManager)
+        XCTAssertNil(mockRouter.presentedViewController)
 
         tabManager.isRestoringTabs = false
-        subject.tabManagerDidRestoreTabs(tabManager)
+        await fulfillment(of: [exp], timeout: 1)
 
         XCTAssertNotNil(mockRouter.presentedViewController as? DefaultBrowserOnboardingViewController)
         XCTAssertEqual(mockRouter.presentCalled, 1)

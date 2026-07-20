@@ -296,7 +296,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        guard isBrowserReady else { return false }
+        guard hasBrowserLoaded else { return false }
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
@@ -307,7 +307,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        guard isBrowserReady else { return }
+        guard hasBrowserLoaded else { return }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
@@ -353,10 +353,9 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    /// Ensures we're properly setup before we handle routes / deeplinks. `browserIsReady` can maybe be removed at a
-    /// later point after the deeplink refactor is shipped, but this will be a subsequent initiative just in case.
-    private var isBrowserReady: Bool {
-        // Is restoring tabs check is necessary for FXIOS-13351
+    /// Ensures we're properly setup before we handle routes / deeplinks.
+    private var hasBrowserLoaded: Bool {
+        // The restoring tabs check is necessary for FXIOS-13351.
         let isReady = browserIsReady && !tabManager.isRestoringTabs
 
         guard isReady else {
@@ -1384,8 +1383,9 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - TabManagerDelegate
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        // Once tab restore is made, if there's any saved route we make sure to call it
-        if let savedRoute {
+        // TabManager clears isRestoringTabs after notifying its delegates.
+        Task { @MainActor [weak self] in
+            guard let self, let savedRoute = self.savedRoute else { return }
             logger.log("Find and handle route called after tabManagerDidRestoreTabs",
                        level: .info,
                        category: .coordinator)
