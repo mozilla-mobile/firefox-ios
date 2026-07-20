@@ -153,6 +153,26 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertTrue(worldCupSectionSettingValue)
     }
 
+    func testHomepageSettings_generateSettings_withWorldCupDisabled_hidesSetting() throws {
+        let subject = createSubject()
+        subject.profile = profile
+        worldCupStore.isFeatureEnabled = false
+
+        let settingsList = subject.generateSettings()
+
+        let customizeFirefoxHomeSettingsList = settingsList.first(
+            where: {
+                $0.title?.string == .Settings.Homepage.CustomizeFirefoxHome.Title
+            })
+
+        let worldCupSectionSetting = customizeFirefoxHomeSettingsList?.children.first(
+            where: {
+                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.WorldCupSection
+            }) as? BoolSetting
+
+        XCTAssertNil(worldCupSectionSetting)
+    }
+
     // MARK: - Helper
     private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
         if isEnabled {
