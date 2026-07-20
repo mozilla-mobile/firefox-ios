@@ -4756,7 +4756,7 @@ extension String {
             public static let URLPlaceholder = MZLocalizedString(
                 key: "", // WebCompatReporter.Fields.URLPlaceholder.v154
                 tableName: "WebCompatReporter",
-                value: "Website address",
+                value: "URL",
                 comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form."
             )
             public static let DetailsPlaceholder = MZLocalizedString(
@@ -4794,13 +4794,13 @@ extension String {
             public static let FooterText = MZLocalizedString(
                 key: "", // WebCompatReporter.AdditionalInfo.FooterText.v154
                 tableName: "WebCompatReporter",
-                value: "Your report helps us understand and fix issues in Firefox to make it better for everyone. %@",
-                comment: "Explanatory caption below the Additional Info section. %@ is replaced by the tappable 'Learn More' link, in the Report a Website Issue form."
+                value: "Your report helps us understand and fix issues in %1$@ to make it better for everyone. %2$@",
+                comment: "Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form."
             )
             public static let LearnMore = MZLocalizedString(
                 key: "", // WebCompatReporter.AdditionalInfo.LearnMore.v154
                 tableName: "WebCompatReporter",
-                value: "Learn More",
+                value: "Learn more",
                 comment: "Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form."
             )
         }

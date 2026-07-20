@@ -196,7 +196,11 @@ final class WebCompatReportViewController: UINavigationController,
         from state: WebCompatReporterState
     ) -> WebCompatReportViewModel.Section {
         let learnMore: String = .WebCompatReporter.AdditionalInfo.LearnMore
-        let footerText = String(format: .WebCompatReporter.AdditionalInfo.FooterText, learnMore)
+        let footerText = String(
+            format: .WebCompatReporter.AdditionalInfo.FooterText,
+            AppName.shortName.rawValue,
+            learnMore
+        )
         return WebCompatReportViewModel.Section(
             id: SectionID.advancedOptions.rawValue,
             title: .WebCompatReporter.AdditionalInfo.Title,
