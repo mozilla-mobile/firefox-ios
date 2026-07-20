@@ -95,7 +95,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
-    // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncHistory() {
         // History is generated using the DB so go directly to Sign in
         // Sign into Mozilla Account
@@ -121,7 +120,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
-    // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncBookmark() {
         waitForTabsButton()
         navigator.nowAt(HomePanelsScreen)
@@ -139,7 +137,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
-    // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncBookmarkDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
@@ -151,7 +148,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
-    // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncTabs() {
         signInFxAccounts()
 
@@ -180,7 +176,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
-    // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncLogins() {
         waitForTabsButton()
         navigator.nowAt(HomePanelsScreen)
@@ -204,7 +199,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
-    // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncHistoryDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
@@ -218,7 +212,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
-    // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncPasswordDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
@@ -242,7 +235,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
-    // https://mozilla.testrail.io/index.php?/cases/view/2306820
     func testFxASyncTabsDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
