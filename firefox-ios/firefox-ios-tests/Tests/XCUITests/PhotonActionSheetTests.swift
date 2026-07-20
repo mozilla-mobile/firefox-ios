@@ -73,7 +73,11 @@ class PhotonActionSheetTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323203
-    func testShareSheetSendToDevice() {
+    func testShareSheetSendToDevice() throws {
+        try XCTSkipIf(
+            isFirefoxBeta || isFirefox,
+            "Skipping test because Firefox and FirefoxBeta are not yet supported"
+        )
         openNewShareSheet()
         var attempts = 2
         let sendToDeviceButton = app.staticTexts["Send to Device"]
@@ -92,7 +96,11 @@ class PhotonActionSheetTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323204
-    func testShareSheetOpenAndCancel() {
+    func testShareSheetOpenAndCancel() throws {
+        try XCTSkipIf(
+            isFirefoxBeta || isFirefox,
+            "Skipping test because Firefox and FirefoxBeta are not yet supported"
+        )
         openNewShareSheet()
         app.buttons["Cancel"].waitAndTap()
         // User is back to the BrowserTab where the sharesheet was launched

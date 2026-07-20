@@ -70,7 +70,12 @@ final class TranslationsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3379185
-    func testTranslationSettingsDoesNotAppear_translationExperimentOff() {
+    func testTranslationSettingsDoesNotAppear_translationExperimentOff() throws {
+        try XCTSkipIf(
+            isFirefoxBeta || isFirefox,
+            "Skipping test because on Firefox and FirefoxBeta addLaunchArgument cannot override the " +
+            "default experiment value, so the translations feature cannot be forced off"
+        )
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "translations-feature")
         app.launch()
         openSettingsFromToolbarMenu()
