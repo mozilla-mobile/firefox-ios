@@ -362,6 +362,7 @@ class BrowserViewController: UIViewController,
     let profile: Profile
     let tabManager: TabManager
     var googleLensSearches = [TabUUID: GoogleLensSearchState]()
+    let googleLensTelemetry: GoogleLensTelemetry
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
@@ -449,6 +450,7 @@ class BrowserViewController: UIViewController,
         self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
         self.searchEnginesManager = searchEnginesManager
+        self.googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: gleanWrapper)
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
@@ -5054,6 +5056,12 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController {
     /// Used to get the context menu save image in the context menu, shown from long press on webview links
     func getImageData(_ url: URL, success: @escaping @MainActor @Sendable (Data) -> Void) {
+        getImageData(url, success: success, failure: {})
+    }
+
+    func getImageData(_ url: URL,
+                      success: @escaping @MainActor @Sendable (Data) -> Void,
+                      failure: @escaping @MainActor @Sendable () -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
@@ -5062,6 +5070,10 @@ extension BrowserViewController {
                let data = data {
                 ensureMainThread {
                     success(data)
+                }
+            } else {
+                ensureMainThread {
+                    failure()
                 }
             }
         }.resume()
