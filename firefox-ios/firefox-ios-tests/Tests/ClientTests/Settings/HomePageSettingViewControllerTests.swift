@@ -11,6 +11,7 @@ import Shared
 final class HomePageSettingViewControllerTests: XCTestCase {
     private var profile: MockProfile!
     private var wallpaperManager: WallpaperManagerMock!
+    private var worldCupStore: MockWorldCupStore!
     private var delegate: MockSettingsDelegate!
     private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
@@ -29,6 +30,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
 
         delegate = MockSettingsDelegate()
         wallpaperManager = WallpaperManagerMock()
+        worldCupStore = MockWorldCupStore()
     }
 
     override func tearDown() async throws {
@@ -164,7 +166,8 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         let subject = HomePageSettingViewController(prefs: profile.prefs,
                                                     wallpaperManager: wallpaperManager,
                                                     settingsDelegate: delegate,
-                                                    tabManager: MockTabManager())
+                                                    tabManager: MockTabManager(),
+                                                    worldCupStore: worldCupStore)
         trackForMemoryLeaks(subject)
         return subject
     }
