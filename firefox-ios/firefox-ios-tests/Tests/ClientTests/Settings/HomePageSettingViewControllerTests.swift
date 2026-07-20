@@ -132,9 +132,9 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     }
 
     func testHomepageSettings_generateSettings_worldCupSectionDefaultValue_whenFFEnabled_isTrue() throws {
-        setFeatureFlag(.worldCupWidget, isEnabled: true)
         let subject = createSubject()
         subject.profile = profile
+        worldCupStore.isFeatureEnabled = true
 
         let settingsList = subject.generateSettings()
 
