@@ -10,14 +10,41 @@ import UIKit
 /// with a mock. Labels and values are the raw Glean `broken_site_report` keys and
 /// their JSON-formatted values (plain-language copy follows in a later PR).
 public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
-    /// A single line inside a section: a raw payload key and its JSON value,
-    /// e.g. label "breakage_category", value "\"media\"".
+    /// A payload field's value, kept typed so the view owns how it is rendered.
+    /// `displayText` is the raw JSON-style rendering shown in the current preview
+    /// (a plain-language presentation is a follow-up); `.null` is an uncollected
+    /// field.
+    public enum PreviewValue: Hashable, Sendable {
+        case string(String)
+        case list([String])
+        case bool(Bool)
+        case quantity(Int)
+        case null
+
+        public var displayText: String {
+            switch self {
+            case .string(let value):
+                return "\"\(value)\""
+            case .list(let values):
+                return "[" + values.map { "\"\($0)\"" }.joined(separator: ", ") + "]"
+            case .bool(let value):
+                return value ? "true" : "false"
+            case .quantity(let value):
+                return String(value)
+            case .null:
+                return "null"
+            }
+        }
+    }
+
+    /// A single line inside a section: a raw payload key and its typed value,
+    /// e.g. label "breakage_category", value `.string("media")`.
     public struct PreviewRow: Hashable, Sendable {
         public let id: String
         public let label: String
-        public let value: String
+        public let value: PreviewValue
 
-        public init(id: String, label: String, value: String) {
+        public init(id: String, label: String, value: PreviewValue) {
             self.id = id
             self.label = label
             self.value = value

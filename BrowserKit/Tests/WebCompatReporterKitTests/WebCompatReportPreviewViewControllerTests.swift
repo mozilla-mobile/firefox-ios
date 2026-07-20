@@ -95,11 +95,15 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     private func sampleSections() -> [WebCompatReportPreviewViewModel.PreviewSection] {
         return [
             WebCompatReportPreviewViewModel.PreviewSection(id: "details", title: "Report details", rows: [
-                WebCompatReportPreviewViewModel.PreviewRow(id: "website", label: "Website", value: "https://example.com"),
-                WebCompatReportPreviewViewModel.PreviewRow(id: "issue", label: "Issue type", value: "Site is not usable")
+                WebCompatReportPreviewViewModel.PreviewRow(
+                    id: "website", label: "Website", value: .string("https://example.com")
+                ),
+                WebCompatReportPreviewViewModel.PreviewRow(
+                    id: "issue", label: "Issue type", value: .string("Site is not usable")
+                )
             ]),
             WebCompatReportPreviewViewModel.PreviewSection(id: "device", title: "Device", rows: [
-                WebCompatReportPreviewViewModel.PreviewRow(id: "type", label: "Device type", value: "Phone")
+                WebCompatReportPreviewViewModel.PreviewRow(id: "type", label: "Device type", value: .string("Phone"))
             ])
         ]
     }

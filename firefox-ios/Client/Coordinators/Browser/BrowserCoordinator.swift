@@ -666,7 +666,8 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func webCompatReportViewControllerDidTapPreview(_ request: WebCompatPreviewRequest) {
-        let tab = browserViewController.tabManager.selectedTab
+        // No selected tab means there is nothing to report on, so there is nothing to preview.
+        guard let tab = browserViewController.tabManager.selectedTab else { return }
         let enrichedPayload = WebCompatReportDataCollector.enrich(
             request.payload,
             tab: tab,
@@ -674,7 +675,7 @@ final class BrowserCoordinator: BaseCoordinator,
         )
         let viewModel = WebCompatReportViewController.makePreviewViewModel(payload: enrichedPayload)
         // Show the instant viewport screenshot first, then upgrade to the full page.
-        let initialScreenshot = request.includeScreenshot ? tab?.screenshot : nil
+        let initialScreenshot = request.includeScreenshot ? tab.screenshot : nil
         let previewViewController = WebCompatReportPreviewViewController(
             viewModel: viewModel.withScreenshot(initialScreenshot),
             theme: themeManager.getCurrentTheme(for: windowUUID)

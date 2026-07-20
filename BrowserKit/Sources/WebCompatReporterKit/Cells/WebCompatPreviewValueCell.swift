@@ -34,9 +34,10 @@ final class WebCompatPreviewValueCell: UICollectionViewListCell {
         ])
     }
 
-    func configure(label: String, value: String, theme: Theme) {
+    func configure(label: String, value: WebCompatReportPreviewViewModel.PreviewValue, theme: Theme) {
         backgroundConfiguration = .listGroupedCell()
         backgroundConfiguration?.backgroundColor = theme.colors.layer5
+        let valueText = value.displayText
         let font = UIFontMetrics(forTextStyle: .footnote).scaledFont(
             for: UIFont.monospacedSystemFont(ofSize: 13, weight: .regular)
         )
@@ -45,12 +46,12 @@ final class WebCompatPreviewValueCell: UICollectionViewListCell {
             attributes: [.font: font, .foregroundColor: theme.colors.textSecondary]
         )
         text.append(NSAttributedString(
-            string: value,
+            string: valueText,
             attributes: [.font: font, .foregroundColor: theme.colors.textPrimary]
         ))
         valueLabel.attributedText = text
         // Read as a single "key, value" element to VoiceOver.
         isAccessibilityElement = true
-        accessibilityLabel = "\(label), \(value)"
+        accessibilityLabel = "\(label), \(valueText)"
     }
 }

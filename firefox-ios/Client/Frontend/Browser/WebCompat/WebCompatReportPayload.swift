@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import WebCompatReporterKit
 
 /// The `broken-site-report` payload, aligned 1:1 with the Glean metrics defined
 /// in `broken_site_report.yaml` (one property per metric). This is the single
@@ -39,10 +40,11 @@ struct WebCompatReportPayload: Equatable {
     var isTablet: Bool?
     var memory: Int?
 
-    /// One preview line: its Glean metric key and a JSON-style value.
+    /// One preview line: its Glean metric key and a typed value (rendered by the
+    /// preview's view layer, so the model never hand-builds display strings).
     struct Field: Equatable {
         let key: String
-        let value: String
+        let value: WebCompatReportPreviewViewModel.PreviewValue
     }
 
     /// A titled group of fields, mirroring the report's JSON nesting.
@@ -62,61 +64,58 @@ struct WebCompatReportPayload: Equatable {
     }
 
     /// The payload grouped for display, in the report's canonical order. Keys are
-    /// the Glean metric names; values are JSON-style (`null` when not collected).
+    /// the Glean metric names; values are typed (`.null` when not collected) and
+    /// rendered by the preview's view layer.
     var previewGroups: [Group] {
         return [
             Group(title: "basic", fields: [
-                Field(key: "url", value: Self.string(url)),
-                Field(key: "breakage_category", value: Self.string(breakageCategory)),
-                Field(key: "description", value: Self.string(description))
+                Field(key: "url", value: Self.value(url)),
+                Field(key: "breakage_category", value: Self.value(breakageCategory)),
+                Field(key: "description", value: Self.value(description))
             ]),
             Group(title: "tabInfo", fields: [
-                Field(key: "languages", value: Self.list(languages)),
-                Field(key: "useragent_string", value: Self.string(useragentString))
+                Field(key: "languages", value: Self.value(languages)),
+                Field(key: "useragent_string", value: Self.value(useragentString))
             ]),
             Group(title: "antitracking", fields: [
-                Field(key: "block_list", value: Self.string(blockList)),
-                Field(key: "blocked_origins", value: Self.list(blockedOrigins)),
-                Field(key: "etp_category", value: Self.string(etpCategory)),
-                Field(key: "is_private_browsing", value: Self.bool(isPrivateBrowsing))
+                Field(key: "block_list", value: Self.value(blockList)),
+                Field(key: "blocked_origins", value: Self.value(blockedOrigins)),
+                Field(key: "etp_category", value: Self.value(etpCategory)),
+                Field(key: "is_private_browsing", value: Self.value(isPrivateBrowsing))
             ]),
             Group(title: "frameworks", fields: [
-                Field(key: "fastclick", value: Self.bool(fastclick)),
-                Field(key: "marfeel", value: Self.bool(marfeel)),
-                Field(key: "mobify", value: Self.bool(mobify))
+                Field(key: "fastclick", value: Self.value(fastclick)),
+                Field(key: "marfeel", value: Self.value(marfeel)),
+                Field(key: "mobify", value: Self.value(mobify))
             ]),
             Group(title: "app", fields: [
-                Field(key: "default_locales", value: Self.list(defaultLocales)),
-                Field(key: "default_useragent_string", value: Self.string(defaultUseragentString))
+                Field(key: "default_locales", value: Self.value(defaultLocales)),
+                Field(key: "default_useragent_string", value: Self.value(defaultUseragentString))
             ]),
             Group(title: "graphics", fields: [
-                Field(key: "device_pixel_ratio", value: Self.string(devicePixelRatio)),
-                Field(key: "has_touch_screen", value: Self.bool(hasTouchScreen))
+                Field(key: "device_pixel_ratio", value: Self.value(devicePixelRatio)),
+                Field(key: "has_touch_screen", value: Self.value(hasTouchScreen))
             ]),
             Group(title: "system", fields: [
-                Field(key: "is_tablet", value: Self.bool(isTablet)),
-                Field(key: "memory", value: Self.quantity(memory))
+                Field(key: "is_tablet", value: Self.value(isTablet)),
+                Field(key: "memory", value: Self.value(memory))
             ])
         ]
     }
 
-    private static func string(_ value: String?) -> String {
-        guard let value else { return "null" }
-        return "\"\(value)\""
+    private static func value(_ value: String?) -> WebCompatReportPreviewViewModel.PreviewValue {
+        return value.map { .string($0) } ?? .null
     }
 
-    private static func list(_ value: [String]?) -> String {
-        guard let value else { return "null" }
-        return "[" + value.map { "\"\($0)\"" }.joined(separator: ", ") + "]"
+    private static func value(_ value: [String]?) -> WebCompatReportPreviewViewModel.PreviewValue {
+        return value.map { .list($0) } ?? .null
     }
 
-    private static func bool(_ value: Bool?) -> String {
-        guard let value else { return "null" }
-        return value ? "true" : "false"
+    private static func value(_ value: Bool?) -> WebCompatReportPreviewViewModel.PreviewValue {
+        return value.map { .bool($0) } ?? .null
     }
 
-    private static func quantity(_ value: Int?) -> String {
-        guard let value else { return "null" }
-        return String(value)
+    private static func value(_ value: Int?) -> WebCompatReportPreviewViewModel.PreviewValue {
+        return value.map { .quantity($0) } ?? .null
     }
 }

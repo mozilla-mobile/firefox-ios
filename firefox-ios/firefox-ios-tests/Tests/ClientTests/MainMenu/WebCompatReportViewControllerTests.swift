@@ -182,7 +182,6 @@ final class WebCompatReportViewControllerTests: XCTestCase {
 
         XCTAssertEqual(viewModel.title, .WebCompatReporter.Preview.Title)
         XCTAssertNil(viewModel.screenshot)
-        XCTAssertFalse(viewModel.showsScreenshot)
         // Sections/keys come straight from WebCompatReportPayload (the Glean-aligned model).
         XCTAssertEqual(
             viewModel.sections.map(\.id),
@@ -191,16 +190,16 @@ final class WebCompatReportViewControllerTests: XCTestCase {
 
         let basic = viewModel.sections.first { $0.id == "basic" }
         XCTAssertEqual(basic?.rows.map(\.label), ["url", "breakage_category", "description"])
-        XCTAssertEqual(basic?.rows.first { $0.id == "basic.url" }?.value, "\"https://example.com\"")
+        XCTAssertEqual(basic?.rows.first { $0.id == "basic.url" }?.value, .string("https://example.com"))
         XCTAssertEqual(
             basic?.rows.first { $0.id == "basic.breakage_category" }?.value,
-            "\"\(WebCompatSubOption.pageNotLoading.rawValue)\""
+            .string(WebCompatSubOption.pageNotLoading.rawValue)
         )
-        XCTAssertEqual(basic?.rows.first { $0.id == "basic.description" }?.value, "\"Broken images\"")
-        // Not-yet-collected fields render as null.
+        XCTAssertEqual(basic?.rows.first { $0.id == "basic.description" }?.value, .string("Broken images"))
+        // Not-yet-collected fields are null.
         XCTAssertEqual(
             viewModel.sections.first { $0.id == "tabInfo" }?.rows.first { $0.id == "tabInfo.languages" }?.value,
-            "null"
+            .null
         )
     }
 
@@ -234,7 +233,7 @@ final class WebCompatReportViewControllerTests: XCTestCase {
         XCTAssertEqual(payload.breakageCategory, WebCompatIssueCategory.other.rawValue)
     }
 
-    func testPayloadPreviewGroups_formatsJsonValuesAndNulls() {
+    func testPayloadPreviewGroups_producesTypedValuesAndNulls() {
         var payload = WebCompatReportPayload()
         payload.url = "https://example.com"
         payload.languages = ["en-US", "fr"]
@@ -242,14 +241,14 @@ final class WebCompatReportViewControllerTests: XCTestCase {
 
         let groups = payload.previewGroups
 
-        func value(_ title: String, _ key: String) -> String? {
+        func value(_ title: String, _ key: String) -> WebCompatReportPreviewViewModel.PreviewValue? {
             return groups.first { $0.title == title }?.fields.first { $0.key == key }?.value
         }
-        XCTAssertEqual(value("basic", "url"), "\"https://example.com\"")
-        XCTAssertEqual(value("basic", "description"), "null")
-        XCTAssertEqual(value("tabInfo", "languages"), "[\"en-US\", \"fr\"]")
-        XCTAssertEqual(value("frameworks", "mobify"), "false")
-        XCTAssertEqual(value("system", "memory"), "null")
+        XCTAssertEqual(value("basic", "url"), .string("https://example.com"))
+        XCTAssertEqual(value("basic", "description"), .null)
+        XCTAssertEqual(value("tabInfo", "languages"), .list(["en-US", "fr"]))
+        XCTAssertEqual(value("frameworks", "mobify"), .bool(false))
+        XCTAssertEqual(value("system", "memory"), .null)
     }
 
     func testDidTapPreview_forwardsPayloadToCoordinator() {
