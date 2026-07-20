@@ -568,6 +568,7 @@ class CodeUsageDetector {
         case unsafe
         case cspHeader
         case userInterfaceIdiom
+        case screenBounds
 
         var bundledHeader: String {
             switch self {
@@ -597,6 +598,13 @@ class CodeUsageDetector {
                 decisions. iPhone apps running on iPad or in iPhone Mirroring on Mac still report the phone idiom. \
                 Prefer size classes or trait-based layout instead.
                 """
+            case .screenBounds:
+                return """
+                ### ⚠️ `UIScreen.main.bounds` usage detected
+                Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid using `UIScreen.main.bounds`. In an \
+                adaptive environment, your scene may not span the full screen. Use the view's or window's bounds, \
+                size classes, or trait-based layout instead.
+                """
             }
         }
 
@@ -622,6 +630,8 @@ class CodeUsageDetector {
                 return "Content-Security-Policy"
             case .userInterfaceIdiom:
                 return "userInterfaceIdiom"
+            case .screenBounds:
+                return "UIScreen.main.bounds"
             }
         }
 
@@ -647,7 +657,7 @@ class CodeUsageDetector {
         // Decide if we want to `warn` instead of `fail` on the pull request.
         var shouldWarn: Bool {
             switch self {
-            case .deferred, .notifiable, .userInterfaceIdiom:
+            case .deferred, .notifiable, .userInterfaceIdiom, .screenBounds:
                 return true
             default:
                 return false
