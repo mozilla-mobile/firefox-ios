@@ -63,7 +63,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
     override func layoutSubviews() {
         super.layoutSubviews()
         containerPillView.layoutIfNeeded()
-        containerPillView.layer.cornerRadius = contentView.frame.height / 2
+        containerPillView.layer.cornerRadius = containerPillView.frame.height / 2
     }
 
     // MARK: Layout
@@ -83,10 +83,10 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
             titleLabel.leadingAnchor.constraint(equalTo: shieldIcon.trailingAnchor, constant: UX.spacing),
             titleLabel.centerYAnchor.constraint(equalTo: shieldIcon.centerYAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: containerPillView.trailingAnchor, constant: -UX.horizontalPadding),
+            titleLabel.topAnchor.constraint(equalTo: containerPillView.topAnchor, constant: UX.verticalPadding),
+            titleLabel.bottomAnchor.constraint(equalTo: containerPillView.bottomAnchor, constant: -UX.verticalPadding),
 
             containerPillView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            containerPillView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerPillView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             containerPillView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor,
                                                        constant: UX.horizontalPadding),
