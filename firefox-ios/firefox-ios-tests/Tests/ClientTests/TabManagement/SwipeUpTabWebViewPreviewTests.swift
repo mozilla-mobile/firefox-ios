@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 @testable import Client
@@ -78,6 +79,105 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
     func testPreviewCardFrame_afterLayout_matchesBounds() {
         let subject = createSubject()
         subject.layoutIfNeeded()
+
+        XCTAssertEqual(subject.previewCardFrame, subject.bounds)
+    }
+
+    // MARK: - addTabScreenshot
+
+    func testAddTabScreenshot_doesNotChangeLayout() {
+        let subject = createSubject()
+        subject.layoutIfNeeded()
+
+        subject.addTabScreenshot(image: UIImage())
+
+        XCTAssertEqual(subject.previewCardFrame, subject.bounds)
+    }
+
+    // MARK: - setInitialTransform
+
+    func testSetInitialTransform_whenCloseTabEnabled_showsPreview() {
+        let subject = createSubject(closeTabEnabled: true)
+        subject.layoutIfNeeded()
+
+        subject.setInitialTransform(topPadding: 50, bottomPadding: 40)
+
+        XCTAssertEqual(subject.alpha, 1.0)
+        XCTAssertEqual(subject.layer.zPosition, 1000)
+    }
+
+    func testSetInitialTransform_whenCloseTabDisabled_showsPreview() {
+        let subject = createSubject(closeTabEnabled: false)
+        subject.layoutIfNeeded()
+
+        subject.setInitialTransform(topPadding: 50, bottomPadding: 40)
+
+        XCTAssertEqual(subject.alpha, 1.0)
+        XCTAssertEqual(subject.layer.zPosition, 1000)
+    }
+
+    // MARK: - translate
+
+    func testTranslate_shrinksPreviewCard() {
+        let subject = createSubject()
+        subject.layoutIfNeeded()
+
+        subject.translate(CGPoint(x: 0, y: -150), fingerLocation: CGPoint(x: 150, y: 300))
+
+        XCTAssertLessThan(subject.previewCardFrame.width, subject.bounds.width)
+    }
+
+    func testTranslate_whenCloseTabEnabledAndFingerInTopThird_shrinksPreviewCard() {
+        let subject = createSubject(closeTabEnabled: true)
+        subject.layoutIfNeeded()
+
+        subject.translate(CGPoint(x: 0, y: -150), fingerLocation: CGPoint(x: 150, y: 100))
+
+        XCTAssertLessThan(subject.previewCardFrame.width, subject.bounds.width)
+    }
+
+    // MARK: - restore
+
+    func testRestore_afterTranslate_resetsPreviewCardFrame() {
+        let subject = createSubject()
+        subject.layoutIfNeeded()
+        subject.translate(CGPoint(x: 0, y: -150), fingerLocation: CGPoint(x: 150, y: 300))
+
+        subject.restore()
+
+        XCTAssertEqual(subject.previewCardFrame, subject.bounds)
+    }
+
+    // MARK: - tossPreview
+
+    func testTossPreview_movesPreviewCardUp() {
+        let subject = createSubject()
+        subject.layoutIfNeeded()
+
+        subject.tossPreview()
+
+        XCTAssertLessThan(subject.previewCardFrame.midY, subject.bounds.midY)
+        XCTAssertLessThan(subject.previewCardFrame.width, subject.bounds.width)
+    }
+
+    // MARK: - dismissForTabTray
+
+    func testDismissForTabTray_fadesOutPreview() {
+        let subject = createSubject()
+        subject.layoutIfNeeded()
+
+        subject.dismissForTabTray()
+
+        XCTAssertEqual(subject.alpha, 0.0)
+    }
+
+    // MARK: - applyTheme
+
+    func testApplyTheme_doesNotChangeLayout() {
+        let subject = createSubject()
+        subject.layoutIfNeeded()
+
+        subject.applyTheme(theme: LightTheme())
 
         XCTAssertEqual(subject.previewCardFrame, subject.bounds)
     }

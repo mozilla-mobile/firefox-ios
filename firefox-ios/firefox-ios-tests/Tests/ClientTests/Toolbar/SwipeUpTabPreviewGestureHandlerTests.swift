@@ -7,12 +7,17 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase {
+final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
     private var profile: MockProfile!
     private var tabManager: MockTabManager!
     private var mockVC: MockBrowserViewController!
     private var themeManager: MockThemeManager!
     private var mockFlags: MockNimbusFeatureFlags!
+    private var tabPreview: SwipeUpTabWebViewPreview!
+    private var mockStore: MockStoreForMiddleware<AppState>!
+
+    // releaseOutcome thresholds against a 600pt tall preview: close (1/3) y = 200, tabTray (2/3) y = 400.
+    private let previewFrame = CGRect(x: 0, y: 0, width: 300, height: 600)
 
     override func setUp() async throws {
         try await super.setUp()
@@ -22,6 +27,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase {
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         themeManager = MockThemeManager()
         mockFlags = MockNimbusFeatureFlags()
+        setupStore()
     }
 
     override func tearDown() async throws {
@@ -31,6 +37,9 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase {
         mockVC = nil
         themeManager = nil
         mockFlags = nil
+        tabPreview = nil
+        resetStore()
+        mockStore = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -122,12 +131,126 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase {
         XCTAssertFalse(subject.gestureRecognizerShouldBegin(panGesture))
     }
 
+    // MARK: - handlePanGesture
+
+    func testHandlePanGesture_whenInteractiveGestureDisabled_doesNotDispatch() {
+        mockFlags.enabledFlags = []
+        let subject = createSubject()
+        tabManager.selectedTab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let gesture = MockSwipeUpPanGestureRecognizer()
+        gesture.state = .ended
+        gesture.gestureLocation = CGPoint(x: 150, y: 300)
+
+        subject.handlePanGestureForTesting(gesture)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+    }
+
+    func testHandlePanGesture_whenNoSelectedTab_doesNothing() {
+        mockFlags.enabledFlags = [.addressBarGestureToOpenTabTrayInteractive]
+        let subject = createSubject()
+        tabManager.selectedTab = nil
+        let gesture = MockSwipeUpPanGestureRecognizer()
+        gesture.state = .began
+
+        subject.handlePanGestureForTesting(gesture)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+    }
+
+    func testHandlePanGesture_whenBegan_doesNotDispatch() {
+        mockFlags.enabledFlags = [.addressBarGestureToOpenTabTrayInteractive]
+        let subject = createSubject()
+        tabManager.selectedTab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let gesture = MockSwipeUpPanGestureRecognizer()
+        gesture.state = .began
+
+        subject.handlePanGestureForTesting(gesture)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+    }
+
+    func testHandlePanGesture_whenChanged_doesNotDispatch() {
+        mockFlags.enabledFlags = [.addressBarGestureToOpenTabTrayInteractive]
+        let subject = createSubject()
+        tabManager.selectedTab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let gesture = MockSwipeUpPanGestureRecognizer()
+        gesture.state = .changed
+        gesture.gestureTranslation = CGPoint(x: 0, y: -150)
+        gesture.gestureLocation = CGPoint(x: 150, y: 100)
+
+        subject.handlePanGestureForTesting(gesture)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+    }
+
+    func testHandlePanGesture_whenEndedInBottomThird_cancelsWithoutDispatch() {
+        mockFlags.enabledFlags = [.addressBarGestureToOpenTabTrayInteractive]
+        let subject = createSubject()
+        tabManager.selectedTab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let gesture = MockSwipeUpPanGestureRecognizer()
+        gesture.state = .ended
+        gesture.gestureLocation = CGPoint(x: 150, y: 500)
+
+        subject.handlePanGestureForTesting(gesture)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+    }
+
+    func testHandlePanGesture_whenEndedInMiddle_dispatchesShowTabTray() {
+        mockFlags.enabledFlags = [.addressBarGestureToOpenTabTrayInteractive]
+        let subject = createSubject()
+        tabManager.selectedTab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let gesture = MockSwipeUpPanGestureRecognizer()
+        gesture.state = .ended
+        gesture.gestureLocation = CGPoint(x: 150, y: 300)
+
+        subject.handlePanGestureForTesting(gesture)
+
+        let action = mockStore.dispatchedActions.first { $0 is GeneralBrowserAction } as? GeneralBrowserAction
+        XCTAssertEqual(action?.actionType as? GeneralBrowserActionType, .showTabTray)
+
+        // The open tab tray path schedules a delayed dismiss that captures self,
+        // do this so the memory leak check doesn't yell at me
+        drainDismissDelay()
+    }
+
+    func testHandlePanGesture_whenEndedInTopThirdAndCloseTabEnabled_tossesPreviewCard() {
+        mockFlags.enabledFlags = [
+            .addressBarGestureToOpenTabTrayInteractive,
+            .addressBarGestureToOpenTabTrayCloseTab
+        ]
+        let subject = createSubject()
+        tabManager.selectedTab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let gesture = MockSwipeUpPanGestureRecognizer()
+        gesture.state = .ended
+        gesture.gestureLocation = CGPoint(x: 150, y: 100)
+
+        subject.handlePanGestureForTesting(gesture)
+
+        XCTAssertLessThan(tabPreview.previewCardFrame.midY, previewFrame.midY)
+    }
+
+    // MARK: - handleSwipeGesture
+
+    func testHandleSwipeGesture_whenNoToolbarState_dispatchesToolbarMiddlewareAction() {
+        let subject = createSubject()
+        let gesture = UISwipeGestureRecognizer()
+        gesture.direction = .up
+
+        subject.handleSwipeGestureForTesting(gesture)
+
+        let action = mockStore.dispatchedActions.first { $0 is ToolbarMiddlewareAction } as? ToolbarMiddlewareAction
+        XCTAssertEqual(action?.actionType as? ToolbarMiddlewareActionType, .didSwipeToOpenTabTray)
+    }
+
     // MARK: - Helpers
 
     private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> SwipeUpTabPreviewGestureHandler {
         let provider = SwipeGestureFeatureFlagProvider(featureFlagsProvider: mockFlags)
-        let tabPreview = SwipeUpTabWebViewPreview(frame: .zero, swipeGestureFeatureFlagProvider: provider)
+        tabPreview = SwipeUpTabWebViewPreview(frame: previewFrame, swipeGestureFeatureFlagProvider: provider)
+        tabPreview.layoutIfNeeded()
         let subject = SwipeUpTabPreviewGestureHandler(
             tabPreview: tabPreview,
             bottomBlurView: UIView(),
@@ -140,5 +263,47 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase {
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    /// Spins the run loop long enough for the open-tab-tray dismiss delay (0.4s) to fire,
+    /// releasing the strong self capture before the memory leak teardown check runs.
+    private func drainDismissDelay() {
+        let expectation = XCTestExpectation(description: "dismiss delay elapsed")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func setupAppState() -> AppState {
+        return AppState()
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
+    }
+}
+
+// Private subclass so we don't affect other tests that rely on the overridden function
+private class MockSwipeUpPanGestureRecognizer: MockUIPanGestureRecognizer {
+    var gestureLocation: CGPoint?
+    private var stateOverride: UIGestureRecognizer.State?
+
+    // UIKit doesn't persist a forced state on an idle recognizer, so back it with our own storage
+    override var state: UIGestureRecognizer.State {
+        get { stateOverride ?? super.state }
+        set { stateOverride = newValue }
+    }
+
+    override func location(in view: UIView?) -> CGPoint {
+        if let gestureLocation = gestureLocation {
+            return gestureLocation
+        }
+        return super.location(in: view)
     }
 }
