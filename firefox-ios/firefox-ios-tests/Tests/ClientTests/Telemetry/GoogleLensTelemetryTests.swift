@@ -61,4 +61,43 @@ final class GoogleLensTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.succeeded, false)
         XCTAssertNil(savedExtras.httpStatus)
     }
+
+    func testToolbarButtonSearchTime_whenStartedThenStopped_accumulatesTiming() throws {
+        let metric = GleanMetrics.GoogleLens.toolbarButtonSearchTime
+
+        let timerId = try XCTUnwrap(subject?.startSearchTimer(source: .camera))
+        subject?.stopSearchTimer(source: .camera, timerId: timerId)
+
+        let savedMetrics = gleanWrapper.savedEvents.compactMap { $0 as? TimingDistributionMetricType }
+        XCTAssertEqual(gleanWrapper.startTimingCalled, 1)
+        XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
+        XCTAssertEqual(savedMetrics.count, 2)
+        XCTAssertTrue(savedMetrics.allSatisfy { $0 === metric })
+    }
+
+    func testWebpageImageSearchTime_whenStartedThenStopped_accumulatesTiming() throws {
+        let metric = GleanMetrics.GoogleLens.webpageImageSearchTime
+
+        let timerId = try XCTUnwrap(subject?.startSearchTimer(source: .contextMenu))
+        subject?.stopSearchTimer(source: .contextMenu, timerId: timerId)
+
+        let savedMetrics = gleanWrapper.savedEvents.compactMap { $0 as? TimingDistributionMetricType }
+        XCTAssertEqual(gleanWrapper.startTimingCalled, 1)
+        XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
+        XCTAssertEqual(savedMetrics.count, 2)
+        XCTAssertTrue(savedMetrics.allSatisfy { $0 === metric })
+    }
+
+    func testWebpageImageSearchTime_whenCanceled_cancelsTiming() throws {
+        let metric = GleanMetrics.GoogleLens.webpageImageSearchTime
+
+        let timerId = try XCTUnwrap(subject?.startSearchTimer(source: .contextMenu))
+        subject?.cancelSearchTimer(source: .contextMenu, timerId: timerId)
+
+        let savedMetrics = gleanWrapper.savedEvents.compactMap { $0 as? TimingDistributionMetricType }
+        XCTAssertEqual(gleanWrapper.startTimingCalled, 1)
+        XCTAssertEqual(gleanWrapper.cancelTimingCalled, 1)
+        XCTAssertEqual(savedMetrics.count, 2)
+        XCTAssertTrue(savedMetrics.allSatisfy { $0 === metric })
+    }
 }
