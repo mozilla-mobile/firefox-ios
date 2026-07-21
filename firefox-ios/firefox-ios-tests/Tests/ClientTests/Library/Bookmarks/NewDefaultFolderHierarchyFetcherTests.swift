@@ -98,6 +98,26 @@ final class NewDefaultFolderHierarchyFetcherTests: XCTestCase {
         return subject
     }
 
+    func testFolderHierarchy_setsParentTitleOnlyOnNestedRows() async throws {
+        // Mobile → Work → Taxes
+        let workGuid = await addFolder(title: "Work")
+        _ = await addFolder(title: "Taxes", parentFolderGUID: workGuid)
+        let subject = createSubject(rootFolderGUID: BookmarkRoots.RootGUID)
+
+        let folders = await subject.fetchFolders()
+
+        let work = try XCTUnwrap(folders.first { $0.title == "Work" })
+        let taxes = try XCTUnwrap(folders.first { $0.title == "Taxes" })
+
+        // Top-level card header: indent 0, no "↳ parent" subtitle
+        XCTAssertEqual(work.indentation, 0)
+        XCTAssertNil(work.parentTitle)
+
+        // Nested row: indent 1, subtitle points at the immediate parent
+        XCTAssertEqual(taxes.indentation, 1)
+        XCTAssertEqual(taxes.parentTitle, "Work")
+    }
+
     private func addFolder(title: String, parentFolderGUID: String? = nil) async -> String {
         return await withCheckedContinuation { continuation in
             mockProfile.places.createFolder(parentGUID: parentFolderGUID ?? rootFolderGUID,
