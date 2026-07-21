@@ -150,7 +150,7 @@ struct NewDefaultFolderHierarchyFetcher: NewFolderHierarchyFetcher {
     ///                    Namely used to prepend the desktop folders to the top of the mobile bookmarks subfolder hierarchy
     ///   - isDesktopSubtree: True if this folder is the Desktop subtree's root or a descendant of it -
     ///                    propagated to children so every folder in the subtree (not just the root)
-    ///                    can be identified later via `Folder.isDesktopRoot`.
+    ///                    can be identified later via `NewFolder.isDesktopRoot`.
     private func recursiveAddSubFolders(_ folder: BookmarkFolderData,
                                         folders: inout [NewFolder],
                                         hasDesktopBookmarks: Bool,
@@ -191,7 +191,7 @@ struct NewDefaultFolderHierarchyFetcher: NewFolderHierarchyFetcher {
                 hasDesktopBookmarks: hasDesktopBookmarks,
                 indent: indentation,
                 excludedGuids: excludedGuids,
-                parentTitle: Folder.localizedTitle(folder.guid) ?? folder.title,
+                parentTitle: NewFolder.localizedTitle(folder.guid) ?? folder.title,
                 isDesktopSubtree: isDesktop
             )
         }
