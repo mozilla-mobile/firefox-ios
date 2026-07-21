@@ -118,6 +118,60 @@ final class NewDefaultFolderHierarchyFetcherTests: XCTestCase {
         XCTAssertEqual(taxes.parentTitle, "Work")
     }
 
+    func testMakeGroups_withMobileAndDesktopFolders_returnsMobileFirstAndDesktopCollapsed() {
+        let mobileFolder = NewFolder(title: "Mobile Folder", guid: "mobile-guid", indentation: 0)
+        let desktopFolder = NewFolder(title: "Desktop Folder", guid: "desktop-guid", indentation: 0, isDesktopRoot: true)
+
+        let groups = FolderGroup.makeGroups(from: [mobileFolder, desktopFolder],
+                                            mobileTitle: "Mobile Bookmarks",
+                                            desktopTitle: "Desktop Bookmarks",
+                                            mobileExpandedByDefault: true,
+                                            desktopExpandedByDefault: false)
+
+        XCTAssertEqual(groups.count, 2)
+
+        let mobileGroup = groups[0]
+        XCTAssertEqual(mobileGroup.id, FolderGroup.mobileGroupID)
+        XCTAssertEqual(mobileGroup.folders, [mobileFolder])
+        XCTAssertTrue(mobileGroup.isExpanded)
+
+        let desktopGroup = groups[1]
+        XCTAssertEqual(desktopGroup.id, FolderGroup.desktopGroupID)
+        XCTAssertEqual(desktopGroup.folders, [desktopFolder])
+        XCTAssertFalse(desktopGroup.isExpanded)
+    }
+
+    func testMakeGroups_withOnlyMobileFolders_returnsSingleMobileGroup() {
+        let mobileFolder = NewFolder(title: "Mobile Folder", guid: "mobile-guid", indentation: 0)
+
+        let groups = FolderGroup.makeGroups(from: [mobileFolder],
+                                            mobileTitle: "Mobile Bookmarks",
+                                            desktopTitle: "Desktop Bookmarks",
+                                            mobileExpandedByDefault: true,
+                                            desktopExpandedByDefault: false)
+
+        XCTAssertEqual(groups.count, 1)
+        XCTAssertEqual(groups[0].id, FolderGroup.mobileGroupID)
+        XCTAssertEqual(groups[0].folders, [mobileFolder])
+    }
+
+    func testBlocks_splitsFlatFolderListIntoCardsAtEachIndentationZero() {
+        let folderA = NewFolder(title: "A", guid: "a-guid", indentation: 0)
+        let folderASub = NewFolder(title: "A-Sub", guid: "a-sub-guid", indentation: 1, parentTitle: "A")
+        let folderB = NewFolder(title: "B", guid: "b-guid", indentation: 0)
+
+        let group = FolderGroup(id: "test-group",
+                                title: "Test",
+                                folders: [folderA, folderASub, folderB],
+                                isExpanded: true)
+
+        let blocks = group.blocks
+
+        XCTAssertEqual(blocks.count, 2)
+        XCTAssertEqual(blocks[0].folders, [folderA, folderASub])
+        XCTAssertEqual(blocks[1].folders, [folderB])
+    }
+
     private func addFolder(title: String, parentFolderGUID: String? = nil) async -> String {
         return await withCheckedContinuation { continuation in
             mockProfile.places.createFolder(parentGUID: parentFolderGUID ?? rootFolderGUID,

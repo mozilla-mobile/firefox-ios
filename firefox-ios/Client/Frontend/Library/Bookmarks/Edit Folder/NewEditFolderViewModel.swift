@@ -53,10 +53,6 @@ class NewEditFolderViewModel: @unchecked Sendable {
         selectedFolder = NewFolder(title: parentFolder.title, guid: parentFolder.guid, indentation: 0)
     }
 
-    private func title(for folder: BookmarkFolderData) -> String {
-        return LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
-    }
-
     private func loadFolderGroups() {
         Task { @MainActor [weak self] in
             guard let self else { return }
@@ -139,18 +135,5 @@ class NewEditFolderViewModel: @unchecked Sendable {
 
             onBookmarkSaved?()
         }
-    }
-}
-
-extension BookmarkFolderData {
-    func copy(withTitle title: String) -> BookmarkFolderData {
-        return BookmarkFolderData(guid: guid,
-                                  dateAdded: dateAdded,
-                                  lastModified: lastModified,
-                                  parentGUID: parentGUID,
-                                  position: position,
-                                  title: title,
-                                  childGUIDs: childGUIDs,
-                                  children: children)
     }
 }

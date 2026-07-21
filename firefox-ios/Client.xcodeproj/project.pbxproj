@@ -2230,6 +2230,7 @@
 		EC4078FC300AA2CB0003DE07 /* NewEditFolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4078FB300AA2C50003DE07 /* NewEditFolderViewModel.swift */; };
 		EC407900300AA7FA0003DE07 /* NewDefaultFolderHierarchyFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4078FF300AA7EF0003DE07 /* NewDefaultFolderHierarchyFetcherTests.swift */; };
 		EC407902300AA8960003DE07 /* NewEditFolderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC407901300AA88F0003DE07 /* NewEditFolderViewModelTests.swift */; };
+		EC4084E1300FCAEE0003DE07 /* BookmarkFolderData+Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */; };
 		ECD8E56C2FF7EB69002092C6 /* WaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */; };
 		ECD8E56E2FF7ED79002092C6 /* WaybackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56D2FF7ED75002092C6 /* WaybackServiceTests.swift */; };
 		ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */; };
@@ -11817,6 +11818,7 @@
 		EC4078FB300AA2C50003DE07 /* NewEditFolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditFolderViewModel.swift; sourceTree = "<group>"; };
 		EC4078FF300AA7EF0003DE07 /* NewDefaultFolderHierarchyFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDefaultFolderHierarchyFetcherTests.swift; sourceTree = "<group>"; };
 		EC407901300AA88F0003DE07 /* NewEditFolderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditFolderViewModelTests.swift; sourceTree = "<group>"; };
+		EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BookmarkFolderData+Copy.swift"; sourceTree = "<group>"; };
 		EC724CF0B0021AE49EDC95DC /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EC734AD49E5483F11375E891 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		EC934F7BB2F8B247BC714BE2 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
@@ -12540,6 +12542,7 @@
 		0BDDB33B2CA6B19B00D501DF /* Edit Folder */ = {
 			isa = PBXGroup;
 			children = (
+				EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */,
 				EC4078FB300AA2C50003DE07 /* NewEditFolderViewModel.swift */,
 				EC0FBD2230053136005CCA62 /* LinkActionCell.swift */,
 				EC0FBD2030053117005CCA62 /* FolderTreeCell.swift */,
@@ -20599,6 +20602,7 @@
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
 				818BCC742E463BAD008309B1 /* CuratedRecommendationCacheUtility.swift in Sources */,
 				ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */,
+				EC4084E1300FCAEE0003DE07 /* BookmarkFolderData+Copy.swift in Sources */,
 				8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				E17798A22BD804D300F6F0EB /* AddressToolbarContainerModel.swift in Sources */,

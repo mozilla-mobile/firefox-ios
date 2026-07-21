@@ -51,10 +51,6 @@ class EditFolderViewModel: @unchecked Sendable {
         selectedFolder = folder
     }
 
-    private func title(for folder: BookmarkFolderData) -> String {
-        return LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
-    }
-
     func shouldShowDisclosureIndicator(isFolderSelected: Bool) -> Bool {
         return isFolderSelected && !isFolderCollapsed
     }
