@@ -389,6 +389,7 @@
         "NavigationTest\/testDownloadLink()",
         "NavigationTest\/testLongPressLinkOptions_TAE()",
         "NavigationTest\/testLongPressOnAddressBar()",
+        "NavigationTest\/testLongTapFirefoxIconAppIcon()",
         "NavigationTest\/testLongTapFirefoxIconNewPrivateTab()",
         "NavigationTest\/testLongTapFirefoxIconNewTab()",
         "NavigationTest\/testLongTapFirefoxIconOpenLastBookmark()",
