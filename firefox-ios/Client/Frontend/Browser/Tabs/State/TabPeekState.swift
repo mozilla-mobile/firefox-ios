@@ -3,8 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import ModifiedCopy
 import Common
 
+@Copyable
 struct TabPeekState: ScreenState {
     let showAddToBookmarks: Bool
     let showRemoveBookmark: Bool
@@ -62,13 +64,13 @@ struct TabPeekState: ScreenState {
         switch action.actionType {
         case TabPeekActionType.loadTabPeek:
             guard let tabPeekModel = action.tabPeekModel else { return state }
-            return TabPeekState(windowUUID: state.windowUUID,
-                                showAddToBookmarks: tabPeekModel.canTabBeSaved,
-                                showRemoveBookmark: tabPeekModel.canTabBeRemoved,
-                                showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,
-                                showCopyURL: tabPeekModel.canCopyURL,
-                                previewAccessibilityLabel: tabPeekModel.accessiblityLabel,
-                                screenshot: tabPeekModel.screenshot)
+            return state
+                .copy(showAddToBookmarks: tabPeekModel.canTabBeSaved)
+                .copy(showRemoveBookmark: tabPeekModel.canTabBeRemoved)
+                .copy(showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved)
+                .copy(showCopyURL: tabPeekModel.canCopyURL)
+                .copy(previewAccessibilityLabel: tabPeekModel.accessiblityLabel)
+                .copy(screenshot: tabPeekModel.screenshot)
         default:
             return state
         }
