@@ -170,7 +170,7 @@ struct NewDefaultFolderHierarchyFetcher: NewFolderHierarchyFetcher {
             folders.append(NewFolder(title: folder.title,
                                      guid: folder.guid,
                                      indentation: indent,
-                                     parentTitle: parentTitle,
+                                     parentTitle: indent == 0 ? nil : parentTitle,
                                      isDesktopRoot: isDesktop))
 
             // Prepend desktop folders to the top of the mobile bookmarks folder hierarchy
