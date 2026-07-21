@@ -1769,6 +1769,7 @@
 		C838FD5E289981240068F60B /* WallpaperURLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C838FD5D289981240068F60B /* WallpaperURLProvider.swift */; };
 		C838FD612899A9BB0068F60B /* WallpaperURLProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C838FD5F2899A9390068F60B /* WallpaperURLProviderTests.swift */; };
 		C83B7DD629BBB49D005565C2 /* SurveySurfaceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83B7DD429BBAF7E005565C2 /* SurveySurfaceManagerTests.swift */; };
+		AA11BB22CC33DD44EE550002 /* SurveySurfaceViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE550001 /* SurveySurfaceViewModelTests.swift */; };
 		C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8417D212657F0600010B877 /* LibraryViewModel.swift */; };
 		C84266752728462900382274 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		C84266772728462900382274 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
@@ -10848,6 +10849,7 @@
 		C838FD5D289981240068F60B /* WallpaperURLProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperURLProvider.swift; sourceTree = "<group>"; };
 		C838FD5F2899A9390068F60B /* WallpaperURLProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperURLProviderTests.swift; sourceTree = "<group>"; };
 		C83B7DD429BBAF7E005565C2 /* SurveySurfaceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceManagerTests.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE550001 /* SurveySurfaceViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceViewModelTests.swift; sourceTree = "<group>"; };
 		C8417D212657F0600010B877 /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
 		C84266742728462900382274 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
 		C8445A13264428DC00B83F53 /* LibraryPanelViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelViewState.swift; sourceTree = "<group>"; };
@@ -15743,6 +15745,7 @@
 			isa = PBXGroup;
 			children = (
 				C83B7DD429BBAF7E005565C2 /* SurveySurfaceManagerTests.swift */,
+				AA11BB22CC33DD44EE550001 /* SurveySurfaceViewModelTests.swift */,
 			);
 			path = SurveySurface;
 			sourceTree = "<group>";
@@ -21036,6 +21039,7 @@
 				8AAEB9FE2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift in Sources */,
 				C8E531CC29E72A2F00E03FEF /* ShortcutRouteTests.swift in Sources */,
 				C83B7DD629BBB49D005565C2 /* SurveySurfaceManagerTests.swift in Sources */,
+				AA11BB22CC33DD44EE550002 /* SurveySurfaceViewModelTests.swift in Sources */,
 				E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */,
 				8AC884212D5262070033ABF5 /* CrashTrackerTests.swift in Sources */,
 				AA742C7C2E904B9B00CF55B3 /* MicrosurveyTelemetryTests.swift in Sources */,
