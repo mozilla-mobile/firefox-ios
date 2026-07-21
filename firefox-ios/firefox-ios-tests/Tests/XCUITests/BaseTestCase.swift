@@ -22,6 +22,8 @@ func path(forTestPage page: String) -> String {
 // Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
 let TIMEOUT: TimeInterval = 10
 let TIMEOUT_LONG: TimeInterval = 20
+// Translation is network-bound and can take up to ~1 min to complete
+let TRANSLATION_TIMEOUT: TimeInterval = 90
 let MAX_SWIPE = 5
 
 @MainActor

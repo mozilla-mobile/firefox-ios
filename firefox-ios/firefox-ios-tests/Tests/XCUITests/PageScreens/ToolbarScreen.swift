@@ -195,15 +195,23 @@ final class ToolbarScreen {
         }
     }
 
-    func assertTranslateButtonExists(with mode: TranslationButtonType) {
+    func assertTranslateButtonExists(with mode: TranslationButtonType, timeout: TimeInterval = TIMEOUT) {
         switch mode {
         case .inactive:
-            BaseTestCase().mozWaitForElementToExist(translateButton)
+            BaseTestCase().mozWaitForElementToExist(translateButton, timeout: timeout)
         case .loading:
-            BaseTestCase().mozWaitForElementToExist(translateLoadingButton)
+            BaseTestCase().mozWaitForElementToExist(translateLoadingButton, timeout: timeout)
         case .active:
-            BaseTestCase().mozWaitForElementToExist(translateActiveButton)
+            BaseTestCase().mozWaitForElementToExist(translateActiveButton, timeout: timeout)
         }
+    }
+
+    /// Gates on the loading spinner disappearing (translation done) before asserting the active
+    /// button, since translation is network-bound and can take much longer than a normal UI wait.
+    func waitForTranslateButtonToBecomeActive() {
+        let base = BaseTestCase()
+        base.mozWaitForElementToNotExist(translateLoadingButton, timeout: TRANSLATION_TIMEOUT)
+        base.mozWaitForElementToExist(translateActiveButton)
     }
 
     func assertTranslateButtonDoesNotExist(with mode: TranslationButtonType) {
