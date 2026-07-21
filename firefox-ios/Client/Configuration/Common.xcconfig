@@ -23,17 +23,7 @@ IPHONEOS_DEPLOYMENT_TARGET = 15.0
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/../../Frameworks @executable_path/Frameworks @loader_path/Frameworks
 MOZ_PUBLIC_URL_SCHEME = firefox
 MOZ_TODAY_WIDGET_SEARCH_DISPLAY_NAME = Firefox - Search
-// Xcode 27 links SPM package products statically into every consumer (including static-library
-// targets), so -ObjC force-loads duplicate copies and linking fails with duplicate symbols.
-// On Xcode 27 we drop -ObjC and instead link Storage/Account directly (their Xcode-27 archives
-// are self-contained). Xcode <= 26 keeps the original -ObjC behavior unchanged.
-// XCODE_VERSION_MAJOR is 2600 for Xcode 26.x and 2700 for Xcode 27.x; add an entry per new major.
-FX_OBJC_LDFLAG_2600 = -ObjC
-FX_OBJC_LDFLAG_2700 =
-FX_OBJC_LDFLAG = $(FX_OBJC_LDFLAG_$(XCODE_VERSION_MAJOR))
-FX_XC27_LIBS_2700 = -lStorage -lAccount
-FX_XC27_LIBS = $(FX_XC27_LIBS_$(XCODE_VERSION_MAJOR))
-OTHER_LDFLAGS = $(FX_OBJC_LDFLAG)
+OTHER_LDFLAGS = -ObjC
 OTHER_SWIFT_FLAGS_common = -DMOZ_TARGET_CLIENT
 PRODUCT_NAME = $(TARGET_NAME)
 SDKROOT = iphoneos
