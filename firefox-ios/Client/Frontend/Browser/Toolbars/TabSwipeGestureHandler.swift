@@ -8,7 +8,7 @@ import Redux
 import Shared
 
 @MainActor
-final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlaggable {
+final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber {
     /// Delegate protocol for handling address bar pan gesture events.
     /// Allows external objects to respond to swipe gesture state changes during tab switching.
     protocol Delegate: AnyObject {
@@ -47,18 +47,17 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
     private let addressToolbarContainer: AddressToolbarContainer
     private let statusBarOverlay: StatusBarOverlay
     private var panGestureRecognizer: UIPanGestureRecognizer?
-    private var swipeUpGestureRecognizer: UISwipeGestureRecognizer?
-    private var swipeDownGestureRecognizer: UISwipeGestureRecognizer?
 
     // MARK: - Properties
     private let tabManager: TabManager
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
     var newTabSettingsProvider: (() -> NewTabPage?)?
-    weak var delegate: AddressBarPanGestureHandler.Delegate?
+    weak var delegate: TabSwipeGestureHandler.Delegate?
     private var homepageScreenshot: UIImage?
     private var toolbarState: ToolbarState?
     private let prefs: Prefs
+    private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
     private var isRTL: Bool {
         return UIView.userInterfaceLayoutDirection(
@@ -75,7 +74,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
         tabManager: TabManager,
         windowUUID: WindowUUID,
         screenshotHelper: ScreenshotHelper?,
-        prefs: Prefs
+        prefs: Prefs,
+        swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
     ) {
         self.addressToolbarContainer = addressToolbarContainer
         self.contentContainer = contentContainer
@@ -85,6 +85,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
         self.screenshotHelper = screenshotHelper
         self.statusBarOverlay = statusBarOverlay
         self.prefs = prefs
+        self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
         super.init()
         subscribeToRedux()
         setupGesture()
@@ -93,7 +94,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
         guard Thread.isMainThread else {
-            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            assertionFailure("TabSwipeGestureHandler was not deallocated on the main thread. Observer was not removed")
             return
         }
 
@@ -104,20 +105,14 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
 
     private func setupGesture() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        // If there is any other gesture enabled on the address bar, setting panGesture.delegate = self
+        // will cause gestureRecognizerShouldBegin() to run on every gesture. We do this with every address bar
+        // gesture so that they only activate during their respective gestures (i.e., only on horizontal/vertical pan)
+        if swipeGestureFeatureFlagProvider.isAnyGestureEnabled {
+            panGesture.delegate = self
+        }
         addressToolbarContainer.addGestureRecognizer(panGesture)
         panGestureRecognizer = panGesture
-
-        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeUpGesture.direction = .up
-        addressToolbarContainer.addGestureRecognizer(swipeUpGesture)
-        swipeUpGestureRecognizer = swipeUpGesture
-
-        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeDownGesture.direction = .down
-        addressToolbarContainer.addGestureRecognizer(swipeDownGesture)
-        swipeDownGestureRecognizer = swipeDownGesture
-
-        panGesture.require(toFail: swipeUpGesture)
     }
 
     // MARK: - Redux
@@ -144,18 +139,9 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
         // safely re-enable the gesture
         if state.addressToolbar.isEditing {
             disablePanGestureRecognizer()
-            disableSwipeUpGestureRecognizer()
-            disableSwipeDownGestureRecognizer()
         } else {
             enablePanGestureRecognizer()
             enablePanGestureOnHomepageIfNeeded()
-            enableSwipeUpGestureRecognizer()
-            enableSwipeDownGestureRecognizer()
-        }
-
-        if !featureFlagsProvider.isEnabled(.addressBarGestureToOpenTabTraySwipe) {
-            disableSwipeUpGestureRecognizer()
-            disableSwipeDownGestureRecognizer()
         }
     }
 
@@ -165,24 +151,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
         panGestureRecognizer?.isEnabled = true
     }
 
-    private func enableSwipeUpGestureRecognizer() {
-        swipeUpGestureRecognizer?.isEnabled = true
-    }
-
-    private func enableSwipeDownGestureRecognizer() {
-        swipeDownGestureRecognizer?.isEnabled = true
-    }
-
     func disablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = false
-    }
-
-    private func disableSwipeUpGestureRecognizer() {
-        swipeUpGestureRecognizer?.isEnabled = false
-    }
-
-    private func disableSwipeDownGestureRecognizer() {
-        swipeDownGestureRecognizer?.isEnabled = false
     }
 
     private func disablePanGestureIfTopAddressBar() {
@@ -235,21 +205,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
             handleGestureEndedState(translation: translation, velocity: velocity, nextTab: nextTab)
         default: break
         }
-    }
-
-    @objc
-    @MainActor
-    private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        let direction = gesture.direction
-
-        if direction == .up && toolbarState?.toolbarPosition == .top {
-            return
-        } else if direction == .down && toolbarState?.toolbarPosition == .bottom {
-            return
-        }
-
-        store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
-                                               actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
     }
 
     private func handleGestureChangedState(translation: CGPoint, nextTab: Tab?) {
@@ -390,5 +345,17 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber, FeatureFlagg
         } else {
             return isRTL ? index + 1 : index - 1
         }
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
+
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
+            return false
+        }
+        let velocity = panGesture.velocity(in: gestureRecognizer.view)
+        // Only begin the horizontal tab switch pan when the motion is horizontally dominant.
+        // This yields vertical pans to the swipe-up tab gesture, which shares this view.
+        return abs(velocity.x) > abs(velocity.y)
     }
 }
