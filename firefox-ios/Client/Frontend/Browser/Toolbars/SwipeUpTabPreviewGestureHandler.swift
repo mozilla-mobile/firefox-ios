@@ -213,4 +213,16 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
                                                actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
     }
+
+    // MARK: - Testing
+    // Compiled only for test builds using the TESTING compilation condition
+#if TESTING
+    func handlePanGestureForTesting(_ gesture: UIPanGestureRecognizer) {
+        handlePanGesture(gesture)
+    }
+
+    func handleSwipeGestureForTesting(_ gesture: UISwipeGestureRecognizer) {
+        handleSwipeGesture(gesture)
+    }
+#endif
 }

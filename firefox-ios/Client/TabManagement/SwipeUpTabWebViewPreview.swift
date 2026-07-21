@@ -140,10 +140,9 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     }
 
     func translate(_ translation: CGPoint, fingerLocation: CGPoint) {
-        let shouldShowCloseButton = (
+        let shouldShowCloseButton =
             releaseOutcome(fingerLocation: fingerLocation) == .closeTab &&
             swipeGestureFeatureFlagProvider.isCloseTabEnabled
-        )
 
         let shouldTriggerHaptic = closeButton.alpha != (shouldShowCloseButton ? 1 : 0)
         if shouldTriggerHaptic {
