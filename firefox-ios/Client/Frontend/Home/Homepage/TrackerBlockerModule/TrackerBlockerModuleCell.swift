@@ -6,8 +6,6 @@ import Common
 import UIKit
 
 final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    // MARK: - UX
-
     private struct UX {
         static let cornerRadius: CGFloat = 8
         static let horizontalPadding: CGFloat = 16
@@ -53,8 +51,6 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         containerPillView.layoutIfNeeded()
         containerPillView.layer.cornerRadius = containerPillView.frame.height / 2
     }
-
-    // MARK: - Layout
 
     private func setupLayout() {
         containerPillView.addSubview(shieldIcon)
