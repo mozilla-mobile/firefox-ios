@@ -60,7 +60,6 @@ struct BrowserViewControllerState: ScreenState {
     var microsurveyState: MicrosurveyPromptState
     var autoTranslatePromptState: AutoTranslatePromptState
     var navigationDestination: NavigationDestination?
-    var tabTrayAnimationSourceFrame: CGRect?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = appState.componentState(
@@ -86,8 +85,7 @@ struct BrowserViewControllerState: ScreenState {
                   frameContext: bvcState.frameContext,
                   microsurveyState: bvcState.microsurveyState,
                   autoTranslatePromptState: bvcState.autoTranslatePromptState,
-                  navigationDestination: bvcState.navigationDestination,
-                  tabTrayAnimationSourceFrame: bvcState.tabTrayAnimationSourceFrame)
+                  navigationDestination: bvcState.navigationDestination)
     }
 
     init(windowUUID: WindowUUID) {
@@ -121,8 +119,7 @@ struct BrowserViewControllerState: ScreenState {
         frameContext: PasswordGeneratorFrameContext? = nil,
         microsurveyState: MicrosurveyPromptState,
         autoTranslatePromptState: AutoTranslatePromptState,
-        navigationDestination: NavigationDestination? = nil,
-        tabTrayAnimationSourceFrame: CGRect? = nil
+        navigationDestination: NavigationDestination? = nil
     ) {
         self.searchScreenState = searchScreenState
         self.toast = toast
@@ -139,7 +136,6 @@ struct BrowserViewControllerState: ScreenState {
         self.microsurveyState = microsurveyState
         self.autoTranslatePromptState = autoTranslatePromptState
         self.navigationDestination = navigationDestination
-        self.tabTrayAnimationSourceFrame = tabTrayAnimationSourceFrame
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -597,8 +593,7 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .tabTray,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action),
-            tabTrayAnimationSourceFrame: action.tabTrayAnimationSourceFrame)
+            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
     }
 
     @MainActor

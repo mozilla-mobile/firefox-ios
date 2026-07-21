@@ -365,6 +365,14 @@ class BrowserViewController: UIViewController,
         return topTabsViewController != nil
     }
 
+    var tabTrayAnimationSourceFrame: CGRect {
+        swipeUpTabWebViewPreviewGestureHandler.tabAnimationSourceFrame
+    }
+
+    var tabTrayAnimationCornerRadius: CGFloat {
+        swipeUpTabWebViewPreviewGestureHandler.tabAnimationSourceCornerRadius
+    }
+
     private var isHomepagePinnedHeaderEnabled: Bool {
         featureFlagsProvider.isEnabled(.homepagePinnedHeader) && featureFlagsProvider.isEnabled(.homepageStoryCategories)
     }
@@ -391,7 +399,6 @@ class BrowserViewController: UIViewController,
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
-    var tabTrayAnimationSourceFrame: CGRect?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -3004,7 +3011,6 @@ class BrowserViewController: UIViewController,
             guard let button = state.buttonTapped else { return }
             presentRefreshLongPressAction(from: button)
         case .tabTray:
-            tabTrayAnimationSourceFrame = state.tabTrayAnimationSourceFrame
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
             store.dispatch(

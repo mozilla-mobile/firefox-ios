@@ -26,6 +26,14 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
     private weak var swipeDownGesture: UISwipeGestureRecognizer?
     private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
+    var tabAnimationSourceFrame: CGRect {
+        tabPreview.previewCardFrame
+    }
+
+    var tabAnimationSourceCornerRadius: CGFloat {
+        tabPreview.scaledPreviewCardCornerRadius
+    }
+
     // MARK: - Inits
     init(tabPreview: SwipeUpTabWebViewPreview,
          bottomBlurView: UIView,

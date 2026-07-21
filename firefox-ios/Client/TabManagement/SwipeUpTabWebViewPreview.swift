@@ -64,6 +64,9 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         return screenshotViewContainer.frame
     }
 
+    // placeholder value
+    var scaledPreviewCardCornerRadius: CGFloat = 0
+
     /// The action to take when the pan gesture ends, based on where the finger is released on screen.
     enum ReleaseOutcome {
         case cancel
@@ -131,6 +134,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             alpha = 1.0
             layer.zPosition = 1000
             screenshotView.applyScreenCornerRadius()
+            print("corner radius 1: ", screenshotView.layer.cornerRadius)
+            // screenshotView.layer.cornerRadius = 0
             guard screenshotViewContainerTopConstraint?.constant != topPadding ||
                   screenshotViewContainerBottomConstraint?.constant != bottomPadding else { return }
             screenshotViewContainerTopConstraint?.constant = topPadding
@@ -164,6 +169,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         let centerOffsetFromFinger = (UX.fingerCardPositionRatio - 0.5) * scaledHeight
         let targetTranslationX = fingerLocation.x - naturalCenter.x
         let targetTranslationY = fingerLocation.y - centerOffsetFromFinger - naturalCenter.y
+        self.scaledPreviewCardCornerRadius = screenshotView.layer.cornerRadius * scale
 
         // Blend in from the full-screen start so the preview slides into place instead of jumping.
         let clampDistance = bounds.height * UX.triggerBoundsHeightPercentage

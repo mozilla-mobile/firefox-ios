@@ -22,7 +22,7 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 
         static let dimmedWhiteValue = 0.0
 
-        static let presentDuration: TimeInterval = 0.2
+        static let presentDuration: TimeInterval = 0.3
         static let dismissDuration: TimeInterval = 0.2
         static let bvcScreenshotQuality: CGFloat = 1.0
 
@@ -198,18 +198,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         // Source from the tab screenshot so the full card survives going off screen
         let sourceFrame = browserVC.tabTrayAnimationSourceFrame
         var snapshotImage: UIImage?
-        if sourceFrame != nil {
-            snapshotImage = (selectedTab.screenshot ?? browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
-        } else {
-            snapshotImage = browserVC.view.screenshot(quality: UX.bvcScreenshotQuality)
-        }
+        snapshotImage = (selectedTab.screenshot ?? browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
         let bvcSnapshot = UIImageView(image: snapshotImage)
-        var cellFrame = sourceFrame ?? browserVC.view.frame
+        var cellFrame = sourceFrame
         bvcSnapshot.contentMode = .scaleAspectFill
         bvcSnapshot.frame = cellFrame
-        browserVC.tabTrayAnimationSourceFrame = nil
+
         bvcSnapshot.clipsToBounds = true
-        bvcSnapshot.applyScreenCornerRadius()
+        bvcSnapshot.layer.cornerRadius = browserVC.tabTrayAnimationCornerRadius
 
         let backgroundView = makePresentationBackgroundView(finalFrame: finalFrame)
 
