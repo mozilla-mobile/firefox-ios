@@ -6,18 +6,6 @@ import Common
 import UIKit
 
 final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    // MARK: - Display random number for now
-
-    private func displayRandomNumber() {
-        let magicNumbers = [10, 100, 45000, 56742445, 600000000000, 2305000]
-
-        guard let randomNumber = magicNumbers.randomElement() else { return }
-        let numberText = randomNumber.formatted(.number.notation(.compactName))
-        let fullText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, numberText)
-
-        titleLabel.attributedText = fullText.attributedText(boldString: numberText, font: titleLabel.font)
-    }
-
     // MARK: - UX
 
     private struct UX {
@@ -66,7 +54,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         containerPillView.layer.cornerRadius = containerPillView.frame.height / 2
     }
 
-    // MARK: Layout
+    // MARK: - Layout
 
     private func setupLayout() {
         containerPillView.addSubview(shieldIcon)
@@ -101,5 +89,20 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         containerPillView.backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
         shieldIcon.tintColor = theme.colors.iconAccentViolet
+    }
+
+    // MARK: - Update Tracker number
+
+    func updateTrackerNumber(to count: Int) {
+        let numberText = count.formatted(.number.notation(.compactName))
+        let fullText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, numberText)
+        titleLabel.attributedText = fullText.attributedText(boldString: numberText, font: titleLabel.font)
+    }
+
+    private func displayRandomNumber() {
+        let magicNumbers = [10, 100, 45000, 56742445, 600000000000, 2305000]
+        guard let randomNumber = magicNumbers.randomElement() else { return }
+
+        updateTrackerNumber(to: randomNumber)
     }
 }
