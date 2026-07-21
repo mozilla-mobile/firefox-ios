@@ -40,7 +40,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
 
         // Check that translation icon switches to loading (spinner) and eventually active mode (blue button)
         toolBarScreen.assertTranslateButtonExists(with: .loading)
-        toolBarScreen.assertTranslateButtonExists(with: .active)
+        toolBarScreen.waitForTranslateButtonToBecomeActive()
         browserScreen.assertWebPageText(with: "Example domain")
 
         toolBarScreen.tapTranslateButton(with: .active)
