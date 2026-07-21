@@ -676,13 +676,9 @@ final class TabManagerImplementation: NSObject,
         }
 
         if tab.url == nil {
-            logger.log("Tab restored has empty URL",
+            logger.log("Tab restored has empty URL. tabID: \(tabData.id.uuidString), lastUsedTime: \(tabData.lastUsedTime)",
                        level: .debug,
-                       category: .tabs,
-                       extra: [
-                        "tabID": tabData.id.uuidString,
-                        "lastUsedTime": tabData.lastUsedTime.description
-                       ])
+                       category: .tabs)
         }
     }
 
@@ -880,9 +876,18 @@ final class TabManagerImplementation: NSObject,
                            category: .tabs)
             }
 
+            // Never persist a raw internal error-page URL as a tab's restorable siteUrl,
+            // substitute the original failing URL so restoration points at the real site.
+            let persistedUrl: URL?
+            if let tabUrl = tab.url, let internalUrl = InternalURL(tabUrl), internalUrl.isErrorPage {
+                persistedUrl = internalUrl.originalURLFromErrorPage
+            } else {
+                persistedUrl = tab.url
+            }
+
             return TabData(id: tabId,
                            title: tab.lastTitle,
-                           siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
+                           siteUrl: persistedUrl?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
                            lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime),

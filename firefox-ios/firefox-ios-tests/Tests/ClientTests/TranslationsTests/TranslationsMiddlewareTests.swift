@@ -187,6 +187,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(
             mockLogger.savedMessage,
             "Unable to detect language from page to determine if eligible for translations."
+            + " LanguageDetector error: \(TestError.example.localizedDescription)"
         )
         XCTAssertNil(mockTranslationsTelemetry.lastTranslationFlowId)
         XCTAssertEqual(mockTranslationsTelemetry.pageLanguageIdentificationFailedCalledCount, 1)

@@ -52,6 +52,9 @@
 /* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
 "WorldCup.HomepageWidget.RetryButtonLabel.v151" = "പുതുക്കുക";
 
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "മൂന്നാം സ്ഥാനം";
+
 /* The label for an upcoming match in the World Cup widget round phase. */
 "WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "വരാനിരിക്കുന്നവ";
 

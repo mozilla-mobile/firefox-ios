@@ -587,7 +587,6 @@ class Tab: NSObject,
                 webView.load(URLRequest(url: url))
             }
         }
-
         if let interactionState = interactionState {
             webView.interactionState = interactionState
         }

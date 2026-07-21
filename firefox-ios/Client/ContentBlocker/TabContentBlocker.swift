@@ -12,6 +12,8 @@ extension Notification.Name {
 
 protocol ContentBlockerTab: AnyObject {
     @MainActor
+    var isPrivate: Bool { get }
+    @MainActor
     func currentURL() -> URL?
     @MainActor
     func currentWebView() -> WKWebView?
@@ -55,6 +57,10 @@ class TabContentBlocker: Notifiable {
     }
 
     var stats = TPPageStats()
+
+    /// Persists blocked-tracker stats long term. Set by subclasses that have
+    /// access to prefs; left nil when long-term recording is not desired.
+    var statsRecorder: TrackerBlockStatsStore?
 
     init(tab: ContentBlockerTab, logger: Logger = DefaultLogger.shared) {
         self.tab = tab

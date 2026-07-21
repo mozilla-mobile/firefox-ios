@@ -302,6 +302,19 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         view.layer.addSublayer(borderLayer)
     }
 
+    private func gradientBorderImage(size: CGSize, colors: [CGColor]) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            guard let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                            colors: colors as CFArray,
+                                            locations: nil) else { return }
+            context.cgContext.drawLinearGradient(gradient,
+                                                 start: .zero,
+                                                 end: CGPoint(x: size.width, y: size.height),
+                                                 options: [])
+        }
+    }
+
     private func redrawExternalBorder() {
         let width = borderLayer.lineWidth
         let borderRect = backgroundHolder.bounds.insetBy(dx: -width / 3, dy: -width / 3)
@@ -322,8 +335,15 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         // We are using a non-CALayer borderWidth for unselected cells for reduced graphics processing
         // we zero that value here when we are in the selected state to assign the CAShapeLayer
         backgroundHolder.layer.borderWidth = UX.zeroBorderWidth
-        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
 
+        if theme.isNova {
+            let gradientColor = UIColor(patternImage: gradientBorderImage(size: backgroundHolder.bounds.size,
+                                                                          colors: theme.colors.gradientBorder.cgColors))
+            addExternalBorder(to: backgroundHolder, color: gradientColor, width: UX.selectedBorderWidth)
+            return
+        }
+
+        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
         addExternalBorder(to: backgroundHolder, color: borderColor, width: UX.selectedBorderWidth)
     }
 

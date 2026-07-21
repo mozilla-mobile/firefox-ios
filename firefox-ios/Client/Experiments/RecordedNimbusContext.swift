@@ -220,7 +220,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
             logger.log("toJson error thrown while creating JSON string", level: .warning, category: .experiments)
             return "{}"
         }
-        logger.log("toJson end", level: .debug, category: .experiments, extra: ["json": jsonString])
+        logger.log("toJson end: \(jsonString)", level: .debug, category: .experiments)
         return jsonString
     }
 }

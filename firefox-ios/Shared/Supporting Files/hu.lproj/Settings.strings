@@ -269,7 +269,7 @@
 "Settings.Search.GoogleLens.Description.v153" = "Képek küldése a Google-nek keresés céljából.";
 
 /* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
-"Settings.Search.GoogleLens.Footnote.v153" = "Csak akkor érhető el, ha fent engedélyezve van a Google, és az az aktív keresőmotorja böngészés közben.";
+"Settings.Search.GoogleLens.Footnote.v153" = "Csak akkor érhető el, ha fent engedélyezve van a Google, és az az aktív keresőszolgáltatása böngészés során.";
 
 /* In the Search settings, this is the title that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Title.v153" = "Google Lens";

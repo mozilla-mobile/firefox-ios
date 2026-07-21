@@ -31,8 +31,7 @@ class DocumentLogger {
             logger.log(
                 "Document is missing but finished downloading",
                 level: .info,
-                category: .webview,
-                extra: ["url": url.absoluteString]
+                category: .webview
             )
         }
         pending[url] = false

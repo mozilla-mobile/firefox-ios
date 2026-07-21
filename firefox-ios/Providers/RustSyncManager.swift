@@ -542,14 +542,11 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
             let telemetryData = syncResult.telemetryJson ??
                 "(No telemetry data was returned)"
             let telemetryMessage = "\(String(describing: telemetryData))"
-            let syncDetails = ["status": "\(syncResult.status)",
-                               "declinedEngines": "\(declinedEngines)",
-                               "telemetry": telemetryMessage]
 
-            self.logger.log("Finished syncing",
+            self.logger.log("Finished syncing with status: \(syncResult.status), declined engines: \(declinedEngines)",
                             level: .info,
                             category: .sync,
-                            extra: syncDetails)
+                            extra: ["telemetry": telemetryMessage])
 
             if let declined = syncResult.declined {
                 self.updateEnginePrefs(declined: declined)
@@ -593,15 +590,21 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         let deferred = Deferred<Maybe<SyncResult>>()
 
         logger.log("Syncing \(engines)", level: .info, category: .sync)
-        if let accountManager = RustFirefoxAccounts.shared.accountManager {
-            // Prefer accountState over deviceConstellation for the current
-            // device ID to avoid a possible server round-trip.
-            guard case .success(let deviceId) = accountManager.getCurrentDeviceId() else {
+        guard let accountManager = RustFirefoxAccounts.shared.accountManager else {
+            return deferred
+        }
+
+        // Prefer accountState over deviceConstellation for the current
+        // device ID to avoid a possible server round-trip. This runs off the
+        // main thread so the blocking FFI call can't hang the UI.
+        // swiftlint:disable closure_body_length
+        accountManager.getCurrentDeviceId { deviceIDResult in
+            guard case .success(let deviceId) = deviceIDResult else {
                 self.logger.log("Device Id could not be retrieved",
                                 level: .warning,
                                 category: .sync)
                 deferred.fill(Maybe(failure: DeviceIdError()))
-                return deferred
+                return
             }
 
             accountManager.getAccessToken(scope: OAuthScope.oldSync) { result in
@@ -642,6 +645,7 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                 }
             }
         }
+        // swiftlint:enable closure_body_length
         return deferred
     }
 

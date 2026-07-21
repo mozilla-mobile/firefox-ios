@@ -7,7 +7,6 @@ import Foundation
 enum AppComponent {
     case browserViewController
     case homepage
-    case themeSettings
     case tabsTray
     case tabsPanel
     case remoteTabsPanel

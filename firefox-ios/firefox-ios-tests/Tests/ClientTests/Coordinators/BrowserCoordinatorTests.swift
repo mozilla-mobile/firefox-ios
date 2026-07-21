@@ -443,13 +443,44 @@ final class BrowserCoordinatorTests: XCTestCase,
     func testShowGoogleLensCamera_whenCameraCoordinatorAlreadyPresent_doesNotAddDuplicate() {
         let subject = createSubject()
         let existing = CameraCoordinator(parentCoordinatorDelegate: subject,
-                                         router: mockRouter) { _ in }
+                                         router: mockRouter,
+                                         cameraReason: .googleLens) { _ in }
         subject.add(child: existing)
 
         subject.showGoogleLensCamera()
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CameraCoordinator)
+    }
+
+    func testSearchGoogleLens_fromToolbarButton_startsSearchTimer() throws {
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+
+        subject.searchGoogleLens(with: UIImage(), source: .camera)
+
+        let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
+        XCTAssertEqual(glean.startTimingCalled, 1)
+        XCTAssertNotNil(search.searchTimerId)
+    }
+
+    func testSearchGoogleLens_fromWebImageContextMenu_usesExistingSearchTimer() throws {
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+
+        subject.searchGoogleLens(with: UIImage(),
+                                 source: .contextMenu,
+                                 searchTimerId: glean.savedTimerId)
+
+        let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
+        XCTAssertEqual(glean.startTimingCalled, 0)
+        XCTAssertNotNil(search.searchTimerId)
     }
 
     func testShowQRCode_presentsQRCodeNavigationController() {
@@ -1306,14 +1337,19 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertNil(coordinator)
     }
 
-    func testSavedRouteCalled_whenRestoredTabsIsCalled() {
+    func testSavedRouteCalled_whenRestoredTabsIsCalled() async {
         tabManager.isRestoringTabs = true
         let subject = createSubject()
         subject.browserHasLoaded()
         subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
+        let exp = expectation(description: "Saved route handled")
+        mockRouter.onPresent = { exp.fulfill() }
+
+        subject.tabManagerDidRestoreTabs(tabManager)
+        XCTAssertNil(mockRouter.presentedViewController)
 
         tabManager.isRestoringTabs = false
-        subject.tabManagerDidRestoreTabs(tabManager)
+        await fulfillment(of: [exp], timeout: 1)
 
         XCTAssertNotNil(mockRouter.presentedViewController as? DefaultBrowserOnboardingViewController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
@@ -1533,8 +1569,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: canHandle(route:)
 
-    func testCanHandle_refactorEnabled_returnsFalse_beforeBrowserLoaded() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
+    func testCanHandle_returnsFalse_beforeBrowserLoaded() {
         let subject = createSubject()
 
         let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
@@ -1542,49 +1577,17 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertFalse(result)
     }
 
-    func testCanHandle_refactorEnabled_returnsTrue_afterBrowserLoaded() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
-        let subject = createSubject()
-        subject.browserHasLoaded()
-
-        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
-
-        XCTAssertTrue(result)
-    }
-
-    func testCanHandle_refactorEnabled_returnsTrue_whenTabsAreRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
+    func testCanHandle_returnsFalse_whenTabsAreRestoring() {
         tabManager.isRestoringTabs = true
         let subject = createSubject()
         subject.browserHasLoaded()
 
         let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
 
-        XCTAssertTrue(result, "With refactor enabled, isRestoringTabs should not block route handling")
+        XCTAssertFalse(result, "isRestoringTabs should block route handling (FXIOS-13351)")
     }
 
-    func testCanHandle_refactorDisabled_returnsFalse_beforeBrowserLoaded() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
-        let subject = createSubject()
-
-        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
-
-        XCTAssertFalse(result)
-    }
-
-    func testCanHandle_refactorDisabled_returnsFalse_whenTabsAreRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
-        tabManager.isRestoringTabs = true
-        let subject = createSubject()
-        subject.browserHasLoaded()
-
-        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
-
-        XCTAssertFalse(result, "With refactor disabled, isRestoringTabs should block route handling")
-    }
-
-    func testCanHandle_refactorDisabled_returnsTrue_whenBrowserReadyAndNotRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
+    func testCanHandle_returnsTrue_whenBrowserReadyAndNotRestoring() {
         tabManager.isRestoringTabs = false
         let subject = createSubject()
         subject.browserHasLoaded()
@@ -1596,20 +1599,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: handle(route:)
 
-    func testHandle_refactorEnabled_executesRoute_whenBrowserReady() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        subject.browserHasLoaded()
-
-        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
-
-        XCTAssertTrue(browserViewController.handleQueryCalled)
-        XCTAssertEqual(browserViewController.handleQuery, "firefox")
-    }
-
-    func testHandle_refactorEnabled_doesNotExecuteRoute_beforeBrowserLoaded() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
+    func testHandle_doesNotExecuteRoute_beforeBrowserLoaded() {
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
@@ -1618,21 +1608,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertFalse(browserViewController.handleQueryCalled)
     }
 
-    func testHandle_refactorEnabled_executesRoute_whenTabsAreRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(true)
-        tabManager.isRestoringTabs = true
-        let subject = createSubject()
-        subject.browserViewController = browserViewController
-        subject.browserHasLoaded()
-
-        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
-
-        XCTAssertTrue(browserViewController.handleQueryCalled,
-                      "With refactor enabled, route should execute even while tabs are restoring")
-    }
-
-    func testHandle_refactorDisabled_doesNotExecuteRoute_whenTabsAreRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
+    func testHandle_doesNotExecuteRoute_whenTabsAreRestoring() {
         tabManager.isRestoringTabs = true
         let subject = createSubject()
         subject.browserViewController = browserViewController
@@ -1641,11 +1617,10 @@ final class BrowserCoordinatorTests: XCTestCase,
         subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
 
         XCTAssertFalse(browserViewController.handleQueryCalled,
-                       "With refactor disabled, route should not execute while tabs are restoring")
+                       "Route should not execute while tabs are restoring (FXIOS-13351)")
     }
 
-    func testHandle_refactorDisabled_executesRoute_whenBrowserReadyAndNotRestoring() {
-        setIsDeeplinkOptimizationRefactorEnabled(false)
+    func testHandle_executesRoute_whenBrowserReadyAndNotRestoring() {
         tabManager.isRestoringTabs = false
         let subject = createSubject()
         subject.browserViewController = browserViewController
@@ -1672,7 +1647,8 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #filePath,
+    private func createSubject(googleLensService: GoogleLensServicing = GoogleLensService(),
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
@@ -1681,7 +1657,8 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
-                                         worldCupStore: mockWorldCupStore)
+                                         worldCupStore: mockWorldCupStore,
+                                         googleLensService: googleLensService)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
@@ -1734,6 +1711,14 @@ final class BrowserCoordinatorTests: XCTestCase,
         }
 
         return URL(string: "http://localhost:\(webServer.port)")!
+    }
+}
+
+private struct MockGoogleLensService: GoogleLensServicing {
+    func makeUploadRequest(for image: UIImage,
+                           viewportSize: CGSize,
+                           entryPoint: GoogleLensUploadEntryPoint) -> URLRequest? {
+        return URLRequest(url: URL(string: "https://lens.google.com/upload")!)
     }
 }
 

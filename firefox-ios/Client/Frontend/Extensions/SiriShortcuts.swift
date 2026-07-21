@@ -63,10 +63,9 @@ class SiriShortcuts {
             }
         } catch {
             logger.log(
-                "Could not get voice shortcurts: \(error.localizedDescription)",
+                "Could not get voice shortcuts: \(error.localizedDescription)",
                 level: .warning,
-                category: .settings,
-                extra: nil
+                category: .settings
             )
         }
     }
