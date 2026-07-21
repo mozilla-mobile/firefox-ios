@@ -11,7 +11,6 @@ import Shared
 final class HomePageSettingViewControllerTests: XCTestCase {
     private var profile: MockProfile!
     private var wallpaperManager: WallpaperManagerMock!
-    private var worldCupStore: MockWorldCupStore!
     private var delegate: MockSettingsDelegate!
     private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
@@ -30,7 +29,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
 
         delegate = MockSettingsDelegate()
         wallpaperManager = WallpaperManagerMock()
-        worldCupStore = MockWorldCupStore()
     }
 
     override func tearDown() async throws {
@@ -131,48 +129,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertTrue(trackerBlockerModuleSettingValue)
     }
 
-    func testHomepageSettings_generateSettings_worldCupSectionDefaultValue_whenFFEnabled_isTrue() throws {
-        let subject = createSubject()
-        subject.profile = profile
-        worldCupStore.isFeatureEnabled = true
-
-        let settingsList = subject.generateSettings()
-
-        let customizeFirefoxHomeSettingsList = settingsList.first(
-            where: {
-                $0.title?.string == .Settings.Homepage.CustomizeFirefoxHome.Title
-            })
-
-        let worldCupSectionSetting = customizeFirefoxHomeSettingsList?.children.first(
-            where: {
-                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.WorldCupSection
-            }) as? BoolSetting
-
-        let worldCupSectionSettingValue = try XCTUnwrap(worldCupSectionSetting?.getDefaultValue())
-
-        XCTAssertTrue(worldCupSectionSettingValue)
-    }
-
-    func testHomepageSettings_generateSettings_withWorldCupDisabled_hidesSetting() throws {
-        let subject = createSubject()
-        subject.profile = profile
-        worldCupStore.isFeatureEnabled = false
-
-        let settingsList = subject.generateSettings()
-
-        let customizeFirefoxHomeSettingsList = settingsList.first(
-            where: {
-                $0.title?.string == .Settings.Homepage.CustomizeFirefoxHome.Title
-            })
-
-        let worldCupSectionSetting = customizeFirefoxHomeSettingsList?.children.first(
-            where: {
-                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.WorldCupSection
-            }) as? BoolSetting
-
-        XCTAssertNil(worldCupSectionSetting)
-    }
-
     // MARK: - Helper
     private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
         if isEnabled {
@@ -186,8 +142,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         let subject = HomePageSettingViewController(prefs: profile.prefs,
                                                     wallpaperManager: wallpaperManager,
                                                     settingsDelegate: delegate,
-                                                    tabManager: MockTabManager(),
-                                                    worldCupStore: worldCupStore)
+                                                    tabManager: MockTabManager())
         trackForMemoryLeaks(subject)
         return subject
     }

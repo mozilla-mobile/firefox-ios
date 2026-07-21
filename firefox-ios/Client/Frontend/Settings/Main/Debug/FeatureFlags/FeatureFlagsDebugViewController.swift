@@ -332,13 +332,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             ) { [weak self] _ in
                 self?.reloadView()
             },
-            FeatureFlagsBoolSetting(
-                with: .worldCupWidget,
-                titleText: format(string: "World Cup Widget"),
-                statusText: format(string: "Toggle to enable the World Cup widget feature on the Homepage")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
         ]
 
         return SettingSection(

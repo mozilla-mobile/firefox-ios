@@ -1138,7 +1138,6 @@ homepage:
       - jump_back_in
       - bookmarks
       - stories
-      - world_cup_widget
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/26216
     data_reviews:

@@ -47,7 +47,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
-    var showWorldCupCountryPickerCalled = 0
     var showPrivacyNoticeLink = 0
     var showTermsOfUseCalled = 0
     var showCertificatesFromErrorPageCalled = 0
@@ -237,10 +236,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showShortcutsLibrary() {
         showShortcutsLibraryCalled += 1
-    }
-
-    func showWorldCupCountryPicker() {
-        showWorldCupCountryPickerCalled += 1
     }
 
     func showPrivacyNoticeLink(url: URL) {

@@ -63,29 +63,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     @MainActor
-    func test_updateSnapshot_withWorldCupSectionEnabled_includesWorldCupSection() throws {
-        let dataSource = try XCTUnwrap(diffableDataSource)
-
-        let state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
-            WorldCupAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: WorldCupMiddlewareActionType.didUpdate,
-                shouldShowHomepageWorldCupSection: true
-            )
-        )
-
-        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
-
-        let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 3)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .worldcup, .spacer])
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .header), 1)
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .worldcup), 1)
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer), 1)
-    }
-
-    @MainActor
     func test_updateSnapshot_withColorValueOnState() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
         let wallpaperConfig = WallpaperConfiguration(
@@ -535,65 +512,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
-    }
-
-    @MainActor
-    func test_updateSnapshot_withShortcutsWorldCupTrackerBlockerAndJumpBackIn_ordersTrackerBlockerAfterWorldCup() throws {
-        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
-        let dataSource = try XCTUnwrap(diffableDataSource)
-
-        var state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
-            TopSitesAction(
-                topSites: createSites(),
-                windowUUID: .XCTestDefaultUUID,
-                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
-            )
-        )
-        state = HomepageState.reducer(
-            state,
-            TrackerBlockerModuleAction(
-                isEnabled: true,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: TrackerBlockerModuleActionType.toggleShowSectionSetting
-            )
-        )
-        state = HomepageState.reducer(
-            state,
-            TabManagerAction(
-                recentTabs: [createTab(urlString: "www.mozilla.org")],
-                windowUUID: .XCTestDefaultUUID,
-                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
-            )
-        )
-        state = HomepageState.reducer(
-            state,
-            JumpBackInAction(
-                isEnabled: true,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: JumpBackInActionType.toggleShowSectionSetting
-            )
-        )
-        state = HomepageState.reducer(
-            state,
-            WorldCupAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: WorldCupMiddlewareActionType.didUpdate,
-                shouldShowHomepageWorldCupSection: true
-            )
-        )
-
-        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
-
-        let expectedSections: [HomepageSection] = [
-            .header,
-            .topSites(nil, state.topSitesState.numberOfTilesPerRow, true),
-            .worldcup,
-            .trackerBlockerModule,
-            .jumpBackIn(nil, mockSectionConfig),
-            .spacer
-        ]
-        XCTAssertEqual(dataSource.snapshot().sectionIdentifiers, expectedSections)
     }
 
     @MainActor

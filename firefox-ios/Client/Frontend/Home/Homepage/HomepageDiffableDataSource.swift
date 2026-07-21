@@ -31,7 +31,6 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case trackerBlockerModule
         case bookmarks(TextColor?)
         case pocket(TextColor?)
-        case worldcup
         case spacer
 
         var canHandleLongPress: Bool {
@@ -61,7 +60,6 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
         /// that story's on-screen position as stories are inserted above it.
         case merino(MerinoStoryConfiguration, String?)
-        case worldcupCard
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -77,7 +75,6 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 TrackerBlockerModuleCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
-                WorldCupCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -94,8 +91,6 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 return .bookmark
             case .merino:
                 return .story
-            case .worldcupCard:
-                return .worldCupWidget
             default:
                 return nil
             }
@@ -147,15 +142,6 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             )
             snapshot.appendSections([topSitesSection])
             snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
-        }
-
-        if state.worldcupState.shouldShowSection {
-            snapshot.appendSections([.worldcup])
-            snapshot.appendItems(
-                [.worldcupCard],
-                toSection: .worldcup
-            )
-            snapshot.reconfigureItems([.worldcupCard])
         }
 
         if state.trackerBlockerModuleState.shouldShowSection {

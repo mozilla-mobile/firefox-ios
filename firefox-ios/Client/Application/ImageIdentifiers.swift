@@ -11,7 +11,6 @@ import Foundation
 struct ImageIdentifiers {
     public static let badgeMask = "badge-mask"
     public static let firefoxFavicon = "faviconFox"
-    public static let firefoxLogoSoccer = "firefoxLogoSoccer"
     public static let foxConfirmation = "foxConfirmation"
     public static let foxDefaultBrowser = "foxDefaultBrowser"
     public static let foxWithStars = "foxWithStars"

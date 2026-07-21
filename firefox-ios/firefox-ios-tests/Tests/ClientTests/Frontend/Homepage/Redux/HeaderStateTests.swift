@@ -9,17 +9,14 @@ import XCTest
 
 @MainActor
 final class HeaderStateTests: XCTestCase {
-    private var mockWorldCupStore: MockWorldCupStore!
     private var mockQuickAnswersStore: MockQuickAnswersStore!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockWorldCupStore = MockWorldCupStore()
         mockQuickAnswersStore = MockQuickAnswersStore()
     }
 
     override func tearDown() async throws {
-        mockWorldCupStore = nil
         mockQuickAnswersStore = nil
         try await super.tearDown()
     }
@@ -29,40 +26,7 @@ final class HeaderStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(initialState.isPrivate)
-        XCTAssertTrue(initialState.isWorldCupSectionEnabled)
         XCTAssertFalse(initialState.showQuickAnswersButton)
-    }
-
-    func test_worldCupDidUpdate_sectionEnabled_setsFlagTrue() {
-        let initialState = createSubject()
-        let reducer = headerReducer()
-
-        let newState = reducer(
-            initialState,
-            WorldCupAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: WorldCupMiddlewareActionType.didUpdate,
-                shouldShowHomepageWorldCupSection: true
-            )
-        )
-
-        XCTAssertTrue(newState.isWorldCupSectionEnabled)
-    }
-
-    func test_worldCupDidUpdate_sectionDisabled_setsFlagFalse() {
-        let initialState = createSubject()
-        let reducer = headerReducer()
-
-        let newState = reducer(
-            initialState,
-            WorldCupAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: WorldCupMiddlewareActionType.didUpdate,
-                shouldShowHomepageWorldCupSection: false
-            )
-        )
-
-        XCTAssertFalse(newState.isWorldCupSectionEnabled)
     }
 
     func test_initializeAction_returnsExpectedState() {
@@ -79,43 +43,6 @@ final class HeaderStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.isPrivate)
-    }
-
-    func test_init_worldCupFeatureAndSectionEnabled_setsWorldCupFlagTrue() {
-        mockWorldCupStore.isFeatureEnabled = true
-        mockWorldCupStore.isHomepageSectionEnabled = true
-
-        let state = createSubject()
-
-        XCTAssertTrue(state.isWorldCupSectionEnabled)
-    }
-
-    func test_init_worldCupFeatureDisabled_setsWorldCupFlagFalse() {
-        mockWorldCupStore.isFeatureEnabled = false
-        mockWorldCupStore.isHomepageSectionEnabled = true
-
-        let state = createSubject()
-
-        XCTAssertFalse(state.isWorldCupSectionEnabled)
-    }
-
-    func test_init_worldCupSectionDisabled_setsWorldCupFlagFalse() {
-        mockWorldCupStore.isFeatureEnabled = true
-        mockWorldCupStore.isHomepageSectionEnabled = false
-
-        let state = createSubject()
-
-        XCTAssertFalse(state.isWorldCupSectionEnabled)
-    }
-
-    func test_init_privateMode_forcesWorldCupFlagFalse_evenWhenStoreEnabled() {
-        mockWorldCupStore.isFeatureEnabled = true
-        mockWorldCupStore.isHomepageSectionEnabled = true
-
-        let state = createSubject(isPrivate: true)
-
-        XCTAssertTrue(state.isPrivate)
-        XCTAssertFalse(state.isWorldCupSectionEnabled)
     }
 
     func test_init_quickAnswersEnabled_setsShowQuickAnswersButtonTrue() {
@@ -196,7 +123,6 @@ final class HeaderStateTests: XCTestCase {
         return HeaderState(
             windowUUID: .XCTestDefaultUUID,
             isPrivate: isPrivate,
-            worldCupStore: mockWorldCupStore,
             quickAnswersStore: mockQuickAnswersStore
         )
     }

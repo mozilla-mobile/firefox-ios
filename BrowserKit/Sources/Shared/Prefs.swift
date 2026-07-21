@@ -126,24 +126,6 @@ public struct PrefsKeys {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let TrackerBlockerSection = "TrackerBlockerSectionUserPrefsKey"
-        public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
-        /// Tracks whether we've performed the one-time transition from World
-        /// Cup milestone 1 to milestone 2. When the milestone 2 date is first
-        /// reached we force-enable the homepage section once, then respect the
-        /// user preference on subsequent reads.
-        public static let WorldCupMilestone2Transitioned = "WorldCupMilestone2TransitionedUserPrefsKey"
-        /// Override for the merino WCS base host
-        public static let WorldCupBaseHost = "worldCupBaseHostKey"
-        /// Dev-only override for the World Cup `/matches` and `/live` polling
-        /// cadence in seconds. When set, both streams fire on this interval
-        /// regardless of result type — used to test live behavior without
-        /// waiting for the production cadence.
-        public static let WorldCupPollInterval = "worldCupPollIntervalKey"
-    }
-
-    public struct Homepage {
-        public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
-        public static let WorldCupSeenWinningMatchIDs = "WorldCupSeenWinningMatchIDsUserPrefsKey"
     }
 
     public struct QuickAnswers {

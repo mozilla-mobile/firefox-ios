@@ -55,4 +55,3 @@ include:
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
   - nimbus-features/waybackMachineFeature.yaml
-  - nimbus-features/worldCupWidgetFeature.yaml

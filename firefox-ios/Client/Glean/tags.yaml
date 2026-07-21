@@ -155,8 +155,5 @@ User:
 WebCompat:
   description: Corresponds to the in-app "Report Broken Site" (WebCompat) reporting tool.
 
-WorldCupWidget:
-  description: Corresponds to the World Cup widget shown on the homepage.
-
 ZoomBar:
   description: Corresponds to any event around zoom bar. Shown from the app menu.

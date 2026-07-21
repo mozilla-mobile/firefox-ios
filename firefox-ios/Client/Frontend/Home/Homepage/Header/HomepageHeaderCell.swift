@@ -119,10 +119,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.showiPadSetup = showiPadSetup
         self.logoTextColor = logoTextColor
 
-        let logoAsset = headerState.isWorldCupSectionEnabled
-            ? ImageIdentifiers.firefoxLogoSoccer
-            : ImageIdentifiers.homeHeaderLogoBall
-        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
+        logoImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
 
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 

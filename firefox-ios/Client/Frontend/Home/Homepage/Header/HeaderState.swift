@@ -13,34 +13,28 @@ struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
     var showQuickAnswersButton: Bool
-    var isWorldCupSectionEnabled: Bool
 
     init(
         windowUUID: WindowUUID,
         isPrivate: Bool = false,
-        worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
         quickAnswersStore: QuickAnswersStore = QuickAnswersMiddleware()
     ) {
-        let isWorldCupSectionEnabled = isPrivate ? false : worldCupStore.isFeatureEnabledAndSectionEnabled
         let showQuickAnswersButton = isPrivate ? false : quickAnswersStore.isQuickAnswersEnabled
         self.init(
             windowUUID: windowUUID,
             isPrivate: isPrivate,
-            showQuickAnswersButton: showQuickAnswersButton,
-            isWorldCupSectionEnabled: isWorldCupSectionEnabled
+            showQuickAnswersButton: showQuickAnswersButton
         )
     }
 
     private init(
         windowUUID: WindowUUID,
         isPrivate: Bool,
-        showQuickAnswersButton: Bool,
-        isWorldCupSectionEnabled: Bool
+        showQuickAnswersButton: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
         self.showQuickAnswersButton = showQuickAnswersButton
-        self.isWorldCupSectionEnabled = isWorldCupSectionEnabled
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -54,8 +48,6 @@ struct HeaderState: StateType, Equatable, Hashable {
             return handleInitializeAction(for: state, with: action)
         case QuickAnswersMiddlewareActionType.didInitialize, QuickAnswersMiddlewareActionType.didUpdateSettings:
             return handleQuickAnswersAction(for: state, with: action)
-        case WorldCupMiddlewareActionType.didUpdate:
-            return handleWorldCupAction(for: state, with: action)
         default:
             return defaultState(from: state)
         }
@@ -79,21 +71,11 @@ struct HeaderState: StateType, Equatable, Hashable {
         )
     }
 
-    private static func handleWorldCupAction(for state: HeaderState, with action: Action) -> HeaderState {
-        guard let worldCupAction = action as? WorldCupAction else {
-            return defaultState(from: state)
-        }
-        return state.copy(
-            isWorldCupSectionEnabled: worldCupAction.shouldShowHomepageWorldCupSection
-        )
-    }
-
     static func defaultState(from state: HeaderState) -> HeaderState {
         return HeaderState(
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
-            showQuickAnswersButton: state.showQuickAnswersButton,
-            isWorldCupSectionEnabled: state.isWorldCupSectionEnabled
+            showQuickAnswersButton: state.showQuickAnswersButton
         )
     }
 }

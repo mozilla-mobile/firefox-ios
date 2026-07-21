@@ -83,7 +83,6 @@ let middlewares = [
     NativeErrorPageMiddleware().nativeErrorPageProvider,
     WallpaperMiddleware().wallpaperProvider,
     BookmarksMiddleware().bookmarksProvider,
-    WorldCupMiddleware().worldCupProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
     QuickAnswersMiddleware().quickAnswersProvider,
     StartAtHomeMiddleware().startAtHomeProvider,
