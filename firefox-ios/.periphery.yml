@@ -3,6 +3,9 @@ project: Client.xcodeproj
 schemes:
 - Fennec
 
+targets:
+- Client
+
 clean_build: true
 retain_assign_only_properties: true
 retain_objc_accessible: true

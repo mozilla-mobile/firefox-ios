@@ -21,8 +21,7 @@ final class ASSummarizerRemoteConfig: Sendable {
     private static let localizedTag = "localized"
 
     init?(
-        profile: Profile = AppContainer.shared.resolve(),
-        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+        profile: Profile = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.service = profile.remoteSettingsService
