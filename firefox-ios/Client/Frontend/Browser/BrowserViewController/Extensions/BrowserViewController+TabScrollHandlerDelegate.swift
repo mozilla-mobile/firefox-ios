@@ -16,13 +16,13 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     func showToolbar() {
         updateToolbarContext()
         toolbarAnimator?.showToolbar()
-        updateToolbarTranslucency()
+        updateToolbarTranslucency(isMinimized: false)
     }
 
     func hideToolbar() {
         updateToolbarContext()
         toolbarAnimator?.hideToolbar()
-        updateToolbarTranslucency()
+        updateToolbarTranslucency(isMinimized: true)
     }
 
     func dispatchScrollAlphaChange(alpha: CGFloat) {
