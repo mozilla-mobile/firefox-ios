@@ -161,6 +161,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         if state.trackerBlockerModuleState.shouldShowSection {
             snapshot.appendSections([.trackerBlockerModule])
             snapshot.appendItems([.trackerBlockerModule], toSection: .trackerBlockerModule)
+            snapshot.reconfigureItems([.trackerBlockerModule])
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {

@@ -31,7 +31,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.text = .Menu.EnhancedTrackingProtection.trackersBlockedLabel
+        label.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
     }
 
     // MARK: - Init
@@ -39,7 +39,6 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        displayRandomNumber()
     }
 
     required init?(coder: NSCoder) {
@@ -79,6 +78,13 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         ])
     }
 
+    // MARK: - Configuration
+
+    func configure(count: Int, theme: Theme) {
+        updateTrackerNumber(to: count)
+        applyTheme(theme: theme)
+    }
+
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
@@ -89,16 +95,18 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     // MARK: - Update Tracker number
 
-    func updateTrackerNumber(to count: Int) {
+    private func updateTrackerNumber(to count: Int) {
+        guard count > 0 else {
+            titleLabel.attributedText = nil
+            titleLabel.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
+            return
+        }
+
         let numberText = count.formatted(.number.notation(.compactName))
-        let fullText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, numberText)
-        titleLabel.attributedText = fullText.attributedText(boldString: numberText, font: titleLabel.font)
-    }
-
-    private func displayRandomNumber() {
-        let magicNumbers = [10, 100, 45000, 56742445, 600000000000, 2305000]
-        guard let randomNumber = magicNumbers.randomElement() else { return }
-
-        updateTrackerNumber(to: randomNumber)
+        let fullText = String(format: .FirefoxHomepage.TrackerBlocker.TrackersBlocked, numberText)
+        titleLabel.attributedText = fullText.attributedText(
+            boldString: numberText,
+            font: titleLabel.font
+        )
     }
 }
