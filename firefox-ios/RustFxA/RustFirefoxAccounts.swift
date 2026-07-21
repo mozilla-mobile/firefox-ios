@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Shared
-import Storage
 
 import class MozillaAppServices.FxAccountManager
 import class MozillaAppServices.FxAConfig
