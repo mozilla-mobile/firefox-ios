@@ -1412,6 +1412,7 @@
 		96A5F736298D8EDF00234E5F /* MockSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F734298D8EB900234E5F /* MockSearchEngineProvider.swift */; };
 		96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F73729928B3700234E5F /* GeneralizedImageFetcher.swift */; };
 		96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */; };
+		A7E318350000000000000002 /* AccessoryViewProviderAnimationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E318350000000000000001 /* AccessoryViewProviderAnimationTests.swift */; };
 		96C11E9B2864C2DD00840E7C /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C11E9A2864C2DD00840E7C /* DependencyHelper.swift */; };
 		96D95016270238500079D39D /* MainThreadThrottler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D95015270238500079D39D /* MainThreadThrottler.swift */; };
 		96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */; };
@@ -10170,6 +10171,7 @@
 		96A5F734298D8EB900234E5F /* MockSearchEngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSearchEngineProvider.swift; sourceTree = "<group>"; };
 		96A5F73729928B3700234E5F /* GeneralizedImageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralizedImageFetcher.swift; sourceTree = "<group>"; };
 		96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardInputFieldHelperTests.swift; sourceTree = "<group>"; };
+		A7E318350000000000000001 /* AccessoryViewProviderAnimationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProviderAnimationTests.swift; sourceTree = "<group>"; };
 		96B14F71BAAD012EA8852135 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		96C11E9A2864C2DD00840E7C /* DependencyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 		96D95015270238500079D39D /* MainThreadThrottler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainThreadThrottler.swift; sourceTree = "<group>"; };
@@ -13520,6 +13522,7 @@
 		43B658D729CE249D00C9EF08 /* CreditCard */ = {
 			isa = PBXGroup;
 			children = (
+				A7E318350000000000000001 /* AccessoryViewProviderAnimationTests.swift */,
 				ABEF80D82A2F283D003F52C4 /* CreditCardBottomSheetViewModelTests.swift */,
 				96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */,
 				967EDABE29D769A10089208D /* CreditCardInputFieldTests.swift */,
@@ -20781,6 +20784,7 @@
 				EC0FBD2D3006924A005CCA62 /* FolderTreeCellTests.swift in Sources */,
 				C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
+				A7E318350000000000000002 /* AccessoryViewProviderAnimationTests.swift in Sources */,
 				C296B6E92F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift in Sources */,
 				39BF0CD72EB512CD002064F5 /* ImpressionTrackingUtilityTests.swift in Sources */,
 				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,
