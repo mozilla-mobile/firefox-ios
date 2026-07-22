@@ -56,12 +56,99 @@ public protocol WKEngineConfigurationProvider {
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
-    private static let defaultStore = WKWebsiteDataStore.default()
+    private static var defaultStore = WKWebsiteDataStore.default()
+    /// Identifier of the persistent store currently held in `defaultStore`, when we have
+    /// swapped away from `WKWebsiteDataStore.default()` (e.g. for a VPN session). Used to
+    /// clean up the on-disk footprint via `WKWebsiteDataStore.remove(forIdentifier:)` once
+    /// no webviews retain the previous store.
+    private static var defaultStoreIdentifier: UUID?
+    private static var staleStoreIdentifier: UUID?
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
     private let configuration: WKWebViewConfiguration
 
     public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
         self.configuration = configuration
+    }
+
+    @available(iOS 26.0, *)
+    public static func rebuildStores(
+        applyingProxy configs: [ProxyConfiguration],
+        scope: ProxyScope
+    ) async {
+        switch scope {
+        case .normal:
+            let oldStore = defaultStore
+            let newIdentifier = UUID()
+            let newStore = WKWebsiteDataStore(forIdentifier: newIdentifier)
+            newStore.proxyConfigurations = configs
+            await copyData(from: oldStore, to: newStore)
+            await copyCookies(from: oldStore, to: newStore)
+            staleStoreIdentifier = defaultStoreIdentifier
+            defaultStore = newStore
+            defaultStoreIdentifier = newIdentifier
+        case .private:
+            let oldStore = nonPersistentStore
+            let newStore = WKWebsiteDataStore.nonPersistent()
+            newStore.proxyConfigurations = configs
+            await copyData(from: oldStore, to: newStore)
+            await copyCookies(from: oldStore, to: newStore)
+            nonPersistentStore = newStore
+        }
+    }
+
+    @available(iOS 26.0, *)
+    public static func copyData(from newStore: WKWebsiteDataStore, to oldStore: WKWebsiteDataStore) async {
+        do {
+            let oldData = try await oldStore.fetchData(of: WKWebsiteDataStore.allWebsiteDataTypes())
+            try await newStore.restoreData(oldData)
+        } catch {
+            // log error
+        }
+    }
+
+    /// Assigns `proxyConfigurations` on the active stores without swapping them or copying
+    /// cookies. Use this for token rotation, where the proxy endpoint is unchanged and only
+    /// the auth header differs: WebKit keeps the existing connection pool so in-flight
+    /// requests get their grace period, and future requests are sent with the new header.
+    @available(iOS 17.0, *)
+    public static func applyProxyConfigurations(
+        _ configs: [ProxyConfiguration],
+        scope: ProxyScope
+    ) {
+        switch scope {
+        case .normal:
+            defaultStore.proxyConfigurations = configs
+        case .private:
+            nonPersistentStore.proxyConfigurations = configs
+        }
+    }
+
+    /// Removes the on-disk footprint of persistent stores previously displaced by
+    /// `rebuildStores(applyingProxy:scope:)`. Call only after webviews referencing those
+    /// stores have been discarded — outstanding requests keep the store alive and removal
+    /// will fail.
+    @available(iOS 17.0, *)
+    private static func removeDataStores(forIdentifiers identifier: UUID) async {
+        do {
+            try await WKWebsiteDataStore.remove(forIdentifier: identifier)
+        } catch {
+            // log error
+        }
+    }
+
+    @available(iOS 17.0, *)
+    private static func copyCookies(
+        from oldStore: WKWebsiteDataStore,
+        to newStore: WKWebsiteDataStore
+    ) async {
+        let cookies = await oldStore.httpCookieStore.allCookies()
+        for cookie in cookies {
+            await newStore.httpCookieStore.setCookie(cookie)
+        }
+    }
+
+    public func endPrivateBrowsingSession() {
+        Self.nonPersistentStore = .nonPersistent()
     }
 
     public func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
@@ -92,8 +179,10 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
         return DefaultEngineConfiguration(webViewConfiguration: configuration)
     }
+}
 
-    public func endPrivateBrowsingSession() {
-        Self.nonPersistentStore = .nonPersistent()
-    }
+
+public enum ProxyScope {
+    case `private`
+    case normal
 }
