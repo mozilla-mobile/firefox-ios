@@ -557,6 +557,11 @@ class CodeUsageDetector {
 
     private enum Keywords: CaseIterable {
         static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
+        static let commonOrientationSentence = """
+        Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid interface orientation checks for layout \
+        decisions. In a resizable environment the supported orientation is only a preference and may be ignored \
+        (e.g. iPhone Mirroring on Mac always reports portrait). Use size classes or trait-based layout instead.
+        """
 
         case print
         case nsLog
@@ -570,6 +575,10 @@ class CodeUsageDetector {
         case userInterfaceIdiom
         case screenBounds
         case screenScale
+        case deviceOrientation
+        case isPortrait
+        case isLandscape
+        case interfaceOrientation
 
         var bundledHeader: String {
             switch self {
@@ -612,6 +621,26 @@ class CodeUsageDetector {
                 Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid using `UIScreen.main.scale`. \
                 Use the trait collection's `displayScale` instead.
                 """
+            case .deviceOrientation:
+                return """
+                ### ⚠️ `UIDevice.current.orientation` usage detected
+                \(Keywords.commonOrientationSentence)
+                """
+            case .isPortrait:
+                return """
+                ### ⚠️ `.isPortrait` usage detected
+                \(Keywords.commonOrientationSentence)
+                """
+            case .isLandscape:
+                return """
+                ### ⚠️ `.isLandscape` usage detected
+                \(Keywords.commonOrientationSentence)
+                """
+            case .interfaceOrientation:
+                return """
+                ### ⚠️ `interfaceOrientation` usage detected
+                \(Keywords.commonOrientationSentence)
+                """
             }
         }
 
@@ -641,6 +670,14 @@ class CodeUsageDetector {
                 return "UIScreen.main.bounds"
             case .screenScale:
                 return "UIScreen.main.scale"
+            case .deviceOrientation:
+                return "UIDevice.current.orientation"
+            case .isPortrait:
+                return ".isPortrait"
+            case .isLandscape:
+                return ".isLandscape"
+            case .interfaceOrientation:
+                return "interfaceOrientation"
             }
         }
 
@@ -666,7 +703,8 @@ class CodeUsageDetector {
         // Decide if we want to `warn` instead of `fail` on the pull request.
         var shouldWarn: Bool {
             switch self {
-            case .deferred, .notifiable, .userInterfaceIdiom, .screenBounds, .screenScale:
+            case .deferred, .notifiable, .userInterfaceIdiom, .screenBounds, .screenScale,
+                 .deviceOrientation, .isPortrait, .isLandscape, .interfaceOrientation:
                 return true
             default:
                 return false
