@@ -8,7 +8,7 @@ import MozillaAppServices
 import Shared
 
 // FIXME: FXIOS-14160 Make EditFolderViewModel actually Sendable
-class GroupedFolderViewModel: @unchecked Sendable {
+class GroupedEditFolderViewModel: @unchecked Sendable {
     private static let mobileExpandedByDefault = true
     private static let desktopExpandedByDefault = false
 
