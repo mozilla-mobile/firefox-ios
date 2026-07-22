@@ -35,9 +35,9 @@ tracker_blocker:
         description: |
           The digit-count boundary that was crossed, from 4 to 8.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16037
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15941
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/00000
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34765
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
