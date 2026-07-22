@@ -377,6 +377,14 @@ func checkBigPullRequest() {
         Smaller PRs are easier to review. Thanks for making life easy for reviewers! ✨
         """)
     }
+
+    if additionsAndDeletions > bigPRThreshold {
+        markdown("""
+        ### 👀 **Tech lead review**
+        Because this PR is large, the `@mozilla-mobile/firefox-ios-tech-leads` team \
+        will be auto-assigned as reviewer by GitHub Actions.
+        """)
+    }
 }
 
 // Detect and tag specific people whenever specific files are modified
