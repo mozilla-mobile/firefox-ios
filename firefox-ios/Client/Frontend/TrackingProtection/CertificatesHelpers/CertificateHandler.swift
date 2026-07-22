@@ -22,7 +22,7 @@ struct DefaultCertificateDecoder: CertificateDecoding {
     }
 }
 
-class CertificatesHandler {
+final class CertificatesHandler {
     private let serverTrust: SecTrust
     private let decoder: CertificateDecoding
     private let logger: Logger
@@ -63,30 +63,45 @@ class CertificatesHandler {
     }
 }
 
-/// Define a function to get the certificates for a given URL.
-/// - Parameters:
-///   - url: URL to fetch the server trust from.
-///   - configuration: `URLSessionConfiguration` used to build the session. Tests can supply a
-///     configuration wired to a `URLProtocol` stub to avoid real network calls.
-///   - completion: Called with the parsed certificate chain, or `nil` on error.
-func getCertificates(for url: URL,
-                     configuration: URLSessionConfiguration = .ephemeral,
-                     completion: @escaping @Sendable ([Certificate]?) -> Void) {
-    let session = URLSession(configuration: configuration,
-                             delegate: CertificateDelegate(completion: completion),
-                             delegateQueue: nil)
+/// Fetches the certificate chain served by a URL by driving a `URLSession` and capturing the
+/// server trust from the authentication challenge.
+final class CertificatesFetcher {
+    private let configuration: URLSessionConfiguration
+    private let logger: Logger
 
-    // Start a data task to trigger the certificate retrieval
-    let task = session.dataTask(with: url) { _, _, error in
-        if let error = error {
-            DefaultLogger.shared.log("\(error)",
-                                     level: .warning,
-                                     category: .certificate)
-            completion(nil)
-        }
+    /// - Parameters:
+    ///   - configuration: `URLSessionConfiguration` used to build the session. Tests can supply a
+    ///     configuration wired to a `URLProtocol` stub to avoid real network calls.
+    ///   - logger: Logger used to record data-task failures. Defaults to `DefaultLogger.shared`.
+    init(configuration: URLSessionConfiguration = .ephemeral,
+         logger: Logger = DefaultLogger.shared) {
+        self.configuration = configuration
+        self.logger = logger
     }
 
-    task.resume()
+    /// Fetches the certificates for the given URL.
+    /// - Parameters:
+    ///   - url: URL to fetch the server trust from.
+    ///   - completion: Called with the parsed certificate chain, or `nil` on error.
+    func getCertificates(for url: URL,
+                         completion: @escaping @Sendable ([Certificate]?) -> Void) {
+        let logger = self.logger
+        let session = URLSession(configuration: configuration,
+                                 delegate: CertificateDelegate(completion: completion),
+                                 delegateQueue: nil)
+
+        // Start a data task to trigger the certificate retrieval
+        let task = session.dataTask(with: url) { _, _, error in
+            if let error = error {
+                logger.log("\(error)",
+                           level: .warning,
+                           category: .certificate)
+                completion(nil)
+            }
+        }
+
+        task.resume()
+    }
 }
 
 // Custom delegate to handle the authentication challenge
