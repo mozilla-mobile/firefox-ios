@@ -344,6 +344,9 @@ class CodeCoverageGate {
 // swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
+    // Skip size commentary and tech lead heads-up for bot-authored PRs.
+    if danger.github.pullRequest.user.login.hasSuffix("[bot]") { return }
+
     let mediumPRThreshold = 400
     let bigPRThreshold = 800
     let monsterPRThreshold = 2000
@@ -375,6 +378,14 @@ func checkBigPullRequest() {
         markdown("""
         ### 🥇 **Perfect PR size**
         Smaller PRs are easier to review. Thanks for making life easy for reviewers! ✨
+        """)
+    }
+
+    if additionsAndDeletions > bigPRThreshold {
+        markdown("""
+        ### 👀 **Tech lead review**
+        Because this PR is large, the `@mozilla-mobile/firefox-ios-tech-leads` team \
+        will be auto-assigned as reviewer by GitHub Actions.
         """)
     }
 }
