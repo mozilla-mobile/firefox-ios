@@ -344,6 +344,9 @@ class CodeCoverageGate {
 // swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
+    // Skip size commentary and tech lead heads-up for bot-authored PRs.
+    if danger.github.pullRequest.user.login.hasSuffix("[bot]") { return }
+
     let mediumPRThreshold = 400
     let bigPRThreshold = 800
     let monsterPRThreshold = 2000

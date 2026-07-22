@@ -8,9 +8,10 @@ permissions: {}
 
 jobs:
   assign-tech-lead:
-    # Skip drafts, and when triggered by `labeled`, only act on our specific label.
+    # Skip drafts and bot-authored PRs, and when triggered by `labeled`, only act on our specific label.
     if: >-
       github.event.pull_request.draft == false &&
+      github.event.pull_request.user.type != 'Bot' &&
       (github.event.action != 'labeled' || github.event.label.name == 'needs-tech-lead-review')
     runs-on: ubuntu-latest
     concurrency:
