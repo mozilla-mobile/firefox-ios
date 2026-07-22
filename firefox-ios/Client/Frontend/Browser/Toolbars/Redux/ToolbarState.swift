@@ -167,7 +167,8 @@ struct ToolbarState: ScreenState, Sendable {
             TranslationsActionType.receivedTranslationLanguage,
             TranslationsActionType.didReceiveErrorTranslating,
             TranslationsActionType.didTranslationSettingsChange,
-            ToolbarActionType.didSummarizeSettingsChange:
+            ToolbarActionType.didSummarizeSettingsChange,
+            GeneralBrowserActionType.showToast:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -244,7 +245,9 @@ struct ToolbarState: ScreenState, Sendable {
         // ToolbarAction-only field falls back to state when the action is not a `ToolbarAction`.
         let toolbarAction = action as? ToolbarAction
         let translationsAction = action as? TranslationsAction
+        let generalBrowserAction = action as? GeneralBrowserAction
         let actionIsTranslationsEnabled = toolbarAction?.isTranslationsEnabled ?? translationsAction?.isTranslationsEnabled
+        let shouldExpandToolbar = generalBrowserAction?.toastType == .shakeToSummarizeNotAvailable
 
         return ToolbarState(
             windowUUID: state.windowUUID,
@@ -259,7 +262,8 @@ struct ToolbarState: ScreenState, Sendable {
             canGoBack: toolbarAction?.canGoBack ?? state.canGoBack,
             canGoForward: toolbarAction?.canGoForward ?? state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            scrollAlpha: toolbarAction?.scrollAlpha ?? state.scrollAlpha,
+            scrollAlpha: shouldExpandToolbar ? 1 :
+                toolbarAction?.scrollAlpha ?? state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: toolbarAction?.shouldAnimate ?? state.shouldAnimate,

@@ -44,7 +44,7 @@ final class LegacyTabScrollController: NSObject,
 
     protocol Delegate: AnyObject {
         @MainActor
-        func toolbarDisplayStateDidChange(isCollapsed: Bool)
+        func toolbarDisplayStateDidChange()
     }
 
     enum ScrollDirection {
@@ -375,7 +375,7 @@ final class LegacyTabScrollController: NSObject,
             overKeyboardOffset: 0,
             alpha: 1,
             completion: nil)
-        delegate?.toolbarDisplayStateDidChange(isCollapsed: false)
+        delegate?.toolbarDisplayStateDidChange()
     }
 
     func hideToolbars(animated: Bool) {
@@ -392,7 +392,7 @@ final class LegacyTabScrollController: NSObject,
             overKeyboardOffset: overKeyboardScrollHeight,
             alpha: 0,
             completion: nil)
-        delegate?.toolbarDisplayStateDidChange(isCollapsed: true)
+        delegate?.toolbarDisplayStateDidChange()
     }
 
     // MARK: - ScrollView observation

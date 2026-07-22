@@ -625,13 +625,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Translucency and blur helpers
 
-    /// Updates the toolbar blur/glass views based on whether the address bar is minimized.
-    /// - Parameters:
-    ///   - scrollOffset: Optional scroll offset used to fade the top blur on the homepage.
-    ///   - isMinimized: The intended minimized state. When provided it is used directly, which avoids
-    ///     reading a not-yet-committed `scrollAlpha` from the Redux store during a re-entrant dispatch
-    ///     (e.g. showing the toolbar while presenting a toast). When `nil` the store value is used.
-    func updateBlurViews(scrollOffset: CGFloat? = nil, isMinimized: Bool? = nil) {
+    func updateBlurViews(scrollOffset: CGFloat? = nil) {
         guard toolbarHelper.shouldBlur() else {
             topBlurView.alpha = 0
             bottomBlurView.isHidden = true
@@ -645,11 +639,11 @@ class BrowserViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
-        let isToolbarCollapsed = isMinimized ?? (store.state.componentState(
+        let isToolbarCollapsed = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
-        )?.isAddressBarMinimized == true)
+        )?.isAddressBarMinimized == true
         let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
@@ -708,8 +702,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func toolbarDisplayStateDidChange(isCollapsed: Bool) {
-        updateToolbarTranslucency(isMinimized: isCollapsed)
+    func toolbarDisplayStateDidChange() {
+        updateToolbarTranslucency()
     }
 
     /// Updates the toolbar's translucency effects.
@@ -717,8 +711,8 @@ class BrowserViewController: UIViewController,
     /// This method applies blur effects to the top and bottom toolbars and updates the content
     /// container's mask view to ensure proper visual effects during toolbar animations and state
     /// transitions. Only executes when the toolbar translucency refactor feature flag is enabled.
-    func updateToolbarTranslucency(isMinimized: Bool? = nil) {
-        updateBlurViews(isMinimized: isMinimized)
+    func updateToolbarTranslucency() {
+        updateBlurViews()
         addOrUpdateMaskViewIfNeeded()
     }
 
