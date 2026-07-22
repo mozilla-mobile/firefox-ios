@@ -405,6 +405,35 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertEqual(subject.tabs.count, 0)
     }
 
+    @MainActor
+    func testCleanupWebViewsForProxyChange_offloadsBackgroundWebViews() async {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        let tab2 = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab1)
+        XCTAssertNotNil(tab1.webView)
+        XCTAssertNotNil(tab2.webView)
+
+        await subject.cleanupWebViewsForProxyChange()
+
+        XCTAssertNotNil(tab1.webView)
+        XCTAssertNil(tab2.webView)
+    }
+
+    @MainActor
+    func testCleanupWebViewsForProxyChange_ifThereIsASelectedTab_closesAndReopensTab() async {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab1)
+
+        let webViewHash = tab1.webView.hashValue
+
+        await subject.cleanupWebViewsForProxyChange()
+
+        XCTAssertNotEqual(tab1.webView.hashValue, webViewHash)
+    }
+
     // MARK: - selectTab neighbour screenshot preloading (ADR 0008)
 
     @MainActor
