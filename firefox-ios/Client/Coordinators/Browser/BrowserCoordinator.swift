@@ -105,8 +105,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func start(with launchType: LaunchType?) {
         router.setRootViewController(browserViewController, hideBar: true, animated: false)
-        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
-        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
+        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
             startLaunch(with: launchType)
         } else {
             // Defer ToU presentation to next run loop after deep link processing
