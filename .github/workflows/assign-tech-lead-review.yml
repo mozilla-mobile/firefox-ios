@@ -46,12 +46,15 @@ jobs:
           fi
 
           # Request review from the tech lead team. Fails the workflow if unsuccessful after retries.
+          body_file=$(mktemp)
+          trap 'rm -f "$body_file"' EXIT
+          printf '{"team_reviewers":["%s"]}' "$TEAM_SLUG" > "$body_file"
           retry gh api \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2026-03-10" \
             "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
-            -f "team_reviewers[]=$TEAM_SLUG"
+            --input "$body_file"
 
           # Add label. Fails the workflow if the label does not exist or cannot be added.
           retry gh pr edit "$NUMBER" -R "$GH_REPO" --add-label "$LABEL_NAME"
