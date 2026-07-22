@@ -26,7 +26,6 @@ final class CertificatesHandlerTests: XCTestCase {
         XCTAssertEqual(result.count, 1)
     }
 
-    /// Generates a minimal, self-signed certificate at test runtime,
     static func makeSelfSignedSecCertificate() throws -> SecCertificate {
         let privateKey = P256.Signing.PrivateKey()
         let subjectName = try DistinguishedName { CommonName("Test Certificate") }
