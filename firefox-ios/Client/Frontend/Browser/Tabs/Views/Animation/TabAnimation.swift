@@ -22,7 +22,7 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 
         static let dimmedWhiteValue = 0.0
 
-        static let presentDuration: TimeInterval = 3
+        static let presentDuration: TimeInterval = 0.2
         static let dismissDuration: TimeInterval = 0.2
         static let bvcScreenshotQuality: CGFloat = 1.0
 
