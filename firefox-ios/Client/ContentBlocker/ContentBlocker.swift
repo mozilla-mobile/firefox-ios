@@ -398,6 +398,7 @@ extension ContentBlocker {
         let totalListCount = blocklists.count
         nonisolated(unsafe) var listsCompiledCount = 0
         nonisolated(unsafe) var errorCount = 0
+        // swiftlint:disable:next closure_body_length
         blocklists.forEach { filename in
             dispatchGroup.enter()
             ruleStore?.lookUpContentRuleList(forIdentifier: filename) { [weak self] contentRuleList, error in
@@ -406,11 +407,13 @@ extension ContentBlocker {
                     dispatchGroup.leave()
                     return
                 }
-
+                // swiftlint:disable:next closure_body_length
                 self?.logger.log("Will compile list: \(filename)", level: .info, category: .adblock)
                 self?.loadJsonFromBundle(forResource: filename) { jsonString in
                     ensureMainThread {
-                        var str = jsonString
+                        // Ensure JSON is lowercase only. WebKit rules expect lowercase
+                        // domains (and no other part of the JSON should be uppercase).
+                        var str = jsonString.lowercased()
 
                         // Here we find the closing array bracket in the JSON string
                         // and append our safelist as a rule to the end of the JSON.
