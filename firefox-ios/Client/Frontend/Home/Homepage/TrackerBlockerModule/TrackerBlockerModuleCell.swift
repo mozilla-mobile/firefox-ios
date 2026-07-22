@@ -103,7 +103,8 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         }
 
         let numberText = count.formatted(.number.notation(.compactName))
-        let fullText = String(format: .FirefoxHomepage.TrackerBlocker.TrackersBlocked, numberText)
+        // TODO: FXIOS-16382 - use correct string post v155
+        let fullText = String(format: .FirefoxHomepage.TrackerBlocker.TrackersBlockedTemp, numberText)
         titleLabel.attributedText = fullText.attributedText(
             boldString: numberText,
             font: titleLabel.font

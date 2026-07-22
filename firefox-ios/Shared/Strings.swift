@@ -1463,8 +1463,13 @@ extension String {
         }
 
         public struct TrackerBlocker {
+            public static let TrackersBlockedTemp = MZLocalizedString(
+                key: "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b",
+                tableName: "FirefoxHomepage",
+                value: "Trackers Blocked: %@",
+                comment: "The numbers of trackers we've blocked since we started tracking. The %@ placeholder is the actual number of trackers blocked.")
             public static let TrackersBlocked = MZLocalizedString(
-                key: "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v154",
+                key: "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v155",
                 tableName: "FirefoxHomepage",
                 value: "Trackers Blocked: %@",
                 comment: "The numbers of trackers we've blocked since we started tracking. The %@ placeholder is the actual number of trackers blocked.")
