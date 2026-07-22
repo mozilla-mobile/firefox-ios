@@ -25,6 +25,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         icon.adjustsImageSizeForAccessibilityContentSizeCategory = true
         icon.image = UIImage(named: StandardImageIdentifiers.Large.shieldCheckmark)?
             .withRenderingMode(.alwaysTemplate)
+        icon.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.shieldIcon
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -32,6 +33,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.text = .Menu.EnhancedTrackingProtection.trackersBlockedLabel
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.titleLabel
     }
 
     // MARK: - Init
