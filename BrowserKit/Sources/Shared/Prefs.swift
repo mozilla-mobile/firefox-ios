@@ -17,6 +17,9 @@ public struct PrefsKeys {
     public static let TrackerBlockStatsCurrentWeek = "trackerBlockStatsCurrentWeek"
     public static let TrackerBlockStatsLifetime = "trackerBlockStatsLifetime"
     public static let TrackerBlockStatsStartDate = "trackerBlockStatsStartDate"
+    // Highest figure-count boundary already reported to telemetry for the lifetime
+    // blocked-tracker total. Reset alongside the stats above.
+    public static let TrackerBlockStatsReportedFigures = "trackerBlockStatsReportedFigures"
 
     // Global sync state for rust sync manager
     public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"

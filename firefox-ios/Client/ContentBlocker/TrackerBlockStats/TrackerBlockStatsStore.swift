@@ -17,6 +17,12 @@ protocol TrackerBlockStatsStore {
     func currentWeekByCategory(for date: Date) -> [BlocklistCategory: Int]
     func trackingStartDate() -> Date?
     func reset()
+
+    /// The highest figure-count boundary (number of digits in the lifetime total)
+    /// already reported to telemetry. Persisted so each boundary is reported at
+    /// most once over the app's lifetime; cleared by `reset()`.
+    func highestReportedFigures() -> Int
+    func setHighestReportedFigures(_ figures: Int)
 }
 
 /// Prefs-backed store that keeps the in-progress week separate from a lifetime
@@ -32,19 +38,22 @@ final class DefaultTrackerBlockStatsStoreUtility: TrackerBlockStatsStore {
     private let currentWeekKey: String
     private let lifetimeKey: String
     private let startDateKey: String
+    private let reportedFiguresKey: String
 
     init(
         prefs: Prefs,
         calendar: Calendar = Calendar(identifier: .iso8601),
         currentWeekKey: String = PrefsKeys.TrackerBlockStatsCurrentWeek,
         lifetimeKey: String = PrefsKeys.TrackerBlockStatsLifetime,
-        startDateKey: String = PrefsKeys.TrackerBlockStatsStartDate
+        startDateKey: String = PrefsKeys.TrackerBlockStatsStartDate,
+        reportedFiguresKey: String = PrefsKeys.TrackerBlockStatsReportedFigures
     ) {
         self.prefs = prefs
         self.calendar = calendar
         self.currentWeekKey = currentWeekKey
         self.lifetimeKey = lifetimeKey
         self.startDateKey = startDateKey
+        self.reportedFiguresKey = reportedFiguresKey
     }
 
     // MARK: - TrackerBlockStatsStore
@@ -98,6 +107,15 @@ final class DefaultTrackerBlockStatsStoreUtility: TrackerBlockStatsStore {
         prefs.removeObjectForKey(currentWeekKey)
         prefs.removeObjectForKey(lifetimeKey)
         prefs.removeObjectForKey(startDateKey)
+        prefs.removeObjectForKey(reportedFiguresKey)
+    }
+
+    func highestReportedFigures() -> Int {
+        return Int(prefs.intForKey(reportedFiguresKey) ?? 0)
+    }
+
+    func setHighestReportedFigures(_ figures: Int) {
+        prefs.setInt(Int32(figures), forKey: reportedFiguresKey)
     }
 
     // MARK: - Helpers

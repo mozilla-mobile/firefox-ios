@@ -203,6 +203,27 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
         XCTAssertNil(subject.trackingStartDate())
     }
 
+    // MARK: - Reported-figures high-water mark
+
+    func testHighestReportedFigures_defaultsToZeroAndPersists() {
+        let subject = createSubject()
+        XCTAssertEqual(subject.highestReportedFigures(), 0)
+
+        subject.setHighestReportedFigures(6)
+
+        // A brand-new store backed by the same prefs must read the same value.
+        XCTAssertEqual(createSubject().highestReportedFigures(), 6)
+    }
+
+    func testReset_clearsHighestReportedFigures() {
+        let subject = createSubject()
+        subject.setHighestReportedFigures(7)
+
+        subject.reset()
+
+        XCTAssertEqual(subject.highestReportedFigures(), 0)
+    }
+
     // MARK: - Persistence
 
     func testRecordedStats_persistAcrossStoreInstances() {

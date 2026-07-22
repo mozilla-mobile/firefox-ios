@@ -1,0 +1,46 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - TrackerBlocker
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Homepage Tracker Blocker module
+tracker_blocker:
+  lifetime_threshold_reached:
+    type: event
+    description: |
+      Records when the lifetime blocked-tracker total shown in the homepage
+      tracker blocker module first crosses a digit-count boundary (4 through 8
+      figures, i.e. 1,000 / 10,000 / 100,000 / 1,000,000 / 10,000,000). Each
+      boundary is reported at most once over the app's lifetime.
+    extra_keys:
+      figures:
+        type: quantity
+        description: |
+          The digit-count boundary that was crossed, from 4 to 8.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16037
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/00000
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    metadata:
+      tags:
+        - TrackerBlocker
