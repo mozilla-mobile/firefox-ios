@@ -7,7 +7,7 @@ import Common
 import Redux
 
 @MainActor
-class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
+class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber {
     private struct UX {
         static let closeTabAnimationsDuration: CGFloat = 0.3
         static let dismissPreviewDelay: CGFloat = 0.4
@@ -34,6 +34,10 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         tabPreview.scaledPreviewCardCornerRadius
     }
 
+    var isTabPreviewActive: Bool {
+        tabPreview.isPreviewActive
+    }
+
     // MARK: - Inits
     init(tabPreview: SwipeUpTabWebViewPreview,
          bottomBlurView: UIView,
@@ -52,6 +56,7 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         self.windowUUID = windowUUID
         self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
         super.init()
+        subscribeToRedux()
     }
 
     deinit {
@@ -63,6 +68,29 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
                              """)
             return
         }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
+    }
+
+    // MARK: - Redux
+    func subscribeToRedux() {
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return ToolbarState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    private func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: ToolbarState) {
+        toolbarState = state
+        setGestureHandlers(toolbarState: state)
     }
 
     // MARK: - Public functions
@@ -100,6 +128,20 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
     }
 
     // MARK: - Private functions
+    /// While true, redux state updates won't re-enable the pan gesture.
+    /// Used to hold it disabled for the full duration of the close-tab animation.
+    private var isPanGestureLockedForAnimation = false
+
+    private func disablePanGestureRecognizerForAnimation() {
+        isPanGestureLockedForAnimation = true
+        panGesture?.isEnabled = false
+    }
+
+    private func enablePanGestureRecognizerForAnimation() {
+        isPanGestureLockedForAnimation = false
+        panGesture?.isEnabled = true
+    }
+
     private func setGestureHandlers(toolbarState: ToolbarState) {
         // While the address bar is in editing mode (for example, when the user is
         // typing on the homepage with a keyboard), the gestures should be disabled.
@@ -114,11 +156,10 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         // There is no collision between panGesture and the swipe gesture handlers below,
         // if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled is true, then by definition
         // swipeGestureFeatureFlagProvider.isSwipeGestureEnabled must be false, so the code in the if statement wouldn't run
-        let panEnabled = (toolbarState.toolbarPosition == .bottom &&
-                          swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled)
-        panGesture?.isEnabled = panEnabled
-
         let isBottom = toolbarState.toolbarPosition == .bottom
+        let panEnabled = (isBottom && swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled)
+        panGesture?.isEnabled = panEnabled && !isPanGestureLockedForAnimation
+
         if swipeGestureFeatureFlagProvider.isSwipeGestureEnabled {
             swipeUpGesture?.isEnabled = isBottom
             swipeDownGesture?.isEnabled = !isBottom
@@ -169,6 +210,9 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
         let fingerLocation = gesture.location(in: tabPreview)
         switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
         case .closeTab:
+            // Lock the pan gesture until the close animation finishes so a new gesture can't
+            // start mid-animation.
+            disablePanGestureRecognizerForAnimation()
             UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
                 tabPreview.tossPreview()
             } completion: { [weak self, windowUUID] _ in
@@ -184,10 +228,13 @@ class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate {
                     self?.tabPreview.alpha = 0.0
                     self?.tabPreview.layer.zPosition = 0
                 } completion: { [weak self] _ in
-                    self?.tabPreview.restore()
+                    self?.tabPreview.restore(completion: { [weak self] in
+                        self?.enablePanGestureRecognizerForAnimation()
+                    })
                 }
             }
         case .openTabTray:
+            // This delay keeps the tabPreview on screen long enough for the tab tray to appear before disappearing
             DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) {
                 self.tabPreview.dismissForTabTray()
             }

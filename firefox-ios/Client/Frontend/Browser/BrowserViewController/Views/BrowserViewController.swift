@@ -102,7 +102,6 @@ class BrowserViewController: UIViewController,
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var searchController: SearchViewController?
-
     /// Bottom constraint of `searchController.view`. The anchor it targets depends on the search bar
     /// position (`overKeyboardContainer.top` for bottom bar, `view.bottom` for top bar)
     private var searchControllerBottomConstraint: NSLayoutConstraint?
@@ -113,7 +112,6 @@ class BrowserViewController: UIViewController,
     var tabSwipeGestureHandler: TabSwipeGestureHandler?
     var microsurvey: MicrosurveyPromptView?
     var autoTranslatePrompt: AutoTranslatePromptView?
-
     // TODO: FXIOS-14347 Remove this property as part of cleaning up the toolbar performance
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
@@ -371,6 +369,10 @@ class BrowserViewController: UIViewController,
 
     var tabTrayAnimationCornerRadius: CGFloat {
         swipeUpTabWebViewPreviewGestureHandler.tabAnimationSourceCornerRadius
+    }
+
+    var isSwipeUpTabPreviewActive: Bool {
+        swipeUpTabWebViewPreviewGestureHandler.isTabPreviewActive
     }
 
     private var isHomepagePinnedHeaderEnabled: Bool {

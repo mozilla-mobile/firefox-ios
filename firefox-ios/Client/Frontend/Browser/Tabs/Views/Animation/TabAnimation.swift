@@ -153,7 +153,9 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
-        if SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled {
+        // if browserVC.isSwipeUpTabPreviewActive is true then the tab tray
+        // was opened via the interactive gesture
+        if SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled && browserVC.isSwipeUpTabPreviewActive {
             runInteractivePresentationAnimation(
                 context: context,
                 browserVC: browserVC,
@@ -224,7 +226,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         collectionView: UICollectionView,
         selectedTab: Tab,
         tabDisplayView: TabDisplayView?, // needed for interactive path only
-        prepareCell: Bool
+        isInteractive: Bool
     ) {
         guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
               let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
@@ -246,7 +248,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             if let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell {
                 cellFrame = cell.convert(cell.backgroundHolder.bounds, to: nil)
                 cell.isHidden = true
-                if prepareCell {
+                if !isInteractive {
                     tabCell = cell
                     cell.setUnselectedState(theme: theme)
                     cell.alpha = UX.clearAlpha
@@ -265,7 +267,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             context: context,
             selectedTab: selectedTab,
             theme: theme,
-            tabDisplayView: tabDisplayView
+            tabDisplayView: tabDisplayView,
+            isInteractive: isInteractive
         )
     }
 
@@ -278,7 +281,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         context: UIViewControllerContextTransitioning,
         selectedTab: Tab,
         theme: Theme,
-        tabDisplayView: TabDisplayView?
+        tabDisplayView: TabDisplayView?,
+        isInteractive: Bool
     ) {
         let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
             if let cellFrame {
@@ -292,7 +296,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             backgroundView.alpha = UX.clearAlpha
         }
 
-        if SwipeGestureFeatureFlagProvider().isInteractiveGestureEnabled {
+        if isInteractive {
             animator.addCompletion { _ in
                 let settledImage = bvcSnapshot.image
                 backgroundView.removeFromSuperview()
@@ -335,11 +339,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         selectedTab: Tab,
         settledImage: UIImage?,
         theme: Theme
-        ) {
+    ) {
         guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
-                let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource),
-                let indexPath = dataSource.indexPath(for: item),
-                let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
+              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource),
+              let indexPath = dataSource.indexPath(for: item),
+              let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
         else { return }
         cell.syncScreenshotForAnimation(settledImage)
         cell.isHidden = false
@@ -382,7 +386,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             collectionView: tabDisplayView.collectionView,
             selectedTab: selectedTab,
             tabDisplayView: tabDisplayView,
-            prepareCell: false
+            isInteractive: true
         )
     }
 
@@ -418,7 +422,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 collectionView: panelViewController.tabDisplayView.collectionView,
                 selectedTab: selectedTab,
                 tabDisplayView: nil,
-                prepareCell: true
+                isInteractive: false
             )
         }
     }
