@@ -5,9 +5,6 @@
 /// NOTE: It would much cleaner to use RemoteSettingsServer if it had a public initializer.
 /// TODO(FXIOS-13189): Add public initializer from rawValue to RemoteSettingsServer.
 public enum RemoteSettingsEnvironment: String {
-    case prodV2
-    case stageV2
-    case devV2
     case prod
     case stage
     case dev
