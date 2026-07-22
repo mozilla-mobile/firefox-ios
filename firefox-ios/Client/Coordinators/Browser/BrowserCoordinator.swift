@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Glean
 import PhotosUI
 import SwiftUI
 import UIKit
@@ -62,9 +63,6 @@ final class BrowserCoordinator: BaseCoordinator,
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let worldCupStore: WorldCupStoreProtocol
     private let googleLensService: GoogleLensServicing
-    private var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
-    }
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -91,7 +89,9 @@ final class BrowserCoordinator: BaseCoordinator,
         self.windowManager = windowManager
         self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
         self.homepageTabStateStore = homepageTabStateStore
-        self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        self.browserViewController = BrowserViewController(profile: profile,
+                                                           tabManager: tabManager,
+                                                           gleanWrapper: glean)
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.worldCupStore = worldCupStore
@@ -300,7 +300,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        guard checkBrowserIsReady() else { return false }
+        guard hasBrowserLoaded else { return false }
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
@@ -311,7 +311,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        guard checkBrowserIsReady() else { return }
+        guard hasBrowserLoaded else { return }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
@@ -357,20 +357,16 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    /// Depending if we're using the deeplink refactor path or not, there's different checks to ensure we're properly
-    /// setup before we handle routes / deeplinks. `browserIsReady` can maybe be removed at a later point after the deeplink
-    /// refactor is shipped, but this will be a subsequent initiative just in case.
-    private func checkBrowserIsReady() -> Bool {
-        let isReady = isDeeplinkOptimizationRefactorEnabled
-        ? browserIsReady
-        : browserIsReady && !tabManager.isRestoringTabs
+    /// Ensures we're properly setup before we handle routes / deeplinks.
+    private var hasBrowserLoaded: Bool {
+        // The restoring tabs check is necessary for FXIOS-13351.
+        let isReady = browserIsReady && !tabManager.isRestoringTabs
 
         guard isReady else {
             logger.log(
             """
             Not handling route. Browser ready: \(browserIsReady), \
-            restoring tabs: \(tabManager.isRestoringTabs) \
-            with refactor \(isDeeplinkOptimizationRefactorEnabled)
+            restoring tabs: \(tabManager.isRestoringTabs)
             """,
             level: .info,
             category: .coordinator
@@ -1153,7 +1149,8 @@ final class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is PhotoPickerCoordinator }) else { return }
         let coordinator = PhotoPickerCoordinator(
             parentCoordinatorDelegate: self,
-            router: router
+            router: router,
+            photoPickerReason: .googleLens
         ) { [weak self] results in
             self?.handleGoogleLensPhotoPick(results)
         }
@@ -1168,7 +1165,8 @@ final class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is CameraCoordinator }) else { return }
         let coordinator = CameraCoordinator(
             parentCoordinatorDelegate: self,
-            router: router
+            router: router,
+            cameraReason: .googleLens
         ) { [weak self] image in
             guard let image else { return }
             self?.searchGoogleLens(with: image, source: .camera)
@@ -1180,8 +1178,12 @@ final class BrowserCoordinator: BaseCoordinator,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
     }
 
-    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source) {
+    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source, searchTimerId: GleanTimerId? = nil) {
+        let googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: glean)
         guard let tab = tabManager.selectedTab else {
+            if let searchTimerId {
+                googleLensTelemetry.cancelSearchTimer(source: source, timerId: searchTimerId)
+            }
             logger.log("Google Lens: no selected tab to load the upload request",
                        level: .warning,
                        category: .coordinator)
@@ -1192,12 +1194,17 @@ final class BrowserCoordinator: BaseCoordinator,
         guard let request = googleLensService.makeUploadRequest(for: image,
                                                                 viewportSize: viewportSize,
                                                                 entryPoint: entryPoint) else {
+            if let searchTimerId {
+                googleLensTelemetry.cancelSearchTimer(source: source, timerId: searchTimerId)
+            }
             logger.log("Google Lens: failed to build upload request (image could not be processed)",
                        level: .warning,
                        category: .coordinator)
             return
         }
-        browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source)
+        let timerId = searchTimerId ?? googleLensTelemetry.startSearchTimer(source: source)
+        browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source,
+                                                                                      searchTimerId: timerId)
         _ = tab.loadRequest(request)
     }
     private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
@@ -1399,8 +1406,9 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - TabManagerDelegate
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        // Once tab restore is made, if there's any saved route we make sure to call it
-        if let savedRoute {
+        // TabManager clears isRestoringTabs after notifying its delegates.
+        Task { @MainActor [weak self] in
+            guard let self, let savedRoute = self.savedRoute else { return }
             logger.log("Find and handle route called after tabManagerDidRestoreTabs",
                        level: .info,
                        category: .coordinator)

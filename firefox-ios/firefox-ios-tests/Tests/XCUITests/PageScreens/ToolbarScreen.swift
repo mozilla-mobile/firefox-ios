@@ -24,6 +24,7 @@ final class ToolbarScreen {
     private var translateButton: XCUIElement { sel.TRANSLATE_BUTTON.element(in: app) }
     private var translateLoadingButton: XCUIElement { sel.TRANSLATE_LOADING_BUTTON.element(in: app) }
     private var translateActiveButton: XCUIElement { sel.TRANSLATE_ACTIVE_BUTTON.element(in: app) }
+    private var translateLanguageEnglishOption: XCUIElement { sel.TRANSLATE_LANGUAGE_ENGLISH_OPTION.element(in: app) }
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
@@ -185,15 +186,32 @@ final class ToolbarScreen {
         }
     }
 
-    func assertTranslateButtonExists(with mode: TranslationButtonType) {
+    /// Selects English in the translation language picker action sheet when it is shown.
+    /// The picker only appears when the language picker feature is enabled and multiple
+    /// target languages are available, so this is a no-op when the sheet doesn't show.
+    func selectTranslationLanguageIfPresented(timeout: TimeInterval = TIMEOUT) {
+        if translateLanguageEnglishOption.mozWaitForElementToExist(timeout: timeout, failOnTimeout: false) {
+            translateLanguageEnglishOption.waitAndTap()
+        }
+    }
+
+    func assertTranslateButtonExists(with mode: TranslationButtonType, timeout: TimeInterval = TIMEOUT) {
         switch mode {
         case .inactive:
-            BaseTestCase().mozWaitForElementToExist(translateButton)
+            BaseTestCase().mozWaitForElementToExist(translateButton, timeout: timeout)
         case .loading:
-            BaseTestCase().mozWaitForElementToExist(translateLoadingButton)
+            BaseTestCase().mozWaitForElementToExist(translateLoadingButton, timeout: timeout)
         case .active:
-            BaseTestCase().mozWaitForElementToExist(translateActiveButton)
+            BaseTestCase().mozWaitForElementToExist(translateActiveButton, timeout: timeout)
         }
+    }
+
+    /// Gates on the loading spinner disappearing (translation done) before asserting the active
+    /// button, since translation is network-bound and can take much longer than a normal UI wait.
+    func waitForTranslateButtonToBecomeActive() {
+        let base = BaseTestCase()
+        base.mozWaitForElementToNotExist(translateLoadingButton, timeout: TRANSLATION_TIMEOUT)
+        base.mozWaitForElementToExist(translateActiveButton)
     }
 
     func assertTranslateButtonDoesNotExist(with mode: TranslationButtonType) {

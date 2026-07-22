@@ -4,6 +4,11 @@
 
 import AVFoundation
 
+/// Identifies the app flow that prompted showing the system camera interface
+enum CameraReason: String {
+    case googleLens
+}
+
 /// Presents the system camera capture UI and owns its delegate conformance.
 final class CameraCoordinator: BaseCoordinator,
                                UIImagePickerControllerDelegate,
@@ -11,17 +16,23 @@ final class CameraCoordinator: BaseCoordinator,
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let onComplete: (UIImage?) -> Void
     private let isCameraAvailable: Bool
-    private let cameraAuthorizationStatus: AVAuthorizationStatus
+    private let cameraAuthorizationStatus: () -> AVAuthorizationStatus
     private let requestCameraAccess: () async -> Bool
+    private let cameraReason: CameraReason
+    private let cameraTelemetry: SystemCameraTelemetryProtocol
 
     init(
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
         router: Router,
         isCameraAvailable: Bool = UIImagePickerController.isSourceTypeAvailable(.camera),
-        cameraAuthorizationStatus: AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video),
+        cameraAuthorizationStatus: @escaping () -> AVAuthorizationStatus = {
+            AVCaptureDevice.authorizationStatus(for: .video)
+        },
         requestCameraAccess: @escaping () async -> Bool = {
             await AVCaptureDevice.requestAccess(for: .video)
         },
+        cameraReason: CameraReason,
+        cameraTelemetry: SystemCameraTelemetryProtocol = SystemCameraTelemetry(),
         onComplete: @escaping (UIImage?) -> Void
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
@@ -29,6 +40,8 @@ final class CameraCoordinator: BaseCoordinator,
         self.isCameraAvailable = isCameraAvailable
         self.cameraAuthorizationStatus = cameraAuthorizationStatus
         self.requestCameraAccess = requestCameraAccess
+        self.cameraReason = cameraReason
+        self.cameraTelemetry = cameraTelemetry
         super.init(router: router)
     }
 
@@ -45,23 +58,29 @@ final class CameraCoordinator: BaseCoordinator,
             self?.finish(with: nil)
         }
 
-        switch cameraAuthorizationStatus {
+        switch cameraAuthorizationStatus() {
         case .denied, .restricted:
             presentCameraAccessDeniedAlert(over: picker)
         case .notDetermined:
             // If not determined, presenting the interface triggers the system permission prompt.
             // Dismiss the interface if the user refuses access.
-            Task { [weak self] in await self?.dismissCameraInterfaceIfAccessRefused() }
-        default:
+            Task { [weak self] in await self?.handleCameraAccessRequest() }
+        case .authorized:
+            cameraTelemetry.shown(reason: cameraReason)
+        @unknown default:
             break
         }
     }
 
     // MARK: - Camera permission
-    func dismissCameraInterfaceIfAccessRefused() async {
+    func handleCameraAccessRequest() async {
         let granted = await requestCameraAccess()
-        guard !granted else { return }
-        dismissCameraInterface()
+        cameraTelemetry.permissionResponded(reason: cameraReason, granted: granted)
+        if granted {
+            cameraTelemetry.shown(reason: cameraReason)
+        } else {
+            dismissCameraInterface()
+        }
     }
 
     private func presentCameraAccessDeniedAlert(over presenter: UIViewController) {
@@ -79,13 +98,15 @@ final class CameraCoordinator: BaseCoordinator,
         }
     }
 
-    /// Dismisses the camera interface and ends the flow without a captured image.
     func dismissCameraInterface() {
         router.dismiss(animated: true)
         finish(with: nil)
     }
 
-    private func finish(with image: UIImage?) {
+    private func finish(with image: UIImage?, photoSelected: Bool = false) {
+        if isCameraAvailable && cameraAuthorizationStatus() == .authorized {
+            cameraTelemetry.closed(reason: cameraReason, photoSelected: photoSelected)
+        }
         onComplete(image)
         parentCoordinatorDelegate?.didFinish(from: self)
     }
@@ -94,7 +115,7 @@ final class CameraCoordinator: BaseCoordinator,
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         router.dismiss(animated: true)
-        finish(with: info[.originalImage] as? UIImage)
+        finish(with: info[.originalImage] as? UIImage, photoSelected: true)
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

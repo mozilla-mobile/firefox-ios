@@ -167,6 +167,7 @@ final class ContentBlockerTests: XCTestCase {
 }
 
 private final class MockContentBlockerTab: ContentBlockerTab {
+    var isPrivate = false
     func currentURL() -> URL? { return nil }
     func currentWebView() -> WKWebView? { return nil }
     func imageContentBlockingEnabled() -> Bool { return false }
