@@ -29533,10 +29533,6 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"$(FX_XC27_LIBS)",
-				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_developer -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -30467,10 +30463,6 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"$(FX_XC27_LIBS)",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -30494,10 +30486,6 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"$(FX_XC27_LIBS)",
-				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_developer -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -30515,10 +30503,6 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"$(FX_XC27_LIBS)",
-				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_developer -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -30611,10 +30595,6 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"$(FX_XC27_LIBS)",
-				);
 				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_developer -DMOZ_TARGET_CREDENTIAL_PROVIDER";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -32753,10 +32733,6 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"$(FX_XC27_LIBS)",
-				);
 				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_developer -DMOZ_TARGET_CREDENTIAL_PROVIDER";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -33038,10 +33014,6 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"$(FX_XC27_LIBS)",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -33077,10 +33049,6 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"$(FX_XC27_LIBS)",
-				);
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_developer -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

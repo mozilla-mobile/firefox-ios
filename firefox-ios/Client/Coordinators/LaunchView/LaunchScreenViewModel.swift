@@ -58,9 +58,8 @@ class LaunchScreenViewModel {
     }
 
     /// Starts loading and determining which launch screens to display
-    /// - Parameter appVersion: Current app version (defaults to AppInfo.appVersion)
-    func startLoading(appVersion: String = AppInfo.appVersion) {
-        loadLaunchType(appVersion: appVersion)
+    func startLoading() {
+        loadLaunchType()
     }
 
     /// Loads and displays the next launch type in the sequence
@@ -82,7 +81,7 @@ class LaunchScreenViewModel {
 
     /// Determines which launch screens should be displayed based on app state
     /// - Parameter appVersion: Current app version
-    private func loadLaunchType(appVersion: String) {
+    private func loadLaunchType() {
         var order: [LaunchType] = []
 
         if introScreenManager.shouldShowIntroScreen {
