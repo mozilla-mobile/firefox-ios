@@ -344,6 +344,9 @@ class CodeCoverageGate {
 // swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
+    // Skip size commentary and tech lead heads-up for bot-authored PRs.
+    if danger.github.pullRequest.user.login.hasSuffix("[bot]") { return }
+
     let mediumPRThreshold = 400
     let bigPRThreshold = 800
     let monsterPRThreshold = 2000
@@ -375,6 +378,14 @@ func checkBigPullRequest() {
         markdown("""
         ### 🥇 **Perfect PR size**
         Smaller PRs are easier to review. Thanks for making life easy for reviewers! ✨
+        """)
+    }
+
+    if additionsAndDeletions > bigPRThreshold {
+        markdown("""
+        ### 👀 **Tech lead review**
+        Because this PR is large, the `@mozilla-mobile/firefox-ios-tech-leads` team \
+        will be auto-assigned as reviewer by GitHub Actions.
         """)
     }
 }
@@ -573,6 +584,7 @@ class CodeUsageDetector {
         case unsafe
         case cspHeader
         case userInterfaceIdiom
+        case uiScreenMain
         case screenBounds
         case screenScale
         case deviceOrientation
@@ -607,6 +619,13 @@ class CodeUsageDetector {
                 Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid checking `userInterfaceIdiom` for layout \
                 decisions. iPhone apps running on iPad or in iPhone Mirroring on Mac still report the phone idiom. \
                 Prefer size classes or trait-based layout instead.
+                """
+            case .uiScreenMain:
+                return """
+                ### ⚠️ `UIScreen.main` usage detected
+                Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid referencing `UIScreen.main`. Access the \
+                screen dynamically from a window's window scene, or better, remove screen references altogether and \
+                rely on the view's/window's bounds or trait-based layout.
                 """
             case .screenBounds:
                 return """
@@ -666,6 +685,8 @@ class CodeUsageDetector {
                 return "Content-Security-Policy"
             case .userInterfaceIdiom:
                 return "userInterfaceIdiom"
+            case .uiScreenMain:
+                return "UIScreen.main"
             case .screenBounds:
                 return "UIScreen.main.bounds"
             case .screenScale:
@@ -703,7 +724,7 @@ class CodeUsageDetector {
         // Decide if we want to `warn` instead of `fail` on the pull request.
         var shouldWarn: Bool {
             switch self {
-            case .deferred, .notifiable, .userInterfaceIdiom, .screenBounds, .screenScale,
+            case .deferred, .notifiable, .userInterfaceIdiom, .uiScreenMain, .screenBounds, .screenScale,
                  .deviceOrientation, .isPortrait, .isLandscape, .interfaceOrientation:
                 return true
             default:
@@ -716,6 +737,16 @@ class CodeUsageDetector {
             switch self {
             case .cspHeader: return true
             default: return false
+            }
+        }
+
+        // Skip lines already covered by a more specific keyword to avoid double-flagging
+        func isSupersededOnLine(_ line: String) -> Bool {
+            switch self {
+            case .uiScreenMain:
+                return line.contains(Keywords.screenBounds.keyword) || line.contains(Keywords.screenScale.keyword)
+            default:
+                return false
             }
         }
     }
@@ -795,7 +826,9 @@ class CodeUsageDetector {
                 let isRemovedLine = lineStr.starts(with: "-")
                 if isRemovedLine {
                     oldLineCount += 1
-                    if keyword.detectsRemovals && lineStr.contains(keyword.keyword) {
+                    if keyword.detectsRemovals
+                        && lineStr.contains(keyword.keyword)
+                        && !keyword.isSupersededOnLine(lineStr) {
                         let lineNumber = hunk.oldLineStart + oldLineCount - 1
                         detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: true))
                     }
@@ -803,7 +836,9 @@ class CodeUsageDetector {
                     // Context or added line: exists in both old and new file
                     newLineCount += 1
                     oldLineCount += 1
-                    if isAddedLine && lineStr.contains(keyword.keyword) {
+                    if isAddedLine
+                        && lineStr.contains(keyword.keyword)
+                        && !keyword.isSupersededOnLine(lineStr) {
                         let lineNumber = hunk.newLineStart + newLineCount - 1
                         detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: false))
                     }
@@ -820,7 +855,7 @@ class CodeUsageDetector {
     private func collect(keyword: Keywords, inLines lines: [String], file: String) -> [Detection] {
         guard !shouldSkip(keyword, for: file) else { return [] }
         return lines.enumerated().compactMap { index, line in
-            guard line.contains(keyword.keyword) else { return nil }
+            guard line.contains(keyword.keyword), !keyword.isSupersededOnLine(line) else { return nil }
             return Detection(keyword: keyword, file: file, lineNumber: index + 1, isRemoval: false)
         }
     }

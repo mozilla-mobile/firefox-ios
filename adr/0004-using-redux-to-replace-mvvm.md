@@ -57,6 +57,6 @@ We are adopting Redux on the team to utilize the benefits of structuring informa
 
 - [Redux updates presentation](https://docs.google.com/presentation/u/0/d/1kO25b51gv28zQnos9jrSzyMx4vh9Z4yX4H1jCbXMDM4/edit)
 - [Redux guidelines document](https://docs.google.com/document/d/1d6DrWrvGM1EWKMJoQ75O_8Ey81-H43257rSHOY2psIQ/edit?usp=sharing)
-- [Redux wiki page](https://github.com/mozilla-mobile/firefox-ios/wiki/Redux)
-- [How to implement Redux wiki page](https://github.com/mozilla-mobile/firefox-ios/wiki/Redux-%E2%80%90-How-to-Implement)
-- [Redux Guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Redux-Guidelines---FAQs)
+- [Redux Confluence page](https://mozilla-hub.atlassian.net/wiki/spaces/FXIOS/pages/2647621724/Redux)
+- [How to implement Redux Confluence page](https://mozilla-hub.atlassian.net/wiki/spaces/FXIOS/pages/2647556179/Redux+How+to+Implement)
+- [Redux Guidelines](https://mozilla-hub.atlassian.net/wiki/spaces/FXIOS/pages/2647392306/Redux+Guidelines+FAQs)

@@ -17,6 +17,7 @@ This log lists the architectural decisions for MADR.
 - [ADR-0008](0008-lazy-tab-screenshot-restoration.md) - Lazy Tab Screenshot Restoration
 - [ADR-0009](0009-feature-flags-refactor) - Feature Flags Refactor
 - [ADR-0010](0010-offload-background-webviews-on-memory-warning.md) - Offload Background WebViews on Memory Warning
+- [ADR-0011](0011-redux-state-reducer-initializer-cleanup-with-copy-macro.md) - Redux State Reducer Initializer Cleanup with Copy Macro
 
 <!-- adrlogstop -->
 
