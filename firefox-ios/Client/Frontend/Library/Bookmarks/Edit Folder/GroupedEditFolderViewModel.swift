@@ -8,7 +8,7 @@ import MozillaAppServices
 import Shared
 
 // FIXME: FXIOS-14160 Make EditFolderViewModel actually Sendable
-class NewEditFolderViewModel: @unchecked Sendable {
+class GroupedFolderViewModel: @unchecked Sendable {
     private static let mobileExpandedByDefault = true
     private static let desktopExpandedByDefault = false
 
@@ -17,8 +17,8 @@ class NewEditFolderViewModel: @unchecked Sendable {
     private let parentFolder: FxBookmarkNode
     private var folder: FxBookmarkNode?
     private let bookmarkSaver: BookmarksSaver
-    private let folderFetcher: NewFolderHierarchyFetcher
-    private(set) var selectedFolder: NewFolder?
+    private let folderFetcher: GroupedFolderHierarchyFetcher
+    private(set) var selectedFolder: GroupedFolder?
     private(set) var folderGroups = [FolderGroup]()
     private(set) var isBrowsingFolders = false
     private var isNewFolderView: Bool {
@@ -42,15 +42,16 @@ class NewEditFolderViewModel: @unchecked Sendable {
          parentFolder: FxBookmarkNode,
          folder: FxBookmarkNode?,
          bookmarkSaver: BookmarksSaver? = nil,
-         folderFetcher: NewFolderHierarchyFetcher? = nil) {
+         folderFetcher: GroupedFolderHierarchyFetcher? = nil) {
         self.profile = profile
         self.logger = logger
         self.parentFolder = parentFolder
         self.folder = folder
         self.bookmarkSaver = bookmarkSaver ?? DefaultBookmarksSaver(profile: profile)
-        self.folderFetcher = folderFetcher ?? NewDefaultFolderHierarchyFetcher(profile: profile,
-                                                                               rootFolderGUID: BookmarkRoots.RootGUID)
-        selectedFolder = NewFolder(title: parentFolder.title, guid: parentFolder.guid, indentation: 0)
+        self.folderFetcher = folderFetcher ??
+                             GroupedDefaultFolderHierarchyFetcher(profile: profile,
+                                                                  rootFolderGUID: BookmarkRoots.RootGUID)
+        selectedFolder = GroupedFolder(title: parentFolder.title, guid: parentFolder.guid, indentation: 0)
     }
 
     private func loadFolderGroups() {
@@ -84,7 +85,7 @@ class NewEditFolderViewModel: @unchecked Sendable {
     }
 
     @MainActor
-    func selectFolder(_ folder: NewFolder) {
+    func selectFolder(_ folder: GroupedFolder) {
         selectedFolder = folder
         isBrowsingFolders = false
         onFolderStatusUpdate?()

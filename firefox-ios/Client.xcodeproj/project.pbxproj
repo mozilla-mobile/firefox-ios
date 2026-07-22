@@ -2226,10 +2226,10 @@
 		EC0FBD3130069258005CCA62 /* LinkActionCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */; };
 		EC405C143007DEE10003DE07 /* WaybackCodesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC405C133007DED70003DE07 /* WaybackCodesTests.swift */; };
 		EC405C163007E3F60003DE07 /* NativeErrorRegularContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC405C153007E3EC0003DE07 /* NativeErrorRegularContentViewTests.swift */; };
-		EC4078FA300AA15C0003DE07 /* NewFolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4078F9300AA1550003DE07 /* NewFolderHierarchyFetcher.swift */; };
-		EC4078FC300AA2CB0003DE07 /* NewEditFolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4078FB300AA2C50003DE07 /* NewEditFolderViewModel.swift */; };
-		EC407900300AA7FA0003DE07 /* NewDefaultFolderHierarchyFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4078FF300AA7EF0003DE07 /* NewDefaultFolderHierarchyFetcherTests.swift */; };
-		EC407902300AA8960003DE07 /* NewEditFolderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC407901300AA88F0003DE07 /* NewEditFolderViewModelTests.swift */; };
+		EC4078FA300AA15C0003DE07 /* GroupedFolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4078F9300AA1550003DE07 /* GroupedFolderHierarchyFetcher.swift */; };
+		EC4078FC300AA2CB0003DE07 /* GroupedEditFolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4078FB300AA2C50003DE07 /* GroupedEditFolderViewModel.swift */; };
+		EC407900300AA7FA0003DE07 /* GroupedDefaultFolderHierarchyFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4078FF300AA7EF0003DE07 /* GroupedDefaultFolderHierarchyFetcherTests.swift */; };
+		EC407902300AA8960003DE07 /* GroupedEditFolderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC407901300AA88F0003DE07 /* GroupedEditFolderViewModelTests.swift */; };
 		EC4084E1300FCAEE0003DE07 /* BookmarkFolderData+Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */; };
 		ECD8E56C2FF7EB69002092C6 /* WaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */; };
 		ECD8E56E2FF7ED79002092C6 /* WaybackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56D2FF7ED75002092C6 /* WaybackServiceTests.swift */; };
@@ -11814,10 +11814,10 @@
 		EC184DB5A4191574BBE29140 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/Menu.strings; sourceTree = "<group>"; };
 		EC405C133007DED70003DE07 /* WaybackCodesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackCodesTests.swift; sourceTree = "<group>"; };
 		EC405C153007E3EC0003DE07 /* NativeErrorRegularContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorRegularContentViewTests.swift; sourceTree = "<group>"; };
-		EC4078F9300AA1550003DE07 /* NewFolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFolderHierarchyFetcher.swift; sourceTree = "<group>"; };
-		EC4078FB300AA2C50003DE07 /* NewEditFolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditFolderViewModel.swift; sourceTree = "<group>"; };
-		EC4078FF300AA7EF0003DE07 /* NewDefaultFolderHierarchyFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDefaultFolderHierarchyFetcherTests.swift; sourceTree = "<group>"; };
-		EC407901300AA88F0003DE07 /* NewEditFolderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditFolderViewModelTests.swift; sourceTree = "<group>"; };
+		EC4078F9300AA1550003DE07 /* GroupedFolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedFolderHierarchyFetcher.swift; sourceTree = "<group>"; };
+		EC4078FB300AA2C50003DE07 /* GroupedEditFolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditFolderViewModel.swift; sourceTree = "<group>"; };
+		EC4078FF300AA7EF0003DE07 /* GroupedDefaultFolderHierarchyFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedDefaultFolderHierarchyFetcherTests.swift; sourceTree = "<group>"; };
+		EC407901300AA88F0003DE07 /* GroupedEditFolderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditFolderViewModelTests.swift; sourceTree = "<group>"; };
 		EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BookmarkFolderData+Copy.swift"; sourceTree = "<group>"; };
 		EC724CF0B0021AE49EDC95DC /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EC734AD49E5483F11375E891 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
@@ -12491,8 +12491,8 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				EC407901300AA88F0003DE07 /* NewEditFolderViewModelTests.swift */,
-				EC4078FF300AA7EF0003DE07 /* NewDefaultFolderHierarchyFetcherTests.swift */,
+				EC407901300AA88F0003DE07 /* GroupedEditFolderViewModelTests.swift */,
+				EC4078FF300AA7EF0003DE07 /* GroupedDefaultFolderHierarchyFetcherTests.swift */,
 				EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */,
 				EC0FBD2E30069252005CCA62 /* FolderSectionHeaderViewTests.swift */,
 				EC0FBD2C3006924A005CCA62 /* FolderTreeCellTests.swift */,
@@ -12543,7 +12543,7 @@
 			isa = PBXGroup;
 			children = (
 				EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */,
-				EC4078FB300AA2C50003DE07 /* NewEditFolderViewModel.swift */,
+				EC4078FB300AA2C50003DE07 /* GroupedEditFolderViewModel.swift */,
 				EC0FBD2230053136005CCA62 /* LinkActionCell.swift */,
 				EC0FBD2030053117005CCA62 /* FolderTreeCell.swift */,
 				EC0FBD1E300530E3005CCA62 /* FolderSectionHeaderView.swift */,
@@ -12557,7 +12557,7 @@
 		0BDDB3422CA6E40F00D501DF /* Utitlity */ = {
 			isa = PBXGroup;
 			children = (
-				EC4078F9300AA1550003DE07 /* NewFolderHierarchyFetcher.swift */,
+				EC4078F9300AA1550003DE07 /* GroupedFolderHierarchyFetcher.swift */,
 				0BDDB3432CA6E43100D501DF /* FolderHierarchyFetcher.swift */,
 				0BDDB3452CA6E43A00D501DF /* BookmarksSaver.swift */,
 			);
@@ -20050,7 +20050,7 @@
 				E17496402994302D0096900A /* PreferredFont.swift in Sources */,
 				E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */,
 				AB4FB4DD2C89FB10005EF0CC /* BlockedTrackersTableView.swift in Sources */,
-				EC4078FA300AA15C0003DE07 /* NewFolderHierarchyFetcher.swift in Sources */,
+				EC4078FA300AA15C0003DE07 /* GroupedFolderHierarchyFetcher.swift in Sources */,
 				ED6F82FB2D6E6C3400FC1098 /* AppIconView.swift in Sources */,
 				9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
@@ -20143,7 +20143,7 @@
 				0A44ABAC2D6DC2520034FA86 /* ThemedLearnMoreTableViewCell.swift in Sources */,
 				C855728429AEA3C300AF32B0 /* SurveySurfaceViewModel.swift in Sources */,
 				EC0FBD233005313B005CCA62 /* LinkActionCell.swift in Sources */,
-				EC4078FC300AA2CB0003DE07 /* NewEditFolderViewModel.swift in Sources */,
+				EC4078FC300AA2CB0003DE07 /* GroupedEditFolderViewModel.swift in Sources */,
 				CA4ACE4924C8C91600F55894 /* BreachAlertsDetailView.swift in Sources */,
 				C834ACD128D3ACA900203AD1 /* Blurrable.swift in Sources */,
 				C84655E22887388F00861B4A /* Wallpaper.swift in Sources */,
@@ -20800,7 +20800,7 @@
 				EDD592472FC0FF6F0015EF9E /* ModifiedCopyMacroTests.swift in Sources */,
 				AA742C7A2E90358400CF55B3 /* MockMicrosurveyTelemetry.swift in Sources */,
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
-				EC407902300AA8960003DE07 /* NewEditFolderViewModelTests.swift in Sources */,
+				EC407902300AA8960003DE07 /* GroupedEditFolderViewModelTests.swift in Sources */,
 				8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */,
 				21D8EA932ABE04F7003FF16E /* TabTrayViewControllerTests.swift in Sources */,
 				AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */,
@@ -21236,7 +21236,7 @@
 				21FA8FB22AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift in Sources */,
 				8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */,
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,
-				EC407900300AA7FA0003DE07 /* NewDefaultFolderHierarchyFetcherTests.swift in Sources */,
+				EC407900300AA7FA0003DE07 /* GroupedDefaultFolderHierarchyFetcherTests.swift in Sources */,
 				8A6CDB472DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift in Sources */,
 				8CFBBFDC2ECE17AA00E5B22B /* NimbusOnboardingKitFeatureLayerTests.swift in Sources */,
 				0B6153E22E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift in Sources */,

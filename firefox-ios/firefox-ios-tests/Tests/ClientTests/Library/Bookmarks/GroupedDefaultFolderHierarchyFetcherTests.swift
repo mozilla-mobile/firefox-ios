@@ -6,7 +6,7 @@ import XCTest
 import MozillaAppServices
 @testable import Client
 
-final class NewDefaultFolderHierarchyFetcherTests: XCTestCase {
+final class GroupedDefaultFolderHierarchyFetcherTests: XCTestCase {
     var mockProfile: MockProfile!
     let rootFolderGUID = BookmarkRoots.MobileFolderGUID
     let testFolderTitle = "testTitle"
@@ -92,9 +92,11 @@ final class NewDefaultFolderHierarchyFetcherTests: XCTestCase {
         XCTAssertTrue(desktopFolder.isDesktopRoot)
     }
 
-    private func createSubject(rootFolderGUID: String? = nil) -> NewDefaultFolderHierarchyFetcher {
-        let subject = NewDefaultFolderHierarchyFetcher(profile: mockProfile,
-                                                       rootFolderGUID: rootFolderGUID ?? self.rootFolderGUID)
+    private func createSubject(rootFolderGUID: String? = nil) -> GroupedDefaultFolderHierarchyFetcher {
+        let subject = GroupedDefaultFolderHierarchyFetcher(profile: mockProfile,
+                                                           rootFolderGUID:
+                                                           rootFolderGUID ??
+                                                           self.rootFolderGUID)
         return subject
     }
 
@@ -119,8 +121,8 @@ final class NewDefaultFolderHierarchyFetcherTests: XCTestCase {
     }
 
     func testMakeGroups_withMobileAndDesktopFolders_returnsMobileFirstAndDesktopCollapsed() {
-        let mobileFolder = NewFolder(title: "Mobile Folder", guid: "mobile-guid", indentation: 0)
-        let desktopFolder = NewFolder(title: "Desktop Folder", guid: "desktop-guid", indentation: 0, isDesktopRoot: true)
+        let mobileFolder = GroupedFolder(title: "Mobile Folder", guid: "mobile-guid", indentation: 0)
+        let desktopFolder = GroupedFolder(title: "Desktop Folder", guid: "desktop-guid", indentation: 0, isDesktopRoot: true)
 
         let groups = FolderGroup.makeGroups(from: [mobileFolder, desktopFolder],
                                             mobileTitle: "Mobile Bookmarks",
@@ -142,7 +144,7 @@ final class NewDefaultFolderHierarchyFetcherTests: XCTestCase {
     }
 
     func testMakeGroups_withOnlyMobileFolders_returnsSingleMobileGroup() {
-        let mobileFolder = NewFolder(title: "Mobile Folder", guid: "mobile-guid", indentation: 0)
+        let mobileFolder = GroupedFolder(title: "Mobile Folder", guid: "mobile-guid", indentation: 0)
 
         let groups = FolderGroup.makeGroups(from: [mobileFolder],
                                             mobileTitle: "Mobile Bookmarks",
@@ -156,9 +158,9 @@ final class NewDefaultFolderHierarchyFetcherTests: XCTestCase {
     }
 
     func testBlocks_splitsFlatFolderListIntoCardsAtEachIndentationZero() {
-        let folderA = NewFolder(title: "A", guid: "a-guid", indentation: 0)
-        let folderASub = NewFolder(title: "A-Sub", guid: "a-sub-guid", indentation: 1, parentTitle: "A")
-        let folderB = NewFolder(title: "B", guid: "b-guid", indentation: 0)
+        let folderA = GroupedFolder(title: "A", guid: "a-guid", indentation: 0)
+        let folderASub = GroupedFolder(title: "A-Sub", guid: "a-sub-guid", indentation: 1, parentTitle: "A")
+        let folderB = GroupedFolder(title: "B", guid: "b-guid", indentation: 0)
 
         let group = FolderGroup(id: "test-group",
                                 title: "Test",

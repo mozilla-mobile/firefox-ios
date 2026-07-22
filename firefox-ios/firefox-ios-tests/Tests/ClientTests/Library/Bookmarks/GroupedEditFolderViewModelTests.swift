@@ -9,7 +9,7 @@ import Shared
 @testable import Client
 
 @MainActor
-final class NewEditFolderViewModelTests: XCTestCase {
+final class GroupedEditFolderViewModelTests: XCTestCase {
     let folder = MockFxBookmarkNode(type: .folder,
                                     guid: "1235",
                                     position: 1,
@@ -25,14 +25,14 @@ final class NewEditFolderViewModelTests: XCTestCase {
                                           position: 0,
                                           isRoot: false,
                                           title: "Parent")
-    var folderFetcher: MockNewFolderHierarchyFetcher!
+    var folderFetcher: MockGroupedFolderHierarchyFetcher!
     var bookmarksSaver: MockBookmarksSaver!
     var profile: MockProfile!
     var parentFolderSelector: MockParentFolderSelector!
 
     override func setUp() async throws {
         try await super.setUp()
-        folderFetcher = MockNewFolderHierarchyFetcher()
+        folderFetcher = MockGroupedFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
         profile = MockProfile()
         parentFolderSelector = MockParentFolderSelector()
@@ -79,7 +79,7 @@ final class NewEditFolderViewModelTests: XCTestCase {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         subject.beginBrowsingFolders()
 
-        subject.selectFolder(NewFolder(title: "Test", guid: "", indentation: 0))
+        subject.selectFolder(GroupedFolder(title: "Test", guid: "", indentation: 0))
 
         XCTAssertFalse(subject.isBrowsingFolders)
     }
@@ -90,7 +90,7 @@ final class NewEditFolderViewModelTests: XCTestCase {
         subject.onFolderStatusUpdate = {
             expectation.fulfill()
         }
-        subject.selectFolder(NewFolder(title: "Test", guid: "", indentation: 0))
+        subject.selectFolder(GroupedFolder(title: "Test", guid: "", indentation: 0))
 
         waitForExpectations(timeout: 0.1)
     }
@@ -184,23 +184,23 @@ final class NewEditFolderViewModelTests: XCTestCase {
     func createSubject(folder: FxBookmarkNode?,
                        parentFolder: FxBookmarkNode,
                        file: StaticString = #filePath,
-                       line: UInt = #line) -> NewEditFolderViewModel {
-        let subject = NewEditFolderViewModel(profile: profile,
-                                             parentFolder: parentFolder,
-                                             folder: folder,
-                                             bookmarkSaver: bookmarksSaver,
-                                             folderFetcher: folderFetcher)
+                       line: UInt = #line) -> GroupedEditFolderViewModel {
+        let subject = GroupedEditFolderViewModel(profile: profile,
+                                                 parentFolder: parentFolder,
+                                                 folder: folder,
+                                                 bookmarkSaver: bookmarksSaver,
+                                                 folderFetcher: folderFetcher)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }
 
-final class MockNewFolderHierarchyFetcher: NewFolderHierarchyFetcher, @unchecked Sendable {
-    var mockFolderStructures: [NewFolder] = []
+final class MockGroupedFolderHierarchyFetcher: GroupedFolderHierarchyFetcher, @unchecked Sendable {
+    var mockFolderStructures: [GroupedFolder] = []
     private(set) var fetchFoldersCalled = 0
     private(set) var capturedExcludedGuids: [String] = []
 
-    func fetchFolders(excludedGuids: [String]) async -> [NewFolder] {
+    func fetchFolders(excludedGuids: [String]) async -> [GroupedFolder] {
         fetchFoldersCalled += 1
         capturedExcludedGuids = excludedGuids
         return mockFolderStructures

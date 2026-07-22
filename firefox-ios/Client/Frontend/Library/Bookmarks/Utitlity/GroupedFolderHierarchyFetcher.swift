@@ -5,18 +5,18 @@
 import Foundation
 import MozillaAppServices
 
-protocol NewFolderHierarchyFetcher {
-    func fetchFolders(excludedGuids: [String]) async -> [NewFolder]
-    func fetchFolders() async -> [NewFolder]
+protocol GroupedFolderHierarchyFetcher {
+    func fetchFolders(excludedGuids: [String]) async -> [GroupedFolder]
+    func fetchFolders() async -> [GroupedFolder]
 }
 
-extension NewFolderHierarchyFetcher {
-    func fetchFolders() async -> [NewFolder] {
+extension GroupedFolderHierarchyFetcher {
+    func fetchFolders() async -> [GroupedFolder] {
         await fetchFolders(excludedGuids: [])
     }
 }
 
-struct NewFolder: Equatable, Hashable {
+struct GroupedFolder: Equatable, Hashable {
     init(title: String, guid: String, indentation: Int, parentTitle: String? = nil, isDesktopRoot: Bool = false) {
         self.title = Self.localizedTitle(guid) ?? title
         self.guid = guid
@@ -39,19 +39,19 @@ struct NewFolder: Equatable, Hashable {
 struct FolderGroup: Equatable, Identifiable {
     let id: String
     let title: String
-    var folders: [NewFolder]
+    var folders: [GroupedFolder]
     var isExpanded: Bool
 
     static let mobileGroupID = "group.mobile"
     static let desktopGroupID = "group.desktop"
 
     struct Block: Equatable {
-        let folders: [NewFolder]
+        let folders: [GroupedFolder]
     }
 
     var blocks: [Block] {
         var result: [Block] = []
-        var current: [NewFolder] = []
+        var current: [GroupedFolder] = []
         for folder in folders {
             if folder.indentation == 0, !current.isEmpty {
                 result.append(Block(folders: current))
@@ -65,7 +65,7 @@ struct FolderGroup: Equatable, Identifiable {
         return result
     }
 
-    static func makeGroups(from folders: [NewFolder],
+    static func makeGroups(from folders: [GroupedFolder],
                            mobileTitle: String,
                            desktopTitle: String,
                            mobileExpandedByDefault: Bool,
@@ -93,15 +93,15 @@ struct FolderGroup: Equatable, Identifiable {
     }
 }
 
-struct NewDefaultFolderHierarchyFetcher: NewFolderHierarchyFetcher {
+struct GroupedDefaultFolderHierarchyFetcher: GroupedFolderHierarchyFetcher {
     let profile: Profile
     let rootFolderGUID: String
 
-    func fetchFolders(excludedGuids: [String] = []) async -> [NewFolder] {
+    func fetchFolders(excludedGuids: [String] = []) async -> [GroupedFolder] {
         let numDesktopBookmarks = await countDesktopBookmarks()
         return await withCheckedContinuation { continuation in
             profile.places.getBookmarksTree(rootGUID: rootFolderGUID, recursive: true) { result in
-                var folders = [NewFolder]()
+                var folders = [GroupedFolder]()
                 defer { continuation.resume(returning: folders) }
                 switch result {
                 case .success(let data):
@@ -150,9 +150,9 @@ struct NewDefaultFolderHierarchyFetcher: NewFolderHierarchyFetcher {
     ///                    Namely used to prepend the desktop folders to the top of the mobile bookmarks subfolder hierarchy
     ///   - isDesktopSubtree: True if this folder is the Desktop subtree's root or a descendant of it -
     ///                    propagated to children so every folder in the subtree (not just the root)
-    ///                    can be identified later via `NewFolder.isDesktopRoot`.
+    ///                    can be identified later via `GroupedFolder.isDesktopRoot`.
     private func recursiveAddSubFolders(_ folder: BookmarkFolderData,
-                                        folders: inout [NewFolder],
+                                        folders: inout [GroupedFolder],
                                         hasDesktopBookmarks: Bool,
                                         indent: Int = 0,
                                         excludedGuids: [String],
@@ -167,11 +167,11 @@ struct NewDefaultFolderHierarchyFetcher: NewFolderHierarchyFetcher {
         // b) Not a desktop or excluded folder
         if (isDesktopRootFolder && hasDesktopBookmarks) ||
             (!isDesktopRootFolder && !excludedGuids.contains(folder.guid)) {
-            folders.append(NewFolder(title: folder.title,
-                                     guid: folder.guid,
-                                     indentation: indent,
-                                     parentTitle: indent == 0 ? nil : parentTitle,
-                                     isDesktopRoot: isDesktop))
+            folders.append(GroupedFolder(title: folder.title,
+                                         guid: folder.guid,
+                                         indentation: indent,
+                                         parentTitle: indent == 0 ? nil : parentTitle,
+                                         isDesktopRoot: isDesktop))
 
             // Prepend desktop folders to the top of the mobile bookmarks folder hierarchy
             if folder.guid == BookmarkRoots.MobileFolderGUID {
@@ -191,7 +191,7 @@ struct NewDefaultFolderHierarchyFetcher: NewFolderHierarchyFetcher {
                 hasDesktopBookmarks: hasDesktopBookmarks,
                 indent: indentation,
                 excludedGuids: excludedGuids,
-                parentTitle: NewFolder.localizedTitle(folder.guid) ?? folder.title,
+                parentTitle: GroupedFolder.localizedTitle(folder.guid) ?? folder.title,
                 isDesktopSubtree: isDesktop
             )
         }
@@ -211,7 +211,7 @@ struct NewDefaultFolderHierarchyFetcher: NewFolderHierarchyFetcher {
     }
 
     private func prependDesktopFolders(_ folder: BookmarkFolderData,
-                                       folders: inout [NewFolder],
+                                       folders: inout [GroupedFolder],
                                        excludedGuids: [String],
                                        prefixFolders: [BookmarkFolderData] = []) {
         prefixFolders.forEach {
