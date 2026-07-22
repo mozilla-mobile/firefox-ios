@@ -2233,8 +2233,6 @@
 		EC407902300AA8960003DE07 /* GroupedEditFolderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC407901300AA88F0003DE07 /* GroupedEditFolderViewModelTests.swift */; };
 		EC4084E1300FCAEE0003DE07 /* BookmarkFolderData+Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */; };
 		EC43B0CF3011101A0069FF37 /* CertificateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43B0CE301110160069FF37 /* CertificateHandler.swift */; };
-		EC43B7743011377F0069FF37 /* CertificateHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43B7733011377A0069FF37 /* CertificateHandlerTests.swift */; };
-		EC43B776301142350069FF37 /* CertificateDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43B7753011422F0069FF37 /* CertificateDelegateTests.swift */; };
 		ECD8E56C2FF7EB69002092C6 /* WaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */; };
 		ECD8E56E2FF7ED79002092C6 /* WaybackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56D2FF7ED75002092C6 /* WaybackServiceTests.swift */; };
 		ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */; };
@@ -11829,8 +11827,6 @@
 		EC407901300AA88F0003DE07 /* GroupedEditFolderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditFolderViewModelTests.swift; sourceTree = "<group>"; };
 		EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BookmarkFolderData+Copy.swift"; sourceTree = "<group>"; };
 		EC43B0CE301110160069FF37 /* CertificateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateHandler.swift; sourceTree = "<group>"; };
-		EC43B7733011377A0069FF37 /* CertificateHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateHandlerTests.swift; sourceTree = "<group>"; };
-		EC43B7753011422F0069FF37 /* CertificateDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateDelegateTests.swift; sourceTree = "<group>"; };
 		EC724CF0B0021AE49EDC95DC /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EC734AD49E5483F11375E891 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		EC934F7BB2F8B247BC714BE2 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
@@ -15416,8 +15412,6 @@
 		AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */ = {
 			isa = PBXGroup;
 			children = (
-				EC43B7753011422F0069FF37 /* CertificateDelegateTests.swift */,
-				EC43B7733011377A0069FF37 /* CertificateHandlerTests.swift */,
 				0AEA29352F518B7100B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift */,
 				0AB76B552F3F678A009458EB /* BlockedTrackersFooterViewTests.swift */,
 				0A8058262F694E21004CB4A9 /* CreditCardBottomSheetViewControllerTests.swift */,
@@ -20788,7 +20782,6 @@
 				21365E3E2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift in Sources */,
 				21365E3F2F314D1D0000C369 /* ConstraintReferenceTests.swift in Sources */,
 				8A2F21C62DEDC17900C9F4DE /* StartAtHomeMiddlewareTests.swift in Sources */,
-				EC43B776301142350069FF37 /* CertificateDelegateTests.swift in Sources */,
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */,
@@ -20813,7 +20806,6 @@
 				C296B6E92F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift in Sources */,
 				39BF0CD72EB512CD002064F5 /* ImpressionTrackingUtilityTests.swift in Sources */,
 				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,
-				EC43B7743011377F0069FF37 /* CertificateHandlerTests.swift in Sources */,
 				0E6557402D82232B00D7F017 /* DownloadProgressManagerTests.swift in Sources */,
 				AADBD0E42EBBA79B00F35E30 /* MockLanguageDetector.swift in Sources */,
 				AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */,
