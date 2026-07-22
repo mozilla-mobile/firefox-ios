@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && return 1; sleep 2; done; }
 
           total=$(( ADDITIONS + DELETIONS ))
           echo "PR #$NUMBER: additions=$ADDITIONS, deletions=$DELETIONS, total=$total (threshold=$BIG_PR_THRESHOLD), event=$EVENT_ACTION"
@@ -45,15 +45,13 @@ jobs:
             exit 0
           fi
 
-          # Request review from the tech lead team
+          # Request review from the tech lead team. Fails the workflow if unsuccessful after retries.
           retry gh api \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2026-03-10" \
             "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
-            -f "team_reviewers[]=$TEAM_SLUG" \
-            || echo "Reviewer request failed (may be team-permission or duplicate)."
+            -f "team_reviewers[]=$TEAM_SLUG"
 
-          # Add label, no-op if already present
-          retry gh pr edit "$NUMBER" -R "$GH_REPO" --add-label "$LABEL_NAME" \
-            || echo "Label add failed (label may not exist in the repo)."
+          # Add label. Fails the workflow if the label does not exist or cannot be added.
+          retry gh pr edit "$NUMBER" -R "$GH_REPO" --add-label "$LABEL_NAME"
