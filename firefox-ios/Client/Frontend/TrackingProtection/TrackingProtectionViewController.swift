@@ -195,13 +195,14 @@ class TrackingProtectionViewController: UIViewController,
         }
     }
 
-    private func getCertificates(from certificateChain: [SecCertificate]) -> [Certificate] {
+    private func getCertificates(from serverTrust: SecTrust) -> [Certificate] {
+        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
+            return []
+        }
         var certificates = [Certificate]()
         certificates.reserveCapacity(certificateChain.count)
-
         for certificate in certificateChain {
             let certificateData = SecCertificateCopyData(certificate) as Data
-
             do {
                 let certificate = try Certificate(derEncoded: Array(certificateData))
                 certificates.append(certificate)
@@ -211,16 +212,7 @@ class TrackingProtectionViewController: UIViewController,
                                          category: .certificate)
             }
         }
-
         return certificates
-    }
-
-    private func getCertificates(from serverTrust: SecTrust) -> [Certificate] {
-        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
-            return []
-        }
-
-        return getCertificates(from: certificateChain)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -232,12 +224,14 @@ class TrackingProtectionViewController: UIViewController,
         if let serverTrust = model.selectedTab?.webView?.serverTrust {
             model.certificates = getCertificates(from: serverTrust)
         } else if let url = model.selectedTab?.webView?.url,
-           let internalURL = InternalURL(url),
-           internalURL.isCertificateErrorURL,
-           let originalURL = internalURL.originalURLFromErrorPage,
-           let origin = CertStore.origin(for: originalURL),
-           let certificateChain = profile?.certStore.certificateChain(forOrigin: origin) {
-            model.certificates = getCertificates(from: certificateChain)
+                  let internalURL = InternalURL(url),
+                  internalURL.isCertificateErrorURL,
+                  let originalURL = internalURL.originalURLFromErrorPage {
+            Client.getCertificates(for: originalURL) { certificates in
+                Task { @MainActor in
+                    self.model.certificates = certificates ?? []
+                }
+            }
         }
     }
 
