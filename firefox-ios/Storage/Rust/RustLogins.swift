@@ -236,6 +236,9 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
 
     private var didAttemptToMoveToBackup = false
 
+    private var isRetrievingStoredKey = false
+    private var storedKeyCompletions = [@Sendable (Result<String, NSError>) -> Void]()
+
     private let logger: Logger
 
     public init(databasePath: String,
@@ -632,7 +635,26 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
     }
 
     public func getStoredKey(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
+        queue.async {
+            self.storedKeyCompletions.append(completion)
+            guard !self.isRetrievingStoredKey else { return }
+
+            self.isRetrievingStoredKey = true
+            self.retrieveStoredKey()
+        }
+    }
+
+    private func retrieveStoredKey() {
         let (key, encryptedCanaryPhrase) = rustKeychain.getLoginsKeyData()
+
+        let completion: @Sendable (Result<String, NSError>) -> Void = { result in
+            self.queue.async {
+                let completions = self.storedKeyCompletions
+                self.storedKeyCompletions.removeAll()
+                self.isRetrievingStoredKey = false
+                completions.forEach { $0(result) }
+            }
+        }
 
         switch(key, encryptedCanaryPhrase) {
         case (.some(key), .some(encryptedCanaryPhrase)):
