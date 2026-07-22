@@ -7,20 +7,18 @@
 import Shared
 
 final class MockUnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Sendable {
-    private var result: UnifiedTileResult?
+    private let result: UnifiedTileResult?
 
     init(result: UnifiedTileResult?) {
         self.result = result
     }
 
-    func fetchTiles(timestamp: Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        guard let result else { return }
-
-        switch result {
-        case .success(let unifiedTiles):
-            completion(.success(unifiedTiles))
-        case .failure(let error):
-            completion(.failure(error))
+    func fetchTiles(timestamp: Timestamp) async -> UnifiedTileResult {
+        guard let result else {
+            // Simulates a provider that never returns, so the caller must rely on its own timeout.
+            try? await Task.sleep(nanoseconds: .max)
+            return .success([])
         }
+        return result
     }
 }

@@ -12,23 +12,29 @@ typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
 protocol UnifiedAdsProviderInterface: Sendable {
     /// Fetch unified ads tiles.
     ///
-    /// When tiles were fetched recently (see `UnifiedAdsProvider.maxTileStaleness`), the
-    /// completion is called synchronously with the last known tiles and a refresh runs in
-    /// the background for the next caller. Otherwise the blocking ads client request runs
-    /// on a dedicated queue and the completion is called from that queue.
-    /// - Parameters:
-    ///   - timestamp: The timestamp to validate the cache against, useful for tests. Default is Date.now()
-    ///   - completion: Returns an array of Tiles, can be empty
-    func fetchTiles(timestamp: Shared.Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void)
+    /// When tiles were fetched recently (see `UnifiedAdsProvider.maxTileStaleness`), the last
+    /// known tiles are returned immediately and a refresh runs in the background for the next
+    /// caller. Otherwise the blocking ads client request runs on a dedicated queue, off the
+    /// Swift Concurrency cooperative pool, and its result is returned once it completes.
+    /// - Parameter timestamp: The timestamp to validate the cache against, useful for tests.
+    ///   Defaults to `Date.now()`.
+    /// - Returns: An array of tiles, which can be empty, or an error when no tiles are available.
+    func fetchTiles(timestamp: Shared.Timestamp) async -> UnifiedTileResult
 }
 
 extension UnifiedAdsProviderInterface {
-    func fetchTiles(timestamp: Shared.Timestamp = Date.now(), completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        fetchTiles(timestamp: timestamp, completion: completion)
+    func fetchTiles(timestamp: Shared.Timestamp = Date.now()) async -> UnifiedTileResult {
+        await fetchTiles(timestamp: timestamp)
     }
 }
 
-final class UnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Sendable {
+/// Serves sponsored tiles for the homepage, keeping the last known tiles in memory so the top
+/// sites section stays instant while the ads client's cache is revalidated in the background.
+///
+/// The cache is protected by actor isolation rather than a lock, and the blocking ads client
+/// request is bridged onto a dedicated queue so it never ties up a Swift Concurrency
+/// cooperative thread (see FXIOS-16156 / FXIOS-16307).
+actor UnifiedAdsProvider: UnifiedAdsProviderInterface {
     private let adsClient: MozAdsClient
     private let logger: Logger
     private let fetchQueue: DispatchQueueInterface
@@ -40,10 +46,9 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Sendable
     /// that section instant without letting stale ads live for longer than one extra cycle.
     static let maxTileStaleness: Timestamp = OneHourInMilliseconds
 
-    private let cacheLock = NSLock()
     private var lastKnownTiles: [UnifiedTile]?
     private var lastFetchTimestamp: Timestamp = 0
-    private var isRevalidating = false
+    private var revalidationTask: Task<Void, Never>?
 
     enum Error: Swift.Error {
         case noDataAvailable
@@ -82,53 +87,42 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Sendable
         let placements: [AdPlacement]
     }
 
-    func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
-                    completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        if let lastKnownTiles = lastKnownTiles(at: timestamp) {
+    func fetchTiles(timestamp: Shared.Timestamp = Date.now()) async -> UnifiedTileResult {
+        if let lastKnownTiles = validLastKnownTiles(at: timestamp) {
             logger.log("Serving last known tiles while revalidating in the background",
                        level: .debug,
                        category: .homepage)
-            completion(.success(lastKnownTiles))
             revalidateLastKnownTiles(timestamp: timestamp)
-            return
+            return .success(lastKnownTiles)
         }
 
-        fetchQueue.async { [self] in
-            completion(requestTiles(timestamp: timestamp))
-        }
+        return await requestTiles(timestamp: timestamp)
     }
 
-    /// Runs the blocking ads client request and caches the tiles on success. The dedicated
-    /// `fetchQueue` keeps a slow request from tying up a Swift Concurrency cooperative
-    /// thread, and caching here means results that arrive after the top sites section
-    /// stopped waiting for them still get served on the next homepage build.
-    private func requestTiles(timestamp: Shared.Timestamp) -> UnifiedTileResult {
-        logger.log("Fetching tiles with ads client", level: .debug, category: .homepage)
-        let mozAdRequests = TileOrder.placementOrder.map {
-            MozAdsPlacementRequest(iabContent: nil, placementId: $0)
+    /// Runs the blocking ads client request off the actor and caches the tiles on success.
+    /// Caching here means results that arrive after the top sites section stopped waiting for
+    /// them still get served on the next homepage build.
+    private func requestTiles(timestamp: Shared.Timestamp) async -> UnifiedTileResult {
+        let result = await performRequest()
+        if case .success(let tiles) = result {
+            lastKnownTiles = tiles
+            lastFetchTimestamp = timestamp
         }
-        do {
-            let mozAdsTiles = try adsClient.requestTileAds(
-                mozAdRequests: mozAdRequests,
-                options: nil
-            )
-            let unifiedTiles: [UnifiedTile] = TileOrder.placementOrder.compactMap { placement in
-                guard let mozAdsTile = mozAdsTiles[placement] else { return nil }
-                return UnifiedTile.from(name: placement, mozAdsTile: mozAdsTile)
+        return result
+    }
+
+    /// Bridges the blocking `requestTileAds` FFI call onto the dedicated `fetchQueue` so it
+    /// never occupies the actor's executor or a Swift Concurrency cooperative thread.
+    private func performRequest() async -> UnifiedTileResult {
+        let request = BlockingTileRequest(adsClient: adsClient, logger: logger)
+        return await withCheckedContinuation { continuation in
+            fetchQueue.async {
+                continuation.resume(returning: request.run())
             }
-
-            logger.log("Ads client request successful", level: .info, category: .homepage)
-            storeLastKnownTiles(unifiedTiles, fetchedAt: timestamp)
-            return .success(unifiedTiles)
-        } catch let error {
-            logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
-            return .failure(Error.noDataAvailable)
         }
     }
 
-    private func lastKnownTiles(at timestamp: Shared.Timestamp) -> [UnifiedTile]? {
-        cacheLock.lock()
-        defer { cacheLock.unlock() }
+    private func validLastKnownTiles(at timestamp: Shared.Timestamp) -> [UnifiedTile]? {
         guard let lastKnownTiles,
               timestamp >= lastFetchTimestamp,
               timestamp - lastFetchTimestamp <= Self.maxTileStaleness
@@ -136,29 +130,55 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Sendable
         return lastKnownTiles
     }
 
-    private func storeLastKnownTiles(_ tiles: [UnifiedTile], fetchedAt timestamp: Shared.Timestamp) {
-        cacheLock.lock()
-        defer { cacheLock.unlock() }
-        lastKnownTiles = tiles
-        lastFetchTimestamp = timestamp
+    /// Refreshes the last known tiles in the background. A failed refresh keeps the previous
+    /// tiles so they can be served until `maxTileStaleness` runs out. Concurrent revalidations
+    /// coalesce into the one already in flight.
+    private func revalidateLastKnownTiles(timestamp: Shared.Timestamp) {
+        guard revalidationTask == nil else { return }
+        revalidationTask = Task { [weak self] in
+            _ = await self?.requestTiles(timestamp: timestamp)
+            await self?.finishRevalidation()
+        }
     }
 
-    /// Refreshes the last known tiles off the calling thread. A failed refresh keeps the
-    /// previous tiles so they can be served until `maxTileStaleness` runs out.
-    private func revalidateLastKnownTiles(timestamp: Shared.Timestamp) {
-        cacheLock.lock()
-        guard !isRevalidating else {
-            cacheLock.unlock()
-            return
-        }
-        isRevalidating = true
-        cacheLock.unlock()
+    private func finishRevalidation() {
+        revalidationTask = nil
+    }
 
-        fetchQueue.async { [self] in
-            _ = requestTiles(timestamp: timestamp)
-            cacheLock.lock()
-            isRevalidating = false
-            cacheLock.unlock()
+    /// Awaits the in-flight background revalidation, if any. Intended for tests that need to
+    /// observe the refreshed cache deterministically.
+    func awaitPendingRevalidation() async {
+        await revalidationTask?.value
+    }
+}
+
+/// Wraps the Rust-backed ads client so its blocking request can run off the actor. The client
+/// is thread-safe, which this box asserts, keeping `@unchecked Sendable` narrowly scoped here
+/// instead of applied to the whole provider.
+private struct BlockingTileRequest: @unchecked Sendable {
+    let adsClient: MozAdsClient
+    let logger: Logger
+
+    func run() -> UnifiedTileResult {
+        logger.log("Fetching tiles with ads client", level: .debug, category: .homepage)
+        let mozAdRequests = UnifiedAdsProvider.TileOrder.placementOrder.map {
+            MozAdsPlacementRequest(iabContent: nil, placementId: $0)
+        }
+        do {
+            let mozAdsTiles = try adsClient.requestTileAds(
+                mozAdRequests: mozAdRequests,
+                options: nil
+            )
+            let unifiedTiles: [UnifiedTile] = UnifiedAdsProvider.TileOrder.placementOrder.compactMap { placement in
+                guard let mozAdsTile = mozAdsTiles[placement] else { return nil }
+                return UnifiedTile.from(name: placement, mozAdsTile: mozAdsTile)
+            }
+
+            logger.log("Ads client request successful", level: .info, category: .homepage)
+            return .success(unifiedTiles)
+        } catch let error {
+            logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
+            return .failure(UnifiedAdsProvider.Error.noDataAvailable)
         }
     }
 }

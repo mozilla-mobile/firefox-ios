@@ -67,30 +67,62 @@ class MockMozAdsClient: MozAdsClient, @unchecked Sendable {
 /// Collects dispatched work so tests can control when the provider's fetch queue runs,
 /// simulating requests that are still in flight.
 private final class PendingWorkDispatchQueue: DispatchQueueInterface, @unchecked Sendable {
-    private(set) var pendingWork: [() -> Void] = []
+    private let lock = NSLock()
+    private var enqueuedWork: [() -> Void] = []
+    private var enqueueWaiters: [CheckedContinuation<Void, Never>] = []
+
+    var pendingWork: [() -> Void] {
+        lock.lock()
+        defer { lock.unlock() }
+        return enqueuedWork
+    }
 
     func runAllPendingWork() {
-        let work = pendingWork
-        pendingWork = []
+        lock.lock()
+        let work = enqueuedWork
+        enqueuedWork = []
+        lock.unlock()
+
         work.forEach { $0() }
+    }
+
+    /// Suspends until at least one work item has been enqueued, so tests can deterministically
+    /// wait for the provider's background request to reach the queue.
+    func waitForPendingWork() async {
+        await withCheckedContinuation { continuation in
+            lock.lock()
+            if !enqueuedWork.isEmpty {
+                lock.unlock()
+                continuation.resume()
+            } else {
+                enqueueWaiters.append(continuation)
+                lock.unlock()
+            }
+        }
     }
 
     func async(group: DispatchGroup?,
                qos: DispatchQoS,
                flags: DispatchWorkItemFlags,
                execute work: @escaping @Sendable @convention(block) () -> Void) {
-        pendingWork.append(work)
+        lock.lock()
+        enqueuedWork.append(work)
+        let waiters = enqueueWaiters
+        enqueueWaiters = []
+        lock.unlock()
+
+        waiters.forEach { $0.resume() }
     }
 
     func asyncAfter(deadline: DispatchTime,
                     qos: DispatchQoS,
                     flags: DispatchWorkItemFlags,
                     execute work: @escaping @Sendable @convention(block) () -> Void) {
-        pendingWork.append(work)
+        async(group: nil, qos: qos, flags: flags, execute: work)
     }
 
     func asyncAfter(deadline: DispatchTime, execute: DispatchWorkItem) {
-        pendingWork.append { execute.perform() }
+        async(group: nil, qos: .unspecified, flags: []) { execute.perform() }
     }
 }
 
@@ -115,7 +147,7 @@ class UnifiedAdsProviderTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testFetchTiles_whenSuccessful_thenReturnsTiles() {
+    func testFetchTiles_whenSuccessful_thenReturnsTiles() async {
         mockAdsClient.mockAdsTiles = [
             "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.test1.com"),
             "newtab_mobile_tile_2": createAdTile(name: "newtab_mobile_tile_2", url: "https://www.test5.com")
@@ -123,12 +155,12 @@ class UnifiedAdsProviderTests: XCTestCase {
 
         let subject = createSubject()
 
-        fetchTilesAndExpect(tileURLs: ["https://www.test1.com", "https://www.test5.com"],
-                            from: subject,
-                            timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: ["https://www.test1.com", "https://www.test5.com"],
+                             from: subject,
+                             timestamp: baseTimestamp)
     }
 
-    func testFetchTiles_whenInvertedOrder_thenReturnsProperTileOrder() {
+    func testFetchTiles_whenInvertedOrder_thenReturnsProperTileOrder() async {
         // Insert position2 before position1 to verify the order does not depend
         // on the dictionary's iteration order.
         mockAdsClient.mockAdsTiles = [
@@ -138,208 +170,200 @@ class UnifiedAdsProviderTests: XCTestCase {
 
         let subject = createSubject()
 
-        fetchTilesAndExpect(tileURLs: ["https://www.test1.com", "https://www.test5.com"],
-                            from: subject,
-                            timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: ["https://www.test1.com", "https://www.test5.com"],
+                             from: subject,
+                             timestamp: baseTimestamp)
     }
 
-    func testFetchTiles_whenOnlyFirstPlacement_thenReturnsSingleTile() {
+    func testFetchTiles_whenOnlyFirstPlacement_thenReturnsSingleTile() async {
         mockAdsClient.mockAdsTiles = [
             "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.test1.com")
         ]
 
         let subject = createSubject()
 
-        fetchTilesAndExpect(tileURLs: ["https://www.test1.com"], from: subject, timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: ["https://www.test1.com"], from: subject, timestamp: baseTimestamp)
     }
 
-    func testFetchTiles_whenErrorAndNoLastKnownTiles_thenFailsWithError() {
+    func testFetchTiles_whenErrorAndNoLastKnownTiles_thenFailsWithError() async {
         mockAdsClient.mockError = NSError(domain: "test", code: 1)
 
         let subject = createSubject()
-        let expectation = expectation(description: "fetchTiles completion is called")
+        let result = await subject.fetchTiles(timestamp: baseTimestamp)
 
-        subject.fetchTiles(timestamp: baseTimestamp) { result in
-            switch result {
-            case let .failure(error as UnifiedAdsProvider.Error):
-                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-            expectation.fulfill()
+        switch result {
+        case let .failure(error as UnifiedAdsProvider.Error):
+            XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
+        default:
+            XCTFail("Expected failure, got \(result) instead")
         }
-
-        waitForExpectations(timeout: 1)
     }
 
     // MARK: - Serving last known tiles
 
-    func testFetchTiles_withinStalenessWindow_servesLastKnownTilesAndRevalidates() {
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.first.com")
-        ]
+    func testFetchTiles_withinStalenessWindow_servesLastKnownTilesAndRevalidates() async {
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.first.com")
 
         let subject = createSubject()
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
 
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.refreshed.com")
-        ]
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.refreshed.com")
 
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + 30 * oneMinute)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + 30 * oneMinute)
+        await subject.awaitPendingRevalidation()
         XCTAssertEqual(mockAdsClient.requestTileAdsCalledCount, 2, "Expected a background revalidation request")
     }
 
-    func testFetchTiles_afterRevalidation_servesRefreshedTiles() {
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.first.com")
-        ]
+    func testFetchTiles_afterRevalidation_servesRefreshedTiles() async {
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.first.com")
 
         let subject = createSubject()
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
 
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.refreshed.com")
-        ]
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + 30 * oneMinute)
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.refreshed.com")
+        await fetchAndExpect(tileURLs: ["https://www.first.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + 30 * oneMinute)
+        await subject.awaitPendingRevalidation()
 
-        fetchTilesAndExpect(tileURLs: ["https://www.refreshed.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + 31 * oneMinute)
+        await fetchAndExpect(tileURLs: ["https://www.refreshed.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + 31 * oneMinute)
+        await subject.awaitPendingRevalidation()
     }
 
-    func testFetchTiles_atExactStalenessBound_servesLastKnownTiles() {
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.first.com")
-        ]
+    func testFetchTiles_atExactStalenessBound_servesLastKnownTiles() async {
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.first.com")
 
         let subject = createSubject()
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
 
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.refreshed.com")
-        ]
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.refreshed.com")
 
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + maxStaleness)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + maxStaleness)
+        await subject.awaitPendingRevalidation()
     }
 
-    func testFetchTiles_beyondStalenessWindow_fetchesFromAdsClient() {
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.first.com")
-        ]
+    func testFetchTiles_beyondStalenessWindow_fetchesFromAdsClient() async {
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.first.com")
 
         let subject = createSubject()
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
 
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.refreshed.com")
-        ]
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.refreshed.com")
 
-        fetchTilesAndExpect(tileURLs: ["https://www.refreshed.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + maxStaleness + 1)
+        await fetchAndExpect(tileURLs: ["https://www.refreshed.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + maxStaleness + 1)
         XCTAssertEqual(mockAdsClient.requestTileAdsCalledCount, 2)
     }
 
-    func testFetchTiles_whenRevalidationFails_keepsServingLastKnownTiles() {
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.first.com")
-        ]
+    func testFetchTiles_whenRevalidationFails_keepsServingLastKnownTiles() async {
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.first.com")
 
         let subject = createSubject()
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"], from: subject, timestamp: baseTimestamp)
 
         mockAdsClient.mockError = NSError(domain: "test", code: 1)
 
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + 30 * oneMinute)
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + 31 * oneMinute)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + 30 * oneMinute)
+        await subject.awaitPendingRevalidation()
+
+        await fetchAndExpect(tileURLs: ["https://www.first.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + 31 * oneMinute)
+        await subject.awaitPendingRevalidation()
         XCTAssertEqual(mockAdsClient.requestTileAdsCalledCount, 3, "Expected one revalidation per served fetch")
     }
 
-    func testFetchTiles_whenEmptySuccess_cachesEmptyTiles() {
+    func testFetchTiles_whenEmptySuccess_cachesEmptyTiles() async {
         mockAdsClient.mockAdsTiles = [:]
 
         let subject = createSubject()
-        fetchTilesAndExpect(tileURLs: [], from: subject, timestamp: baseTimestamp)
+        await fetchAndExpect(tileURLs: [], from: subject, timestamp: baseTimestamp)
 
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.refreshed.com")
-        ]
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.refreshed.com")
 
-        fetchTilesAndExpect(tileURLs: [], from: subject, timestamp: baseTimestamp + oneMinute)
-        fetchTilesAndExpect(tileURLs: ["https://www.refreshed.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + 2 * oneMinute)
+        await fetchAndExpect(tileURLs: [], from: subject, timestamp: baseTimestamp + oneMinute)
+        await subject.awaitPendingRevalidation()
+        await fetchAndExpect(tileURLs: ["https://www.refreshed.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + 2 * oneMinute)
+        await subject.awaitPendingRevalidation()
     }
 
-    func testFetchTiles_whileRevalidationInFlight_doesNotStartSecondRevalidation() {
+    func testFetchTiles_whileRevalidationInFlight_doesNotStartSecondRevalidation() async {
         let pendingQueue = PendingWorkDispatchQueue()
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.first.com")
-        ]
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.first.com")
 
         let subject = createSubject(fetchQueue: pendingQueue)
-        subject.fetchTiles(timestamp: baseTimestamp) { _ in }
+
+        // Warm the cache with a cold fetch whose blocking work we run explicitly.
+        let coldFetch = Task { await subject.fetchTiles(timestamp: baseTimestamp) }
+        await pendingQueue.waitForPendingWork()
         pendingQueue.runAllPendingWork()
+        _ = await coldFetch.value
 
-        subject.fetchTiles(timestamp: baseTimestamp + 30 * oneMinute) { _ in }
-        subject.fetchTiles(timestamp: baseTimestamp + 31 * oneMinute) { _ in }
+        // The first warm fetch starts a revalidation; the second must reuse the in-flight one.
+        _ = await subject.fetchTiles(timestamp: baseTimestamp + 30 * oneMinute)
+        _ = await subject.fetchTiles(timestamp: baseTimestamp + 31 * oneMinute)
 
+        await pendingQueue.waitForPendingWork()
         XCTAssertEqual(pendingQueue.pendingWork.count, 1, "Expected the in-flight revalidation to be reused")
 
         pendingQueue.runAllPendingWork()
+        await subject.awaitPendingRevalidation()
         XCTAssertEqual(mockAdsClient.requestTileAdsCalledCount, 2)
     }
 
-    func testFetchTiles_resultArrivingAfterCallerStoppedWaiting_isServedOnNextFetch() {
+    func testFetchTiles_resultArrivingAfterCallerStoppedWaiting_isServedOnNextFetch() async {
         let pendingQueue = PendingWorkDispatchQueue()
-        mockAdsClient.mockAdsTiles = [
-            "newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: "https://www.first.com")
-        ]
+        mockAdsClient.mockAdsTiles = tiles(url: "https://www.first.com")
 
         let subject = createSubject(fetchQueue: pendingQueue)
-        subject.fetchTiles(timestamp: baseTimestamp) { _ in }
 
-        // The slow request completes only after the caller stopped waiting for it.
+        // The caller stops waiting for the result; the slow request only completes afterwards.
+        let coldFetch = Task { _ = await subject.fetchTiles(timestamp: baseTimestamp) }
+        await pendingQueue.waitForPendingWork()
         pendingQueue.runAllPendingWork()
+        _ = await coldFetch.value
 
-        fetchTilesAndExpect(tileURLs: ["https://www.first.com"],
-                            from: subject,
-                            timestamp: baseTimestamp + oneMinute)
+        await fetchAndExpect(tileURLs: ["https://www.first.com"],
+                             from: subject,
+                             timestamp: baseTimestamp + oneMinute)
+
+        await pendingQueue.waitForPendingWork()
         XCTAssertFalse(pendingQueue.pendingWork.isEmpty, "Expected a background revalidation to be enqueued")
         pendingQueue.runAllPendingWork()
+        await subject.awaitPendingRevalidation()
     }
 
     // MARK: - Helper functions
 
-    private func fetchTilesAndExpect(
+    private func fetchAndExpect(
         tileURLs expectedTileURLs: [String],
         from subject: UnifiedAdsProvider,
         timestamp: Timestamp,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) {
-        let expectation = expectation(description: "fetchTiles completion is called")
-        subject.fetchTiles(timestamp: timestamp) { result in
-            switch result {
-            case let .success(tiles):
-                XCTAssertEqual(tiles.map(\.url), expectedTileURLs, file: file, line: line)
-            case .failure:
-                XCTFail("Expected success, got \(result) instead", file: file, line: line)
-            }
-            expectation.fulfill()
+    ) async {
+        let result = await subject.fetchTiles(timestamp: timestamp)
+        switch result {
+        case let .success(tiles):
+            XCTAssertEqual(tiles.map(\.url), expectedTileURLs, file: file, line: line)
+        case .failure:
+            XCTFail("Expected success, got \(result) instead", file: file, line: line)
         }
-        waitForExpectations(timeout: 1)
+    }
+
+    private func tiles(url: String) -> [String: MozAdsTile] {
+        return ["newtab_mobile_tile_1": createAdTile(name: "newtab_mobile_tile_1", url: url)]
     }
 
     private func createAdTile(name: String, url: String) -> MozAdsTile {
