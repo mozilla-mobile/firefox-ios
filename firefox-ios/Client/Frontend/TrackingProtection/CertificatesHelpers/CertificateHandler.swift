@@ -9,14 +9,35 @@ import X509
 import SwiftASN1
 import Common
 
+/// Decodes DER-encoded bytes into a parsed `Certificate`. Injectable so tests can drive the
+/// error branch of `CertificatesHandler.handleCertificates()` without needing a malformed
+/// `SecCertificate` (which the Security framework won't produce).
+protocol CertificateDecoding {
+    func decodeCertificate(from derBytes: Data) throws -> Certificate
+}
+
+struct DefaultCertificateDecoder: CertificateDecoding {
+    func decodeCertificate(from derBytes: Data) throws -> Certificate {
+        try Certificate(derEncoded: Array(derBytes))
+    }
+}
+
 class CertificatesHandler {
     private let serverTrust: SecTrust
+    private let decoder: CertificateDecoding
+    private let logger: Logger
 
     /// Initializes a new `CertificatesHandler` with the given server trust.
     /// - Parameters:
     ///   - serverTrust: The server trust containing the certificate chain.
-    init(serverTrust: SecTrust) {
+    ///   - decoder: DER decoder used to parse each `SecCertificate`. Defaults to the production decoder.
+    ///   - logger: Logger used to record decode failures. Defaults to `DefaultLogger.shared`.
+    init(serverTrust: SecTrust,
+         decoder: CertificateDecoding = DefaultCertificateDecoder(),
+         logger: Logger = DefaultLogger.shared) {
         self.serverTrust = serverTrust
+        self.decoder = decoder
+        self.logger = logger
     }
 
     /// Extracts and handles the certificate chain.
@@ -30,22 +51,28 @@ class CertificatesHandler {
         for certificate in certificateChain {
             let certificateData = SecCertificateCopyData(certificate) as Data
             do {
-                let certificate = try Certificate(derEncoded: Array(certificateData))
+                let certificate = try decoder.decodeCertificate(from: certificateData)
                 certificates.append(certificate)
             } catch {
-                DefaultLogger.shared.log("\(error)",
-                                         level: .warning,
-                                         category: .certificate)
+                logger.log("\(error)",
+                           level: .warning,
+                           category: .certificate)
             }
         }
         return certificates
     }
 }
 
-// Define a function to get the certificates for a given URL
-func getCertificates(for url: URL, completion: @escaping @Sendable ([Certificate]?) -> Void) {
-    // Create a URL session with a custom delegate
-    let session = URLSession(configuration: .ephemeral,
+/// Define a function to get the certificates for a given URL.
+/// - Parameters:
+///   - url: URL to fetch the server trust from.
+///   - configuration: `URLSessionConfiguration` used to build the session. Tests can supply a
+///     configuration wired to a `URLProtocol` stub to avoid real network calls.
+///   - completion: Called with the parsed certificate chain, or `nil` on error.
+func getCertificates(for url: URL,
+                     configuration: URLSessionConfiguration = .ephemeral,
+                     completion: @escaping @Sendable ([Certificate]?) -> Void) {
+    let session = URLSession(configuration: configuration,
                              delegate: CertificateDelegate(completion: completion),
                              delegateQueue: nil)
 
