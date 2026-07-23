@@ -41,6 +41,3 @@ tracker_blocker:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-    metadata:
-      tags:
-        - TrackerBlocker
