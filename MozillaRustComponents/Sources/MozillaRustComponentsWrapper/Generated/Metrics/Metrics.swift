@@ -23,7 +23,7 @@ extension GleanMetrics {
             // Intentionally left private, no external user can instantiate a new global object.
         }
 
-        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 7, day: 15, hour: 5, minute: 29, second: 7))
+        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 7, day: 23, hour: 5, minute: 38, second: 43))
     }
 
     enum AdsClient {
@@ -265,7 +265,6 @@ extension GleanMetrics {
         struct EnrollmentExtra: EventExtras {
             var branch: String?
             var experiment: String?
-            var experimentType: String?
 
             func toExtraRecord() -> [String: String] {
                 var record = [String: String]()
@@ -275,9 +274,6 @@ extension GleanMetrics {
                 }
                 if let experiment = self.experiment {
                     record["experiment"] = String(experiment)
-                }
-                if let experimentType = self.experimentType {
-                    record["experiment_type"] = String(experimentType)
                 }
 
                 return record
@@ -480,7 +476,7 @@ extension GleanMetrics {
                 lifetime: .ping,
                 disabled: false
             )
-            , ["branch", "experiment", "experiment_type"]
+            , ["branch", "experiment"]
         )
 
         /// Recorded for each enrollment status each time the SDK completes application of

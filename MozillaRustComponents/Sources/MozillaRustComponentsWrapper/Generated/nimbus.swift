@@ -5375,10 +5375,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusstringhelper_string_format() != 23357) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl() != 55414) {
+    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl() != 33153) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl_debug() != 1185) {
+    if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl_debug() != 38986) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_recordedcontext_get_event_queries() != 32041) {
