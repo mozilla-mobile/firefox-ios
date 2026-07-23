@@ -15,6 +15,7 @@ final class TranslationsEngine {
     )
 
     /// Used only for tests, to test if the bridges weak table releases objects after webviews are destroyed.
+    /// periphery:ignore - test-only inspection point for the NSMapTable weak-memory dealloc test.
     var bridgeCount: Int {
         return bridges.objectEnumerator()?.allObjects.count ?? 0
     }
@@ -79,11 +80,6 @@ final class TranslationsEngine {
         let bridge = Bridge(portA: pageEndpoint, portB: engineEndpoint)
         bridges.setObject(bridge, forKey: pageWebView)
         return bridge
-    }
-
-    func removeBridge(for pageWebView: WKWebView) {
-        bridges.object(forKey: pageWebView)?.teardown()
-        bridges.removeObject(forKey: pageWebView)
     }
 
     /// Load the initial entrypoint for the engine.

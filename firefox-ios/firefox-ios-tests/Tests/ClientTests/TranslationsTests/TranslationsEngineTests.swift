@@ -35,33 +35,6 @@ final class TranslationsEngineTests: XCTestCase {
         )
     }
 
-    func test_removeBridge_removesCachedBridge() {
-        let subject = createSubject()
-        let pageWebView = WKWebView()
-
-        let firstBridge = subject.bridge(to: pageWebView)
-
-        subject.removeBridge(for: pageWebView)
-
-        let secondBridge = subject.bridge(to: pageWebView)
-
-        XCTAssertFalse(
-            firstBridge === secondBridge,
-            "Expected removeBridge(for:) to clear the cached bridge so a subsequent bridge(to:) call returns a new instance."
-        )
-    }
-
-    func test_removeBridge_isIdempotent() {
-        let subject = createSubject()
-        let pageWebView = WKWebView()
-
-        XCTAssertNoThrow {
-            subject.removeBridge(for: pageWebView)
-            subject.removeBridge(for: pageWebView)
-            subject.removeBridge(for: pageWebView)
-        }
-    }
-
     func test_NSMapTable_dropsEntryWhenWebViewIsDeallocated() {
         let engine = TranslationsEngine(schemeHandler: MockSchemeHandler())
         // We need a weak reference so we can check that WKWebView actually deallocates.

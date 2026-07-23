@@ -28,8 +28,6 @@ protocol TranslationsServiceProtocol {
     /// In Gecko, we mark translations done when the engine is ready.
     /// In iOS, we will go a step further and wait for the first translation response to be received.
     func firstResponseReceived(for windowUUID: WindowUUID) async throws
-    /// Asks the engine to discard translations and tear down state for the current document.
-    func discardTranslations(for windowUUID: WindowUUID) async throws
     /// Returns the unique set of languages that can be used as translation targets.
     func fetchSupportedTargetLanguages() async -> [String]
     /// Returns the BCP-47 language code of the currently displayed page (e.g. "ja", "en").
