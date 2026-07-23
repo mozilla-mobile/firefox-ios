@@ -121,11 +121,14 @@ final class WebCompatReportViewController: UINavigationController,
         case issueCategory
         case issueSubOptions
         case additionalDetails
+        case advancedOptions
     }
 
     private enum RowID: String {
         case url
         case additionalDetails
+        case includeScreenshot
+        case includeBlockedList
     }
 
     static func makeSections(
@@ -137,6 +140,7 @@ final class WebCompatReportViewController: UINavigationController,
         if state.selectedCategory != nil {
             sections.append(detailsSection(from: state))
         }
+        sections.append(advancedOptionsSection(from: state))
         return sections
     }
 
@@ -166,6 +170,29 @@ final class WebCompatReportViewController: UINavigationController,
                         placeholder: .WebCompatReporter.Fields.DetailsPlaceholder
                     ),
                     a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.additionalDetails
+                )
+            ]
+        )
+    }
+
+    private static func advancedOptionsSection(
+        from state: WebCompatReporterState
+    ) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.advancedOptions.rawValue,
+            title: .WebCompatReporter.AdditionalInfo.Title,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.includeScreenshot.rawValue,
+                    title: .WebCompatReporter.AdditionalInfo.IncludeScreenshot,
+                    kind: .toggle(isOn: state.includeScreenshot),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeScreenshot
+                ),
+                WebCompatReportViewModel.Row(
+                    id: RowID.includeBlockedList.rawValue,
+                    title: .WebCompatReporter.AdditionalInfo.IncludeBlockedList,
+                    kind: .toggle(isOn: state.includeBlockedList),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeBlockedList
                 )
             ]
         )
@@ -293,7 +320,26 @@ final class WebCompatReportViewController: UINavigationController,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.setAdditionalDetails
             ))
-        case .none:
+        case .includeScreenshot, .includeBlockedList, .none:
+            break
+        }
+    }
+
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool) {
+        switch RowID(rawValue: id) {
+        case .includeScreenshot:
+            store.dispatch(WebCompatReporterViewAction(
+                includeScreenshot: isOn,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.toggleScreenshot
+            ))
+        case .includeBlockedList:
+            store.dispatch(WebCompatReporterViewAction(
+                includeBlockedList: isOn,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.toggleBlockedList
+            ))
+        case .url, .additionalDetails, .none:
             break
         }
     }
