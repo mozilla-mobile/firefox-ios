@@ -37,6 +37,8 @@ struct ImageIdentifiers {
     public static let syncOpenTab = "sync_open_tab"
     public static let radioButtonNotSelected = "radioButtonNotSelected"
     public static let radioButtonSelected = "radioButtonSelected"
+    public static let radioButtonNotSelectedNova = "radioButtonNotSelectedNova"
+    public static let radioButtonSelectedNova = "radioButtonSelectedNova"
 
     public struct Appearance {
         public static let automaticBrowserThemeGradient = "automaticBrowserThemeGradient"
