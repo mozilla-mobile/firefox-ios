@@ -269,7 +269,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Visit news.google.com
         browserScreen.navigateToURL(newsGoogleURL)
         waitUntilPageLoad()
-        browserScreen.assertMobileLayoutFitsViewport()
+        browserScreen.assertLayout(.mobile)
 
         // Step 1: Open the hamburger menu -> the dot menu is opened.
         navigateToBrowserTabMenu()
@@ -279,14 +279,14 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Step 2: Tap 'Request Desktop Site' -> the desktop version of the site is loaded.
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
-        browserScreen.assertDesktopLayout()
+        browserScreen.assertLayout(.desktop)
 
         // Step 3: Visit google.com -> the desktop version is loaded, since this site shares
         // the same eTLD+1 domain (google.com) as news.google.com.
         browserScreen.navigateToURL(googleURL)
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "google.com")
-        browserScreen.assertGoogleDesktopSearchButtonsExist()
+        browserScreen.assertLayout(.desktop)
 
         // Step 4: Visit amazon.com -> different domain, no desktop pref, mobile version loads.
         // NOTE: Amazon may show a region-redirect interstitial (e.g. "Deliver to Canada") on
@@ -294,7 +294,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         browserScreen.navigateToURL(amazonURL)
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "amazon.com")
-        browserScreen.assertAmazonMobileLayoutIsDisplayed()
+        browserScreen.assertLayout(.mobile)
 
         // Step 5: Tap "Back" -> news.google.com is loaded, desktop version preserved.
         // Two taps: history is news.google.com -> google.com -> amazon.com, so one tap
@@ -305,7 +305,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         toolbarScreen.tapBackButton()
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "news.google.com")
-        browserScreen.assertDesktopLayout()
+        browserScreen.assertLayout(.desktop)
 
         // Workaround for site not stop loading
         app.buttons["TabToolbar.stopButton"].waitAndTap()
@@ -313,7 +313,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Step 6 + 7: Close the app from the app switcher, then re-launch it
         closeFromAppSwitcherAndRelaunch()
         browserScreen.addressToolbarContainValue(value: "news.google.com")
-        browserScreen.assertDesktopLayout()
+        browserScreen.assertLayout(.desktop)
 
         // Step 8: Settings -> Data Management -> Website Data -> "Clear All Website Data",
         // then return to the news.google.com tab -> desktop version still preserved.
@@ -323,7 +323,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         navigator.goto(BrowserTab)
         browserScreen.addressToolbarContainValue(value: "news.google.com")
-        browserScreen.assertDesktopLayout()
+        browserScreen.assertLayout(.desktop)
 
         // Step 9: Long-press "Refresh", tap "Request Desktop Site" ->
         // the desktop version of news.google.com is open.
@@ -336,7 +336,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Step 11: Tap 'Request Mobile Site' -> the mobile version of the site is loaded.
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
-        browserScreen.assertMobileLayoutFitsViewport()
+        browserScreen.assertLayout(.mobile)
     }
 
     // HELPERS
