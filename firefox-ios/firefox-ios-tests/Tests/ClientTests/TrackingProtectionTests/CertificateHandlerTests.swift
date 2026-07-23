@@ -10,8 +10,8 @@ import Common
 @testable import Client
 
 final class CertificatesHandlerTests: XCTestCase {
-    func testHandleCertificates_withSingleCertificate_returnsThatCertificate() throws {
-        let generated = try CertificateTestFactory.makeSelfSigned(commonName: "leaf.test")
+    func testHandleCertificates_withSingleCertificate_returnsThatCertificate() async throws {
+        let generated = try await CertificateTestFactory.makeSelfSigned(commonName: "leaf.test")
         let trust = try CertificateTestFactory.makeTrust(from: [generated.secCertificate])
 
         let subject = CertificatesHandler(serverTrust: trust)
@@ -21,9 +21,9 @@ final class CertificatesHandlerTests: XCTestCase {
         XCTAssertEqual(result.first?.subject, generated.certificate.subject)
     }
 
-    func testHandleCertificates_withMultiCertChain_returnsAllCertificatesInOrder() throws {
-        let intermediate = try CertificateTestFactory.makeSelfSigned(commonName: "intermediate.test")
-        let leaf = try CertificateTestFactory.makeLeaf(commonName: "leaf.test", signedBy: intermediate)
+    func testHandleCertificates_withMultiCertChain_returnsAllCertificatesInOrder() async throws {
+        let intermediate = try await CertificateTestFactory.makeSelfSigned(commonName: "intermediate.test")
+        let leaf = try await CertificateTestFactory.makeLeaf(commonName: "leaf.test", signedBy: intermediate)
         let trust = try CertificateTestFactory.makeTrust(from: [leaf.secCertificate,
                                                                 intermediate.secCertificate])
 
@@ -35,8 +35,8 @@ final class CertificatesHandlerTests: XCTestCase {
         XCTAssertEqual(result[1].subject, intermediate.certificate.subject)
     }
 
-    func testHandleCertificates_whenDecoderThrowsForAll_returnsEmptyAndLogsWarning() throws {
-        let generated = try CertificateTestFactory.makeSelfSigned(commonName: "leaf.test")
+    func testHandleCertificates_whenDecoderThrowsForAll_returnsEmptyAndLogsWarning() async throws {
+        let generated = try await CertificateTestFactory.makeSelfSigned(commonName: "leaf.test")
         let trust = try CertificateTestFactory.makeTrust(from: [generated.secCertificate])
         let logger = MockLogger()
 
@@ -50,9 +50,9 @@ final class CertificatesHandlerTests: XCTestCase {
         XCTAssertEqual(logger.savedCategory, .certificate)
     }
 
-    func testHandleCertificates_whenDecoderThrowsForOnlyOneCert_returnsTheOtherCert() throws {
-        let intermediate = try CertificateTestFactory.makeSelfSigned(commonName: "intermediate.test")
-        let leaf = try CertificateTestFactory.makeLeaf(commonName: "leaf.test", signedBy: intermediate)
+    func testHandleCertificates_whenDecoderThrowsForOnlyOneCert_returnsTheOtherCert() async throws {
+        let intermediate = try await CertificateTestFactory.makeSelfSigned(commonName: "intermediate.test")
+        let leaf = try await CertificateTestFactory.makeLeaf(commonName: "leaf.test", signedBy: intermediate)
         let trust = try CertificateTestFactory.makeTrust(from: [leaf.secCertificate,
                                                                 intermediate.secCertificate])
         let decoder = SelectivelyThrowingDecoder(throwOnCallIndex: 0)

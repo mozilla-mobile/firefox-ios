@@ -13,27 +13,34 @@ import SwiftASN1
 /// `SecTrustCopyCertificateChain` drops any cert that isn't linked to the leaf, so tests that
 /// need a multi-cert chain must sign a leaf with an issuer's key (see `makeLeaf(signedBy:)`).
 enum CertificateTestFactory {
-    struct GeneratedCertificate {
+    struct GeneratedCertificate: @unchecked Sendable {
         let certificate: Certificate
         let secCertificate: SecCertificate
         fileprivate let signingContext: SigningContext
     }
 
-    fileprivate struct SigningContext {
+    fileprivate struct SigningContext: Sendable {
         let privateKey: P256.Signing.PrivateKey
         let subjectName: DistinguishedName
     }
 
     /// Generates a self-signed CA certificate with the given common name.
-    static func makeSelfSigned(commonName: String) throws -> GeneratedCertificate {
-        try makeCertificate(commonName: commonName, isCA: true, issuer: nil)
+    /// Key generation and DER serialization are dispatched off the main thread.
+    static func makeSelfSigned(commonName: String) async throws -> GeneratedCertificate {
+        try await Task.detached(priority: .userInitiated) {
+            try makeCertificate(commonName: commonName, isCA: true, issuer: nil)
+        }.value
     }
 
     /// Generates a leaf certificate signed by the given issuer. Use this to build a chain that
     /// `SecTrustCopyCertificateChain` will preserve.
+    /// Key generation and DER serialization are dispatched off the main thread.
     static func makeLeaf(commonName: String,
-                         signedBy issuer: GeneratedCertificate) throws -> GeneratedCertificate {
-        try makeCertificate(commonName: commonName, isCA: false, issuer: issuer.signingContext)
+                         signedBy issuer: GeneratedCertificate) async throws -> GeneratedCertificate {
+        let context = issuer.signingContext
+        return try await Task.detached(priority: .userInitiated) {
+            try makeCertificate(commonName: commonName, isCA: false, issuer: context)
+        }.value
     }
 
     /// Wraps the given `SecCertificate`s in a `SecTrust` using the basic X.509 policy.

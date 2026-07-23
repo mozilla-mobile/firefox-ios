@@ -41,7 +41,7 @@ final class CertificateDelegateTests: XCTestCase {
     }
 
     func testDelegate_withServerTrust_callsCompletionWithCertsAndUsesCredential() async throws {
-        let generated = try CertificateTestFactory.makeSelfSigned(commonName: "leaf.test")
+        let generated = try await CertificateTestFactory.makeSelfSigned(commonName: "leaf.test")
         let trust = try CertificateTestFactory.makeTrust(from: [generated.secCertificate])
 
         let expectation = expectation(description: "completion called with certs")
