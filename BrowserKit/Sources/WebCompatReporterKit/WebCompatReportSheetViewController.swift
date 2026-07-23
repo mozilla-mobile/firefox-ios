@@ -15,6 +15,7 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidSelectCategory(id: String)
     func webCompatReportSheetDidSelectSubOption(id: String)
     func webCompatReportSheetDidTapButton(id: String)
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool)
 }
 
 /// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
@@ -166,6 +167,16 @@ public final class WebCompatReportSheetViewController: UIViewController,
             cell.applyTheme(theme: self.theme)
         }
 
+        let toggleRegistration = UICollectionView.CellRegistration<
+            WebCompatToggleCell, WebCompatReportViewModel.Row
+        > { [weak self] cell, _, row in
+            guard let self, case let .toggle(isOn) = row.kind else { return }
+            cell.configure(title: row.title, isOn: isOn, a11yIdentifier: row.a11yIdentifier) { [weak self] isOn in
+                self?.delegate?.webCompatReportSheetDidToggle(id: row.id, isOn: isOn)
+            }
+            cell.applyTheme(theme: self.theme)
+        }
+
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
         ) { [weak self] collectionView, indexPath, rowID in
@@ -186,6 +197,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
             case .sendButton:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: sendButtonRegistration,
+                    for: indexPath,
+                    item: row
+                )
+            case .toggle:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: toggleRegistration,
                     for: indexPath,
                     item: row
                 )

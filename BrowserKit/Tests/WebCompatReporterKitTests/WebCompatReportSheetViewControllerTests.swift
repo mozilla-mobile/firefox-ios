@@ -156,6 +156,37 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(firstSubview(ofType: UIButton.self, in: cell)?.isEnabled, false)
     }
 
+    func testConfigure_withToggleSection_dequeuesToggleCell() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: makeViewModel(sections: toggleSections()))
+        subject.view.layoutIfNeeded()
+
+        XCTAssertTrue(
+            collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatToggleCell
+        )
+    }
+
+    func testToggleCell_activation_notifiesDelegateWithRowIDAndValue() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let subject = createSubject()
+        subject.delegate = delegate
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: toggleSections()))
+        subject.view.layoutIfNeeded()
+
+        let toggleCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
+        let toggle = firstSubview(ofType: UISwitch.self, in: toggleCell)
+        toggle?.isOn = true
+        fireActions(toggle, for: .valueChanged)
+
+        XCTAssertEqual(delegate.toggles.map(\.id), ["screenshot"])
+        XCTAssertEqual(delegate.toggles.map(\.isOn), [true])
+    }
+
     // MARK: - Helpers
 
     private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
@@ -184,6 +215,29 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                     a11yIdentifier: "send"
                 )
             ])
+        ]
+    }
+
+    private func toggleSections() -> [WebCompatReportViewModel.Section] {
+        return [
+            WebCompatReportViewModel.Section(
+                id: "advanced",
+                title: "Additional Info",
+                rows: [
+                    WebCompatReportViewModel.Row(
+                        id: "screenshot",
+                        title: "Include screenshot",
+                        kind: .toggle(isOn: false),
+                        a11yIdentifier: "screenshot"
+                    ),
+                    WebCompatReportViewModel.Row(
+                        id: "blocklist",
+                        title: "Include blocked list",
+                        kind: .toggle(isOn: true),
+                        a11yIdentifier: "blocklist"
+                    )
+                ]
+            )
         ]
     }
 
@@ -277,6 +331,7 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
     var selectedCategoryIDs: [String] = []
     var selectedSubOptionIDs: [String] = []
     var tappedButtonIDs: [String] = []
+    var toggles: [(id: String, isOn: Bool)] = []
 
     func webCompatReportSheetDidTapClose() {
         didTapCloseCallCount += 1
@@ -296,5 +351,9 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
 
     func webCompatReportSheetDidTapButton(id: String) {
         tappedButtonIDs.append(id)
+    }
+
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool) {
+        toggles.append((id, isOn))
     }
 }
