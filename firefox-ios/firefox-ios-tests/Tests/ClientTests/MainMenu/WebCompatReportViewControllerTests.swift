@@ -76,6 +76,34 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(dispatchedViewActions().isEmpty)
     }
 
+    func testDidToggle_onScreenshotRow_dispatchesToggleScreenshotWithValue() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidToggle(id: "includeScreenshot", isOn: false)
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .toggleScreenshot)
+        XCTAssertEqual(action?.includeScreenshot, false)
+    }
+
+    func testDidToggle_onBlockedListRow_dispatchesToggleBlockedListWithValue() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidToggle(id: "includeBlockedList", isOn: true)
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .toggleBlockedList)
+        XCTAssertEqual(action?.includeBlockedList, true)
+    }
+
+    func testDidToggle_onUnhandledRow_dispatchesNothing() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidToggle(id: "url", isOn: true)
+
+        XCTAssertTrue(dispatchedViewActions().isEmpty)
+    }
+
     func testSimpleCreation_hasNoLeaks() {
         let subject = createSubject(reportedURL: nil)
         subject.loadViewIfNeeded()
@@ -138,38 +166,49 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - makeSections
 
-    func testMakeSections_withoutCategory_showsURLAndCategoryOnly() {
+    func testMakeSections_withoutCategory_omitsDetailsShowsAdvancedToggles() {
         let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
-        // URL + category only (no sub-options, no details until a category is picked).
-        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory"])
+        // URL + category + advanced (no sub-options, no details until a category is picked).
+        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "advancedOptions"])
 
         guard case let .urlField(text, _) = sections.first?.rows.first?.kind else {
             return XCTFail("Expected a URL field row")
         }
         XCTAssertEqual(text, "https://example.com")
+
+        let advanced = sections.first { $0.id == "advancedOptions" }
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: true), .toggle(isOn: false)])
     }
 
-    func testMakeSections_withCategory_showsDetails() {
+    func testMakeSections_withCategory_showsDetailsAndAdvancedToggles() {
         let state = WebCompatReporterState(
             windowUUID: windowUUID,
             url: "https://example.com",
             selectedCategory: .siteNotUsable,
             selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
-            additionalDetails: "Broken images"
+            additionalDetails: "Broken images",
+            includeScreenshot: false,
+            includeBlockedList: true
         )
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
-        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "issueSubOptions", "additionalDetails"])
+        XCTAssertEqual(
+            sections.map(\.id),
+            ["url", "issueCategory", "issueSubOptions", "additionalDetails", "advancedOptions"]
+        )
 
         let details = sections.first { $0.id == "additionalDetails" }
         guard case let .detailsField(text, _) = details?.rows.first?.kind else {
             return XCTFail("Expected a details field row")
         }
         XCTAssertEqual(text, "Broken images")
+
+        let advanced = sections.first { $0.id == "advancedOptions" }
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false), .toggle(isOn: true)])
     }
 
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {

@@ -83,6 +83,28 @@ private func previewDetailsSection() -> WebCompatReportViewModel.Section {
     ])
 }
 
+private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList: Bool)
+-> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(
+        id: "advanced",
+        title: "Additional Info",
+        rows: [
+            WebCompatReportViewModel.Row(
+                id: "screenshot",
+                title: "Automatically include a screenshot to show the problem",
+                kind: .toggle(isOn: includeScreenshot),
+                a11yIdentifier: "screenshot"
+            ),
+            WebCompatReportViewModel.Row(
+                id: "blocklist",
+                title: "Send list of items blocked by tracking protection",
+                kind: .toggle(isOn: includeBlockedList),
+                a11yIdentifier: "blocklist"
+            )
+        ]
+    )
+}
+
 @available(iOS 17.0, *)
 #Preview("Filled") {
     previewSheet(sections: [
@@ -94,15 +116,17 @@ private func previewDetailsSection() -> WebCompatReportViewModel.Section {
             previewSubOption("missing_items", "Missing items"),
             previewSubOption("buttons_not_working", "Buttons or links not working")
         ]),
-        previewDetailsSection()
+        previewDetailsSection(),
+        previewAdvancedSection(includeScreenshot: true, includeBlockedList: true)
     ], isPreviewEnabled: true)
 }
 
 @available(iOS 17.0, *)
-#Preview("Empty / Send disabled") {
+#Preview("Empty") {
     previewSheet(sections: [
         previewURLSection(),
-        previewCategorySection(selectedTitle: nil)
+        previewCategorySection(selectedTitle: nil),
+        previewAdvancedSection(includeScreenshot: true, includeBlockedList: false)
     ], isPreviewEnabled: false)
 }
 #endif
