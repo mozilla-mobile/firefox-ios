@@ -1002,6 +1002,10 @@
 		8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */; };
 		8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */; };
 		8A4593CA2BF7BECA002758DE /* MicrosurveyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C62BF7BECA002758DE /* MicrosurveyTableView.swift */; };
+		8A46470630118973002E8767 /* CertificateHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46470330118973002E8767 /* CertificateHandlerTests.swift */; };
+		8A46470730118973002E8767 /* CertificateDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46470230118973002E8767 /* CertificateDelegateTests.swift */; };
+		8A46470830118973002E8767 /* CertificatesFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46470430118973002E8767 /* CertificatesFetcherTests.swift */; };
+		8A46470930118973002E8767 /* CertificateTestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46470530118973002E8767 /* CertificateTestFactory.swift */; };
 		8A46F5AB2C9E4389005B6422 /* PasswordRuleRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */; };
 		8A46F5AC2C9E4389005B6422 /* RemoteDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A72C9E4389005B6422 /* RemoteDataType.swift */; };
 		8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A82C9E4389005B6422 /* RemoteSettingsFetchConfig.swift */; };
@@ -9665,6 +9669,10 @@
 		8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewController.swift; sourceTree = "<group>"; };
 		8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableHeaderView.swift; sourceTree = "<group>"; };
 		8A4593C62BF7BECA002758DE /* MicrosurveyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableView.swift; sourceTree = "<group>"; };
+		8A46470230118973002E8767 /* CertificateDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateDelegateTests.swift; sourceTree = "<group>"; };
+		8A46470330118973002E8767 /* CertificateHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateHandlerTests.swift; sourceTree = "<group>"; };
+		8A46470430118973002E8767 /* CertificatesFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesFetcherTests.swift; sourceTree = "<group>"; };
+		8A46470530118973002E8767 /* CertificateTestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateTestFactory.swift; sourceTree = "<group>"; };
 		8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordRuleRecord.swift; sourceTree = "<group>"; };
 		8A46F5A72C9E4389005B6422 /* RemoteDataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataType.swift; sourceTree = "<group>"; };
 		8A46F5A82C9E4389005B6422 /* RemoteSettingsFetchConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSettingsFetchConfig.swift; sourceTree = "<group>"; };
@@ -15412,6 +15420,10 @@
 		AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */ = {
 			isa = PBXGroup;
 			children = (
+				8A46470230118973002E8767 /* CertificateDelegateTests.swift */,
+				8A46470330118973002E8767 /* CertificateHandlerTests.swift */,
+				8A46470430118973002E8767 /* CertificatesFetcherTests.swift */,
+				8A46470530118973002E8767 /* CertificateTestFactory.swift */,
 				0AEA29352F518B7100B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift */,
 				0AB76B552F3F678A009458EB /* BlockedTrackersFooterViewTests.swift */,
 				0A8058262F694E21004CB4A9 /* CreditCardBottomSheetViewControllerTests.swift */,
@@ -21103,6 +21115,10 @@
 				21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */,
 				C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */,
 				03911AC02F27CA5D0010967A /* TermsOfUseMigrationTests.swift in Sources */,
+				8A46470630118973002E8767 /* CertificateHandlerTests.swift in Sources */,
+				8A46470730118973002E8767 /* CertificateDelegateTests.swift in Sources */,
+				8A46470830118973002E8767 /* CertificatesFetcherTests.swift in Sources */,
+				8A46470930118973002E8767 /* CertificateTestFactory.swift in Sources */,
 				03D9946C2EE8214F0081D209 /* TermsOfUseCoordinatorTests.swift in Sources */,
 				1DF9168A2F48EAB100FA2407 /* MockRelayController.swift in Sources */,
 				214703452F32821C003FFAD9 /* MockToolbarHelper.swift in Sources */,
