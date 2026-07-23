@@ -22,8 +22,8 @@ final class CertificatesHandlerTests: XCTestCase {
     }
 
     func testHandleCertificates_withMultiCertChain_returnsAllCertificatesInOrder() throws {
-        let leaf = try CertificateTestFactory.makeSelfSigned(commonName: "leaf.test")
         let intermediate = try CertificateTestFactory.makeSelfSigned(commonName: "intermediate.test")
+        let leaf = try CertificateTestFactory.makeLeaf(commonName: "leaf.test", signedBy: intermediate)
         let trust = try CertificateTestFactory.makeTrust(from: [leaf.secCertificate,
                                                                 intermediate.secCertificate])
 
@@ -51,8 +51,8 @@ final class CertificatesHandlerTests: XCTestCase {
     }
 
     func testHandleCertificates_whenDecoderThrowsForOnlyOneCert_returnsTheOtherCert() throws {
-        let leaf = try CertificateTestFactory.makeSelfSigned(commonName: "leaf.test")
         let intermediate = try CertificateTestFactory.makeSelfSigned(commonName: "intermediate.test")
+        let leaf = try CertificateTestFactory.makeLeaf(commonName: "leaf.test", signedBy: intermediate)
         let trust = try CertificateTestFactory.makeTrust(from: [leaf.secCertificate,
                                                                 intermediate.secCertificate])
         let decoder = SelectivelyThrowingDecoder(throwOnCallIndex: 0)
