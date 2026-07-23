@@ -528,7 +528,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .trackerBlockerModule), 1)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .trackerBlockerModule).first, .trackerBlockerModule)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .trackerBlockerModule).first, .trackerBlockerModule(0))
         let expectedSections: [HomepageSection] = [
             .header,
             .trackerBlockerModule,

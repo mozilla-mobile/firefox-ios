@@ -657,9 +657,15 @@ final class HomepageViewController: UIViewController,
             }
         case .jumpBackInSyncedTab(let config):
             return configureSyncedTabCell(config, item: item, at: indexPath)
-        case .trackerBlockerModule:
-            return configuredCell(cellType: TrackerBlockerModuleCell.self, at: indexPath) { cell in
-                cell.applyTheme(theme: currentTheme)
+        case .trackerBlockerModule(let count):
+            return configuredCell(
+                cellType: TrackerBlockerModuleCell.self,
+                at: indexPath
+            ) { cell in
+                cell.configure(
+                    count: count,
+                    theme: currentTheme
+                )
             }
         case .bookmark(let item):
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
