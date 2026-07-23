@@ -1,0 +1,195 @@
+# Automated architecture review using Claude.
+# Trigger:
+#   - On demand by commenting "@claude" on a PR (non-fork PRs only).
+# Claude reads the PR diff and the architecture rules in docs/architecture-guidelines.md,
+# then posts inline review comments flagging violations of those rules.
+#
+# Modeled on:
+#   - mozilla/bigquery-etl/.github/workflows/claude-review.yml
+#   - mozilla/global-platform-admin/.github/workflows/claude-tf-plan-review.yaml
+#
+# Repo secret:
+# - ANTHROPIC_API_KEY: Anthropic API key (repository secret, created manually).
+name: Claude Architecture Review
+
+on:
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: claude-architecture-review-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: >-
+      github.event.issue.pull_request != null &&
+      github.event.issue.state == 'open' &&
+      contains(github.event.comment.body, '@claude') &&
+      github.event.comment.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check PR is not from a fork
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Fail closed: on any API error or unexpected result, default to 'true' (treat as a
+          # fork) and bail, so the secret-bearing steps below never run for a fork PR.
+          IS_FORK=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} --jq '.head.repo.fork' || echo 'true')
+          if [[ "${IS_FORK:-true}" != "false" ]]; then
+            echo "PR is from a fork (or fork status could not be confirmed); refusing to run."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          # issue_comment defaults to the default branch, so check out the PR head instead
+          ref: refs/pull/${{ github.event.issue.number }}/head
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Minimize previous Claude architecture reviews
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          # Filter on the `<!-- claude-architecture-review -->` marker that the prompt asks
+          # Claude to embed in the review body, so we only minimize our own prior reviews.
+          ids=$(gh api graphql \
+            -f query='
+              query($owner: String!, $repo: String!, $pr: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $pr) {
+                    reviews(last: 100) {
+                      nodes {
+                        id
+                        isMinimized
+                        author { login }
+                        body
+                        comments(first: 100) { nodes { id isMinimized } }
+                      }
+                    }
+                  }
+                }
+              }' \
+            -f owner="$REPO_OWNER" -f repo="$REPO_NAME" -F pr="$PR_NUMBER" \
+            | jq -r '.data.repository.pullRequest.reviews.nodes[]
+                    | select(.author.login == "github-actions"
+                             and (.body | test("<!-- claude-architecture-review -->")))
+                    | (
+                        (select(.isMinimized | not) | .id),
+                        (.comments.nodes[] | select(.isMinimized | not) | .id)
+                      )')
+          for id in $ids; do
+            echo "Minimizing $id"
+            gh api graphql \
+              -f query='mutation($id: ID!) { minimizeComment(input: {subjectId: $id, classifier: OUTDATED}) { clientMutationId } }' \
+              -f id="$id"
+          done
+
+      - name: Unset runner tokens before agent step
+        # Prevents a prompt injection in the agent step below from using these to touch the
+        # Actions cache/artifacts API or mint an OIDC token.
+        run: |
+          echo "ACTIONS_RUNTIME_TOKEN=" >> "$GITHUB_ENV"
+          echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN=" >> "$GITHUB_ENV"
+          echo "ACTIONS_ID_TOKEN_REQUEST_URL=" >> "$GITHUB_ENV"
+
+      - name: Run Claude architecture review
+        # Mozilla org allowlist permits "anthropics/claude-code-action@v1" (mutable tag).
+        uses: anthropics/claude-code-action@v1 # zizmor: ignore[unpinned-uses]
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Pass GITHUB_TOKEN explicitly so the action doesn't try to mint an OIDC token
+          # (which would require `id-token: write`). Comments will be authored by
+          # github-actions[bot].
+          github_token: ${{ github.token }}
+          trigger_phrase: "@claude"
+          include_fix_links: false
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.issue.number }}
+
+            Review this pull request against the architecture rules documented in
+            `docs/architecture-guidelines.md`. That file is the sole source of truth for
+            what counts as a violation. Read it before reviewing anything.
+
+            Only flag violations of rules in that document. Do not enforce personal style
+            preferences, generic best practices, or rules not stated there. Skip anything
+            already caught by Danger (`Dangerfile.swift`) or SwiftLint (`.swiftlint.yml`),
+            for example `print()`, `NSLog()`, `os_log()`, force casts (`as!`), force try
+            (`try!`), `Deferred<`, `NotificationCenter.default.addObserver`, `UIScreen.main`,
+            `userInterfaceIdiom`, `UIDevice.current.orientation`, or new
+            `BrowserViewController+*.swift` extensions.
+
+            Label each finding with a Conventional Comments label: `issue`, `suggestion`,
+            or `nitpick`. Do not use the `praise` label or the `(blocking)` decorator;
+            humans decide what is blocking.
+
+            State the concrete problem and the fix, and match your wording to the label:
+            do not hedge an `issue` ("maybe", "you may want to") or inflate a `nitpick`
+            into a demand. Anchor each comment to a changed line; flag unchanged code only
+            when a change breaks or depends on it. Comment only when you are confident the
+            issue is real. Do not post comments that:
+            - Praise the code or restate what it does. If a change is correct, say nothing.
+            - Ask for verification ("Check if...", "Ensure that..."). Verify it yourself
+              or do not raise it.
+            - Flag style preferences not backed by `docs/architecture-guidelines.md`.
+
+            Post a single GitHub review using these tools in order:
+            1. `mcp__github__create_pending_pull_request_review` to start a pending review.
+            2. `mcp__github__add_comment_to_pending_review` for each inline finding,
+               prefixed with its label.
+            3. `mcp__github__submit_pending_pull_request_review` to finalize. Required
+               parameters:
+               - `event`: must be `"COMMENT"`. Never `APPROVE` or `REQUEST_CHANGES`; those
+                 statuses are reserved for human reviewers.
+               - `body`: a few sentences of overall context. Open with a factual
+                 description of what the PR does, not a characterization. Do not include a
+                 bulleted list restating the inline findings; those belong inline only.
+                 Always include the literal string `<!-- claude-architecture-review -->`
+                 in this body. It is a hidden HTML comment used to auto-collapse this
+                 review on rerun.
+
+            If any of those tools fail, fall back to posting a single consolidated
+            top-level comment via `gh pr comment` so the run is not silent.
+          claude_args: |
+            --max-budget-usd 6.00
+            --allowedTools mcp__github__create_pending_pull_request_review,mcp__github__add_comment_to_pending_review
+            --allowedTools mcp__github_inline_comment__create_inline_comment
+            --allowedTools mcp__github__submit_pending_pull_request_review,mcp__github__delete_pending_pull_request_review
+            --allowedTools mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_review_comments,mcp__github__add_reply_to_pull_request_comment
+            --allowedTools mcp__github__get_pull_request,mcp__github__get_pull_request_diff,mcp__github__get_pull_request_files,mcp__github__get_file_contents
+            --allowedTools mcp__github__get_workflow_run,mcp__github__list_workflow_runs,mcp__github__list_workflow_jobs
+            --allowedTools "Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Read,Grep,Glob"
+
+      - name: Log Claude permission denials
+        if: always()
+        env:
+          LOG: ${{ runner.temp }}/claude-execution-output.json
+        run: |
+          set -euo pipefail
+          if [[ ! -f "$LOG" ]]; then
+            echo "No execution log at $LOG; skipping denial check."
+            exit 0
+          fi
+          DENIALS=$(jq '[.[] | select(.type == "result") | .permission_denials // []] | add' "$LOG")
+          COUNT=$(jq 'length' <<< "$DENIALS")
+          if [[ "$COUNT" -eq 0 ]]; then
+            echo "No permission denials detected."
+            exit 0
+          fi
+          TOOLS=$(jq -r 'map(.tool_name) | unique | join(",")' <<< "$DENIALS")
+          echo "::warning::Claude had $COUNT permission denial(s), review may be incomplete. Denied tools: $TOOLS"
+          echo "::group::Permission denial details"
+          jq -r '.[] | "- \(.tool_name): \(.tool_input | tojson)"' <<< "$DENIALS"
+          echo "::endgroup::"
