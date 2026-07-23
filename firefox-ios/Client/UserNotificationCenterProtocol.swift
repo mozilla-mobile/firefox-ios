@@ -12,12 +12,7 @@ protocol UserNotificationCenterProtocol {
     func requestAuthorization(options: UNAuthorizationOptions,
                               completionHandler: @escaping @Sendable (Bool, Error?) -> Void)
     func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: (@Sendable (Error?) -> Void)?)
-    func getPendingNotificationRequests(completionHandler: @escaping @Sendable ([UNNotificationRequest]) -> Void)
-    func removePendingNotificationRequests(withIdentifiers identifiers: [String])
-    func removeAllPendingNotificationRequests()
     func deliveredNotifications() async -> [UNNotification]
-    func removeDeliveredNotifications(withIdentifiers identifiers: [String])
-    func removeAllDeliveredNotifications()
 }
 
 extension UNUserNotificationCenter: UserNotificationCenterProtocol {
