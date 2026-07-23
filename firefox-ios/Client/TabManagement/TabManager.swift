@@ -113,9 +113,6 @@ protocol TabManager: AnyObject {
     func restoreTabs()
 
     func expireLoginAlerts()
-    @discardableResult
-
-    func switchPrivacyMode() -> SwitchPrivacyModeResult
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
     func tabDidSetScreenshot(_ tab: Tab)

@@ -250,11 +250,6 @@ final class BrowserCoordinator: BaseCoordinator,
         openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
-    @MainActor
-    func switchMode() {
-        browserViewController.tabManager.switchPrivacyMode()
-    }
-
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
