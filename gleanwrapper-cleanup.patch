@@ -1,0 +1,181 @@
+diff --git a/firefox-ios/Client/Telemetry/GleanWrapper.swift b/firefox-ios/Client/Telemetry/GleanWrapper.swift
+index bab35c5..a1577f4 100644
+--- a/firefox-ios/Client/Telemetry/GleanWrapper.swift
++++ b/firefox-ios/Client/Telemetry/GleanWrapper.swift
+@@ -8,7 +8,6 @@ import Glean
+ protocol GleanWrapper: Sendable {
+     func handleDeeplinkUrl(url: URL)
+     func setUpload(isEnabled: Bool)
+-    func enableTestingMode()
+ 
+     // MARK: Glean Metrics
+ 
+@@ -20,15 +19,10 @@ protocol GleanWrapper: Sendable {
+     func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String)
+     func setBoolean(for metric: BooleanMetricType, value: Bool)
+     func recordQuantity(for metric: QuantityMetricType, value: Int64)
+-    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String)
+-    func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64)
+     func recordUrl(for metric: UrlMetricType, value: URL)
+     func recordDatetime(for metric: DatetimeMetricType, value: Date)
+     func recordUUID(for metric: UuidMetricType, value: UUID)
+ 
+-    func incrementNumerator(for metric: RateMetricType, amount: Int32)
+-    func incrementDenominator(for metric: RateMetricType, amount: Int32)
+-
+     // MARK: Timing Metrics
+     /// You should nullify any references to the timer after stopping it
+     func startTiming(for metric: TimingDistributionMetricType) -> GleanTimerId
+@@ -58,10 +52,6 @@ struct DefaultGleanWrapper: GleanWrapper {
+         glean.setCollectionEnabled(isEnabled)
+     }
+ 
+-    func enableTestingMode() {
+-        glean.enableTestingMode()
+-    }
+-
+     // MARK: Glean Metrics
+ 
+     func recordEvent<ExtraObject>(
+@@ -99,14 +89,6 @@ struct DefaultGleanWrapper: GleanWrapper {
+         metric.set(value)
+     }
+ 
+-    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String) {
+-        metric[label].set(value)
+-    }
+-
+-    func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {
+-        metric[label].set(value)
+-    }
+-
+     func recordUrl(for metric: UrlMetricType, value: URL) {
+         metric.set(url: value)
+     }
+@@ -119,16 +101,6 @@ struct DefaultGleanWrapper: GleanWrapper {
+         metric.set(value)
+     }
+ 
+-    // MARK: RateMetricType
+-
+-    func incrementNumerator(for metric: RateMetricType, amount: Int32) {
+-        metric.addToNumerator(amount)
+-    }
+-
+-    func incrementDenominator(for metric: RateMetricType, amount: Int32) {
+-        metric.addToDenominator(amount)
+-    }
+-
+     // MARK: MeasurementTelemetry
+ 
+     func startTiming(for metric: TimingDistributionMetricType) -> GleanTimerId {
+diff --git a/firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Homepage/Redux/MerinoMiddlewareTests.swift b/firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Homepage/Redux/MerinoMiddlewareTests.swift
+index e1e6f50..3efbf72 100644
+--- a/firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Homepage/Redux/MerinoMiddlewareTests.swift
++++ b/firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Homepage/Redux/MerinoMiddlewareTests.swift
+@@ -136,7 +136,6 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
+         subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
+ 
+         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
+-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
+     }
+ 
+     func test_viewedSectionAction_sendTelemetryData() throws {
+diff --git a/firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Homepage/Redux/TopSitesMiddlewareTests.swift b/firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Homepage/Redux/TopSitesMiddlewareTests.swift
+index 4196f6c..57cd283 100644
+--- a/firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Homepage/Redux/TopSitesMiddlewareTests.swift
++++ b/firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Homepage/Redux/TopSitesMiddlewareTests.swift
+@@ -307,7 +307,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
+         subject.topSitesProvider.legacyMiddleware(appState, action)
+ 
+         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
+-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
+         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 0)
+     }
+diff --git a/firefox-ios/firefox-ios-tests/Tests/ClientTests/Mocks/MockGleanWrapper.swift b/firefox-ios/firefox-ios-tests/Tests/ClientTests/Mocks/MockGleanWrapper.swift
+index 47ca1b1..a16dd19 100644
+--- a/firefox-ios/firefox-ios-tests/Tests/ClientTests/Mocks/MockGleanWrapper.swift
++++ b/firefox-ios/firefox-ios-tests/Tests/ClientTests/Mocks/MockGleanWrapper.swift
+@@ -13,16 +13,12 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
+     var recordEventNoExtraCalled = 0
+     var incrementCounterCalled = 0
+     var recordStringCalled = 0
+-    var recordLabelCalled = 0
+     var incrementLabeledCounterCalled = 0
+     var setBooleanCalled = 0
+     var recordQuantityCalled = 0
+-    var recordLabeledQuantityCalled = 0
+     var recordUrlCalled = 0
+     var recordDatetimeCalled = 0
+     var recordUUIDCalled = 0
+-    var incrementNumeratorCalled = 0
+-    var incrementDenominatorCalled = 0
+     var startTimingCalled = 0
+     var cancelTimingCalled = 0
+     var stopAndAccumulateCalled = 0
+@@ -47,8 +43,6 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
+         savedSetUploadIsEnabled = isEnabled
+     }
+ 
+-    func enableTestingMode() {}
+-
+     func recordEvent<ExtraObject>(
+         for metric: EventMetricType<ExtraObject>,
+         extras: EventExtras
+@@ -93,26 +87,6 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
+         recordQuantityCalled += 1
+     }
+ 
+-    func recordLabel(
+-        for metric: LabeledMetricType<StringMetricType>,
+-        label: String,
+-        value: String
+-    ) {
+-        savedEvents.append(metric)
+-        recordLabelCalled += 1
+-    }
+-
+-    func recordLabeledQuantity(
+-        for metric: LabeledMetricType<QuantityMetricType>,
+-        label: String,
+-        value: Int64
+-    ) {
+-        savedLabel = label
+-        savedValues.append(value)
+-        savedEvents.append(metric)
+-        recordLabeledQuantityCalled += 1
+-    }
+-
+     func recordUrl(for metric: UrlMetricType, value: URL) {
+         savedEvents.append(metric)
+         recordUrlCalled += 1
+@@ -130,16 +104,6 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
+         recordUUIDCalled += 1
+     }
+ 
+-    func incrementNumerator(for metric: RateMetricType, amount: Int32) {
+-        savedEvents.append(metric)
+-        incrementNumeratorCalled += 1
+-    }
+-
+-    func incrementDenominator(for metric: RateMetricType, amount: Int32) {
+-        savedEvents.append(metric)
+-        incrementDenominatorCalled += 1
+-    }
+-
+     func startTiming(for metric: TimingDistributionMetricType) -> GleanTimerId {
+         savedEvents.append(metric)
+         startTimingCalled += 1
+diff --git a/firefox-ios/firefox-ios-tests/Tests/ClientTests/Telemetry/FxSuggestTelemetryTests.swift b/firefox-ios/firefox-ios-tests/Tests/ClientTests/Telemetry/FxSuggestTelemetryTests.swift
+index f7ed0ab..92e7e27 100644
+--- a/firefox-ios/firefox-ios-tests/Tests/ClientTests/Telemetry/FxSuggestTelemetryTests.swift
++++ b/firefox-ios/firefox-ios-tests/Tests/ClientTests/Telemetry/FxSuggestTelemetryTests.swift
+@@ -235,7 +235,6 @@ final class FxSuggestTelemetryTests: XCTestCase {
+ 
+     func createSubject(locale: LocaleProvider = MockLocaleProvider(),
+                        gleanWrapper: GleanWrapper = DefaultGleanWrapper()) -> FxSuggestTelemetry {
+-        gleanWrapper.enableTestingMode()
+         return FxSuggestTelemetry(locale: locale, gleanWrapper: gleanWrapper)
+     }
+ }

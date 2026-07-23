@@ -13,16 +13,12 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
     var recordEventNoExtraCalled = 0
     var incrementCounterCalled = 0
     var recordStringCalled = 0
-    var recordLabelCalled = 0
     var incrementLabeledCounterCalled = 0
     var setBooleanCalled = 0
     var recordQuantityCalled = 0
-    var recordLabeledQuantityCalled = 0
     var recordUrlCalled = 0
     var recordDatetimeCalled = 0
     var recordUUIDCalled = 0
-    var incrementNumeratorCalled = 0
-    var incrementDenominatorCalled = 0
     var startTimingCalled = 0
     var cancelTimingCalled = 0
     var stopAndAccumulateCalled = 0
@@ -46,8 +42,6 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
         setUploadEnabledCalled += 1
         savedSetUploadIsEnabled = isEnabled
     }
-
-    func enableTestingMode() {}
 
     func recordEvent<ExtraObject>(
         for metric: EventMetricType<ExtraObject>,
@@ -93,26 +87,6 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
         recordQuantityCalled += 1
     }
 
-    func recordLabel(
-        for metric: LabeledMetricType<StringMetricType>,
-        label: String,
-        value: String
-    ) {
-        savedEvents.append(metric)
-        recordLabelCalled += 1
-    }
-
-    func recordLabeledQuantity(
-        for metric: LabeledMetricType<QuantityMetricType>,
-        label: String,
-        value: Int64
-    ) {
-        savedLabel = label
-        savedValues.append(value)
-        savedEvents.append(metric)
-        recordLabeledQuantityCalled += 1
-    }
-
     func recordUrl(for metric: UrlMetricType, value: URL) {
         savedEvents.append(metric)
         recordUrlCalled += 1
@@ -128,16 +102,6 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
         savedEvents.append(metric)
         savedValues.append(value)
         recordUUIDCalled += 1
-    }
-
-    func incrementNumerator(for metric: RateMetricType, amount: Int32) {
-        savedEvents.append(metric)
-        incrementNumeratorCalled += 1
-    }
-
-    func incrementDenominator(for metric: RateMetricType, amount: Int32) {
-        savedEvents.append(metric)
-        incrementDenominatorCalled += 1
     }
 
     func startTiming(for metric: TimingDistributionMetricType) -> GleanTimerId {

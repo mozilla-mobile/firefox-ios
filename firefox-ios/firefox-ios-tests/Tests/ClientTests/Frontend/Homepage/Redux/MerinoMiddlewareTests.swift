@@ -136,7 +136,6 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.pocketSectionProvider.legacyMiddleware(AppState(), action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
     }
 
     func test_viewedSectionAction_sendTelemetryData() throws {
