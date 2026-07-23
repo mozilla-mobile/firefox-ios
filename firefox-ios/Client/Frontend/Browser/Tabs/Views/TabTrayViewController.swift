@@ -499,10 +499,9 @@ final class TabTrayViewController: UIViewController,
             doneButton.tintColor = theme.colors.iconPrimary
             return
         }
-        let checkmark = theme.type.getInterfaceStyle() == .dark
-            ? ImageIdentifiers.checkmarkNovaDark
-            : ImageIdentifiers.checkmarkNovaLight
-        doneButton.image = UIImage(named: checkmark)?.withRenderingMode(.alwaysOriginal)
+
+        doneButton.image = UIImage(named: StandardImageIdentifiers.Large.checkmark)?
+            .withTintColor(theme.colors.iconInverted, renderingMode: .alwaysOriginal)
         doneButton.tintColor = theme.colors.actionPrimary
     }
 

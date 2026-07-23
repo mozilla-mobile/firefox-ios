@@ -10,8 +10,6 @@ import Foundation
 /// Sing the song if you must.
 struct ImageIdentifiers {
     public static let badgeMask = "badge-mask"
-    public static let checkmarkNovaDark = "checkmarkNovaDark"
-    public static let checkmarkNovaLight = "checkmarkNovaLight"
     public static let firefoxFavicon = "faviconFox"
     public static let firefoxLogoSoccer = "firefoxLogoSoccer"
     public static let foxConfirmation = "foxConfirmation"
