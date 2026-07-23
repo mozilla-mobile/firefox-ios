@@ -31,6 +31,11 @@ enum WebCompatReporterUX {
         static let size: CGFloat = 10
     }
 
+    enum DetailsField {
+        /// Fixed box height (~three lines, scaled with Dynamic Type); the text view scrolls internally.
+        static let minimumHeight: CGFloat = 88
+    }
+
     enum Keyboard {
         static let focusPadding: CGFloat = 16
     }
