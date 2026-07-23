@@ -115,8 +115,20 @@
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "%@ ᱨᱮ ᱱᱟᱶᱟ ᱡᱤᱱᱤᱥ";
 
+/* On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting. */
+"MainMenu.SiteProtection.AdBlocker.Title.v153" = "ᱪᱷᱟᱶᱨᱟ ᱟᱠᱚᱴ";
+
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
 "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "ᱡᱩᱲᱟᱹᱣ ᱫᱚ ᱵᱟᱭ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱜᱮᱭᱟ";
+
+/* On the main menu, at the top, title for a badge that opens site protection settings. */
+"MainMenu.SiteProtection.Protections.Title.v153" = "ᱨᱩᱠᱷᱤᱭᱟᱹᱠᱚ";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
+"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "ᱨᱩᱠᱷᱤᱭᱟᱹ ᱠᱚ ᱵᱚᱱᱫᱚ ᱜᱮᱭᱟ";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
+"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "ᱨᱩᱠᱷᱤᱭᱟᱹ ᱠᱚ ᱪᱟᱹᱞᱩ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "ᱚᱲᱟᱜ";
@@ -232,6 +244,9 @@
 /* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v132" = "ᱦᱟᱹᱴᱤᱧ ᱢᱮ";
 
+/* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v144" = "ᱦᱟᱹᱴᱤᱧ ᱢᱮ";
+
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool and is indicating that under the Tools submenu, a Zoom (apply zoom on a page) action is available. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "ᱡᱩᱢ";
 
@@ -246,6 +261,9 @@
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
 "MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "ᱧᱩᱛ ᱢᱳᱰ";
+
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. */
+"MainMenu.Submenus.Tools.PageZoomV2.Title.v141" = "ᱥᱟᱦᱴᱟ ᱢᱟᱨᱟᱝᱪᱷᱚ";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
 "MainMenu.Submenus.Tools.Print.Subtitle.v131" = "ᱪᱷᱟᱯᱟ";
@@ -274,11 +292,17 @@
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v131" = "ᱦᱟᱹᱴᱤᱧ ᱢᱮ";
 
+/* On the main menu, the title for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.Share.Title.v144" = "ᱦᱟᱹᱴᱤᱧ ᱢᱮ";
+
 /* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱰᱟᱨᱠ ᱢᱚᱰ ᱵᱚᱱᱫᱚᱭ ᱢᱮ";
 
 /* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱰᱟᱨᱠ ᱢᱚᱰ ᱪᱟᱹᱞᱩᱭ ᱢᱮ";
+
+/* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱰᱟᱨᱠ ᱢᱚᱰ";
 
 /* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
 "MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
@@ -307,14 +331,41 @@
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "ᱱᱟᱶᱟ ᱴᱮᱵᱽ";
 
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "ᱜᱷᱟᱥᱟᱣ ᱮᱱᱟ";
+
+/* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "ᱰᱮᱥᱠᱴᱟᱹᱯ ᱥᱟᱭᱤᱴ";
+
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
+"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "ᱯᱟᱥᱱᱟᱣ ᱟᱠᱟᱱᱟ";
+
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "ᱥᱟᱦᱴᱟ ᱨᱮ ᱯᱟᱱᱛᱮ ᱢᱮ";
+
+/* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "ᱠᱟ.ᱡ";
+
+/* On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...) */
+"MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142" = "ᱯᱩᱛᱷᱤ ᱚᱲᱟᱜ";
+
+/* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "ᱰᱷᱮᱨ";
+
+/* On the main menu, the accessibility label for the action that will open the page zoom tool. */
+"MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "ᱥᱟᱦᱴᱟ ᱢᱟᱨᱟᱝᱪᱷᱚ";
+
+/* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "ᱯᱟᱲᱦᱟᱣ ᱧᱮᱞ";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "ᱥᱟᱺᱪᱟᱣ ᱢᱮ";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "ᱥᱚᱵᱢᱮᱱᱩ ᱥᱟᱧᱪᱟᱣ ᱢᱮ";
+
+/* On the main menu, the accessibility label for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142" = "ᱥᱟᱦᱴᱟ ᱩᱥᱟᱹᱨ ᱥᱟᱹᱦᱤᱡ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
 
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "ᱰᱮᱥᱠᱴᱚᱯ ᱥᱟᱭᱤᱴ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
@@ -328,11 +379,38 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "ᱢᱩᱞ ᱥᱚᱵᱢᱮᱱᱩ";
 
+/* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
+"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱧᱩᱛ ᱢᱚᱰ";
+
+/* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.DesktopSite.Title.v141" = "ᱰᱮᱥᱠᱴᱟᱹᱯ ᱥᱟᱭᱤᱴ";
+
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "ᱥᱟᱠᱟᱢ ᱨᱮ ᱯᱟᱱᱛᱮ ᱢᱮ …";
 
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPageV2.Title.v141" = "ᱥᱟᱠᱟᱢ ᱨᱮ ᱯᱟᱱᱛᱮ ᱢᱮ";
+
+/* On the main menu, the title for the action that will hide some menu options in the current section of the menu. */
+"MainMenu.ToolsSection.LessOptions.Title.v141" = "ᱠᱟ.ᱡ";
+
+/* On the main menu, the title for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.MoreOptions.Title.v141" = "ᱰᱷᱮᱨ";
+
+/* On the main menu, the title for the action that will show the reader view for the webpage. */
+"MainMenu.ToolsSection.ReaderView.Title.v149" = "ᱯᱟᱲᱦᱟᱣ ᱧᱮᱞ";
+
+/* On the main menu, the label for the action that indicates that Reader view is turned off. */
+"MainMenu.ToolsSection.ReaderViewOff.Title.v150" = "ᱵᱚᱸᱫᱚ";
+
+/* On the main menu, the label for the action that indicates that Reader view is turned on. */
+"MainMenu.ToolsSection.ReaderViewOn.Title.v150" = "ᱪᱟᱹᱞᱩ";
+
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "ᱥᱟᱺᱪᱟᱣ ᱢᱮ";
+
+/* On the main menu, the title for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.SummarizePage.Title.v142" = "ᱥᱟᱦᱴᱟ ᱩᱥᱟᱹᱨ ᱥᱟᱹᱦᱤᱡ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
 
 /* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "ᱰᱮᱥᱠᱴᱚᱯ ᱥᱟᱭᱤᱴ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
@@ -342,4 +420,22 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱠᱚ";
+
+/* On the main menu, the accessibility label for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145" = "ᱥᱟᱦᱴᱟ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱠᱟᱱᱟ";
+
+/* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "ᱥᱟᱦᱴᱟ %@ ᱛᱮ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱠᱟᱱᱟ";
+
+/* On the main menu, the title for the action that will translate the content of the webpage. */
+"MainMenu.ToolsSection.Translation.Title.v145" = "ᱥᱟᱦᱴᱟ ᱛᱚᱨᱡᱚᱢᱟᱭ ᱢᱮ";
+
+/* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.Translated.Title.v145" = "ᱛᱚᱨᱡᱚᱢᱟ ᱟᱠᱟᱱᱟ";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
+"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "ᱵᱚᱸᱫᱚ";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON. */
+"MainMenu.WebsiteDarkModeOnV2.Title.v142" = "ᱪᱟᱹᱞᱩ";
 

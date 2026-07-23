@@ -1,6 +1,6 @@
 /* Text displayed above the input field when changing the existing passcode */
-"Enter passcode" = "បញ្ចូលលេខសម្ងាត់";
+"Enter passcode" = "បញ្ចូលកូដសម្ងាត់";
 
 /* Touch ID prompt subtitle when accessing logins */
-"Use your fingerprint to access Logins now." = "ប្រើ​ស្នាម​ម្រាមដៃ​ដើម្បី​ចូល​ឥឡូវ​នេះ។";
+"Use your fingerprint to access Logins now." = "ប្រើក្រយៅដៃរបស់អ្នក ដើម្បីអាក់សេសបញ្ជាប់ចូលឥឡូវនេះ។";
 

@@ -46,6 +46,27 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Circà o stampittà un indirizzu";
 
+/* The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2" = "Stampittà l’indirizzu per u situ web.";
+
+/* The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2" = "Aghjunghje un accurtatoghju";
+
+/* The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153" = "Abbandunà";
+
+/* The error message shown when a user enters an invalid website URL in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.InvalidURLErrorMessage.v153" = "Stampittate un indirizzu web accettevule";
+
+/* The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153" = "Arregistrà";
+
+/* The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut. */
+"FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153" = "Aghjunghje un accurtatoghju";
+
+/* The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153" = "Indirizzu web di u situ";
+
 /* This is the navigation title for the Shortcuts Library view */
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "Accurtatoghji";
 
@@ -55,6 +76,15 @@
 /* This is the section title for the Shortcuts section on Firefox Homepage. */
 "FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Accurtatoghji";
 
+/* On the homepage, in the category selection bar, in the stories section, this will be the title of the button indicating that all story categories are currently selected. */
+"FirefoxHomepage.Stories.AllStoryCategories.v151" = "Tuttu";
+
 /* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
 "FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ nant’à %2$@";
+
+/* The text shown when we turn on the Tracker Blocker feature on the homepage, and the number of trackers blocked is zero. */
+"FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153" = "Site prutetti";
+
+/* The numbers of trackers we've blocked since we started tracking. The %d placeholder is the actual number of trackers blocked. */
+"FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b" = "Perseguitatori bluccati : %d";
 
