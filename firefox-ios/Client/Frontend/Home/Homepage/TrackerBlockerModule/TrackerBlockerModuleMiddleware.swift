@@ -12,15 +12,23 @@ import Redux
 /// happens off the homepage while the user browses.
 @MainActor
 final class TrackerBlockerModuleMiddleware {
-    private let statsStore: TrackerBlockStatsStore
+    private static let minReportableFigures = 4
+    private static let maxReportableFigures = 8
 
-    init(statsStore: TrackerBlockStatsStore? = nil) {
+    private let statsStore: TrackerBlockStatsStore
+    private let telemetry: TrackerBlockerTelemetry
+
+    init(
+        statsStore: TrackerBlockStatsStore? = nil,
+        telemetry: TrackerBlockerTelemetry = TrackerBlockerTelemetry()
+    ) {
         if let statsStore {
             self.statsStore = statsStore
         } else {
             let prefs = (AppContainer.shared.resolve() as Profile).prefs
             self.statsStore = DefaultTrackerBlockStatsStoreUtility(prefs: prefs)
         }
+        self.telemetry = telemetry
     }
 
     lazy var trackerBlockerModuleProvider: Middleware<AppState> = (legacyProvider, modernProvider)
@@ -42,12 +50,33 @@ final class TrackerBlockerModuleMiddleware {
     }
 
     private func dispatchBlockedCount(windowUUID: WindowUUID) {
+        let count = statsStore.lifetimeTotal()
+        recordThresholdCrossings(for: count)
         store.dispatch(
             TrackerBlockerModuleAction(
-                blockedTrackerCount: statsStore.lifetimeTotal(),
+                blockedTrackerCount: count,
                 windowUUID: windowUUID,
                 actionType: TrackerBlockerModuleMiddlewareActionType.updateBlockedCount
             )
         )
+    }
+
+    /// Fires a telemetry event for each digit-count boundary (4...8 figures) the
+    /// lifetime total has newly crossed, then persists the high-water mark so no
+    /// boundary is reported more than once.
+    private func recordThresholdCrossings(for count: Int) {
+        guard count > 0 else { return }
+        let figures = String(count).count
+        guard figures >= Self.minReportableFigures else { return }
+
+        let cappedFigures = min(figures, Self.maxReportableFigures)
+        let alreadyReported = statsStore.highestReportedFigures()
+        guard cappedFigures > alreadyReported else { return }
+
+        let firstToReport = max(Self.minReportableFigures, alreadyReported + 1)
+        for boundary in firstToReport...cappedFigures {
+            telemetry.lifetimeThresholdReached(figures: boundary)
+        }
+        statsStore.setHighestReportedFigures(cappedFigures)
     }
 }

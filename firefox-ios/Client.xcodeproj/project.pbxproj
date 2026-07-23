@@ -495,6 +495,8 @@
 		39B77FF5300FD63B00430F38 /* TrackerBlockerModuleMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B77FF4300FD63B00430F38 /* TrackerBlockerModuleMiddleware.swift */; };
 		39B77FF8300FD65000430F38 /* TrackerBlockerModuleMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B77FF6300FD65000430F38 /* TrackerBlockerModuleMiddlewareTests.swift */; };
 		39B77FF9300FD65000430F38 /* TrackerBlockerModuleStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B77FF7300FD65000430F38 /* TrackerBlockerModuleStateTests.swift */; };
+		39B783F43011074500430F38 /* TrackerBlockerTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B783F33011074100430F38 /* TrackerBlockerTelemetry.swift */; };
+		39B783F63011076900430F38 /* TrackerBlockerTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B783F53011076400430F38 /* TrackerBlockerTelemetryTests.swift */; };
 		39BD570E2E53F3ED00CA1317 /* MerinoFeedFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BD570D2E53F3E400CA1317 /* MerinoFeedFetcher.swift */; };
 		39BF0CD52EB512A1002064F5 /* ImpressionTrackingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BF0CD42EB51297002064F5 /* ImpressionTrackingUtility.swift */; };
 		39BF0CD72EB512CD002064F5 /* ImpressionTrackingUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BF0CD62EB512C5002064F5 /* ImpressionTrackingUtilityTests.swift */; };
@@ -3574,6 +3576,8 @@
 		39B77FF4300FD63B00430F38 /* TrackerBlockerModuleMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleMiddleware.swift; sourceTree = "<group>"; };
 		39B77FF6300FD65000430F38 /* TrackerBlockerModuleMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleMiddlewareTests.swift; sourceTree = "<group>"; };
 		39B77FF7300FD65000430F38 /* TrackerBlockerModuleStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleStateTests.swift; sourceTree = "<group>"; };
+		39B783F33011074100430F38 /* TrackerBlockerTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerTelemetry.swift; sourceTree = "<group>"; };
+		39B783F53011076400430F38 /* TrackerBlockerTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerTelemetryTests.swift; sourceTree = "<group>"; };
 		39BD570D2E53F3E400CA1317 /* MerinoFeedFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoFeedFetcher.swift; sourceTree = "<group>"; };
 		39BF0CD42EB51297002064F5 /* ImpressionTrackingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpressionTrackingUtility.swift; sourceTree = "<group>"; };
 		39BF0CD62EB512C5002064F5 /* ImpressionTrackingUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpressionTrackingUtilityTests.swift; sourceTree = "<group>"; };
@@ -13260,6 +13264,7 @@
 		390786DC2FD722FA001CE0C2 /* TrackerBlockerModule */ = {
 			isa = PBXGroup;
 			children = (
+				39B783F33011074100430F38 /* TrackerBlockerTelemetry.swift */,
 				C2F700B12FBC000100112233 /* TrackerBlockerModuleAction.swift */,
 				39B77FF4300FD63B00430F38 /* TrackerBlockerModuleMiddleware.swift */,
 				C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */,
@@ -14828,6 +14833,7 @@
 		8AC225632B6D3F9600CDA7FD /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
+				39B783F53011076400430F38 /* TrackerBlockerTelemetryTests.swift */,
 				8CFBC1892ECF44C400E5B22B /* ActionExtensionTelemetryTests.swift */,
 				8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */,
 				C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */,
@@ -20043,6 +20049,7 @@
 				8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */,
 				ED9FD5DB2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift in Sources */,
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
+				39B783F43011074500430F38 /* TrackerBlockerTelemetry.swift in Sources */,
 				8AE9FD262CF66301001053EE /* UnifiedAdsProvider.swift in Sources */,
 				C25018E12ECC7A290071506F /* BridgeEndpoint.swift in Sources */,
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetView.swift in Sources */,
@@ -20851,6 +20858,7 @@
 				2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */,
 				5A3A7DDC2889EC5D0065F81A /* MockBookmarksHandler.swift in Sources */,
 				8015C8B52D0A31FE0093AED0 /* RecordedNimbusContextTests.swift in Sources */,
+				39B783F63011076900430F38 /* TrackerBlockerTelemetryTests.swift in Sources */,
 				EDD592472FC0FF6F0015EF9E /* ModifiedCopyMacroTests.swift in Sources */,
 				AA742C7A2E90358400CF55B3 /* MockMicrosurveyTelemetry.swift in Sources */,
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
