@@ -12,6 +12,8 @@ import WebCompatReporterKit
 protocol WebCompatReportCoordinatorDelegate: AnyObject {
     /// Sheet asked to finish; the coordinator owns the dismissal.
     func webCompatReportViewControllerDidFinish()
+    /// User tapped the "Learn More…" link; the coordinator opens the explainer page.
+    func webCompatReportViewControllerDidTapLearnMore(url: URL)
 }
 
 /// Store-connected container that hosts the `WebCompatReporterKit` sheet, maps
@@ -122,6 +124,7 @@ final class WebCompatReportViewController: UINavigationController,
         case issueSubOptions
         case additionalDetails
         case advancedOptions
+        case send
     }
 
     private enum RowID: String {
@@ -129,6 +132,7 @@ final class WebCompatReportViewController: UINavigationController,
         case additionalDetails
         case includeScreenshot
         case includeBlockedList
+        case send
     }
 
     static func makeSections(
@@ -141,6 +145,7 @@ final class WebCompatReportViewController: UINavigationController,
             sections.append(detailsSection(from: state))
         }
         sections.append(advancedOptionsSection(from: state))
+        sections.append(sendSection(from: state))
         return sections
     }
 
@@ -178,9 +183,21 @@ final class WebCompatReportViewController: UINavigationController,
     private static func advancedOptionsSection(
         from state: WebCompatReporterState
     ) -> WebCompatReportViewModel.Section {
+        let learnMore: String = .WebCompatReporter.AdditionalInfo.LearnMore
+        let footerText = String.localizedStringWithFormat(
+            .WebCompatReporter.AdditionalInfo.FooterText,
+            AppName.shortName.rawValue,
+            learnMore
+        )
         return WebCompatReportViewModel.Section(
             id: SectionID.advancedOptions.rawValue,
             title: .WebCompatReporter.AdditionalInfo.Title,
+            footer: WebCompatReportViewModel.Footer(
+                text: footerText,
+                linkText: learnMore,
+                linkURL: SupportUtils.URLForTopic("report-site-issues-firefox-ios"),
+                linkA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.learnMoreLink
+            ),
             rows: [
                 WebCompatReportViewModel.Row(
                     id: RowID.includeScreenshot.rawValue,
@@ -193,6 +210,20 @@ final class WebCompatReportViewController: UINavigationController,
                     title: .WebCompatReporter.AdditionalInfo.IncludeBlockedList,
                     kind: .toggle(isOn: state.includeBlockedList),
                     a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeBlockedList
+                )
+            ]
+        )
+    }
+
+    private static func sendSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.send.rawValue,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.send.rawValue,
+                    title: .WebCompatReporter.SendButton.Title,
+                    kind: .sendButton(isEnabled: state.canSubmit),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.sendButton
                 )
             ]
         )
@@ -320,7 +351,7 @@ final class WebCompatReportViewController: UINavigationController,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.setAdditionalDetails
             ))
-        case .includeScreenshot, .includeBlockedList, .none:
+        case .includeScreenshot, .includeBlockedList, .send, .none:
             break
         }
     }
@@ -339,9 +370,21 @@ final class WebCompatReportViewController: UINavigationController,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.toggleBlockedList
             ))
-        case .url, .additionalDetails, .none:
+        case .url, .additionalDetails, .send, .none:
             break
         }
+    }
+
+    func webCompatReportSheetDidTapButton(id: String) {
+        guard RowID(rawValue: id) == .send else { return }
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.submit
+        ))
+    }
+
+    func webCompatReportSheetDidTapLearnMore(url: URL) {
+        reportCoordinator?.webCompatReportViewControllerDidTapLearnMore(url: url)
     }
 
     // MARK: - Themeable

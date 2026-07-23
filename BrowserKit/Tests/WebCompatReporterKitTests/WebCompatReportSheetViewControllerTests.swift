@@ -119,6 +119,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
 
     func testConfigure_withFieldSections_dequeuesTypedCells() {
         let subject = createSubject()
+        // Tall enough to lay out every section, so the last (send) cell exists.
         subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 2000)
         subject.loadViewIfNeeded()
 
@@ -129,6 +130,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatURLCell)
         XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 1)) is WebCompatToggleCell)
         XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 2)) is WebCompatDetailsCell)
+        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 3)) is WebCompatSendButtonCell)
     }
 
     func testToggleCell_activation_notifiesDelegateWithRowIDAndValue() {
@@ -148,6 +150,37 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
 
         XCTAssertEqual(delegate.toggles.map(\.id), ["screenshot"])
         XCTAssertEqual(delegate.toggles.map(\.isOn), [true])
+    }
+
+    func testSendButtonCell_tap_notifiesDelegateWithRowID() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let sendCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 3))
+        let button = firstSubview(ofType: UIButton.self, in: sendCell?.contentView)
+        fireActions(button, for: .touchUpInside)
+
+        XCTAssertEqual(delegate.tappedButtonIDs, ["send"])
+    }
+
+    func testSendButtonTap_commitsActiveFieldEditBeforeForwardingTap() throws {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let detailsCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 2))
+        let textView = try XCTUnwrap(firstSubview(ofType: UITextView.self, in: detailsCell?.contentView))
+        textView.becomeFirstResponder()
+        textView.text = "typed but not dismissed"
+
+        let sendCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 3))
+        let button = firstSubview(ofType: UIButton.self, in: sendCell?.contentView)
+        fireActions(button, for: .touchUpInside)
+
+        XCTAssertEqual(delegate.editedText.map(\.id), ["details"])
+        XCTAssertEqual(delegate.editedText.map(\.text), ["typed but not dismissed"])
+        XCTAssertEqual(delegate.tappedButtonIDs, ["send"])
     }
 
     func testURLCell_editingEnd_notifiesDelegateWithRowIDAndText() {
@@ -178,6 +211,51 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
 
         XCTAssertEqual(delegate.editedText.map(\.id), ["details"])
         XCTAssertEqual(delegate.editedText.map(\.text), ["The images never load"])
+    }
+
+    func testLearnMoreFooterLinkTap_forwardsTappedURLToDelegate() throws {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let footer = try XCTUnwrap(collectionView(in: subject)?.supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionFooter,
+            at: IndexPath(item: 0, section: 1)
+        ) as? WebCompatLearnMoreFooterView)
+        let textView = try XCTUnwrap(firstSubview(ofType: UITextView.self, in: footer))
+        let linkURL = try XCTUnwrap(URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"))
+
+        let allowsDefault = footer.textView(
+            textView,
+            shouldInteractWith: linkURL,
+            in: NSRange(location: 0, length: 0),
+            interaction: .invokeDefaultAction
+        )
+
+        // Coordinator owns navigation, so the text view must not open the URL itself.
+        XCTAssertFalse(allowsDefault)
+        XCTAssertEqual(delegate.learnMoreURLs, [linkURL])
+    }
+
+    func testLearnMoreFooter_applyTheme_addsLinkAttributeOverLinkTextRange() throws {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let footer = try XCTUnwrap(collectionView(in: subject)?.supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionFooter,
+            at: IndexPath(item: 0, section: 1)
+        ) as? WebCompatLearnMoreFooterView)
+        let textView = try XCTUnwrap(firstSubview(ofType: UITextView.self, in: footer))
+        let attributed = try XCTUnwrap(textView.attributedText)
+
+        // fieldSections() footer: text "Your report helps us. Learn More…", link "Learn More…".
+        let expectedRange = (attributed.string as NSString).range(of: "Learn More…")
+        var linkRange = NSRange(location: 0, length: 0)
+        let linkURL = attributed.attribute(.link, at: expectedRange.location, effectiveRange: &linkRange) as? URL
+
+        XCTAssertEqual(linkURL, URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"))
+        XCTAssertEqual(linkRange, expectedRange)
     }
 
     // MARK: - Helpers
@@ -235,6 +313,12 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
             WebCompatReportViewModel.Section(
                 id: "advanced",
                 title: "Advanced Options",
+                footer: WebCompatReportViewModel.Footer(
+                    text: "Your report helps us. Learn More…",
+                    linkText: "Learn More…",
+                    linkURL: URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"),
+                    linkA11yIdentifier: "learn-more"
+                ),
                 rows: [
                     WebCompatReportViewModel.Row(
                         id: "screenshot",
@@ -256,6 +340,14 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                     title: "Additional details",
                     kind: .detailsField(text: "", placeholder: "Additional Details (optional)"),
                     a11yIdentifier: "details"
+                )
+            ]),
+            WebCompatReportViewModel.Section(id: "send", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "send",
+                    title: "Send Report",
+                    kind: .sendButton(isEnabled: true),
+                    a11yIdentifier: "send"
                 )
             ])
         ]
@@ -352,6 +444,9 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
     var selectedSubOptionIDs: [String] = []
     var editedText: [(id: String, text: String)] = []
     var toggles: [(id: String, isOn: Bool)] = []
+    var tappedButtonIDs: [String] = []
+    var learnMoreURLs: [URL] = []
+    var didTapLearnMoreCallCount = 0
 
     func webCompatReportSheetDidTapClose() {
         didTapCloseCallCount += 1
@@ -375,5 +470,14 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
 
     func webCompatReportSheetDidToggle(id: String, isOn: Bool) {
         toggles.append((id, isOn))
+    }
+
+    func webCompatReportSheetDidTapButton(id: String) {
+        tappedButtonIDs.append(id)
+    }
+
+    func webCompatReportSheetDidTapLearnMore(url: URL) {
+        learnMoreURLs.append(url)
+        didTapLearnMoreCallCount += 1
     }
 }
