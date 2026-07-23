@@ -14,7 +14,6 @@ let releaseCheck = ReleaseBranchCheck()
 if releaseCheck.isReleaseBranch {
     releaseCheck.postReleaseBranchComment()
 } else {
-    checkStringsFile()
     checkForFunMetrics()
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
     checkForSpecificFileChange()
@@ -943,22 +942,6 @@ func checkAlphabeticalOrder(inFile filePath: String) {
         }
     } catch {
         warn("Failed to read or process file \(filePath): \(error)")
-    }
-}
-
-// Check if there's String file changes, and if so ask the l10n reviewers
-func checkStringsFile() {
-    let edited = danger.git.modifiedFiles
-    let touchedStrings = edited.filter { path in
-        path.localizedCaseInsensitiveContains("/Strings.swift")
-    }
-
-    if !touchedStrings.isEmpty {
-        markdown("""
-        ### ✍️ **Strings Updated**
-        Detected changes in `Shared/Strings.swift`.
-        To keep strings up to standards, please add a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) as reviewer. 🌍
-        """)
     }
 }
 
