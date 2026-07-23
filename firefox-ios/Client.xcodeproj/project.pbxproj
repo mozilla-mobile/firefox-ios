@@ -789,6 +789,7 @@
 		61E637852D03615D00E95B63 /* LabelButtonHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */; };
 		61E637872D03615D00E95B63 /* StoryCategoryPickerViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637862D03615D00E95B63 /* StoryCategoryPickerViewTests.swift */; };
 		61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */; };
+		630EBE4D301109A30046E9BC /* GradientProgressBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630EBE4C301109A10046E9BC /* GradientProgressBarTests.swift */; };
 		630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */; };
 		631A369F2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631A369E2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift */; };
 		631A36A32CC0B2470044DFEB /* NativeErrorPageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631A36A22CC0B2470044DFEB /* NativeErrorPageHelper.swift */; };
@@ -9211,6 +9212,7 @@
 		62C1428C920701180BCD4C47 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		62DF49B9976D5863CADF6EAA /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Menu.strings; sourceTree = "<group>"; };
 		63094229AA6EC744599B77A4 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		630EBE4C301109A10046E9BC /* GradientProgressBarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientProgressBarTests.swift; sourceTree = "<group>"; };
 		630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeErrorPageViewControllerTests.swift; sourceTree = "<group>"; };
 		631A369E2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageMiddleware.swift; sourceTree = "<group>"; };
 		631A36A22CC0B2470044DFEB /* NativeErrorPageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeErrorPageHelper.swift; sourceTree = "<group>"; };
@@ -13780,6 +13782,14 @@
 			path = AIControls;
 			sourceTree = "<group>";
 		};
+		630EBE4B301108DC0046E9BC /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				630EBE4C301109A10046E9BC /* GradientProgressBarTests.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
 		630FE1332C7FB42500D9D6B2 /* NativeErrorPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -16698,6 +16708,7 @@
 		E1AEC16D286E0CF500062E29 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				630EBE4B301108DC0046E9BC /* Widgets */,
 				BC129A302E461F8C004A6875 /* Summarizer */,
 				E1AEC173286E0CF500062E29 /* Browser */,
 				8A36BE2A29EDE16700AC1C5C /* ContentContainerTests.swift */,
@@ -20882,6 +20893,7 @@
 				8AE80BB62891AEA100BC12EA /* MockDispatchGroup.swift in Sources */,
 				8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */,
 				21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */,
+				630EBE4D301109A30046E9BC /* GradientProgressBarTests.swift in Sources */,
 				C27484E42F55C4B600920313 /* MockSummarizerConfigFactory.swift in Sources */,
 				E1EAA5F32D4A705500D3039C /* ToolbarMiddlewareTests.swift in Sources */,
 				8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */,
