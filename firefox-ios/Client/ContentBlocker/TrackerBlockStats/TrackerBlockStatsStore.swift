@@ -5,50 +5,59 @@
 import Foundation
 import Shared
 
-/// Persists blocked-tracker counts long term, bucketed by ISO-8601 calendar
-/// week and by category. Lifetime figures are derived by summing all buckets.
+/// Persists blocked-tracker counts long term, keyed by category. Keeps the
+/// in-progress ISO-8601 week separate from a single lifetime running total, and
+/// records the date tracking first began. Lifetime figures are the running total
+/// plus the current week.
 protocol TrackerBlockStatsStore {
     func record(category: BlocklistCategory, count: Int, date: Date)
     func lifetimeTotal() -> Int
     func lifetimeByCategory() -> [BlocklistCategory: Int]
-    func weeklyTotal(for date: Date) -> Int
-    func weeklyByCategory(for date: Date) -> [BlocklistCategory: Int]
+    func currentWeekTotal(for date: Date) -> Int
+    func currentWeekByCategory(for date: Date) -> [BlocklistCategory: Int]
+    func trackingStartDate() -> Date?
     func reset()
 }
 
-/// Prefs-backed store that keeps the in-progress week separate from completed
-/// weeks. `record` runs on a hot path (once per newly-blocked host), so it only
-/// ever decodes/encodes the small, fixed-size current-week value. Completed
-/// weeks are folded into the archive on a week rollover, an operation that
-/// happens at most once per week, not per insert.
+/// Prefs-backed store that keeps the in-progress week separate from a lifetime
+/// running total. `record` runs on a hot path (once per newly-blocked host), so
+/// it only ever decodes/encodes the small, fixed-size current-week value.
+/// Completed weeks are folded into the running total on a week rollover, an
+/// operation that happens at most once per week, not per insert. The running
+/// total has no per-week identity, so storage stays a fixed size no matter how
+/// long tracking has run.
 final class DefaultTrackerBlockStatsStoreUtility: TrackerBlockStatsStore {
     private let prefs: Prefs
     private let calendar: Calendar
     private let currentWeekKey: String
-    private let archiveKey: String
+    private let lifetimeKey: String
+    private let startDateKey: String
 
     init(
         prefs: Prefs,
         calendar: Calendar = Calendar(identifier: .iso8601),
         currentWeekKey: String = PrefsKeys.TrackerBlockStatsCurrentWeek,
-        archiveKey: String = PrefsKeys.TrackerBlockStatsArchive
+        lifetimeKey: String = PrefsKeys.TrackerBlockStatsLifetime,
+        startDateKey: String = PrefsKeys.TrackerBlockStatsStartDate
     ) {
         self.prefs = prefs
         self.calendar = calendar
         self.currentWeekKey = currentWeekKey
-        self.archiveKey = archiveKey
+        self.lifetimeKey = lifetimeKey
+        self.startDateKey = startDateKey
     }
 
     // MARK: - TrackerBlockStatsStore
 
     func record(category: BlocklistCategory, count: Int, date: Date) {
         guard count > 0 else { return }
+        setStartDateIfNeeded(date)
         let (year, week) = isoYearWeek(for: date)
 
         var current = loadCurrentWeek()
-        // A new week has started: retire the completed week into the archive.
+        // A new week has started: fold the completed week into the running total.
         if let existing = current, existing.year != year || existing.week != week {
-            archive(existing)
+            foldIntoLifetime(existing)
             current = nil
         }
 
@@ -58,28 +67,37 @@ final class DefaultTrackerBlockStatsStoreUtility: TrackerBlockStatsStore {
     }
 
     func lifetimeTotal() -> Int {
-        let archived = loadArchive().buckets.reduce(0) { $0 + $1.total }
-        return archived + (loadCurrentWeek()?.total ?? 0)
+        return loadLifetime().total + (loadCurrentWeek()?.total ?? 0)
     }
 
     func lifetimeByCategory() -> [BlocklistCategory: Int] {
-        var buckets = loadArchive().buckets
-        if let current = loadCurrentWeek() { buckets.append(current) }
-        return aggregate(buckets: buckets)
+        var counts = loadLifetime().counts
+        if let current = loadCurrentWeek() {
+            for (key, count) in current.counts {
+                counts[key, default: 0] += count
+            }
+        }
+        return aggregate(counts: counts)
     }
 
-    func weeklyTotal(for date: Date) -> Int {
-        return bucket(for: date)?.total ?? 0
+    func currentWeekTotal(for date: Date) -> Int {
+        return currentWeekBucket(for: date)?.total ?? 0
     }
 
-    func weeklyByCategory(for date: Date) -> [BlocklistCategory: Int] {
-        guard let bucket = bucket(for: date) else { return [:] }
-        return aggregate(buckets: [bucket])
+    func currentWeekByCategory(for date: Date) -> [BlocklistCategory: Int] {
+        guard let bucket = currentWeekBucket(for: date) else { return [:] }
+        return aggregate(counts: bucket.counts)
+    }
+
+    func trackingStartDate() -> Date? {
+        guard let timestamp = prefs.timestampForKey(startDateKey) else { return nil }
+        return Date.fromTimestamp(timestamp)
     }
 
     func reset() {
         prefs.removeObjectForKey(currentWeekKey)
-        prefs.removeObjectForKey(archiveKey)
+        prefs.removeObjectForKey(lifetimeKey)
+        prefs.removeObjectForKey(startDateKey)
     }
 
     // MARK: - Helpers
@@ -89,34 +107,36 @@ final class DefaultTrackerBlockStatsStoreUtility: TrackerBlockStatsStore {
         return (components.yearForWeekOfYear ?? 0, components.weekOfYear ?? 0)
     }
 
-    private func bucket(for date: Date) -> TrackerBlockStatsBucket? {
+    /// Returns the stored current-week bucket only if it belongs to the ISO week
+    /// of `date`. A stale bucket from a prior week (not yet rolled over because
+    /// no new hit has been recorded) is treated as absent.
+    private func currentWeekBucket(for date: Date) -> TrackerBlockStatsBucket? {
         let (year, week) = isoYearWeek(for: date)
-        if let current = loadCurrentWeek(), current.year == year, current.week == week {
-            return current
+        guard let current = loadCurrentWeek(), current.year == year, current.week == week else {
+            return nil
         }
-        return loadArchive().buckets.first { $0.year == year && $0.week == week }
+        return current
     }
 
-    private func archive(_ bucket: TrackerBlockStatsBucket) {
+    private func foldIntoLifetime(_ bucket: TrackerBlockStatsBucket) {
         guard bucket.total > 0 else { return }
-        var data = loadArchive()
-        if let index = data.buckets.firstIndex(where: { $0.year == bucket.year && $0.week == bucket.week }) {
-            for (key, count) in bucket.counts {
-                data.buckets[index].counts[key, default: 0] += count
-            }
-        } else {
-            data.buckets.append(bucket)
+        var lifetime = loadLifetime()
+        for (key, count) in bucket.counts {
+            lifetime.counts[key, default: 0] += count
         }
-        saveArchive(data)
+        saveLifetime(lifetime)
     }
 
-    private func aggregate(buckets: [TrackerBlockStatsBucket]) -> [BlocklistCategory: Int] {
+    private func setStartDateIfNeeded(_ date: Date) {
+        guard prefs.timestampForKey(startDateKey) == nil else { return }
+        prefs.setTimestamp(date.toTimestamp(), forKey: startDateKey)
+    }
+
+    private func aggregate(counts: [String: Int]) -> [BlocklistCategory: Int] {
         var result = [BlocklistCategory: Int]()
-        for bucket in buckets {
-            for (storageKey, count) in bucket.counts {
-                guard let category = BlocklistCategory(storageKey: storageKey) else { continue }
-                result[category, default: 0] += count
-            }
+        for (storageKey, count) in counts {
+            guard let category = BlocklistCategory(storageKey: storageKey) else { continue }
+            result[category, default: 0] += count
         }
         return result
     }
@@ -131,12 +151,12 @@ final class DefaultTrackerBlockStatsStoreUtility: TrackerBlockStatsStore {
         encode(bucket, forKey: currentWeekKey)
     }
 
-    private func loadArchive() -> TrackerBlockStatsData {
-        return decode(TrackerBlockStatsData.self, forKey: archiveKey) ?? TrackerBlockStatsData()
+    private func loadLifetime() -> TrackerBlockStatsRunningTotal {
+        return decode(TrackerBlockStatsRunningTotal.self, forKey: lifetimeKey) ?? TrackerBlockStatsRunningTotal()
     }
 
-    private func saveArchive(_ data: TrackerBlockStatsData) {
-        encode(data, forKey: archiveKey)
+    private func saveLifetime(_ total: TrackerBlockStatsRunningTotal) {
+        encode(total, forKey: lifetimeKey)
     }
 
     private func decode<T: Decodable>(_ type: T.Type, forKey key: String) -> T? {
