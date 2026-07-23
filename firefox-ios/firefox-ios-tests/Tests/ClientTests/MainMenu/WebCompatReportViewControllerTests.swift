@@ -3,22 +3,26 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import WebCompatReporterKit
 import XCTest
 
 @testable import Client
 
 @MainActor
-final class WebCompatReportViewControllerTests: XCTestCase {
+final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        setupStore()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        resetStore()
         try await super.tearDown()
     }
 
@@ -40,6 +44,36 @@ final class WebCompatReportViewControllerTests: XCTestCase {
         subject.webCompatReportSheetDidTapClose()
 
         XCTAssertEqual(coordinator.didFinishCallCount, 1)
+    }
+
+    // MARK: - Delegate intents → Redux actions
+
+    func testDidEditText_onURLRow_dispatchesEditURLWithText() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "url", text: "https://changed.example.com")
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .editURL)
+        XCTAssertEqual(action?.url, "https://changed.example.com")
+    }
+
+    func testDidEditText_onDetailsRow_dispatchesSetAdditionalDetailsWithText() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "additionalDetails", text: "Images never load")
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .setAdditionalDetails)
+        XCTAssertEqual(action?.additionalDetails, "Images never load")
+    }
+
+    func testDidEditText_onUnhandledRow_dispatchesNothing() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "send", text: "ignored")
+
+        XCTAssertTrue(dispatchedViewActions().isEmpty)
     }
 
     func testSimpleCreation_hasNoLeaks() {
@@ -102,8 +136,73 @@ final class WebCompatReportViewControllerTests: XCTestCase {
         XCTAssertEqual(sections.count, 1)
     }
 
+    // MARK: - makeSections
+
+    func testMakeSections_withoutCategory_showsURLAndCategoryOnly() {
+        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        // URL + category only (no sub-options, no details until a category is picked).
+        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory"])
+
+        guard case let .urlField(text, _) = sections.first?.rows.first?.kind else {
+            return XCTFail("Expected a URL field row")
+        }
+        XCTAssertEqual(text, "https://example.com")
+    }
+
+    func testMakeSections_withCategory_showsDetails() {
+        let state = WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .siteNotUsable,
+            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
+            additionalDetails: "Broken images"
+        )
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "issueSubOptions", "additionalDetails"])
+
+        let details = sections.first { $0.id == "additionalDetails" }
+        guard case let .detailsField(text, _) = details?.rows.first?.kind else {
+            return XCTFail("Expected a details field row")
+        }
+        XCTAssertEqual(text, "Broken images")
+    }
+
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {
         return WebCompatReportViewController(windowUUID: windowUUID, reportedURL: reportedURL)
+    }
+
+    private func dispatchedViewActions() -> [WebCompatReporterViewAction] {
+        return mockStore.dispatchedActions.compactMap { $0 as? WebCompatReporterViewAction }
+    }
+
+    private func lastViewAction() -> WebCompatReporterViewAction? {
+        return dispatchedViewActions().last
+    }
+
+    // MARK: - StoreTestUtility
+
+    func setupAppState() -> AppState {
+        return AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .webCompatReporter(WebCompatReporterState(windowUUID: windowUUID))
+                ]
+            )
+        )
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }
 
