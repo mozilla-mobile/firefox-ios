@@ -69,6 +69,21 @@ private func previewSubOption(_ id: String, _ title: String, selected: Bool = fa
     return WebCompatReportViewModel.Row(id: id, title: title, kind: .subOption(isSelected: selected), a11yIdentifier: id)
 }
 
+private func previewDetailsSection() -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(id: "details", rows: [
+        WebCompatReportViewModel.Row(
+            id: "details",
+            title: "Describe the issue in detail",
+            kind: .detailsField(
+                text: "The recipe images never load on this page.",
+                placeholder: "Describe the issue in detail (optional)"
+            ),
+            a11yIdentifier: "details"
+        )
+    ])
+}
+
+
 @available(iOS 17.0, *)
 #Preview("Filled") {
     previewSheet(sections: [
@@ -79,7 +94,8 @@ private func previewSubOption(_ id: String, _ title: String, selected: Bool = fa
             previewSubOption("page_not_loading", "Page not loading correctly", selected: true),
             previewSubOption("missing_items", "Missing items"),
             previewSubOption("buttons_not_working", "Buttons or links not working")
-        ])
+        ]),
+        previewDetailsSection()
     ], isPreviewEnabled: true)
 }
 

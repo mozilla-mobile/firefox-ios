@@ -58,6 +58,24 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action?.url, "https://changed.example.com")
     }
 
+    func testDidEditText_onDetailsRow_dispatchesSetAdditionalDetailsWithText() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "additionalDetails", text: "Images never load")
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .setAdditionalDetails)
+        XCTAssertEqual(action?.additionalDetails, "Images never load")
+    }
+
+    func testDidEditText_onUnhandledRow_dispatchesNothing() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "send", text: "ignored")
+
+        XCTAssertTrue(dispatchedViewActions().isEmpty)
+    }
+
     func testSimpleCreation_hasNoLeaks() {
         let subject = createSubject(reportedURL: nil)
         subject.loadViewIfNeeded()
@@ -125,7 +143,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
-        // URL + category only (no sub-options until a category is picked).
+        // URL + category only (no sub-options, no details until a category is picked).
         XCTAssertEqual(sections.map(\.id), ["url", "issueCategory"])
 
         guard case let .urlField(text, _) = sections.first?.rows.first?.kind else {
@@ -134,18 +152,24 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(text, "https://example.com")
     }
 
-    func testMakeSections_withCategory_addsSubOptions() {
+    func testMakeSections_withCategory_showsDetails() {
         let state = WebCompatReporterState(
             windowUUID: windowUUID,
             url: "https://example.com",
             selectedCategory: .siteNotUsable,
-            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue
+            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
+            additionalDetails: "Broken images"
         )
 
-        XCTAssertEqual(
-            WebCompatReportViewController.makeSections(from: state).map(\.id),
-            ["url", "issueCategory", "issueSubOptions"]
-        )
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "issueSubOptions", "additionalDetails"])
+
+        let details = sections.first { $0.id == "additionalDetails" }
+        guard case let .detailsField(text, _) = details?.rows.first?.kind else {
+            return XCTFail("Expected a details field row")
+        }
+        XCTAssertEqual(text, "Broken images")
     }
 
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {

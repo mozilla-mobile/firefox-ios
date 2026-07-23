@@ -166,6 +166,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         let subOption = subOptionCellRegistration()
         let category = categoryCellRegistration()
         let url = urlCellRegistration()
+        let details = detailsCellRegistration()
 
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
@@ -178,6 +179,8 @@ public final class WebCompatReportSheetViewController: UIViewController,
                 return collectionView.dequeueConfiguredReusableCell(using: subOption, for: indexPath, item: row)
             case .urlField:
                 return collectionView.dequeueConfiguredReusableCell(using: url, for: indexPath, item: row)
+            case .detailsField:
+                return collectionView.dequeueConfiguredReusableCell(using: details, for: indexPath, item: row)
             case .plain:
                 return collectionView.dequeueConfiguredReusableCell(using: plain, for: indexPath, item: row)
             }
@@ -242,6 +245,24 @@ public final class WebCompatReportSheetViewController: UIViewController,
             cell.applyTheme(theme: self.theme)
         }
     }
+
+    private func detailsCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatDetailsCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { [weak self] cell, _, row in
+            guard let self, case let .detailsField(text, placeholder) = row.kind else { return }
+            cell.configure(
+                text: text,
+                placeholder: placeholder,
+                accessibilityLabel: row.title,
+                a11yIdentifier: row.a11yIdentifier,
+                onEditingEnded: { [weak self] text in
+                    self?.delegate?.webCompatReportSheetDidEditText(id: row.id, text: text)
+                }
+            )
+            cell.applyTheme(theme: self.theme)
+        }
+    }
+
 
     private func headerRegistration()
     -> UICollectionView.SupplementaryRegistration<UICollectionViewListCell> {

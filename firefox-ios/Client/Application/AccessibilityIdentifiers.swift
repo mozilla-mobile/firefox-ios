@@ -138,6 +138,7 @@ struct AccessibilityIdentifiers {
         static let urlField = "WebCompatReporter.URLField"
         static let categoryMenu = "WebCompatReporter.CategoryMenu"
         static let subOption = "WebCompatReporter.SubOption"
+        static let additionalDetails = "WebCompatReporter.AdditionalDetails"
     }
 
     struct UnifiedSearch {

@@ -42,6 +42,7 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
             case categoryMenu(isPlaceholder: Bool, options: [MenuOption])
             case subOption(isSelected: Bool)
             case urlField(text: String, placeholder: String)
+            case detailsField(text: String, placeholder: String)
         }
 
         public let id: String
