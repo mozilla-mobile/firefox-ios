@@ -25,12 +25,15 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         icon.adjustsImageSizeForAccessibilityContentSizeCategory = true
         icon.image = UIImage(named: StandardImageIdentifiers.Large.shieldCheckmark)?
             .withRenderingMode(.alwaysTemplate)
+        icon.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.shieldIcon
     }
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.text = .Menu.EnhancedTrackingProtection.trackersBlockedLabel
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.titleLabel
         label.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
     }
 

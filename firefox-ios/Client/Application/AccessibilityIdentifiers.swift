@@ -305,6 +305,11 @@ struct AccessibilityIdentifiers {
             static let favIconImage = "SyncedTabFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
         }
+
+        struct TrackerBlockerModule {
+            static let shieldIcon = "TrackerBlockerModule.shieldIcon"
+            static let titleLabel = "TrackerBlockerModule.titleLabel"
+        }
     }
 
     struct GeneralizedIdentifiers {
