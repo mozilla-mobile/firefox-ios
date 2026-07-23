@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 
 /// A view that represents a selectable option with an image and a radio button.
-struct GenericImageOption: View {
+struct GenericImageOption: View, FeatureFlaggable {
     private struct UX {
         static let optionWidth: CGFloat = 60
         static let optionHeight: CGFloat = 100
@@ -30,7 +30,6 @@ struct GenericImageOption: View {
     let label: String
     let imageName: String
     let a11yIdentifier: String
-    let isNova: Bool
 
     var body: some View {
         VStack(spacing: UX.spacing) {
@@ -75,6 +74,7 @@ struct GenericImageOption: View {
 
     /// The radio button image indicating selection state.
     private var selectableOptionRadioButton: some View {
+        let isNova = featureFlagsProvider.isEnabled(.novaDesign)
         let selectedName = isNova ? ImageIdentifiers.radioButtonSelectedNova : ImageIdentifiers.radioButtonSelected
         let notSelectedName = isNova ? ImageIdentifiers.radioButtonNotSelectedNova
                                      : ImageIdentifiers.radioButtonNotSelected

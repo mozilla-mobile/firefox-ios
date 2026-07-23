@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable, FeatureFlaggable {
     private struct UX {
         static let radioButtonSize = CGSize(width: 24, height: 24)
         static let spacing: CGFloat = 12
@@ -52,8 +52,6 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
         optionLabel.text
     }
 
-    private var isNova = false
-
     var checked = false {
         didSet {
             updateRadioButtonImage()
@@ -62,6 +60,7 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
     }
 
     private func updateRadioButtonImage() {
+        let isNova = featureFlagsProvider.isEnabled(.novaDesign)
         let selectedName = isNova ? UX.Images.selectedNova : UX.Images.selected
         let notSelectedName = isNova ? UX.Images.notSelectedNova : UX.Images.notSelected
         radioButton.image = UIImage(named: checked ? selectedName : notSelectedName)
@@ -152,7 +151,6 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
         optionLabel.textColor = colors.textPrimary
         backgroundColor = theme.colors.layer2
         topSeparatorView.backgroundColor = theme.colors.borderPrimary
-        isNova = theme.isNova
         updateRadioButtonImage()
     }
 }
