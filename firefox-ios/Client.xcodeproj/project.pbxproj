@@ -33485,7 +33485,7 @@
 			repositoryURL = "https://github.com/apple/swift-certificates.git";
 			requirement = {
 				kind = exactVersion;
-				version = 1.2.0;
+				version = 1.19.3;
 			};
 		};
 		EDD592482FC1090C0015EF9E /* XCRemoteSwiftPackageReference "ModifiedCopyMacro" */ = {
