@@ -23,11 +23,15 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_REPO: ${{ github.repository }}
       NUMBER: ${{ github.event.pull_request.number }}
+      PR_AUTHOR: ${{ github.event.pull_request.user.login }}
       ADDITIONS: ${{ github.event.pull_request.additions }}
       DELETIONS: ${{ github.event.pull_request.deletions }}
       EVENT_ACTION: ${{ github.event.action }}
       BIG_PR_THRESHOLD: '800'
-      TEAM_SLUG: 'firefox-ios-tech-leads'
+      # Space-separated GitHub logins of the tech leads to request as reviewers.
+      # Should follow the list under https://github.com/orgs/mozilla-mobile/teams/firefox-ios-tech-leads/members
+      # Hard-coded for now since requesting a team as reviewer requires the token to have org read access
+      REVIEWERS: 'orlam cramsden thatswinnie  adudenamedruby yoanarios ih-codes'
       LABEL_NAME: 'needs-tech-lead-review'
 
     steps:
@@ -45,14 +49,27 @@ jobs:
             exit 0
           fi
 
-          # Request review from the tech lead team. Fails the workflow if unsuccessful after retries.
+          # Build the JSON reviewers array, skipping the PR author (GitHub 422s if
+          # you request the author as their own reviewer).
+          reviewers_json=""
+          for login in $REVIEWERS; do
+            [ "$login" = "$PR_AUTHOR" ] && continue
+            reviewers_json="${reviewers_json:+$reviewers_json,}\"$login\""
+          done
+
+          if [ -z "$reviewers_json" ]; then
+            echo "No eligible reviewers to request (list empty or only the author). Nothing to do."
+            exit 0
+          fi
+
+          # Request review from the individual reviewers. Fails the workflow if unsuccessful after retries.
           request_reviewer() {
             gh api \
               --method POST \
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2026-03-10" \
               "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
-              --input - <<< "{\"team_reviewers\":[\"$TEAM_SLUG\"]}"
+              --input - <<< "{\"reviewers\":[$reviewers_json]}"
           }
           retry request_reviewer
 
