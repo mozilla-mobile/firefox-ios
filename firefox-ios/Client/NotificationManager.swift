@@ -9,7 +9,6 @@ import Shared
 
 protocol NotificationManagerProtocol {
     func requestAuthorization(completion: @escaping @Sendable (Bool, Error?) -> Void)
-    func requestAuthorization(completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
     func requestAuthorization() async throws -> Bool
     func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings
     func hasPermission() async -> Bool
@@ -18,19 +17,9 @@ protocol NotificationManagerProtocol {
                   id: String,
                   userInfo: [AnyHashable: Any]?,
                   categoryIdentifier: String,
-                  date: Date,
-                  repeats: Bool)
-    func schedule(title: String,
-                  body: String,
-                  id: String,
-                  userInfo: [AnyHashable: Any]?,
-                  categoryIdentifier: String,
                   interval: TimeInterval,
                   repeats: Bool)
-    func findDeliveredNotifications() async -> [UNNotification]
     func findDeliveredNotificationForId(id: String) async -> UNNotification?
-    func removeAllPendingNotifications()
-    func removePendingNotificationsWithId(ids: [String])
 }
 
 // TODO: FXIOS-14114 - NotificationManager @unchecked Sendable
@@ -50,17 +39,6 @@ final class NotificationManager: NotificationManagerProtocol, @unchecked Sendabl
             completion(granted, error)
 
             self.telemetry.sendNotificationPermissionPrompt(isPermissionGranted: granted)
-        }
-    }
-
-    @available(*, renamed: "requestAuthorization()")
-    func requestAuthorization(completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
-        self.requestAuthorization { granted, error in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                completion(.success(granted))
-            }
         }
     }
 
@@ -98,26 +76,6 @@ final class NotificationManager: NotificationManagerProtocol, @unchecked Sendabl
         return hasPermission
     }
 
-    // Scheduling push notification based on the Date trigger (Ex 25 December at 10:00PM)
-    func schedule(title: String,
-                  body: String,
-                  id: String,
-                  userInfo: [AnyHashable: Any]? = nil,
-                  categoryIdentifier: String = "",
-                  date: Date,
-                  repeats: Bool = false) {
-        let units: Set<Calendar.Component> = [.minute, .hour, .day, .month, .year]
-        let dateComponents = Calendar.current.dateComponents(units, from: date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents,
-                                                    repeats: repeats)
-        schedule(title: title,
-                 body: body,
-                 id: id,
-                 userInfo: userInfo,
-                 categoryIdentifier: categoryIdentifier,
-                 trigger: trigger)
-    }
-
     // Scheduling push notification based on the time interval trigger (Ex 2 sec, 10min)
     func schedule(title: String,
                   body: String,
@@ -136,33 +94,18 @@ final class NotificationManager: NotificationManagerProtocol, @unchecked Sendabl
                  trigger: trigger)
     }
 
-    // Fetches all delivered notifications that are still present in Notification Center.
-    func findDeliveredNotifications() async -> [UNNotification] {
-        return await center.deliveredNotifications()
-    }
-
     // Fetches all delivered notifications that are still present in Notification Center by id
     func findDeliveredNotificationForId(id: String) async -> UNNotification? {
-        let notificationList: [UNNotification] = await findDeliveredNotifications()
+        let notificationList: [UNNotification] = await center.deliveredNotifications()
         let notification = notificationList.first(where: { notification -> Bool in
             notification.request.identifier == id
         })
         return notification
     }
 
-    // Remove all pending notifications
-    func removeAllPendingNotifications() {
-        center.removeAllPendingNotificationRequests()
-    }
-
-    // Remove pending notifications with id
-    func removePendingNotificationsWithId(ids: [String]) {
-        center.removePendingNotificationRequests(withIdentifiers: ids)
-    }
-
     // MARK: - Private
 
-    // Helper method that takes trigger based on date or time interval
+    // Helper method that takes a time interval trigger
     private func schedule(title: String,
                           body: String,
                           id: String,

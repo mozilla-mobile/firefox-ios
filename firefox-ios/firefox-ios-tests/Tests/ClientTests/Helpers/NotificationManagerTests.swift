@@ -34,14 +34,6 @@ class NotificationManagerTests: XCTestCase {
         XCTAssertTrue(self.center.getSettingsWasCalled)
     }
 
-    func testScheduleDate() {
-        notificationManager.schedule(title: "Title",
-                                     body: "Body",
-                                     id: "test-id",
-                                     date: Date.tomorrow)
-        XCTAssertTrue(center.addWasCalled)
-    }
-
     func testScheduleInterval() {
         notificationManager.schedule(title: "Title",
                                      body: "Body",
@@ -50,34 +42,9 @@ class NotificationManagerTests: XCTestCase {
         XCTAssertTrue(center.addWasCalled)
     }
 
-    func testFindDeliveredNotifications() async {
-        _ = await notificationManager.findDeliveredNotifications()
-        XCTAssertTrue(self.center.getDeliveredWasCalled)
-    }
-
     func testFindDeliveredNotificationForId() async {
         _ = await notificationManager.findDeliveredNotificationForId(id: "id1")
         XCTAssertTrue(self.center.getDeliveredWasCalled)
-    }
-
-    func testRemoveAllPendingNotifications() {
-        let notification1 = buildRequest(title: "title", body: "body", id: "id1")
-        let notification2 = buildRequest(title: "title", body: "body", id: "id2")
-        center.pendingRequests = [notification1, notification2]
-
-        notificationManager.removeAllPendingNotifications()
-        XCTAssertTrue(self.center.removeAllPendingRequestsWasCalled)
-        XCTAssertEqual(self.center.pendingRequests.count, 0)
-    }
-
-    func testRemovePendingNotificationsWithId() {
-        let notification1 = buildRequest(title: "title", body: "body", id: "id1")
-        let notification2 = buildRequest(title: "title", body: "body", id: "id2")
-        center.pendingRequests = [notification1, notification2]
-
-        notificationManager.removePendingNotificationsWithId(ids: ["id1"])
-        XCTAssertTrue(self.center.getPendingRequestsWithIdWasCalled)
-        XCTAssertEqual(self.center.pendingRequests.count, 1)
     }
 
     func testCloseRemoteTabNotification() {
@@ -93,18 +60,5 @@ class NotificationManagerTests: XCTestCase {
                 XCTFail("Error adding notification request: \(error)")
             }
         }
-    }
-
-    // MARK: - Helpers
-
-    private func buildRequest(title: String, body: String, id: String) -> UNNotificationRequest {
-        let notificationContent = UNMutableNotificationContent()
-        notificationContent.title = title
-        notificationContent.body = body
-        notificationContent.sound = UNNotificationSound.default
-        let request = UNNotificationRequest(identifier: id,
-                                            content: notificationContent,
-                                            trigger: nil)
-        return request
     }
 }
