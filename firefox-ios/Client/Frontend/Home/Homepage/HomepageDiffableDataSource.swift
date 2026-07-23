@@ -54,7 +54,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
-        case trackerBlockerModule
+        case trackerBlockerModule(Int)
         case bookmark(BookmarkConfiguration)
         /// FXIOS-15423: Include the selected category in the item's identity so category transitions are treated as
         /// a presentation-context change. Without the category context, diffable treats the same story in
@@ -160,7 +160,10 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 
         if state.trackerBlockerModuleState.shouldShowSection {
             snapshot.appendSections([.trackerBlockerModule])
-            snapshot.appendItems([.trackerBlockerModule], toSection: .trackerBlockerModule)
+            snapshot.appendItems(
+                [.trackerBlockerModule(state.trackerBlockerModuleState.blockedTrackerCount)],
+                toSection: .trackerBlockerModule
+            )
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
