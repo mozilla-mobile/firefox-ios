@@ -13,7 +13,7 @@ class CertTests: XCTestCase {
         let cert1 = getCertificate("testcert1")
         let cert2 = getCertificate("testcert2")
 
-        // Check that contains return false for certs not in store.
+        // Check that contains returns false for certs not in store.
         XCTAssertFalse(certStore.containsCertificate(cert1, forOrigin: origin1))
 
         // Add a certificate.
@@ -29,7 +29,7 @@ class CertTests: XCTestCase {
         // Add a different certificate for the same origin.
         certStore.addCertificate(cert2, forOrigin: origin1)
 
-        // Check that adding a cert for an existing origin doesn't do a replace.
+        // Check that adding a cert for an existing origin doesn't replace existing certs.
         XCTAssert(certStore.containsCertificate(cert1, forOrigin: origin1))
         XCTAssert(certStore.containsCertificate(cert2, forOrigin: origin1))
 
@@ -43,15 +43,39 @@ class CertTests: XCTestCase {
         let origin = "www.mozilla.org:80"
         let cert = getCertificate("testcert1")
 
-        // Check that hasCertificate returns false before adding
+        // Check that hasCertificate returns false before adding.
         XCTAssertFalse(certStore.hasCertificate(forOrigin: origin))
 
-        // Add a certificate and check it's found
+        // Add a certificate and check it's found.
         certStore.addCertificate(cert, forOrigin: origin)
         XCTAssert(certStore.hasCertificate(forOrigin: origin))
 
-        // Check that it's unique to the origin
+        // Check that it's unique to the origin.
         XCTAssertFalse(certStore.hasCertificate(forOrigin: "people.mozilla.org:80"))
+    }
+
+    func testOriginFromURL() {
+        let url = URL(string: "https://www.mozilla.org")!
+
+        XCTAssertEqual(
+            CertStore.origin(for: url),
+            "www.mozilla.org:443"
+        )
+    }
+
+    func testOriginFromURLWithCustomPort() {
+        let url = URL(string: "https://www.mozilla.org:8443")!
+
+        XCTAssertEqual(
+            CertStore.origin(for: url),
+            "www.mozilla.org:8443"
+        )
+    }
+
+    func testOriginFromURLWithoutHost() {
+        let url = URL(string: "file:///tmp/test")!
+
+        XCTAssertNil(CertStore.origin(for: url))
     }
 
     fileprivate func getCertificate(_ file: String) -> SecCertificate {
