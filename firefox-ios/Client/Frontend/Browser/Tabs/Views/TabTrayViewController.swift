@@ -34,7 +34,8 @@ final class TabTrayViewController: UIViewController,
                                    TabTraySelectorDelegate,
                                    TabTrayAnimationDelegate,
                                    TabDisplayViewDragAndDropInteraction,
-                                   Notifiable {
+                                   Notifiable,
+                                   FeatureFlaggable {
     typealias SubscriberStateType = TabTrayState
     private struct UX {
         struct NavigationMenu {
@@ -457,11 +458,7 @@ final class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
         newTabButton.tintColor = theme.colors.iconPrimary
-        if #available(iOS 26, *) {
-            doneButton.tintColor = theme.isNova ? theme.colors.iconInverted : theme.colors.iconPrimary
-        } else {
-            doneButton.tintColor = theme.colors.iconPrimary
-        }
+        styleDoneButton(for: theme)
         syncTabButton.tintColor = theme.colors.iconPrimary
         panelContainer.backgroundColor = theme.colors.layer3
 
@@ -487,17 +484,26 @@ final class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
         deleteButton.tintColor = swipeTheme.colors.iconPrimary
         newTabButton.tintColor = swipeTheme.colors.iconPrimary
-        if #available(iOS 26, *) {
-            doneButton.tintColor = swipeTheme.isNova ? swipeTheme.colors.iconInverted : swipeTheme.colors.iconPrimary
-        } else {
-            doneButton.tintColor = swipeTheme.colors.iconPrimary
-        }
+        styleDoneButton(for: swipeTheme)
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
         panelContainer.backgroundColor = swipeTheme.colors.layer3
 
         activeExperimentSegmentControl.applyTheme(theme: swipeTheme)
         setupToolBarAppearance(theme: swipeTheme)
         setupNavigationBarAppearance(theme: swipeTheme)
+    }
+
+    private func styleDoneButton(for theme: Theme) {
+        guard #available(iOS 26, *), featureFlagsProvider.isEnabled(.novaDesign) else {
+            doneButton.image = nil
+            doneButton.tintColor = theme.colors.iconPrimary
+            return
+        }
+        let checkmark = theme.type.getInterfaceStyle() == .dark
+            ? ImageIdentifiers.checkmarkNovaDark
+            : ImageIdentifiers.checkmarkNovaLight
+        doneButton.image = UIImage(named: checkmark)?.withRenderingMode(.alwaysOriginal)
+        doneButton.tintColor = theme.colors.actionPrimary
     }
 
     private func setupToolBarAppearance(theme: Theme) {
