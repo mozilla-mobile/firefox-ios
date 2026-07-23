@@ -34,7 +34,7 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
         subject.record(category: .advertising, count: 3, date: friday)
 
         XCTAssertEqual(subject.lifetimeTotal(), 5)
-        XCTAssertEqual(subject.weeklyTotal(for: monday), 5)
+        XCTAssertEqual(subject.currentWeekTotal(for: monday), 5)
     }
 
     func testRecord_attributesPerCategory() {
@@ -61,11 +61,12 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
 
         XCTAssertEqual(subject.lifetimeTotal(), 0)
         XCTAssertTrue(subject.lifetimeByCategory().isEmpty)
+        XCTAssertNil(subject.trackingStartDate(), "Ignored records must not start tracking")
     }
 
     // MARK: - Week boundaries
 
-    func testRecord_crossingWeekBoundaryCreatesSeparateBuckets() {
+    func testRecord_crossingWeekBoundaryFoldsPreviousWeekIntoLifetime() {
         let subject = createSubject()
         let week24 = makeDate(year: 2024, month: 6, day: 14)
         let week25 = makeDate(year: 2024, month: 6, day: 17)
@@ -74,11 +75,11 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
         subject.record(category: .advertising, count: 8, date: week25)
 
         XCTAssertEqual(subject.lifetimeTotal(), 11, "Lifetime is the sum of both weeks")
-        XCTAssertEqual(subject.weeklyTotal(for: week24), 3, "Weekly reflects only its own week")
-        XCTAssertEqual(subject.weeklyTotal(for: week25), 8)
+        XCTAssertEqual(subject.currentWeekTotal(for: week24), 0, "The previous week is no longer the current week")
+        XCTAssertEqual(subject.currentWeekTotal(for: week25), 8, "Only the in-progress week is reported")
     }
 
-    func testRecord_acrossISOYearRolloverCreatesSeparateBuckets() {
+    func testRecord_acrossISOYearRolloverFoldsPreviousWeekIntoLifetime() {
         let subject = createSubject()
         // 2020-12-31 falls in ISO week 53 of 2020; 2021-01-04 is ISO week 1 of 2021.
         let lastWeekOf2020 = makeDate(year: 2020, month: 12, day: 31)
@@ -88,13 +89,13 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
         subject.record(category: .analytics, count: 9, date: firstWeekOf2021)
 
         XCTAssertEqual(subject.lifetimeTotal(), 15)
-        XCTAssertEqual(subject.weeklyTotal(for: lastWeekOf2020), 6)
-        XCTAssertEqual(subject.weeklyTotal(for: firstWeekOf2021), 9)
+        XCTAssertEqual(subject.currentWeekTotal(for: lastWeekOf2020), 0)
+        XCTAssertEqual(subject.currentWeekTotal(for: firstWeekOf2021), 9)
     }
 
-    // MARK: - Weekly by category
+    // MARK: - Current week
 
-    func testWeeklyByCategory_returnsOnlyCurrentWeek() {
+    func testCurrentWeekByCategory_reflectsOnlyTheInProgressWeek() {
         let subject = createSubject()
         let thisWeek = makeDate(year: 2024, month: 6, day: 10)
         let nextWeek = makeDate(year: 2024, month: 6, day: 17)
@@ -102,17 +103,89 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
         subject.record(category: .advertising, count: 2, date: thisWeek)
         subject.record(category: .social, count: 5, date: nextWeek)
 
-        XCTAssertEqual(subject.weeklyByCategory(for: thisWeek), [.advertising: 2])
-        XCTAssertEqual(subject.weeklyByCategory(for: nextWeek), [.social: 5])
+        // Once the week rolls over, the earlier week is folded away and no longer
+        // reported per-week; only the in-progress week remains queryable.
+        XCTAssertEqual(subject.currentWeekByCategory(for: thisWeek), [:])
+        XCTAssertEqual(subject.currentWeekByCategory(for: nextWeek), [.social: 5])
     }
 
-    func testWeeklyTotal_returnsZeroForWeekWithoutData() {
+    func testCurrentWeekTotal_returnsZeroForNonCurrentWeek() {
         let subject = createSubject()
         subject.record(category: .advertising, count: 2, date: makeDate(year: 2024, month: 6, day: 10))
 
-        let untouchedWeek = makeDate(year: 2024, month: 1, day: 1)
-        XCTAssertEqual(subject.weeklyTotal(for: untouchedWeek), 0)
-        XCTAssertTrue(subject.weeklyByCategory(for: untouchedWeek).isEmpty)
+        let otherWeek = makeDate(year: 2024, month: 1, day: 1)
+        XCTAssertEqual(subject.currentWeekTotal(for: otherWeek), 0)
+        XCTAssertTrue(subject.currentWeekByCategory(for: otherWeek).isEmpty)
+    }
+
+    // MARK: - Lifetime across rollovers
+
+    func testLifetimeAndCurrentWeek_correctAfterWeekRollovers() {
+        let subject = createSubject()
+        let week1 = makeDate(year: 2024, month: 6, day: 3)
+        let week2 = makeDate(year: 2024, month: 6, day: 10)
+        let week3 = makeDate(year: 2024, month: 6, day: 17)
+
+        subject.record(category: .advertising, count: 2, date: week1)
+        subject.record(category: .analytics, count: 5, date: week2)
+        subject.record(category: .advertising, count: 3, date: week3)
+
+        XCTAssertEqual(subject.lifetimeTotal(), 10)
+        XCTAssertEqual(subject.currentWeekTotal(for: week1), 0, "A folded week is no longer the current week")
+        XCTAssertEqual(subject.currentWeekTotal(for: week2), 0)
+        XCTAssertEqual(subject.currentWeekTotal(for: week3), 3, "Current in-progress week")
+        XCTAssertEqual(subject.lifetimeByCategory()[.advertising], 5)
+        XCTAssertEqual(subject.lifetimeByCategory()[.analytics], 5)
+    }
+
+    func testStorage_staysFixedSizeAcrossManyWeeks() {
+        let subject = createSubject()
+        // Record one hit per week across ~15 weeks (day values overflow the month
+        // and are normalized by the calendar into successive weeks).
+        for day in stride(from: 1, through: 99, by: 7) {
+            subject.record(category: .advertising, count: 1, date: makeDate(year: 2024, month: 1, day: day))
+        }
+
+        // The hot-path value must never accumulate history: it holds exactly one week.
+        let current = decodeCurrentWeek()
+        XCTAssertNotNil(current)
+        XCTAssertEqual(current?.counts.values.reduce(0, +), 1, "Current week holds only the most recent week")
+
+        // All completed weeks collapse into a single running total, not a growing list.
+        let lifetime = decodeLifetime()
+        XCTAssertEqual(lifetime.counts.count, 1, "Running total is keyed by category only, not by week")
+        XCTAssertEqual(subject.lifetimeTotal(), 15)
+    }
+
+    // MARK: - Start date
+
+    func testTrackingStartDate_isSetToFirstRecordedDate() {
+        let subject = createSubject()
+        let firstDate = makeDate(year: 2024, month: 6, day: 10)
+
+        subject.record(category: .advertising, count: 1, date: firstDate)
+
+        XCTAssertEqual(subject.trackingStartDate()?.toTimestamp(), firstDate.toTimestamp())
+    }
+
+    func testTrackingStartDate_isNotOverwrittenByLaterRecords() {
+        let subject = createSubject()
+        let firstDate = makeDate(year: 2024, month: 6, day: 10)
+        let laterWeek = makeDate(year: 2024, month: 6, day: 17)
+
+        subject.record(category: .advertising, count: 1, date: firstDate)
+        subject.record(category: .analytics, count: 1, date: laterWeek)
+
+        XCTAssertEqual(subject.trackingStartDate()?.toTimestamp(), firstDate.toTimestamp())
+    }
+
+    func testTrackingStartDate_persistsAcrossStoreInstances() {
+        let firstDate = makeDate(year: 2024, month: 6, day: 10)
+        let first = createSubject()
+        first.record(category: .advertising, count: 1, date: firstDate)
+
+        let second = createSubject()
+        XCTAssertEqual(second.trackingStartDate()?.toTimestamp(), firstDate.toTimestamp())
     }
 
     // MARK: - Reset
@@ -125,8 +198,9 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
         subject.reset()
 
         XCTAssertEqual(subject.lifetimeTotal(), 0)
-        XCTAssertEqual(subject.weeklyTotal(for: date), 0)
+        XCTAssertEqual(subject.currentWeekTotal(for: date), 0)
         XCTAssertTrue(subject.lifetimeByCategory().isEmpty)
+        XCTAssertNil(subject.trackingStartDate())
     }
 
     // MARK: - Persistence
@@ -140,45 +214,8 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
         let second = createSubject()
 
         XCTAssertEqual(second.lifetimeTotal(), 4)
-        XCTAssertEqual(second.weeklyTotal(for: date), 4)
+        XCTAssertEqual(second.currentWeekTotal(for: date), 4)
         XCTAssertEqual(second.lifetimeByCategory()[.advertising], 4)
-    }
-
-    // MARK: - Current-week / archive separation
-
-    func testCurrentWeekBlob_staysSingleBucketAcrossManyWeeks() {
-        let subject = createSubject()
-        // Record one hit per week across ~15 weeks (day values overflow the month
-        // and are normalized by the calendar into successive weeks).
-        for day in stride(from: 1, through: 99, by: 7) {
-            subject.record(category: .advertising, count: 1, date: makeDate(year: 2024, month: 1, day: day))
-        }
-
-        // The hot-path value must never accumulate history: it holds exactly one bucket.
-        let current = decodeCurrentWeek()
-        XCTAssertNotNil(current)
-        XCTAssertEqual(current?.counts.values.reduce(0, +), 1, "Current week holds only the most recent week")
-
-        // All completed weeks live in the archive instead.
-        XCTAssertGreaterThan(decodeArchive().buckets.count, 1)
-    }
-
-    func testLifetimeAndWeekly_correctAfterWeekRollovers() {
-        let subject = createSubject()
-        let week1 = makeDate(year: 2024, month: 6, day: 3)
-        let week2 = makeDate(year: 2024, month: 6, day: 10)
-        let week3 = makeDate(year: 2024, month: 6, day: 17)
-
-        subject.record(category: .advertising, count: 2, date: week1)
-        subject.record(category: .analytics, count: 5, date: week2)
-        subject.record(category: .advertising, count: 3, date: week3)
-
-        XCTAssertEqual(subject.lifetimeTotal(), 10)
-        XCTAssertEqual(subject.weeklyTotal(for: week1), 2, "An archived week is still queryable")
-        XCTAssertEqual(subject.weeklyTotal(for: week2), 5)
-        XCTAssertEqual(subject.weeklyTotal(for: week3), 3, "Current in-progress week")
-        XCTAssertEqual(subject.lifetimeByCategory()[.advertising], 5)
-        XCTAssertEqual(subject.lifetimeByCategory()[.analytics], 5)
     }
 
     // MARK: - Helpers
@@ -191,8 +228,9 @@ final class TrackerBlockStatsStoreTests: XCTestCase {
         return decode(TrackerBlockStatsBucket.self, forKey: PrefsKeys.TrackerBlockStatsCurrentWeek)
     }
 
-    private func decodeArchive() -> TrackerBlockStatsData {
-        return decode(TrackerBlockStatsData.self, forKey: PrefsKeys.TrackerBlockStatsArchive) ?? TrackerBlockStatsData()
+    private func decodeLifetime() -> TrackerBlockStatsRunningTotal {
+        return decode(TrackerBlockStatsRunningTotal.self, forKey: PrefsKeys.TrackerBlockStatsLifetime)
+            ?? TrackerBlockStatsRunningTotal()
     }
 
     private func decode<T: Decodable>(_ type: T.Type, forKey key: String) -> T? {

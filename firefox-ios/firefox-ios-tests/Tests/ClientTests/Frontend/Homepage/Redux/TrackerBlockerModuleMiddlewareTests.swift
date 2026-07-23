@@ -124,7 +124,8 @@ private final class MockTrackerBlockStatsStore: TrackerBlockStatsStore {
     func record(category: BlocklistCategory, count: Int, date: Date) {}
     func lifetimeTotal() -> Int { return lifetimeTotalToReturn }
     func lifetimeByCategory() -> [BlocklistCategory: Int] { return [:] }
-    func weeklyTotal(for date: Date) -> Int { return 0 }
-    func weeklyByCategory(for date: Date) -> [BlocklistCategory: Int] { return [:] }
+    func currentWeekTotal(for date: Date) -> Int { return 0 }
+    func currentWeekByCategory(for date: Date) -> [BlocklistCategory: Int] { return [:] }
+    func trackingStartDate() -> Date? { return nil }
     func reset() {}
 }
