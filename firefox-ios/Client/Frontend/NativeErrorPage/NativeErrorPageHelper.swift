@@ -38,7 +38,7 @@ class NativeErrorPageHelper {
 
     init(
         error: NSError,
-        cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider()
+        cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared
     ) {
         self.error = error
         self.cellularDataStateProvider = cellularDataStateProvider
@@ -124,7 +124,7 @@ class NativeErrorPageHelper {
     // MARK: - Instance Methods
 
     func parseErrorDetails() -> ErrorPageModel {
-        if CellularDataErrorHelper.isRestrictedOfflineError(error, provider: cellularDataStateProvider) {
+        if cellularDataStateProvider.isRestrictedOfflineError(error) {
             return .cellularDataRestricted
         }
 
