@@ -9,11 +9,6 @@ import Common
 import Shared
 import WebKit
 
-enum SwitchPrivacyModeResult {
-    case createdNewTab
-    case usedExistingTab
-}
-
 final class TabManagerImplementation: NSObject,
                                       TabManager,
                                       FeatureFlaggable,
@@ -1184,25 +1179,6 @@ final class TabManagerImplementation: NSObject,
         for tab in backgroundTabsWithWebViews {
             await tab.offloadWebView()
         }
-    }
-
-    func switchPrivacyMode() -> SwitchPrivacyModeResult {
-        assert(Thread.isMainThread)
-        var result = SwitchPrivacyModeResult.usedExistingTab
-        guard let selectedTab = selectedTab else { return result }
-        let nextSelectedTab: Tab?
-
-        if selectedTab.isPrivate {
-            nextSelectedTab = mostRecentTab(inTabs: normalTabs)
-        } else if privateTabs.isEmpty {
-            nextSelectedTab = addTab(isPrivate: true)
-            result = .createdNewTab
-        } else {
-            nextSelectedTab = mostRecentTab(inTabs: privateTabs)
-        }
-
-        selectTab(nextSelectedTab)
-        return result
     }
 
     func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
