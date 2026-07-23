@@ -14,10 +14,14 @@ open class GradientProgressBar: UIProgressView {
 
     var gradientColors: [CGColor] = []
     // Alpha mask for visible part of gradient.
-    private var alphaMaskLayer = CALayer()
+    var alphaMaskLayer = CALayer()
 
     // Gradient layer.
     open var gradientLayer = CAGradientLayer()
+
+    private var isRTL: Bool {
+        return UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft
+    }
 
     // Duration for "setProgress(animated: true)"
     open var animationDuration = DefaultValues.animationDuration
@@ -106,7 +110,8 @@ open class GradientProgressBar: UIProgressView {
         let moveAnimation = CABasicAnimation(keyPath: "position")
         moveAnimation.duration = DefaultValues.animationDuration
         moveAnimation.fromValue = gradientLayer.position
-        moveAnimation.toValue = CGPoint(x: gradientLayer.frame.width, y: gradientLayer.position.y)
+        let exitX = isRTL ? -gradientLayer.frame.width : gradientLayer.frame.width
+        moveAnimation.toValue = CGPoint(x: exitX, y: gradientLayer.position.y)
         moveAnimation.fillMode = CAMediaTimingFillMode.forwards
         moveAnimation.isRemovedOnCompletion = false
 
@@ -128,7 +133,7 @@ open class GradientProgressBar: UIProgressView {
     override open func layoutSubviews() {
         super.layoutSubviews()
         self.gradientLayer.frame = CGRect(
-            x: bounds.origin.x - 4,
+            x: isRTL ? bounds.origin.x + 4 : bounds.origin.x - 4,
             y: bounds.origin.y,
             width: bounds.size.width * 2,
             height: bounds.size.height
@@ -153,7 +158,7 @@ open class GradientProgressBar: UIProgressView {
         // Workaround for non animated progress change
         // Source: https://stackoverflow.com/a/16381287/3532505
         CATransaction.setAnimationDuration(animated ? DefaultValues.animationDuration : 0.0)
-        alphaMaskLayer.frame = bounds.updateWidth(byPercentage: CGFloat(progress))
+        alphaMaskLayer.frame = bounds.updateWidth(byPercentage: CGFloat(progress), isRTL: isRTL)
         if progress == 1 {
             // Delay calling hide until the last animation has completed
             CATransaction.setCompletionBlock({
@@ -180,7 +185,9 @@ open class GradientProgressBar: UIProgressView {
 }
 
 extension CGRect {
-    func updateWidth(byPercentage percentage: CGFloat) -> CGRect {
-        return CGRect(x: origin.x, y: origin.y, width: size.width * percentage, height: size.height)
+    func updateWidth(byPercentage percentage: CGFloat, isRTL: Bool = false) -> CGRect {
+        let newWidth = size.width * percentage
+        let newX = isRTL ? origin.x + (size.width - newWidth) : origin.x
+        return CGRect(x: newX, y: origin.y, width: newWidth, height: size.height)
     }
 }

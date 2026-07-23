@@ -22,6 +22,8 @@ func path(forTestPage page: String) -> String {
 // Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
 let TIMEOUT: TimeInterval = 10
 let TIMEOUT_LONG: TimeInterval = 20
+// Translation is network-bound and can take up to ~1 min to complete
+let TRANSLATION_TIMEOUT: TimeInterval = 90
 let MAX_SWIPE = 5
 
 @MainActor
@@ -511,9 +513,24 @@ class BaseTestCase: XCTestCase {
         urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
         mozWaitForElementToExist(app.tables["Context Menu"])
         pasteAction.waitAndTap()
-        springboard.buttons["Allow Paste"].tapIfExists(timeout: 1.5)
         mozWaitForElementToExist(urlBar)
-        mozWaitForValueContains(urlBar, value: url)
+        waitForPastedValue(in: urlBar, contains: url)
+    }
+
+    /// Waits for `element` to contain `url` after a paste, dismissing the "Allow Paste"
+    /// prompt whenever it shows, since a single check can miss its variable CI delay.
+    func waitForPastedValue(in element: XCUIElement, contains url: String, timeout: TimeInterval = TIMEOUT_LONG) {
+        let allowPaste = springboard.buttons["Allow Paste"]
+        let startTime = Date()
+        while true {
+            if allowPaste.exists { allowPaste.tap() }
+            if let value = element.value as? String, value.contains(url) { return }
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to contain value \(url)")
+                return
+            }
+            usleep(10000)
+        }
     }
 
     func waitForElementsToExist(_ elements: [XCUIElement], timeout: TimeInterval = TIMEOUT, message: String? = nil) {

@@ -1,0 +1,60 @@
+name: 'Assign Tech Lead Review'
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, labeled]
+
+permissions: {}
+
+jobs:
+  assign-tech-lead:
+    # Skip drafts and bot-authored PRs, and when triggered by `labeled`, only act on our specific label.
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.user.type != 'Bot' &&
+      (github.event.action != 'labeled' || github.event.label.name == 'needs-tech-lead-review')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: assign-tech-lead-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.pull_request.number }}
+      ADDITIONS: ${{ github.event.pull_request.additions }}
+      DELETIONS: ${{ github.event.pull_request.deletions }}
+      EVENT_ACTION: ${{ github.event.action }}
+      BIG_PR_THRESHOLD: '800'
+      TEAM_SLUG: 'firefox-ios-tech-leads'
+      LABEL_NAME: 'needs-tech-lead-review'
+
+    steps:
+      - name: Check PR size and assign reviewer + label
+        shell: bash
+        run: |
+          set -euo pipefail
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && return 1; sleep 2; done; }
+
+          total=$(( ADDITIONS + DELETIONS ))
+          echo "PR #$NUMBER: additions=$ADDITIONS, deletions=$DELETIONS, total=$total (threshold=$BIG_PR_THRESHOLD), event=$EVENT_ACTION"
+
+          if [ "$EVENT_ACTION" != "labeled" ] && [ "$total" -le "$BIG_PR_THRESHOLD" ]; then
+            echo "Under threshold and not manually labeled, nothing to do."
+            exit 0
+          fi
+
+          # Request review from the tech lead team. Fails the workflow if unsuccessful after retries.
+          request_reviewer() {
+            gh api \
+              --method POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2026-03-10" \
+              "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
+              --input - <<< "{\"team_reviewers\":[\"$TEAM_SLUG\"]}"
+          }
+          retry request_reviewer
+
+          # Add label. Fails the workflow if the label does not exist or cannot be added.
+          retry gh pr edit "$NUMBER" -R "$GH_REPO" --add-label "$LABEL_NAME"

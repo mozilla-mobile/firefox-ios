@@ -43,7 +43,7 @@ final class LaunchCoordinator: BaseCoordinator,
 
     @MainActor
     func start(with launchType: LaunchType) {
-        let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
+        let isFullScreen = launchType.isFullScreenAvailable()
         switch launchType {
         case .videoIntro:
             presentVideoIntro()

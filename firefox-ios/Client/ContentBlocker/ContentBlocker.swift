@@ -28,6 +28,25 @@ enum BlocklistCategory: CaseIterable {
             return .fingerprinting
         }
     }
+
+    /// A stable string identifier used to persist per-category stats. Unlike the
+    /// enum case order, this value is guaranteed not to change, so serialized
+    /// stats remain readable even if the enum is reordered or extended.
+    var storageKey: String {
+        switch self {
+        case .advertising: return "advertising"
+        case .analytics: return "analytics"
+        case .social: return "social"
+        case .cryptomining: return "cryptomining"
+        case .fingerprinting: return "fingerprinting"
+        }
+    }
+
+    init?(storageKey: String) {
+        guard let match = BlocklistCategory.allCases.first(where: { $0.storageKey == storageKey })
+        else { return nil }
+        self = match
+    }
 }
 
 enum BlocklistFileName: String, CaseIterable {

@@ -4,7 +4,8 @@
 
 import XCTest
 import Common
-@testable import Shared
+
+@testable import Client
 
 @MainActor
 class ThemeableTests: XCTestCaseRootViewController {

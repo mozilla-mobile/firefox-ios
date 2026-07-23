@@ -1173,12 +1173,16 @@ gov.gd
 // Confirmed by registry <info@nic.ge> 2024-11-20
 ge
 com.ge
+cyb.ge
 edu.ge
 gov.ge
+llc.ge
 net.ge
+online.ge
 org.ge
 pvt.ge
 school.ge
+tnx.ge
 
 // gf : https://www.iana.org/domains/root/db/gf.html
 gf
@@ -1461,11 +1465,14 @@ tv.im
 // Please note, that nic.in is not an official eTLD, but used by most
 // government institutions.
 // Confirmed by Gaurav Kansal <gaurav.kansal@nic.in> 2025-11-06
+// Added aero.in, alumni.in, school.in and ub.in by Gaurav Kansal <gaurav.kansal@nic.in> 2026-06-25
 in
 5g.in
 6g.in
 ac.in
+aero.in
 ai.in
+alumni.in
 am.in
 bank.in
 bihar.in
@@ -1500,8 +1507,10 @@ pg.in
 post.in
 pro.in
 res.in
+school.in
 travel.in
 tv.in
+ub.in
 uk.in
 up.in
 us.in
@@ -4333,14 +4342,18 @@ no
 fhs.no
 folkebibl.no
 fylkesbibl.no
+gielda.no
+herad.no
 idrett.no
+kommune.no
 museum.no
 priv.no
+suohkan.no
+tjielte.no
+uenorge.no
 vgs.no
 // Norid category second-level domains managed by parties other than Norid : https://www.norid.no/en/om-domenenavn/regelverk-for-no/vedlegg-d/
 dep.no
-herad.no
-kommune.no
 mil.no
 stat.no
 // Norid geographical second level domains : https://www.norid.no/en/om-domenenavn/regelverk-for-no/vedlegg-b/
@@ -4481,7 +4494,7 @@ askøy.no
 askvoll.no
 asnes.no
 åsnes.no
-audnedaln.no
+audnedal.no
 aukra.no
 aure.no
 aurland.no
@@ -4592,7 +4605,6 @@ forsand.no
 fosnes.no
 fræna.no
 frana.no
-frei.no
 frogn.no
 froland.no
 frosta.no
@@ -4643,6 +4655,7 @@ halden.no
 halsa.no
 hamar.no
 hamaroy.no
+hamarøy.no
 hammarfeasta.no
 hámmárfeasta.no
 hammerfest.no
@@ -4697,6 +4710,7 @@ karasjohka.no
 kárášjohka.no
 karasjok.no
 karlsoy.no
+karlsøy.no
 karmoy.no
 karmøy.no
 kautokeino.no
@@ -4885,6 +4899,7 @@ ralingen.no
 rana.no
 randaberg.no
 rauma.no
+re.no
 rendalen.no
 rennebu.no
 rennesoy.no
@@ -5042,6 +5057,7 @@ tysvær.no
 tysvar.no
 ullensaker.no
 ullensvang.no
+ulstein.no
 ulvik.no
 unjarga.no
 unjárga.no
@@ -5797,7 +5813,6 @@ or.th
 
 // tj : http://www.nic.tj/policy.html
 tj
-ac.tj
 biz.tj
 co.tj
 com.tj
@@ -12748,6 +12763,12 @@ co.ca
 // Submitted by Gavin Brown <gavin.brown@centralnic.com>
 co.com
 
+// Code For Host Inc Ltd : https://codeforhost.com
+// Submitted by Mehedi Hasan <support@codeforhost.com>
+sch.ac
+dev.cv
+store.cv
+
 // Codeberg e. V. : https://codeberg.org
 // Submitted by Moritz Marquardt <git@momar.de>
 codeberg.page
@@ -14147,10 +14168,6 @@ in-vpn.org
 // Submitted by Connor McFarlane <noc@inferno.co.uk>
 oninferno.net
 
-// info.at : http://www.info.at/
-biz.at
-info.at
-
 // info.cx : http://info.cx
 // Submitted by June Slater <whois@igloo.to>
 info.cx
@@ -14225,6 +14242,12 @@ iopsys.se
 // IPiFony Systems, Inc. : https://www.ipifony.com/
 // Submitted by Matthew Hardeman <mhardeman@ipifony.com>
 ipifony.net
+
+// IPv64.net : https://ipv64.net/
+// Submitted by Dennis Schröder <info@ipv64.net>
+home64.de
+ipv64.de
+ipv64.net
 
 // ir.md : https://nic.ir.md
 // Submitted by Ali Soizi <info@nic.ir.md>
@@ -14611,7 +14634,6 @@ polyspace.com
 // May First - People Link : https://mayfirst.org/
 // Submitted by Jamie McClelland <info@mayfirst.org>
 mayfirst.info
-mayfirst.org
 
 // McHost : https://mchost.ru
 // Submitted by Evgeniy Subbotin <e.subbotin@mchost.ru>
@@ -15632,9 +15654,10 @@ dedibox.fr
 schokokeks.net
 
 // Scottish Government : https://www.gov.scot
-// Submitted by Martin Ellis <martin.ellis@gov.scot>
+// Submitted by Martin Ellis <digital-publishing@gov.scot>
 gov.scot
 service.gov.scot
+mygov.scot
 
 // Scry Security : http://www.scrysec.com
 // Submitted by Shante Adam <shante@skyhat.io>
@@ -16325,6 +16348,10 @@ weeklylottery.org.uk
 // Submitted by Brandon DuRette <brandon.durette@wpengine.com>
 wpenginepowered.com
 js.wpenginepowered.com
+
+// xAI : https://x.ai/
+// Submitted by Asim Shrestha <security@x.ai>
+grok.me
 
 // XenonCloud GbR : https://xenoncloud.net
 // Submitted by Julian Uphoff <publicsuffixlist@xenoncloud.net>

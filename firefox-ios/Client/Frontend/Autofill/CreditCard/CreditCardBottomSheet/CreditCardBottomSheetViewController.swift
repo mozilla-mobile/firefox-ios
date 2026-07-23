@@ -36,6 +36,7 @@ class CreditCardBottomSheetViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
+    private let logger: Logger
     private var viewModel: CreditCardBottomSheetViewModel
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -102,11 +103,13 @@ class CreditCardBottomSheetViewController: UIViewController,
     init(viewModel: CreditCardBottomSheetViewModel,
          windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
 
         self.viewModel.didUpdateCreditCard = { [weak self] in
@@ -379,6 +382,11 @@ class CreditCardBottomSheetViewController: UIViewController,
             bottomSheetState: .selectSavedCard,
             row: row
         ) else {
+            // A nil means the card couldn't be decrypted. The Keychain key is unavailable.
+            logger.log("Credit card autofill selection failed: unable to decrypt selected card.",
+                       level: .fatal,
+                       category: .autofill)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillFailed)
             return
         }
         didSelectCreditCardToFill?(plainTextCreditCard)

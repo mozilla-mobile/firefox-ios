@@ -109,7 +109,7 @@ class BrowserViewController: UIViewController,
     var searchLoader: SearchLoader?
     var iOS15FindInPageBar: FindInPageBar? /* TODO: Remove once we drop iOS 15 support */
     var zoomPageBar: ZoomPageBar?
-    var addressBarPanGestureHandler: AddressBarPanGestureHandler?
+    var tabSwipeGestureHandler: TabSwipeGestureHandler?
     var microsurvey: MicrosurveyPromptView?
     var autoTranslatePrompt: AutoTranslatePromptView?
     // TODO: FXIOS-14347 Remove this property as part of cleaning up the toolbar performance
@@ -195,6 +195,27 @@ class BrowserViewController: UIViewController,
     private lazy var webPagePreview: TabWebViewPreview = .build {
         $0.isHidden = true
     }
+
+    private lazy var swipeUpTabWebViewPreview: SwipeUpTabWebViewPreview = {
+        let view = SwipeUpTabWebViewPreview(
+            frame: .zero,
+            swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
+        )
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0.0
+        return view
+    }()
+
+    private lazy var swipeUpTabWebViewPreviewGestureHandler = SwipeUpTabPreviewGestureHandler(
+        tabPreview: swipeUpTabWebViewPreview,
+        bottomBlurView: bottomBlurView,
+        topBlurView: topBlurView,
+        screenshotHelper: screenshotHelper,
+        tabManager: tabManager,
+        themeManager: themeManager,
+        windowUUID: windowUUID,
+        swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
+    )
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
@@ -283,6 +304,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: Feature flags
 
+    private var swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
+
     private var isTabTrayUIExperimentsEnabled: Bool {
         let featureFlagStatus = featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
@@ -362,6 +385,7 @@ class BrowserViewController: UIViewController,
     let profile: Profile
     let tabManager: TabManager
     var googleLensSearches = [TabUUID: GoogleLensSearchState]()
+    let googleLensTelemetry: GoogleLensTelemetry
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
@@ -449,6 +473,7 @@ class BrowserViewController: UIViewController,
         self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
         self.searchEnginesManager = searchEnginesManager
+        self.googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: gleanWrapper)
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
@@ -456,6 +481,7 @@ class BrowserViewController: UIViewController,
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
         self.relayController = (UIApplication.shared.delegate as? AppDelegate)?.relayController ?? RelayController()
+        self.swipeGestureFeatureFlagProvider = SwipeGestureFeatureFlagProvider()
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -468,7 +494,7 @@ class BrowserViewController: UIViewController,
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
         guard Thread.isMainThread else {
-            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            assertionFailure("TabSwipeGestureHandler was not deallocated on the main thread. Observer was not removed")
             return
         }
 
@@ -744,10 +770,10 @@ class BrowserViewController: UIViewController,
         if isBottomSearchBar,
            let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
            !toolbarState.addressToolbar.isEditing {
-            addressBarPanGestureHandler?.enablePanGestureRecognizer()
+            tabSwipeGestureHandler?.enablePanGestureRecognizer()
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         } else {
-            addressBarPanGestureHandler?.disablePanGestureRecognizer()
+            tabSwipeGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
         }
     }
@@ -1333,7 +1359,7 @@ class BrowserViewController: UIViewController,
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
 
         guard isSwipingTabsEnabled else { return }
-        addressBarPanGestureHandler = AddressBarPanGestureHandler(
+        tabSwipeGestureHandler = TabSwipeGestureHandler(
             addressToolbarContainer: addressToolbarContainer,
             contentContainer: contentContainer,
             webPagePreview: webPagePreview,
@@ -1341,12 +1367,16 @@ class BrowserViewController: UIViewController,
             tabManager: tabManager,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper,
-            prefs: profile.prefs
+            prefs: profile.prefs,
+            swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
         )
-        addressBarPanGestureHandler?.delegate = self
+        tabSwipeGestureHandler?.delegate = self
     }
 
     func addSubviews() {
+        if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled {
+            view.addSubview(swipeUpTabWebViewPreview)
+        }
         if isSwipingTabsEnabled {
             view.addSubviews(webPagePreview)
         }
@@ -1371,9 +1401,12 @@ class BrowserViewController: UIViewController,
         view.addSubview(overKeyboardContainer)
 
         if isSwipingTabsEnabled {
-            addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
+            tabSwipeGestureHandler?.newTabSettingsProvider = { [weak self] in
                 return self?.newTabSettings
             }
+        }
+        if swipeGestureFeatureFlagProvider.isAnyGestureEnabled {
+            swipeUpTabWebViewPreviewGestureHandler.setupGesture(on: addressToolbarContainer)
         }
     }
 
@@ -1613,6 +1646,9 @@ class BrowserViewController: UIViewController,
             ])
         }
 
+        if swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled {
+            swipeUpTabWebViewPreview.pinToSuperview()
+        }
         if isSnapKitRemovalEnabled {
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
@@ -4210,7 +4246,7 @@ class BrowserViewController: UIViewController,
         guard let profile = profile as? BrowserProfile else { return }
 
         if isSwipingTabsEnabled {
-            addressBarPanGestureHandler?.disablePanGestureRecognizer()
+            tabSwipeGestureHandler?.disablePanGestureRecognizer()
             addressToolbarContainer.hideSkeletonBars()
         }
 
@@ -4239,7 +4275,7 @@ class BrowserViewController: UIViewController,
         if isSwipingTabsEnabled {
             let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
             if showNavToolbar {
-                addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                tabSwipeGestureHandler?.enablePanGestureRecognizer()
             }
         }
         if searchSessionState == .active {
@@ -5054,6 +5090,12 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController {
     /// Used to get the context menu save image in the context menu, shown from long press on webview links
     func getImageData(_ url: URL, success: @escaping @MainActor @Sendable (Data) -> Void) {
+        getImageData(url, success: success, failure: {})
+    }
+
+    func getImageData(_ url: URL,
+                      success: @escaping @MainActor @Sendable (Data) -> Void,
+                      failure: @escaping @MainActor @Sendable () -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
@@ -5062,6 +5104,10 @@ extension BrowserViewController {
                let data = data {
                 ensureMainThread {
                     success(data)
+                }
+            } else {
+                ensureMainThread {
+                    failure()
                 }
             }
         }.resume()
@@ -5173,7 +5219,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: iOS15FindInPageBar != nil)
         guard isSwipingTabsEnabled else { return }
-        addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
+        tabSwipeGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
