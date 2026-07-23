@@ -22,47 +22,6 @@ struct DefaultCertificateDecoder: CertificateDecoding {
     }
 }
 
-final class CertificatesHandler {
-    private let serverTrust: SecTrust
-    private let decoder: CertificateDecoding
-    private let logger: Logger
-
-    /// Initializes a new `CertificatesHandler` with the given server trust.
-    /// - Parameters:
-    ///   - serverTrust: The server trust containing the certificate chain.
-    ///   - decoder: DER decoder used to parse each `SecCertificate`. Defaults to the production decoder.
-    ///   - logger: Logger used to record decode failures. Defaults to `DefaultLogger.shared`.
-    init(serverTrust: SecTrust,
-         decoder: CertificateDecoding = DefaultCertificateDecoder(),
-         logger: Logger = DefaultLogger.shared) {
-        self.serverTrust = serverTrust
-        self.decoder = decoder
-        self.logger = logger
-    }
-
-    /// Extracts and handles the certificate chain.
-    /// - Parameters:
-    ///   - completion: A completion block that provides the extracted certificates.
-    func handleCertificates() -> [Certificate] {
-        var certificates = [Certificate]()
-        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
-            return certificates
-        }
-        for certificate in certificateChain {
-            let certificateData = SecCertificateCopyData(certificate) as Data
-            do {
-                let certificate = try decoder.decodeCertificate(from: certificateData)
-                certificates.append(certificate)
-            } catch {
-                logger.log("\(error)",
-                           level: .warning,
-                           category: .certificate)
-            }
-        }
-        return certificates
-    }
-}
-
 /// Fetches the certificate chain served by a URL by driving a `URLSession` and capturing the
 /// server trust from the authentication challenge.
 final class CertificatesFetcher {
@@ -101,6 +60,47 @@ final class CertificatesFetcher {
         }
 
         task.resume()
+    }
+}
+
+final class CertificatesHandler {
+    private let serverTrust: SecTrust
+    private let decoder: CertificateDecoding
+    private let logger: Logger
+
+    /// Initializes a new `CertificatesHandler` with the given server trust.
+    /// - Parameters:
+    ///   - serverTrust: The server trust containing the certificate chain.
+    ///   - decoder: DER decoder used to parse each `SecCertificate`. Defaults to the production decoder.
+    ///   - logger: Logger used to record decode failures. Defaults to `DefaultLogger.shared`.
+    init(serverTrust: SecTrust,
+         decoder: CertificateDecoding = DefaultCertificateDecoder(),
+         logger: Logger = DefaultLogger.shared) {
+        self.serverTrust = serverTrust
+        self.decoder = decoder
+        self.logger = logger
+    }
+
+    /// Extracts and handles the certificate chain.
+    /// - Parameters:
+    ///   - completion: A completion block that provides the extracted certificates.
+    func handleCertificates() -> [Certificate] {
+        var certificates = [Certificate]()
+        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
+            return certificates
+        }
+        for certificate in certificateChain {
+            let certificateData = SecCertificateCopyData(certificate) as Data
+            do {
+                let certificate = try decoder.decodeCertificate(from: certificateData)
+                certificates.append(certificate)
+            } catch {
+                logger.log("\(error)",
+                           level: .warning,
+                           category: .certificate)
+            }
+        }
+        return certificates
     }
 }
 
