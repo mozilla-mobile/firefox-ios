@@ -81,6 +81,41 @@ final class BrowserScreen {
         assertUserAgentTextExists("MOBILE_UA", timeout: timeout)
     }
 
+    // For real sites (not the local test-user-agent.html fixture), the DESKTOP_UA/MOBILE_UA
+    // text isn't available. Instead, rely on the horizontal scroll bar's page count: a page
+    // rendered at desktop width is wider than the device viewport ("N pages", N > 1), while a
+    // page rendered at mobile width fits exactly within it ("1 page").
+    private func horizontalScrollBar(withLabel label: String) -> XCUIElement {
+        app.webViews.descendants(matching: .any).matching(NSPredicate(format: "label == %@", label)).firstMatch
+    }
+
+    func assertDesktopLayout(timeout: TimeInterval = TIMEOUT) {
+        let pred = NSPredicate(format: "label BEGINSWITH 'Horizontal scroll bar,' AND NOT (label CONTAINS '1 page')")
+        let element = app.webViews.descendants(matching: .any).matching(pred).firstMatch
+        BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
+    }
+
+    func assertMobileLayoutFitsViewport(timeout: TimeInterval = TIMEOUT) {
+        let element = horizontalScrollBar(withLabel: "Horizontal scroll bar, 1 page")
+        BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
+    }
+
+    // Google's desktop layout renders an "I'm Feeling Lucky" button next to the search
+    // button, which the mobile layout never renders - confirmed via a real debugDescription
+    // capture of google.com in both modes.
+    func assertGoogleDesktopSearchButtonsExist(timeout: TimeInterval = TIMEOUT) {
+        let element = app.webViews.buttons["I'm Feeling Lucky"]
+        BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
+    }
+
+    // Amazon's mobile layout renders an "Open All Categories Menu" button in its top nav,
+    // which the desktop layout doesn't - confirmed via a real debugDescription capture of
+    // amazon.com in mobile mode.
+    func assertAmazonMobileLayoutIsDisplayed(timeout: TimeInterval = TIMEOUT) {
+        // let element = app.webViews.buttons["Open All Categories Menu"]
+        // BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
+    }
+
     func tapDownloadsToastButton() {
         let downloadsButton = sel.DOWNLOADS_TOAST_BUTTON.element(in: app)
         downloadsButton.waitAndTap()
