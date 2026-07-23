@@ -139,7 +139,8 @@ final class WebCompatReportViewController: UINavigationController,
                 WebCompatReportViewModel.Row(
                     id: SectionID.issueCategory.rawValue,
                     title: selectedTitle ?? .WebCompatReporter.IssueSection.CategoryPlaceholder,
-                    kind: .categoryMenu(isPlaceholder: selectedTitle == nil, options: options)
+                    kind: .categoryMenu(isPlaceholder: selectedTitle == nil, options: options),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.categoryMenu
                 )
             ]
         )
@@ -153,7 +154,8 @@ final class WebCompatReportViewController: UINavigationController,
             WebCompatReportViewModel.Row(
                 id: subOption.rawValue,
                 title: title(for: subOption),
-                kind: .subOption(isSelected: subOption.rawValue == state.selectedSubOptionID)
+                kind: .subOption(isSelected: subOption.rawValue == state.selectedSubOptionID),
+                a11yIdentifier: "\(AccessibilityIdentifiers.WebCompatReporter.subOption).\(subOption.rawValue)"
             )
         }
         let subOptionSection = WebCompatReportViewModel.Section(

@@ -43,7 +43,8 @@ private func previewCategorySection(selectedTitle: String?) -> WebCompatReportVi
                 kind: .categoryMenu(
                     isPlaceholder: selectedTitle == nil,
                     options: previewCategoryOptions(selectedID: selectedID)
-                )
+                ),
+                a11yIdentifier: "issue-category"
             )
         ]
     )
@@ -51,7 +52,7 @@ private func previewCategorySection(selectedTitle: String?) -> WebCompatReportVi
 
 private func previewSubOption(_ id: String, _ title: String, selected: Bool = false)
 -> WebCompatReportViewModel.Row {
-    return WebCompatReportViewModel.Row(id: id, title: title, kind: .subOption(isSelected: selected))
+    return WebCompatReportViewModel.Row(id: id, title: title, kind: .subOption(isSelected: selected), a11yIdentifier: id)
 }
 
 @available(iOS 17.0, *)

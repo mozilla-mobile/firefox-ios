@@ -20,6 +20,8 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.contentHorizontalAlignment = .leading
         button.showsMenuAsPrimaryAction = true
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         return button
     }()
 
@@ -107,13 +109,20 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
         isPlaceholder: Bool,
         options: [WebCompatReportViewModel.Row.MenuOption],
         theme: Theme,
+        a11yIdentifier: String,
         onSelect: @escaping (String) -> Void
     ) {
         selectionHandler = onSelect
+        menuButton.accessibilityIdentifier = a11yIdentifier
         backgroundConfiguration = .listGroupedCell()
         backgroundConfiguration?.backgroundColor = theme.colors.layer5
         var configuration = menuButton.configuration ?? UIButton.Configuration.plain()
         configuration.title = title
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = FXFontStyles.Regular.body.scaledFont()
+            return outgoing
+        }
         configuration.baseForegroundColor = isPlaceholder ? theme.colors.textSecondary : theme.colors.textPrimary
         menuButton.configuration = configuration
         chevronUpView.tintColor = theme.colors.textSecondary

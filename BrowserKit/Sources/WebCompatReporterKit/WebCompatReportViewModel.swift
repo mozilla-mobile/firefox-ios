@@ -47,11 +47,13 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
         public let id: String
         public let title: String
         public let kind: Kind
+        public let a11yIdentifier: String
 
-        public init(id: String, title: String, kind: Kind = .plain) {
+        public init(id: String, title: String, kind: Kind = .plain, a11yIdentifier: String) {
             self.id = id
             self.title = title
             self.kind = kind
+            self.a11yIdentifier = a11yIdentifier
         }
     }
 
