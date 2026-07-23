@@ -8,9 +8,6 @@ import SiteImageView
 
 class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private struct UX {
-        static let screenshotViewContainerShadowCornerRadius: CGFloat = 25.0
-        static let screenshotViewContainerVerticalPadding: CGFloat = 100.0
-        static let screenshotViewContainerShadowOffset = CGSize(width: 2, height: 4)
         static let triggerBoundsHeightPercentage: CGFloat = 0.25
         static let fingerCardPositionRatio: CGFloat = 2.0 / 3.0
         static let closeReleaseThreshold: CGFloat = 1.0 / 3.0
@@ -37,7 +34,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private let tabBackgroundHover: UIView = .build()
     private let screenshotViewContainer: UIView = .build {
         $0.layer.masksToBounds = false
-        $0.layer.shadowOffset = UX.screenshotViewContainerShadowOffset
         $0.applyScreenCornerRadius()
     }
     private let screenshotView: UIImageView = .build {
@@ -63,6 +59,12 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     var previewCardFrame: CGRect {
         return screenshotViewContainer.frame
     }
+
+    /// The preview card's corner radius scaled by the current screenshotView scale
+    private(set) var scaledPreviewCardCornerRadius: CGFloat = 0
+
+    /// Whether the interactive swipe preview is currently active
+    private(set) var isPreviewActive = false
 
     /// The action to take when the pan gesture ends, based on where the finger is released on screen.
     enum ReleaseOutcome {
@@ -140,11 +142,17 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     }
 
     func translate(_ translation: CGPoint, fingerLocation: CGPoint) {
+        isPreviewActive = true
         let shouldShowCloseButton =
             releaseOutcome(fingerLocation: fingerLocation) == .closeTab &&
             swipeGestureFeatureFlagProvider.isCloseTabEnabled
 
-        let shouldTriggerHaptic = closeButton.alpha != (shouldShowCloseButton ? 1 : 0)
+        let targetCloseButtonAlpha = shouldShowCloseButton ? 1.0 : 0.0
+
+        let shouldTriggerHaptic =
+            (closeButton.alpha != targetCloseButtonAlpha) &&
+            swipeGestureFeatureFlagProvider.isCloseTabEnabled
+
         if shouldTriggerHaptic {
             addHaptics()
         }
@@ -164,6 +172,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         let centerOffsetFromFinger = (UX.fingerCardPositionRatio - 0.5) * scaledHeight
         let targetTranslationX = fingerLocation.x - naturalCenter.x
         let targetTranslationY = fingerLocation.y - centerOffsetFromFinger - naturalCenter.y
+        self.scaledPreviewCardCornerRadius = screenshotView.layer.cornerRadius * scale
 
         // Blend in from the full-screen start so the preview slides into place instead of jumping.
         let clampDistance = bounds.height * UX.triggerBoundsHeightPercentage
@@ -192,12 +201,14 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         return .cancel
     }
 
-    func restore() {
+    func restore(completion: (() -> Void)? = nil) {
+        isPreviewActive = false
         UIView.animate(withDuration: UX.restoreDuration) { [self] in
             screenshotViewContainer.transform = .identity
             screenshotView.layer.cornerRadius = 0
         } completion: { [weak self] _ in
             self?.alpha = 0.0
+            completion?()
         }
     }
 
@@ -208,7 +219,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         )
     }
 
-    /// Fades the preview out in place (without snapping back to full screen) and resets it for reuse.
+    /// Fades the preview out in place (without snapping back to full screen) and prepares it for reuse.
     func dismissForTabTray() {
         UIView.animate(withDuration: UX.previewFadeOutDuration) { [self] in
             alpha = 0.0
@@ -216,6 +227,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             self?.screenshotViewContainer.transform = .identity
             self?.screenshotView.layer.cornerRadius = 0
             self?.layer.zPosition = 0
+            self?.isPreviewActive = false
         }
     }
 

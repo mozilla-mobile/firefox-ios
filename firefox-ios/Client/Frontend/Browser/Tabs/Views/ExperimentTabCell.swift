@@ -67,6 +67,12 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         return isPad ? screenshotViewPad : screenshotViewPhone
     }
 
+    /// Syncs the screenshot between the tab preview and the tab cell when opening the tab tray
+    func syncScreenshotForAnimation(_ image: UIImage?) {
+        guard let image, screenshotView.image != nil else { return }
+        screenshotView.image = image
+    }
+
     /// Invisible button without corner radius to ensure the button has the required hitbox size
     private lazy var closeButton: UIButton = .build { button in
         button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.closeButton
