@@ -18,6 +18,13 @@ final class ErrorPageHandlerTests: XCTestCase {
         await DependencyHelperMock().bootstrapDependencies()
     }
 
+    func testSystemCellularDataStateProvider_sharedInstance_isStableAcrossReloads() {
+        let firstLoadProvider = SystemCellularDataStateProvider.shared
+        let reloadedPageProvider = SystemCellularDataStateProvider.shared
+
+        XCTAssertTrue(firstLoadProvider === reloadedPageProvider)
+    }
+
     override func tearDown() async throws {
         DependencyHelperMock().reset()
         try super.tearDownWithError()

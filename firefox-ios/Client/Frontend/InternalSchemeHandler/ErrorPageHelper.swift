@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CoreTelephony
 import Foundation
 import WebKit
 import GCDWebServers
@@ -19,28 +18,6 @@ private let ErrorPageCertErrorParam = "certerror"
 private let ErrorPageCellularDataRestrictedParam = "cellularDataRestricted"
 private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
 private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
-
-protocol CellularDataStateProvider {
-    var isRestricted: Bool { get }
-}
-
-struct SystemCellularDataStateProvider: CellularDataStateProvider {
-    private let cellularData = CTCellularData()
-
-    var isRestricted: Bool {
-        return cellularData.restrictedState == .restricted
-    }
-}
-
-enum CellularDataErrorHelper {
-    static func isRestrictedOfflineError(
-        _ error: NSError,
-        provider: any CellularDataStateProvider
-    ) -> Bool {
-        let offlineErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
-        return error.domain == NSURLErrorDomain && error.code == offlineErrorCode && provider.isRestricted
-    }
-}
 
 struct CertErrorsMapping {
     // Error codes copied from Gecko. The ints corresponding to these codes were determined
@@ -347,7 +324,7 @@ class ErrorPageHelper {
 
     init(certStore: CertStore?,
          logger: Logger = DefaultLogger.shared,
-         cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider()) {
+         cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared) {
         self.certStore = certStore
         self.logger = logger
         self.cellularDataStateProvider = cellularDataStateProvider
@@ -373,7 +350,7 @@ class ErrorPageHelper {
             URLQueryItem(name: "timestamp", value: "\(Int(Date().timeIntervalSince1970 * 1000))")
         ]
 
-        if CellularDataErrorHelper.isRestrictedOfflineError(error, provider: cellularDataStateProvider) {
+        if cellularDataStateProvider.isRestrictedOfflineError(error) {
             queryItems.append(URLQueryItem(name: ErrorPageCellularDataRestrictedParam, value: "true"))
         }
 

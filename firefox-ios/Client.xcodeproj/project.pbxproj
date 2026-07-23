@@ -785,6 +785,7 @@
 		630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */; };
 		631A369F2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631A369E2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift */; };
 		631A36A32CC0B2470044DFEB /* NativeErrorPageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631A36A22CC0B2470044DFEB /* NativeErrorPageHelper.swift */; };
+		A1D8E7F93010234500C0DA7A /* SystemCellularDataStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D8E7F83010234500C0DA7A /* SystemCellularDataStateProvider.swift */; };
 		635183FB2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635183FA2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift */; };
 		63B213282CCA796D00A466DB /* NativeErrorPageAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B213272CCA796D00A466DB /* NativeErrorPageAction.swift */; };
 		63B2132A2CCA797400A466DB /* NativeErrorPageState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B213292CCA797400A466DB /* NativeErrorPageState.swift */; };
@@ -11769,6 +11770,7 @@
 		EBBB440898B7A7DD4702405D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		EBC486982195F46A00CDA48D /* InternalSchemeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalSchemeHandler.swift; sourceTree = "<group>"; };
 		EBC4869A2195F58200CDA48D /* ErrorPageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorPageHelper.swift; sourceTree = "<group>"; };
+		A1D8E7F83010234500C0DA7A /* SystemCellularDataStateProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemCellularDataStateProvider.swift; sourceTree = "<group>"; };
 		EBC4869B2195F58200CDA48D /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
 		EBE26B4E220C959D00D1D99A /* BrowserViewController+ToolBarActionMenuDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ToolBarActionMenuDelegate.swift"; sourceTree = "<group>"; };
 		EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapper.swift; sourceTree = "<group>"; };
@@ -17047,6 +17049,7 @@
 				EBC4869B2195F58200CDA48D /* AboutHomeHandler.swift */,
 				EBC4869A2195F58200CDA48D /* ErrorPageHelper.swift */,
 				EBC486982195F46A00CDA48D /* InternalSchemeHandler.swift */,
+				A1D8E7F83010234500C0DA7A /* SystemCellularDataStateProvider.swift */,
 			);
 			path = InternalSchemeHandler;
 			sourceTree = "<group>";
@@ -20206,6 +20209,7 @@
 				C2F700A22FBC000100112233 /* TrackerBlockerModuleCell.swift in Sources */,
 				0EBD66922DBFE41000A78532 /* ConcurrencyThrottler.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
+				A1D8E7F93010234500C0DA7A /* SystemCellularDataStateProvider.swift in Sources */,
 				C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */,
 				8A454D462CB9C83F009436D9 /* TopSitesMiddleware.swift in Sources */,
 				0B1278E02DDB1D6E00406656 /* BackForwardList.swift in Sources */,
