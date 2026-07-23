@@ -10,6 +10,7 @@ struct ThemeOptionView: View {
     let theme: ThemeSelectionView.ThemeOption
     /// A flag indicating whether this option is currently selected.
     let isSelected: Bool
+    /// A flag indicating whether Nova design system is enabled.
     let isNova: Bool
     /// Callback executed when a new theme option is selected.
     let onSelected: (() -> Void)?
