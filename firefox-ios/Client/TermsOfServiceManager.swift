@@ -89,17 +89,20 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
                 EmbeddedLink(
                     fullText: termsOfUseAgreement,
                     linkText: termsOfUseLink,
-                    action: .openTermsOfService
+                    action: .openTermsOfService,
+                    accessibilityIdentifier: AccessibilityIdentifiers.TermsOfService.termsOfServiceAgreement
                 ),
                 EmbeddedLink(
                     fullText: privacyAgreement,
                     linkText: privacyNoticeLink,
-                    action: .openPrivacyNotice
+                    action: .openPrivacyNotice,
+                    accessibilityIdentifier: AccessibilityIdentifiers.TermsOfService.privacyNoticeAgreement
                 ),
                 EmbeddedLink(
                     fullText: manageAgreement,
                     linkText: manageLink,
-                    action: .openManageSettings
+                    action: .openManageSettings,
+                    accessibilityIdentifier: AccessibilityIdentifiers.TermsOfService.manageDataCollectionAgreement
                 )
             ]
         )
