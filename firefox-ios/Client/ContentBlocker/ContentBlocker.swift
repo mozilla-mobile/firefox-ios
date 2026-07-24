@@ -406,11 +406,12 @@ extension ContentBlocker {
                     dispatchGroup.leave()
                     return
                 }
-
                 self?.logger.log("Will compile list: \(filename)", level: .info, category: .adblock)
                 self?.loadJsonFromBundle(forResource: filename) { jsonString in
                     ensureMainThread {
-                        var str = jsonString
+                        // Ensure JSON is lowercase only. WebKit rules expect lowercase
+                        // domains (and no other part of the JSON should be uppercase).
+                        var str = jsonString.lowercased()
 
                         // Here we find the closing array bracket in the JSON string
                         // and append our safelist as a rule to the end of the JSON.
