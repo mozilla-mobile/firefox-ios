@@ -119,6 +119,7 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     private enum SectionID: String {
+        case url
         case issueCategory
         case issueSubOptions
         case advancedOptions
@@ -126,6 +127,7 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     private enum RowID: String {
+        case url
         case includeScreenshot
         case includeBlockedList
         case send
@@ -134,10 +136,25 @@ final class WebCompatReportViewController: UINavigationController,
     static func makeSections(
         from state: WebCompatReporterState
     ) -> [WebCompatReportViewModel.Section] {
-        var sections = makeIssueSections(from: state)
+        var sections = [urlSection(from: state)]
+        sections.append(contentsOf: makeIssueSections(from: state))
         sections.append(advancedOptionsSection(from: state))
         sections.append(sendSection(from: state))
         return sections
+    }
+
+    private static func urlSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.url.rawValue,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.url.rawValue,
+                    title: .WebCompatReporter.Fields.URLLabel,
+                    kind: .urlField(text: state.url, placeholder: .WebCompatReporter.Fields.URLPlaceholder),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.urlField
+                )
+            ]
+        )
     }
 
     private static func advancedOptionsSection(
@@ -322,7 +339,20 @@ final class WebCompatReportViewController: UINavigationController,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.toggleBlockedList
             ))
-        case .send, .none:
+        case .url, .send, .none:
+            break
+        }
+    }
+
+    func webCompatReportSheetDidEditText(id: String, text: String) {
+        switch RowID(rawValue: id) {
+        case .url:
+            store.dispatch(WebCompatReporterViewAction(
+                url: text,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.editURL
+            ))
+        case .includeScreenshot, .includeBlockedList, .send, .none:
             break
         }
     }

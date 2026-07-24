@@ -70,10 +70,15 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
             chevronDownView.widthAnchor.constraint(equalToConstant: scaledChevronSize),
             chevronDownView.heightAnchor.constraint(equalToConstant: scaledChevronSize)
         ]
+        // .defaultHigh (not required) avoids the self-sizing vs. min-height constraint conflict.
+        let topConstraint = menuButton.topAnchor.constraint(equalTo: margins.topAnchor)
+        let bottomConstraint = menuButton.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
+        topConstraint.priority = .defaultHigh
+        bottomConstraint.priority = .defaultHigh
         NSLayoutConstraint.activate(chevronSizeConstraints + [
             menuButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
-            menuButton.topAnchor.constraint(equalTo: margins.topAnchor),
-            menuButton.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
+            topConstraint,
+            bottomConstraint,
             menuButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             menuButton.heightAnchor.constraint(
                 greaterThanOrEqualToConstant: WebCompatReporterUX.Control.minimumTapTarget

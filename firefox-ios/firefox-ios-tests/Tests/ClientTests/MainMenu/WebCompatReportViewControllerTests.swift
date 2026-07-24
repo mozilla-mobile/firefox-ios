@@ -112,6 +112,16 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(dispatchedViewActions().isEmpty)
     }
 
+    func testDidEditText_onURLRow_dispatchesEditURLWithText() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "url", text: "https://changed.example.com")
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .editURL)
+        XCTAssertEqual(action?.url, "https://changed.example.com")
+    }
+
     func testSimpleCreation_hasNoLeaks() {
         let subject = createSubject(reportedURL: nil)
         subject.loadViewIfNeeded()
@@ -174,20 +184,25 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - makeSections
 
-    func testMakeSections_withoutCategory_showsAdvancedTogglesAndDisabledSendButton() {
+    func testMakeSections_withoutCategory_showsURLCategoryAdvancedAndDisabledSend() {
         let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
-        // Category + advanced + send (no sub-options until a category is picked).
-        XCTAssertEqual(sections.map(\.id), ["issueCategory", "advancedOptions", "send"])
+        // URL + category + advanced + send (no sub-options until a category is picked).
+        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "advancedOptions", "send"])
 
         let advanced = sections.first { $0.id == "advancedOptions" }
         XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: true), .toggle(isOn: false)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
+
+        guard case let .urlField(text, _) = sections.first?.rows.first?.kind else {
+            return XCTFail("Expected a URL field row")
+        }
+        XCTAssertEqual(text, "https://example.com")
     }
 
-    func testMakeSections_withCategory_keepsAdvancedTogglesBeforeSendButton() {
+    func testMakeSections_withCategory_keepsAdvancedTogglesBeforeEnabledSendButton() {
         let state = WebCompatReporterState(
             windowUUID: windowUUID,
             url: "https://example.com",
@@ -199,7 +214,10 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
-        XCTAssertEqual(sections.map(\.id), ["issueCategory", "issueSubOptions", "advancedOptions", "send"])
+        XCTAssertEqual(
+            sections.map(\.id),
+            ["url", "issueCategory", "issueSubOptions", "advancedOptions", "send"]
+        )
 
         let advanced = sections.first { $0.id == "advancedOptions" }
         XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false), .toggle(isOn: true)])

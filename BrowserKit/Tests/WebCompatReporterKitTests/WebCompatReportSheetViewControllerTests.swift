@@ -32,23 +32,6 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(subject.navigationItem.rightBarButtonItem?.isEnabled, true)
     }
 
-    func testConfigure_withSections_populatesList() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-
-        subject.configure(with: makeViewModel(sections: [
-            .init(id: "url", rows: [.init(id: "url", title: "https://example.com", a11yIdentifier: "url")]),
-            .init(id: "advanced", rows: [
-                .init(id: "screenshot", title: "Include screenshot", a11yIdentifier: "screenshot"),
-                .init(id: "blocklist", title: "Include blocked list", a11yIdentifier: "blocklist")
-            ])
-        ]))
-
-        let collectionView = subject.view.subviews.compactMap { $0 as? UICollectionView }.first
-        XCTAssertEqual(collectionView?.numberOfSections, 2)
-        XCTAssertEqual(collectionView?.numberOfItems(inSection: 1), 2)
-    }
-
     func testCloseButton_notifiesDelegate() {
         let delegate = MockWebCompatReportSheetDelegate()
         let subject = createSubject()
@@ -273,6 +256,19 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertNil(footerView(in: subject))
     }
 
+    func testConfigure_withFieldSections_dequeuesTypedCells() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 2000)
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: makeViewModel(sections: fieldSections()))
+        subject.view.layoutIfNeeded()
+
+        XCTAssertTrue(
+            collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatURLCell
+        )
+    }
+
     // MARK: - Helpers
 
     private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
@@ -344,6 +340,19 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                     title: "Include screenshot",
                     kind: .toggle(isOn: isOn),
                     a11yIdentifier: "screenshot"
+                )
+            ])
+        ]
+    }
+
+    private func fieldSections() -> [WebCompatReportViewModel.Section] {
+        return [
+            WebCompatReportViewModel.Section(id: "url", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "url",
+                    title: "URL",
+                    kind: .urlField(text: "https://example.com", placeholder: "Website address"),
+                    a11yIdentifier: "url"
                 )
             ])
         ]
@@ -504,6 +513,7 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
     var tappedButtonIDs: [String] = []
     var toggles: [(id: String, isOn: Bool)] = []
     var learnMoreURLs: [URL] = []
+    var editedText: [(id: String, text: String)] = []
 
     func webCompatReportSheetDidTapClose() {
         didTapCloseCallCount += 1
@@ -531,5 +541,9 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
 
     func webCompatReportSheetDidTapLearnMore(url: URL) {
         learnMoreURLs.append(url)
+    }
+
+    func webCompatReportSheetDidEditText(id: String, text: String) {
+        editedText.append((id, text))
     }
 }
