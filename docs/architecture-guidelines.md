@@ -73,7 +73,12 @@ References: [0003 Redux Pilot](../adr/0003-redux-pilot.md), [0004 Redux replaces
 
 ## Tests
 
-- Tests must call `super.setUp()` and `super.tearDown()` in their respective overrides.
-- `setUp` and `tearDown` must mirror each other. Every property assigned in `setUp` must be reset (typically to `nil`) in `tearDown`, so state does not leak across tests.
-- Tests should test for leaks with `trackForMemoryLeaks` whenever possible.
-- Unit tests cases shouldn't only cover happy path.
+- Tests must call `super.setUp()` first in `setUp()` and `super.tearDown()` last in `tearDown()`.
+- `setUp` and `tearDown` must mirror each other. Every property assigned in `setUp` must be reset (typically to `nil`) in `tearDown`, in reverse order of setup so dependencies are still valid when their owners are cleaned up.
+- Track memory leaks with `trackForMemoryLeaks` from `TestKit`. This is a minimum requirement for tests covering view controllers and coordinators, and encouraged elsewhere.
+- Do not exercise real external services (network, disk, keychain) in unit tests. Inject a mock through the type's protocol dependency. Tests that hit real services belong in integration tests.
+- Do not call `Date()`, `Locale.current`, or `Locale.preferredLanguages` directly in tested logic. Inject them so tests can control the value.
+- Prefer `XCTUnwrap` over force-unwrapping in test code. Tests should fail gracefully instead of crashing on `nil`.
+- Unit tests should not cover only the happy path. Include error paths, edge cases, and boundary conditions.
+
+References: [Unit Tests Guidelines wiki](https://github.com/mozilla-mobile/firefox-ios/wiki/Unit-Tests-Guidelines).
