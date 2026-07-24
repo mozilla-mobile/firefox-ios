@@ -14,6 +14,7 @@ enum TabTrayLayoutType: Equatable {
 
 @Copyable
 struct TabTrayState: ScreenState, Equatable {
+    var windowUUID: WindowUUID
     var isPrivateMode: Bool
     var selectedPanel: TabTrayPanelType
     var normalTabsCount: String
@@ -21,7 +22,6 @@ struct TabTrayState: ScreenState, Equatable {
     var hasSyncableAccount: Bool
     var shouldDismiss: Bool
     var toastType: ToastType?
-    var windowUUID: WindowUUID
     var showCloseConfirmation: Bool
     var enableDeleteTabsButton: Bool?
 
