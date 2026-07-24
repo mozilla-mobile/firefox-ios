@@ -65,16 +65,17 @@ enum QuickLink: Int {
         }
     }
 
-    /// The button's fill color for the given theme. Private actions use the private accent,
-    /// other actions use the primary action color.
-    public func backgroundColor(for theme: Theme) -> Color {
+    /// The button's fill colors for the given theme.
+    public func backgroundColors(for theme: Theme) -> [Color] {
         switch self {
         case .search:
-            return Color(uiColor: theme.colors.actionPrimary)
+            return [Color(uiColor: theme.colors.gradientAIStrongStop1),
+                    Color(uiColor: theme.colors.gradientAIStrongStop2)]
         case .copiedLink:
-            return Color(uiColor: theme.colors.actionPrimary)
+            return [Color(uiColor: theme.colors.layerSelectedText)]
         case .privateSearch, .closePrivateTabs:
-            return Color(uiColor: theme.colors.layerAccentPrivate)
+            return [Color(uiColor: theme.colors.gradientOnboardingStop1),
+                    Color(uiColor: theme.colors.gradientOnboardingStop2)]
         }
     }
 
@@ -85,6 +86,6 @@ enum QuickLink: Int {
 
     /// Foreground color for labels and logos drawn on top of the button fill.
     public func foregroundColor(for theme: Theme) -> Color {
-        return Color(uiColor: theme.colors.textInverted)
+        return Color(uiColor: theme.colors.textOnDark)
     }
 }

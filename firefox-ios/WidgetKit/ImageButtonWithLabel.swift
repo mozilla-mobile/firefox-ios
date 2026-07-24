@@ -90,7 +90,13 @@ struct ImageButtonWithLabel: View {
             BackgroundContent(link: link)
         } else {
             ContainerRelativeShape()
-                .fill(link.backgroundColor(for: theme))
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: link.backgroundColors(for: theme)),
+                        startPoint: .bottomLeading,
+                        endPoint: .topTrailing
+                    )
+                )
         }
     }
 
@@ -156,7 +162,13 @@ struct BackgroundContent: View {
                 .fill(link.tintedBackgroundColor(for: theme))
         } else {
             ContainerRelativeShape()
-                .fill(link.backgroundColor(for: theme))
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: link.backgroundColors(for: theme)),
+                        startPoint: .bottomLeading,
+                        endPoint: .topTrailing
+                    )
+                )
         }
     }
 }
