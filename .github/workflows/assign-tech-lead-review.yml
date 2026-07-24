@@ -49,27 +49,48 @@ jobs:
             exit 0
           fi
 
-          # Build the JSON reviewers array, skipping the PR author (GitHub 422s if
-          # you request the author as their own reviewer).
-          reviewers_json=""
-          for login in $REVIEWERS; do
-            [ "$login" = "$PR_AUTHOR" ] && continue
-            reviewers_json="${reviewers_json:+$reviewers_json,}\"$login\""
+          # Fetch currently requested reviewers so we don't stack multiple tech leads on the same PR
+          # (e.g. on `synchronize` re-runs) and don't re-request someone who is already reviewing.
+          current_reviewers=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
+            --jq '.users[].login' | tr '\n' ' ')
+
+          # If any tech lead is already a requested reviewer, skip assignment and just make sure the label is set.
+          for cur in $current_reviewers; do
+            for login in $REVIEWERS; do
+              if [ "$login" = "$cur" ]; then
+                echo "Tech lead $cur is already requested for review; skipping assignment."
+                retry gh pr edit "$NUMBER" -R "$GH_REPO" --add-label "$LABEL_NAME"
+                exit 0
+              fi
+            done
           done
 
-          if [ -z "$reviewers_json" ]; then
+          # Build the eligible list: not the PR author (GitHub 422s if you request the author as their own reviewer).
+          eligible=()
+          for login in $REVIEWERS; do
+            [ "$login" = "$PR_AUTHOR" ] && continue
+            eligible+=("$login")
+          done
+
+          if [ ${#eligible[@]} -eq 0 ]; then
             echo "No eligible reviewers to request (list empty or only the author). Nothing to do."
             exit 0
           fi
 
-          # Request review from the individual reviewers. Fails the workflow if unsuccessful after retries.
+          # Pick one random reviewer from the eligible list.
+          picked="${eligible[$((RANDOM % ${#eligible[@]}))]}"
+          echo "Requesting review from: $picked"
+
+          # Request review from the picked reviewer. Fails the workflow if unsuccessful after retries.
           request_reviewer() {
             gh api \
               --method POST \
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2026-03-10" \
               "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
-              --input - <<< "{\"reviewers\":[$reviewers_json]}"
+              --input - <<< "{\"reviewers\":[\"$picked\"]}"
           }
           retry request_reviewer
 
