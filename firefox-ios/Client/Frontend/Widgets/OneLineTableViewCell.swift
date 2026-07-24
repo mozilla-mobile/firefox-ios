@@ -94,7 +94,7 @@ class OneLineTableViewCell: UITableViewCell,
         updateReorderControl()
 
         // Position the accessory at the trailing edge of the cell, accounting for safe area and padding
-        if let accessoryView {
+        if !isEditing, let accessoryView {
             if UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft {
                 accessoryView.frame.origin.x = UX.accessoryViewTrailingPadding + safeAreaInsets.left
             } else {
