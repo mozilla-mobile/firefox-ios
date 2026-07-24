@@ -134,6 +134,11 @@ struct AccessibilityIdentifiers {
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
+    struct WebCompatReporter {
+        static let categoryMenu = "WebCompatReporter.CategoryMenu"
+        static let subOption = "WebCompatReporter.SubOption"
+    }
+
     struct UnifiedSearch {
         struct BottomSheetRow {
             static let engine = "UnifiedSearch.BottomSheetRow.Engine"
