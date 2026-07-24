@@ -13,6 +13,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
     let action: Action
     let linkAction: (Action) -> Void
     let textAlignment: TextAlignment
+    let accessibilityIdentifier: String?
 
     public init(
         textColor: UIColor,
@@ -21,6 +22,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
         linkText: String,
         action: Action,
         textAlignment: TextAlignment = .center,
+        accessibilityIdentifier: String? = nil,
         linkAction: @escaping (Action) -> Void
     ) {
         self.textColor = textColor
@@ -30,39 +32,33 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
         self.action = action
         self.linkAction = linkAction
         self.textAlignment = textAlignment
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 
     public var body: some View {
-        Text(attributedString)
-            .fixedSize(horizontal: false, vertical: true)
-            .accessibilityElement(children: .combine)
-            .accessibilityAddTraits(.isLink)
-            .accessibilityLabel(fullText)
-            .accessibilityAction {
-                linkAction(action)
-            }
-            .font(.caption)
-            .multilineTextAlignment(textAlignment)
-            .environment(\.openURL, OpenURLAction { url in
-                if url.scheme == "action", let host = url.host,
-                   let action = Action(rawValue: host) {
-                    // Handle in-app navigation
-                    linkAction(action)
-                    return .handled
-                }
-                return .systemAction
-            })
+        // Rendered as a Button so the link is a single, reliably hittable accessibility element that is
+        // addressable by identifier in UI tests. The link substring keeps its underlined link styling.
+        Button {
+            linkAction(action)
+        } label: {
+            Text(attributedString)
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.caption)
+                .multilineTextAlignment(textAlignment)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(fullText)
+        .accessibilityAddTraits(.isLink)
+        .accessibilityIdentifier(accessibilityIdentifier ?? action.rawValue)
     }
 
     private var attributedString: AttributedString {
         var attrString = AttributedString(fullText)
         attrString.foregroundColor = Color(uiColor: textColor)
 
-        let actionURL = URL(string: "action://\(action.rawValue)")!
         if let range = attrString.range(of: linkText) {
             attrString[range].underlineStyle = .single
             attrString[range].foregroundColor = Color(uiColor: linkColor)
-            attrString[range].link = actionURL
         }
 
         return attrString

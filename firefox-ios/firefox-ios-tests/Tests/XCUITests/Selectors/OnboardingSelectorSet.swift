@@ -17,6 +17,11 @@ protocol OnboardingSelectorsSet {
 
     var AGREE_AND_CONTINUE_BUTTON: Selector { get }
     var ONBOARDING_PRIMARY_BUTTON: Selector { get }
+    var TERMS_OF_USE_LINK: Selector { get }
+    var PRIVACY_NOTICE_LINK: Selector { get }
+    var MANAGE_LINK: Selector { get }
+    var TOS_PAGE_DONE_BUTTON: Selector { get }
+    var MANAGE_SHEET_DONE_BUTTON: Selector { get }
     var CONTINUE_BUTTON: Selector { get }
     var MANAGE_TEXT_BUTTON: Selector { get }
     var LAST_TOS_DESCRIPTION_TEXT: Selector { get }
@@ -34,6 +39,11 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     private enum IDs {
         static let termsAndService_AgreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
         static let termsAndService_OnboardingPrimaryButton = "TermsOfService.OnboardingPrimaryButton"
+        static let termsOfUse_LinkTextFragment = "Terms of Use"
+        static let privacyNotice_LinkTextFragment = "Privacy Notice"
+        static let manage_LinkTextFragment = "Manage"
+        static let termsOfService_DoneButton = AccessibilityIdentifiers.TermsOfService.doneButton
+        static let manageSheet_DoneButton = AccessibilityIdentifiers.TermsOfService.PrivacyNotice.doneButton
         static let continueButton = "Continue"
         static let manage_Text = "TermsOfService.ManageDataCollectionAgreement"
         static let QRCode_SignIn = "QRCodeSignIn.button"
@@ -60,6 +70,36 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     let CONTINUE_BUTTON = Selector.buttonByLabel(
         IDs.continueButton,
         description: "Continue button on first screen for Firefox/Firefox Beta",
+        groups: ["onboarding"]
+    )
+
+    let TERMS_OF_USE_LINK = Selector.staticTextLabelContains(
+        IDs.termsOfUse_LinkTextFragment,
+        description: "Firefox Terms of Use link on the ToS onboarding card",
+        groups: ["onboarding"]
+    )
+
+    let PRIVACY_NOTICE_LINK = Selector.linkContainingLabel(
+        IDs.privacyNotice_LinkTextFragment,
+        description: "Privacy Notice link on the ToS onboarding card",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_LINK = Selector.linkContainingLabel(
+        IDs.manage_LinkTextFragment,
+        description: "Manage link on the ToS onboarding card",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_SHEET_DONE_BUTTON = Selector.buttonId(
+        IDs.manageSheet_DoneButton,
+        description: "Done button dismissing the Manage privacy preferences bottom sheet",
+        groups: ["onboarding"]
+    )
+
+    let TOS_PAGE_DONE_BUTTON = Selector.buttonId(
+        IDs.termsOfService_DoneButton,
+        description: "Done button dismissing the Terms of Use pop up",
         groups: ["onboarding"]
     )
 
@@ -191,6 +231,7 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
 
     var all: [Selector] {
         [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, MANAGE_TEXT_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
-         DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON, PAGE_CONTROL]
+         DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON, PAGE_CONTROL,
+         TERMS_OF_USE_LINK, PRIVACY_NOTICE_LINK, MANAGE_LINK, TOS_PAGE_DONE_BUTTON, MANAGE_SHEET_DONE_BUTTON]
     }
 }

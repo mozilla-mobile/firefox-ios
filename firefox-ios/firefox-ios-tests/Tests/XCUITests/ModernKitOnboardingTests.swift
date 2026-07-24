@@ -74,6 +74,56 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertModernTermsOfServiceScreen()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4035799
+    func testModernTermsOfUseLinkDisplayAndDismissal() throws {
+        try verifyLinkDisplayAndDismissal(for: .termsOfUse)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4035800
+    func testModernPrivacyNoticeLinkDisplayAndDismissal() throws {
+        try verifyLinkDisplayAndDismissal(for: .privacyNotice)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4035801
+    func testModernManageBottomSheetDisplayAndDismissal() throws {
+        try verifyLinkDisplayAndDismissal(for: .manage)
+    }
+
+    /// Shared flow for the ToS card link cases (C4035799–C4035801): tap link → overlay shown → force
+    /// close hides it → backgrounding keeps it → Done dismisses it. iOS 26+ only (link tappability).
+    private func verifyLinkDisplayAndDismissal(for link: OnboardingScreen.ToSLink) throws {
+        guard #available(iOS 26.0, *) else {
+            throw XCTSkip("ToS card links are only individually tappable on iOS 26+")
+        }
+
+        launchApp()
+
+        // Step 1: The ToS card, including the link, is displayed
+        onboardingScreen.assertModernTermsOfServiceScreen()
+        onboardingScreen.assertLinkIsDisplayed(link)
+
+        // Step 2: Tapping the link displays its overlay
+        onboardingScreen.tapLink(link)
+        onboardingScreen.assertOverlayIsDisplayed(for: link)
+
+        // Step 3: Force closing and resuming closes the overlay and shows the ToS card
+        app.terminate()
+        launchApp()
+        onboardingScreen.assertModernTermsOfServiceScreen()
+        onboardingScreen.assertOverlayIsClosed(for: link)
+
+        // Step 4: Reopen the overlay; backgrounding and foregrounding keeps it displayed
+        onboardingScreen.tapLink(link)
+        onboardingScreen.assertOverlayIsDisplayed(for: link)
+        restartInBackground()
+        onboardingScreen.assertOverlayIsDisplayed(for: link)
+
+        // Step 5: Dismissing via the Done button closes the overlay and shows the ToS card
+        onboardingScreen.dismissOverlay(for: link)
+        onboardingScreen.assertModernTermsOfServiceScreen()
+        onboardingScreen.assertOverlayIsClosed(for: link)
+    }
+
     func testModernKitOnboardingWelcomeScreen() throws {
         launchApp()
 
