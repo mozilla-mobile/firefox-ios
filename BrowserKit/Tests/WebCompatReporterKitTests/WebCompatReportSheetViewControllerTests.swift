@@ -37,10 +37,10 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         subject.loadViewIfNeeded()
 
         subject.configure(with: makeViewModel(sections: [
-            .init(id: "url", rows: [.init(id: "url", title: "https://example.com")]),
+            .init(id: "url", rows: [.init(id: "url", title: "https://example.com", a11yIdentifier: "url")]),
             .init(id: "advanced", rows: [
-                .init(id: "screenshot", title: "Include screenshot"),
-                .init(id: "blocklist", title: "Include blocked list")
+                .init(id: "screenshot", title: "Include screenshot", a11yIdentifier: "screenshot"),
+                .init(id: "blocklist", title: "Include blocked list", a11yIdentifier: "blocklist")
             ])
         ]))
 
@@ -117,6 +117,31 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         )
     }
 
+    func testPickerCells_carryAccessibilityIdentifiersFromViewModel() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: makeViewModel(sections: pickerSections()))
+        subject.view.layoutIfNeeded()
+
+        func firstButton(in view: UIView?) -> UIButton? {
+            guard let view else { return nil }
+            for subview in view.subviews {
+                if let button = subview as? UIButton { return button }
+                if let found = firstButton(in: subview) { return found }
+            }
+            return nil
+        }
+
+        let collectionView = subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+        let categoryCell = collectionView?.cellForItem(at: IndexPath(item: 0, section: 0))
+        XCTAssertEqual(firstButton(in: categoryCell?.contentView)?.accessibilityIdentifier, "issue-category")
+
+        let subOptionCell = collectionView?.cellForItem(at: IndexPath(item: 0, section: 1))
+        XCTAssertEqual(subOptionCell?.accessibilityIdentifier, "browser_blocked")
+    }
+
     // MARK: - Helpers
 
     private func pickerSections() -> [WebCompatReportViewModel.Section] {
@@ -137,29 +162,34 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                 WebCompatReportViewModel.Row(
                     id: "issue-category",
                     title: "Site is not usable",
-                    kind: .categoryMenu(isPlaceholder: false, options: options)
+                    kind: .categoryMenu(isPlaceholder: false, options: options),
+                    a11yIdentifier: "issue-category"
                 )
             ]),
             WebCompatReportViewModel.Section(id: "issue-suboptions", rows: [
                 WebCompatReportViewModel.Row(
                     id: "browser_blocked",
                     title: "Browser is blocked",
-                    kind: .subOption(isSelected: false)
+                    kind: .subOption(isSelected: false),
+                    a11yIdentifier: "browser_blocked"
                 ),
                 WebCompatReportViewModel.Row(
                     id: "page_not_loading",
                     title: "Page not loading correctly",
-                    kind: .subOption(isSelected: false)
+                    kind: .subOption(isSelected: false),
+                    a11yIdentifier: "page_not_loading"
                 ),
                 WebCompatReportViewModel.Row(
                     id: "missing_items",
                     title: "Missing items",
-                    kind: .subOption(isSelected: false)
+                    kind: .subOption(isSelected: false),
+                    a11yIdentifier: "missing_items"
                 ),
                 WebCompatReportViewModel.Row(
                     id: "buttons_not_working",
                     title: "Buttons or links not working",
-                    kind: .subOption(isSelected: false)
+                    kind: .subOption(isSelected: false),
+                    a11yIdentifier: "buttons_not_working"
                 )
             ])
         ]

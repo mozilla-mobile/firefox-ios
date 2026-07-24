@@ -135,7 +135,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
             WebCompatSubOptionCell, WebCompatReportViewModel.Row
         > { [weak self] cell, _, row in
             guard let self, case let .subOption(isSelected) = row.kind else { return }
-            cell.configure(title: row.title, isSelected: isSelected, theme: self.theme)
+            cell.configure(title: row.title, isSelected: isSelected, theme: self.theme, a11yIdentifier: row.a11yIdentifier)
         }
 
         let categoryRegistration = UICollectionView.CellRegistration<
@@ -146,7 +146,8 @@ public final class WebCompatReportSheetViewController: UIViewController,
                 title: row.title,
                 isPlaceholder: isPlaceholder,
                 options: options,
-                theme: self.theme
+                theme: self.theme,
+                a11yIdentifier: row.a11yIdentifier
             ) { [weak self] optionID in
                 self?.delegate?.webCompatReportSheetDidSelectCategory(id: optionID)
             }
