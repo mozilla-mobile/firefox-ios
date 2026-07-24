@@ -79,7 +79,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
     }
 
     private lazy var headerView: UIStackView = .build { stack in
-        stack.distribution = .fillProportionally
+        stack.distribution = .fill
         stack.axis = .horizontal
         stack.alignment = .top
         stack.spacing = UX.headerStackSpacing
@@ -178,7 +178,6 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
             toastView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: UX.padding.bottom),
 
             headerView.widthAnchor.constraint(equalTo: toastView.widthAnchor),
-            titleLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor),
         ])
     }
 

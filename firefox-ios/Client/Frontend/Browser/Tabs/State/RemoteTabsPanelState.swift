@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ModifiedCopy
 import Redux
 import Storage
 
@@ -48,6 +49,7 @@ enum RemoteTabsPanelEmptyStateReason {
 }
 
 /// State for RemoteTabsPanel. WIP.
+@Copyable
 struct RemoteTabsPanelState: ScreenState, Sendable {
     let refreshState: RemoteTabsPanelRefreshState
     let allowsRefresh: Bool
@@ -126,53 +128,39 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
     }
 
     private static func handleRefreshDidBeginAction(state: RemoteTabsPanelState) -> RemoteTabsPanelState {
-        return RemoteTabsPanelState(windowUUID: state.windowUUID,
-                                    refreshState: .refreshing,
-                                    allowsRefresh: state.allowsRefresh,
-                                    clientAndTabs: state.clientAndTabs,
-                                    showingEmptyState: state.showingEmptyState,
-                                    devices: state.devices)
+        return state.copy(refreshState: .refreshing)
     }
 
     private static func handleRefreshDidFailAction(reason: RemoteTabsPanelEmptyStateReason,
                                                    state: RemoteTabsPanelState) -> RemoteTabsPanelState {
-        let allowsRefresh = reason.allowsRefresh
-        return RemoteTabsPanelState(windowUUID: state.windowUUID,
-                                    refreshState: .idle,
-                                    allowsRefresh: allowsRefresh,
-                                    clientAndTabs: state.clientAndTabs,
-                                    showingEmptyState: reason,
-                                    devices: state.devices)
+        return state
+            .copy(refreshState: .idle)
+            .copy(allowsRefresh: reason.allowsRefresh)
+            .copy(showingEmptyState: reason)
     }
 
     private static func handleRefreshDidSucceedAction(clientAndTabs: [ClientAndTabs],
                                                       state: RemoteTabsPanelState,
                                                       action: RemoteTabsPanelAction) -> RemoteTabsPanelState {
-        return RemoteTabsPanelState(windowUUID: state.windowUUID,
-                                    refreshState: .idle,
-                                    allowsRefresh: true,
-                                    clientAndTabs: clientAndTabs,
-                                    showingEmptyState: nil,
-                                    devices: action.devices ?? state.devices)
+        return state
+            .copy(refreshState: .idle)
+            .copy(allowsRefresh: true)
+            .copy(clientAndTabs: clientAndTabs)
+            .copy(showingEmptyState: nil)
+            .copy(devices: action.devices ?? state.devices)
     }
 
     private static func handleRemoteDevicesChangedAction(devices: [Device],
                                                          state: RemoteTabsPanelState) -> RemoteTabsPanelState {
-        return RemoteTabsPanelState(windowUUID: state.windowUUID,
-                                    refreshState: .idle,
-                                    allowsRefresh: state.allowsRefresh,
-                                    clientAndTabs: state.clientAndTabs,
-                                    showingEmptyState: state.showingEmptyState,
-                                    devices: devices)
+        return state
+            .copy(refreshState: .idle)
+            .copy(devices: devices)
     }
 
     private static func handleSyncDidBeginAction(state: RemoteTabsPanelState) -> RemoteTabsPanelState {
-        return RemoteTabsPanelState(windowUUID: state.windowUUID,
-                                    refreshState: .syncingTabs,
-                                    allowsRefresh: false,
-                                    clientAndTabs: state.clientAndTabs,
-                                    showingEmptyState: state.showingEmptyState,
-                                    devices: state.devices)
+        return state
+            .copy(refreshState: .syncingTabs)
+            .copy(allowsRefresh: false)
     }
 
     static func defaultState(from state: RemoteTabsPanelState) -> RemoteTabsPanelState {
