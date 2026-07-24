@@ -97,6 +97,15 @@ class UITestAppDelegate: AppDelegate {
             profile.prefs.setInt(1, forKey: PrefsKeys.UseStageServer)
         }
 
+        // Point the FxA account manager at a custom content server (e.g. a local
+        // FxA stack) so pairing/sign-in can run against it. Set before the
+        // account manager initializes. Used by the pairing E2E test.
+        if let customFxA = ProcessInfo.processInfo.environment["CUSTOM_FXA_SERVER"],
+           !customFxA.isEmpty {
+            profile.prefs.setBool(true, forKey: PrefsKeys.KeyUseCustomFxAContentServer)
+            profile.prefs.setString(customFxA, forKey: PrefsKeys.KeyCustomFxAContentServer)
+        }
+
         if launchArguments.contains(LaunchArguments.FxAChinaServer) {
             profile.prefs.setInt(1, forKey: PrefsKeys.KeyEnableChinaSyncService)
         }

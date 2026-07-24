@@ -665,6 +665,7 @@
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		4FB4AF7526E7E789005FDF91 /* HomeButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB4AF7426E7E789005FDF91 /* HomeButtonTests.swift */; };
+		51FA861543B01C235F89D81E /* PairingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2F882B9141B1043C350462 /* PairingTests.swift */; };
 		580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580B0C4121748CFE00448DF8 /* DataManagementTests.swift */; };
 		59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6825233896FC846499289 /* HistoryPanel.swift */; };
 		59A68D66379CFA85C4EAF00B /* TwoLineImageOverlayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68B1F857A8638598A63A0 /* TwoLineImageOverlayCell.swift */; };
@@ -1715,6 +1716,7 @@
 		C2F700A12FBC000100112233 /* TrackerBlockerModuleAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B12FBC000100112233 /* TrackerBlockerModuleAction.swift */; };
 		C2F700A22FBC000100112233 /* TrackerBlockerModuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */; };
 		C2F700A32FBC000100112233 /* TrackerBlockerModuleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */; };
+		C32D262AC6733C3D39E149CA /* LaunchPairingFromURLSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6894075BBBAF589F845633D0 /* LaunchPairingFromURLSetting.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
 		C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45F44681D087DB600CB7EF0 /* TopTabsViewController.swift */; };
@@ -9275,6 +9277,7 @@
 		68604013B70C7337A7F4D32B /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Shared.strings; sourceTree = "<group>"; };
 		686648B0B68F9301463E8117 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/ClearPrivateDataConfirm.strings"; sourceTree = "<group>"; };
 		6871454BAD9E0B0E2306EE03 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		6894075BBBAF589F845633D0 /* LaunchPairingFromURLSetting.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaunchPairingFromURLSetting.swift; sourceTree = "<group>"; };
 		689A4CF494961DA72688CEB0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		68A94D0A84015C2BFE52CD0D /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		68AD409582FAC0E324C3F8DB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -9305,6 +9308,7 @@
 		6D104BC89EC4F86C2FE54B6B /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
 		6D1D460C9E48FB470BF532AE /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/Menu.strings; sourceTree = "<group>"; };
 		6D294AAD9001DE3B5343BC16 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Storage.strings"; sourceTree = "<group>"; };
+		6D2F882B9141B1043C350462 /* PairingTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PairingTests.swift; sourceTree = "<group>"; };
 		6D394DAB92EA8E3A059930CD /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Today.strings"; sourceTree = "<group>"; };
 		6D49419EA0A95261E886982D /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		6D8C406EB79AA56D1AA5BAFC /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/FindInPage.strings; sourceTree = "<group>"; };
@@ -12141,7 +12145,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		8CF609442EA8D61F00F069B6 /* Exceptions for "ActionExtension" folder in "ActionExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -13484,6 +13488,7 @@
 				0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */,
 				B1F90EC02BB3F6B600A4D431 /* ZoomingTests.swift */,
 				B1383C522F34BD2F00AA374F /* SecurityTests.swift */,
+				6D2F882B9141B1043C350462 /* PairingTests.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -14268,6 +14273,7 @@
 				8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */,
 				5A96FB592D94356C00917B12 /* ScreenshotSetting.swift */,
 				8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */,
+				6894075BBBAF589F845633D0 /* LaunchPairingFromURLSetting.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -19487,6 +19493,7 @@
 				B10997432A97251D00CC8860 /* UrlBarTests.swift in Sources */,
 				2C3406C81E719F00000FD889 /* SettingsTests.swift in Sources */,
 				2CF21D0920A4A163000D08B7 /* StoryTests.swift in Sources */,
+				51FA861543B01C235F89D81E /* PairingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -20745,6 +20752,7 @@
 				BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */,
 				BCFF93F22AAF9688005B5B71 /* FirefoxSuggestSettings.swift in Sources */,
 				BCFF93F42AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift in Sources */,
+				C32D262AC6733C3D39E149CA /* LaunchPairingFromURLSetting.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
