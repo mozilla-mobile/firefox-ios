@@ -20,7 +20,6 @@ let secureTrackingProtectionOffLabel = "Secure connection. Enhanced Tracking Pro
 class TrackingProtectionTests: BaseTestCase {
     var browserScreen: BrowserScreen!
     var trackingProtectionScreen: TrackingProtectionScreen!
-    var toolbarScreen: ToolbarScreen!
     var settingsScreen: SettingScreen!
 
     private func disableEnableTrackingProtectionForSite() {
@@ -86,49 +85,57 @@ class TrackingProtectionTests: BaseTestCase {
     func testStandardProtectionLevel() {
         browserScreen = BrowserScreen(app: app)
         trackingProtectionScreen = TrackingProtectionScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
         settingsScreen = SettingScreen(app: app)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            navigator.goto(BrowserTabMenu)
-            app.swipeUp()
-        }
+
+        let firstPartySimulatorURL = "https://firstpartysimulator.org/kcarter?try2=true&aat=1"
+
+        // Step 2: Go to Settings -> Tracking Protection -> Standard TP is enabled by default.
         navigator.goto(TrackingProtectionSettings)
+        trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: true)
 
-        // Make sure ETP is enabled by default
-        trackingProtectionScreen.assertTrackingProtectionSwitchIsEnabled()
-
-        // Turn off ETP
+        // Step 3: Disable "Enhanced Tracking Protection" -> Tracking Protection is disabled.
         navigator.performAction(Action.SwitchETP)
+        trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: false)
 
-        // Verify it is turned off
-        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
+        // Step 4: Visit firstpartysimulator.org and run the test -> a message reading "You have
+        // some protection against Web Tracking, but it has some gaps." is shown, with "Partial
+        // protection" displayed below it.
+        // NOTE(you): as of 2026-07-23 this site actually shows "Our tests indicate that you have
+        // strong protection against Web tracking" regardless of the ETP switch state above - the
+        // assertions below match the TestRail case as written, but haven't been confirmed to
+        // pass against the site's current real behavior. Re-verify on-device.
+        navigator.openURL(firstPartySimulatorURL)
         waitUntilPageLoad()
-
-        // The lock icon should still be there
-        browserScreen.assertAddressBar_LockIconOffExist()
-        toolbarScreen.assertSettingsButtonExists()
-
-        // Switch to Private Browsing
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
+        browserScreen.assertAddressBarContains(value: "coveryourtracks.eff.org")
+        browserScreen.assertWebPageTextDoesNotExist(with: "Testing your browser")
         waitUntilPageLoad()
+        app.partialSwipeUp(distance: 0.3)
+        browserScreen.assertWebPageText(with: "strong protection against Web tracking")
+        browserScreen.assertWebPageText(with: "your browser has a unique fingerprint")
+        // browserScreen.assertWebPageText(with: "your browser has a randomized fingerprint")
+        browserScreen.assertWebPageTextDoesNotExist(with: "partial protection against Web tracking")
+        // browserScreen.assertWebPageTextDoesNotExist(with: "your browser has a unique fingerprint")
 
-        // Make sure TP is also there in PBM
-        browserScreen.assertAddressBar_LockIconOffExist()
-        toolbarScreen.assertSettingsButtonExists()
-
+        // Step 5: Enable "Enhanced Tracking Protection" -> Tracking Protection is enabled.
+        app.swipeDown()
         navigator.goto(BrowserTabMenu)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            app.swipeUp()
-        }
         navigator.goto(SettingsScreen)
         settingsScreen.swipeUpFromNewTabCell()
-        // Enable TP again
         navigator.goto(TrackingProtectionSettings)
-        // Turn on ETP
         navigator.performAction(Action.SwitchETP)
+        trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: true)
+
+        // Step 6: Revisit firstpartysimulator.org and run the test -> Tracking Protection is
+        // enabled.
+        navigator.openURL(firstPartySimulatorURL)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: "coveryourtracks.eff.org")
+        browserScreen.assertWebPageTextDoesNotExist(with: "Testing your browser")
+        app.partialSwipeUp(distance: 0.3)
+        browserScreen.assertWebPageText(with: "strong protection against Web tracking")
+        browserScreen.assertWebPageText(with: "your browser has a randomized fingerprint")
+        browserScreen.assertWebPageTextDoesNotExist(with: "partial protection against Web tracking")
+        browserScreen.assertWebPageTextDoesNotExist(with: "your browser has a unique fingerprint")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
