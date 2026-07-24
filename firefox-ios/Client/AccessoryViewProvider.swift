@@ -75,7 +75,7 @@ final class AccessoryViewProvider: UIView,
     }
 
     // MARK: - UI Elements
-    private let toolbar: UIToolbar = .build()
+    private let toolbar: UIToolbar
     private let toolbarTopHeightSpacer: UIView = .build()
 
     private lazy var previousButton: UIButton = {
@@ -197,10 +197,12 @@ final class AccessoryViewProvider: UIView,
     // MARK: - Initialization
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: WindowUUID,
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationCenter = NotificationCenter.default,
+         toolbar: UIToolbar = .build()) {
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
+        self.toolbar = toolbar
 
         super.init(frame: CGRect(width: UIScreen.main.bounds.width,
                                  height: UX.accessoryViewHeight))
@@ -321,7 +323,9 @@ final class AccessoryViewProvider: UIView,
 
     // MARK: - Private Methods
     private func configureToolbarItems() {
-        toolbar.setItems(toolbarItems, animated: true)
+        // Animated item changes can be deferred until the input accessory is presented again.
+        let shouldAnimate = if #available(iOS 26.0, *) { false } else { true }
+        toolbar.setItems(toolbarItems, animated: shouldAnimate)
     }
 
     // MARK: - ThemeApplicable
