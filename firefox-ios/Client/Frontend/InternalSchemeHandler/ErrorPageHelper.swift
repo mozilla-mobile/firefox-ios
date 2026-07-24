@@ -15,6 +15,7 @@ private let MessageOpenInSafari = "openInSafari"
 private let MessageCertVisitOnce = "certVisitOnce"
 private let ErrorPageBadCertParam = "badcert"
 private let ErrorPageCertErrorParam = "certerror"
+private let ErrorPageCellularDataRestrictedParam = "cellularDataRestricted"
 private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
 private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
 
@@ -256,6 +257,14 @@ final class ErrorPageHandler: InternalSchemeResponse {
             "short_description": errDomain,
             ]
 
+        let offlineErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let isCellularDataRestricted = errCode == offlineErrorCode
+            && components.valueForQuery(ErrorPageCellularDataRestrictedParam) == "true"
+        if isCellularDataRestricted {
+            variables["error_title"] = .NativeErrorPage.CellularDataRestricted.TitleLabel
+            variables["short_description"] = .NativeErrorPage.CellularDataRestricted.Description
+        }
+
         let tryAgain: String = .ErrorPageTryAgain
         // swiftlint:disable line_length
         var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
@@ -311,11 +320,14 @@ final class ErrorPageHandler: InternalSchemeResponse {
 class ErrorPageHelper {
     fileprivate weak var certStore: CertStore?
     private var logger: Logger
+    private let cellularDataStateProvider: any CellularDataStateProvider
 
     init(certStore: CertStore?,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared) {
         self.certStore = certStore
         self.logger = logger
+        self.cellularDataStateProvider = cellularDataStateProvider
     }
 
     @MainActor
@@ -337,6 +349,10 @@ class ErrorPageHelper {
             // 'timestamp' is used for the js reload logic
             URLQueryItem(name: "timestamp", value: "\(Int(Date().timeIntervalSince1970 * 1000))")
         ]
+
+        if cellularDataStateProvider.isRestrictedOfflineError(error) {
+            queryItems.append(URLQueryItem(name: ErrorPageCellularDataRestrictedParam, value: "true"))
+        }
 
         // If this is an invalid certificate, show a certificate error allowing the
         // user to go back or continue. The certificate itself is encoded and added as
