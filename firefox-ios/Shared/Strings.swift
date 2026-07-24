@@ -4146,12 +4146,6 @@ extension String {
                 tableName: nil,
                 value: "Sign in to sync tabs, bookmarks, passwords, and more.",
                 comment: "Ddescription that appears in the settings screen to explain what Firefox Sync is useful for.")
-            public static let SigningOutTitle = MZLocalizedString(
-                key: "Settings.Sync.SigningOut.Title.v154",
-                tableName: nil,
-                value: "Signing out…",
-                comment: "In the settings account row, shown transiently while the user is being signed out of their account.")
-
             public struct SignInView {
                 public static let Title = MZLocalizedString(
                     key: "Settings.Sync.SignInView.Title.v103",
@@ -6184,11 +6178,6 @@ extension String {
                 tableName: "MainMenu",
                 value: "Manage what you back up and sync",
                 comment: "On the main menu, when the user is signed in.")
-            public static let SigningOutTitle = MZLocalizedString(
-                key: "MainMenu.Account.SigningOut.Title.v154",
-                tableName: "MainMenu",
-                value: "Signing out…",
-                comment: "On the main menu account header, shown transiently while the user is being signed out of their account.")
             public static let SyncErrorTitle = MZLocalizedString(
                 key: "MainMenu.Account.SyncError.Title.v131",
                 tableName: "MainMenu",
