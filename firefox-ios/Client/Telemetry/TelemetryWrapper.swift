@@ -7,7 +7,6 @@
 import Common
 import Glean
 import Shared
-import Storage
 import class MozillaAppServices.NimbusGleanPings
 
 protocol TelemetryWrapperProtocol {
