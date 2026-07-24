@@ -107,6 +107,8 @@ public protocol ThemeColourPalette {
     var gradientAIStrongStop2: UIColor { get }
     var gradientAIStrongStop3: UIColor { get }
 
+    var faviconLetterColorSet: FaviconLetterColorSet { get }
+
     // MARK: - Nova tokens
     var layerAccentSubtle: UIColor { get }
     var layerInverse: UIColor { get }

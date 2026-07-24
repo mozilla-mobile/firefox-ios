@@ -123,6 +123,8 @@ private struct LightColourPalette: ThemeColourPalette {
 
     var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
 
+    var faviconLetterColorSet: FaviconLetterColorSet = StandardFaviconColorSet()
+
     // MARK: - Nova tokens
     var layerAccentSubtle: UIColor { NovaMissingToken.color("layerAccentSubtle") }
     var layerInverse: UIColor { NovaMissingToken.color("layerInverse") }
