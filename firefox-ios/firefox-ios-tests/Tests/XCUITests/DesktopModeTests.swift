@@ -258,6 +258,87 @@ class DesktopModeTestsIphone: BaseTestCase {
         browserScreen.assertDesktopUserAgentIsDisplayed()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306850
+    func testRequestDesktopSitePersistsAcrossDomainAndRestart() {
+        if skipPlatform { return }
+
+        let newsGoogleURL = "https://news.google.com/"
+        let googleURL = "https://www.google.com/"
+        let amazonURL = "https://www.amazon.com/"
+
+        // Visit news.google.com
+        browserScreen.navigateToURL(newsGoogleURL)
+        waitUntilPageLoad()
+        browserScreen.assertLayout(.mobile)
+
+        // Step 1: Open the hamburger menu -> the dot menu is opened.
+        navigateToBrowserTabMenu()
+        mainMenuScreen.waitForMenuOptionsToExist()
+        mainMenuScreen.assertDesktopSiteExists()
+
+        // Step 2: Tap 'Request Desktop Site' -> the desktop version of the site is loaded.
+        navigator.goto(RequestDesktopSite)
+        waitUntilPageLoad()
+        browserScreen.assertLayout(.desktop)
+
+        // Step 3: Visit google.com -> the desktop version is loaded, since this site shares
+        // the same eTLD+1 domain (google.com) as news.google.com.
+        browserScreen.navigateToURL(googleURL)
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "google.com")
+        browserScreen.assertLayout(.desktop)
+
+        // Step 4: Visit amazon.com -> different domain, no desktop pref, mobile version loads.
+        // NOTE: Amazon may show a region-redirect interstitial (e.g. "Deliver to Canada") on
+        // top of the mobile page - do not deal with anything locale related here.
+        browserScreen.navigateToURL(amazonURL)
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "amazon.com")
+        browserScreen.assertLayout(.mobile)
+
+        // Step 5: Tap "Back" -> news.google.com is loaded, desktop version preserved.
+        // Two taps: history is news.google.com -> google.com -> amazon.com, so one tap
+        // only returns to google.com.
+        toolbarScreen.tapBackButton()
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "google.com")
+        toolbarScreen.tapBackButton()
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "news.google.com")
+        browserScreen.assertLayout(.desktop)
+
+        // Workaround for site not stop loading
+        app.buttons["TabToolbar.stopButton"].waitAndTap()
+
+        // Step 6 + 7: Close the app from the app switcher, then re-launch it
+        closeFromAppSwitcherAndRelaunch()
+        browserScreen.addressToolbarContainValue(value: "news.google.com")
+        browserScreen.assertLayout(.desktop)
+
+        // Step 8: Settings -> Data Management -> Website Data -> "Clear All Website Data",
+        // then return to the news.google.com tab -> desktop version still preserved.
+        navigator.nowAt(BrowserTab)
+        navigator.goto(WebsiteDataSettings)
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
+        navigator.performAction(Action.AcceptClearAllWebsiteData)
+        navigator.goto(BrowserTab)
+        browserScreen.addressToolbarContainValue(value: "news.google.com")
+        browserScreen.assertLayout(.desktop)
+
+        // Step 9: Long-press "Refresh", tap "Request Desktop Site" ->
+        // the desktop version of news.google.com is open.
+        // [?] The site is already in desktop mode. The option from reload is "Request Mobile Site".
+
+        // Step 10: Open the hamburger menu -> the menu is open.
+        navigateToBrowserTabMenu()
+        mainMenuScreen.waitForMenuOptionsToExist()
+
+        // Step 11: Tap 'Request Mobile Site' -> the mobile version of the site is loaded.
+        navigator.goto(RequestMobileSite)
+        waitUntilPageLoad()
+        browserScreen.assertLayout(.mobile)
+    }
+
     // HELPERS
     private func navigateToBrowserTabMenu() {
         navigator.nowAt(BrowserTab)
