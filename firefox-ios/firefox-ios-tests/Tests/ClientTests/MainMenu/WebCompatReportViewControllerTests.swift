@@ -283,7 +283,6 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
 private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoordinatorDelegate {
     var didFinishCallCount = 0
-    var didTapLearnMoreCallCount = 0
     var learnMoreURLs: [URL] = []
 
     func webCompatReportViewControllerDidFinish() {
@@ -291,7 +290,6 @@ private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoord
     }
 
     func webCompatReportViewControllerDidTapLearnMore(url: URL) {
-        didTapLearnMoreCallCount += 1
         learnMoreURLs.append(url)
     }
 }

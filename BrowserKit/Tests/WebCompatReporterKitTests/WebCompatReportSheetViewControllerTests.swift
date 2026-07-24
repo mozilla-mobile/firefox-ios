@@ -446,7 +446,6 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
     var toggles: [(id: String, isOn: Bool)] = []
     var tappedButtonIDs: [String] = []
     var learnMoreURLs: [URL] = []
-    var didTapLearnMoreCallCount = 0
 
     func webCompatReportSheetDidTapClose() {
         didTapCloseCallCount += 1
@@ -478,6 +477,5 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
 
     func webCompatReportSheetDidTapLearnMore(url: URL) {
         learnMoreURLs.append(url)
-        didTapLearnMoreCallCount += 1
     }
 }
