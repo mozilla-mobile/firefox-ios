@@ -8,16 +8,30 @@ import SwiftUI
 import UIKit
 
 @MainActor
-private func previewSheet(sections: [WebCompatReportViewModel.Section]) -> UIViewController {
+private func previewSheet(
+    sections: [WebCompatReportViewModel.Section],
+    isPreviewEnabled: Bool
+) -> UIViewController {
     let viewModel = WebCompatReportViewModel(
-        navigationTitle: "Report a Website Issue",
+        navigationTitle: "Report Broken Site",
         closeButtonAccessibilityLabel: "Close",
         previewButtonTitle: "Preview",
-        isPreviewEnabled: !sections.isEmpty,
+        isPreviewEnabled: isPreviewEnabled,
         sections: sections
     )
     let sheet = WebCompatReportSheetViewController(viewModel: viewModel, theme: LightTheme())
     return UINavigationController(rootViewController: sheet)
+}
+
+private func previewURLSection() -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(id: "url", rows: [
+        WebCompatReportViewModel.Row(
+            id: "url",
+            title: "URL",
+            kind: .urlField(text: "https://houseandhome.com/recipe/croque-monsieur", placeholder: "Website address"),
+            a11yIdentifier: "url"
+        )
+    ])
 }
 
 private func previewCategoryOptions(selectedID: String?) -> [WebCompatReportViewModel.Row.MenuOption] {
@@ -56,13 +70,9 @@ private func previewSubOption(_ id: String, _ title: String, selected: Bool = fa
 }
 
 @available(iOS 17.0, *)
-#Preview("Placeholder") {
-    previewSheet(sections: [previewCategorySection(selectedTitle: nil)])
-}
-
-@available(iOS 17.0, *)
-#Preview("Category selected") {
+#Preview("Filled") {
     previewSheet(sections: [
+        previewURLSection(),
         previewCategorySection(selectedTitle: "Site is not usable"),
         WebCompatReportViewModel.Section(id: "issue-suboptions", rows: [
             previewSubOption("browser_blocked", "Browser is blocked or unsupported"),
@@ -70,6 +80,14 @@ private func previewSubOption(_ id: String, _ title: String, selected: Bool = fa
             previewSubOption("missing_items", "Missing items"),
             previewSubOption("buttons_not_working", "Buttons or links not working")
         ])
-    ])
+    ], isPreviewEnabled: true)
+}
+
+@available(iOS 17.0, *)
+#Preview("Empty / Send disabled") {
+    previewSheet(sections: [
+        previewURLSection(),
+        previewCategorySection(selectedTitle: nil)
+    ], isPreviewEnabled: false)
 }
 #endif
