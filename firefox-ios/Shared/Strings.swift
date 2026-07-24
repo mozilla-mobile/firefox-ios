@@ -9191,6 +9191,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "Keep searches within reach.",
                 comment: "String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens.")
+            public static let Test = MZLocalizedString(
+                key: "Test",
+                tableName: "Test",
+                value: "Test",
+                comment: "Test")
         }
         struct v154 {
             public static let SettingsDisplayThemeTitle = MZLocalizedString(
