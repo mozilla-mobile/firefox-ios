@@ -117,6 +117,31 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         )
     }
 
+    func testPickerCells_carryAccessibilityIdentifiersFromViewModel() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: makeViewModel(sections: pickerSections()))
+        subject.view.layoutIfNeeded()
+
+        func firstButton(in view: UIView?) -> UIButton? {
+            guard let view else { return nil }
+            for subview in view.subviews {
+                if let button = subview as? UIButton { return button }
+                if let found = firstButton(in: subview) { return found }
+            }
+            return nil
+        }
+
+        let collectionView = subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+        let categoryCell = collectionView?.cellForItem(at: IndexPath(item: 0, section: 0))
+        XCTAssertEqual(firstButton(in: categoryCell?.contentView)?.accessibilityIdentifier, "issue-category")
+
+        let subOptionCell = collectionView?.cellForItem(at: IndexPath(item: 0, section: 1))
+        XCTAssertEqual(subOptionCell?.accessibilityIdentifier, "browser_blocked")
+    }
+
     // MARK: - Helpers
 
     private func pickerSections() -> [WebCompatReportViewModel.Section] {
