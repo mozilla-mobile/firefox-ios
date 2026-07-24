@@ -15,6 +15,7 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidSelectCategory(id: String)
     func webCompatReportSheetDidSelectSubOption(id: String)
     func webCompatReportSheetDidEditText(id: String, text: String)
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool)
 }
 
 /// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
@@ -167,6 +168,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         let category = categoryCellRegistration()
         let url = urlCellRegistration()
         let details = detailsCellRegistration()
+        let toggle = toggleCellRegistration()
 
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
@@ -181,6 +183,8 @@ public final class WebCompatReportSheetViewController: UIViewController,
                 return collectionView.dequeueConfiguredReusableCell(using: url, for: indexPath, item: row)
             case .detailsField:
                 return collectionView.dequeueConfiguredReusableCell(using: details, for: indexPath, item: row)
+            case .toggle:
+                return collectionView.dequeueConfiguredReusableCell(using: toggle, for: indexPath, item: row)
             case .plain:
                 return collectionView.dequeueConfiguredReusableCell(using: plain, for: indexPath, item: row)
             }
@@ -259,6 +263,17 @@ public final class WebCompatReportSheetViewController: UIViewController,
                     self?.delegate?.webCompatReportSheetDidEditText(id: row.id, text: text)
                 }
             )
+            cell.applyTheme(theme: self.theme)
+        }
+    }
+
+    private func toggleCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatToggleCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { [weak self] cell, _, row in
+            guard let self, case let .toggle(isOn) = row.kind else { return }
+            cell.configure(title: row.title, isOn: isOn, a11yIdentifier: row.a11yIdentifier) { [weak self] isOn in
+                self?.delegate?.webCompatReportSheetDidToggle(id: row.id, isOn: isOn)
+            }
             cell.applyTheme(theme: self.theme)
         }
     }
