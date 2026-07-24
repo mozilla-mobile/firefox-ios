@@ -32,11 +32,9 @@ public class CloseButton: UIButton,
         adjustsImageSizeForAccessibilityContentSizeCategory = true
         setupConstraints()
 
-        #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
             configuration = .glass()
         }
-        #endif
     }
 
     required init?(coder aDecoder: NSCoder) {

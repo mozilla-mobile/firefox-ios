@@ -37,7 +37,6 @@ final class SummarizeServiceFactoryTests: XCTestCase {
         super.tearDown()
     }
 
-    #if canImport(FoundationModels)
     func test_make_whenAppleIntelligenceAvailable() throws {
         guard #available(iOS 26, *) else {
             throw XCTSkip("Skipping iOS 26-only test on earlier OS versions")
@@ -55,7 +54,6 @@ final class SummarizeServiceFactoryTests: XCTestCase {
 
         XCTAssertNotNil(service.summarizerLifecycle)
     }
-    #endif
 
     func test_make_whenHostedSummarizerTrue_returnsNilForLLMConfigNotAvailable() throws {
         let subject = createSubject()
