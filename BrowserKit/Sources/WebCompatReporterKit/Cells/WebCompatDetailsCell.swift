@@ -15,8 +15,11 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
     private var editingEndedHandler: ((String) -> Void)?
     private var heightConstraint: NSLayoutConstraint?
 
-    private var scaledMinimumHeight: CGFloat {
-        return UIFontMetrics.default.scaledValue(for: WebCompatReporterUX.DetailsField.minimumHeight)
+    func scaledMinimumHeight(compatibleWith traitCollection: UITraitCollection) -> CGFloat {
+        return UIFontMetrics.default.scaledValue(
+            for: WebCompatReporterUX.DetailsField.minimumHeight,
+            compatibleWith: traitCollection
+        )
     }
 
     private lazy var textView: UITextView = .build { textView in
@@ -54,7 +57,7 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
         contentView.addSubview(textView)
         contentView.addSubview(placeholderLabel)
         let margins = contentView.layoutMarginsGuide
-        let height = textView.heightAnchor.constraint(equalToConstant: scaledMinimumHeight)
+        let height = textView.heightAnchor.constraint(equalToConstant: scaledMinimumHeight(compatibleWith: traitCollection))
         heightConstraint = height
         NSLayoutConstraint.activate([
             textView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
@@ -103,7 +106,7 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
         guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
         ensureMainThread { [weak self] in
             guard let self else { return }
-            self.heightConstraint?.constant = self.scaledMinimumHeight
+            self.heightConstraint?.constant = self.scaledMinimumHeight(compatibleWith: self.traitCollection)
         }
     }
 
