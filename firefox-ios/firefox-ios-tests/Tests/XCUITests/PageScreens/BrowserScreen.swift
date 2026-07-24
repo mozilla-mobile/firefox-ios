@@ -86,16 +86,8 @@ final class BrowserScreen {
         case mobile
     }
 
-    // Dispatches to a per-site signal for whether the desktop or mobile layout is showing.
-    // Sites are matched from the current address bar value:
-    // - google.com (not news.google.com): desktop shows an "I'm Feeling Lucky" button that
-    //   mobile never renders - confirmed via a real debugDescription capture in both modes.
-    // - amazon.com: mobile shows an "Open All Categories Menu" button in its top nav that
-    //   desktop doesn't - confirmed via a real debugDescription capture in mobile mode.
-    // - everything else (e.g. news.google.com): the local test-user-agent.html fixture's
-    //   DESKTOP_UA/MOBILE_UA text isn't available on real sites, so this falls back to the
-    //   horizontal scroll bar's page count - a page rendered at desktop width is wider than
-    //   the device viewport ("N pages", N > 1), while mobile width fits exactly ("1 page").
+    // No one magic heuristic to determine desktop vs mobile layout, so we hardcode some
+    // known characteristics of the test websites.
     func assertLayout(_ mode: SiteLayoutMode, timeout: TimeInterval = TIMEOUT) {
         let currentURL = (addressBar.value as? String) ?? ""
         let element: XCUIElement
