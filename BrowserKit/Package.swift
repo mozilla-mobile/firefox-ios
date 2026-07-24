@@ -90,7 +90,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/swhitty/SwiftDraw",
-            exact: "0.18.3"),
+            exact: "0.29.0"),
         .package(
             url: "https://github.com/johnxnguyen/Down.git",
             exact: "0.11.0"),
