@@ -48,7 +48,8 @@ extension BookmarksCoordinatorDelegate {
 class BookmarksCoordinator: BaseCoordinator,
                             BookmarksCoordinatorDelegate,
                             QRCodeNavigationHandler,
-                            ParentCoordinatorDelegate {
+                            ParentCoordinatorDelegate,
+                            FeatureFlaggable {
     // MARK: - Properties
 
     private let profile: Profile
@@ -163,6 +164,11 @@ class BookmarksCoordinator: BaseCoordinator,
             return makeEditBookmarkController(for: nil, folder: parentFolder)
         }
         if type == .folder {
+            if featureFlagsProvider.isEnabled(.newBookmarkFolderTree) {
+                return makeGroupedEditFolderController(for: nil,
+                                                       folder: parentFolder,
+                                                       parentFolderSelector: parentFolderSelector)
+            }
             return makeEditFolderController(for: nil, folder: parentFolder, parentFolderSelector: parentFolderSelector)
         }
         return UIViewController()
@@ -173,6 +179,9 @@ class BookmarksCoordinator: BaseCoordinator,
             return makeEditBookmarkController(for: node, folder: folder)
         }
         if node.type == .folder {
+            if featureFlagsProvider.isEnabled(.newBookmarkFolderTree) {
+                return makeGroupedEditFolderController(for: node, folder: folder, parentFolderSelector: nil)
+            }
             return makeEditFolderController(for: node, folder: folder, parentFolderSelector: nil)
         }
         return UIViewController()
@@ -211,6 +220,30 @@ class BookmarksCoordinator: BaseCoordinator,
         setBackBarButtonItemTitle("")
         let controller = EditFolderViewController(viewModel: viewModel,
                                                   windowUUID: windowUUID)
+        controller.onViewWillAppear = { [weak self] in
+            self?.libraryNavigationHandler?.setNavigationBarHidden(true)
+        }
+        controller.onViewWillDisappear = { [weak self] in
+            if !(controller.transitionCoordinator?.isInteractive ?? false) {
+                self?.libraryNavigationHandler?.setNavigationBarHidden(false)
+            }
+        }
+        return controller
+    }
+
+    private func makeGroupedEditFolderController(for node: FxBookmarkNode?,
+                                                 folder: FxBookmarkNode,
+                                                 parentFolderSelector: ParentFolderSelector?) -> UIViewController {
+        let viewModel = GroupedEditFolderViewModel(profile: profile,
+                                                   parentFolder: folder,
+                                                   folder: node)
+        viewModel.onBookmarkSaved = { [weak self] in
+            self?.reloadLastBookmarksController()
+        }
+        viewModel.parentFolderSelector = parentFolderSelector
+        setBackBarButtonItemTitle("")
+        let controller = GroupedEditFolderViewController(viewModel: viewModel,
+                                                         windowUUID: windowUUID)
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
