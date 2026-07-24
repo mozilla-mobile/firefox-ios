@@ -157,9 +157,12 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
     }
 
     func testDeleteMultipleLogins() {
-        // Add three logins to delete, one after another to avoid crashing (FIXME: FXIOS-14323 / Github #31023)
+        logins.rustKeychain.removeLoginsKeysForDebugMenuItem()
+
+        var addExpectations = [XCTestExpectation]()
         for i in 0..<3 {
             let expectation = XCTestExpectation(description: "Add login \(i)")
+            addExpectations.append(expectation)
             let login = RustLoginsTests.loginFactory(number: i)
 
             logins.addLogin(login: login) { result in
@@ -171,9 +174,8 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
                     XCTFail("Add login \(i) failed")
                 }
             }
-
-            wait(for: [expectation], timeout: 2)
         }
+        wait(for: addExpectations, timeout: 2)
 
         let deleteExpectation = XCTestExpectation(description: "Deleting all entries")
 
