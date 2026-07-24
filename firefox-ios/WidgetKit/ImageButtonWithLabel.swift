@@ -49,6 +49,7 @@ import Common
 // +-------------------------------------------------------+
 
 struct ImageButtonWithLabel: View {
+    @Environment(\.theme) private var theme
     var isSmall: Bool
     var link: QuickLink
 
@@ -77,7 +78,7 @@ struct ImageButtonWithLabel: View {
                         icon
                     }
                 }
-                .foregroundColor(Color("widgetLabelColors"))
+                .foregroundColor(link.foregroundColor(for: theme))
                 .padding([.horizontal, .vertical], paddingValue)
             }
         }
@@ -89,13 +90,7 @@ struct ImageButtonWithLabel: View {
             BackgroundContent(link: link)
         } else {
             ContainerRelativeShape()
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: link.backgroundColors),
-                        startPoint: .bottomLeading,
-                        endPoint: .topTrailing
-                    )
-                )
+                .fill(link.backgroundColor(for: theme))
         }
     }
 
@@ -152,21 +147,16 @@ struct ImageButtonWithLabel: View {
 @available(iOS 16.0, *)
 struct BackgroundContent: View {
     @Environment(\.widgetRenderingMode) private var renderingMode
+    @Environment(\.theme) private var theme
     var link: QuickLink
 
     var body: some View {
         if renderingMode == .accented {
             ContainerRelativeShape()
-                .fill(link.tintedBackgroundColor)
+                .fill(link.tintedBackgroundColor(for: theme))
         } else {
             ContainerRelativeShape()
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: link.backgroundColors),
-                        startPoint: .bottomLeading,
-                        endPoint: .topTrailing
-                    )
-                )
+                .fill(link.backgroundColor(for: theme))
         }
     }
 }

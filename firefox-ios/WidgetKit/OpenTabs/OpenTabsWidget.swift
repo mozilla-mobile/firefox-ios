@@ -14,6 +14,7 @@ struct OpenTabsWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TabProvider()) { entry in
             OpenTabsView(entry: entry)
+                .widgetTheme()
         }
         .supportedFamilies([.systemMedium, .systemLarge])
         .configurationDisplayName(String.QuickViewGalleryTitle)
@@ -23,14 +24,14 @@ struct OpenTabsWidget: Widget {
 }
 
 struct OpenTabsView: View {
-    private struct UX {
-        static let tabsContentColor = "openTabsContentColor"
-    }
-
     let entry: OpenTabsEntry
 
     @Environment(\.widgetFamily)
     var widgetFamily
+    @Environment(\.theme)
+    private var theme
+
+    private var contentColor: Color { Color(uiColor: theme.colors.textPrimary) }
 
     @ViewBuilder
     func lineItemForTab(_ tab: SimpleTab) -> some View {
@@ -43,18 +44,18 @@ struct OpenTabsView: View {
                             favIcon.resizable()
                                 .widgetAccentedRenderingMode(.accentedDesaturated)
                                 .frame(width: 16, height: 16)
-                                .foregroundColor(Color(UX.tabsContentColor))
+                                .foregroundColor(contentColor)
                         } else {
                             favIcon.resizable()
                                 .frame(width: 16, height: 16)
-                                .foregroundColor(Color(UX.tabsContentColor))
+                                .foregroundColor(contentColor)
                         }
                     } else {
                         globeIconView
                     }
 
                     Text(tab.title ?? "")
-                        .foregroundColor(Color(UX.tabsContentColor))
+                        .foregroundColor(contentColor)
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                         .font(.system(size: 15, weight: .regular, design: .default))
@@ -64,7 +65,7 @@ struct OpenTabsView: View {
 
             // Separator
             Rectangle()
-                .fill(Color("separatorColor"))
+                .fill(Color(uiColor: theme.colors.borderPrimary))
                 .frame(height: 0.5)
                 .padding(.leading, 45)
         }
@@ -75,11 +76,11 @@ struct OpenTabsView: View {
         if #available(iOS 18.0, *) {
             Image(decorative: StandardImageIdentifiers.Large.globe)
                 .widgetAccentedRenderingMode(.accentedDesaturated)
-                .foregroundColor(Color(UX.tabsContentColor))
+                .foregroundColor(contentColor)
                 .frame(width: 16, height: 16)
         } else {
             Image(decorative: StandardImageIdentifiers.Large.globe)
-                .foregroundColor(Color(UX.tabsContentColor))
+                .foregroundColor(contentColor)
                 .frame(width: 16, height: 16)
         }
     }
@@ -87,19 +88,19 @@ struct OpenTabsView: View {
     var emptyView: some View {
         VStack {
             Text(String.NoOpenTabsLabel)
-                .foregroundStyle(Color(UX.tabsContentColor))
+                .foregroundStyle(contentColor)
             HStack {
                 Spacer()
                 Image(decorative: StandardImageIdentifiers.Small.externalLink)
-                    .foregroundColor(Color(UX.tabsContentColor))
+                    .foregroundColor(contentColor)
                 Text(String.OpenFirefoxLabel)
-                    .foregroundColor(Color(UX.tabsContentColor))
+                    .foregroundColor(contentColor)
                     .lineLimit(1)
                     .font(.system(size: 13, weight: .semibold, design: .default))
                 Spacer()
             }.padding(10)
         }
-        .foregroundColor(Color("backgroundColor"))
+        .foregroundColor(Color(uiColor: theme.colors.layer1))
     }
 
     var tabsView: some View {
@@ -111,7 +112,7 @@ struct OpenTabsView: View {
             if entry.tabs.count > numberOfTabsToDisplay {
                 HStack(alignment: .center, spacing: 15) {
                     Image(decorative: StandardImageIdentifiers.Small.externalLink)
-                        .foregroundColor(Color(UX.tabsContentColor))
+                        .foregroundColor(contentColor)
                         .frame(width: 16, height: 16)
                     Text(
                         String.localizedStringWithFormat(
@@ -119,7 +120,7 @@ struct OpenTabsView: View {
                             (entry.tabs.count - numberOfTabsToDisplay)
                         )
                     )
-                    .foregroundColor(Color(UX.tabsContentColor))
+                    .foregroundColor(contentColor)
                     .lineLimit(1)
                     .font(.system(size: 13, weight: .semibold, design: .default))
                     Spacer()
@@ -135,9 +136,9 @@ struct OpenTabsView: View {
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
             Image(decorative: StandardImageIdentifiers.Small.externalLink)
-                .foregroundColor(Color(UX.tabsContentColor))
+                .foregroundColor(contentColor)
             Text(String.OpenFirefoxLabel)
-                .foregroundColor(Color(UX.tabsContentColor))
+                .foregroundColor(contentColor)
                 .lineLimit(1)
                 .font(.system(size: 13, weight: .semibold, design: .default))
             Spacer()
@@ -161,7 +162,7 @@ struct OpenTabsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .widgetBackground(Color("backgroundColor"))
+        .widgetBackground(Color(uiColor: theme.colors.layer1))
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {

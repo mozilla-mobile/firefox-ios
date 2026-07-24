@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import UIKit
+import SwiftUI
 
 /// Lightweight `ThemeManager` for the WidgetKit extension.
 ///
@@ -15,6 +15,13 @@ public final class WidgetKitThemeManager: ThemeManager {
     public init() {}
 
     // MARK: - Theme accessors
+
+    /// Resolves the widget theme from the SwiftUI color scheme, which is the only reliable
+    /// light/dark signal available inside a widget extension.
+    public func theme(for colorScheme: ColorScheme, isPrivate: Bool = false) -> Theme {
+        guard !isPrivate else { return NovaPrivateTheme() }
+        return colorScheme == .dark ? NovaDarkTheme() : NovaLightTheme()
+    }
 
     public func getCurrentTheme(for window: WindowUUID?) -> Theme {
         return systemTheme()

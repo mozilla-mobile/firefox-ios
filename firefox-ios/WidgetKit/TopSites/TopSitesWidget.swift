@@ -5,6 +5,7 @@
 import SwiftUI
 import WidgetKit
 import Combine
+import Common
 
 struct TopSitesWidget: Widget {
     private let kind = "Top Sites"
@@ -12,6 +13,7 @@ struct TopSitesWidget: Widget {
      var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TopSitesProvider()) { entry in
             TopSitesView(entry: entry)
+                .widgetTheme()
         }
         .supportedFamilies([.systemMedium])
         .configurationDisplayName(String.TopSitesGalleryTitleV2)
@@ -22,14 +24,14 @@ struct TopSitesWidget: Widget {
 
 struct TopSitesView: View {
     private struct UX {
-        static let widgetBackgroundColor = Color("backgroundColor")
-        static let emptySquareFillColor = Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 0.3)
         static let itemCornerRadius: CGFloat = 5.0
         static let iconScale: CGFloat = 1.0
         static let minimumRowSpacing: CGFloat = 12.0
     }
 
     let entry: TopSitesEntry
+
+    @Environment(\.theme) private var theme
 
     var body: some View {
         VStack {
@@ -44,7 +46,9 @@ struct TopSitesView: View {
                           content: {
                     ForEach(0..<8) { index in
                         if let site = entry.sites[safe: index] {
-                            topSitesItem(site, iconSize: itemSize)
+                            topSitesItem(site,
+                                         iconSize: itemSize,
+                                         emptyColor: Color(uiColor: theme.colors.layer3).opacity(0.3))
                                 .frame(height: rowSize)
                         } else {
                             Rectangle()
@@ -52,7 +56,7 @@ struct TopSitesView: View {
                                 .frame(height: rowSize)
                                 .overlay {
                                     RoundedRectangle(cornerRadius: UX.itemCornerRadius)
-                                        .fill(UX.emptySquareFillColor)
+                                        .fill(Color(uiColor: theme.colors.layer3))
                                         .frame(width: itemSize, height: itemSize)
                                 }
                         }
@@ -62,13 +66,13 @@ struct TopSitesView: View {
             .padding(.all)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .widgetBackground(UX.widgetBackgroundColor)
+        .widgetBackground(Color(uiColor: theme.colors.layer1))
     }
 
     @ViewBuilder
-    private func topSitesItem(_ site: WidgetTopSite, iconSize: CGFloat) -> some View {
+    private func topSitesItem(_ site: WidgetTopSite, iconSize: CGFloat, emptyColor: Color) -> some View {
         let destination = linkToContainingApp("?url=\(site.url)", query: "widget-medium-topsites-open-url")
-        let rectangleShape = Rectangle().fill(UX.emptySquareFillColor)
+        let rectangleShape = Rectangle().fill(emptyColor)
         Group {
             if let image = entry.favicons[site.faviconImageCacheKey] {
                 if #available(iOSApplicationExtension 18.0, *) {
