@@ -125,11 +125,7 @@ jobs:
 
             Only flag violations of rules in that document. Do not enforce personal style
             preferences, generic best practices, or rules not stated there. Skip anything
-            already caught by Danger (`Dangerfile.swift`) or SwiftLint (`.swiftlint.yml`),
-            for example `print()`, `NSLog()`, `os_log()`, force casts (`as!`), force try
-            (`try!`), `Deferred<`, `NotificationCenter.default.addObserver`, `UIScreen.main`,
-            `userInterfaceIdiom`, `UIDevice.current.orientation`, or new
-            `BrowserViewController+*.swift` extensions.
+            already caught by Danger (`Dangerfile.swift`) or SwiftLint (`.swiftlint.yml`).
 
             Label each finding with a Conventional Comments label: `issue`, `suggestion`,
             or `nitpick`. Do not use the `praise` label or the `(blocking)` decorator;
