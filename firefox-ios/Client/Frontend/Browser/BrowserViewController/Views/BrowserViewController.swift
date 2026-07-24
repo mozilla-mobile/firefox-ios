@@ -363,6 +363,18 @@ class BrowserViewController: UIViewController,
         return topTabsViewController != nil
     }
 
+    var tabTrayAnimationSourceFrame: CGRect {
+        swipeUpTabWebViewPreviewGestureHandler.tabAnimationSourceFrame
+    }
+
+    var tabTrayAnimationCornerRadius: CGFloat {
+        swipeUpTabWebViewPreviewGestureHandler.tabAnimationSourceCornerRadius
+    }
+
+    var isSwipeUpTabPreviewActive: Bool {
+        swipeUpTabWebViewPreviewGestureHandler.isTabPreviewActive
+    }
+
     private var isHomepagePinnedHeaderEnabled: Bool {
         featureFlagsProvider.isEnabled(.homepagePinnedHeader) && featureFlagsProvider.isEnabled(.homepageStoryCategories)
     }

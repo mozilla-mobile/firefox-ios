@@ -84,6 +84,7 @@ let middlewares = [
     WallpaperMiddleware().wallpaperProvider,
     BookmarksMiddleware().bookmarksProvider,
     WorldCupMiddleware().worldCupProvider,
+    TrackerBlockerModuleMiddleware().trackerBlockerModuleProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
     QuickAnswersMiddleware().quickAnswersProvider,
     StartAtHomeMiddleware().startAtHomeProvider,

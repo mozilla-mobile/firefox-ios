@@ -37,10 +37,10 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         subject.loadViewIfNeeded()
 
         subject.configure(with: makeViewModel(sections: [
-            .init(id: "url", rows: [.init(id: "url", title: "https://example.com")]),
+            .init(id: "url", rows: [.init(id: "url", title: "https://example.com", a11yIdentifier: "url")]),
             .init(id: "advanced", rows: [
-                .init(id: "screenshot", title: "Include screenshot"),
-                .init(id: "blocklist", title: "Include blocked list")
+                .init(id: "screenshot", title: "Include screenshot", a11yIdentifier: "screenshot"),
+                .init(id: "blocklist", title: "Include blocked list", a11yIdentifier: "blocklist")
             ])
         ]))
 
@@ -137,29 +137,34 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                 WebCompatReportViewModel.Row(
                     id: "issue-category",
                     title: "Site is not usable",
-                    kind: .categoryMenu(isPlaceholder: false, options: options)
+                    kind: .categoryMenu(isPlaceholder: false, options: options),
+                    a11yIdentifier: "issue-category"
                 )
             ]),
             WebCompatReportViewModel.Section(id: "issue-suboptions", rows: [
                 WebCompatReportViewModel.Row(
                     id: "browser_blocked",
                     title: "Browser is blocked",
-                    kind: .subOption(isSelected: false)
+                    kind: .subOption(isSelected: false),
+                    a11yIdentifier: "browser_blocked"
                 ),
                 WebCompatReportViewModel.Row(
                     id: "page_not_loading",
                     title: "Page not loading correctly",
-                    kind: .subOption(isSelected: false)
+                    kind: .subOption(isSelected: false),
+                    a11yIdentifier: "page_not_loading"
                 ),
                 WebCompatReportViewModel.Row(
                     id: "missing_items",
                     title: "Missing items",
-                    kind: .subOption(isSelected: false)
+                    kind: .subOption(isSelected: false),
+                    a11yIdentifier: "missing_items"
                 ),
                 WebCompatReportViewModel.Row(
                     id: "buttons_not_working",
                     title: "Buttons or links not working",
-                    kind: .subOption(isSelected: false)
+                    kind: .subOption(isSelected: false),
+                    a11yIdentifier: "buttons_not_working"
                 )
             ])
         ]
