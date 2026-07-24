@@ -84,13 +84,17 @@ final class CreditCardBottomSheetViewModel {
     init(creditCardProvider: CreditCardProvider,
          creditCard: CreditCard?,
          decryptedCreditCard: UnencryptedCreditCardFields?,
+         preloadedCreditCards: [CreditCard]? = nil,
          logger: Logger = DefaultLogger.shared,
          state: CreditCardBottomSheetState) {
         self.autofill = creditCardProvider
         self.state = state
         self.logger = logger
-        creditCards = [CreditCard]()
-        updateCreditCardList { _ in }
+        let shouldUsePreloadedCreditCards = state == .selectSavedCard && preloadedCreditCards != nil
+        creditCards = shouldUsePreloadedCreditCards ? preloadedCreditCards : [CreditCard]()
+        if !shouldUsePreloadedCreditCards {
+            updateCreditCardList { _ in }
+        }
         if creditCard != nil {
             self.creditCard = creditCard
             self.decryptedCreditCard = decryptedCreditCard
