@@ -327,7 +327,10 @@ class DesktopModeTestsIphone: BaseTestCase {
 
         // Step 9: Long-press "Refresh", tap "Request Desktop Site" ->
         // the desktop version of news.google.com is open.
-        // [?] The site is already in desktop mode. The option from reload is "Request Mobile Site".
+        navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.goto(BrowserTab)
+        browserScreen.assertLayout(.mobile)
+        switchToDesktopSite()
 
         // Step 10: Open the hamburger menu -> the menu is open.
         navigateToBrowserTabMenu()
