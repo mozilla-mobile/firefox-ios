@@ -18,7 +18,7 @@ public enum Packages {
         .remote(url: "https://github.com/SnapKit/SnapKit.git", requirement: .exact("5.7.0")),
         .remote(url: "https://github.com/nbhasin2/Fuzi.git", requirement: .branch("master")),
         .remote(url: "https://github.com/nbhasin2/GCDWebServer.git", requirement: .branch("master")),
-        .remote(url: "https://github.com/getsentry/sentry-cocoa.git", requirement: .exact("8.36.0")),
+        .remote(url: "https://github.com/getsentry/sentry-cocoa.git", requirement: .exact("9.10.0")),
         .remote(url: "https://github.com/onevcat/Kingfisher.git", requirement: .exact("8.2.0")),
         .remote(url: "https://github.com/apple/swift-certificates.git", requirement: .exact("1.2.0")),
         .remote(url: "https://github.com/mozilla-mobile/MappaMundi.git", requirement: .branch("master")),
