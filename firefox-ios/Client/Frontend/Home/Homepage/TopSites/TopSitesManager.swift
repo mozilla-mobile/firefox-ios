@@ -120,7 +120,8 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
                 continuation: continuation
             )
 
-            unifiedAdsProvider.fetchTiles { [weak self] result in
+            Task { [weak self, unifiedAdsProvider] in
+                let result = await unifiedAdsProvider.fetchTiles()
                 timeoutTask.cancel()
                 Self.resumeSponsoredTilesFetch(
                     result,
