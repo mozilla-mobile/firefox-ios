@@ -25,7 +25,7 @@ struct SVGImageProcessor: ImageProcessor {
         case .data(let data):
             if let image = UIImage(data: data) {
                 return image
-            } else if let svgImage = SVG(data: data)?.rasterize(with: defaultFaviconSize) {
+            } else if let svgImage = SVG(data: data)?.rasterize(size: defaultFaviconSize) {
                 return svgImage
             }
             return nil
