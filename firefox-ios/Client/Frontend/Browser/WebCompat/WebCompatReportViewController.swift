@@ -112,13 +112,63 @@ final class WebCompatReportViewController: UINavigationController,
             closeButtonAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             previewButtonTitle: .WebCompatReporter.Sheet.PreviewButton,
             isPreviewEnabled: state.canPreview,
-            sections: makeIssueSections(from: state)
+            sections: makeSections(from: state)
         )
     }
 
     private enum SectionID: String {
+        case url
         case issueCategory
         case issueSubOptions
+        case additionalDetails
+    }
+
+    private enum RowID: String {
+        case url
+        case additionalDetails
+    }
+
+    static func makeSections(
+        from state: WebCompatReporterState
+    ) -> [WebCompatReportViewModel.Section] {
+        var sections = [urlSection(from: state)]
+        sections.append(contentsOf: makeIssueSections(from: state))
+        // Only show details once a category is selected.
+        if state.selectedCategory != nil {
+            sections.append(detailsSection(from: state))
+        }
+        return sections
+    }
+
+    private static func urlSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.url.rawValue,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.url.rawValue,
+                    title: .WebCompatReporter.Fields.URLLabel,
+                    kind: .urlField(text: state.url, placeholder: .WebCompatReporter.Fields.URLPlaceholder),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.urlField
+                )
+            ]
+        )
+    }
+
+    private static func detailsSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.additionalDetails.rawValue,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.additionalDetails.rawValue,
+                    title: .WebCompatReporter.Fields.DetailsAccessibilityLabel,
+                    kind: .detailsField(
+                        text: state.additionalDetails,
+                        placeholder: .WebCompatReporter.Fields.DetailsPlaceholder
+                    ),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.additionalDetails
+                )
+            ]
+        )
     }
 
     static func makeIssueSections(
@@ -227,6 +277,25 @@ final class WebCompatReportViewController: UINavigationController,
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.selectSubOption
         ))
+    }
+
+    func webCompatReportSheetDidEditText(id: String, text: String) {
+        switch RowID(rawValue: id) {
+        case .url:
+            store.dispatch(WebCompatReporterViewAction(
+                url: text,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.editURL
+            ))
+        case .additionalDetails:
+            store.dispatch(WebCompatReporterViewAction(
+                additionalDetails: text,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.setAdditionalDetails
+            ))
+        case .none:
+            break
+        }
     }
 
     // MARK: - Themeable
