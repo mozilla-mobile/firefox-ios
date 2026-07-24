@@ -33,29 +33,10 @@ final class BridgeTests: XCTestCase {
         XCTAssertTrue(subject.portB.receivedJSON.isEmpty)
     }
 
-    func test_bridge_send_sendsToGivenEndpoint() {
-        let subject = createSubject(aName: "a", bName: "b")
-        subject.bridge.send(#"{"hello":true}"#, to: subject.portB)
-
-        XCTAssertEqual(subject.portB.receivedJSON, [#"{"hello":true}"#])
-        XCTAssertTrue(subject.portA.receivedJSON.isEmpty)
-    }
-
     func test_bridge_init_registersScriptHandlers() {
         let subject = createSubject(aName: "a", bName: "b")
         XCTAssertEqual(subject.portA.registerCount, 1)
         XCTAssertEqual(subject.portB.registerCount, 1)
-    }
-
-    func test_bridge_teardown_unregistersScriptHandlers() {
-        let subject = createSubject(aName: "a", bName: "b")
-        XCTAssertEqual(subject.portA.unregisterCount, 0)
-        XCTAssertEqual(subject.portB.unregisterCount, 0)
-
-        subject.bridge.teardown()
-
-        XCTAssertEqual(subject.portA.unregisterCount, 1)
-        XCTAssertEqual(subject.portB.unregisterCount, 1)
     }
 
     private struct Subject {

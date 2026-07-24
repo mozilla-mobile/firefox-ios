@@ -20,10 +20,6 @@ public final class Bridge: NSObject, WKScriptMessageHandler {
         portB.registerScriptHandler(self)
     }
 
-    func send(_ json: String, to endpoint: BridgeEndpoint) {
-        endpoint.send(json: json)
-    }
-
     func receive(handlerName: String, body: Any) {
         guard
             JSONSerialization.isValidJSONObject(body),
@@ -36,11 +32,6 @@ public final class Bridge: NSObject, WKScriptMessageHandler {
         } else if handlerName == portB.handlerName {
             portA.send(json: json)
         }
-    }
-
-    func teardown() {
-        portA.unregisterScriptHandler()
-        portB.unregisterScriptHandler()
     }
 
     public func userContentController(
