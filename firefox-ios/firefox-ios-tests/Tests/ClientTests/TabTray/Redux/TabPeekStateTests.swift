@@ -27,7 +27,7 @@ final class TabPeekStateTests: XCTestCase {
         XCTAssertEqual(initialState.showSendToDevice, false)
 
         let action = getAction(for: .loadTabPeek)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showAddToBookmarks, true)
         XCTAssertEqual(newState.showSendToDevice, true)
@@ -42,7 +42,7 @@ final class TabPeekStateTests: XCTestCase {
         XCTAssertEqual(initialState.showSendToDevice, false)
 
         let action = getAction(for: .loadTabPeek)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showRemoveBookmark, true)
         XCTAssertEqual(newState.showSendToDevice, true)
@@ -65,7 +65,7 @@ final class TabPeekStateTests: XCTestCase {
             accessiblityLabel: ""
         )
         let action = getAction(for: .loadTabPeek, with: model)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showAddToBookmarks, false)
         XCTAssertEqual(newState.showSendToDevice, false)
@@ -88,7 +88,7 @@ final class TabPeekStateTests: XCTestCase {
             accessiblityLabel: ""
         )
         let action = getAction(for: .loadTabPeek, with: model)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showRemoveBookmark, false)
         XCTAssertEqual(newState.showSendToDevice, false)
@@ -111,7 +111,7 @@ final class TabPeekStateTests: XCTestCase {
             accessiblityLabel: ""
         )
         let action = getAction(for: .loadTabPeek, with: model)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showAddToBookmarks, true)
         XCTAssertEqual(newState.showSendToDevice, false)

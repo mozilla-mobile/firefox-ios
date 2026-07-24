@@ -29,7 +29,7 @@ final class PasswordGeneratorStateTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             actionType: PasswordGeneratorActionType.updateGeneratedPassword,
             password: "abc")
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.password, "abc")
     }

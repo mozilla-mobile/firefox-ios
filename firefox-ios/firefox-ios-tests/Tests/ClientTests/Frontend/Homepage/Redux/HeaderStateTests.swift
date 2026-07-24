@@ -37,7 +37,7 @@ final class HeaderStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -53,7 +53,7 @@ final class HeaderStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -69,7 +69,7 @@ final class HeaderStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -147,7 +147,7 @@ final class HeaderStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             QuickAnswersMiddlewareAction(
                 isQuickAnswersEnabled: true,
@@ -163,7 +163,7 @@ final class HeaderStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             QuickAnswersMiddlewareAction(
                 isQuickAnswersEnabled: false,
@@ -179,7 +179,7 @@ final class HeaderStateTests: XCTestCase {
         let initialState = createSubject(isPrivate: true)
         let reducer = headerReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             QuickAnswersMiddlewareAction(
                 isQuickAnswersEnabled: true,

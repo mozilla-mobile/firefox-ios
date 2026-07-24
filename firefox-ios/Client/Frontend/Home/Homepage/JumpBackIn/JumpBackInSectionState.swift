@@ -51,7 +51,14 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         self.shouldShowSection = shouldShowSection
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
         // because we dispatch to the main thread in the store. We will want to
         // also isolate that to the @MainActor to remove this.

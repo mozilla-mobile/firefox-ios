@@ -23,7 +23,7 @@ final class WorldCupSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = WorldCupSectionState.reducer
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -44,7 +44,7 @@ final class WorldCupSectionStateTests: XCTestCase {
         let reducer = WorldCupSectionState.reducer
         let apiError = WorldCupLoadError.network(reason: "offline")
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -62,7 +62,7 @@ final class WorldCupSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = WorldCupSectionState.reducer
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -87,7 +87,7 @@ final class WorldCupSectionStateTests: XCTestCase {
     func test_didUpdateAction_propagatesShouldShowConfetti() {
         let reducer = WorldCupSectionState.reducer
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             createSubject(),
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -102,7 +102,7 @@ final class WorldCupSectionStateTests: XCTestCase {
     func test_didUpdateAction_defaultsShouldShowConfettiToFalse() {
         let reducer = WorldCupSectionState.reducer
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             createSubject(),
             WorldCupAction(
                 windowUUID: .XCTestDefaultUUID,

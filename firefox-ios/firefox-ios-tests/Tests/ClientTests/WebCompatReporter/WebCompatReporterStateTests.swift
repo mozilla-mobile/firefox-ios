@@ -50,7 +50,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterMiddlewareActionType.didLoadInitialDraft
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.url, "https://example.com")
     }
@@ -64,7 +64,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterMiddlewareActionType.didLoadInitialDraft
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.url, "https://existing.com")
     }
@@ -81,7 +81,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.editURL
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.url, "https://edited.com")
     }
@@ -98,7 +98,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.selectCategory
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.selectedCategory, .videoOrAudio)
     }
@@ -118,7 +118,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.selectCategory
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.selectedCategory, .designBroken)
         XCTAssertNil(newState.selectedSubOptionID)
@@ -139,7 +139,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.selectCategory
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.selectedSubOptionID, "page_not_loading")
     }
@@ -160,7 +160,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.selectSubOption
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.selectedSubOptionID, "missing_items")
     }
@@ -177,7 +177,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.setAdditionalDetails
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.additionalDetails, "Buttons are unresponsive")
     }
@@ -193,7 +193,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.toggleScreenshot
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.includeScreenshot)
     }
@@ -208,7 +208,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.toggleScreenshot
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.includeScreenshot)
     }
@@ -222,7 +222,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.toggleBlockedList
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.includeBlockedList)
     }
@@ -243,7 +243,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterMiddlewareActionType.didLoadInitialDraft
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState, initialState)
     }
@@ -258,7 +258,7 @@ final class WebCompatReporterStateTests: XCTestCase {
             actionType: WebCompatReporterViewActionType.editURL
         )
 
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState, initialState)
     }

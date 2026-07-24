@@ -29,7 +29,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             actionType: MicrosurveyPromptMiddlewareActionType.initialize
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showPrompt, true)
         XCTAssertEqual(newState.showSurvey, false)
@@ -48,7 +48,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         XCTAssertEqual(initialState.showPrompt, true)
 
         let action = getAction(for: .closePrompt)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showPrompt, false)
         XCTAssertEqual(newState.showSurvey, false)
@@ -62,7 +62,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         XCTAssertEqual(initialState.showSurvey, false)
 
         let action = getAction(for: .continueToSurvey)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showSurvey, true)
         XCTAssertEqual(newState.showPrompt, true)
@@ -79,7 +79,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         let reducer = microsurveyReducer()
 
         let action = MicrosurveyPromptAction(windowUUID: .XCTestDefaultUUID, actionType: FakeActionType.testAction)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(newState.showPrompt, true)

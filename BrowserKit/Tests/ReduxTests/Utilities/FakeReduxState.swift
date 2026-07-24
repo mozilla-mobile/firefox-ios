@@ -10,7 +10,29 @@ struct FakeReduxState: StateType, Equatable {
     var counter = 0
     var isInPrivateMode = false
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Handles one type of action
+        guard let action = action as? FakeReduxModernAction else { return defaultState(from: state) }
+
+        switch action {
+        case .initialValueLoaded(let counterValue),
+            .counterIncreased(let counterValue),
+            .counterDecreased(let counterValue):
+            return FakeReduxState(counter: counterValue,
+                                  isInPrivateMode: state.isInPrivateMode)
+
+        case .setPrivateModeTo(let isPrivate):
+            return FakeReduxState(counter: state.counter,
+                                  isInPrivateMode: isPrivate)
+
+        default:
+            return defaultState(from: state)
+        }
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         guard let action = action as? FakeReduxAction else { return defaultState(from: state) }
 
         switch action.actionType {
@@ -23,6 +45,7 @@ struct FakeReduxState: StateType, Equatable {
         case FakeReduxActionType.setPrivateModeTo:
             return FakeReduxState(counter: state.counter,
                                   isInPrivateMode: action.privateMode ?? state.isInPrivateMode)
+
         default:
             return defaultState(from: state)
         }

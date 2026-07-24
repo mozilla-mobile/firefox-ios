@@ -35,7 +35,7 @@ final class TabPanelStateTests: XCTestCase {
         let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
         XCTAssertEqual(newState.tabs, tabs)
         XCTAssertTrue(newState.isPrivateMode)
     }
@@ -55,7 +55,7 @@ final class TabPanelStateTests: XCTestCase {
         let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didChangeTabPanel)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
         XCTAssertEqual(newState.tabs, tabs)
         XCTAssertTrue(newState.isPrivateMode)
     }
@@ -72,7 +72,7 @@ final class TabPanelStateTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             actionType: TabPanelMiddlewareActionType.willAppearTabPanel
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let scrollState = try XCTUnwrap(newState.scrollState)
         XCTAssertEqual(expectedIndex, scrollState.toIndex)
@@ -94,7 +94,7 @@ final class TabPanelStateTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             actionType: TabPanelMiddlewareActionType.refreshTabs
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.tabs, tabs)
     }

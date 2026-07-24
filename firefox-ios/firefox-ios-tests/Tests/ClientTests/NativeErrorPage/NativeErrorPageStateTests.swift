@@ -22,7 +22,7 @@ final class NativeErrorPageStateTests: XCTestCase {
         let model = ErrorPageModel.internetConnection
 
         let action = getAction(model: model, for: .initialize)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.model, model)
     }
@@ -49,7 +49,7 @@ If you’re on a corporate network, your support team might have more info.
         ))
 
         let action = getAction(model: model, for: .initialize)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.model, model)
     }
@@ -63,7 +63,7 @@ If you’re on a corporate network, your support team might have more info.
         let model = ErrorPageModel.generic(GenericErrorModel(url: testURL))
 
         let action = getAction(model: model, for: .initialize)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.model, model)
     }
@@ -76,7 +76,7 @@ If you’re on a corporate network, your support team might have more info.
         let model = ErrorPageModel.generic(GenericErrorModel(url: nil))
 
         let action = getAction(model: model, for: .initialize)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.model, model)
     }
@@ -88,7 +88,7 @@ If you’re on a corporate network, your support team might have more info.
 
         let model = ErrorPageModel.generic(GenericErrorModel(url: URL(string: "https://example.com")!))
         let action = getAction(model: model, for: .initialize)
-        let state = reducer(initialState, action)
+        let state = reducer.legacyReducer(initialState, action)
 
         let defaultState = NativeErrorPageState.defaultState(from: state)
 
