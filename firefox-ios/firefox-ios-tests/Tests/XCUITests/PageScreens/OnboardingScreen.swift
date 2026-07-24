@@ -49,6 +49,38 @@ final class OnboardingScreen {
         case bottom = "Bottom"
     }
 
+    /// A tappable legal link on the Terms of Service card. Each opens an overlay dismissed via a Done
+    /// button: a web pop up for Terms of Use / Privacy Notice, a bottom sheet for Manage.
+    enum ToSLink {
+        case termsOfUse
+        case privacyNotice
+        case manage
+
+        var name: String {
+            switch self {
+            case .termsOfUse: return "Terms of Use"
+            case .privacyNotice: return "Privacy Notice"
+            case .manage: return "Manage"
+            }
+        }
+
+        /// Accessibility identifier applied to the rendered link, matching the ids set in `TermsOfServiceManager`.
+        var identifier: String {
+            switch self {
+            case .termsOfUse: return AccessibilityIdentifiers.TermsOfService.termsOfServiceAgreement
+            case .privacyNotice: return AccessibilityIdentifiers.TermsOfService.privacyNoticeAgreement
+            case .manage: return AccessibilityIdentifiers.TermsOfService.manageDataCollectionAgreement
+            }
+        }
+
+        var overlayName: String {
+            switch self {
+            case .termsOfUse, .privacyNotice: return "link pop up"
+            case .manage: return "Manage bottom sheet"
+            }
+        }
+    }
+
     private let app: XCUIApplication
     private let sel: OnboardingSelectorsSet
     private let flowType: OnboardingFlowType
@@ -367,6 +399,51 @@ final class OnboardingScreen {
 
         XCTAssertEqual(title.label, "Welcome to Firefox", "Should show correct title")
         XCTAssertEqual(button.label, "Continue", "Should show Continue button")
+    }
+
+    /// Asserts the given link is displayed on the ToS card.
+    func assertLinkIsDisplayed(_ link: ToSLink) {
+        let element = linkElement(link)
+        BaseTestCase().mozWaitForElementToExist(element)
+        XCTAssertTrue(element.exists, "The \(link.name) link should be displayed on the ToS card")
+    }
+
+    /// Taps the given link to open its overlay. The link is a single hittable control, so a plain tap
+    /// on its accessibility identifier is reliable.
+    func tapLink(_ link: ToSLink) {
+        linkElement(link).waitAndTap()
+    }
+
+    /// Asserts the overlay opened by the given link (web pop up or bottom sheet) is displayed.
+    func assertOverlayIsDisplayed(for link: ToSLink) {
+        let doneButton = overlayDoneButton(link).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(doneButton, timeout: TIMEOUT_LONG)
+        XCTAssertTrue(doneButton.exists, "The \(link.overlayName) should be displayed")
+    }
+
+    /// Asserts the overlay opened by the given link is no longer displayed.
+    func assertOverlayIsClosed(for link: ToSLink) {
+        let doneButton = overlayDoneButton(link).element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(doneButton)
+        XCTAssertFalse(doneButton.exists, "The \(link.overlayName) should be closed")
+    }
+
+    /// Dismisses the overlay opened by the given link via its Done button, returning to the ToS card.
+    func dismissOverlay(for link: ToSLink) {
+        overlayDoneButton(link).element(in: app).waitAndTap()
+    }
+
+    /// Locates the embedded ToS link by its accessibility identifier. Matched across any element type
+    /// since the link carries both button and link traits.
+    private func linkElement(_ link: ToSLink) -> XCUIElement {
+        return app.descendants(matching: .any).matching(identifier: link.identifier).firstMatch
+    }
+
+    private func overlayDoneButton(_ link: ToSLink) -> Selector {
+        switch link {
+        case .termsOfUse, .privacyNotice: return sel.TOS_PAGE_DONE_BUTTON
+        case .manage: return sel.MANAGE_SHEET_DONE_BUTTON
+        }
     }
 
     /// Verifies the welcome screen (shown after ToS acceptance)
