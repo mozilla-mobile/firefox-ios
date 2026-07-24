@@ -10,6 +10,10 @@ class EditBookmarkViewController: UIViewController,
                                   UITableViewDelegate,
                                   Themeable {
     private struct UX {
+        static let viewHorizontalMargin: CGFloat = 16
+        static let deleteImageHorizontalMargin: CGFloat = 12
+        static let viewVerticalMargin: CGFloat = 8
+        static let deleteBookmarkButtonViewTopMargin: CGFloat = 32
         static let bookmarkCellTopPadding: CGFloat = 25.0
         static let folderHeaderIdentifier = "folderHeaderIdentifier"
         static let folderHeaderHorizontalPadding: CGFloat = 16.0
@@ -58,6 +62,32 @@ class EditBookmarkViewController: UIViewController,
     var onViewWillAppear: VoidReturnCallback?
 
     private let viewModel: EditBookmarkViewModel
+
+    private lazy var deleteBookmarkButton: UIButton = .build { button in
+        let deleteImage = UIImage(named: StandardImageIdentifiers.Large.delete)?.withRenderingMode(.alwaysTemplate)
+
+        var configuration = UIButton.Configuration.plain()
+        configuration.title = .RemoveBookmarkContextMenuTitle
+        configuration.image = deleteImage
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = FXFontStyles.Regular.body.scaledFont()
+            return outgoing
+        }
+        configuration.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.viewVerticalMargin,
+            leading: UX.viewHorizontalMargin,
+            bottom: UX.viewVerticalMargin,
+            trailing: UX.viewHorizontalMargin
+        )
+        configuration.imagePadding = UX.deleteImageHorizontalMargin
+        configuration.titleAlignment = .leading
+
+        button.configuration = configuration
+        button.contentHorizontalAlignment = .leading
+        button.addTarget(self, action: #selector(self.deleteBookmarkAction), for: .touchUpInside)
+    }
+
     private lazy var dataSource: EditBookmarkDiffableDataSource = {
         return EditBookmarkDiffableDataSource(tableView: tableView,
                                               cellProvider: { [weak self] _, indexPath, item in
@@ -132,12 +162,17 @@ class EditBookmarkViewController: UIViewController,
 
     // MARK: - Setup
     private func setupSubviews() {
-        view.addSubview(tableView)
+        view.addSubviews(tableView, deleteBookmarkButton)
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            deleteBookmarkButton.topAnchor.constraint(equalTo: tableView.bottomAnchor,
+                                                      constant: UX.deleteBookmarkButtonViewTopMargin),
+
+            deleteBookmarkButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            deleteBookmarkButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            deleteBookmarkButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
@@ -160,6 +195,19 @@ class EditBookmarkViewController: UIViewController,
         }
     }
 
+    @objc
+    private func deleteBookmarkAction() {
+        viewModel.onBookmarkDeleted = { [weak self] in
+            guard let self else { return }
+            if navigationController?.viewControllers.first == self {
+                viewModel.didFinish()
+            } else {
+                navigationController?.popViewController(animated: true)
+            }
+        }
+        viewModel.deleteBookmark()
+    }
+
     // MARK: - Themeable
 
     func applyTheme() {
@@ -180,6 +228,9 @@ class EditBookmarkViewController: UIViewController,
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
+        deleteBookmarkButton.tintColor = theme.colors.textPrimary
+        deleteBookmarkButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        deleteBookmarkButton.backgroundColor = theme.colors.layer5
         if #available(iOS 26.0, *) {
             saveBarButton.tintColor = theme.colors.textAccent
         }
