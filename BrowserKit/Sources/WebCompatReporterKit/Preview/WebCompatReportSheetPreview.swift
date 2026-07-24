@@ -88,6 +88,12 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
     return WebCompatReportViewModel.Section(
         id: "advanced",
         title: "Additional Info",
+        footer: WebCompatReportViewModel.Footer(
+            text: "Your report helps us understand and fix issues in Firefox to make it better for everyone. Learn More",
+            linkText: "Learn More",
+            linkURL: URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"),
+            linkA11yIdentifier: "learn-more"
+        ),
         rows: [
             WebCompatReportViewModel.Row(
                 id: "screenshot",
@@ -105,6 +111,17 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
     )
 }
 
+private func previewSendSection(isEnabled: Bool) -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(id: "send", rows: [
+        WebCompatReportViewModel.Row(
+            id: "send",
+            title: "Send Report",
+            kind: .sendButton(isEnabled: isEnabled),
+            a11yIdentifier: "send"
+        )
+    ])
+}
+
 @available(iOS 17.0, *)
 #Preview("Filled") {
     previewSheet(sections: [
@@ -117,16 +134,18 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
             previewSubOption("buttons_not_working", "Buttons or links not working")
         ]),
         previewDetailsSection(),
-        previewAdvancedSection(includeScreenshot: true, includeBlockedList: true)
+        previewAdvancedSection(includeScreenshot: true, includeBlockedList: true),
+        previewSendSection(isEnabled: true)
     ], isPreviewEnabled: true)
 }
 
 @available(iOS 17.0, *)
-#Preview("Empty") {
+#Preview("Empty / Send disabled") {
     previewSheet(sections: [
         previewURLSection(),
         previewCategorySection(selectedTitle: nil),
-        previewAdvancedSection(includeScreenshot: true, includeBlockedList: false)
+        previewAdvancedSection(includeScreenshot: true, includeBlockedList: false),
+        previewSendSection(isEnabled: false)
     ], isPreviewEnabled: false)
 }
 #endif

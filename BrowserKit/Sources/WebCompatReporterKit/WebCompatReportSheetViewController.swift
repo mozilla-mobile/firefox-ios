@@ -16,6 +16,8 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidSelectSubOption(id: String)
     func webCompatReportSheetDidEditText(id: String, text: String)
     func webCompatReportSheetDidToggle(id: String, isOn: Bool)
+    func webCompatReportSheetDidTapButton(id: String)
+    func webCompatReportSheetDidTapLearnMore(url: URL)
 }
 
 /// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
@@ -150,8 +152,9 @@ public final class WebCompatReportSheetViewController: UIViewController,
             var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             let sections = self?.viewModel.sections ?? []
             let hasHeader = index < sections.count && sections[index].title != nil
+            let hasFooter = index < sections.count && sections[index].footer != nil
             config.headerMode = hasHeader ? .supplementary : .none
-            config.footerMode = .none
+            config.footerMode = hasFooter ? .supplementary : .none
             config.backgroundColor = backgroundColor
             return NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
         }
@@ -169,6 +172,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         let url = urlCellRegistration()
         let details = detailsCellRegistration()
         let toggle = toggleCellRegistration()
+        let sendButton = sendButtonCellRegistration()
 
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
@@ -185,6 +189,8 @@ public final class WebCompatReportSheetViewController: UIViewController,
                 return collectionView.dequeueConfiguredReusableCell(using: details, for: indexPath, item: row)
             case .toggle:
                 return collectionView.dequeueConfiguredReusableCell(using: toggle, for: indexPath, item: row)
+            case .sendButton:
+                return collectionView.dequeueConfiguredReusableCell(using: sendButton, for: indexPath, item: row)
             case .plain:
                 return collectionView.dequeueConfiguredReusableCell(using: plain, for: indexPath, item: row)
             }
@@ -195,7 +201,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
 
     private func configureSupplementaryProvider(on dataSource: UICollectionViewDiffableDataSource<String, String>) {
         let header = headerRegistration()
-        dataSource.supplementaryViewProvider = { collectionView, _, indexPath in
+        let footer = footerRegistration()
+        dataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
+            if elementKind == UICollectionView.elementKindSectionFooter {
+                return collectionView.dequeueConfiguredReusableSupplementary(using: footer, for: indexPath)
+            }
             return collectionView.dequeueConfiguredReusableSupplementary(using: header, for: indexPath)
         }
     }
@@ -278,6 +288,19 @@ public final class WebCompatReportSheetViewController: UIViewController,
         }
     }
 
+    private func sendButtonCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatSendButtonCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { [weak self] cell, _, row in
+            guard let self, case let .sendButton(isEnabled) = row.kind else { return }
+            cell.configure(title: row.title, isEnabled: isEnabled, a11yIdentifier: row.a11yIdentifier) { [weak self] in
+                // Fields report on end-editing, so commit the active one before submitting.
+                self?.view.endEditing(true)
+                self?.delegate?.webCompatReportSheetDidTapButton(id: row.id)
+            }
+            cell.applyTheme(theme: self.theme)
+        }
+    }
+
     private func headerRegistration()
     -> UICollectionView.SupplementaryRegistration<UICollectionViewListCell> {
         return UICollectionView.SupplementaryRegistration(
@@ -291,6 +314,21 @@ public final class WebCompatReportSheetViewController: UIViewController,
             content.textProperties.color = self.theme.colors.textSecondary
             header.contentConfiguration = content
             header.accessibilityTraits.insert(.header)
+        }
+    }
+
+    private func footerRegistration()
+    -> UICollectionView.SupplementaryRegistration<WebCompatLearnMoreFooterView> {
+        return UICollectionView.SupplementaryRegistration(
+            elementKind: UICollectionView.elementKindSectionFooter
+        ) { [weak self] footerView, _, indexPath in
+            guard let self,
+                  let sectionID = self.dataSource.sectionIdentifier(for: indexPath.section),
+                  let footer = self.sectionsByID[sectionID]?.footer else { return }
+            footerView.configure(footer: footer) { [weak self] url in
+                self?.delegate?.webCompatReportSheetDidTapLearnMore(url: url)
+            }
+            footerView.applyTheme(theme: self.theme)
         }
     }
 
