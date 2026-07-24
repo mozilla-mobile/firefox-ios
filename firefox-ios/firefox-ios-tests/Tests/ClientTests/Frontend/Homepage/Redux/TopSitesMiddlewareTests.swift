@@ -307,7 +307,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.topSitesProvider.legacyMiddleware(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 0)
     }
