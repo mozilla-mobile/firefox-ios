@@ -52,3 +52,24 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Badirudi zure Interneterako konexioak arazoren bat duela.";
 
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v154" = "Orria egiaztatzen…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v154" = "Ezin izan dugu Wayback Machine-ra konektatu";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "Baliteke gunea lanpetuta egotea edo erabilgarri ez egotea. Saiatu berriro geroago. Beste orriak ere ez badira kargatzen, egiaztatu zure Wi-Fi edo datu-konexioa. %@(e)k ere orri honen aurreko bertsio bat bila dezake Wayback Machine erabilita.";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "Saiatu berriro";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.Search.v154" = "Egiaztatu aurreko bertsiorik dagoen";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "Ezin da konektatu";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Orri honen artxibatutako bertsio bat bilatzen du Wayback Machine erabilita.";
+

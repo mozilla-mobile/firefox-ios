@@ -329,7 +329,7 @@
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Pagina de start Firefox";
+"Firefox.HomePage.Title" = "Pagină de start Firefox";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Personalizează pagina de start";
@@ -467,7 +467,7 @@
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Închise recent";
 
 /* Accessibility label for the tab toolbar indicating the Home button. */
-"Home" = "Acasă";
+"Home" = "Pagină de start";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Marchează";
@@ -1403,7 +1403,7 @@
 "Settings.NewTab.Option.FirefoxHome" = "Pagină de start Firefox";
 
 /* Option in settings to show your homepage when you open a new tab */
-"Settings.NewTab.Option.HomePage" = "Pagina de start";
+"Settings.NewTab.Option.HomePage" = "Pagină de start";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Filă nouă";
