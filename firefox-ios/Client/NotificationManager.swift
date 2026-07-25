@@ -44,8 +44,12 @@ final class NotificationManager: NotificationManagerProtocol, @unchecked Sendabl
 
     func requestAuthorization() async throws -> Bool {
         return try await withCheckedThrowingContinuation { continuation in
-            requestAuthorization { result in
-                continuation.resume(with: result)
+            requestAuthorization { granted, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: granted)
+                }
             }
         }
     }
