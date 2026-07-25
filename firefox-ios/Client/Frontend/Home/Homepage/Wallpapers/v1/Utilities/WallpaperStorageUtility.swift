@@ -60,7 +60,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, WallpaperStora
         userDefaults.set(encoded, forKey: PrefsKeys.Wallpapers.CurrentWallpaper)
     }
 
-    func store(_ image: UIImage, withName name: String, andKey key: String) throws {
+    func store(_ image: UIImage, withName name: String) throws {
         let filePathProvider = WallpaperFilePathProvider(with: fileManager)
 
         guard let filePath = filePathProvider.imagePathWith(name: name),
