@@ -921,6 +921,38 @@ final class TabManagerImplementation: NSObject,
         self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
     }
 
+    // MARK: - Window merging
+
+    func tabDataForWindowMerge() -> [TabData] {
+        // Persist the live session state (back/forward history) of every tab that currently has a
+        // webview, so that once the tabs are recreated in the destination window their history can
+        // be restored from the tab session store (keyed by tab UUID). Tabs without a live webview
+        // already have their session persisted on disk from when they were last active.
+        for tab in tabs {
+            guard let sessionData = tab.webView?.interactionState as? Data,
+                  let tabID = UUID(uuidString: tab.tabUUID)
+            else { continue }
+            tabSessionStore.saveTabSession(tabID: tabID, sessionData: sessionData)
+        }
+        return generateTabDataForSaving()
+    }
+
+    func addTabs(fromWindowMergeData tabDataList: [TabData]) {
+        let existingUUIDs = Set(tabs.map { $0.tabUUID })
+        var didAddTab = false
+        for tabData in tabDataList where !existingUUIDs.contains(tabData.id.uuidString) {
+            _ = configureNewTab(with: tabData)
+            didAddTab = true
+        }
+
+        guard didAddTab else { return }
+
+        // Keep the current selection; merged tabs are appended as zombies. Notifying delegates
+        // refreshes the tab tray, and commitChanges persists the now-merged window to disk.
+        delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
+        commitChanges()
+    }
+
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished, let tab = selectedTab, let url = tab.url else { return }
