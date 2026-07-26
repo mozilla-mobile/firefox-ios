@@ -54,6 +54,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private let windowManager: WindowManager
+    private let windowMerger: WindowMerging
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
@@ -81,6 +82,7 @@ final class BrowserCoordinator: BaseCoordinator,
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         windowMerger: WindowMerging = MergeWindowsManager(),
          googleLensService: GoogleLensServicing = GoogleLensService(),
          isCameraAvailable: @escaping @MainActor () -> Bool = {
              UIImagePickerController.isSourceTypeAvailable(.camera)
@@ -91,6 +93,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowManager = windowManager
+        self.windowMerger = windowMerger
         self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
         self.homepageTabStateStore = homepageTabStateStore
         self.browserViewController = BrowserViewController(profile: profile,
@@ -341,6 +344,8 @@ final class BrowserCoordinator: BaseCoordinator,
                 handleClosePrivateTabsWidgetAction()
             case .showIntroOnboarding:
                 showIntroOnboarding()
+            case .mergeWindows:
+                windowMerger.mergeAllWindows(into: windowUUID)
             }
 
         case let .fxaSignIn(params):

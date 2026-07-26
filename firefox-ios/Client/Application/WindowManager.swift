@@ -6,6 +6,7 @@ import Foundation
 import Common
 import Shared
 import TabDataStore
+import UIKit
 import WidgetKit
 
 /// Defines various actions in the app which are performed for all open iPad
@@ -349,5 +350,108 @@ final class WindowManagerImplementation: WindowManager {
             return AppWindowInfo(tabManager: nil)
         }
         return windowInfo
+    }
+}
+
+// MARK: - Scene destruction
+
+/// Abstraction over closing iPad windows (`UIScene`s). Lets the merge-windows feature be unit tested
+/// without depending on the non-mockable `UIApplication` scene-session APIs.
+protocol SceneDestroying {
+    /// Requests that the iPad windows matching the given UUIDs be closed by the system.
+    /// - Parameter windowUUIDs: the UUIDs of the windows to close.
+    @MainActor
+    func destroyScenes(for windowUUIDs: [WindowUUID])
+}
+
+struct DefaultSceneDestroyer: SceneDestroying {
+    @MainActor
+    func destroyScenes(for windowUUIDs: [WindowUUID]) {
+        guard !windowUUIDs.isEmpty else { return }
+        for scene in UIApplication.shared.connectedScenes {
+            guard let delegate = scene.delegate as? SceneDelegate,
+                  let uuid = delegate.sceneCoordinator?.windowUUID,
+                  windowUUIDs.contains(uuid)
+            else { continue }
+            UIApplication.shared.requestSceneSessionDestruction(scene.session, options: nil, errorHandler: nil)
+        }
+    }
+}
+
+// MARK: - Window merging
+
+/// Merges the tabs from every other open iPad window into a single destination window and closes the
+/// emptied windows. Triggered by the "Merge All Windows" home screen Quick Action (issue #25356).
+protocol WindowMerging {
+    /// Moves every tab from all other open windows into the destination window (preserving each
+    /// tab's history), then closes the other windows and removes their persisted window data.
+    /// - Parameter targetWindowUUID: the window that survives and receives all of the merged tabs.
+    @MainActor
+    func mergeAllWindows(into targetWindowUUID: WindowUUID)
+}
+
+final class MergeWindowsManager: WindowMerging {
+    private let windowManager: WindowManager
+    private let tabDataStore: TabDataStore
+    private let sceneDestroyer: SceneDestroying
+    private let logger: Logger
+
+    init(windowManager: WindowManager = AppContainer.shared.resolve(),
+         tabDataStore: TabDataStore = DefaultTabDataStore(),
+         sceneDestroyer: SceneDestroying = DefaultSceneDestroyer(),
+         logger: Logger = DefaultLogger.shared) {
+        self.windowManager = windowManager
+        self.tabDataStore = tabDataStore
+        self.sceneDestroyer = sceneDestroyer
+        self.logger = logger
+    }
+
+    @MainActor
+    func mergeAllWindows(into targetWindowUUID: WindowUUID) {
+        guard let targetTabManager = windowManager.tabManager(for: targetWindowUUID) else {
+            logger.log("Merge windows aborted: no tab manager for the target window.",
+                       level: .warning,
+                       category: .window)
+            return
+        }
+
+        let otherWindowUUIDs = windowManager.allWindowUUIDs(includingReserved: false)
+            .filter { $0 != targetWindowUUID }
+
+        guard !otherWindowUUIDs.isEmpty else {
+            logger.log("Merge windows requested but no other windows are open.",
+                       level: .debug,
+                       category: .window)
+            return
+        }
+
+        // Collect the tabs (with history persisted to the session store) from each other window.
+        var mergedTabData: [TabData] = []
+        for windowUUID in otherWindowUUIDs {
+            guard let tabManager = windowManager.tabManager(for: windowUUID) else { continue }
+            mergedTabData.append(contentsOf: tabManager.tabDataForWindowMerge())
+        }
+
+        // Append them to the surviving window. Tab UUIDs are preserved, so the matching session
+        // files in the tab session store restore each tab's back/forward history on selection.
+        targetTabManager.addTabs(fromWindowMergeData: mergedTabData)
+
+        // Close the now-merged windows. Closing a scene does not preserve its tabs
+        // (see SceneDelegate.sceneDidEnterBackground / sceneDidDisconnect), so the windows cannot
+        // resurrect their data after we remove it below.
+        sceneDestroyer.destroyScenes(for: otherWindowUUIDs)
+
+        // Remove the merged windows' persisted window data. Their per-tab session files are left
+        // intact because they are now referenced by the surviving window's tabs.
+        Task { [tabDataStore] in
+            await tabDataStore.removeWindowData(forUUIDs: otherWindowUUIDs)
+        }
+
+        logger.log("""
+                   Merged \(mergedTabData.count) tab(s) from \(otherWindowUUIDs.count) window(s) \
+                   into window \(targetWindowUUID).
+                   """,
+                   level: .info,
+                   category: .window)
     }
 }

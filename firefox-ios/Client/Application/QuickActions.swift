@@ -11,6 +11,7 @@ enum ShortcutType: String {
     case newPrivateTab = "NewPrivateTab"
     case openLastBookmark = "OpenLastBookmark"
     case appIcon = "AppIcon"
+    case mergeWindows = "MergeWindows"
 
     var type: String {
         return Bundle.main.bundleIdentifier! + ".\(self.rawValue)"
@@ -78,6 +79,20 @@ struct QuickActionsImplementation: QuickActions {
             } else {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
             }
+        case .mergeWindows:
+            let mergeWindowsShortcut = UIMutableApplicationShortcutItem(
+                type: ShortcutType.mergeWindows.type,
+                localizedTitle: .QuickActionsMergeAllWindowsTitle,
+                localizedSubtitle: nil,
+                icon: UIApplicationShortcutIcon(templateImageName: StandardImageIdentifiers.Large.tabTray),
+                userInfo: userData as [String: NSSecureCoding]
+            )
+
+            if let index = (dynamicShortcutItems.firstIndex { $0.type == ShortcutType.mergeWindows.type }) {
+                dynamicShortcutItems[index] = mergeWindowsShortcut
+            } else {
+                dynamicShortcutItems.append(mergeWindowsShortcut)
+            }
         default:
             break
         }
@@ -92,5 +107,34 @@ struct QuickActionsImplementation: QuickActions {
 
         dynamicShortcutItems.remove(at: index)
         application.shortcutItems = dynamicShortcutItems
+    }
+}
+
+// MARK: - MergeWindowsQuickActionController
+
+/// Keeps the "Merge All Windows" home screen Quick Action in sync with the number of open iPad
+/// windows: the action is only offered while two or more windows are open. Call `update()` whenever
+/// the set of open windows changes (a scene becoming active or disconnecting).
+@MainActor
+struct MergeWindowsQuickActionController {
+    private let quickActions: QuickActions
+    private let windowManager: WindowManager
+    private let application: UIApplication
+
+    init(quickActions: QuickActions = QuickActionsImplementation(),
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         application: UIApplication = .shared) {
+        self.quickActions = quickActions
+        self.windowManager = windowManager
+        self.application = application
+    }
+
+    /// Adds the merge Quick Action when 2+ windows are open, otherwise removes it.
+    func update() {
+        if windowManager.windows.count >= 2 {
+            quickActions.addDynamicApplicationShortcutItemOfType(.mergeWindows, toApplication: application)
+        } else {
+            quickActions.removeDynamicApplicationShortcutItemOfType(.mergeWindows, fromApplication: application)
+        }
     }
 }

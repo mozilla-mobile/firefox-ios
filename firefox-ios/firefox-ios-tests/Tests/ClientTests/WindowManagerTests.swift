@@ -5,6 +5,8 @@
 import Foundation
 import XCTest
 import Common
+import TabDataStore
+import UIKit
 @testable import Client
 
 @MainActor
@@ -411,6 +413,92 @@ class WindowManagerTests: XCTestCase {
         XCTAssertFalse(subject.windows.keys.contains(.unavailable))
     }
 
+    // MARK: - Window merging
+
+    @MainActor
+    func testMergeAllWindows_withNoOtherWindows_doesNothing() {
+        let subject = createSubject()
+        let target = WindowUUID()
+        let targetManager = MockTabManager(windowUUID: target)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: targetManager), uuid: target)
+
+        let destroyer = MockSceneDestroyer()
+        let merger = MergeWindowsManager(windowManager: subject,
+                                         tabDataStore: mockTabDataStore,
+                                         sceneDestroyer: destroyer)
+
+        merger.mergeAllWindows(into: target)
+
+        XCTAssertEqual(targetManager.addTabsFromWindowMergeCalled, 0)
+        XCTAssertTrue(destroyer.destroyedUUIDs.isEmpty)
+    }
+
+    @MainActor
+    func testMergeAllWindows_movesOtherWindowsTabsAndClosesThem() {
+        let subject = createSubject()
+        let target = WindowUUID()
+        let other = WindowUUID()
+        let targetManager = MockTabManager(windowUUID: target)
+        let otherManager = MockTabManager(windowUUID: other)
+        otherManager.tabDataForWindowMergeResult = [makeMergeTabData(), makeMergeTabData()]
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: targetManager), uuid: target)
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: otherManager), uuid: other)
+
+        let destroyer = MockSceneDestroyer()
+        let merger = MergeWindowsManager(windowManager: subject,
+                                         tabDataStore: mockTabDataStore,
+                                         sceneDestroyer: destroyer)
+
+        merger.mergeAllWindows(into: target)
+
+        XCTAssertEqual(otherManager.tabDataForWindowMergeCalled, 1)
+        XCTAssertEqual(targetManager.addTabsFromWindowMergeCalled, 1)
+        XCTAssertEqual(targetManager.addedWindowMergeTabData.count, 2)
+        XCTAssertEqual(destroyer.destroyedUUIDs, [other])
+    }
+
+    @MainActor
+    func testMergeWindowsQuickAction_addedWhenTwoOrMoreWindowsOpen() {
+        let subject = createSubject()
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: WindowUUID())
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: WindowUUID())
+        let quickActions = MockMergeQuickActions()
+        let controller = MergeWindowsQuickActionController(quickActions: quickActions,
+                                                           windowManager: subject,
+                                                           application: .shared)
+
+        controller.update()
+
+        XCTAssertEqual(quickActions.addedTypes, [.mergeWindows])
+        XCTAssertTrue(quickActions.removedTypes.isEmpty)
+    }
+
+    @MainActor
+    func testMergeWindowsQuickAction_removedWhenFewerThanTwoWindowsOpen() {
+        let subject = createSubject()
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: WindowUUID())
+        let quickActions = MockMergeQuickActions()
+        let controller = MergeWindowsQuickActionController(quickActions: quickActions,
+                                                           windowManager: subject,
+                                                           application: .shared)
+
+        controller.update()
+
+        XCTAssertEqual(quickActions.removedTypes, [.mergeWindows])
+        XCTAssertTrue(quickActions.addedTypes.isEmpty)
+    }
+
+    private func makeMergeTabData() -> TabData {
+        return TabData(id: UUID(),
+                       title: "Test",
+                       siteUrl: "https://example.com",
+                       faviconURL: nil,
+                       isPrivate: false,
+                       lastUsedTime: Date(),
+                       createdAtTime: Date(),
+                       temporaryDocumentSession: [:])
+    }
+
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {
@@ -418,5 +506,31 @@ class WindowManagerTests: XCTestCase {
         // modify and reset between each test case as needed, without
         // impacting other tests that may use the shared AppContainer.
         return WindowManagerImplementation(tabDataStore: mockTabDataStore)
+    }
+}
+
+// MARK: - Window merging test doubles
+
+final class MockSceneDestroyer: SceneDestroying {
+    var destroyedUUIDs: [WindowUUID] = []
+
+    func destroyScenes(for windowUUIDs: [WindowUUID]) {
+        destroyedUUIDs = windowUUIDs
+    }
+}
+
+final class MockMergeQuickActions: QuickActions, @unchecked Sendable {
+    var addedTypes: [ShortcutType] = []
+    var removedTypes: [ShortcutType] = []
+
+    func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
+                                                 withUserData userData: [String: String],
+                                                 toApplication application: UIApplication) {
+        addedTypes.append(type)
+    }
+
+    func removeDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
+                                                    fromApplication application: UIApplication) {
+        removedTypes.append(type)
     }
 }
