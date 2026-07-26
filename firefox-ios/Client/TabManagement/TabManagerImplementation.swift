@@ -940,7 +940,7 @@ final class TabManagerImplementation: NSObject,
         let existingUUIDs = Set(tabs.map { $0.tabUUID })
         var didAddTab = false
         for tabData in tabDataList where !existingUUIDs.contains(tabData.id.uuidString) {
-            _ = configureNewTab(with: tabData)
+            _ = legacyConfigureNewTab(with: tabData)
             didAddTab = true
         }
 
