@@ -1918,7 +1918,7 @@ workflows:
                 --results-bucket="$GOOGLE_CLOUD_BUCKET" \
                 --results-dir="$RESULTS_DIR")
 
-            FIREBASE_XCRESULT_PATH=$("${HOME}/google-cloud-sdk/bin/gsutil" ls "$XCRESULT_PATH" | grep ".xcresult")
+            FIREBASE_XCRESULT_PATH=$("${HOME}/google-cloud-sdk/bin/gcloud" storage ls "$XCRESULT_PATH" | grep ".xcresult")
             envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
     - script@1:
         is_always_run: true
@@ -1935,9 +1935,9 @@ workflows:
             # pull firebase xcresult and rename it to extract measurement data
             mkdir test_firebase_xcresult
 
-            $HOME/google-cloud-sdk/bin/gsutil -m cp -r "$FIREBASE_XCRESULT_PATH" ./test_firebase_xcresult &
+            $HOME/google-cloud-sdk/bin/gcloud storage cp -r "$FIREBASE_XCRESULT_PATH" ./test_firebase_xcresult &
 
-            # Get the process ID of the backgrounded gsutil command
+            # Get the process ID of the backgrounded gcloud storage command
             PID=$!
 
             TIMEOUT=60
@@ -1945,22 +1945,22 @@ workflows:
             ITERATIONS=$((TIMEOUT / CHECK_INTERVAL))
 
             for ((i = 0; i < ITERATIONS; i++)); do
-                echo "Waiting for gsutil to complete..."
+                echo "Waiting for gcloud storage to complete..."
                 sleep $CHECK_INTERVAL
                 if ! ps -p $PID > /dev/null; then
                     break
                 fi
             done
 
-            # if gsutil is still running after 60s, it is hanging and needs to be killed
+            # if gcloud storage is still running after 60s, it is hanging and needs to be killed
             if ps -p $PID > /dev/null; then
-                echo "The gsutil command exceeded the timeout. Stopping and removing contents..."
+                echo "The gcloud storage command exceeded the timeout. Stopping and removing contents..."
                 kill -9 $PID
 
                 rm -rf ./test_firebase_xcresult
                 mkdir ./test_firebase_xcresult
                 echo "Retrying xcresult copy without multi-processing..."
-                $HOME/google-cloud-sdk/bin/gsutil cp -r "$FIREBASE_XCRESULT_PATH" ./test_firebase_xcresult
+                CLOUDSDK_STORAGE_PROCESS_COUNT=1 CLOUDSDK_STORAGE_THREAD_COUNT=1 $HOME/google-cloud-sdk/bin/gcloud storage cp -r "$FIREBASE_XCRESULT_PATH" ./test_firebase_xcresult
             fi
 
             mv ./test_firebase_xcresult/*.xcresult ./test_firebase_xcresult/Test-Fennec-test.xcresult
