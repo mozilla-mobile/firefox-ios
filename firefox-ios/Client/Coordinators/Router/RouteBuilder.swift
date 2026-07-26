@@ -235,6 +235,8 @@ final class RouteBuilder: @unchecked Sendable {
             }
         case .appIcon:
             return .settings(section: .appIcon)
+        case .mergeWindows:
+            return .action(action: .mergeWindows)
         }
     }
 
