@@ -270,8 +270,6 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     }
 
     // MARK: - Testing
-    // Compiled only for test builds using the TESTING compilation condition
-#if TESTING
     func handlePanGestureForTesting(_ gesture: UIPanGestureRecognizer) {
         handlePanGesture(gesture)
     }
@@ -279,5 +277,4 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     func handleSwipeGestureForTesting(_ gesture: UISwipeGestureRecognizer) {
         handleSwipeGesture(gesture)
     }
-#endif
 }
