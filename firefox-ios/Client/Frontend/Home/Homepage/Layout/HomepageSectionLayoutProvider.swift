@@ -48,6 +48,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let maxWidth: CGFloat = 500
         }
 
+        struct WidgetsConstants {
+            /// Fraction of the container width the centered widget tile should occupy.
+            static let widthFraction: CGFloat = 0.8
+            /// Tile height as a proportion of its width (2:3 height-to-width ratio).
+            static let heightToWidthRatio: CGFloat = 2.3 / 3.0
+        }
+
         struct PocketConstants {
             static let preferredCellSize = CGSize(width: 361, height: 282)
             static let minimumCellWidth: CGFloat = 320
@@ -174,6 +181,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return createTrackerBlockerModuleSectionLayout(for: traitCollection)
         case .pocket:
             return createStoriesSectionLayout(for: environment)
+        case .widgets:
+            return createWidgetsSectionLayout(for: environment)
         case .bookmarks:
             return createBookmarksSectionLayout(for: environment)
         case .worldcup:
@@ -242,6 +251,42 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             trailing: horizontalInset)
 
         return section
+    }
+
+    private func createWidgetsSectionLayout(
+        for environment: NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection {
+        let metrics = widgetsSectionMetrics(for: environment)
+
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .absolute(metrics.itemHeight))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, subitem: item, count: 1)
+        let section = NSCollectionLayoutSection(group: group)
+
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: metrics.horizontalInset,
+            bottom: UX.spacingBetweenSections,
+            trailing: metrics.horizontalInset)
+
+        return section
+    }
+
+    /// Resolves the widget tile's horizontal inset and height for the given layout environment.
+    /// The tile fills `widthFraction` of the container (centered via an equal inset on each side,
+    /// falling back to the standard inset on very narrow containers) and its height is derived from
+    /// the resulting width to maintain a 2:3 height-to-width ratio.
+    private func widgetsSectionMetrics(
+        for environment: NSCollectionLayoutEnvironment
+    ) -> (horizontalInset: CGFloat, itemHeight: CGFloat) {
+        let containerWidth = environment.container.contentSize.width
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
+        let fractionalInset = containerWidth * (1 - UX.WidgetsConstants.widthFraction) / 2
+        let horizontalInset = max(leadingInset, fractionalInset)
+        let tileWidth = max(0, containerWidth - horizontalInset * 2)
+        let itemHeight = tileWidth * UX.WidgetsConstants.heightToWidthRatio
+        return (horizontalInset, itemHeight)
     }
 
     private func createHeaderSectionLayout(
@@ -922,6 +967,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return cellHeight + UX.spacingBetweenSections
     }
 
+    /// Returns the height of the Widgets section when it is visible, or 0 when hidden.
+    private func getWidgetsSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
+              state.widgetsState.shouldShowSection,
+              state.widgetsState.widgetURL != nil else { return 0 }
+
+        return widgetsSectionMetrics(for: environment).itemHeight + UX.spacingBetweenSections
+    }
+
     /// Returns the height that the spacer should be, before accounting for vertical stories peeking above the fold.
     /// Baseline stories: gets the height available for the spacer to take up to force the stories section to be
     /// right above the fold
@@ -937,6 +991,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let headerLogoHeight = getHeaderLogoHeight(environment: environment)
         let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
+        let widgetsHeight = getWidgetsSectionHeight(environment: environment)
         let worldcupHeight = getWorldcupSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
         let trackerBlockerModuleHeight = getTrackerBlockerModuleSectionHeight()
@@ -947,6 +1002,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             - headerLogoHeight
             - privacyNoticeHeight
             - topSitesHeight
+            - widgetsHeight
             - worldcupHeight
             - jumpBackInHeight
             - trackerBlockerModuleHeight

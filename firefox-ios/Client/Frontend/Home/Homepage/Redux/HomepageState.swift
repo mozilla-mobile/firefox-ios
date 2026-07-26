@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Foundation
 import ModifiedCopy
 import Redux
 
@@ -14,6 +15,7 @@ struct HomepageState: ScreenState, Equatable {
     let headerState: HeaderState
     let messageState: MessageCardState
     let topSitesState: TopSitesSectionState
+    let widgetsState: WidgetsSectionState
     let searchState: SearchBarState
     let jumpBackInState: JumpBackInSectionState
     let trackerBlockerModuleState: TrackerBlockerModuleState
@@ -63,6 +65,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: homepageState.headerState,
             messageState: homepageState.messageState,
             topSitesState: homepageState.topSitesState,
+            widgetsState: homepageState.widgetsState,
             searchState: homepageState.searchState,
             jumpBackInState: homepageState.jumpBackInState,
             trackerBlockerModuleState: homepageState.trackerBlockerModuleState,
@@ -84,6 +87,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: HeaderState(windowUUID: windowUUID),
             messageState: MessageCardState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
+            widgetsState: WidgetsSectionState(windowUUID: windowUUID),
             searchState: SearchBarState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             trackerBlockerModuleState: TrackerBlockerModuleState(windowUUID: windowUUID),
@@ -104,6 +108,7 @@ struct HomepageState: ScreenState, Equatable {
         headerState: HeaderState,
         messageState: MessageCardState,
         topSitesState: TopSitesSectionState,
+        widgetsState: WidgetsSectionState,
         searchState: SearchBarState,
         jumpBackInState: JumpBackInSectionState,
         trackerBlockerModuleState: TrackerBlockerModuleState,
@@ -121,6 +126,7 @@ struct HomepageState: ScreenState, Equatable {
         self.headerState = headerState
         self.messageState = messageState
         self.topSitesState = topSitesState
+        self.widgetsState = widgetsState
         self.searchState = searchState
         self.jumpBackInState = jumpBackInState
         self.trackerBlockerModuleState = trackerBlockerModuleState
@@ -169,6 +175,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(widgetsState: WidgetsSectionState.reducer(state.widgetsState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
@@ -187,6 +194,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(widgetsState: WidgetsSectionState.reducer(state.widgetsState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
@@ -212,6 +220,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(widgetsState: WidgetsSectionState.reducer(state.widgetsState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
@@ -230,6 +239,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(widgetsState: WidgetsSectionState.reducer(state.widgetsState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
@@ -247,6 +257,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(widgetsState: WidgetsSectionState.reducer(state.widgetsState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
@@ -263,6 +274,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(widgetsState: WidgetsSectionState.reducer(state.widgetsState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
@@ -280,6 +292,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(headerState: HeaderState.reducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer(state.topSitesState, action))
+            .copy(widgetsState: WidgetsSectionState.reducer(state.widgetsState, action))
             .copy(searchState: SearchBarState.reducer(state.searchState, action))
             .copy(jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer(state.trackerBlockerModuleState, action))
@@ -294,6 +307,7 @@ struct HomepageState: ScreenState, Equatable {
         return state
             .copy(messageState: MessageCardState.defaultState(from: state.messageState))
             .copy(topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState))
+            .copy(widgetsState: WidgetsSectionState.defaultState(from: state.widgetsState))
             .copy(searchState: SearchBarState.defaultState(from: state.searchState))
             .copy(jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.defaultState(from: state.trackerBlockerModuleState))
@@ -302,5 +316,44 @@ struct HomepageState: ScreenState, Equatable {
             .copy(merinoState: MerinoState.defaultState(from: state.merinoState))
             .copy(wallpaperState: WallpaperState.defaultState(from: state.wallpaperState))
             .copy(shouldTriggerImpression: false)
+    }
+}
+
+/// State for the Widgets section displayed on the homepage. The section embeds a single
+/// tile hosting a webview which loads an interactive experience via an iframe.
+struct WidgetsSectionState: StateType, Equatable {
+    var windowUUID: WindowUUID
+    var shouldShowSection: Bool
+    let widgetURL: URL?
+
+    static let defaultWidgetURL = URL(
+        string: "https://prod-games-particle.merino.prod.webservices.mozgcp.net/index.html"
+    )
+
+    init(windowUUID: WindowUUID) {
+        self.init(
+            windowUUID: windowUUID,
+            shouldShowSection: WidgetsSectionState.defaultWidgetURL != nil,
+            widgetURL: WidgetsSectionState.defaultWidgetURL
+        )
+    }
+
+    private init(
+        windowUUID: WindowUUID,
+        shouldShowSection: Bool,
+        widgetURL: URL?
+    ) {
+        self.windowUUID = windowUUID
+        self.shouldShowSection = shouldShowSection
+        self.widgetURL = widgetURL
+    }
+
+    static let reducer: Reducer<Self> = { state, action in
+        // The prototype widgets section is static: no action mutates its state.
+        return defaultState(from: state)
+    }
+
+    static func defaultState(from state: WidgetsSectionState) -> WidgetsSectionState {
+        return state
     }
 }

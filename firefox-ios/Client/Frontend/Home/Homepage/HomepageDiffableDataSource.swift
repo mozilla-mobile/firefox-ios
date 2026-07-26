@@ -4,6 +4,7 @@
 
 import Common
 import UIKit
+import WebKit
 
 typealias HomepageSection = HomepageDiffableDataSource.HomeSection
 typealias HomepageItem = HomepageDiffableDataSource.HomeItem
@@ -26,6 +27,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case header
         case messageCard
         case topSites(TextColor?, NumberOfTilesPerRow, ShouldShowSectionHeader)
+        case widgets
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case trackerBlockerModule
@@ -62,6 +64,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         /// that story's on-screen position as stories are inserted above it.
         case merino(MerinoStoryConfiguration, String?)
         case worldcupCard
+        case widget(URL)
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -78,6 +81,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 BookmarksCell.self,
                 StoryCell.self,
                 WorldCupCell.self,
+                WidgetsCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -147,6 +151,11 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             )
             snapshot.appendSections([topSitesSection])
             snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
+        }
+
+        if state.widgetsState.shouldShowSection, let widgetURL = state.widgetsState.widgetURL {
+            snapshot.appendSections([.widgets])
+            snapshot.appendItems([.widget(widgetURL)], toSection: .widgets)
         }
 
         if state.worldcupState.shouldShowSection {
@@ -268,3 +277,113 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 }
 
 class HomepageSpacerCell: UICollectionViewCell, ReusableCell { }
+
+/// Homepage tile that hosts a `WKWebView` loading an interactive experience via an iframe.
+/// Matches the look and feel of the Stories cards: rounded corners, an opaque background and a soft shadow.
+final class WidgetsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
+    private struct UX {
+        static let cornerRadius: CGFloat = 16
+        static let shadowOffset = CGSize(width: 0, height: 1)
+        static let shadowBlurRadius: CGFloat = 2
+        static let shadowOpacity: Float = 1
+    }
+
+    /// Stable identifier for the widgets' dedicated persistent data store (iOS 17+).
+    private static let dataStoreIdentifier = UUID(uuidString: "0A9E1D2C-3B4F-4A6E-8C1D-2E3F4A5B6C7D")!
+
+    /// A single data store shared by every widget tile across the app, kept isolated from the
+    /// browsing tabs' cookie/site-data store. Persistent on iOS 17+, in-memory on older versions.
+    private static let sharedDataStore: WKWebsiteDataStore = {
+        if #available(iOS 17.0, *) {
+            return WKWebsiteDataStore(forIdentifier: WidgetsCell.dataStoreIdentifier)
+        } else {
+            return .nonPersistent()
+        }
+    }()
+
+    // MARK: - UI Elements
+
+    /// Clips the webview to the rounded corners while `contentView` carries the shadow.
+    private let rootContainer: UIView = .build { view in
+        view.layer.cornerRadius = UX.cornerRadius
+        view.clipsToBounds = true
+    }
+
+    private lazy var webView: WKWebView = {
+        let configuration = WKWebViewConfiguration()
+        configuration.allowsInlineMediaPlayback = true
+        configuration.mediaTypesRequiringUserActionForPlayback = []
+        configuration.websiteDataStore = WidgetsCell.sharedDataStore
+        let webView = WKWebView(frame: .zero, configuration: configuration)
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.scrollView.isScrollEnabled = false
+        webView.scrollView.bounces = false
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        return webView
+    }()
+
+    private var loadedURL: URL?
+
+    // MARK: - Initializers
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isAccessibilityElement = false
+        setupLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: UX.cornerRadius).cgPath
+    }
+
+    // MARK: - Public
+
+    func configure(url: URL, theme: Theme) {
+        if loadedURL != url {
+            loadedURL = url
+            webView.load(URLRequest(url: url))
+        }
+        applyTheme(theme: theme)
+    }
+
+    // MARK: - Helpers
+
+    private func setupLayout() {
+        rootContainer.addSubview(webView)
+        contentView.addSubview(rootContainer)
+
+        NSLayoutConstraint.activate([
+            rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
+            rootContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            rootContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            webView.topAnchor.constraint(equalTo: rootContainer.topAnchor),
+            webView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
+        ])
+    }
+
+    private func setupShadow(theme: Theme) {
+        contentView.layer.shadowRadius = UX.shadowBlurRadius
+        contentView.layer.shadowOffset = UX.shadowOffset
+        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        contentView.layer.shadowOpacity = UX.shadowOpacity
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        contentView.backgroundColor = .clear
+        rootContainer.backgroundColor = theme.colors.layer2
+        setupShadow(theme: theme)
+    }
+}

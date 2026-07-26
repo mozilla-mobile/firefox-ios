@@ -687,6 +687,10 @@ final class HomepageViewController: UIViewController,
                     }
                 )
             }
+        case .widget(let url):
+            return configuredCell(cellType: WidgetsCell.self, at: indexPath) { cell in
+                cell.configure(url: url, theme: currentTheme)
+            }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
         }
