@@ -689,7 +689,9 @@ final class HomepageViewController: UIViewController,
             }
         case .widget(let url):
             return configuredCell(cellType: WidgetsCell.self, at: indexPath) { cell in
-                cell.configure(url: url, theme: currentTheme)
+                cell.configure(url: url, theme: currentTheme, onKeyboardPresented: { [weak self] keyboardFrame in
+                    self?.scrollWidgetAboveKeyboard(keyboardFrame: keyboardFrame)
+                })
             }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
@@ -712,6 +714,37 @@ final class HomepageViewController: UIViewController,
         DispatchQueue.main.async {
             self.refreshHomepageDataSourceSnapshot()
         }
+    }
+
+    /// Scrolls the collection view so the bottom of the widget tile sits 10pt above the top of the
+    /// keyboard (whose frame includes any input-accessory toolbar). Used when the widget's web view
+    /// presents the keyboard so as much of the widget as possible stays visible above it.
+    private func scrollWidgetAboveKeyboard(keyboardFrame: CGRect) {
+        let spacingAboveKeyboard: CGFloat = 60
+        guard let collectionView,
+              let sectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(of: .widgets)
+        else { return }
+        let indexPath = IndexPath(item: 0, section: sectionIndex)
+        guard collectionView.isValid(indexPath: indexPath),
+              let attributes = collectionView.layoutAttributesForItem(at: indexPath)
+        else { return }
+
+        // Work in the view controller's (non-scrolling) coordinate space so the maths accounts for
+        // the current content offset and the collection view's on-screen position.
+        let cellFrameInView = collectionView.convert(attributes.frame, to: view)
+        let keyboardFrameInView = view.convert(keyboardFrame, from: nil)
+        let desiredCellBottom = keyboardFrameInView.minY - spacingAboveKeyboard
+        let delta = cellFrameInView.maxY - desiredCellBottom
+        guard abs(delta) > 0.5 else { return }
+
+        let minOffsetY = -collectionView.adjustedContentInset.top
+        let maxOffsetY = max(
+            minOffsetY,
+            collectionView.contentSize.height - collectionView.bounds.height
+                + collectionView.adjustedContentInset.bottom
+        )
+        let targetY = min(max(collectionView.contentOffset.y + delta, minOffsetY), maxOffsetY)
+        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: targetY), animated: true)
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {

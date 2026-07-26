@@ -325,16 +325,30 @@ final class WidgetsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     private var loadedURL: URL?
 
+    /// Invoked when the keyboard is presented while an input inside the web view (iframe) is focused.
+    /// The associated value is the keyboard's end frame in screen coordinates (includes any toolbar).
+    private var onKeyboardPresented: ((CGRect) -> Void)?
+
     // MARK: - Initializers
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         isAccessibilityElement = false
         setupLayout()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func layoutSubviews() {
@@ -345,12 +359,33 @@ final class WidgetsCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     // MARK: - Public
 
-    func configure(url: URL, theme: Theme) {
+    func configure(url: URL, theme: Theme, onKeyboardPresented: ((CGRect) -> Void)? = nil) {
+        self.onKeyboardPresented = onKeyboardPresented
         if loadedURL != url {
             loadedURL = url
             webView.load(URLRequest(url: url))
         }
         applyTheme(theme: theme)
+    }
+
+    // MARK: - Keyboard
+
+    @objc
+    private func keyboardWillShow(_ notification: Notification) {
+        // Only react when the keyboard was triggered by an input within our web view (the iframe),
+        // not by unrelated first responders elsewhere on the homepage (e.g. the address bar).
+        guard firstResponder(in: webView) != nil,
+              let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
+        else { return }
+        onKeyboardPresented?(keyboardFrame.cgRectValue)
+    }
+
+    private func firstResponder(in view: UIView) -> UIView? {
+        if view.isFirstResponder { return view }
+        for subview in view.subviews {
+            if let responder = firstResponder(in: subview) { return responder }
+        }
+        return nil
     }
 
     // MARK: - Helpers
