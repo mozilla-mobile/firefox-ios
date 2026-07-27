@@ -382,6 +382,7 @@ class GroupedEditFolderViewController: UIViewController,
                        isSelected: folder.guid == viewModel.selectedFolder?.guid)
         cell.applyTheme(theme: theme)
     }
+
     // MARK: - Helpers
 
     private var groupSections: [(groupIndex: Int, blockIndex: Int)] {
