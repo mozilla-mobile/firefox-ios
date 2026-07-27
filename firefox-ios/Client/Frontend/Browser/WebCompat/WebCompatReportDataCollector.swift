@@ -9,8 +9,8 @@ import Shared
 import UIKit
 import WebKit
 
-/// Device and process values for the report payload. Behind a protocol so tests
-/// can fake them instead of reading `UIDevice`/`ProcessInfo`/`Locale` statics.
+/// Device and process values, behind a protocol so tests can fake the
+/// `UIDevice`/`ProcessInfo`/`Locale` statics.
 protocol WebCompatDeviceInfoProviding {
     var preferredLanguages: [String] { get }
     var isTablet: Bool { get }
@@ -28,9 +28,8 @@ struct WebCompatDeviceInfoProvider: WebCompatDeviceInfoProviding {
     var displayScale: CGFloat { UITraitCollection.current.displayScale }
 }
 
-/// Tab inputs to the payload mapping as a plain value, so tests don't need a live
-/// `Tab`/`WKWebView`. Nil `blockingStrength` means no content blocker.
-/// `blockedOrigins` is only filled when the user opted in.
+/// Tab inputs as a plain value, so tests don't need a live `Tab`/`WKWebView`. Nil
+/// `blockingStrength` means no content blocker; `blockedOrigins` is filled only on opt-in.
 struct WebCompatTabSnapshot: Equatable {
     var isPrivate: Bool
     var pageUserAgent: String?
@@ -39,9 +38,8 @@ struct WebCompatTabSnapshot: Equatable {
     var blockedOrigins: [String]?
 }
 
-/// Fills in the parts of the `broken-site-report` payload we can read natively,
-/// plus the page screenshot. The `fastclick`/`marfeel`/`mobify` flags need
-/// JavaScript, so they stay nil until FXIOS-16184.
+/// Fills the `broken-site-report` fields readable natively, plus the page screenshot.
+/// The `fastclick`/`marfeel`/`mobify` flags need JavaScript, so they stay nil until FXIOS-16184.
 enum WebCompatReportDataCollector {
     /// Reads the tab into a snapshot and hands off to the pure mapping below.
     @MainActor
@@ -54,15 +52,15 @@ enum WebCompatReportDataCollector {
         return enrich(payload, device: device, tab: makeSnapshot(from: tab, includeBlockedList: includeBlockedList))
     }
 
-    /// The mapping itself — no UIKit, no `Tab` — so tests can drive it with fakes.
+    /// Pure mapping: no UIKit, no `Tab`, so tests can drive it with fakes.
     static func enrich(
         _ payload: WebCompatReportPayload,
         device: WebCompatDeviceInfoProviding,
         tab: WebCompatTabSnapshot
     ) -> WebCompatReportPayload {
         var payload = payload
-        // The metric documents `languages` as the page's navigator.languages, which
-        // needs FXIOS-16184. Only `defaultLocales` is an app-level list.
+        // `languages` is the page's navigator.languages (FXIOS-16184); only
+        // `defaultLocales` is an app-level list.
         payload.defaultLocales = device.preferredLanguages
         payload.isTablet = device.isTablet
         payload.memory = device.physicalMemoryMegabytes
@@ -71,7 +69,9 @@ enum WebCompatReportDataCollector {
 
         let pageUserAgent = tab.pageUserAgent
         payload.useragentString = (pageUserAgent?.isEmpty == false) ? pageUserAgent : device.defaultUserAgent
-        payload.devicePixelRatio = devicePixelRatioString(tab.displayScale ?? device.displayScale)
+        // An off-screen web view reports a display scale of 0, not nil.
+        let pageScale = tab.displayScale ?? 0
+        payload.devicePixelRatio = String(format: "%g", pageScale > 0 ? pageScale : device.displayScale)
         payload.isPrivateBrowsing = tab.isPrivate
 
         if let blockingStrength = tab.blockingStrength {
@@ -82,16 +82,16 @@ enum WebCompatReportDataCollector {
         return payload
     }
 
-    /// Blocked trackers, or nil when the user didn't opt in. Kept out of
-    /// `makeSnapshot` so the opt-out is testable without a live `Tab`.
+    /// Blocked trackers, or nil without opt-in. Kept out of `makeSnapshot` so the
+    /// opt-out is testable without a live `Tab`.
     static func blockedOrigins(from stats: TPPageStats, includeBlockedList: Bool) -> [String]? {
         guard includeBlockedList else { return nil }
         return stats.domains.values.flatMap { $0 }.sorted()
     }
 
-    /// The page as one tall image, via the same PDF route as "Save as PDF".
-    /// WebKit paginates very tall content and we only render page one, so anything
-    /// past ~14400pt is cut off. Nil if there's no web view or the capture fails.
+    /// The page as one tall image, via the same PDF route as Save as PDF. WebKit
+    /// paginates tall content and only page one is rendered, so anything past
+    /// ~14400pt is cut. Nil if there's no web view or the capture fails.
     @MainActor
     static func captureFullPage(
         from tab: Tab,
@@ -136,9 +136,5 @@ enum WebCompatReportDataCollector {
             blockingStrength: blocker?.blockingStrengthPref,
             blockedOrigins: blocker.flatMap { blockedOrigins(from: $0.stats, includeBlockedList: includeBlockedList) }
         )
-    }
-
-    private static func devicePixelRatioString(_ value: CGFloat) -> String {
-        return String(format: "%g", value)
     }
 }

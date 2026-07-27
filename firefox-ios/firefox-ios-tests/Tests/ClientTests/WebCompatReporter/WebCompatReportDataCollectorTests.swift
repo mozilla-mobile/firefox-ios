@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 @testable import Client
@@ -137,7 +138,35 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(payload.blockedOrigins)
     }
 
+    // MARK: - Tab-backed collection
+
+    // A tab with no web view still has to produce a payload, falling back to the
+    // device for anything the page would have supplied.
+    func test_enrich_fromTabWithoutWebView_usesTabPrivacyAndDeviceScale() {
+        let tab = Tab(profile: MockProfile(), isPrivate: true, windowUUID: windowUUID)
+
+        let payload = WebCompatReportDataCollector.enrich(
+            WebCompatReportPayload(),
+            tab: tab,
+            includeBlockedList: false,
+            device: FakeDeviceInfoProvider(displayScale: 2.0)
+        )
+
+        XCTAssertEqual(payload.isPrivateBrowsing, true)
+        XCTAssertEqual(payload.devicePixelRatio, "2")
+    }
+
+    func test_captureFullPage_withoutWebView_returnsNil() async {
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+
+        let image = await WebCompatReportDataCollector.captureFullPage(from: tab)
+
+        XCTAssertNil(image)
+    }
+
     // MARK: - Helpers
+
+    private let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     private func makeSnapshot(
         isPrivate: Bool = false,

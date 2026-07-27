@@ -4,41 +4,38 @@
 
 import Foundation
 
-/// One property per Glean metric in `broken_site_report.yaml`. The Report Preview
-/// screen and the eventual submission (FXIOS-16185) both read from here, so field
-/// names are written once rather than per screen.
-///
-/// Page-context data still needs FXIOS-16184, so those fields stay nil.
+/// One property per Glean metric in `broken_site_report.yaml`, so the field names
+/// live in one place. The struct is flat; each comment below is the Glean category
+/// the fields under it belong to. Page-context fields stay nil until FXIOS-16184.
 struct WebCompatReportPayload: Equatable {
-    // basic
+    // broken_site_report
     var url: String?
     var breakageCategory: String?
     var description: String?
-    // tabInfo
+    // broken_site_report.tab_info
     var languages: [String]?
     var useragentString: String?
-    // tabInfo.antitracking
+    // broken_site_report.tab_info.antitracking
     var blockList: String?
     var blockedOrigins: [String]?
     var etpCategory: String?
     var isPrivateBrowsing: Bool?
-    // tabInfo.frameworks
+    // broken_site_report.tab_info.frameworks
     var fastclick: Bool?
     var marfeel: Bool?
     var mobify: Bool?
-    // browserInfo.app
+    // broken_site_report.browser_info.app
     var defaultLocales: [String]?
     var defaultUseragentString: String?
-    // browserInfo.graphics
+    // broken_site_report.browser_info.graphics
     var devicePixelRatio: String?
     var hasTouchScreen: Bool?
-    // browserInfo.system
+    // broken_site_report.browser_info.system
     var isTablet: Bool?
     var memory: Int?
 
-    /// Seeds the payload from the in-progress report: only what the user typed or
-    /// picked, with everything gathered at send time left nil. The sub-option is
-    /// the more specific answer, so it beats the category.
+    /// Only what the user typed or picked; send-time data stays nil. The sub-option
+    /// wins over the category as the more specific answer.
     static func make(from state: WebCompatReporterState) -> WebCompatReportPayload {
         var payload = WebCompatReportPayload()
         payload.url = state.url.isEmpty ? nil : state.url
