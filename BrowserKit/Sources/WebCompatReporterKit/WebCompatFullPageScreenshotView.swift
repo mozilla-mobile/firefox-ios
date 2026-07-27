@@ -35,27 +35,18 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     private let image: UIImage?
     private let imageAspect: CGFloat
 
-    private var scrollFraction: CGFloat = 0
-    /// Cached in `layoutSubviews` so scrolling only moves the highlight.
-    private struct HighlightGeometry {
-        let thumbnailHeight: CGFloat
-        let viewportHeight: CGFloat
-        let pageHeight: CGFloat
+    private var scrollFraction: CGFloat {
+        let maximumOffset = max(1, scrollView.contentSize.height - scrollView.bounds.height)
+        let fraction = scrollView.contentOffset.y / maximumOffset
+        return min(max(fraction.isFinite ? fraction : 0, 0), 1)
     }
 
-    private var highlightGeometry: HighlightGeometry?
-
     // `private(set)` so the layout tests can read these frames without walking the hierarchy.
-    private(set) lazy var captureContainer: UIView = {
-        let view = UIView()
-        view.clipsToBounds = true
-        view.layer.cornerRadius = UX.captureCornerRadius
-        return view
-    }()
-
     private(set) lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.clipsToBounds = true
+        scrollView.layer.cornerRadius = UX.captureCornerRadius
         scrollView.delegate = self
         return scrollView
     }()
@@ -118,11 +109,10 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         self.imageAspect = (size.width > 0 && aspect.isFinite) ? aspect : 1
         super.init(frame: .zero)
 
-        captureContainer.addSubview(scrollView)
         scrollView.addSubview(pageImageView)
         thumbnailContainer.addSubview(thumbnailImageView)
         brightWindowContainer.addSubview(brightWindowImageView)
-        addSubview(captureContainer)
+        addSubview(scrollView)
         addSubview(thumbnailContainer)
         // Siblings of the thumbnail, not children: it clips, which would eat the border and shadow.
         addSubview(brightWindowContainer)
@@ -153,74 +143,64 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
         let contentTop = safeAreaInsets.top + UX.topInset
         let availableHeight = max(1, bounds.height - contentTop - safeAreaInsets.bottom - UX.bottomInset)
-        // The thumbnail shows the whole page, so cap its height or a tall page overflows.
-        var thumbnailWidth = UX.thumbnailWidth
-        var thumbnailHeight = thumbnailWidth * imageAspect
-        if thumbnailHeight > availableHeight {
-            thumbnailHeight = availableHeight
-            thumbnailWidth = max(1, thumbnailHeight / imageAspect)
-        }
+        // The rail keeps a fixed width and squashes a tall page rather than narrowing, which
+        // would otherwise feed back into the margins and reflow the capture.
+        let thumbnailHeight = min(availableHeight, UX.thumbnailWidth * imageAspect)
         // Equal margins either side keep the capture centered, with the rail in the right one.
-        let sideMargin = WebCompatReporterUX.Spacing.screenHorizontal + thumbnailWidth + UX.railGap
+        let sideMargin = WebCompatReporterUX.Spacing.screenHorizontal + UX.thumbnailWidth + UX.railGap
         let captureWidth = max(1, bounds.width - sideMargin * 2)
         let hasUsableSize = captureWidth > UX.minimumUsableSide && availableHeight > UX.minimumUsableSide
         let isRenderable = hasUsableSize && image != nil
-        for view in [captureContainer, thumbnailContainer, brightWindowContainer, highlightView] {
+        for view in [scrollView, thumbnailContainer, brightWindowContainer, highlightView] {
             view.isHidden = !isRenderable
         }
-        guard isRenderable else {
-            highlightGeometry = nil
-            return
-        }
+        guard isRenderable else { return }
 
         let pageHeight = max(1, captureWidth * imageAspect)
-        captureContainer.frame = CGRect(x: sideMargin, y: contentTop, width: captureWidth, height: availableHeight)
-        scrollView.frame = captureContainer.bounds
+        scrollView.frame = CGRect(x: sideMargin, y: contentTop, width: captureWidth, height: availableHeight)
         pageImageView.frame = CGRect(x: 0, y: 0, width: captureWidth, height: pageHeight)
         scrollView.contentSize = CGSize(width: captureWidth, height: pageHeight)
 
         thumbnailContainer.frame = CGRect(
-            x: bounds.width - WebCompatReporterUX.Spacing.screenHorizontal - thumbnailWidth,
+            x: bounds.width - WebCompatReporterUX.Spacing.screenHorizontal - UX.thumbnailWidth,
             y: contentTop,
-            width: thumbnailWidth,
+            width: UX.thumbnailWidth,
             height: thumbnailHeight
         )
         thumbnailImageView.frame = thumbnailContainer.bounds
-        highlightGeometry = HighlightGeometry(
-            thumbnailHeight: thumbnailHeight,
-            viewportHeight: availableHeight,
-            pageHeight: pageHeight
-        )
         layoutViewportHighlight()
     }
 
     private func layoutViewportHighlight() {
-        guard let geometry = highlightGeometry else { return }
         let thumbnailFrame = thumbnailContainer.frame
-        let width = thumbnailFrame.width
-        let visibleFraction = min(1, geometry.viewportHeight / geometry.pageHeight)
-        let highlightHeight = max(UX.minimumHighlightHeight, geometry.thumbnailHeight * visibleFraction)
-        let travel = max(0, geometry.thumbnailHeight - highlightHeight)
+        let pageHeight = scrollView.contentSize.height
+        guard !thumbnailContainer.isHidden, pageHeight > 0 else { return }
+
+        let visibleFraction = min(1, scrollView.bounds.height / pageHeight)
+        let highlightHeight = max(UX.minimumHighlightHeight, thumbnailFrame.height * visibleFraction)
+        let travel = max(0, thumbnailFrame.height - highlightHeight)
         let highlightTop = scrollFraction * travel
 
         let windowFrame = CGRect(
             x: thumbnailFrame.minX,
             y: thumbnailFrame.minY + highlightTop,
-            width: width,
+            width: thumbnailFrame.width,
             height: highlightHeight
         )
         highlightView.frame = windowFrame
         // Shift the bright copy so its visible slice registers with the dimmed page underneath.
         brightWindowContainer.frame = windowFrame
-        brightWindowImageView.frame = CGRect(x: 0, y: -highlightTop, width: width, height: geometry.thumbnailHeight)
+        brightWindowImageView.frame = CGRect(
+            x: 0,
+            y: -highlightTop,
+            width: thumbnailFrame.width,
+            height: thumbnailFrame.height
+        )
     }
 
     // MARK: - Scroll sync
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let maximumOffset = max(1, scrollView.contentSize.height - scrollView.bounds.height)
-        let fraction = scrollView.contentOffset.y / maximumOffset
-        scrollFraction = min(max(fraction.isFinite ? fraction : 0, 0), 1)
         layoutViewportHighlight()
     }
 
