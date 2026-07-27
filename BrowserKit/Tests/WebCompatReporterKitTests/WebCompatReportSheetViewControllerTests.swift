@@ -207,7 +207,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertTrue(checkmarkBefore === checkmarkView(in: subject, at: subOptionIndexPath))
     }
 
-    func testConfigure_whenASubOptionChanges_rebuildsItsCheckmark() {
+    func testConfigure_whenASubOptionChanges_dropsItsCheckmark() {
         let subject = createSubject()
         subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
@@ -215,14 +215,14 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         subject.view.layoutIfNeeded()
 
         let subOptionIndexPath = IndexPath(item: 0, section: 0)
-        XCTAssertNotNil(checkmarkView(in: subject, at: subOptionIndexPath))
+        XCTAssertEqual(accessoryCount(in: subject, at: subOptionIndexPath), 1)
 
         subject.configure(
             with: makeViewModel(sections: subOptionAndToggleSections(isOn: false, isSubOptionSelected: false))
         )
         subject.view.layoutIfNeeded()
 
-        XCTAssertNil(checkmarkView(in: subject, at: subOptionIndexPath))
+        XCTAssertEqual(accessoryCount(in: subject, at: subOptionIndexPath), 0)
     }
 
     // MARK: - Helpers
@@ -265,6 +265,16 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
     ) -> UIImageView? {
         let cell = collectionView(in: subject)?.cellForItem(at: indexPath)
         return firstSubview(ofType: UIImageView.self, in: cell)
+    }
+
+    /// The accessory model, which updates synchronously — unlike the accessory views,
+    /// which linger in the hierarchy while the list animates them out.
+    private func accessoryCount(
+        in subject: WebCompatReportSheetViewController,
+        at indexPath: IndexPath
+    ) -> Int? {
+        let cell = collectionView(in: subject)?.cellForItem(at: indexPath) as? UICollectionViewListCell
+        return cell?.accessories.count
     }
 
     private func subOptionAndToggleSections(
