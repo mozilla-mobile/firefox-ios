@@ -8,7 +8,6 @@ import UIKit
 
 final class WebCompatToggleCell: UICollectionViewListCell, ThemeApplicable, ReusableCell {
     private var toggleHandler: ((Bool) -> Void)?
-    private var isOn = false
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
@@ -18,13 +17,7 @@ final class WebCompatToggleCell: UICollectionViewListCell, ThemeApplicable, Reus
         label.isAccessibilityElement = false
     }
 
-    // Not built via `.build`: as a custom-view cell accessory it must keep
-    // `translatesAutoresizingMaskIntoConstraints = true` (UIKit asserts otherwise).
-    private lazy var switchControl: ThemedSwitch = {
-        let control = ThemedSwitch()
-        control.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
-        return control
-    }()
+    private let switchControl = ThemedSwitch()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,6 +29,7 @@ final class WebCompatToggleCell: UICollectionViewListCell, ThemeApplicable, Reus
     }
 
     private func setupLayout() {
+        switchControl.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
         contentView.addSubview(titleLabel)
         let margins = contentView.layoutMarginsGuide
         NSLayoutConstraint.activate([
@@ -52,8 +46,8 @@ final class WebCompatToggleCell: UICollectionViewListCell, ThemeApplicable, Reus
 
     func configure(title: String, isOn: Bool, a11yIdentifier: String, onToggle: @escaping (Bool) -> Void) {
         toggleHandler = onToggle
-        self.isOn = isOn
         titleLabel.text = title
+        switchControl.isOn = isOn
         switchControl.accessibilityLabel = title
         switchControl.accessibilityIdentifier = a11yIdentifier
     }
@@ -64,11 +58,7 @@ final class WebCompatToggleCell: UICollectionViewListCell, ThemeApplicable, Reus
         backgroundConfiguration = .listGroupedCell()
         backgroundConfiguration?.backgroundColor = theme.colors.layer5
         titleLabel.textColor = theme.colors.textPrimary
-        // Canonical ThemedSwitch order (cf. PaddedSwitch.configure,
-        // ClearPrivateDataTableViewController): apply theme first, then set the value so
-        // the off-track color resolves from the now-populated theme colors.
         switchControl.applyTheme(theme: theme)
-        switchControl.isOn = isOn
     }
 
     @objc
