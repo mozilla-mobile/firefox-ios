@@ -18,6 +18,8 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         static let veryTallPageHeight: CGFloat = 40000
         /// Mirrors `WebCompatFullPageScreenshotView.UX.minimumHighlightHeight`, which is private.
         static let minimumHighlightHeight: CGFloat = 24
+        /// Mirrors `WebCompatFullPageScreenshotView.UX.thumbnailWidth`, which is private.
+        static let railWidth: CGFloat = 44
         static let frameAccuracy: CGFloat = 0.5
     }
 
@@ -100,6 +102,25 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(subject.screenshotView.highlightView.frame.height, UX.minimumHighlightHeight)
     }
 
+    // The rail used to back-solve its width from the capped height, so a tall enough page
+    // collapsed it to a sliver and widened the capture along with it.
+    func testLayout_onVeryTallPage_keepsRailWidthAndCaptureWidth() {
+        let tallSubject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+        let veryTallSubject = createSubject(image: sampleImage(height: UX.veryTallPageHeight))
+
+        layout(tallSubject, in: UX.presentationSize)
+        layout(veryTallSubject, in: UX.presentationSize)
+
+        let veryTallView = veryTallSubject.screenshotView
+        XCTAssertEqual(veryTallView.thumbnailContainer.frame.width, UX.railWidth, accuracy: UX.frameAccuracy)
+        XCTAssertEqual(
+            veryTallView.scrollView.frame.width,
+            tallSubject.screenshotView.scrollView.frame.width,
+            accuracy: UX.frameAccuracy,
+            "Page length must not change the capture width"
+        )
+    }
+
     // A drifting bright slice spotlights a different part of the page than the capture shows.
     func testHighlight_brightSliceTracksTheHighlightOffset() {
         let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
@@ -145,7 +166,7 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         line: UInt = #line
     ) {
         let view = subject.screenshotView
-        XCTAssertEqual(view.captureContainer.isHidden, expected, "captureContainer", file: file, line: line)
+        XCTAssertEqual(view.scrollView.isHidden, expected, "scrollView", file: file, line: line)
         XCTAssertEqual(view.thumbnailContainer.isHidden, expected, "thumbnailContainer", file: file, line: line)
         XCTAssertEqual(view.highlightView.isHidden, expected, "highlightView", file: file, line: line)
     }

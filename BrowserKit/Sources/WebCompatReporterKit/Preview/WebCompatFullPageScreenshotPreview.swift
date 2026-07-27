@@ -13,6 +13,8 @@ private struct FullPageScreenshotPreview: UIViewControllerRepresentable {
     enum PageLength: CGFloat {
         case short = 400
         case tall = 2400
+        /// Past the point where the rail runs out of vertical room.
+        case long = 8000
     }
 
     private enum UX {
@@ -109,6 +111,12 @@ private struct FullPageScreenshotPreview: UIViewControllerRepresentable {
 @available(iOS 17.0, *)
 #Preview("Short page") {
     FullPageScreenshotPreview(pageLength: .short)
+        .ignoresSafeArea()
+}
+
+@available(iOS 17.0, *)
+#Preview("Long page") {
+    FullPageScreenshotPreview(pageLength: .long)
         .ignoresSafeArea()
 }
 #endif
