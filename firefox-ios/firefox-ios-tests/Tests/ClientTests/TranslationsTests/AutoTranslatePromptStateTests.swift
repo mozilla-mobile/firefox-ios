@@ -28,7 +28,7 @@ final class AutoTranslatePromptStateTests: XCTestCase {
 
         XCTAssertFalse(initialState.showPrompt)
 
-        let newState = reducer(initialState, getAction(for: .showAutoTranslatePrompt))
+        let newState = reducer.legacyReducer(initialState, getAction(for: .showAutoTranslatePrompt))
 
         XCTAssertTrue(newState.showPrompt)
     }
@@ -39,7 +39,7 @@ final class AutoTranslatePromptStateTests: XCTestCase {
 
         XCTAssertTrue(initialState.showPrompt)
 
-        let newState = reducer(initialState, getAction(for: .didTapEnableAutoTranslate))
+        let newState = reducer.legacyReducer(initialState, getAction(for: .didTapEnableAutoTranslate))
 
         XCTAssertFalse(newState.showPrompt)
     }
@@ -50,7 +50,7 @@ final class AutoTranslatePromptStateTests: XCTestCase {
 
         XCTAssertTrue(initialState.showPrompt)
 
-        let newState = reducer(initialState, getAction(for: .didDismissAutoTranslatePrompt))
+        let newState = reducer.legacyReducer(initialState, getAction(for: .didDismissAutoTranslatePrompt))
 
         XCTAssertFalse(newState.showPrompt)
     }
@@ -60,7 +60,7 @@ final class AutoTranslatePromptStateTests: XCTestCase {
         let reducer = autoTranslatePromptReducer()
 
         let action = TranslationsAction(windowUUID: .XCTestDefaultUUID, actionType: FakeActionType.testAction)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.showPrompt, true)
     }
@@ -70,7 +70,7 @@ final class AutoTranslatePromptStateTests: XCTestCase {
         let reducer = autoTranslatePromptReducer()
 
         let action = TranslationsAction(windowUUID: WindowUUID(), actionType: TranslationsActionType.showAutoTranslatePrompt)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.showPrompt)
     }

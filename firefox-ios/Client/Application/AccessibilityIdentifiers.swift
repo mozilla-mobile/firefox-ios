@@ -134,6 +134,12 @@ struct AccessibilityIdentifiers {
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
+    struct WebCompatReporter {
+        static let categoryMenu = "WebCompatReporter.CategoryMenu"
+        static let subOption = "WebCompatReporter.SubOption"
+        static let sendButton = "WebCompatReporter.SendButton"
+    }
+
     struct UnifiedSearch {
         struct BottomSheetRow {
             static let engine = "UnifiedSearch.BottomSheetRow.Engine"
@@ -304,6 +310,11 @@ struct AccessibilityIdentifiers {
             static let itemTitle = "SyncedTabItemTitle"
             static let favIconImage = "SyncedTabFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
+        }
+
+        struct TrackerBlockerModule {
+            static let shieldIcon = "TrackerBlockerModule.shieldIcon"
+            static let titleLabel = "TrackerBlockerModule.titleLabel"
         }
     }
 

@@ -23,23 +23,13 @@ class ChangeRSServerSetting: HiddenSetting {
         Current: \(currentEnvRaw.capitalized)
 
         Changes take effect on the next app launch.
+
+        To switch to Staging and reset ordering prefs for Consolidated Search, choose the SEC Reset option.
         """
         let alert = UIAlertController(title: "Remote Settings Server",
                                       message: message,
                                       preferredStyle: .alert)
 
-        alert.addAction(UIAlertAction(title: "Production V2", style: .default, handler: { [weak self] _ in
-            guard let self else { return }
-            self.prefs.setString(RemoteSettingsEnvironment.prodV2.rawValue, forKey: self.prefsKey)
-        }))
-        alert.addAction(UIAlertAction(title: "Staging V2", style: .default, handler: { [weak self] _ in
-            guard let self else { return }
-            self.prefs.setString(RemoteSettingsEnvironment.stageV2.rawValue, forKey: self.prefsKey)
-        }))
-        alert.addAction(UIAlertAction(title: "Dev V2", style: .default, handler: { [weak self] _ in
-            guard let self else { return }
-            self.prefs.setString(RemoteSettingsEnvironment.devV2.rawValue, forKey: self.prefsKey)
-        }))
         alert.addAction(UIAlertAction(title: "Production", style: .default, handler: { [weak self] _ in
             guard let self else { return }
             self.prefs.removeObjectForKey(self.prefsKey)

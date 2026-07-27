@@ -326,6 +326,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .vpnFeature,
+                titleText: format(string: "VPN"),
+                statusText: format(string: "Toggle to enable the VPN feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .waybackMachine,
                 titleText: format(string: "Wayback Machine"),
                 statusText: format(string: "Toggle to show Wayback Machine fallback on native error pages")

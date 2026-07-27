@@ -1,0 +1,98 @@
+name: 'Assign Tech Lead Review'
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, labeled]
+
+permissions: {}
+
+jobs:
+  assign-tech-lead:
+    # Skip drafts and bot-authored PRs, and when triggered by `labeled`, only act on our specific label.
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.user.type != 'Bot' &&
+      (github.event.action != 'labeled' || github.event.label.name == 'needs-tech-lead-review')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: assign-tech-lead-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.pull_request.number }}
+      PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+      ADDITIONS: ${{ github.event.pull_request.additions }}
+      DELETIONS: ${{ github.event.pull_request.deletions }}
+      EVENT_ACTION: ${{ github.event.action }}
+      BIG_PR_THRESHOLD: '800'
+      # Space-separated GitHub logins of the tech leads to request as reviewers.
+      # Should follow the list under https://github.com/orgs/mozilla-mobile/teams/firefox-ios-tech-leads/members
+      # Hard-coded for now since requesting a team as reviewer requires the token to have org read access
+      REVIEWERS: 'orlam cramsden thatswinnie  adudenamedruby yoanarios ih-codes'
+      LABEL_NAME: 'needs-tech-lead-review'
+
+    steps:
+      - name: Check PR size and assign reviewer + label
+        shell: bash
+        run: |
+          set -euo pipefail
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && return 1; sleep 2; done; }
+
+          total=$(( ADDITIONS + DELETIONS ))
+          echo "PR #$NUMBER: additions=$ADDITIONS, deletions=$DELETIONS, total=$total (threshold=$BIG_PR_THRESHOLD), event=$EVENT_ACTION"
+
+          if [ "$EVENT_ACTION" != "labeled" ] && [ "$total" -le "$BIG_PR_THRESHOLD" ]; then
+            echo "Under threshold and not manually labeled, nothing to do."
+            exit 0
+          fi
+
+          # Fetch currently requested reviewers so we don't stack multiple tech leads on the same PR
+          # (e.g. on `synchronize` re-runs) and don't re-request someone who is already reviewing.
+          current_reviewers=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
+            --jq '.users[].login' | tr '\n' ' ')
+
+          # If any tech lead is already a requested reviewer, skip assignment and just make sure the label is set.
+          for cur in $current_reviewers; do
+            for login in $REVIEWERS; do
+              if [ "$login" = "$cur" ]; then
+                echo "Tech lead $cur is already requested for review; skipping assignment."
+                retry gh pr edit "$NUMBER" -R "$GH_REPO" --add-label "$LABEL_NAME"
+                exit 0
+              fi
+            done
+          done
+
+          # Build the eligible list: not the PR author (GitHub 422s if you request the author as their own reviewer).
+          eligible=()
+          for login in $REVIEWERS; do
+            [ "$login" = "$PR_AUTHOR" ] && continue
+            eligible+=("$login")
+          done
+
+          if [ ${#eligible[@]} -eq 0 ]; then
+            echo "No eligible reviewers to request (list empty or only the author). Nothing to do."
+            exit 0
+          fi
+
+          # Pick one random reviewer from the eligible list.
+          picked="${eligible[$((RANDOM % ${#eligible[@]}))]}"
+          echo "Requesting review from: $picked"
+
+          # Request review from the picked reviewer. Fails the workflow if unsuccessful after retries.
+          request_reviewer() {
+            gh api \
+              --method POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2026-03-10" \
+              "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
+              --input - <<< "{\"reviewers\":[\"$picked\"]}"
+          }
+          retry request_reviewer
+
+          # Add label. Fails the workflow if the label does not exist or cannot be added.
+          retry gh pr edit "$NUMBER" -R "$GH_REPO" --add-label "$LABEL_NAME"

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 import Storage
 import UIKit
 import WebKit
@@ -133,7 +134,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showGoogleLensCamera()
 
     @MainActor
-    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source)
+    func searchGoogleLens(with image: UIImage,
+                          source: GoogleLensTelemetry.Source,
+                          searchTimerId: GleanTimerId?)
 
     @MainActor
     func showQuickAnswers(transitionType: QuickAnswersTransitionType)

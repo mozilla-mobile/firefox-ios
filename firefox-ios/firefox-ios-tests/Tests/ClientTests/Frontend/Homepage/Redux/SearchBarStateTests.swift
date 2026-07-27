@@ -21,7 +21,7 @@ final class SearchBarStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = searchBarReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 isSearchBarEnabled: true,
@@ -39,7 +39,7 @@ final class SearchBarStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = searchBarReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 isSearchBarEnabled: false,
@@ -57,7 +57,7 @@ final class SearchBarStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = searchBarReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             GeneralBrowserAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -74,7 +74,7 @@ final class SearchBarStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = searchBarReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             GeneralBrowserAction(
                 windowUUID: .XCTestDefaultUUID,

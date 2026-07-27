@@ -20,7 +20,7 @@ final class MessageCardStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = messageCardReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             MessageCardAction(
                 messageCardConfiguration: MessageCardConfiguration(
@@ -44,7 +44,7 @@ final class MessageCardStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = messageCardReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             MessageCardAction(
                 messageCardConfiguration: MessageCardConfiguration(
@@ -66,7 +66,7 @@ final class MessageCardStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = messageCardReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             MessageCardAction(
                 messageCardConfiguration: MessageCardConfiguration(

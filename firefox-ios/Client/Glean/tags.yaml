@@ -140,6 +140,9 @@ TopSites:
     Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)
     label on GitHub.
 
+TrackerBlocker:
+  description: Corresponds to the tracker blocker module shown on the homepage, which surfaces the lifetime blocked-tracker count.
+
 TrackingProtection:
   description: Corresponds to the enhanced tracking protection bottom sheet which can be displayed over a webpage.
   

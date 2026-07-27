@@ -64,6 +64,7 @@ enum FeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case videoIntroOnboarding
+    case vpnFeature
     case waybackMachine
     case worldCupWidget
 
@@ -132,6 +133,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
+                .vpnFeature,
                 .waybackMachine,
                 .worldCupWidget:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey

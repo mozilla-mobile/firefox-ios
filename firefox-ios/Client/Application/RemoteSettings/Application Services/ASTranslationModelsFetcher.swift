@@ -23,15 +23,6 @@ struct ModelFieldsRecord: Codable {
     let schema: Int64
 }
 
-struct TranslationRecord: Codable {
-    let fileType: String?
-    let fromLang: String?
-    let name: String
-    let schema: Int64?
-    let toLang: String?
-    let version: String
-}
-
 protocol TranslationModelsFetcherProtocol: Sendable {
     func fetchTranslatorWASM() async -> Data?
     func fetchModels(from sourceLang: String, to targetLang: String) async -> Data?

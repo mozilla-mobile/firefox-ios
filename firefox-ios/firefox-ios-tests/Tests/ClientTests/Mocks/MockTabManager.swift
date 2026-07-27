@@ -121,10 +121,6 @@ class MockTabManager: TabManager {
 
     func expireLoginAlerts() {}
 
-    func switchPrivacyMode() -> SwitchPrivacyModeResult {
-        return .createdNewTab
-    }
-
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
         return Tab(profile: MockProfile(), windowUUID: windowUUID)
     }

@@ -95,7 +95,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     public func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme {
-        return shouldShowPrivateTheme ? PrivateModeTheme() : getThemeFrom(type: determineUserTheme())
+        return getThemeFrom(type: shouldShowPrivateTheme ? .privateMode : determineUserTheme())
     }
 
     @MainActor

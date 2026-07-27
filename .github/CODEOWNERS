@@ -9,6 +9,7 @@
 /firefox-ios/Client/Experiments/initial_experiments.json @afurlan-firefox @mozilla-mobile/fxios-eng
 /firefox-ios/Client/Assets/CC_Script @nbhasin2 @issammani
 /firefox-ios/Client/Assets/RemoteSettingsData/ @nbhasin2 @issammani @mattreaganmozilla
+/firefox-ios/Shared/Strings.swift @mozilla-mobile/fxios-eng @mozilla-mobile/firefox-ios-l10n
 /MozillaRustComponents/Package.swift @mozilla-mobile/fxios-eng
 /MozillaRustComponents/Package.resolved @mozilla-mobile/fxios-eng
 /MozillaRustComponents/Sources/FocusRustComponentsWrapper/Generated @mozilla-mobile/fxios-eng

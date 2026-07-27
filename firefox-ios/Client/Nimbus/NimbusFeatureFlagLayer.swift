@@ -197,6 +197,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .videoIntroOnboarding:
             return checkVideoIntroOnboardingFeature()
 
+        case .vpnFeature:
+            return checkVPNFeature()
+
         case .waybackMachine:
             return checkWaybackMachineFeature()
 
@@ -471,5 +474,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkWaybackMachineFeature() -> Bool {
         return nimbus.features.waybackMachineFeature.value().enabled
+    }
+
+    private func checkVPNFeature() -> Bool {
+        return nimbus.features.vpnFeature.value().enabled
     }
 }

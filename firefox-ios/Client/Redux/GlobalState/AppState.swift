@@ -9,9 +9,18 @@ import Common
 struct AppState: StateType, Sendable {
     let presentedComponents: PresentedComponentsState
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
         return AppState(
-            presentedComponents: PresentedComponentsState.reducer(state.presentedComponents, action)
+            presentedComponents: PresentedComponentsState.reducer
+                                 .modernReducer(state.presentedComponents, action, actionWindowUUID)
+        )
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
+        return AppState(
+            presentedComponents: PresentedComponentsState.reducer.legacyReducer(state.presentedComponents, action)
         )
     }
 
@@ -84,6 +93,7 @@ let middlewares = [
     WallpaperMiddleware().wallpaperProvider,
     BookmarksMiddleware().bookmarksProvider,
     WorldCupMiddleware().worldCupProvider,
+    TrackerBlockerModuleMiddleware().trackerBlockerModuleProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
     QuickAnswersMiddleware().quickAnswersProvider,
     StartAtHomeMiddleware().startAtHomeProvider,

@@ -27,22 +27,19 @@ enum LaunchType {
     /// We show full screen launch types from scene coordinator, other launch type are shown from browser coordinator
     /// - Parameters:
     ///   - type: The coordinator the launch type can happen from
-    ///   - isIphone: True when the current device is of type iPhone
     /// - Returns: true if the launch type can be launched from a particular coordinator or not
-    func canLaunch(fromType type: LaunchCoordinatorType,
-                   isIphone: Bool) -> Bool {
+    func canLaunch(fromType type: LaunchCoordinatorType) -> Bool {
         switch type {
         case .BrowserCoordinator:
-            return !isFullScreenAvailable(isIphone: isIphone)
+            return !isFullScreenAvailable()
         case .SceneCoordinator:
-            return isFullScreenAvailable(isIphone: isIphone)
+            return isFullScreenAvailable()
         }
     }
 
     /// We show full screen launch types from scene coordinator, other launch type are shown from browser coordinator
-    /// - Parameter isIphone: True when the current device is of type iPhone
     /// - Returns: if the launch type needs to be full screen or not
-    func isFullScreenAvailable(isIphone: Bool) -> Bool {
+    func isFullScreenAvailable() -> Bool {
         switch self {
         case .videoIntro:
             return true

@@ -54,5 +54,6 @@ include:
   - nimbus-features/touFeature.yaml
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
+  - nimbus-features/vpnFeature.yaml
   - nimbus-features/waybackMachineFeature.yaml
   - nimbus-features/worldCupWidgetFeature.yaml

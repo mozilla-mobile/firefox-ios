@@ -43,7 +43,8 @@ private func previewCategorySection(selectedTitle: String?) -> WebCompatReportVi
                 kind: .categoryMenu(
                     isPlaceholder: selectedTitle == nil,
                     options: previewCategoryOptions(selectedID: selectedID)
-                )
+                ),
+                a11yIdentifier: "issue-category"
             )
         ]
     )
@@ -51,12 +52,26 @@ private func previewCategorySection(selectedTitle: String?) -> WebCompatReportVi
 
 private func previewSubOption(_ id: String, _ title: String, selected: Bool = false)
 -> WebCompatReportViewModel.Row {
-    return WebCompatReportViewModel.Row(id: id, title: title, kind: .subOption(isSelected: selected))
+    return WebCompatReportViewModel.Row(id: id, title: title, kind: .subOption(isSelected: selected), a11yIdentifier: id)
+}
+
+private func previewSendSection(isEnabled: Bool) -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(id: "send", rows: [
+        WebCompatReportViewModel.Row(
+            id: "send",
+            title: "Send Report",
+            kind: .sendButton(isEnabled: isEnabled),
+            a11yIdentifier: "send"
+        )
+    ])
 }
 
 @available(iOS 17.0, *)
 #Preview("Placeholder") {
-    previewSheet(sections: [previewCategorySection(selectedTitle: nil)])
+    previewSheet(sections: [
+        previewCategorySection(selectedTitle: nil),
+        previewSendSection(isEnabled: false)
+    ])
 }
 
 @available(iOS 17.0, *)
@@ -68,7 +83,8 @@ private func previewSubOption(_ id: String, _ title: String, selected: Bool = fa
             previewSubOption("page_not_loading", "Page not loading correctly", selected: true),
             previewSubOption("missing_items", "Missing items"),
             previewSubOption("buttons_not_working", "Buttons or links not working")
-        ])
+        ]),
+        previewSendSection(isEnabled: true)
     ])
 }
 #endif

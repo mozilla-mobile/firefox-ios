@@ -7,8 +7,6 @@ import UserNotifications
 @testable import Client
 
 class MockUserNotificationCenter: UserNotificationCenterProtocol, @unchecked Sendable {
-    var pendingRequests = [UNNotificationRequest]()
-
     var getSettingsWasCalled = false
     func notificationSettings() async -> UNNotificationSettings {
         getSettingsWasCalled = true
@@ -31,37 +29,9 @@ class MockUserNotificationCenter: UserNotificationCenterProtocol, @unchecked Sen
         addWasCalled = true
     }
 
-    var getPendingRequestsWasCalled = false
-    func getPendingNotificationRequests(completionHandler: @escaping ([UNNotificationRequest]) -> Void) {
-        getPendingRequestsWasCalled = true
-        completionHandler(pendingRequests)
-    }
-
-    var getPendingRequestsWithIdWasCalled = false
-    func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
-        getPendingRequestsWithIdWasCalled = true
-        pendingRequests.removeAll(where: { identifiers.contains($0.identifier) })
-    }
-
-    var removeAllPendingRequestsWasCalled = false
-    func removeAllPendingNotificationRequests() {
-        removeAllPendingRequestsWasCalled = true
-        pendingRequests.removeAll()
-    }
-
     var getDeliveredWasCalled = false
     func deliveredNotifications() async -> [UNNotification] {
         getDeliveredWasCalled = true
         return []
-    }
-
-    var removeDeliveredWithIdsWasCalled = false
-    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
-        removeDeliveredWithIdsWasCalled = true
-    }
-
-    var removeAllDeliveredWasCalled = false
-    func removeAllDeliveredNotifications() {
-        removeAllDeliveredWasCalled = true
     }
 }

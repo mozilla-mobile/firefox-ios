@@ -4,9 +4,15 @@
 
 import Foundation
 
-class SurveySurfaceViewModel {
+final class SurveySurfaceViewModel {
     // MARK: - Properties
-    weak var delegate: SurveySurfaceDelegate?
+    /// Held strongly on purpose. The `SurveySurfaceManager` acting as delegate is otherwise only
+    /// retained by the transient `LaunchScreenViewModel`, which is deallocated once the browser
+    /// becomes the root view controller — while the survey is still presented. A `weak` reference
+    /// here left the delegate `nil` by the time the user tapped a button, so `didTapTakeSurvey`
+    /// never reached the manager (no telemetry, no survey URL). The manager does not reference this
+    /// view model back, so there is no retain cycle.
+    var delegate: SurveySurfaceDelegate?
     var info: SurveySurfaceInfoProtocol
 
     // MARK: - Initialization

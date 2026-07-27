@@ -94,7 +94,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895150
+    // https://mozilla.testrail.io/index.php?/cases/view/2306819
     func testFxASyncHistory() {
         // History is generated using the DB so go directly to Sign in
         // Sign into Mozilla Account
@@ -119,7 +119,7 @@ class IntegrationTests: BaseTestCase {
         )
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895147
+    // https://mozilla.testrail.io/index.php?/cases/view/2306819
     func testFxASyncBookmark() {
         waitForTabsButton()
         navigator.nowAt(HomePanelsScreen)
@@ -136,7 +136,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895148
+    // https://mozilla.testrail.io/index.php?/cases/view/2306819
     func testFxASyncBookmarkDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
@@ -147,7 +147,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts[TestLabels.exampleDomain])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895151
+    // https://mozilla.testrail.io/index.php?/cases/view/2306819
     func testFxASyncTabs() {
         signInFxAccounts()
 
@@ -175,7 +175,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895152
+    // https://mozilla.testrail.io/index.php?/cases/view/2306819
     func testFxASyncLogins() {
         waitForTabsButton()
         navigator.nowAt(HomePanelsScreen)
@@ -198,7 +198,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895149
+    // https://mozilla.testrail.io/index.php?/cases/view/2306819
     func testFxASyncHistoryDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
@@ -211,7 +211,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[historyItemSavedOnDesktop])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895150
+    // https://mozilla.testrail.io/index.php?/cases/view/2306819
     func testFxASyncPasswordDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
@@ -234,8 +234,7 @@ class IntegrationTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895153
-    // https://mozilla.testrail.io/index.php?/cases/view/3895154
+    // https://mozilla.testrail.io/index.php?/cases/view/2306819
     func testFxASyncTabsDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
@@ -255,7 +254,7 @@ class IntegrationTests: BaseTestCase {
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895155
+    // https://mozilla.testrail.io/index.php?/cases/view/2306822
     func testFxADisconnectConnect() {
         // Sign into Mozilla Account
         signInFxAccounts()

@@ -39,4 +39,4 @@ This involves introducing:
 
 ## References
 - [Proposal](https://docs.google.com/document/d/1fYN63KDPjL8wl2ZQ3qu_p8lt-MGQ-koIi6m369zpU4c/edit?usp=sharing)
-- [Wiki page](https://github.com/mozilla-mobile/firefox-ios/wiki/Navigation-&-Coordinators)
+- [Confluence page](https://mozilla-hub.atlassian.net/wiki/spaces/FXIOS/pages/2545713156/Navigation+and+Coordinators)

@@ -135,7 +135,6 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var iconAccentYellow: UIColor = LightTheme().colors.iconAccentYellow
 
     // MARK: - Deprecated
-    // TODO: Deprecated for Nova; replace call sites with Nova values (FXIOS-16131)
     var layer5: UIColor = LightTheme().colors.layer5
     var layerGradientOverlay: Gradient = LightTheme().colors.layerGradientOverlay
     var layerHomepage: Gradient = LightTheme().colors.layerHomepage

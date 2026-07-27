@@ -35,6 +35,7 @@ metrics_files:
   - firefox-ios/Client/Glean/probes/terms_of_use.yaml
   - firefox-ios/Client/Glean/probes/toolbar.yaml
   - firefox-ios/Client/Glean/probes/top_sites.yaml
+  - firefox-ios/Client/Glean/probes/tracker_blocker.yaml
   - firefox-ios/Client/Glean/probes/tracking_protection.yaml
   - firefox-ios/Client/Glean/probes/user.yaml
   - firefox-ios/Client/Glean/probes/world_cup_widget.yaml

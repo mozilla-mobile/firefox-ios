@@ -24,87 +24,73 @@ final class LaunchTypeTests: XCTestCase {
     // MARK: - Video Intro
     func testCanLaunch_videoIntroFromSceneCoordinator() {
         let launchType = LaunchType.videoIntro
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
+        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator))
     }
 
     func testCanLaunch_videoIntroFromBrowserCoordinator() {
         let launchType = LaunchType.videoIntro
-        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))
-        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: false))
+        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator))
     }
 
     func testIsFullScreen_videoIntroIsAlwaysFullScreen() {
         let launchType = LaunchType.videoIntro
-        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: true))
-        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: false))
+        XCTAssertTrue(launchType.isFullScreenAvailable())
     }
 
     func testCanLaunch_surveyFromBrowserCoordinator() {
         let launchType = LaunchType.survey(manager: SurveySurfaceManager(windowUUID: windowUUID))
-        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))
-        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: false))
+        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator))
     }
 
     func testCanLaunch_surveyFromSceneCoordinator() {
         let launchType = LaunchType.survey(manager: SurveySurfaceManager(windowUUID: windowUUID))
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
+        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator))
     }
 
     func testCanLaunch_defaultBrowserFromBrowserCoordinator() {
         let launchType = LaunchType.defaultBrowser
-        XCTAssertTrue(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))
-        XCTAssertTrue(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: false))
+        XCTAssertTrue(launchType.canLaunch(fromType: .BrowserCoordinator))
     }
 
     func testCanLaunch_defaultBrowserFromSceneCoordinator() {
         let launchType = LaunchType.defaultBrowser
-        XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
-        XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
+        XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator))
     }
 
     func testCanLaunch_termsOfServiceFromBrowserCoordinator() {
         let launchType = LaunchType.termsOfService(manager: TermsOfServiceManager(prefs: profile.prefs))
-        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))
-        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: false))
+        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator))
     }
 
     func testCanLaunch_termsOfServiceFromSceneCoordinator() {
         let launchType = LaunchType.termsOfService(manager: TermsOfServiceManager(prefs: profile.prefs))
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
+        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator))
     }
 
     func testCanLaunch_introFromBrowserCoordinator() {
         let launchType = LaunchType.intro(manager: IntroScreenManager(prefs: profile.prefs))
-        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))
-        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: false))
+        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator))
     }
 
     func testCanLaunch_introFromSceneCoordinator() {
         let launchType = LaunchType.intro(manager: IntroScreenManager(prefs: profile.prefs))
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
-        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
+        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator))
     }
 
     // MARK: - Is full screen
 
     func testIsFullScreen_surveyIsAlwaysFullScreen() {
         let launchType = LaunchType.survey(manager: SurveySurfaceManager(windowUUID: windowUUID))
-        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: true))
-        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: false))
+        XCTAssertTrue(launchType.isFullScreenAvailable())
     }
 
     func testIsFullScreen_defaultBrowserIsNeverFullScreen() {
         let launchType = LaunchType.defaultBrowser
-        XCTAssertFalse(launchType.isFullScreenAvailable(isIphone: true))
-        XCTAssertFalse(launchType.isFullScreenAvailable(isIphone: false))
+        XCTAssertFalse(launchType.isFullScreenAvailable())
     }
 
-    func testIsFullScreen_introFullScreenOnIphone() {
+    func testIsFullScreen_introIsAlwaysFullScreen() {
         let launchType = LaunchType.intro(manager: IntroScreenManager(prefs: profile.prefs))
-        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: true))
-        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: false))
+        XCTAssertTrue(launchType.isFullScreenAvailable())
     }
 }

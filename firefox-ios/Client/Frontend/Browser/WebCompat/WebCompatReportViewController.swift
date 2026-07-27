@@ -112,13 +112,40 @@ final class WebCompatReportViewController: UINavigationController,
             closeButtonAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             previewButtonTitle: .WebCompatReporter.Sheet.PreviewButton,
             isPreviewEnabled: state.canPreview,
-            sections: makeIssueSections(from: state)
+            sections: makeSections(from: state)
         )
     }
 
     private enum SectionID: String {
         case issueCategory
         case issueSubOptions
+        case send
+    }
+
+    private enum RowID: String {
+        case send
+    }
+
+    static func makeSections(
+        from state: WebCompatReporterState
+    ) -> [WebCompatReportViewModel.Section] {
+        var sections = makeIssueSections(from: state)
+        sections.append(sendSection(from: state))
+        return sections
+    }
+
+    private static func sendSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.send.rawValue,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.send.rawValue,
+                    title: .WebCompatReporter.SendButton.Title,
+                    kind: .sendButton(isEnabled: state.canSubmit),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.sendButton
+                )
+            ]
+        )
     }
 
     static func makeIssueSections(
@@ -139,7 +166,8 @@ final class WebCompatReportViewController: UINavigationController,
                 WebCompatReportViewModel.Row(
                     id: SectionID.issueCategory.rawValue,
                     title: selectedTitle ?? .WebCompatReporter.IssueSection.CategoryPlaceholder,
-                    kind: .categoryMenu(isPlaceholder: selectedTitle == nil, options: options)
+                    kind: .categoryMenu(isPlaceholder: selectedTitle == nil, options: options),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.categoryMenu
                 )
             ]
         )
@@ -153,7 +181,8 @@ final class WebCompatReportViewController: UINavigationController,
             WebCompatReportViewModel.Row(
                 id: subOption.rawValue,
                 title: title(for: subOption),
-                kind: .subOption(isSelected: subOption.rawValue == state.selectedSubOptionID)
+                kind: .subOption(isSelected: subOption.rawValue == state.selectedSubOptionID),
+                a11yIdentifier: "\(AccessibilityIdentifiers.WebCompatReporter.subOption).\(subOption.rawValue)"
             )
         }
         let subOptionSection = WebCompatReportViewModel.Section(
@@ -224,6 +253,14 @@ final class WebCompatReportViewController: UINavigationController,
             subOptionID: subOption.rawValue,
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.selectSubOption
+        ))
+    }
+
+    func webCompatReportSheetDidTapButton(id: String) {
+        guard RowID(rawValue: id) == .send else { return }
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.submit
         ))
     }
 

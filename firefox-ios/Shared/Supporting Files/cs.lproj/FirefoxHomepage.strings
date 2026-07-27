@@ -85,6 +85,6 @@
 /* The text shown when we turn on the Tracker Blocker feature on the homepage, and the number of trackers blocked is zero. */
 "FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153" = "Jste chráněni";
 
-/* The numbers of trackers we've blocked since we started tracking. The %d placeholder is the actual number of trackers blocked. */
-"FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b" = "Zablokováno sledovacích prvků: %d";
+/* The numbers of trackers we've blocked since we started tracking. The %@ placeholder is the actual number of trackers blocked. */
+"FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b" = "Zablokováno sledovacích prvků: %@";
 

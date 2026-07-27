@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 import Storage
 import WebKit
 import SummarizeKit
@@ -59,6 +60,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showGoogleLensCameraCalled = 0
     var searchGoogleLensCalled = 0
     var searchGoogleLensSource: GoogleLensTelemetry.Source?
+    var searchGoogleLensTimerId: GleanTimerId?
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -194,9 +196,12 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showGoogleLensCameraCalled += 1
     }
 
-    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source) {
+    func searchGoogleLens(with image: UIImage,
+                          source: GoogleLensTelemetry.Source,
+                          searchTimerId: GleanTimerId?) {
         searchGoogleLensCalled += 1
         searchGoogleLensSource = source
+        searchGoogleLensTimerId = searchTimerId
     }
 
     // MARK: - BrowserDelegate

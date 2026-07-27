@@ -98,7 +98,14 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
         self.devices = devices
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
               let action = action as? RemoteTabsPanelAction else { return defaultState(from: state) }

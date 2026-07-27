@@ -144,7 +144,7 @@ final class HomepageViewController: UIViewController,
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
         guard Thread.isMainThread else {
-            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            assertionFailure("TabSwipeGestureHandler was not deallocated on the main thread. Observer was not removed")
             return
         }
 
@@ -657,8 +657,16 @@ final class HomepageViewController: UIViewController,
             }
         case .jumpBackInSyncedTab(let config):
             return configureSyncedTabCell(config, item: item, at: indexPath)
-        case .trackerBlockerModule:
-            return configuredCell(cellType: TrackerBlockerModuleCell.self, at: indexPath) { _ in }
+        case .trackerBlockerModule(let count):
+            return configuredCell(
+                cellType: TrackerBlockerModuleCell.self,
+                at: indexPath
+            ) { cell in
+                cell.configure(
+                    count: count,
+                    theme: currentTheme
+                )
+            }
         case .bookmark(let item):
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
