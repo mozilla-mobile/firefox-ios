@@ -48,6 +48,18 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Delegate intents → Redux actions
 
+    func testDidTapLearnMore_forwardsURLToCoordinator() throws {
+        let learnMoreURL = try XCTUnwrap(URL(string: "https://example.com/learn-more"))
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapLearnMore(url: learnMoreURL)
+
+        XCTAssertEqual(coordinator.didTapLearnMoreURLs, [learnMoreURL])
+    }
+
     func testDidTapButton_onSendRow_dispatchesSubmit() {
         let subject = createSubject(reportedURL: nil)
 
@@ -230,8 +242,13 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
 private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoordinatorDelegate {
     var didFinishCallCount = 0
+    var didTapLearnMoreURLs: [URL] = []
 
     func webCompatReportViewControllerDidFinish() {
         didFinishCallCount += 1
+    }
+
+    func webCompatReportViewControllerDidTapLearnMore(url: URL) {
+        didTapLearnMoreURLs.append(url)
     }
 }
