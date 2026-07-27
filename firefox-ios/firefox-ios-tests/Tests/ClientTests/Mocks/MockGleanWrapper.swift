@@ -43,6 +43,8 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
         savedSetUploadIsEnabled = isEnabled
     }
 
+    func enableTestingMode() {}
+
     func recordEvent<ExtraObject>(
         for metric: EventMetricType<ExtraObject>,
         extras: EventExtras

@@ -8,6 +8,7 @@ import Glean
 protocol GleanWrapper: Sendable {
     func handleDeeplinkUrl(url: URL)
     func setUpload(isEnabled: Bool)
+    func enableTestingMode()
 
     // MARK: Glean Metrics
 
@@ -50,6 +51,10 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     func setUpload(isEnabled: Bool) {
         glean.setCollectionEnabled(isEnabled)
+    }
+
+    func enableTestingMode() {
+        glean.enableTestingMode()
     }
 
     // MARK: Glean Metrics

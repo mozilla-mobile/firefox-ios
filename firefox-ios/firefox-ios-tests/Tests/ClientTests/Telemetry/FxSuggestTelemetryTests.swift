@@ -235,6 +235,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
 
     func createSubject(locale: LocaleProvider = MockLocaleProvider(),
                        gleanWrapper: GleanWrapper = DefaultGleanWrapper()) -> FxSuggestTelemetry {
+        gleanWrapper.enableTestingMode()
         return FxSuggestTelemetry(locale: locale, gleanWrapper: gleanWrapper)
     }
 }
