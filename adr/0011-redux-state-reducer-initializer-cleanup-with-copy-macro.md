@@ -13,7 +13,7 @@ This is working well for us, but as our reducers grow, state initialization is b
 
 Our larger Redux states currently suffer from excessive code duplication. At a glance, it is unclear to developers which properties are updating in a given reducer helper method. This is because some states have over a dozen properties, meaning each fresh state initialization has over a dozen lines. Since an action typically updates only one or two properties, this creates needless visual noise.
 
-Take for example this `HomepageState` reducer helper method, which changes only a single property in response to the `HomepageActionType`.`availableContentHeightDidChange` action:
+Take for example this `HomepageState` reducer helper method, which changes only a two properties in response to the `HomepageActionType.availableContentHeightDidChange` action:
 
 ```swift
 private static func handleAvailableContentHeightChangeAction(
