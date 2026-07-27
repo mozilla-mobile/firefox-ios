@@ -128,9 +128,11 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     /// stores have been discarded — outstanding requests keep the store alive and removal
     /// will fail.
     @available(iOS 17.0, *)
-    private static func removeDataStores(forIdentifiers identifier: UUID) async {
+    public static func removeStaleStores() async {
         do {
-            try await WKWebsiteDataStore.remove(forIdentifier: identifier)
+            if let staleID = Self.staleStoreIdentifier {
+                try await WKWebsiteDataStore.remove(forIdentifier: staleID)
+            }
         } catch {
             // log error
         }
