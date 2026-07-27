@@ -8,57 +8,107 @@ import ComponentLibrary
 import SwiftUI
 import UIKit
 
-@MainActor
-private func previewFullPageScreenshot(pageHeight: CGFloat) -> UIViewController {
-    return WebCompatFullPageScreenshotViewController(
-        image: previewSampleCapture(pageHeight: pageHeight),
-        closeButtonViewModel: CloseButtonViewModel(
-            a11yLabel: "Close",
-            a11yIdentifier: "WebCompatReporter.Preview.ScreenshotClose"
-        ),
-        theme: LightTheme()
-    )
-}
+/// Hosts the viewer over a stand-in page: heading, image block, filler lines.
+private struct FullPageScreenshotPreview: UIViewControllerRepresentable {
+    enum PageLength: CGFloat {
+        case short = 400
+        case tall = 2400
+    }
 
-/// A stand-in page: heading, image block, filler lines. Enough for the rail and
-/// the highlight to track something.
-private func previewSampleCapture(pageHeight: CGFloat) -> UIImage {
-    let size = CGSize(width: 320, height: pageHeight)
-    let renderer = UIGraphicsImageRenderer(size: size)
-    return renderer.image { context in
-        UIColor.white.setFill()
-        context.fill(CGRect(origin: .zero, size: size))
+    private enum UX {
+        static let pageWidth: CGFloat = 320
+        static let horizontalInset: CGFloat = 16
 
-        "Croque Monsieur".draw(
-            at: CGPoint(x: 16, y: 24),
-            withAttributes: [.font: UIFont.boldSystemFont(ofSize: 28), .foregroundColor: UIColor.black]
+        enum Title {
+            static let top: CGFloat = 24
+            static let fontSize: CGFloat = 28
+        }
+
+        enum ImageBlock {
+            static let top: CGFloat = 72
+            static let height: CGFloat = 180
+            static let cornerRadius: CGFloat = 8
+            static let color = UIColor(red: 0.72, green: 0.55, blue: 0.36, alpha: 1)
+        }
+
+        enum TextLine {
+            static let top: CGFloat = 280
+            static let height: CGFloat = 10
+            static let spacing: CGFloat = 26
+            static let cornerRadius: CGFloat = 3
+            static let opacity: CGFloat = 0.12
+        }
+    }
+
+    let pageLength: PageLength
+
+    func makeUIViewController(context: Context) -> WebCompatFullPageScreenshotViewController {
+        return WebCompatFullPageScreenshotViewController(
+            image: samplePage(),
+            closeButtonViewModel: CloseButtonViewModel(
+                a11yLabel: "Close",
+                a11yIdentifier: "WebCompatReporter.Preview.ScreenshotClose"
+            ),
+            theme: LightTheme()
         )
+    }
 
-        UIColor(red: 0.72, green: 0.55, blue: 0.36, alpha: 1).setFill()
-        UIBezierPath(
-            roundedRect: CGRect(x: 16, y: 72, width: size.width - 32, height: 180),
-            cornerRadius: 8
-        ).fill()
+    func updateUIViewController(_ viewController: WebCompatFullPageScreenshotViewController, context: Context) {}
 
-        UIColor.black.withAlphaComponent(0.12).setFill()
-        var lineY: CGFloat = 280
-        while lineY < size.height - 20 {
+    private func samplePage() -> UIImage {
+        let size = CGSize(width: UX.pageWidth, height: pageLength.rawValue)
+        let contentWidth = size.width - UX.horizontalInset * 2
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            UIColor.white.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+
+            "Croque Monsieur".draw(
+                at: CGPoint(x: UX.horizontalInset, y: UX.Title.top),
+                withAttributes: [
+                    .font: UIFont.boldSystemFont(ofSize: UX.Title.fontSize),
+                    .foregroundColor: UIColor.black
+                ]
+            )
+
+            UX.ImageBlock.color.setFill()
             UIBezierPath(
-                roundedRect: CGRect(x: 16, y: lineY, width: size.width - 32, height: 10),
-                cornerRadius: 3
+                roundedRect: CGRect(
+                    x: UX.horizontalInset,
+                    y: UX.ImageBlock.top,
+                    width: contentWidth,
+                    height: UX.ImageBlock.height
+                ),
+                cornerRadius: UX.ImageBlock.cornerRadius
             ).fill()
-            lineY += 26
+
+            UIColor.black.withAlphaComponent(UX.TextLine.opacity).setFill()
+            var lineY = UX.TextLine.top
+            while lineY + UX.TextLine.height < size.height {
+                UIBezierPath(
+                    roundedRect: CGRect(
+                        x: UX.horizontalInset,
+                        y: lineY,
+                        width: contentWidth,
+                        height: UX.TextLine.height
+                    ),
+                    cornerRadius: UX.TextLine.cornerRadius
+                ).fill()
+                lineY += UX.TextLine.spacing
+            }
         }
     }
 }
 
 @available(iOS 17.0, *)
 #Preview("Tall page") {
-    previewFullPageScreenshot(pageHeight: 2400)
+    FullPageScreenshotPreview(pageLength: .tall)
+        .ignoresSafeArea()
 }
 
 @available(iOS 17.0, *)
 #Preview("Short page") {
-    previewFullPageScreenshot(pageHeight: 400)
+    FullPageScreenshotPreview(pageLength: .short)
+        .ignoresSafeArea()
 }
 #endif

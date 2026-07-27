@@ -6,9 +6,9 @@ import Common
 import ComponentLibrary
 import UIKit
 
-/// The iOS "Full Page" screenshot preview, near enough (Figma 23608-67772). The
-/// capture scrolls in the middle; a slim thumbnail of the whole page floats in
-/// the right margin with a highlight that follows the scroll.
+/// Mirrors the iOS "Full Page" screenshot preview (Figma 23608-67772): the capture
+/// scrolls in the middle, a thumbnail of the whole page sits in the right margin
+/// with a highlight that follows the scroll.
 final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollViewDelegate {
     private enum UX {
         static let topInset: CGFloat = 72
@@ -18,8 +18,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         static let thumbnailCornerRadius: CGFloat = 10
         static let thumbnailBorderWidth: CGFloat = 2
         static let thumbnailWidth: CGFloat = 44
-        /// The thumbnail base is dimmed to this; a bright copy clipped over it
-        /// picks out the current viewport.
+        /// The base thumbnail is dimmed to this; a bright copy clipped over it marks the viewport.
         static let thumbnailDimOpacity: CGFloat = 0.4
         static let highlightCornerRadius: CGFloat = 8
         static let highlightBorderWidth: CGFloat = 3
@@ -27,8 +26,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         static let highlightShadowRadius: CGFloat = 3
         static let minimumHighlightHeight: CGFloat = 24
         static let closeButtonTopInset: CGFloat = 24
-        /// Under this we're still mid-presentation, so skip the layout and hide
-        /// the content until the size means something.
+        /// Below this we're still mid-presentation and the proportions are meaningless.
         static let minimumUsableSide: CGFloat = 80
     }
 
@@ -38,8 +36,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     private let imageAspect: CGFloat
 
     private var scrollFraction: CGFloat = 0
-    /// Cached in `layoutSubviews` so a scroll only moves the highlight instead of
-    /// redoing the whole geometry pass every frame.
+    /// Cached in `layoutSubviews` so scrolling only moves the highlight.
     private struct HighlightGeometry {
         let thumbnailHeight: CGFloat
         let viewportHeight: CGFloat
@@ -48,8 +45,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     private var highlightGeometry: HighlightGeometry?
 
-    // `private(set)` so the layout tests can read these frames directly rather
-    // than walking the hierarchy by index.
+    // `private(set)` so the layout tests can read these frames without walking the hierarchy.
     private(set) lazy var captureContainer: UIView = {
         let view = UIView()
         view.clipsToBounds = true
@@ -87,8 +83,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         return imageView
     }()
 
-    /// A bright copy of the page clipped to the viewport, which is what gives the
-    /// native spotlight effect.
+    /// A bright copy clipped to the viewport, which gives the spotlight effect.
     private lazy var brightWindowContainer: UIView = {
         let view = UIView()
         view.clipsToBounds = true
@@ -129,8 +124,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         brightWindowContainer.addSubview(brightWindowImageView)
         addSubview(captureContainer)
         addSubview(thumbnailContainer)
-        // A sibling of the thumbnail rather than a child, otherwise the border and
-        // shadow get clipped away.
+        // Siblings of the thumbnail, not children: it clips, which would eat the border and shadow.
         addSubview(brightWindowContainer)
         addSubview(highlightView)
         addSubview(closeButton)
@@ -169,8 +163,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         // Equal margins either side keep the capture centered, with the rail in the right one.
         let sideMargin = WebCompatReporterUX.Spacing.screenHorizontal + thumbnailWidth + UX.railGap
         let captureWidth = max(1, bounds.width - sideMargin * 2)
-        // Wait for a real size. Laying out mid-transition gives the capture and rail
-        // wildly wrong proportions.
         let hasUsableSize = captureWidth > UX.minimumUsableSide && availableHeight > UX.minimumUsableSide
         let isRenderable = hasUsableSize && image != nil
         for view in [captureContainer, thumbnailContainer, brightWindowContainer, highlightView] {
@@ -204,7 +196,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     private func layoutViewportHighlight() {
         guard let geometry = highlightGeometry else { return }
-        // In the view's coordinate space, since it's a sibling of the thumbnail.
         let thumbnailFrame = thumbnailContainer.frame
         let width = thumbnailFrame.width
         let visibleFraction = min(1, geometry.viewportHeight / geometry.pageHeight)
@@ -219,8 +210,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             height: highlightHeight
         )
         highlightView.frame = windowFrame
-        // Shift the bright copy so its visible slice lines up with the dimmed page
-        // underneath. Otherwise the spotlight shows the wrong part.
+        // Shift the bright copy so its visible slice registers with the dimmed page underneath.
         brightWindowContainer.frame = windowFrame
         brightWindowImageView.frame = CGRect(x: 0, y: -highlightTop, width: width, height: geometry.thumbnailHeight)
     }
@@ -231,7 +221,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         let maximumOffset = max(1, scrollView.contentSize.height - scrollView.bounds.height)
         let fraction = scrollView.contentOffset.y / maximumOffset
         scrollFraction = min(max(fraction.isFinite ? fraction : 0, 0), 1)
-        // Only the highlight moves. No need for a full layout pass per frame.
         layoutViewportHighlight()
     }
 
@@ -245,7 +234,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        // The scrim from the native full-page preview (Figma 23608-67772).
         backgroundColor = theme.colors.layerScrim
         thumbnailContainer.layer.borderColor = theme.colors.iconSecondary.cgColor
         highlightView.layer.borderColor = theme.colors.borderInverted.cgColor
