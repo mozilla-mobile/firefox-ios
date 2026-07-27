@@ -187,6 +187,44 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.toggles.map(\.isOn), [true])
     }
 
+    // A toggle flip re-renders the whole view model. Rows that didn't change must not
+    // be reconfigured: sub-option cells rebuild their checkmark accessory on configure,
+    // and the list animates that as a remove+insert, so the checkmark visibly flickers.
+    func testConfigure_whenOnlyAToggleChanges_doesNotRebuildTheSubOptionCheckmark() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: subOptionAndToggleSections(isOn: false)))
+        subject.view.layoutIfNeeded()
+
+        let subOptionIndexPath = IndexPath(item: 0, section: 0)
+        let checkmarkBefore = checkmarkView(in: subject, at: subOptionIndexPath)
+
+        subject.configure(with: makeViewModel(sections: subOptionAndToggleSections(isOn: true)))
+        subject.view.layoutIfNeeded()
+
+        XCTAssertNotNil(checkmarkBefore)
+        XCTAssertTrue(checkmarkBefore === checkmarkView(in: subject, at: subOptionIndexPath))
+    }
+
+    func testConfigure_whenASubOptionChanges_rebuildsItsCheckmark() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: subOptionAndToggleSections(isOn: false)))
+        subject.view.layoutIfNeeded()
+
+        let subOptionIndexPath = IndexPath(item: 0, section: 0)
+        XCTAssertNotNil(checkmarkView(in: subject, at: subOptionIndexPath))
+
+        subject.configure(
+            with: makeViewModel(sections: subOptionAndToggleSections(isOn: false, isSubOptionSelected: false))
+        )
+        subject.view.layoutIfNeeded()
+
+        XCTAssertNil(checkmarkView(in: subject, at: subOptionIndexPath))
+    }
+
     // MARK: - Helpers
 
     private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
@@ -213,6 +251,41 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                     title: "Send Report",
                     kind: .sendButton(isEnabled: isEnabled),
                     a11yIdentifier: "send"
+                )
+            ])
+        ]
+    }
+
+    /// The image view backing a sub-option's checkmark accessory, or nil when unselected.
+    /// Identity matters: the cell builds a fresh one on every configure, so a new instance
+    /// means the row was reconfigured.
+    private func checkmarkView(
+        in subject: WebCompatReportSheetViewController,
+        at indexPath: IndexPath
+    ) -> UIImageView? {
+        let cell = collectionView(in: subject)?.cellForItem(at: indexPath)
+        return firstSubview(ofType: UIImageView.self, in: cell)
+    }
+
+    private func subOptionAndToggleSections(
+        isOn: Bool,
+        isSubOptionSelected: Bool = true
+    ) -> [WebCompatReportViewModel.Section] {
+        return [
+            WebCompatReportViewModel.Section(id: "issue-suboptions", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "page_not_loading",
+                    title: "Page not loading correctly",
+                    kind: .subOption(isSelected: isSubOptionSelected),
+                    a11yIdentifier: "page_not_loading"
+                )
+            ]),
+            WebCompatReportViewModel.Section(id: "advanced", title: "Additional Info", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "screenshot",
+                    title: "Include screenshot",
+                    kind: .toggle(isOn: isOn),
+                    a11yIdentifier: "screenshot"
                 )
             ])
         ]

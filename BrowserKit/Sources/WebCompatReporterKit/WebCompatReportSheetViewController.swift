@@ -240,6 +240,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
     }
 
     private func applySnapshot() {
+        let previousRowsByID = rowsByID
         rowsByID = [:]
         sectionsByID = [:]
         let previousItems = Set(dataSource.snapshot().itemIdentifiers)
@@ -251,8 +252,14 @@ public final class WebCompatReportSheetViewController: UIViewController,
             snapshot.appendItems(section.rows.map { $0.id }, toSection: section.id)
         }
         // The data source keys on id, so rows that persist won't re-render on
-        // content change unless explicitly reconfigured.
-        snapshot.reconfigureItems(snapshot.itemIdentifiers.filter { previousItems.contains($0) })
+        // content change unless explicitly reconfigured. Only reconfigure the ones
+        // whose content actually changed: cells rebuild their accessories on every
+        // configure, and the list animates that as a remove+insert, so reconfiguring
+        // untouched rows flickers their checkmark away.
+        let changedItems = snapshot.itemIdentifiers.filter { rowID in
+            previousItems.contains(rowID) && previousRowsByID[rowID] != rowsByID[rowID]
+        }
+        snapshot.reconfigureItems(changedItems)
         dataSource.apply(snapshot, animatingDifferences: !previousItems.isEmpty)
     }
 
