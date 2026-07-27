@@ -175,11 +175,11 @@ lazy var legacyProvider: LegacyMiddlewareMethod<FakeReduxState> = { [self] state
 ```
 
 A few notes:
-- The `[swift]` is an explicit capture of `self` in a closure using a capture list. This makes it so you don't need to explicitly refer to `self` in the body of the closure, which is a handy convenience. However, this comes with a retain cycle implication for our unit tests. See examples of `releaseMiddlewareProvidersFromMemory` in the codebase for how to deal with
+- In the example above, we explicitly capture `[self]` in the provider closure's capture list. This adds convenience so you do not need to refer to `self` in the body of the closure. However, a strong capture of `self` creates a retain cycle in our unit tests when we want to check for memory leaks. See examples of `releaseMiddlewareProvidersFromMemory` in the codebase for how to work around this.
 
 #### State Reducers
 
-Below is an example of a Redux state that is currently undergoing migration. Note that this state supports three actions. The `initialValueLoaded` and `counterIncreased` actions have been migrated to `ModernAction`. The `counterDecreased` and `setPrivateModeTo` actions have not yet been migrated and is of the legacy `Action`.
+Below is an example of a Redux state that is currently undergoing migration. Note that this state supports four actions. The `initialValueLoaded` and `counterIncreased` actions have been migrated to `ModernAction`. The `counterDecreased` and `setPrivateModeTo` actions have not yet been migrated and is of the legacy `Action`.
 
 ```swift
 static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
