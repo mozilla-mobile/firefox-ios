@@ -789,6 +789,9 @@
 		61D17EF32FE30B1100BCDD52 /* MockNimbusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D17EF22FE30B1100BCDD52 /* MockNimbusUtils.swift */; };
 		61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */; };
 		61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */; };
+		61E24E4E3012ACE400F27037 /* VPNServerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4D3012ACD800F27037 /* VPNServerList.swift */; };
+		61E24E503012AD3D00F27037 /* VPNGuardian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4F3012AD3900F27037 /* VPNGuardian.swift */; };
+		61E24E523017BF2A00F27037 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E513017BF2A00F27037 /* VPNManager.swift */; };
 		61E637852D03615D00E95B63 /* LabelButtonHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */; };
 		61E637872D03615D00E95B63 /* StoryCategoryPickerViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637862D03615D00E95B63 /* StoryCategoryPickerViewTests.swift */; };
 		61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */; };
@@ -9216,6 +9219,9 @@
 		61DA4B5AB7DA505B9C992F95 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSetting.swift; sourceTree = "<group>"; };
 		61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingsView.swift; sourceTree = "<group>"; };
+		61E24E4D3012ACD800F27037 /* VPNServerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNServerList.swift; sourceTree = "<group>"; };
+		61E24E4F3012AD3900F27037 /* VPNGuardian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNGuardian.swift; sourceTree = "<group>"; };
+		61E24E513017BF2A00F27037 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelButtonHeaderViewTests.swift; sourceTree = "<group>"; };
 		61E637862D03615D00E95B63 /* StoryCategoryPickerViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCategoryPickerViewTests.swift; sourceTree = "<group>"; };
 		61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBuilderTests.swift; sourceTree = "<group>"; };
@@ -13814,12 +13820,14 @@
 			path = AIControls;
 			sourceTree = "<group>";
 		};
-		630EBE4B301108DC0046E9BC /* Widgets */ = {
+		61E24BA63011617200F27037 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
-				630EBE4C301109A10046E9BC /* GradientProgressBarTests.swift */,
+				61E24E513017BF2A00F27037 /* VPNManager.swift */,
+				61E24E4F3012AD3900F27037 /* VPNGuardian.swift */,
+				61E24E4D3012ACD800F27037 /* VPNServerList.swift */,
 			);
-			path = Widgets;
+			path = VPN;
 			sourceTree = "<group>";
 		};
 		630FE1332C7FB42500D9D6B2 /* NativeErrorPage */ = {
@@ -17637,6 +17645,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				61E24BA63011617200F27037 /* VPN */,
 				ECD8E56A2FF7EB5B002092C6 /* Wayback */,
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				AA5E81452EB12BAB00919E60 /* Translations */,
@@ -20241,6 +20250,7 @@
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				C2A057E32FA8C32200100C24 /* WorldCupCell.swift in Sources */,
+				61E24E523017BF2A00F27037 /* VPNManager.swift in Sources */,
 				F00CA4012F00000000000003 /* WorldCupMatchesResponse.swift in Sources */,
 				F00CA4012F00000000000005 /* WorldCupLiveResponse.swift in Sources */,
 				F00CA4012F00000000000013 /* WorldCupTeamsResponse.swift in Sources */,
@@ -20530,6 +20540,7 @@
 				612194E82CE50A9B001664BB /* WallpaperState.swift in Sources */,
 				DAE6DF1B29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift in Sources */,
 				0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */,
+				61E24E503012AD3D00F27037 /* VPNGuardian.swift in Sources */,
 				8AB53B3A2D4138F200C97590 /* MessageCardMiddleware.swift in Sources */,
 				AA24AD302E7C37C6008659A3 /* TrendingSearchClient.swift in Sources */,
 				2137786529832C8900D01309 /* OverlayModeManager.swift in Sources */,
@@ -20738,6 +20749,7 @@
 				8A9E041B2D4D08350022ED90 /* BookmarkConfiguration.swift in Sources */,
 				8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */,
 				AAD861A82E9E748700F6E0E0 /* TranslationSetting.swift in Sources */,
+				61E24E4E3012ACE400F27037 /* VPNServerList.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
 				0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */,
 				21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */,
