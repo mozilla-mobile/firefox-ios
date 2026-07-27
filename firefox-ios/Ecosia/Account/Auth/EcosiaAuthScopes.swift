@@ -7,7 +7,8 @@ import Foundation
 /// OAuth scopes requested during native Auth0 authentication.
 public enum EcosiaAuthScopes {
     public static let oauthScope =
-        "openid profile email offline_access read:impact write:impact read:conversations write:conversations"
+        "openid profile email offline_access read:impact write:impact " +
+        "read:conversations write:conversations update:conversations delete:conversations"
 
     public static let conversationScopes: Set<String> = [
         "read:conversations",
