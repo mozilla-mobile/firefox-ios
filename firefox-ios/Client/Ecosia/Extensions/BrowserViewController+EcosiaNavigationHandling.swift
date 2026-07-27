@@ -31,22 +31,17 @@ extension BrowserViewController {
         if ecosiaEcosifyNavigationIfNeeded(url: url, tab: tab) {
             return true
         }
-        ecosiaHandleNavigationAction(url: url, navigationAction: navigationAction)
+        ecosiaHandleNavigationAction(url: url)
         return false
     }
 
     /// Handles any Ecosia-specific tracking when a navigation action is allowed.
     /// Stores a pending URL to be tracked at didCommit.
-    private func ecosiaHandleNavigationAction(url: URL, navigationAction: WKNavigationAction) {
+    private func ecosiaHandleNavigationAction(url: URL) {
         // Clear any stale pending tracking from a previous navigation
         pendingInappSearchUrl = nil
 
         guard url.isEcosiaSearchVertical() else { return }
-
-        // Back/forward navigations are suppressed: on web, bfcache keeps the page mounted so
-        // Vue never refires. Tab switching doesn't reach this delegate at all, so any other
-        // navigation type arriving here is a genuine user action and should always track.
-        guard navigationAction.navigationType != .backForward else { return }
 
         // Store the URL; the event fires in ecosiaHandleDidCommit when content starts rendering
         pendingInappSearchUrl = url

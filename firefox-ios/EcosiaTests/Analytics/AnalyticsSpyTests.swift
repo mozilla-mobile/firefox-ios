@@ -627,7 +627,7 @@ final class AnalyticsSpyTests: XCTestCase, @unchecked Sendable {
         let testCases = [
             (WKNavigationType.other, "\(rootURL)/search?q=test", true, "Tracks regular navigation"),
             (WKNavigationType.reload, "\(rootURL)/search?q=test", true, "Tracks reload"),
-            (WKNavigationType.backForward, "\(rootURL)/search?q=test", false, "Does not track back/forward"),
+            (WKNavigationType.backForward, "\(rootURL)/search?q=test", true, "Tracks back/forward"),
         ]
 
         for (type, urlString, shouldTrack, message) in testCases {
