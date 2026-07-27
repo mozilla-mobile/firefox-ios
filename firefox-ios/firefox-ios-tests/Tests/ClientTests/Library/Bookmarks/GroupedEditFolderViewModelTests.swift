@@ -194,15 +194,3 @@ final class GroupedEditFolderViewModelTests: XCTestCase {
         return subject
     }
 }
-
-final class MockGroupedFolderHierarchyFetcher: GroupedFolderHierarchyFetcher, @unchecked Sendable {
-    var mockFolderStructures: [GroupedFolder] = []
-    private(set) var fetchFoldersCalled = 0
-    private(set) var capturedExcludedGuids: [String] = []
-
-    func fetchFolders(excludedGuids: [String]) async -> [GroupedFolder] {
-        fetchFoldersCalled += 1
-        capturedExcludedGuids = excludedGuids
-        return mockFolderStructures
-    }
-}

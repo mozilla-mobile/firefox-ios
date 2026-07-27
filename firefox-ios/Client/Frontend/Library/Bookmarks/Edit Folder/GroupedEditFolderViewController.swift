@@ -28,7 +28,7 @@ class GroupedEditFolderViewController: UIViewController,
 
     private let viewModel: GroupedEditFolderViewModel
 
-    private lazy var tableView: UITableView = .build({ view in
+    lazy var tableView: UITableView = .build({ view in
         view.dataSource = self
         view.delegate = self
         view.register(cellType: EditFolderCell.self)
