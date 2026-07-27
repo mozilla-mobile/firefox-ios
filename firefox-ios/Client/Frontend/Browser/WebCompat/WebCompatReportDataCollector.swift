@@ -67,8 +67,9 @@ enum WebCompatReportDataCollector {
         payload.hasTouchScreen = true
         payload.defaultUseragentString = device.defaultUserAgent
 
-        let pageUserAgent = tab.pageUserAgent
-        payload.useragentString = (pageUserAgent?.isEmpty == false) ? pageUserAgent : device.defaultUserAgent
+        // Only set when something overrode the UA, so a nil here is distinguishable from a
+        // page that matched the default. The real value is navigator.userAgent (FXIOS-16184).
+        payload.useragentString = tab.pageUserAgent.flatMap { $0.isEmpty ? nil : $0 }
         // An off-screen web view reports a display scale of 0, not nil.
         let pageScale = tab.displayScale ?? 0
         payload.devicePixelRatio = String(format: "%g", pageScale > 0 ? pageScale : device.displayScale)

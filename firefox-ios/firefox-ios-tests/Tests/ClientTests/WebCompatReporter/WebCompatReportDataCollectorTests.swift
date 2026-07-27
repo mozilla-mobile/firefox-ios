@@ -22,7 +22,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(payload.languages)
     }
 
-    // MARK: - useragent fallback
+    // MARK: - useragent
 
     func test_enrich_nonEmptyPageUserAgent_isUsed() {
         let device = FakeDeviceInfoProvider(defaultUserAgent: "DefaultUA/1.0")
@@ -31,24 +31,29 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
 
         XCTAssertEqual(payload.useragentString, "PageUA/2.0")
+        XCTAssertEqual(payload.defaultUseragentString, "DefaultUA/1.0")
     }
 
-    func test_enrich_emptyPageUserAgent_fallsBackToDevice() {
+    // Without an override there is no page UA to report. Copying the device default
+    // would be indistinguishable in the ping from a page that genuinely matched it.
+    func test_enrich_emptyPageUserAgent_leavesUseragentStringNil() {
         let device = FakeDeviceInfoProvider(defaultUserAgent: "DefaultUA/1.0")
         let snapshot = makeSnapshot(pageUserAgent: "")
 
         let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
 
-        XCTAssertEqual(payload.useragentString, "DefaultUA/1.0")
+        XCTAssertNil(payload.useragentString)
+        XCTAssertEqual(payload.defaultUseragentString, "DefaultUA/1.0")
     }
 
-    func test_enrich_nilPageUserAgent_fallsBackToDevice() {
+    func test_enrich_nilPageUserAgent_leavesUseragentStringNil() {
         let device = FakeDeviceInfoProvider(defaultUserAgent: "DefaultUA/1.0")
         let snapshot = makeSnapshot(pageUserAgent: nil)
 
         let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
 
-        XCTAssertEqual(payload.useragentString, "DefaultUA/1.0")
+        XCTAssertNil(payload.useragentString)
+        XCTAssertEqual(payload.defaultUseragentString, "DefaultUA/1.0")
     }
 
     // MARK: - devicePixelRatio precedence
