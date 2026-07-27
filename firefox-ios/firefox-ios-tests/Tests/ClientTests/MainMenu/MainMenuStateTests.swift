@@ -57,7 +57,7 @@ final class MainMenuStateTests: XCTestCase {
 
         XCTAssertNil(initialState.currentTabInfo)
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -77,7 +77,7 @@ final class MainMenuStateTests: XCTestCase {
         XCTAssertNil(initialState.navigationDestination)
 
         MainMenuNavigationDestination.allCasesForTests.forEach { destination in
-            let newState = reducer(
+            let newState = reducer.legacyReducer(
                 initialState,
                 MainMenuAction(
                     windowUUID: .XCTestDefaultUUID,
@@ -101,7 +101,7 @@ final class MainMenuStateTests: XCTestCase {
 
         XCTAssertFalse(initialState.shouldDismiss)
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -119,7 +119,7 @@ final class MainMenuStateTests: XCTestCase {
 
         XCTAssertFalse(initialState.shouldDismiss)
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,

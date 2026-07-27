@@ -31,7 +31,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.navigateTo)
 
         let action = getAction(for: .addNewTab)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.navigateTo, .newTab)
     }
@@ -43,7 +43,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.displayView)
 
         let action = getAction(for: .showNewTabLongPressActions)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.displayView, .newTabLongPressActions)
     }
@@ -55,7 +55,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.displayView)
 
         let action = getAction(for: .showGoogleLensPhotoPicker)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.displayView, .googleLensPhotoPicker)
     }
@@ -67,7 +67,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.displayView)
 
         let action = getAction(for: .showGoogleLensCamera)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.displayView, .googleLensCamera)
     }
@@ -86,7 +86,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = GeneralBrowserAction(frameContext: frameContext,
                                           windowUUID: .XCTestDefaultUUID,
                                           actionType: GeneralBrowserActionType.showPasswordGenerator)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
         let displayView = newState.displayView!
         let desiredDisplayView =
         BrowserViewControllerState.DisplayType.passwordGenerator
@@ -102,7 +102,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.navigateTo)
 
         let action = getAction(for: .reloadWebsite)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.navigateTo, .reload)
     }
@@ -115,7 +115,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let archivedURL = URL(string: "https://web.archive.org/web/20130919044612/http://example.com/")!
         let action = getGeneralBrowserAction(destinationURL: archivedURL, for: .loadWaybackURL)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.navigateTo, .loadURL(archivedURL))
     }
@@ -125,7 +125,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let reducer = browserViewControllerReducer()
 
         let action = getGeneralBrowserAction(destinationURL: nil, for: .loadWaybackURL)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertNil(newState.navigateTo)
     }
@@ -141,7 +141,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: GeneralBrowserActionType.showSummarizer
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         guard case .summarizer(let config, let trigger) = newState.navigationDestination?.destination else {
             return XCTFail("Expected .summarizer")
@@ -155,7 +155,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let reducer = browserViewControllerReducer()
 
         let action = getAction(for: .showSummarizer)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertNil(newState.navigationDestination)
     }
@@ -169,7 +169,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton,
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.shouldShowReaderModeBarSummarizerButton)
     }
@@ -183,7 +183,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: SummarizeMiddlewareActionType.summaryNotAvailable,
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.shouldShowReaderModeBarSummarizerButton)
     }
@@ -197,7 +197,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let url = try XCTUnwrap(URL(string: "www.example.com"))
         let action = getNavigationBrowserAction(for: .tapOnCell, destination: .link, url: url)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let destination = newState.navigationDestination?.destination
         switch destination {
@@ -218,7 +218,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let url = try XCTUnwrap(URL(string: "www.example.com"))
         let action = getNavigationBrowserAction(for: .tapOnLink, destination: .link, url: url)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let destination = newState.navigationDestination?.destination
         switch destination {
@@ -250,7 +250,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             for: .tapOnShareSheet,
             destination: .shareSheet(shareSheetConfiguration)
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let destination = newState.navigationDestination?.destination
         switch destination {
@@ -276,7 +276,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let url = try XCTUnwrap(URL(string: "www.example.com"))
         let action = getNavigationBrowserAction(for: .longPressOnCell, destination: .link, url: url)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let destination = newState.navigationDestination?.destination
         switch destination {
@@ -301,7 +301,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: NavigationBrowserActionType.tapOnOpenInNewTab
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let navigationDestination = try XCTUnwrap(newState.navigationDestination)
         switch navigationDestination.destination {
@@ -328,7 +328,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: NavigationBrowserActionType.tapOnOpenInNewTab
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let navigationDestination = try XCTUnwrap(newState.navigationDestination)
         switch navigationDestination.destination {
@@ -354,7 +354,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: NavigationBrowserActionType.tapOnCell
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let navigationDestination = try XCTUnwrap(newState.navigationDestination)
         switch navigationDestination.destination {
@@ -374,7 +374,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.navigationDestination)
 
         let action = getNavigationBrowserAction(for: .tapOnSettingsSection, destination: .settings(.topSites))
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let destination = newState.navigationDestination?.destination
         switch destination {
@@ -400,7 +400,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertTrue(newState.shouldStartAtHome)
     }
@@ -415,7 +415,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertFalse(newState.shouldStartAtHome)
     }
@@ -429,7 +429,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.navigationDestination)
 
         let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .homepageZeroSearch)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
         let destination = newState.navigationDestination?.destination
         switch destination {
         case .homepageZeroSearch:
@@ -453,7 +453,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
         let destination = newState.navigationDestination?.destination
         switch destination {
         case .homepageZeroSearch:
@@ -476,7 +476,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertNil(newState.navigationDestination)
     }
@@ -492,7 +492,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertNil(newState.navigationDestination)
     }
@@ -507,7 +507,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertNil(newState.navigationDestination)
     }
@@ -521,7 +521,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.navigationDestination)
 
         let action = getNavigationBrowserAction(for: .tapOnShortcutsShowAllButton, destination: .shortcutsLibrary)
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let destination = newState.navigationDestination?.destination
         switch destination {
@@ -543,7 +543,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         guard let url = URL(string: "https://www.mozilla.com") else { return }
 
         let action = getNavigationBrowserAction(for: .tapOnPrivacyNoticeLink, destination: .privacyNoticeLink(url))
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         let destination = newState.navigationDestination?.destination
         switch destination {
@@ -563,7 +563,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             for: .tapOnQuickAnswersButton,
             destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
         )
-        let newState = reducer(initialState, action)
+        let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(
             newState.navigationDestination?.destination,
@@ -579,13 +579,13 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             for: .tapOnQuickAnswersButton,
             destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
         )
-        let navigatedState = reducer(initialState, navigateAction)
+        let navigatedState = reducer.legacyReducer(initialState, navigateAction)
 
         let handledAction = getNavigationBrowserAction(
             for: .navigationDestinationHandled,
             destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
         )
-        let handledState = reducer(navigatedState, handledAction)
+        let handledState = reducer.legacyReducer(navigatedState, handledAction)
 
         XCTAssertNotNil(navigatedState.navigationDestination)
         XCTAssertNil(handledState.navigationDestination)
@@ -634,7 +634,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     /// We need to set up the state for the homepage search bar in order to test method that relies on this state
     func setupStoreForSearchBar() {
         let initialHomepageState = HomepageState
-            .reducer(
+            .reducer.legacyReducer(
                 HomepageState(windowUUID: .XCTestDefaultUUID),
                 HomepageAction(
                     windowUUID: .XCTestDefaultUUID,
@@ -642,7 +642,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
                 )
             )
         let newHomepageState = HomepageState
-            .reducer(
+            .reducer.legacyReducer(
                 initialHomepageState,
                 HomepageAction(
                     isSearchBarEnabled: true,

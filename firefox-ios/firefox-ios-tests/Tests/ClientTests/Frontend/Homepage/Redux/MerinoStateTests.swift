@@ -282,8 +282,8 @@ final class MerinoStateTests: XCTestCase {
         return MerinoState(windowUUID: .XCTestDefaultUUID)
     }
 
-    private func pocketReducer() -> Reducer<MerinoState> {
-        return MerinoState.reducer
+    private func pocketReducer() -> LegacyReducerMethod<MerinoState> {
+        return MerinoState.reducer.legacyReducer
     }
 
     private func createTestCategories() -> [MerinoCategoryConfiguration] {

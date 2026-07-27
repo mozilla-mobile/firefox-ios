@@ -44,7 +44,7 @@ final class TermsOfUseStateTests: XCTestCase {
         var state = TermsOfUseState(windowUUID: windowUUID)
         let action = TermsOfUseAction(windowUUID: windowUUID, actionType: .termsAccepted)
 
-        state = TermsOfUseState.reducer(state, action)
+        state = TermsOfUseState.reducer.legacyReducer(state, action)
 
         XCTAssertTrue(state.hasAccepted)
         XCTAssertFalse(state.wasDismissed)
@@ -55,7 +55,7 @@ final class TermsOfUseStateTests: XCTestCase {
         var state = TermsOfUseState(windowUUID: windowUUID)
         let action = TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss)
 
-        state = TermsOfUseState.reducer(state, action)
+        state = TermsOfUseState.reducer.legacyReducer(state, action)
 
         XCTAssertFalse(state.hasAccepted)
         XCTAssertTrue(state.wasDismissed)
@@ -66,7 +66,7 @@ final class TermsOfUseStateTests: XCTestCase {
         var state = TermsOfUseState(windowUUID: windowUUID)
         let action = TermsOfUseAction(windowUUID: windowUUID, actionType: .remindMeLaterTapped)
 
-        state = TermsOfUseState.reducer(state, action)
+        state = TermsOfUseState.reducer.legacyReducer(state, action)
 
         XCTAssertFalse(state.hasAccepted)
         XCTAssertTrue(state.wasDismissed)
@@ -81,7 +81,7 @@ final class TermsOfUseStateTests: XCTestCase {
         )
 
         let action = TermsOfUseAction(windowUUID: windowUUID, actionType: .learnMoreLinkTapped)
-        state = TermsOfUseState.reducer(state, action)
+        state = TermsOfUseState.reducer.legacyReducer(state, action)
 
         XCTAssertTrue(state.hasAccepted)
         XCTAssertFalse(state.wasDismissed)
@@ -98,7 +98,7 @@ final class TermsOfUseStateTests: XCTestCase {
         let differentUUID = WindowUUID()
         let action = TermsOfUseAction(windowUUID: differentUUID, actionType: .termsAccepted)
 
-        state = TermsOfUseState.reducer(state, action)
+        state = TermsOfUseState.reducer.legacyReducer(state, action)
 
         XCTAssertTrue(state.hasAccepted)
         XCTAssertTrue(state.wasDismissed)
