@@ -16,9 +16,6 @@ class MockNotificationManager: NotificationManagerProtocol {
         completion(shouldGrantPermission, errorToReturn)
     }
 
-    func requestAuthorization(completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
-    }
-
     func requestAuthorization() async throws -> Bool {
         return wasAuthorizationSuccessful
     }
@@ -37,18 +34,6 @@ class MockNotificationManager: NotificationManagerProtocol {
     }
 
     var scheduledNotifications = 0
-    var scheduleWithDateWasCalled = false
-    func schedule(title: String,
-                  body: String,
-                  id: String,
-                  userInfo: [AnyHashable: Any]?,
-                  categoryIdentifier: String,
-                  date: Date,
-                  repeats: Bool) {
-        scheduledNotifications += 1
-        scheduleWithDateWasCalled = true
-    }
-
     var scheduleWithIntervalWasCalled = false
     func schedule(title: String,
                   body: String,
@@ -61,23 +46,7 @@ class MockNotificationManager: NotificationManagerProtocol {
         scheduleWithIntervalWasCalled = true
     }
 
-    func findDeliveredNotifications() async -> [UNNotification] {
-        return []
-    }
-
     func findDeliveredNotificationForId(id: String) async -> UNNotification? {
         return nil
-    }
-
-    var removeAllPendingNotificationsWasCalled = false
-    func removeAllPendingNotifications() {
-        removeAllPendingNotificationsWasCalled = true
-        scheduledNotifications = 0
-    }
-
-    var removePendingNotificationsWithIdWasCalled = false
-    func removePendingNotificationsWithId(ids: [String]) {
-        scheduledNotifications -= 1
-        removePendingNotificationsWithIdWasCalled = true
     }
 }
