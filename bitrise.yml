@@ -1948,6 +1948,12 @@ workflows:
                 echo "Waiting for gcloud storage to complete..."
                 sleep $CHECK_INTERVAL
                 if ! ps -p $PID > /dev/null; then
+                    wait $PID
+                    STATUS=$?
+                    if [ $STATUS -ne 0 ]; then
+                        echo "gcloud storage cp failed with exit code $STATUS"
+                        exit $STATUS
+                    fi
                     break
                 fi
             done
