@@ -212,32 +212,26 @@ class GroupedEditFolderViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == Self.editFolderSection { return 1 }
+        guard section != Self.editFolderSection else { return 1 }
         guard viewModel.isBrowsingFolders else { return 2 }
-        guard let location = groupSections[safe: section - Self.firstGroupSection],
-              let group = viewModel.folderGroups[safe: location.groupIndex],
-              group.isExpanded
-        else { return 0 }
-        return group.blocks[safe: location.blockIndex]?.folders.count ?? 0
+
+        guard let group = folderGroup(forSection: section) else { return 0 }
+        guard group.isExpanded else { return 0 }
+        guard let block = folderBlock(forSection: section) else { return 0 }
+
+        return block.folders.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == Self.editFolderSection {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: EditFolderCell.cellIdentifier,
-                                                           for: indexPath) as? EditFolderCell
-            else { return UITableViewCell() }
-            configureEditFolderCell(cell)
-            return cell
+        guard indexPath.section != Self.editFolderSection else {
+            return configureEditFolderCell(tableView, at: indexPath)
         }
-
-        if !viewModel.isBrowsingFolders {
+        guard viewModel.isBrowsingFolders else {
             return configureSummaryRow(tableView, at: indexPath)
         }
 
-        guard let location = groupSections[safe: indexPath.section - Self.firstGroupSection],
-              let group = viewModel.folderGroups[safe: location.groupIndex],
-              let folder = group.blocks[safe: location.blockIndex]?.folders[safe: indexPath.row],
-              let cell = tableView.dequeueReusableCell(withIdentifier: FolderTreeCell.cellIdentifier,
+        guard let folder = folder(at: indexPath) else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: FolderTreeCell.cellIdentifier,
                                                        for: indexPath) as? FolderTreeCell
         else { return UITableViewCell() }
 
@@ -247,11 +241,111 @@ class GroupedEditFolderViewController: UIViewController,
         return cell
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section != Self.editFolderSection else { return }
+
+        guard viewModel.isBrowsingFolders else {
+            guard indexPath.row == 1 else { return }
+            viewModel.beginBrowsingFolders()
+            return
+        }
+
+        guard let folder = folder(at: indexPath) else { return }
+        viewModel.selectFolder(folder)
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section != Self.editFolderSection else { return nil }
+        guard let header = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: FolderSectionHeaderView.reuseIdentifier
+        ) as? FolderSectionHeaderView else { return nil }
+
+        guard viewModel.isBrowsingFolders else {
+            guard section == Self.firstGroupSection else { return nil }
+            header.configure(
+                title: nil,
+                caption: .Bookmarks.Menu.EditBookmarkLocationLabel,
+                showsChevron: false,
+                titleColor: theme.colors.textPrimary,
+                captionColor: theme.colors.textSecondary
+            )
+            header.onTap = nil
+            return header
+        }
+
+        guard let location = groupLocation(forSection: section) else { return nil }
+        guard location.blockIndex == 0 else { return nil }
+        guard let group = viewModel.folderGroups[safe: location.groupIndex] else { return nil }
+
+        header.configure(
+            title: group.title,
+            caption: location.groupIndex == 0 ? .Bookmarks.Menu.EditBookmarkAllFoldersLabel : nil,
+            showsChevron: true,
+            isExpanded: group.isExpanded,
+            titleColor: theme.colors.textPrimary,
+            captionColor: theme.colors.textSecondary
+        )
+        header.onTap = { [weak self] in
+            self?.toggleGroup(at: location.groupIndex)
+        }
+        return header
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        guard section != Self.editFolderSection else { return 0 }
+        guard viewModel.isBrowsingFolders else {
+            return section == Self.firstGroupSection ? UITableView.automaticDimension : 0
+        }
+        guard let location = groupLocation(forSection: section) else { return 0 }
+        return location.blockIndex == 0 ? UITableView.automaticDimension : CGFloat.leastNormalMagnitude
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    // MARK: - Section/Folder Resolution
+
+    private func groupLocation(forSection section: Int) -> (groupIndex: Int, blockIndex: Int)? {
+        groupSections[safe: section - Self.firstGroupSection]
+    }
+
+    private func folderGroup(forSection section: Int) -> FolderGroup? {
+        guard let location = groupLocation(forSection: section) else { return nil }
+        return viewModel.folderGroups[safe: location.groupIndex]
+    }
+
+    private func folderBlock(forSection section: Int) -> FolderGroup.Block? {
+        guard let location = groupLocation(forSection: section) else { return nil }
+        return viewModel.folderGroups[safe: location.groupIndex]?.blocks[safe: location.blockIndex]
+    }
+
+    private func folder(at indexPath: IndexPath) -> GroupedFolder? {
+        guard let block = folderBlock(forSection: indexPath.section) else { return nil }
+        return block.folders[safe: indexPath.row]
+    }
+
+    // MARK: - Cell Configuration
+
+    private func configureEditFolderCell(_ tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: EditFolderCell.cellIdentifier,
+                                                       for: indexPath) as? EditFolderCell
+        else { return UITableViewCell() }
+
+        cell.setTitle(viewModel.editedFolderTitle)
+        cell.onTitleFieldUpdate = { [weak self] in
+            self?.viewModel.updateFolderTitle($0)
+        }
+        cell.applyTheme(theme: theme)
+        return cell
+    }
+
     private func configureSummaryRow(_ tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        guard indexPath.row != 0 else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: FolderTreeCell.cellIdentifier,
                                                            for: indexPath) as? FolderTreeCell
             else { return UITableViewCell() }
+
             let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)
             cell.indentationLevel = 0
             cell.configure(title: viewModel.selectedFolder?.title ?? "",
@@ -266,17 +360,10 @@ class GroupedEditFolderViewController: UIViewController,
         guard let cell = tableView.dequeueReusableCell(withIdentifier: LinkActionCell.cellIdentifier,
                                                        for: indexPath) as? LinkActionCell
         else { return UITableViewCell() }
+
         cell.configure(title: .Bookmarks.Menu.EditBookmarkChangeLocationLabel)
         cell.applyTheme(theme: theme)
         return cell
-    }
-
-    private func configureEditFolderCell(_ cell: EditFolderCell) {
-        cell.setTitle(viewModel.editedFolderTitle)
-        cell.onTitleFieldUpdate = { [weak self] in
-            self?.viewModel.updateFolderTitle($0)
-        }
-        cell.applyTheme(theme: theme)
     }
 
     private func configureParentFolderCell(_ cell: FolderTreeCell, folder: GroupedFolder) {
@@ -295,77 +382,6 @@ class GroupedEditFolderViewController: UIViewController,
                        isSelected: folder.guid == viewModel.selectedFolder?.guid)
         cell.applyTheme(theme: theme)
     }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section != Self.editFolderSection else { return }
-
-        guard viewModel.isBrowsingFolders else {
-            if indexPath.row == 1 {
-                viewModel.beginBrowsingFolders()
-            }
-            return
-        }
-
-        guard let location = groupSections[safe: indexPath.section - Self.firstGroupSection],
-              let group = viewModel.folderGroups[safe: location.groupIndex],
-              let folder = group.blocks[safe: location.blockIndex]?.folders[safe: indexPath.row]
-        else { return }
-        viewModel.selectFolder(folder)
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section != Self.editFolderSection,
-              let header = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: FolderSectionHeaderView.reuseIdentifier
-              ) as? FolderSectionHeaderView
-        else { return nil }
-
-        guard viewModel.isBrowsingFolders else {
-            guard section == Self.firstGroupSection else { return nil }
-            header.configure(
-                title: nil,
-                caption: .Bookmarks.Menu.EditBookmarkLocationLabel,
-                showsChevron: false,
-                titleColor: theme.colors.textPrimary,
-                captionColor: theme.colors.textSecondary
-            )
-            header.onTap = nil
-            return header
-        }
-
-        guard let location = groupSections[safe: section - Self.firstGroupSection],
-              location.blockIndex == 0,
-              let group = viewModel.folderGroups[safe: location.groupIndex]
-        else { return nil }
-
-        let isFirstGroup = location.groupIndex == 0
-        header.configure(
-            title: group.title,
-            caption: isFirstGroup ? .Bookmarks.Menu.EditBookmarkAllFoldersLabel : nil,
-            showsChevron: true,
-            isExpanded: group.isExpanded,
-            titleColor: theme.colors.textPrimary,
-            captionColor: theme.colors.textSecondary
-        )
-        header.onTap = { [weak self] in
-            self?.toggleGroup(at: location.groupIndex)
-        }
-        return header
-    }
-
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        guard section != Self.editFolderSection else { return 0 }
-        guard viewModel.isBrowsingFolders else {
-            return section == Self.firstGroupSection ? UITableView.automaticDimension : 0
-        }
-        guard let location = groupSections[safe: section - Self.firstGroupSection] else { return 0 }
-        return location.blockIndex == 0 ? UITableView.automaticDimension : CGFloat.leastNormalMagnitude
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-
     // MARK: - Helpers
 
     private var groupSections: [(groupIndex: Int, blockIndex: Int)] {
