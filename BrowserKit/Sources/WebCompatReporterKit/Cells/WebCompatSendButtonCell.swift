@@ -6,7 +6,7 @@ import Common
 import ComponentLibrary
 import UIKit
 
-final class WebCompatSendButtonCell: UICollectionViewListCell, ThemeApplicable, ReusableCell {
+final class WebCompatSendButtonCell: UICollectionViewListCell, ThemeApplicable {
     private var tapHandler: (() -> Void)?
 
     private lazy var button: PrimaryRoundedButton = .build { button in

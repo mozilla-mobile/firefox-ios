@@ -145,19 +145,15 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.tappedButtonIDs, ["send"])
     }
 
-    func testSendButton_whenDisabled_doesNotNotifyDelegate() {
-        let delegate = MockWebCompatReportSheetDelegate()
+    func testSendButton_whenNotSubmittable_rendersDisabledButton() {
         let subject = createSubject()
-        subject.delegate = delegate
         subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
         subject.configure(with: makeViewModel(sections: sendSections(isEnabled: false)))
         subject.view.layoutIfNeeded()
 
         let cell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
-        let button = firstSubview(ofType: UIButton.self, in: cell)
-        XCTAssertEqual(button?.isEnabled, false)
-        XCTAssertTrue(delegate.tappedButtonIDs.isEmpty)
+        XCTAssertEqual(firstSubview(ofType: UIButton.self, in: cell)?.isEnabled, false)
     }
 
     // MARK: - Helpers
