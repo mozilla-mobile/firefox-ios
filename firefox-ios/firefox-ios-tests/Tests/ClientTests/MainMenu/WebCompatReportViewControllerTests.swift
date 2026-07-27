@@ -3,22 +3,26 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import WebCompatReporterKit
 import XCTest
 
 @testable import Client
 
 @MainActor
-final class WebCompatReportViewControllerTests: XCTestCase {
+final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        setupStore()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        resetStore()
         try await super.tearDown()
     }
 
@@ -40,6 +44,49 @@ final class WebCompatReportViewControllerTests: XCTestCase {
         subject.webCompatReportSheetDidTapClose()
 
         XCTAssertEqual(coordinator.didFinishCallCount, 1)
+    }
+
+    // MARK: - Delegate intents → Redux actions
+
+    func testDidTapButton_onSendRow_dispatchesSubmit() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidTapButton(id: "send")
+
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .submit)
+    }
+
+    func testDidTapButton_onUnhandledRow_dispatchesNothing() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidTapButton(id: "unknown")
+
+        XCTAssertTrue(dispatchedViewActions().isEmpty)
+    }
+
+    // MARK: - makeSections
+
+    func testMakeSections_withoutCategory_appendsDisabledSendButton() {
+        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        XCTAssertEqual(sections.map(\.id), ["issueCategory", "send"])
+        XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
+    }
+
+    func testMakeSections_withCategory_enablesSendButtonAndKeepsItLast() {
+        let state = WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .siteNotUsable,
+            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue
+        )
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        XCTAssertEqual(sections.map(\.id), ["issueCategory", "issueSubOptions", "send"])
+        XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: true)])
     }
 
     func testSimpleCreation_hasNoLeaks() {
@@ -104,6 +151,35 @@ final class WebCompatReportViewControllerTests: XCTestCase {
 
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {
         return WebCompatReportViewController(windowUUID: windowUUID, reportedURL: reportedURL)
+    }
+
+    private func dispatchedViewActions() -> [WebCompatReporterViewAction] {
+        return mockStore.dispatchedActions.compactMap { $0 as? WebCompatReporterViewAction }
+    }
+
+    private func lastViewAction() -> WebCompatReporterViewAction? {
+        return dispatchedViewActions().last
+    }
+
+    // MARK: - StoreTestUtility
+
+    func setupAppState() -> AppState {
+        return AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .webCompatReporter(WebCompatReporterState(windowUUID: windowUUID))
+                ]
+            )
+        )
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }
 

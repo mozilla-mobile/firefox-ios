@@ -117,7 +117,75 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         )
     }
 
+    func testConfigure_withSendSection_dequeuesSendButtonCell() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: makeViewModel(sections: sendSections(isEnabled: true)))
+        subject.view.layoutIfNeeded()
+
+        XCTAssertTrue(
+            collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatSendButtonCell
+        )
+    }
+
+    func testSendButton_whenTapped_notifiesDelegateWithRowID() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let subject = createSubject()
+        subject.delegate = delegate
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: sendSections(isEnabled: true)))
+        subject.view.layoutIfNeeded()
+
+        let cell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
+        fireActions(firstSubview(ofType: UIButton.self, in: cell), for: .touchUpInside)
+
+        XCTAssertEqual(delegate.tappedButtonIDs, ["send"])
+    }
+
+    func testSendButton_whenNotSubmittable_rendersDisabledButton() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: sendSections(isEnabled: false)))
+        subject.view.layoutIfNeeded()
+
+        let cell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
+        XCTAssertEqual(firstSubview(ofType: UIButton.self, in: cell)?.isEnabled, false)
+    }
+
     // MARK: - Helpers
+
+    private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
+        return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+    }
+
+    // UIControl.sendActions needs a running UIApplication, which logic tests lack,
+    // so invoke each registered target/action selector directly.
+    private func fireActions(_ control: UIControl?, for event: UIControl.Event) {
+        guard let control else { return }
+        for target in control.allTargets {
+            let object = target as NSObject
+            control.actions(forTarget: target, forControlEvent: event)?.forEach {
+                object.perform(Selector($0))
+            }
+        }
+    }
+
+    private func sendSections(isEnabled: Bool) -> [WebCompatReportViewModel.Section] {
+        return [
+            WebCompatReportViewModel.Section(id: "send", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "send",
+                    title: "Send Report",
+                    kind: .sendButton(isEnabled: isEnabled),
+                    a11yIdentifier: "send"
+                )
+            ])
+        ]
+    }
 
     private func pickerSections() -> [WebCompatReportViewModel.Section] {
         let options = [
@@ -208,6 +276,7 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
     var didTapPreviewCallCount = 0
     var selectedCategoryIDs: [String] = []
     var selectedSubOptionIDs: [String] = []
+    var tappedButtonIDs: [String] = []
 
     func webCompatReportSheetDidTapClose() {
         didTapCloseCallCount += 1
@@ -223,5 +292,9 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
 
     func webCompatReportSheetDidSelectSubOption(id: String) {
         selectedSubOptionIDs.append(id)
+    }
+
+    func webCompatReportSheetDidTapButton(id: String) {
+        tappedButtonIDs.append(id)
     }
 }

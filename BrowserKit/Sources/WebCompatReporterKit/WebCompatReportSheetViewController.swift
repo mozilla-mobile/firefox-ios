@@ -14,6 +14,7 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidTapPreview()
     func webCompatReportSheetDidSelectCategory(id: String)
     func webCompatReportSheetDidSelectSubOption(id: String)
+    func webCompatReportSheetDidTapButton(id: String)
 }
 
 /// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
@@ -153,6 +154,18 @@ public final class WebCompatReportSheetViewController: UIViewController,
             }
         }
 
+        let sendButtonRegistration = UICollectionView.CellRegistration<
+            WebCompatSendButtonCell, WebCompatReportViewModel.Row
+        > { [weak self] cell, _, row in
+            guard let self, case let .sendButton(isEnabled) = row.kind else { return }
+            cell.configure(title: row.title, isEnabled: isEnabled, a11yIdentifier: row.a11yIdentifier) { [weak self] in
+                // Text fields report on end-editing, so commit the active one before submitting.
+                self?.view.endEditing(true)
+                self?.delegate?.webCompatReportSheetDidTapButton(id: row.id)
+            }
+            cell.applyTheme(theme: self.theme)
+        }
+
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
         ) { [weak self] collectionView, indexPath, rowID in
@@ -167,6 +180,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
             case .subOption:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: subOptionRegistration,
+                    for: indexPath,
+                    item: row
+                )
+            case .sendButton:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: sendButtonRegistration,
                     for: indexPath,
                     item: row
                 )
