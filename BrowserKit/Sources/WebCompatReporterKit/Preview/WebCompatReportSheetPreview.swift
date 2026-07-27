@@ -88,6 +88,28 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
     )
 }
 
+/// The Additional Info section the footer hangs off; the footer itself is section-agnostic.
+private func previewFooterSection() -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(
+        id: "footer-host",
+        title: "Additional Info",
+        footer: WebCompatReportViewModel.Footer(
+            text: "Firefox needs this info to fix the site. Learn More…",
+            linkText: "Learn More…",
+            linkURL: URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"),
+            linkA11yIdentifier: "learnMore"
+        ),
+        rows: [
+            WebCompatReportViewModel.Row(
+                id: "screenshot",
+                title: "Automatically include a screenshot to show the problem",
+                kind: .toggle(isOn: true),
+                a11yIdentifier: "screenshot"
+            )
+        ]
+    )
+}
+
 @available(iOS 17.0, *)
 #Preview("Placeholder") {
     previewSheet(sections: [
@@ -117,6 +139,14 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
         previewCategorySection(selectedTitle: nil),
         previewAdvancedSection(includeScreenshot: false, includeBlockedList: false),
         previewSendSection(isEnabled: false)
+    ])
+}
+
+@available(iOS 17.0, *)
+#Preview("Learn More footer") {
+    previewSheet(sections: [
+        previewCategorySection(selectedTitle: "Site is not usable"),
+        previewFooterSection()
     ])
 }
 #endif

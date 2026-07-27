@@ -225,6 +225,53 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(accessoryCount(in: subject, at: subOptionIndexPath), 0)
     }
 
+    func testLearnMoreFooterLinkTap_forwardsTappedURLToDelegate() throws {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let hosted = hostedFooterSubject(delegate: delegate)
+        defer { hosted.window.isHidden = true }
+
+        let footer = try XCTUnwrap(footerView(in: hosted.controller))
+        let textView = try XCTUnwrap(firstSubview(ofType: UITextView.self, in: footer))
+        let linkURL = try XCTUnwrap(URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"))
+
+        let allowsDefault = footer.textView(
+            textView,
+            shouldInteractWith: linkURL,
+            in: NSRange(location: 0, length: 0),
+            interaction: .invokeDefaultAction
+        )
+
+        // The coordinator owns navigation, so the text view must not open the URL itself.
+        XCTAssertFalse(allowsDefault)
+        XCTAssertEqual(delegate.learnMoreURLs, [linkURL])
+    }
+
+    func testLearnMoreFooter_applyTheme_linksOnlyTheLinkTextRange() throws {
+        let hosted = hostedFooterSubject(delegate: MockWebCompatReportSheetDelegate())
+        defer { hosted.window.isHidden = true }
+
+        let footer = try XCTUnwrap(footerView(in: hosted.controller))
+        let textView = try XCTUnwrap(firstSubview(ofType: UITextView.self, in: footer))
+        let attributed = try XCTUnwrap(textView.attributedText)
+
+        let expectedRange = (attributed.string as NSString).range(of: "Learn More…")
+        var linkRange = NSRange(location: 0, length: 0)
+        let linkURL = attributed.attribute(.link, at: expectedRange.location, effectiveRange: &linkRange) as? URL
+
+        XCTAssertEqual(linkURL, URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"))
+        XCTAssertEqual(linkRange, expectedRange)
+    }
+
+    func testSectionWithoutFooter_rendersNoFooterSupplementary() {
+        let subject = createSubject()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: pickerSections()))
+        subject.view.layoutIfNeeded()
+
+        XCTAssertNil(footerView(in: subject))
+    }
+
     // MARK: - Helpers
 
     private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
@@ -324,6 +371,46 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         ]
     }
 
+    /// A key-windowed sheet whose second section carries a Learn More footer, so
+    /// the supplementary view is actually realized.
+    private func hostedFooterSubject(
+        delegate: MockWebCompatReportSheetDelegate
+    ) -> (controller: WebCompatReportSheetViewController, window: UIWindow) {
+        let subject = createSubject()
+        subject.delegate = delegate
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.rootViewController = subject
+        window.makeKeyAndVisible()
+        subject.configure(with: makeViewModel(sections: footerSections()))
+        subject.view.layoutIfNeeded()
+        return (subject, window)
+    }
+
+    private func footerView(in subject: WebCompatReportSheetViewController) -> WebCompatLearnMoreFooterView? {
+        return collectionView(in: subject)?.supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionFooter,
+            at: IndexPath(item: 0, section: 0)
+        ) as? WebCompatLearnMoreFooterView
+    }
+
+    private func footerSections() -> [WebCompatReportViewModel.Section] {
+        return [
+            WebCompatReportViewModel.Section(
+                id: "footer-host",
+                title: "Additional Info",
+                footer: WebCompatReportViewModel.Footer(
+                    text: "Firefox needs this info to fix the site. Learn More…",
+                    linkText: "Learn More…",
+                    linkURL: URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"),
+                    linkA11yIdentifier: "learnMore"
+                ),
+                rows: [
+                    WebCompatReportViewModel.Row(id: "row", title: "Row", a11yIdentifier: "row")
+                ]
+            )
+        ]
+    }
+
     private func pickerSections() -> [WebCompatReportViewModel.Section] {
         let options = [
             WebCompatReportViewModel.Row.MenuOption(
@@ -415,6 +502,7 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
     var selectedSubOptionIDs: [String] = []
     var tappedButtonIDs: [String] = []
     var toggles: [(id: String, isOn: Bool)] = []
+    var learnMoreURLs: [URL] = []
 
     func webCompatReportSheetDidTapClose() {
         didTapCloseCallCount += 1
@@ -438,5 +526,9 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
 
     func webCompatReportSheetDidToggle(id: String, isOn: Bool) {
         toggles.append((id, isOn))
+    }
+
+    func webCompatReportSheetDidTapLearnMore(url: URL) {
+        learnMoreURLs.append(url)
     }
 }

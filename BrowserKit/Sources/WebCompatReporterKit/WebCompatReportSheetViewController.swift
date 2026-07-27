@@ -16,6 +16,7 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidSelectSubOption(id: String)
     func webCompatReportSheetDidTapButton(id: String)
     func webCompatReportSheetDidToggle(id: String, isOn: Bool)
+    func webCompatReportSheetDidTapLearnMore(url: URL)
 }
 
 /// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
@@ -119,8 +120,9 @@ public final class WebCompatReportSheetViewController: UIViewController,
             var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             let sections = self?.viewModel.sections ?? []
             let hasHeader = index < sections.count && sections[index].title != nil
+            let hasFooter = index < sections.count && sections[index].footer != nil
             config.headerMode = hasHeader ? .supplementary : .none
-            config.footerMode = .none
+            config.footerMode = hasFooter ? .supplementary : .none
             config.backgroundColor = backgroundColor
             return NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
         }
@@ -233,7 +235,22 @@ public final class WebCompatReportSheetViewController: UIViewController,
             header.accessibilityTraits.insert(.header)
         }
 
-        dataSource.supplementaryViewProvider = { collectionView, _, indexPath in
+        let footerRegistration = UICollectionView.SupplementaryRegistration<WebCompatLearnMoreFooterView>(
+            elementKind: UICollectionView.elementKindSectionFooter
+        ) { [weak self] footerView, _, indexPath in
+            guard let self,
+                  let sectionID = self.dataSource.sectionIdentifier(for: indexPath.section),
+                  let footer = self.sectionsByID[sectionID]?.footer else { return }
+            footerView.configure(footer: footer) { [weak self] url in
+                self?.delegate?.webCompatReportSheetDidTapLearnMore(url: url)
+            }
+            footerView.applyTheme(theme: self.theme)
+        }
+
+        dataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
+            if elementKind == UICollectionView.elementKindSectionFooter {
+                return collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration, for: indexPath)
+            }
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
         }
         return dataSource

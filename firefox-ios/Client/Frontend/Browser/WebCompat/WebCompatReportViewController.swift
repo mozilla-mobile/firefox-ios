@@ -12,6 +12,8 @@ import WebCompatReporterKit
 protocol WebCompatReportCoordinatorDelegate: AnyObject {
     /// Sheet asked to finish; the coordinator owns the dismissal.
     func webCompatReportViewControllerDidFinish()
+    /// User tapped the "Learn More…" link; the coordinator opens the explainer page.
+    func webCompatReportViewControllerDidTapLearnMore(url: URL)
 }
 
 /// Store-connected container that hosts the `WebCompatReporterKit` sheet, maps
@@ -308,6 +310,10 @@ final class WebCompatReportViewController: UINavigationController,
         case .send, .none:
             break
         }
+    }
+
+    func webCompatReportSheetDidTapLearnMore(url: URL) {
+        reportCoordinator?.webCompatReportViewControllerDidTapLearnMore(url: url)
     }
 
     // MARK: - Themeable
