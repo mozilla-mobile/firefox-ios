@@ -35,6 +35,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
     private var rowsByID: [String: WebCompatReportViewModel.Row] = [:]
     private var sectionsByID: [String: WebCompatReportViewModel.Section] = [:]
 
+    /// configure(with:) themes cells at build time, so the first applyTheme must skip the
+    /// reconfigure — running it then lands in the nav bar's large-title pass and collapses
+    /// the title on load. Later (live) theme changes do reconfigure to re-theme cells.
+    private var hasAppliedThemeOnce = false
+
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -289,6 +294,9 @@ public final class WebCompatReportSheetViewController: UIViewController,
         collectionView.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        reconfigureAllItems()
+        if hasAppliedThemeOnce {
+            reconfigureAllItems()
+        }
+        hasAppliedThemeOnce = true
     }
 }
