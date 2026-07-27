@@ -194,7 +194,7 @@ let package = Package(
         ),
         .target(
             name: "TestKit",
-            dependencies: ["Shared", "Redux"]
+            dependencies: ["Shared", "Redux", "AppAttestKit"]
         ),
         .target(
             name: "ToolbarKit",
@@ -237,6 +237,11 @@ let package = Package(
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),
+        .testTarget(
+            name: "AppAttestKitTests",
+            dependencies: ["AppAttestKit", "TestKit"],
+            swiftSettings: []
+        ),
         .target(
             name: "MLPAKit",
             dependencies: ["AppAttestKit", "Common", "JWTKit", "Shared"],

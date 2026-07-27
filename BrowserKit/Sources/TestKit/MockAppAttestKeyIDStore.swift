@@ -7,22 +7,22 @@ import AppAttestKit
 /// Concrete implementation of `AppAttestKeyIDStore` that keeps the `keyID` in memory.
 /// This is only used for testing since the keychain implementation is not easily testable
 /// and might fail sometimes on non-signed builds on CI.
-final class MockAppAttestKeyIDStore: AppAttestKeyIDStore, @unchecked Sendable {
+public final class MockAppAttestKeyIDStore: AppAttestKeyIDStore, @unchecked Sendable {
     private var value: String?
 
-    init(initial: String? = nil) {
+    public init(initial: String? = nil) {
         self.value = initial
     }
 
-    func loadKeyID() -> String? {
+    public func loadKeyID() -> String? {
         return value
     }
 
-    func saveKeyID(_ keyID: String) throws {
+    public func saveKeyID(_ keyID: String) throws {
         value = keyID
     }
 
-    func clearKeyID() throws {
+    public func clearKeyID() throws {
         value = nil
     }
 }

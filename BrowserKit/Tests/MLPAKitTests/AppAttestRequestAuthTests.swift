@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import AppAttestKit
+import TestKit
 import XCTest
 
 @testable import MLPAKit
@@ -109,9 +110,9 @@ final class AppAttestRequestAuthTests: XCTestCase {
     }
 
     private func makeRequest() throws -> URLRequest {
-        var request = URLRequest(url: AppAttestTestData.requestURL)
+        var request = URLRequest(url: MLPATestData.requestURL)
         request.httpMethod = "POST"
-        request.httpBody = try JSONSerialization.data(withJSONObject: AppAttestTestData.requestBody)
+        request.httpBody = try JSONSerialization.data(withJSONObject: MLPATestData.requestBody)
         return request
     }
 

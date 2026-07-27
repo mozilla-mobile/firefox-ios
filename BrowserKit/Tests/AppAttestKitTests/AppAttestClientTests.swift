@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import AppAttestKit
+import TestKit
 import XCTest
 
 final class AppAttestClientTests: XCTestCase {
