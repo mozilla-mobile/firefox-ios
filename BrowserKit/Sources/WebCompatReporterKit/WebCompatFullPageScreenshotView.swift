@@ -25,6 +25,9 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         static let highlightShadowOpacity: Float = 0.5
         static let highlightShadowRadius: CGFloat = 3
         static let minimumHighlightHeight: CGFloat = 24
+        /// Comfortably above `minimumHighlightHeight`, otherwise a wide page gives the
+        /// highlight no room to travel and it sits frozen and overhanging.
+        static let minimumRailHeight: CGFloat = 64
         static let closeButtonTopInset: CGFloat = 24
         /// Below this we're still mid-presentation and the proportions are meaningless.
         static let minimumUsableSide: CGFloat = 80
@@ -75,7 +78,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     }()
 
     /// A bright copy clipped to the viewport, which gives the spotlight effect.
-    private lazy var brightWindowContainer: UIView = {
+    private(set) lazy var brightWindowContainer: UIView = {
         let view = UIView()
         view.clipsToBounds = true
         view.layer.cornerRadius = UX.highlightCornerRadius
@@ -98,7 +101,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         return view
     }()
 
-    private lazy var closeButton: CloseButton = .build { button in
+    private(set) lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
     }
 
@@ -145,7 +148,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         let availableHeight = max(1, bounds.height - contentTop - safeAreaInsets.bottom - UX.bottomInset)
         // The rail keeps a fixed width and squashes a tall page rather than narrowing, which
         // would otherwise feed back into the margins and reflow the capture.
-        let thumbnailHeight = min(availableHeight, UX.thumbnailWidth * imageAspect)
+        let thumbnailHeight = min(availableHeight, max(UX.minimumRailHeight, UX.thumbnailWidth * imageAspect))
         // Equal margins either side keep the capture centered, with the rail in the right one.
         let sideMargin = WebCompatReporterUX.Spacing.screenHorizontal + UX.thumbnailWidth + UX.railGap
         let captureWidth = max(1, bounds.width - sideMargin * 2)
@@ -157,7 +160,10 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         guard isRenderable else { return }
 
         let pageHeight = max(1, captureWidth * imageAspect)
-        scrollView.frame = CGRect(x: sideMargin, y: contentTop, width: captureWidth, height: availableHeight)
+        // A page shorter than the space available gets a card its own size. Stretching it
+        // would round the top corners over scrim and leave the image's bottom edge square.
+        let captureHeight = min(availableHeight, pageHeight)
+        scrollView.frame = CGRect(x: sideMargin, y: contentTop, width: captureWidth, height: captureHeight)
         pageImageView.frame = CGRect(x: 0, y: 0, width: captureWidth, height: pageHeight)
         scrollView.contentSize = CGSize(width: captureWidth, height: pageHeight)
 
