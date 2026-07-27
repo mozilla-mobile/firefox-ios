@@ -26,7 +26,7 @@ final class TrackerBlockerModuleStateTests: XCTestCase {
     @MainActor func test_updateBlockedCountAction_setsCount() {
         let state = createSubject()
 
-        let newState = TrackerBlockerModuleState.reducer(
+        let newState = TrackerBlockerModuleState.reducer.legacyReducer(
             state,
             TrackerBlockerModuleAction(
                 blockedTrackerCount: 42,
@@ -39,7 +39,7 @@ final class TrackerBlockerModuleStateTests: XCTestCase {
     }
 
     @MainActor func test_updateBlockedCountAction_withoutCount_keepsExistingCount() {
-        let state = TrackerBlockerModuleState.reducer(
+        let state = TrackerBlockerModuleState.reducer.legacyReducer(
             createSubject(),
             TrackerBlockerModuleAction(
                 blockedTrackerCount: 7,
@@ -49,7 +49,7 @@ final class TrackerBlockerModuleStateTests: XCTestCase {
         )
 
         // A malformed update (no count) must not clobber the previously stored value.
-        let newState = TrackerBlockerModuleState.reducer(
+        let newState = TrackerBlockerModuleState.reducer.legacyReducer(
             state,
             TrackerBlockerModuleAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -61,7 +61,7 @@ final class TrackerBlockerModuleStateTests: XCTestCase {
     }
 
     @MainActor func test_unrelatedAction_preservesCount() {
-        let state = TrackerBlockerModuleState.reducer(
+        let state = TrackerBlockerModuleState.reducer.legacyReducer(
             createSubject(),
             TrackerBlockerModuleAction(
                 blockedTrackerCount: 15,
@@ -70,7 +70,7 @@ final class TrackerBlockerModuleStateTests: XCTestCase {
             )
         )
 
-        let newState = TrackerBlockerModuleState.reducer(
+        let newState = TrackerBlockerModuleState.reducer.legacyReducer(
             state,
             HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.viewDidAppear)
         )
