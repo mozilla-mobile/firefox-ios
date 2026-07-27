@@ -266,6 +266,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             return
         }
 
+        addHaptics()
         store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
                                                actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
     }
