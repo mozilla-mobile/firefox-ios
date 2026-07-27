@@ -117,6 +117,57 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertEqual(header?.accessibilityIdentifier, "section.system")
     }
 
+    // MARK: - Screenshot
+
+    func testWithScreenshot_addsLeadingScreenshotSection() {
+        let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
+        layout(subject)
+
+        let collectionView = collectionView(in: subject)
+        XCTAssertEqual(collectionView?.numberOfSections, sampleSections.count + 1)
+        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
+    }
+
+    // The coordinator shows the sheet with the instant viewport grab, then reconfigures once the
+    // full-page capture lands.
+    func testConfigure_screenshotArrivingLate_insertsItAsTheLeadingSection() {
+        let subject = createSubject(screenshot: nil, sections: sampleSections)
+        layout(subject)
+
+        subject.configure(with: makeViewModel(screenshot: sampleImage(), sections: sampleSections))
+        subject.view.layoutIfNeeded()
+
+        let collectionView = collectionView(in: subject)
+        XCTAssertEqual(collectionView?.numberOfSections, sampleSections.count + 1)
+        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
+    }
+
+    // A late screenshot inserts a section ahead of the rest, which is where losing the user's
+    // place is most likely.
+    func testConfigure_screenshotArrivingLate_keepsExpandedSectionsExpanded() {
+        let subject = createSubject(screenshot: nil, sections: sampleSections)
+        layout(subject)
+        expandFirstSection(in: subject)
+
+        subject.configure(with: makeViewModel(screenshot: sampleImage(), sections: sampleSections))
+        subject.view.layoutIfNeeded()
+
+        XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 1), 2)
+    }
+
+    func testScreenshotTap_notifiesDelegate() throws {
+        let delegate = MockWebCompatReportPreviewDelegate()
+        let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
+        subject.delegate = delegate
+        layout(subject)
+
+        let cell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
+        let button = try XCTUnwrap(firstSubview(ofType: UIButton.self, in: cell?.contentView))
+        fireActions(on: button, for: .touchUpInside)
+
+        XCTAssertEqual(delegate.didTapScreenshotCallCount, 1)
+    }
+
     func testCloseTap_notifiesDelegate() throws {
         let delegate = MockWebCompatReportPreviewDelegate()
         let subject = createSubject(sections: sampleSections)
@@ -150,21 +201,26 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     // MARK: - Helpers
 
     private func makeViewModel(
+        screenshot: UIImage? = nil,
         sections: [WebCompatReportPreviewViewModel.PreviewSection] = []
     ) -> WebCompatReportPreviewViewModel {
         return WebCompatReportPreviewViewModel(
             title: "Report Preview",
             closeAccessibilityLabel: "Close",
             closeA11yIdentifier: "close",
+            screenshotAccessibilityLabel: "Screenshot",
+            screenshotA11yIdentifier: "screenshot",
+            screenshot: screenshot,
             sections: sections
         )
     }
 
     private func createSubject(
+        screenshot: UIImage? = nil,
         sections: [WebCompatReportPreviewViewModel.PreviewSection] = []
     ) -> WebCompatReportPreviewViewController {
         return WebCompatReportPreviewViewController(
-            viewModel: makeViewModel(sections: sections),
+            viewModel: makeViewModel(screenshot: screenshot, sections: sections),
             theme: LightTheme()
         )
     }
@@ -248,6 +304,14 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         )
     }
 
+    private func sampleImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 40, height: 60))
+        return renderer.image { context in
+            UIColor.systemBlue.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 40, height: 60))
+        }
+    }
+
     private func collectionView(in subject: WebCompatReportPreviewViewController) -> UICollectionView? {
         return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
     }
@@ -267,8 +331,13 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
 
 private final class MockWebCompatReportPreviewDelegate: WebCompatReportPreviewDelegate {
     var didRequestDismissCallCount = 0
+    var didTapScreenshotCallCount = 0
 
     func webCompatReportPreviewDidRequestDismiss() {
         didRequestDismissCallCount += 1
+    }
+
+    func webCompatReportPreviewDidTapScreenshot() {
+        didTapScreenshotCallCount += 1
     }
 }

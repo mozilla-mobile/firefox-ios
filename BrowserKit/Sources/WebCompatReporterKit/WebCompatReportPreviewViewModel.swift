@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import UIKit
 
 /// What the screen renders. The Client maps Redux state and collected device data onto this,
 /// keeping Redux out of the package. Labels and values are the raw Glean `broken_site_report`
@@ -75,17 +75,42 @@ public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
     public let title: String
     public let closeAccessibilityLabel: String
     public let closeA11yIdentifier: String
+    public let screenshotAccessibilityLabel: String
+    public let screenshotA11yIdentifier: String
+    /// The captured page, shown as a tappable thumbnail. Nil means either the user
+    /// turned the screenshot off or the capture hasn't finished; the thumbnail is
+    /// left out entirely either way.
+    public let screenshot: UIImage?
     public let sections: [PreviewSection]
 
     public init(
         title: String,
         closeAccessibilityLabel: String,
         closeA11yIdentifier: String,
+        screenshotAccessibilityLabel: String,
+        screenshotA11yIdentifier: String,
+        screenshot: UIImage? = nil,
         sections: [PreviewSection] = []
     ) {
         self.title = title
         self.closeAccessibilityLabel = closeAccessibilityLabel
         self.closeA11yIdentifier = closeA11yIdentifier
+        self.screenshotAccessibilityLabel = screenshotAccessibilityLabel
+        self.screenshotA11yIdentifier = screenshotA11yIdentifier
+        self.screenshot = screenshot
         self.sections = sections
+    }
+
+    // `UIImage` isn't `Equatable`, so compare the screenshot by identity. Getting
+    // "unequal" wrong only costs a redraw, so that's the safe direction. Anything
+    // added above needs adding here too.
+    public static func == (lhs: WebCompatReportPreviewViewModel, rhs: WebCompatReportPreviewViewModel) -> Bool {
+        return lhs.title == rhs.title
+            && lhs.closeAccessibilityLabel == rhs.closeAccessibilityLabel
+            && lhs.closeA11yIdentifier == rhs.closeA11yIdentifier
+            && lhs.screenshotAccessibilityLabel == rhs.screenshotAccessibilityLabel
+            && lhs.screenshotA11yIdentifier == rhs.screenshotA11yIdentifier
+            && lhs.sections == rhs.sections
+            && lhs.screenshot === rhs.screenshot
     }
 }
