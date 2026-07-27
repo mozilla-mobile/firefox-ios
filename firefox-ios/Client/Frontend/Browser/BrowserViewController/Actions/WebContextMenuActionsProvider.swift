@@ -182,10 +182,7 @@ class WebContextMenuActionsProvider {
         ) { _ in
             getImageData(url) { data in
                 if url.pathExtension.lowercased() == "gif" {
-                    PHPhotoLibrary.shared().performChanges {
-                        let creationRequest = PHAssetCreationRequest.forAsset()
-                        creationRequest.addResource(with: .photo, data: data, options: nil)
-                    }
+                    Self.saveGIFToPhotoLibrary(data: data)
                 } else {
                     ensureMainThread {
                         guard let image = UIImage(data: data) else { return }
@@ -195,6 +192,16 @@ class WebContextMenuActionsProvider {
             }
             Self.recordOptionSelectedTelemetry(option: .saveImage, originExtra: origin)
         })
+    }
+
+    /// Photos invokes the change block on its own private queue, so the block has to be formed in a nonisolated
+    /// context. Running it inside a `@MainActor` context makes it inherit main actor isolation,
+    /// and the runtime executor check then traps as soon as Photos runs it off the main thread.
+    nonisolated private static func saveGIFToPhotoLibrary(data: Data) {
+        PHPhotoLibrary.shared().performChanges {
+            let creationRequest = PHAssetCreationRequest.forAsset()
+            creationRequest.addResource(with: .photo, data: data, options: nil)
+        }
     }
 
     @MainActor
