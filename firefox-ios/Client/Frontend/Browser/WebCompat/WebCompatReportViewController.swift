@@ -224,7 +224,18 @@ final class WebCompatReportViewController: UINavigationController,
     // MARK: - WebCompatReportSheetDelegate
 
     func webCompatReportSheetDidTapClose() {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.cancel
+        ))
         reportCoordinator?.webCompatReportViewControllerDidFinish()
+    }
+
+    func webCompatReportSheetDidTapPreview() {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.preview
+        ))
     }
 
     func webCompatReportSheetDidSelectCategory(id: String) {

@@ -56,7 +56,9 @@ enum WebCompatReporterViewActionType: ActionType {
     case setAdditionalDetails
     case toggleScreenshot
     case toggleBlockedList
+    case preview
     case submit
+    case cancel
 }
 
 enum WebCompatReporterMiddlewareActionType: ActionType {
