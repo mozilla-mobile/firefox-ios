@@ -1918,7 +1918,7 @@ workflows:
                 --results-bucket="$GOOGLE_CLOUD_BUCKET" \
                 --results-dir="$RESULTS_DIR")
 
-            FIREBASE_XCRESULT_PATH=$("${HOME}/google-cloud-sdk/bin/gcloud" storage ls "$XCRESULT_PATH" | grep ".xcresult")
+            FIREBASE_XCRESULT_PATH=$("${HOME}/google-cloud-sdk/bin/gcloud" storage ls "$XCRESULT_PATH" | grep -F ".xcresult")
             envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
     - script@1:
         is_always_run: true
