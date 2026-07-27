@@ -36,12 +36,12 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
             }
         }
 
-        /// How a row renders: a plain title row, the category pull-down, or a
-        /// selectable sub-option row.
+        /// How a row renders in the list.
         public enum Kind: Hashable, Sendable {
             case plain
             case categoryMenu(isPlaceholder: Bool, options: [MenuOption])
             case subOption(isSelected: Bool)
+            case sendButton(isEnabled: Bool)
         }
 
         public let id: String

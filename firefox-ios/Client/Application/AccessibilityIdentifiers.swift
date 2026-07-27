@@ -137,6 +137,7 @@ struct AccessibilityIdentifiers {
     struct WebCompatReporter {
         static let categoryMenu = "WebCompatReporter.CategoryMenu"
         static let subOption = "WebCompatReporter.SubOption"
+        static let sendButton = "WebCompatReporter.SendButton"
     }
 
     struct UnifiedSearch {
