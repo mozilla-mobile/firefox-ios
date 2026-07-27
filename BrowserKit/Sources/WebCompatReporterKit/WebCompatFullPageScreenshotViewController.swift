@@ -22,8 +22,7 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
         screenshotView = WebCompatFullPageScreenshotView(image: image, closeButtonViewModel: closeButtonViewModel)
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
-        // The scrim is translucent and the sheet underneath stays mounted, so
-        // without this VoiceOver swipes straight through into it.
+        // The sheet underneath stays mounted, so without this VoiceOver swipes into it.
         screenshotView.accessibilityViewIsModal = true
         screenshotView.onClose = { [weak self] in
             self?.delegate?.webCompatFullPageScreenshotDidTapClose()

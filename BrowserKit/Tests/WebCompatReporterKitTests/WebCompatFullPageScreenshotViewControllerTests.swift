@@ -9,6 +9,18 @@ import XCTest
 
 @MainActor
 final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
+    private enum UX {
+        static let presentationSize = CGSize(width: 390, height: 844)
+        /// What the view is handed at the start of the presentation transition.
+        static let transitionSize = CGSize(width: 1, height: 1)
+        static let pageWidth: CGFloat = 320
+        static let tallPageHeight: CGFloat = 2400
+        static let veryTallPageHeight: CGFloat = 40000
+        /// Mirrors `WebCompatFullPageScreenshotView.UX.minimumHighlightHeight`, which is private.
+        static let minimumHighlightHeight: CGFloat = 24
+        static let frameAccuracy: CGFloat = 0.5
+    }
+
     func testCloseButton_notifiesDelegate() {
         let delegate = MockWebCompatFullPageScreenshotDelegate()
         let subject = createSubject()
@@ -22,21 +34,20 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
 
     // MARK: - Content gating
 
-    // Presentation starts near zero size, so everything hides until the size is
-    // real. The part worth pinning is that it comes back afterwards.
+    // Presentation starts near zero size, so everything hides until the size is real.
     func testLayout_atTransitionSize_hidesGeometryDrivenViews() {
-        let subject = createSubject(image: sampleImage(height: 2400))
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
 
-        layout(subject, in: CGSize(width: 1, height: 1))
+        layout(subject, in: UX.transitionSize)
 
         assertGeometryViewsHidden(subject, expected: true)
     }
 
     func testLayout_recoveringFromTransitionSize_showsGeometryDrivenViews() {
-        let subject = createSubject(image: sampleImage(height: 2400))
-        layout(subject, in: CGSize(width: 1, height: 1))
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+        layout(subject, in: UX.transitionSize)
 
-        layout(subject, in: presentationSize)
+        layout(subject, in: UX.presentationSize)
 
         assertGeometryViewsHidden(subject, expected: false)
     }
@@ -44,7 +55,7 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
     func testLayout_withoutImage_hidesGeometryDrivenViews() {
         let subject = createSubject(image: nil)
 
-        layout(subject, in: presentationSize)
+        layout(subject, in: UX.presentationSize)
 
         assertGeometryViewsHidden(subject, expected: true)
     }
@@ -52,61 +63,57 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
     // MARK: - Viewport highlight
 
     func testHighlight_atTopOfPage_sitsAtTopOfThumbnail() {
-        let subject = createSubject(image: sampleImage(height: 2400))
-        layout(subject, in: presentationSize)
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+        layout(subject, in: UX.presentationSize)
 
         let view = subject.screenshotView
-        XCTAssertEqual(view.highlightView.frame.minY, view.thumbnailContainer.frame.minY, accuracy: 0.5)
+        XCTAssertEqual(view.highlightView.frame.minY, view.thumbnailContainer.frame.minY, accuracy: UX.frameAccuracy)
     }
 
     func testHighlight_scrolledToBottom_sitsAtBottomOfThumbnail() {
-        let subject = createSubject(image: sampleImage(height: 2400))
-        layout(subject, in: presentationSize)
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+        layout(subject, in: UX.presentationSize)
 
         scroll(subject, toFractionOfMaximumOffset: 1)
 
         let view = subject.screenshotView
-        XCTAssertEqual(view.highlightView.frame.maxY, view.thumbnailContainer.frame.maxY, accuracy: 0.5)
+        XCTAssertEqual(view.highlightView.frame.maxY, view.thumbnailContainer.frame.maxY, accuracy: UX.frameAccuracy)
     }
 
     // Rubber-banding pushes the offset past both ends. The highlight has to stay put.
     func testHighlight_whenOverScrolled_staysWithinThumbnail() {
-        let subject = createSubject(image: sampleImage(height: 2400))
-        layout(subject, in: presentationSize)
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+        layout(subject, in: UX.presentationSize)
         let view = subject.screenshotView
 
         scroll(subject, toFractionOfMaximumOffset: 1.4)
-        XCTAssertLessThanOrEqual(view.highlightView.frame.maxY, view.thumbnailContainer.frame.maxY + 0.5)
+        XCTAssertLessThanOrEqual(view.highlightView.frame.maxY, view.thumbnailContainer.frame.maxY + UX.frameAccuracy)
 
         scroll(subject, toFractionOfMaximumOffset: -0.4)
-        XCTAssertGreaterThanOrEqual(view.highlightView.frame.minY, view.thumbnailContainer.frame.minY - 0.5)
+        XCTAssertGreaterThanOrEqual(view.highlightView.frame.minY, view.thumbnailContainer.frame.minY - UX.frameAccuracy)
     }
 
     func testHighlight_onVeryTallPage_keepsAGrabbableMinimumHeight() {
-        let subject = createSubject(image: sampleImage(height: 40000))
-        layout(subject, in: presentationSize)
+        let subject = createSubject(image: sampleImage(height: UX.veryTallPageHeight))
+        layout(subject, in: UX.presentationSize)
 
-        XCTAssertGreaterThanOrEqual(subject.screenshotView.highlightView.frame.height, minimumHighlightHeight)
+        XCTAssertGreaterThanOrEqual(subject.screenshotView.highlightView.frame.height, UX.minimumHighlightHeight)
     }
 
-    // If the bright slice drifts out of register, the spotlight shows a different
-    // part of the page than the capture does.
+    // A drifting bright slice spotlights a different part of the page than the capture shows.
     func testHighlight_brightSliceTracksTheHighlightOffset() {
-        let subject = createSubject(image: sampleImage(height: 2400))
-        layout(subject, in: presentationSize)
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+        layout(subject, in: UX.presentationSize)
 
         scroll(subject, toFractionOfMaximumOffset: 0.5)
 
         let view = subject.screenshotView
         let offsetFromThumbnailTop = view.highlightView.frame.minY - view.thumbnailContainer.frame.minY
         XCTAssertGreaterThan(offsetFromThumbnailTop, 0, "Expected the highlight to have moved down the rail")
-        XCTAssertEqual(view.brightWindowImageView.frame.minY, -offsetFromThumbnailTop, accuracy: 0.5)
+        XCTAssertEqual(view.brightWindowImageView.frame.minY, -offsetFromThumbnailTop, accuracy: UX.frameAccuracy)
     }
 
     // MARK: - Helpers
-
-    private let presentationSize = CGSize(width: 390, height: 844)
-    private let minimumHighlightHeight: CGFloat = 24
 
     private func createSubject(image: UIImage? = nil) -> WebCompatFullPageScreenshotViewController {
         return WebCompatFullPageScreenshotViewController(
@@ -143,7 +150,7 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         XCTAssertEqual(view.highlightView.isHidden, expected, "highlightView", file: file, line: line)
     }
 
-    private func sampleImage(width: CGFloat = 320, height: CGFloat) -> UIImage {
+    private func sampleImage(width: CGFloat = UX.pageWidth, height: CGFloat) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
         return renderer.image { context in
             UIColor.systemBlue.setFill()
@@ -151,8 +158,7 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         }
     }
 
-    // No UIApplication in logic tests, so UIControl.sendActions does nothing.
-    // Call the registered selectors directly instead.
+    // No UIApplication in logic tests, so `sendActions` does nothing.
     private func fireActions(_ control: UIControl?, for event: UIControl.Event) {
         guard let control else { return }
         for target in control.allTargets {
