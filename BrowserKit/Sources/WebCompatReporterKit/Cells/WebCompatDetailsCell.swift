@@ -5,21 +5,21 @@
 import Common
 import UIKit
 
-/// Optional multiline details row: a fixed-height box (scaled with Dynamic Type) whose
+/// Optional multiline details row: a box sized to a fixed number of text lines whose
 /// text view scrolls internally once the content exceeds it. Value reported on editing-end.
 final class WebCompatDetailsCell: UICollectionViewListCell,
                                   ThemeApplicable,
                                   ReusableCell,
-                                  UITextViewDelegate,
-                                  Notifiable {
+                                  UITextViewDelegate {
     private var editingEndedHandler: ((String) -> Void)?
-    private var heightConstraint: NSLayoutConstraint?
 
-    func scaledMinimumHeight(compatibleWith traitCollection: UITraitCollection) -> CGFloat {
-        return UIFontMetrics.default.scaledValue(
-            for: WebCompatReporterUX.DetailsField.minimumHeight,
-            compatibleWith: traitCollection
-        )
+    /// Carries the current body line height so Auto Layout scales the box with Dynamic Type
+    /// on its own; the label itself is never drawn.
+    private lazy var lineHeightSizingLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.text = " "
+        label.isHidden = true
     }
 
     private lazy var textView: UITextView = .build { textView in
@@ -42,11 +42,6 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        startObservingNotifications(
-            withNotificationCenter: NotificationCenter.default,
-            forObserver: self,
-            observing: [UIContentSizeCategory.didChangeNotification]
-        )
     }
 
     required init?(coder: NSCoder) {
@@ -56,15 +51,20 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
     private func setupLayout() {
         contentView.addSubview(textView)
         contentView.addSubview(placeholderLabel)
+        contentView.addSubview(lineHeightSizingLabel)
         let margins = contentView.layoutMarginsGuide
-        let height = textView.heightAnchor.constraint(equalToConstant: scaledMinimumHeight(compatibleWith: traitCollection))
-        heightConstraint = height
         NSLayoutConstraint.activate([
             textView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             textView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             textView.topAnchor.constraint(equalTo: margins.topAnchor),
             textView.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
-            height,
+            textView.heightAnchor.constraint(
+                equalTo: lineHeightSizingLabel.heightAnchor,
+                multiplier: WebCompatReporterUX.DetailsField.visibleLineCount
+            ),
+
+            lineHeightSizingLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            lineHeightSizingLabel.topAnchor.constraint(equalTo: margins.topAnchor),
 
             placeholderLabel.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
             placeholderLabel.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
@@ -98,16 +98,6 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
         textView.textColor = theme.colors.textPrimary
         textView.tintColor = theme.colors.actionPrimary
         placeholderLabel.textColor = theme.colors.textSecondary
-    }
-
-    // MARK: - Notifiable
-
-    nonisolated func handleNotifications(_ notification: Notification) {
-        guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
-        ensureMainThread { [weak self] in
-            guard let self else { return }
-            self.heightConstraint?.constant = self.scaledMinimumHeight(compatibleWith: self.traitCollection)
-        }
     }
 
     /// Only the typed text is exposed as the value; the placeholder is a visual
