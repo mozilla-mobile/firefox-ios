@@ -62,7 +62,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
         let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
         let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
-        let newState = HomepageState.reducer(
+        let newState = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             WallpaperAction(
                 wallpaperConfiguration: wallpaperConfiguration,
@@ -84,7 +84,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
         let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
         let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
-        let newState = HomepageState.reducer(
+        let newState = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             WallpaperAction(
                 wallpaperConfiguration: wallpaperConfiguration,
@@ -200,7 +200,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_viewDidLayoutSubviews_withTopSitesChange_triggersHomepageAction() throws {
         let subject = createSubject()
 
-        let newState = HomepageState.reducer(
+        let newState = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             HomepageAction(
                 numberOfTopSitesPerRow: 10,
@@ -284,7 +284,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         // Add some visible sections in the collection view to trigger impression telemetry
         let populatedState = await getPopulatedCollectionViewState(from: initialState)
-        let newState = HomepageState.reducer(
+        let newState = HomepageState.reducer.legacyReducer(
             populatedState,
             GeneralBrowserAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -313,7 +313,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_newState_didSelectedTabChangeToHomepageAction_forScrollToTop_setsCollectionViewOffsetToZero() {
         let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
         let subject = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
-        let newState = HomepageState.reducer(
+        let newState = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             GeneralBrowserAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -505,7 +505,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         subject.loadViewIfNeeded()
 
-        let stateWithWallpaperHeight = HomepageState.reducer(
+        let stateWithWallpaperHeight = HomepageState.reducer.legacyReducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             HomepageAction(
                 availableContentHeight: 100,
@@ -586,7 +586,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     private func getPopulatedCollectionViewState(from currentState: HomepageState) async -> HomepageState {
         let merinoManager = MockMerinoManager()
         let merinoStories = await merinoManager.getMerinoItems(source: .homepage)
-        return HomepageState.reducer(
+        return HomepageState.reducer.legacyReducer(
             currentState,
             MerinoAction(
                 merinoStoryResponse: merinoStories,
@@ -600,7 +600,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 // FXIOS-13346 / FXIOS-13343 - needed to update tests since we added a bandaid fix to not call
 @MainActor
 private func changeInitialStateToTriggerUpdateInSnapshot() -> HomepageState {
-   return HomepageState.reducer(
+   return HomepageState.reducer.legacyReducer(
         HomepageState(windowUUID: .XCTestDefaultUUID),
         GeneralBrowserAction(
             windowUUID: .XCTestDefaultUUID,

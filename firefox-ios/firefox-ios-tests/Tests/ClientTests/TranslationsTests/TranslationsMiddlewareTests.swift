@@ -1405,7 +1405,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
         )
-        return AppState.reducer(mockStore.state, initialAction)
+        return AppState.reducer.legacyReducer(mockStore.state, initialAction)
     }
 
     private func setupAppStateWithTranslationLanguage(
@@ -1422,7 +1422,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             windowUUID: .XCTestDefaultUUID,
             actionType: TranslationsActionType.translationCompleted
         )
-        return AppState.reducer(mockStore.state, action)
+        return AppState.reducer.legacyReducer(mockStore.state, action)
     }
 
     // MARK: - Helpers
