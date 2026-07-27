@@ -247,7 +247,8 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
     }
 
     func testLearnMoreFooter_applyTheme_linksOnlyTheLinkTextRange() throws {
-        let hosted = hostedFooterSubject(delegate: MockWebCompatReportSheetDelegate())
+        let delegate = MockWebCompatReportSheetDelegate()
+        let hosted = hostedFooterSubject(delegate: delegate)
         defer { hosted.window.isHidden = true }
 
         let footer = try XCTUnwrap(footerView(in: hosted.controller))
