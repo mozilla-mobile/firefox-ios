@@ -11,9 +11,12 @@ import XCTest
 final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
     private enum UX {
         static let presentationSize = CGSize(width: 390, height: 844)
+        static let landscapeSize = CGSize(width: 852, height: 393)
         /// What the view is handed at the start of the presentation transition.
         static let transitionSize = CGSize(width: 1, height: 1)
         static let pageWidth: CGFloat = 320
+        /// Short enough to fit the space the capture is given.
+        static let shortPageHeight: CGFloat = 400
         static let tallPageHeight: CGFloat = 2400
         static let veryTallPageHeight: CGFloat = 40000
         /// Mirrors `WebCompatFullPageScreenshotView.UX.minimumHighlightHeight`, which is private.
@@ -29,9 +32,24 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         subject.delegate = delegate
         subject.loadViewIfNeeded()
 
-        fireActions(firstSubview(ofType: CloseButton.self, in: subject.view), for: .touchUpInside)
+        fireActions(subject.screenshotView.closeButton, for: .touchUpInside)
 
-        XCTAssertEqual(delegate.didTapCloseCallCount, 1)
+        XCTAssertEqual(delegate.didRequestDismissCallCount, 1)
+    }
+
+    // The two-finger scrub is the expected way out of a modal.
+    func testAccessibilityEscape_notifiesDelegate() {
+        let delegate = MockWebCompatFullPageScreenshotDelegate()
+        let subject = createSubject()
+        subject.delegate = delegate
+
+        XCTAssertTrue(subject.accessibilityPerformEscape())
+        XCTAssertEqual(delegate.didRequestDismissCallCount, 1)
+    }
+
+    // Reporting the gesture as handled with nobody listening would swallow it silently.
+    func testAccessibilityEscape_withoutDelegate_isNotHandled() {
+        XCTAssertFalse(createSubject().accessibilityPerformEscape())
     }
 
     // MARK: - Content gating
@@ -121,6 +139,39 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         )
     }
 
+    // A page wider than it is tall makes the rail short. The highlight's minimum height used
+    // to exceed it, so it overhung the rail and stopped tracking the scroll entirely.
+    func testHighlight_onWideLandscapePage_staysInsideTheRailAndTracksScroll() {
+        let subject = createSubject(
+            image: sampleImage(width: UX.landscapeSize.width, height: UX.landscapeSize.height)
+        )
+        layout(subject, in: UX.landscapeSize)
+        let view = subject.screenshotView
+        let topOffset = view.highlightView.frame.minY
+
+        scroll(subject, toFractionOfMaximumOffset: 1)
+
+        XCTAssertLessThanOrEqual(
+            view.highlightView.frame.maxY,
+            view.thumbnailContainer.frame.maxY + UX.frameAccuracy,
+            "The highlight must not overhang the rail"
+        )
+        XCTAssertGreaterThan(view.highlightView.frame.minY, topOffset, "The highlight must track the scroll")
+    }
+
+    // MARK: - Capture sizing
+
+    // Stretching a short page to the full height would round the top corners over scrim and
+    // leave the image's bottom edge square.
+    func testLayout_shortPage_sizesTheCaptureToThePage() {
+        let subject = createSubject(image: sampleImage(height: UX.shortPageHeight))
+
+        layout(subject, in: UX.presentationSize)
+
+        let scrollView = subject.screenshotView.scrollView
+        XCTAssertEqual(scrollView.frame.height, scrollView.contentSize.height, accuracy: UX.frameAccuracy)
+    }
+
     // A drifting bright slice spotlights a different part of the page than the capture shows.
     func testHighlight_brightSliceTracksTheHighlightOffset() {
         let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
@@ -167,12 +218,17 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
     ) {
         let view = subject.screenshotView
         XCTAssertEqual(view.scrollView.isHidden, expected, "scrollView", file: file, line: line)
+        XCTAssertEqual(view.brightWindowContainer.isHidden, expected, "brightWindowContainer", file: file, line: line)
         XCTAssertEqual(view.thumbnailContainer.isHidden, expected, "thumbnailContainer", file: file, line: line)
         XCTAssertEqual(view.highlightView.isHidden, expected, "highlightView", file: file, line: line)
+        XCTAssertFalse(view.closeButton.isHidden, "The close button must stay reachable", file: file, line: line)
     }
 
+    // Scale 1, or the 40000pt fixture allocates hundreds of megabytes at device scale.
     private func sampleImage(width: CGFloat = UX.pageWidth, height: CGFloat) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 1
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height), format: format)
         return renderer.image { context in
             UIColor.systemBlue.setFill()
             context.fill(CGRect(x: 0, y: 0, width: width, height: height))
@@ -180,8 +236,7 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
     }
 
     // No UIApplication in logic tests, so `sendActions` does nothing.
-    private func fireActions(_ control: UIControl?, for event: UIControl.Event) {
-        guard let control else { return }
+    private func fireActions(_ control: UIControl, for event: UIControl.Event) {
         for target in control.allTargets {
             let object = target as NSObject
             control.actions(forTarget: target, forControlEvent: event)?.forEach {
@@ -189,21 +244,12 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
             }
         }
     }
-
-    private func firstSubview<T: UIView>(ofType type: T.Type, in view: UIView?) -> T? {
-        guard let view else { return nil }
-        for subview in view.subviews {
-            if let match = subview as? T { return match }
-            if let match = firstSubview(ofType: type, in: subview) { return match }
-        }
-        return nil
-    }
 }
 
 private final class MockWebCompatFullPageScreenshotDelegate: WebCompatFullPageScreenshotDelegate {
-    var didTapCloseCallCount = 0
+    var didRequestDismissCallCount = 0
 
-    func webCompatFullPageScreenshotDidTapClose() {
-        didTapCloseCallCount += 1
+    func webCompatFullPageScreenshotDidRequestDismiss() {
+        didRequestDismissCallCount += 1
     }
 }

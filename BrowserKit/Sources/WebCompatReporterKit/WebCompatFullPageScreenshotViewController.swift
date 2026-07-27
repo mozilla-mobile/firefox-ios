@@ -9,7 +9,7 @@ import UIKit
 /// What the viewer reports back. The coordinator does the dismissing.
 @MainActor
 public protocol WebCompatFullPageScreenshotDelegate: AnyObject {
-    func webCompatFullPageScreenshotDidTapClose()
+    func webCompatFullPageScreenshotDidRequestDismiss()
 }
 
 /// Full-screen page viewer, shown over the Report Preview sheet.
@@ -25,7 +25,7 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
         // The sheet underneath stays mounted, so without this VoiceOver swipes into it.
         screenshotView.accessibilityViewIsModal = true
         screenshotView.onClose = { [weak self] in
-            self?.delegate?.webCompatFullPageScreenshotDidTapClose()
+            self?.delegate?.webCompatFullPageScreenshotDidRequestDismiss()
         }
         screenshotView.applyTheme(theme: theme)
     }
@@ -36,6 +36,20 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
 
     override public func loadView() {
         view = screenshotView
+    }
+
+    // MARK: - Accessibility
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIAccessibility.post(notification: .screenChanged, argument: screenshotView.closeButton)
+    }
+
+    /// The two-finger scrub. Without it the only way out is the close button.
+    override public func accessibilityPerformEscape() -> Bool {
+        guard let delegate else { return false }
+        delegate.webCompatFullPageScreenshotDidRequestDismiss()
+        return true
     }
 
     // MARK: - ThemeApplicable
