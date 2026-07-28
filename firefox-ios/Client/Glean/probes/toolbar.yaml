@@ -287,6 +287,50 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: 2026-12-01
+  interactive_swipe_up_started:
+    type: event
+    description: |
+        Counts the number of times a user started the interactive swipe up gesture
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16411
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: 2026-12-01
+  tab_tray_opened_via_interactive_swipe:
+    type: event
+    description: |
+        Counts the number of times a user opened the tab tray using the interactive swipe gesture
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16411
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: 2026-12-01
+  tab_closed_via_interactive_swipe:
+    type: event
+    description: |
+        Counts the number of times a user closed a tab using the interactive swipe gesture
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16411
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: 2026-12-01
+  interactive_swipe_cancelled:
+    type: event
+    description: |
+        Counts the number of times a user started an interactive swipe gesture but didn't open the tab tray or close the selected tab
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16411
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: 2026-12-01
   app_menu_button_tapped:
     type: event
     description: |

@@ -5,6 +5,7 @@
 import UIKit
 import Common
 import Redux
+import Glean
 
 @MainActor
 final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber {
@@ -25,6 +26,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     private weak var swipeUpGesture: UISwipeGestureRecognizer?
     private weak var swipeDownGesture: UISwipeGestureRecognizer?
     private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
+    private let toolbarTelemetry: ToolbarTelemetry
 
     var tabAnimationSourceFrame: CGRect {
         tabPreview.previewCardFrame
@@ -46,7 +48,8 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
          tabManager: TabManager,
          themeManager: ThemeManager,
          windowUUID: WindowUUID,
-         swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider) {
+         swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider,
+         toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry()) {
         self.tabPreview = tabPreview
         self.bottomBlurView = bottomBlurView
         self.topBlurView = topBlurView
@@ -55,6 +58,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
+        self.toolbarTelemetry = toolbarTelemetry
         super.init()
         subscribeToRedux()
     }
@@ -174,6 +178,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
         guard let tab = tabManager?.selectedTab else { return }
         switch gesture.state {
         case .began:
+            toolbarTelemetry.interactiveSwipeUpStarted()
             let screenshotBounds = CGRect(origin: .zero,
                                           size: CGSize(
                                             width: tabPreview.bounds.width,
@@ -213,6 +218,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
         case .closeTab:
             // Lock the pan gesture until the close animation finishes so a new gesture can't
             // start mid-animation.
+            toolbarTelemetry.tabClosedViaInteractiveSwipe()
             disablePanGestureRecognizerForAnimation()
             UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
                 tabPreview.tossPreview()
@@ -239,6 +245,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) {
                 self.tabPreview.dismissForTabTray()
             }
+            toolbarTelemetry.tabTrayOpenedViaInteractiveSwipe()
             store.dispatch(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
@@ -246,6 +253,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
                 )
             )
         case .cancel:
+            toolbarTelemetry.interactiveSwipeCancelled()
             tabPreview.restore()
         }
     }
