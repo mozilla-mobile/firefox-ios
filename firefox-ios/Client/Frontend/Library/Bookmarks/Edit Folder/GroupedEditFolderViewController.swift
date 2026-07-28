@@ -385,6 +385,7 @@ final class GroupedEditFolderViewController: UIViewController,
 
     // MARK: - Helpers
 
+    // TODO: FXIOS-16414 Add a caching mechanism to avoid constant computation
     private var groupSections: [(groupIndex: Int, blockIndex: Int)] {
         var result: [(groupIndex: Int, blockIndex: Int)] = []
         for (groupIndex, group) in viewModel.folderGroups.enumerated() {
