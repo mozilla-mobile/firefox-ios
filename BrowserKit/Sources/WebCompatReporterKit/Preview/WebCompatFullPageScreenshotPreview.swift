@@ -9,6 +9,9 @@ import SwiftUI
 import UIKit
 
 /// Hosts the viewer over a stand-in page: heading, image block, filler lines.
+///
+/// The page is drawn the way a website would render, so its colours are the page's own and
+/// deliberately not the app theme — a real capture doesn't follow the theme either.
 private struct FullPageScreenshotPreview: UIViewControllerRepresentable {
     enum PageLength: CGFloat {
         case short = 400
@@ -30,7 +33,7 @@ private struct FullPageScreenshotPreview: UIViewControllerRepresentable {
             static let top: CGFloat = 72
             static let height: CGFloat = 180
             static let cornerRadius: CGFloat = 8
-            static let color = UIColor(red: 0.72, green: 0.55, blue: 0.36, alpha: 1)
+            static let color = UIColor.systemBrown
         }
 
         enum TextLine {

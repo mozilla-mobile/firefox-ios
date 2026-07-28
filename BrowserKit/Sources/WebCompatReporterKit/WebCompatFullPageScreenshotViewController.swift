@@ -16,7 +16,7 @@ public protocol WebCompatFullPageScreenshotDelegate: AnyObject {
 public final class WebCompatFullPageScreenshotViewController: UIViewController, ThemeApplicable {
     public weak var delegate: WebCompatFullPageScreenshotDelegate?
 
-    let screenshotView: WebCompatFullPageScreenshotView
+    private let screenshotView: WebCompatFullPageScreenshotView
 
     public init(image: UIImage?, closeButtonViewModel: CloseButtonViewModel, theme: Theme) {
         screenshotView = WebCompatFullPageScreenshotView(image: image, closeButtonViewModel: closeButtonViewModel)
@@ -34,6 +34,8 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
         fatalError("init(coder:) has not been implemented")
     }
 
+    // Deliberately no `super` call: UIKit's implementation would build a plain `UIView` and
+    // assign it over ours.
     override public func loadView() {
         view = screenshotView
     }
@@ -42,7 +44,7 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIAccessibility.post(notification: .screenChanged, argument: screenshotView.closeButton)
+        screenshotView.moveAccessibilityFocusToFirstElement()
     }
 
     /// The two-finger scrub. Without it the only way out is the close button.
