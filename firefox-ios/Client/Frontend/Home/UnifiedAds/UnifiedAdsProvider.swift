@@ -54,11 +54,6 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
         let count: Int
     }
 
-    private struct RequestBody: Codable {
-        let context_id: String
-        let placements: [AdPlacement]
-    }
-
     func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
                     completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
         logger.log("Fetching tiles with ads client", level: .debug, category: .homepage)

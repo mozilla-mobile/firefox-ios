@@ -16,7 +16,6 @@ enum HistoryDeletionUtilityDateOptions: String, CaseIterable {
 }
 
 protocol HistoryDeletionProtocol {
-    func delete(_ sites: [String], completion: @Sendable @escaping (Bool) -> Void)
     @MainActor
     func deleteHistoryFrom(_ dateOption: HistoryDeletionUtilityDateOptions,
                            completion: @Sendable @escaping @MainActor (HistoryDeletionUtilityDateOptions) -> Void)
@@ -32,16 +31,6 @@ final class HistoryDeletionUtility: HistoryDeletionProtocol, Sendable {
     }
 
     // MARK: Interface
-    func delete(
-        _ sites: [String],
-        completion: @Sendable @escaping (Bool) -> Void
-    ) {
-        deleteFromHistory(sites)
-        deleteMetadata(sites) { result in
-            completion(result)
-        }
-    }
-
     @MainActor
     func deleteHistoryFrom(
         _ dateOption: HistoryDeletionUtilityDateOptions,
@@ -60,28 +49,6 @@ final class HistoryDeletionUtility: HistoryDeletionProtocol, Sendable {
         deleteProfileMetadataSince(dateOption)
 
         HistoryDeletionUtilityTelemetry().clearedHistory(dateOption)
-    }
-
-    // MARK: URL based deletion functions
-    private func deleteFromHistory(_ sites: [String]) {
-        sites.forEach { _ = profile.places.deleteVisitsFor($0) }
-    }
-
-    private func deleteMetadata(
-        _ sites: [String],
-        completion: @Sendable @escaping (Bool) -> Void
-    ) {
-        sites.forEach { currentSite in
-            profile.places
-                .deleteVisitsFor(url: currentSite)
-                .uponQueue(.global()) { result in
-                    guard let lastSite = sites.last,
-                          lastSite == currentSite
-                    else { return }
-
-                    completion(result.isSuccess)
-                }
-        }
     }
 
     // MARK: - Date based deletion functions
