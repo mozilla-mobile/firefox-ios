@@ -60,7 +60,7 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
             textView.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
             textView.heightAnchor.constraint(
                 equalTo: lineHeightSizingLabel.heightAnchor,
-                multiplier: WebCompatReporterUX.DetailsField.visibleLineCount
+                multiplier: CGFloat(WebCompatReporterUX.DetailsField.visibleLineCount)
             ),
 
             lineHeightSizingLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
@@ -86,8 +86,22 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
         textView.accessibilityLabel = accessibilityLabel
         textView.accessibilityIdentifier = a11yIdentifier
         placeholderLabel.text = placeholder
-        placeholderLabel.isHidden = !textView.text.isEmpty
+        updatePlaceholderVisibility()
         updateAccessibilityValue()
+    }
+
+    private var currentText: String {
+        return textView.text ?? ""
+    }
+
+    private func updatePlaceholderVisibility() {
+        placeholderLabel.isHidden = !currentText.isEmpty
+    }
+
+    /// Only the typed text is exposed as the value; the placeholder is a visual
+    /// hint, so VoiceOver announces the field label once rather than twice.
+    private func updateAccessibilityValue() {
+        textView.accessibilityValue = currentText.isEmpty ? nil : currentText
     }
 
     // MARK: - ThemeApplicable
@@ -100,20 +114,14 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
         placeholderLabel.textColor = theme.colors.textSecondary
     }
 
-    /// Only the typed text is exposed as the value; the placeholder is a visual
-    /// hint, so VoiceOver announces the field label once rather than twice.
-    private func updateAccessibilityValue() {
-        textView.accessibilityValue = textView.text.isEmpty ? nil : textView.text
-    }
-
     // MARK: - UITextViewDelegate
 
     func textViewDidChange(_ textView: UITextView) {
-        placeholderLabel.isHidden = !textView.text.isEmpty
+        updatePlaceholderVisibility()
         updateAccessibilityValue()
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        editingEndedHandler?(textView.text ?? "")
+        editingEndedHandler?(currentText)
     }
 }

@@ -17,9 +17,10 @@ struct WebCompatReporterState: ScreenState, Equatable {
     var includeScreenshot: Bool
     var includeBlockedList: Bool
 
-    /// Preview and Send stay disabled until the user picks a category.
+    /// Preview and Send stay disabled, and the details field stays hidden, until the user picks a category.
     var canSubmit: Bool { selectedCategory != nil }
     var canPreview: Bool { selectedCategory != nil }
+    var showsAdditionalDetails: Bool { selectedCategory != nil }
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let state = appState.componentState(

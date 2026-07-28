@@ -140,8 +140,7 @@ final class WebCompatReportViewController: UINavigationController,
     ) -> [WebCompatReportViewModel.Section] {
         var sections = [urlSection(from: state)]
         sections.append(contentsOf: makeIssueSections(from: state))
-        // Only show details once a category is selected.
-        if state.selectedCategory != nil {
+        if state.showsAdditionalDetails {
             sections.append(detailsSection(from: state))
         }
         sections.append(advancedOptionsSection(from: state))
