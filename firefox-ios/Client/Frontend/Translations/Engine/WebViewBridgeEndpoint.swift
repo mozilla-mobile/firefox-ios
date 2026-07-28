@@ -54,5 +54,4 @@ final class WebViewBridgeEndpoint: BridgeEndpoint {
         userContentController.removeScriptMessageHandler(forName: handlerName, contentWorld: contentWorld)
         userContentController.add(handler, contentWorld: contentWorld, name: handlerName)
     }
-
 }
