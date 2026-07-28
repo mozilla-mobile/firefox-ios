@@ -12,14 +12,35 @@ public protocol WebCompatFullPageScreenshotDelegate: AnyObject {
     func webCompatFullPageScreenshotDidRequestDismiss()
 }
 
+/// Describes the capture to assistive tech and to UI automation. Both values are supplied by the
+/// caller because the package can reach neither Client's strings nor its `AccessibilityIdentifiers`.
+public struct WebCompatFullPageScreenshotViewModel: Equatable, Sendable {
+    public let captureAccessibilityLabel: String
+    public let captureAccessibilityIdentifier: String
+
+    public init(captureAccessibilityLabel: String, captureAccessibilityIdentifier: String) {
+        self.captureAccessibilityLabel = captureAccessibilityLabel
+        self.captureAccessibilityIdentifier = captureAccessibilityIdentifier
+    }
+}
+
 /// Full-screen page viewer, shown over the Report Preview sheet.
 public final class WebCompatFullPageScreenshotViewController: UIViewController, ThemeApplicable {
     public weak var delegate: WebCompatFullPageScreenshotDelegate?
 
     private let screenshotView: WebCompatFullPageScreenshotView
 
-    public init(image: UIImage?, closeButtonViewModel: CloseButtonViewModel, theme: Theme) {
-        screenshotView = WebCompatFullPageScreenshotView(image: image, closeButtonViewModel: closeButtonViewModel)
+    public init(
+        image: UIImage?,
+        viewModel: WebCompatFullPageScreenshotViewModel,
+        closeButtonViewModel: CloseButtonViewModel,
+        theme: Theme
+    ) {
+        screenshotView = WebCompatFullPageScreenshotView(
+            image: image,
+            viewModel: viewModel,
+            closeButtonViewModel: closeButtonViewModel
+        )
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         // The sheet underneath stays mounted, so without this VoiceOver swipes into it.
@@ -44,7 +65,7 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        screenshotView.moveAccessibilityFocusToFirstElement()
+        screenshotView.moveAccessibilityFocusToCloseButton()
     }
 
     /// The two-finger scrub. Without it the only way out is the close button.

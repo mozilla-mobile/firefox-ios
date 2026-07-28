@@ -39,11 +39,12 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     var onClose: (() -> Void)?
 
     private let image: UIImage?
-    private let imageAspect: CGFloat
+    private let viewModel: WebCompatFullPageScreenshotViewModel
+    private let imageHeightToWidthRatio: CGFloat
 
     /// The page as the capture renders it, which is what the highlight measures itself against.
     private var pageHeight: CGFloat {
-        return scrollView.bounds.width * imageAspect
+        return scrollView.bounds.width * imageHeightToWidthRatio
     }
 
     private var scrollFraction: CGFloat {
@@ -64,8 +65,8 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         return max(UX.minimumHighlightHeight, railHeight * visibleFraction)
     }
 
-    // `private(set)` so the module's layout tests can read these frames without walking the
-    // hierarchy. Nothing outside the view can mutate or replace them.
+    // `private(set)` so the module's layout tests can read these frames and accessibility wiring
+    // without walking the hierarchy. Nothing outside the view can reassign them.
     private(set) lazy var scrollView: UIScrollView = .build { scrollView in
         scrollView.showsVerticalScrollIndicator = false
         // Rounds the capture's corners.
@@ -74,9 +75,15 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         scrollView.delegate = self
     }
 
-    private lazy var pageImageView: UIImageView = .build { imageView in
+    /// The capture itself, and the one element VoiceOver reads on this screen. It sits inside the
+    /// scroll view so focusing it also lets the three-finger scroll move the page.
+    private(set) lazy var pageImageView: UIImageView = .build { imageView in
         imageView.image = self.image
         imageView.contentMode = .scaleToFill
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityTraits = .image
+        imageView.accessibilityLabel = self.viewModel.captureAccessibilityLabel
+        imageView.accessibilityIdentifier = self.viewModel.captureAccessibilityIdentifier
     }
 
     private(set) lazy var thumbnailContainer: UIView = .build { view in
@@ -115,13 +122,25 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     private(set) lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
+        // Its icon is an appearance-adaptive asset rather than a template, so no tint reaches it.
+        // The dark variant fills the circle with #312F33, which all but disappears against the
+        // scrim; pinning the appearance keeps the white-filled variant over a surface that is
+        // dark in every palette.
+        button.overrideUserInterfaceStyle = .light
     }
 
-    init(image: UIImage?, closeButtonViewModel: CloseButtonViewModel) {
+    init(
+        image: UIImage?,
+        viewModel: WebCompatFullPageScreenshotViewModel,
+        closeButtonViewModel: CloseButtonViewModel
+    ) {
         self.image = image
+        self.viewModel = viewModel
         let size = image?.size ?? .zero
-        let aspect = size.height / size.width
-        self.imageAspect = (size.width > 0 && aspect.isFinite) ? aspect : 1
+        let ratio = size.height / size.width
+        // Both dimensions, or a zero-height capture yields a ratio of 0 that passes `isFinite`
+        // and then collapses the capture to nothing while still reporting itself renderable.
+        self.imageHeightToWidthRatio = (size.width > 0 && size.height > 0 && ratio.isFinite) ? ratio : 1
         super.init(frame: .zero)
 
         setupSubviews()
@@ -143,6 +162,12 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         for imageView in [pageImageView, thumbnailImageView, brightWindowImageView] {
             imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
             imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        }
+        // The rail is a map of the capture, not content of its own, so VoiceOver reads the capture
+        // once rather than three times over.
+        for view in [thumbnailContainer, thumbnailImageView, brightWindowContainer,
+                     brightWindowImageView, highlightView] {
+            view.isAccessibilityElement = false
         }
 
         scrollView.addSubview(pageImageView)
@@ -178,7 +203,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         // the image's bottom edge square.
         let ratio = scrollView.heightAnchor.constraint(
             equalTo: scrollView.widthAnchor,
-            multiplier: imageAspect
+            multiplier: imageHeightToWidthRatio
         )
         ratio.priority = .defaultHigh
         let width = scrollView.widthAnchor.constraint(
@@ -204,7 +229,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             pageImageView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             pageImageView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             pageImageView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-            pageImageView.heightAnchor.constraint(equalTo: pageImageView.widthAnchor, multiplier: imageAspect)
+            pageImageView.heightAnchor.constraint(equalTo: pageImageView.widthAnchor, multiplier: imageHeightToWidthRatio)
         ]
     }
 
@@ -212,7 +237,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         // The rail keeps a fixed width and squashes a tall page rather than narrowing, which
         // would otherwise feed back into the margins and reflow the capture.
         let height = thumbnailContainer.heightAnchor.constraint(
-            equalToConstant: max(UX.minimumRailHeight, UX.thumbnailWidth * imageAspect)
+            equalToConstant: max(UX.minimumRailHeight, UX.thumbnailWidth * imageHeightToWidthRatio)
         )
         height.priority = .defaultHigh
         let bottom = thumbnailContainer.bottomAnchor.constraint(
@@ -317,7 +342,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     // MARK: - Accessibility
 
     /// The sheet underneath stays mounted, so VoiceOver needs pointing at the viewer.
-    func moveAccessibilityFocusToFirstElement() {
+    func moveAccessibilityFocusToCloseButton() {
         UIAccessibility.post(notification: .screenChanged, argument: closeButton)
     }
 
@@ -338,8 +363,11 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layerScrim
-        thumbnailContainer.layer.borderColor = theme.colors.iconSecondary.cgColor
-        highlightView.layer.borderColor = theme.colors.borderInverted.cgColor
+        // Both strokes sit over the scrim and the page capture, neither of which follows the theme,
+        // so they need a token that stays light in every palette. `borderInverted` and
+        // `iconSecondary` flip, which put a white ring on a white page in the light themes.
+        thumbnailContainer.layer.borderColor = theme.colors.iconOnColor.cgColor
+        highlightView.layer.borderColor = theme.colors.iconOnColor.cgColor
         highlightView.layer.shadowColor = theme.colors.shadowStrong.cgColor
     }
 }

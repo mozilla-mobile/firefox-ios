@@ -23,7 +23,34 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
         static let minimumHighlightHeight: CGFloat = 24
         /// Mirrors `WebCompatFullPageScreenshotView.UX.thumbnailWidth`, which is private.
         static let railWidth: CGFloat = 44
+        /// Mirrors `WebCompatFullPageScreenshotView.UX.minimumRailHeight`, which is private.
+        static let minimumRailHeight: CGFloat = 64
         static let frameAccuracy: CGFloat = 0.5
+        static let captureAccessibilityLabel = "Screenshot of the page"
+        static let captureAccessibilityIdentifier = "capture"
+    }
+
+    // MARK: - Accessibility
+
+    // The capture is the whole point of the screen, and VoiceOver reached nothing but the close
+    // button until it became an element in its own right.
+    func testCapture_isAnAccessibilityElementDescribingThePage() {
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+
+        XCTAssertTrue(subject.pageImageView.isAccessibilityElement)
+        XCTAssertEqual(subject.pageImageView.accessibilityLabel, UX.captureAccessibilityLabel)
+        XCTAssertEqual(subject.pageImageView.accessibilityIdentifier, UX.captureAccessibilityIdentifier)
+        XCTAssertEqual(subject.pageImageView.accessibilityTraits, .image)
+    }
+
+    // Three copies of the same page would otherwise be read as three separate elements.
+    func testRail_isHiddenFromVoiceOver() {
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+
+        XCTAssertFalse(subject.thumbnailContainer.isAccessibilityElement)
+        XCTAssertFalse(subject.brightWindowContainer.isAccessibilityElement)
+        XCTAssertFalse(subject.brightWindowImageView.isAccessibilityElement)
+        XCTAssertFalse(subject.highlightView.isAccessibilityElement)
     }
 
     func testCloseButton_invokesOnClose() {
@@ -109,12 +136,66 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
         )
     }
 
-    func testHighlight_onVeryTallPage_keepsAGrabbableMinimumHeight() {
+    // The window says how much of the page is on screen, so it has to be that fraction of the rail.
+    // Asserting only that it sits inside the rail passed while it was more than twice this size.
+    func testHighlight_tallPage_isTheVisibleFractionOfTheRail() {
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+
+        layout(subject, in: UX.presentationSize)
+
+        let visibleFraction = subject.scrollView.frame.height / subject.scrollView.contentSize.height
+        XCTAssertEqual(
+            subject.highlightView.frame.height,
+            subject.thumbnailContainer.frame.height * visibleFraction,
+            accuracy: UX.frameAccuracy
+        )
+    }
+
+    // A page that fits needs no window: the whole rail is on screen.
+    func testHighlight_shortPage_coversTheWholeRail() {
+        let subject = createSubject(image: sampleImage(height: UX.shortPageHeight))
+
+        layout(subject, in: UX.presentationSize)
+
+        XCTAssertEqual(
+            subject.highlightView.frame.height,
+            subject.thumbnailContainer.frame.height,
+            accuracy: UX.frameAccuracy
+        )
+        XCTAssertEqual(
+            subject.highlightView.frame.minY,
+            subject.thumbnailContainer.frame.minY,
+            accuracy: UX.frameAccuracy
+        )
+    }
+
+    // Exact, not a lower bound: `>=` also passed when the window filled the entire rail.
+    func testHighlight_onVeryTallPage_clampsToTheMinimumHeight() {
         let subject = createSubject(image: sampleImage(height: UX.veryTallPageHeight))
 
         layout(subject, in: UX.presentationSize)
 
-        XCTAssertGreaterThanOrEqual(subject.highlightView.frame.height, UX.minimumHighlightHeight)
+        XCTAssertEqual(
+            subject.highlightView.frame.height,
+            UX.minimumHighlightHeight,
+            accuracy: UX.frameAccuracy
+        )
+    }
+
+    // The offset is a transform precisely so it lands without waiting for another layout pass.
+    // Every other scroll test lays out afterwards, so they all pass with the handler gutted.
+    func testHighlight_onScroll_movesWithoutAnotherLayoutPass() {
+        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
+        layout(subject, in: UX.presentationSize)
+        let scrollView = subject.scrollView
+
+        scrollView.contentOffset = CGPoint(x: 0, y: scrollView.contentSize.height - scrollView.bounds.height)
+
+        XCTAssertEqual(
+            subject.highlightView.frame.maxY,
+            subject.thumbnailContainer.frame.maxY,
+            accuracy: UX.frameAccuracy
+        )
     }
 
     // The rail used to back-solve its width from the capped height, so a tall enough page
@@ -151,12 +232,18 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
         )
     }
 
-    // The same stretch left a short page's rail taller than the capture beside it.
-    func testLayout_shortPage_keepsTheRailNoTallerThanTheCapture() {
+    // The same stretch left a short page's rail taller than the capture beside it. Exact, because
+    // `<= capture height` was satisfied by anything from nothing to the full 307pt.
+    func testLayout_shortPage_clampsTheRailToItsMinimumHeight() {
         let subject = createSubject(image: sampleImage(height: UX.shortPageHeight))
 
         layout(subject, in: UX.presentationSize)
 
+        XCTAssertEqual(
+            subject.thumbnailContainer.frame.height,
+            UX.minimumRailHeight,
+            accuracy: UX.frameAccuracy
+        )
         XCTAssertLessThanOrEqual(
             subject.thumbnailContainer.frame.maxY,
             subject.scrollView.frame.maxY + UX.frameAccuracy
@@ -191,9 +278,17 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
 
         let offsetFromThumbnailTop = subject.highlightView.frame.minY - subject.thumbnailContainer.frame.minY
         XCTAssertGreaterThan(offsetFromThumbnailTop, 0, "Expected the highlight to have moved down the rail")
+        // Asserting the raw offset just restates the implementation. What has to hold is that the
+        // bright copy still lines up with the dimmed page it is spotlighting, at the same size.
         XCTAssertEqual(
-            subject.brightWindowImageView.frame.minY,
-            -offsetFromThumbnailTop,
+            subject.brightWindowContainer.convert(subject.brightWindowImageView.frame, to: subject).minY,
+            subject.thumbnailContainer.frame.minY,
+            accuracy: UX.frameAccuracy,
+            "The bright copy must stay registered with the dimmed page"
+        )
+        XCTAssertEqual(
+            subject.brightWindowImageView.frame.height,
+            subject.thumbnailContainer.frame.height,
             accuracy: UX.frameAccuracy
         )
     }
@@ -219,6 +314,10 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
     private func createSubject(image: UIImage? = nil) -> WebCompatFullPageScreenshotView {
         return WebCompatFullPageScreenshotView(
             image: image,
+            viewModel: WebCompatFullPageScreenshotViewModel(
+                captureAccessibilityLabel: UX.captureAccessibilityLabel,
+                captureAccessibilityIdentifier: UX.captureAccessibilityIdentifier
+            ),
             closeButtonViewModel: CloseButtonViewModel(a11yLabel: "Close", a11yIdentifier: "close")
         )
     }
@@ -230,7 +329,7 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
 
     private func scroll(_ subject: WebCompatFullPageScreenshotView, toFractionOfMaximumOffset fraction: CGFloat) {
         let scrollView = subject.scrollView
-        let maximumOffset = max(1, scrollView.contentSize.height - scrollView.bounds.height)
+        let maximumOffset = max(0, scrollView.contentSize.height - scrollView.bounds.height)
         scrollView.contentOffset = CGPoint(x: 0, y: maximumOffset * fraction)
         subject.layoutIfNeeded()
     }
