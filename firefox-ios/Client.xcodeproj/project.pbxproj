@@ -2251,6 +2251,7 @@
 		ECD8E56E2FF7ED79002092C6 /* WaybackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56D2FF7ED75002092C6 /* WaybackServiceTests.swift */; };
 		ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */; };
 		ECF75D3C301930E2008183CA /* MockGroupedParentFolderSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF75D3B301930D8008183CA /* MockGroupedParentFolderSelector.swift */; };
+		ECF75D3E30193E9A008183CA /* GroupedEditBookmarkViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF75D3D30193E8A008183CA /* GroupedEditBookmarkViewModelTests.swift */; };
 		ED07C0EB2CCADCD5006C0627 /* SearchEngineSelectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */; };
 		ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */; };
 		ED07C0EF2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */; };
@@ -11864,6 +11865,7 @@
 		ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackCodes.swift; sourceTree = "<group>"; };
 		ECDA4593850BA4E08FDAC5AF /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		ECF75D3B301930D8008183CA /* MockGroupedParentFolderSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGroupedParentFolderSelector.swift; sourceTree = "<group>"; };
+		ECF75D3D30193E8A008183CA /* GroupedEditBookmarkViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditBookmarkViewModelTests.swift; sourceTree = "<group>"; };
 		ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionState.swift; sourceTree = "<group>"; };
 		ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionAction.swift; sourceTree = "<group>"; };
 		ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionMiddleware.swift; sourceTree = "<group>"; };
@@ -12533,6 +12535,7 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				ECF75D3D30193E8A008183CA /* GroupedEditBookmarkViewModelTests.swift */,
 				EC82F42C3017AEB200194A83 /* GroupedEditFolderViewControllerTests.swift */,
 				EC407901300AA88F0003DE07 /* GroupedEditFolderViewModelTests.swift */,
 				EC4078FF300AA7EF0003DE07 /* GroupedDefaultFolderHierarchyFetcherTests.swift */,
@@ -20996,6 +20999,7 @@
 				1D4D79462BF2F4E7007C6796 /* SimpleTab.swift in Sources */,
 				ECF75D3C301930E2008183CA /* MockGroupedParentFolderSelector.swift in Sources */,
 				8A3F08B02FB40BDC001F5DE9 /* MockTabRestorerDelegate.swift in Sources */,
+				ECF75D3E30193E9A008183CA /* GroupedEditBookmarkViewModelTests.swift in Sources */,
 				21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */,
 				C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */,
 				81DAB2F92C8901AC00F4BE98 /* MainMenuStateTests.swift in Sources */,
