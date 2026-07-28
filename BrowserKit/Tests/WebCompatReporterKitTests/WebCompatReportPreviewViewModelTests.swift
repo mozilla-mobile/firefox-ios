@@ -32,6 +32,7 @@ final class WebCompatReportPreviewViewModelTests: XCTestCase {
             id: "system",
             title: "system",
             a11yIdentifier: "section.system",
+            contentA11yIdentifier: "section.system.content",
             rows: [WebCompatReportPreviewViewModel.PreviewRow(id: "memory", label: "memory", value: .quantity(6144))]
         )
 

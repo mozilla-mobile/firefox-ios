@@ -79,7 +79,6 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
     ]
 }
 
-/// A stand-in page so the thumbnail has something to render.
 private func previewSampleScreenshot() -> UIImage {
     let size = CGSize(width: 320, height: 1400)
     let renderer = UIGraphicsImageRenderer(size: size)

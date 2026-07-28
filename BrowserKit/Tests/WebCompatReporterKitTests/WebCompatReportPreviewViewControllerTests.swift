@@ -155,6 +155,31 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 1), 2)
     }
 
+    // Turning the screenshot toggle off drops section 0, which shifts every remaining section
+    // down an index.
+    func testConfigure_screenshotRemoved_dropsTheScreenshotSection() {
+        let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
+        layout(subject)
+
+        subject.configure(with: makeViewModel(screenshot: nil, sections: sampleSections))
+        subject.view.layoutIfNeeded()
+
+        let collectionView = collectionView(in: subject)
+        XCTAssertEqual(collectionView?.numberOfSections, sampleSections.count)
+        XCTAssertFalse(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
+    }
+
+    func testConfigure_screenshotRemoved_keepsExpandedSectionsExpanded() {
+        let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
+        layout(subject)
+        expandFirstSection(in: subject)
+
+        subject.configure(with: makeViewModel(screenshot: nil, sections: sampleSections))
+        subject.view.layoutIfNeeded()
+
+        XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
+    }
+
     func testScreenshotTap_notifiesDelegate() throws {
         let delegate = MockWebCompatReportPreviewDelegate()
         let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
@@ -315,7 +340,6 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     private func collectionView(in subject: WebCompatReportPreviewViewController) -> UICollectionView? {
         return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
     }
-
     /// A section is recognisable from outside by its header cell's identifier.
     private func sectionIndex(
         ofHeader accessibilityIdentifier: String,

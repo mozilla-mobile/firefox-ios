@@ -5,17 +5,14 @@
 import Common
 import UIKit
 
-/// The page thumbnail at the top of the Report Preview list: a tilted card, per
-/// the Figma, and the whole surface opens the full-screen viewer.
+/// The page thumbnail at the top of the Report Preview list. The whole surface
+/// opens the full-screen viewer.
 final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeApplicable, ReusableCell {
     private var tapHandler: (() -> Void)?
 
     /// Holds the tilt and the shadow. Separate from the clipped image, or the
     /// rounded corners mask the shadow away.
     private lazy var cardContainer: UIView = .build { view in
-        view.layer.shadowOpacity = WebCompatReporterUX.Thumbnail.shadowOpacity
-        view.layer.shadowRadius = WebCompatReporterUX.Thumbnail.shadowRadius
-        view.layer.shadowOffset = WebCompatReporterUX.Thumbnail.shadowOffset
         view.transform = CGAffineTransform(
             rotationAngle: WebCompatReporterUX.Thumbnail.tiltDegrees * .pi / 180
         )
@@ -86,7 +83,6 @@ final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeAppli
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        // Without a path, every scrolled frame costs an offscreen pass.
         cardContainer.layer.shadowPath = UIBezierPath(
             roundedRect: cardContainer.bounds,
             cornerRadius: WebCompatReporterUX.Thumbnail.cornerRadius
@@ -96,8 +92,16 @@ final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeAppli
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        imageView.layer.borderColor = theme.colors.layer1.cgColor
-        cardContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        imageView.layer.borderColor = theme.colors.layer2.cgColor
+        cardContainer.applyShadow(
+            FxShadow(
+                blurRadius: WebCompatReporterUX.Thumbnail.shadowBlurRadius,
+                offset: WebCompatReporterUX.Thumbnail.shadowOffset,
+                opacity: WebCompatReporterUX.Thumbnail.shadowOpacity,
+                colorProvider: { $0.colors.shadowDefault }
+            ),
+            theme: theme
+        )
     }
 
     @objc

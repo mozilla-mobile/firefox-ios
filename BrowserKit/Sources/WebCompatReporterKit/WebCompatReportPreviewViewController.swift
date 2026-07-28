@@ -35,15 +35,15 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         case content(WebCompatReportPreviewViewModel.PreviewSection)
     }
 
-    private static let screenshotSectionID = "webcompat.preview.screenshot.section"
-    private static let screenshotItemID = "webcompat.preview.screenshot.item"
+    private static let screenshotDataSourceSectionID = "webcompat.preview.screenshot.section"
+    private static let screenshotDataSourceItemID = "webcompat.preview.screenshot.item"
 
     /// Suffixed so an item id can't collide with a section id in `itemsByID`.
-    private static func headerItemID(for sectionID: String) -> String {
+    private static func headerDataSourceItemID(for sectionID: String) -> String {
         return "\(sectionID).header"
     }
 
-    private static func contentItemID(for sectionID: String) -> String {
+    private static func contentDataSourceItemID(for sectionID: String) -> String {
         return "\(sectionID).content"
     }
 
@@ -130,13 +130,12 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         return UICollectionViewCompositionalLayout { [weak self] index, environment in
             let sectionIDs = self?.orderedSectionIDs ?? []
             let sectionID = index < sectionIDs.count ? sectionIDs[index] : nil
-            if sectionID == WebCompatReportPreviewViewController.screenshotSectionID {
+            if sectionID == Self.screenshotDataSourceSectionID {
                 var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
                 configuration.backgroundColor = .clear
                 configuration.showsSeparators = false
                 let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
-                // Room between the nav bar and the tilt.
-                section.contentInsets.top = WebCompatReporterUX.Spacing.sectionGap
+                section.contentInsets.top = WebCompatReporterUX.Thumbnail.topInset
                 return section
             }
             var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
@@ -216,12 +215,6 @@ public final class WebCompatReportPreviewViewController: UIViewController,
                 )
             case let .header(title, a11yIdentifier):
                 return collectionView.dequeueConfiguredReusableCell(
-                    using: fallbackRegistration, for: indexPath, item: itemID
-                )
-            }
-            switch self.itemsByID[itemID] {
-            case let .header(title, a11yIdentifier):
-                return collectionView.dequeueConfiguredReusableCell(
                     using: headerRegistration,
                     for: indexPath,
                     item: .header(title: title, a11yIdentifier: a11yIdentifier)
@@ -231,7 +224,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
                     using: contentRegistration, for: indexPath, item: section
                 )
             case .none:
-                assertionFailure("No Technical Data item registered for id \(itemID)")
+                assertionFailure("No Report Preview item registered for id \(itemID)")
                 return collectionView.dequeueConfiguredReusableCell(
                     using: fallbackRegistration, for: indexPath, item: itemID
                 )
@@ -243,19 +236,20 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         let expandedHeaderIDs = currentlyExpandedHeaderIDs()
         let previousItems = itemsByID
 
+        let screenshot = viewModel.screenshot
         itemsByID = [:]
         orderedSectionIDs = []
 
-        if let screenshot = viewModel.screenshot {
-            itemsByID[Self.screenshotItemID] = .screenshot(screenshot)
-            orderedSectionIDs.append(Self.screenshotSectionID)
+        if let screenshot {
+            itemsByID[Self.screenshotDataSourceItemID] = .screenshot(screenshot)
+            orderedSectionIDs.append(Self.screenshotDataSourceSectionID)
         }
         for section in viewModel.sections {
-            itemsByID[Self.headerItemID(for: section.id)] = .header(
+            itemsByID[Self.headerDataSourceItemID(for: section.id)] = .header(
                 title: section.title,
                 a11yIdentifier: section.a11yIdentifier
             )
-            itemsByID[Self.contentItemID(for: section.id)] = .content(section)
+            itemsByID[Self.contentDataSourceItemID(for: section.id)] = .content(section)
             orderedSectionIDs.append(section.id)
         }
 
@@ -267,19 +261,19 @@ public final class WebCompatReportPreviewViewController: UIViewController,
             dataSource.apply(sectionsSnapshot, animatingDifferences: false)
         }
 
-        if viewModel.screenshot != nil,
-           dataSource.snapshot(for: Self.screenshotSectionID).items.isEmpty {
+        if screenshot != nil,
+           dataSource.snapshot(for: Self.screenshotDataSourceSectionID).items.isEmpty {
             var snapshot = NSDiffableDataSourceSectionSnapshot<String>()
-            snapshot.append([Self.screenshotItemID])
-            dataSource.apply(snapshot, to: Self.screenshotSectionID, animatingDifferences: false)
+            snapshot.append([Self.screenshotDataSourceItemID])
+            dataSource.apply(snapshot, to: Self.screenshotDataSourceSectionID, animatingDifferences: false)
         }
 
         for section in viewModel.sections where dataSource.snapshot(for: section.id).items.isEmpty {
-            let headerID = Self.headerItemID(for: section.id)
+            let headerID = Self.headerDataSourceItemID(for: section.id)
             // A fresh section starts collapsed. `expand` only restores what the user opened.
             var snapshot = NSDiffableDataSourceSectionSnapshot<String>()
             snapshot.append([headerID])
-            snapshot.append([Self.contentItemID(for: section.id)], to: headerID)
+            snapshot.append([Self.contentDataSourceItemID(for: section.id)], to: headerID)
             if expandedHeaderIDs.contains(headerID) {
                 snapshot.expand([headerID])
             }
@@ -305,7 +299,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         let existingSectionIDs = Set(dataSource.snapshot().sectionIdentifiers)
         var expanded = Set<String>()
         for section in viewModel.sections where existingSectionIDs.contains(section.id) {
-            let headerID = Self.headerItemID(for: section.id)
+            let headerID = Self.headerDataSourceItemID(for: section.id)
             if dataSource.snapshot(for: section.id).isExpanded(headerID) {
                 expanded.insert(headerID)
             }

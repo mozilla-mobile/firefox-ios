@@ -40,18 +40,20 @@ enum WebCompatReporterUX {
         static let focusPadding: CGFloat = 16
     }
 
-    /// The tilted page card on the Report Preview screen. Figma has it at 150×180,
-    /// 16pt corners, a 4pt border and a soft shadow, rotated 1.925° clockwise.
+    /// The tilted page card on the Report Preview screen.
     enum Thumbnail {
         static let size = CGSize(width: 150, height: 180)
         static let cornerRadius: CGFloat = 16
         static let borderWidth: CGFloat = 4
         static let tiltDegrees: CGFloat = 1.925
-        /// `shadowDefault` already carries the Figma 12% alpha. Set this below 1 and
-        /// the two multiply, which leaves the shadow invisible.
-        static let shadowOpacity: Float = 1
-        static let shadowRadius: CGFloat = 7
-        static let shadowOffset = CGSize(width: 0, height: 2)
         static let verticalPadding: CGFloat = 18
+        /// Clears the nav bar, so the tilt has room above it.
+        static let topInset: CGFloat = 24
+
+        /// Figma's blur, which `applyShadow(_:theme:)` halves to get `shadowRadius`.
+        static let shadowBlurRadius: CGFloat = 14
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        /// `shadowDefault` already carries the Figma 12% alpha, so this stays at 1.
+        static let shadowOpacity: Float = 1
     }
 }
