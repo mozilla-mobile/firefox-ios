@@ -48,6 +48,18 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Delegate intents → Redux actions
 
+    func testDidTapLearnMore_forwardsURLToCoordinator() throws {
+        let learnMoreURL = try XCTUnwrap(URL(string: "https://example.com/learn-more"))
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapLearnMore(url: learnMoreURL)
+
+        XCTAssertEqual(coordinator.didTapLearnMoreURLs, [learnMoreURL])
+    }
+
     func testDidTapButton_onSendRow_dispatchesSubmit() {
         let subject = createSubject(reportedURL: nil)
 
@@ -194,6 +206,20 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: true)])
     }
 
+    func testMakeSections_attachesLearnMoreFooterWithATappableLink() throws {
+        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        XCTAssertEqual(sections.filter { $0.footer != nil }.map(\.id), ["advancedOptions"])
+
+        // The footer view locates the link by searching `text` for `linkText`; if the
+        // format string and the link string drift apart the link silently stops rendering.
+        let footer = try XCTUnwrap(sections.first { $0.id == "advancedOptions" }?.footer)
+        XCTAssertTrue(footer.text.contains(footer.linkText))
+        XCTAssertNotNil(footer.linkURL)
+    }
+
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {
         return WebCompatReportViewController(windowUUID: windowUUID, reportedURL: reportedURL)
     }
@@ -230,8 +256,13 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
 private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoordinatorDelegate {
     var didFinishCallCount = 0
+    var didTapLearnMoreURLs: [URL] = []
 
     func webCompatReportViewControllerDidFinish() {
         didFinishCallCount += 1
+    }
+
+    func webCompatReportViewControllerDidTapLearnMore(url: URL) {
+        didTapLearnMoreURLs.append(url)
     }
 }

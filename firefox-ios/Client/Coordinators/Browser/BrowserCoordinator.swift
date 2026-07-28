@@ -642,6 +642,13 @@ final class BrowserCoordinator: BaseCoordinator,
         router.dismiss(animated: true, completion: nil)
     }
 
+    func webCompatReportViewControllerDidTapLearnMore(url: URL) {
+        // Dismiss first, otherwise the explainer loads in a tab hidden behind the sheet.
+        router.dismiss(animated: true, completion: { [weak self] in
+            self?.browserViewController.openURLInNewTab(url)
+        })
+    }
+
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
 
