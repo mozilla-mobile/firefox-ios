@@ -206,6 +206,20 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: true)])
     }
 
+    func testMakeSections_attachesLearnMoreFooterWithATappableLink() throws {
+        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        XCTAssertEqual(sections.filter { $0.footer != nil }.map(\.id), ["advancedOptions"])
+
+        // The footer view locates the link by searching `text` for `linkText`; if the
+        // format string and the link string drift apart the link silently stops rendering.
+        let footer = try XCTUnwrap(sections.first { $0.id == "advancedOptions" }?.footer)
+        XCTAssertTrue(footer.text.contains(footer.linkText))
+        XCTAssertNotNil(footer.linkURL)
+    }
+
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {
         return WebCompatReportViewController(windowUUID: windowUUID, reportedURL: reportedURL)
     }

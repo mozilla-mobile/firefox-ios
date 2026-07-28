@@ -146,6 +146,7 @@ final class WebCompatReportViewController: UINavigationController,
         return WebCompatReportViewModel.Section(
             id: SectionID.advancedOptions.rawValue,
             title: .WebCompatReporter.AdditionalInfo.Title,
+            footer: learnMoreFooter(),
             rows: [
                 WebCompatReportViewModel.Row(
                     id: RowID.includeScreenshot.rawValue,
@@ -160,6 +161,20 @@ final class WebCompatReportViewController: UINavigationController,
                     a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeBlockedList
                 )
             ]
+        )
+    }
+
+    private static func learnMoreFooter() -> WebCompatReportViewModel.Footer {
+        let linkText: String = .WebCompatReporter.AdditionalInfo.LearnMore
+        return WebCompatReportViewModel.Footer(
+            text: String(
+                format: .WebCompatReporter.AdditionalInfo.FooterText,
+                AppName.shortName.rawValue,
+                linkText
+            ),
+            linkText: linkText,
+            linkURL: SupportUtils.URLForTopic("report-broken-site"),
+            linkA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.learnMore
         )
     }
 
