@@ -2242,6 +2242,8 @@
 		EC4F28143011A62600BAD351 /* CertificatesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F28133011A61D00BAD351 /* CertificatesHandlerTests.swift */; };
 		EC4F28163011A64900BAD351 /* CertificateTestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F28153011A64400BAD351 /* CertificateTestFactory.swift */; };
 		EC4F28183011A6BF00BAD351 /* CertificatesFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F28173011A6B900BAD351 /* CertificatesFetcherTests.swift */; };
+		EC71F4E130190C9300A84FB9 /* GroupedEditBookmarkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC71F4E030190C8000A84FB9 /* GroupedEditBookmarkViewModel.swift */; };
+		EC7BFBF230190EB000254E9A /* BookmarkItemData+Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BFBF130190EAA00254E9A /* BookmarkItemData+Copy.swift */; };
 		EC82F42B3013C75300194A83 /* GroupedEditFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82F42A3013C74D00194A83 /* GroupedEditFolderViewController.swift */; };
 		EC82F42D3017AEC200194A83 /* GroupedEditFolderViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82F42C3017AEB200194A83 /* GroupedEditFolderViewControllerTests.swift */; };
 		EC82F42F3017B03B00194A83 /* MockGroupedFolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82F42E3017B02D00194A83 /* MockGroupedFolderHierarchyFetcher.swift */; };
@@ -11848,8 +11850,10 @@
 		EC4F28133011A61D00BAD351 /* CertificatesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesHandlerTests.swift; sourceTree = "<group>"; };
 		EC4F28153011A64400BAD351 /* CertificateTestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateTestFactory.swift; sourceTree = "<group>"; };
 		EC4F28173011A6B900BAD351 /* CertificatesFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesFetcherTests.swift; sourceTree = "<group>"; };
+		EC71F4E030190C8000A84FB9 /* GroupedEditBookmarkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditBookmarkViewModel.swift; sourceTree = "<group>"; };
 		EC724CF0B0021AE49EDC95DC /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EC734AD49E5483F11375E891 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
+		EC7BFBF130190EAA00254E9A /* BookmarkItemData+Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BookmarkItemData+Copy.swift"; sourceTree = "<group>"; };
 		EC82F42A3013C74D00194A83 /* GroupedEditFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditFolderViewController.swift; sourceTree = "<group>"; };
 		EC82F42C3017AEB200194A83 /* GroupedEditFolderViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditFolderViewControllerTests.swift; sourceTree = "<group>"; };
 		EC82F42E3017B02D00194A83 /* MockGroupedFolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGroupedFolderHierarchyFetcher.swift; sourceTree = "<group>"; };
@@ -12548,6 +12552,8 @@
 		0B8BF3732CA2EB3300E9812D /* Edit Bookmark */ = {
 			isa = PBXGroup;
 			children = (
+				EC7BFBF130190EAA00254E9A /* BookmarkItemData+Copy.swift */,
+				EC71F4E030190C8000A84FB9 /* GroupedEditBookmarkViewModel.swift */,
 				0B8BF3712CA2DA4600E9812D /* EditBookmarkViewController.swift */,
 				0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */,
 				0B8BF3742CA2EFC000E9812D /* EditBookmarkCell.swift */,
@@ -20430,6 +20436,7 @@
 				D5D0532E2645B3A700759F85 /* ExperimentsTableView.swift in Sources */,
 				8A832A9029DC96C50025D5DD /* LaunchScreenView.swift in Sources */,
 				8C2FB1E62FF3D67900C9A803 /* WebCompatReporterState.swift in Sources */,
+				EC71F4E130190C9300A84FB9 /* GroupedEditBookmarkViewModel.swift in Sources */,
 				8AAAB05B2C1B7268008830B3 /* ClientTabsSearchWrapper.swift in Sources */,
 				214EF4152AC5D5D0005BCCDA /* TabDisplayView.swift in Sources */,
 				8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */,
@@ -20534,6 +20541,7 @@
 				F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */,
 				8A7892052CF91FEF00490CA4 /* UnifiedAdsCallbackTelemetry.swift in Sources */,
 				8A454D292CB7078D009436D9 /* MerinoState.swift in Sources */,
+				EC7BFBF230190EB000254E9A /* BookmarkItemData+Copy.swift in Sources */,
 				21E77E502AA8BAEC00FABA10 /* TabTrayState.swift in Sources */,
 				C2D3A8C22FDFF686008D5689 /* WorldCupLottieView.swift in Sources */,
 				8C2447E82DFADF3D00BD2C91 /* ActivityEventHelper.swift in Sources */,
