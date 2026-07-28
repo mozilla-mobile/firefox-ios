@@ -190,8 +190,14 @@ class ToolbarTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
             if !isPrivate {
-                app.partialSwipeUp(distance: 0.2)
-                mozWaitForElementToExist(app.otherElements["News"])
+                // News scrolls in after the relaunch and loads async; retry the swipe.
+                let news = app.otherElements["News"]
+                var swipes = 3
+                repeat {
+                    app.partialSwipeUp(distance: 0.2)
+                    swipes -= 1
+                } while !news.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && swipes > 0
+                mozWaitForElementToExist(news)
             }
             navigator.nowAt(BrowserTab)
             mozWaitElementHittable(element: app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)
