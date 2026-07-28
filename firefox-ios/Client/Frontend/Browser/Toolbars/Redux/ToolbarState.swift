@@ -20,8 +20,8 @@ struct ToolbarState: ScreenState, Sendable {
     let isShowingTopTabs: Bool
     let canGoBack: Bool
     let canGoForward: Bool
-    let scrollAlpha: Float
     var numberOfTabs: Int
+    let scrollAlpha: Float
     var showMenuWarningBadge: Bool
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
