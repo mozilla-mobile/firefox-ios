@@ -50,6 +50,10 @@ private struct FullPageScreenshotPreview: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> WebCompatFullPageScreenshotViewController {
         return WebCompatFullPageScreenshotViewController(
             image: samplePage(),
+            viewModel: WebCompatFullPageScreenshotViewModel(
+                captureAccessibilityLabel: "Screenshot of the page",
+                captureAccessibilityIdentifier: "WebCompatReporter.Preview.ScreenshotCapture"
+            ),
             closeButtonViewModel: CloseButtonViewModel(
                 a11yLabel: "Close",
                 a11yIdentifier: "WebCompatReporter.Preview.ScreenshotClose"
