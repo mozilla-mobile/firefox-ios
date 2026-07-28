@@ -2242,6 +2242,9 @@
 		EC4F28143011A62600BAD351 /* CertificatesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F28133011A61D00BAD351 /* CertificatesHandlerTests.swift */; };
 		EC4F28163011A64900BAD351 /* CertificateTestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F28153011A64400BAD351 /* CertificateTestFactory.swift */; };
 		EC4F28183011A6BF00BAD351 /* CertificatesFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F28173011A6B900BAD351 /* CertificatesFetcherTests.swift */; };
+		EC82F42B3013C75300194A83 /* GroupedEditFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82F42A3013C74D00194A83 /* GroupedEditFolderViewController.swift */; };
+		EC82F42D3017AEC200194A83 /* GroupedEditFolderViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82F42C3017AEB200194A83 /* GroupedEditFolderViewControllerTests.swift */; };
+		EC82F42F3017B03B00194A83 /* MockGroupedFolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82F42E3017B02D00194A83 /* MockGroupedFolderHierarchyFetcher.swift */; };
 		ECD8E56C2FF7EB69002092C6 /* WaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */; };
 		ECD8E56E2FF7ED79002092C6 /* WaybackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E56D2FF7ED75002092C6 /* WaybackServiceTests.swift */; };
 		ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD8E8052FFBE69E002092C6 /* WaybackCodes.swift */; };
@@ -11847,6 +11850,9 @@
 		EC4F28173011A6B900BAD351 /* CertificatesFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesFetcherTests.swift; sourceTree = "<group>"; };
 		EC724CF0B0021AE49EDC95DC /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EC734AD49E5483F11375E891 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
+		EC82F42A3013C74D00194A83 /* GroupedEditFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditFolderViewController.swift; sourceTree = "<group>"; };
+		EC82F42C3017AEB200194A83 /* GroupedEditFolderViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditFolderViewControllerTests.swift; sourceTree = "<group>"; };
+		EC82F42E3017B02D00194A83 /* MockGroupedFolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGroupedFolderHierarchyFetcher.swift; sourceTree = "<group>"; };
 		EC934F7BB2F8B247BC714BE2 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		ECD8E56B2FF7EB64002092C6 /* WaybackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackService.swift; sourceTree = "<group>"; };
 		ECD8E56D2FF7ED75002092C6 /* WaybackServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackServiceTests.swift; sourceTree = "<group>"; };
@@ -12521,6 +12527,7 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				EC82F42C3017AEB200194A83 /* GroupedEditFolderViewControllerTests.swift */,
 				EC407901300AA88F0003DE07 /* GroupedEditFolderViewModelTests.swift */,
 				EC4078FF300AA7EF0003DE07 /* GroupedDefaultFolderHierarchyFetcherTests.swift */,
 				EC0FBD3030069258005CCA62 /* LinkActionCellTests.swift */,
@@ -12572,6 +12579,7 @@
 		0BDDB33B2CA6B19B00D501DF /* Edit Folder */ = {
 			isa = PBXGroup;
 			children = (
+				EC82F42A3013C74D00194A83 /* GroupedEditFolderViewController.swift */,
 				EC4084E0300FCAE40003DE07 /* BookmarkFolderData+Copy.swift */,
 				EC4078FB300AA2C50003DE07 /* GroupedEditFolderViewModel.swift */,
 				EC0FBD2230053136005CCA62 /* LinkActionCell.swift */,
@@ -15995,6 +16003,7 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				EC82F42E3017B02D00194A83 /* MockGroupedFolderHierarchyFetcher.swift */,
 				617D8AC12FC8D5B700E1C7A5 /* MockConversionValueUpdater.swift */,
 				C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */,
 				0A80C4252F3CD45400DB85AE /* MockLAContext.swift */,
@@ -20566,6 +20575,7 @@
 				C27EF6132EBA28E100BED719 /* LanguageDetector.swift in Sources */,
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
 				8AC6F2262D6E263500D10A9F /* ExperimentRemoteTabsEmptyView.swift in Sources */,
+				EC82F42B3013C75300194A83 /* GroupedEditFolderViewController.swift in Sources */,
 				CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
 				1BE7A4922C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift in Sources */,
@@ -20900,6 +20910,7 @@
 				8AFC09572FA54A240070CA11 /* TabManagerPreserveTabsTests.swift in Sources */,
 				8AFC09582FA54A240070CA11 /* TabManagerRemoveTabTests.swift in Sources */,
 				1D8956212FFD58E40041B982 /* TabErrorTelemetryHelperTests.swift in Sources */,
+				EC82F42F3017B03B00194A83 /* MockGroupedFolderHierarchyFetcher.swift in Sources */,
 				8AFC09592FA54A240070CA11 /* TabManagerTestsBase.swift in Sources */,
 				8AFC095A2FA54A240070CA11 /* TabManagerOlderTabsTests.swift in Sources */,
 				8AFC095B2FA54A240070CA11 /* TabManagerRestoreTabsTests.swift in Sources */,
@@ -21027,6 +21038,7 @@
 				354F8FAB2E0985B9007DFFEB /* SearchBarStateTests.swift in Sources */,
 				8C2FB1EB2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift in Sources */,
 				399BA8002F901D9200CCC502 /* UserFeaturePreferenceManagerTests.swift in Sources */,
+				EC82F42D3017AEC200194A83 /* GroupedEditFolderViewControllerTests.swift in Sources */,
 				5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */,
 				AAD9D64B2EB25B3500BFECAF /* TranslationsMiddlewareTests.swift in Sources */,
 				C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */,
