@@ -124,6 +124,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         ) {
             HStack(alignment: .top) {
                 Image(StandardImageIdentifiers.Large.information)
+                    .accessibilityHidden(true)
                 Text(verbatim: .Settings.AIControls.BlockedInformation)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textPrimary.color)

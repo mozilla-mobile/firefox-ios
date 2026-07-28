@@ -65,7 +65,8 @@ final class AnimationControllerTests: XCTestCase {
             snapshotTransform: transform,
             applyTheme: {
                 applyThemeCalled = true
-            }) {}
+            }
+        ) {}
 
         XCTAssertEqual(summaryView.alpha, 1.0)
         XCTAssertEqual(loadingLabel.alpha, 0.0)
