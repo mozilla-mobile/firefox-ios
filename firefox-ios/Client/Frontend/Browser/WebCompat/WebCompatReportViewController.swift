@@ -12,7 +12,7 @@ import WebCompatReporterKit
 protocol WebCompatReportCoordinatorDelegate: AnyObject {
     /// Sheet asked to finish; the coordinator owns the dismissal.
     func webCompatReportViewControllerDidFinish()
-    /// User tapped the "Learn More…" link; the coordinator opens the explainer page.
+    /// User tapped the "Learn More…" link; the coordinator dismisses the sheet and opens the explainer page.
     func webCompatReportViewControllerDidTapLearnMore(url: URL)
 }
 

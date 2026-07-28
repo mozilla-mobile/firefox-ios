@@ -643,8 +643,10 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func webCompatReportViewControllerDidTapLearnMore(url: URL) {
-        // Keep the sheet up so the in-progress report isn't lost; open the explainer in a new tab behind it.
-        browserViewController.openURLInNewTab(url)
+        // Dismiss first, otherwise the explainer loads in a tab hidden behind the sheet.
+        router.dismiss(animated: true, completion: { [weak self] in
+            self?.browserViewController.openURLInNewTab(url)
+        })
     }
 
     func presentSavePDFController() {
