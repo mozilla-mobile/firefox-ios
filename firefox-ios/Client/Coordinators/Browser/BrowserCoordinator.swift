@@ -629,10 +629,6 @@ final class BrowserCoordinator: BaseCoordinator,
     func presentReportBrokenSite(url: URL?) {
         let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
         reportViewController.reportCoordinator = self
-        if let sheetPresentationController = reportViewController.sheetPresentationController {
-            sheetPresentationController.detents = [.large()]
-            sheetPresentationController.prefersGrabberVisible = true
-        }
         router.present(reportViewController, animated: true, completion: nil)
     }
 

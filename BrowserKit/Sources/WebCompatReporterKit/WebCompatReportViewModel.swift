@@ -59,6 +59,7 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
             case plain
             case categoryMenu(isPlaceholder: Bool, options: [MenuOption])
             case subOption(isSelected: Bool)
+            case urlField(text: String, placeholder: String)
             case sendButton(isEnabled: Bool)
             case toggle(isOn: Bool)
         }
