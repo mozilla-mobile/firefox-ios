@@ -4,8 +4,7 @@
 
 import CoreGraphics
 
-/// Layout constants for the WebCompat "Report a Website Issue" bottom sheet,
-/// matching the iOS Figma source (Mobile Assembly File 2026, node 23608-71142).
+/// Layout constants for the WebCompat "Report a Website Issue" bottom sheet.
 enum WebCompatReporterUX {
     enum Spacing {
         static let screenHorizontal: CGFloat = 16

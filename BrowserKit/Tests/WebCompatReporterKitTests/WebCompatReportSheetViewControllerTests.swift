@@ -113,7 +113,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         )
     }
 
-    func testSendButton_whenTapped_notifiesDelegateWithRowID() {
+    func testSendButton_whenTapped_notifiesDelegateWithRowID() throws {
         let delegate = MockWebCompatReportSheetDelegate()
         let subject = createSubject()
         subject.delegate = delegate
@@ -123,7 +123,8 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         subject.view.layoutIfNeeded()
 
         let cell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
-        fireActions(firstSubview(ofType: UIButton.self, in: cell), for: .touchUpInside)
+        let sendButton = try XCTUnwrap(firstSubview(ofType: UIButton.self, in: cell))
+        fireActions(on: sendButton, for: .touchUpInside)
 
         XCTAssertEqual(delegate.tappedButtonIDs, ["send"])
     }
@@ -152,7 +153,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         )
     }
 
-    func testToggleCell_activation_notifiesDelegateWithRowIDAndValue() {
+    func testToggleCell_activation_notifiesDelegateWithRowIDAndValue() throws {
         let delegate = MockWebCompatReportSheetDelegate()
         let subject = createSubject()
         subject.delegate = delegate
@@ -162,9 +163,9 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         subject.view.layoutIfNeeded()
 
         let toggleCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
-        let toggle = firstSubview(ofType: UISwitch.self, in: toggleCell)
-        toggle?.isOn = true
-        fireActions(toggle, for: .valueChanged)
+        let toggle = try XCTUnwrap(firstSubview(ofType: UISwitch.self, in: toggleCell))
+        toggle.isOn = true
+        fireActions(on: toggle, for: .valueChanged)
 
         XCTAssertEqual(delegate.toggles.map(\.id), ["screenshot"])
         XCTAssertEqual(delegate.toggles.map(\.isOn), [true])
@@ -273,18 +274,6 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
 
     private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
         return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
-    }
-
-    // UIControl.sendActions needs a running UIApplication, which logic tests lack,
-    // so invoke each registered target/action selector directly.
-    private func fireActions(_ control: UIControl?, for event: UIControl.Event) {
-        guard let control else { return }
-        for target in control.allTargets {
-            let object = target as NSObject
-            control.actions(forTarget: target, forControlEvent: event)?.forEach {
-                object.perform(Selector($0))
-            }
-        }
     }
 
     private func sendSections(isEnabled: Bool) -> [WebCompatReportViewModel.Section] {
