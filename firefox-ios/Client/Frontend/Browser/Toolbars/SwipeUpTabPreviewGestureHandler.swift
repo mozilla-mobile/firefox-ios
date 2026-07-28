@@ -193,6 +193,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
                 topPadding: topBlurView.bounds.height,
                 bottomPadding: bottomBlurView.bounds.height
             )
+            addHaptics()
         case .changed:
             tabPreview.addTabScreenshot(image: tab.screenshot)
             let translation = gesture.translation(in: gesture.view)
@@ -265,8 +266,15 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             return
         }
 
+        addHaptics()
         store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
                                                actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
+    }
+
+    private func addHaptics() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.prepare()
+        impactFeedback.impactOccurred()
     }
 
     // MARK: - Testing
