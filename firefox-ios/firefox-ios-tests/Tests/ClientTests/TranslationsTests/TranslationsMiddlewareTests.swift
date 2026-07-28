@@ -1893,8 +1893,6 @@ private final class StallingTranslationsService: TranslationsServiceProtocol {
         }
     }
 
-    func discardTranslations(for windowUUID: WindowUUID) async throws {}
-
     func fetchSupportedTargetLanguages() async -> [String] { [] }
 
     func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String { "en" }

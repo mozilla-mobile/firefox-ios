@@ -69,6 +69,7 @@ final class FolderTreeCell: UITableViewCell, ReusableCell, ThemeApplicable {
         leftImageView.image = nil
         accessoryType = .none
         indentationLevel = 0
+        selectionStyle = .default
     }
 
     private func setMargin() {

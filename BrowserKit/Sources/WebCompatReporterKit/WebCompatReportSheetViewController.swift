@@ -15,6 +15,8 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidSelectCategory(id: String)
     func webCompatReportSheetDidSelectSubOption(id: String)
     func webCompatReportSheetDidTapButton(id: String)
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool)
+    func webCompatReportSheetDidTapLearnMore(url: URL)
 }
 
 /// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
@@ -33,6 +35,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
     /// The current values are looked up here by id.
     private var rowsByID: [String: WebCompatReportViewModel.Row] = [:]
     private var sectionsByID: [String: WebCompatReportViewModel.Section] = [:]
+
+    /// configure(with:) themes cells at build time, so the first applyTheme must skip the
+    /// reconfigure — running it then lands in the nav bar's large-title pass and collapses
+    /// the title on load. Later (live) theme changes do reconfigure to re-theme cells.
+    private var hasAppliedThemeOnce = false
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
@@ -113,8 +120,9 @@ public final class WebCompatReportSheetViewController: UIViewController,
             var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             let sections = self?.viewModel.sections ?? []
             let hasHeader = index < sections.count && sections[index].title != nil
+            let hasFooter = index < sections.count && sections[index].footer != nil
             config.headerMode = hasHeader ? .supplementary : .none
-            config.footerMode = .none
+            config.footerMode = hasFooter ? .supplementary : .none
             config.backgroundColor = backgroundColor
             return NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
         }
@@ -166,6 +174,16 @@ public final class WebCompatReportSheetViewController: UIViewController,
             cell.applyTheme(theme: self.theme)
         }
 
+        let toggleRegistration = UICollectionView.CellRegistration<
+            WebCompatToggleCell, WebCompatReportViewModel.Row
+        > { [weak self] cell, _, row in
+            guard let self, case let .toggle(isOn) = row.kind else { return }
+            cell.configure(title: row.title, isOn: isOn, a11yIdentifier: row.a11yIdentifier) { [weak self] isOn in
+                self?.delegate?.webCompatReportSheetDidToggle(id: row.id, isOn: isOn)
+            }
+            cell.applyTheme(theme: self.theme)
+        }
+
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
         ) { [weak self] collectionView, indexPath, rowID in
@@ -189,6 +207,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
                     for: indexPath,
                     item: row
                 )
+            case .toggle:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: toggleRegistration,
+                    for: indexPath,
+                    item: row
+                )
             case .plain:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: plainRegistration,
@@ -198,7 +222,24 @@ public final class WebCompatReportSheetViewController: UIViewController,
             }
         }
 
-        let headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(
+        configureSupplementaryProvider(on: dataSource)
+        return dataSource
+    }
+
+    private func configureSupplementaryProvider(on dataSource: UICollectionViewDiffableDataSource<String, String>) {
+        let header = headerRegistration()
+        let footer = footerRegistration()
+        dataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
+            if elementKind == UICollectionView.elementKindSectionFooter {
+                return collectionView.dequeueConfiguredReusableSupplementary(using: footer, for: indexPath)
+            }
+            return collectionView.dequeueConfiguredReusableSupplementary(using: header, for: indexPath)
+        }
+    }
+
+    private func headerRegistration()
+    -> UICollectionView.SupplementaryRegistration<UICollectionViewListCell> {
+        return UICollectionView.SupplementaryRegistration(
             elementKind: UICollectionView.elementKindSectionHeader
         ) { [weak self] header, _, indexPath in
             guard let self,
@@ -210,14 +251,25 @@ public final class WebCompatReportSheetViewController: UIViewController,
             header.contentConfiguration = content
             header.accessibilityTraits.insert(.header)
         }
+    }
 
-        dataSource.supplementaryViewProvider = { collectionView, _, indexPath in
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+    private func footerRegistration()
+    -> UICollectionView.SupplementaryRegistration<WebCompatLearnMoreFooterView> {
+        return UICollectionView.SupplementaryRegistration(
+            elementKind: UICollectionView.elementKindSectionFooter
+        ) { [weak self] footerView, _, indexPath in
+            guard let self,
+                  let sectionID = self.dataSource.sectionIdentifier(for: indexPath.section),
+                  let footer = self.sectionsByID[sectionID]?.footer else { return }
+            footerView.configure(footer: footer) { [weak self] url in
+                self?.delegate?.webCompatReportSheetDidTapLearnMore(url: url)
+            }
+            footerView.applyTheme(theme: self.theme)
         }
-        return dataSource
     }
 
     private func applySnapshot() {
+        let previousRowsByID = rowsByID
         rowsByID = [:]
         sectionsByID = [:]
         let previousItems = Set(dataSource.snapshot().itemIdentifiers)
@@ -229,8 +281,14 @@ public final class WebCompatReportSheetViewController: UIViewController,
             snapshot.appendItems(section.rows.map { $0.id }, toSection: section.id)
         }
         // The data source keys on id, so rows that persist won't re-render on
-        // content change unless explicitly reconfigured.
-        snapshot.reconfigureItems(snapshot.itemIdentifiers.filter { previousItems.contains($0) })
+        // content change unless explicitly reconfigured. Only reconfigure the ones
+        // whose content actually changed: cells rebuild their accessories on every
+        // configure, and the list animates that as a remove+insert, so reconfiguring
+        // untouched rows flickers their checkmark away.
+        let changedItems = snapshot.itemIdentifiers.filter { rowID in
+            previousItems.contains(rowID) && previousRowsByID[rowID] != rowsByID[rowID]
+        }
+        snapshot.reconfigureItems(changedItems)
         dataSource.apply(snapshot, animatingDifferences: !previousItems.isEmpty)
     }
 
@@ -272,6 +330,9 @@ public final class WebCompatReportSheetViewController: UIViewController,
         collectionView.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        reconfigureAllItems()
+        if hasAppliedThemeOnce {
+            reconfigureAllItems()
+        }
+        hasAppliedThemeOnce = true
     }
 }

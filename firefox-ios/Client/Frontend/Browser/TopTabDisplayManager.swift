@@ -20,7 +20,6 @@ enum TabAnimationType {
     case addTab
     case removedNonLastTab
     case removedLastTab
-    case updateTab
     case moveTab
 }
 
