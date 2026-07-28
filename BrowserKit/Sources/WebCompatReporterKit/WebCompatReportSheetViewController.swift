@@ -130,7 +130,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
             let keyboardFrameInView = view.convert(endFrameInScreen, from: nil)
             let overlap = max(0, collectionView.frame.maxY - keyboardFrameInView.minY)
             // adjustedContentInset already covers the bottom safe area, so add only the rest.
-            bottomInset = max(0, overlap - view.safeAreaInsets.bottom) + WebCompatReporterUX.Keyboard.focusPadding
+            let uncoveredOverlap = max(0, overlap - view.safeAreaInsets.bottom)
+            if uncoveredOverlap > 0 {
+                bottomInset = uncoveredOverlap + WebCompatReporterUX.Keyboard.focusPadding
+            }
+            // Otherwise the keyboard hides nothing (hardware, or undocked on iPad) and the
+            // inset stays at zero, so focusing a field doesn't shift the list.
         }
         collectionView.contentInset.bottom = bottomInset
         collectionView.verticalScrollIndicatorInsets.bottom = bottomInset

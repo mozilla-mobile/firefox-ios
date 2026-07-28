@@ -155,7 +155,7 @@ private func previewFooterSection() -> WebCompatReportViewModel.Section {
         previewCategorySection(selectedTitle: nil),
         previewAdvancedSection(includeScreenshot: false, includeBlockedList: false),
         previewSendSection(isEnabled: false)
-    ])
+    ], isPreviewEnabled: false)
 }
 
 @available(iOS 17.0, *)
