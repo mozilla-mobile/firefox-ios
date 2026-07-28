@@ -66,6 +66,28 @@ private func previewSendSection(isEnabled: Bool) -> WebCompatReportViewModel.Sec
     ])
 }
 
+private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList: Bool)
+-> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(
+        id: "advanced",
+        title: "Additional Info",
+        rows: [
+            WebCompatReportViewModel.Row(
+                id: "screenshot",
+                title: "Automatically include a screenshot to show the problem",
+                kind: .toggle(isOn: includeScreenshot),
+                a11yIdentifier: "screenshot"
+            ),
+            WebCompatReportViewModel.Row(
+                id: "blocklist",
+                title: "Send list of items blocked by tracking protection",
+                kind: .toggle(isOn: includeBlockedList),
+                a11yIdentifier: "blocklist"
+            )
+        ]
+    )
+}
+
 @available(iOS 17.0, *)
 #Preview("Placeholder") {
     previewSheet(sections: [
@@ -84,7 +106,17 @@ private func previewSendSection(isEnabled: Bool) -> WebCompatReportViewModel.Sec
             previewSubOption("missing_items", "Missing items"),
             previewSubOption("buttons_not_working", "Buttons or links not working")
         ]),
+        previewAdvancedSection(includeScreenshot: true, includeBlockedList: true),
         previewSendSection(isEnabled: true)
+    ])
+}
+
+@available(iOS 17.0, *)
+#Preview("Advanced options off") {
+    previewSheet(sections: [
+        previewCategorySection(selectedTitle: nil),
+        previewAdvancedSection(includeScreenshot: false, includeBlockedList: false),
+        previewSendSection(isEnabled: false)
     ])
 }
 #endif

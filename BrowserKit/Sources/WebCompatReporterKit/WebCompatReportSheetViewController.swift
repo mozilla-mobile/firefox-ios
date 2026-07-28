@@ -15,6 +15,7 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidSelectCategory(id: String)
     func webCompatReportSheetDidSelectSubOption(id: String)
     func webCompatReportSheetDidTapButton(id: String)
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool)
 }
 
 /// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
@@ -33,6 +34,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
     /// The current values are looked up here by id.
     private var rowsByID: [String: WebCompatReportViewModel.Row] = [:]
     private var sectionsByID: [String: WebCompatReportViewModel.Section] = [:]
+
+    /// configure(with:) themes cells at build time, so the first applyTheme must skip the
+    /// reconfigure — running it then lands in the nav bar's large-title pass and collapses
+    /// the title on load. Later (live) theme changes do reconfigure to re-theme cells.
+    private var hasAppliedThemeOnce = false
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
@@ -166,6 +172,16 @@ public final class WebCompatReportSheetViewController: UIViewController,
             cell.applyTheme(theme: self.theme)
         }
 
+        let toggleRegistration = UICollectionView.CellRegistration<
+            WebCompatToggleCell, WebCompatReportViewModel.Row
+        > { [weak self] cell, _, row in
+            guard let self, case let .toggle(isOn) = row.kind else { return }
+            cell.configure(title: row.title, isOn: isOn, a11yIdentifier: row.a11yIdentifier) { [weak self] isOn in
+                self?.delegate?.webCompatReportSheetDidToggle(id: row.id, isOn: isOn)
+            }
+            cell.applyTheme(theme: self.theme)
+        }
+
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
         ) { [weak self] collectionView, indexPath, rowID in
@@ -186,6 +202,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
             case .sendButton:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: sendButtonRegistration,
+                    for: indexPath,
+                    item: row
+                )
+            case .toggle:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: toggleRegistration,
                     for: indexPath,
                     item: row
                 )
@@ -218,6 +240,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
     }
 
     private func applySnapshot() {
+        let previousRowsByID = rowsByID
         rowsByID = [:]
         sectionsByID = [:]
         let previousItems = Set(dataSource.snapshot().itemIdentifiers)
@@ -229,8 +252,14 @@ public final class WebCompatReportSheetViewController: UIViewController,
             snapshot.appendItems(section.rows.map { $0.id }, toSection: section.id)
         }
         // The data source keys on id, so rows that persist won't re-render on
-        // content change unless explicitly reconfigured.
-        snapshot.reconfigureItems(snapshot.itemIdentifiers.filter { previousItems.contains($0) })
+        // content change unless explicitly reconfigured. Only reconfigure the ones
+        // whose content actually changed: cells rebuild their accessories on every
+        // configure, and the list animates that as a remove+insert, so reconfiguring
+        // untouched rows flickers their checkmark away.
+        let changedItems = snapshot.itemIdentifiers.filter { rowID in
+            previousItems.contains(rowID) && previousRowsByID[rowID] != rowsByID[rowID]
+        }
+        snapshot.reconfigureItems(changedItems)
         dataSource.apply(snapshot, animatingDifferences: !previousItems.isEmpty)
     }
 
@@ -272,6 +301,9 @@ public final class WebCompatReportSheetViewController: UIViewController,
         collectionView.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        reconfigureAllItems()
+        if hasAppliedThemeOnce {
+            reconfigureAllItems()
+        }
+        hasAppliedThemeOnce = true
     }
 }

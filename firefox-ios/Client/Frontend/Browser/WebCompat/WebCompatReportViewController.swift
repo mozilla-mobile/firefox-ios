@@ -119,10 +119,13 @@ final class WebCompatReportViewController: UINavigationController,
     private enum SectionID: String {
         case issueCategory
         case issueSubOptions
+        case advancedOptions
         case send
     }
 
     private enum RowID: String {
+        case includeScreenshot
+        case includeBlockedList
         case send
     }
 
@@ -130,8 +133,32 @@ final class WebCompatReportViewController: UINavigationController,
         from state: WebCompatReporterState
     ) -> [WebCompatReportViewModel.Section] {
         var sections = makeIssueSections(from: state)
+        sections.append(advancedOptionsSection(from: state))
         sections.append(sendSection(from: state))
         return sections
+    }
+
+    private static func advancedOptionsSection(
+        from state: WebCompatReporterState
+    ) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.advancedOptions.rawValue,
+            title: .WebCompatReporter.AdditionalInfo.Title,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.includeScreenshot.rawValue,
+                    title: .WebCompatReporter.AdditionalInfo.IncludeScreenshot,
+                    kind: .toggle(isOn: state.includeScreenshot),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeScreenshot
+                ),
+                WebCompatReportViewModel.Row(
+                    id: RowID.includeBlockedList.rawValue,
+                    title: .WebCompatReporter.AdditionalInfo.IncludeBlockedList,
+                    kind: .toggle(isOn: state.includeBlockedList),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeBlockedList
+                )
+            ]
+        )
     }
 
     private static func sendSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
@@ -262,6 +289,25 @@ final class WebCompatReportViewController: UINavigationController,
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.submit
         ))
+    }
+
+    func webCompatReportSheetDidToggle(id: String, isOn: Bool) {
+        switch RowID(rawValue: id) {
+        case .includeScreenshot:
+            store.dispatch(WebCompatReporterViewAction(
+                includeScreenshot: isOn,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.toggleScreenshot
+            ))
+        case .includeBlockedList:
+            store.dispatch(WebCompatReporterViewAction(
+                includeBlockedList: isOn,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.toggleBlockedList
+            ))
+        case .send, .none:
+            break
+        }
     }
 
     // MARK: - Themeable
