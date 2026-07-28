@@ -236,9 +236,6 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
 
     private var didAttemptToMoveToBackup = false
 
-    private var isRetrievingStoredKey = false
-    private var storedKeyCompletions = [@Sendable (Result<String, NSError>) -> Void]()
-
     private let logger: Logger
 
     public init(databasePath: String,
@@ -635,24 +632,11 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
     }
 
     public func getStoredKey(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
-        queue.async {
-            self.storedKeyCompletions.append(completion)
-            guard !self.isRetrievingStoredKey else { return }
-
-            self.isRetrievingStoredKey = true
-            self.retrieveStoredKey()
-        }
-    }
-
-    private func retrieveStoredKey() {
         let (key, encryptedCanaryPhrase) = rustKeychain.getLoginsKeyData()
 
-        let completion: @Sendable (Result<String, NSError>) -> Void = { result in
+        let queueCompletion: @Sendable (Result<String, NSError>) -> Void = { result in
             self.queue.async {
-                let completions = self.storedKeyCompletions
-                self.storedKeyCompletions.removeAll()
-                self.isRetrievingStoredKey = false
-                completions.forEach { $0(result) }
+                completion(result)
             }
         }
 
@@ -660,15 +644,15 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         case (.some(key), .some(encryptedCanaryPhrase)):
                 self.handleExpectedKeyAction(encryptedCanaryPhrase: encryptedCanaryPhrase,
                                              key: key,
-                                             completion: completion)
+                                             completion: queueCompletion)
         case (.some(key), .none):
-            self.handleUnexpectedKeyAction(completion: completion)
+            self.handleUnexpectedKeyAction(completion: queueCompletion)
         case (.none, .some(encryptedCanaryPhrase)):
-            self.handleMissingKeyAction(completion: completion)
+            self.handleMissingKeyAction(completion: queueCompletion)
         case (.none, .none):
-            self.handleFirstTimeCallOrClearedKeychainAction(completion: completion)
+            self.handleFirstTimeCallOrClearedKeychainAction(completion: queueCompletion)
         default:
-            self.handleIllegalStateAction(completion: completion)
+            self.handleIllegalStateAction(completion: queueCompletion)
         }
     }
 
@@ -724,7 +708,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
 
-        self.hasSyncedLogins().upon { result in
+        self.hasSyncedLogins().uponQueue(queue) { result in
             guard result.failureValue == nil else {
                 completion(.failure(result.failureValue! as NSError))
                 return
