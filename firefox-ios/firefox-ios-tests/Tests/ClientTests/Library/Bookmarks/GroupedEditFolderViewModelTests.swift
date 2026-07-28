@@ -35,7 +35,7 @@ final class GroupedEditFolderViewModelTests: XCTestCase {
         folderFetcher = MockGroupedFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
         profile = MockProfile()
-        parentFolderSelector = MockParentFolderSelector()
+        parentFolderSelector = MockGroupedParentFolderSelector()
     }
 
     override func tearDown() async throws {
