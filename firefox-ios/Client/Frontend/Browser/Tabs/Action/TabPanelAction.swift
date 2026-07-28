@@ -52,7 +52,6 @@ struct TabPanelViewAction: Action {
 enum TabPanelViewActionType: ActionType {
     case tabPanelDidLoad
     case tabPanelWillAppear
-    case tabPanelDidAppear
     case addNewTab
     case closeTab
     case closeAllTabs

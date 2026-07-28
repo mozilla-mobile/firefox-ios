@@ -2468,7 +2468,6 @@ class BrowserViewController: UIViewController,
             } else {
                 showDefaultBookmarkToast(urlString: urlString)
             }
-        default: break
         }
     }
 
