@@ -222,7 +222,24 @@ public final class WebCompatReportSheetViewController: UIViewController,
             }
         }
 
-        let headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(
+        configureSupplementaryProvider(on: dataSource)
+        return dataSource
+    }
+
+    private func configureSupplementaryProvider(on dataSource: UICollectionViewDiffableDataSource<String, String>) {
+        let header = headerRegistration()
+        let footer = footerRegistration()
+        dataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
+            if elementKind == UICollectionView.elementKindSectionFooter {
+                return collectionView.dequeueConfiguredReusableSupplementary(using: footer, for: indexPath)
+            }
+            return collectionView.dequeueConfiguredReusableSupplementary(using: header, for: indexPath)
+        }
+    }
+
+    private func headerRegistration()
+    -> UICollectionView.SupplementaryRegistration<UICollectionViewListCell> {
+        return UICollectionView.SupplementaryRegistration(
             elementKind: UICollectionView.elementKindSectionHeader
         ) { [weak self] header, _, indexPath in
             guard let self,
@@ -234,8 +251,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
             header.contentConfiguration = content
             header.accessibilityTraits.insert(.header)
         }
+    }
 
-        let footerRegistration = UICollectionView.SupplementaryRegistration<WebCompatLearnMoreFooterView>(
+    private func footerRegistration()
+    -> UICollectionView.SupplementaryRegistration<WebCompatLearnMoreFooterView> {
+        return UICollectionView.SupplementaryRegistration(
             elementKind: UICollectionView.elementKindSectionFooter
         ) { [weak self] footerView, _, indexPath in
             guard let self,
@@ -246,14 +266,6 @@ public final class WebCompatReportSheetViewController: UIViewController,
             }
             footerView.applyTheme(theme: self.theme)
         }
-
-        dataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
-            if elementKind == UICollectionView.elementKindSectionFooter {
-                return collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration, for: indexPath)
-            }
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
-        }
-        return dataSource
     }
 
     private func applySnapshot() {
