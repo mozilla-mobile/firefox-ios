@@ -29,11 +29,11 @@ struct ToolbarState: ScreenState, Sendable {
     var isTranslationsEnabled: Bool
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
-
+    
     var isAddressBarMinimized: Bool {
         return scrollAlpha.isZero
     }
-
+    
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
             ToolbarState.self,
@@ -43,7 +43,7 @@ struct ToolbarState: ScreenState, Sendable {
             self.init(windowUUID: uuid)
             return
         }
-
+        
         self.init(windowUUID: toolbarState.windowUUID,
                   toolbarPosition: toolbarState.toolbarPosition,
                   toolbarLayout: toolbarState.toolbarLayout,
@@ -66,7 +66,7 @@ struct ToolbarState: ScreenState, Sendable {
                   nextTabScreenshot: toolbarState.nextTabScreenshot
         )
     }
-
+    
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
@@ -91,7 +91,7 @@ struct ToolbarState: ScreenState, Sendable {
             nextTabScreenshot: nil
         )
     }
-
+    
     init(
         windowUUID: WindowUUID,
         toolbarPosition: AddressToolbarPosition,
@@ -135,18 +135,18 @@ struct ToolbarState: ScreenState, Sendable {
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
     }
-
+    
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
-
+    
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
         // Does not handle any modern actions
         return defaultState(from: state)
     }
-
+    
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         return handleReducer(state: state, action: action)
     }
-
+    
     @MainActor
     private static func handleReducer(state: ToolbarState, action: Action) -> ToolbarState {
         // Only process actions for the current window
@@ -154,11 +154,11 @@ struct ToolbarState: ScreenState, Sendable {
         else {
             return defaultState(from: state)
         }
-
+        
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbars(state: state, action: action)
-
+            
         case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
             ToolbarActionType.lockIconChanged,
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
@@ -178,43 +178,43 @@ struct ToolbarState: ScreenState, Sendable {
             TranslationsActionType.didTranslationSettingsChange,
             ToolbarActionType.didSummarizeSettingsChange:
             return handleToolbarUpdates(state: state, action: action)
-
+            
         case GeneralBrowserActionType.showToast:
             return handleShowToast(state: state, action: action)
-
+            
         case ToolbarActionType.showMenuWarningBadge:
             return handleShowMenuWarningBadge(state: state, action: action)
-
+            
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChanged(state: state, action: action)
-
+            
         case ToolbarActionType.didSetTabScreenshot:
             return handleDidSetTabScreenshot(state: state, action: action)
-
+            
         case ToolbarActionType.toolbarPositionChanged:
             return handleToolbarPositionChanged(state: state, action: action)
-
+            
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChanged(state: state, action: action)
-
+            
         case ToolbarActionType.traitCollectionDidChange:
             return handleTraitCollectionDidChange(state: state, action: action)
-
+            
         case ToolbarActionType.navigationButtonDoubleTapped:
             return handleNavigationButtonDoubleTapped(state: state, action: action)
-
+            
         case ToolbarActionType.navigationHintFinishedPresenting:
             return handleNavigationHintFinishedPresenting(state: state, action: action)
-
+            
         case SearchEngineSelectionActionType.didTapSearchEngine,
             SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleSearchEngineSelectionAction(state: state, action: action)
-
+            
         default:
             return defaultState(from: state)
         }
     }
-
+    
     @MainActor
     private static func handleDidLoadToolbars(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction,
@@ -223,10 +223,11 @@ struct ToolbarState: ScreenState, Sendable {
               let tabTrayButtonStyle = toolbarAction.tabTrayButtonStyle,
               let isTranslucent = toolbarAction.isTranslucent
         else { return defaultState(from: state) }
-
+        
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
         
-        return state.copy(toolbarPosition: position)
+        return state
+            .copy(toolbarPosition: position)
             .copy(toolbarLayout: toolbarLayout)
             .copy(tabTrayButtonStyle: tabTrayButtonStyle)
             .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
@@ -234,7 +235,7 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(isTranslucent: isTranslucent)
             .copy(isTranslationsEnabled: toolbarAction.isTranslationsEnabled ?? state.isTranslationsEnabled)
     }
-
+    
     @MainActor
     private static func handleToolbarUpdates(state: Self, action: Action) -> ToolbarState {
         // Both `ToolbarAction` (lifecycle) and `TranslationsAction` (translation events) reach this
@@ -243,7 +244,7 @@ struct ToolbarState: ScreenState, Sendable {
         let toolbarAction = action as? ToolbarAction
         let translationsAction = action as? TranslationsAction
         let actionIsTranslationsEnabled = toolbarAction?.isTranslationsEnabled ?? translationsAction?.isTranslationsEnabled
-
+        
         return state
             .copy(isPrivateMode: toolbarAction?.isPrivate ?? state.isPrivateMode)
             .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, action))
@@ -257,100 +258,110 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(isTranslucent: toolbarAction?.isTranslucent ?? state.isTranslucent)
             .copy(isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled)
     }
-
+    
     @MainActor
     private static func handleShowToast(state: Self, action: Action) -> ToolbarState {
         guard let browserAction = action as? GeneralBrowserAction,
               browserAction.toastType == .shakeToSummarizeNotAvailable
         else { return defaultState(from: state) }
-
+        
         return state.copy(scrollAlpha: 1)
     }
-
+    
     @MainActor
     private static func handleShowMenuWarningBadge(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state.copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
+        return state
+            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge)
     }
-
+    
     @MainActor
     private static func handleNumberOfTabsChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state.copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
+        return state
+            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs)
     }
-
+    
     @MainActor
     private static func handleDidSetTabScreenshot(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state.copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
+        return state
+            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(previousTabScreenshot: toolbarAction.previousTabScreenshot)
             .copy(nextTabScreenshot: toolbarAction.nextTabScreenshot)
     }
-
+    
     @MainActor
     private static func handleToolbarPositionChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition
         else {
             return defaultState(from: state)
         }
-
+        
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
         
-        return state.copy(toolbarPosition: position)
+        return state
+            .copy(toolbarPosition: position)
             .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, action))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, action))
     }
-
+    
     @MainActor
     private static func handleBackForwardButtonStateChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state.copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
+        return state
+            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(canGoBack: toolbarAction.canGoBack ?? state.canGoBack)
             .copy(canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
     }
-
+    
     @MainActor
     private static func handleTraitCollectionDidChange(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state.copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
+        return state
+            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar)
             .copy(isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs)
     }
-
+    
     @MainActor
     private static func handleNavigationButtonDoubleTapped(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state.copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
+        return state
+            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(canShowNavigationHint: true)
     }
-
+    
     @MainActor
     private static func handleNavigationHintFinishedPresenting(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state.copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
+        return state
+            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(canShowNavigationHint: false)
     }
-
+    
     @MainActor
     private static func handleSearchEngineSelectionAction(state: Self, action: Action) -> ToolbarState {
         guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction else {
             return defaultState(from: state)
         }
-
-        return state.copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, searchEngineSelectionAction))
+        
+        return state
+            .copy(addressToolbar: AddressBarState.reducer
+                .legacyReducer(state.addressToolbar, searchEngineSelectionAction))
             .copy(navigationToolbar: NavigationBarState.reducer
-                                             .legacyReducer(state.navigationToolbar, searchEngineSelectionAction))
+                .legacyReducer(state.navigationToolbar, searchEngineSelectionAction))
     }
-
+    
     private static func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition)
     -> AddressToolbarPosition {
         switch position {
@@ -358,7 +369,7 @@ struct ToolbarState: ScreenState, Sendable {
         case .bottom: return .bottom
         }
     }
-
+    
     static func defaultState(from state: ToolbarState) -> ToolbarState {
         return state
     }
