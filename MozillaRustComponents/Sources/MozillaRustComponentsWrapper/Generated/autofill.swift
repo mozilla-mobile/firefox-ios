@@ -570,6 +570,8 @@ public protocol StoreProtocol: AnyObject, Sendable {
      */
     func scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKey: String) throws  -> CreditCardsDeletionMetrics
     
+    func shutdown() 
+    
     func touchAddress(guid: String) throws 
     
     func touchCreditCard(guid: String) throws 
@@ -815,6 +817,13 @@ open func scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKe
         FfiConverterString.lower(localEncryptionKey),$0
     )
 })
+}
+    
+open func shutdown()  {try! rustCall() {
+    uniffi_autofill_fn_method_store_shutdown(
+            self.uniffiCloneHandle(),$0
+    )
+}
 }
     
 open func touchAddress(guid: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
@@ -1842,6 +1851,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement() != 12482) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_shutdown() != 46136) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_touch_address() != 31779) {
