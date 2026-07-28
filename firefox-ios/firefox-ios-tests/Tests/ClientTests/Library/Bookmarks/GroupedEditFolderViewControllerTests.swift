@@ -117,12 +117,12 @@ final class GroupedEditFolderViewControllerTests: XCTestCase {
     func test_saveButtonAction_popsViewController() {
         let subject = createSubject()
         let navController = UINavigationController()
-        navController.pushViewController(subject, animated: false)
         navController.pushViewController(UIViewController(), animated: false)
+        navController.pushViewController(subject, animated: false)
 
         subject.saveButtonAction()
 
-        XCTAssertEqual(navController.viewControllers.count, 1)
+        XCTAssert(!navController.viewControllers.contains(subject))
     }
 
     // MARK: - Private

@@ -199,10 +199,9 @@ class BookmarksCoordinator: BaseCoordinator,
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
-        controller.onViewWillDisappear = { [weak self] in
-            if !(controller.transitionCoordinator?.isInteractive ?? false) {
-                self?.libraryNavigationHandler?.setNavigationBarHidden(false)
-            }
+        controller.onViewWillDisappear = { [weak self, weak controller] in
+            guard !(controller?.transitionCoordinator?.isInteractive ?? false) else { return }
+            self?.libraryNavigationHandler?.setNavigationBarHidden(false)
         }
         return controller
     }
@@ -223,10 +222,9 @@ class BookmarksCoordinator: BaseCoordinator,
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
-        controller.onViewWillDisappear = { [weak self] in
-            if !(controller.transitionCoordinator?.isInteractive ?? false) {
-                self?.libraryNavigationHandler?.setNavigationBarHidden(false)
-            }
+        controller.onViewWillDisappear = { [weak self, weak controller] in
+            guard !(controller?.transitionCoordinator?.isInteractive ?? false) else { return }
+            self?.libraryNavigationHandler?.setNavigationBarHidden(false)
         }
         return controller
     }
@@ -247,10 +245,9 @@ class BookmarksCoordinator: BaseCoordinator,
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
-        controller.onViewWillDisappear = { [weak self] in
-            if !(controller.transitionCoordinator?.isInteractive ?? false) {
-                self?.libraryNavigationHandler?.setNavigationBarHidden(false)
-            }
+        controller.onViewWillDisappear = { [weak self, weak controller] in
+            guard !(controller?.transitionCoordinator?.isInteractive ?? false) else { return }
+            self?.libraryNavigationHandler?.setNavigationBarHidden(false)
         }
         return controller
     }

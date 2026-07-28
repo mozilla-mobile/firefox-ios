@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class GroupedEditFolderViewController: UIViewController,
+final class GroupedEditFolderViewController: UIViewController,
                                        UITableViewDelegate,
                                        UITableViewDataSource,
                                        Themeable {
