@@ -2160,7 +2160,7 @@ extension String {
             public static let NotFoundLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.NotFound.v155",
                 tableName: "NativeErrorPage",
-                value: "No archived version found.",
+                value: "No archived version found",
                 comment: "Label shown when wayback responds and says no snapshot was found.")
             public static let RetryButton = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Retry.v154",
