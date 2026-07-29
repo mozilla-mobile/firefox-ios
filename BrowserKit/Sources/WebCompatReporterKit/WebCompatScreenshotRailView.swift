@@ -6,25 +6,18 @@ import Common
 import UIKit
 
 /// The whole page mapped into a narrow strip, with a spotlight marking the part of it a viewer is
-/// currently showing. The rail owns its own width and page ratio; where it sits and how far it may
-/// grow are the caller's business.
-///
-/// The spotlight is a full-brightness copy of the page clipped to the visible window, floating over
-/// a dimmed base. That is how the native iOS spotlight works, and it explains the hierarchy: the
-/// clipping happens in `clipView` rather than on the rail itself, so the ring's border and shadow
-/// aren't cropped away.
+/// showing. The rail owns its width and page ratio; where it sits and how far it may grow are the
+/// caller's business.
 final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
-    // Not `private`: the layout tests assert against these rather than mirroring copies that drift.
+    /// Internal rather than private: the viewer reads `width` and `gap` to work out its own margins.
     enum UX {
         static let width: CGFloat = 44
-        /// Between the rail and the content it maps.
         static let gap: CGFloat = 12
         static let cornerRadius: CGFloat = 10
         static let borderWidth: CGFloat = 2
-        /// The base page is dimmed to this; the bright copy clipped over it marks the window.
         static let dimOpacity: CGFloat = 0.4
-        /// Comfortably above `minimumHighlightHeight`, otherwise a wide page gives the highlight no
-        /// room to travel and it sits frozen and overhanging.
+        /// Comfortably above `minimumHighlightHeight`, or a wide page leaves the spotlight no room
+        /// to travel and it sits frozen and overhanging.
         static let minimumHeight: CGFloat = 64
         static let highlightCornerRadius: CGFloat = 8
         static let highlightBorderWidth: CGFloat = 3
@@ -38,34 +31,28 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
     private var visibleFraction: CGFloat = 1
     private var highlightHeightConstraint: NSLayoutConstraint?
 
-    /// Derived from the rail's own height, so it holds still while scrolling and changes only when
-    /// the geometry does.
     private var highlightHeight: CGFloat {
         guard bounds.height > 0 else { return UX.minimumHighlightHeight }
         return max(UX.minimumHighlightHeight, bounds.height * min(1, max(0, visibleFraction)))
     }
 
-    // `private(set)`: the module's layout tests read these frames, nothing outside reassigns them.
-    private(set) lazy var clipView: UIView = .build { view in
-        // Rounds the dimmed page and keeps it inside the rail.
+    private lazy var clipView: UIView = .build { view in
         view.clipsToBounds = true
         view.layer.cornerRadius = UX.cornerRadius
         view.layer.borderWidth = UX.borderWidth
     }
 
-    /// The dimmed whole page behind the spotlight.
-    private(set) lazy var dimmedPageView: UIImageView = makePageView(alpha: UX.dimOpacity)
+    private lazy var dimmedPageView: UIImageView = makePageView(alpha: UX.dimOpacity)
 
     /// A bright copy cropped to the window, which is what gives the spotlight effect.
-    private(set) lazy var spotlightContainer: UIView = .build { view in
-        // The crop *is* the spotlight: it cuts the bright page down to the visible window.
+    private lazy var spotlightContainer: UIView = .build { view in
         view.clipsToBounds = true
         view.layer.cornerRadius = UX.highlightCornerRadius
     }
 
-    private(set) lazy var spotlightPageView: UIImageView = makePageView()
+    private lazy var spotlightPageView: UIImageView = makePageView()
 
-    private(set) lazy var highlightView: UIView = .build { view in
+    private lazy var highlightView: UIView = .build { view in
         view.layer.cornerRadius = UX.highlightCornerRadius
         view.layer.borderWidth = UX.highlightBorderWidth
         view.layer.shadowOpacity = UX.highlightShadowOpacity
@@ -74,15 +61,14 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
     }
 
     /// - Parameters:
-    ///   - image: the whole page. Downsampled once for the two copies the rail draws.
+    ///   - image: the whole page.
     ///   - pageHeightToWidthRatio: the page's height over its width, which the caller has already
-    ///     had to derive and sanitise for its own layout.
+    ///     derived and sanitised for its own layout.
     init(image: UIImage?, pageHeightToWidthRatio: CGFloat) {
         self.pageHeightToWidthRatio = pageHeightToWidthRatio
         super.init(frame: .zero)
 
-        // Not built through `.build`, so it has to opt out of the autoresizing mask itself or the
-        // constraints below fight the ones UIKit synthesises for it.
+        // Not built through `.build`, so it opts out of the autoresizing mask itself.
         translatesAutoresizingMaskIntoConstraints = false
         setupPageCopies(from: image)
         setupSubviews()
@@ -99,17 +85,15 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
         return .build { imageView in
             imageView.contentMode = .scaleToFill
             imageView.alpha = alpha
-            // Its size comes from the rail and never the other way round. At the default priority a
-            // long page's intrinsic height ties with the rail's own height constraint and wins,
-            // stretching the rail down the screen.
+            // Its size comes from the rail, never the other way round. At the default priority a
+            // long page's intrinsic height ties with the rail's own height constraint and wins.
             imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
             imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
     }
 
     /// Both copies draw at rail width, so carrying the full capture would leave two extra layers
-    /// holding a bitmap of the whole page. A tall enough capture also exceeds the maximum texture
-    /// size, at which point the layer draws nothing at all.
+    /// holding a bitmap of the whole page, and a tall enough one past the maximum texture size.
     private func setupPageCopies(from image: UIImage?) {
         let railImage = image?.preparingThumbnail(
             of: CGSize(width: UX.width, height: UX.width * pageHeightToWidthRatio)
@@ -121,6 +105,8 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
     private func setupSubviews() {
         clipView.addSubview(dimmedPageView)
         spotlightContainer.addSubview(spotlightPageView)
+        // The spotlight is a sibling of `clipView` rather than inside it, so the ring's border and
+        // shadow aren't cropped away.
         addSubviews(clipView, spotlightContainer, highlightView)
         // The rail maps content it doesn't own, so VoiceOver reads that content once, at the source.
         for view in [self, clipView, dimmedPageView, spotlightContainer, spotlightPageView, highlightView] {
@@ -129,19 +115,19 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
     }
 
     private func setupConstraints() {
-        let height = heightAnchor.constraint(equalToConstant: UX.width * pageHeightToWidthRatio)
+        let railHeight = heightAnchor.constraint(equalToConstant: UX.width * pageHeightToWidthRatio)
         // Breakable, so a caller that caps the rail squashes a long page rather than reporting
         // unsatisfiable constraints.
-        height.priority = .defaultHigh
-        let highlightHeightConstraint = highlightView.heightAnchor.constraint(
+        railHeight.priority = .defaultHigh
+        let heightConstraint = highlightView.heightAnchor.constraint(
             equalToConstant: UX.minimumHighlightHeight
         )
-        self.highlightHeightConstraint = highlightHeightConstraint
+        highlightHeightConstraint = heightConstraint
 
         NSLayoutConstraint.activate([
             widthAnchor.constraint(equalToConstant: UX.width),
             heightAnchor.constraint(greaterThanOrEqualToConstant: UX.minimumHeight),
-            height,
+            railHeight,
 
             clipView.topAnchor.constraint(equalTo: topAnchor),
             clipView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -153,11 +139,11 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
             dimmedPageView.trailingAnchor.constraint(equalTo: clipView.trailingAnchor),
             dimmedPageView.bottomAnchor.constraint(equalTo: clipView.bottomAnchor),
 
-            // The highlight sits at the top of the rail; `updateHighlightOffset()` slides it down.
+            // Pinned to the top; `updateHighlightOffset()` slides it down from there.
             highlightView.topAnchor.constraint(equalTo: topAnchor),
             highlightView.leadingAnchor.constraint(equalTo: leadingAnchor),
             highlightView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            highlightHeightConstraint,
+            heightConstraint,
 
             spotlightContainer.topAnchor.constraint(equalTo: highlightView.topAnchor),
             spotlightContainer.leadingAnchor.constraint(equalTo: highlightView.leadingAnchor),
@@ -191,8 +177,8 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
 
         applyHighlightHeight()
         updateHighlightOffset()
-        // Derived from the height just resolved rather than from the layer's bounds, which is still
-        // a pass behind. Without a path Core Animation traces the shadow from the layer's contents.
+        // From the height just resolved, not the layer's bounds, which is a pass behind. Without a
+        // path Core Animation traces the shadow from the layer's contents.
         highlightView.layer.shadowPath = UIBezierPath(
             roundedRect: CGRect(x: 0, y: 0, width: bounds.width, height: highlightHeight),
             cornerRadius: UX.highlightCornerRadius
@@ -200,17 +186,13 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
     }
 
     private func applyHighlightHeight() {
-        // Guarded, or assigning it every pass would invalidate the layout it was just given.
+        // Guarded, or assigning it every pass invalidates the layout it was just given.
         guard highlightHeightConstraint?.constant != highlightHeight else { return }
         highlightHeightConstraint?.constant = highlightHeight
-        // A caller that changes the fractions outside a layout pass gets the new height on the next
-        // one rather than whenever something else happens to dirty the tree.
-        setNeedsLayout()
     }
 
-    /// Slides the window down the rail. A translation rather than a constraint constant because the
-    /// caller updates mid-scroll, where a constant only takes effect on the next layout pass and
-    /// the spotlight visibly trails the content.
+    /// A translation rather than a constraint constant: the caller updates mid-scroll, where a
+    /// constant only takes effect on the next layout pass and the spotlight visibly trails.
     private func updateHighlightOffset() {
         let travel = max(0, bounds.height - highlightHeight)
         let offset = CGAffineTransform(translationX: 0, y: min(1, max(0, scrollFraction)) * travel)
