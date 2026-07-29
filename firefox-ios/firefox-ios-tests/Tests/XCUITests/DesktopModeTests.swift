@@ -286,8 +286,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         browserScreen.navigateToURL(googleURL)
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "google.com")
-        // "I'm feeling lucky" may not show up intermittently
-        // browserScreen.assertLayout(.desktop)
+        browserScreen.assertLayout(.desktop, retries: 3)
 
         // Step 4: Visit amazon.com -> different domain, no desktop pref, mobile version loads.
         // NOTE: Amazon may show a region-redirect interstitial (e.g. "Deliver to Canada") on

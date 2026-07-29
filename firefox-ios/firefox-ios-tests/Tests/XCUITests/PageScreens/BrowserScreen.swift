@@ -20,6 +20,7 @@ final class BrowserScreen {
     private var bookText: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT.element(in: app) }
     private var bookTextInTable: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT_IN_TABLE.element(in: app) }
     private var clearButton: XCUIElement { sel.CLEAR_TEXT_BUTTON.element(in: app) }
+    private var reloadButton: XCUIElement { sel.RELOAD_BUTTON.element(in: app) }
 
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
@@ -86,25 +87,59 @@ final class BrowserScreen {
         case mobile
     }
 
+    func reload() {
+        reloadButton.waitAndTap()
+    }
+
     // No one magic heuristic to determine desktop vs mobile layout, so we hardcode some
     // known characteristics of the test websites.
-    func assertLayout(_ mode: SiteLayoutMode, timeout: TimeInterval = TIMEOUT) {
-        let currentURL = (addressBar.value as? String) ?? ""
-        let element: XCUIElement
+    //
+    // `retries`: the custom UA can intermittently take an extra navigation to apply
+    // (WKWebView customUserAgent timing), so when > 1, a mismatch reloads the page and
+    // re-checks instead of failing immediately.
+    @discardableResult
+    func assertLayout(
+        _ mode: SiteLayoutMode,
+        timeout: TimeInterval = TIMEOUT,
+        failOnTimeout: Bool = true,
+        retries: Int = 1
+    ) -> Bool {
+        var isMatch = false
 
-        if mode == .desktop, currentURL.contains("google.com"), !currentURL.contains("news.google.com") {
-            element = app.webViews.buttons["I'm Feeling Lucky"]
-        } else if mode == .mobile, currentURL.contains("amazon.com") {
-            element = app.webViews.buttons["Open All Categories Menu"]
-        } else if mode == .desktop {
-            let pred = NSPredicate(format: "label BEGINSWITH 'Horizontal scroll bar,' AND NOT (label CONTAINS '1 page')")
-            element = app.webViews.descendants(matching: .any).matching(pred).firstMatch
-        } else {
-            element = app.webViews.descendants(matching: .any)
-                .matching(NSPredicate(format: "label == 'Horizontal scroll bar, 1 page'")).firstMatch
+        for attempt in 1...retries {
+            XCTContext.runActivity(named: "assertLayout(\(mode)) attempt \(attempt)/\(retries)") { activity in
+                if attempt > 1 {
+                    reload()
+                    BaseTestCase().waitUntilPageLoad()
+                }
+
+                let currentURL = (addressBar.value as? String) ?? ""
+                let element: XCUIElement
+
+                if mode == .desktop, currentURL.contains("google.com"), !currentURL.contains("news.google.com") {
+                    element = app.webViews.buttons["I'm Feeling Lucky"]
+                } else if mode == .mobile, currentURL.contains("amazon.com") {
+                    element = app.webViews.buttons["Open All Categories Menu"]
+                } else if mode == .desktop {
+                    let pred = NSPredicate(
+                        format: "label BEGINSWITH 'Horizontal scroll bar,' AND NOT (label CONTAINS '1 page')"
+                    )
+                    element = app.webViews.descendants(matching: .any).matching(pred).firstMatch
+                } else {
+                    element = app.webViews.descendants(matching: .any)
+                        .matching(NSPredicate(format: "label == 'Horizontal scroll bar, 1 page'")).firstMatch
+                }
+
+                isMatch = BaseTestCase().mozWaitForElementToExist(element, timeout: timeout, failOnTimeout: false)
+                activity.add(XCTAttachment(string: isMatch ? "\(mode) layout detected" : "\(mode) layout NOT detected"))
+            }
+            if isMatch { break }
         }
 
-        BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
+        if !isMatch, failOnTimeout {
+            XCTFail("\(mode) layout did not appear after \(retries) attempt(s)")
+        }
+        return isMatch
     }
 
     func tapDownloadsToastButton() {

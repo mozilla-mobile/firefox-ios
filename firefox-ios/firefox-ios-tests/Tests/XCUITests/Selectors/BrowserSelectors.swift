@@ -9,6 +9,7 @@ protocol BrowserSelectorsSet {
     var SEARCH_ENGINE_LOGO: Selector { get }
     var DOWNLOADS_TOAST_BUTTON: Selector { get }
     var BACK_BUTTON: Selector { get }
+    var RELOAD_BUTTON: Selector { get }
     var MENU_BUTTON: Selector { get }
     var STATIC_TEXT_MOZILLA: Selector { get }
     var STATIC_TEXT_EXAMPLE_DOMAIN: Selector { get }
@@ -37,6 +38,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let addressBar = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
         static let searchEngineLogo = AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine
         static let backButton = AccessibilityIdentifiers.Toolbar.backButton
+        static let reloadButton = AccessibilityIdentifiers.Toolbar.reloadButton
         static let menuButton = "Menu"
         static let clearTextLabel = "Clear text"
         static let downloadLabel = "Downloads"
@@ -74,6 +76,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
     let BACK_BUTTON = Selector.buttonId(
         IDs.backButton,
         description: "Back button",
+        groups: ["browser"]
+    )
+
+    let RELOAD_BUTTON = Selector.buttonId(
+        IDs.reloadButton,
+        description: "Reload button",
         groups: ["browser"]
     )
 
@@ -203,7 +211,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         )
     }
 
-    var all: [Selector] { [ADDRESS_BAR, SEARCH_ENGINE_LOGO, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
+    var all: [Selector] { [ADDRESS_BAR, SEARCH_ENGINE_LOGO, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON, RELOAD_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
