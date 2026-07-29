@@ -13,6 +13,7 @@ import QuickAnswersKit
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, FeatureFlaggable {
     enum UX {
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
+        static let privateLogoImageSize = CGSize(width: 69, height: 74)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
         static let quickAnswersButtonSize: CGFloat = 44
@@ -64,6 +65,12 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
     private lazy var logoCenterConstraint = logoContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
     private lazy var logoLeadingConstraint = logoContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+    private lazy var logoImageWidthConstraint = logoImage.widthAnchor.constraint(
+        equalToConstant: UX.firefoxLogoImageSize.width
+    )
+    private lazy var logoImageHeightConstraint = logoImage.heightAnchor.constraint(
+        equalToConstant: UX.firefoxLogoImageSize.height
+    )
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -94,8 +101,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
-            logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
+            logoImageWidthConstraint,
+            logoImageHeightConstraint,
             logoTextImage.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
             logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height),
 
@@ -119,10 +126,21 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.showiPadSetup = showiPadSetup
         self.logoTextColor = logoTextColor
 
-        let logoAsset = headerState.isWorldCupSectionEnabled
-            ? ImageIdentifiers.firefoxLogoSoccer
-            : ImageIdentifiers.homeHeaderLogoBall
-        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
+        let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
+        if isNovaPrivate {
+            // Nova private homepage shows the private mode logo (mask + ball) without the wordmark.
+            logoImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoPrivate)
+            logoImageWidthConstraint.constant = UX.privateLogoImageSize.width
+            logoImageHeightConstraint.constant = UX.privateLogoImageSize.height
+        } else {
+            let logoAsset = headerState.isWorldCupSectionEnabled
+                ? ImageIdentifiers.firefoxLogoSoccer
+                : ImageIdentifiers.homeHeaderLogoBall
+            logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
+            logoImageWidthConstraint.constant = UX.firefoxLogoImageSize.width
+            logoImageHeightConstraint.constant = UX.firefoxLogoImageSize.height
+        }
+        logoTextImage.isHidden = isNovaPrivate
 
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 
