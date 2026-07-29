@@ -556,7 +556,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
 
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
             hiddenDebugOptions.append(ToggleVPNProxySetting(settings: self,
                                                             vpnManager: AppContainer.shared.resolve()))
         }
