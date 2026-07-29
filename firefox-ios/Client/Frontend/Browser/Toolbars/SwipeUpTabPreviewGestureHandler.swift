@@ -5,7 +5,6 @@
 import UIKit
 import Common
 import Redux
-import Glean
 
 @MainActor
 final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber {
