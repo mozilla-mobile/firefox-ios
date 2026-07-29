@@ -29,7 +29,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     var isLoading: Bool
     let readerModeState: ReaderModeState?
     let canSummarize: Bool
-    /// The order these are declared in must match the initializer's parameter order, which `@Copyable` relies on.
     let translationConfiguration: TranslationConfiguration?
     let didStartTyping: Bool
     let isEmptySearch: Bool
