@@ -207,22 +207,22 @@ workflows:
             envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
 
-    - xcode-test-without-building@0:
-        timeout: 1200
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
-        - maximum_test_repetitions: 2
-    - xcode-test-shard-calculation@0:
-        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
-        inputs:
-        - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 5
-        - destination: $BITRISE_DESTINATION
-        outputs:
-        - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
-        is_always_run: true
+    # - xcode-test-without-building@0:
+    #     timeout: 1200
+    #     inputs:
+    #     - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+    #     - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+    #     - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
+    #     - maximum_test_repetitions: 2
+    # - xcode-test-shard-calculation@0:
+    #     run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+    #     inputs:
+    #     - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+    #     - shard_count: 5
+    #     - destination: $BITRISE_DESTINATION
+    #     outputs:
+    #     - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
+    #     is_always_run: true
     # Only push/release/epic builds save SPM cache. PRs read from the cache
     # (via restore-spm-cache@3 above) but never write back, so they can't
     # poison the cache for subsequent builds. main keeps the cache fresh.
@@ -328,7 +328,10 @@ workflows:
     - xcode-test-without-building@0:
         timeout: 1200
         inputs:
-        - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
+        - only_testing: XCUITests/DesktopModeTestsIphone/testRequestDesktopSitePersistsAcrossDomainAndRestart
+        - test_repetition_mode: up_until_maximum_repetitions
+        - maximum_test_repetitions: "50"
+        - relaunch_tests_for_each_repetition: "yes"
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.5-arm64.xctestrun
