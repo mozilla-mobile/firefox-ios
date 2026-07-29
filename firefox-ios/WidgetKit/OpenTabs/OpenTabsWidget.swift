@@ -94,11 +94,10 @@ struct OpenTabsView: View {
                 Text(String.OpenFirefoxLabel)
                     .foregroundColor(contentColor)
                     .lineLimit(1)
-                    .font(.system(size: 13, weight: .semibold, design: .default))
+                    .font(.footnote.weight(.semibold))
                 Spacer()
             }.padding(10)
         }
-        .foregroundColor(Color(uiColor: theme.colors.layer1))
     }
 
     var tabsView: some View {
@@ -138,7 +137,7 @@ struct OpenTabsView: View {
             Text(String.OpenFirefoxLabel)
                 .foregroundColor(contentColor)
                 .lineLimit(1)
-                .font(.system(size: 13, weight: .semibold, design: .default))
+                .font(.footnote.weight(.semibold))
             Spacer()
         }.padding([.horizontal])
     }
@@ -160,7 +159,13 @@ struct OpenTabsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .widgetBackground(Color(uiColor: theme.colors.layer1))
+        .widgetBackground(
+            LinearGradient(
+                gradient: theme.colors.gradientWidgetSurface.swiftUI,
+                startPoint: .bottomLeading,
+                endPoint: .topTrailing
+            )
+        )
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
