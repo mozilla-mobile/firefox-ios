@@ -15,7 +15,8 @@ public protocol WebCompatReportPreviewDelegate: AnyObject {
 /// The Technical Data screen: collapsible sections listing the raw payload as
 /// key/value pairs. Store-agnostic, so configure it with a view model.
 ///
-/// Named for the ticket. Report Preview is a separate screen that pushes to this one.
+/// TODO: FXIOS-16432 - Rename the `ReportPreview` types to `TechnicalData`. Report Preview is a
+/// separate screen that pushes to this one.
 public final class WebCompatReportPreviewViewController: UIViewController,
                                                          ThemeApplicable,
                                                          UICollectionViewDelegate {
