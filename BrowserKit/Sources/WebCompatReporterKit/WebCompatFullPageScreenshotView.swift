@@ -44,11 +44,14 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         return min(1, scrollView.bounds.height / pageHeight)
     }
 
+    /// Owns the card's shape and geometry so the scroll view itself stays unrounded and unclipped.
+    private lazy var captureContainer: UIView = .build { view in
+        view.clipsToBounds = true
+        view.layer.cornerRadius = UX.captureCornerRadius
+    }
+
     private lazy var scrollView: UIScrollView = .build { scrollView in
         scrollView.showsVerticalScrollIndicator = false
-        // Rounds the capture's corners.
-        scrollView.clipsToBounds = true
-        scrollView.layer.cornerRadius = UX.captureCornerRadius
         scrollView.delegate = self
     }
 
@@ -106,7 +109,8 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     private func setupSubviews() {
         scrollView.addSubview(pageImageView)
-        addSubviews(scrollView, railView, closeButton)
+        captureContainer.addSubview(scrollView)
+        addSubviews(captureContainer, railView, closeButton)
     }
 
     private func setupConstraints() {
@@ -132,34 +136,42 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         // A page shorter than the space available gets a card its own size, so the ratio only
         // holds while it fits. Stretching it would round the top corners over scrim and leave
         // the image's bottom edge square.
-        let ratio = scrollView.heightAnchor.constraint(
-            equalTo: scrollView.widthAnchor,
+        let ratio = captureContainer.heightAnchor.constraint(
+            equalTo: captureContainer.widthAnchor,
             multiplier: imageHeightToWidthRatio
         )
         ratio.priority = .defaultHigh
-        let width = scrollView.widthAnchor.constraint(
+        let width = captureContainer.widthAnchor.constraint(
             equalTo: safeAreaLayoutGuide.widthAnchor,
             constant: -UX.captureSideMargin * 2
         )
-        let bottom = scrollView.bottomAnchor.constraint(
+        let bottom = captureContainer.bottomAnchor.constraint(
             lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
             constant: -UX.bottomInset
         )
         breakBeforeRequiredConstraints(width, bottom)
 
         return [
-            scrollView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
-            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: UX.topInset),
+            captureContainer.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
+            captureContainer.topAnchor.constraint(
+                equalTo: safeAreaLayoutGuide.topAnchor,
+                constant: UX.topInset
+            ),
             // A floor rather than the whole story: at accessibility text sizes the close button
             // grows past the nominal inset above.
-            scrollView.topAnchor.constraint(
+            captureContainer.topAnchor.constraint(
                 greaterThanOrEqualTo: closeButton.bottomAnchor,
                 constant: UX.captureCloseButtonGap
             ),
-            scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 0),
+            captureContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: 0),
             width,
             bottom,
             ratio,
+
+            scrollView.topAnchor.constraint(equalTo: captureContainer.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: captureContainer.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: captureContainer.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: captureContainer.bottomAnchor),
 
             pageImageView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             pageImageView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
@@ -186,7 +198,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
                 equalTo: safeAreaLayoutGuide.trailingAnchor,
                 constant: -WebCompatReporterUX.Spacing.screenHorizontal
             ),
-            railView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            railView.topAnchor.constraint(equalTo: captureContainer.topAnchor),
             bottom
         ]
     }
@@ -219,7 +231,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             && availableHeight > UX.minimumUsableSide
 
         let isHidden = !isRenderable
-        for view in [scrollView, railView] where view.isHidden != isHidden {
+        for view in [captureContainer, railView] where view.isHidden != isHidden {
             view.isHidden = isHidden
         }
     }
