@@ -80,6 +80,5 @@ struct PasswordGeneratorState: ScreenState {
         return state.copy(windowUUID: state.windowUUID)
             .copy(password: state.password)
             .copy(passwordHidden: state.passwordHidden)
-        )
     }
 }
