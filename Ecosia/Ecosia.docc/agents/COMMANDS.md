@@ -1,6 +1,6 @@
 # Development Commands
 
-> Full setup narrative for humans: [Ecosia/Ecosia.docc/Ecosia.md](../Ecosia.md)
+> [Full setup narrative for humans here](../../../firefox-ios/Ecosia/Ecosia.docc/Ecosia.md)
 
 Run from **workspace root** (`ios-browser/`) unless otherwise specified.
 
@@ -21,7 +21,7 @@ sh ./bootstrap.sh    # Installs hooks, resolves packages, updates content blocke
 Run after adding new Swift files, asset catalogues, or directories:
 
 ```sh
-bash tuist-setup.sh
+sh tuist-setup.sh
 ```
 
 Verify a new file is registered:
