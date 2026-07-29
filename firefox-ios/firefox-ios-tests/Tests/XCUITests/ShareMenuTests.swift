@@ -183,19 +183,14 @@ class ShareMenuTests: FeatureFlaggedTestBase {
         // The Markup tool opens. It can take a little longer to load, so wait longer.
         if #available(iOS 26, *) {
             if !iPad() {
-                // The navbar overflow label varies ("More" -> "View More", MTE-5253) and the
-                // palette sometimes opens without one; only tap the label that's actually present.
-                if !app.buttons["Markup"].mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
-                    let overflow = app.navigationBars.buttons["More"].exists
-                        ? app.navigationBars.buttons["More"]
-                        : app.navigationBars.buttons["View More"]
-                    if overflow.exists {
-                        overflow.waitAndTap()
-                    }
+                // Share "Markup" sometimes opens QuickLook in preview mode (a "Markup" pen button, no
+                // palette); tap it to enter markup, then verify the PencilKit Drawing-Palette + Pen.
+                let palette = app.otherElements["Drawing-Palette"]
+                if !palette.mozWaitForElementToExist(timeout: TIMEOUT_LONG, failOnTimeout: false) {
+                    app.switches["QLOverlayMarkupButtonAccessibilityIdentifier"].firstMatch.waitAndTap()
                 }
-                mozWaitForElementToExist(app.buttons["Markup"], timeout: TIMEOUT_LONG)
-                mozWaitForElementToExist(app.buttons["Close"], timeout: TIMEOUT_LONG)
-                mozWaitForElementToExist(app.otherElements["Drawing-Palette"], timeout: TIMEOUT_LONG)
+                mozWaitForElementToExist(palette, timeout: TIMEOUT_LONG)
+                mozWaitForElementToExist(app.buttons["Pen"], timeout: TIMEOUT_LONG)
             } else {
                 // On iPad the Markup palette renders inline with no navbar overflow button;
                 // the Markup control is a switch, not a button.

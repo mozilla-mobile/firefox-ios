@@ -182,19 +182,14 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         // The Markup tool opens
         if #available(iOS 26, *) {
             if !iPad() {
-                // The navbar overflow label varies ("More" -> "View More", MTE-5253) and the
-                // palette sometimes opens without one; only tap the label that's actually present.
-                if !app.buttons["Markup"].mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
-                    let overflow = app.navigationBars.buttons["More"].exists
-                        ? app.navigationBars.buttons["More"]
-                        : app.navigationBars.buttons["View More"]
-                    if overflow.exists {
-                        overflow.waitAndTap()
-                    }
+                // Share "Markup" sometimes opens QuickLook in preview mode (a "Markup" pen button, no
+                // palette); tap it to enter markup, then verify the PencilKit Drawing-Palette + Pen.
+                let palette = app.otherElements["Drawing-Palette"]
+                if !palette.mozWaitForElementToExist(timeout: TIMEOUT_LONG, failOnTimeout: false) {
+                    app.buttons["Markup"].waitAndTap()
                 }
-                mozWaitForElementToExist(app.buttons["Markup"])
-                mozWaitForElementToExist(app.buttons["Close"])
-                mozWaitForElementToExist(app.otherElements["Drawing-Palette"])
+                mozWaitForElementToExist(palette, timeout: TIMEOUT_LONG)
+                mozWaitForElementToExist(app.buttons["Pen"], timeout: TIMEOUT_LONG)
             } else {
                 mozWaitForElementToExist(app.switches["Markup"])
                 mozWaitForElementToExist(app.buttons["close"])

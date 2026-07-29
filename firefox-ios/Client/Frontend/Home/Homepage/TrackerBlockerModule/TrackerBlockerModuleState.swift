@@ -11,6 +11,8 @@ import Shared
 struct TrackerBlockerModuleState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     let shouldShowSection: Bool
+    /// Lifetime count of trackers blocked in non-private browsing, shown in the module.
+    let blockedTrackerCount: Int
 
     init(
         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
@@ -20,19 +22,29 @@ struct TrackerBlockerModuleState: StateType, Equatable, Hashable {
         self.init(
             windowUUID: windowUUID,
             shouldShowSection: featureFlagsProvider.isEnabled(.homepageTrackerBlockerModule)
-                && userPreferences.getPreferenceFor(.homepageTrackerBlockerModule)
+                && userPreferences.getPreferenceFor(.homepageTrackerBlockerModule),
+            blockedTrackerCount: 0
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        shouldShowSection: Bool
+        shouldShowSection: Bool,
+        blockedTrackerCount: Int
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
+        self.blockedTrackerCount = blockedTrackerCount
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
             return defaultState(from: state)
@@ -41,9 +53,24 @@ struct TrackerBlockerModuleState: StateType, Equatable, Hashable {
         switch action.actionType {
         case TrackerBlockerModuleActionType.toggleShowSectionSetting:
             return handleSettingsToggleAction(action, state: state)
+        case TrackerBlockerModuleMiddlewareActionType.updateBlockedCount:
+            return handleUpdateBlockedCountAction(action, state: state)
         default:
             return defaultState(from: state)
         }
+    }
+
+    private static func handleUpdateBlockedCountAction(
+        _ action: Action,
+        state: TrackerBlockerModuleState
+    ) -> TrackerBlockerModuleState {
+        guard let trackerBlockerModuleAction = action as? TrackerBlockerModuleAction,
+              let blockedTrackerCount = trackerBlockerModuleAction.blockedTrackerCount
+        else {
+            return defaultState(from: state)
+        }
+
+        return state.copy(blockedTrackerCount: blockedTrackerCount)
     }
 
     private static func handleSettingsToggleAction(

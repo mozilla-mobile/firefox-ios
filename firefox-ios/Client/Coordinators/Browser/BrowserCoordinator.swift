@@ -250,11 +250,6 @@ final class BrowserCoordinator: BaseCoordinator,
         openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
-    @MainActor
-    func switchMode() {
-        browserViewController.tabManager.switchPrivacyMode()
-    }
-
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
@@ -634,10 +629,6 @@ final class BrowserCoordinator: BaseCoordinator,
     func presentReportBrokenSite(url: URL?) {
         let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
         reportViewController.reportCoordinator = self
-        if let sheetPresentationController = reportViewController.sheetPresentationController {
-            sheetPresentationController.detents = [.large()]
-            sheetPresentationController.prefersGrabberVisible = true
-        }
         router.present(reportViewController, animated: true, completion: nil)
     }
 
@@ -645,6 +636,13 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func webCompatReportViewControllerDidFinish() {
         router.dismiss(animated: true, completion: nil)
+    }
+
+    func webCompatReportViewControllerDidTapLearnMore(url: URL) {
+        // Dismiss first, otherwise the explainer loads in a tab hidden behind the sheet.
+        router.dismiss(animated: true, completion: { [weak self] in
+            self?.browserViewController.openURLInNewTab(url)
+        })
     }
 
     func presentSavePDFController() {

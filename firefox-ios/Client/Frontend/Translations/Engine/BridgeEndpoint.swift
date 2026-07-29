@@ -16,7 +16,4 @@ protocol BridgeEndpoint: AnyObject {
     /// Called by a `Bridge` to attach `WKScriptMessageHandler`.
     /// For tests, this will be a no-op..
     func registerScriptHandler(_ handler: WKScriptMessageHandler)
-    /// Called by a `Bridge`  to remove a `WKScriptMessageHandler`.
-    /// For tests, this will be a no-op..
-    func unregisterScriptHandler()
 }

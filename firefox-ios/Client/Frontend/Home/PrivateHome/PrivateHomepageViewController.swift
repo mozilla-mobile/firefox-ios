@@ -11,9 +11,6 @@ import Shared
 protocol PrivateHomepageDelegate: AnyObject {
     @MainActor
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool)
-
-    @MainActor
-    func switchMode()
 }
 
 // Displays the view for the private homepage when users create a new tab in private browsing

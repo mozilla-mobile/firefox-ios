@@ -36,7 +36,7 @@ final class SearchEngineSelectionStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.searchEngines, [])
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             SearchEngineSelectionAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -60,7 +60,7 @@ final class SearchEngineSelectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.searchEngines, [])
         XCTAssertNil(initialState.selectedSearchEngine)
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             SearchEngineSelectionAction(
                 windowUUID: .XCTestDefaultUUID,

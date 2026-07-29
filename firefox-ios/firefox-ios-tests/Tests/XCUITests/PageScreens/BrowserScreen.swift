@@ -81,6 +81,32 @@ final class BrowserScreen {
         assertUserAgentTextExists("MOBILE_UA", timeout: timeout)
     }
 
+    enum SiteLayoutMode {
+        case desktop
+        case mobile
+    }
+
+    // No one magic heuristic to determine desktop vs mobile layout, so we hardcode some
+    // known characteristics of the test websites.
+    func assertLayout(_ mode: SiteLayoutMode, timeout: TimeInterval = TIMEOUT) {
+        let currentURL = (addressBar.value as? String) ?? ""
+        let element: XCUIElement
+
+        if mode == .desktop, currentURL.contains("google.com"), !currentURL.contains("news.google.com") {
+            element = app.webViews.buttons["I'm Feeling Lucky"]
+        } else if mode == .mobile, currentURL.contains("amazon.com") {
+            element = app.webViews.buttons["Open All Categories Menu"]
+        } else if mode == .desktop {
+            let pred = NSPredicate(format: "label BEGINSWITH 'Horizontal scroll bar,' AND NOT (label CONTAINS '1 page')")
+            element = app.webViews.descendants(matching: .any).matching(pred).firstMatch
+        } else {
+            element = app.webViews.descendants(matching: .any)
+                .matching(NSPredicate(format: "label == 'Horizontal scroll bar, 1 page'")).firstMatch
+        }
+
+        BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
+    }
+
     func tapDownloadsToastButton() {
         let downloadsButton = sel.DOWNLOADS_TOAST_BUTTON.element(in: app)
         downloadsButton.waitAndTap()

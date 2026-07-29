@@ -96,18 +96,8 @@ final class SwipeUpTabWebViewPreviewTests: XCTestCase {
 
     // MARK: - setInitialTransform
 
-    func testSetInitialTransform_whenCloseTabEnabled_showsPreview() {
-        let subject = createSubject(closeTabEnabled: true)
-        subject.layoutIfNeeded()
-
-        subject.setInitialTransform(topPadding: 50, bottomPadding: 40)
-
-        XCTAssertEqual(subject.alpha, 1.0)
-        XCTAssertEqual(subject.layer.zPosition, 1000)
-    }
-
-    func testSetInitialTransform_whenCloseTabDisabled_showsPreview() {
-        let subject = createSubject(closeTabEnabled: false)
+    func testSetInitialTransform_showsPreview() {
+        let subject = createSubject()
         subject.layoutIfNeeded()
 
         subject.setInitialTransform(topPadding: 50, bottomPadding: 40)
