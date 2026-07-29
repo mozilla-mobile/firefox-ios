@@ -42,7 +42,7 @@ extension UIImage {
             size = baseSize
         }
 
-        let format = UIGraphicsImageRendererFormat.default()
+        let format = UIGraphicsImageRendererFormat.preferred()
         if let scale { format.scale = scale }
         let renderer = UIGraphicsImageRenderer(size: size, format: format)
         return renderer.image { context in
