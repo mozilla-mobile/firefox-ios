@@ -20,6 +20,8 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         view.clipsToBounds = true
     }
 
+    private var onTap: (() -> Void)?
+
     private lazy var shieldIcon: UIImageView = .build { icon in
         icon.contentMode = .scaleAspectFit
         icon.adjustsImageSizeForAccessibilityContentSizeCategory = true
@@ -59,6 +61,9 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         containerPillView.addSubview(titleLabel)
         contentView.addSubview(containerPillView)
 
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        containerPillView.addGestureRecognizer(tapGesture)
+
         NSLayoutConstraint.activate([
             shieldIcon.widthAnchor.constraint(equalToConstant: UX.iconSize),
             shieldIcon.heightAnchor.constraint(equalToConstant: UX.iconSize),
@@ -83,9 +88,15 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     // MARK: - Configuration
 
-    func configure(count: Int, theme: Theme) {
+    func configure(count: Int, theme: Theme, onTap: (() -> Void)?) {
+        self.onTap = onTap
         updateTrackerNumber(to: count)
         applyTheme(theme: theme)
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
     }
 
     // MARK: - ThemeApplicable

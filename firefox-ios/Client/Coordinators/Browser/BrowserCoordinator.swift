@@ -814,6 +814,17 @@ final class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: sourceView)
     }
 
+    func showTrackerBlockerSheet() {
+        let viewController = TrackerBlockerSheetViewController(
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+        if let sheet = viewController.sheetPresentationController {
+            sheet.detents = [.medium()]
+        }
+        router.present(viewController, animated: true)
+    }
+
     /// Starts the ShareSheetCoordinator, which initiates opening the iOS share sheet using an `UIActivityViewController`.
     ///
     /// For shared tabs where the user is currently on a non-HTML page (e.g. viewing a PDF), this method will initiate a
