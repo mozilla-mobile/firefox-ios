@@ -183,7 +183,6 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     }
 }
 
-
 public enum ProxyScope {
     case `private`
     case normal

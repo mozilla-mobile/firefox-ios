@@ -557,6 +557,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
 
+        if #available(iOS 26.0, *) {
+            hiddenDebugOptions.append(ToggleVPNProxySetting(settings: self,
+                                                            vpnManager: AppContainer.shared.resolve()))
+        }
+
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
 
