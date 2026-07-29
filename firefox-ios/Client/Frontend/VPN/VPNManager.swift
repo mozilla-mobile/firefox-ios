@@ -2,15 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/
-
 import Foundation
 import Common
+import Shared
 import MozillaAppServices
-import Account
 import Network
 import WebEngine
 
@@ -28,8 +23,9 @@ enum VPNError: Error {
 
 @available(iOS 26.0, *)
 final class VPNManager: VPNManaging {
+    private static let secretEnvKey = "VPN_GUARDIAN_SECRET"
+
     private let logger: Logger
-    private let accountManagerProvider: () -> FxAccountManager?
     private let guardian: VPNGuardian
     private let serverlist: VPNServerlist
     private let windowManager: WindowManager
@@ -41,23 +37,34 @@ final class VPNManager: VPNManaging {
 
     init(
         logger: Logger = DefaultLogger.shared,
-        accountManager: @escaping () -> FxAccountManager? = {
-            RustFirefoxAccounts.shared.accountManager
-        },
         rsService: RemoteSettingsService = (AppContainer.shared.resolve() as Profile).remoteSettingsService,
-        clientConfig: VPNGuardian.Configuration = .prod,
-        windowManager: WindowManager = AppContainer.shared.resolve()
+        clientConfig: VPNGuardian.Configuration = .staging,
+        windowManager: WindowManager = AppContainer.shared.resolve(),
+        urlSession: URLSessionProtocol = URLSession.shared
     ) {
         self.logger = logger
-        self.accountManagerProvider = accountManager
-        let authHeaders = ["Authorization": "Bearer [insert token here]"]
         self.guardian = VPNGuardian(
-            authHeaders: authHeaders,
+            authHeaders: Self.guardianAuthHeaders(logger: logger),
             configuration: clientConfig,
             logger: logger
         )
         self.serverlist = VPNServerlist(rsService: rsService, logger: logger)
         self.windowManager = windowManager
+    }
+
+    /// Guardian's shared auth secret, supplied at runtime via the `VPN_GUARDIAN_SECRET` environment
+    /// variable so it never lands in source control. Set it on the Run action of a local, unshared
+    /// copy of the Fennec scheme — the shared schemes are tracked in git, `xcuserdata` is not.
+    private static func guardianAuthHeaders(logger: Logger) -> [String: String] {
+        guard let secret = ProcessInfo.processInfo.environment[secretEnvKey], !secret.isEmpty else {
+            logger.log(
+                "\(secretEnvKey) is unset — Guardian pass requests will fail to authenticate",
+                level: .warning,
+                category: .sync
+            )
+            return [:]
+        }
+        return ["secret": secret]
     }
 
     func start(privateOnly: Bool = false) async {

@@ -792,6 +792,7 @@
 		61E24E4E3012ACE400F27037 /* VPNServerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4D3012ACD800F27037 /* VPNServerList.swift */; };
 		61E24E503012AD3D00F27037 /* VPNGuardian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4F3012AD3900F27037 /* VPNGuardian.swift */; };
 		61E24E523017BF2A00F27037 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E513017BF2A00F27037 /* VPNManager.swift */; };
+		61E24E543018BC1000F27037 /* ToggleVPNProxySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E533018BC1000F27037 /* ToggleVPNProxySetting.swift */; };
 		61E637852D03615D00E95B63 /* LabelButtonHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */; };
 		61E637872D03615D00E95B63 /* StoryCategoryPickerViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637862D03615D00E95B63 /* StoryCategoryPickerViewTests.swift */; };
 		61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */; };
@@ -9222,6 +9223,7 @@
 		61E24E4D3012ACD800F27037 /* VPNServerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNServerList.swift; sourceTree = "<group>"; };
 		61E24E4F3012AD3900F27037 /* VPNGuardian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNGuardian.swift; sourceTree = "<group>"; };
 		61E24E513017BF2A00F27037 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
+		61E24E533018BC1000F27037 /* ToggleVPNProxySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleVPNProxySetting.swift; sourceTree = "<group>"; };
 		61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelButtonHeaderViewTests.swift; sourceTree = "<group>"; };
 		61E637862D03615D00E95B63 /* StoryCategoryPickerViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCategoryPickerViewTests.swift; sourceTree = "<group>"; };
 		61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBuilderTests.swift; sourceTree = "<group>"; };
@@ -14288,6 +14290,7 @@
 				C72748232ECE1809003B394D /* MerinoTestDataSetting.swift */,
 				C2EA23552FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift */,
 				8A5A24C02FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift */,
+				61E24E533018BC1000F27037 /* ToggleVPNProxySetting.swift */,
 				8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */,
 				C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */,
 				8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */,
@@ -20329,6 +20332,7 @@
 				1D5A117A2EAEC51100DD27F7 /* ResetSearchEnginePrefsSetting.swift in Sources */,
 				21618A932A4499FC00A5189E /* AppState.swift in Sources */,
 				8A5A24C12FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift in Sources */,
+				61E24E543018BC1000F27037 /* ToggleVPNProxySetting.swift in Sources */,
 				E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */,
 				C22C0D772FC832BC00951BF6 /* WorldCupPagerView.swift in Sources */,
 				0A7693692C81F2A300103A6D /* TrackingProtectionConnectionDetailsView.swift in Sources */,

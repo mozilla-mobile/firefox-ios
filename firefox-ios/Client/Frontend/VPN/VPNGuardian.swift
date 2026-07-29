@@ -6,14 +6,16 @@ import Common
 import Foundation
 
 final class VPNGuardian: Sendable {
-
     enum Configuration {
         case prod
         case staging
 
         var baseURL: URL {
             switch self {
-            case .prod, .staging: return URL(string: "https://vpn.mozilla.org")!
+            case .prod:
+                return URL(string: "https://vpn.mozilla.com")!
+            case .staging:
+                return URL(string: "https://vpn.mozilla.org")!
             }
         }
     }
@@ -126,7 +128,7 @@ final class VPNGuardian: Sendable {
     }
 
     private func fetchProxyPass(authHeaders: [String: String]) async throws -> ProxyPass {
-        let url = configuration.baseURL.appendingPathComponent("api/v1/fpn/token")
+        let url = configuration.baseURL.appendingPathComponent("api/v1/foxfooding/token")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
