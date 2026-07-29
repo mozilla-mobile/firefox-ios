@@ -17,12 +17,9 @@ final class WebCompatScreenshotRailViewTests: XCTestCase {
         static let frameAccuracy: CGFloat = 0.5
     }
 
+    /// Held for the test's lifetime, or it takes the rail's superview and every constraint against
+    /// it down when it goes.
     private var host: UIView?
-
-    override func tearDown() {
-        host = nil
-        super.tearDown()
-    }
 
     func testRail_takesItsHeightFromThePageRatio() {
         let subject = createSubject(pageRatio: UX.tallPageRatio)
@@ -47,8 +44,7 @@ final class WebCompatScreenshotRailViewTests: XCTestCase {
 
     // MARK: - Helpers
 
-    /// Hosts and drives the rail the way the viewer does. Held for the test's lifetime, or it takes
-    /// the rail's superview and every constraint against it down when it goes.
+    /// Hosts and drives the rail the way the viewer does.
     private func createSubject(pageRatio: CGFloat) -> WebCompatScreenshotRailView {
         let subject = WebCompatScreenshotRailView(
             image: samplePage(ratio: pageRatio),
