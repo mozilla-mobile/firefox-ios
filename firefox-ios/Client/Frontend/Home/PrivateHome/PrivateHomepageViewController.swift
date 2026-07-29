@@ -179,8 +179,7 @@ final class PrivateHomepageViewController: UIViewController,
 
     private func applyBackgroundGradient(to gradient: CAGradientLayer, theme: Theme) {
         if theme.isNova {
-            gradient.colors = theme.colors.gradientPrivacy.cgColors
-            // Not using 3 stop locations, since gradientPrivacy has 2 colors
+            gradient.colors = theme.colors.gradientAccentSubtle.cgColors
             gradient.locations = nil
         } else {
             gradient.colors = theme.colors.layerHomepage.cgColors
