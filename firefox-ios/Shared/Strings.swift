@@ -2157,16 +2157,16 @@ extension String {
                 tableName: "NativeErrorPage",
                 value: "Couldn’t reach Wayback Machine",
                 comment: "Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page.")
-            public static let NotFoundLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.NotFound.v155",
-                tableName: "NativeErrorPage",
-                value: "No archived version found",
-                comment: "Label shown when wayback responds and says no snapshot was found.")
             public static let RetryButton = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Retry.v154",
                 tableName: "NativeErrorPage",
                 value: "Retry",
                 comment: "Button label allowing the user to retry searching the Wayback Machine after a failed attempt.")
+            public static let NotFoundLabel = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.NotFound.v155",
+                tableName: "NativeErrorPage",
+                value: "No archived version found",
+                comment: "Label shown when wayback responds and says no snapshot was found.")
             public static let SearchButton = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Search.v155",
                 tableName: "NativeErrorPage",
