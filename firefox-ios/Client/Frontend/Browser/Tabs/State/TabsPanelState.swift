@@ -24,11 +24,12 @@ struct TabsPanelState: ScreenState, Equatable {
         return tabs.isEmpty
     }
 
-    init(appState: AppState, uuid: WindowUUID) {
+    init(appState: AppState, uuid: WindowUUID, screenIdentity: UUID? = nil) {
         guard let panelState = appState.componentState(
             TabsPanelState.self,
             for: .tabsPanel,
-            window: uuid
+            window: uuid,
+            screenIdentity: screenIdentity
         ) else {
             self.init(windowUUID: uuid)
             return
