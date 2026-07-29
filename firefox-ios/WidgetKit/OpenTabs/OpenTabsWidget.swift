@@ -26,10 +26,8 @@ struct OpenTabsWidget: Widget {
 struct OpenTabsView: View {
     let entry: OpenTabsEntry
 
-    @Environment(\.widgetFamily)
-    var widgetFamily
-    @Environment(\.theme)
-    private var theme
+    @Environment(\.widgetFamily) var widgetFamily
+    @Environment(\.theme) private var theme
 
     private var contentColor: Color { Color(uiColor: theme.colors.textPrimary) }
 
