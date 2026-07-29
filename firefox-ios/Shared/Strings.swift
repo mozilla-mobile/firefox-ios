@@ -2171,7 +2171,7 @@ extension String {
                 key: "NativeErrorPage.Wayback.Error.Search.v155",
                 tableName: "NativeErrorPage",
                 value: "Search the web",
-                comment: "Button label allowing the user to retry searching the Wayback Machine after a failed attempt.")
+                comment: "Button label allowing the use their default search engine to search for the page.")
         }
     }
 }
