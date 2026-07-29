@@ -454,9 +454,8 @@ final class NativeErrorPageViewController: UIViewController,
 
         let query = "\"\(failingURL.absoluteString)\""
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let searchURL = URL(string: "https://www.google.com/search?q=\(encodedQuery)") else {
-            return
-        }
+              let searchURL = URL(string: "https://www.google.com/search?q=\(encodedQuery)")
+        else { return }
 
         store.dispatch(
             GeneralBrowserAction(
