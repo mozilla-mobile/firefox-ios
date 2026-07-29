@@ -26,6 +26,23 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.TrackingProtectionperSiteToggle)
     }
 
+    // Reads the adblock-tester.com score banner (e.g. "38 points out of 100 (11 services, 22
+    // checks)") and returns the leading number. The score/service/check counts are dynamic
+    // (depend on ads/trackers live on the page at test time), so callers should compare scores
+    // relative to each other rather than against a fixed expected value.
+    private func adblockTesterScore(timeout: TimeInterval = TIMEOUT) -> Int {
+        let scoreElement = app.webViews.otherElements.matching(
+            NSPredicate(format: "label CONTAINS[c] 'points out of 100'")
+        ).firstMatch
+        mozWaitForElementToExist(scoreElement, timeout: timeout)
+
+        guard let match = scoreElement.label.range(of: #"^\d+"#, options: .regularExpression) else {
+            XCTFail("Could not parse a leading score number from label: \(scoreElement.label)")
+            return 0
+        }
+        return Int(scoreElement.label[match]) ?? 0
+    }
+
     private func checkTrackingProtectionDisabledForSite() {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
     }
@@ -87,7 +104,7 @@ class TrackingProtectionTests: BaseTestCase {
         trackingProtectionScreen = TrackingProtectionScreen(app: app)
         settingsScreen = SettingScreen(app: app)
 
-        let firstPartySimulatorURL = "https://firstpartysimulator.org/kcarter?try2=true&aat=1"
+        let adblockTesterURL = "https://adblock-tester.com/"
 
         // Step 2: Go to Settings -> Tracking Protection -> Standard TP is enabled by default.
         navigator.goto(TrackingProtectionSettings)
@@ -97,26 +114,15 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
         trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: false)
 
-        // Step 4: Visit firstpartysimulator.org and run the test -> a message reading "You have
-        // some protection against Web Tracking, but it has some gaps." is shown, with "Partial
-        // protection" displayed below it.
-        // NOTE(you): as of 2026-07-23 this site actually shows "Our tests indicate that you have
-        // strong protection against Web tracking" regardless of the ETP switch state above - the
-        // assertions below match the TestRail case as written, but haven't been confirmed to
-        // pass against the site's current real behavior. Re-verify on-device.
-        navigator.openURL(firstPartySimulatorURL)
+        // Step 4: Go to https://adblock-tester.com/ and run the test -> a message shows the
+        // score out of 100 (e.g. "38 points out of 100") while ETP is disabled.
+        navigator.openURL(adblockTesterURL)
         waitUntilPageLoad()
-        browserScreen.assertAddressBarContains(value: "coveryourtracks.eff.org")
-        browserScreen.assertWebPageTextDoesNotExist(with: "Testing your browser")
-        waitUntilPageLoad()
-        app.partialSwipeUp(distance: 0.3)
-        browserScreen.assertWebPageText(with: "strong protection against Web tracking")
-        browserScreen.assertWebPageText(with: "your browser has a unique fingerprint")
-        // browserScreen.assertWebPageText(with: "your browser has a randomized fingerprint")
-        browserScreen.assertWebPageTextDoesNotExist(with: "partial protection against Web tracking")
-        // browserScreen.assertWebPageTextDoesNotExist(with: "your browser has a unique fingerprint")
+        app.swipeUp()
+        let scoreWithETPOff = adblockTesterScore()
 
-        // Step 5: Enable "Enhanced Tracking Protection" -> Tracking Protection is enabled.
+        // Step 5: Enable "Enhanced Tracking Protection" and recheck adblock-tester.com ->
+        // Tracking Protection is enabled, and the score increases (e.g. from 38 to 42 out of 100).
         app.swipeDown()
         navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
@@ -125,17 +131,16 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
         trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: true)
 
-        // Step 6: Revisit firstpartysimulator.org and run the test -> Tracking Protection is
-        // enabled.
-        navigator.openURL(firstPartySimulatorURL)
+        navigator.openURL(adblockTesterURL)
         waitUntilPageLoad()
-        browserScreen.assertAddressBarContains(value: "coveryourtracks.eff.org")
-        browserScreen.assertWebPageTextDoesNotExist(with: "Testing your browser")
-        app.partialSwipeUp(distance: 0.3)
-        browserScreen.assertWebPageText(with: "strong protection against Web tracking")
-        browserScreen.assertWebPageText(with: "your browser has a randomized fingerprint")
-        browserScreen.assertWebPageTextDoesNotExist(with: "partial protection against Web tracking")
-        browserScreen.assertWebPageTextDoesNotExist(with: "your browser has a unique fingerprint")
+        app.swipeUp()
+        let scoreWithETPOn = adblockTesterScore()
+
+        XCTAssertGreaterThan(
+            scoreWithETPOn,
+            scoreWithETPOff,
+            "Enabling Enhanced Tracking Protection should improve the adblock-tester.com score"
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
