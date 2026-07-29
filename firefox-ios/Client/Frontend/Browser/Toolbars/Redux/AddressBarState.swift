@@ -268,9 +268,28 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return defaultState(from: state)
         }
 
-        return AddressBarState(windowUUID: state.windowUUID)
+        return state
+            .copy(navigationActions: [])
+            .copy(leadingPageActions: [])
+            .copy(trailingPageActions: [])
+            .copy(browserActions: [])
+            .copy(editingAccessoryAction: nil)
             .copy(borderPosition: borderPosition)
-            .copy(alternativeSearchEngine: state.alternativeSearchEngine)
+            .copy(url: nil)
+            .copy(searchTerm: nil)
+            .copy(lockIconButtonA11yId: nil)
+            .copy(lockIconImageName: nil)
+            .copy(lockIconNeedsTheming: true)
+            .copy(safeListedURLImageName: nil)
+            .copy(isEditing: false)
+            .copy(shouldShowKeyboard: false)
+            .copy(shouldSelectSearchTerm: false)
+            .copy(isLoading: false)
+            .copy(readerModeState: nil)
+            .copy(canSummarize: false)
+            .copy(translationConfiguration: nil)
+            .copy(didStartTyping: false)
+            .copy(isEmptySearch: true)
     }
 
     @MainActor
