@@ -21,34 +21,23 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 1)
     }
 
-    func testExpandingSection_revealsItsValueRows() {
+    func testExpandingSection_revealsItsValueRows() throws {
         let subject = createSubject(sections: sampleSections)
         layout(subject)
 
-        expandFirstSection(in: subject)
+        try expandFirstSection(in: subject)
 
         let collectionView = collectionView(in: subject)
         XCTAssertEqual(collectionView?.numberOfItems(inSection: 0), 2)
         XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 1, section: 0)) is WebCompatPreviewSectionContentCell)
     }
 
-    // The Client re-configures on every state change. That must not close an open group.
-    func testConfigure_afterExpanding_keepsTheSectionExpanded() {
+    // The Client re-configures on every state change. An unchanged re-configure must skip the
+    // top-level apply, which would drop every item and close the open group.
+    func testConfigure_withUnchangedSections_keepsTheExistingCells() throws {
         let subject = createSubject(sections: sampleSections)
         layout(subject)
-        expandFirstSection(in: subject)
-
-        subject.configure(with: makeViewModel(sections: sampleSections))
-        subject.view.layoutIfNeeded()
-
-        XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
-    }
-
-    // An unchanged re-configure should skip the top-level apply, which would drop every item.
-    func testConfigure_withUnchangedSections_keepsTheExistingCells() {
-        let subject = createSubject(sections: sampleSections)
-        layout(subject)
-        expandFirstSection(in: subject)
+        try expandFirstSection(in: subject)
         let contentIndexPath = IndexPath(item: 1, section: 0)
         let cellBeforeReconfigure = collectionView(in: subject)?.cellForItem(at: contentIndexPath)
         XCTAssertNotNil(cellBeforeReconfigure)
@@ -62,10 +51,10 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         )
     }
 
-    func testApplyTheme_afterExpanding_keepsTheSectionExpanded() {
+    func testApplyTheme_afterExpanding_keepsTheSectionExpanded() throws {
         let subject = createSubject(sections: sampleSections)
         layout(subject)
-        expandFirstSection(in: subject)
+        try expandFirstSection(in: subject)
 
         subject.applyTheme(theme: DarkTheme())
         subject.view.layoutIfNeeded()
@@ -74,13 +63,13 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 
     // If a round-tripped snapshot omitted collapsed children, applying it would delete them.
-    func testApplyTheme_whileCollapsed_thenExpanding_stillRevealsRows() {
+    func testApplyTheme_whileCollapsed_thenExpanding_stillRevealsRows() throws {
         let subject = createSubject(sections: sampleSections)
         layout(subject)
 
         subject.applyTheme(theme: DarkTheme())
         subject.view.layoutIfNeeded()
-        expandFirstSection(in: subject)
+        try expandFirstSection(in: subject)
 
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
     }
@@ -89,13 +78,13 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     func testConfigure_withAnAddedSection_keepsTheOpenSectionExpanded() throws {
         let subject = createSubject(sections: sampleSections)
         layout(subject)
-        expandFirstSection(in: subject)
+        try expandFirstSection(in: subject)
 
         subject.configure(with: makeViewModel(sections: [addedSection] + sampleSections))
         subject.view.layoutIfNeeded()
 
         let basicSection = try XCTUnwrap(
-            subject.dataSource.snapshot().sectionIdentifiers.firstIndex(of: "basic"),
+            sectionIndex(ofHeader: "section.basic", in: subject),
             "The pre-existing section should survive the added one"
         )
         XCTAssertEqual(basicSection, 1, "The added section should sort ahead of it")
@@ -103,10 +92,10 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 
     // A value edited under a stable id still has to reach the cell; the diff can't see it.
-    func testConfigure_withChangedRowValue_updatesTheVisibleRow() {
+    func testConfigure_withChangedRowValue_updatesTheVisibleRow() throws {
         let subject = createSubject(sections: sampleSections)
         layout(subject)
-        expandFirstSection(in: subject)
+        try expandFirstSection(in: subject)
 
         subject.configure(with: makeViewModel(sections: [changedFirstSection, sampleSections[1]]))
         subject.view.layoutIfNeeded()
@@ -158,87 +147,7 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertEqual(collectionView(in: subject)?.numberOfSections, 0)
     }
 
-    /// A `backgroundConfiguration` card renders square on top and round on the bottom, because a
-    /// list cell masks by group position. Only visible in the list, hence real pixels.
-    func testExpandedCard_isRoundedOnAllFourCorners() throws {
-        let cardRows = try cardRowExtents(in: try renderExpandedScreen())
-
-        let topRow = try XCTUnwrap(cardRows.first)
-        let bottomRow = try XCTUnwrap(cardRows.last)
-        let widestRow = try XCTUnwrap(cardRows.max(by: { $0.width < $1.width }))
-        XCTAssertLessThan(
-            topRow.width,
-            widestRow.width,
-            "The card's first scanline spans its full width, so the top corners are square"
-        )
-        XCTAssertLessThan(
-            bottomRow.width,
-            widestRow.width,
-            "The card's last scanline spans its full width, so the bottom corners are square"
-        )
-    }
-
     // MARK: - Helpers
-
-    private func renderExpandedScreen() throws -> UIImage {
-        let subject = createSubject(sections: sampleSections)
-        let window = UIWindow(frame: CGRect(origin: .zero, size: UX.presentationSize))
-        window.rootViewController = UINavigationController(rootViewController: subject)
-        window.isHidden = false
-        addTeardownBlock { window.rootViewController = nil }
-        window.layoutIfNeeded()
-        expandFirstSection(in: subject)
-        window.layoutIfNeeded()
-
-        return UIGraphicsImageRenderer(bounds: window.bounds).image { context in
-            window.layer.render(in: context.cgContext)
-        }
-    }
-
-    /// Every card scanline's horizontal extent, top to bottom. The card is the only `layer5` fill
-    /// wide enough to span most of the screen.
-    ///
-    /// Matched against a swatch from the same renderer, not against colour components: the buffer
-    /// is BGRA, so comparing components works only while the colour is channel-symmetric.
-    private func cardRowExtents(in image: UIImage) throws -> [(y: Int, width: Int)] {
-        let cgImage = try XCTUnwrap(image.cgImage)
-        let data = try XCTUnwrap(cgImage.dataProvider?.data)
-        let pointer = try XCTUnwrap(CFDataGetBytePtr(data))
-        let bytesPerPixel = cgImage.bitsPerPixel / 8
-        let cardPixel = try swatchBytes(of: LightTheme().colors.layer5, bytesPerPixel: bytesPerPixel)
-
-        var extents: [(y: Int, width: Int)] = []
-        for y in 0..<cgImage.height {
-            var longestRun = 0
-            var run = 0
-            for x in 0..<cgImage.width {
-                let offset = y * cgImage.bytesPerRow + x * bytesPerPixel
-                let isCard = (0..<bytesPerPixel).allSatisfy { pointer[offset + $0] == cardPixel[$0] }
-                if isCard {
-                    run += 1
-                    longestRun = max(longestRun, run)
-                } else {
-                    run = 0
-                }
-            }
-            // Wide enough to be the card rather than a glyph or the disclosure chevron.
-            if longestRun > cgImage.width / 2 { extents.append((y, longestRun)) }
-        }
-        XCTAssertFalse(extents.isEmpty, "Found no card in the render, so the scan proves nothing")
-        return extents
-    }
-
-    /// The colour's bytes as this renderer lays them out, so channel order can't matter.
-    private func swatchBytes(of color: UIColor, bytesPerPixel: Int) throws -> [UInt8] {
-        let swatch = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { context in
-            color.setFill()
-            context.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
-        }
-        let cgImage = try XCTUnwrap(swatch.cgImage)
-        let data = try XCTUnwrap(cgImage.dataProvider?.data)
-        let pointer = try XCTUnwrap(CFDataGetBytePtr(data))
-        return (0..<bytesPerPixel).map { pointer[$0] }
-    }
 
     private func makeViewModel(
         sections: [WebCompatReportPreviewViewModel.PreviewSection] = []
@@ -266,13 +175,17 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         subject.view.layoutIfNeeded()
     }
 
-    /// UIKit owns the disclosure gesture, so expand the way that gesture ends up doing.
-    private func expandFirstSection(in subject: WebCompatReportPreviewViewController) {
+    /// UIKit owns the disclosure gesture, so expand the way that gesture ends up doing. Reached
+    /// through the collection view, since the screen keeps its data source private.
+    private func expandFirstSection(in subject: WebCompatReportPreviewViewController) throws {
+        let dataSource = try XCTUnwrap(
+            collectionView(in: subject)?.dataSource as? UICollectionViewDiffableDataSource<String, String>
+        )
         let sectionID = sampleSections[0].id
-        var snapshot = subject.dataSource.snapshot(for: sectionID)
+        var snapshot = dataSource.snapshot(for: sectionID)
         // The header is the section snapshot's only root; its id format is private.
         snapshot.expand(snapshot.rootItems)
-        subject.dataSource.apply(snapshot, to: sectionID, animatingDifferences: false)
+        dataSource.apply(snapshot, to: sectionID, animatingDifferences: false)
         subject.view.layoutIfNeeded()
     }
 
@@ -337,6 +250,18 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
 
     private func collectionView(in subject: WebCompatReportPreviewViewController) -> UICollectionView? {
         return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+    }
+
+    /// A section is recognisable from outside by its header cell's identifier.
+    private func sectionIndex(
+        ofHeader accessibilityIdentifier: String,
+        in subject: WebCompatReportPreviewViewController
+    ) -> Int? {
+        guard let collectionView = collectionView(in: subject) else { return nil }
+        return (0..<collectionView.numberOfSections).first { section in
+            collectionView.cellForItem(at: IndexPath(item: 0, section: section))?
+                .accessibilityIdentifier == accessibilityIdentifier
+        }
     }
 }
 

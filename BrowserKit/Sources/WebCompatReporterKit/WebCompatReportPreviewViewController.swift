@@ -60,14 +60,13 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     private lazy var closeBarButtonItem = UIBarButtonItem(customView: closeButton)
 
-    private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var collectionView: UICollectionView = .build({ collectionView in
         collectionView.delegate = self
-        return collectionView
-    }()
+    }) {
+        UICollectionView(frame: .zero, collectionViewLayout: self.makeLayout())
+    }
 
-    private(set) lazy var dataSource = makeDataSource()
+    private lazy var dataSource = makeDataSource()
 
     public init(viewModel: WebCompatReportPreviewViewModel, theme: Theme) {
         self.viewModel = viewModel
@@ -114,18 +113,15 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     private func setupLayout() {
         view.addSubview(collectionView)
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        collectionView.pinToSuperview()
     }
 
-    private func makeLayout(backgroundColor: UIColor? = nil) -> UICollectionViewCompositionalLayout {
+    private func makeLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { _, environment in
             var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-            configuration.backgroundColor = backgroundColor
+            // Clear so the collection view's own themed background shows through. A theme change
+            // then repaints instead of having to rebuild the layout for its colour.
+            configuration.backgroundColor = .clear
             configuration.showsSeparators = false
             return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
         }
@@ -303,7 +299,6 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         collectionView.backgroundColor = theme.colors.layer1
-        collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         if hasAppliedThemeOnce { reconfigureAllItems() }
         hasAppliedThemeOnce = true
     }
