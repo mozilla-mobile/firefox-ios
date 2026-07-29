@@ -49,7 +49,7 @@ struct SmallQuickLinkView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .widgetBackground(
                 LinearGradient(
-                    gradient: Gradient(colors: entry.link.backgroundColors(for: theme)),
+                    gradient: entry.link.gradient(for: theme),
                     startPoint: .bottomLeading,
                     endPoint: .topTrailing
                 )

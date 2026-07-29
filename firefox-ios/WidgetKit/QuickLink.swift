@@ -66,26 +66,31 @@ enum QuickLink: Int {
     }
 
     /// The button's fill colors for the given theme.
-    public func backgroundColors(for theme: Theme) -> [Color] {
+    public func gradient(for theme: Theme) -> SwiftUI.Gradient {
         switch self {
         case .search:
-            return [Color(uiColor: theme.colors.gradientAIStrongStop1),
-                    Color(uiColor: theme.colors.gradientAIStrongStop2)]
+            return theme.colors.gradientAccentSubtle.swiftUI
         case .copiedLink:
-            return [Color(uiColor: theme.colors.layerSelectedText)]
+            return theme.colors.gradientWidgetSurfaceStandard.swiftUI
         case .privateSearch, .closePrivateTabs:
-            return [Color(uiColor: theme.colors.gradientOnboardingStop1),
-                    Color(uiColor: theme.colors.gradientOnboardingStop2)]
+            return theme.colors.gradientWidgetSurfacePrivate.swiftUI
         }
     }
 
     /// The fill used when the widget renders in accented (tinted) mode.
     public func tintedBackgroundColor(for theme: Theme) -> Color {
-        return Color(uiColor: theme.colors.layer1)
+        return Color(uiColor: theme.colors.layer1).opacity(0.4)
     }
 
     /// Foreground color for labels and logos drawn on top of the button fill.
     public func foregroundColor(for theme: Theme) -> Color {
-        return Color(uiColor: theme.colors.textOnDark)
+        switch self {
+        case .search:
+            return Color(uiColor: theme.colors.textPrimary)
+        case .copiedLink:
+            return Color(uiColor: theme.colors.textPrimary)
+        case .privateSearch, .closePrivateTabs:
+            return Color(uiColor: theme.colors.textOnDark)
+        }
     }
 }

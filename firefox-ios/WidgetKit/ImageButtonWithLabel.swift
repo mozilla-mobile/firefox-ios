@@ -92,7 +92,7 @@ struct ImageButtonWithLabel: View {
             ContainerRelativeShape()
                 .fill(
                     LinearGradient(
-                        gradient: Gradient(colors: link.backgroundColors(for: theme)),
+                        gradient: link.gradient(for: theme),
                         startPoint: .bottomLeading,
                         endPoint: .topTrailing
                     )
@@ -164,7 +164,7 @@ struct BackgroundContent: View {
             ContainerRelativeShape()
                 .fill(
                     LinearGradient(
-                        gradient: Gradient(colors: link.backgroundColors(for: theme)),
+                        gradient: link.gradient(for: theme),
                         startPoint: .bottomLeading,
                         endPoint: .topTrailing
                     )
