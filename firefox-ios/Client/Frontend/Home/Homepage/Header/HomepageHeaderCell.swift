@@ -126,7 +126,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.showiPadSetup = showiPadSetup
         self.logoTextColor = logoTextColor
 
-        // Nova private homepage shows the private mode logo without the wordmark.
         let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
         let logoAsset = switch (isNovaPrivate, headerState.isWorldCupSectionEnabled) {
         case (true, _): ImageIdentifiers.homeHeaderLogoPrivate
