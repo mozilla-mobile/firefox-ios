@@ -29,7 +29,7 @@ struct PasswordGeneratorState: ScreenState {
             passwordHidden: passwordGeneratorState.passwordHidden
         )
     }
-    
+
     init(
         windowUUID: WindowUUID,
         password: String = "",
