@@ -6,34 +6,21 @@ import Common
 import ComponentLibrary
 import UIKit
 
-/// Mirrors the iOS "Full Page" screenshot preview: the capture scrolls in the middle,
-/// a thumbnail of the whole page sits in the right margin with a highlight that follows
-/// the scroll.
+/// Mirrors the iOS "Full Page" screenshot preview: the capture scrolls in the middle, and a rail in
+/// the right margin maps the whole page with a spotlight that follows the scroll.
 final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollViewDelegate {
     private enum UX {
         static let topInset: CGFloat = 72
         static let bottomInset: CGFloat = 24
-        static let railGap: CGFloat = 12
         static let captureCornerRadius: CGFloat = 12
-        static let thumbnailCornerRadius: CGFloat = 10
-        static let thumbnailBorderWidth: CGFloat = 2
-        static let thumbnailWidth: CGFloat = 44
-        /// The base thumbnail is dimmed to this; a bright copy clipped over it marks the viewport.
-        static let thumbnailDimOpacity: CGFloat = 0.4
-        static let highlightCornerRadius: CGFloat = 8
-        static let highlightBorderWidth: CGFloat = 3
-        static let highlightShadowOpacity: Float = 0.5
-        static let highlightShadowRadius: CGFloat = 3
-        static let minimumHighlightHeight: CGFloat = 24
-        /// Comfortably above `minimumHighlightHeight`, otherwise a wide page gives the
-        /// highlight no room to travel and it sits frozen and overhanging.
-        static let minimumRailHeight: CGFloat = 64
         static let closeButtonTopInset: CGFloat = 24
+        /// Keeps the capture clear of the close button once Dynamic Type has grown it.
+        static let captureCloseButtonGap: CGFloat = 18
         /// Below this we're still mid-presentation and the proportions are meaningless.
         static let minimumUsableSide: CGFloat = 80
         /// Equal on both sides so the capture stays centered, with the rail in the right one.
         static let captureSideMargin: CGFloat = WebCompatReporterUX.Spacing.screenHorizontal
-            + thumbnailWidth + railGap
+            + WebCompatScreenshotRailView.UX.width + WebCompatScreenshotRailView.UX.gap
     }
 
     var onClose: (() -> Void)?
@@ -42,27 +29,19 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     private let viewModel: WebCompatFullPageScreenshotViewModel
     private let imageHeightToWidthRatio: CGFloat
 
-    /// The page as the capture renders it, which is what the highlight measures itself against.
+    /// The page as the capture renders it, which is what the rail measures itself against.
     private var pageHeight: CGFloat {
         return scrollView.bounds.width * imageHeightToWidthRatio
     }
 
     private var scrollFraction: CGFloat {
         let maximumOffset = max(1, pageHeight - scrollView.bounds.height)
-        let fraction = scrollView.contentOffset.y / maximumOffset
-        return min(max(fraction.isFinite ? fraction : 0, 0), 1)
+        return min(max(scrollView.contentOffset.y / maximumOffset, 0), 1)
     }
 
-    private var highlightHeightConstraint: NSLayoutConstraint?
-
-    /// Set by the rail's height against how much of the page the capture shows, so it holds still
-    /// while scrolling and only changes when the geometry does.
-    private var highlightHeight: CGFloat {
-        let railHeight = thumbnailContainer.bounds.height
-        guard railHeight > 0, pageHeight > 0 else { return UX.minimumHighlightHeight }
-
-        let visibleFraction = min(1, scrollView.bounds.height / pageHeight)
-        return max(UX.minimumHighlightHeight, railHeight * visibleFraction)
+    private var visibleFraction: CGFloat {
+        guard pageHeight > 0 else { return 1 }
+        return min(1, scrollView.bounds.height / pageHeight)
     }
 
     // `private(set)` so the module's layout tests can read these frames and accessibility wiring
@@ -84,41 +63,16 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         imageView.accessibilityTraits = .image
         imageView.accessibilityLabel = self.viewModel.captureAccessibilityLabel
         imageView.accessibilityIdentifier = self.viewModel.captureAccessibilityIdentifier
+        // Its size comes from the constraints below, so it must not push back with the intrinsic
+        // size of the whole page.
+        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
-    private(set) lazy var thumbnailContainer: UIView = .build { view in
-        // Rounds the dimmed page inside it.
-        view.clipsToBounds = true
-        view.layer.cornerRadius = UX.thumbnailCornerRadius
-        view.layer.borderWidth = UX.thumbnailBorderWidth
-    }
-
-    /// The dimmed whole page behind the highlight.
-    private lazy var thumbnailImageView: UIImageView = .build { imageView in
-        imageView.image = self.image
-        imageView.contentMode = .scaleToFill
-        imageView.alpha = UX.thumbnailDimOpacity
-    }
-
-    /// A bright copy clipped to the viewport, which gives the spotlight effect.
-    private(set) lazy var brightWindowContainer: UIView = .build { view in
-        // The clip *is* the spotlight: it crops the bright page down to the viewport window.
-        view.clipsToBounds = true
-        view.layer.cornerRadius = UX.highlightCornerRadius
-    }
-
-    private(set) lazy var brightWindowImageView: UIImageView = .build { imageView in
-        imageView.image = self.image
-        imageView.contentMode = .scaleToFill
-    }
-
-    private(set) lazy var highlightView: UIView = .build { view in
-        view.layer.cornerRadius = UX.highlightCornerRadius
-        view.layer.borderWidth = UX.highlightBorderWidth
-        view.layer.shadowOpacity = UX.highlightShadowOpacity
-        view.layer.shadowRadius = UX.highlightShadowRadius
-        view.layer.shadowOffset = .zero
-    }
+    private(set) lazy var railView = WebCompatScreenshotRailView(
+        image: image,
+        pageHeightToWidthRatio: imageHeightToWidthRatio
+    )
 
     private(set) lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
@@ -155,32 +109,13 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     // MARK: - Setup
 
     private func setupSubviews() {
-        // Every copy of the page is sized by the constraints below, so none of them may push
-        // back with its intrinsic size. A long page otherwise drags the rail down the screen:
-        // the bright copy is required-equal to the rail's height, and at the default priority
-        // its intrinsic height beats the rail's own height constraint.
-        for imageView in [pageImageView, thumbnailImageView, brightWindowImageView] {
-            imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-            imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        }
-        // The rail is a map of the capture, not content of its own, so VoiceOver reads the capture
-        // once rather than three times over.
-        for view in [thumbnailContainer, thumbnailImageView, brightWindowContainer,
-                     brightWindowImageView, highlightView] {
-            view.isAccessibilityElement = false
-        }
-
         scrollView.addSubview(pageImageView)
-        thumbnailContainer.addSubview(thumbnailImageView)
-        brightWindowContainer.addSubview(brightWindowImageView)
-        // The bright window and the highlight are siblings of the thumbnail, not children:
-        // it clips, which would eat the highlight's border and shadow.
-        addSubviews(scrollView, thumbnailContainer, brightWindowContainer, highlightView, closeButton)
+        addSubviews(scrollView, railView, closeButton)
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate(
-            closeButtonConstraints() + captureConstraints() + railConstraints() + highlightConstraints()
+            closeButtonConstraints() + captureConstraints() + railConstraints()
         )
     }
 
@@ -219,6 +154,12 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         return [
             scrollView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
             scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: UX.topInset),
+            // A floor rather than the whole story: at accessibility text sizes the close button
+            // grows past the nominal inset above.
+            scrollView.topAnchor.constraint(
+                greaterThanOrEqualTo: closeButton.bottomAnchor,
+                constant: UX.captureCloseButtonGap
+            ),
             scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 0),
             width,
             bottom,
@@ -229,61 +170,28 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             pageImageView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             pageImageView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             pageImageView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-            pageImageView.heightAnchor.constraint(equalTo: pageImageView.widthAnchor, multiplier: imageHeightToWidthRatio)
+            pageImageView.heightAnchor.constraint(
+                equalTo: pageImageView.widthAnchor,
+                multiplier: imageHeightToWidthRatio
+            )
         ]
     }
 
+    /// The rail sizes itself; this only places it and says how far it may grow.
     private func railConstraints() -> [NSLayoutConstraint] {
-        // The rail keeps a fixed width and squashes a tall page rather than narrowing, which
-        // would otherwise feed back into the margins and reflow the capture.
-        let height = thumbnailContainer.heightAnchor.constraint(
-            equalToConstant: max(UX.minimumRailHeight, UX.thumbnailWidth * imageHeightToWidthRatio)
-        )
-        height.priority = .defaultHigh
-        let bottom = thumbnailContainer.bottomAnchor.constraint(
+        let bottom = railView.bottomAnchor.constraint(
             lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
             constant: -UX.bottomInset
         )
         breakBeforeRequiredConstraints(bottom)
 
         return [
-            thumbnailContainer.trailingAnchor.constraint(
+            railView.trailingAnchor.constraint(
                 equalTo: safeAreaLayoutGuide.trailingAnchor,
                 constant: -WebCompatReporterUX.Spacing.screenHorizontal
             ),
-            thumbnailContainer.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: UX.topInset),
-            thumbnailContainer.widthAnchor.constraint(equalToConstant: UX.thumbnailWidth),
-            bottom,
-            height,
-
-            thumbnailImageView.topAnchor.constraint(equalTo: thumbnailContainer.topAnchor),
-            thumbnailImageView.leadingAnchor.constraint(equalTo: thumbnailContainer.leadingAnchor),
-            thumbnailImageView.trailingAnchor.constraint(equalTo: thumbnailContainer.trailingAnchor),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: thumbnailContainer.bottomAnchor)
-        ]
-    }
-
-    /// The highlight sits at the top of the rail and `updateHighlightOffset()` translates it down
-    /// from there, so its height is the only constant the layout owns.
-    private func highlightConstraints() -> [NSLayoutConstraint] {
-        let height = highlightView.heightAnchor.constraint(equalToConstant: UX.minimumHighlightHeight)
-        highlightHeightConstraint = height
-
-        return [
-            highlightView.leadingAnchor.constraint(equalTo: thumbnailContainer.leadingAnchor),
-            highlightView.trailingAnchor.constraint(equalTo: thumbnailContainer.trailingAnchor),
-            highlightView.topAnchor.constraint(equalTo: thumbnailContainer.topAnchor),
-            height,
-
-            brightWindowContainer.topAnchor.constraint(equalTo: highlightView.topAnchor),
-            brightWindowContainer.leadingAnchor.constraint(equalTo: highlightView.leadingAnchor),
-            brightWindowContainer.trailingAnchor.constraint(equalTo: highlightView.trailingAnchor),
-            brightWindowContainer.bottomAnchor.constraint(equalTo: highlightView.bottomAnchor),
-
-            brightWindowImageView.leadingAnchor.constraint(equalTo: brightWindowContainer.leadingAnchor),
-            brightWindowImageView.trailingAnchor.constraint(equalTo: brightWindowContainer.trailingAnchor),
-            brightWindowImageView.topAnchor.constraint(equalTo: brightWindowContainer.topAnchor),
-            brightWindowImageView.heightAnchor.constraint(equalTo: thumbnailContainer.heightAnchor)
+            railView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            bottom
         ]
     }
 
@@ -301,11 +209,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         super.layoutSubviews()
 
         updateContentVisibility()
-        // Guarded, or assigning it every pass would invalidate the layout it was just given.
-        if highlightHeightConstraint?.constant != highlightHeight {
-            highlightHeightConstraint?.constant = highlightHeight
-        }
-        updateHighlightOffset()
+        railView.update(scrollFraction: scrollFraction, visibleFraction: visibleFraction)
     }
 
     /// Bad geometry produces inf/NaN and kills rendering, so the derived views stay hidden
@@ -319,24 +223,9 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             && availableHeight > UX.minimumUsableSide
 
         let isHidden = !isRenderable
-        for view in [scrollView, thumbnailContainer, brightWindowContainer, highlightView]
-        where view.isHidden != isHidden {
+        for view in [scrollView, railView] where view.isHidden != isHidden {
             view.isHidden = isHidden
         }
-    }
-
-    /// Slides the window down the rail. A translation rather than a constraint constant because
-    /// `scrollViewDidScroll` lands mid-layout, where a constant only takes effect on the next
-    /// pass and the highlight visibly trails the capture.
-    private func updateHighlightOffset() {
-        let travel = max(0, thumbnailContainer.bounds.height - highlightHeight)
-        let offset = CGAffineTransform(translationX: 0, y: scrollFraction * travel)
-
-        highlightView.transform = offset
-        brightWindowContainer.transform = offset
-        // The inverse keeps the bright copy registered with the dimmed page underneath, so the
-        // window moves while the slice it exposes stays put.
-        brightWindowImageView.transform = offset.inverted()
     }
 
     // MARK: - Accessibility
@@ -349,7 +238,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     // MARK: - Scroll sync
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateHighlightOffset()
+        railView.update(scrollFraction: scrollFraction, visibleFraction: visibleFraction)
     }
 
     // MARK: - Actions
@@ -363,11 +252,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layerScrim
-        // Both strokes sit over the scrim and the page capture, neither of which follows the theme,
-        // so they need a token that stays light in every palette. `borderInverted` and
-        // `iconSecondary` flip, which put a white ring on a white page in the light themes.
-        thumbnailContainer.layer.borderColor = theme.colors.iconOnColor.cgColor
-        highlightView.layer.borderColor = theme.colors.iconOnColor.cgColor
-        highlightView.layer.shadowColor = theme.colors.shadowStrong.cgColor
+        railView.applyTheme(theme: theme)
     }
 }
