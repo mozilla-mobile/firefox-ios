@@ -5,16 +5,18 @@
 import Foundation
 import Redux
 import Common
+import ModifiedCopy
 
+@Copyable
 struct TabsPanelState: ScreenState, Equatable {
     struct ScrollState: Equatable {
         let toIndex: Int
         let withAnimation: Bool
     }
 
+    var windowUUID: WindowUUID
     var isPrivateMode: Bool
     var tabs: [TabModel]
-    var windowUUID: WindowUUID
     var scrollState: ScrollState?
     var didTapAddTab: Bool
     var urlRequest: URLRequest?
@@ -94,34 +96,32 @@ struct TabsPanelState: ScreenState, Equatable {
         case TabPanelMiddlewareActionType.didLoadTabPanel,
             TabPanelMiddlewareActionType.didChangeTabPanel:
             guard let tabsModel = action.tabDisplayModel else { return defaultState(from: state) }
-
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: tabsModel.isPrivateMode,
-                                  tabs: tabsModel.tabs)
+            return state
+                .resetTransientState()
+                .copy(isPrivateMode: tabsModel.isPrivateMode)
+                .copy(tabs: tabsModel.tabs)
 
         case TabPanelMiddlewareActionType.willAppearTabPanel:
             let scrollModel = createTabScrollBehavior(
                 forState: state,
                 withScrollBehavior: .scrollToSelectedTab(shouldAnimate: false)
             )
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  scrollState: scrollModel)
+            return state
+                .resetTransientState()
+                .copy(scrollState: scrollModel)
 
         case TabPanelMiddlewareActionType.refreshTabs:
             guard let tabModel = action.tabDisplayModel else { return defaultState(from: state) }
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: tabModel.tabs)
+            return state
+                .resetTransientState()
+                .copy(tabs: tabModel.tabs)
 
         case TabPanelMiddlewareActionType.scrollToTab:
             guard let scrollBehavior = action.scrollBehavior else { return defaultState(from: state) }
             let scrollModel = createTabScrollBehavior(forState: state, withScrollBehavior: scrollBehavior)
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  scrollState: scrollModel)
+            return state
+                .resetTransientState()
+                .copy(scrollState: scrollModel)
 
         default:
             return defaultState(from: state)
@@ -160,5 +160,13 @@ struct TabsPanelState: ScreenState, Equatable {
 
         // This can happen if the user changes tab panels and one of the panels is empty (nothing to scroll to)
         return nil
+    }
+
+    // MARK: - Helper function to reset transient state
+    private func resetTransientState() -> TabsPanelState {
+        return self
+            .copy(scrollState: nil)
+            .copy(didTapAddTab: false)
+            .copy(urlRequest: nil)
     }
 }
