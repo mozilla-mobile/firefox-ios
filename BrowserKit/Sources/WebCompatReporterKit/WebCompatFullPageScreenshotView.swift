@@ -44,9 +44,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         return min(1, scrollView.bounds.height / pageHeight)
     }
 
-    // `private(set)` so the module's layout tests can read these frames and accessibility wiring
-    // without walking the hierarchy. Nothing outside the view can reassign them.
-    private(set) lazy var scrollView: UIScrollView = .build { scrollView in
+    private lazy var scrollView: UIScrollView = .build { scrollView in
         scrollView.showsVerticalScrollIndicator = false
         // Rounds the capture's corners.
         scrollView.clipsToBounds = true
@@ -54,32 +52,30 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         scrollView.delegate = self
     }
 
-    /// The capture itself, and the one element VoiceOver reads on this screen. It sits inside the
-    /// scroll view so focusing it also lets the three-finger scroll move the page.
-    private(set) lazy var pageImageView: UIImageView = .build { imageView in
+    /// The one element VoiceOver reads here. It sits inside the scroll view, so focusing it also
+    /// lets the three-finger scroll move the page.
+    private lazy var pageImageView: UIImageView = .build { imageView in
         imageView.image = self.image
         imageView.contentMode = .scaleToFill
         imageView.isAccessibilityElement = true
         imageView.accessibilityTraits = .image
         imageView.accessibilityLabel = self.viewModel.captureAccessibilityLabel
         imageView.accessibilityIdentifier = self.viewModel.captureAccessibilityIdentifier
-        // Its size comes from the constraints below, so it must not push back with the intrinsic
-        // size of the whole page.
+        // Its size comes from the constraints below, so it must not push back with the whole
+        // page's intrinsic size.
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
-    private(set) lazy var railView = WebCompatScreenshotRailView(
+    private lazy var railView = WebCompatScreenshotRailView(
         image: image,
         pageHeightToWidthRatio: imageHeightToWidthRatio
     )
 
-    private(set) lazy var closeButton: CloseButton = .build { button in
+    private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
-        // Its icon is an appearance-adaptive asset rather than a template, so no tint reaches it.
-        // The dark variant fills the circle with #312F33, which all but disappears against the
-        // scrim; pinning the appearance keeps the white-filled variant over a surface that is
-        // dark in every palette.
+        // Its icon is an appearance-adaptive asset, not a template, so no tint reaches it. The dark
+        // variant's circle all but disappears against the scrim, which is dark in every palette.
         button.overrideUserInterfaceStyle = .light
     }
 
@@ -212,8 +208,8 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         railView.update(scrollFraction: scrollFraction, visibleFraction: visibleFraction)
     }
 
-    /// Bad geometry produces inf/NaN and kills rendering, so the derived views stay hidden
-    /// until the bounds and the image can actually describe a page.
+    /// Bad geometry produces inf/NaN and kills rendering, so these stay hidden until the bounds and
+    /// the image can describe a page.
     private func updateContentVisibility() {
         let availableWidth = bounds.width - safeAreaInsets.left - safeAreaInsets.right
         let availableHeight = bounds.height - safeAreaInsets.top - safeAreaInsets.bottom

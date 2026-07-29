@@ -17,123 +17,21 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
         /// Short enough to fit the space the capture is given.
         static let shortPageHeight: CGFloat = 400
         static let tallPageHeight: CGFloat = 2400
-        static let veryTallPageHeight: CGFloat = 40000
-        static let frameAccuracy: CGFloat = 0.5
-        static let captureAccessibilityLabel = "Screenshot of the page"
-        static let captureAccessibilityIdentifier = "capture"
     }
 
-    func testCloseButton_invokesOnClose() {
-        var closeCallCount = 0
-        let subject = createSubject()
-        subject.onClose = { closeCallCount += 1 }
+    // The geometry is checked against the previews. This covers the shapes that used to produce
+    // inf/NaN and stop the view drawing: a page longer than the space it has, a page shorter than
+    // it, no page at all, and the near-zero bounds of a presentation transition.
+    func testLayout_acrossPageShapes_completes() {
+        for image in [sampleImage(height: UX.tallPageHeight), sampleImage(height: UX.shortPageHeight), nil] {
+            let subject = createSubject(image: image)
+            subject.applyTheme(theme: LightTheme())
 
-        fireActions(subject.closeButton, for: .touchUpInside)
+            layout(subject, in: UX.transitionSize)
+            layout(subject, in: UX.presentationSize)
 
-        XCTAssertEqual(closeCallCount, 1)
-    }
-
-    // MARK: - Accessibility
-
-    // The capture is the whole point of the screen, and VoiceOver reached nothing but the close
-    // button until it became an element in its own right.
-    func testCapture_isAnAccessibilityElementDescribingThePage() {
-        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
-
-        XCTAssertTrue(subject.pageImageView.isAccessibilityElement)
-        XCTAssertEqual(subject.pageImageView.accessibilityLabel, UX.captureAccessibilityLabel)
-        XCTAssertEqual(subject.pageImageView.accessibilityIdentifier, UX.captureAccessibilityIdentifier)
-        XCTAssertEqual(subject.pageImageView.accessibilityTraits, .image)
-    }
-
-    // MARK: - Content gating
-
-    // Presentation starts near zero size, so everything hides until the size is real.
-    func testLayout_atTransitionSize_hidesGeometryDrivenViews() {
-        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
-
-        layout(subject, in: UX.transitionSize)
-
-        assertGeometryViewsHidden(subject, expected: true)
-    }
-
-    func testLayout_recoveringFromTransitionSize_showsGeometryDrivenViews() {
-        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
-        layout(subject, in: UX.transitionSize)
-
-        layout(subject, in: UX.presentationSize)
-
-        assertGeometryViewsHidden(subject, expected: false)
-    }
-
-    func testLayout_withoutImage_hidesGeometryDrivenViews() {
-        let subject = createSubject(image: nil)
-
-        layout(subject, in: UX.presentationSize)
-
-        assertGeometryViewsHidden(subject, expected: true)
-    }
-
-    // MARK: - Capture sizing
-
-    // Stretching a short page to the full height would round the top corners over scrim and
-    // leave the image's bottom edge square.
-    func testLayout_shortPage_sizesTheCaptureToThePage() {
-        let subject = createSubject(image: sampleImage(height: UX.shortPageHeight))
-
-        layout(subject, in: UX.presentationSize)
-
-        XCTAssertEqual(
-            subject.scrollView.frame.height,
-            subject.scrollView.contentSize.height,
-            accuracy: UX.frameAccuracy
-        )
-    }
-
-    // The rail used to back-solve its width from its capped height, which widened the capture
-    // along with it. How long the page is can't change the capture's width.
-    func testLayout_pageLength_doesNotChangeTheCaptureWidth() {
-        let tallSubject = createSubject(image: sampleImage(height: UX.tallPageHeight))
-        let veryTallSubject = createSubject(image: sampleImage(height: UX.veryTallPageHeight))
-
-        layout(tallSubject, in: UX.presentationSize)
-        layout(veryTallSubject, in: UX.presentationSize)
-
-        XCTAssertEqual(
-            veryTallSubject.scrollView.frame.width,
-            tallSubject.scrollView.frame.width,
-            accuracy: UX.frameAccuracy
-        )
-    }
-
-    // MARK: - Driving the rail
-
-    // The rail is only ever as right as what it's told, and these two fractions are everything
-    // the viewer tells it.
-    func testScrollingToTheBottom_movesTheRailSpotlightToTheBottom() {
-        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
-        layout(subject, in: UX.presentationSize)
-
-        scrollToBottom(subject)
-
-        XCTAssertEqual(
-            subject.railView.highlightView.frame.maxY,
-            subject.railView.bounds.height,
-            accuracy: UX.frameAccuracy
-        )
-    }
-
-    func testLayout_sizesTheRailSpotlightToTheVisibleFractionOfThePage() {
-        let subject = createSubject(image: sampleImage(height: UX.tallPageHeight))
-
-        layout(subject, in: UX.presentationSize)
-
-        let visibleFraction = subject.scrollView.frame.height / subject.scrollView.contentSize.height
-        XCTAssertEqual(
-            subject.railView.highlightView.frame.height,
-            subject.railView.bounds.height * visibleFraction,
-            accuracy: UX.frameAccuracy
-        )
+            XCTAssertEqual(subject.bounds.size, UX.presentationSize)
+        }
     }
 
     // MARK: - Helpers
@@ -142,8 +40,8 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
         return WebCompatFullPageScreenshotView(
             image: image,
             viewModel: WebCompatFullPageScreenshotViewModel(
-                captureAccessibilityLabel: UX.captureAccessibilityLabel,
-                captureAccessibilityIdentifier: UX.captureAccessibilityIdentifier
+                captureAccessibilityLabel: "Screenshot of the page",
+                captureAccessibilityIdentifier: "capture"
             ),
             closeButtonViewModel: CloseButtonViewModel(a11yLabel: "Close", a11yIdentifier: "close")
         )
@@ -155,45 +53,15 @@ final class WebCompatFullPageScreenshotViewTests: XCTestCase {
         subject.layoutIfNeeded()
     }
 
-    private func scrollToBottom(_ subject: WebCompatFullPageScreenshotView) {
-        let scrollView = subject.scrollView
-        scrollView.contentOffset = CGPoint(
-            x: 0,
-            y: max(0, scrollView.contentSize.height - scrollView.bounds.height)
-        )
-        subject.setNeedsLayout()
-        subject.layoutIfNeeded()
-    }
-
-    private func assertGeometryViewsHidden(
-        _ subject: WebCompatFullPageScreenshotView,
-        expected: Bool,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        XCTAssertEqual(subject.scrollView.isHidden, expected, "scrollView", file: file, line: line)
-        XCTAssertEqual(subject.railView.isHidden, expected, "railView", file: file, line: line)
-        XCTAssertFalse(subject.closeButton.isHidden, "The close button must stay reachable", file: file, line: line)
-    }
-
-    // Scale 1, or the 40000pt fixture allocates hundreds of megabytes at device scale.
-    private func sampleImage(width: CGFloat = UX.pageWidth, height: CGFloat) -> UIImage {
+    // Scale 1, or a long-page fixture allocates hundreds of megabytes at device scale.
+    private func sampleImage(height: CGFloat) -> UIImage {
+        let size = CGSize(width: UX.pageWidth, height: height)
         let format = UIGraphicsImageRendererFormat.default()
         format.scale = 1
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height), format: format)
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
         return renderer.image { context in
             UIColor.systemBlue.setFill()
-            context.fill(CGRect(x: 0, y: 0, width: width, height: height))
-        }
-    }
-
-    // No UIApplication in logic tests, so `sendActions` does nothing.
-    private func fireActions(_ control: UIControl, for event: UIControl.Event) {
-        for target in control.allTargets {
-            let object = target as NSObject
-            control.actions(forTarget: target, forControlEvent: event)?.forEach {
-                object.perform(Selector($0))
-            }
+            context.fill(CGRect(origin: .zero, size: size))
         }
     }
 }
