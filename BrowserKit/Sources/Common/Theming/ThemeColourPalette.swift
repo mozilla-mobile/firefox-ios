@@ -124,4 +124,7 @@ public protocol ThemeColourPalette {
     var gradientBorder: Gradient { get }
     var gradientPrivacy: Gradient { get }
     var gradientPrivacyMask: Gradient { get }
+    var gradientWidgetSurface: Gradient { get }
+    var gradientWidgetSurfaceStandard: Gradient { get }
+    var gradientWidgetSurfacePrivate: Gradient { get }
 }
