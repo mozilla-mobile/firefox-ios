@@ -14,18 +14,15 @@ struct SummarizerModelConfig: Codable {
   let config: String?
 }
 
-final class ASSummarizerRemoteConfig: Sendable {
-    private let service: RemoteSettingsService
-    private let rsClient: RemoteSettingsClient?
-    private let profile: Profile
+/// Reads the AI prompts and configurations stored in the `summarizer-models-config` collection.
+final class ASAIRemoteConfig: Sendable {
+    private let rsClient: RemoteSettingsClientProtocol?
     private static let localizedTag = "localized"
 
-    init?(
-        profile: Profile = AppContainer.shared.resolve()
+    init(
+        rsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.summarizerModelsConfig.makeClient()
     ) {
-        self.profile = profile
-        self.service = profile.remoteSettingsService
-        self.rsClient = ASRemoteSettingsCollection.summarizerModelsConfig.makeClient()
+        self.rsClient = rsClient
     }
 
     /// Fetches the summarizer configuration from Remote Settings for the given `model` and `contentType`.
@@ -46,6 +43,11 @@ final class ASSummarizerRemoteConfig: Sendable {
             instructions: record.instructions,
             options: decodeConfig(from: record.config)
         )
+    }
+
+    /// Fetches only the instructions (the prompt) of the record named `name`.
+    func fetchPrompt(named name: String) -> String? {
+        return getRecords().first { $0.name == name }?.instructions
     }
 
     private func decodeConfig(from configString: String?) -> [String: AnyHashable] {
