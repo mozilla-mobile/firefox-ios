@@ -126,20 +126,18 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.showiPadSetup = showiPadSetup
         self.logoTextColor = logoTextColor
 
+        // Nova private homepage shows the private mode logo without the wordmark.
         let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
-        if isNovaPrivate {
-            // Nova private homepage shows the private mode logo (mask + ball) without the wordmark.
-            logoImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoPrivate)
-            logoImageWidthConstraint.constant = UX.privateLogoImageSize.width
-            logoImageHeightConstraint.constant = UX.privateLogoImageSize.height
-        } else {
-            let logoAsset = headerState.isWorldCupSectionEnabled
-                ? ImageIdentifiers.firefoxLogoSoccer
-                : ImageIdentifiers.homeHeaderLogoBall
-            logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
-            logoImageWidthConstraint.constant = UX.firefoxLogoImageSize.width
-            logoImageHeightConstraint.constant = UX.firefoxLogoImageSize.height
+        let logoAsset = switch (isNovaPrivate, headerState.isWorldCupSectionEnabled) {
+        case (true, _): ImageIdentifiers.homeHeaderLogoPrivate
+        case (false, true): ImageIdentifiers.firefoxLogoSoccer
+        case (false, false): ImageIdentifiers.homeHeaderLogoBall
         }
+        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
+
+        let logoSize = isNovaPrivate ? UX.privateLogoImageSize : UX.firefoxLogoImageSize
+        logoImageWidthConstraint.constant = logoSize.width
+        logoImageHeightConstraint.constant = logoSize.height
         logoTextImage.isHidden = isNovaPrivate
 
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
