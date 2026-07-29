@@ -10,10 +10,6 @@ import Shared
 import struct MozillaAppServices.Login
 import struct MozillaAppServices.LoginEntry
 
-struct NewSearchInProgressError: MaybeErrorType {
-    public let description: String
-}
-
 // Login List View Model
 @MainActor
 final class PasswordManagerViewModel {
@@ -173,18 +169,8 @@ final class PasswordManagerViewModel {
         })
     }
 
-    func setBreachIndexPath(indexPath: IndexPath) {
-        self.breachIndexPath = [indexPath]
-    }
-
-    func setBreachAlertsManager(_ client: BreachAlertsClientProtocol) {
-        self.breachAlertsManager = BreachAlertsManager(client, profile: profile)
-    }
-
     // MARK: - UX Constants
     struct UX {
-        static let rowHeight: CGFloat = 58
-        static let searchHeight: CGFloat = 58
         static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
         static let noResultsFont = UIFont.systemFont(ofSize: 16)
     }
