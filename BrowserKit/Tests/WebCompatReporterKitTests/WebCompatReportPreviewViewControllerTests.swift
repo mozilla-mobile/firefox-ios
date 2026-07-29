@@ -144,10 +144,10 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
 
     // A late screenshot inserts a section ahead of the rest, which is where losing the user's
     // place is most likely.
-    func testConfigure_screenshotArrivingLate_keepsExpandedSectionsExpanded() {
+    func testConfigure_screenshotArrivingLate_keepsExpandedSectionsExpanded() throws {
         let subject = createSubject(screenshot: nil, sections: sampleSections)
         layout(subject)
-        expandFirstSection(in: subject)
+        try expandFirstSection(in: subject)
 
         subject.configure(with: makeViewModel(screenshot: sampleImage(), sections: sampleSections))
         subject.view.layoutIfNeeded()
@@ -169,10 +169,10 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertFalse(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
     }
 
-    func testConfigure_screenshotRemoved_keepsExpandedSectionsExpanded() {
+    func testConfigure_screenshotRemoved_keepsExpandedSectionsExpanded() throws {
         let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
         layout(subject)
-        expandFirstSection(in: subject)
+        try expandFirstSection(in: subject)
 
         subject.configure(with: makeViewModel(screenshot: nil, sections: sampleSections))
         subject.view.layoutIfNeeded()
@@ -329,17 +329,10 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         )
     }
 
-    private func sampleImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 40, height: 60))
-        return renderer.image { context in
-            UIColor.systemBlue.setFill()
-            context.fill(CGRect(x: 0, y: 0, width: 40, height: 60))
-        }
-    }
-
     private func collectionView(in subject: WebCompatReportPreviewViewController) -> UICollectionView? {
         return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
     }
+
     /// A section is recognisable from outside by its header cell's identifier.
     private func sectionIndex(
         ofHeader accessibilityIdentifier: String,

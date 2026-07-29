@@ -58,12 +58,4 @@ final class WebCompatReportPreviewViewModelTests: XCTestCase {
             sections: sections
         )
     }
-
-    private func sampleImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 10, height: 10))
-        return renderer.image { context in
-            UIColor.systemBlue.setFill()
-            context.fill(CGRect(x: 0, y: 0, width: 10, height: 10))
-        }
-    }
 }

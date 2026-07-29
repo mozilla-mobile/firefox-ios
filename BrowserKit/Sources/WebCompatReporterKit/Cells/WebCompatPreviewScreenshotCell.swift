@@ -32,18 +32,21 @@ final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeAppli
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupLayout()
+        setupSubviews()
+        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupLayout() {
+    private func setupSubviews() {
         backgroundConfiguration = UIBackgroundConfiguration.clear()
         cardContainer.addSubview(imageView)
-        contentView.addSubview(cardContainer)
-        contentView.addSubview(tapButton)
+        contentView.addSubviews(cardContainer, tapButton)
+    }
+
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: cardContainer.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: cardContainer.trailingAnchor),
