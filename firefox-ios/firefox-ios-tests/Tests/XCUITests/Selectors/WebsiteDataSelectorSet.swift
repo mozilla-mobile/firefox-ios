@@ -23,6 +23,8 @@ protocol WebsiteDataSelectorsSet {
     func circleImageInsideCells(_ app: XCUIApplication) -> XCUIElement
     @MainActor
     func anyTableButton(_ app: XCUIApplication) -> XCUIElement
+    @MainActor
+    func websiteDataRowImages(_ app: XCUIApplication) -> XCUIElementQuery
 
     var all: [Selector] { get }
 }
@@ -120,6 +122,13 @@ struct WebsiteDataSelectors: WebsiteDataSelectorsSet {
     @MainActor
     func anyTableButton(_ app: XCUIApplication) -> XCUIElement {
         return app.tables.buttons.firstMatch
+    }
+
+    /// Scoped to `tables` on purpose: Settings is presented as a form sheet, so an unscoped `app.cells`
+    /// query also matches homepage collection view cells sitting behind the modal.
+    @MainActor
+    func websiteDataRowImages(_ app: XCUIApplication) -> XCUIElementQuery {
+        return app.tables.cells.buttons.images
     }
 
     var all: [Selector] {

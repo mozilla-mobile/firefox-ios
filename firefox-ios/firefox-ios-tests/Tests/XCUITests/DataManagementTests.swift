@@ -17,7 +17,7 @@ class DataManagementTests: BaseTestCase {
         app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].waitAndTap(timeout: TIMEOUT)
         app.alerts.buttons["OK"].waitAndTap(timeout: TIMEOUT)
         mozWaitForElementToNotExist(app.alerts.buttons["OK"])
-        XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
+        XCTAssertEqual(app.tables.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
         // Navigate back to the browser
         mozWaitElementEnabled(element: app.buttons["Data Management"], timeout: TIMEOUT)
         app.buttons["Data Management"].waitAndTap()
@@ -62,7 +62,7 @@ class DataManagementTests: BaseTestCase {
         }
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         mozWaitForElementToExist(app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"])
-        XCTAssertEqual(0, app.cells.buttons.images.count)
+        XCTAssertEqual(0, app.tables.cells.buttons.images.count)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307017

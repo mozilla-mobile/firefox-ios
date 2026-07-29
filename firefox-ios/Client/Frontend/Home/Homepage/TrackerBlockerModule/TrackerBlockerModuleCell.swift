@@ -18,6 +18,8 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     private lazy var containerPillView: UIView = .build { view in
         view.clipsToBounds = true
+        view.isAccessibilityElement = true
+        view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.containerPill
     }
 
     private var onTap: (() -> Void)?
@@ -90,6 +92,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     func configure(count: Int, theme: Theme, onTap: (() -> Void)?) {
         self.onTap = onTap
+        containerPillView.accessibilityTraits = onTap != nil ? .button : .staticText
         updateTrackerNumber(to: count)
         applyTheme(theme: theme)
     }
@@ -113,6 +116,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         guard count > 0 else {
             titleLabel.attributedText = nil
             titleLabel.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
+            containerPillView.accessibilityLabel = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
             return
         }
 
@@ -123,5 +127,6 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
             boldString: numberText,
             font: titleLabel.font
         )
+        containerPillView.accessibilityLabel = fullText
     }
 }
