@@ -14,7 +14,7 @@ struct WebCompatReportPayload: Equatable {
     var description: String?
     // broken_site_report.tab_info
     var languages: [String]?
-    var useragentString: String?
+    var userAgentString: String?
     // broken_site_report.tab_info.antitracking
     var blockList: String?
     var blockedOrigins: [String]?
@@ -26,7 +26,7 @@ struct WebCompatReportPayload: Equatable {
     var mobify: Bool?
     // broken_site_report.browser_info.app
     var defaultLocales: [String]?
-    var defaultUseragentString: String?
+    var defaultUserAgentString: String?
     // broken_site_report.browser_info.graphics
     var devicePixelRatio: String?
     var hasTouchScreen: Bool?

@@ -30,30 +30,30 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
 
         let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
 
-        XCTAssertEqual(payload.useragentString, "PageUA/2.0")
-        XCTAssertEqual(payload.defaultUseragentString, "DefaultUA/1.0")
+        XCTAssertEqual(payload.userAgentString, "PageUA/2.0")
+        XCTAssertEqual(payload.defaultUserAgentString, "DefaultUA/1.0")
     }
 
     // Without an override there is no page UA to report. Copying the device default
     // would be indistinguishable in the ping from a page that genuinely matched it.
-    func test_enrich_emptyPageUserAgent_leavesUseragentStringNil() {
+    func test_enrich_emptyPageUserAgent_leavesUserAgentStringNil() {
         let device = FakeDeviceInfoProvider(defaultUserAgent: "DefaultUA/1.0")
         let snapshot = makeSnapshot(pageUserAgent: "")
 
         let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
 
-        XCTAssertNil(payload.useragentString)
-        XCTAssertEqual(payload.defaultUseragentString, "DefaultUA/1.0")
+        XCTAssertNil(payload.userAgentString)
+        XCTAssertEqual(payload.defaultUserAgentString, "DefaultUA/1.0")
     }
 
-    func test_enrich_nilPageUserAgent_leavesUseragentStringNil() {
+    func test_enrich_nilPageUserAgent_leavesUserAgentStringNil() {
         let device = FakeDeviceInfoProvider(defaultUserAgent: "DefaultUA/1.0")
         let snapshot = makeSnapshot(pageUserAgent: nil)
 
         let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
 
-        XCTAssertNil(payload.useragentString)
-        XCTAssertEqual(payload.defaultUseragentString, "DefaultUA/1.0")
+        XCTAssertNil(payload.userAgentString)
+        XCTAssertEqual(payload.defaultUserAgentString, "DefaultUA/1.0")
     }
 
     // MARK: - devicePixelRatio precedence
