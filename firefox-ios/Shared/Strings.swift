@@ -2171,7 +2171,7 @@ extension String {
                 key: "NativeErrorPage.Wayback.Error.Search.v155",
                 tableName: "NativeErrorPage",
                 value: "Search the web",
-                comment: "Button label allowing the use their default search engine to search for the page.")
+                comment: "Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.")
         }
     }
 }
