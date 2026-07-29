@@ -430,7 +430,7 @@ final class NativeErrorPageViewController: UIViewController,
             do {
                 let snapshot = try await WaybackService.fetchSnapshot(for: failingURL.absoluteString)
                 guard let snapshot, snapshot.available, let archivedURL = URL(string: snapshot.url) else {
-                    await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed) }
+                    await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed(.notFound)) }
                     return
                 }
                 await MainActor.run {
@@ -444,9 +444,28 @@ final class NativeErrorPageViewController: UIViewController,
                     )
                 }
             } catch {
-                await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed) }
+                await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed(.networkError)) }
             }
         }
+    }
+
+    func regularContentViewDidTapSearchWeb() {
+        guard let failingURL = model?.url?.baseURLWithPath else { return }
+
+        let query = "\"\(failingURL.absoluteString)\""
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let searchURL = URL(string: "https://www.google.com/search?q=\(encodedQuery)") else {
+            return
+        }
+
+        store.dispatch(
+            GeneralBrowserAction(
+                destinationURL: searchURL,
+                isNativeErrorPage: true,
+                windowUUID: self.windowUUID,
+                actionType: GeneralBrowserActionType.loadWaybackURL
+            )
+        )
     }
 
     // MARK: - NativeErrorBadCertContentViewDelegate
