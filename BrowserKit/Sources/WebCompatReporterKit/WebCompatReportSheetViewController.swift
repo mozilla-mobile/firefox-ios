@@ -5,9 +5,7 @@
 import Common
 import UIKit
 
-/// The intents the sheet emits. The Client translates these into dispatched
-/// Redux actions and coordinator navigation; the view controller itself never
-/// dismisses or navigates.
+/// The intents the sheet emits; the Client maps these to Redux actions and navigation.
 @MainActor
 public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidTapClose()
@@ -17,22 +15,21 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidTapButton(id: String)
     func webCompatReportSheetDidToggle(id: String, isOn: Bool)
     func webCompatReportSheetDidTapLearnMore(url: URL)
+    func webCompatReportSheetDidEditText(id: String, text: String)
 }
 
-/// The "Report a Website Issue" sheet content, shown as an iOS-26 `.large`
-/// detent sheet inside a nav controller. Store-agnostic: configured with a
+/// The "Report a Website Issue" sheet content. Store-agnostic: configured with a
 /// `WebCompatReportViewModel`, emits intents via `WebCompatReportSheetDelegate`.
 public final class WebCompatReportSheetViewController: UIViewController,
                                                        ThemeApplicable,
-                                                       UICollectionViewDelegate {
+                                                       UICollectionViewDelegate,
+                                                       Notifiable {
     public weak var delegate: WebCompatReportSheetDelegate?
 
     private var viewModel: WebCompatReportViewModel
     private var theme: Theme
 
-    /// The diffable data source keys on stable section/row `id`s (not content),
-    /// so content changes reconfigure a row in place instead of delete+insert.
-    /// The current values are looked up here by id.
+    /// The data source keys on stable section/row `id`s; current values are looked up here.
     private var rowsByID: [String: WebCompatReportViewModel.Row] = [:]
     private var sectionsByID: [String: WebCompatReportViewModel.Section] = [:]
 
@@ -45,6 +42,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
+        collectionView.keyboardDismissMode = .onDrag
         return collectionView
     }()
 
@@ -81,6 +79,14 @@ public final class WebCompatReportSheetViewController: UIViewController,
         setupCollectionView()
         configure(with: viewModel)
         applyTheme(theme: theme)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIResponder.keyboardWillShowNotification,
+                UIResponder.keyboardWillHideNotification
+            ]
+        )
     }
 
     // MARK: - Configuration
@@ -115,6 +121,37 @@ public final class WebCompatReportSheetViewController: UIViewController,
         ])
     }
 
+    // MARK: - Keyboard
+
+    private func adjustForKeyboard(endFrameInScreen: CGRect, isHiding: Bool) {
+        guard isViewLoaded else { return }
+        var bottomInset: CGFloat = 0
+        if !isHiding {
+            let keyboardFrameInView = view.convert(endFrameInScreen, from: nil)
+            let overlap = max(0, collectionView.frame.maxY - keyboardFrameInView.minY)
+            // adjustedContentInset already covers the bottom safe area, so add only the rest.
+            let uncoveredOverlap = max(0, overlap - view.safeAreaInsets.bottom)
+            if uncoveredOverlap > 0 {
+                bottomInset = uncoveredOverlap + WebCompatReporterUX.Keyboard.focusPadding
+            }
+            // Otherwise the keyboard hides nothing (hardware, or undocked on iPad) and the
+            // inset stays at zero, so focusing a field doesn't shift the list.
+        }
+        collectionView.contentInset.bottom = bottomInset
+        collectionView.verticalScrollIndicatorInsets.bottom = bottomInset
+        guard let responder = firstResponder(in: collectionView) else { return }
+        let responderFrame = responder.convert(responder.bounds, to: collectionView)
+        collectionView.scrollRectToVisible(responderFrame, animated: true)
+    }
+
+    private func firstResponder(in view: UIView) -> UIView? {
+        if view.isFirstResponder { return view }
+        for subview in view.subviews {
+            if let found = firstResponder(in: subview) { return found }
+        }
+        return nil
+    }
+
     private func makeLayout(backgroundColor: UIColor? = nil) -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { [weak self] index, environment in
             var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
@@ -130,98 +167,36 @@ public final class WebCompatReportSheetViewController: UIViewController,
 
     // MARK: - Data source
 
+    // Registrations MUST be created up front and reused; UIKit asserts if one is
+    // created lazily inside the cell provider. So they're built once here and the
+    // provider only dequeues with them.
     private func makeDataSource() -> UICollectionViewDiffableDataSource<String, String> {
-        let plainRegistration = UICollectionView.CellRegistration<
-            UICollectionViewListCell, WebCompatReportViewModel.Row
-        > { cell, _, row in
-            var content = cell.defaultContentConfiguration()
-            content.text = row.title
-            cell.contentConfiguration = content
-            cell.accessories = []
-        }
-
-        let subOptionRegistration = UICollectionView.CellRegistration<
-            WebCompatSubOptionCell, WebCompatReportViewModel.Row
-        > { [weak self] cell, _, row in
-            guard let self, case let .subOption(isSelected) = row.kind else { return }
-            cell.configure(title: row.title, isSelected: isSelected, theme: self.theme, a11yIdentifier: row.a11yIdentifier)
-        }
-
-        let categoryRegistration = UICollectionView.CellRegistration<
-            WebCompatCategoryMenuCell, WebCompatReportViewModel.Row
-        > { [weak self] cell, _, row in
-            guard let self, case let .categoryMenu(isPlaceholder, options) = row.kind else { return }
-            cell.configure(
-                title: row.title,
-                isPlaceholder: isPlaceholder,
-                options: options,
-                theme: self.theme,
-                a11yIdentifier: row.a11yIdentifier
-            ) { [weak self] optionID in
-                self?.delegate?.webCompatReportSheetDidSelectCategory(id: optionID)
-            }
-        }
-
-        let sendButtonRegistration = UICollectionView.CellRegistration<
-            WebCompatSendButtonCell, WebCompatReportViewModel.Row
-        > { [weak self] cell, _, row in
-            guard let self, case let .sendButton(isEnabled) = row.kind else { return }
-            cell.configure(title: row.title, isEnabled: isEnabled, a11yIdentifier: row.a11yIdentifier) { [weak self] in
-                // Text fields report on end-editing, so commit the active one before submitting.
-                self?.view.endEditing(true)
-                self?.delegate?.webCompatReportSheetDidTapButton(id: row.id)
-            }
-            cell.applyTheme(theme: self.theme)
-        }
-
-        let toggleRegistration = UICollectionView.CellRegistration<
-            WebCompatToggleCell, WebCompatReportViewModel.Row
-        > { [weak self] cell, _, row in
-            guard let self, case let .toggle(isOn) = row.kind else { return }
-            cell.configure(title: row.title, isOn: isOn, a11yIdentifier: row.a11yIdentifier) { [weak self] isOn in
-                self?.delegate?.webCompatReportSheetDidToggle(id: row.id, isOn: isOn)
-            }
-            cell.applyTheme(theme: self.theme)
-        }
+        let plain = plainCellRegistration()
+        let subOption = subOptionCellRegistration()
+        let category = categoryCellRegistration()
+        let url = urlCellRegistration()
+        let sendButton = sendButtonCellRegistration()
+        let toggle = toggleCellRegistration()
 
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
         ) { [weak self] collectionView, indexPath, rowID in
-            guard let self, let row = self.rowsByID[rowID] else { return UICollectionViewListCell() }
+            guard let row = self?.rowsByID[rowID] else { return UICollectionViewListCell() }
             switch row.kind {
             case .categoryMenu:
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: categoryRegistration,
-                    for: indexPath,
-                    item: row
-                )
+                return collectionView.dequeueConfiguredReusableCell(using: category, for: indexPath, item: row)
             case .subOption:
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: subOptionRegistration,
-                    for: indexPath,
-                    item: row
-                )
+                return collectionView.dequeueConfiguredReusableCell(using: subOption, for: indexPath, item: row)
+            case .urlField:
+                return collectionView.dequeueConfiguredReusableCell(using: url, for: indexPath, item: row)
             case .sendButton:
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: sendButtonRegistration,
-                    for: indexPath,
-                    item: row
-                )
+                return collectionView.dequeueConfiguredReusableCell(using: sendButton, for: indexPath, item: row)
             case .toggle:
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: toggleRegistration,
-                    for: indexPath,
-                    item: row
-                )
+                return collectionView.dequeueConfiguredReusableCell(using: toggle, for: indexPath, item: row)
             case .plain:
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: plainRegistration,
-                    for: indexPath,
-                    item: row
-                )
+                return collectionView.dequeueConfiguredReusableCell(using: plain, for: indexPath, item: row)
             }
         }
-
         configureSupplementaryProvider(on: dataSource)
         return dataSource
     }
@@ -234,6 +209,80 @@ public final class WebCompatReportSheetViewController: UIViewController,
                 return collectionView.dequeueConfiguredReusableSupplementary(using: footer, for: indexPath)
             }
             return collectionView.dequeueConfiguredReusableSupplementary(using: header, for: indexPath)
+        }
+    }
+
+    private func plainCellRegistration()
+    -> UICollectionView.CellRegistration<UICollectionViewListCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { cell, _, row in
+            var content = cell.defaultContentConfiguration()
+            content.text = row.title
+            cell.contentConfiguration = content
+            cell.accessories = []
+        }
+    }
+
+    private func subOptionCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatSubOptionCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { [weak self] cell, _, row in
+            guard let self, case let .subOption(isSelected) = row.kind else { return }
+            cell.configure(title: row.title, isSelected: isSelected, theme: self.theme, a11yIdentifier: row.a11yIdentifier)
+        }
+    }
+
+    private func categoryCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatCategoryMenuCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { [weak self] cell, _, row in
+            guard let self, case let .categoryMenu(isPlaceholder, options) = row.kind else { return }
+            cell.configure(
+                title: row.title,
+                isPlaceholder: isPlaceholder,
+                options: options,
+                theme: self.theme,
+                a11yIdentifier: row.a11yIdentifier
+            ) { [weak self] optionID in
+                self?.delegate?.webCompatReportSheetDidSelectCategory(id: optionID)
+            }
+        }
+    }
+
+    private func urlCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatURLCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { [weak self] cell, _, row in
+            guard let self, case let .urlField(text, placeholder) = row.kind else { return }
+            cell.configure(
+                title: row.title,
+                text: text,
+                placeholder: placeholder,
+                a11yIdentifier: row.a11yIdentifier
+            ) { [weak self] text in
+                self?.delegate?.webCompatReportSheetDidEditText(id: row.id, text: text)
+            }
+            cell.applyTheme(theme: self.theme)
+        }
+    }
+
+    private func sendButtonCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatSendButtonCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { [weak self] cell, _, row in
+            guard let self, case let .sendButton(isEnabled) = row.kind else { return }
+            cell.configure(title: row.title, isEnabled: isEnabled, a11yIdentifier: row.a11yIdentifier) { [weak self] in
+                // Text fields report on end-editing, so commit the active one before submitting.
+                self?.view.endEditing(true)
+                self?.delegate?.webCompatReportSheetDidTapButton(id: row.id)
+            }
+            cell.applyTheme(theme: self.theme)
+        }
+    }
+
+    private func toggleCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatToggleCell, WebCompatReportViewModel.Row> {
+        return UICollectionView.CellRegistration { [weak self] cell, _, row in
+            guard let self, case let .toggle(isOn) = row.kind else { return }
+            cell.configure(title: row.title, isOn: isOn, a11yIdentifier: row.a11yIdentifier) { [weak self] isOn in
+                self?.delegate?.webCompatReportSheetDidToggle(id: row.id, isOn: isOn)
+            }
+            cell.applyTheme(theme: self.theme)
         }
     }
 
@@ -318,7 +367,18 @@ public final class WebCompatReportSheetViewController: UIViewController,
 
     @objc
     private func didTapPreview() {
+        view.endEditing(true)
         delegate?.webCompatReportSheetDidTapPreview()
+    }
+
+    // MARK: - Notifiable
+
+    nonisolated public func handleNotifications(_ notification: Notification) {
+        let isHiding = notification.name == UIResponder.keyboardWillHideNotification
+        let endFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
+        ensureMainThread { [weak self] in
+            self?.adjustForKeyboard(endFrameInScreen: endFrame, isHiding: isHiding)
+        }
     }
 
     // MARK: - ThemeApplicable

@@ -9,7 +9,7 @@ import SiteImageView
 class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private struct UX {
         static let triggerBoundsHeightPercentage: CGFloat = 0.25
-        static let fingerCardPositionRatio: CGFloat = 2.0 / 3.0
+        static let fingerCardPositionRatio: CGFloat = 1 // 0 = top of card, 1 = bottom of card
         static let closeReleaseThreshold: CGFloat = 1.0 / 3.0
         static let tabTrayReleaseThreshold: CGFloat = 2.0 / 3.0
         static let previewFadeOutDuration: CGFloat = 0.2
@@ -20,6 +20,9 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         static let minimumTabPreviewScale: CGFloat = 0.33
         static let tossPreviewXScale: CGFloat = 0.6
         static let tossPreviewYScale: CGFloat = 0.6
+        // A number used in calculating the size of the tab preview during the animation,
+        // larger values shrink the preview faster
+        static let scaleSpeed: CGFloat = 1.237
     }
 
     private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
@@ -164,7 +167,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         }
 
         // Shrink continuously during the gesture
-        let scale = max((1 - abs(translation.y) / bounds.height), UX.minimumTabPreviewScale)
+        let scale = max((1 - abs(UX.scaleSpeed * translation.y) / bounds.height), UX.minimumTabPreviewScale)
 
         // Transform that places the finger horizontally centered and <fingerCardPositionRatio> down the card.
         let naturalCenter = screenshotViewContainer.center

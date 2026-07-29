@@ -30,4 +30,8 @@ enum WebCompatReporterUX {
     enum Chevron {
         static let size: CGFloat = 10
     }
+
+    enum Keyboard {
+        static let focusPadding: CGFloat = 16
+    }
 }

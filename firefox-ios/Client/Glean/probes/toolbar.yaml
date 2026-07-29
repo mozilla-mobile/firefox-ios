@@ -275,7 +275,7 @@ toolbar:
   tab_tray_opened_via_swipe:
     type: event
     description: |
-        Counts the number of times a user opened the tab tray using a swipe gesture
+        Records when a user opened the tab tray using the non-interactive swipe gesture
     extra_keys:
       is_at_bottom:
         description: Whether the address bar is at the bottom
@@ -284,6 +284,50 @@ toolbar:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16079
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34299
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: 2026-12-01
+  interactive_swipe_up_started:
+    type: event
+    description: |
+        Records when a user started the interactive swipe up gesture
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16411
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34887
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: 2026-12-01
+  tab_tray_opened_via_interactive_swipe:
+    type: event
+    description: |
+        Records when a user opened the tab tray using the interactive swipe gesture
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16411
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34887
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: 2026-12-01
+  tab_closed_via_interactive_swipe:
+    type: event
+    description: |
+        Records when a user closed a tab using the interactive swipe gesture
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16411
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34887
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: 2026-12-01
+  interactive_swipe_cancelled:
+    type: event
+    description: |
+        Records when a user started an interactive swipe gesture but didn't open the tab tray or close the selected tab
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16411
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/34887
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: 2026-12-01
