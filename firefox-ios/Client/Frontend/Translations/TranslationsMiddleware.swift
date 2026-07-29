@@ -194,13 +194,28 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
                 let pageLanguage = try? await translationsService.detectPageLanguage(for: action.windowUUID)
                 let filteredLanguages = languages.filter { $0 != pageLanguage }
-                if !translationConfiguration.isMultiLanguageFlow, let singleLanguage = filteredLanguages.first {
+                logger.log(
+                    "Translate tap: preferred=\(languages) page=\(pageLanguage ?? "nil") filtered=\(filteredLanguages)",
+                    level: .debug,
+                    category: .library
+                )
+                if filteredLanguages.count == 1, let singleLanguage = filteredLanguages.first {
+                    logger.log(
+                        "Auto-translating to \(singleLanguage) (single option after filtering)",
+                        level: .debug,
+                        category: .library
+                    )
                     store.dispatch(TranslationLanguageSelectedAction(
                         windowUUID: action.windowUUID,
                         targetLanguage: singleLanguage,
                         actionType: TranslationsActionType.didSelectTargetLanguage
                     ))
                 } else {
+                    logger.log(
+                        "Showing language picker with \(filteredLanguages.count) options",
+                        level: .debug,
+                        category: .library
+                    )
                     store.dispatch(GeneralBrowserAction(
                         buttonTapped: capturedButton,
                         translationLanguages: filteredLanguages,

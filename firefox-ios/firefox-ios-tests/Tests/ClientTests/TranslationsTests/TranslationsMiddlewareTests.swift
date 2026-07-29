@@ -622,6 +622,38 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(dispatchedActionType, GeneralBrowserActionType.showTranslationLanguagePicker)
     }
 
+    func test_didTapButtonAction_withInactiveState_andPageInPreferredLanguage_autoTranslates() throws {
+        setTranslationsFeatureEnabled(enabled: true, languagePickerEnabled: true)
+        mockProfile.prefs.setString("en,de", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+        let mockService = MockTranslationsService(
+            detectPageLanguageResult: .success("de"),
+            supportedTargetLanguages: ["en", "de"]
+        )
+        let subject = createSubject(translationsService: mockService)
+
+        let action = ToolbarMiddlewareAction(
+            buttonType: .translate,
+            gestureType: .tap,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton
+        )
+
+        let expectation = XCTestExpectation(description: "didSelectTargetLanguage dispatched for single filtered language")
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if mockStore?.dispatchedActions.last is TranslationLanguageSelectedAction {
+                expectation.fulfill()
+            }
+        }
+
+        subject.translationsProvider.legacyMiddleware(setupAppStateWithTranslationConfig(for: .inactive), action)
+
+        wait(for: [expectation], timeout: 1.0)
+        let selectedAction = try XCTUnwrap(
+            mockStore.dispatchedActions.compactMap { $0 as? TranslationLanguageSelectedAction }.first
+        )
+        XCTAssertEqual(selectedAction.targetLanguage, "en")
+    }
+
     func test_didSelectTargetLanguage_dispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)

@@ -188,35 +188,61 @@ class MainMenuCoordinator: BaseCoordinator {
                 ))
                 return
             }
-            let prefs = profile.prefs
             Task {
-                let manager = PreferredTranslationLanguagesManager(prefs: prefs)
-                let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
-                let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                let pageLanguage = isTranslated
-                    ? translationConfig?.sourceLanguage
-                    : (try? await TranslationsService().detectPageLanguage(for: windowUUID))
-                let filteredLanguages = languages.filter { $0 != pageLanguage && $0 != translatedLanguage }
-                if isSingleLanguageFlow, let language = filteredLanguages.first {
-                    store.dispatch(TranslationLanguageSelectedAction(
-                        windowUUID: windowUUID,
-                        targetLanguage: language,
-                        actionType: TranslationsActionType.didSelectTargetLanguage
-                    ))
-                } else {
-                    store.dispatch(GeneralBrowserAction(
-                        translationLanguages: filteredLanguages,
-                        isPageTranslated: isTranslated,
-                        translatedToLanguage: translatedLanguage,
-                        windowUUID: windowUUID,
-                        actionType: GeneralBrowserActionType.showTranslationLanguagePicker
-                    ))
-                }
+                await self.resolveTranslationLanguage(
+                    isTranslated: isTranslated,
+                    translationConfig: translationConfig,
+                    translatedLanguage: translatedLanguage
+                )
             }
         }
     }
 
     // MARK: - Private helpers
+
+    private func resolveTranslationLanguage(
+        isTranslated: Bool,
+        translationConfig: TranslationConfiguration?,
+        translatedLanguage: String?
+    ) async {
+        let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+        let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
+        let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
+        let pageLanguage = isTranslated
+            ? translationConfig?.sourceLanguage
+            : (try? await TranslationsService().detectPageLanguage(for: windowUUID))
+        let filteredLanguages = languages.filter { $0 != pageLanguage && $0 != translatedLanguage }
+        logger.log(
+            "Menu translate: preferred=\(languages) page=\(pageLanguage ?? "nil") filtered=\(filteredLanguages)",
+            level: .debug,
+            category: .library
+        )
+        if filteredLanguages.count == 1, let language = filteredLanguages.first {
+            logger.log(
+                "Auto-translating to \(language) (single option after filtering)",
+                level: .debug,
+                category: .library
+            )
+            store.dispatch(TranslationLanguageSelectedAction(
+                windowUUID: windowUUID,
+                targetLanguage: language,
+                actionType: TranslationsActionType.didSelectTargetLanguage
+            ))
+        } else {
+            logger.log(
+                "Showing language picker with \(filteredLanguages.count) options",
+                level: .debug,
+                category: .library
+            )
+            store.dispatch(GeneralBrowserAction(
+                translationLanguages: filteredLanguages,
+                isPageTranslated: isTranslated,
+                translatedToLanguage: translatedLanguage,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+            ))
+        }
+    }
 
     private func createMainMenuViewController() -> MainMenuViewController {
         let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID, profile: profile)
