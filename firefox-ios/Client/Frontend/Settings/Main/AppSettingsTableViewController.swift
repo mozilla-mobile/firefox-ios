@@ -573,6 +573,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
         #endif
 
         hiddenDebugOptions.append(SafeAreaGuidesSetting(settings: self))
+        if #available(iOS 26.0, *) {
+            hiddenDebugOptions.append(ToggleVPNProxySetting(settings: self,
+                                                            vpnManager: AppContainer.shared.resolve()))
+        }
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
