@@ -151,11 +151,14 @@ final class NativeErrorPageViewController: UIViewController,
         }
     }
 
+    private let searchEnginesManager: SearchEnginesManagerProvider
+
     init(
         windowUUID: WindowUUID,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         overlayManager: OverlayModeManager,
+        searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         logger: Logger = DefaultLogger.shared
     ) {
@@ -163,6 +166,7 @@ final class NativeErrorPageViewController: UIViewController,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.overlayManager = overlayManager
+        self.searchEnginesManager = searchEnginesManager
         self.notificationCenter = notificationCenter
         self.logger = logger
         nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
@@ -450,12 +454,11 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func regularContentViewDidTapSearchWeb() {
-        guard let failingURL = model?.url?.baseURLWithPath else { return }
+        guard let failingURL = model?.url?.baseURLWithPath,
+              let defaultEngine = searchEnginesManager.defaultEngine else { return }
 
         let query = "\"\(failingURL.absoluteString)\""
-        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let searchURL = URL(string: "https://www.google.com/search?q=\(encodedQuery)")
-        else { return }
+        guard let searchURL = defaultEngine.searchURLForQuery(query) else { return }
 
         store.dispatch(
             GeneralBrowserAction(
