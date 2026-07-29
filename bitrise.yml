@@ -259,7 +259,6 @@ workflows:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - pipeline_intermediate_files: |-
-            # BITRISE_TEST_SHARDS_PATH_FIREFOX
             BITRISE_TEST_BUNDLE_PATH
             BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         is_always_run: true
