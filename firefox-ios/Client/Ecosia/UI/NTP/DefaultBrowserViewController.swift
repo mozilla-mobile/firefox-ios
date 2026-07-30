@@ -126,7 +126,6 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         self.delegate = delegate
         if traitCollection.userInterfaceIdiom == .pad {
             modalPresentationStyle = .formSheet
-            preferredContentSize = .init(width: 544, height: 600)
         } else {
             modalPresentationCapturesStatusBarAppearance = true
         }
@@ -175,11 +174,15 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         triviaView.addSubview(triviaDecriptionLabel)
         contentView.addSubview(beforeView)
         contentView.addSubview(afterView)
+
+        if traitCollection.userInterfaceIdiom == .pad {
+            waves.contentMode = .scaleToFill
+        }
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
