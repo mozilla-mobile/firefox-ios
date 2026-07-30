@@ -10,7 +10,6 @@ public protocol QuickAnswersConfigFetcher: Sendable {
 }
 
 public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
-    // TODO: FXIOS-15123 - Replace with the real Exa system prompt once it is finalized.
     private static let exaInstructions = """
     Answer in 1 sentence. Remove any superscript numbers from the response like [1], [2] and other citations numbers.
     """.replacingOccurrences(of: "\n", with: " ")
