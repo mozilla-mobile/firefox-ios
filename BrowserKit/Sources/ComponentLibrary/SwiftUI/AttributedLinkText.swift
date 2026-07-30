@@ -46,7 +46,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
                 .font(.caption)
                 .multilineTextAlignment(textAlignment)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.noHighlight)
         .accessibilityLabel(fullText)
         .accessibilityAddTraits(.isLink)
         .accessibilityIdentifier(accessibilityIdentifier ?? action.rawValue)
