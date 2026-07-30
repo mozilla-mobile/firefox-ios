@@ -24,15 +24,42 @@ class TabsTests: BaseTestCase {
     var browserScreen: BrowserScreen!
     var newTabsScreen: NewTabsScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
+    var syncScreen: SyncScreen!
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
     func testAddTabFromTabTray() {
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        syncScreen = SyncScreen(app: app)
         navigator.nowAt(NewTabScreen)
         toolBarScreen.assertTabsButtonExists()
+
+        // Step 1: Open the tab tray
         navigator.goto(TabTray)
+        tabTrayScreen.assertTabTrayControlsExist()
+
+        // Step 2: Rotate to landscape then back to portrait
+        browserScreen.setOrientation(.landscapeLeft)
+        tabTrayScreen.assertTabTrayControlsExist()
+        browserScreen.setOrientation(.portrait)
+        tabTrayScreen.assertTabTrayControlsExist()
+
+        // Step 3: Open a couple of tabs, then close them
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertTabCount(3)
+        tabTrayScreen.closeFirstTab()
+        tabTrayScreen.assertTabCount(2)
+        tabTrayScreen.swipeToCloseFirstTab()
+        tabTrayScreen.assertTabCount(1)
+
+        // Step 4: Visit a page in the opened tab
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
@@ -40,7 +67,7 @@ class TabsTests: BaseTestCase {
         // The tabs counter shows the correct number
         toolBarScreen.assertTabsOpened(expectedCount: 2)
 
-        // The tab tray shows the correct tabs
+        // Step 5: Tap the tab counter
         if iPad() {
             toolBarScreen.tapOnTabsButton()
         } else {
@@ -52,6 +79,43 @@ class TabsTests: BaseTestCase {
             urlLabel: urlLabel,
             selectedTab: selectedTab
         )
+
+        // Step 6: Tap on the page content
+        tabTrayScreen.tapOnCell(named: urlLabel)
+        mozWaitForElementToNotExist(app.otherElements[AccessibilityIdentifiers.TabTray.tabsTray])
+        browserScreen.addressToolbarContainValue(value: urlValueLong)
+        navigator.nowAt(BrowserTab)
+
+        // Step 7: Open pages in Private Browsing and tap the tab counter
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertTabTrayControlsExist()
+
+        // Step 8: Go to the app switcher
+        // Restarting app in the background to simulate the app switcher
+        restartInBackground()
+        tabTrayScreen.assertTabTrayControlsExist()
+
+        // Step 9: Open some pages in a normal browsing session and tap 'Close all tabs'
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertTabCount(1)
+
+        // Step 10: Switch to Synced Tabs from the tab tray
+        // (Not fully implemented)
+        navigator.performAction(Action.ToggleExperimentSyncMode)
+        syncScreen.assertSignInPromptExists()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354300

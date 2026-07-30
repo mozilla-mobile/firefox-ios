@@ -21,6 +21,10 @@ final class BrowserScreen {
     private var bookTextInTable: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT_IN_TABLE.element(in: app) }
     private var clearButton: XCUIElement { sel.CLEAR_TEXT_BUTTON.element(in: app) }
 
+    func setOrientation(_ orientation: UIDeviceOrientation) {
+        XCUIDevice.shared.orientation = orientation
+    }
+
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
         BaseTestCase().mozWaitForValueContains(addressBar, value: value, timeout: timeout)
