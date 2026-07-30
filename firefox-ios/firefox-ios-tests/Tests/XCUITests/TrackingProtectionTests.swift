@@ -26,23 +26,6 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.TrackingProtectionperSiteToggle)
     }
 
-    // Reads the adblock-tester.com score banner (e.g. "38 points out of 100 (11 services, 22
-    // checks)") and returns the leading number. The score/service/check counts are dynamic
-    // (depend on ads/trackers live on the page at test time), so callers should compare scores
-    // relative to each other rather than against a fixed expected value.
-    private func adblockTesterScore(timeout: TimeInterval = TIMEOUT) -> Int {
-        let scoreElement = app.webViews.otherElements.matching(
-            NSPredicate(format: "label CONTAINS[c] 'points out of 100'")
-        ).firstMatch
-        mozWaitForElementToExist(scoreElement, timeout: timeout)
-
-        guard let match = scoreElement.label.range(of: #"^\d+"#, options: .regularExpression) else {
-            XCTFail("Could not parse a leading score number from label: \(scoreElement.label)")
-            return 0
-        }
-        return Int(scoreElement.label[match]) ?? 0
-    }
-
     private func checkTrackingProtectionDisabledForSite() {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
     }
@@ -119,7 +102,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(adblockTesterURL)
         waitUntilPageLoad()
         app.swipeUp()
-        let scoreWithETPOff = adblockTesterScore()
+        let scoreWithETPOff = browserScreen.adblockTesterScore()
 
         // Step 5: Enable "Enhanced Tracking Protection" and recheck adblock-tester.com ->
         // Tracking Protection is enabled, and the score increases (e.g. from 38 to 42 out of 100).
@@ -134,7 +117,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(adblockTesterURL)
         waitUntilPageLoad()
         app.swipeUp()
-        let scoreWithETPOn = adblockTesterScore()
+        let scoreWithETPOn = browserScreen.adblockTesterScore()
 
         XCTAssertGreaterThan(
             scoreWithETPOn,
