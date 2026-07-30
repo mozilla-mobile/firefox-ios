@@ -92,6 +92,10 @@ struct TrackerBlockerModuleState: StateType, Equatable, Hashable {
     }
 
     static func defaultState(from state: TrackerBlockerModuleState) -> TrackerBlockerModuleState {
-        return state
+        return TrackerBlockerModuleState(
+            windowUUID: state.windowUUID,
+            shouldShowSection: state.shouldShowSection,
+            blockedTrackerCount: state.blockedTrackerCount
+        )
     }
 }
