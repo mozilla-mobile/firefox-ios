@@ -80,9 +80,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
-        // Its icon is an appearance-adaptive asset, not a template, so no tint reaches it. The dark
-        // variant's circle all but disappears against the scrim, which is dark in every palette.
-        button.overrideUserInterfaceStyle = .light
     }
 
     init(
@@ -237,6 +234,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layerScrim
+        closeButton.tintColor = theme.colors.iconOnColor
         railView.applyTheme(theme: theme)
     }
 }
