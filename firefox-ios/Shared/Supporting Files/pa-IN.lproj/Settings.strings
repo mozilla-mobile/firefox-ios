@@ -74,9 +74,6 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "ਪਾਬੰਦੀ ਲਗਾਈ";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**ਪਾਬੰਦੀ ਲਾਈ**: ਤੁਸੀਂ ਫ਼ੀਚਰ ਨੂੰ ਨਹੀਂ ਵੇਖੋਗੇ ਅਤੇ ਨਾ ਹੀ ਵਰਤ ਸਕੋਗੇ। ਡਿਵਾਈਸ ਉੱਤੇ ਮੌਜੂਦ AI ਲਈ ਕੋਈ ਵੀ ਡਾਊਨਲੋਡ ਕੀਤੇ ਮਾਡਲਾਂ ਨੂੰ ਹਟਾਇਆ ਜਾਵੇਗਾ।";
-
-/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**ਪਾਬੰਦੀ ਲਾਈ**: ਤੁਸੀਂ ਫ਼ੀਚਰ ਨੂੰ ਨਹੀਂ ਵੇਖੋਗੇ ਅਤੇ ਨਾ ਹੀ ਵਰਤ ਸਕੋਗੇ। ਡਿਵਾਈਸ ਉੱਤੇ ਮੌਜੂਦ AI ਲਈ ਕੋਈ ਵੀ ਡਾਊਨਲੋਡ ਕੀਤੇ ਮਾਡਲਾਂ ਨੂੰ ਹਟਾਇਆ ਜਾਵੇਗਾ।";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
@@ -345,12 +342,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "ਇਸ਼ਾਰੇ";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "ਕਿਸੇ ਭਾਸ਼ਾ ਨੂੰ ਚੁਣੋ";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "ਪਸੰਦੀਦਾ ਐਪ ਭਾਸ਼ਾ";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "ਭਾਸ਼ਾ";

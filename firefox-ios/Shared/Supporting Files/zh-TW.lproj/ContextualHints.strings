@@ -1,6 +1,12 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode. */
 "ContextualHints.FeltDeletion.Body.v122" = "點擊此處即可開啟新的隱私瀏覽階段。清除瀏覽紀錄、Cookie 等一切上網資料。";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the description of the one that explains how to search with Google Lens from the address toolbar. */
+"ContextualHints.Toolbar.GoogleLens.Description.v154" = "使用攝影機拍照或瀏覽照片來以圖搜圖。";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of the one that explains how to search with Google Lens from the address toolbar. */
+"ContextualHints.Toolbar.GoogleLens.Title.v154" = "使用 Google 智慧鏡頭搜尋";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar. */
 "ContextualHints.Translations.Body.v145" = "快速而有隱私的翻譯功能，已經可供使用。";
 

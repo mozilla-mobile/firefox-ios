@@ -5,7 +5,7 @@
 "New Tab" = "Yeni Vərəq";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Bu sizə şəkil çəkmə və yükləmə imkanı verir.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Daxil olduğunuz saytlar sizin yerinizi soruşa bilərlər.";

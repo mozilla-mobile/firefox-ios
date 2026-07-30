@@ -74,9 +74,6 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Bloccata";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Bloccata**: la funzione non verrà visualizzata e non sarà possibile utilizzarla. Per l’IA sul dispositivo, tutti i modelli scaricati saranno rimossi.";
-
-/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Bloccata**: la funzione non verrà visualizzata e non sarà possibile utilizzarla. Per l’IA sul dispositivo, tutti i modelli scaricati saranno rimossi.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
@@ -269,7 +266,7 @@
 "Settings.Search.GoogleLens.Description.v153" = "Invia immagini a Google per effettuare ricerche.";
 
 /* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
-"Settings.Search.GoogleLens.Footnote.v153" = "Disponibile solo se Google è attivo ed è impostato come motore di ricerca predefinito durante la navigazione.";
+"Settings.Search.GoogleLens.Footnote.v153" = "Disponibile solo se Google è attivo qui sopra ed è il motore di ricerca in uso durante la navigazione.";
 
 /* In the Search settings, this is the title that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Title.v153" = "Google Lens";
@@ -329,7 +326,7 @@
 "Settings.Studies.Message.v148" = "%@ seleziona utenti in modo casuale per provare nuove funzionalità, contribuendo così a migliorare la qualità del browser per tutti.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
-"Settings.Studies.Title.v136" = "Installa e conduci studi";
+"Settings.Studies.Title.v136" = "Installa ed esegui studi";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v148" = "Consenti studi sulle funzionalità";
@@ -345,12 +342,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Gesti";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Scegli una lingua";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "Lingua preferita per le app";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "Lingua";
