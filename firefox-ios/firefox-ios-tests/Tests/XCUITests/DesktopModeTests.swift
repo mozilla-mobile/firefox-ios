@@ -262,14 +262,19 @@ class DesktopModeTestsIphone: BaseTestCase {
     func testRequestDesktopSitePersistsAcrossDomainAndRestart() {
         if skipPlatform { return }
 
-        let newsGoogleURL = "https://wiki.mozilla.org/"
-        let googleURL = "https://mozilla.org/"
-        let amazonURL = "https://www.amazon.com/"
+        // localtest.me / lvh.me are public "wildcard loopback" domains that resolve to
+        // 127.0.0.1 via DNS (no /etc/hosts needed), so they reach the app's local test
+        // server while still being real registrable domains for eTLD+1 purposes:
+        //   news.localtest.me & localtest.me share baseDomain "localtest.me" -> pref shared
+        //   lvh.me is a different baseDomain -> pref not shared
+        let newsGoogleURL = "http://news.localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
+        let googleURL = "http://localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
+        let amazonURL = "http://lvh.me:\(serverPort)/test-fixture/test-user-agent.html"
 
         // Visit news.google.com
         browserScreen.navigateToURL(newsGoogleURL)
         waitUntilPageLoad()
-        browserScreen.assertLayout(.mobile)
+        browserScreen.assertMobileUserAgentIsDisplayed()
 
         // Step 1: Open the hamburger menu -> the dot menu is opened.
         navigateToBrowserTabMenu()
@@ -279,39 +284,40 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Step 2: Tap 'Request Desktop Site' -> the desktop version of the site is loaded.
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
-        browserScreen.assertLayout(.desktop)
+        browserScreen.assertDesktopUserAgentIsDisplayed()
 
-        // Step 3: Visit mozilla.org -> the desktop preference persists (same eTLD+1 as
-        // wiki.mozilla.org), but mozilla.org's own layout is fully responsive and doesn't
-        // visually change based on desktop/mobile UA, so there's no reliable layout signal to
-        // assert here - just confirm the navigation landed on the right page.
+        // Step 3: Visit google.com -> the desktop version is loaded, since this site shares
+        // the same eTLD+1 domain (google.com) as news.google.com.
         browserScreen.navigateToURL(googleURL)
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "mozilla.org")
+        browserScreen.addressToolbarContainValue(value: "localtest.me")
+        browserScreen.assertDesktopUserAgentIsDisplayed()
 
         // Step 4: Visit amazon.com -> different domain, no desktop pref, mobile version loads.
         // NOTE: Amazon may show a region-redirect interstitial (e.g. "Deliver to Canada") on
         // top of the mobile page - do not deal with anything locale related here.
         browserScreen.navigateToURL(amazonURL)
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "amazon.com")
-        browserScreen.assertLayout(.mobile)
+        browserScreen.addressToolbarContainValue(value: "lvh.me")
+        browserScreen.assertMobileUserAgentIsDisplayed()
 
         // Step 5: Tap "Back" -> news.google.com is loaded, desktop version preserved.
         // Two taps: history is news.google.com -> google.com -> amazon.com, so one tap
         // only returns to google.com.
         toolbarScreen.tapBackButton()
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "mozilla.org")
+        browserScreen.addressToolbarContainValue(value: "localtest.me")
         toolbarScreen.tapBackButton()
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "wiki.mozilla.org")
-        browserScreen.assertLayout(.desktop)
+        browserScreen.addressToolbarContainValue(value: "news.localtest.me")
+        browserScreen.assertDesktopUserAgentIsDisplayed()
+
+        // (Removed real-site "stop loading" workaround: local fixtures load instantly.)
 
         // Step 6 + 7: Close the app from the app switcher, then re-launch it
         closeFromAppSwitcherAndRelaunch()
-        browserScreen.addressToolbarContainValue(value: "wiki.mozilla.org")
-        browserScreen.assertLayout(.desktop)
+        browserScreen.addressToolbarContainValue(value: "news.localtest.me")
+        browserScreen.assertDesktopUserAgentIsDisplayed()
 
         // Step 8: Settings -> Data Management -> Website Data -> "Clear All Website Data",
         // then return to the news.google.com tab -> desktop version still preserved.
@@ -320,14 +326,14 @@ class DesktopModeTestsIphone: BaseTestCase {
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         navigator.goto(BrowserTab)
-        browserScreen.addressToolbarContainValue(value: "wiki.mozilla.org")
-        browserScreen.assertLayout(.desktop)
+        browserScreen.addressToolbarContainValue(value: "news.localtest.me")
+        browserScreen.assertDesktopUserAgentIsDisplayed()
 
         // Step 9: Long-press "Refresh", tap "Request Desktop Site" ->
         // the desktop version of news.google.com is open.
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
-        browserScreen.assertLayout(.mobile)
+        browserScreen.assertMobileUserAgentIsDisplayed()
         switchToDesktopSite()
 
         // Step 10: Open the hamburger menu -> the menu is open.
@@ -337,7 +343,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Step 11: Tap 'Request Mobile Site' -> the mobile version of the site is loaded.
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
-        browserScreen.assertLayout(.mobile)
+        browserScreen.assertMobileUserAgentIsDisplayed()
     }
 
     // HELPERS
