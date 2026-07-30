@@ -42,7 +42,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
     private init(
         windowUUID: WindowUUID,
         jumpBackInTabs: [JumpBackInTabConfiguration],
-        mostRecentSyncedTab: JumpBackInSyncedTabConfiguration? = nil,
+        mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?,
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
@@ -59,30 +59,19 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
     }
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
-        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
-        // because we dispatch to the main thread in the store. We will want to
-        // also isolate that to the @MainActor to remove this.
-        guard Thread.isMainThread else {
-            assertionFailure("JumpBackInSectionState reducer is not being called from the main thread!")
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return defaultState(from: state)
         }
 
-        return MainActor.assumeIsolated {
-            guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-            else {
-                return defaultState(from: state)
-            }
-
-            switch action.actionType {
-            case TabManagerMiddlewareActionType.fetchedRecentTabs:
-                return handleInitializeAction(for: state, with: action)
-            case RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab:
-                return handleRemoteTabsAction(for: state, with: action)
-            case JumpBackInActionType.toggleShowSectionSetting:
-                return handleToggleShowSectionSettingAction(action: action, state: state)
-            default:
-                return defaultState(from: state)
-            }
+        switch action.actionType {
+        case TabManagerMiddlewareActionType.fetchedRecentTabs:
+            return handleInitializeAction(for: state, with: action)
+        case RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab:
+            return handleRemoteTabsAction(for: state, with: action)
+        case JumpBackInActionType.toggleShowSectionSetting:
+            return handleToggleShowSectionSettingAction(action: action, state: state)
+        default:
+            return defaultState(from: state)
         }
     }
 
@@ -97,18 +86,18 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
 
-        return state.copy(
-            jumpBackInTabs: recentTabs.compactMap { tab in
-                let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
-                let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
-                return JumpBackInTabConfiguration(
-                    tab: tab,
-                    titleText: site.title,
-                    descriptionText: site.tileURL.shortDisplayString.capitalized,
-                    siteURL: itemURL
-                )
-            }
-        )
+        let tabConfigurations = recentTabs.compactMap { tab in
+            let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
+            let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
+            return JumpBackInTabConfiguration(
+                tab: tab,
+                titleText: site.title,
+                descriptionText: site.tileURL.shortDisplayString.capitalized,
+                siteURL: itemURL
+            )
+        }
+
+        return state.copy(jumpBackInTabs: tabConfigurations)
     }
 
     private static func handleRemoteTabsAction(
@@ -116,8 +105,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         with action: Action
     ) -> JumpBackInSectionState {
         guard let tabManagerAction = action as? RemoteTabsAction,
-              let mostRecentSyncedTab = tabManagerAction.mostRecentSyncedTab
-        else {
+              let mostRecentSyncedTab = tabManagerAction.mostRecentSyncedTab else {
             return defaultState(from: state)
         }
 
@@ -125,25 +113,22 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         let site = Site.createBasicSite(url: itemURL, title: mostRecentSyncedTab.tab.title)
         let descriptionText = mostRecentSyncedTab.client.name
 
-        return state.copy(
-            mostRecentSyncedTab: JumpBackInSyncedTabConfiguration(
-                titleText: site.title,
-                descriptionText: descriptionText,
-                url: mostRecentSyncedTab.tab.URL
-            )
+        let syncedTabConfiguration = JumpBackInSyncedTabConfiguration(
+            titleText: site.title,
+            descriptionText: descriptionText,
+            url: mostRecentSyncedTab.tab.URL
         )
+
+        return state.copy(mostRecentSyncedTab: syncedTabConfiguration)
     }
 
     private static func handleToggleShowSectionSettingAction(action: Action, state: Self) -> JumpBackInSectionState {
         guard let jumpBackInAction = action as? JumpBackInAction,
-              let isEnabled = jumpBackInAction.isEnabled
-        else {
+              let isEnabled = jumpBackInAction.isEnabled else {
             return defaultState(from: state)
         }
 
-        return state.copy(
-            shouldShowSection: isEnabled
-        )
+        return state.copy(shouldShowSection: isEnabled)
     }
 
     static func defaultState(from state: JumpBackInSectionState) -> JumpBackInSectionState {
