@@ -544,6 +544,84 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertTrue(subject.isBottomSearchBar)
     }
 
+    // MARK: Search suggestions
+
+    func test_querySuggestClient_whenStaleResponseArrives_discardsIt() async {
+        let (subject, mockSuggestClient) = createSubjectWithMockSuggestClient()
+
+        subject.searchQuery = "hello"
+        subject.searchQuery = "hello world"
+        await drainPendingSuggestTasks()
+
+        // Both queries reached the client, so the first one's response is now stale.
+        XCTAssertEqual(mockSuggestClient.capturedQueries, ["hello", "hello world"])
+
+        mockSuggestClient.completeQuery(at: 0, suggestions: ["hello stale"])
+
+        XCTAssertEqual(subject.suggestions, [])
+        XCTAssertEqual(subject.savedQuery, "")
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 0)
+        // Cancellation alone cannot stop an in-flight completion handler, which is why the guard is needed.
+        XCTAssertEqual(mockSuggestClient.cancelPendingRequestCalledCount, 2)
+    }
+
+    func test_querySuggestClient_whenCurrentResponseArrives_appliesIt() async {
+        let (subject, mockSuggestClient) = createSubjectWithMockSuggestClient()
+
+        subject.searchQuery = "hello"
+        await drainPendingSuggestTasks()
+
+        mockSuggestClient.completeQuery(at: 0, suggestions: ["hello", "hello world"])
+
+        // The response's own copy of the typed query is removed, then the typed query is re-inserted at index 0.
+        XCTAssertEqual(subject.suggestions, ["hello", "hello world"])
+        XCTAssertEqual(subject.suggestions?.filter { $0 == "hello" }.count, 1)
+        XCTAssertEqual(subject.savedQuery, "hello")
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
+    }
+
+    func test_querySuggestClient_whenStaleResponseArrivesAfterCurrentOne_keepsCurrentResults() async {
+        let (subject, mockSuggestClient) = createSubjectWithMockSuggestClient()
+
+        subject.searchQuery = "hello"
+        subject.searchQuery = "hello world"
+        await drainPendingSuggestTasks()
+
+        // The current query's response lands first and is applied.
+        mockSuggestClient.completeQuery(at: 1, suggestions: ["hello world news"])
+        XCTAssertEqual(subject.suggestions, ["hello world", "hello world news"])
+        XCTAssertEqual(subject.savedQuery, "hello world")
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
+
+        // The older query's response arrives late and must not clobber what is already on screen.
+        mockSuggestClient.completeQuery(at: 0, suggestions: ["hello stale"])
+
+        XCTAssertEqual(subject.suggestions, ["hello world", "hello world news"])
+        XCTAssertFalse(subject.suggestions?.contains("hello stale") ?? true)
+        XCTAssertEqual(subject.savedQuery, "hello world")
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
+    }
+
+    /// Order matters: `searchEnginesManager.didSet` calls `setupSuggestClient(with:)`, which replaces `suggestClient`
+    /// with a real networking client, so the mock has to be installed afterwards. The manager itself is required
+    /// because `shouldShowSearchEngineSuggestions` reads `shouldShowSearchSuggestions` from it. Firefox Suggest is
+    /// turned off so the `Task` spawned by `querySuggestClient()` returns without reloading or outliving `tearDown`.
+    private func createSubjectWithMockSuggestClient() -> (SearchViewModel, MockSearchSuggestClient) {
+        searchEnginesManager.shouldShowFirefoxSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
+        let subject = createSubject()
+        subject.searchEnginesManager = searchEnginesManager
+        let mockSuggestClient = MockSearchSuggestClient()
+        subject.suggestClient = mockSuggestClient
+        // Setting the manager above fires one empty-query pass that reloads the table; start counting from zero.
+        mockDelegate.didReloadTableViewCount = 0
+        return (subject, mockSuggestClient)
+    }
+
+    private func drainPendingSuggestTasks() async {
+        await Task.yield()
+    }
+
     private func createSubject(
         isPrivate: Bool = false,
         isBottomSearchBar: Bool = false,
@@ -594,5 +672,30 @@ final class MockSearchDelegate: SearchViewDelegate {
     func reloadTableView() {
         didReloadTableViewCalled?()
         didReloadTableViewCount += 1
+    }
+}
+
+/// Captures each request instead of completing it, so tests can deliver responses out of order.
+final class MockSearchSuggestClient: SearchSuggestClientProvider, @unchecked Sendable {
+    typealias QueryCallback = @Sendable (_ response: [String]?, _ error: NSError?) -> Void
+
+    private(set) var capturedQueries: [String] = []
+    private(set) var cancelPendingRequestCalledCount = 0
+    private var pendingCallbacks: [QueryCallback] = []
+
+    func query(_ query: String, callback: @escaping QueryCallback) {
+        capturedQueries.append(query)
+        pendingCallbacks.append(callback)
+    }
+
+    /// Deliberately does not drop pending callbacks: cancelling a `URLSessionTask` that is already completing does
+    /// not stop its completion handler, which is the race the view model has to defend against.
+    func cancelPendingRequest() {
+        cancelPendingRequestCalledCount += 1
+    }
+
+    func completeQuery(at index: Int, suggestions: [String]?, error: NSError? = nil) {
+        guard pendingCallbacks.indices.contains(index) else { return }
+        pendingCallbacks[index](suggestions, error)
     }
 }

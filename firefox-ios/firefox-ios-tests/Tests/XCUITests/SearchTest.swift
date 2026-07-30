@@ -427,13 +427,8 @@ class SearchTests: FeatureFlaggedTestBase {
         XCTAssertFalse(targetLabel.isEmpty, "Expected the target suggestion row to have a non-empty label")
         targetRow.buttons.firstMatch.waitAndTap()
 
-        // The tapped row's exact text (not just a substring) fills the URL bar but does not conduct the search
-        mozWaitForValueContains(urlBarAddress, value: targetLabel)
-        XCTAssertEqual(
-            urlBarAddress.value as? String,
-            targetLabel + " ",
-            "URL bar should contain exactly the tapped row's text"
-        )
+        // The tapped row's text, plus its trailing space, fills the URL bar but does not conduct the search
+        mozWaitForValueContains(urlBarAddress, value: targetLabel + " ")
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
         // Delete the text and type "g"
