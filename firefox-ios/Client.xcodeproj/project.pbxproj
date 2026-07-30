@@ -1712,6 +1712,11 @@
 		C2F700A22FBC000100112233 /* TrackerBlockerModuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */; };
 		C2F700A32FBC000100112233 /* TrackerBlockerModuleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */; };
 		C2F700D42FBC000100112233 /* TrackerBlockerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */; };
+		C2F70A012FBC000100112233 /* TrackerBlockerSheetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B012FBC000100112233 /* TrackerBlockerSheetState.swift */; };
+		C2F70A022FBC000100112233 /* TrackerBlockerGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B022FBC000100112233 /* TrackerBlockerGradientView.swift */; };
+		C2F70A032FBC000100112233 /* TrackerBlockerProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B032FBC000100112233 /* TrackerBlockerProgressBarView.swift */; };
+		C2F70A042FBC000100112233 /* TrackerCategoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B042FBC000100112233 /* TrackerCategoryRowView.swift */; };
+		C2F70A052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift */; };
 		C2FA00022FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00012FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift */; };
 		C2FA00042FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00032FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift */; };
 		C2FA00212FFF000100AD1FBD /* QuickAnswersTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00202FFF000100AD1FBD /* QuickAnswersTip.swift */; };
@@ -10890,6 +10895,11 @@
 		C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleCell.swift; sourceTree = "<group>"; };
 		C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleState.swift; sourceTree = "<group>"; };
 		C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetViewController.swift; sourceTree = "<group>"; };
+		C2F70B012FBC000100112233 /* TrackerBlockerSheetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetState.swift; sourceTree = "<group>"; };
+		C2F70B022FBC000100112233 /* TrackerBlockerGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerGradientView.swift; sourceTree = "<group>"; };
+		C2F70B032FBC000100112233 /* TrackerBlockerProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerProgressBarView.swift; sourceTree = "<group>"; };
+		C2F70B042FBC000100112233 /* TrackerCategoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryRowView.swift; sourceTree = "<group>"; };
+		C2F70B052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetViewControllerTests.swift; sourceTree = "<group>"; };
 		C2FA00012FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteQuickAnswersConfigFetcher.swift; sourceTree = "<group>"; };
 		C2FA00032FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteQuickAnswersConfigFetcherTests.swift; sourceTree = "<group>"; };
 		C2FA00202FFF000100AD1FBD /* QuickAnswersTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersTip.swift; sourceTree = "<group>"; };
@@ -13358,6 +13368,10 @@
 				39B77FF4300FD63B00430F38 /* TrackerBlockerModuleMiddleware.swift */,
 				C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */,
 				C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */,
+				C2F70B012FBC000100112233 /* TrackerBlockerSheetState.swift */,
+				C2F70B022FBC000100112233 /* TrackerBlockerGradientView.swift */,
+				C2F70B032FBC000100112233 /* TrackerBlockerProgressBarView.swift */,
+				C2F70B042FBC000100112233 /* TrackerCategoryRowView.swift */,
 				C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */,
 			);
 			path = TrackerBlockerModule;
@@ -14105,6 +14119,7 @@
 			children = (
 				638201083038D85F003C51C5 /* SectionHeaderConfigurationTests.swift */,
 				39CC6FD3301A792500164DCA /* TrackerBlockerModuleCellTests.swift */,
+				C2F70B052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift */,
 				8A09BCC12D22F1A500CFDF60 /* ContextMenu */,
 				8AA0A6662CAC745300AC7EB3 /* HomepageDiffableDataSourceTests.swift */,
 				8AD3AFC42D143F0D00CFC887 /* HomepageDimensionCalculatorTests.swift */,
@@ -20380,6 +20395,10 @@
 				C79CEE5E2EDF3C4B004C4EB8 /* JumpBackInCell.swift in Sources */,
 				C2F700A22FBC000100112233 /* TrackerBlockerModuleCell.swift in Sources */,
 				C2F700D42FBC000100112233 /* TrackerBlockerSheetViewController.swift in Sources */,
+				C2F70A012FBC000100112233 /* TrackerBlockerSheetState.swift in Sources */,
+				C2F70A022FBC000100112233 /* TrackerBlockerGradientView.swift in Sources */,
+				C2F70A032FBC000100112233 /* TrackerBlockerProgressBarView.swift in Sources */,
+				C2F70A042FBC000100112233 /* TrackerCategoryRowView.swift in Sources */,
 				0EBD66922DBFE41000A78532 /* ConcurrencyThrottler.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */,
@@ -21316,6 +21335,7 @@
 				21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */,
 				61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */,
 				39CC6FD4301A792800164DCA /* TrackerBlockerModuleCellTests.swift in Sources */,
+				C2F70A052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift in Sources */,
 				5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */,
 				8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */,
 				614987AF2F6B37E300BC5ACA /* AIControlsModelTests.swift in Sources */,

@@ -840,9 +840,6 @@ final class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             themeManager: themeManager
         )
-        if let sheet = viewController.sheetPresentationController {
-            sheet.detents = [.medium()]
-        }
         router.present(viewController, animated: true)
     }
 
