@@ -29,8 +29,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     private let viewModel: WebCompatFullPageScreenshotViewModel
     private let imageHeightToWidthRatio: CGFloat
 
-    /// The container, not the scroll view filling it: the three below are read from `layoutSubviews`,
-    /// and a subview of a subview has no bounds that early in the pass.
     private var captureSize: CGSize {
         return captureContainer.bounds.size
     }
@@ -60,8 +58,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         scrollView.delegate = self
     }
 
-    /// The one element VoiceOver reads here. It sits inside the scroll view, so focusing it also
-    /// lets the three-finger scroll move the page.
     private lazy var pageImageView: UIImageView = .build { imageView in
         imageView.image = self.image
         imageView.contentMode = .scaleToFill
@@ -90,9 +86,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         self.image = image
         self.viewModel = viewModel
         let size = image?.size ?? .zero
-        // A zero in either dimension gives a ratio of 0 or infinity, which collapses the capture or
-        // stops it drawing while it still reports itself renderable.
-        self.imageHeightToWidthRatio = size.width > 0 && size.height > 0 ? size.height / size.width : 1
+        self.imageHeightToWidthRatio = size != .zero ? size.height / size.width : 1
         super.init(frame: .zero)
 
         setupLayout()
@@ -109,31 +103,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         scrollView.addSubview(pageImageView)
         captureContainer.addSubview(scrollView)
         addSubviews(captureContainer, railView, closeButton)
-
-        // A page shorter than the space available gets a card its own size, so the ratio only holds
-        // while it fits.
-        let captureRatio = captureContainer.heightAnchor.constraint(
-            equalTo: captureContainer.widthAnchor,
-            multiplier: imageHeightToWidthRatio
-        )
-        captureRatio.priority = .defaultHigh
-        // Breakable, so the near-zero bounds we get mid-presentation don't report unsatisfiable
-        // constraints, while still beating the ratio at a real size.
-        let captureWidth = captureContainer.widthAnchor.constraint(
-            equalTo: safeAreaLayoutGuide.widthAnchor,
-            constant: -UX.captureSideMargin * 2
-        )
-        captureWidth.priority = .required - 1
-        let captureBottom = captureContainer.bottomAnchor.constraint(
-            lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
-            constant: -UX.bottomInset
-        )
-        captureBottom.priority = .required - 1
-        let railBottom = railView.bottomAnchor.constraint(
-            lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
-            constant: -UX.bottomInset
-        )
-        railBottom.priority = .required - 1
 
         NSLayoutConstraint.activate([
             closeButton.leadingAnchor.constraint(
@@ -157,9 +126,18 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
                 constant: UX.captureCloseButtonGap
             ),
             captureContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: 0),
-            captureWidth,
-            captureBottom,
-            captureRatio,
+            captureContainer.widthAnchor.constraint(
+                equalTo: safeAreaLayoutGuide.widthAnchor,
+                constant: -UX.captureSideMargin * 2
+            ).priority(.required - 1),
+            captureContainer.bottomAnchor.constraint(
+                lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
+                constant: -UX.bottomInset
+            ).priority(.required - 1),
+            captureContainer.heightAnchor.constraint(
+                equalTo: captureContainer.widthAnchor,
+                multiplier: imageHeightToWidthRatio
+            ).priority(.defaultHigh),
 
             scrollView.topAnchor.constraint(equalTo: captureContainer.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: captureContainer.leadingAnchor),
@@ -181,7 +159,10 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
                 constant: -WebCompatReporterUX.Spacing.screenHorizontal
             ),
             railView.topAnchor.constraint(equalTo: captureContainer.topAnchor),
-            railBottom
+            railView.bottomAnchor.constraint(
+                lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
+                constant: -UX.bottomInset
+            ).priority(.required - 1)
         ])
     }
 
@@ -194,8 +175,6 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         railView.update(scrollFraction: scrollFraction, visibleFraction: visibleFraction)
     }
 
-    /// Bad geometry produces inf/NaN and kills rendering, so these stay hidden until the bounds and
-    /// the image can describe a page.
     private func updateContentVisibility() {
         let availableWidth = bounds.width - safeAreaInsets.left - safeAreaInsets.right
         let availableHeight = bounds.height - safeAreaInsets.top - safeAreaInsets.bottom

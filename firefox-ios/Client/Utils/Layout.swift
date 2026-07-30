@@ -2,18 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
-
-extension NSLayoutConstraint {
-    /// Builder function that return a new NSLayoutConstraints with the priority set. This is useful
-    /// to inline constraint creation in a call to `NSLayoutConstraint.active()`.
-    /// - Parameter priority: the priority to set
-    /// - Returns: the same `NSLayoutConstraint` with the priority set
-    func priority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
-        self.priority = priority
-        return self
-    }
-}
 
 extension NSLayoutAnchor where AnchorType == NSLayoutXAxisAnchor {
     /// Similar to `constraint(equalTo:)` except that it also takes an optional
