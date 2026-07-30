@@ -5,7 +5,9 @@
 import Foundation
 import Redux
 import Common
+import ModifiedCopy
 
+@Copyable
 struct PasswordGeneratorState: ScreenState {
     var windowUUID: WindowUUID
     var password: String
@@ -55,22 +57,19 @@ struct PasswordGeneratorState: ScreenState {
             else {
                 return defaultState(from: state)
             }
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: password,
-                passwordHidden: state.passwordHidden)
+            return state.copy(windowUUID: action.windowUUID)
+                .copy(password: password)
+                .copy(passwordHidden: state.passwordHidden)
 
         case PasswordGeneratorActionType.hidePassword:
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: state.password,
-                passwordHidden: true)
+            return state.copy(windowUUID: action.windowUUID)
+                .copy(password: state.password)
+                .copy(passwordHidden: true)
 
         case PasswordGeneratorActionType.showPassword:
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: state.password,
-                passwordHidden: false)
+            return state.copy(windowUUID: action.windowUUID)
+                .copy(password: state.password)
+                .copy(passwordHidden: false)
 
         default:
             return defaultState(from: state)
@@ -78,10 +77,8 @@ struct PasswordGeneratorState: ScreenState {
     }
 
     static func defaultState(from state: PasswordGeneratorState) -> PasswordGeneratorState {
-        return PasswordGeneratorState(
-            windowUUID: state.windowUUID,
-            password: state.password,
-            passwordHidden: state.passwordHidden
-        )
+        return state.copy(windowUUID: state.windowUUID)
+            .copy(password: state.password)
+            .copy(passwordHidden: state.passwordHidden)
     }
 }
