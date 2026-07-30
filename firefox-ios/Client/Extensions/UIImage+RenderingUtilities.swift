@@ -11,8 +11,17 @@ extension UIImage {
     ///   - targetSize: the target size for the image. Leave nil to use the default.
     ///   - minimumSize: the minimum size for the image. It will be scaled up to this size
     ///   if needed (keeping proportions).
+    ///   - scale: the renderer scale. Leave nil for the natural screen scale; pass 1 for
+    ///   very tall pages, where the native-scale bitmap would be prohibitively large.
+    ///   - backgroundColor: the fill drawn behind the page. Defaults to clear.
     /// - Returns: an image of the PDF. Returns nil if an issue occurs or the PDF data is invalid.
-    static func imageFromPDF(data: Data, targetSize: CGSize? = nil, minimumSize: CGSize? = nil) -> UIImage? {
+    static func imageFromPDF(
+        data: Data,
+        targetSize: CGSize? = nil,
+        minimumSize: CGSize? = nil,
+        scale: CGFloat? = nil,
+        backgroundColor: UIColor = .clear
+    ) -> UIImage? {
         guard let document = PDFDocument(data: data), let page = document.page(at: 0) else {
             return nil
         }
@@ -33,11 +42,13 @@ extension UIImage {
             size = baseSize
         }
 
-        let renderer = UIGraphicsImageRenderer(size: size)
+        let format = UIGraphicsImageRendererFormat.preferred()
+        if let scale { format.scale = scale }
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
         return renderer.image { context in
             let cgContext = context.cgContext
 
-            UIColor.clear.setFill()
+            backgroundColor.setFill()
             context.fill(CGRect(origin: .zero, size: size))
 
             // Coordinate system must be flipped to match PDF rendering

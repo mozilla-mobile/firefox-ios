@@ -140,4 +140,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var gradientBorder: Gradient { NovaMissingToken.gradient("gradientBorder") }
     var gradientPrivacy: Gradient { NovaMissingToken.gradient("gradientPrivacy") }
     var gradientPrivacyMask: Gradient { NovaMissingToken.gradient("gradientPrivacyMask") }
+    var gradientWidgetSurface: Gradient { NovaMissingToken.gradient("gradientWidgetSurface") }
+    var gradientWidgetSurfaceStandard: Gradient { NovaMissingToken.gradient("gradientWidgetSurfaceStandard") }
+    var gradientWidgetSurfacePrivate: Gradient { NovaMissingToken.gradient("gradientWidgetSurfacePrivate") }
 }

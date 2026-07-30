@@ -26,6 +26,8 @@ final class WebsiteDataScreen {
         okButton.waitAndTap()
         BaseTestCase().mozWaitForElementToNotExist(okButton)
 
+        // The table clears asynchronously; wait for the rows to be removed before asserting the count.
+        BaseTestCase().mozWaitForElementToNotExist(app.cells.buttons.images.firstMatch)
         XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
 
         // Add wait for back button to be enabled
@@ -37,6 +39,8 @@ final class WebsiteDataScreen {
     }
 
     func assertAllWebsiteDataCleared() {
+        // The table clears asynchronously; wait for the rows to be removed before asserting the count.
+        BaseTestCase().mozWaitForElementToNotExist(app.cells.buttons.images.firstMatch)
         XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
     }
 

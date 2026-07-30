@@ -207,6 +207,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .privacyDashboard,
+                titleText: format(string: "Privacy Dashboard"),
+                statusText: format(string: "Toggle Privacy Dashboard")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .quickAnswers,
                 titleText: format(string: "Quick Answers"),
                 statusText: format(string: "Toggle to enable the Quick Answers feature")

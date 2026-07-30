@@ -113,6 +113,9 @@ private struct NovaLightColourPalette: ThemeColourPalette {
         NovaColors.VioletDesaturated90
     ])
     var gradientPrivacyMask = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
+    var gradientWidgetSurface = Gradient(colors: [NovaColors.Gray0, NovaColors.Gray0])
+    var gradientWidgetSurfaceStandard = Gradient(colors: [NovaColors.Gray15, NovaColors.Gray10])
+    var gradientWidgetSurfacePrivate = Gradient(colors: [NovaColors.VioletDesaturated70, NovaColors.VioletDesaturated60])
     var gradientAIStrongStop1: UIColor = NovaColors.Violet50
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30
