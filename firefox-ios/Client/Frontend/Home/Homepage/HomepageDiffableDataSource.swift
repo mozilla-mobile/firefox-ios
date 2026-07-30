@@ -179,7 +179,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         snapshot.appendSections([.spacer])
         snapshot.appendItems([.spacer], toSection: .spacer)
 
-        if state.searchState.shouldShowSearchBar {
+        if state.searchBarState.shouldShowSearchBar {
             snapshot.appendSections([.searchBar])
             snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
