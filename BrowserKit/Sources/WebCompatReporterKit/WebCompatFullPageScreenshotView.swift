@@ -29,19 +29,26 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     private let viewModel: WebCompatFullPageScreenshotViewModel
     private let imageHeightToWidthRatio: CGFloat
 
+    /// The container rather than the scroll view inside it, which the two below measure against:
+    /// they are read from `layoutSubviews`, and at that point in the pass a subview of a subview
+    /// has no bounds yet. The scroll view fills the container, so the rectangle is the same one.
+    private var captureSize: CGSize {
+        return captureContainer.bounds.size
+    }
+
     /// The page as the capture renders it, which is what the rail measures itself against.
     private var pageHeight: CGFloat {
-        return scrollView.bounds.width * imageHeightToWidthRatio
+        return captureSize.width * imageHeightToWidthRatio
     }
 
     private var scrollFraction: CGFloat {
-        let maximumOffset = max(1, pageHeight - scrollView.bounds.height)
+        let maximumOffset = max(1, pageHeight - captureSize.height)
         return min(max(scrollView.contentOffset.y / maximumOffset, 0), 1)
     }
 
     private var visibleFraction: CGFloat {
         guard pageHeight > 0 else { return 1 }
-        return min(1, scrollView.bounds.height / pageHeight)
+        return min(1, captureSize.height / pageHeight)
     }
 
     /// Owns the card's shape and geometry so the scroll view itself stays unrounded and unclipped.
