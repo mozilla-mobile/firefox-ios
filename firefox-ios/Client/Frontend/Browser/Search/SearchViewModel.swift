@@ -23,7 +23,7 @@ class SearchViewModel: FeatureFlaggable,
                        LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
-    private var suggestClient: SearchSuggestClient?
+    var suggestClient: SearchSuggestClientProvider?
     private let recentSearchProvider: RecentSearchProvider
     private let trendingSearchClient: TrendingSearchClientProvider
     private let logger: Logger
