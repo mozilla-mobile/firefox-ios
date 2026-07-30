@@ -947,7 +947,7 @@ struct AccessibilityIdentifiers {
         static let waybackButton = "NativeErrorPage.waybackButton"
         static let waybackErrorCard = "NativeErrorPage.waybackErrorCard"
         static let waybackErrorLabel = "NativeErrorPage.waybackErrorLabel"
-        static let waybackRetryButton = "NativeErrorPage.waybackRetryButton"
+        static let waybackErrorButton = "NativeErrorPage.waybackRetryButton"
         static let goBackButton = "NativeErrorPage.goBackButton"
         static let proceedButton = "NativeErrorPage.proceedButton"
         static let advancedSectionHeader = "NativeErrorPage.advancedSectionHeader"

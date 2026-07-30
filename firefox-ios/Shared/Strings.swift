@@ -2162,6 +2162,16 @@ extension String {
                 tableName: "NativeErrorPage",
                 value: "Retry",
                 comment: "Button label allowing the user to retry searching the Wayback Machine after a failed attempt.")
+            public static let NotFoundLabel = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.NotFound.v155",
+                tableName: "NativeErrorPage",
+                value: "No archived version found",
+                comment: "Label shown when wayback responds and says no snapshot was found.")
+            public static let SearchButton = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.Search.v155",
+                tableName: "NativeErrorPage",
+                value: "Search the web",
+                comment: "Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.")
         }
     }
 }
