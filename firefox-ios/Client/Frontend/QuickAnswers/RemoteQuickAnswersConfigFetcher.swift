@@ -5,35 +5,25 @@
 import Foundation
 import QuickAnswersKit
 
-/// A `QuickAnswersConfigFetcher` that loads the model prompt from Remote Settings.
-/// NOTE: This file should be under QuickAnswersKit near the other fetcher implementations.
-/// Since all of RS classes are in Client, we can't move it there yet.
+/// A `QuickAnswersConfigFetcher` implementation that loads the model prompt from Remote Settings,
+/// falling back to `defaultFetcher` when Remote Settings has no instructions for the model.
 struct RemoteQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
-    /// `getRecords(syncIfEmpty:)` is a synchronous Rust call that can sync over the network and hit
-    /// disk, so it must never run on the main thread nor on the Swift concurrency cooperative pool.
-    private static let fetchQueue = DispatchQueue(
-        label: "org.mozilla.ios.RemoteQuickAnswersConfigFetcher",
-        qos: .userInitiated
-    )
-
-    let model: QuickAnswersModel
+    let model: QuickAnswersKit.QuickAnswersModel
     private let remoteConfig: ASAIRemoteConfig
+    private let defaultFetcher: QuickAnswersConfigFetcher
 
-    init(model: QuickAnswersModel, remoteConfig: ASAIRemoteConfig = ASAIRemoteConfig()) {
+    init(model: QuickAnswersKit.QuickAnswersModel,
+         remoteConfig: ASAIRemoteConfig = ASAIRemoteConfig(),
+         defaultFetcher: QuickAnswersConfigFetcher? = nil) {
         self.model = model
         self.remoteConfig = remoteConfig
+        self.defaultFetcher = defaultFetcher ?? DefaultQuickAnswersConfigFetcher(model: model)
     }
 
     func fetch() async throws -> QuickAnswersConfig {
-        let instructions: String? = await withCheckedContinuation { continuation in
-            Self.fetchQueue.async {
-                continuation.resume(returning: remoteConfig.fetchPrompt(named: recordName))
-            }
+        guard let instructions = remoteConfig.fetchQuickAnswersInstruction(model) else {
+            return try await defaultFetcher.fetch()
         }
-        return QuickAnswersConfig(model: model, instructions: instructions ?? "")
-    }
-
-    private var recordName: String {
-        return "quick-answers-\(model.rawValue)"
+        return QuickAnswersConfig(model: model, instructions: instructions)
     }
 }

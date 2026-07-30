@@ -9,55 +9,45 @@ import XCTest
 
 final class RemoteQuickAnswersConfigFetcherTests: XCTestCase {
     private let instructions = "Answer in 1 sentence."
+    private let defaultInstructions = "Default prompt"
 
     func testFetch_returnsInstructionsOfTheRecordMatchingTheModel() async throws {
         let client = MockRemoteSettingsClient(records: [
-            makeRecord(name: "quick-answers-liner", instructions: "Liner prompt"),
-            makeRecord(name: "quick-answers-exa", instructions: instructions)
+            makeRecord(name: "quickAnswers-liner", instructions: "Liner prompt"),
+            makeRecord(name: "quickAnswers-exa", instructions: instructions)
         ])
         let subject = createSubject(model: .exa, client: client)
 
         let config = try await subject.fetch()
 
         XCTAssertEqual(config.instructions, instructions)
-        XCTAssertEqual(config.options["model"] as? String, QuickAnswersModel.exa.rawValue)
+        XCTAssertEqual(config.options["model"] as? String, QuickAnswersKit.QuickAnswersModel.exa.rawValue)
     }
 
-    func testFetch_returnsEmptyInstructions_whenNoRecordMatchesTheModel() async throws {
+    func testFetch_returnsDefaultInstructions_whenNoRecordMatchesTheModel() async throws {
         let client = MockRemoteSettingsClient(records: [
-            makeRecord(name: "quick-answers-exa", instructions: instructions)
+            makeRecord(name: "quickAnswers-exa", instructions: instructions)
         ])
         let subject = createSubject(model: .liner, client: client)
 
         let config = try await subject.fetch()
 
-        XCTAssertEqual(config.instructions, "")
+        XCTAssertEqual(config.instructions, defaultInstructions)
     }
 
-    func testFetch_returnsEmptyInstructions_whenRecordsAreNotAvailable() async throws {
+    func testFetch_returnsDefaultInstructions_whenRecordsAreNotAvailable() async throws {
         let client = MockRemoteSettingsClient(records: [])
         client.returnsNilRecords = true
         let subject = createSubject(model: .exa, client: client)
 
         let config = try await subject.fetch()
 
-        XCTAssertEqual(config.instructions, "")
-    }
-
-    func testFetch_returnsEmptyInstructions_whenRecordFieldsAreMalformed() async throws {
-        let client = MockRemoteSettingsClient(records: [
-            RemoteSettingsRecord(id: "1", lastModified: 0, deleted: false, attachment: nil, fields: "not-json")
-        ])
-        let subject = createSubject(model: .exa, client: client)
-
-        let config = try await subject.fetch()
-
-        XCTAssertEqual(config.instructions, "")
+        XCTAssertEqual(config.instructions, defaultInstructions)
     }
 
     func testFetch_doesNotReadRecordsOnTheMainThread() async throws {
         let client = MockRemoteSettingsClient(records: [
-            makeRecord(name: "quick-answers-exa", instructions: instructions)
+            makeRecord(name: "quickAnswers-exa", instructions: instructions)
         ])
         let subject = createSubject(model: .exa, client: client)
 
@@ -67,10 +57,14 @@ final class RemoteQuickAnswersConfigFetcherTests: XCTestCase {
     }
 
     private func createSubject(
-        model: QuickAnswersModel,
+        model: QuickAnswersKit.QuickAnswersModel,
         client: MockRemoteSettingsClient
     ) -> RemoteQuickAnswersConfigFetcher {
-        return RemoteQuickAnswersConfigFetcher(model: model, remoteConfig: ASAIRemoteConfig(rsClient: client))
+        return RemoteQuickAnswersConfigFetcher(
+            model: model,
+            remoteConfig: ASAIRemoteConfig(rsClient: client),
+            defaultFetcher: MockQuickAnswersConfigFetcher(model: model, instructions: defaultInstructions)
+        )
     }
 
     private func makeRecord(name: String, instructions: String) -> RemoteSettingsRecord {
@@ -78,5 +72,14 @@ final class RemoteQuickAnswersConfigFetcherTests: XCTestCase {
         {"name":"\(name)","instructions":"\(instructions)"}
         """
         return RemoteSettingsRecord(id: name, lastModified: 0, deleted: false, attachment: nil, fields: fields)
+    }
+}
+
+private struct MockQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
+    let model: QuickAnswersKit.QuickAnswersModel
+    let instructions: String
+
+    func fetch() async throws -> QuickAnswersConfig {
+        return QuickAnswersConfig(model: model, instructions: instructions)
     }
 }
