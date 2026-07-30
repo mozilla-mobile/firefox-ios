@@ -10,9 +10,6 @@
 /* Label for the button, displayed in the menu, downloads a pdf when pressed. */
 "Menu.DownloadPDF.Label.v129" = "PDF ᱰᱟᱣᱱᱞᱚᱰ ᱮᱱᱟ";
 
-/* Label for the edit bookmark button in the legacy menu. Pressing this button opens the bookmark editing screen for the current page's bookmark. Please keep the text as short as possible for this label. */
-"Menu.EditBookmark.Label.v135" = "ᱥᱟᱯᱲᱟᱣ";
-
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "ᱥᱟᱦᱴᱟ ᱨᱮ ᱧᱟᱢ ᱢᱮ";
 
@@ -50,10 +47,10 @@
 "Menu.SharePageAction.Title" = "ᱥᱟᱠᱟᱢ ᱦᱟᱹᱴᱤᱧ ᱢᱮ…";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "ᱰᱮᱥᱠᱴᱚᱯ ᱥᱟᱤᱴ ᱱᱮᱦᱚᱨ ᱢᱮ";
+"Menu.ViewDekstopSiteAction.Title" = "ᱰᱮᱥᱠᱴᱚᱯ ᱥᱟᱭᱤᱴ ᱱᱮᱦᱚᱨ ᱢᱮ";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "ᱢᱚᱵᱟᱤᱞ ᱥᱟᱤᱴ ᱱᱮᱦᱚᱨ ᱢᱮ";
+"Menu.ViewMobileSiteAction.Title" = "ᱢᱚᱵᱟᱤᱞ ᱥᱟᱭᱤᱴ ᱱᱮᱦᱚᱨ ᱢᱮ";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "SettingsMenu.OpenHomePageAction.Title" = "ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ";

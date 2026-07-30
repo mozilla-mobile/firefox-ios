@@ -23,7 +23,7 @@
 "Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139" = "Cancella";
 
 /* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
-"Bookmarks.Menu.DeleteBookmark.v132" = "Elimina segnalibri";
+"Bookmarks.Menu.DeleteBookmark.v132" = "Elimina segnalibro";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
 "Bookmarks.Menu.DeletedBookmark.v131" = "Eliminato “%@”";
@@ -47,7 +47,7 @@
 "Bookmarks.Menu.EditBookmarkDesktopGroupLabel.v154" = "Desktop";
 
 /* VoiceOver accessibility value read for a collapsed folder group header in the New/Edit Folder location picker. */
-"Bookmarks.Menu.EditBookmarkGroupCollapsedValue.v154" = "Raggruppato";
+"Bookmarks.Menu.EditBookmarkGroupCollapsedValue.v154" = "Compresso";
 
 /* VoiceOver accessibility value read for an expanded folder group header in the New/Edit Folder location picker. */
 "Bookmarks.Menu.EditBookmarkGroupExpandedValue.v154" = "Espanso";

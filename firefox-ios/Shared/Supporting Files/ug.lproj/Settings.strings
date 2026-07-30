@@ -73,9 +73,6 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "توسۇلغان";
 
-/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**توسۇلغان**: بۇ ئىقتىدارنى كۆرەلمەيسىز ۋە ئىشلىتەلمەيسىز. ئۈسكۈنىگە چۈشۈرۈلگەن بارلىق سۈنئىي ئەقىل مودېلى ئۆچۈرۈلىدۇ.";
-
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "بەت ۋە خۇلاسە ھەرگىز ساقلانمايدۇ.";
 
@@ -318,12 +315,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "قول ئىشارىتى";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "تىل تاللىنىدۇ";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "ئەپنىڭ تىل مايىللىقى";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "تىل";

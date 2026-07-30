@@ -52,3 +52,24 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Det ser ut til at det er et problem med internett-tilkoblingen din.";
 
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v154" = "Søker etter siden…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v154" = "Kunne ikke nå Wayback Machine";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "Nettstedet kan være opptatt eller utilgjengelig. Prøv igjen senere. Hvis andre sider heller ikke lastes inn, må du kontrollere Wi-Fi- eller datatilkoblingen. %@ kan også søke i Wayback Machine etter en tidligere versjon av denne siden.";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "Prøv igjen";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.Search.v154" = "Sjekk etter tidligere versjon";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "Kan ikke koble til";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Søker i Wayback Machine etter en arkivert versjon av denne siden.";
+

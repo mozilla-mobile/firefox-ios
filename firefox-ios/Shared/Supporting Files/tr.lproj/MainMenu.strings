@@ -295,12 +295,6 @@
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v144" = "Paylaş";
 
-/* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "Koyu web sitesi modunu kapat";
-
-/* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Koyu web sitesi modunu aç";
-
 /* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Koyu web sitesi modu";
 

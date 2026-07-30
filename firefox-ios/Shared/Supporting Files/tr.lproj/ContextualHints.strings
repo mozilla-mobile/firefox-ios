@@ -1,6 +1,12 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode. */
 "ContextualHints.FeltDeletion.Body.v122" = "Yeni bir gizli oturum başlatmak için buraya dokunun. Geçmişinizi, çerezlerinizi ve diğer her şeyi silin.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the description of the one that explains how to search with Google Lens from the address toolbar. */
+"ContextualHints.Toolbar.GoogleLens.Description.v154" = "Gördüğünüz şeyi aramak için kameranızı kullanın veya fotoğraf seçin.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of the one that explains how to search with Google Lens from the address toolbar. */
+"ContextualHints.Toolbar.GoogleLens.Title.v154" = "Google Lens ile ara";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar. */
 "ContextualHints.Translations.Body.v145" = "Hızlı ve gizli çeviriler siz istediğiniz anda hazır.";
 

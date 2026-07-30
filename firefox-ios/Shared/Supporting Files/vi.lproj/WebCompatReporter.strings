@@ -1,0 +1,102 @@
+/* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "Báo cáo của bạn giúp chúng tôi hiểu và khắc phục các sự cố trong %1$@ để cải thiện dịch vụ cho mọi người. %2$@";
+
+/* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "Gửi danh sách các mục bị chặn bởi tính năng trình chống theo dõi";
+
+/* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Tự động thêm ảnh chụp màn hình để minh hoạ sự cố";
+
+/* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Tìm hiểu thêm";
+
+/* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.Title.v154" = "Thông tin bổ sung";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "Thiết kế trang bị lỗi";
+
+/* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
+"WebCompatReporter.Category.Other.v154" = "Khác";
+
+/* Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form. */
+"WebCompatReporter.Category.SiteNotUsable.v154" = "Trang không thể sử dụng";
+
+/* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
+"WebCompatReporter.Category.VideoOrAudio.v154" = "Video hoặc âm thanh không phát";
+
+/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Mô tả sự cố một cách chi tiết";
+
+/* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Mô tả chi tiết sự cố (không bắt buộc)";
+
+/* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLLabel.v154" = "URL";
+
+/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLPlaceholder.v154" = "URL";
+
+/* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "Chọn loại sự cố…";
+
+/* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.Title.v154" = "Sự cố trang web";
+
+/* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Ảnh chụp màn hình trang bạn đang được báo cáo. Nhấn đúp để xem toàn màn hình.";
+
+/* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Đóng";
+
+/* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
+"WebCompatReporter.Preview.Title.v154" = "Xem trước báo cáo";
+
+/* Title of the button that submits the website issue report, in the Report a Website Issue form. */
+"WebCompatReporter.SendButton.Title.v154" = "Gửi báo cáo";
+
+/* Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report. */
+"WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154" = "Đóng";
+
+/* Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form. */
+"WebCompatReporter.Sheet.PreviewButton.v154" = "Xem trước";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.BrowserBlocked.v154" = "Trình duyệt không được hỗ trợ hoặc bị chặn";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "Các nút hoặc liên kết không hoạt động";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Thiếu phụ đề";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "Hình ảnh không tải";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Các mục bị lệch vị trí";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "Các mục chưa hiển thị hết";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Các mục bị chồng chéo lên nhau";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "Các nút điều khiển đa phương tiện bị mất hoặc bị hỏng";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "Các mục bị thiếu";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoAudio.v154" = "Không có âm thanh";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoVideo.v154" = "Không có video";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PageNotLoading.v154" = "Trang không tải đúng cách";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PlaybackFails.v154" = "Video hoặc âm thanh không phát";
+
