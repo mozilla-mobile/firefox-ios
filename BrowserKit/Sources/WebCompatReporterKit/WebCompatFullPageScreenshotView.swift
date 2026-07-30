@@ -29,14 +29,12 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
     private let viewModel: WebCompatFullPageScreenshotViewModel
     private let imageHeightToWidthRatio: CGFloat
 
-    /// The container rather than the scroll view inside it, which the two below measure against:
-    /// they are read from `layoutSubviews`, and at that point in the pass a subview of a subview
-    /// has no bounds yet. The scroll view fills the container, so the rectangle is the same one.
+    /// The container, not the scroll view filling it: the three below are read from `layoutSubviews`,
+    /// and a subview of a subview has no bounds that early in the pass.
     private var captureSize: CGSize {
         return captureContainer.bounds.size
     }
 
-    /// The page as the capture renders it, which is what the rail measures itself against.
     private var pageHeight: CGFloat {
         return captureSize.width * imageHeightToWidthRatio
     }
@@ -51,7 +49,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         return min(1, captureSize.height / pageHeight)
     }
 
-    /// Owns the card's shape and geometry so the scroll view itself stays unrounded and unclipped.
+    /// Owns the card's shape so the scroll view stays unrounded and unclipped.
     private lazy var captureContainer: UIView = .build { view in
         view.clipsToBounds = true
         view.layer.cornerRadius = UX.captureCornerRadius
@@ -68,11 +66,9 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         imageView.image = self.image
         imageView.contentMode = .scaleToFill
         imageView.isAccessibilityElement = true
-        imageView.accessibilityTraits = .image
         imageView.accessibilityLabel = self.viewModel.captureAccessibilityLabel
         imageView.accessibilityIdentifier = self.viewModel.captureAccessibilityIdentifier
-        // Its size comes from the constraints below, so it must not push back with the whole
-        // page's intrinsic size.
+        // Its size comes from the constraints below, so it must not push back with its own.
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
@@ -97,14 +93,12 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         self.image = image
         self.viewModel = viewModel
         let size = image?.size ?? .zero
-        let ratio = size.height / size.width
-        // Both dimensions, or a zero-height capture yields a ratio of 0 that passes `isFinite`
-        // and then collapses the capture to nothing while still reporting itself renderable.
-        self.imageHeightToWidthRatio = (size.width > 0 && size.height > 0 && ratio.isFinite) ? ratio : 1
+        // A zero in either dimension gives a ratio of 0 or infinity, which collapses the capture or
+        // stops it drawing while it still reports itself renderable.
+        self.imageHeightToWidthRatio = size.width > 0 && size.height > 0 ? size.height / size.width : 1
         super.init(frame: .zero)
 
-        setupSubviews()
-        setupConstraints()
+        setupLayout()
         closeButton.configure(viewModel: closeButtonViewModel)
     }
 
@@ -114,20 +108,37 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
 
     // MARK: - Setup
 
-    private func setupSubviews() {
+    private func setupLayout() {
         scrollView.addSubview(pageImageView)
         captureContainer.addSubview(scrollView)
         addSubviews(captureContainer, railView, closeButton)
-    }
 
-    private func setupConstraints() {
-        NSLayoutConstraint.activate(
-            closeButtonConstraints() + captureConstraints() + railConstraints()
+        // A page shorter than the space available gets a card its own size, so the ratio only holds
+        // while it fits.
+        let captureRatio = captureContainer.heightAnchor.constraint(
+            equalTo: captureContainer.widthAnchor,
+            multiplier: imageHeightToWidthRatio
         )
-    }
+        captureRatio.priority = .defaultHigh
+        // Breakable, so the near-zero bounds we get mid-presentation don't report unsatisfiable
+        // constraints, while still beating the ratio at a real size.
+        let captureWidth = captureContainer.widthAnchor.constraint(
+            equalTo: safeAreaLayoutGuide.widthAnchor,
+            constant: -UX.captureSideMargin * 2
+        )
+        captureWidth.priority = .required - 1
+        let captureBottom = captureContainer.bottomAnchor.constraint(
+            lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
+            constant: -UX.bottomInset
+        )
+        captureBottom.priority = .required - 1
+        let railBottom = railView.bottomAnchor.constraint(
+            lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
+            constant: -UX.bottomInset
+        )
+        railBottom.priority = .required - 1
 
-    private func closeButtonConstraints() -> [NSLayoutConstraint] {
-        return [
+        NSLayoutConstraint.activate([
             closeButton.leadingAnchor.constraint(
                 equalTo: safeAreaLayoutGuide.leadingAnchor,
                 constant: WebCompatReporterUX.Spacing.screenHorizontal
@@ -135,30 +146,8 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             closeButton.topAnchor.constraint(
                 equalTo: safeAreaLayoutGuide.topAnchor,
                 constant: UX.closeButtonTopInset
-            )
-        ]
-    }
+            ),
 
-    private func captureConstraints() -> [NSLayoutConstraint] {
-        // A page shorter than the space available gets a card its own size, so the ratio only
-        // holds while it fits. Stretching it would round the top corners over scrim and leave
-        // the image's bottom edge square.
-        let ratio = captureContainer.heightAnchor.constraint(
-            equalTo: captureContainer.widthAnchor,
-            multiplier: imageHeightToWidthRatio
-        )
-        ratio.priority = .defaultHigh
-        let width = captureContainer.widthAnchor.constraint(
-            equalTo: safeAreaLayoutGuide.widthAnchor,
-            constant: -UX.captureSideMargin * 2
-        )
-        let bottom = captureContainer.bottomAnchor.constraint(
-            lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
-            constant: -UX.bottomInset
-        )
-        breakBeforeRequiredConstraints(width, bottom)
-
-        return [
             captureContainer.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
             captureContainer.topAnchor.constraint(
                 equalTo: safeAreaLayoutGuide.topAnchor,
@@ -171,9 +160,9 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
                 constant: UX.captureCloseButtonGap
             ),
             captureContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: 0),
-            width,
-            bottom,
-            ratio,
+            captureWidth,
+            captureBottom,
+            captureRatio,
 
             scrollView.topAnchor.constraint(equalTo: captureContainer.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: captureContainer.leadingAnchor),
@@ -188,34 +177,15 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             pageImageView.heightAnchor.constraint(
                 equalTo: pageImageView.widthAnchor,
                 multiplier: imageHeightToWidthRatio
-            )
-        ]
-    }
+            ),
 
-    /// The rail sizes itself; this only places it and says how far it may grow.
-    private func railConstraints() -> [NSLayoutConstraint] {
-        let bottom = railView.bottomAnchor.constraint(
-            lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
-            constant: -UX.bottomInset
-        )
-        breakBeforeRequiredConstraints(bottom)
-
-        return [
             railView.trailingAnchor.constraint(
                 equalTo: safeAreaLayoutGuide.trailingAnchor,
                 constant: -WebCompatReporterUX.Spacing.screenHorizontal
             ),
             railView.topAnchor.constraint(equalTo: captureContainer.topAnchor),
-            bottom
-        ]
-    }
-
-    /// Keeps the near-zero bounds we get mid-presentation from reporting unsatisfiable
-    /// constraints, while still winning against the aspect-ratio constraints at a real size.
-    private func breakBeforeRequiredConstraints(_ constraints: NSLayoutConstraint...) {
-        for constraint in constraints {
-            constraint.priority = .required - 1
-        }
+            railBottom
+        ])
     }
 
     // MARK: - Layout
@@ -233,14 +203,14 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
         let availableWidth = bounds.width - safeAreaInsets.left - safeAreaInsets.right
         let availableHeight = bounds.height - safeAreaInsets.top - safeAreaInsets.bottom
             - UX.topInset - UX.bottomInset
+        // The capture only gets what the two margins leave, and the rail lives in one of them.
+        // Under `minimumUsableSide` we're still mid-presentation.
         let isRenderable = image != nil
             && availableWidth - UX.captureSideMargin * 2 > UX.minimumUsableSide
             && availableHeight > UX.minimumUsableSide
 
-        let isHidden = !isRenderable
-        for view in [captureContainer, railView] where view.isHidden != isHidden {
-            view.isHidden = isHidden
-        }
+        captureContainer.isHidden = !isRenderable
+        railView.isHidden = !isRenderable
     }
 
     // MARK: - Accessibility

@@ -64,8 +64,6 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
         fatalError("init(coder:) has not been implemented")
     }
 
-    // Deliberately no `super` call: UIKit's implementation would build a plain `UIView` and
-    // assign it over ours.
     override public func loadView() {
         view = screenshotView
     }
