@@ -67,6 +67,21 @@ struct CookiesClearableTests {
         #expect(after.first?.domain == "other.com")
     }
 
+    // Ensure clear(forDomain:) dynamically dispatches to CookiesClearable implementation,
+    // not the Clearable extension default (which asserts).
+    @MainActor
+    @Test
+    func test_clearForDomain_calledViaClearableProtocol_runsCustomImplementation() async {
+        let store = WKWebsiteDataStore.nonPersistent()
+        await store.httpCookieStore.setCookie(makeCookie(domain: "example.com"))
+
+        let clearable: Clearable = makeSubject(dataStore: store)
+        await clearable.clear(forDomain: "example.com")
+
+        let after = await store.httpCookieStore.allCookies()
+        #expect(after.isEmpty)
+    }
+
     @MainActor
     private func makeSubject(dataStore: WKWebsiteDataStore = .nonPersistent()) -> CookiesClearable {
         CookiesClearable(logger: MockLogger(), dataStore: dataStore)
@@ -79,5 +94,49 @@ struct CookiesClearableTests {
             .domain: domain,
             .path: "/"
         ])!
+    }
+}
+
+@Suite("SiteDataClearable")
+struct SiteDataClearableTests {
+    @MainActor
+    @Test
+    func test_clear_returnsSuccess() async {
+        let result: Maybe<Void> = await withCheckedContinuation { continuation in
+            makeSubject().clear().upon { continuation.resume(returning: $0) }
+        }
+        #expect(result.isSuccess)
+    }
+
+    @MainActor
+    @Test
+    func test_clearForDomain_withEmptyStore_storeRemainsEmpty() async {
+        let store = WKWebsiteDataStore.nonPersistent()
+        await makeSubject(dataStore: store).clear(forDomain: "example.com")
+        let records = await store.dataRecords(ofTypes: [WKWebsiteDataTypeLocalStorage])
+        #expect(records.isEmpty)
+    }
+
+    // Ensure clear(forDomain:) dynamically dispatches to SiteDataClearable implementation,
+    // not the Clearable extension default (which asserts).
+    @MainActor
+    @Test
+    func test_clearForDomain_calledViaClearableProtocol_doesNotHitAssertingDefault() async {
+        let store = WKWebsiteDataStore.nonPersistent()
+        let clearable: Clearable = makeSubject(dataStore: store)
+        await clearable.clear(forDomain: "example.com")
+        let records = await store.dataRecords(ofTypes: [WKWebsiteDataTypeLocalStorage])
+        #expect(records.isEmpty)
+    }
+
+    @MainActor
+    @Test
+    func test_label_isOfflineData() {
+        #expect(makeSubject().label == .ClearableOfflineData)
+    }
+
+    @MainActor
+    private func makeSubject(dataStore: WKWebsiteDataStore = .nonPersistent()) -> SiteDataClearable {
+        SiteDataClearable(logger: MockLogger(), dataStore: dataStore)
     }
 }

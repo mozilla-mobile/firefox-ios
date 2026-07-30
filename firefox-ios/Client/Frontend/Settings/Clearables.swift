@@ -134,6 +134,7 @@ class SpotlightClearable: Clearable {
 class SiteDataClearable: Clearable {
     var label: String { .ClearableOfflineData }
     private let logger: Logger
+    private let dataStore: WKWebsiteDataStore
     private let dataTypes = Set([
         WKWebsiteDataTypeLocalStorage,
         WKWebsiteDataTypeSessionStorage,
@@ -142,12 +143,15 @@ class SiteDataClearable: Clearable {
         WKWebsiteDataTypeFetchCache,
     ])
 
-    init(logger: Logger = DefaultLogger.shared) {
+    @MainActor
+    init(logger: Logger = DefaultLogger.shared,
+         dataStore: WKWebsiteDataStore = .default()) {
         self.logger = logger
+        self.dataStore = dataStore
     }
 
     func clear() -> Success {
-        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+        dataStore.removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         logger.log("SiteDataClearable succeeded.",
                    level: .debug,
@@ -157,7 +161,6 @@ class SiteDataClearable: Clearable {
 
     @MainActor
     func clear(forDomain domain: String) async {
-        let dataStore = WKWebsiteDataStore.default()
         let records = await dataStore.dataRecords(ofTypes: dataTypes)
         let targets = records.filter { $0.displayName == domain.lowercased() }
         guard !targets.isEmpty else { return }
