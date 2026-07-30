@@ -145,6 +145,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Address bar choice is onboarding flow screen 2
         onboardingScreen.selectAddressBarPosition(position: .top)
+        onboardingScreen.assertAddressBarPositionSelected(position: .top)
         onboardingScreen.goToNextScreenViaPrimary()
         onboardingScreen.assertTitle()
 
@@ -164,7 +165,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/4038428
+    // https://mozilla.testrail.io/index.php?/cases/view/4035645 [Config] nav:bottombar
     func testModernKitOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -182,6 +183,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Address bar choice is onboarding flow screen 2
         onboardingScreen.selectAddressBarPosition(position: .bottom)
+        onboardingScreen.assertAddressBarPositionSelected(position: .bottom)
         onboardingScreen.goToNextScreenViaPrimary()
         onboardingScreen.assertTitle()
 
