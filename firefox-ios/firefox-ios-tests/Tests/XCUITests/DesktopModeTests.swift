@@ -262,11 +262,9 @@ class DesktopModeTestsIphone: BaseTestCase {
     func testRequestDesktopSitePersistsAcrossDomainAndRestart() {
         if skipPlatform { return }
 
-        // localtest.me / lvh.me are public "wildcard loopback" domains that resolve to
-        // 127.0.0.1 via DNS (no /etc/hosts needed), so they reach the app's local test
-        // server while still being real registrable domains for eTLD+1 purposes:
-        //   news.localtest.me & localtest.me share baseDomain "localtest.me" -> pref shared
-        //   lvh.me is a different baseDomain -> pref not shared
+        // We use localtest.mc and lvh.me instead of news.google.com, google.com and amazon.com
+        // described in TestRail. localtest.me and lvh.me are public "wildcard loopback"
+        // domains that resolve to 127.0.0.1 via DNS.
         let newsGoogleURL = "http://news.localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
         let googleURL = "http://localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
         let amazonURL = "http://lvh.me:\(serverPort)/test-fixture/test-user-agent.html"
