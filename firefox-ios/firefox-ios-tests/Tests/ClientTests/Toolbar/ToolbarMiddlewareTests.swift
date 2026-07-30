@@ -1093,16 +1093,12 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra
-        )
-        let event = GleanMetrics.Toolbar.tabTrayOpenedViaSwipe
+        let event = GleanMetrics.ToolbarAddressBar.swiped
 
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
-        XCTAssertEqual(savedExtras.isAtBottom, false)
     }
 
     func testDidSwipeToOpenTabTray_withBottomToolbar_recordsIsAtBottomTrue() throws {
@@ -1116,12 +1112,13 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
 
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
+        let event = GleanMetrics.ToolbarAddressBar.swiped
 
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.isAtBottom, true)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     // MARK: - ToolbarAction
