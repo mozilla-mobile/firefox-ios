@@ -113,6 +113,9 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
         NovaColors.Purple20
     ])
     var gradientPrivacyMask = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
+    var gradientWidgetSurface = Gradient(colors: [.clear]) // widgets don't have private mode
+    var gradientWidgetSurfaceStandard = Gradient(colors: [.clear]) // widgets don't have private mode
+    var gradientWidgetSurfacePrivate = Gradient(colors: [.clear]) // widgets don't have private mode
     var gradientAIStrongStop1: UIColor = NovaColors.Violet50
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30
