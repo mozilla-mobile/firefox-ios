@@ -96,6 +96,12 @@ final class BrowserScreen {
             element = app.webViews.buttons["I'm Feeling Lucky"]
         } else if mode == .mobile, currentURL.contains("amazon.com") {
             element = app.webViews.buttons["Open All Categories Menu"]
+        } else if currentURL.contains("wiki.mozilla.org") {
+            // MediaWiki's mobile skin footer links to "Desktop"; its desktop skin footer links
+            // back to "Mobile view" - each only exists in the mode it's offering to switch away from.
+            element = mode == .desktop
+                ? app.webViews.staticTexts["Mobile view"]
+                : app.webViews.staticTexts["Desktop"]
         } else if mode == .desktop {
             let pred = NSPredicate(format: "label BEGINSWITH 'Horizontal scroll bar,' AND NOT (label CONTAINS '1 page')")
             element = app.webViews.descendants(matching: .any).matching(pred).firstMatch
