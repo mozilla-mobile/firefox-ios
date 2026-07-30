@@ -1105,7 +1105,10 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
-        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.homepageTelemetryState.isZeroSearch, position: index)
+        let config = OpenPocketTelemetryConfig(
+            isZeroSearch: homepageState.homepageTelemetryState.isZeroSearch,
+            position: index
+        )
         store.dispatch(
             MerinoAction(
                 telemetryConfig: config,
