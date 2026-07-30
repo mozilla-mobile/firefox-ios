@@ -8,7 +8,7 @@ import Redux
 
 /// State for homepage-level flags that are not tied to a specific section.
 @Copyable
-struct HomepageConfigurationState: StateType, Equatable {
+struct HomepageTelemetryState: StateType, Equatable {
     var windowUUID: WindowUUID
 
     /// FXIOS-11504 - This is mainly used for telemetry for top sites and merino and presenting CFRs.
@@ -67,7 +67,7 @@ struct HomepageConfigurationState: StateType, Equatable {
         }
     }
 
-    private static func handleEmbeddedHomepageAction(action: Action, state: Self) -> HomepageConfigurationState {
+    private static func handleEmbeddedHomepageAction(action: Action, state: Self) -> HomepageTelemetryState {
         guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
             return defaultState(from: state)
         }
@@ -75,8 +75,8 @@ struct HomepageConfigurationState: StateType, Equatable {
         return state.copy(isZeroSearch: isZeroSearch).copy(shouldTriggerImpression: false)
     }
 
-    static func defaultState(from state: HomepageConfigurationState) -> HomepageConfigurationState {
-        return HomepageConfigurationState(
+    static func defaultState(from state: HomepageTelemetryState) -> HomepageTelemetryState {
+        return HomepageTelemetryState(
             windowUUID: state.windowUUID,
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false

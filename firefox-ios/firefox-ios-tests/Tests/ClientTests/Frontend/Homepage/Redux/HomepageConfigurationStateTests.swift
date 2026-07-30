@@ -98,11 +98,11 @@ final class HomepageConfigurationStateTests: XCTestCase {
     }
 
     // MARK: - Private
-    private func createSubject() -> HomepageConfigurationState {
-        return HomepageConfigurationState(windowUUID: .XCTestDefaultUUID)
+    private func createSubject() -> HomepageTelemetryState {
+        return HomepageTelemetryState(windowUUID: .XCTestDefaultUUID)
     }
 
-    private func configurationReducer() -> Reducer<HomepageConfigurationState> {
-        return HomepageConfigurationState.reducer
+    private func configurationReducer() -> Reducer<HomepageTelemetryState> {
+        return HomepageTelemetryState.reducer
     }
 }

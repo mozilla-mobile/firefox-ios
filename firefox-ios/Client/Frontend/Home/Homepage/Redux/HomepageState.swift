@@ -21,7 +21,7 @@ struct HomepageState: ScreenState, Equatable {
     let worldcupState: WorldCupSectionState
     let merinoState: MerinoState
     let wallpaperState: WallpaperState
-    let configurationState: HomepageConfigurationState
+    let configurationState: HomepageTelemetryState
     let privacyNoticeState: PrivacyNoticeState
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -64,7 +64,7 @@ struct HomepageState: ScreenState, Equatable {
             worldcupState: WorldCupSectionState(windowUUID: windowUUID),
             merinoState: MerinoState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
-            configurationState: HomepageConfigurationState(windowUUID: windowUUID),
+            configurationState: HomepageTelemetryState(windowUUID: windowUUID),
             privacyNoticeState: PrivacyNoticeState(windowUUID: windowUUID)
         )
     }
@@ -81,7 +81,7 @@ struct HomepageState: ScreenState, Equatable {
         worldcupState: WorldCupSectionState,
         merinoState: MerinoState,
         wallpaperState: WallpaperState,
-        configurationState: HomepageConfigurationState,
+        configurationState: HomepageTelemetryState,
         privacyNoticeState: PrivacyNoticeState
     ) {
         self.windowUUID = windowUUID
@@ -124,7 +124,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(configurationState: HomepageConfigurationState.reducer.legacyReducer(state.configurationState, action))
+            .copy(configurationState: HomepageTelemetryState.reducer.legacyReducer(state.configurationState, action))
             .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
     }
 
@@ -139,7 +139,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState))
             .copy(merinoState: MerinoState.defaultState(from: state.merinoState))
             .copy(wallpaperState: WallpaperState.defaultState(from: state.wallpaperState))
-            .copy(configurationState: HomepageConfigurationState.defaultState(from: state.configurationState))
+            .copy(configurationState: HomepageTelemetryState.defaultState(from: state.configurationState))
             .copy(privacyNoticeState: PrivacyNoticeState.defaultState(from: state.privacyNoticeState))
     }
 }
