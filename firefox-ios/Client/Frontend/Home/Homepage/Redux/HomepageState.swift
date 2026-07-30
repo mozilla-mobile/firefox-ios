@@ -339,7 +339,6 @@ struct HomepageState: ScreenState, Equatable {
 
     // MARK: - Helper function to reset transient state
     private func resetTransientState() -> HomepageState {
-        return self
-            .copy(shouldTriggerImpression: false)
+        return Self.defaultState(from: self)
     }
 }
