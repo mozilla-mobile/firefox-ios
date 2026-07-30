@@ -129,15 +129,15 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             captureContainer.widthAnchor.constraint(
                 equalTo: safeAreaLayoutGuide.widthAnchor,
                 constant: -UX.captureSideMargin * 2
-            ).priority(.required - 1),
+            ).priority(.defaultHigh),
             captureContainer.bottomAnchor.constraint(
                 lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
                 constant: -UX.bottomInset
-            ).priority(.required - 1),
+            ).priority(.defaultHigh),
             captureContainer.heightAnchor.constraint(
                 equalTo: captureContainer.widthAnchor,
                 multiplier: imageHeightToWidthRatio
-            ).priority(.defaultHigh),
+            ).priority(.defaultHigh - 1),
 
             scrollView.topAnchor.constraint(equalTo: captureContainer.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: captureContainer.leadingAnchor),
@@ -162,7 +162,7 @@ final class WebCompatFullPageScreenshotView: UIView, ThemeApplicable, UIScrollVi
             railView.bottomAnchor.constraint(
                 lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
                 constant: -UX.bottomInset
-            ).priority(.required - 1)
+            ).priority(.defaultHigh)
         ])
     }
 

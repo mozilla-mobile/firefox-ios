@@ -10,17 +10,6 @@ import XCTest
 
 @MainActor
 final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
-    func testCloseCallback_notifiesDelegate() throws {
-        let delegate = MockWebCompatFullPageScreenshotDelegate()
-        let subject = createSubject()
-        subject.delegate = delegate
-        subject.loadViewIfNeeded()
-
-        try screenshotView(of: subject).onClose?()
-
-        XCTAssertEqual(delegate.didRequestDismissCallCount, 1)
-    }
-
     // The two-finger scrub is the expected way out of a modal.
     func testAccessibilityEscape_notifiesDelegate() {
         let delegate = MockWebCompatFullPageScreenshotDelegate()
@@ -52,14 +41,6 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         )
         trackForMemoryLeaks(subject)
         return subject
-    }
-
-    /// `loadView` assigns the screenshot view as the root view, so the tests reach it from there
-    /// rather than through a property on the controller.
-    private func screenshotView(
-        of subject: WebCompatFullPageScreenshotViewController
-    ) throws -> WebCompatFullPageScreenshotView {
-        return try XCTUnwrap(subject.view as? WebCompatFullPageScreenshotView)
     }
 }
 

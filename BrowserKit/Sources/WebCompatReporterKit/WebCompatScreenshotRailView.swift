@@ -110,7 +110,7 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
         let railHeight = heightAnchor.constraint(equalToConstant: UX.width * pageHeightToWidthRatio)
         // Breakable, so a caller that caps the rail squashes a long page rather than reporting
         // unsatisfiable constraints.
-        railHeight.priority = .defaultHigh
+        railHeight.priority = .defaultHigh - 1
         let heightConstraint = highlightView.heightAnchor.constraint(
             equalToConstant: UX.minimumHighlightHeight
         )
