@@ -149,6 +149,7 @@
         "DesktopModeTestsIphone\/testLongPressReload_tabTrayExperimentOff_TAE()",
         "DesktopModeTestsIphone\/testLongPressReload_tabTrayExperimentOn()",
         "DesktopModeTestsIphone\/testLongPressReload_tabTrayExperimentOn_TAE()",
+        "DesktopModeTestsIphone\/testRequestDesktopSitePersistsAcrossDomainAndRestart()",
         "DownloadsTests\/testDownloadFile()",
         "DownloadsTests\/testDownloadFile_TAE()",
         "DownloadsTests\/testToastButtonToGoToDownloads()",
