@@ -265,12 +265,12 @@ class DesktopModeTestsIphone: BaseTestCase {
         // We use localtest.mc and lvh.me instead of news.google.com, google.com and amazon.com
         // described in TestRail. localtest.me and lvh.me are public "wildcard loopback"
         // domains that resolve to 127.0.0.1 via DNS.
-        let newsGoogleURL = "http://news.localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
-        let googleURL = "http://localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
-        let amazonURL = "http://lvh.me:\(serverPort)/test-fixture/test-user-agent.html"
+        let newsLocaltestURL = "http://news.localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
+        let localtestURL = "http://localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
+        let lvhURL = "http://lvh.me:\(serverPort)/test-fixture/test-user-agent.html"
 
         // Visit news.google.com
-        browserScreen.navigateToURL(newsGoogleURL)
+        browserScreen.navigateToURL(newsLocaltestURL)
         waitUntilPageLoad()
         browserScreen.assertMobileUserAgentIsDisplayed()
 
@@ -286,7 +286,7 @@ class DesktopModeTestsIphone: BaseTestCase {
 
         // Step 3: Visit google.com -> the desktop version is loaded, since this site shares
         // the same eTLD+1 domain (google.com) as news.google.com.
-        browserScreen.navigateToURL(googleURL)
+        browserScreen.navigateToURL(localtestURL)
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "localtest.me")
         browserScreen.assertDesktopUserAgentIsDisplayed()
@@ -294,7 +294,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         // Step 4: Visit amazon.com -> different domain, no desktop pref, mobile version loads.
         // NOTE: Amazon may show a region-redirect interstitial (e.g. "Deliver to Canada") on
         // top of the mobile page - do not deal with anything locale related here.
-        browserScreen.navigateToURL(amazonURL)
+        browserScreen.navigateToURL(lvhURL)
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "lvh.me")
         browserScreen.assertMobileUserAgentIsDisplayed()
