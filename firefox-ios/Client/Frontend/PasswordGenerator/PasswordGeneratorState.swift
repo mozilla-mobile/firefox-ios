@@ -48,8 +48,9 @@ struct PasswordGeneratorState: ScreenState {
     }
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else { return defaultState(from: state) }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+            return defaultState(from: state)
+        }
 
         switch action.actionType {
         case PasswordGeneratorActionType.updateGeneratedPassword:
@@ -57,18 +58,18 @@ struct PasswordGeneratorState: ScreenState {
             else {
                 return defaultState(from: state)
             }
-            return state.copy(windowUUID: action.windowUUID)
+            return state
+                .copy(windowUUID: action.windowUUID)
                 .copy(password: password)
-                .copy(passwordHidden: state.passwordHidden)
 
         case PasswordGeneratorActionType.hidePassword:
-            return state.copy(windowUUID: action.windowUUID)
-                .copy(password: state.password)
+            return state
+                .copy(windowUUID: action.windowUUID)
                 .copy(passwordHidden: true)
 
         case PasswordGeneratorActionType.showPassword:
-            return state.copy(windowUUID: action.windowUUID)
-                .copy(password: state.password)
+            return state
+                .copy(windowUUID: action.windowUUID)
                 .copy(passwordHidden: false)
 
         default:
@@ -77,8 +78,10 @@ struct PasswordGeneratorState: ScreenState {
     }
 
     static func defaultState(from state: PasswordGeneratorState) -> PasswordGeneratorState {
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(password: state.password)
-            .copy(passwordHidden: state.passwordHidden)
+        return PasswordGeneratorState(
+            windowUUID: state.windowUUID,
+            password: state.password,
+            passwordHidden: state.passwordHidden
+        )
     }
 }
