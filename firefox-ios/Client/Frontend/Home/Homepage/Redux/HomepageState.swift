@@ -21,12 +21,8 @@ struct HomepageState: ScreenState, Equatable {
     let worldcupState: WorldCupSectionState
     let merinoState: MerinoState
     let wallpaperState: WallpaperState
-
-    let shouldTriggerImpression: Bool
-
-    /// `shouldShowPrivacyNotice` is true when the homepage should display the privacy notice card. This is the case when a
-    /// new privacy notice is available after a user has already accepted the ToS/ToU
-    let shouldShowPrivacyNotice: Bool
+    let configurationState: HomepageConfigurationState
+    let privacyNoticeState: PrivacyNoticeState
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = appState.componentState(
@@ -50,8 +46,8 @@ struct HomepageState: ScreenState, Equatable {
             worldcupState: homepageState.worldcupState,
             merinoState: homepageState.merinoState,
             wallpaperState: homepageState.wallpaperState,
-            shouldTriggerImpression: homepageState.shouldTriggerImpression,
-            shouldShowPrivacyNotice: homepageState.shouldShowPrivacyNotice
+            configurationState: homepageState.configurationState,
+            privacyNoticeState: homepageState.privacyNoticeState
         )
     }
 
@@ -68,8 +64,8 @@ struct HomepageState: ScreenState, Equatable {
             worldcupState: WorldCupSectionState(windowUUID: windowUUID),
             merinoState: MerinoState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
-            shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: false
+            configurationState: HomepageConfigurationState(windowUUID: windowUUID),
+            privacyNoticeState: PrivacyNoticeState(windowUUID: windowUUID)
         )
     }
 
@@ -85,8 +81,8 @@ struct HomepageState: ScreenState, Equatable {
         worldcupState: WorldCupSectionState,
         merinoState: MerinoState,
         wallpaperState: WallpaperState,
-        shouldTriggerImpression: Bool,
-        shouldShowPrivacyNotice: Bool
+        configurationState: HomepageConfigurationState,
+        privacyNoticeState: PrivacyNoticeState
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -99,8 +95,8 @@ struct HomepageState: ScreenState, Equatable {
         self.worldcupState = worldcupState
         self.merinoState = merinoState
         self.wallpaperState = wallpaperState
-        self.shouldTriggerImpression = shouldTriggerImpression
-        self.shouldShowPrivacyNotice = shouldShowPrivacyNotice
+        self.configurationState = configurationState
+        self.privacyNoticeState = privacyNoticeState
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -111,112 +107,7 @@ struct HomepageState: ScreenState, Equatable {
     }
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else {
-            return passthroughState(from: state, action: action)
-        }
-
-        switch action.actionType {
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
-            return handleInitializeAndViewWillTransitionAction(state: state, action: action)
-        case HomepageActionType.embeddedHomepage:
-            return handleEmbeddedHomepageAction(state: state, action: action)
-        case HomepageActionType.privacyNoticeCloseButtonTapped:
-            return handlePrivacyNoticeCloseButtonTappedAction(state: state, action: action)
-        case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
-            return handleDidTabChangeToHomepageAction(state: state, action: action)
-        case HomepageMiddlewareActionType.configuredPrivacyNotice:
-            return handlePrivacyNoticeInitialization(action: action, state: state)
-        default:
-            return passthroughState(from: state, action: action)
-        }
-    }
-
-    @MainActor
-    private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
-    }
-
-    @MainActor
-    private static func handleEmbeddedHomepageAction(state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
-    }
-
-    @MainActor
-    private static func handlePrivacyNoticeCloseButtonTappedAction(state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
-            .copy(shouldShowPrivacyNotice: false)
-    }
-
-    @MainActor
-    private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: true)
-    }
-
-    @MainActor
-    private static func handlePrivacyNoticeInitialization(action: Action, state: Self) -> HomepageState {
-        return state
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
-            .copy(shouldShowPrivacyNotice: true)
+        return passthroughState(from: state, action: action)
     }
 
     @MainActor
@@ -233,7 +124,8 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
+            .copy(configurationState: HomepageConfigurationState.reducer.legacyReducer(state.configurationState, action))
+            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
@@ -247,6 +139,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState))
             .copy(merinoState: MerinoState.defaultState(from: state.merinoState))
             .copy(wallpaperState: WallpaperState.defaultState(from: state.wallpaperState))
-            .copy(shouldTriggerImpression: false)
+            .copy(configurationState: HomepageConfigurationState.defaultState(from: state.configurationState))
+            .copy(privacyNoticeState: PrivacyNoticeState.defaultState(from: state.privacyNoticeState))
     }
 }

@@ -28,7 +28,7 @@ final class WallpaperStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 availableContentHeight: 500,
@@ -48,7 +48,7 @@ final class WallpaperStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let stateWithHeights = reducer(
+        let stateWithHeights = reducer.legacyReducer(
             initialState,
             HomepageAction(
                 availableContentHeight: 500,
@@ -58,7 +58,7 @@ final class WallpaperStateTests: XCTestCase {
             )
         )
 
-        let newState = reducer(
+        let newState = reducer.legacyReducer(
             stateWithHeights,
             HomepageAction(
                 availableContentHeight: 600,

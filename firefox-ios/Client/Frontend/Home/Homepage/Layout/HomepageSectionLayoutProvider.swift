@@ -633,7 +633,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         // Ensures we should be showing the privacy notice
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
-              state.shouldShowPrivacyNotice else { return 0 }
+              state.privacyNoticeState.shouldShowPrivacyNotice else { return 0 }
 
         var totalHeight: CGFloat = 0
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
