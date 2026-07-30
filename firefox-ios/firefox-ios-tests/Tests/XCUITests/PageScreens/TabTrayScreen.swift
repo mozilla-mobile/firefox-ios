@@ -105,6 +105,23 @@ final class TabTrayScreen {
         BaseTestCase().mozWaitForElementToExist(newTabButton)
     }
 
+    // Verifies the three controls the Tab Tray should always offer: new tab, close all tabs,
+    // and switch to private browsing.
+    func assertTabTrayControlsExist() {
+        BaseTestCase().mozWaitForElementToExist(newTabButton)
+        BaseTestCase().mozWaitForElementToExist(app.buttons["closeAllTabsButtonTabTray"])
+
+        let privateModeButton = BaseTestCase().iPad()
+            ? app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
+            : app.buttons["\(AccessibilityIdentifiers.TabTray.selectorCell)0"]
+        BaseTestCase().mozWaitForElementToExist(privateModeButton)
+    }
+
+    func swipeToCloseFirstTab() {
+        guard let collectionView = getVisibleCollectionView() else { return }
+        collectionView.cells.element(boundBy: 0).swipeLeft()
+    }
+
     func switchToPrivateBrowsing(timeout: TimeInterval = TIMEOUT) {
         let privateModeButton: XCUIElement
         if BaseTestCase().iPad() {
