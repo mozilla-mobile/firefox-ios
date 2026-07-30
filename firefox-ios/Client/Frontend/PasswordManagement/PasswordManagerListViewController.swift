@@ -27,7 +27,6 @@ class PasswordManagerListViewController: SensitiveViewController,
     private let searchController = UISearchController(searchResultsController: nil)
     private let loadingView: SettingsLoadingView = .build()
     private var deleteAlert: UIAlertController?
-    private var selectedIndexPaths = [IndexPath]()
     private let tableView: UITableView
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
