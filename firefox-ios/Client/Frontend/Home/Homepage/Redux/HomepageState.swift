@@ -183,7 +183,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(isZeroSearch: isZeroSearch)
             .copy(shouldTriggerImpression: false)
     }
 
