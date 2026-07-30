@@ -8,6 +8,7 @@ import Shared
 import Common
 import WebKit
 import SummarizeKit
+import ModifiedCopy
 
 struct TranslationLanguagePickerData: Equatable {
     let languages: [String]
@@ -15,6 +16,7 @@ struct TranslationLanguagePickerData: Equatable {
     let translatedToLanguage: String?
 }
 
+@Copyable
 struct BrowserViewControllerState: ScreenState {
     enum NavigationType: Equatable {
         case home
@@ -104,19 +106,35 @@ struct BrowserViewControllerState: ScreenState {
             navigationDestination: nil)
     }
 
+//    toast: ToastType? = nil,
+//    showOverlay: Bool? = nil,
+//    windowUUID: WindowUUID,
+//    reloadWebView: Bool = false,
+//    shouldStartAtHome: Bool = false,
+//    shouldShowReaderModeBarSummarizerButton: Bool,
+//    browserViewType: BrowserViewType,
+//    navigateTo: NavigationType? = nil,
+//    displayView: DisplayType? = nil,
+//    buttonTapped: UIButton? = nil,
+//    frameContext: PasswordGeneratorFrameContext? = nil,
+//    microsurveyState: MicrosurveyPromptState,
+//    autoTranslatePromptState: AutoTranslatePromptState,
+//    navigationDestination: NavigationDestination? = nil
+
+    // FIXME: Let's remove all the default parameters from this method after we're done with @Copyable
     init(
-        searchScreenState: SearchScreenState,
-        toast: ToastType? = nil,
-        showOverlay: Bool? = nil,
         windowUUID: WindowUUID,
-        reloadWebView: Bool = false,
-        shouldStartAtHome: Bool = false,
+        searchScreenState: SearchScreenState,
+        toast: ToastType?, // I did this one already as an example check
+        showOverlay: Bool? = nil, // This one is used in ONE init
+        reloadWebView: Bool = false, // 2 places
+        shouldStartAtHome: Bool = false, // 1 place
         shouldShowReaderModeBarSummarizerButton: Bool,
         browserViewType: BrowserViewType,
-        navigateTo: NavigationType? = nil,
-        displayView: DisplayType? = nil,
-        buttonTapped: UIButton? = nil,
-        frameContext: PasswordGeneratorFrameContext? = nil,
+        navigateTo: NavigationType? = nil, // Used in 4 places
+        displayView: DisplayType? = nil, // several places
+        buttonTapped: UIButton? = nil, // several actions
+        frameContext: PasswordGeneratorFrameContext? = nil, // password gen 1 place
         microsurveyState: MicrosurveyPromptState,
         autoTranslatePromptState: AutoTranslatePromptState,
         navigationDestination: NavigationDestination? = nil
@@ -166,8 +184,10 @@ struct BrowserViewControllerState: ScreenState {
         } else if let action = action as? SummarizeAction {
             return reduceStateForSummarizeAction(action: action, state: state)
         } else {
+            // TODO: This should be a defaultState() `defaultState(from: state)`
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
+                toast: nil,
                 windowUUID: state.windowUUID,
                 reloadWebView: false,
                 shouldStartAtHome: false,
@@ -204,6 +224,7 @@ struct BrowserViewControllerState: ScreenState {
             NavigationBrowserActionType.tapOnNativeErrorPageLearnMore:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
+                toast: nil,
                 windowUUID: state.windowUUID,
                 shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
                 browserViewType: state.browserViewType,
@@ -215,6 +236,7 @@ struct BrowserViewControllerState: ScreenState {
         case NavigationBrowserActionType.navigationDestinationHandled:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
+                toast: nil,
                 windowUUID: state.windowUUID,
                 shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
                 browserViewType: state.browserViewType,
@@ -252,6 +274,7 @@ struct BrowserViewControllerState: ScreenState {
         case SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
+                toast: nil,
                 windowUUID: state.windowUUID,
                 shouldShowReaderModeBarSummarizerButton: true,
                 browserViewType: state.browserViewType,
@@ -262,6 +285,7 @@ struct BrowserViewControllerState: ScreenState {
         case SummarizeMiddlewareActionType.summaryNotAvailable:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
+                toast: nil,
                 windowUUID: state.windowUUID,
                 shouldShowReaderModeBarSummarizerButton: false,
                 browserViewType: state.browserViewType,
@@ -297,6 +321,7 @@ struct BrowserViewControllerState: ScreenState {
 
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
+                toast: nil,
                 windowUUID: state.windowUUID,
                 shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
                 browserViewType: state.browserViewType,
@@ -335,6 +360,7 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
+            toast: nil,
             windowUUID: state.windowUUID,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
@@ -349,6 +375,7 @@ struct BrowserViewControllerState: ScreenState {
                                                 state: BrowserViewControllerState) -> BrowserViewControllerState {
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
+            toast: nil,
             windowUUID: state.windowUUID,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
@@ -442,6 +469,7 @@ struct BrowserViewControllerState: ScreenState {
         let showOverlay = action.showOverlay ?? false
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
+            toast: nil,
             showOverlay: showOverlay,
             windowUUID: state.windowUUID,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
@@ -732,6 +760,7 @@ struct BrowserViewControllerState: ScreenState {
                                                           action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
+            toast: nil,
             windowUUID: state.windowUUID,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
@@ -749,6 +778,7 @@ struct BrowserViewControllerState: ScreenState {
         }
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
+            toast: nil,
             windowUUID: state.windowUUID,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
@@ -824,23 +854,12 @@ struct BrowserViewControllerState: ScreenState {
 
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
+            toast: nil,
             windowUUID: state.windowUUID,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
             microsurveyState: microsurveyState,
             autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action)
-        )
-    }
-
-    static func defaultState(from state: BrowserViewControllerState) -> BrowserViewControllerState {
-        let microsurveyState = MicrosurveyPromptState.defaultState(from: state.microsurveyState)
-        return BrowserViewControllerState(
-            searchScreenState: state.searchScreenState,
-            windowUUID: state.windowUUID,
-            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
-            browserViewType: state.browserViewType,
-            microsurveyState: microsurveyState,
-            autoTranslatePromptState: AutoTranslatePromptState.defaultState(from: state.autoTranslatePromptState)
         )
     }
 
@@ -859,6 +878,7 @@ struct BrowserViewControllerState: ScreenState {
 
         return BrowserViewControllerState(
             searchScreenState: SearchScreenState(inPrivateMode: isPrivateBrowsing),
+            toast: nil,
             windowUUID: state.windowUUID,
             reloadWebView: true,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
@@ -872,13 +892,33 @@ struct BrowserViewControllerState: ScreenState {
         action: StartAtHomeAction,
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
+        return state
+            .resetTransientState()
+            .copy(shouldStartAtHome: action.shouldStartAtHome ?? false)
+            .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
+            .copy(autoTranslatePromptState: AutoTranslatePromptState
+                .reducer.legacyReducer(state.autoTranslatePromptState, action))
+    }
+
+    static func defaultState(from state: BrowserViewControllerState) -> BrowserViewControllerState {
+        let microsurveyState = MicrosurveyPromptState.defaultState(from: state.microsurveyState)
+
         return BrowserViewControllerState(
-            searchScreenState: state.searchScreenState,
             windowUUID: state.windowUUID,
-            shouldStartAtHome: action.shouldStartAtHome ?? false,
+            searchScreenState: state.searchScreenState,
+            toast: nil,
+            showOverlay: nil,
+            reloadWebView: false,
+            shouldStartAtHome: false,
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
-            microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action),
-            autoTranslatePromptState: AutoTranslatePromptState.reducer.legacyReducer(state.autoTranslatePromptState, action))
+            navigateTo: nil,
+            displayView: nil,
+            buttonTapped: nil,
+            frameContext: nil,
+            microsurveyState: microsurveyState,
+            autoTranslatePromptState: state.autoTranslatePromptState,
+            navigationDestination: nil
+        )
     }
 }

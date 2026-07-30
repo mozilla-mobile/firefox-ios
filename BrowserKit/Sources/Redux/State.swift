@@ -12,4 +12,12 @@ public protocol StateType: Sendable, Equatable {
     ///
     /// All the state properties that have a default value into the initializer should be restore to default.
     static func defaultState(from state: Self) -> Self
+
+    func resetTransientState() -> Self
+}
+
+extension StateType {
+    public func resetTransientState() -> Self {
+        return Self.defaultState(from: self)
+    }
 }
