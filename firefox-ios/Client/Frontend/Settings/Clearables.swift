@@ -15,8 +15,9 @@ protocol Clearable {
     @MainActor
     func clear() -> Success
     /// Clears data scoped to a single domain (eTLD+1).
-    /// Default implementation is a no-op for clearables where domain scoping is not meaningful
-    /// (e.g. history, downloads, spotlight).
+    /// Default implementation in production is a no-op for clearables where domain scoping is not meaningful
+    /// but will assert in debug builds since we currently do not expect to call this on Clearables where
+    /// it is unsupported. (e.g. history, downloads, spotlight).
     @MainActor
     func clear(forDomain domain: String) async
     var label: String { get }
@@ -24,7 +25,9 @@ protocol Clearable {
 
 extension Clearable {
     @MainActor
-    func clear(forDomain domain: String) async { }
+    func clear(forDomain domain: String) async {
+        assertionFailure("clear(forDomain:) called on Clearable '\(String(describing: type(of: self)))' that does not support it.")
+    }
 }
 
 // TODO: FXIOS-14152 - HistoryClearable shouldn't be @unchecked Sendable
@@ -131,25 +134,41 @@ class SpotlightClearable: Clearable {
 class SiteDataClearable: Clearable {
     var label: String { .ClearableOfflineData }
     private let logger: Logger
+    private let dataStore: WKWebsiteDataStore
+    private let dataTypes = Set([
+        WKWebsiteDataTypeLocalStorage,
+        WKWebsiteDataTypeSessionStorage,
+        WKWebsiteDataTypeWebSQLDatabases,
+        WKWebsiteDataTypeIndexedDBDatabases,
+        WKWebsiteDataTypeFetchCache,
+    ])
 
-    init(logger: Logger = DefaultLogger.shared) {
+    @MainActor
+    init(logger: Logger = DefaultLogger.shared,
+         dataStore: WKWebsiteDataStore = .default()) {
         self.logger = logger
+        self.dataStore = dataStore
     }
 
     func clear() -> Success {
-        let dataTypes = Set([
-            WKWebsiteDataTypeLocalStorage,
-            WKWebsiteDataTypeSessionStorage,
-            WKWebsiteDataTypeWebSQLDatabases,
-            WKWebsiteDataTypeIndexedDBDatabases,
-            WKWebsiteDataTypeFetchCache,
-        ])
-        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+        dataStore.removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         logger.log("SiteDataClearable succeeded.",
                    level: .debug,
                    category: .storage)
         return succeed()
+    }
+
+    @MainActor
+    func clear(forDomain domain: String) async {
+        let records = await dataStore.dataRecords(ofTypes: dataTypes)
+        let targets = records.filter { $0.displayName == domain.lowercased() }
+        guard !targets.isEmpty else { return }
+        await dataStore.removeData(ofTypes: dataTypes, for: targets)
+        logger.log(
+            "SiteDataClearable removed domain-scoped data for \(domain).",
+            level: .debug,
+            category: .storage)
     }
 }
 
@@ -158,6 +177,7 @@ class CookiesClearable: Clearable {
     var label: String { .ClearableCookies }
     private let logger: Logger
     private let dataStore: WKWebsiteDataStore
+    private let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage])
 
     @MainActor
     init(logger: Logger = DefaultLogger.shared,
@@ -168,7 +188,7 @@ class CookiesClearable: Clearable {
 
     func clear() -> Success {
         dataStore.removeData(
-            ofTypes: [WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage],
+            ofTypes: dataTypes,
             modifiedSince: .distantPast,
             completionHandler: {}
         )
@@ -181,10 +201,10 @@ class CookiesClearable: Clearable {
 
     @MainActor
     func clear(forDomain domain: String) async {
-        let records = await dataStore.dataRecords(ofTypes: [WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage])
+        let records = await dataStore.dataRecords(ofTypes: dataTypes)
         let targets = records.filter { $0.displayName == domain.lowercased() }
         guard !targets.isEmpty else { return }
-        await dataStore.removeData(ofTypes: [WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage], for: targets)
+        await dataStore.removeData(ofTypes: dataTypes, for: targets)
         logger.log(
             "CookiesClearable removed domain-scoped data for \(domain).",
             level: .debug,
