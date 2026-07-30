@@ -259,6 +259,7 @@ class DesktopModeTestsIphone: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306850
+    // Smoketest
     func testRequestDesktopSitePersistsAcrossDomainAndRestart() {
         if skipPlatform { return }
 
