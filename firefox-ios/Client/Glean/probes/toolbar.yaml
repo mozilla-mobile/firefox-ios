@@ -381,7 +381,7 @@ toolbar.address_bar:
   swiped:
     type: event
     description: |
-        Records when a user swiped up / down on the address bar, opening the tab tray
+        Recorded when a user swiped up / down on the address bar, opening the tab tray
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16079
     data_reviews:
