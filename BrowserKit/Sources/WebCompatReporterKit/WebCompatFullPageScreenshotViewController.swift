@@ -25,8 +25,13 @@ public struct WebCompatFullPageScreenshotViewModel: Equatable, Sendable {
 }
 
 /// Full-screen page viewer, shown over the Report Preview sheet.
-public final class WebCompatFullPageScreenshotViewController: UIViewController, ThemeApplicable {
+public final class WebCompatFullPageScreenshotViewController: UIViewController, Themeable {
     public weak var delegate: WebCompatFullPageScreenshotDelegate?
+
+    public let themeManager: ThemeManager
+    public var themeListenerCancellable: Any?
+    public var currentWindowUUID: WindowUUID?
+    private let notificationCenter: NotificationProtocol
 
     private let screenshotView: WebCompatFullPageScreenshotView
 
@@ -34,13 +39,18 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
         image: UIImage?,
         viewModel: WebCompatFullPageScreenshotViewModel,
         closeButtonViewModel: CloseButtonViewModel,
-        theme: Theme
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         screenshotView = WebCompatFullPageScreenshotView(
             image: image,
             viewModel: viewModel,
             closeButtonViewModel: closeButtonViewModel
         )
+        self.currentWindowUUID = windowUUID
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         // The sheet underneath stays mounted, so without this VoiceOver swipes into it.
@@ -48,7 +58,6 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
         screenshotView.onClose = { [weak self] in
             self?.delegate?.webCompatFullPageScreenshotDidRequestDismiss()
         }
-        screenshotView.applyTheme(theme: theme)
     }
 
     required init?(coder: NSCoder) {
@@ -59,6 +68,12 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
     // assign it over ours.
     override public func loadView() {
         view = screenshotView
+    }
+
+    override public func viewDidLoad() {
+        super.viewDidLoad()
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     // MARK: - Accessibility
@@ -75,9 +90,9 @@ public final class WebCompatFullPageScreenshotViewController: UIViewController, 
         return true
     }
 
-    // MARK: - ThemeApplicable
+    // MARK: - Themeable
 
-    public func applyTheme(theme: Theme) {
-        screenshotView.applyTheme(theme: theme)
+    public func applyTheme() {
+        screenshotView.applyTheme(theme: themeManager.getCurrentTheme(for: currentWindowUUID))
     }
 }

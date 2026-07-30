@@ -54,7 +54,9 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
                 captureAccessibilityIdentifier: "capture"
             ),
             closeButtonViewModel: CloseButtonViewModel(a11yLabel: "Close", a11yIdentifier: "close"),
-            theme: LightTheme()
+            windowUUID: .XCTestDefaultUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+            notificationCenter: NotificationCenter.default
         )
     }
 

@@ -58,7 +58,8 @@ private struct FullPageScreenshotPreview: UIViewControllerRepresentable {
                 a11yLabel: "Close",
                 a11yIdentifier: "WebCompatReporter.Preview.ScreenshotClose"
             ),
-            theme: LightTheme()
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
         )
     }
 
