@@ -15,7 +15,7 @@ final class VPNGuardian: Sendable {
             case .prod:
                 return URL(string: "https://vpn.mozilla.com")!
             case .staging:
-                return URL(string: "https://vpn.mozilla.org")!
+                return URL(string: "https://stage.vpn.nonprod.webservices.mozgcp.net/")!
             }
         }
     }
@@ -25,7 +25,7 @@ final class VPNGuardian: Sendable {
         let bearerToken: String
         let notBefore: Date
         let expiresAt: Date
-        let usage: ProxyUsage
+        let usage: ProxyUsage? // This shouldn't be nil in the real world case
     }
 
     struct ProxyUsage {
@@ -159,13 +159,13 @@ final class VPNGuardian: Sendable {
         let claims = try Self.decodeJWTClaims(parsed.token)
         let nbf = Date(timeIntervalSince1970: claims.nbf)
         let exp = Date(timeIntervalSince1970: claims.exp)
-        let usage = try parseUsage(response: http)
+//        let usage = try parseUsage(response: http)
 
         return ProxyPass(
             bearerToken: parsed.token,
             notBefore: nbf,
             expiresAt: exp,
-            usage: usage
+            usage: nil
         )
     }
 
@@ -176,12 +176,16 @@ final class VPNGuardian: Sendable {
 
     private static func decodeJWTClaims(_ jwt: String) throws -> JWTClaims {
         let parts = jwt.split(separator: ".")
-        guard parts.count == 3 else { throw GuardianError.bodyInvalid }
+        guard parts.count == 3 else {
+            throw GuardianError.bodyInvalid
+        }
         var payload = String(parts[1])
             .replacingOccurrences(of: "-", with: "+")
             .replacingOccurrences(of: "_", with: "/")
         while payload.count % 4 != 0 { payload += "=" }
-        guard let data = Data(base64Encoded: payload) else { throw GuardianError.bodyInvalid }
+        guard let data = Data(base64Encoded: payload) else {
+            throw GuardianError.bodyInvalid
+        }
         do {
             return try JSONDecoder().decode(JWTClaims.self, from: data)
         } catch {
