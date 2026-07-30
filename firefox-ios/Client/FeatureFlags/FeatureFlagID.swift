@@ -40,6 +40,7 @@ enum FeatureFlagID: String, CaseIterable {
     case newBookmarkFolderTree
     case novaDesign
     case noInternetConnectionErrorPage
+    case privacyDashboard
     case quickAnswers
     case recentSearches
     case relayIntegration
@@ -117,6 +118,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .newBookmarkFolderTree,
                 .novaDesign,
                 .noInternetConnectionErrorPage,
+                .privacyDashboard,
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,

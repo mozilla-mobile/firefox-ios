@@ -120,6 +120,22 @@ struct ToolbarTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayOpenedViaSwipe, extras: isAtBottomExtra)
     }
 
+    func interactiveSwipeUpStarted() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.interactiveSwipeUpStarted)
+    }
+
+    func tabTrayOpenedViaInteractiveSwipe() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayOpenedViaInteractiveSwipe)
+    }
+
+    func tabClosedViaInteractiveSwipe() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabClosedViaInteractiveSwipe)
+    }
+
+    func interactiveSwipeCancelled() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.interactiveSwipeCancelled)
+    }
+
     // Other
     func dragInteractionStarted() {
         gleanWrapper.recordEvent(for: GleanMetrics.Awesomebar.dragLocationBar)
