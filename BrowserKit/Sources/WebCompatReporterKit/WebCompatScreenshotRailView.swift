@@ -177,13 +177,10 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
     }
 
     private func applyHighlightHeight() {
-        // Guarded, or assigning it every pass invalidates the layout it was just given.
         guard highlightHeightConstraint?.constant != highlightHeight else { return }
         highlightHeightConstraint?.constant = highlightHeight
     }
 
-    /// A translation rather than a constraint constant, which would only take effect on the next
-    /// layout pass and leave the spotlight trailing the scroll.
     private func updateHighlightOffset() {
         let travel = max(0, bounds.height - highlightHeight)
         let offset = CGAffineTransform(translationX: 0, y: min(1, max(0, scrollFraction)) * travel)
