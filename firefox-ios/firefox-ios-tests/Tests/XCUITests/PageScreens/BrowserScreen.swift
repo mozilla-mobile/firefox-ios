@@ -39,9 +39,7 @@ final class BrowserScreen {
     }
 
     // Reads the adblock-tester.com score banner (e.g. "38 points out of 100 (11 services, 22
-    // checks)") and returns the leading number. The score/service/check counts are dynamic
-    // (depend on ads/trackers live on the page at test time), so callers should compare scores
-    // relative to each other rather than against a fixed expected value.
+    // checks)") and returns the leading number.
     func adblockTesterScore(timeout: TimeInterval = TIMEOUT) -> Int {
         let scoreElement = app.webViews.otherElements.matching(
             NSPredicate(format: "label CONTAINS[c] 'points out of 100'")
