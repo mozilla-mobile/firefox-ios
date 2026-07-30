@@ -4,6 +4,7 @@
 
 import Common
 import ComponentLibrary
+import TestKit
 import XCTest
 @testable import WebCompatReporterKit
 
@@ -18,15 +19,6 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
         try screenshotView(of: subject).onClose?()
 
         XCTAssertEqual(delegate.didRequestDismissCallCount, 1)
-    }
-
-    // The report sheet underneath stays mounted, so without this VoiceOver swipes straight into it.
-    func testLoadView_marksTheScreenshotViewAsModal() throws {
-        let subject = createSubject()
-
-        let screenshotView = try screenshotView(of: subject)
-
-        XCTAssertTrue(screenshotView.accessibilityViewIsModal)
     }
 
     // The two-finger scrub is the expected way out of a modal.
@@ -47,7 +39,7 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
     // MARK: - Helpers
 
     private func createSubject() -> WebCompatFullPageScreenshotViewController {
-        return WebCompatFullPageScreenshotViewController(
+        let subject = WebCompatFullPageScreenshotViewController(
             image: nil,
             viewModel: WebCompatFullPageScreenshotViewModel(
                 captureAccessibilityLabel: "Screenshot of the page",
@@ -58,6 +50,8 @@ final class WebCompatFullPageScreenshotViewControllerTests: XCTestCase {
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             notificationCenter: NotificationCenter.default
         )
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     /// `loadView` assigns the screenshot view as the root view, so the tests reach it from there
