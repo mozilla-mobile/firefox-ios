@@ -47,7 +47,7 @@ final class ASAIRemoteConfig: Sendable {
     }
 
     func fetchQuickAnswersInstruction(_ model: QuickAnswersKit.QuickAnswersModel) -> String? {
-        // We don't provide a system prompt for liner model
+        // We don't provide a system prompt for liner model for now.
         guard model == .exa else { return nil }
         let recordName = "quickAnswers-\(model.rawValue)"
         return getRecords().first { $0.name == recordName }?.instructions
