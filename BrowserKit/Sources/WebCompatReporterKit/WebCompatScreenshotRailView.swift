@@ -6,10 +6,8 @@ import Common
 import UIKit
 
 /// The whole page mapped into a narrow strip, with a spotlight marking the part of it a viewer is
-/// showing. The rail owns its width and page ratio; where it sits and how far it may grow are the
-/// caller's business.
+/// showing.
 final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
-    /// Internal rather than private: the viewer reads `width` and `gap` to work out its own margins.
     enum UX {
         static let width: CGFloat = 44
         static let gap: CGFloat = 12
@@ -44,7 +42,7 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
 
     private lazy var dimmedPageView: UIImageView = makePageView(alpha: UX.dimOpacity)
 
-    /// A bright copy cropped to the window, which is what gives the spotlight effect.
+    /// Crops the bright copy to the window, which is what gives the spotlight effect.
     private lazy var spotlightContainer: UIView = .build { view in
         view.clipsToBounds = true
         view.layer.cornerRadius = UX.highlightCornerRadius
@@ -60,15 +58,10 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
         view.layer.shadowOffset = .zero
     }
 
-    /// - Parameters:
-    ///   - image: the whole page.
-    ///   - pageHeightToWidthRatio: the page's height over its width, which the caller has already
-    ///     derived and sanitised for its own layout.
     init(image: UIImage?, pageHeightToWidthRatio: CGFloat) {
         self.pageHeightToWidthRatio = pageHeightToWidthRatio
         super.init(frame: .zero)
 
-        // Not built through `.build`, so it opts out of the autoresizing mask itself.
         translatesAutoresizingMaskIntoConstraints = false
         setupPageCopies(from: image)
         setupSubviews()
@@ -85,16 +78,16 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
         return .build { imageView in
             imageView.contentMode = .scaleToFill
             imageView.alpha = alpha
-            // Its size comes from the rail, never the other way round. At the default priority a
-            // long page's intrinsic height ties with the rail's own height constraint and wins.
+            // Its size comes from the rail, never the other way round: at the default priority a
+            // long page's intrinsic height beats the rail's own height constraint.
             imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
             imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
     }
 
-    /// Both copies draw at rail width, so carrying the full capture would leave two extra layers
-    /// holding a bitmap of the whole page, and a tall enough one past the maximum texture size.
     private func setupPageCopies(from image: UIImage?) {
+        // Both copies draw at rail width, so the full capture is wasted memory, and a tall enough
+        // one is past the maximum texture size.
         let railImage = image?.preparingThumbnail(
             of: CGSize(width: UX.width, height: UX.width * pageHeightToWidthRatio)
         ) ?? image
@@ -105,10 +98,9 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
     private func setupSubviews() {
         clipView.addSubview(dimmedPageView)
         spotlightContainer.addSubview(spotlightPageView)
-        // The spotlight is a sibling of `clipView` rather than inside it, so the ring's border and
-        // shadow aren't cropped away.
+        // A sibling of `clipView` rather than inside it, so the ring isn't cropped away.
         addSubviews(clipView, spotlightContainer, highlightView)
-        // The rail maps content it doesn't own, so VoiceOver reads that content once, at the source.
+        // The rail maps content VoiceOver already reads at the source.
         for view in [self, clipView, dimmedPageView, spotlightContainer, spotlightPageView, highlightView] {
             view.isAccessibilityElement = false
         }
@@ -177,8 +169,7 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
 
         applyHighlightHeight()
         updateHighlightOffset()
-        // From the height just resolved, not the layer's bounds, which is a pass behind. Without a
-        // path Core Animation traces the shadow from the layer's contents.
+        // From the height just resolved, not the layer's bounds, which is a pass behind.
         highlightView.layer.shadowPath = UIBezierPath(
             roundedRect: CGRect(x: 0, y: 0, width: bounds.width, height: highlightHeight),
             cornerRadius: UX.highlightCornerRadius
@@ -191,8 +182,8 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
         highlightHeightConstraint?.constant = highlightHeight
     }
 
-    /// A translation rather than a constraint constant: the caller updates mid-scroll, where a
-    /// constant only takes effect on the next layout pass and the spotlight visibly trails.
+    /// A translation rather than a constraint constant, which would only take effect on the next
+    /// layout pass and leave the spotlight trailing the scroll.
     private func updateHighlightOffset() {
         let travel = max(0, bounds.height - highlightHeight)
         let offset = CGAffineTransform(translationX: 0, y: min(1, max(0, scrollFraction)) * travel)
@@ -200,16 +191,15 @@ final class WebCompatScreenshotRailView: UIView, ThemeApplicable {
         highlightView.transform = offset
         spotlightContainer.transform = offset
         // The inverse keeps the bright copy registered with the dimmed page underneath, so the
-        // window moves while the slice it exposes stays put.
+        // window moves while the page it exposes stays put.
         spotlightPageView.transform = offset.inverted()
     }
 
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        // Both strokes sit over the page the rail maps, which doesn't follow the app theme, so they
-        // need a token that stays light in every palette. `borderInverted` and `iconSecondary` flip,
-        // which put a white ring on a white page in the light themes.
+        // Both strokes sit over a page that doesn't follow the app theme, so they need a token that
+        // stays light in every palette rather than one that flips.
         clipView.layer.borderColor = theme.colors.iconOnColor.cgColor
         highlightView.layer.borderColor = theme.colors.iconOnColor.cgColor
         highlightView.layer.shadowColor = theme.colors.shadowStrong.cgColor
