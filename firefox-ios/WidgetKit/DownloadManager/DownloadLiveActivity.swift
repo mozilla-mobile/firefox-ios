@@ -131,11 +131,13 @@ struct DownloadLiveActivity: Widget {
             return ZStack {
                 Rectangle()
                     .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
-                    .foregroundStyle(LinearGradient(
-                        gradient: Gradient(colors: [Color(uiColor: theme.colors.gradientAIStrongStop2),
-                                                    Color(uiColor: theme.colors.gradientAIStrongStop1)]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing))
+                    .foregroundStyle(
+                        LinearGradient(
+                            gradient: theme.colors.gradientWidgetSurface.swiftUI,
+                            startPoint: .bottomLeading,
+                            endPoint: .topTrailing
+                        )
+                    )
                 HStack(spacing: UX.LockScreen.horizontalSpacing) {
                     Image(UX.firefoxIcon)
                         .resizable()
