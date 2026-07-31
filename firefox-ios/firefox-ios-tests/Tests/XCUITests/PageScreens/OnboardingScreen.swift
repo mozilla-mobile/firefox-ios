@@ -175,6 +175,20 @@ final class OnboardingScreen {
         XCTAssertEqual(secondaryButton.label, expectedSecondary)
     }
 
+    /// Asserts the copy of a primary-only onboarding card, verifying no secondary button is present.
+    func assertTextsOnCurrentScreen(expectedTitle: String,
+                                    expectedDescription: String,
+                                    expectedPrimary: String) {
+        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
+        let description = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(title)
+        XCTAssertEqual(title.label, expectedTitle)
+        XCTAssertEqual(description.label, expectedDescription)
+        XCTAssertEqual(primaryButton.label, expectedPrimary)
+        XCTAssertFalse(secondaryButton.exists, "No secondary button should be present on this card")
+    }
+
     func tapSignIn() {
         primaryButton.waitAndTap()
     }
@@ -433,6 +447,42 @@ final class OnboardingScreen {
         overlayDoneButton(link).element(in: app).waitAndTap()
     }
 
+    /// Asserts the Manage data-collection bottom sheet shows all its content: title, Done button, and
+    /// both data toggles with their titles, descriptions and embedded Learn more links.
+    func assertManageBottomSheetContents() {
+        let title = sel.MANAGE_SHEET_TITLE.element(in: app)
+        let doneButton = sel.MANAGE_SHEET_DONE_BUTTON.element(in: app)
+        let technicalTitle = sel.MANAGE_SHEET_TECHNICAL_DATA_TITLE.element(in: app)
+        let technicalSwitch = sel.MANAGE_SHEET_TECHNICAL_DATA_SWITCH.element(in: app)
+        let technicalDescription = sel.MANAGE_SHEET_TECHNICAL_DATA_DESCRIPTION.element(in: app)
+        let crashTitle = sel.MANAGE_SHEET_CRASH_REPORTS_TITLE.element(in: app)
+        let crashSwitch = sel.MANAGE_SHEET_CRASH_REPORTS_SWITCH.element(in: app)
+        let crashDescription = sel.MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION.element(in: app)
+
+        BaseTestCase().waitForElementsToExist([
+            title, doneButton,
+            technicalTitle, technicalSwitch, technicalDescription,
+            crashTitle, crashSwitch, crashDescription
+        ])
+
+        XCTAssertEqual(title.label, "Help us make Firefox better")
+        XCTAssertEqual(doneButton.label, "Done")
+
+        XCTAssertEqual(technicalTitle.label, "Send technical and interaction data to Mozilla")
+        XCTAssertTrue(technicalDescription.label.contains(
+            "Data about your device, hardware configuration, and how you use Firefox helps improve"),
+                      "Technical data description text is missing")
+        XCTAssertTrue(technicalDescription.label.contains("Learn more"),
+                      "Technical data description should contain the Learn more link")
+
+        XCTAssertEqual(crashTitle.label, "Automatically send crash reports")
+        XCTAssertTrue(crashDescription.label.contains(
+            "Crash reports allow us to diagnose and fix issues with the browser"),
+                      "Crash reports description text is missing")
+        XCTAssertTrue(crashDescription.label.contains("Learn more"),
+                      "Crash reports description should contain the Learn more link")
+    }
+
     /// Locates the embedded ToS link by its accessibility identifier. Matched across any element type
     /// since the link carries both button and link traits.
     private func linkElement(_ link: ToSLink) -> XCUIElement {
@@ -495,6 +545,14 @@ final class OnboardingScreen {
         XCTAssertTrue(systemThemeButton.isSelected, "System Auto should be the default selected theme")
         XCTAssertFalse(lightButton.isSelected, "Light theme should not be selected by default")
         XCTAssertFalse(darkButton.isSelected, "Dark theme should not be selected by default")
+    }
+
+    /// Asserts the given theme option on the theme card is the selected one. Selection is read from the
+    /// button's accessibility selected state.
+    func assertThemeIsSelected(_ theme: String) {
+        let button = app.buttons["\(rootA11yId)SegmentedButton.\(theme)"]
+        BaseTestCase().mozWaitForElementToExist(button)
+        XCTAssertTrue(button.isSelected, "\(theme) theme should be the selected theme")
     }
 
     /// The System Auto / Automatic segmented button. Its label differs between the modern flows.
