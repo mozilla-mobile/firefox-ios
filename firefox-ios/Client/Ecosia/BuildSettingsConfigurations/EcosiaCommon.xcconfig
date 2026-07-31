@@ -22,7 +22,7 @@ MOZ_WALLPAPER_ASSET_URL=https://cdn.ecosia.org/static/mobile-wallpapers
 OTHER_LDFLAGS = $(inherited) -lxml2
 
 // Ecosia: App marketing version — bump this for every release.
-MARKETING_VERSION = 12.4.0
+MARKETING_VERSION = 12.4.1
 
 // Ecosia: Build performance setting.
 EAGER_LINKING = NO
