@@ -140,6 +140,24 @@ final class ContentBlockerTests: XCTestCase {
         )
     }
 
+    func testClearSafelist_reloadsAdBlockerList() async {
+        let mock = MockAdBlockerListFetcher(jsonToReturn: Self.validRuleJSON)
+        ContentBlocker.shared.adBlockerListFetcher = mock
+
+        await ContentBlocker.shared.reloadAdBlockerList()
+        XCTAssertEqual(mock.fetchCallCount, 1)
+
+        let clearExpectation = XCTestExpectation(description: "clearSafelist completed")
+        ContentBlocker.shared.clearSafelist { clearExpectation.fulfill() }
+        await fulfillment(of: [clearExpectation], timeout: 5)
+
+        XCTAssertEqual(
+            mock.fetchCallCount,
+            2,
+            "clearSafelist should trigger reloadAdBlockerList"
+        )
+    }
+
     func testReloadAdBlockerList_differentJSON_recompiles() async {
         let mock = MockAdBlockerListFetcher(jsonToReturn: Self.validRuleJSON)
         ContentBlocker.shared.adBlockerListFetcher = mock
