@@ -151,7 +151,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         // Verify leading action (share).
         let leadingAction = config.leadingPageActions.first
         XCTAssertNotNil(leadingAction)
-        XCTAssertEqual(leadingAction?.iconName, StandardImageIdentifiers.Medium.share)
+        XCTAssertEqual(leadingAction?.iconName, StandardImageIdentifiers.Medium.shareApple)
         XCTAssertTrue(leadingAction?.isEnabled ?? false)
 
         // Verify trailing action (reload).

@@ -128,7 +128,7 @@ final class AddressToolbarContainerModel: Equatable {
         // Leading Page Actions
         let shareAction: ToolbarActionConfiguration = .init(
             actionType: .share,
-            iconName: StandardImageIdentifiers.Medium.share,
+            iconName: StandardImageIdentifiers.Medium.shareApple,
             isEnabled: true,
             hasCustomColor: true,
             a11yLabel: "",

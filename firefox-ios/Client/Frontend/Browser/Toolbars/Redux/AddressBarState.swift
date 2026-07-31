@@ -1059,7 +1059,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func shareAction(enabled: Bool, hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .share,
-            iconName: StandardImageIdentifiers.Medium.share,
+            iconName: StandardImageIdentifiers.Medium.shareApple,
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             a11yLabel: .TabLocationShareAccessibilityLabel,
