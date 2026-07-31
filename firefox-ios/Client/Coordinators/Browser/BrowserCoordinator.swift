@@ -638,6 +638,16 @@ final class BrowserCoordinator: BaseCoordinator,
         router.dismiss(animated: true, completion: nil)
     }
 
+    func webCompatReportViewControllerDidSubmit() {
+        // Dismiss first, otherwise the toast is covered by the sheet.
+        router.dismiss(animated: true, completion: { [weak self] in
+            // TODO: FXIOS-16468 swap in the dedicated "Report sent" string once l10n exports it.
+            self?.browserViewController.showPlainToast(
+                message: String.Microsurvey.Survey.ConfirmationPage.ConfirmationLabel
+            )
+        })
+    }
+
     func webCompatReportViewControllerDidTapLearnMore(url: URL) {
         // Dismiss first, otherwise the explainer loads in a tab hidden behind the sheet.
         router.dismiss(animated: true, completion: { [weak self] in

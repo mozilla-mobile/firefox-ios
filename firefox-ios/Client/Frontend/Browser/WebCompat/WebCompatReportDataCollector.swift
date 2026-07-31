@@ -31,7 +31,7 @@ struct WebCompatDeviceInfoProvider: WebCompatDeviceInfoProviding {
 /// Tab inputs as a plain value, so tests don't need a live `Tab`/`WKWebView`. Nil
 /// `blockingStrength` means no content blocker; `blockedOrigins` is filled only on opt-in.
 struct WebCompatTabSnapshot: Equatable {
-    var isPrivate: Bool
+    var isPrivate: Bool?
     var pageUserAgent: String?
     var displayScale: CGFloat?
     var blockingStrength: BlockingStrength?
@@ -47,9 +47,15 @@ enum WebCompatReportDataCollector {
         _ payload: WebCompatReportPayload,
         tab: Tab,
         includeBlockedList: Bool,
+        includeTabSpecificInfo: Bool = true,
         device: WebCompatDeviceInfoProviding = WebCompatDeviceInfoProvider()
     ) -> WebCompatReportPayload {
-        return enrich(payload, device: device, tab: makeSnapshot(from: tab, includeBlockedList: includeBlockedList))
+        let snapshot = makeSnapshot(
+            from: tab,
+            includeBlockedList: includeBlockedList,
+            includeTabSpecificInfo: includeTabSpecificInfo
+        )
+        return enrich(payload, device: device, tab: snapshot)
     }
 
     /// Pure mapping: no UIKit, no `Tab`, so tests can drive it with fakes.
@@ -67,8 +73,6 @@ enum WebCompatReportDataCollector {
         payload.hasTouchScreen = true
         payload.defaultUserAgentString = device.defaultUserAgent
 
-        // Only set when something overrode the User Agent, so a nil here is distinguishable from a
-        // page that matched the default. The real value is navigator.userAgent (FXIOS-16184).
         payload.userAgentString = tab.pageUserAgent.flatMap { $0.isEmpty ? nil : $0 }
         // An off-screen web view reports a display scale of 0, not nil.
         let pageScale = tab.displayScale ?? 0
@@ -77,7 +81,7 @@ enum WebCompatReportDataCollector {
 
         if let blockingStrength = tab.blockingStrength {
             payload.blockList = blockingStrength.rawValue
-            payload.etpCategory = blockingStrength.rawValue
+            payload.etpCategory = etpCategory(for: blockingStrength)
             payload.blockedOrigins = tab.blockedOrigins
         }
         return payload
@@ -87,7 +91,7 @@ enum WebCompatReportDataCollector {
     /// opt-out is testable without a live `Tab`.
     static func blockedOrigins(from stats: TPPageStats, includeBlockedList: Bool) -> [String]? {
         guard includeBlockedList else { return nil }
-        return stats.domains.values.flatMap { $0 }.sorted()
+        return Set(stats.domains.values.flatMap { $0 }).sorted()
     }
 
     /// The page as one tall image, via the same PDF route as Save as PDF. WebKit
@@ -127,8 +131,21 @@ enum WebCompatReportDataCollector {
         }
     }
 
+    /// Not `block_list`'s basic/strict: this is the cross-platform standard/strict vocabulary.
+    private static func etpCategory(for blockingStrength: BlockingStrength) -> String {
+        switch blockingStrength {
+        case .basic: return "standard"
+        case .strict: return "strict"
+        }
+    }
+
     @MainActor
-    private static func makeSnapshot(from tab: Tab, includeBlockedList: Bool) -> WebCompatTabSnapshot {
+    private static func makeSnapshot(
+        from tab: Tab,
+        includeBlockedList: Bool,
+        includeTabSpecificInfo: Bool
+    ) -> WebCompatTabSnapshot {
+        guard includeTabSpecificInfo else { return WebCompatTabSnapshot() }
         let blocker = tab.contentBlocker
         return WebCompatTabSnapshot(
             isPrivate: tab.isPrivate,

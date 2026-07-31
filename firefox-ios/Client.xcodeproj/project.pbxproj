@@ -1378,6 +1378,7 @@
 		8CB4742330011A9900BB0119 /* WebCompatReportPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4742230011A9900BB0119 /* WebCompatReportPayloadTests.swift */; };
 		8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8CC033F92BA476840033449E /* FormAutofillHelper.js */; };
 		8CC185F72FF6A0D1004A124F /* WebCompatReporterKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC185F62FF6A0D1004A124F /* WebCompatReporterKit */; };
+		8CC6023F301C89A80041B7D0 /* WebCompatReportRecorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC6023E301C89A80041B7D0 /* WebCompatReportRecorderTests.swift */; };
 		8CC617092C35463B001C7688 /* AddressModifiedStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC617082C35463B001C7688 /* AddressModifiedStatus.swift */; };
 		8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */; };
 		8CE1E4322B8C76AE0026530B /* LoginStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4312B8C76AE0026530B /* LoginStorage.swift */; };
@@ -10105,6 +10106,7 @@
 		8CB4742030011A9900BB0119 /* WebCompatReportDataCollectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportDataCollectorTests.swift; sourceTree = "<group>"; };
 		8CB4742230011A9900BB0119 /* WebCompatReportPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportPayloadTests.swift; sourceTree = "<group>"; };
 		8CC033F92BA476840033449E /* FormAutofillHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FormAutofillHelper.js; sourceTree = "<group>"; };
+		8CC6023E301C89A80041B7D0 /* WebCompatReportRecorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportRecorderTests.swift; sourceTree = "<group>"; };
 		8CC617082C35463B001C7688 /* AddressModifiedStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressModifiedStatus.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModelTests.swift; sourceTree = "<group>"; };
@@ -15245,6 +15247,7 @@
 				8C2FB1EC2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift */,
 				8CB4742030011A9900BB0119 /* WebCompatReportDataCollectorTests.swift */,
 				8CB4742230011A9900BB0119 /* WebCompatReportPayloadTests.swift */,
+				8CC6023E301C89A80041B7D0 /* WebCompatReportRecorderTests.swift */,
 			);
 			path = WebCompatReporter;
 			sourceTree = "<group>";
@@ -21390,6 +21393,7 @@
 				8A4EA0D42C01100200E4E4F1 /* MicrosurveySurfaceManagerTests.swift in Sources */,
 				C24E2D2A2ECF960000BBCFA7 /* MockTranslationsTelemetry.swift in Sources */,
 				8ADEC6832A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift in Sources */,
+				8CC6023F301C89A80041B7D0 /* WebCompatReportRecorderTests.swift in Sources */,
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
 				0B5CAF0D2E40DA89008B5D5A /* MockSummarizationChecker.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,
