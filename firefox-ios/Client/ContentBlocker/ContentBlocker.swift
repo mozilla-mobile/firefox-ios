@@ -165,6 +165,25 @@ class ContentBlocker {
                 }
             }
         }
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(remoteSettingsDidSync(_:)),
+            name: .remoteSettingsDidSync,
+            object: nil
+        )
+    }
+
+    @objc
+    private func remoteSettingsDidSync(_ notification: Notification) {
+        guard let collections = notification.userInfo?["updatedCollections"] as? [String],
+              collections.contains(ASRemoteSettingsCollection.trackingProtectionLists.rawValue) else {
+            return
+        }
+        Task {
+            await reloadAdBlockerList()
+            prefsChanged()
+        }
     }
 
     func prefsChanged() {
