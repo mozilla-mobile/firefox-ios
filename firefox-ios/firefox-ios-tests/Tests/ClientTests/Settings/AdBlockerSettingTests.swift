@@ -85,11 +85,13 @@ final class AdBlockerSettingTests: XCTestCase {
     // MARK: - Helpers
 
     private func createSubject() -> AdBlockerSetting {
-        return AdBlockerSetting(
+        let subject = AdBlockerSetting(
             prefs: profile.prefs,
             supportDelegate: mockDelegate,
             settingDidChange: { _ in }
         )
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
 
