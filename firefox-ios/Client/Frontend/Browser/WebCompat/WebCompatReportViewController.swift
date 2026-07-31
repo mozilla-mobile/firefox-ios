@@ -112,8 +112,6 @@ final class WebCompatReportViewController: UINavigationController,
         return WebCompatReportViewModel(
             navigationTitle: .MainMenu.ToolsSection.ReportBrokenSite,
             closeButtonAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
-            previewButtonTitle: .WebCompatReporter.Sheet.PreviewButton,
-            isPreviewEnabled: state.canPreview,
             sections: makeSections(from: state)
         )
     }
@@ -164,13 +162,8 @@ final class WebCompatReportViewController: UINavigationController,
             id: SectionID.advancedOptions.rawValue,
             title: .WebCompatReporter.AdditionalInfo.Title,
             footer: learnMoreFooter(),
+            // The screenshot row is parked (FXIOS-16450): the image has no transport yet.
             rows: [
-                WebCompatReportViewModel.Row(
-                    id: RowID.includeScreenshot.rawValue,
-                    title: .WebCompatReporter.AdditionalInfo.IncludeScreenshot,
-                    kind: .toggle(isOn: state.includeScreenshot),
-                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeScreenshot
-                ),
                 WebCompatReportViewModel.Row(
                     id: RowID.includeBlockedList.rawValue,
                     title: .WebCompatReporter.AdditionalInfo.IncludeBlockedList,
