@@ -479,10 +479,9 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.tapEmailSignIn()
         onboardingScreen.assertFxASignInWebView()
 
-        // Step 4: Input a valid email and password and sign in.
+        // Step 4: Input a dummy email. (Do not create account here.)
         onboardingScreen.typeFxAEmail("foo1bar2baz3@gmail.com")
         onboardingScreen.tapFxAContinueButton()
-        onboardingScreen.typeFxANewAccountPassword("TestPass\(Int.random(in: 1000...9999))")
     }
 
     func testModernKitOnboardingSkipSync() throws {
