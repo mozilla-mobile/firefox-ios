@@ -184,7 +184,6 @@ struct WorldCupCountryPickerView: View, ThemeableView {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: UX.selectedCheckmarkSize, height: UX.selectedCheckmarkSize)
                 .foregroundStyle(theme.colors.layer5.color)
-                .accessibilityHidden(true)
         }
         .frame(width: UX.selectedBadgeSize, height: UX.selectedBadgeSize)
     }

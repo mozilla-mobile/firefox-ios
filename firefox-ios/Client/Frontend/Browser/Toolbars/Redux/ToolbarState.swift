@@ -369,6 +369,25 @@ struct ToolbarState: ScreenState, Sendable {
     }
 
     static func defaultState(from state: ToolbarState) -> ToolbarState {
-        return state
+        return ToolbarState(windowUUID: state.windowUUID,
+                            toolbarPosition: state.toolbarPosition,
+                            toolbarLayout: state.toolbarLayout,
+                            tabTrayButtonStyle: state.tabTrayButtonStyle,
+                            isPrivateMode: state.isPrivateMode,
+                            addressToolbar: state.addressToolbar,
+                            navigationToolbar: state.navigationToolbar,
+                            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                            isShowingTopTabs: state.isShowingTopTabs,
+                            canGoBack: state.canGoBack,
+                            canGoForward: state.canGoForward,
+                            numberOfTabs: state.numberOfTabs,
+                            scrollAlpha: state.scrollAlpha,
+                            showMenuWarningBadge: state.showMenuWarningBadge,
+                            canShowNavigationHint: state.canShowNavigationHint,
+                            shouldAnimate: state.shouldAnimate,
+                            isTranslucent: state.isTranslucent,
+                            isTranslationsEnabled: state.isTranslationsEnabled,
+                            previousTabScreenshot: state.previousTabScreenshot,
+                            nextTabScreenshot: state.nextTabScreenshot)
     }
 }
