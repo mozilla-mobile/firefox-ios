@@ -9,6 +9,16 @@ import XCTest
 
 @MainActor
 final class WebCompatReportDataCollectorTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
+    }
+
     // MARK: - Device fields
 
     // The native locale list must only reach `defaultLocales`. `languages` is page
@@ -91,7 +101,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertEqual(payload.etpCategory, "strict")
     }
 
-    func test_enrich_basicBlocking_mapsToBasicCategory() {
+    func test_enrich_basicBlocking_mapsToStandardCategoryButKeepsBasicBlockList() {
         let snapshot = makeSnapshot(blockingStrength: .basic)
 
         let payload = WebCompatReportDataCollector.enrich(
@@ -101,7 +111,23 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         )
 
         XCTAssertEqual(payload.blockList, "basic")
-        XCTAssertEqual(payload.etpCategory, "basic")
+        XCTAssertEqual(payload.etpCategory, "standard")
+    }
+
+    func test_enrich_emptyTabSnapshot_keepsDeviceFieldsButDropsTabFields() {
+        let payload = WebCompatReportDataCollector.enrich(
+            WebCompatReportPayload(),
+            device: FakeDeviceInfoProvider(),
+            tab: WebCompatTabSnapshot()
+        )
+
+        XCTAssertNil(payload.isPrivateBrowsing)
+        XCTAssertNil(payload.blockList)
+        XCTAssertNil(payload.etpCategory)
+        XCTAssertNil(payload.blockedOrigins)
+        XCTAssertNil(payload.userAgentString)
+        XCTAssertEqual(payload.defaultLocales, FakeDeviceInfoProvider().preferredLanguages)
+        XCTAssertEqual(payload.memory, FakeDeviceInfoProvider().physicalMemoryMegabytes)
     }
 
     func test_enrich_noBlocker_leavesBlockListAndCategoryNil() {

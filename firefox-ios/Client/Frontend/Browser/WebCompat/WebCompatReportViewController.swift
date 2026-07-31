@@ -12,6 +12,8 @@ import WebCompatReporterKit
 protocol WebCompatReportCoordinatorDelegate: AnyObject {
     /// Sheet asked to finish; the coordinator owns the dismissal.
     func webCompatReportViewControllerDidFinish()
+    /// Report was sent; the coordinator dismisses and confirms it.
+    func webCompatReportViewControllerDidSubmit()
     /// User tapped the "Learn More…" link; the coordinator dismisses the sheet and opens the explainer page.
     func webCompatReportViewControllerDidTapLearnMore(url: URL)
 }
@@ -103,6 +105,10 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     func newState(state: WebCompatReporterState) {
+        guard !state.shouldDismiss else {
+            reportCoordinator?.webCompatReportViewControllerDidSubmit()
+            return
+        }
         sheetViewController.configure(with: WebCompatReportViewController.makeViewModel(from: state))
     }
 

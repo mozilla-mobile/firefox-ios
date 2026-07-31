@@ -170,7 +170,9 @@ broken_site_report.tab_info.antitracking:
   etp_category:
     type: string
     description: |
-      The user's tracking-protection strength setting ("basic" or "strict").
+      The user's tracking-protection strength in the cross-platform ETP vocabulary:
+      "standard" (iOS calls this basic) or "strict". iOS has no "custom" equivalent.
+      `block_list` reports the same setting in iOS's own basic/strict wording.
     data_sensitivity:
       - technical
     lifetime: ping
