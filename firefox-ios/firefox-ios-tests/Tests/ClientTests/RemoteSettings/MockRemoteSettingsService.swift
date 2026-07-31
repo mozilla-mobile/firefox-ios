@@ -4,7 +4,7 @@
 
 import MozillaAppServices
 
-final class MockRemoteSettingsService: RemoteSettingsService {
+final class MockRemoteSettingsService: RemoteSettingsService, @unchecked Sendable {
     private let syncResult: [String]
 
     init(syncResult: [String]) {
