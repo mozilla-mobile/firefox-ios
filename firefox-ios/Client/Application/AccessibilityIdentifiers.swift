@@ -318,6 +318,7 @@ struct AccessibilityIdentifiers {
         }
 
         struct TrackerBlockerModule {
+            static let containerPill = "TrackerBlockerModule.containerPill"
             static let shieldIcon = "TrackerBlockerModule.shieldIcon"
             static let titleLabel = "TrackerBlockerModule.titleLabel"
         }

@@ -18,7 +18,11 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     private lazy var containerPillView: UIView = .build { view in
         view.clipsToBounds = true
+        view.isAccessibilityElement = true
+        view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.containerPill
     }
+
+    private var onTap: (() -> Void)?
 
     private lazy var shieldIcon: UIImageView = .build { icon in
         icon.contentMode = .scaleAspectFit
@@ -59,6 +63,9 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         containerPillView.addSubview(titleLabel)
         contentView.addSubview(containerPillView)
 
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        containerPillView.addGestureRecognizer(tapGesture)
+
         NSLayoutConstraint.activate([
             shieldIcon.widthAnchor.constraint(equalToConstant: UX.iconSize),
             shieldIcon.heightAnchor.constraint(equalToConstant: UX.iconSize),
@@ -83,9 +90,16 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     // MARK: - Configuration
 
-    func configure(count: Int, theme: Theme) {
+    func configure(count: Int, theme: Theme, onTap: (() -> Void)?) {
+        self.onTap = onTap
+        containerPillView.accessibilityTraits = onTap != nil ? .button : .staticText
         updateTrackerNumber(to: count)
         applyTheme(theme: theme)
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
     }
 
     // MARK: - ThemeApplicable
@@ -102,6 +116,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         guard count > 0 else {
             titleLabel.attributedText = nil
             titleLabel.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
+            containerPillView.accessibilityLabel = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
             return
         }
 
@@ -112,5 +127,6 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
             boldString: numberText,
             font: titleLabel.font
         )
+        containerPillView.accessibilityLabel = fullText
     }
 }

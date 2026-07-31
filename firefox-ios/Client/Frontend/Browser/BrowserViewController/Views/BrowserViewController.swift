@@ -2911,6 +2911,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showContextMenu(for: configuration)
         case .trackingProtectionSettings:
             navigationHandler?.show(settings: .contentBlocker)
+        case .trackerBlockerSheet:
+            navigationHandler?.showTrackerBlockerSheet()
         case .settings(let section):
             navigationHandler?.show(settings: section)
         case .link:
