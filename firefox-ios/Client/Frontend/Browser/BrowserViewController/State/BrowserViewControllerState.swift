@@ -96,11 +96,14 @@ struct BrowserViewControllerState: ScreenState {
             searchScreenState: SearchScreenState(),
             toast: nil,
             showOverlay: nil,
+            reloadWebView: false,
+            shouldStartAtHome: false,
             shouldShowReaderModeBarSummarizerButton: false,
             browserViewType: .normalHomepage,
             navigateTo: nil,
             displayView: nil,
             buttonTapped: nil,
+            frameContext: nil,
             microsurveyState: MicrosurveyPromptState(windowUUID: windowUUID),
             autoTranslatePromptState: AutoTranslatePromptState(windowUUID: windowUUID),
             navigationDestination: nil)
@@ -110,18 +113,18 @@ struct BrowserViewControllerState: ScreenState {
         windowUUID: WindowUUID,
         searchScreenState: SearchScreenState,
         toast: ToastType?,
-        showOverlay: Bool? = nil,
-        reloadWebView: Bool = false,
-        shouldStartAtHome: Bool = false,
+        showOverlay: Bool?,
+        reloadWebView: Bool,
+        shouldStartAtHome: Bool,
         shouldShowReaderModeBarSummarizerButton: Bool,
         browserViewType: BrowserViewType,
-        navigateTo: NavigationType? = nil,
-        displayView: DisplayType? = nil,
-        buttonTapped: UIButton? = nil,
-        frameContext: PasswordGeneratorFrameContext? = nil,
+        navigateTo: NavigationType?,
+        displayView: DisplayType?,
+        buttonTapped: UIButton?,
+        frameContext: PasswordGeneratorFrameContext?,
         microsurveyState: MicrosurveyPromptState,
         autoTranslatePromptState: AutoTranslatePromptState,
-        navigationDestination: NavigationDestination? = nil
+        navigationDestination: NavigationDestination?
     ) {
         self.searchScreenState = searchScreenState
         self.toast = toast
