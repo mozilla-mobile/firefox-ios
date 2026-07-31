@@ -28,6 +28,11 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.register(cellType: ThemedLearnMoreTableViewCell.self)
+    }
+
     private func getDefaultBrowserSetting() -> [SettingSection] {
         let footerTitle = NSAttributedString(
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
@@ -78,12 +83,9 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
 
             contentSection.append(autoplaySetting)
             if featureFlagsProvider.isEnabled(.adBlocker) {
-                contentSection.append(BoolSetting(
+                contentSection.append(AdBlockerSetting(
                     prefs: profile.prefs,
-                    theme: theme,
-                    prefKey: PrefsKeys.BlockAds,
-                    defaultValue: false,
-                    titleText: .Settings.Browsing.BlockAds,
+                    supportDelegate: parentCoordinator as? SupportSettingsDelegate,
                     settingDidChange: { isEnabled in
                         if isEnabled {
                             Task {
