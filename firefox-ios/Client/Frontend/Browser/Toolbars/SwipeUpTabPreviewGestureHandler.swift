@@ -202,7 +202,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             let translation = gesture.translation(in: gesture.view)
             let fingerLocation = gesture.location(in: tabPreview)
             tabPreview.translate(translation, fingerLocation: fingerLocation)
-        case .ended:
+        case .ended, .cancelled:
             handleGestureEnded(gesture: gesture)
         default:
             break
