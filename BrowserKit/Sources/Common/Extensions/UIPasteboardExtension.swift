@@ -10,7 +10,7 @@ extension UIPasteboard {
     /// fetch, so it is never done on the main thread.
     ///
     /// - Parameter completion: Called off the main thread. Hop back to it before touching UI.
-    public nonisolated func asyncString(completion: @Sendable @escaping (String?) -> Void) {
+    nonisolated public func asyncString(completion: @Sendable @escaping (String?) -> Void) {
         Task(priority: .medium) { completion(self.string) }
     }
 }
