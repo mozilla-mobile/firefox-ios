@@ -7,22 +7,12 @@ import XCTest
 
 @MainActor
 final class OneLineTableViewCellTests: XCTestCase {
-    override func setUp() async throws {
-        try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
-    }
-
-    override func tearDown() async throws {
-        DependencyHelperMock().reset()
-        try await super.tearDown()
-    }
-
     // MARK: - layoutSubviews
 
     func testLayoutSubviews_nonEditingMode_accessoryViewPositionedAtTrailingEdge() {
         let subject = createSubject()
         subject.frame = CGRect(x: 0, y: 0, width: 375, height: 44)
-        subject.configure(viewModel: createViewModel(withAccessory: true))
+        subject.configure(viewModel: createViewModel(isAccessoryEnabled: true))
 
         subject.layoutSubviews()
 
@@ -37,7 +27,6 @@ final class OneLineTableViewCellTests: XCTestCase {
         XCTAssertEqual(
             accessoryView.frame.origin.x,
             expectedX,
-            accuracy: 0.5,
             "In non-editing mode the accessory view should be positioned at the trailing edge"
         )
     }
@@ -45,7 +34,7 @@ final class OneLineTableViewCellTests: XCTestCase {
     func testLayoutSubviews_editingMode_accessoryViewNotRepositioned() {
         let subject = createSubject()
         subject.frame = CGRect(x: 0, y: 0, width: 375, height: 44)
-        subject.configure(viewModel: createViewModel(withAccessory: true))
+        subject.configure(viewModel: createViewModel(isAccessoryEnabled: true))
 
         let manualX = subject.frame.width
             - (subject.accessoryView?.frame.width ?? 0)
@@ -55,19 +44,21 @@ final class OneLineTableViewCellTests: XCTestCase {
         subject.isEditing = true
         subject.layoutSubviews()
 
-        if let accessoryView = subject.accessoryView {
-            XCTAssertNotEqual(
-                accessoryView.frame.origin.x,
-                manualX,
-                "In editing mode the accessory view should NOT be manually repositioned"
-            )
+        guard let accessoryView = subject.accessoryView else {
+            XCTFail("Expected accessoryView to be set")
+            return
         }
+        XCTAssertNotEqual(
+            accessoryView.frame.origin.x,
+            manualX,
+            "In editing mode the accessory view should NOT be manually repositioned"
+        )
     }
 
     func testLayoutSubviews_noAccessoryView_noOp() {
         let subject = createSubject()
         subject.frame = CGRect(x: 0, y: 0, width: 375, height: 44)
-        subject.configure(viewModel: createViewModel(withAccessory: false))
+        subject.configure(viewModel: createViewModel(isAccessoryEnabled: false))
 
         subject.layoutSubviews()
 
@@ -78,7 +69,7 @@ final class OneLineTableViewCellTests: XCTestCase {
 
     func testConfigure_setsAccessoryAndEditingAccessory() {
         let subject = createSubject()
-        subject.configure(viewModel: createViewModel(withAccessory: true, withEditingAccessory: true))
+        subject.configure(viewModel: createViewModel(isAccessoryEnabled: true, isEditingAccessoryEnabled: true))
 
         XCTAssertNotNil(subject.accessoryView, "accessoryView should be set after configure")
         XCTAssertNotNil(subject.editingAccessoryView, "editingAccessoryView should be set after configure")
@@ -93,11 +84,13 @@ final class OneLineTableViewCellTests: XCTestCase {
     }
 
     private func createViewModel(
-        withAccessory: Bool,
-        withEditingAccessory: Bool = false
+        isAccessoryEnabled: Bool,
+        isEditingAccessoryEnabled: Bool = false
     ) -> OneLineTableViewCellViewModel {
-        let accessoryView: UIView? = withAccessory ? UIView(frame: CGRect(x: 0, y: 0, width: 24, height: 24)) : nil
-        let editingAccessoryView: UIImageView? = withEditingAccessory
+        let accessoryView: UIView? = isAccessoryEnabled
+            ? UIView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+            : nil
+        let editingAccessoryView: UIImageView? = isEditingAccessoryEnabled
             ? UIImageView(image: UIImage(systemName: "chevron.right"))
             : nil
 
