@@ -15,7 +15,7 @@ protocol GroupedParentFolderSelector: AnyObject {
     func selectFolderCreatedFromChild(folder: GroupedFolder)
 }
 
-// FIXME: FXIOS-14161 Make GroupedEditBookmarkViewModel actually Sendable
+// FIXME: FXIOS-16473 Make GroupedEditBookmarkViewModel actually Sendable
 class GroupedEditBookmarkViewModel: GroupedParentFolderSelector, @unchecked Sendable {
     static let mobileHeaderPlaceholderGuid = "EditBookmarkViewModel.mobileHeaderPlaceholder"
     static let desktopHeaderPlaceholderGuid = "EditBookmarkViewModel.desktopHeaderPlaceholder"
