@@ -274,6 +274,50 @@ final class OnboardingScreen {
         sel.CLOSE_BUTTON.element(in: app).waitAndTap()
     }
 
+    func tapEmailSignIn() {
+        sel.EMAIL_SIGN_IN_BUTTON.element(in: app).waitAndTap()
+    }
+
+    /// Asserts the FxA sign-in webview (email + continue button) opened via "Use Email Instead" is displayed.
+    func assertFxASignInWebView() {
+        BaseTestCase().mozWaitForElementToExist(
+            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
+        )
+        if #available(iOS 17, *) {
+            BaseTestCase().mozWaitForElementToExist(
+                app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
+            )
+        } else {
+            BaseTestCase().mozWaitForElementToExist(
+                app.staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
+            )
+        }
+        BaseTestCase().mozWaitForElementToExist(
+            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton]
+        )
+    }
+
+    /// Types the given email into the FxA sign-in webview and dismisses the keyboard.
+    func typeFxAEmail(_ email: String) {
+        if #available(iOS 17, *) {
+            app.webViews.textFields.firstMatch.tapAndTypeText(email)
+        } else {
+            app.staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField].waitAndTap()
+            app.typeText(email)
+        }
+        app.buttons["Done"].tapIfExists()
+    }
+
+    func tapFxAContinueButton() {
+        app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].waitAndTap()
+    }
+
+    /// Types the given password into the new-account password field (the FxA webview's second secure text
+    /// field) for an email that isn't yet registered.
+    func typeFxANewAccountPassword(_ password: String) {
+        app.secureTextFields.element(boundBy: 1).tapAndTypeText(password)
+    }
+
     func closeTourIfNeeded() {
         let closeButton = sel.CLOSE_TOUR_BUTTON.element(in: app)
         if closeButton.exists {
