@@ -122,6 +122,24 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action?.url, "https://changed.example.com")
     }
 
+    func testDidEditText_onDetailsRow_dispatchesSetAdditionalDetailsWithText() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "additionalDetails", text: "Images never load")
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .setAdditionalDetails)
+        XCTAssertEqual(action?.additionalDetails, "Images never load")
+    }
+
+    func testDidEditText_onNonTextRow_dispatchesNothing() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "send", text: "ignored")
+
+        XCTAssertTrue(dispatchedViewActions().isEmpty)
+    }
+
     func testSimpleCreation_hasNoLeaks() {
         let subject = createSubject(reportedURL: nil)
         subject.loadViewIfNeeded()
@@ -189,7 +207,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
-        // URL + category + advanced + send (no sub-options until a category is picked).
+        // No sub-options and no details until a category is picked.
         XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "advancedOptions", "send"])
 
         let advanced = sections.first { $0.id == "advancedOptions" }
@@ -202,12 +220,13 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(text, "https://example.com")
     }
 
-    func testMakeSections_withCategory_keepsAdvancedTogglesBeforeEnabledSendButton() {
+    func testMakeSections_withCategory_addsSubOptionsDetailsAndAdvancedWithSendLast() {
         let state = WebCompatReporterState(
             windowUUID: windowUUID,
             url: "https://example.com",
             selectedCategory: .siteNotUsable,
             selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
+            additionalDetails: "Broken images",
             includeScreenshot: false,
             includeBlockedList: true
         )
@@ -216,12 +235,18 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(
             sections.map(\.id),
-            ["url", "issueCategory", "issueSubOptions", "advancedOptions", "send"]
+            ["url", "issueCategory", "issueSubOptions", "additionalDetails", "advancedOptions", "send"]
         )
 
         let advanced = sections.first { $0.id == "advancedOptions" }
         XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false), .toggle(isOn: true)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: true)])
+
+        let details = sections.first { $0.id == "additionalDetails" }
+        guard case let .detailsField(text, _) = details?.rows.first?.kind else {
+            return XCTFail("Expected a details field row")
+        }
+        XCTAssertEqual(text, "Broken images")
     }
 
     func testMakeSections_attachesLearnMoreFooterWithATappableLink() throws {

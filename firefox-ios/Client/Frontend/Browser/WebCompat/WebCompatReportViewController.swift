@@ -122,12 +122,14 @@ final class WebCompatReportViewController: UINavigationController,
         case url
         case issueCategory
         case issueSubOptions
+        case additionalDetails
         case advancedOptions
         case send
     }
 
     private enum RowID: String {
         case url
+        case additionalDetails
         case includeScreenshot
         case includeBlockedList
         case send
@@ -138,6 +140,9 @@ final class WebCompatReportViewController: UINavigationController,
     ) -> [WebCompatReportViewModel.Section] {
         var sections = [urlSection(from: state)]
         sections.append(contentsOf: makeIssueSections(from: state))
+        if state.showsAdditionalDetails {
+            sections.append(detailsSection(from: state))
+        }
         sections.append(advancedOptionsSection(from: state))
         sections.append(sendSection(from: state))
         return sections
@@ -152,6 +157,23 @@ final class WebCompatReportViewController: UINavigationController,
                     title: .WebCompatReporter.Fields.URLLabel,
                     kind: .urlField(text: state.url, placeholder: .WebCompatReporter.Fields.URLPlaceholder),
                     a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.urlField
+                )
+            ]
+        )
+    }
+
+    private static func detailsSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.additionalDetails.rawValue,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.additionalDetails.rawValue,
+                    title: .WebCompatReporter.Fields.DetailsAccessibilityLabel,
+                    kind: .detailsField(
+                        text: state.additionalDetails,
+                        placeholder: .WebCompatReporter.Fields.DetailsPlaceholder
+                    ),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.additionalDetails
                 )
             ]
         )
@@ -339,7 +361,7 @@ final class WebCompatReportViewController: UINavigationController,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.toggleBlockedList
             ))
-        case .url, .send, .none:
+        case .url, .additionalDetails, .send, .none:
             break
         }
     }
@@ -351,6 +373,12 @@ final class WebCompatReportViewController: UINavigationController,
                 url: text,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.editURL
+            ))
+        case .additionalDetails:
+            store.dispatch(WebCompatReporterViewAction(
+                additionalDetails: text,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.setAdditionalDetails
             ))
         case .includeScreenshot, .includeBlockedList, .send, .none:
             break
