@@ -131,7 +131,7 @@ struct NoImageModeDefaults {
 }
 
 @MainActor
-class ContentBlocker {
+class ContentBlocker: Notifiable {
     var safelistedDomains = SafelistedDomains()
     let ruleStore = WKContentRuleListStore.default()
     var blockImagesRule: WKContentRuleList?
@@ -166,23 +166,26 @@ class ContentBlocker {
             }
         }
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(remoteSettingsDidSync(_:)),
-            name: .remoteSettingsDidSync,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [.remoteSettingsDidSync]
         )
     }
 
-    @objc
-    private func remoteSettingsDidSync(_ notification: Notification) {
-        guard let collections = notification.userInfo?["updatedCollections"] as? [String],
-              collections.contains(ASRemoteSettingsCollection.trackingProtectionLists.rawValue) else {
-            return
-        }
-        Task {
-            await reloadAdBlockerList()
-            prefsChanged()
+    nonisolated func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .remoteSettingsDidSync:
+            guard let collections = notification.userInfo?["updatedCollections"] as? [String],
+                  collections.contains(ASRemoteSettingsCollection.trackingProtectionLists.rawValue) else {
+                return
+            }
+            Task { @MainActor [weak self] in
+                await self?.reloadAdBlockerList()
+                self?.prefsChanged()
+            }
+        default:
+            break
         }
     }
 
