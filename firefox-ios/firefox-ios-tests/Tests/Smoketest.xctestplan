@@ -328,7 +328,6 @@
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
         "JumpBackInTests",
-        "JumpBackInTests\/testJumpBackInSection()",
         "JumpBackInTests\/testLongTapOnJumpBackInLink()",
         "JumpBackInTests\/testPrivateTab()",
         "JumpBackInTests\/testPrivateTab_tabTrayExperimentOff()",
