@@ -116,6 +116,32 @@ struct DownloadLiveActivity: Widget {
         }
     }
 
+    private func minimalViewBuilder(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
+        return ZStack {
+            Image(StandardImageIdentifiers.Large.download)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: UX.downloadIconSizeMinimal, height: UX.downloadIconSizeMinimal)
+                .foregroundStyle(.orange)
+                .padding([.leading, .trailing], UX.downloadPaddingLeadingMinimal)
+            Circle()
+                .stroke(lineWidth: UX.lineWidthMinimal)
+                .foregroundColor(.gray)
+                .opacity(UX.downloadOpacityMinimal)
+                .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
+                .padding(.leading, UX.downloadPaddingLeadingMinimal)
+                .padding(.trailing, UX.downloadPaddingTrailingMinimal)
+            Circle()
+                .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+                .stroke(style: StrokeStyle(lineWidth: UX.lineWidthMinimal))
+                .rotationEffect(.degrees(UX.downloadRotationMinimal))
+                .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
+                .foregroundStyle(.orange)
+                .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
+        }
+    }
+
     private struct LockScreenView: View {
         let liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>
 
@@ -196,32 +222,6 @@ struct DownloadLiveActivity: Widget {
                     .foregroundStyle(Color(uiColor: theme.colors.textOnDark))
             }
             .frame(width: UX.LockScreen.circleRadius, height: UX.LockScreen.circleRadius)
-        }
-    }
-
-    private func minimalViewBuilder(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
-        return ZStack {
-            Image(StandardImageIdentifiers.Large.download)
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .frame(width: UX.downloadIconSizeMinimal, height: UX.downloadIconSizeMinimal)
-                .foregroundStyle(.orange)
-                .padding([.leading, .trailing], UX.downloadPaddingLeadingMinimal)
-            Circle()
-                .stroke(lineWidth: UX.lineWidthMinimal)
-                .foregroundColor(.gray)
-                .opacity(UX.downloadOpacityMinimal)
-                .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
-                .padding(.leading, UX.downloadPaddingLeadingMinimal)
-                .padding(.trailing, UX.downloadPaddingTrailingMinimal)
-            Circle()
-                .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
-                .stroke(style: StrokeStyle(lineWidth: UX.lineWidthMinimal))
-                .rotationEffect(.degrees(UX.downloadRotationMinimal))
-                .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
-                .foregroundStyle(.orange)
-                .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
         }
     }
 
