@@ -21,6 +21,9 @@ public protocol StateType: Sendable, Equatable {
 }
 
 extension StateType {
+    /// Gives every conforming state `resetTransientState()` for free, rather than a hand-written implementation per type.
+    /// This makes `defaultState(from:)` the single source of truth for reseting the transient state.
+    /// As such, `defaultState(from:)` must accurately describe what those transient fields are.
     public func resetTransientState() -> Self {
         return Self.defaultState(from: self)
     }
