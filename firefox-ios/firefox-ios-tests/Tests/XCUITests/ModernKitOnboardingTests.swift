@@ -444,6 +444,47 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.exitSignInFlow()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4036952
+    func testModernKitOnboardingStartSyncingUseEmailInstead() throws {
+        launchApp()
+
+        onboardingScreen.handleTermsOfService()
+
+        // Step 1 - Screen 1: Default Browser - Skip (secondary button)
+        onboardingScreen.assertTitle()
+        onboardingScreen.goToNextScreenViaSecondary()
+
+        if iPad() {
+            // iPad does not show the address bar top/bottom placement card (second screen).
+            // However, the accessibility IDs increase by one.
+            onboardingScreen.currentScreen += 1
+        } else {
+            // Screen 2: Choose address bar - Continue (primary button)
+            onboardingScreen.assertTitle()
+            onboardingScreen.selectAddressBarPosition(position: .bottom)
+            onboardingScreen.goToNextScreenViaPrimary()
+        }
+
+        // Step 1 - Screen 3: Choose theme - Continue (primary button)
+        onboardingScreen.assertTitle()
+        onboardingScreen.selectThemeButtons()
+        onboardingScreen.goToNextScreenViaPrimary()
+
+        // Step 2: Tap the "Start Syncing" button.
+        onboardingScreen.assertSyncScreen()
+        onboardingScreen.tapSignIn()
+        onboardingScreen.assertSignInScreen()
+
+        // Step 3: Tap "Use Email Instead"
+        onboardingScreen.tapEmailSignIn()
+        onboardingScreen.assertFxASignInWebView()
+
+        // Step 4: Input a valid email and password and sign in.
+        onboardingScreen.typeFxAEmail("foo1bar2baz3@gmail.com")
+        onboardingScreen.tapFxAContinueButton()
+        onboardingScreen.typeFxANewAccountPassword("TestPass\(Int.random(in: 1000...9999))")
+    }
+
     func testModernKitOnboardingSkipSync() throws {
         launchApp()
 
