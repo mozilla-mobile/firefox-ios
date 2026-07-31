@@ -312,12 +312,6 @@ final class OnboardingScreen {
         app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].waitAndTap()
     }
 
-    /// Types the given password into the new-account password field (the FxA webview's second secure text
-    /// field) for an email that isn't yet registered.
-    func typeFxANewAccountPassword(_ password: String) {
-        app.secureTextFields.element(boundBy: 1).tapAndTypeText(password)
-    }
-
     func closeTourIfNeeded() {
         let closeButton = sel.CLOSE_TOUR_BUTTON.element(in: app)
         if closeButton.exists {
