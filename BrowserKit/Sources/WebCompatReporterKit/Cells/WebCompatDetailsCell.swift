@@ -53,18 +53,19 @@ final class WebCompatDetailsCell: UICollectionViewListCell,
         contentView.addSubview(placeholderLabel)
         contentView.addSubview(lineHeightSizingLabel)
         let margins = contentView.layoutMarginsGuide
+        let verticalInset = WebCompatReporterUX.Card.contentInset
         NSLayoutConstraint.activate([
             textView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             textView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
-            textView.topAnchor.constraint(equalTo: margins.topAnchor),
-            textView.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
+            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: verticalInset),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -verticalInset),
             textView.heightAnchor.constraint(
                 equalTo: lineHeightSizingLabel.heightAnchor,
                 multiplier: CGFloat(WebCompatReporterUX.DetailsField.visibleLineCount)
             ),
 
             lineHeightSizingLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
-            lineHeightSizingLabel.topAnchor.constraint(equalTo: margins.topAnchor),
+            lineHeightSizingLabel.topAnchor.constraint(equalTo: textView.topAnchor),
 
             placeholderLabel.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
             placeholderLabel.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
