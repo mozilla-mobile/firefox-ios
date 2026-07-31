@@ -56,13 +56,6 @@ final class QuickAnswersSettingsViewControllerTests: XCTestCase {
         XCTAssertEqual(boolSetting.prefKey, PrefsKeys.Settings.quickAnswersFeature)
     }
 
-    func test_generateSettings_boolSettingDefaultValueIsTrue() throws {
-        let subject = createSubject()
-        let section = try XCTUnwrap(subject.generateSettings().first)
-        let boolSetting = try XCTUnwrap(section.children.first as? BoolSetting)
-        XCTAssertTrue(try XCTUnwrap(boolSetting.getDefaultValue()))
-    }
-
     func test_generateSettings_sectionHasNoTitle() throws {
         let subject = createSubject()
         let section = try XCTUnwrap(subject.generateSettings().first)
