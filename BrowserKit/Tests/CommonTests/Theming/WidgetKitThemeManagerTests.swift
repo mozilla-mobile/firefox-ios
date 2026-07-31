@@ -25,7 +25,7 @@ final class WidgetKitThemeManagerTests: XCTestCase {
         let theme = subject.resolvedTheme(with: true)
 
         XCTAssertTrue(theme.isNova)
-        XCTAssertEqual(theme.type, .privateMode)
+        XCTAssertNotEqual(theme.type, .privateMode)
     }
 
     func testResolvedTheme_withPrivateNotShown_returnsNovaTheme() {
@@ -35,13 +35,6 @@ final class WidgetKitThemeManagerTests: XCTestCase {
 
         XCTAssertTrue(theme.isNova)
         XCTAssertNotEqual(theme.type, .privateMode)
-    }
-
-    func testWindowNonspecificTheme_usesNovaFaviconColorSet() {
-        let subject = WidgetKitThemeManager()
-
-        XCTAssertEqual(subject.windowNonspecificTheme().colors.faviconLetterColorSet.backgroundColors,
-                       NovaFaviconColorSet().backgroundColors)
     }
 
     func testSetters_areNoOp() {

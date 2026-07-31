@@ -19,7 +19,6 @@ public final class WidgetKitThemeManager: ThemeManager {
     /// Resolves the widget theme from the SwiftUI color scheme, which is the only reliable
     /// light/dark signal available inside a widget extension.
     public func theme(for colorScheme: ColorScheme, isPrivate: Bool = false) -> Theme {
-        guard !isPrivate else { return NovaPrivateTheme() }
         return colorScheme == .dark ? NovaDarkTheme() : NovaLightTheme()
     }
 
@@ -28,7 +27,7 @@ public final class WidgetKitThemeManager: ThemeManager {
     }
 
     public func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme {
-        return shouldShowPrivateTheme ? NovaPrivateTheme() : systemTheme()
+        return systemTheme()
     }
 
     public func windowNonspecificTheme() -> Theme {

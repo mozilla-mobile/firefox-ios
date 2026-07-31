@@ -65,7 +65,7 @@ enum QuickLink: Int {
         }
     }
 
-    /// The button's fill colors for the given theme.
+    /// The image button's background gradient for the given theme.
     public func gradient(for theme: Theme) -> SwiftUI.Gradient {
         switch self {
         case .search:
@@ -85,9 +85,7 @@ enum QuickLink: Int {
     /// Foreground color for labels and logos drawn on top of the button fill.
     public func foregroundColor(for theme: Theme) -> Color {
         switch self {
-        case .search:
-            return Color(uiColor: theme.colors.textPrimary)
-        case .copiedLink:
+        case .search, .copiedLink:
             return Color(uiColor: theme.colors.textPrimary)
         case .privateSearch, .closePrivateTabs:
             return Color(uiColor: theme.colors.textOnDark)
