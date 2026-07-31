@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 final class AdBlockerSetting: BoolSetting {
-    static let learnMoreTopic = "ad-blocker-ios"
+    static let learnMoreTopic = "block-ads-firefox-ios"
 
     private let subtitleText: String
     private let learnMoreText: String
