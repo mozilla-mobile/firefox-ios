@@ -12,4 +12,16 @@ public protocol StateType: Sendable, Equatable {
     ///
     /// All the state properties that have a default value into the initializer should be restore to default.
     static func defaultState(from state: Self) -> Self
+
+    /// Resets transient fields via `defaultState(from:)`, preserving everything else. Call first in a
+    /// `.copy()` chain, before field-specific overrides. If a field's reset behavior is handler-dependent
+    /// (e.g. `toast` in `BrowserViewControllerState`), add `.copy(field: state.field)` after this call
+    /// wherever it should be preserved.
+    func resetTransientState() -> Self
+}
+
+extension StateType {
+    public func resetTransientState() -> Self {
+        return Self.defaultState(from: self)
+    }
 }
