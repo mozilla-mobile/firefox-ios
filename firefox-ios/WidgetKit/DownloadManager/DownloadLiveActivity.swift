@@ -139,7 +139,7 @@ struct DownloadLiveActivity: Widget {
                         )
                     )
                 HStack(spacing: UX.LockScreen.horizontalSpacing) {
-                    Image(UX.firefoxIcon)
+                    Image(decorative: UX.firefoxIcon)
                         .resizable()
                         .scaledToFit()
                         .frame(width: UX.LockScreen.iconSize, height: UX.LockScreen.iconSize)
@@ -190,7 +190,7 @@ struct DownloadLiveActivity: Widget {
                     .rotationEffect(.degrees(270))
                     .animation(.linear, value: UX.LockScreen.circleAnimation)
                     .foregroundColor(Color(uiColor: theme.colors.textOnDark))
-                Image(totalCompletion ? UX.checkmarkIcon : UX.mediaStopIcon)
+                Image(decorative: totalCompletion ? UX.checkmarkIcon : UX.mediaStopIcon)
                     .renderingMode(.template)
                     .frame(width: UX.LockScreen.progressIconSize, height: UX.LockScreen.progressIconSize)
                     .foregroundStyle(Color(uiColor: theme.colors.textOnDark))
