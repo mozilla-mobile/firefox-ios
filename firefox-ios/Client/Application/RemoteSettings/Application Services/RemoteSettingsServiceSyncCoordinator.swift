@@ -15,13 +15,16 @@ final class RemoteSettingsServiceSyncCoordinator: @unchecked Sendable, Notifiabl
     private let logger: Logger
     private var syncTimer: Timer?
     private let maxSyncFrequency: Double = 60 * 60 * 24 // 24 hours
+    private let notificationCenter: NotificationProtocol
 
     init(service: RemoteSettingsService,
          prefs: Prefs,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.service = service
         self.prefs = prefs
         self.logger = logger
+        self.notificationCenter = notificationCenter
 
         startObservingNotifications(
             withNotificationCenter: NotificationCenter.default,
@@ -96,6 +99,13 @@ final class RemoteSettingsServiceSyncCoordinator: @unchecked Sendable, Notifiabl
                 level: .info,
                 category: .remoteSettings
             )
+            if !syncResults.isEmpty {
+                notificationCenter.post(
+                    name: .remoteSettingsDidSync,
+                    withObject: nil,
+                    withUserInfo: ["updatedCollections": syncResults]
+                )
+            }
         } catch {
             logger.log(
                 "Remote Settings sync error: \(error)",
