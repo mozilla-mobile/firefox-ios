@@ -211,7 +211,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "advancedOptions", "send"])
 
         let advanced = sections.first { $0.id == "advancedOptions" }
-        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: true), .toggle(isOn: false)])
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
 
         guard case let .urlField(text, _) = sections.first?.rows.first?.kind else {
@@ -239,7 +239,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         )
 
         let advanced = sections.first { $0.id == "advancedOptions" }
-        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false), .toggle(isOn: true)])
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: true)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: true)])
 
         let details = sections.first { $0.id == "additionalDetails" }

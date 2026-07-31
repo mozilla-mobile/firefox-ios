@@ -99,6 +99,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         closeButton.accessibilityLabel = viewModel.closeButtonAccessibilityLabel
         previewButton.title = viewModel.previewButtonTitle
         previewButton.isEnabled = viewModel.isPreviewEnabled
+        navigationItem.rightBarButtonItem = viewModel.previewButtonTitle == nil ? nil : previewButton
         applySnapshot()
     }
 
@@ -107,7 +108,6 @@ public final class WebCompatReportSheetViewController: UIViewController,
     private func setupNavigationItem() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = closeButton
-        navigationItem.rightBarButtonItem = previewButton
         navigationItem.largeTitleDisplayMode = .always
     }
 
