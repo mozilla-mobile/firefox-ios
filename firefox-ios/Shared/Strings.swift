@@ -2825,6 +2825,54 @@ extension String {
     }
 }
 
+// MARK: - Privacy Dashboard
+extension String {
+    public struct PrivacyDashboard {
+        public static let HeaderLabelForNoTrackersBlocked = MZLocalizedString(
+            key: "PrivacyDashboard.HeaderLabelForNoTrackersBlocked.v155",
+            tableName: "PrivacyDashboard",
+            value: "%@ blocks trackers as you browse, you’ll see them here.",
+            comment: "On the Privacy Dashboard popup, the text for the header of the popup, in the case where we have not yet blocked any trackers yet. The placeholder %@ will be the app name, Firefox."
+        )
+        public static let HeaderLabel = MZLocalizedString(
+            key: "PrivacyDashboard.HeaderLabel.v155",
+            tableName: "PrivacyDashboard",
+            value: "Trackers blocked this week",
+            comment: "On the Privacy Dashboard popup, the text for the header when we have blocked some trackers this week. This is going to have, above it, in bold letters, the number of trackers blocked this week."
+        )
+        public static let CrossSiteTrackers = MZLocalizedString(
+            key: "PrivacyDashboard.CrossSiteTrackers.v155",
+            tableName: "PrivacyDashboard",
+            value: "Cross-Site Tracking Cookies",
+            comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how many cross-site tracking cookies we've blocked."
+        )
+        public static let Fingerprinters = MZLocalizedString(
+            key: "PrivacyDashboard.Fingerprinters.v155",
+            tableName: "PrivacyDashboard",
+            value: "Fingerprinters",
+            comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how many fingerprinter's we've blocked."
+        )
+        public static let TrackingContent = MZLocalizedString(
+            key: "PrivacyDashboard.TrackingContent.v155",
+            tableName: "PrivacyDashboard",
+            value: "Tracking Content",
+            comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how much tracking content we've blocked."
+        )
+        public static let SocialTrackers = MZLocalizedString(
+            key: "PrivacyDashboard.SocialTrackers.v155",
+            tableName: "PrivacyDashboard",
+            value: "Social Media Trackers",
+            comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how many social media trackers we've blocked."
+        )
+        public static let TotalTrackersBlockedSince = MZLocalizedString(
+            key: "PrivacyDashboard.TotalTrackersBlockedSince.v155",
+            tableName: "PrivacyDashboard",
+            value: "%1$@ since %2$@ 🎉",
+            comment: "On the Privacy Dashboard popup, the text for the footer of the page. The first placeholder (%1$@) is the total number of trackers we've blocked, in a localized format (provided by Swift's built in number localization). The second placeholder (%2$@) will be a date in DD/MM/YY format, and will denote the date we've started blocking trackers for the user."
+        )
+    }
+}
+
 // MARK: - Research Surface
 extension String {
     public struct ResearchSurface {
