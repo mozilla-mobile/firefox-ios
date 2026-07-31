@@ -8,14 +8,14 @@ import MozillaAppServices
 import Shared
 
 protocol GroupedParentFolderSelector: AnyObject {
-    /// In some cases, a child `EditFolderViewController` needs to pass information to a parent `EditBookmarkViewController`
-    /// to select the folder that was just created
-    /// - Parameter folder: The folder that was created in the `EditFolderViewController`
+    /// In some cases, a child `GroupedEditFolderViewController` needs to pass information
+    /// to a parent `GroupedEditBookmarkViewController` to select the folder that was just created
+    /// - Parameter folder: The folder that was created in the `GroupedEditFolderViewController`
     @MainActor
     func selectFolderCreatedFromChild(folder: GroupedFolder)
 }
 
-// FIXME: FXIOS-14161 Make EditBookmarkViewModel actually Sendable
+// FIXME: FXIOS-14161 Make GroupedEditBookmarkViewModel actually Sendable
 class GroupedEditBookmarkViewModel: GroupedParentFolderSelector, @unchecked Sendable {
     static let mobileHeaderPlaceholderGuid = "EditBookmarkViewModel.mobileHeaderPlaceholder"
     static let desktopHeaderPlaceholderGuid = "EditBookmarkViewModel.desktopHeaderPlaceholder"
@@ -136,7 +136,7 @@ class GroupedEditBookmarkViewModel: GroupedParentFolderSelector, @unchecked Send
     func saveBookmark() -> Task<Void, Never>? {
         guard let selectedFolder, let node else { return nil }
         return Task { @MainActor [weak self] in
-            // There is no way to access the EditBookmarkViewController without the bookmark already existing,
+            // There is no way to access the GroupedEditBookmarkViewController without the bookmark already existing,
             // so this call will always try to update an existing bookmark
             let result = await self?.bookmarksSaver.save(bookmark: node,
                                                          parentFolderGUID: selectedFolder.guid)
@@ -161,7 +161,7 @@ class GroupedEditBookmarkViewModel: GroupedParentFolderSelector, @unchecked Send
         bookmarkCoordinatorDelegate?.didFinish()
     }
 
-    // MARK: ParentFolderSelector
+    // MARK: GroupedParentFolderSelector
 
     func selectFolderCreatedFromChild(folder: GroupedFolder) {
         isFolderCollapsed = true
