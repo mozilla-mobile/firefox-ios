@@ -35,28 +35,28 @@ final class BrowsingSettingsViewControllerTests: XCTestCase {
         trackForMemoryLeaks(subject)
     }
 
-    func testGenerateSettings_whenAdBlockerFlagOff_omitsBlockAdsAndUsesMediaSection() {
+    func testGenerateSettings_whenAdBlockerFlagOff_omitsAdBlockerAndUsesMediaSection() {
         featureFlags.enabledFlags = []
         let subject = createSubject()
 
         let sections = subject.generateSettings()
         let contentSection = sections.last
-        let titles = contentSection?.children.compactMap { $0.title?.string } ?? []
+        let hasAdBlocker = contentSection?.children.contains(where: { $0 is AdBlockerSetting }) ?? false
 
         XCTAssertEqual(contentSection?.title?.string, String.Settings.Browsing.Media)
-        XCTAssertFalse(titles.contains(String.Settings.Browsing.BlockAds))
+        XCTAssertFalse(hasAdBlocker)
     }
 
-    func testGenerateSettings_whenAdBlockerFlagOn_includesBlockAdsAndUsesContentSection() {
+    func testGenerateSettings_whenAdBlockerFlagOn_includesAdBlockerAndUsesContentSection() {
         featureFlags.enabledFlags = [.adBlocker]
         let subject = createSubject()
 
         let sections = subject.generateSettings()
         let contentSection = sections.last
-        let titles = contentSection?.children.compactMap { $0.title?.string } ?? []
+        let hasAdBlocker = contentSection?.children.contains(where: { $0 is AdBlockerSetting }) ?? false
 
         XCTAssertEqual(contentSection?.title?.string, String.Settings.Browsing.Content)
-        XCTAssertTrue(titles.contains(String.Settings.Browsing.BlockAds))
+        XCTAssertTrue(hasAdBlocker)
     }
 
     // MARK: - Helper

@@ -3356,6 +3356,27 @@ extension String {
                 value: "Block Ads",
                 comment: "Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements."
             )
+
+            public struct AdBlocker {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Title.v155",
+                    tableName: "Settings",
+                    value: "Ad Blocker",
+                    comment: "Title for the Ad Blocker toggle in the Browsing settings page."
+                )
+                public static let Description = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Description.v155",
+                    tableName: "Settings",
+                    value: "Reduces ads and ad-related trackers. If a site looks broken, try turning this off.",
+                    comment: "Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites."
+                )
+                public static let LearnMore = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.LearnMore.v155",
+                    tableName: "Settings",
+                    value: "Learn more",
+                    comment: "Link text below the Ad Blocker toggle description that opens a support page with more information."
+                )
+            }
         }
 
         public struct AIControls {
