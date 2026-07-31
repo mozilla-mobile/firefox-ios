@@ -8,10 +8,19 @@ public struct EmbeddedLink: Sendable {
     let fullText: String
     let linkText: String
     let action: TermsOfUseAction
+    /// Stable identifier applied to the rendered link so it is individually addressable in UI tests
+    /// and exposed as a distinct accessibility element. Falls back to the action when nil.
+    let accessibilityIdentifier: String?
 
-    public init(fullText: String, linkText: String, action: TermsOfUseAction) {
+    public init(
+        fullText: String,
+        linkText: String,
+        action: TermsOfUseAction,
+        accessibilityIdentifier: String? = nil
+    ) {
         self.fullText = fullText
         self.linkText = linkText
         self.action = action
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 }

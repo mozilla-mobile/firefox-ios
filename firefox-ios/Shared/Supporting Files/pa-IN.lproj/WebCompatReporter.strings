@@ -1,0 +1,99 @@
+/* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਵਲੋਂ ਪਾਬੰਦੀ ਲਈਆਂ ਚੀਜ਼ਾਂ ਦੀ ਸੂਚੀ ਭੇਜੋ";
+
+/* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "ਸਮੱਸਿਆ ਵੇਖਾਉਣ ਆਪਣੇ-ਆਪ ਸਕਰੀਨਸ਼ਾਟ ਸ਼ਾਮਲ ਕਰੋ";
+
+/* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.LearnMore.v154" = "ਹੋਰ ਜਾਣੋ";
+
+/* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.Title.v154" = "ਵਧੀਕ ਜਾਣਕਾਰੀ";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "ਡਿਜ਼ਾਇਨ ਖ਼ਰਾਬ ਹੈ";
+
+/* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
+"WebCompatReporter.Category.Other.v154" = "ਹੋਰ";
+
+/* Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form. */
+"WebCompatReporter.Category.SiteNotUsable.v154" = "ਸਾਈਟ ਵਰਤਣਯੋਗ ਨਹੀਂ ਹੈ";
+
+/* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
+"WebCompatReporter.Category.VideoOrAudio.v154" = "ਵੀਡੀਓ ਜਾਂ ਆਡੀਓ ਨਹੀਂ ਚੱਲਦੀ ਹੈ";
+
+/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "ਮਸਲੇ ਬਾਰੇ ਵੇਰਵੇ ਸਮੇਤ ਜਾਣਕਾਰੀ ਦਿਓ";
+
+/* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "ਮਸਲੇ ਬਾਰੇ ਵੇਰਵੇ ਸਮੇਤ ਜਾਣਕਾਰੀ ਦਿਓ (ਚੋਣਵਾਂ)";
+
+/* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLLabel.v154" = "URL";
+
+/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLPlaceholder.v154" = "URL";
+
+/* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "…ਸਮੱਸਿਆ ਦੀ ਕਿਸਮ ਚੁਣੋ";
+
+/* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.Title.v154" = "ਸਾਈਟ ਨਾਲ ਸਮੱਸਿਆ";
+
+/* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "ਤੁਹਾਡੇ ਵਲੋਂ ਇਤਲਾਹ ਦਿੱਤੇ ਜਾ ਰਹੇ ਸਫ਼ੇ ਦਾ ਸਕਰੀਨਸ਼ਾਟ ਹੈ। ਪੂਰੀ ਸਕਰੀਨ ਉੱਤੇ ਵੇਖਣ ਲਈ ਦੋ ਵਾਰ ਛੂਹੋ।";
+
+/* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "ਬੰਦ ਕਰੋ";
+
+/* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
+"WebCompatReporter.Preview.Title.v154" = "ਰਿਪਰੋਟ ਦੀ ਝਲਕ";
+
+/* Title of the button that submits the website issue report, in the Report a Website Issue form. */
+"WebCompatReporter.SendButton.Title.v154" = "ਰਿਪੋਰਟ ਭੇਜੋ";
+
+/* Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report. */
+"WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154" = "ਬੰਦ ਕਰੋ";
+
+/* Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form. */
+"WebCompatReporter.Sheet.PreviewButton.v154" = "ਝਲਕ";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.BrowserBlocked.v154" = "ਬਰਾਊਜ਼ਰ ਸਹਾਇਕ ਨਹੀਂ ਹੈ ਜਾਂ ਪਾਬੰਦੀ ਲਾਈ ਹੈ";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "ਬਟਨ ਜਾਂ ਲਿੰਕ ਕੰਮ ਨਹੀਂ ਕਰਦੇ ਹਨ";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "ਸੁਰਖੀਆਂ ਮੌਜੂਦ ਨਹੀਂ ਹਨ";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "ਚਿੱਤਰ ਲੋਡ ਨਹੀਂ ਹੋਏ";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "ਚੀਜ਼ਾਂ ਅੱਗੇ ਪਿੱਛੇ ਹੋ ਗਈਆਂ ਹਨ";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "ਚੀਜ਼ਾਂ ਦਿਖਾਈ ਨਹੀਂ ਦਿੰਦੀਆਂ ਹਨ";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "ਚੀਜ਼ਾਂ ਹੇਠ ਉੱਤੇ ਹੋ ਗਈਆਂ ਹਨ";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "ਮੀਡੀਆ ਕੰਟਰੋਲ ਖ਼ਰਾਬ ਜਾਂ ਗੁੰਮ ਹਨ";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "ਚੀਜ਼ਾਂ ਮੌਜੂਦ ਨਹੀਂ";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoAudio.v154" = "ਆਡੀਓ ਨਹੀਂ ਹੈ";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoVideo.v154" = "ਵੀਡੀਓ ਨਹੀਂ ਹੈ";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PageNotLoading.v154" = "ਸਫ਼ਾ ਠੀਕ ਤਰ੍ਹਾਂ ਲੋਡ ਨਹੀਂ ਹੁੰਦਾ ਹੈ";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PlaybackFails.v154" = "ਵੀਡੀਓ ਜਾਂ ਆਡੀਓ ਚੱਲਦੀ ਨਹੀਂ ਹੈ";
+

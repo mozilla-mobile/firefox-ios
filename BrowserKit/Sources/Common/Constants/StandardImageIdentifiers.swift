@@ -32,7 +32,7 @@ public struct StandardImageIdentifiers {
         public static let logoGoogleLens = "logoGoogleLensMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
         public static let readerView = "readerViewMedium"
-        public static let share = "shareMedium"
+        public static let shareApple = "shareAppleMedium"
         public static let sun = "sunMedium"
         public static let sunFill = "sunFillMedium"
         public static let translate = "translateMedium"

@@ -40,7 +40,8 @@ struct WebCompatReportPayload: Equatable {
         var payload = WebCompatReportPayload()
         payload.url = state.url.isEmpty ? nil : state.url
         payload.breakageCategory = state.selectedSubOptionID ?? state.selectedCategory?.rawValue
-        payload.description = state.additionalDetails.isEmpty ? nil : state.additionalDetails
+        let details = state.additionalDetails.trimmingCharacters(in: .whitespacesAndNewlines)
+        payload.description = details.isEmpty ? nil : details
         return payload
     }
 }

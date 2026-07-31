@@ -5,6 +5,7 @@
 import MozillaAppServices
 import Common
 import SummarizeKit
+import QuickAnswersKit
 
 /// For more context, See schema in
 /// https://firefox.settings.services.mozilla.com/v1/buckets/main/collections/summarizer-models-config/records
@@ -14,18 +15,15 @@ struct SummarizerModelConfig: Codable {
   let config: String?
 }
 
-final class ASSummarizerRemoteConfig: Sendable {
-    private let service: RemoteSettingsService
-    private let rsClient: RemoteSettingsClient?
-    private let profile: Profile
+/// Reads the AI prompts and configurations stored in the remote settings `summarizer-models-config` collection.
+final class ASAIRemoteConfig: Sendable {
+    private let rsClient: RemoteSettingsClientProtocol?
     private static let localizedTag = "localized"
 
-    init?(
-        profile: Profile = AppContainer.shared.resolve()
+    init(
+        rsClient: RemoteSettingsClientProtocol? = ASRemoteSettingsCollection.summarizerModelsConfig.makeClient()
     ) {
-        self.profile = profile
-        self.service = profile.remoteSettingsService
-        self.rsClient = ASRemoteSettingsCollection.summarizerModelsConfig.makeClient()
+        self.rsClient = rsClient
     }
 
     /// Fetches the summarizer configuration from Remote Settings for the given `model` and `contentType`.
@@ -46,6 +44,13 @@ final class ASSummarizerRemoteConfig: Sendable {
             instructions: record.instructions,
             options: decodeConfig(from: record.config)
         )
+    }
+
+    func fetchQuickAnswersInstruction(_ model: QuickAnswersKit.QuickAnswersModel) -> String? {
+        // We don't provide a system prompt for liner model for now.
+        guard model == .exa else { return nil }
+        let recordName = "quickAnswers-\(model.rawValue)"
+        return getRecords().first { $0.name == recordName }?.instructions
     }
 
     private func decodeConfig(from configString: String?) -> [String: AnyHashable] {

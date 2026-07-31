@@ -16,4 +16,17 @@ extension XCTestCase {
         }
         return nil
     }
+
+    /// `UIControl.sendActions` needs a running `UIApplication`, which logic tests lack, and it
+    /// fails silently. Invoke each registered target/action directly instead. The control is
+    /// non-optional so a nil lookup fails at the caller's `XCTUnwrap`, not quietly here.
+    @MainActor
+    func fireActions(on control: UIControl, for event: UIControl.Event) {
+        for target in control.allTargets {
+            let object = target as NSObject
+            control.actions(forTarget: target, forControlEvent: event)?.forEach {
+                object.perform(Selector($0))
+            }
+        }
+    }
 }

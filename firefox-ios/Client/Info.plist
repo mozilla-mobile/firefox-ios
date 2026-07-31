@@ -185,15 +185,7 @@
 		</dict>
 	</dict>
 	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>logoFirefoxLarge</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>App Icon</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).AppIcon</string>
-		</dict>
+	<array>		
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>plusLarge</string>
@@ -209,6 +201,14 @@
 			<string>New Private Tab</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).NewPrivateTab</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>logoFirefoxLarge</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>App Icon</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).AppIcon</string>
 		</dict>
 	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

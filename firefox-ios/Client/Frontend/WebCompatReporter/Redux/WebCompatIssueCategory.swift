@@ -5,12 +5,12 @@
 import Foundation
 
 /// Issue categories for the "Report a Website Issue" form — a grouping for the
-/// sub-options, not display copy. The Glean `broken-site-report` reason keys
-/// live on `WebCompatSubOption.rawValue`.
+/// sub-options, not display copy. Raw values are Glean `broken-site-report` reason
+/// keys too: a report sent without a sub-option carries the category instead.
 enum WebCompatIssueCategory: String, CaseIterable, Identifiable {
-    case siteNotUsable
-    case designBroken
-    case videoOrAudio
+    case siteNotUsable = "site_not_usable"
+    case designBroken = "design_broken"
+    case videoOrAudio = "video_or_audio"
     case other
 
     var id: String { rawValue }

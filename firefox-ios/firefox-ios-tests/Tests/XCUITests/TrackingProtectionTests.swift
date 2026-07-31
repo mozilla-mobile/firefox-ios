@@ -20,7 +20,6 @@ let secureTrackingProtectionOffLabel = "Secure connection. Enhanced Tracking Pro
 class TrackingProtectionTests: BaseTestCase {
     var browserScreen: BrowserScreen!
     var trackingProtectionScreen: TrackingProtectionScreen!
-    var toolbarScreen: ToolbarScreen!
     var settingsScreen: SettingScreen!
 
     private func disableEnableTrackingProtectionForSite() {
@@ -86,49 +85,45 @@ class TrackingProtectionTests: BaseTestCase {
     func testStandardProtectionLevel() {
         browserScreen = BrowserScreen(app: app)
         trackingProtectionScreen = TrackingProtectionScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
         settingsScreen = SettingScreen(app: app)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            navigator.goto(BrowserTabMenu)
-            app.swipeUp()
-        }
+
+        let adblockTesterURL = "https://adblock-tester.com/"
+
+        // Step 2: Go to Settings -> Tracking Protection -> Standard TP is enabled by default.
         navigator.goto(TrackingProtectionSettings)
+        trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: true)
 
-        // Make sure ETP is enabled by default
-        trackingProtectionScreen.assertTrackingProtectionSwitchIsEnabled()
-
-        // Turn off ETP
+        // Step 3: Disable "Enhanced Tracking Protection" -> Tracking Protection is disabled.
         navigator.performAction(Action.SwitchETP)
+        trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: false)
 
-        // Verify it is turned off
-        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
+        // Step 4: Go to https://adblock-tester.com/ and run the test -> a message shows the
+        // score out of 100 (e.g. "38 points out of 100") while ETP is disabled.
+        navigator.openURL(adblockTesterURL)
         waitUntilPageLoad()
+        app.swipeUp()
+        let scoreWithETPOff = browserScreen.adblockTesterScore()
 
-        // The lock icon should still be there
-        browserScreen.assertAddressBar_LockIconOffExist()
-        toolbarScreen.assertSettingsButtonExists()
-
-        // Switch to Private Browsing
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
-        waitUntilPageLoad()
-
-        // Make sure TP is also there in PBM
-        browserScreen.assertAddressBar_LockIconOffExist()
-        toolbarScreen.assertSettingsButtonExists()
-
+        // Step 5: Enable "Enhanced Tracking Protection" and recheck adblock-tester.com ->
+        // Tracking Protection is enabled, and the score increases (e.g. from 38 to 42 out of 100).
+        app.swipeDown()
         navigator.goto(BrowserTabMenu)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            app.swipeUp()
-        }
         navigator.goto(SettingsScreen)
         settingsScreen.swipeUpFromNewTabCell()
-        // Enable TP again
         navigator.goto(TrackingProtectionSettings)
-        // Turn on ETP
         navigator.performAction(Action.SwitchETP)
+        trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: true)
+
+        navigator.openURL(adblockTesterURL)
+        waitUntilPageLoad()
+        app.swipeUp()
+        let scoreWithETPOn = browserScreen.adblockTesterScore()
+
+        XCTAssertGreaterThan(
+            scoreWithETPOn,
+            scoreWithETPOff,
+            "Enabling Enhanced Tracking Protection should improve the adblock-tester.com score"
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2318742

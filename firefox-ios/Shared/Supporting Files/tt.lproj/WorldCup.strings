@@ -16,9 +16,6 @@
 /* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
 "WorldCup.CountryPicker.Country.Scotland.v151" = "Шотландия";
 
-/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Әзер";
-
 /* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
 "WorldCup.CountryPicker.SkipButton.Title.v151" = "Калдырып тору";
 

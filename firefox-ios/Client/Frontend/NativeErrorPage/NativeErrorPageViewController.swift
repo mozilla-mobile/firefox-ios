@@ -151,11 +151,14 @@ final class NativeErrorPageViewController: UIViewController,
         }
     }
 
+    private let searchEnginesManager: SearchEnginesManagerProvider
+
     init(
         windowUUID: WindowUUID,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         overlayManager: OverlayModeManager,
+        searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         logger: Logger = DefaultLogger.shared
     ) {
@@ -163,6 +166,7 @@ final class NativeErrorPageViewController: UIViewController,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.overlayManager = overlayManager
+        self.searchEnginesManager = searchEnginesManager
         self.notificationCenter = notificationCenter
         self.logger = logger
         nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
@@ -430,7 +434,7 @@ final class NativeErrorPageViewController: UIViewController,
             do {
                 let snapshot = try await WaybackService.fetchSnapshot(for: failingURL.absoluteString)
                 guard let snapshot, snapshot.available, let archivedURL = URL(string: snapshot.url) else {
-                    await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed) }
+                    await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed(.notFound)) }
                     return
                 }
                 await MainActor.run {
@@ -444,9 +448,26 @@ final class NativeErrorPageViewController: UIViewController,
                     )
                 }
             } catch {
-                await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed) }
+                await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed(.networkError)) }
             }
         }
+    }
+
+    func regularContentViewDidTapSearchWeb() {
+        guard let failingURL = model?.url?.baseURLWithPath,
+              let defaultEngine = searchEnginesManager.defaultEngine else { return }
+
+        let query = "\"\(failingURL.absoluteString)\""
+        guard let searchURL = defaultEngine.searchURLForQuery(query) else { return }
+
+        store.dispatch(
+            GeneralBrowserAction(
+                destinationURL: searchURL,
+                isNativeErrorPage: true,
+                windowUUID: self.windowUUID,
+                actionType: GeneralBrowserActionType.loadWaybackURL
+            )
+        )
     }
 
     // MARK: - NativeErrorBadCertContentViewDelegate
