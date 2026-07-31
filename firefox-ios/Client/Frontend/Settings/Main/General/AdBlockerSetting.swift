@@ -7,6 +7,8 @@ import Foundation
 import Shared
 
 final class AdBlockerSetting: BoolSetting {
+    static let learnMoreTopic = "ad-blocker-ios"
+
     private let subtitleText: String
     private let learnMoreText: String
     private weak var supportDelegate: SupportSettingsDelegate?
@@ -59,7 +61,7 @@ final class AdBlockerSetting: BoolSetting {
         cell.selectionStyle = .none
 
         cell.learnMoreDidTap = { [weak self] in
-            let url = SupportUtils.URLForTopic("ad-blocker")
+            let url = SupportUtils.URLForTopic(AdBlockerSetting.learnMoreTopic)
             self?.supportDelegate?.askedToOpen(
                 url: url,
                 withTitle: NSAttributedString(string: String.Settings.Browsing.AdBlocker.Title)

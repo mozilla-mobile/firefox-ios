@@ -64,7 +64,7 @@ final class AdBlockerSettingTests: XCTestCase {
         XCTAssertEqual(mockDelegate.askedToOpenCallCount, 1)
         XCTAssertEqual(
             mockDelegate.askedToOpenURL,
-            SupportUtils.URLForTopic("ad-blocker")
+            SupportUtils.URLForTopic(AdBlockerSetting.learnMoreTopic)
         )
     }
 
