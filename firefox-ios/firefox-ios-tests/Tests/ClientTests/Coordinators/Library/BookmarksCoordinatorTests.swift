@@ -48,8 +48,13 @@ final class BookmarksCoordinatorTests: XCTestCase {
 
         subject.showBookmarkDetail(for: folder, folder: folder)
 
-        XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        let controller = router.pushedViewController as? EditFolderViewController
+        XCTAssertNotNil(controller)
+        trackForMemoryLeaks(controller)
         XCTAssertEqual(router.pushCalled, 1)
+        router.pushedViewController = nil
+        router.topViewController = nil
+        router.navigationController.setViewControllers([], animated: false)
     }
 
     func testShowBookmarkDetail_forBookmarkCreation() {
