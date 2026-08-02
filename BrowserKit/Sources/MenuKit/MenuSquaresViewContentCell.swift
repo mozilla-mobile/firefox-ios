@@ -8,7 +8,6 @@ import Common
 final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentViewSpacing: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.80
     }
 
     private var contentStackView: UIStackView = .build { stack in
@@ -20,7 +19,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
     private var menuData: [MenuSection]
     private var theme: Theme?
 
-    public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
+    private var mainMenuHelper: MainMenuInterface = MainMenuHelper()
 
     private var horizontalTabsSection: MenuSection? {
         return menuData.first(where: { $0.isHorizontalTabsSection })
