@@ -58,6 +58,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         subject.webCompatReportSheetDidTapLearnMore(url: learnMoreURL)
 
         XCTAssertEqual(coordinator.didTapLearnMoreURLs, [learnMoreURL])
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .learnMore)
     }
 
     func testDidTapButton_onSendRow_dispatchesSubmit() {

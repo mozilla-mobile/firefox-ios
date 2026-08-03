@@ -59,6 +59,7 @@ enum WebCompatReporterViewActionType: ActionType {
     case preview
     case submit
     case cancel
+    case learnMore
 }
 
 enum WebCompatReporterMiddlewareActionType: ActionType {

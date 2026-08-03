@@ -1,0 +1,149 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - WebCompat
+
+###############################################################################
+# WebCompat — Report a Website Issue interaction telemetry
+#
+# Usage and abandonment events for the in-app "Report a Website Issue" flow,
+# sent in the default `events` ping. The report contents are separate: they
+# live in `broken_site_report.*` and go out in the `broken-site-report` ping.
+#
+# NAMING: desktop files the equivalent events under `webcompatreporting`
+# (toolkit/components/reportbrokensite/metrics.yaml). iOS uses
+# `webcompat_reporting` to match the snake_case of this directory, so
+# cross-platform queries must spell the category per platform.
+###############################################################################
+
+webcompat_reporting:
+  opened:
+    type: event
+    description: |
+      Recorded when the user opens the "Report a Website Issue" sheet.
+    extra_keys:
+      source:
+        type: string
+        description: |
+          The entry point the reporter was opened from. Values match desktop's
+          `webcompatreporting.opened.source`.
+          Options are listed in the WebCompatReporterTelemetry.Source enumeration.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - webcompat-reporting-tool-telemetry@mozilla.com
+    expires: never
+  reason_selected:
+    type: event
+    description: |
+      Recorded when the user picks an issue category in the reporter. The sheet
+      presents a two-level picker (category, then sub-option); only the
+      top-level category is recorded here. The reason a sent report actually
+      carries is in `broken_site_report.breakage_category`.
+    extra_keys:
+      reason:
+        type: string
+        description: |
+          The selected issue category.
+          Options are listed in the WebCompatIssueCategory enumeration.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - webcompat-reporting-tool-telemetry@mozilla.com
+    expires: never
+  previewed:
+    type: event
+    description: |
+      Recorded when the user opens the report preview. The preview entry point
+      is parked (FXIOS-16450), so this is expected to stay at zero until that
+      UI is unhidden.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - webcompat-reporting-tool-telemetry@mozilla.com
+    expires: never
+  cancelled:
+    type: event
+    description: |
+      Recorded when the user closes or swipes away the reporter without sending
+      a report.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - webcompat-reporting-tool-telemetry@mozilla.com
+    expires: never
+  send:
+    type: event
+    description: |
+      Recorded when the user sends a report, alongside the
+      `broken-site-report` ping carrying the report itself.
+    extra_keys:
+      sent_with_blocked_trackers:
+        type: boolean
+        description: |
+          Whether the user kept the "list of items blocked by tracking
+          protection" option on.
+      sent_with_screenshot:
+        type: boolean
+        description: |
+          Whether a screenshot was attached to the report. The screenshot
+          option is parked (FXIOS-16450) and no image is transported yet, so
+          this is always false for now.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - webcompat-reporting-tool-telemetry@mozilla.com
+    expires: never
+  learn_more:
+    type: event
+    description: |
+      Recorded when the user taps the "Learn More" link in the reporter's
+      advanced options footer, which opens the SUMO article on reporting a
+      broken site.
+    data_sensitivity:
+      - interaction
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - webcompat-reporting-tool-telemetry@mozilla.com
+    expires: never

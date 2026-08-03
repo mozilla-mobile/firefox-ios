@@ -24,6 +24,7 @@ protocol WebCompatReportCoordinatorDelegate: AnyObject {
 final class WebCompatReportViewController: UINavigationController,
                                            StoreSubscriber,
                                            Themeable,
+                                           UIAdaptivePresentationControllerDelegate,
                                            WebCompatReportSheetDelegate {
     typealias SubscriberStateType = WebCompatReporterState
 
@@ -66,6 +67,7 @@ final class WebCompatReportViewController: UINavigationController,
         super.viewDidLoad()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        presentationController?.delegate = self
         subscribeToRedux()
         store.dispatch(WebCompatReporterViewAction(
             url: reportedURL?.absoluteString,
@@ -303,6 +305,16 @@ final class WebCompatReportViewController: UINavigationController,
         }
     }
 
+    // MARK: - UIAdaptivePresentationControllerDelegate
+
+    /// UIKit calls this only for the interactive swipe, not for programmatic dismissal.
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.cancel
+        ))
+    }
+
     // MARK: - WebCompatReportSheetDelegate
 
     func webCompatReportSheetDidTapClose() {
@@ -385,6 +397,10 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     func webCompatReportSheetDidTapLearnMore(url: URL) {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.learnMore
+        ))
         reportCoordinator?.webCompatReportViewControllerDidTapLearnMore(url: url)
     }
 
