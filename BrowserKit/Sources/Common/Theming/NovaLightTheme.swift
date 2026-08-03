@@ -65,7 +65,7 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var textOnDark: UIColor = NovaColors.VioletDesaturated0
     var textOnLight: UIColor = NovaColors.VioletDesaturated90
     var textOnColorPrimary: UIColor = NovaColors.VioletDesaturated0
-    var textToast: UIColor = NovaColors.Violet50
+    var textToast: UIColor = NovaColors.Violet30
 
     // MARK: - Icon
 
