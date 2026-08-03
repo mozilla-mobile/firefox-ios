@@ -19119,7 +19119,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
+			shellScript = "bash \"$PWD/bin/sdk_generator.sh\" -g Glean -o \"$SRCROOT/Storage/Generated\"\n";
 		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19141,7 +19141,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OUTPUT_DIR=\"${SRCROOT}/Client/Generated/Metrics/\"\n# remove old Metrics file if present\nrm \"${SRCROOT}/Client/Generated/Metrics/Metrics.swift\"\nbash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n";
+			shellScript = "OUTPUT_DIR=\"${SRCROOT}/Client/Generated/Metrics/\"\n# remove old Metrics file if present\nrm \"${SRCROOT}/Client/Generated/Metrics/Metrics.swift\"\nbash \"$PWD/bin/sdk_generator.sh\" -g Glean -o \"$OUTPUT_DIR\"\n";
 		};
 		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19163,7 +19163,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$ACTION\" != \"indexbuild\" ]; then\n    /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash \"$SOURCE_ROOT/bin/nimbus-fml.sh\" --verbose\nfi\n\n";
+			shellScript = "if [ \"$ACTION\" != \"indexbuild\" ]; then\n    /usr/bin/env -i HOME=\"$HOME\" PROJECT=\"$PROJECT\" CONFIGURATION=\"$CONFIGURATION\" SOURCE_ROOT=\"$SOURCE_ROOT\" bash \"$SOURCE_ROOT/bin/nimbus-fml.sh\" --verbose\nfi\n\n";
 		};
 		C2A1EA152F4383FE00DD202A /* Run Periphery */ = {
 			isa = PBXShellScriptBuildPhase;
