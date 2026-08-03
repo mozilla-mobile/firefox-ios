@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Example Link Page</title>
+</head>
+
+<body>
+    <h1 id="top">Example Link Page</h1>
+
+    <!-- Link opened in a new tab; loads this same local page -->
+    <p><a id="open-in-new-tab" href="test-example-link.html">Open Example Link Page</a></p>
+
+    <!-- In-page deep link to another section of the same page -->
+    <p><a id="go-to-section" href="#section-two"
+          onclick="document.getElementById('section-two-text').textContent = 'You are now in Section Two';">Go to Section Two</a></p>
+
+    <div style="height: 2000px"></div>
+
+    <h2 id="section-two">Section Two</h2>
+    <p id="section-two-text"></p>
+</body>
+</html>

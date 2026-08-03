@@ -14,6 +14,12 @@ let url2Label = "Mozilla - Internet for people, not profit (US)"
 let url3Label = "Internet for people, not profit — Mozilla"
 let url4Label = "Form Autofill Demo: Basic @autocomplete"
 
+// Labels and text from the test-example-link.html local fixture
+let newTabLinkLabel = "Open Example Link Page"
+let sectionLinkLabel = "Go to Section Two"
+let exampleLinkPageTitle = "Example Link Page"
+let sectionLoadedText = "You are now in Section Two"
+
 class PrivateBrowsingTest: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
     private var settingScreen: SettingScreen!
@@ -279,6 +285,69 @@ class PrivateBrowsingTest: BaseTestCase {
         openMultipleTabsInPrivateModeAndForceRestart(isClosePrivateTabEnabled: false)
         // All of the previously opened tabs are displayed
         tabTray.assertTabCount(2)
+    }
+
+    // Smoketest
+    // https://mozilla.testrail.io/index.php?/cases/view/3168539
+    func testSwitchBetweenPrivateAndNormalBrowsingCloseTabsDisabled() {
+        // Precondition: keep private tabs on exit so they persist across mode switches
+        navigator.goto(SettingsScreen)
+        settingScreen.disableClosePrivateTabs()
+
+        openPrivateTabsViaDeeplinksThenBrowseNormally()
+
+        // Step 4: Switch back to private browsing; the previously opened tabs persist and work
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        tabTray.assertTabCount(2)
+        tabTray.tapTabAtIndex(index: 0)
+        navigator.nowAt(BrowserTab)
+        browserScreen.assertWebPageText(with: exampleLinkPageTitle)
+    }
+
+    // Smoketest
+    // https://mozilla.testrail.io/index.php?/cases/view/3168538
+    func testSwitchBetweenPrivateAndNormalBrowsingCloseTabsEnabled() {
+        // Precondition: close private tabs on exit so they are cleared when leaving private mode
+        navigator.goto(SettingsScreen)
+        settingScreen.enableClosePrivateTabs()
+
+        openPrivateTabsViaDeeplinksThenBrowseNormally()
+
+        // Step 4: Switch back to private browsing; the previous tabs are gone and the homepage is shown
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        browserScreen.assertPrivateBrowsingLabelExist()
+    }
+
+    private func openPrivateTabsViaDeeplinksThenBrowseNormally() {
+        // Step 1: In private mode, open a website and open one of its links in a new tab
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(path(forTestPage: TestPages.exampleLink))
+        waitUntilPageLoad()
+        browserScreen.longPressLink(named: newTabLinkLabel)
+        contextMenuScreen.openInNewPrivateTab()
+        // Firefox opens a new tab; display it and confirm the correct website loaded
+        navigator.goto(TabTray)
+        tabTray.assertTabCount(2)
+        tabTray.tapTabAtIndex(index: 1)
+        navigator.nowAt(BrowserTab)
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "localhost")
+        browserScreen.assertWebPageText(with: exampleLinkPageTitle)
+
+        // Step 2: On the same tab, tap a deep link and confirm the new section loads in the same tab
+        browserScreen.tapWebLink(named: sectionLinkLabel)
+        browserScreen.assertWebPageText(with: sectionLoadedText)
+
+        // Step 3: Switch to normal browsing and access a website
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(path(forTestPage: TestPages.exampleHTML))
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "localhost")
+        browserScreen.assertWebPageText(with: TestLabels.exampleDomain)
     }
 
     private func openMultipleTabsInPrivateModeAndForceRestart(isClosePrivateTabEnabled: Bool = true) {

@@ -58,6 +58,12 @@ final class ContextMenuScreen {
         ])
     }
 
+    func openInNewPrivateTab() {
+        let openPrivate = sel.OPEN_IN_NEW_PRIVATE_TAB.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(openPrivate)
+        openPrivate.waitAndTap()
+    }
+
     func openInNewPrivateTabAndSwitch() {
         let openPrivate = sel.OPEN_IN_NEW_PRIVATE_TAB.element(in: app)
         BaseTestCase().mozWaitForElementToExist(openPrivate)

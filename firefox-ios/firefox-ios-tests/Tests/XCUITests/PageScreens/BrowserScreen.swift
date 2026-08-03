@@ -299,6 +299,12 @@ final class BrowserScreen {
         XCTAssertTrue(hasFocus, "Expected the address bar to have keyboard focus, but it doesn't.")
     }
 
+    func tapWebLink(named name: String, timeout: TimeInterval = TIMEOUT) {
+        let link = sel.linkElement(named: name).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(link, timeout: timeout)
+        link.waitAndTap()
+    }
+
     func longPressLink(named linkName: String, duration: TimeInterval = 2.0) {
         let link = sel.linkElement(named: linkName).element(in: app)
         BaseTestCase().mozWaitForElementToExist(link)
