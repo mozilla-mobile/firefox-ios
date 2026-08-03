@@ -328,20 +328,27 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
 
             self.getStoredKey { result in
-                switch result {
-                case .success:
-                    do {
-                        try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
-                        completionHandler(true)
-                    } catch let err as NSError {
-                        self.logger.log("Error verifying logins",
-                                        level: .warning,
-                                        category: .storage,
-                                        description: err.localizedDescription)
+                self.queue.async {
+                    guard self.isOpen else {
+                        completionHandler(false)
+                        return
+                    }
+
+                    switch result {
+                    case .success:
+                        do {
+                            try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
+                            completionHandler(true)
+                        } catch let err as NSError {
+                            self.logger.log("Error verifying logins",
+                                            level: .warning,
+                                            category: .storage,
+                                            description: err.localizedDescription)
+                            completionHandler(false)
+                        }
+                    case .failure:
                         completionHandler(false)
                     }
-                case .failure:
-                    completionHandler(false)
                 }
             }
         }
@@ -475,16 +482,24 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
 
             self.getStoredKey { result in
-                switch result {
-                case .success:
-                    do {
-                        let login = try self.storage?.add(login: login)
-                        completionHandler(.success(login))
-                    } catch let err as NSError {
+                self.queue.async {
+                    guard self.isOpen else {
+                        let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                        completionHandler(.failure(error))
+                        return
+                    }
+
+                    switch result {
+                    case .success:
+                        do {
+                            let login = try self.storage?.add(login: login)
+                            completionHandler(.success(login))
+                        } catch let err as NSError {
+                            completionHandler(.failure(err))
+                        }
+                    case .failure(let err):
                         completionHandler(.failure(err))
                     }
-                case .failure(let err):
-                    completionHandler(.failure(err))
                 }
             }
         }
@@ -519,16 +534,24 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
                 }
 
                 self.getStoredKey { result in
-                    switch result {
-                    case .success:
-                        do {
-                            let updatedLogin = try self.storage?.update(id: id, login: login)
-                            completionHandler(.success(updatedLogin))
-                        } catch let error as NSError {
+                    self.queue.async {
+                        guard self.isOpen else {
+                            let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                             completionHandler(.failure(error))
+                            return
                         }
-                    case .failure(let err):
-                        completionHandler(.failure(err))
+
+                        switch result {
+                        case .success:
+                            do {
+                                let updatedLogin = try self.storage?.update(id: id, login: login)
+                                completionHandler(.success(updatedLogin))
+                            } catch let error as NSError {
+                                completionHandler(.failure(error))
+                            }
+                        case .failure(let err):
+                            completionHandler(.failure(err))
+                        }
                     }
                 }
             }

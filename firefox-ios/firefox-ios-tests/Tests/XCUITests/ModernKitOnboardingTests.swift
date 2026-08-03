@@ -17,6 +17,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     var onboardingScreen: OnboardingScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
+    var settingScreen: SettingScreen!
 
     override func setUpExperimentVariables() {
         launchArguments = [
@@ -33,6 +34,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         onboardingScreen = OnboardingScreen(app: app, flowType: flowType)
         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
+        settingScreen = SettingScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -87,6 +89,19 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/4035801
     func testModernManageBottomSheetDisplayAndDismissal() {
         verifyLinkDisplayAndDismissal(for: .manage)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4035796
+    func testModernManageBottomSheetContent() {
+        launchApp()
+
+        // Step 1: The ToS onboarding card, including the Manage link, is displayed
+        onboardingScreen.assertModernTermsOfServiceScreen()
+        onboardingScreen.assertLinkIsDisplayed(.manage)
+
+        // Step 2: Tapping Manage opens the bottom sheet showing all of its content
+        onboardingScreen.tapLink(.manage)
+        onboardingScreen.assertManageBottomSheetContents()
     }
 
     /// Shared flow for the ToS card link cases (C4035799–C4035801): tap link → overlay shown → force
@@ -237,6 +252,123 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3309013
+    func testModernKitOnboardingCardsCopy() throws {
+        launchApp()
+
+        onboardingScreen.handleTermsOfService()
+
+        // Card 1: Set as Default Browser
+        onboardingScreen.assertTextsOnCurrentScreen(
+            expectedTitle: "Open all your links with built-in privacy",
+            expectedDescription: "We protect your data and automatically block companies from spying on your clicks.",
+            expectedPrimary: "Set as Default Browser",
+            expectedSecondary: "Not Now"
+        )
+        onboardingScreen.goToNextScreenViaSecondary()
+
+        if iPad() {
+            // iPad does not show the address bar card; a11y IDs still increase by one.
+            onboardingScreen.currentScreen += 1
+        } else {
+            // Card 2: Choose your address bar (iPhone only) - advanced via the Continue primary button
+            onboardingScreen.assertTextsOnCurrentScreen(
+                expectedTitle: "Choose your address bar",
+                expectedDescription: "Start typing to get search suggestions, your top sites, " +
+                    "bookmarks, history and search engines – all in one place.",
+                expectedPrimary: "Continue"
+            )
+            onboardingScreen.assertToolbarCustomizationScreen()
+            onboardingScreen.goToNextScreenViaPrimary()
+        }
+
+        // Card 3: Pick your theme - advanced via the Continue primary button
+        onboardingScreen.assertTextsOnCurrentScreen(
+            expectedTitle: "Pick your theme",
+            expectedDescription: "Pick your favorite theme or have Firefox match your device, putting you in control.",
+            expectedPrimary: "Continue"
+        )
+        onboardingScreen.assertModernThemeCustomizationScreen()
+        onboardingScreen.goToNextScreenViaPrimary()
+
+        // Card 4: Instantly pick up where you left off (Sync)
+        onboardingScreen.assertSyncScreen()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4035641
+    func testModernKitOnboardingLightThemeSelection() throws {
+        verifyThemeSelection(theme: "Light")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4035642
+    func testModernKitOnboardingDarkThemeSelection() throws {
+        verifyThemeSelection(theme: "Dark", restoreLightThemeAfterwards: true)
+    }
+
+    /// Shared flow for the theme selection cases (C4035641, C4035642): reach the theme card, select
+    /// the given theme, confirm the Sync card is shown, then close the tour to reach the homepage.
+    private func verifyThemeSelection(theme: String, restoreLightThemeAfterwards: Bool = false) {
+        launchApp()
+
+        onboardingScreen.handleTermsOfService()
+
+        // Screen 1: Default Browser - Skip (secondary button)
+        onboardingScreen.assertTitle()
+        onboardingScreen.goToNextScreenViaSecondary()
+
+        if iPad() {
+            // iPad does not show the address bar top/bottom placement card (second screen).
+            // However, the accessibility IDs increase by one.
+            onboardingScreen.currentScreen += 1
+        } else {
+            // Screen 2: Choose address bar - Continue (primary button)
+            onboardingScreen.assertTitle()
+            onboardingScreen.goToNextScreenViaPrimary()
+        }
+
+        // Step 1: Reach the "Pick your theme" card
+        onboardingScreen.assertModernThemeCustomizationScreen()
+
+        // Step 2: Select the theme and tap Continue - the theme is applied, the card closes and the
+        // next card (Sync) is displayed
+        onboardingScreen.selectTheme(theme)
+        onboardingScreen.assertThemeIsSelected(theme)
+        onboardingScreen.goToNextScreenViaPrimary()
+        onboardingScreen.assertSyncScreen()
+
+        // Step 3: Close the onboarding tour - the homepage is reached with the theme applied
+        onboardingScreen.closeTour()
+        firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+
+        // Validate the theme was applied app-wide by checking Settings > Appearance reflects the choice
+        assertAppearanceSettingReflects(theme: theme)
+
+        // Restore Light theme from the Appearance screen so the test does not leave the device in Dark mode
+        if restoreLightThemeAfterwards {
+            settingScreen.selectLightTheme()
+            settingScreen.assertLightThemeSelected()
+        }
+    }
+
+    /// Opens Settings > Appearance and asserts the given theme is the selected option, confirming the
+    /// onboarding choice was applied app-wide via ThemeManager rather than only on the card.
+    private func assertAppearanceSettingReflects(theme: String) {
+        navigator.nowAt(BrowserTab)
+        navigator.goto(SettingsScreen)
+        navigator.goto(DisplaySettings)
+        settingScreen.assertAppearanceScreenIsShown()
+
+        switch theme {
+        case "Light":
+            settingScreen.assertLightThemeSelected()
+        case "Dark":
+            settingScreen.assertDarkThemeSelected()
+        default:
+            XCTFail("Unsupported theme: \(theme)")
+        }
+    }
+
     // MARK: - Sync Flow Tests
 
     // https://mozilla.testrail.io/index.php?/cases/view/4036954
@@ -312,6 +444,21 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         onboardingScreen.closeTour()
 
+        firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4038427
+    func testModernKitOnboardingDefaultBrowserSkip() {
+        launchApp()
+
+        onboardingScreen.handleTermsOfService()
+
+        // Step 1: The Set as Default Browser card (first onboarding card) is available
+        onboardingScreen.assertModernWelcomeScreen()
+
+        // Step 2: Tap Skip - the onboarding carousel closes and the homepage is displayed
+        onboardingScreen.closeTour()
         firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }

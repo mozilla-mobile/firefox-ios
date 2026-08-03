@@ -53,13 +53,22 @@ final class WebServer: WebServerProtocol, @unchecked Sendable {
     @discardableResult
     func start() throws -> Bool {
         if !server.isRunning {
-            try server.start(options: [
+            var options: [String: Any] = [
                 GCDWebServerOption_Port: AppInfo.webserverPort,
                 GCDWebServerOption_BindToLocalhost: true,
                 GCDWebServerOption_AutomaticallySuspendInBackground: false, // done by the app in AppDelegate
                 GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
                 GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
-            ])
+            ]
+            // UI tests serve fixtures via loopback aliases (e.g. *.localtest.me) to exercise
+            // per-eTLD+1 behavior. The app only auto-authenticates the internal server for the
+            // "localhost" host, so drop Basic auth under UI tests to let those hosts load.
+            // The server still binds to localhost only, so it stays unreachable off-device.
+            if AppConstants.isRunningUITests {
+                options.removeValue(forKey: GCDWebServerOption_AuthenticationMethod)
+                options.removeValue(forKey: GCDWebServerOption_AuthenticationAccounts)
+            }
+            try server.start(options: options)
         }
         return server.isRunning
     }

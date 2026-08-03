@@ -22,15 +22,6 @@ enum RemoteDataType: String, Codable {
     case passwordRules
     case contentBlockingLists
 
-    var type: any RemoteDataTypeRecord.Type {
-        switch self {
-        case .passwordRules:
-            return PasswordRuleRecord.self
-        case .contentBlockingLists:
-            return ContentBlockingListRecord.self
-        }
-    }
-
     var fileNames: [String] {
         switch self {
         case .passwordRules:

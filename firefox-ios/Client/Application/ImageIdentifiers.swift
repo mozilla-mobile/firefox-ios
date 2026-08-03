@@ -16,6 +16,7 @@ struct ImageIdentifiers {
     public static let foxDefaultBrowser = "foxDefaultBrowser"
     public static let foxWithStars = "foxWithStars"
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
+    public static let homeHeaderLogoPrivate = "fxHomeHeaderLogoPrivate"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
     public static let homepagePocket = "homepage-pocket"
     public static let logo = "splash"

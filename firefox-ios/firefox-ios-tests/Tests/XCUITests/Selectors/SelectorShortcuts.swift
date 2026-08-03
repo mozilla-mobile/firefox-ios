@@ -10,6 +10,12 @@ extension Selector {
         Selector(strategy: .anyById(id), value: id, description: description, groups: groups)
     }
 
+    /// Matches an element of any type by its accessibility identifier. Use when the element's XCUIElement
+    /// type is uncertain (e.g. a label that surfaces as a link/otherElement due to embedded interactions).
+    static func anyElementById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .anyElementById(id), value: id, description: description, groups: groups)
+    }
+
     static func buttonId(_ id: String, description: String, groups: [String] = []) -> Selector {
         Selector(strategy: .buttonById(id), value: id, description: description, groups: groups)
     }

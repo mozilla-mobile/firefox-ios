@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import FoundationModels
 
 /// Error types for summarization flows, mapping underlying model errors to user‑friendly cases.
 /// The UI layer will rely on userMessage to display appropriate messages.
@@ -81,12 +82,6 @@ public enum SummarizerError: Error, LocalizedError {
     }
 }
 
-/// We need these compile time checks so the app can be built with pre‑iOS 26 SDKs.
-/// Once our BR workflow switches to 26, we can remove them,
-/// as the runtime @available checks will be enough.
-#if canImport(FoundationModels)
-import FoundationModels
-
 extension SummarizerError {
     /// Initialize from `LanguageModelSession.GenerationError`.
     @available(iOS 26, *)
@@ -107,5 +102,3 @@ extension SummarizerError {
         }
     }
 }
-
-#endif

@@ -48,26 +48,7 @@ class RemoteDataTypeTests: XCTestCase {
         }
     }
 
-    // MARK: ContentBlockingListRecord Tests
-
-    func testLoadContentBlockingListRecords() async throws {
-        // Note: currently ContentBlockingListRecord is a placeholder model.
-        do {
-            let _: [ContentBlockingListRecord] = try await loadAndTestRecords(for: .contentBlockingLists)
-        } catch {
-            XCTFail("testLoadContentBlockingListRecords failed: \(error)")
-        }
-    }
-
-    func testRecordsInContentBlockingJSONFileNotEmpty() async throws {
-        // Note: currently ContentBlockingListRecord is a placeholder model.
-        do {
-            let records: [ContentBlockingListRecord] = try await loadAndTestRecords(for: .contentBlockingLists)
-            XCTAssertGreaterThan(records.count, 0, "Expected more than 0 records, but found none")
-        } catch {
-            XCTFail("testRecordsInContentBlockingJSONFileNotEmpty failed: \(error)")
-        }
-    }
+    // MARK: Content Blocking List Tests
 
     func testLoadContentBlockListJSONFiles() {
         let lists = RemoteDataType.contentBlockingLists

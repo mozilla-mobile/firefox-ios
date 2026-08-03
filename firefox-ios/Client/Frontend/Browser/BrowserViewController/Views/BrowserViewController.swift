@@ -240,15 +240,11 @@ class BrowserViewController: UIViewController,
     }
 
     private lazy var effect: some UIVisualEffect = {
-#if canImport(FoundationModels)
         if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             return UIGlassEffect(style: .regular)
         } else {
             return UIBlurEffect(style: .systemUltraThinMaterial)
         }
-#else
-        return UIBlurEffect(style: .systemUltraThinMaterial)
-#endif
     }()
 
     // MARK: Blur views for translucent toolbars
@@ -897,9 +893,7 @@ class BrowserViewController: UIViewController,
 
     private func processAppleIntelligenceState() {
         if #available(iOS 26, *) {
-#if canImport(FoundationModels)
             AppleIntelligenceUtil().processAvailabilityState()
-#endif
         }
     }
 
