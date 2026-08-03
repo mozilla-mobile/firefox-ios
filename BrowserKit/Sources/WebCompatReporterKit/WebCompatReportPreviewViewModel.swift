@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import UIKit
+import Foundation
 
 /// What the screen renders. The Client maps Redux state and collected device data onto this,
 /// keeping Redux out of the package. Labels and values are the raw Glean `broken_site_report`
@@ -77,7 +77,6 @@ public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
     public let closeA11yIdentifier: String
     public let screenshotAccessibilityLabel: String
     public let screenshotA11yIdentifier: String
-    public let screenshot: UIImage?
     public let sections: [PreviewSection]
 
     public init(
@@ -86,7 +85,6 @@ public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
         closeA11yIdentifier: String,
         screenshotAccessibilityLabel: String,
         screenshotA11yIdentifier: String,
-        screenshot: UIImage? = nil,
         sections: [PreviewSection] = []
     ) {
         self.title = title
@@ -94,18 +92,6 @@ public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
         self.closeA11yIdentifier = closeA11yIdentifier
         self.screenshotAccessibilityLabel = screenshotAccessibilityLabel
         self.screenshotA11yIdentifier = screenshotA11yIdentifier
-        self.screenshot = screenshot
         self.sections = sections
-    }
-
-    // `UIImage` isn't `Equatable`, so the screenshot compares by identity.
-    public static func == (lhs: WebCompatReportPreviewViewModel, rhs: WebCompatReportPreviewViewModel) -> Bool {
-        return lhs.title == rhs.title
-            && lhs.closeAccessibilityLabel == rhs.closeAccessibilityLabel
-            && lhs.closeA11yIdentifier == rhs.closeA11yIdentifier
-            && lhs.screenshotAccessibilityLabel == rhs.screenshotAccessibilityLabel
-            && lhs.screenshotA11yIdentifier == rhs.screenshotA11yIdentifier
-            && lhs.sections == rhs.sections
-            && lhs.screenshot === rhs.screenshot
     }
 }

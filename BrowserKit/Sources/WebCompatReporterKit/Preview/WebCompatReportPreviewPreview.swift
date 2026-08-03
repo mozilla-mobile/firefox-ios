@@ -24,10 +24,10 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
             closeA11yIdentifier: "WebCompatReporter.Preview.Close",
             screenshotAccessibilityLabel: "Screenshot of the page you are reporting",
             screenshotA11yIdentifier: "WebCompatReporter.Preview.Screenshot",
-            screenshot: screenshot,
             sections: Self.sampleSections
         )
         let controller = WebCompatReportPreviewViewController(viewModel: viewModel, theme: theme)
+        controller.updateScreenshot(screenshot)
         return UINavigationController(rootViewController: controller)
     }
 

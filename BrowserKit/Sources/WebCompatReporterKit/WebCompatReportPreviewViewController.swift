@@ -48,6 +48,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
     public weak var delegate: WebCompatReportPreviewDelegate?
 
     private var viewModel: WebCompatReportPreviewViewModel
+    private var screenshot: UIImage?
     private var theme: Theme
 
     /// The data source keys on item ids, so the values themselves live here.
@@ -101,6 +102,14 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         navigationItem.title = viewModel.title
         closeButton.accessibilityLabel = viewModel.closeAccessibilityLabel
         closeButton.accessibilityIdentifier = viewModel.closeA11yIdentifier
+        updateSections()
+    }
+
+    /// The capture arrives after the screen is on screen, so it comes in on its own rather than
+    /// through the view model. Nil drops the thumbnail.
+    public func updateScreenshot(_ image: UIImage?) {
+        screenshot = image
+        guard isViewLoaded else { return }
         updateSections()
     }
 
@@ -226,7 +235,6 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         let expandedHeaderIDs = currentlyExpandedHeaderIDs()
         let previousItems = itemsByID
 
-        let screenshot = viewModel.screenshot
         itemsByID = [:]
         orderedSectionIDs = []
 
