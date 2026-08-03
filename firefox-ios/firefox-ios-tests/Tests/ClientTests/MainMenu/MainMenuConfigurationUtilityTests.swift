@@ -211,6 +211,31 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         XCTAssertEqual(translateItem?.a11yHint, expectedHint)
     }
 
+    func test_reportBrokenSiteItem_isHidden_whenTelemetryIsDisabled() {
+        XCTAssertTrue(hasReportBrokenSiteItem(isTelemetryEnabled: true))
+        XCTAssertFalse(hasReportBrokenSiteItem(isTelemetryEnabled: false))
+    }
+
+    private func hasReportBrokenSiteItem(isTelemetryEnabled: Bool) -> Bool {
+        let profile = MockProfile()
+        profile.prefs.setBool(isTelemetryEnabled, forKey: AppConstants.prefSendUsageData)
+
+        let featureFlagProvider = MockNimbusFeatureFlags()
+        featureFlagProvider.enabledFlags = [.reportBrokenSite]
+
+        DependencyHelperMock().bootstrapDependencies(
+            injectedProfile: profile,
+            injectedFeatureFlagProvider: featureFlagProvider
+        )
+
+        let sections = configUtility.generateMenuElements(
+            with: getTabInfo(url: URL(string: "https://www.mozilla.org")),
+            and: windowUUID,
+            isExpanded: true
+        )
+        return sections.flatMap { $0.options }.contains { $0.title == .MainMenu.ToolsSection.ReportBrokenSite }
+    }
+
     private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
             return SummarizerLanguageExpansionFeature(enabled: enabled)
@@ -219,11 +244,12 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     private func getTabInfo(
         isHomepage: Bool = false,
+        url: URL? = nil,
         translationConfiguration: TranslationConfiguration? = nil
     ) -> MainMenuTabInfo {
         return MainMenuTabInfo(
             tabID: "uuid",
-            url: nil,
+            url: url,
             canonicalURL: nil,
             isHomepage: isHomepage,
             isDefaultUserAgentDesktop: false,

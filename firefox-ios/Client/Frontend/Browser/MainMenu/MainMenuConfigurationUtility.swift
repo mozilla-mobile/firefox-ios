@@ -32,6 +32,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         featureFlagsProvider.isEnabled(.reportBrokenSite)
     }
 
+    private var canSendTechnicalData: Bool {
+        let profile: Profile = AppContainer.shared.resolve()
+        return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+    }
+
     private var isSummarizerOn: Bool {
         return DefaultSummarizerNimbusUtils().isSummarizeFeatureToggledOn
     }
@@ -351,6 +356,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         tabInfo: MainMenuTabInfo
     ) -> MenuElement? {
         guard isReportBrokenSiteOn,
+              canSendTechnicalData,
               tabInfo.url?.isWebPage(includeDataURIs: false) == true
         else { return nil }
 
