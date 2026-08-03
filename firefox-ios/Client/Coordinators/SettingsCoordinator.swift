@@ -357,7 +357,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedRelayMask() {
-        settingsViewController?.handle(route: .relayMask)
+        findAndHandle(route: .settings(section: .relayMask))
     }
 
     func pressedClearPrivateData() {
