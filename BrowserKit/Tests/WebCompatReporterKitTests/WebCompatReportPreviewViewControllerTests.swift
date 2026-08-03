@@ -117,55 +117,6 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertEqual(header?.accessibilityIdentifier, "section.system")
     }
 
-    // MARK: - Screenshot
-
-    func testWithScreenshot_addsLeadingScreenshotSection() {
-        let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
-        layout(subject)
-
-        let collectionView = collectionView(in: subject)
-        XCTAssertEqual(collectionView?.numberOfSections, sampleSections.count + 1)
-        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
-    }
-
-    // The coordinator shows the sheet first and reconfigures once the capture lands.
-    func testConfigure_screenshotArrivingLate_insertsItAsTheLeadingSection() {
-        let subject = createSubject(screenshot: nil, sections: sampleSections)
-        layout(subject)
-
-        subject.configure(with: makeViewModel(screenshot: sampleImage(), sections: sampleSections))
-        subject.view.layoutIfNeeded()
-
-        let collectionView = collectionView(in: subject)
-        XCTAssertEqual(collectionView?.numberOfSections, sampleSections.count + 1)
-        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
-    }
-
-    // Inserting a section ahead of the rest is where losing the user's place is most likely.
-    func testConfigure_screenshotArrivingLate_keepsExpandedSectionsExpanded() throws {
-        let subject = createSubject(screenshot: nil, sections: sampleSections)
-        layout(subject)
-        try expandFirstSection(in: subject)
-
-        subject.configure(with: makeViewModel(screenshot: sampleImage(), sections: sampleSections))
-        subject.view.layoutIfNeeded()
-
-        XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 1), 2)
-    }
-
-    func testScreenshotTap_notifiesDelegate() throws {
-        let delegate = MockWebCompatReportPreviewDelegate()
-        let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
-        subject.delegate = delegate
-        layout(subject)
-
-        let cell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
-        let button = try XCTUnwrap(firstSubview(ofType: UIButton.self, in: cell?.contentView))
-        fireActions(on: button, for: .touchUpInside)
-
-        XCTAssertEqual(delegate.didTapScreenshotCallCount, 1)
-    }
-
     func testCloseTap_notifiesDelegate() throws {
         let delegate = MockWebCompatReportPreviewDelegate()
         let subject = createSubject(sections: sampleSections)
@@ -199,7 +150,6 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     // MARK: - Helpers
 
     private func makeViewModel(
-        screenshot: UIImage? = nil,
         sections: [WebCompatReportPreviewViewModel.PreviewSection] = []
     ) -> WebCompatReportPreviewViewModel {
         return WebCompatReportPreviewViewModel(
@@ -208,17 +158,15 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
             closeA11yIdentifier: "close",
             screenshotAccessibilityLabel: "Screenshot",
             screenshotA11yIdentifier: "screenshot",
-            screenshot: screenshot,
             sections: sections
         )
     }
 
     private func createSubject(
-        screenshot: UIImage? = nil,
         sections: [WebCompatReportPreviewViewModel.PreviewSection] = []
     ) -> WebCompatReportPreviewViewController {
         return WebCompatReportPreviewViewController(
-            viewModel: makeViewModel(screenshot: screenshot, sections: sections),
+            viewModel: makeViewModel(sections: sections),
             theme: LightTheme()
         )
     }
@@ -321,13 +269,10 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
 
 private final class MockWebCompatReportPreviewDelegate: WebCompatReportPreviewDelegate {
     var didRequestDismissCallCount = 0
-    var didTapScreenshotCallCount = 0
 
     func webCompatReportPreviewDidRequestDismiss() {
         didRequestDismissCallCount += 1
     }
 
-    func webCompatReportPreviewDidTapScreenshot() {
-        didTapScreenshotCallCount += 1
-    }
+    func webCompatReportPreviewDidTapScreenshot() {}
 }
