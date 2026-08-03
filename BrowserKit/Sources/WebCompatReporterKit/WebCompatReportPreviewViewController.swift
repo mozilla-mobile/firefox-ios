@@ -6,8 +6,7 @@ import Common
 import ComponentLibrary
 import UIKit
 
-/// What the screen reports back. The coordinator opens the full-screen viewer and owns
-/// dismissal; this never navigates itself.
+/// What the screen reports back. The coordinator owns dismissal.
 @MainActor
 public protocol WebCompatReportPreviewDelegate: AnyObject {
     func webCompatReportPreviewDidRequestDismiss()
@@ -54,8 +53,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     /// The data source keys on item ids, so the values themselves live here.
     private var itemsByID: [String: ItemKind] = [:]
-    /// Display order, so the layout closure can spot the screenshot section and
-    /// give it the frameless appearance.
+    /// Display order, so the layout closure can spot the screenshot section.
     private var orderedSectionIDs: [String] = []
 
     /// The first applyTheme runs inside `viewDidLoad`, where reconfiguring collapses the nav

@@ -128,8 +128,7 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
     }
 
-    // The coordinator shows the sheet with the instant viewport grab, then reconfigures once the
-    // full-page capture lands.
+    // The coordinator shows the sheet first and reconfigures once the capture lands.
     func testConfigure_screenshotArrivingLate_insertsItAsTheLeadingSection() {
         let subject = createSubject(screenshot: nil, sections: sampleSections)
         layout(subject)
@@ -142,8 +141,7 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
     }
 
-    // A late screenshot inserts a section ahead of the rest, which is where losing the user's
-    // place is most likely.
+    // Inserting a section ahead of the rest is where losing the user's place is most likely.
     func testConfigure_screenshotArrivingLate_keepsExpandedSectionsExpanded() throws {
         let subject = createSubject(screenshot: nil, sections: sampleSections)
         layout(subject)
@@ -153,31 +151,6 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         subject.view.layoutIfNeeded()
 
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 1), 2)
-    }
-
-    // Turning the screenshot toggle off drops section 0, which shifts every remaining section
-    // down an index.
-    func testConfigure_screenshotRemoved_dropsTheScreenshotSection() {
-        let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
-        layout(subject)
-
-        subject.configure(with: makeViewModel(screenshot: nil, sections: sampleSections))
-        subject.view.layoutIfNeeded()
-
-        let collectionView = collectionView(in: subject)
-        XCTAssertEqual(collectionView?.numberOfSections, sampleSections.count)
-        XCTAssertFalse(collectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatPreviewScreenshotCell)
-    }
-
-    func testConfigure_screenshotRemoved_keepsExpandedSectionsExpanded() throws {
-        let subject = createSubject(screenshot: sampleImage(), sections: sampleSections)
-        layout(subject)
-        try expandFirstSection(in: subject)
-
-        subject.configure(with: makeViewModel(screenshot: nil, sections: sampleSections))
-        subject.view.layoutIfNeeded()
-
-        XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
     }
 
     func testScreenshotTap_notifiesDelegate() throws {

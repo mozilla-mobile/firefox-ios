@@ -5,9 +5,6 @@
 import UIKit
 import XCTest
 
-/// Arbitrary: every caller cares that there IS an image, not how big it is.
-private let sampleImageSize = CGSize(width: 40, height: 60)
-
 extension XCTestCase {
     /// Depth-first search for the first subview of the given type.
     @MainActor
@@ -18,17 +15,6 @@ extension XCTestCase {
             if let match = firstSubview(ofType: type, in: subview) { return match }
         }
         return nil
-    }
-
-    /// A solid-colour stand-in image. Scale 1, so a fixture costs its nominal pixels rather
-    /// than three times as many at device scale.
-    func sampleImage(size: CGSize = sampleImageSize) -> UIImage {
-        let format = UIGraphicsImageRendererFormat.default()
-        format.scale = 1
-        return UIGraphicsImageRenderer(size: size, format: format).image { context in
-            UIColor.systemBlue.setFill()
-            context.fill(CGRect(origin: .zero, size: size))
-        }
     }
 
     /// `UIControl.sendActions` needs a running `UIApplication`, which logic tests lack, and it

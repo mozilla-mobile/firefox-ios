@@ -49,11 +49,5 @@ enum WebCompatReporterUX {
         static let verticalPadding: CGFloat = 18
         /// Clears the nav bar, so the tilt has room above it.
         static let topInset: CGFloat = 24
-
-        /// Figma's blur, which `applyShadow(_:theme:)` halves to get `shadowRadius`.
-        static let shadowBlurRadius: CGFloat = 14
-        static let shadowOffset = CGSize(width: 0, height: 2)
-        /// `shadowDefault` already carries the Figma 12% alpha, so this stays at 1.
-        static let shadowOpacity: Float = 1
     }
 }

@@ -9,26 +9,22 @@ import UIKit
 /// opens the full-screen viewer.
 final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeApplicable, ReusableCell {
     private var tapHandler: (() -> Void)?
+    private var shadowPathBounds: CGRect = .zero
 
-    /// Holds the tilt and the shadow. Separate from the clipped image, or the
-    /// rounded corners mask the shadow away.
-    private lazy var cardContainer: UIView = .build { view in
-        view.transform = CGAffineTransform(
+    /// The shadow sits on the button's own layer, outside the background view that clips to the
+    /// rounded corners.
+    private lazy var thumbnailButton: UIButton = .build({ button in
+        button.transform = CGAffineTransform(
             rotationAngle: WebCompatReporterUX.Thumbnail.tiltDegrees * .pi / 180
         )
-    }
-
-    private lazy var imageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = WebCompatReporterUX.Thumbnail.cornerRadius
-        imageView.layer.borderWidth = WebCompatReporterUX.Thumbnail.borderWidth
-    }
-
-    private lazy var tapButton: UIButton = .build { button in
         button.addTarget(self, action: #selector(self.didTap), for: .touchUpInside)
-        button.accessibilityTraits = [.button, .image]
-    }
+    }, {
+        var configuration = UIButton.Configuration.plain()
+        configuration.background.cornerRadius = WebCompatReporterUX.Thumbnail.cornerRadius
+        configuration.background.imageContentMode = .scaleAspectFill
+        configuration.background.strokeWidth = WebCompatReporterUX.Thumbnail.borderWidth
+        return UIButton(configuration: configuration)
+    })
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,33 +38,22 @@ final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeAppli
 
     private func setupSubviews() {
         backgroundConfiguration = UIBackgroundConfiguration.clear()
-        cardContainer.addSubview(imageView)
-        contentView.addSubviews(cardContainer, tapButton)
+        contentView.addSubview(thumbnailButton)
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: cardContainer.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: cardContainer.trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: cardContainer.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: cardContainer.bottomAnchor),
-
-            cardContainer.widthAnchor.constraint(equalToConstant: WebCompatReporterUX.Thumbnail.size.width),
-            cardContainer.heightAnchor.constraint(equalToConstant: WebCompatReporterUX.Thumbnail.size.height),
-            cardContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            cardContainer.topAnchor.constraint(
+            thumbnailButton.widthAnchor.constraint(equalToConstant: WebCompatReporterUX.Thumbnail.size.width),
+            thumbnailButton.heightAnchor.constraint(equalToConstant: WebCompatReporterUX.Thumbnail.size.height),
+            thumbnailButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            thumbnailButton.topAnchor.constraint(
                 equalTo: contentView.topAnchor,
                 constant: WebCompatReporterUX.Thumbnail.verticalPadding
             ),
-            cardContainer.bottomAnchor.constraint(
+            thumbnailButton.bottomAnchor.constraint(
                 equalTo: contentView.bottomAnchor,
                 constant: -WebCompatReporterUX.Thumbnail.verticalPadding
-            ),
-
-            tapButton.topAnchor.constraint(equalTo: cardContainer.topAnchor),
-            tapButton.bottomAnchor.constraint(equalTo: cardContainer.bottomAnchor),
-            tapButton.leadingAnchor.constraint(equalTo: cardContainer.leadingAnchor),
-            tapButton.trailingAnchor.constraint(equalTo: cardContainer.trailingAnchor)
+            )
         ])
     }
 
@@ -79,15 +64,17 @@ final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeAppli
         onTap: @escaping () -> Void
     ) {
         tapHandler = onTap
-        imageView.image = image
-        tapButton.accessibilityLabel = imageAccessibilityLabel
-        tapButton.accessibilityIdentifier = a11yIdentifier
+        thumbnailButton.configuration?.background.image = image
+        thumbnailButton.accessibilityLabel = imageAccessibilityLabel
+        thumbnailButton.accessibilityIdentifier = a11yIdentifier
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        cardContainer.layer.shadowPath = UIBezierPath(
-            roundedRect: cardContainer.bounds,
+        guard thumbnailButton.bounds != shadowPathBounds else { return }
+        shadowPathBounds = thumbnailButton.bounds
+        thumbnailButton.layer.shadowPath = UIBezierPath(
+            roundedRect: thumbnailButton.bounds,
             cornerRadius: WebCompatReporterUX.Thumbnail.cornerRadius
         ).cgPath
     }
@@ -95,16 +82,8 @@ final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeAppli
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        imageView.layer.borderColor = theme.colors.layer2.cgColor
-        cardContainer.applyShadow(
-            FxShadow(
-                blurRadius: WebCompatReporterUX.Thumbnail.shadowBlurRadius,
-                offset: WebCompatReporterUX.Thumbnail.shadowOffset,
-                opacity: WebCompatReporterUX.Thumbnail.shadowOpacity,
-                colorProvider: { $0.colors.shadowDefault }
-            ),
-            theme: theme
-        )
+        thumbnailButton.configuration?.background.strokeColor = theme.colors.layer2
+        thumbnailButton.applyShadow(FxShadow.shadow200, theme: theme)
     }
 
     @objc

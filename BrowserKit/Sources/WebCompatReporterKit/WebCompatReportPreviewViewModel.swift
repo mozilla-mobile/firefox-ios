@@ -77,8 +77,6 @@ public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
     public let closeA11yIdentifier: String
     public let screenshotAccessibilityLabel: String
     public let screenshotA11yIdentifier: String
-    /// Nil means the user turned the screenshot off or the capture hasn't finished;
-    /// the thumbnail is left out entirely either way.
     public let screenshot: UIImage?
     public let sections: [PreviewSection]
 
@@ -100,8 +98,7 @@ public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
         self.sections = sections
     }
 
-    // `UIImage` isn't `Equatable`, so compare the screenshot by identity. Getting
-    // "unequal" wrong only costs a redraw, so that's the safe direction.
+    // `UIImage` isn't `Equatable`, so the screenshot compares by identity.
     public static func == (lhs: WebCompatReportPreviewViewModel, rhs: WebCompatReportPreviewViewModel) -> Bool {
         return lhs.title == rhs.title
             && lhs.closeAccessibilityLabel == rhs.closeAccessibilityLabel
