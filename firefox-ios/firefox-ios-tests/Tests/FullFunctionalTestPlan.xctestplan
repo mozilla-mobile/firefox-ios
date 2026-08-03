@@ -342,6 +342,7 @@
         "ToolbarTests\/testShowToolbarWhenScrollingDefaultOption()",
         "ToolbarTests\/testToolbarIsVisibleAfterTypingInWebPageTextField()",
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
+        "TrackingProtectionTests\/testStandardProtectionLevel()",
         "TrackingProtectionTests\/testStandardProtectionLevel_TAE()",
         "TrackingProtectionTests\/testStandardProtectionLevel_tabTrayExperimentOff()",
         "TrackingProtectionTests\/testStandardProtectionLevel_tabTrayExperimentOn()",
