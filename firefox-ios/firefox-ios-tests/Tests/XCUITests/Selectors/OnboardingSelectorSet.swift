@@ -22,6 +22,13 @@ protocol OnboardingSelectorsSet {
     var MANAGE_LINK: Selector { get }
     var TOS_PAGE_DONE_BUTTON: Selector { get }
     var MANAGE_SHEET_DONE_BUTTON: Selector { get }
+    var MANAGE_SHEET_TITLE: Selector { get }
+    var MANAGE_SHEET_TECHNICAL_DATA_TITLE: Selector { get }
+    var MANAGE_SHEET_TECHNICAL_DATA_SWITCH: Selector { get }
+    var MANAGE_SHEET_TECHNICAL_DATA_DESCRIPTION: Selector { get }
+    var MANAGE_SHEET_CRASH_REPORTS_TITLE: Selector { get }
+    var MANAGE_SHEET_CRASH_REPORTS_SWITCH: Selector { get }
+    var MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION: Selector { get }
     var CONTINUE_BUTTON: Selector { get }
     var MANAGE_TEXT_BUTTON: Selector { get }
     var LAST_TOS_DESCRIPTION_TEXT: Selector { get }
@@ -37,13 +44,21 @@ protocol OnboardingSelectorsSet {
 
 struct OnboardingSelectors: OnboardingSelectorsSet {
     private enum IDs {
+        typealias PrivacyNotice = AccessibilityIdentifiers.TermsOfService.PrivacyNotice
         static let termsAndService_AgreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
         static let termsAndService_OnboardingPrimaryButton = "TermsOfService.OnboardingPrimaryButton"
         static let termsOfUse_LinkTextFragment = "Terms of Use"
         static let privacyNotice_LinkTextFragment = "Privacy Notice"
         static let manage_LinkTextFragment = "Manage"
         static let termsOfService_DoneButton = AccessibilityIdentifiers.TermsOfService.doneButton
-        static let manageSheet_DoneButton = AccessibilityIdentifiers.TermsOfService.PrivacyNotice.doneButton
+        static let manageSheet_DoneButton = PrivacyNotice.doneButton
+        static let manageSheet_Title = PrivacyNotice.title
+        static let manageSheet_TechnicalDataTitle = PrivacyNotice.TechnicalData.actionTitleLabel
+        static let manageSheet_TechnicalDataSwitch = PrivacyNotice.TechnicalData.actionSwitch
+        static let manageSheet_TechnicalDataDescription = PrivacyNotice.TechnicalData.actionDescriptionLabel
+        static let manageSheet_CrashReportsTitle = PrivacyNotice.CrashReports.actionTitleLabel
+        static let manageSheet_CrashReportsSwitch = PrivacyNotice.CrashReports.actionSwitch
+        static let manageSheet_CrashReportsDescription = PrivacyNotice.CrashReports.actionDescriptionLabel
         static let continueButton = "Continue"
         static let manage_Text = "TermsOfService.ManageDataCollectionAgreement"
         static let QRCode_SignIn = "QRCodeSignIn.button"
@@ -94,6 +109,48 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     let MANAGE_SHEET_DONE_BUTTON = Selector.buttonId(
         IDs.manageSheet_DoneButton,
         description: "Done button dismissing the Manage privacy preferences bottom sheet",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_SHEET_TITLE = Selector.staticTextId(
+        IDs.manageSheet_Title,
+        description: "Title of the Manage privacy preferences bottom sheet",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_SHEET_TECHNICAL_DATA_TITLE = Selector.anyElementById(
+        IDs.manageSheet_TechnicalDataTitle,
+        description: "Technical and interaction data toggle title on the Manage sheet",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_SHEET_TECHNICAL_DATA_SWITCH = Selector.anyElementById(
+        IDs.manageSheet_TechnicalDataSwitch,
+        description: "Technical and interaction data toggle on the Manage sheet",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_SHEET_TECHNICAL_DATA_DESCRIPTION = Selector.anyElementById(
+        IDs.manageSheet_TechnicalDataDescription,
+        description: "Technical and interaction data description on the Manage sheet",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_SHEET_CRASH_REPORTS_TITLE = Selector.anyElementById(
+        IDs.manageSheet_CrashReportsTitle,
+        description: "Automatically send crash reports toggle title on the Manage sheet",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_SHEET_CRASH_REPORTS_SWITCH = Selector.anyElementById(
+        IDs.manageSheet_CrashReportsSwitch,
+        description: "Automatically send crash reports toggle on the Manage sheet",
+        groups: ["onboarding"]
+    )
+
+    let MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION = Selector.anyElementById(
+        IDs.manageSheet_CrashReportsDescription,
+        description: "Automatically send crash reports description on the Manage sheet",
         groups: ["onboarding"]
     )
 
@@ -232,6 +289,9 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     var all: [Selector] {
         [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, MANAGE_TEXT_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
          DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON, PAGE_CONTROL,
-         TERMS_OF_USE_LINK, PRIVACY_NOTICE_LINK, MANAGE_LINK, TOS_PAGE_DONE_BUTTON, MANAGE_SHEET_DONE_BUTTON]
+         TERMS_OF_USE_LINK, PRIVACY_NOTICE_LINK, MANAGE_LINK, TOS_PAGE_DONE_BUTTON, MANAGE_SHEET_DONE_BUTTON,
+         MANAGE_SHEET_TITLE, MANAGE_SHEET_TECHNICAL_DATA_TITLE, MANAGE_SHEET_TECHNICAL_DATA_SWITCH,
+         MANAGE_SHEET_TECHNICAL_DATA_DESCRIPTION, MANAGE_SHEET_CRASH_REPORTS_TITLE,
+         MANAGE_SHEET_CRASH_REPORTS_SWITCH, MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION]
     }
 }
