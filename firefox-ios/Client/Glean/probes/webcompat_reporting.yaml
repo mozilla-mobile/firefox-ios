@@ -18,14 +18,10 @@ $tags:
 ###############################################################################
 # WebCompat — Report a Website Issue interaction telemetry
 #
-# Usage and abandonment events for the in-app "Report a Website Issue" flow,
-# sent in the default `events` ping. The report contents are separate: they
-# live in `broken_site_report.*` and go out in the `broken-site-report` ping.
+# Usage and abandonment events for the reporter. The report contents are
+# separate: `broken_site_report.*`, sent in the `broken-site-report` ping.
 #
-# NAMING: desktop files the equivalent events under `webcompatreporting`
-# (toolkit/components/reportbrokensite/metrics.yaml). iOS uses
-# `webcompat_reporting` to match the snake_case of this directory, so
-# cross-platform queries must spell the category per platform.
+# Desktop files the equivalent events under `webcompatreporting`.
 ###############################################################################
 
 webcompat_reporting:
@@ -37,8 +33,7 @@ webcompat_reporting:
       source:
         type: string
         description: |
-          The entry point the reporter was opened from. Values match desktop's
-          `webcompatreporting.opened.source`.
+          The entry point the reporter was opened from.
           Options are listed in the WebCompatReporterTelemetry.Source enumeration.
     data_sensitivity:
       - interaction
@@ -53,10 +48,9 @@ webcompat_reporting:
   reason_selected:
     type: event
     description: |
-      Recorded when the user picks an issue category in the reporter. The sheet
-      presents a two-level picker (category, then sub-option); only the
-      top-level category is recorded here. The reason a sent report actually
-      carries is in `broken_site_report.breakage_category`.
+      Recorded when the user picks a top-level issue category. The sheet's
+      second-level sub-option is not recorded here; the reason a sent report
+      carries is `broken_site_report.breakage_category`.
     extra_keys:
       reason:
         type: string
@@ -76,9 +70,8 @@ webcompat_reporting:
   previewed:
     type: event
     description: |
-      Recorded when the user opens the report preview. The preview entry point
-      is parked (FXIOS-16450), so this is expected to stay at zero until that
-      UI is unhidden.
+      Recorded when the user opens the report preview, which is currently
+      parked (FXIOS-16450).
     data_sensitivity:
       - interaction
     bugs:
@@ -118,9 +111,8 @@ webcompat_reporting:
       sent_with_screenshot:
         type: boolean
         description: |
-          Whether a screenshot was attached to the report. The screenshot
-          option is parked (FXIOS-16450) and no image is transported yet, so
-          this is always false for now.
+          Whether a screenshot was attached to the report. Always false while
+          the screenshot option is parked (FXIOS-16450).
     data_sensitivity:
       - interaction
     bugs:
@@ -135,8 +127,7 @@ webcompat_reporting:
     type: event
     description: |
       Recorded when the user taps the "Learn More" link in the reporter's
-      advanced options footer, which opens the SUMO article on reporting a
-      broken site.
+      advanced options footer.
     data_sensitivity:
       - interaction
     bugs:
