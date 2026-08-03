@@ -45,7 +45,7 @@ webcompat_reporting:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35009
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
       - webcompat-reporting-tool-telemetry@mozilla.com
@@ -68,7 +68,7 @@ webcompat_reporting:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35009
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
       - webcompat-reporting-tool-telemetry@mozilla.com
@@ -84,7 +84,7 @@ webcompat_reporting:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35009
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
       - webcompat-reporting-tool-telemetry@mozilla.com
@@ -99,7 +99,7 @@ webcompat_reporting:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35009
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
       - webcompat-reporting-tool-telemetry@mozilla.com
@@ -126,7 +126,7 @@ webcompat_reporting:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35009
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
       - webcompat-reporting-tool-telemetry@mozilla.com
@@ -142,7 +142,7 @@ webcompat_reporting:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16478
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35009
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
       - webcompat-reporting-tool-telemetry@mozilla.com
