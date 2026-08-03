@@ -9,7 +9,6 @@ import UIKit
 /// opens the full-screen viewer.
 final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeApplicable, ReusableCell {
     private var tapHandler: (() -> Void)?
-    private var shadowPathBounds: CGRect = .zero
 
     /// The shadow sits on the button's own layer, outside the background view that clips to the
     /// rounded corners.
@@ -67,16 +66,6 @@ final class WebCompatPreviewScreenshotCell: UICollectionViewListCell, ThemeAppli
         thumbnailButton.configuration?.background.image = image
         thumbnailButton.accessibilityLabel = imageAccessibilityLabel
         thumbnailButton.accessibilityIdentifier = a11yIdentifier
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard thumbnailButton.bounds != shadowPathBounds else { return }
-        shadowPathBounds = thumbnailButton.bounds
-        thumbnailButton.layer.shadowPath = UIBezierPath(
-            roundedRect: thumbnailButton.bounds,
-            cornerRadius: WebCompatReporterUX.Thumbnail.cornerRadius
-        ).cgPath
     }
 
     // MARK: - ThemeApplicable
