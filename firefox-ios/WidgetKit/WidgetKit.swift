@@ -3,11 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 #if canImport(WidgetKit)
-import WidgetKit
+import Common
 import SwiftUI
+import WidgetKit
 
 @main
 struct FirefoxWidgets: WidgetBundle {
+    init() {
+        MainActor.assumeIsolated {
+            AppContainer.shared.register(service: WidgetKitThemeManager() as ThemeManager)
+        }
+    }
+
     @WidgetBundleBuilder var body: some Widget {
         SmallQuickLinkWidget()
         SearchQuickLinksWidget()
