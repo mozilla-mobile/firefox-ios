@@ -4970,6 +4970,14 @@ extension String {
                 comment: "Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen."
             )
         }
+        public struct Toast {
+            public static let ReportSent = MZLocalizedString(
+                key: "WebCompatReporter.Toast.ReportSent.v155",
+                tableName: "WebCompatReporter",
+                value: "Report sent",
+                comment: "Message of the toast shown after the user successfully submits a website issue report."
+            )
+        }
     }
 }
 
