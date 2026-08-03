@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import ComponentLibrary
 import UIKit
 
 /// What the screen reports back. The coordinator owns dismissal.
@@ -60,13 +59,10 @@ public final class WebCompatReportPreviewViewController: UIViewController,
     /// bar's large title. Later changes do reconfigure.
     private var hasAppliedThemeOnce = false
 
-    /// ComponentLibrary's button, not a bare `UIBarButtonItem`. It brings its own size
-    /// constraints, so it stays a round chip.
-    private lazy var closeButton: CloseButton = .build { button in
-        button.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
-    }
-
-    private lazy var closeBarButtonItem = UIBarButtonItem(customView: closeButton)
+    private lazy var closeButton: UIBarButtonItem = {
+        let image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
+        return UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(didTapClose))
+    }()
 
     private lazy var collectionView: UICollectionView = .build({ collectionView in
         collectionView.delegate = self
@@ -103,12 +99,8 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         self.viewModel = viewModel
         guard isViewLoaded else { return }
         navigationItem.title = viewModel.title
-        closeButton.configure(
-            viewModel: CloseButtonViewModel(
-                a11yLabel: viewModel.closeAccessibilityLabel,
-                a11yIdentifier: viewModel.closeA11yIdentifier
-            )
-        )
+        closeButton.accessibilityLabel = viewModel.closeAccessibilityLabel
+        closeButton.accessibilityIdentifier = viewModel.closeA11yIdentifier
         updateSections()
     }
 
@@ -116,7 +108,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     private func setupNavigationItem() {
         // Trailing, so the leading slot stays free for the back button on a pushed screen.
-        navigationItem.rightBarButtonItem = closeBarButtonItem
+        navigationItem.rightBarButtonItem = closeButton
     }
 
     private func setupLayout() {
