@@ -217,18 +217,15 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
     }
 
     private func hasReportBrokenSiteItem(isTelemetryEnabled: Bool) -> Bool {
-        let profile = MockProfile()
-        profile.prefs.setBool(isTelemetryEnabled, forKey: AppConstants.prefSendUsageData)
-
         let featureFlagProvider = MockNimbusFeatureFlags()
         featureFlagProvider.enabledFlags = [.reportBrokenSite]
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlagProvider)
 
-        DependencyHelperMock().bootstrapDependencies(
-            injectedProfile: profile,
-            injectedFeatureFlagProvider: featureFlagProvider
-        )
+        let profile = MockProfile()
+        profile.prefs.setBool(isTelemetryEnabled, forKey: AppConstants.prefSendUsageData)
+        let configurationUtility = MainMenuConfigurationUtility(profile: profile)
 
-        let sections = configUtility.generateMenuElements(
+        let sections = configurationUtility.generateMenuElements(
             with: getTabInfo(url: URL(string: "https://www.mozilla.org")),
             and: windowUUID,
             isExpanded: true

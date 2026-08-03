@@ -28,12 +28,17 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let reportBrokenSite = StandardImageIdentifiers.Large.report
     }
 
+    private let profile: Profile
+
+    init(profile: Profile = AppContainer.shared.resolve()) {
+        self.profile = profile
+    }
+
     private var isReportBrokenSiteOn: Bool {
         featureFlagsProvider.isEnabled(.reportBrokenSite)
     }
 
     private var canSendTechnicalData: Bool {
-        let profile: Profile = AppContainer.shared.resolve()
         return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
     }
 
@@ -692,5 +697,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 )
             }
         )
+    }
+
+    static func == (lhs: MainMenuConfigurationUtility, rhs: MainMenuConfigurationUtility) -> Bool {
+        return lhs.profile === rhs.profile
     }
 }
