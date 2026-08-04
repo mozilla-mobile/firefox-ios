@@ -14,7 +14,7 @@ protocol WebCompatReportCoordinatorDelegate: AnyObject {
     func webCompatReportViewControllerDidFinish()
     /// Report was sent; the coordinator dismisses and confirms it.
     func webCompatReportViewControllerDidSubmit()
-    /// User tapped the "Learn More…" link; the coordinator dismisses the sheet and opens the explainer page.
+    /// User tapped the "Learn More…" link; the coordinator shows the explainer page without dismissing the sheet.
     func webCompatReportViewControllerDidTapLearnMore(url: URL)
 }
 
