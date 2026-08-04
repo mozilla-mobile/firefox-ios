@@ -196,6 +196,10 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
                 topPadding: topBlurView.bounds.height,
                 bottomPadding: bottomBlurView.bounds.height
             )
+            if gesture.velocity(in: nil).y <= -1100 {
+                handleGestureEnded(gesture: gesture)
+                return
+            }
             addHaptics()
         case .changed:
             tabPreview.addTabScreenshot(image: tab.screenshot)
@@ -210,9 +214,13 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     }
 
     @objc
-    private func handleGestureEnded(gesture: UIGestureRecognizer) {
+    private func handleGestureEnded(gesture: UIPanGestureRecognizer) {
         let fingerLocation = gesture.location(in: tabPreview)
-        switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
+        var outcome = tabPreview.releaseOutcome(fingerLocation: fingerLocation)
+        if gesture.velocity(in: nil).y <= -1100 {
+            outcome = SwipeUpTabWebViewPreview.ReleaseOutcome.openTabTray
+        }
+        switch outcome {
         case .closeTab:
             // Lock the pan gesture until the close animation finishes so a new gesture can't
             // start mid-animation.
@@ -259,6 +267,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     @objc
     private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         if !swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled { return }
+        print("Velocity: ", gesture.velocity(in: nil))
         handleGestureState(gesture)
     }
 
