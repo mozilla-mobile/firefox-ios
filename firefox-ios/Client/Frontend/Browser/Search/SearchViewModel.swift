@@ -23,10 +23,7 @@ class SearchViewModel: FeatureFlaggable,
                        LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
-    private var suggestClient: SearchSuggestClientProvider?
-    /// Test seam. When non-nil this instance is used instead of building a networking client for the
-    /// default engine. Always nil in production.
-    private let injectedSuggestClient: SearchSuggestClientProvider?
+    private var suggestClient: SearchSuggestClient?
     private let recentSearchProvider: RecentSearchProvider
     private let trendingSearchClient: TrendingSearchClientProvider
     private let logger: Logger
@@ -214,7 +211,6 @@ class SearchViewModel: FeatureFlaggable,
         tabManager: TabManager,
         trendingSearchClient: TrendingSearchClientProvider,
         recentSearchProvider: RecentSearchProvider,
-        suggestClient: SearchSuggestClientProvider? = nil,
         logger: Logger = DefaultLogger.shared,
         featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search
     ) {
@@ -225,7 +221,6 @@ class SearchViewModel: FeatureFlaggable,
         self.tabManager = tabManager
         self.trendingSearchClient = trendingSearchClient
         self.recentSearchProvider = recentSearchProvider
-        self.injectedSuggestClient = suggestClient
         self.logger = logger
         self.searchFeature = featureConfig
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
@@ -526,7 +521,7 @@ class SearchViewModel: FeatureFlaggable,
     /// - Parameter defaultEngine: default search engine set in settings (i.e. Google)
     private func setupSuggestClient(with defaultEngine: OpenSearchEngine) {
         let ua = SearchViewModel.userAgent ?? "FxSearch"
-        suggestClient = injectedSuggestClient ?? SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
+        suggestClient = SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
     }
 
     /// Determines if a suggestion should be shown based on the view model's privacy mode and

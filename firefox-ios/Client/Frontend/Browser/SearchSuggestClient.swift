@@ -9,15 +9,6 @@ let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
-/// Abstraction over the search suggestion client so consumers can be unit tested without network access.
-protocol SearchSuggestClientProvider {
-    func query(
-        _ query: String,
-        callback: @escaping @Sendable (_ response: [String]?, _ error: NSError?) -> Void
-    )
-    func cancelPendingRequest()
-}
-
 /*
  * Clients of SearchSuggestionClient should retain the object during the
  * lifetime of the search suggestion query, as requests are canceled during destruction.
@@ -25,7 +16,7 @@ protocol SearchSuggestClientProvider {
  * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
  */
 // TODO: FXIOS-14199 - SearchSuggestClient shouldn't be @unchecked Sendable
-final class SearchSuggestClient: SearchSuggestClientProvider, @unchecked Sendable {
+final class SearchSuggestClient: @unchecked Sendable {
     fileprivate let searchEngine: OpenSearchEngine
     fileprivate let userAgent: String
     fileprivate var task: URLSessionTask?

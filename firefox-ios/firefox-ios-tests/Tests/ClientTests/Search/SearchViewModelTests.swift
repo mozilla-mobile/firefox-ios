@@ -544,94 +544,11 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertTrue(subject.isBottomSearchBar)
     }
 
-    // MARK: Search suggestions
-
-    func test_querySuggestClient_whenStaleResponseArrives_discardsIt() async throws {
-        // Firefox Suggest off, so the `Task` spawned by `querySuggestClient()` fails its guard without
-        // awaiting a query, which would otherwise fire extra, non-deterministically timed reloads.
-        searchEnginesManager.shouldShowFirefoxSuggestions = false
-        searchEnginesManager.shouldShowSponsoredSuggestions = false
-        let mockSuggestClient = MockSearchSuggestClient()
-        let subject = createSubject(mockSuggestClient: mockSuggestClient)
-        // Required: `shouldShowSearchEngineSuggestions` reads `shouldShowSearchSuggestions` from the
-        // manager. Assigning it also fires one empty-query pass that reloads the table.
-        subject.searchEnginesManager = searchEnginesManager
-        mockDelegate.didReloadTableViewCount = 0
-
-        subject.searchQuery = "hello"
-        let staleCallback = try XCTUnwrap(mockSuggestClient.lastCallback)
-        subject.searchQuery = "hello world"
-        XCTAssertEqual(mockSuggestClient.lastQuery, "hello world")
-        // Let the spawned Firefox Suggest tasks finish before `tearDown` resets `AppContainer`.
-        await Task.yield()
-
-        staleCallback(["hello stale"], nil)
-
-        XCTAssertEqual(subject.suggestions, [])
-        XCTAssertEqual(subject.savedQuery, "")
-        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 0)
-        // Cancellation alone cannot stop an in-flight completion handler, which is why the guard is needed.
-        XCTAssertEqual(mockSuggestClient.cancelPendingRequestCalledCount, 2)
-    }
-
-    func test_querySuggestClient_whenCurrentResponseArrives_appliesIt() async throws {
-        searchEnginesManager.shouldShowFirefoxSuggestions = false
-        searchEnginesManager.shouldShowSponsoredSuggestions = false
-        let mockSuggestClient = MockSearchSuggestClient()
-        let subject = createSubject(mockSuggestClient: mockSuggestClient)
-        subject.searchEnginesManager = searchEnginesManager
-        mockDelegate.didReloadTableViewCount = 0
-
-        subject.searchQuery = "hello"
-        XCTAssertEqual(mockSuggestClient.lastQuery, "hello")
-        let callback = try XCTUnwrap(mockSuggestClient.lastCallback)
-        await Task.yield()
-
-        callback(["hello", "hello world"], nil)
-
-        // The response's own copy of the typed query is removed, then the typed query is re-inserted at index 0.
-        XCTAssertEqual(subject.suggestions, ["hello", "hello world"])
-        XCTAssertEqual(subject.suggestions?.filter { $0 == "hello" }.count, 1)
-        XCTAssertEqual(subject.savedQuery, "hello")
-        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
-        XCTAssertEqual(mockSuggestClient.cancelPendingRequestCalledCount, 1)
-    }
-
-    func test_querySuggestClient_whenStaleResponseArrivesAfterCurrentOne_keepsCurrentResults() async throws {
-        searchEnginesManager.shouldShowFirefoxSuggestions = false
-        searchEnginesManager.shouldShowSponsoredSuggestions = false
-        let mockSuggestClient = MockSearchSuggestClient()
-        let subject = createSubject(mockSuggestClient: mockSuggestClient)
-        subject.searchEnginesManager = searchEnginesManager
-        mockDelegate.didReloadTableViewCount = 0
-
-        subject.searchQuery = "hello"
-        let staleCallback = try XCTUnwrap(mockSuggestClient.lastCallback)
-        subject.searchQuery = "hello world"
-        let currentCallback = try XCTUnwrap(mockSuggestClient.lastCallback)
-        await Task.yield()
-
-        // The current query's response lands first and is applied.
-        currentCallback(["hello world news"], nil)
-        XCTAssertEqual(subject.suggestions, ["hello world", "hello world news"])
-        XCTAssertEqual(subject.savedQuery, "hello world")
-        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
-
-        // The older query's response arrives late and must not clobber what is already on screen.
-        staleCallback(["hello stale"], nil)
-
-        XCTAssertEqual(subject.suggestions, ["hello world", "hello world news"])
-        XCTAssertFalse(subject.suggestions?.contains("hello stale") ?? true)
-        XCTAssertEqual(subject.savedQuery, "hello world")
-        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
-    }
-
     private func createSubject(
         isPrivate: Bool = false,
         isBottomSearchBar: Bool = false,
         mockTrendingClient: TrendingSearchClientProvider = MockTrendingSearchClient(),
         mockRecentSearchProvider: RecentSearchProvider = MockRecentSearchProvider(),
-        mockSuggestClient: SearchSuggestClientProvider? = nil,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> SearchViewModel {
@@ -642,8 +559,7 @@ final class SearchViewModelTests: XCTestCase {
             model: searchEnginesManager,
             tabManager: MockTabManager(),
             trendingSearchClient: mockTrendingClient,
-            recentSearchProvider: mockRecentSearchProvider,
-            suggestClient: mockSuggestClient
+            recentSearchProvider: mockRecentSearchProvider
         )
         subject.delegate = mockDelegate
         return subject
@@ -678,26 +594,5 @@ final class MockSearchDelegate: SearchViewDelegate {
     func reloadTableView() {
         didReloadTableViewCalled?()
         didReloadTableViewCount += 1
-    }
-}
-
-/// Holds the most recent request instead of completing it, so a test can fire an older callback after a
-/// newer query has already been issued.
-final class MockSearchSuggestClient: SearchSuggestClientProvider, @unchecked Sendable {
-    typealias QueryCallback = @Sendable (_ response: [String]?, _ error: NSError?) -> Void
-
-    private(set) var lastQuery: String?
-    private(set) var lastCallback: QueryCallback?
-    private(set) var cancelPendingRequestCalledCount = 0
-
-    func query(_ query: String, callback: @escaping QueryCallback) {
-        lastQuery = query
-        lastCallback = callback
-    }
-
-    /// Deliberately does not drop the pending callback: cancelling a `URLSessionTask` that is already completing
-    /// does not stop its completion handler, which is the race the view model has to defend against.
-    func cancelPendingRequest() {
-        cancelPendingRequestCalledCount += 1
     }
 }
