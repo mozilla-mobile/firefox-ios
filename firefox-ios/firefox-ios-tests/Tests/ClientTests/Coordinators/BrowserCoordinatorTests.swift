@@ -1151,6 +1151,9 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         subject.handle(route: .settings(section: .appIcon))
 
+        // Wait for a pending main-thread transition settle before asserting
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+
         XCTAssertEqual(presentedViewController.dismissCalled, 1)
         let presentedNavigationController = try XCTUnwrap(
             mockRouter.presentedViewController as? ThemedNavigationController
