@@ -138,7 +138,7 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var iconAccentYellow: UIColor = LightTheme().colors.iconAccentYellow
 
     // MARK: - Deprecated
-    var layer5: UIColor = LightTheme().colors.layer5
+    var layer5: UIColor { layerSurfaceMedium }
     var layerGradientOverlay: Gradient = LightTheme().colors.layerGradientOverlay
     var layerHomepage: Gradient = LightTheme().colors.layerHomepage
     var layerAccentNonOpaque: UIColor = LightTheme().colors.layerAccentNonOpaque
