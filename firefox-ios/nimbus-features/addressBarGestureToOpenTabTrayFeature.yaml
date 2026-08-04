@@ -27,6 +27,6 @@ features:
           enabled_closetab: true
       - channel: developer
         value:
-          enabled_swipe: true
-          enabled_interactive: false
-          enabled_closetab: false
+          enabled_swipe: false
+          enabled_interactive: true
+          enabled_closetab: true
