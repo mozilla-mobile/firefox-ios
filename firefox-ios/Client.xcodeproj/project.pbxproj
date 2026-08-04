@@ -499,6 +499,7 @@
 		39BD570E2E53F3ED00CA1317 /* MerinoFeedFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BD570D2E53F3E400CA1317 /* MerinoFeedFetcher.swift */; };
 		39C137972655798A003DC662 /* NimbusIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C137962655798A003DC662 /* NimbusIntegrationTests.swift */; };
 		39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */; };
+		39CC6FD4301A792800164DCA /* TrackerBlockerModuleCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CC6FD3301A792500164DCA /* TrackerBlockerModuleCellTests.swift */; };
 		39D056382665235700FBEE59 /* initial_experiments.json in Resources */ = {isa = PBXBuildFile; fileRef = 3964F5FB2656D2B500065278 /* initial_experiments.json */; };
 		39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */; };
 		39E186DD2F7D98B600FD3FFA /* MerinoCategoryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E186DC2F7D98A600FD3FFA /* MerinoCategoryConfiguration.swift */; };
@@ -1711,6 +1712,7 @@
 		C2F700A12FBC000100112233 /* TrackerBlockerModuleAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B12FBC000100112233 /* TrackerBlockerModuleAction.swift */; };
 		C2F700A22FBC000100112233 /* TrackerBlockerModuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */; };
 		C2F700A32FBC000100112233 /* TrackerBlockerModuleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */; };
+		C2F700D42FBC000100112233 /* TrackerBlockerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */; };
 		C2FA00022FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00012FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift */; };
 		C2FA00042FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FA00032FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift */; };
 		C32D262AC6733C3D39E149CA /* LaunchPairingFromURLSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6894075BBBAF589F845633D0 /* LaunchPairingFromURLSetting.swift */; };
@@ -3585,6 +3587,7 @@
 		39BD570D2E53F3E400CA1317 /* MerinoFeedFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoFeedFetcher.swift; sourceTree = "<group>"; };
 		39C137962655798A003DC662 /* NimbusIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusIntegrationTests.swift; sourceTree = "<group>"; };
 		39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxScreenGraphTests.swift; sourceTree = "<group>"; };
+		39CC6FD3301A792500164DCA /* TrackerBlockerModuleCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleCellTests.swift; sourceTree = "<group>"; };
 		39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMessagingTriggerTests.swift; sourceTree = "<group>"; };
 		39DB4F1AA7B4688949522C99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		39DD4C8BA7FCE677AFDACC2D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -10831,6 +10834,7 @@
 		C2F700B12FBC000100112233 /* TrackerBlockerModuleAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleAction.swift; sourceTree = "<group>"; };
 		C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleCell.swift; sourceTree = "<group>"; };
 		C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleState.swift; sourceTree = "<group>"; };
+		C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetViewController.swift; sourceTree = "<group>"; };
 		C2FA00012FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteQuickAnswersConfigFetcher.swift; sourceTree = "<group>"; };
 		C2FA00032FFF000100AD1FBD /* RemoteQuickAnswersConfigFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteQuickAnswersConfigFetcherTests.swift; sourceTree = "<group>"; };
 		C326435B8F6E47257506096B /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Search.strings; sourceTree = "<group>"; };
@@ -13328,6 +13332,7 @@
 				C2F700B12FBC000100112233 /* TrackerBlockerModuleAction.swift */,
 				39B77FF4300FD63B00430F38 /* TrackerBlockerModuleMiddleware.swift */,
 				C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */,
+				C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */,
 				C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */,
 			);
 			path = TrackerBlockerModule;
@@ -14071,6 +14076,7 @@
 		8A00BD852CAB3FC200680AF9 /* Homepage */ = {
 			isa = PBXGroup;
 			children = (
+				39CC6FD3301A792500164DCA /* TrackerBlockerModuleCellTests.swift */,
 				8A09BCC12D22F1A500CFDF60 /* ContextMenu */,
 				8AA0A6662CAC745300AC7EB3 /* HomepageDiffableDataSourceTests.swift */,
 				8AD3AFC42D143F0D00CFC887 /* HomepageDimensionCalculatorTests.swift */,
@@ -20396,6 +20402,7 @@
 				AA02D5EB2EB3D83200814F4C /* TranslationsAction.swift in Sources */,
 				C79CEE5E2EDF3C4B004C4EB8 /* JumpBackInCell.swift in Sources */,
 				C2F700A22FBC000100112233 /* TrackerBlockerModuleCell.swift in Sources */,
+				C2F700D42FBC000100112233 /* TrackerBlockerSheetViewController.swift in Sources */,
 				0EBD66922DBFE41000A78532 /* ConcurrencyThrottler.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */,
@@ -21345,6 +21352,7 @@
 				1D62C5272EE8E77F00C6BCB9 /* RelayControllerTests.swift in Sources */,
 				21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */,
 				61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */,
+				39CC6FD4301A792800164DCA /* TrackerBlockerModuleCellTests.swift in Sources */,
 				5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */,
 				8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */,
 				614987AF2F6B37E300BC5ACA /* AIControlsModelTests.swift in Sources */,

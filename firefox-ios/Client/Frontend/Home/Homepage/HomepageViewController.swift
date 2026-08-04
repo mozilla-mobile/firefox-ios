@@ -664,7 +664,10 @@ final class HomepageViewController: UIViewController,
             ) { cell in
                 cell.configure(
                     count: count,
-                    theme: currentTheme
+                    theme: currentTheme,
+                    onTap: { [weak self] in
+                        self?.navigateToTrackerBlocker()
+                    }
                 )
             }
         case .bookmark(let item):
@@ -1071,6 +1074,14 @@ final class HomepageViewController: UIViewController,
             selectNewTab: true
         )
         self.dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+    }
+
+    private func navigateToTrackerBlocker() {
+        guard featureFlagsProvider.isEnabled(.privacyDashboard) else { return }
+        dispatchNavigationBrowserAction(
+            with: NavigationDestination(.trackerBlockerSheet),
+            actionType: NavigationBrowserActionType.tapOnCell
+        )
     }
 
     private func navigateToBookmarksPanel() {
