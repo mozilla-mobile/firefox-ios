@@ -200,7 +200,6 @@
         "ModernKitOnboardingTests\/testModernKitOnboardingFullFlowWithToS()",
         "ModernOnboardingTests\/testModernOnboardingFullFlowToSAlreadyAccepted()",
         "ModernOnboardingTests\/testModernOnboardingFullFlowWithToS()",
-        "ModernOrangeAndBlueOnboardingTests",
         "NavigationTest\/testLongPressLinkOptions()",
         "NavigationTest\/testLongPressLinkOptions_TAE()",
         "NavigationTest\/testNavigationPreservesDesktopSiteOnSameHost()",
