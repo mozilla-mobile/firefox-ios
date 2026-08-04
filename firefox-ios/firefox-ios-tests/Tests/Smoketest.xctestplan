@@ -385,7 +385,6 @@
         "ModernOnboardingTests\/testModernOnboardingToolbarSelection()",
         "ModernOnboardingTests\/testModernOnboardingWelcomeScreen()",
         "ModernOnboardingTests\/testModernTermsOfServiceScreen()",
-        "ModernOrangeAndBlueOnboardingTests",
         "MultiWindowTests",
         "NavigationTest\/testBackArrowNavigation()",
         "NavigationTest\/testBookmarkLink()",

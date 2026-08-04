@@ -8,9 +8,6 @@ import XCTest
 /// Tests for the modern onboarding flow (enable-modern-ui feature flag)
 /// Modern onboarding has 4 main screens: Welcome, Toolbar, Theme, Sync
 /// Plus an optional Terms of Service screen if not previously accepted
-///
-/// **NOTE**: These tests almost precisely mirror those in `ModernOrangeAndBlueOnboardingTests.swift`
-///
 class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     // We just test the modern Kit rebranded flow in this file
     let flowType = OnboardingScreen.OnboardingFlowType.modernKit

@@ -14,7 +14,7 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
     private let toggleLabelsContainer: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.distribution = .fill
-        stack.alignment = .leading
+        stack.alignment = .fill
         stack.axis = .vertical
         stack.spacing = TPMenuUX.UX.headerLabelDistance
         stack.isAccessibilityElement = true
@@ -25,6 +25,8 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.isAccessibilityElement = false
+        // Let the text wrap instead of squeezing the switch, which draws at its natural size regardless.
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
     private let toggleSwitch: UISwitch = .build { toggleSwitch in
@@ -36,6 +38,7 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.isAccessibilityElement = false
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
     private var viewConstraints: [NSLayoutConstraint] = []
