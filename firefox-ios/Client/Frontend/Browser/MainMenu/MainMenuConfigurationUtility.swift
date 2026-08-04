@@ -699,7 +699,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         )
     }
 
+    /// `Equatable` is only here because `MainMenuState` stores a configurator and `StateType`
+    /// requires it. The profile is deliberately left out: this is a stateless helper, not state.
     static func == (lhs: MainMenuConfigurationUtility, rhs: MainMenuConfigurationUtility) -> Bool {
-        return lhs.profile === rhs.profile
+        return true
     }
 }
