@@ -4,9 +4,9 @@
 
 import Common
 import MenuKit
+import ModifiedCopy
 import Redux
 import SummarizeKit
-import ModifiedCopy
 
 struct AccountData: Equatable {
     let title: String
@@ -181,8 +181,7 @@ struct MainMenuState: ScreenState, Sendable {
 
     @MainActor
     private static func handleReducer(state: MainMenuState, action: Action) -> MainMenuState {
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else {
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return defaultState(from: state)
         }
 
@@ -236,71 +235,35 @@ struct MainMenuState: ScreenState, Sendable {
     }
 
     private static func handleViewDidLoadAction(state: MainMenuState) -> MainMenuState {
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
+        return state
     }
 
     private static func handleUpdateAccountHeaderAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
+        return state
             .copy(accountData: action.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     private static func handleUpdateBannerVisibilityAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
+        return state
             .copy(isBrowserDefault: action.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     private static func handleUpdateMenuAppearanceAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
+        return state
             .copy(isPhoneLandscape: action.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     private static func handleUpdateSiteProtectionsHeaderAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
+        return state
             .copy(siteProtectionsData: action.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     @MainActor
@@ -309,19 +272,13 @@ struct MainMenuState: ScreenState, Sendable {
               let currentTabInfo = action.currentTabInfo
         else { return defaultState(from: state) }
 
-        return state.copy(windowUUID: state.windowUUID)
+        return state
             .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
                 isExpanded: state.moreCellTapped
             ))
             .copy(currentTabInfo: currentTabInfo)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     @MainActor
@@ -331,20 +288,14 @@ struct MainMenuState: ScreenState, Sendable {
               let currentTabInfo = state.currentTabInfo
         else { return defaultState(from: state) }
 
-        return state.copy(windowUUID: state.windowUUID)
+        return state
             .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
                 isExpanded: state.moreCellTapped,
                 profileImage: accountProfileImage
             ))
-            .copy(currentTabInfo: state.currentTabInfo)
-            .copy(accountData: state.accountData)
             .copy(accountProfileImage: accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     @MainActor
@@ -354,86 +305,40 @@ struct MainMenuState: ScreenState, Sendable {
               let isExpanded = action.isExpanded
         else { return defaultState(from: state) }
 
-        return state.copy(windowUUID: state.windowUUID)
+        return state
             .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
                 isExpanded: !isExpanded,
                 profileImage: state.accountProfileImage
             ))
-            .copy(currentTabInfo: state.currentTabInfo)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
             .copy(moreCellTapped: true)
     }
 
     private static func handleTapNavigateToDestinationAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
+        return state
             .copy(navigationDestination: action.navigationDestination)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     private static func handleTapToggleUserAgentAndTapCloseMenuAction(state: MainMenuState) -> MainMenuState {
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
+        return state
             .copy(shouldDismiss: true)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     private static func handleDismissMenuAction(state: MainMenuState) -> MainMenuState {
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
+        return state
             .copy(shouldDismiss: true)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     private static func handleTapEditBookmarkAction(state: MainMenuState, action: Action) -> MainMenuState {
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
+        return state
             .copy(navigationDestination: MenuNavigationDestination(.editBookmark))
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 
     private static func handleTapZoomAction(state: MainMenuState) -> MainMenuState {
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
+        return state
             .copy(navigationDestination: MenuNavigationDestination(.zoom))
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
     }
 }
