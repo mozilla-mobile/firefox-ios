@@ -1,7 +1,16 @@
 #!/bin/sh
 
 echo "Starting Swiftlint Check..."
-swiftlint --strict --quiet
+
+# The version is pinned in .swiftlint-version
+REPO_ROOT=$(git rev-parse --show-toplevel)
+SWIFTLINT=$("$REPO_ROOT/scripts/install-swiftlint.sh")
+if [ -z "$SWIFTLINT" ]; then
+    echo "Could not install the pinned SwiftLint version. Run ./bootstrap.sh from the repo root."
+    exit 1
+fi
+
+"$SWIFTLINT" --strict --quiet
 RESULT=$?
 
 if [ $RESULT -ne 0 ]; then
