@@ -48,10 +48,20 @@ final class BookmarksCoordinatorTests: XCTestCase {
 
         subject.showBookmarkDetail(for: folder, folder: folder)
 
-        let controller = router.pushedViewController as? EditFolderViewController
-        XCTAssertNotNil(controller)
-        trackForMemoryLeaks(controller)
+        XCTAssertTrue(router.pushedViewController is EditFolderViewController)
         XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    func testShowBookmarksDetail_forFolder_doesNotLeakController() {
+        let subject = createSubject()
+        let folder = LocalDesktopFolder()
+
+        subject.showBookmarkDetail(for: folder, folder: folder)
+
+        guard let controller = router.pushedViewController as? EditFolderViewController else {
+            return XCTFail("Expected EditFolderViewController to be pushed")
+        }
+        trackForMemoryLeaks(controller)
         router.pushedViewController = nil
         router.topViewController = nil
         router.navigationController.setViewControllers([], animated: false)
