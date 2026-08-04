@@ -15,15 +15,19 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
     typealias PreviewValue = WebCompatReportPreviewViewModel.PreviewValue
 
     let theme: Theme
+    let screenshot: UIImage?
 
     func makeUIViewController(context: Context) -> UINavigationController {
         let viewModel = WebCompatReportPreviewViewModel(
             title: "Report Preview",
             closeAccessibilityLabel: "Close",
             closeA11yIdentifier: "WebCompatReporter.Preview.Close",
+            screenshotAccessibilityLabel: "Screenshot of the page you are reporting",
+            screenshotA11yIdentifier: "WebCompatReporter.Preview.Screenshot",
             sections: Self.sampleSections
         )
         let controller = WebCompatReportPreviewViewController(viewModel: viewModel, theme: theme)
+        controller.updateScreenshot(screenshot)
         return UINavigationController(rootViewController: controller)
     }
 
@@ -75,15 +79,51 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
     ]
 }
 
+private func previewSampleScreenshot() -> UIImage {
+    let size = CGSize(width: 320, height: 1400)
+    let renderer = UIGraphicsImageRenderer(size: size)
+    return renderer.image { context in
+        UIColor.white.setFill()
+        context.fill(CGRect(origin: .zero, size: size))
+
+        "Croque Monsieur".draw(
+            at: CGPoint(x: 16, y: 24),
+            withAttributes: [.font: UIFont.boldSystemFont(ofSize: 28), .foregroundColor: UIColor.black]
+        )
+
+        UIColor(red: 0.72, green: 0.55, blue: 0.36, alpha: 1).setFill()
+        UIBezierPath(
+            roundedRect: CGRect(x: 16, y: 72, width: size.width - 32, height: 180),
+            cornerRadius: 8
+        ).fill()
+
+        UIColor.black.withAlphaComponent(0.12).setFill()
+        var lineY: CGFloat = 280
+        while lineY < size.height - 20 {
+            UIBezierPath(
+                roundedRect: CGRect(x: 16, y: lineY, width: size.width - 32, height: 10),
+                cornerRadius: 3
+            ).fill()
+            lineY += 26
+        }
+    }
+}
+
 @available(iOS 17.0, *)
-#Preview("Raw payload") {
-    WebCompatReportPreviewHost(theme: LightTheme())
+#Preview("With screenshot") {
+    WebCompatReportPreviewHost(theme: LightTheme(), screenshot: previewSampleScreenshot())
         .ignoresSafeArea()
 }
 
 @available(iOS 17.0, *)
-#Preview("Raw payload (dark)") {
-    WebCompatReportPreviewHost(theme: DarkTheme())
+#Preview("Screenshot off") {
+    WebCompatReportPreviewHost(theme: LightTheme(), screenshot: nil)
+        .ignoresSafeArea()
+}
+
+@available(iOS 17.0, *)
+#Preview("With screenshot (dark)") {
+    WebCompatReportPreviewHost(theme: DarkTheme(), screenshot: previewSampleScreenshot())
         .ignoresSafeArea()
 }
 #endif
