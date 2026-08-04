@@ -178,6 +178,9 @@ public final class FileUploadService: Sendable {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        // Ecosia: identifies this native app call to the Cloudflare WAF rule guarding this
+        // endpoint, which otherwise only allows browser-style requests with a matching Origin.
+        request.setValue("ios", forHTTPHeaderField: "X-Ecosia-App")
         request.cachePolicy = .reloadIgnoringLocalCacheData
         request.httpBody = Data("{}".utf8)
 
