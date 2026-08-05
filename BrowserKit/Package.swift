@@ -38,6 +38,9 @@ let package = Package(
             name: "MenuKit",
             targets: ["MenuKit"]),
         .library(
+            name: "AppAttestKit",
+            targets: ["AppAttestKit"]),
+        .library(
             name: "MLPAKit",
             targets: ["MLPAKit"]),
         .library(name: "SummarizeKit",
@@ -191,7 +194,7 @@ let package = Package(
         ),
         .target(
             name: "TestKit",
-            dependencies: ["Shared", "Redux"]
+            dependencies: ["Shared", "Redux", "AppAttestKit"]
         ),
         .target(
             name: "ToolbarKit",
@@ -229,19 +232,31 @@ let package = Package(
             ]
         ),
         .target(
+            name: "AppAttestKit",
+            dependencies: [],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "AppAttestKitTests",
+            dependencies: ["AppAttestKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "MLPAKit",
-            dependencies: ["Common", "JWTKit", "Shared"],
+            dependencies: ["AppAttestKit", "Common", "JWTKit", "Shared"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),
         .testTarget(
             name: "MLPAKitTests",
-            dependencies: ["MLPAKit", "TestKit"],
+            dependencies: ["MLPAKit", "AppAttestKit", "TestKit"],
             swiftSettings: []
         ),
         .target(
             name: "SummarizeKit",
             dependencies: [
+                "AppAttestKit",
                 "Common",
                 "ComponentLibrary",
                 "Down",
@@ -271,14 +286,14 @@ let package = Package(
         ),
         .target(
             name: "LLMKit",
-            dependencies: ["MLPAKit"],
+            dependencies: ["MLPAKit", "AppAttestKit"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]
         ),
         .testTarget(
             name: "LLMKitTests",
-            dependencies: ["LLMKit", "MLPAKit", "TestKit"],
+            dependencies: ["LLMKit", "MLPAKit", "AppAttestKit", "TestKit"],
             swiftSettings: []
         ),
         .target(

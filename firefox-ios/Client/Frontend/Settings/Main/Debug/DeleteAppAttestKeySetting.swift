@@ -3,7 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MLPAKit
+import Storage
+import AppAttestKit
 
 class DeleteAppAttestKeySetting: HiddenSetting {
     override var title: NSAttributedString? {
