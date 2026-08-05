@@ -37,7 +37,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
-                          WebCompatReportCoordinatorDelegate,
+                          WebCompatReportCoordinatorNavigationDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -48,7 +48,6 @@ final class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
-    private weak var reportBrokenSiteViewController: WebCompatReportViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -628,39 +627,24 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentReportBrokenSite(url: URL?) {
-        let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
-        reportViewController.reportCoordinator = self
-        reportBrokenSiteViewController = reportViewController
-        router.present(reportViewController, animated: true, completion: nil)
-    }
-
-    // MARK: - WebCompatReportCoordinatorDelegate
-
-    func webCompatReportViewControllerDidFinish() {
-        router.dismiss(animated: true, completion: nil)
-    }
-
-    func webCompatReportViewControllerDidSubmit() {
-        // Dismiss first, otherwise the toast is covered by the sheet.
-        router.dismiss(animated: true, completion: { [weak self] in
-            // TODO: FXIOS-16468 swap in the dedicated "Report sent" string once l10n exports it.
-            self?.browserViewController.showPlainToast(
-                message: String.Microsurvey.Survey.ConfirmationPage.ConfirmationLabel
-            )
-        })
-    }
-
-    func webCompatReportViewControllerDidTapLearnMore(url: URL) {
-        // Dismissing the sheet or opening a tab tears its Redux state down and loses the report.
-        // `TermsOfUseLinkViewController` is a generic in-app web view, reused here despite the name.
-        let linkViewController = TermsOfUseLinkViewController(
-            url: url,
+        let webCompatReportCoordinator = WebCompatReportCoordinator(
+            router: router,
             windowUUID: windowUUID,
-            themeManager: themeManager
+            themeManager: themeManager,
+            parentCoordinatorDelegate: self,
+            navigationDelegate: self
         )
-        let navigationController = UINavigationController(rootViewController: linkViewController)
-        navigationController.modalPresentationStyle = .pageSheet
-        reportBrokenSiteViewController?.present(navigationController, animated: true)
+        add(child: webCompatReportCoordinator)
+        webCompatReportCoordinator.start(reportedURL: url)
+    }
+
+    // MARK: - WebCompatReportCoordinatorNavigationDelegate
+
+    func webCompatReportDidSubmit() {
+        // TODO: FXIOS-16468 swap in the dedicated "Report sent" string once l10n exports it.
+        browserViewController.showPlainToast(
+            message: String.Microsurvey.Survey.ConfirmationPage.ConfirmationLabel
+        )
     }
 
     func presentSavePDFController() {
