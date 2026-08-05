@@ -422,7 +422,6 @@ struct BrowserViewControllerState: ScreenState {
                                                  action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(navigateTo: .home)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -434,7 +433,6 @@ struct BrowserViewControllerState: ScreenState {
                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(navigateTo: .newTab)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -446,7 +444,6 @@ struct BrowserViewControllerState: ScreenState {
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .backForwardList)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -459,7 +456,6 @@ struct BrowserViewControllerState: ScreenState {
         action: GeneralBrowserAction) -> BrowserViewControllerState {
             return state
                 .resetTransientState()
-                .copy(toast: state.toast)
                 .copy(displayView: .trackingProtectionDetails)
                 .copy(buttonTapped: action.buttonTapped)
                 .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
@@ -472,7 +468,6 @@ struct BrowserViewControllerState: ScreenState {
                                              action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .menu)
             .copy(buttonTapped: action.buttonTapped)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
@@ -485,7 +480,6 @@ struct BrowserViewControllerState: ScreenState {
                                                       action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .tabsLongPressActions)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -497,7 +491,6 @@ struct BrowserViewControllerState: ScreenState {
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .reloadLongPressAction)
             .copy(buttonTapped: action.buttonTapped)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
@@ -511,7 +504,6 @@ struct BrowserViewControllerState: ScreenState {
         action: GeneralBrowserAction) -> BrowserViewControllerState {
             return state
                 .resetTransientState()
-                .copy(toast: state.toast)
                 .copy(displayView: .locationViewLongPressAction)
                 .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
                 .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -523,7 +515,6 @@ struct BrowserViewControllerState: ScreenState {
                                                  action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(navigateTo: .back)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -535,7 +526,6 @@ struct BrowserViewControllerState: ScreenState {
                                                     action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(navigateTo: .forward)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -547,7 +537,6 @@ struct BrowserViewControllerState: ScreenState {
                                                 action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .tabTray)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -559,7 +548,6 @@ struct BrowserViewControllerState: ScreenState {
                                                   action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(navigateTo: .reload)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -571,7 +559,6 @@ struct BrowserViewControllerState: ScreenState {
                                                          action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(navigateTo: .reloadNoCache)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -586,7 +573,6 @@ struct BrowserViewControllerState: ScreenState {
         }
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(navigateTo: .loadURL(url))
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -598,7 +584,6 @@ struct BrowserViewControllerState: ScreenState {
                                                        action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(navigateTo: .stopLoading)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -610,7 +595,6 @@ struct BrowserViewControllerState: ScreenState {
                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .share)
             .copy(buttonTapped: action.buttonTapped)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
@@ -623,7 +607,6 @@ struct BrowserViewControllerState: ScreenState {
                                                    action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .readerMode)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -635,7 +618,6 @@ struct BrowserViewControllerState: ScreenState {
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .newTabLongPressActions)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -647,7 +629,6 @@ struct BrowserViewControllerState: ScreenState {
                                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .readerModeLongPressAction)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -692,7 +673,6 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .translationLanguagePicker(TranslationLanguagePickerData(
                 languages: action.translationLanguages ?? [],
                 isTranslated: action.isPageTranslated,
@@ -711,7 +691,6 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .googleLensPhotoPicker)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
@@ -725,7 +704,6 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         return state
             .resetTransientState()
-            .copy(toast: state.toast)
             .copy(displayView: .googleLensCamera)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
