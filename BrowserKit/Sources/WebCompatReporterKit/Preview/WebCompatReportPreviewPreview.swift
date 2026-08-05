@@ -14,7 +14,6 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
     typealias PreviewSection = WebCompatReportPreviewViewModel.PreviewSection
     typealias PreviewValue = WebCompatReportPreviewViewModel.PreviewValue
 
-    let theme: Theme
     let screenshot: UIImage?
 
     func makeUIViewController(context: Context) -> UINavigationController {
@@ -26,7 +25,11 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
             screenshotA11yIdentifier: "WebCompatReporter.Preview.Screenshot",
             sections: Self.sampleSections
         )
-        let controller = WebCompatReportPreviewViewController(viewModel: viewModel, theme: theme)
+        let controller = WebCompatReportPreviewViewController(
+            viewModel: viewModel,
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+        )
         controller.updateScreenshot(screenshot)
         return UINavigationController(rootViewController: controller)
     }
@@ -111,19 +114,13 @@ private func previewSampleScreenshot() -> UIImage {
 
 @available(iOS 17.0, *)
 #Preview("With screenshot") {
-    WebCompatReportPreviewHost(theme: LightTheme(), screenshot: previewSampleScreenshot())
+    WebCompatReportPreviewHost(screenshot: previewSampleScreenshot())
         .ignoresSafeArea()
 }
 
 @available(iOS 17.0, *)
 #Preview("Screenshot off") {
-    WebCompatReportPreviewHost(theme: LightTheme(), screenshot: nil)
-        .ignoresSafeArea()
-}
-
-@available(iOS 17.0, *)
-#Preview("With screenshot (dark)") {
-    WebCompatReportPreviewHost(theme: DarkTheme(), screenshot: previewSampleScreenshot())
+    WebCompatReportPreviewHost(screenshot: nil)
         .ignoresSafeArea()
 }
 #endif

@@ -164,7 +164,9 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     ) -> WebCompatReportPreviewViewController {
         return WebCompatReportPreviewViewController(
             viewModel: makeViewModel(sections: sections),
-            theme: LightTheme()
+            windowUUID: .XCTestDefaultUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+            notificationCenter: NotificationCenter.default
         )
     }
 
