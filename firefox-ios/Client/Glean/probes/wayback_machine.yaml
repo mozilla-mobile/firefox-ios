@@ -22,7 +22,7 @@ $tags:
 # Add your new metrics and/or events here.
 
 wayback_error_page:
-  check_button:
+  check_button_tapped:
     type: event
     description: |
       Records when the user taps the check for archive button.
@@ -50,7 +50,7 @@ wayback_error_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
-  search_the_web:
+  search_the_web_tapped:
     type: event
     description: |
       Records when the user hits search the web due to wayback not finding an archive.

@@ -12,7 +12,7 @@ struct WaybackTelemetry {
     }
 
     func searchForArchiveTapped() {
-        gleanWrapper.recordEvent(for: GleanMetrics.WaybackErrorPage.checkButton)
+        gleanWrapper.recordEvent(for: GleanMetrics.WaybackErrorPage.checkButtonTapped)
     }
 
     func foundArchive() {
@@ -20,6 +20,6 @@ struct WaybackTelemetry {
     }
 
     func searchTheWebTapped() {
-        gleanWrapper.recordEvent(for: GleanMetrics.WaybackErrorPage.searchTheWeb)
+        gleanWrapper.recordEvent(for: GleanMetrics.WaybackErrorPage.searchTheWebTapped)
     }
 }
