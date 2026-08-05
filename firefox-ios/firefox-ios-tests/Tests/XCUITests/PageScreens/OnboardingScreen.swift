@@ -239,6 +239,13 @@ final class OnboardingScreen {
         }
     }
 
+    /// Asserts the given address bar position button is selected on the modern flow's segmented control.
+    func assertAddressBarPositionSelected(position: AddressBarPosition) {
+        let button = sel.addressBarTopButton(rootId: rootA11yId, position: position).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        XCTAssertTrue(button.isSelected, "\(position.rawValue) address bar position button should be selected")
+    }
+
     /// Exercises the multiple choice buttons on the card to choose your theme.
     func selectThemeButtons() {
         var themes = ["Light", "Dark"]
