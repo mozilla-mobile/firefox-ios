@@ -3,20 +3,20 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import ComponentLibrary
 import UIKit
 
 /// What the screen reports back. The coordinator owns dismissal.
 @MainActor
 public protocol WebCompatReportPreviewDelegate: AnyObject {
     func webCompatReportPreviewDidRequestDismiss()
+    func webCompatReportPreviewDidTapScreenshot()
 }
 
-/// The Technical Data screen: collapsible sections listing the raw payload as
-/// key/value pairs. Store-agnostic, so configure it with a view model.
+/// The Report Preview sheet: a tappable page thumbnail above collapsible sections listing the
+/// raw payload as key/value pairs. Store-agnostic, so configure it with a view model.
 ///
-/// TODO: FXIOS-16432 - Rename the `ReportPreview` types to `TechnicalData`. Report Preview is a
-/// separate screen that pushes to this one.
+/// TODO: FXIOS-16432 - Split this into the plain-language Report Preview screen and the pushed
+/// Technical Data screen, renaming the `ReportPreview` types accordingly.
 public final class WebCompatReportPreviewViewController: UIViewController,
                                                          ThemeApplicable,
                                                          UICollectionViewDelegate {
@@ -25,41 +25,45 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         static let headerVerticalInset: CGFloat = 10
     }
 
-    /// Omits `rows` deliberately. Carrying them would mark the header changed on any value
-    /// edit, when it only renders the title.
+    /// `header` omits `rows` deliberately. Carrying them would mark the header changed on any
+    /// value edit, when it only renders the title.
     private enum ItemKind: Equatable {
+        case screenshot(UIImage)
         case header(title: String, a11yIdentifier: String)
         case content(WebCompatReportPreviewViewModel.PreviewSection)
     }
 
+    private static let screenshotDataSourceSectionID = "webcompat.preview.screenshot.section"
+    private static let screenshotDataSourceItemID = "webcompat.preview.screenshot.item"
+
     /// Suffixed so an item id can't collide with a section id in `itemsByID`.
-    private static func headerItemID(for sectionID: String) -> String {
+    private static func headerDataSourceItemID(for sectionID: String) -> String {
         return "\(sectionID).header"
     }
 
-    private static func contentItemID(for sectionID: String) -> String {
+    private static func contentDataSourceItemID(for sectionID: String) -> String {
         return "\(sectionID).content"
     }
 
     public weak var delegate: WebCompatReportPreviewDelegate?
 
     private var viewModel: WebCompatReportPreviewViewModel
+    private var screenshot: UIImage?
     private var theme: Theme
 
     /// The data source keys on item ids, so the values themselves live here.
     private var itemsByID: [String: ItemKind] = [:]
+    /// Display order, so the layout closure can spot the screenshot section.
+    private var orderedSectionIDs: [String] = []
 
     /// The first applyTheme runs inside `viewDidLoad`, where reconfiguring collapses the nav
     /// bar's large title. Later changes do reconfigure.
     private var hasAppliedThemeOnce = false
 
-    /// ComponentLibrary's button, not a bare `UIBarButtonItem`. It brings its own size
-    /// constraints, so it stays a round chip.
-    private lazy var closeButton: CloseButton = .build { button in
-        button.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
-    }
-
-    private lazy var closeBarButtonItem = UIBarButtonItem(customView: closeButton)
+    private lazy var closeButton: UIBarButtonItem = {
+        let image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
+        return UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(didTapClose))
+    }()
 
     private lazy var collectionView: UICollectionView = .build({ collectionView in
         collectionView.delegate = self
@@ -96,12 +100,16 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         self.viewModel = viewModel
         guard isViewLoaded else { return }
         navigationItem.title = viewModel.title
-        closeButton.configure(
-            viewModel: CloseButtonViewModel(
-                a11yLabel: viewModel.closeAccessibilityLabel,
-                a11yIdentifier: viewModel.closeA11yIdentifier
-            )
-        )
+        closeButton.accessibilityLabel = viewModel.closeAccessibilityLabel
+        closeButton.accessibilityIdentifier = viewModel.closeA11yIdentifier
+        updateSections()
+    }
+
+    /// The capture arrives after the screen is on screen, so it comes in on its own rather than
+    /// through the view model. Nil drops the thumbnail.
+    public func updateScreenshot(_ image: UIImage?) {
+        screenshot = image
+        guard isViewLoaded else { return }
         updateSections()
     }
 
@@ -109,7 +117,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     private func setupNavigationItem() {
         // Trailing, so the leading slot stays free for the back button on a pushed screen.
-        navigationItem.rightBarButtonItem = closeBarButtonItem
+        navigationItem.rightBarButtonItem = closeButton
     }
 
     private func setupLayout() {
@@ -118,7 +126,17 @@ public final class WebCompatReportPreviewViewController: UIViewController,
     }
 
     private func makeLayout() -> UICollectionViewCompositionalLayout {
-        return UICollectionViewCompositionalLayout { _, environment in
+        return UICollectionViewCompositionalLayout { [weak self] index, environment in
+            let sectionIDs = self?.orderedSectionIDs ?? []
+            let sectionID = index < sectionIDs.count ? sectionIDs[index] : nil
+            if sectionID == Self.screenshotDataSourceSectionID {
+                var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+                configuration.backgroundColor = .clear
+                configuration.showsSeparators = false
+                let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
+                section.contentInsets.top = WebCompatReporterUX.Thumbnail.topInset
+                return section
+            }
             var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             // Clear so the collection view's own themed background shows through. A theme change
             // then repaints instead of having to rebuild the layout for its colour.
@@ -132,6 +150,20 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     // Registrations go here, not inside the provider: UIKit crashes on one built lazily per cell.
     private func makeDataSource() -> UICollectionViewDiffableDataSource<String, String> {
+        let screenshotRegistration = UICollectionView.CellRegistration<
+            WebCompatPreviewScreenshotCell, UIImage
+        > { [weak self] cell, _, image in
+            guard let self else { return }
+            cell.configure(
+                image: image,
+                imageAccessibilityLabel: self.viewModel.screenshotAccessibilityLabel,
+                a11yIdentifier: self.viewModel.screenshotA11yIdentifier
+            ) { [weak self] in
+                self?.delegate?.webCompatReportPreviewDidTapScreenshot()
+            }
+            cell.applyTheme(theme: self.theme)
+        }
+
         let headerRegistration = UICollectionView.CellRegistration<
             UICollectionViewListCell, ItemKind
         > { [weak self] cell, _, item in
@@ -176,6 +208,10 @@ public final class WebCompatReportPreviewViewController: UIViewController,
                 )
             }
             switch self.itemsByID[itemID] {
+            case let .screenshot(image):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: screenshotRegistration, for: indexPath, item: image
+                )
             case let .header(title, a11yIdentifier):
                 return collectionView.dequeueConfiguredReusableCell(
                     using: headerRegistration,
@@ -187,7 +223,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
                     using: contentRegistration, for: indexPath, item: section
                 )
             case .none:
-                assertionFailure("No Technical Data item registered for id \(itemID)")
+                assertionFailure("No Report Preview item registered for id \(itemID)")
                 return collectionView.dequeueConfiguredReusableCell(
                     using: fallbackRegistration, for: indexPath, item: itemID
                 )
@@ -200,29 +236,42 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         let previousItems = itemsByID
 
         itemsByID = [:]
+        orderedSectionIDs = []
+
+        if let screenshot {
+            itemsByID[Self.screenshotDataSourceItemID] = .screenshot(screenshot)
+            orderedSectionIDs.append(Self.screenshotDataSourceSectionID)
+        }
         for section in viewModel.sections {
-            itemsByID[Self.headerItemID(for: section.id)] = .header(
+            itemsByID[Self.headerDataSourceItemID(for: section.id)] = .header(
                 title: section.title,
                 a11yIdentifier: section.a11yIdentifier
             )
-            itemsByID[Self.contentItemID(for: section.id)] = .content(section)
+            itemsByID[Self.contentDataSourceItemID(for: section.id)] = .content(section)
+            orderedSectionIDs.append(section.id)
         }
 
         // Items live in the per-section snapshots, so applying the top-level one drops them all.
         // Only apply it when the sections themselves changed.
-        let sectionIDs = viewModel.sections.map { $0.id }
-        if dataSource.snapshot().sectionIdentifiers != sectionIDs {
+        if dataSource.snapshot().sectionIdentifiers != orderedSectionIDs {
             var sectionsSnapshot = NSDiffableDataSourceSnapshot<String, String>()
-            sectionsSnapshot.appendSections(sectionIDs)
+            sectionsSnapshot.appendSections(orderedSectionIDs)
             dataSource.apply(sectionsSnapshot, animatingDifferences: false)
         }
 
+        if screenshot != nil,
+           dataSource.snapshot(for: Self.screenshotDataSourceSectionID).items.isEmpty {
+            var snapshot = NSDiffableDataSourceSectionSnapshot<String>()
+            snapshot.append([Self.screenshotDataSourceItemID])
+            dataSource.apply(snapshot, to: Self.screenshotDataSourceSectionID, animatingDifferences: false)
+        }
+
         for section in viewModel.sections where dataSource.snapshot(for: section.id).items.isEmpty {
-            let headerID = Self.headerItemID(for: section.id)
+            let headerID = Self.headerDataSourceItemID(for: section.id)
             // A fresh section starts collapsed. `expand` only restores what the user opened.
             var snapshot = NSDiffableDataSourceSectionSnapshot<String>()
             snapshot.append([headerID])
-            snapshot.append([Self.contentItemID(for: section.id)], to: headerID)
+            snapshot.append([Self.contentDataSourceItemID(for: section.id)], to: headerID)
             if expandedHeaderIDs.contains(headerID) {
                 snapshot.expand([headerID])
             }
@@ -248,7 +297,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         let existingSectionIDs = Set(dataSource.snapshot().sectionIdentifiers)
         var expanded = Set<String>()
         for section in viewModel.sections where existingSectionIDs.contains(section.id) {
-            let headerID = Self.headerItemID(for: section.id)
+            let headerID = Self.headerDataSourceItemID(for: section.id)
             if dataSource.snapshot(for: section.id).isExpanded(headerID) {
                 expanded.insert(headerID)
             }

@@ -52,7 +52,7 @@ public class ShadowCardView: UIView, ThemeApplicable {
     }
 
     public func applyTheme(theme: Theme) {
-        rootView.backgroundColor = theme.colors.layer2
+        rootView.backgroundColor = theme.isNova ? theme.colors.layer4 : theme.colors.layer2
         setupShadow(theme: theme)
     }
 

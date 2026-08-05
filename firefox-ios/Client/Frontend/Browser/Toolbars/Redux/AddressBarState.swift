@@ -1116,10 +1116,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                        hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .readerModeWithSummarizer,
-            iconName: StandardImageIdentifiers.Medium.readerView,
-            bottomBadgeImage: UIImage(
-                named: StandardImageIdentifiers.Large.lightningFill
-            )?.withRenderingMode(.alwaysTemplate),
+            iconName: StandardImageIdentifiers.Medium.readerSummarize,
             isEnabled: true,
             isSelected: isSelected,
             hasCustomColor: !hasAlternativeLocationColor,

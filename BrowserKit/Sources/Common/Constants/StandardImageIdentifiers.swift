@@ -31,6 +31,7 @@ public struct StandardImageIdentifiers {
         public static let lightning = "lightningMedium"
         public static let logoGoogleLens = "logoGoogleLensMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
+        public static let readerSummarize = "readerSummarizeMedium"
         public static let readerView = "readerViewMedium"
         public static let shareApple = "shareAppleMedium"
         public static let sun = "sunMedium"

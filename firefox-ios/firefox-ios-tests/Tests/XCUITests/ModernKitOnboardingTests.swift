@@ -8,9 +8,6 @@ import XCTest
 /// Tests for the modern onboarding flow (enable-modern-ui feature flag)
 /// Modern onboarding has 4 main screens: Welcome, Toolbar, Theme, Sync
 /// Plus an optional Terms of Service screen if not previously accepted
-///
-/// **NOTE**: These tests almost precisely mirror those in `ModernOrangeAndBlueOnboardingTests.swift`
-///
 class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     // We just test the modern Kit rebranded flow in this file
     let flowType = OnboardingScreen.OnboardingFlowType.modernKit
@@ -104,6 +101,45 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertManageBottomSheetContents()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4035802
+    func testModernCrashReportsToggle() {
+        verifyManageDataToggle(.crashReports)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4035803
+    func testModernTechnicalDataToggle() {
+        verifyManageDataToggle(.technicalData)
+    }
+
+    /// Shared flow for the Manage sheet data-collection toggle cases (C4035802, C4035803): assert on by
+    /// default, disable, verify the off state persists across a dismiss/reopen, then open the SUMO page.
+    private func verifyManageDataToggle(_ toggle: OnboardingScreen.ManageToggle) {
+        launchApp()
+
+        // Step 1: The ToS onboarding card is displayed
+        onboardingScreen.assertModernTermsOfServiceScreen()
+
+        // Step 2: Tapping Manage opens the bottom sheet with the toggle enabled by default
+        onboardingScreen.tapLink(.manage)
+        onboardingScreen.assertOverlayIsDisplayed(for: .manage)
+        onboardingScreen.assertManageToggleIsOn(toggle)
+
+        // Step 3: Disabling the toggle turns it off
+        onboardingScreen.tapManageToggle(toggle)
+        onboardingScreen.assertManageToggleIsOff(toggle)
+
+        // Step 4: The disabled state persists after dismissing and reopening the bottom sheet
+        onboardingScreen.dismissOverlay(for: .manage)
+        onboardingScreen.assertOverlayIsClosed(for: .manage)
+        onboardingScreen.tapLink(.manage)
+        onboardingScreen.assertOverlayIsDisplayed(for: .manage)
+        onboardingScreen.assertManageToggleIsOff(toggle)
+
+        // Step 5: Tapping the Learn more link below the toggle opens a SUMO page
+        onboardingScreen.tapManageToggleLearnMore(toggle)
+        onboardingScreen.assertSumoPageOpened()
+    }
+
     /// Shared flow for the ToS card link cases (C4035799–C4035801): tap link → overlay shown → force
     /// close hides it → backgrounding keeps it → Done dismisses it. iOS 26+ only (link tappability).
     private func verifyLinkDisplayAndDismissal(for link: OnboardingScreen.ToSLink) {
@@ -160,6 +196,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Address bar choice is onboarding flow screen 2
         onboardingScreen.selectAddressBarPosition(position: .top)
+        onboardingScreen.assertAddressBarPositionSelected(position: .top)
         onboardingScreen.goToNextScreenViaPrimary()
         onboardingScreen.assertTitle()
 
@@ -179,7 +216,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/4038428
+    // https://mozilla.testrail.io/index.php?/cases/view/4035645 [Config] nav:bottombar
     func testModernKitOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -197,6 +234,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Address bar choice is onboarding flow screen 2
         onboardingScreen.selectAddressBarPosition(position: .bottom)
+        onboardingScreen.assertAddressBarPositionSelected(position: .bottom)
         onboardingScreen.goToNextScreenViaPrimary()
         onboardingScreen.assertTitle()
 

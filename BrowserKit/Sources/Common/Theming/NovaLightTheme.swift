@@ -65,7 +65,7 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var textOnDark: UIColor = NovaColors.VioletDesaturated0
     var textOnLight: UIColor = NovaColors.VioletDesaturated90
     var textOnColorPrimary: UIColor = NovaColors.VioletDesaturated0
-    var textToast: UIColor = NovaColors.Violet50
+    var textToast: UIColor = NovaColors.Violet30
 
     // MARK: - Icon
 
@@ -138,7 +138,7 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var iconAccentYellow: UIColor = LightTheme().colors.iconAccentYellow
 
     // MARK: - Deprecated
-    var layer5: UIColor = LightTheme().colors.layer5
+    var layer5: UIColor { layerSurfaceMedium }
     var layerGradientOverlay: Gradient = LightTheme().colors.layerGradientOverlay
     var layerHomepage: Gradient = LightTheme().colors.layerHomepage
     var layerAccentNonOpaque: UIColor = LightTheme().colors.layerAccentNonOpaque
