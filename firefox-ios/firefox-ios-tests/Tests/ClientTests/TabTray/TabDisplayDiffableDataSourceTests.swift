@@ -52,9 +52,8 @@ final class TabDisplayDiffableDataSourceTests: XCTestCase {
                                file: StaticString = #filePath,
                                line: UInt = #line) -> TabDisplayView {
         let tabs = createTabs(numberOfTabs: numberActiveTabs)
-        let tabState = TabsPanelState(windowUUID: .XCTestDefaultUUID,
-                                      isPrivateMode: isPrivateMode,
-                                      tabs: tabs)
+        let tabState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: isPrivateMode)
+            .copy(tabs: tabs)
 
         let subject = TabDisplayView(panelType: isPrivateMode ? .privateTabs : .tabs,
                                      state: tabState,

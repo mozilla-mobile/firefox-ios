@@ -59,9 +59,9 @@ struct TabsPanelState: ScreenState, Equatable {
          isPrivateMode: Bool,
          tabs: [TabModel],
          toastType: ToastType? = nil,
-         scrollState: ScrollState? = nil,
-         didTapAddTab: Bool = false,
-         urlRequest: URLRequest? = nil) {
+         scrollState: ScrollState?,
+         didTapAddTab: Bool,
+         urlRequest: URLRequest?) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
         self.windowUUID = windowUUID
@@ -131,7 +131,11 @@ struct TabsPanelState: ScreenState, Equatable {
     static func defaultState(from state: TabsPanelState) -> TabsPanelState {
         return TabsPanelState(windowUUID: state.windowUUID,
                               isPrivateMode: state.isPrivateMode,
-                              tabs: state.tabs)
+                              tabs: state.tabs,
+                              toastType: nil,
+                              scrollState: nil,
+                              didTapAddTab: false,
+                              urlRequest: nil)
     }
 
     static func createTabScrollBehavior(
@@ -160,13 +164,5 @@ struct TabsPanelState: ScreenState, Equatable {
 
         // This can happen if the user changes tab panels and one of the panels is empty (nothing to scroll to)
         return nil
-    }
-
-    // MARK: - Helper function to reset transient state
-    private func resetTransientState() -> TabsPanelState {
-        return self
-            .copy(scrollState: nil)
-            .copy(didTapAddTab: false)
-            .copy(urlRequest: nil)
     }
 }
