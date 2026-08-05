@@ -340,6 +340,8 @@ final class BrowserCoordinator: BaseCoordinator,
             case .showIntroOnboarding:
                 showIntroOnboarding()
             case .mergeWindows:
+                // A home screen shortcut can outlive the feature being turned off remotely.
+                guard featureFlagsProvider.isEnabled(.mergeWindows) else { break }
                 windowMerger.mergeAllWindows(into: windowUUID)
             }
 
