@@ -108,6 +108,7 @@ class IntegrationTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/4036952
     func testModernKitOnboardingStartSyncingUseEmailInstead() throws {
         let onboardingScreen = OnboardingScreen(app: app, flowType: .modernKit)
+        let firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
 
         onboardingScreen.handleTermsOfService()
 
@@ -143,7 +144,10 @@ class IntegrationTests: BaseTestCase {
         // Step 4: Input valid email and valid password
         completeFxASignIn()
 
-        // Wait for initial sync to complete
+        // User is redirected to homepage
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+
+        // Go to Settings page and see sync is happening
         waitForInitialSyncComplete()
     }
 
