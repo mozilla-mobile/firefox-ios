@@ -51,7 +51,7 @@ final class WebCompatReporterMiddleware {
             telemetry.cancelled()
 
         case WebCompatReporterViewActionType.learnMore:
-            telemetry.learnMore()
+            telemetry.learnMoreTapped()
 
         case WebCompatReporterViewActionType.submit:
             submitReport(windowUUID: action.windowUUID, state: state)
@@ -74,7 +74,7 @@ final class WebCompatReporterMiddleware {
         }
         recorder.submit(payload)
         // The screenshot option is parked (FXIOS-16450) and no image is transported yet.
-        telemetry.sent(withBlockedTrackers: reporterState.includeBlockedList, withScreenshot: false)
+        telemetry.created(withBlockedTrackers: reporterState.includeBlockedList, withScreenshot: false)
 
         store.dispatch(WebCompatReporterMiddlewareAction(
             windowUUID: windowUUID,

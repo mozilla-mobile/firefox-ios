@@ -37,15 +37,15 @@ struct WebCompatReporterTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.cancelled)
     }
 
-    func sent(withBlockedTrackers: Bool, withScreenshot: Bool) {
-        let extra = GleanMetrics.WebcompatReporting.SendExtra(
-            sentWithBlockedTrackers: withBlockedTrackers,
-            sentWithScreenshot: withScreenshot
+    func created(withBlockedTrackers: Bool, withScreenshot: Bool) {
+        let extra = GleanMetrics.WebcompatReporting.CreatedExtra(
+            hasBlockedTrackersList: withBlockedTrackers,
+            hasScreenshot: withScreenshot
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.send, extras: extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.created, extras: extra)
     }
 
-    func learnMore() {
-        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.learnMore)
+    func learnMoreTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.learnMoreTapped)
     }
 }

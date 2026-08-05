@@ -155,38 +155,38 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_learnMore_recordsLearnMore() {
+    func test_learnMore_recordsLearnMoreTapped() {
         let subject = createSubject()
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.learnMore))
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.WebcompatReporting.learnMore))
+        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.WebcompatReporting.learnMoreTapped))
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_submit_recordsSendCarryingTheBlockedListChoice() throws {
+    func test_submit_recordsCreatedCarryingTheBlockedListChoice() throws {
         let subject = createSubject()
         setIncludeBlockedList(true)
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
-        let savedExtras = try XCTUnwrap(sendExtras())
-        XCTAssertEqual(savedExtras.sentWithBlockedTrackers, true)
+        let savedExtras = try XCTUnwrap(createdExtras())
+        XCTAssertEqual(savedExtras.hasBlockedTrackersList, true)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_submit_whenStateWantsAScreenshot_stillRecordsSendWithoutOne() throws {
+    func test_submit_whenStateWantsAScreenshot_stillRecordsCreatedWithoutOne() throws {
         let subject = createSubject()
         XCTAssertTrue(WebCompatReporterState(windowUUID: .XCTestDefaultUUID).includeScreenshot)
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
-        let savedExtras = try XCTUnwrap(sendExtras())
-        XCTAssertEqual(savedExtras.sentWithScreenshot, false)
-        XCTAssertEqual(savedExtras.sentWithBlockedTrackers, false)
+        let savedExtras = try XCTUnwrap(createdExtras())
+        XCTAssertEqual(savedExtras.hasScreenshot, false)
+        XCTAssertEqual(savedExtras.hasBlockedTrackersList, false)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -245,9 +245,9 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         return gleanWrapper.savedEvents.contains { ($0 as? EventMetricType<NoExtras>) === event }
     }
 
-    private func sendExtras() -> GleanMetrics.WebcompatReporting.SendExtra? {
+    private func createdExtras() -> GleanMetrics.WebcompatReporting.CreatedExtra? {
         return gleanWrapper.savedExtras.compactMap {
-            $0 as? GleanMetrics.WebcompatReporting.SendExtra
+            $0 as? GleanMetrics.WebcompatReporting.CreatedExtra
         }.first
     }
 

@@ -97,18 +97,18 @@ webcompat_reporting:
       - fx-ios-data-stewards@mozilla.com
       - webcompat-reporting-tool-telemetry@mozilla.com
     expires: never
-  send:
+  created:
     type: event
     description: |
-      Recorded when the user sends a report, alongside the
+      Recorded when the user submits a report, alongside the
       `broken-site-report` ping carrying the report itself.
     extra_keys:
-      sent_with_blocked_trackers:
+      has_blocked_trackers_list:
         type: boolean
         description: |
-          Whether the user kept the "list of items blocked by tracking
-          protection" option on.
-      sent_with_screenshot:
+          Indicates whether or not the user submitted the list of items blocked
+          by tracking protection alongside the report.
+      has_screenshot:
         type: boolean
         description: |
           Whether a screenshot was attached to the report. Always false while
@@ -123,7 +123,7 @@ webcompat_reporting:
       - fx-ios-data-stewards@mozilla.com
       - webcompat-reporting-tool-telemetry@mozilla.com
     expires: never
-  learn_more:
+  learn_more_tapped:
     type: event
     description: |
       Recorded when the user taps the "Learn More" link in the reporter's
