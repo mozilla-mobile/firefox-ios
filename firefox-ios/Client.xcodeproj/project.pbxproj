@@ -2046,7 +2046,6 @@
 		E1442FD1294782D9003680B0 /* UIModalPresentationStyle+Photon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FC6294782D7003680B0 /* UIModalPresentationStyle+Photon.swift */; };
 		E1442FD2294782D9003680B0 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FC7294782D7003680B0 /* UIViewController+Extension.swift */; };
 		E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FC9294782D8003680B0 /* URL+Mail.swift */; };
-		E1442FD5294782D9003680B0 /* UIView+SnapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FCA294782D8003680B0 /* UIView+SnapKit.swift */; };
 		E1442FD6294782D9003680B0 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FCB294782D8003680B0 /* UIView+Extension.swift */; };
 		E1442FD8294782D9003680B0 /* UIPasteboard+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FCD294782D8003680B0 /* UIPasteboard+Extension.swift */; };
 		E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FCD294782D8003680B0 /* UIPasteboard+Extension.swift */; };
@@ -11634,7 +11633,6 @@
 		E1442FC6294782D7003680B0 /* UIModalPresentationStyle+Photon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIModalPresentationStyle+Photon.swift"; sourceTree = "<group>"; };
 		E1442FC7294782D7003680B0 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		E1442FC9294782D8003680B0 /* URL+Mail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Mail.swift"; sourceTree = "<group>"; };
-		E1442FCA294782D8003680B0 /* UIView+SnapKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+SnapKit.swift"; sourceTree = "<group>"; };
 		E1442FCB294782D8003680B0 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		E1442FCD294782D8003680B0 /* UIPasteboard+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIPasteboard+Extension.swift"; sourceTree = "<group>"; };
 		E1463D012981DA190074E16E /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -13151,7 +13149,6 @@
 				E1442FCD294782D8003680B0 /* UIPasteboard+Extension.swift */,
 				E1442FCB294782D8003680B0 /* UIView+Extension.swift */,
 				E1442FC4294782D7003680B0 /* UIView+Screenshot.swift */,
-				E1442FCA294782D8003680B0 /* UIView+SnapKit.swift */,
 				1D3822E82BAB99250046BC5E /* UIView+ThemeUUIDIdentifiable.swift */,
 				E1442FC7294782D7003680B0 /* UIViewController+Extension.swift */,
 				C81A8F2426D3ED1900EBA539 /* UIWindow+Extension.swift */,
@@ -20540,7 +20537,6 @@
 				8ADED55C2D6679D500345293 /* BrowsingSettingsViewController.swift in Sources */,
 				8A0A7C402F61F03500D00820 /* TabWebView.swift in Sources */,
 				BCBE058C2E3A8720004B6039 /* SummarizeSetting.swift in Sources */,
-				E1442FD5294782D9003680B0 /* UIView+SnapKit.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */,
 				EBB89508219398E500EB91A0 /* ContentBlocker+Safelist.swift in Sources */,
