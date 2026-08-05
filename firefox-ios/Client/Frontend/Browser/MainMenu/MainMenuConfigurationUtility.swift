@@ -276,8 +276,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             if isSummarizerLanguageExpansionEnabled {
                 options.append(configureReaderViewItem(with: uuid, tabInfo: tabInfo))
             }
+            options.append(configureWebsiteDarkModeItem(with: uuid, and: tabInfo))
+            if let reportBrokenSiteItem = configureReportBrokenSiteItem(with: uuid, tabInfo: tabInfo) {
+                options.append(reportBrokenSiteItem)
+            }
             options.append(contentsOf: [
-                configureWebsiteDarkModeItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
                 MenuElement(
                     title: .MainMenu.Submenus.Save.SaveAsPDF,
@@ -349,9 +352,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     }
                 ),
             ])
-            if let reportBrokenSiteItem = configureReportBrokenSiteItem(with: uuid, tabInfo: tabInfo) {
-                options.append(reportBrokenSiteItem)
-            }
         }
         return MenuSection(isExpanded: isExpanded, options: options)
     }

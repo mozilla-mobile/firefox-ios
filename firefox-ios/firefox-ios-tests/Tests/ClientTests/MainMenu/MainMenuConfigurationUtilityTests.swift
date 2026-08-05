@@ -216,21 +216,52 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         XCTAssertFalse(hasReportBrokenSiteItem(isTelemetryEnabled: false))
     }
 
-    private func hasReportBrokenSiteItem(isTelemetryEnabled: Bool) -> Bool {
-        let featureFlagProvider = MockNimbusFeatureFlags()
-        featureFlagProvider.enabledFlags = [.reportBrokenSite]
-        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlagProvider)
+    func test_reportBrokenSiteItem_isHidden_whenFlagIsDisabled() {
+        XCTAssertFalse(hasReportBrokenSiteItem(isReportBrokenSiteEnabled: false))
+    }
 
-        let profile = MockProfile()
-        profile.prefs.setBool(isTelemetryEnabled, forKey: AppConstants.prefSendUsageData)
-        let configurationUtility = MainMenuConfigurationUtility(profile: profile)
+    func test_reportBrokenSiteItem_isPlacedBetweenWebsiteDarkModeAndShortcuts() throws {
+        let sections = makeConfigurationUtility().generateMenuElements(
+            with: getTabInfo(url: URL(string: "https://www.mozilla.org")),
+            and: windowUUID,
+            isExpanded: true
+        )
+        let titles = try XCTUnwrap(sections.first).options.map { $0.title }
 
-        let sections = configurationUtility.generateMenuElements(
+        let websiteDarkModeIndex = try XCTUnwrap(titles.firstIndex(of: .MainMenu.Submenus.Tools.WebsiteDarkMode))
+        let reportBrokenSiteIndex = try XCTUnwrap(titles.firstIndex(of: .MainMenu.ToolsSection.ReportBrokenSite))
+        let shortcutsIndex = try XCTUnwrap(titles.firstIndex(of: .MainMenu.Submenus.Save.AddToShortcuts))
+
+        XCTAssertEqual(reportBrokenSiteIndex, websiteDarkModeIndex + 1)
+        XCTAssertEqual(shortcutsIndex, reportBrokenSiteIndex + 1)
+    }
+
+    private func hasReportBrokenSiteItem(
+        isReportBrokenSiteEnabled: Bool = true,
+        isTelemetryEnabled: Bool = true
+    ) -> Bool {
+        let sections = makeConfigurationUtility(
+            isReportBrokenSiteEnabled: isReportBrokenSiteEnabled,
+            isTelemetryEnabled: isTelemetryEnabled
+        ).generateMenuElements(
             with: getTabInfo(url: URL(string: "https://www.mozilla.org")),
             and: windowUUID,
             isExpanded: true
         )
         return sections.flatMap { $0.options }.contains { $0.title == .MainMenu.ToolsSection.ReportBrokenSite }
+    }
+
+    private func makeConfigurationUtility(
+        isReportBrokenSiteEnabled: Bool = true,
+        isTelemetryEnabled: Bool = true
+    ) -> MainMenuConfigurationUtility {
+        let featureFlagProvider = MockNimbusFeatureFlags()
+        featureFlagProvider.enabledFlags = isReportBrokenSiteEnabled ? [.reportBrokenSite] : []
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlagProvider)
+
+        let profile = MockProfile()
+        profile.prefs.setBool(isTelemetryEnabled, forKey: AppConstants.prefSendUsageData)
+        return MainMenuConfigurationUtility(profile: profile)
     }
 
     private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {
