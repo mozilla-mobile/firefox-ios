@@ -66,9 +66,7 @@ class IntegrationTests: BaseTestCase {
         completeFxASignIn()
     }
 
-    /// Completes an FxA sign-in on the email webview: waits for it to load, types the email/password
-    /// from FXA_EMAIL/FXA_PASSWORD, and waits for sync to be ready. Assumes the caller already opened
-    /// the webview via `Action.OpenEmailToSignIn`, however it got there.
+    /// Completes an FxA sign-in on the email login screen.
     private func completeFxASignIn() {
         sleep(5)
         mozWaitForElementToExist(
