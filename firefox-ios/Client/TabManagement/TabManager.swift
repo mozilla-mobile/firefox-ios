@@ -106,6 +106,14 @@ protocol TabManager: AnyObject {
     /// - Parameter tabDataList: the tab data collected from the other windows being merged.
     func addTabs(fromWindowMergeData tabDataList: [TabData])
 
+    /// Empties this window's tab list after its tabs were copied into another window by
+    /// `tabDataForWindowMerge()`. The tabs' session data and screenshots are deliberately left on
+    /// disk because the destination window's tabs now reference them by the same UUIDs. Called
+    /// before the merged-away window is closed so that a save triggered on the way down writes an
+    /// empty tab list rather than resurrecting tabs that have already moved.
+    @MainActor
+    func discardTabsMovedToAnotherWindow()
+
     // MARK: Other Tab Actions
     func clearAllTabsHistory()
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
