@@ -765,10 +765,51 @@ workflows:
             brew install fxios
             fxios bootstrap
         title: Run bootstrap
-    - swiftlint-extended@1:
+    - script@1:
+        title: Run swiftlint
         inputs:
-        - linting_path: "$BITRISE_SOURCE_DIR"
-        - lint_config_file: ""  # Don't pass a config file to make use of nested configurations
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            cd "$BITRISE_SOURCE_DIR"
+
+            # Use the version pinned in .swiftlint-version rather than whichever
+            # version the stack happens to ship, so that CI and local runs match
+            SWIFTLINT=$(./scripts/install-swiftlint.sh)
+            "$SWIFTLINT" version
+
+            # Lint from the repo root and don't pass a config file, to make use
+            # of nested configurations. Violations are written to stdout, while
+            # progress and the summary go to stderr.
+            REPORT="$BITRISE_DEPLOY_DIR/swiftlint_report.txt"
+            set +e
+            "$SWIFTLINT" lint > "$REPORT"
+            set -e
+
+            cat "$REPORT"
+
+            # Publish the violations as a test report as well, so that swiftlint
+            # gets its own entry on the pull request alongside the UI test ones.
+            # SwiftLint takes a single reporter per run, so this is a second pass
+            # rather than a second output format; it hits SwiftLint's cache from
+            # the run above. A run with no violations still writes a test suite,
+            # which is what keeps the entry visible when linting passes.
+            if [ -n "${BITRISE_TEST_RESULT_DIR:-}" ]; then
+                RESULT_DIR="$BITRISE_TEST_RESULT_DIR/swiftlint"
+                mkdir -p "$RESULT_DIR"
+                set +e
+                "$SWIFTLINT" lint --reporter junit > "$RESULT_DIR/swiftlint.xml"
+                set -e
+                echo '{"test-name":"swiftlint"}' > "$RESULT_DIR/test-info.json"
+            else
+                echo "BITRISE_TEST_RESULT_DIR is unset, skipping the swiftlint test report"
+            fi
+
+            # Left unset when there are no violations, which the next step reads
+            if [ -s "$REPORT" ]; then
+                envman add --key SWIFTLINT_REPORT --valuefile "$REPORT"
+            fi
     - deploy-to-bitrise-io@2: {}
     - script@1:
         inputs:

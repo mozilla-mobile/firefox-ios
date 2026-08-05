@@ -11,6 +11,9 @@
 # Default argument is "firefox"
 PRODUCT="${1:-firefox}"
 
+# Install the swiftlint version pinned in .swiftlint-version
+./scripts/install-swiftlint.sh > /dev/null
+
 if [[ "$PRODUCT" == "firefox" ]]; then
     echo "Running Firefox bootstrap..."
     

@@ -81,6 +81,20 @@ final class OnboardingScreen {
         }
     }
 
+    /// A data-collection toggle on the Manage bottom sheet. Each maps to its switch and description
+    /// (the description carries the toggle's Learn more link).
+    enum ManageToggle {
+        case crashReports
+        case technicalData
+
+        var name: String {
+            switch self {
+            case .crashReports: return "Automatically send crash reports"
+            case .technicalData: return "Send technical and interaction data to Mozilla"
+            }
+        }
+    }
+
     private let app: XCUIApplication
     private let sel: OnboardingSelectorsSet
     private let flowType: OnboardingFlowType
@@ -223,6 +237,13 @@ final class OnboardingScreen {
                 }
             }
         }
+    }
+
+    /// Asserts the given address bar position button is selected on the modern flow's segmented control.
+    func assertAddressBarPositionSelected(position: AddressBarPosition) {
+        let button = sel.addressBarTopButton(rootId: rootA11yId, position: position).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        XCTAssertTrue(button.isSelected, "\(position.rawValue) address bar position button should be selected")
     }
 
     /// Exercises the multiple choice buttons on the card to choose your theme.
@@ -481,6 +502,56 @@ final class OnboardingScreen {
                       "Crash reports description text is missing")
         XCTAssertTrue(crashDescription.label.contains("Learn more"),
                       "Crash reports description should contain the Learn more link")
+    }
+
+    /// Asserts the given Manage sheet toggle is displayed and turned on. Switch state is read from the
+    /// element's value, which is "1" when on and "0" when off.
+    func assertManageToggleIsOn(_ toggle: ManageToggle) {
+        let element = manageToggleSwitch(toggle)
+        BaseTestCase().mozWaitForElementToExist(element)
+        XCTAssertEqual(element.value as? String, "1", "The \(toggle.name) toggle should be enabled")
+    }
+
+    /// Asserts the given Manage sheet toggle is displayed and turned off.
+    func assertManageToggleIsOff(_ toggle: ManageToggle) {
+        let element = manageToggleSwitch(toggle)
+        BaseTestCase().mozWaitForElementToExist(element)
+        XCTAssertEqual(element.value as? String, "0", "The \(toggle.name) toggle should be disabled")
+    }
+
+    /// Taps the given Manage sheet toggle to flip its on/off state.
+    func tapManageToggle(_ toggle: ManageToggle) {
+        manageToggleSwitch(toggle).waitAndTap()
+    }
+
+    /// Taps the Learn more link below the given Manage sheet toggle. The link spans the whole
+    /// description label, so tapping the label opens the SUMO support page.
+    func tapManageToggleLearnMore(_ toggle: ManageToggle) {
+        manageToggleDescription(toggle).waitAndTap()
+    }
+
+    private func manageToggleSwitch(_ toggle: ManageToggle) -> XCUIElement {
+        switch toggle {
+        case .crashReports: return sel.MANAGE_SHEET_CRASH_REPORTS_SWITCH.element(in: app)
+        case .technicalData: return sel.MANAGE_SHEET_TECHNICAL_DATA_SWITCH.element(in: app)
+        }
+    }
+
+    private func manageToggleDescription(_ toggle: ManageToggle) -> XCUIElement {
+        switch toggle {
+        case .crashReports: return sel.MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION.element(in: app)
+        case .technicalData: return sel.MANAGE_SHEET_TECHNICAL_DATA_DESCRIPTION.element(in: app)
+        }
+    }
+
+    /// Asserts a SUMO support page opened after tapping a Learn more link, confirmed by its web view
+    /// and the presenting navigation controller's Done button (the shared ToS page Done identifier).
+    func assertSumoPageOpened() {
+        let doneButton = sel.TOS_PAGE_DONE_BUTTON.element(in: app)
+        let webView = app.webViews.firstMatch
+        BaseTestCase().waitForElementsToExist([doneButton, webView], timeout: TIMEOUT_LONG)
+        XCTAssertTrue(doneButton.exists, "The SUMO support page Done button should be displayed")
+        XCTAssertTrue(webView.exists, "The SUMO support page web view should be displayed")
     }
 
     /// Locates the embedded ToS link by its accessibility identifier. Matched across any element type

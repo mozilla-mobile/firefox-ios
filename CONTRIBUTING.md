@@ -54,7 +54,7 @@ We add the "Contributor Fix" label on tasks that have a PR opened for it, or if 
 * Use 4-space indentation instead of 2  
 * Follow existing patterns in the codebase when in doubt  
 
-We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure conformance to accepted rules. You can run Swiftlint by installing it [locally with Homebrew](https://github.com/realm/SwiftLint#using-homebrew). Swiftlint will then be run through Xcode Build Phases on the Client target.
+We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure conformance to accepted rules. The version is pinned in `.swiftlint-version` so that every engineer and CI lint with the same version; `./bootstrap.sh` installs it into `.tools/` for you, and you can install it on its own with `./scripts/install-swiftlint.sh`. Don't install Swiftlint through Homebrew for this project — a Homebrew install is no longer used by the build. Swiftlint is then run through Xcode Build Phases on the Client target.
 
 ### Quality expectations for pull requests
 
