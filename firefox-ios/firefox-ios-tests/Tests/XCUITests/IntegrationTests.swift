@@ -18,6 +18,7 @@ class IntegrationTests: BaseTestCase {
 
     let testWithDB = ["testFxASyncHistory", "testFxAFirefoxSuggest"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
+    let testModernKitOnboarding = ["testModernKitOnboardingStartSyncingUseEmailInstead"]
 
     // This DB contains 1 entry example.com
     let historyDB = "exampleURLHistoryBookmark-places.db"
@@ -40,6 +41,11 @@ class IntegrationTests: BaseTestCase {
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
                                LaunchArguments.SkipContextualHints]
+        } else if testModernKitOnboarding.contains(key) {
+            launchArguments = [LaunchArguments.ClearProfile,
+                                LaunchArguments.StageServer,
+                               "\(LaunchArguments.LoadExperiment)modernKitOnboardingOn",
+                               "\(LaunchArguments.ExperimentFeatureName)onboarding-framework-feature"]
         } else {
             launchArguments.append(LaunchArguments.StageServer)
         }
@@ -96,6 +102,69 @@ class IntegrationTests: BaseTestCase {
         }
         mozWaitForElementToNotExist(app.tables.staticTexts["Syncing…"])
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4036952
+    func testModernKitOnboardingStartSyncingUseEmailInstead() throws {
+        let onboardingScreen = OnboardingScreen(app: app, flowType: .modernKit)
+
+        onboardingScreen.handleTermsOfService()
+
+        // Step 1 - Screen 1: Default Browser - Skip (secondary button)
+        onboardingScreen.assertTitle()
+        onboardingScreen.goToNextScreenViaSecondary()
+
+        if iPad() {
+            // iPad does not show the address bar top/bottom placement card (second screen).
+            // However, the accessibility IDs increase by one.
+            onboardingScreen.currentScreen += 1
+        } else {
+            // Screen 2: Choose address bar - Continue (primary button)
+            onboardingScreen.assertTitle()
+            onboardingScreen.selectAddressBarPosition(position: .bottom)
+            onboardingScreen.goToNextScreenViaPrimary()
+        }
+
+        // Step 1 - Screen 3: Choose theme - Continue (primary button)
+        onboardingScreen.assertTitle()
+        onboardingScreen.selectThemeButtons()
+        onboardingScreen.goToNextScreenViaPrimary()
+
+        // Step 2: Tap the "Start Syncing" button.
+        onboardingScreen.assertSyncScreen()
+        onboardingScreen.tapSignIn()
+        onboardingScreen.assertSignInScreen()
+
+        // Step 3: Tap "Use Email Instead"
+        navigator.nowAt(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
+
+        // Step 4: Input valid email and valid password
+        print("==================== 10 ====================")
+        sleep(5)
+        mozWaitForElementToExist(
+            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+            timeout: TIMEOUT_LONG
+        )
+        print("==================== 20 ====================")
+        userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
+        userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
+        print("==================== 25 ==================== "+userState.fxaUsername!)
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
+        print("==================== 30 ====================")
+        navigator.performAction(Action.FxATypeEmail)
+        print("==================== 40 ====================")
+        navigator.performAction(Action.FxATapOnContinueButton)
+        mozWaitForElementToNotExist(app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
+        mozWaitForElementToExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
+        navigator.performAction(Action.FxATypePasswordExistingAccount)
+        navigator.performAction(Action.FxATapOnSignInButton)
+        mozWaitForElementToNotExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
+        waitForTabsButton()
+        allowNotifications()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
