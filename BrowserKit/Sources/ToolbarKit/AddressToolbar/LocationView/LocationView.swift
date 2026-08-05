@@ -736,6 +736,12 @@ final class LocationView: UIView,
         delegate?.locationTextFieldNeedsSearchReset()
     }
 
+    func locationTextField(_ textField: LocationTextField,
+                           didDisplayEditingAccessoryButton button: UIButton,
+                           contextualHintType: String) {
+        delegate?.locationViewDidDisplayEditingAccessoryButton(button, contextualHintType: contextualHintType)
+    }
+
     // MARK: - Accessibility
     private func configureA11y(_ config: LocationViewConfiguration) {
         lockIconButton.accessibilityIdentifier = config.lockIconButtonA11yId

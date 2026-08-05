@@ -62,6 +62,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         actionType: .googleLens,
         iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
         isEnabled: true,
+        contextualHintType: TipKitHintType.googleLens.rawValue,
         a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
         a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton,
         menuElements: [

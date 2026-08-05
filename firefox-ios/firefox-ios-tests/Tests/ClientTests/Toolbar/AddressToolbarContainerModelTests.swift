@@ -202,6 +202,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertEqual(state.addressToolbar.editingAccessoryAction?.actionType, .googleLens)
         let accessoryAction = model.addressToolbarConfig.locationViewConfiguration.editingAccessoryAction
         XCTAssertEqual(accessoryAction?.iconName, StandardImageIdentifiers.Medium.logoGoogleLens)
+        XCTAssertEqual(accessoryAction?.contextualHintType, TipKitHintType.googleLens.rawValue)
         XCTAssertEqual(accessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
         XCTAssertEqual(accessoryAction?.menuElements, expectedMenuElements)
     }
@@ -335,6 +336,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
             actionType: .googleLens,
             iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
             isEnabled: true,
+            contextualHintType: TipKitHintType.googleLens.rawValue,
             a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
             a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton,
             menuElements: [

@@ -4,6 +4,7 @@
 
 import Common
 import Shared
+import TipKit
 import UIKit
 
 extension BrowserViewController: PhotonActionSheetProtocol {
@@ -117,6 +118,48 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     private func presentTranslationContextualHint() {
         present(translationContextHintVC, animated: true)
         UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
+    }
+
+    @MainActor
+    func configureGoogleLensTip(for button: UIButton) {
+        guard #available(iOS 17.0, *) else { return }
+        guard googleLensTipViewController == nil else { return }
+
+        googleLensTipObservationTask?.cancel()
+        let tip = GoogleLensTip()
+        googleLensTipObservationTask = Task { @MainActor [weak self, weak button] in
+            for await status in tip.statusUpdates {
+                guard !Task.isCancelled else { return }
+
+                switch status {
+                // Wait for TipKit to finish evaluating the tip's display eligibility.
+                case .pending:
+                    continue
+                // Present the tip once TipKit determines it is eligible for display.
+                case .available:
+                    await Task.yield()
+                    guard let self,
+                          let button,
+                          button.window != nil,
+                          self.presentedViewController == nil
+                    else { return }
+
+                    let tipViewController = TipUIPopoverViewController(tip, sourceItem: button)
+                    self.googleLensTipViewController = tipViewController
+                    self.present(tipViewController, animated: true)
+                // Dismiss the presented tip when TipKit marks it as closed or otherwise invalid.
+                case .invalidated:
+                    guard let self else { return }
+                    if self.presentedViewController === self.googleLensTipViewController {
+                        self.dismiss(animated: true)
+                    }
+                    self.googleLensTipViewController = nil
+                    return
+                @unknown default:
+                    break
+                }
+            }
+        }
     }
 
     private func presentContextualHint(for hintType: ContextualHintType) {
