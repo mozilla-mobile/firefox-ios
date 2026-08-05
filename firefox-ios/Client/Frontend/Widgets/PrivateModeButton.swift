@@ -25,7 +25,8 @@ final class PrivateModeButton: ToggleButton, PrivateModeUI {
         let colors = theme.colors
         isSelected = isPrivate
 
-        tintColor = isPrivate ? (theme.isNova ? colors.iconInverted : colors.iconOnColor) : colors.iconPrimary
+        let selectedTint = theme.isNova ? colors.iconInverted : colors.iconOnColor
+        tintColor = isPrivate ? selectedTint : colors.iconPrimary
         imageView?.tintColor = tintColor
 
         if isSelected {
@@ -38,7 +39,8 @@ final class PrivateModeButton: ToggleButton, PrivateModeUI {
     override func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
         let colors = theme.colors
-        tintColor = isSelected ? (theme.isNova ? colors.iconInverted : colors.iconOnColor) : colors.iconPrimary
+        let selectedTint = theme.isNova ? colors.iconInverted : colors.iconOnColor
+        tintColor = isSelected ? selectedTint : colors.iconPrimary
         imageView?.tintColor = tintColor
     }
 }
