@@ -124,6 +124,7 @@ class ToggleButton: UIButton, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        backgroundLayer.backgroundColor = theme.colors.layerAccentPrivate.cgColor
+        let background = theme.isNova ? theme.colors.actionPrimary : theme.colors.layerAccentPrivate
+        backgroundLayer.backgroundColor = background.cgColor
     }
 }
