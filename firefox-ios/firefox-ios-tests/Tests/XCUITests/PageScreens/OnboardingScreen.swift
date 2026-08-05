@@ -49,6 +49,52 @@ final class OnboardingScreen {
         case bottom = "Bottom"
     }
 
+    /// A tappable legal link on the Terms of Service card. Each opens an overlay dismissed via a Done
+    /// button: a web pop up for Terms of Use / Privacy Notice, a bottom sheet for Manage.
+    enum ToSLink {
+        case termsOfUse
+        case privacyNotice
+        case manage
+
+        var name: String {
+            switch self {
+            case .termsOfUse: return "Terms of Use"
+            case .privacyNotice: return "Privacy Notice"
+            case .manage: return "Manage"
+            }
+        }
+
+        /// Accessibility identifier applied to the rendered link, matching the ids set in `TermsOfServiceManager`.
+        var identifier: String {
+            switch self {
+            case .termsOfUse: return AccessibilityIdentifiers.TermsOfService.termsOfServiceAgreement
+            case .privacyNotice: return AccessibilityIdentifiers.TermsOfService.privacyNoticeAgreement
+            case .manage: return AccessibilityIdentifiers.TermsOfService.manageDataCollectionAgreement
+            }
+        }
+
+        var overlayName: String {
+            switch self {
+            case .termsOfUse, .privacyNotice: return "link pop up"
+            case .manage: return "Manage bottom sheet"
+            }
+        }
+    }
+
+    /// A data-collection toggle on the Manage bottom sheet. Each maps to its switch and description
+    /// (the description carries the toggle's Learn more link).
+    enum ManageToggle {
+        case crashReports
+        case technicalData
+
+        var name: String {
+            switch self {
+            case .crashReports: return "Automatically send crash reports"
+            case .technicalData: return "Send technical and interaction data to Mozilla"
+            }
+        }
+    }
+
     private let app: XCUIApplication
     private let sel: OnboardingSelectorsSet
     private let flowType: OnboardingFlowType
@@ -143,6 +189,20 @@ final class OnboardingScreen {
         XCTAssertEqual(secondaryButton.label, expectedSecondary)
     }
 
+    /// Asserts the copy of a primary-only onboarding card, verifying no secondary button is present.
+    func assertTextsOnCurrentScreen(expectedTitle: String,
+                                    expectedDescription: String,
+                                    expectedPrimary: String) {
+        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
+        let description = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(title)
+        XCTAssertEqual(title.label, expectedTitle)
+        XCTAssertEqual(description.label, expectedDescription)
+        XCTAssertEqual(primaryButton.label, expectedPrimary)
+        XCTAssertFalse(secondaryButton.exists, "No secondary button should be present on this card")
+    }
+
     func tapSignIn() {
         primaryButton.waitAndTap()
     }
@@ -177,6 +237,13 @@ final class OnboardingScreen {
                 }
             }
         }
+    }
+
+    /// Asserts the given address bar position button is selected on the modern flow's segmented control.
+    func assertAddressBarPositionSelected(position: AddressBarPosition) {
+        let button = sel.addressBarTopButton(rootId: rootA11yId, position: position).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        XCTAssertTrue(button.isSelected, "\(position.rawValue) address bar position button should be selected")
     }
 
     /// Exercises the multiple choice buttons on the card to choose your theme.
@@ -369,6 +436,137 @@ final class OnboardingScreen {
         XCTAssertEqual(button.label, "Continue", "Should show Continue button")
     }
 
+    /// Asserts the given link is displayed on the ToS card.
+    func assertLinkIsDisplayed(_ link: ToSLink) {
+        let element = linkElement(link)
+        BaseTestCase().mozWaitForElementToExist(element)
+        XCTAssertTrue(element.exists, "The \(link.name) link should be displayed on the ToS card")
+    }
+
+    /// Taps the given link to open its overlay. The link is a single hittable control, so a plain tap
+    /// on its accessibility identifier is reliable.
+    func tapLink(_ link: ToSLink) {
+        linkElement(link).waitAndTap()
+    }
+
+    /// Asserts the overlay opened by the given link (web pop up or bottom sheet) is displayed.
+    func assertOverlayIsDisplayed(for link: ToSLink) {
+        let doneButton = overlayDoneButton(link).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(doneButton, timeout: TIMEOUT_LONG)
+        XCTAssertTrue(doneButton.exists, "The \(link.overlayName) should be displayed")
+    }
+
+    /// Asserts the overlay opened by the given link is no longer displayed.
+    func assertOverlayIsClosed(for link: ToSLink) {
+        let doneButton = overlayDoneButton(link).element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(doneButton)
+        XCTAssertFalse(doneButton.exists, "The \(link.overlayName) should be closed")
+    }
+
+    /// Dismisses the overlay opened by the given link via its Done button, returning to the ToS card.
+    func dismissOverlay(for link: ToSLink) {
+        overlayDoneButton(link).element(in: app).waitAndTap()
+    }
+
+    /// Asserts the Manage data-collection bottom sheet shows all its content: title, Done button, and
+    /// both data toggles with their titles, descriptions and embedded Learn more links.
+    func assertManageBottomSheetContents() {
+        let title = sel.MANAGE_SHEET_TITLE.element(in: app)
+        let doneButton = sel.MANAGE_SHEET_DONE_BUTTON.element(in: app)
+        let technicalTitle = sel.MANAGE_SHEET_TECHNICAL_DATA_TITLE.element(in: app)
+        let technicalSwitch = sel.MANAGE_SHEET_TECHNICAL_DATA_SWITCH.element(in: app)
+        let technicalDescription = sel.MANAGE_SHEET_TECHNICAL_DATA_DESCRIPTION.element(in: app)
+        let crashTitle = sel.MANAGE_SHEET_CRASH_REPORTS_TITLE.element(in: app)
+        let crashSwitch = sel.MANAGE_SHEET_CRASH_REPORTS_SWITCH.element(in: app)
+        let crashDescription = sel.MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION.element(in: app)
+
+        BaseTestCase().waitForElementsToExist([
+            title, doneButton,
+            technicalTitle, technicalSwitch, technicalDescription,
+            crashTitle, crashSwitch, crashDescription
+        ])
+
+        XCTAssertEqual(title.label, "Help us make Firefox better")
+        XCTAssertEqual(doneButton.label, "Done")
+
+        XCTAssertEqual(technicalTitle.label, "Send technical and interaction data to Mozilla")
+        XCTAssertTrue(technicalDescription.label.contains(
+            "Data about your device, hardware configuration, and how you use Firefox helps improve"),
+                      "Technical data description text is missing")
+        XCTAssertTrue(technicalDescription.label.contains("Learn more"),
+                      "Technical data description should contain the Learn more link")
+
+        XCTAssertEqual(crashTitle.label, "Automatically send crash reports")
+        XCTAssertTrue(crashDescription.label.contains(
+            "Crash reports allow us to diagnose and fix issues with the browser"),
+                      "Crash reports description text is missing")
+        XCTAssertTrue(crashDescription.label.contains("Learn more"),
+                      "Crash reports description should contain the Learn more link")
+    }
+
+    /// Asserts the given Manage sheet toggle is displayed and turned on. Switch state is read from the
+    /// element's value, which is "1" when on and "0" when off.
+    func assertManageToggleIsOn(_ toggle: ManageToggle) {
+        let element = manageToggleSwitch(toggle)
+        BaseTestCase().mozWaitForElementToExist(element)
+        XCTAssertEqual(element.value as? String, "1", "The \(toggle.name) toggle should be enabled")
+    }
+
+    /// Asserts the given Manage sheet toggle is displayed and turned off.
+    func assertManageToggleIsOff(_ toggle: ManageToggle) {
+        let element = manageToggleSwitch(toggle)
+        BaseTestCase().mozWaitForElementToExist(element)
+        XCTAssertEqual(element.value as? String, "0", "The \(toggle.name) toggle should be disabled")
+    }
+
+    /// Taps the given Manage sheet toggle to flip its on/off state.
+    func tapManageToggle(_ toggle: ManageToggle) {
+        manageToggleSwitch(toggle).waitAndTap()
+    }
+
+    /// Taps the Learn more link below the given Manage sheet toggle. The link spans the whole
+    /// description label, so tapping the label opens the SUMO support page.
+    func tapManageToggleLearnMore(_ toggle: ManageToggle) {
+        manageToggleDescription(toggle).waitAndTap()
+    }
+
+    private func manageToggleSwitch(_ toggle: ManageToggle) -> XCUIElement {
+        switch toggle {
+        case .crashReports: return sel.MANAGE_SHEET_CRASH_REPORTS_SWITCH.element(in: app)
+        case .technicalData: return sel.MANAGE_SHEET_TECHNICAL_DATA_SWITCH.element(in: app)
+        }
+    }
+
+    private func manageToggleDescription(_ toggle: ManageToggle) -> XCUIElement {
+        switch toggle {
+        case .crashReports: return sel.MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION.element(in: app)
+        case .technicalData: return sel.MANAGE_SHEET_TECHNICAL_DATA_DESCRIPTION.element(in: app)
+        }
+    }
+
+    /// Asserts a SUMO support page opened after tapping a Learn more link, confirmed by its web view
+    /// and the presenting navigation controller's Done button (the shared ToS page Done identifier).
+    func assertSumoPageOpened() {
+        let doneButton = sel.TOS_PAGE_DONE_BUTTON.element(in: app)
+        let webView = app.webViews.firstMatch
+        BaseTestCase().waitForElementsToExist([doneButton, webView], timeout: TIMEOUT_LONG)
+        XCTAssertTrue(doneButton.exists, "The SUMO support page Done button should be displayed")
+        XCTAssertTrue(webView.exists, "The SUMO support page web view should be displayed")
+    }
+
+    /// Locates the embedded ToS link by its accessibility identifier. Matched across any element type
+    /// since the link carries both button and link traits.
+    private func linkElement(_ link: ToSLink) -> XCUIElement {
+        return app.descendants(matching: .any).matching(identifier: link.identifier).firstMatch
+    }
+
+    private func overlayDoneButton(_ link: ToSLink) -> Selector {
+        switch link {
+        case .termsOfUse, .privacyNotice: return sel.TOS_PAGE_DONE_BUTTON
+        case .manage: return sel.MANAGE_SHEET_DONE_BUTTON
+        }
+    }
+
     /// Verifies the welcome screen (shown after ToS acceptance)
     func assertModernWelcomeScreen() {
         let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
@@ -405,20 +603,38 @@ final class OnboardingScreen {
         XCTAssertTrue(primary.exists, "Primary button should exist")
         XCTAssertTrue(lightButton.exists, "Light theme option should exist")
         XCTAssertTrue(darkButton.exists, "Dark theme option should exist")
+        XCTAssertTrue(systemThemeButton.exists, "System Auto theme option should exist")
+    }
 
-        // The "System Auto" / "Automatic" label is different between the two modern flows
+    /// Asserts the theme card defaults to the System Auto / Automatic option, with Light and Dark
+    /// unselected. Selection is read from the button's accessibility selected state.
+    func assertDefaultThemeIsSystemAuto() {
+        let lightButton = app.buttons["\(rootA11yId)SegmentedButton.Light"]
+        let darkButton = app.buttons["\(rootA11yId)SegmentedButton.Dark"]
 
-        var systemButton: XCUIElement?
-        if BaseTestCase().isFennec {
-            if case .modernOrangeAndBlue = flowType {
-                systemButton = app.buttons["\(rootA11yId)SegmentedButton.System Auto"]
-            } else if case .modernKit = flowType {
-                systemButton = app.buttons["\(rootA11yId)SegmentedButton.Automatic"]
-            }
+        BaseTestCase().waitForElementsToExist([systemThemeButton, lightButton, darkButton])
+        XCTAssertTrue(systemThemeButton.isSelected, "System Auto should be the default selected theme")
+        XCTAssertFalse(lightButton.isSelected, "Light theme should not be selected by default")
+        XCTAssertFalse(darkButton.isSelected, "Dark theme should not be selected by default")
+    }
+
+    /// Asserts the given theme option on the theme card is the selected one. Selection is read from the
+    /// button's accessibility selected state.
+    func assertThemeIsSelected(_ theme: String) {
+        let button = app.buttons["\(rootA11yId)SegmentedButton.\(theme)"]
+        BaseTestCase().mozWaitForElementToExist(button)
+        XCTAssertTrue(button.isSelected, "\(theme) theme should be the selected theme")
+    }
+
+    /// The System Auto / Automatic segmented button. Its label differs between the modern flows.
+    private var systemThemeButton: XCUIElement {
+        let label: String
+        if BaseTestCase().isFennec, case .modernOrangeAndBlue = flowType {
+            label = "System Auto"
         } else {
-            systemButton = app.buttons["\(rootA11yId)SegmentedButton.Automatic"]
+            label = "Automatic"
         }
-        XCTAssertEqual(systemButton?.exists, true, "System Auto theme option should exist")
+        return app.buttons["\(rootA11yId)SegmentedButton.\(label)"]
     }
 
     func assertSyncScreen() {

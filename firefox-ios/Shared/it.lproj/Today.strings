@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Chiudi le schede anonime";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Aggiungi collegamenti Firefox alla schermata principale";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Aggiungi collegamenti Firefox alla schermata principale.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Apri il link copiato";

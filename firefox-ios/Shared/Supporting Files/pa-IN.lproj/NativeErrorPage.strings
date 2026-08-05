@@ -52,3 +52,15 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "ਤੁਹਾਡੇ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਾਲ ਸਮੱਸਿਆ ਜਾਪਦੀ ਹੈ।";
 
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v154" = "…ਸਫ਼ੇ ਲਈ ਚੈੱਕ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "ਮੁੜ-ਕੋਸ਼ਿਸ਼";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.Search.v154" = "ਹੋਰ ਪੁਰਾਣੇ ਵਰਜ਼ਨ ਲਈ ਜਾਂਚ ਕਰੋ";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "ਕਨੈਕਟ ਕਰਨ ਲਈ ਅਸਮਰੱਥ";
+

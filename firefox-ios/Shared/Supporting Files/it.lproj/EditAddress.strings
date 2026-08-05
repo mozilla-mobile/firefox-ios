@@ -20,10 +20,10 @@
 "Addresses.EditAddress.AutofillAddressCity.v129" = "Città";
 
 /* Label for the field where users can specify just the country, used in contexts where full address details are not required. Simplifies autofill when only country information is necessary. */
-"Addresses.EditAddress.AutofillAddressCountryOnly.v129" = "Nazione";
+"Addresses.EditAddress.AutofillAddressCountryOnly.v129" = "Paese";
 
 /* Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders. */
-"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "Stato o regione";
+"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "Paese o regione";
 
 /* Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information. */
 "Addresses.EditAddress.AutofillAddressCounty.v129" = "Contea";

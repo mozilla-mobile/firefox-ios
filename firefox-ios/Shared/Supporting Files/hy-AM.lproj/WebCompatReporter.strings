@@ -1,0 +1,102 @@
+/* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "Ձեր զեկույցը մեզ օգնում է հասկանալ և շտկել %1$@-ի խնդիրները՝ այն բոլորի համար ավելի լավը դարձնելու համար։ %2$@";
+
+/* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "Ուղարկել հետագծման պաշտպանության կողմից արգելափակված տարրերի ցանկը";
+
+/* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Ավտոմատ կերպով ներառեք էկրանի նկար՝ խնդիրը ցույց տալու համար";
+
+/* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Իմանալ ավելին";
+
+/* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.Title.v154" = "Լրացուցիչ տեղեկություններ";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "Դիզայնը կոտրված է";
+
+/* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
+"WebCompatReporter.Category.Other.v154" = "Այլ";
+
+/* Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form. */
+"WebCompatReporter.Category.SiteNotUsable.v154" = "Կայքը օգտագործելի չէ";
+
+/* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
+"WebCompatReporter.Category.VideoOrAudio.v154" = "Տեսանյութը կամ աուդիոն չեն նվագարկվում";
+
+/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Մանրամասն նկարագրեք խնդիրը";
+
+/* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Մանրամասն նկարագրեք խնդիրը (ըստ ցանկության)";
+
+/* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLLabel.v154" = "URL";
+
+/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLPlaceholder.v154" = "URL";
+
+/* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "Ընտրեք խնդրի տեսակը…";
+
+/* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.Title.v154" = "Կայքի խնդիր";
+
+/* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Ձեր կողմից հաղորդվող էջի էկրանի նկար։ Կրկնակի հպեք՝ լիաէկրան դիտելու համար։";
+
+/* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Փակել";
+
+/* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
+"WebCompatReporter.Preview.Title.v154" = "Հաշվետվության նախադիտում";
+
+/* Title of the button that submits the website issue report, in the Report a Website Issue form. */
+"WebCompatReporter.SendButton.Title.v154" = "Ուղարկել զեկույց";
+
+/* Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report. */
+"WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154" = "Փակել";
+
+/* Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form. */
+"WebCompatReporter.Sheet.PreviewButton.v154" = "Նախադիտել";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.BrowserBlocked.v154" = "Դիտարկիչը չի աջակցվում կամ արգելափակված է";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "Կոճակները կամ հղումները չեն աշխատում";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Ենթագրերը բացակայում են";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "Պատկերները չեն բեռնվել";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Տարրերը սխալ են դասավորված";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "Նյութերը լիովին տեսանելի չեն";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Տարրերը համընկնում են";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "Մեդիա կառավարման տարրերը խափանված են կամ բացակայում են";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "Բացակայող իրեր";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoAudio.v154" = "Աուդիո չկա";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoVideo.v154" = "Տեսանյութ չկա";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PageNotLoading.v154" = "Էջը ճիշտ չի բեռնվում";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PlaybackFails.v154" = "Տեսանյութը կամ աուդիոն չեն նվագարկվում";
+

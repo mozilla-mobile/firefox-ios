@@ -19,7 +19,8 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
-        parentFolderSelector: ParentFolderSelector?
+        parentFolderSelector: ParentFolderSelector?,
+        groupedParentFolderSelector: GroupedParentFolderSelector?
     )
 
     @MainActor
@@ -35,12 +36,14 @@ extension BookmarksCoordinatorDelegate {
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
-        parentFolderSelector: ParentFolderSelector? = nil
+        parentFolderSelector: ParentFolderSelector? = nil,
+        groupedParentFolderSelector: GroupedParentFolderSelector? = nil
     ) {
         showBookmarkDetail(
             bookmarkType: bookmarkType,
             parentBookmarkFolder: parentBookmarkFolder,
-            parentFolderSelector: parentFolderSelector
+            parentFolderSelector: parentFolderSelector,
+            groupedParentFolderSelector: groupedParentFolderSelector
         )
     }
 }
@@ -105,11 +108,13 @@ class BookmarksCoordinator: BaseCoordinator,
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
-        parentFolderSelector: ParentFolderSelector? = nil
+        parentFolderSelector: ParentFolderSelector? = nil,
+        groupedParentFolderSelector: GroupedParentFolderSelector? = nil
     ) {
         let detailController = makeDetailController(for: bookmarkType,
                                                     parentFolder: parentBookmarkFolder,
-                                                    parentFolderSelector: parentFolderSelector)
+                                                    parentFolderSelector: parentFolderSelector,
+                                                    groupedParentFolderSelector: groupedParentFolderSelector)
         router.push(detailController)
     }
 
@@ -159,7 +164,8 @@ class BookmarksCoordinator: BaseCoordinator,
 
     private func makeDetailController(for type: BookmarkNodeType,
                                       parentFolder: FxBookmarkNode,
-                                      parentFolderSelector: ParentFolderSelector?) -> UIViewController {
+                                      parentFolderSelector: ParentFolderSelector?,
+                                      groupedParentFolderSelector: GroupedParentFolderSelector?) -> UIViewController {
         if type == .bookmark {
             return makeEditBookmarkController(for: nil, folder: parentFolder)
         }
@@ -167,7 +173,7 @@ class BookmarksCoordinator: BaseCoordinator,
             if featureFlagsProvider.isEnabled(.newBookmarkFolderTree) {
                 return makeGroupedEditFolderController(for: nil,
                                                        folder: parentFolder,
-                                                       parentFolderSelector: parentFolderSelector)
+                                                       parentFolderSelector: groupedParentFolderSelector)
             }
             return makeEditFolderController(for: nil, folder: parentFolder, parentFolderSelector: parentFolderSelector)
         }
@@ -231,7 +237,7 @@ class BookmarksCoordinator: BaseCoordinator,
 
     private func makeGroupedEditFolderController(for node: FxBookmarkNode?,
                                                  folder: FxBookmarkNode,
-                                                 parentFolderSelector: ParentFolderSelector?) -> UIViewController {
+                                                 parentFolderSelector: GroupedParentFolderSelector?) -> UIViewController {
         let viewModel = GroupedEditFolderViewModel(profile: profile,
                                                    parentFolder: folder,
                                                    folder: node)

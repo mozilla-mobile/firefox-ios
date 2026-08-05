@@ -10,12 +10,18 @@ import Shared
 protocol NativeErrorRegularContentViewDelegate: AnyObject {
     func regularContentViewDidTapReload()
     func regularContentViewDidTapSearchWayback()
+    func regularContentViewDidTapSearchWeb()
 }
 
 enum WaybackButtonState: Equatable {
     case idle
     case loading
-    case failed
+    case failed(Reason)
+
+    enum Reason: Equatable {
+        case networkError
+        case notFound
+    }
 }
 
 /// Encapsulates the "no internet / generic error" action area: a reload button,
@@ -60,10 +66,9 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         stackView.spacing = 6
     }
 
-    private lazy var waybackRetryButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(self.didTapWayback), for: .touchUpInside)
+    private lazy var waybackErrorButton: UIButton = .build { button in
         button.contentHorizontalAlignment = .leading
-        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackRetryButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackErrorButton
     }
 
     private lazy var waybackErrorContentStack: UIStackView = .build { stackView in
@@ -101,7 +106,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         waybackErrorMessageRow.addArrangedSubview(waybackErrorIcon)
         waybackErrorMessageRow.addArrangedSubview(waybackErrorLabel)
         waybackErrorContentStack.addArrangedSubview(waybackErrorMessageRow)
-        waybackErrorContentStack.addArrangedSubview(waybackRetryButton)
+        waybackErrorContentStack.addArrangedSubview(waybackErrorButton)
 
         waybackErrorCard.addSubview(waybackErrorContentStack)
         NSLayoutConstraint.activate([
@@ -162,10 +167,10 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
             waybackButton.isHidden = false
             waybackErrorCard.isHidden = true
             applyWaybackTitle(.NativeErrorPage.Wayback.CheckingLabel, enabled: false, showsSpinner: true)
-        case .failed:
+        case .failed(let reason):
             waybackButton.isHidden = true
             waybackErrorCard.isHidden = false
-            configureRetryButtonTitle()
+            configureWaybackErrorCard(reason: reason)
         }
     }
 
@@ -182,13 +187,23 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Wayback.WaybackButtonA11yHint : nil
     }
 
-    private func configureRetryButtonTitle() {
+    private func configureWaybackErrorCard(reason: WaybackButtonState.Reason) {
         let attributes: [NSAttributedString.Key: Any] = [
             .underlineStyle: NSUnderlineStyle.single.rawValue,
             .font: FXFontStyles.Regular.footnote.scaledFont()
         ]
-        let title = NSAttributedString(string: .NativeErrorPage.Wayback.RetryButton, attributes: attributes)
-        waybackRetryButton.setAttributedTitle(title, for: .normal)
+        switch reason {
+        case .notFound:
+            let title = NSAttributedString(string: .NativeErrorPage.Wayback.SearchButton, attributes: attributes)
+            waybackErrorButton.setAttributedTitle(title, for: .normal)
+            waybackErrorLabel.text = String.NativeErrorPage.Wayback.NotFoundLabel
+            waybackErrorButton.addTarget(self, action: #selector(self.didTapSearchWeb), for: .touchUpInside)
+        case .networkError:
+            let title = NSAttributedString(string: .NativeErrorPage.Wayback.RetryButton, attributes: attributes)
+            waybackErrorButton.setAttributedTitle(title, for: .normal)
+            waybackErrorLabel.text = String.NativeErrorPage.Wayback.CouldNotReachLabel
+            waybackErrorButton.addTarget(self, action: #selector(self.didTapWayback), for: .touchUpInside)
+        }
     }
 
     @objc
@@ -201,6 +216,11 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         delegate?.regularContentViewDidTapSearchWayback()
     }
 
+    @objc
+    private func didTapSearchWeb() {
+        delegate?.regularContentViewDidTapSearchWeb()
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         reloadButton.applyTheme(theme: theme)
@@ -208,6 +228,6 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         waybackErrorCard.backgroundColor = theme.colors.layerWarning
         waybackErrorLabel.textColor = theme.colors.textPrimary
         waybackErrorIcon.tintColor = theme.colors.actionWarning
-        waybackRetryButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        waybackErrorButton.setTitleColor(theme.colors.textPrimary, for: .normal)
     }
 }

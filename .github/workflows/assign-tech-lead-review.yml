@@ -49,18 +49,31 @@ jobs:
             exit 0
           fi
 
-          # Fetch currently requested reviewers so we don't stack multiple tech leads on the same PR
-          # (e.g. on `synchronize` re-runs) and don't re-request someone who is already reviewing.
-          current_reviewers=$(gh api \
+          # GitHub logins are case-insensitive but the API returns them in canonical casing
+          # (e.g. `OrlaM`), so normalize everything to lowercase before comparing.
+          reviewers_lc=$(printf '%s' "$REVIEWERS" | tr '[:upper:]' '[:lower:]')
+          author_lc=$(printf '%s' "$PR_AUTHOR" | tr '[:upper:]' '[:lower:]')
+
+          # Fetch reviewers already involved so we don't stack multiple tech leads on the same PR
+          # (e.g. on `synchronize` re-runs). Includes both still-pending review requests and anyone
+          # who already submitted a review (GitHub drops reviewers from `requested_reviewers` once
+          # they review, so we'd otherwise re-assign a fresh tech lead on the next push).
+          requested_reviewers=$(gh api \
             -H "Accept: application/vnd.github+json" \
             "/repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" \
-            --jq '.users[].login' | tr '\n' ' ')
+            --jq '.users[].login | ascii_downcase' | tr '\n' ' ')
+          past_reviewers=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/$GH_REPO/pulls/$NUMBER/reviews" \
+            --jq '.[].user.login | ascii_downcase' | sort -u | tr '\n' ' ')
+          involved_reviewers="$requested_reviewers $past_reviewers"
 
-          # If any tech lead is already a requested reviewer, skip assignment and just make sure the label is set.
-          for cur in $current_reviewers; do
-            for login in $REVIEWERS; do
+          # If any tech lead is already requested or has already reviewed, skip assignment
+          # and just make sure the label is set.
+          for cur in $involved_reviewers; do
+            for login in $reviewers_lc; do
               if [ "$login" = "$cur" ]; then
-                echo "Tech lead $cur is already requested for review; skipping assignment."
+                echo "Tech lead $cur is already involved in review; skipping assignment."
                 retry gh pr edit "$NUMBER" -R "$GH_REPO" --add-label "$LABEL_NAME"
                 exit 0
               fi
@@ -69,8 +82,8 @@ jobs:
 
           # Build the eligible list: not the PR author (GitHub 422s if you request the author as their own reviewer).
           eligible=()
-          for login in $REVIEWERS; do
-            [ "$login" = "$PR_AUTHOR" ] && continue
+          for login in $reviewers_lc; do
+            [ "$login" = "$author_lc" ] && continue
             eligible+=("$login")
           done
 

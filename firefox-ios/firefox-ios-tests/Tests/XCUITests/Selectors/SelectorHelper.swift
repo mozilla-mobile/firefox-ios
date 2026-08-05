@@ -8,6 +8,7 @@ enum SelectorStrategy {
     case buttonById(String)
     case staticTextById(String)
     case anyById(String)                 // button or label
+    case anyElementById(String)          // any element type, matched by identifier
     case staticTextLabelContains(String) // text that contains a fragment
     case predicate(NSPredicate)          // escape hatch
     case linkById(String)
@@ -62,6 +63,8 @@ extension Selector {
             let button = app.buttons[value]
             if button.exists { return button }
             return app.staticTexts[value]
+        case .anyElementById(let id):
+            return app.descendants(matching: .any).matching(identifier: id).firstMatch
         case .staticTextLabelContains:
             return app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", value)).element(boundBy: 0)
         case .predicate(let p):
@@ -114,6 +117,8 @@ extension Selector {
             // Return the .any with the identifier to use exists/firstMatch
             let pred = NSPredicate(format: "identifier == %@", value)
             return app.descendants(matching: .any).matching(pred)
+        case .anyElementById(let id):
+            return app.descendants(matching: .any).matching(identifier: id)
         case .staticTextLabelContains:
             let pred = NSPredicate(format: "label CONTAINS %@", value)
             return app.staticTexts.containing(pred)
@@ -168,6 +173,13 @@ extension Selector {
 
     static func linkByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
         let p = NSPredicate(format: "elementType == %d AND label == %@", XCUIElement.ElementType.link.rawValue, label)
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
+
+    /// Matches a `link` element whose label contains the fragment. The embedded onboarding links are
+    /// discrete link elements, so this targets the link glyphs (not the surrounding sentence text).
+    static func linkContainingLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label CONTAINS %@", XCUIElement.ElementType.link.rawValue, label)
         return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
     }
 }

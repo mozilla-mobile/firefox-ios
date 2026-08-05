@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "ᱮᱯ ᱪᱤᱱᱦᱟᱹ";
+
 /* (No Comment) */
 "New Private Tab" = "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵ";
 
@@ -5,7 +8,7 @@
 "New Tab" = "ᱱᱟᱶᱟ ᱴᱮᱵ";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
+"NSCameraUsageDescription" = "Firefox ᱟᱢᱟᱜ ᱠᱮᱢᱨᱟ QR ᱠᱳᱰ ᱥᱠᱮᱱ ᱞᱟᱹᱜᱤᱫ ᱟᱨ ᱵᱟᱝ ᱪᱤᱛᱟᱹᱨ ᱟᱨ ᱵᱷᱤᱰᱤᱭᱳ ᱦᱟᱛᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ ᱾";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "ᱟᱢᱟᱜ ᱥᱟᱧᱪᱟᱣ ᱨᱩᱠᱷᱭᱟᱹ ᱞᱳᱜᱤᱱ ᱨᱮ ᱵᱚᱞᱚᱱ ᱞᱟᱹᱜᱤᱱ Firefox ᱟᱢᱟᱜ ᱢᱮᱫᱦᱟᱸ ID ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟᱭ ᱾";

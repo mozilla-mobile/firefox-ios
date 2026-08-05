@@ -28,14 +28,14 @@ final class GroupedEditFolderViewModelTests: XCTestCase {
     var folderFetcher: MockGroupedFolderHierarchyFetcher!
     var bookmarksSaver: MockBookmarksSaver!
     var profile: MockProfile!
-    var parentFolderSelector: MockParentFolderSelector!
+    var parentFolderSelector: MockGroupedParentFolderSelector!
 
     override func setUp() async throws {
         try await super.setUp()
         folderFetcher = MockGroupedFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
         profile = MockProfile()
-        parentFolderSelector = MockParentFolderSelector()
+        parentFolderSelector = MockGroupedParentFolderSelector()
     }
 
     override func tearDown() async throws {

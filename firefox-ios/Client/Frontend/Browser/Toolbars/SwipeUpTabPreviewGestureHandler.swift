@@ -177,7 +177,6 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
         guard let tab = tabManager?.selectedTab else { return }
         switch gesture.state {
         case .began:
-            toolbarTelemetry.interactiveSwipeUpStarted()
             let screenshotBounds = CGRect(origin: .zero,
                                           size: CGSize(
                                             width: tabPreview.bounds.width,
@@ -203,7 +202,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             let translation = gesture.translation(in: gesture.view)
             let fingerLocation = gesture.location(in: tabPreview)
             tabPreview.translate(translation, fingerLocation: fingerLocation)
-        case .ended:
+        case .ended, .cancelled:
             handleGestureEnded(gesture: gesture)
         default:
             break
@@ -217,7 +216,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
         case .closeTab:
             // Lock the pan gesture until the close animation finishes so a new gesture can't
             // start mid-animation.
-            toolbarTelemetry.tabClosedViaInteractiveSwipe()
+            toolbarTelemetry.addressBarDragged(outcome: ToolbarTelemetry.PanGestureOutcomes.tabClosed)
             disablePanGestureRecognizerForAnimation()
             UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
                 tabPreview.tossPreview()
@@ -244,7 +243,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) {
                 self.tabPreview.dismissForTabTray()
             }
-            toolbarTelemetry.tabTrayOpenedViaInteractiveSwipe()
+            toolbarTelemetry.addressBarDragged(outcome: ToolbarTelemetry.PanGestureOutcomes.tabTrayOpened)
             store.dispatch(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
@@ -252,7 +251,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
                 )
             )
         case .cancel:
-            toolbarTelemetry.interactiveSwipeCancelled()
+            toolbarTelemetry.addressBarDragged(outcome: ToolbarTelemetry.PanGestureOutcomes.cancelled)
             tabPreview.restore()
         }
     }

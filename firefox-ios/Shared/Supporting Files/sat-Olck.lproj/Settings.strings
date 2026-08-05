@@ -67,6 +67,24 @@
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "ᱜᱚᱱᱚᱝ ᱦᱚᱨᱟᱠᱚ";
 
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "ᱱᱚᱶᱟ ᱟᱞᱮ ᱵᱽᱨᱟᱣᱩᱡᱚᱨ ᱨᱮᱱᱟᱜ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱧᱮᱞ ᱟᱨ ᱥᱟᱹᱛ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱮᱢᱟ ᱞᱮᱭᱟ ᱾";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "ᱟᱡ ᱛᱮ ᱰᱤᱜᱟᱹᱣ ᱠᱷᱚᱵᱚᱨ ᱵᱷᱮᱡᱟᱭᱟ";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
+"Settings.DailyUsagePing.Message.v135" = "ᱱᱚᱣᱟ ᱫᱚ %@ ᱮᱠᱴᱤᱵᱷ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱠᱚ ᱟᱱᱩᱢᱟᱱ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱮᱢᱟ ᱠᱚᱣᱟᱭ ᱾";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "ᱫᱤᱱᱟᱹᱢ ᱵᱮᱵᱷᱟᱨ ping";
+
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "ᱠᱷᱟᱛᱟ";
 

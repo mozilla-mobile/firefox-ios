@@ -97,4 +97,8 @@ extension Notification.Name {
     public static let DefaultSearchEngineUpdated = Notification.Name("DefaultSearchEngineUpdated")
     public static let SearchSettingsDidUpdateDefaultSearchEngine =
     Notification.Name("SearchSettingsDidUpdateDefaultSearchEngine")
+
+    // MARK: Remote Settings
+
+    public static let remoteSettingsDidSync = Notification.Name("remoteSettingsDidSync")
 }

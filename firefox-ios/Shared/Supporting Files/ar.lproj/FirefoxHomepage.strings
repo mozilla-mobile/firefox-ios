@@ -19,9 +19,6 @@
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "لا تترك أي آثار على هذا الجهاز";
 
-/* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
-"FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "إعادة تحميل الصفحة";
-
 /* This is the navigation title for the Shortcuts Library view */
 "FirefoxHomepage.Shortcuts.Library.Title.v143" = "الاختصارات";
 

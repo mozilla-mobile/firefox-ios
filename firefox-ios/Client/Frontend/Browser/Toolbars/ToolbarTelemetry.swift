@@ -11,6 +11,12 @@ struct ToolbarTelemetry {
         case camera
     }
 
+    enum PanGestureOutcomes: String {
+        case tabTrayOpened
+        case tabClosed
+        case cancelled
+    }
+
     private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
@@ -115,25 +121,13 @@ struct ToolbarTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayLongPress, extras: isPrivateExtra)
     }
 
-    func tabTrayOpenedViaSwipe(isAtBottom: Bool) {
-        let isAtBottomExtra = GleanMetrics.Toolbar.TabTrayOpenedViaSwipeExtra(isAtBottom: isAtBottom)
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayOpenedViaSwipe, extras: isAtBottomExtra)
+    func addressBarSwiped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.ToolbarAddressBar.swiped)
     }
 
-    func interactiveSwipeUpStarted() {
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.interactiveSwipeUpStarted)
-    }
-
-    func tabTrayOpenedViaInteractiveSwipe() {
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabTrayOpenedViaInteractiveSwipe)
-    }
-
-    func tabClosedViaInteractiveSwipe() {
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.tabClosedViaInteractiveSwipe)
-    }
-
-    func interactiveSwipeCancelled() {
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.interactiveSwipeCancelled)
+    func addressBarDragged(outcome: PanGestureOutcomes) {
+        let outcome = GleanMetrics.ToolbarAddressBar.DraggedExtra(outcome: outcome.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.ToolbarAddressBar.dragged, extras: outcome)
     }
 
     // Other

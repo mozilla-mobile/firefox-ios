@@ -296,6 +296,14 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(mockRouter.presentedViewController is UINavigationController)
     }
 
+    func testShowTrackerBlockerSheet_presentsTrackerBlockerSheet() {
+        let subject = createSubject()
+        subject.showTrackerBlockerSheet()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is TrackerBlockerSheetViewController)
+    }
+
     func testStartShareSheetCoordinator_addsShareSheetCoordinator() {
         let subject = createSubject()
 

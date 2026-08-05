@@ -52,3 +52,24 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "인터넷 연결에 문제가 있는 것 같습니다.";
 
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v154" = "페이지 확인 중…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v154" = "Wayback Machine에 연결할 수 없음";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "서버가 바쁘거나 사용할 수 없습니다. 나중에 다시 시도하세요. 다른 페이지가 로딩되지 않는다면 Wi-Fi 혹은 데이터 연결을 확인해 보세요. %@는 Wayback Machine에서 이 페이지의 이전 버전을 검색할 수도 있습니다.";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "다시 시도";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.Search.v154" = "이전 버전 확인";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "연결할 수 없음";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Wayback Machine에서 이 페이지의 아카이브된 버전을 검색합니다.";
+

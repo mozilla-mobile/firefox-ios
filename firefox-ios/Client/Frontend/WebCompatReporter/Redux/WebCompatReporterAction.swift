@@ -63,4 +63,5 @@ enum WebCompatReporterViewActionType: ActionType {
 
 enum WebCompatReporterMiddlewareActionType: ActionType {
     case didLoadInitialDraft
+    case didSubmit
 }

@@ -60,8 +60,11 @@ extension ContentBlocker {
     private func updateSafelist(completion: (() -> Void)?) {
         removeAllRulesInStore {
             self.compileListsNotInStore {
-                completion?()
-                NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
+                Task {
+                    await self.reloadAdBlockerList()
+                    completion?()
+                    NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
+                }
             }
         }
 

@@ -28,7 +28,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
     private let backgroundView: UIVisualEffectView = .build {
-        if #available(iOS 26, *) {
+        if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             $0.effect = UIGlassEffect(style: .regular)
         } else {
             $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)

@@ -146,6 +146,9 @@ shavar-*
 # Licenses.html generation
 LicensePlistTemp
 
+# Pinned developer tools installed by scripts/install-swiftlint.sh
+.tools/
+
 # Claude Code
 .claude/settings.local.json
 .mcp.json

@@ -74,9 +74,6 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Blocat";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Blocat**: No veureu la funció ni la podreu utilitzar. Per a la IA en el dispositiu, s’eliminaran tots els models baixats.";
-
-/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blocat**: No veureu la funció ni la podreu utilitzar. Per a la IA en el dispositiu, s’eliminaran tots els models baixats.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
@@ -345,12 +342,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Gestos";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Trieu una llengua";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "Llengua preferida de l’aplicació";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "Llengua";

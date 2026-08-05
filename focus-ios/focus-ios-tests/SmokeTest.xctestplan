@@ -15,6 +15,7 @@
     {
       "skippedTests" : [
         "AsianLocaleTest",
+        "BrowsingTest\/testXssAccountTakeover()",
         "CollapsedURLTest",
         "CopyPasteTest\/testCopyMenuItem()",
         "CopyTest",

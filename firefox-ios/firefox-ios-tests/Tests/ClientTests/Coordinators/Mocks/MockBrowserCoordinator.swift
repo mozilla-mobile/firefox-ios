@@ -24,6 +24,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showLibraryCalled = 0
     var showHomepanelSectionCalled = 0
     var showEnhancedTrackingProtectionCalled = 0
+    var showTrackerBlockerSheetCalled = 0
     var showShareSheetCalled = 0
     var showTabTrayCalled = 0
     var showQrCodeCalled = 0
@@ -106,6 +107,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showEnhancedTrackingProtectionCalled += 1
+    }
+
+    func showTrackerBlockerSheet() {
+        showTrackerBlockerSheetCalled += 1
     }
 
     func showTabTray(selectedPanel: TabTrayPanelType) {

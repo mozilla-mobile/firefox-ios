@@ -3,10 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ModifiedCopy
 import Redux
 import ToolbarKit
 import SummarizeKit
 
+@Copyable
 struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
     var navigationActions: [ToolbarActionConfiguration]
@@ -27,11 +29,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
     var isLoading: Bool
     let readerModeState: ReaderModeState?
     let canSummarize: Bool
+    let translationConfiguration: TranslationConfiguration?
     let didStartTyping: Bool
     let isEmptySearch: Bool
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
-    let translationConfiguration: TranslationConfiguration?
 
     private static let cancelEditAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
@@ -266,61 +268,36 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return defaultState(from: state)
         }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: [ToolbarActionConfiguration](),
-            leadingPageActions: [ToolbarActionConfiguration](),
-            trailingPageActions: [ToolbarActionConfiguration](),
-            browserActions: [ToolbarActionConfiguration](),
-            editingAccessoryAction: nil,
-            borderPosition: borderPosition,
-            url: nil,
-            searchTerm: nil,
-            lockIconButtonA11yId: nil,
-            lockIconImageName: nil,
-            lockIconNeedsTheming: true,
-            safeListedURLImageName: nil,
-            isEditing: false,
-            shouldShowKeyboard: false,
-            shouldSelectSearchTerm: false,
-            isLoading: false,
-            readerModeState: nil,
-            canSummarize: false,
-            translationConfiguration: nil,
-            didStartTyping: false,
-            isEmptySearch: true,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(navigationActions: [])
+            .copy(leadingPageActions: [])
+            .copy(trailingPageActions: [])
+            .copy(browserActions: [])
+            .copy(editingAccessoryAction: nil)
+            .copy(borderPosition: borderPosition)
+            .copy(url: nil)
+            .copy(searchTerm: nil)
+            .copy(lockIconButtonA11yId: nil)
+            .copy(lockIconImageName: nil)
+            .copy(lockIconNeedsTheming: true)
+            .copy(safeListedURLImageName: nil)
+            .copy(isEditing: false)
+            .copy(shouldShowKeyboard: false)
+            .copy(shouldSelectSearchTerm: false)
+            .copy(isLoading: false)
+            .copy(readerModeState: nil)
+            .copy(canSummarize: false)
+            .copy(translationConfiguration: nil)
+            .copy(didStartTyping: false)
+            .copy(isEmptySearch: true)
     }
 
     @MainActor
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+        return state.copy(
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing)
         )
     }
 
@@ -328,30 +305,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleDidSetTabScreenshotAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+        return state.copy(
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing)
         )
     }
 
@@ -361,33 +316,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return defaultState(from: state)
         }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: leadingPageActions(action: translationsAction,
-                                                   addressBarState: state,
-                                                   isEditing: state.isEditing),
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: translationsAction.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(leadingPageActions: leadingPageActions(action: translationsAction,
+                                                         addressBarState: state,
+                                                         isEditing: state.isEditing))
+            .copy(translationConfiguration: translationsAction.translationConfiguration)
     }
 
     @MainActor
@@ -400,31 +333,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                       addressBarState: state,
                                                       isEditing: state.isEditing,
                                                       isEmptySearch: state.isEmptySearch)
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: toolbarAction.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(trailingPageActions: trailingPageActions)
+            .copy(canSummarize: toolbarAction.canSummarize)
     }
 
     @MainActor
@@ -436,68 +347,28 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                       addressBarState: state,
                                                       isEditing: state.isEditing,
                                                       isEmptySearch: state.isEmptySearch)
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: toolbarAction.readerModeState,
-            canSummarize: toolbarAction.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(trailingPageActions: trailingPageActions)
+            .copy(lockIconImageName: lockIconImageName)
+            .copy(readerModeState: toolbarAction.readerModeState)
+            .copy(canSummarize: toolbarAction.canSummarize)
     }
 
     @MainActor
     private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction,
-                                                 addressBarState: state,
-                                                 isEditing: state.isEditing),
-            leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                   addressBarState: state,
-                                                   isEditing: state.isEditing),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: toolbarAction.isLoading ?? state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction,
+                                                       addressBarState: state,
+                                                       isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                         addressBarState: state,
+                                                         isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: state.isEditing))
+            .copy(isLoading: toolbarAction.isLoading ?? state.isLoading)
     }
 
     @MainActor
@@ -506,41 +377,31 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let isEmptySearch = toolbarAction.url == nil
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction,
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction,
+                                                       addressBarState: state,
+                                                       isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                         addressBarState: state,
+                                                         isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: state.isEditing,
+                                                           isEmptySearch: isEmptySearch))
+            .copy(browserActions: browserActions(action: toolbarAction,
                                                  addressBarState: state,
-                                                 isEditing: state.isEditing),
-            leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                   addressBarState: state,
-                                                   isEditing: state.isEditing),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing,
-                                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: toolbarAction.url,
-            searchTerm: nil,
-            lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId,
-            lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
-            lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
-            safeListedURLImageName: toolbarAction.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: resolveTranslationConfig(
+                                                 isEditing: state.isEditing))
+            .copy(url: toolbarAction.url)
+            .copy(searchTerm: nil)
+            .copy(lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId)
+            .copy(lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName)
+            .copy(lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming)
+            .copy(safeListedURLImageName: toolbarAction.safeListedURLImageName)
+            .copy(translationConfiguration: resolveTranslationConfig(
                 from: toolbarAction,
                 existingConfig: state.translationConfiguration
-            ),
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+            ))
+            .copy(isEmptySearch: isEmptySearch)
     }
 
     private static func resolveTranslationConfig(
@@ -557,179 +418,85 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleLockIconChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId,
-            lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
-            lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId)
+            .copy(lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName)
+            .copy(lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming)
     }
 
     @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction,
-                                                 addressBarState: state,
-                                                 isEditing: state.isEditing),
-            leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                   addressBarState: state,
-                                                   isEditing: state.isEditing),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: nil,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction,
+                                                       addressBarState: state,
+                                                       isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                         addressBarState: state,
+                                                         isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: state.isEditing))
+            .copy(searchTerm: nil)
     }
 
     @MainActor
     private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction,
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction,
+                                                       addressBarState: state,
+                                                       isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                         addressBarState: state,
+                                                         isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: state.isEditing))
+            .copy(browserActions: browserActions(action: toolbarAction,
                                                  addressBarState: state,
-                                                 isEditing: state.isEditing),
-            leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                   addressBarState: state,
-                                                   isEditing: state.isEditing),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+                                                 isEditing: state.isEditing))
     }
 
     @MainActor
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction,
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction,
+                                                       addressBarState: state,
+                                                       isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                         addressBarState: state,
+                                                         isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: state.isEditing))
+            .copy(browserActions: browserActions(action: toolbarAction,
                                                  addressBarState: state,
-                                                 isEditing: state.isEditing),
-            leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                   addressBarState: state,
-                                                   isEditing: state.isEditing),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+                                                 isEditing: state.isEditing))
     }
 
     @MainActor
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction,
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction,
+                                                       addressBarState: state,
+                                                       isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                         addressBarState: state,
+                                                         isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: state.isEditing))
+            .copy(browserActions: browserActions(action: toolbarAction,
                                                  addressBarState: state,
-                                                 isEditing: state.isEditing),
-            leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                   addressBarState: state,
-                                                   isEditing: state.isEditing),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: toolbarAction.addressBorderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+                                                 isEditing: state.isEditing))
+            .copy(borderPosition: toolbarAction.addressBorderPosition)
     }
 
     @MainActor
@@ -738,34 +505,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: true,
-                                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: toolbarAction.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: true,
-            shouldShowKeyboard: true,
-            shouldSelectSearchTerm: false,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: false,
-            isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: true,
+                                                           isEmptySearch: isEmptySearch))
+            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(searchTerm: toolbarAction.searchTerm)
+            .copy(isEditing: true)
+            .copy(shouldShowKeyboard: true)
+            .copy(shouldSelectSearchTerm: false)
+            .copy(didStartTyping: false)
+            .copy(isEmptySearch: isEmptySearch)
     }
 
     @MainActor
@@ -776,34 +529,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let locationText = searchTerm ?? state.url?.absoluteString
         let isEmptySearch = locationText == nil || locationText?.isEmpty == true
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: true,
-                                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: true,
-            shouldShowKeyboard: true,
-            shouldSelectSearchTerm: true,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: false,
-            isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: true,
+                                                           isEmptySearch: isEmptySearch))
+            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(searchTerm: searchTerm)
+            .copy(isEditing: true)
+            .copy(shouldShowKeyboard: true)
+            .copy(shouldSelectSearchTerm: true)
+            .copy(didStartTyping: false)
+            .copy(isEmptySearch: isEmptySearch)
     }
 
     @MainActor
@@ -822,34 +561,21 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let url = toolbarAction.url ?? state.url
         let isEmptySearch = url == nil
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: false,
-                                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: false),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: url,
-            searchTerm: nil,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: false,
-            shouldShowKeyboard: false,
-            shouldSelectSearchTerm: false,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: false,
-            isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: false,
+                                                           isEmptySearch: isEmptySearch))
+            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: false))
+            .copy(url: url)
+            .copy(searchTerm: nil)
+            .copy(isEditing: false)
+            .copy(shouldShowKeyboard: false)
+            .copy(shouldSelectSearchTerm: false)
+            .copy(didStartTyping: false)
+            .copy(isEmptySearch: isEmptySearch)
     }
 
     @MainActor
@@ -858,34 +584,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: true,
-                                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: toolbarAction.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: true,
-            shouldShowKeyboard: true,
-            shouldSelectSearchTerm: false,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: false,
-            isEmptySearch: isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: true,
+                                                           isEmptySearch: isEmptySearch))
+            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(searchTerm: toolbarAction.searchTerm)
+            .copy(isEditing: true)
+            .copy(shouldShowKeyboard: true)
+            .copy(shouldSelectSearchTerm: false)
+            .copy(didStartTyping: false)
+            .copy(isEmptySearch: isEmptySearch)
     }
 
     /// This case can occur when scrolling on homepage or in search view
@@ -894,193 +606,67 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleShouldShowKeyboardAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: toolbarAction.shouldShowKeyboard ?? false,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state.copy(shouldShowKeyboard: toolbarAction.shouldShowKeyboard ?? false)
     }
 
     @MainActor
     private static func handleClearSearchAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: true,
-                                                     isEmptySearch: true),
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: nil,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: true,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: true,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: true,
+                                                           isEmptySearch: true))
+            .copy(searchTerm: nil)
+            .copy(isEditing: true)
+            .copy(isEmptySearch: true)
     }
 
     @MainActor
     private static func handleDidDeleteSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: true,
-                                                     isEmptySearch: true),
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: true,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: false,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: true,
-            isEmptySearch: true,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: true,
+                                                           isEmptySearch: true))
+            .copy(isEditing: true)
+            .copy(shouldSelectSearchTerm: false)
+            .copy(didStartTyping: true)
+            .copy(isEmptySearch: true)
     }
 
     @MainActor
     private static func handleDidEnterSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: true,
-                                                     isEmptySearch: false),
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: true,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: false,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: true,
-            isEmptySearch: false,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                           addressBarState: state,
+                                                           isEditing: true,
+                                                           isEmptySearch: false))
+            .copy(isEditing: true)
+            .copy(shouldSelectSearchTerm: false)
+            .copy(didStartTyping: true)
+            .copy(isEmptySearch: false)
     }
 
     private static func handleDidSetSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: toolbarAction.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: false,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(searchTerm: toolbarAction.searchTerm)
+            .copy(didStartTyping: false)
     }
 
     private static func handleDidStartTypingAction(state: Self, action: Action) -> Self {
         guard action is ToolbarAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: false,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: true,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state
+            .copy(shouldSelectSearchTerm: false)
+            .copy(didStartTyping: true)
     }
 
     private static func handleDidTapSearchEngine(state: Self, action: Action) -> Self {
@@ -1088,61 +674,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
               let selectedSearchEngine = searchEngineSelectionAction.selectedSearchEngine
         else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: selectedSearchEngine
-        )
+        return state.copy(alternativeSearchEngine: selectedSearchEngine)
     }
 
     private static func handleDidClearAlternativeSearchEngine(state: Self, action: Action) -> Self {
         guard action is SearchEngineSelectionAction else { return defaultState(from: state) }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: state.editingAccessoryAction,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: nil
-        )
+        return state.copy(alternativeSearchEngine: nil)
     }
 
     private static func handleGoogleLensAvailabilityDidChange(state: Self, action: Action) -> Self {
@@ -1151,31 +689,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return defaultState(from: state)
         }
 
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            editingAccessoryAction: editingAccessoryAction(isGoogleLensEnabled: isGoogleLensEnabled),
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
+        return state.copy(editingAccessoryAction: editingAccessoryAction(isGoogleLensEnabled: isGoogleLensEnabled))
     }
 
     static func defaultState(from state: AddressBarState) -> Self {
@@ -1545,7 +1059,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func shareAction(enabled: Bool, hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .share,
-            iconName: StandardImageIdentifiers.Medium.share,
+            iconName: StandardImageIdentifiers.Medium.shareApple,
             isEnabled: enabled,
             hasCustomColor: !hasAlternativeLocationColor,
             a11yLabel: .TabLocationShareAccessibilityLabel,
@@ -1602,10 +1116,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                        hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .readerModeWithSummarizer,
-            iconName: StandardImageIdentifiers.Medium.readerView,
-            bottomBadgeImage: UIImage(
-                named: StandardImageIdentifiers.Large.lightningFill
-            )?.withRenderingMode(.alwaysTemplate),
+            iconName: StandardImageIdentifiers.Medium.readerSummarize,
             isEnabled: true,
             isSelected: isSelected,
             hasCustomColor: !hasAlternativeLocationColor,

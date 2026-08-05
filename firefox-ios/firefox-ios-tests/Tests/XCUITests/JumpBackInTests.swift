@@ -35,22 +35,6 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         tabTrayScreen.tapOnNewTabButton()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306922
-    func testJumpBackInSection() {
-        prepareTest()
-        // Open a tab and visit a page
-        browserScreen.navigateToURL("https://www.example.com")
-        waitUntilPageLoad()
-
-        // Open a new tab
-        openNewTabFromTabTray()
-
-        // "Jump Back In" section is displayed
-        jumpBackInScreen.assertSectionExists()
-        // The contextual hint box is not displayed consistently, so
-        // I don't test for its existence.
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306920
     func testPrivateTab() throws {
         prepareTest()

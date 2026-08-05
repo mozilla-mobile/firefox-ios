@@ -1,0 +1,102 @@
+/* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "Uw rapport helpt ons problemen in %1$@ te begrijpen en op te lossen, om het voor iedereen te verbeteren. %2$@";
+
+/* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "Lijst met door bescherming tegen volgen geblokkeerde items verzenden";
+
+/* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Automatisch een schermafbeelding bijvoegen om het probleem te tonen";
+
+/* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Meer info";
+
+/* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.Title.v154" = "Aanvullende informatie";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "Ontwerp is defect";
+
+/* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
+"WebCompatReporter.Category.Other.v154" = "Overig";
+
+/* Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form. */
+"WebCompatReporter.Category.SiteNotUsable.v154" = "Website is niet bruikbaar";
+
+/* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
+"WebCompatReporter.Category.VideoOrAudio.v154" = "Video of audio wordt niet afgespeeld";
+
+/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Beschrijf het probleem in detail";
+
+/* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Beschrijf het probleem in detail (optioneel)";
+
+/* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLLabel.v154" = "URL";
+
+/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLPlaceholder.v154" = "URL";
+
+/* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "Kies probleemtype…";
+
+/* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.Title.v154" = "Websiteprobleem";
+
+/* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Schermafbeelding van de pagina die u rapporteert. Dubbeltik voor weergave in volledig scherm.";
+
+/* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Sluiten";
+
+/* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
+"WebCompatReporter.Preview.Title.v154" = "Rapportvoorbeeld";
+
+/* Title of the button that submits the website issue report, in the Report a Website Issue form. */
+"WebCompatReporter.SendButton.Title.v154" = "Rapport verzenden";
+
+/* Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report. */
+"WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154" = "Sluiten";
+
+/* Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form. */
+"WebCompatReporter.Sheet.PreviewButton.v154" = "Voorbeeld";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.BrowserBlocked.v154" = "Browser wordt niet ondersteund of geblokkeerd";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "Knoppen of koppelingen werken niet";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Ondertitels ontbreken";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "Afbeeldingen niet geladen";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Items zijn niet goed uitgelijnd";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "Items niet volledig zichtbaar";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Items overlappen elkaar";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "Mediabediening werkt niet of ontbreekt";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "Ontbrekende items";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoAudio.v154" = "Er is geen audio";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoVideo.v154" = "Er is geen video";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PageNotLoading.v154" = "Pagina wordt niet correct geladen";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PlaybackFails.v154" = "De video of audio wordt niet afgespeeld";
+

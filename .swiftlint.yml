@@ -159,6 +159,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - MozillaRustComponents/
   - LocalizationTools
   - firefoxios-l10n
+  # Local git worktrees checked out alongside the repo, not part of the tracked source tree
+  - .claude/worktrees
 
 included:
   - /Users/vagrant/git

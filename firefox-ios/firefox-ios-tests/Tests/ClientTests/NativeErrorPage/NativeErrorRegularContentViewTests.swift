@@ -37,10 +37,18 @@ final class NativeErrorRegularContentViewTests: XCTestCase {
         XCTAssertFalse(subject.waybackButton.isEnabled)
     }
 
-    func test_configureWaybackButton_failedState_hidesButtonShowsCard() {
+    func test_configureWaybackButton_failedNotFoundState_hidesButtonShowsCard() {
         let subject = createSubject()
         subject.configure(showWaybackButton: true)
-        subject.configureWaybackButton(state: .failed)
+        subject.configureWaybackButton(state: .failed(.notFound))
+        XCTAssertTrue(subject.waybackButton.isHidden)
+        XCTAssertFalse(subject.waybackErrorCard.isHidden)
+    }
+
+    func test_configureWaybackButton_failedNetworkErrorState_hidesButtonShowsCard() {
+        let subject = createSubject()
+        subject.configure(showWaybackButton: true)
+        subject.configureWaybackButton(state: .failed(.networkError))
         XCTAssertTrue(subject.waybackButton.isHidden)
         XCTAssertFalse(subject.waybackErrorCard.isHidden)
     }

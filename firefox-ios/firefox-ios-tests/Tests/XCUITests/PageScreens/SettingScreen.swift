@@ -204,6 +204,11 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
+    func assertAppearanceScreenIsShown() {
+        let navBar = sel.APPEARANCE_NAVIGATION_BAR.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(navBar)
+    }
+
     func assertAutomaticThemeSelected(_ selected: Bool = true) {
         let button = sel.AUTOMATIC_THEME_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(button)

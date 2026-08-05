@@ -138,6 +138,7 @@ struct AccessibilityIdentifiers {
         static let urlField = "WebCompatReporter.URLField"
         static let categoryMenu = "WebCompatReporter.CategoryMenu"
         static let subOption = "WebCompatReporter.SubOption"
+        static let additionalDetails = "WebCompatReporter.AdditionalDetails"
         static let sendButton = "WebCompatReporter.SendButton"
         static let includeScreenshot = "WebCompatReporter.IncludeScreenshot"
         static let includeBlockedList = "WebCompatReporter.IncludeBlockedList"
@@ -317,6 +318,7 @@ struct AccessibilityIdentifiers {
         }
 
         struct TrackerBlockerModule {
+            static let containerPill = "TrackerBlockerModule.containerPill"
             static let shieldIcon = "TrackerBlockerModule.shieldIcon"
             static let titleLabel = "TrackerBlockerModule.titleLabel"
         }
@@ -784,6 +786,8 @@ struct AccessibilityIdentifiers {
             static let blockPopUps = "blockPopups"
             static let autoPlay = "AutoplaySettings"
             static let blockImages = "NoImageModeStatus"
+            static let adBlockerTitle = "AdBlocker"
+            static let adBlockerLearnMore = "AdBlockerLearnMore"
         }
 
         struct Summarize {
@@ -947,7 +951,7 @@ struct AccessibilityIdentifiers {
         static let waybackButton = "NativeErrorPage.waybackButton"
         static let waybackErrorCard = "NativeErrorPage.waybackErrorCard"
         static let waybackErrorLabel = "NativeErrorPage.waybackErrorLabel"
-        static let waybackRetryButton = "NativeErrorPage.waybackRetryButton"
+        static let waybackErrorButton = "NativeErrorPage.waybackRetryButton"
         static let goBackButton = "NativeErrorPage.goBackButton"
         static let proceedButton = "NativeErrorPage.proceedButton"
         static let advancedSectionHeader = "NativeErrorPage.advancedSectionHeader"

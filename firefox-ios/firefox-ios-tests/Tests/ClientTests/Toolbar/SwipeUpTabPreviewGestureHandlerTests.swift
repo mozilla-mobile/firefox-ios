@@ -172,7 +172,8 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         subject.handlePanGestureForTesting(gesture)
 
         XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
-        assertRecordedEvent(GleanMetrics.Toolbar.interactiveSwipeUpStarted)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
     }
 
     func testHandlePanGesture_whenChanged_doesNotDispatch() {
@@ -200,7 +201,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         subject.handlePanGestureForTesting(gesture)
 
         XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
-        assertRecordedEvent(GleanMetrics.Toolbar.interactiveSwipeCancelled)
+        assertRecordedEvent(outcome: .cancelled)
     }
 
     func testHandlePanGesture_whenEndedInMiddle_dispatchesShowTabTray() {
@@ -215,7 +216,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
 
         let action = mockStore.dispatchedActions.first { $0 is GeneralBrowserAction } as? GeneralBrowserAction
         XCTAssertEqual(action?.actionType as? GeneralBrowserActionType, .showTabTray)
-        assertRecordedEvent(GleanMetrics.Toolbar.tabTrayOpenedViaInteractiveSwipe)
+        assertRecordedEvent(outcome: .tabTrayOpened)
 
         // The open tab tray path schedules a delayed dismiss that captures self,
         // do this so the memory leak check doesn't yell at me
@@ -236,7 +237,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         subject.handlePanGestureForTesting(gesture)
 
         XCTAssertLessThan(tabPreview.previewCardFrame.midY, previewFrame.midY)
-        assertRecordedEvent(GleanMetrics.Toolbar.tabClosedViaInteractiveSwipe)
+        assertRecordedEvent(outcome: .tabClosed)
     }
 
     // MARK: - handleSwipeGesture
@@ -274,15 +275,19 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         return subject
     }
 
-    private func assertRecordedEvent(_ event: EventMetricType<NoExtras>,
+    private func assertRecordedEvent(outcome: ToolbarTelemetry.PanGestureOutcomes,
                                      file: StaticString = #filePath,
                                      line: UInt = #line) {
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1, file: file, line: line)
-        let savedMetric = mockGleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1, file: file, line: line)
+        let event = GleanMetrics.ToolbarAddressBar.dragged
+        let savedMetric = mockGleanWrapper.savedEvents.last
+            as? EventMetricType<GleanMetrics.ToolbarAddressBar.DraggedExtra>
         XCTAssert(savedMetric === event,
                   "Received \(String(describing: savedMetric)) instead of \(event)",
                   file: file,
                   line: line)
+        let savedExtras = mockGleanWrapper.savedExtras.last as? GleanMetrics.ToolbarAddressBar.DraggedExtra
+        XCTAssertEqual(savedExtras?.outcome, outcome.rawValue, file: file, line: line)
     }
 
     /// Spins the run loop long enough for the open-tab-tray dismiss delay (0.4s) to fire,

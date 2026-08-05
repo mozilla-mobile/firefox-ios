@@ -74,9 +74,6 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Wedi'i Rwystro";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "** Wedi'ch rhwystro **: fyddwch chi ddim yn gweld ac na gallu defnyddio'r nodwedd. Ar gyfer AI ar y ddyfais, bydd unrhyw fodelau wedi'u llwytho i lawr yn cael eu dileu.";
-
-/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Wedi'u Rhwystro**: Fyddwch chi ddim yn gweld nac yn gallu defnyddio'r nodwedd. Pan fydd AI ar y ddyfais, mae unrhyw fodelau sydd eisoes wedi'u llwytho i lawr yn cael eu dileu.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
@@ -345,12 +342,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Ystumiau";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Dewiswch iaith";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "Dewis Iaith Ap";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "Iaith";

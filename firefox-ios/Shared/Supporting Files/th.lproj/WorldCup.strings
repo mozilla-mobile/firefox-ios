@@ -31,9 +31,6 @@
 /* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
 "WorldCup.CountryPicker.Country.Scotland.v151" = "สกอตแลนด์";
 
-/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.DoneButtonTitle.v151" = "เสร็จสิ้น";
-
 /* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
 "WorldCup.CountryPicker.SkipButton.Title.v151" = "ข้าม";
 
@@ -183,9 +180,6 @@
 
 /* The label for the 'Final' match in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "รอบชิงชนะเลิศ";
-
-/* The label indicating the displaying match has ended after penalties. */
-"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "หมดเวลา • ยิงจุดโทษ";
 
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "รอบก่อนรองชนะเลิศ";

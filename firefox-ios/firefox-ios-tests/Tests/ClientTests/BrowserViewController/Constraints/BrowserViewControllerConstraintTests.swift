@@ -83,22 +83,21 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
     func test_header_hasHorizontalConstraint_TopToolbar() {
         let subject = createSubject(isBottomSearchBar: false)
 
-        // Header view uses .left and .right instead of .leading and .trailing
-        let hasLeft = hasConstraint(for: subject.header,
-                                    attribute: .left,
-                                    relatedTo: subject.view)
+        let hasLeading = hasConstraint(for: subject.header,
+                                       attribute: .leading,
+                                       relatedTo: subject.view)
 
-        let hasRight = hasConstraint(for: subject.header,
-                                     attribute: .right,
-                                     relatedTo: subject.view)
+        let hasTrailing = hasConstraint(for: subject.header,
+                                        attribute: .trailing,
+                                        relatedTo: subject.view)
         let hasTop = subject.header.constraints.contains { $0.firstAttribute == .top } ||
         subject.view.constraints.contains {
             ($0.firstItem === subject.header && $0.firstAttribute == .top) ||
             ($0.secondItem === subject.header && $0.secondAttribute == .top)
         }
 
-        XCTAssertTrue(hasLeft)
-        XCTAssertTrue(hasRight)
+        XCTAssertTrue(hasLeading)
+        XCTAssertTrue(hasTrailing)
         XCTAssertTrue(hasTop)
     }
 
