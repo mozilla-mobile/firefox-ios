@@ -23,11 +23,10 @@ enum VPNError: Error {
 
 @available(iOS 26.0, *)
 final class VPNManager: VPNManaging {
-    private static let secretEnvKey = "VPN_GUARDIAN_SECRET"
+    private static let secretKey = "VPNGuardianSecret"
 
     private let logger: Logger
     private let guardian: VPNGuardian
-    private let serverlist: VPNServerlist
     private let windowManager: WindowManager
 
     private(set) var isRunning = false
@@ -48,7 +47,6 @@ final class VPNManager: VPNManaging {
             configuration: clientConfig,
             logger: logger
         )
-        self.serverlist = VPNServerlist(rsService: rsService, logger: logger)
         self.windowManager = windowManager
     }
 
@@ -56,11 +54,12 @@ final class VPNManager: VPNManaging {
     /// variable so it never lands in source control. Set it on the Run action of a local, unshared
     /// copy of the Fennec scheme — the shared schemes are tracked in git, `xcuserdata` is not.
     private static func guardianAuthHeaders(logger: Logger) -> [String: String] {
-        guard let secret = ProcessInfo.processInfo.environment[secretEnvKey], !secret.isEmpty else {
+        let secret = Bundle.main.object(forInfoDictionaryKey: secretKey) as? String
+        guard let secret, !secret.isEmpty else {
             logger.log(
-                "\(secretEnvKey) is unset — Guardian pass requests will fail to authenticate",
+                "\(secretKey) is unset — Guardian pass requests will fail to authenticate",
                 level: .warning,
-                category: .sync
+                category: .settings
             )
             return [:]
         }
@@ -70,9 +69,9 @@ final class VPNManager: VPNManaging {
     func start(privateOnly: Bool = false) async {
         do {
             let pass = try await self.guardian.getPass()
-            guard let server = self.serverlist.selectServer() else {
-                throw VPNError.noServerFound
-            }
+
+            // Hardcode server to point at staging for this foxfooding
+            let server = VPNGuardian.Server(hostname: "stage.m1.fastly-masque.net", port: 2499, city: "", countryCode: "")
 
             self.logger.log(
                 "Got Guardian proxy pass — expires \(pass.expiresAt), usage \(String(describing: pass.usage)); server \(server.hostname):\(server.port) (\(server.city), \(server.countryCode))",

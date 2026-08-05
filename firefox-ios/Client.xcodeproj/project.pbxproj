@@ -800,7 +800,6 @@
 		61D17EF32FE30B1100BCDD52 /* MockNimbusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D17EF22FE30B1100BCDD52 /* MockNimbusUtils.swift */; };
 		61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */; };
 		61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */; };
-		61E24E4E3012ACE400F27037 /* VPNServerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4D3012ACD800F27037 /* VPNServerList.swift */; };
 		61E24E503012AD3D00F27037 /* VPNGuardian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4F3012AD3900F27037 /* VPNGuardian.swift */; };
 		61E24E523017BF2A00F27037 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E513017BF2A00F27037 /* VPNManager.swift */; };
 		61E24E543018BC1000F27037 /* ToggleVPNProxySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E533018BC1000F27037 /* ToggleVPNProxySetting.swift */; };
@@ -9417,7 +9416,6 @@
 		61DA4B5AB7DA505B9C992F95 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSetting.swift; sourceTree = "<group>"; };
 		61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingsView.swift; sourceTree = "<group>"; };
-		61E24E4D3012ACD800F27037 /* VPNServerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNServerList.swift; sourceTree = "<group>"; };
 		61E24E4F3012AD3900F27037 /* VPNGuardian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNGuardian.swift; sourceTree = "<group>"; };
 		61E24E513017BF2A00F27037 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		61E24E533018BC1000F27037 /* ToggleVPNProxySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleVPNProxySetting.swift; sourceTree = "<group>"; };
@@ -14004,7 +14002,6 @@
 			children = (
 				61E24E513017BF2A00F27037 /* VPNManager.swift */,
 				61E24E4F3012AD3900F27037 /* VPNGuardian.swift */,
-				61E24E4D3012ACD800F27037 /* VPNServerList.swift */,
 			);
 			path = VPN;
 			sourceTree = "<group>";
@@ -15773,13 +15770,6 @@
 			path = Summarizer;
 			sourceTree = "<group>";
 		};
-		C27AB5D12F9B81710085439A /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		C27EF6182EBA363800BED719 /* LanguageDetector */ = {
 			isa = PBXGroup;
 			children = (
@@ -16876,7 +16866,6 @@
 		E1AEC16D286E0CF500062E29 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
-				630EBE4B301108DC0046E9BC /* Widgets */,
 				BC129A302E461F8C004A6875 /* Summarizer */,
 				E1AEC173286E0CF500062E29 /* Browser */,
 				8A36BE2A29EDE16700AC1C5C /* ContentContainerTests.swift */,
