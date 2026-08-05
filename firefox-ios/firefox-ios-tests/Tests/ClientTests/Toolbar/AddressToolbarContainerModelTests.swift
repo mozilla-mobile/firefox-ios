@@ -341,7 +341,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                 ToolbarMenuElementConfiguration(
                     actionType: .googleLensTakePhoto,
                     title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
-                    imageName: StandardImageIdentifiers.Large.camera,
+                    imageName: StandardImageIdentifiers.Large.screenshot,
                     a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
                 ),
                 ToolbarMenuElementConfiguration(
