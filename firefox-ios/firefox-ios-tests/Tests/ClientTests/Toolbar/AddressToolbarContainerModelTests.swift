@@ -187,7 +187,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         let expectedMenuElements = [
             ToolbarMenuElement(
                 title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
-                imageName: StandardImageIdentifiers.Large.camera,
+                imageName: StandardImageIdentifiers.Large.screenshot,
                 a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction,
                 onSelected: { _ in }
             ),
