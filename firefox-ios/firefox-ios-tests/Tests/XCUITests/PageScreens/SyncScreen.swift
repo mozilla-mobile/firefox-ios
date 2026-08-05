@@ -19,4 +19,10 @@ final class SyncScreen {
         BaseTestCase().mozWaitForElementToExist(sel.FIREFOX_SYNC_TITLE.element(in: app), timeout: timeout)
         BaseTestCase().mozWaitForElementToExist(sel.SYNC_AND_SAVE_DATA_BUTTON.element(in: app), timeout: timeout)
     }
+
+    /// Taps the "Sync and Save Data" button on the Synced Tabs panel's signed-out state, opening the
+    /// same "Sync and Save Data" sign-in screen reachable from Settings.
+    func tapSyncAndSaveData() {
+        sel.SYNC_AND_SAVE_DATA_BUTTON.element(in: app).waitAndTap()
+    }
 }
