@@ -41,7 +41,7 @@ class IntegrationTests: BaseTestCase {
                                LaunchArguments.SkipContextualHints]
         } else if testModernKitOnboarding.contains(key) {
             launchArguments = [LaunchArguments.ClearProfile,
-                                LaunchArguments.StageServer,
+                               LaunchArguments.StageServer,
                                "\(LaunchArguments.LoadExperiment)modernKitOnboardingOn",
                                "\(LaunchArguments.ExperimentFeatureName)onboarding-framework-feature"]
         } else {
@@ -63,6 +63,13 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
+        completeFxASignIn()
+    }
+
+    /// Completes an FxA sign-in on the email webview: waits for it to load, types the email/password
+    /// from FXA_EMAIL/FXA_PASSWORD, and waits for sync to be ready. Assumes the caller already opened
+    /// the webview via `Action.OpenEmailToSignIn`, however it got there.
+    private func completeFxASignIn() {
         sleep(5)
         mozWaitForElementToExist(
             app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
@@ -136,28 +143,7 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.OpenEmailToSignIn)
 
         // Step 4: Input valid email and valid password
-        print("==================== 10 ====================")
-        sleep(5)
-        mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
-            timeout: TIMEOUT_LONG
-        )
-        print("==================== 20 ====================")
-        userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
-        userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
-        print("==================== 25 ==================== "+userState.fxaUsername!)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
-        print("==================== 30 ====================")
-        navigator.performAction(Action.FxATypeEmail)
-        print("==================== 40 ====================")
-        navigator.performAction(Action.FxATapOnContinueButton)
-        mozWaitForElementToNotExist(app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
-        mozWaitForElementToExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.FxATypePasswordExistingAccount)
-        navigator.performAction(Action.FxATapOnSignInButton)
-        mozWaitForElementToNotExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
-        waitForTabsButton()
-        allowNotifications()
+        completeFxASignIn()
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
