@@ -155,6 +155,9 @@ TrendingSearches:
 User:
   description: Corresponds to user properties and settings.
 
+WaybackMachine:
+  description: Corresponds to waybackMachine error page interactions
+
 WebCompat:
   description: Corresponds to the in-app "Report Broken Site" (WebCompat) reporting tool.
 

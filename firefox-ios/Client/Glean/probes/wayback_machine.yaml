@@ -1,0 +1,66 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - WaybackMachine
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+
+wayback_error_page:
+  check_button:
+    type: event
+    description: |
+      Records when the user taps the check for archive button.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
+    data_reviews:
+      - i guess this would be the link for the PR I make to add this?
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  archive_found:
+    type: event
+    description: |
+      Records when the wayback machine returns a valid archive for the failing URL.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
+    data_reviews:
+      - i guess this would be the link for the PR I make to add this?
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  search_the_web:
+    type: event
+    description: |
+      Records when the user hits search the web due to wayback not finding an archive.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
+    data_reviews:
+      - i guess this would be the link for the PR I make to add this?
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
