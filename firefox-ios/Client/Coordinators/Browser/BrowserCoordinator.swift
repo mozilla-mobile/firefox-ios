@@ -37,7 +37,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
-                          WebCompatReportCoordinatorDelegate,
+                          WebCompatReportCoordinatorNavigationDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -627,32 +627,27 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentReportBrokenSite(url: URL?) {
-        let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
-        reportViewController.reportCoordinator = self
-        router.present(reportViewController, animated: true, completion: nil)
+        let webCompatReportCoordinator = WebCompatReportCoordinator(
+            router: router,
+            windowUUID: windowUUID,
+            parentCoordinatorDelegate: self,
+            navigationDelegate: self
+        )
+        add(child: webCompatReportCoordinator)
+        webCompatReportCoordinator.start(reportedURL: url)
     }
 
-    // MARK: - WebCompatReportCoordinatorDelegate
+    // MARK: - WebCompatReportCoordinatorNavigationDelegate
 
-    func webCompatReportViewControllerDidFinish() {
-        router.dismiss(animated: true, completion: nil)
+    func webCompatReportOpenURLInNewTab(_ url: URL) {
+        browserViewController.openURLInNewTab(url)
     }
 
-    func webCompatReportViewControllerDidSubmit() {
-        // Dismiss first, otherwise the toast is covered by the sheet.
-        router.dismiss(animated: true, completion: { [weak self] in
-            // TODO: FXIOS-16468 swap in the dedicated "Report sent" string once l10n exports it.
-            self?.browserViewController.showPlainToast(
-                message: String.Microsurvey.Survey.ConfirmationPage.ConfirmationLabel
-            )
-        })
-    }
-
-    func webCompatReportViewControllerDidTapLearnMore(url: URL) {
-        // Dismiss first, otherwise the explainer loads in a tab hidden behind the sheet.
-        router.dismiss(animated: true, completion: { [weak self] in
-            self?.browserViewController.openURLInNewTab(url)
-        })
+    func webCompatReportDidSubmit() {
+        // TODO: FXIOS-16468 swap in the dedicated "Report sent" string once l10n exports it.
+        browserViewController.showPlainToast(
+            message: String.Microsurvey.Survey.ConfirmationPage.ConfirmationLabel
+        )
     }
 
     func presentSavePDFController() {
