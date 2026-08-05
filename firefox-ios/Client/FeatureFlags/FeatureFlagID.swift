@@ -38,6 +38,7 @@ enum FeatureFlagID: String, CaseIterable {
     case hostedSummarizerToolbarEntrypoint
     case httpsUpgrade
     case improvedAppStoreReviewTriggerFeature
+    case mergeWindows
     case microsurvey
     case modernOnboardingUI
     case multiDayOnboarding
@@ -122,6 +123,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .hostedSummarizer,
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
+                .mergeWindows,
                 .microsurvey,
                 .multiDayOnboarding,
                 .nativeErrorPage,

@@ -183,4 +183,9 @@ class MockTabManager: TabManager {
         addTabsFromWindowMergeCalled += 1
         addedWindowMergeTabData = tabDataList
     }
+
+    var discardTabsMovedToAnotherWindowCalled = 0
+    func discardTabsMovedToAnotherWindow() {
+        discardTabsMovedToAnotherWindowCalled += 1
+    }
 }

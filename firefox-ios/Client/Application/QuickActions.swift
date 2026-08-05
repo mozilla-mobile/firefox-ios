@@ -109,32 +109,3 @@ struct QuickActionsImplementation: QuickActions {
         application.shortcutItems = dynamicShortcutItems
     }
 }
-
-// MARK: - MergeWindowsQuickActionController
-
-/// Keeps the "Merge All Windows" home screen Quick Action in sync with the number of open iPad
-/// windows: the action is only offered while two or more windows are open. Call `update()` whenever
-/// the set of open windows changes (a scene becoming active or disconnecting).
-@MainActor
-struct MergeWindowsQuickActionController {
-    private let quickActions: QuickActions
-    private let windowManager: WindowManager
-    private let application: UIApplication
-
-    init(quickActions: QuickActions = QuickActionsImplementation(),
-         windowManager: WindowManager = AppContainer.shared.resolve(),
-         application: UIApplication = .shared) {
-        self.quickActions = quickActions
-        self.windowManager = windowManager
-        self.application = application
-    }
-
-    /// Adds the merge Quick Action when 2+ windows are open, otherwise removes it.
-    func update() {
-        if windowManager.windows.count >= 2 {
-            quickActions.addDynamicApplicationShortcutItemOfType(.mergeWindows, toApplication: application)
-        } else {
-            quickActions.removeDynamicApplicationShortcutItemOfType(.mergeWindows, fromApplication: application)
-        }
-    }
-}
