@@ -252,18 +252,22 @@ public actor DefaultTabDataStore: TabDataStore {
     }
 
     public func removeWindowData(forUUIDs uuids: [WindowUUID]) async {
-        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else { return }
+        for isBackup in [false, true] {
+            guard let directoryURL = fileManager.windowDataDirectory(isBackup: isBackup) else { continue }
 
-        let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
+            let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
 
-        for url in fileURLs {
-            guard let uuid = windowUUID(fromURL: url) else { continue }
-            guard uuids.contains(where: { $0 == uuid }) else {
-                logger.log("Will not remove window data for UUID: \(uuid)", level: .info, category: .tabs)
-                continue
+            for url in fileURLs {
+                guard let uuid = windowUUID(fromURL: url) else { continue }
+                guard uuids.contains(where: { $0 == uuid }) else {
+                    logger.log("Will not remove window data for UUID: \(uuid)", level: .info, category: .tabs)
+                    continue
+                }
+                logger.log("Removing window data for UUID: \(uuid), isBackup: \(isBackup)",
+                           level: .info,
+                           category: .tabs)
+                fileManager.removeFileAt(path: url)
             }
-            logger.log("Removing window data for UUID: \(uuid)", level: .info, category: .tabs)
-            fileManager.removeFileAt(path: url)
         }
     }
 
