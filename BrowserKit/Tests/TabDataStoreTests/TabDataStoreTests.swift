@@ -154,6 +154,34 @@ final class TabDataStoreTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(fetchedWindowData?.id, windowData.id)
     }
 
+    // MARK: - Removing Data
+
+    /// fetchWindowData falls back to the backup file whenever the main file is missing, so a
+    /// removed window must have both deleted or its tabs can reappear later.
+    @MainActor
+    func testRemoveWindowData_removesBothPrimaryAndBackupFiles() async {
+        let subject = createSubject()
+        mockFileManager.primaryDirectoryURL = URL(string: "some/primary")
+        mockFileManager.backupDirectoryURL = URL(string: "some/backup")
+        mockFileManager.pathContents = [URL(string: "some/dir/window-\(defaultTestTabWindowUUID.uuidString)")!]
+
+        await subject.removeWindowData(forUUIDs: [defaultTestTabWindowUUID])
+
+        XCTAssertEqual(mockFileManager.removeFileAtPathCalledCount, 2)
+    }
+
+    @MainActor
+    func testRemoveWindowData_leavesOtherWindowsAlone() async {
+        let subject = createSubject()
+        mockFileManager.primaryDirectoryURL = URL(string: "some/primary")
+        mockFileManager.backupDirectoryURL = URL(string: "some/backup")
+        mockFileManager.pathContents = [URL(string: "some/dir/window-\(UUID().uuidString)")!]
+
+        await subject.removeWindowData(forUUIDs: [defaultTestTabWindowUUID])
+
+        XCTAssertEqual(mockFileManager.removeFileAtPathCalledCount, 0)
+    }
+
     // MARK: - Fetching and Saving Data
     @MainActor
     func testPreserveBeforeRestore() async throws {

@@ -122,6 +122,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .improvedAppStoreReviewTriggerFeature:
             return checkImprovedAppStoreReviewTriggerFeature()
 
+        case .mergeWindows:
+            return checkMergeWindowsFeature()
+
         case .microsurvey:
             return checkMicrosurveyFeature()
 
@@ -492,6 +495,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkWebViewDocumentFetchRefactor() -> Bool {
         return nimbus.features.webViewDocumentFetchRefactorFeature.value().enabled
+    }
+
+    private func checkMergeWindowsFeature() -> Bool {
+        return nimbus.features.mergeWindowsFeature.value().enabled
     }
 
     private func checkVPNFeature() -> Bool {
