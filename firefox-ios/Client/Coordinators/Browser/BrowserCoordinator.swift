@@ -630,6 +630,8 @@ final class BrowserCoordinator: BaseCoordinator,
         let webCompatReportCoordinator = WebCompatReportCoordinator(
             router: router,
             windowUUID: windowUUID,
+            themeManager: themeManager,
+            tabManager: tabManager,
             parentCoordinatorDelegate: self,
             navigationDelegate: self
         )

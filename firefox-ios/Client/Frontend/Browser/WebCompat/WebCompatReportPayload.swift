@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import WebCompatReporterKit
 
 /// One property per Glean metric in `broken_site_report.yaml`, so the field names
 /// live in one place. The struct is flat; each comment below is the Glean category
@@ -43,5 +44,74 @@ struct WebCompatReportPayload: Equatable {
         let details = state.additionalDetails.trimmingCharacters(in: .whitespacesAndNewlines)
         payload.description = details.isEmpty ? nil : details
         return payload
+    }
+
+    struct PreviewField {
+        let key: String
+        let value: WebCompatReportPreviewViewModel.PreviewValue
+    }
+
+    struct PreviewGroup {
+        let id: String
+        let fields: [PreviewField]
+    }
+
+    /// Projected from this struct rather than from Redux state, so the preview can only show what
+    /// the report will actually send. Group and field names are the raw `broken-site-report` keys.
+    var previewGroups: [PreviewGroup] {
+        return [
+            PreviewGroup(id: "basic", fields: [
+                PreviewField(key: "description", value: previewValue(description)),
+                PreviewField(key: "reason", value: previewValue(breakageCategory)),
+                PreviewField(key: "url", value: previewValue(url))
+            ]),
+            PreviewGroup(id: "tabInfo", fields: [
+                PreviewField(key: "languages", value: previewValue(languages)),
+                PreviewField(key: "useragentString", value: previewValue(userAgentString))
+            ]),
+            PreviewGroup(id: "antiTracking", fields: [
+                PreviewField(key: "blockList", value: previewValue(blockList)),
+                PreviewField(key: "blockedOrigins", value: previewValue(blockedOrigins)),
+                PreviewField(key: "etpCategory", value: previewValue(etpCategory)),
+                PreviewField(key: "isPrivateBrowsing", value: previewValue(isPrivateBrowsing))
+            ]),
+            PreviewGroup(id: "frameworks", fields: [
+                PreviewField(key: "fastclick", value: previewValue(fastclick)),
+                PreviewField(key: "marfeel", value: previewValue(marfeel)),
+                PreviewField(key: "mobify", value: previewValue(mobify))
+            ]),
+            PreviewGroup(id: "app", fields: [
+                PreviewField(key: "defaultLocales", value: previewValue(defaultLocales)),
+                PreviewField(key: "defaultUseragentString", value: previewValue(defaultUserAgentString))
+            ]),
+            PreviewGroup(id: "system", fields: [
+                PreviewField(key: "isTablet", value: previewValue(isTablet)),
+                PreviewField(key: "memory", value: previewValue(memory))
+            ]),
+            PreviewGroup(id: "graphics", fields: [
+                PreviewField(key: "devicePixelRatio", value: previewValue(devicePixelRatio)),
+                PreviewField(key: "hasTouchScreen", value: previewValue(hasTouchScreen))
+            ])
+        ]
+    }
+
+    private func previewValue(_ text: String?) -> WebCompatReportPreviewViewModel.PreviewValue {
+        guard let text, !text.isEmpty else { return .null }
+        return .string(text)
+    }
+
+    private func previewValue(_ values: [String]?) -> WebCompatReportPreviewViewModel.PreviewValue {
+        guard let values else { return .null }
+        return .list(values)
+    }
+
+    private func previewValue(_ flag: Bool?) -> WebCompatReportPreviewViewModel.PreviewValue {
+        guard let flag else { return .null }
+        return .bool(flag)
+    }
+
+    private func previewValue(_ number: Int?) -> WebCompatReportPreviewViewModel.PreviewValue {
+        guard let number else { return .null }
+        return .quantity(number)
     }
 }
