@@ -1248,17 +1248,15 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: - Report broken site
 
-    func testWebCompatReportLearnMore_keepsTheSheetUpAndDoesNotOpenATab() throws {
+    func testPresentReportBrokenSite_startsTheReportCoordinator() {
         let subject = createSubject()
         subject.browserViewController = browserViewController
+
         subject.presentReportBrokenSite(url: URL(string: "https://example.com"))
-        let learnMoreURL = try XCTUnwrap(URL(string: "https://support.mozilla.org/1/mobile/report-broken-site"))
 
-        subject.webCompatReportViewControllerDidTapLearnMore(url: learnMoreURL)
-
-        // Either would tear the sheet's Redux state down and lose the in-progress report.
-        XCTAssertEqual(mockRouter.dismissCalled, 0)
-        XCTAssertFalse(browserViewController.openURLInNewTabCalled)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is WebCompatReportCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
     // MARK: - Sign in route
