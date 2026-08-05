@@ -120,11 +120,11 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
 
-        let event = GleanMetrics.WebcompatReporting.reasonSelected
+        let event = GleanMetrics.BrokenSiteReport.reasonSelected
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first
-                                        as? GleanMetrics.WebcompatReporting.ReasonSelectedExtra)
+                                        as? GleanMetrics.BrokenSiteReport.ReasonSelectedExtra)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first
-                                        as? EventMetricType<GleanMetrics.WebcompatReporting.ReasonSelectedExtra>)
+                                        as? EventMetricType<GleanMetrics.BrokenSiteReport.ReasonSelectedExtra>)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.reason, WebCompatIssueCategory.videoOrAudio.rawValue)
@@ -139,7 +139,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.WebcompatReporting.previewed))
+        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReport.previewed))
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -150,7 +150,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.cancel))
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.WebcompatReporting.cancelled))
+        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReport.cancelled))
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -161,7 +161,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.learnMore))
 
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.WebcompatReporting.learnMoreTapped))
+        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReport.learnMoreTapped))
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -245,9 +245,9 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         return gleanWrapper.savedEvents.contains { ($0 as? EventMetricType<NoExtras>) === event }
     }
 
-    private func createdExtras() -> GleanMetrics.WebcompatReporting.CreatedExtra? {
+    private func createdExtras() -> GleanMetrics.BrokenSiteReport.CreatedExtra? {
         return gleanWrapper.savedExtras.compactMap {
-            $0 as? GleanMetrics.WebcompatReporting.CreatedExtra
+            $0 as? GleanMetrics.BrokenSiteReport.CreatedExtra
         }.first
     }
 

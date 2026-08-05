@@ -20,32 +20,32 @@ struct WebCompatReporterTelemetry {
     }
 
     func opened(source: Source) {
-        let extra = GleanMetrics.WebcompatReporting.OpenedExtra(source: source.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.opened, extras: extra)
+        let extra = GleanMetrics.BrokenSiteReport.OpenedExtra(source: source.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.opened, extras: extra)
     }
 
     func reasonSelected(category: WebCompatIssueCategory) {
-        let extra = GleanMetrics.WebcompatReporting.ReasonSelectedExtra(reason: category.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.reasonSelected, extras: extra)
+        let extra = GleanMetrics.BrokenSiteReport.ReasonSelectedExtra(reason: category.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.reasonSelected, extras: extra)
     }
 
     func previewed() {
-        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.previewed)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.previewed)
     }
 
     func cancelled() {
-        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.cancelled)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.cancelled)
     }
 
     func created(withBlockedTrackers: Bool, withScreenshot: Bool) {
-        let extra = GleanMetrics.WebcompatReporting.CreatedExtra(
+        let extra = GleanMetrics.BrokenSiteReport.CreatedExtra(
             hasBlockedTrackersList: withBlockedTrackers,
             hasScreenshot: withScreenshot
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.created, extras: extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.created, extras: extra)
     }
 
     func learnMoreTapped() {
-        gleanWrapper.recordEvent(for: GleanMetrics.WebcompatReporting.learnMoreTapped)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.learnMoreTapped)
     }
 }
