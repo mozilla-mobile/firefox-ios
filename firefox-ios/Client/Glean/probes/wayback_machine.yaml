@@ -32,7 +32,7 @@ wayback_error_page:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
     data_reviews:
-      - i guess this would be the link for the PR I make to add this?
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -46,7 +46,7 @@ wayback_error_page:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
     data_reviews:
-      - i guess this would be the link for the PR I make to add this?
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -60,7 +60,7 @@ wayback_error_page:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
     data_reviews:
-      - i guess this would be the link for the PR I make to add this?
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
