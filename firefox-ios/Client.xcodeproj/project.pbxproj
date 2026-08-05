@@ -789,7 +789,6 @@
 		61D17EF32FE30B1100BCDD52 /* MockNimbusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D17EF22FE30B1100BCDD52 /* MockNimbusUtils.swift */; };
 		61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */; };
 		61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */; };
-		61E24E4E3012ACE400F27037 /* VPNServerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4D3012ACD800F27037 /* VPNServerList.swift */; };
 		61E24E503012AD3D00F27037 /* VPNGuardian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4F3012AD3900F27037 /* VPNGuardian.swift */; };
 		61E24E523017BF2A00F27037 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E513017BF2A00F27037 /* VPNManager.swift */; };
 		61E24E543018BC1000F27037 /* ToggleVPNProxySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E533018BC1000F27037 /* ToggleVPNProxySetting.swift */; };
@@ -1352,8 +1351,6 @@
 		8C2FB1E82FF3D68100C9A803 /* WebCompatReporterMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1E72FF3D68100C9A803 /* WebCompatReporterMiddleware.swift */; };
 		8C2FB1EB2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1EA2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift */; };
 		8C2FB1ED2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FB1EC2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift */; };
-		8CB4742130011A9900BB0119 /* WebCompatReportDataCollectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4742030011A9900BB0119 /* WebCompatReportDataCollectorTests.swift */; };
-		8CB4742330011A9900BB0119 /* WebCompatReportPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4742230011A9900BB0119 /* WebCompatReportPayloadTests.swift */; };
 		8C381F002EBE1C74009A54AA /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 8C381EFF2EBE1C74009A54AA /* SiteImageView */; };
 		8C381F022EBE1CC3009A54AA /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 8C381F012EBE1CC3009A54AA /* SiteImageView */; };
 		8C3A17792E68390000341A01 /* OnboardingLaunchScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3A17782E68390000341A01 /* OnboardingLaunchScreenViewControllerTests.swift */; };
@@ -1376,6 +1373,8 @@
 		8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */; };
 		8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80E2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift */; };
 		8CA6FA0E2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6FA0D2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift */; };
+		8CB4742130011A9900BB0119 /* WebCompatReportDataCollectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4742030011A9900BB0119 /* WebCompatReportDataCollectorTests.swift */; };
+		8CB4742330011A9900BB0119 /* WebCompatReportPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4742230011A9900BB0119 /* WebCompatReportPayloadTests.swift */; };
 		8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8CC033F92BA476840033449E /* FormAutofillHelper.js */; };
 		8CC185F72FF6A0D1004A124F /* WebCompatReporterKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC185F62FF6A0D1004A124F /* WebCompatReporterKit */; };
 		8CC617092C35463B001C7688 /* AddressModifiedStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC617082C35463B001C7688 /* AddressModifiedStatus.swift */; };
@@ -2026,7 +2025,6 @@
 		DA9FD88624E213CD00168D1E /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88524E213CC00168D1E /* Helpers.swift */; };
 		DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88724E213DC00168D1E /* QuickLink.swift */; };
 		DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACDE995225E537900C8F37F /* VersionSettingTests.swift */; };
-		FBADD1700000000000000002 /* LaunchPairingFromURLSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */; };
 		DAE6DF1B29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE6DF1A29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift */; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
@@ -2428,6 +2426,7 @@
 		FB16062100000000000000E6 /* GoogleLensService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062100000000000000E5 /* GoogleLensService.swift */; };
 		FB16062200000000000000A2 /* CameraCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062200000000000000A1 /* CameraCoordinator.swift */; };
 		FB16062200000000000000B2 /* CameraCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062200000000000000B1 /* CameraCoordinatorTests.swift */; };
+		FBADD1700000000000000002 /* LaunchPairingFromURLSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */; };
 		FC16179B00000000000000B1 /* WebCompatReportViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */; };
 		FF0001AA2F000007000AAAAA /* WorldCupSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0001AA2F000004000AAAAA /* WorldCupSectionState.swift */; };
 		FF0001AB2F000007000AAAAA /* WorldCupMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0001AB2F000004000AAAAA /* WorldCupMiddleware.swift */; };
@@ -9220,7 +9219,6 @@
 		61DA4B5AB7DA505B9C992F95 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSetting.swift; sourceTree = "<group>"; };
 		61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingsView.swift; sourceTree = "<group>"; };
-		61E24E4D3012ACD800F27037 /* VPNServerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNServerList.swift; sourceTree = "<group>"; };
 		61E24E4F3012AD3900F27037 /* VPNGuardian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNGuardian.swift; sourceTree = "<group>"; };
 		61E24E513017BF2A00F27037 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		61E24E533018BC1000F27037 /* ToggleVPNProxySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleVPNProxySetting.swift; sourceTree = "<group>"; };
@@ -10040,8 +10038,6 @@
 		8C2FB1E72FF3D68100C9A803 /* WebCompatReporterMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReporterMiddleware.swift; sourceTree = "<group>"; };
 		8C2FB1EA2FF3D6BB00C9A803 /* WebCompatReporterStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReporterStateTests.swift; sourceTree = "<group>"; };
 		8C2FB1EC2FF3D6CA00C9A803 /* WebCompatReporterMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReporterMiddlewareTests.swift; sourceTree = "<group>"; };
-		8CB4742030011A9900BB0119 /* WebCompatReportDataCollectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportDataCollectorTests.swift; sourceTree = "<group>"; };
-		8CB4742230011A9900BB0119 /* WebCompatReportPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportPayloadTests.swift; sourceTree = "<group>"; };
 		8C3A17782E68390000341A01 /* OnboardingLaunchScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingLaunchScreenViewControllerTests.swift; sourceTree = "<group>"; };
 		8C3B0B892F72767000E2C370 /* TranslationLanguagePickerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationLanguagePickerViewControllerTests.swift; sourceTree = "<group>"; };
 		8C3B1A1A2F73C8D100E2C370 /* TranslationToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationToggleCell.swift; sourceTree = "<group>"; };
@@ -10064,6 +10060,8 @@
 		8CA4E80E2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanUsageReportingLifecycleObserverTest.swift; sourceTree = "<group>"; };
 		8CA6FA0D2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingKitCardInfoModel.swift; sourceTree = "<group>"; };
 		8CA841E0986514988B705D97 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Menu.strings; sourceTree = "<group>"; };
+		8CB4742030011A9900BB0119 /* WebCompatReportDataCollectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportDataCollectorTests.swift; sourceTree = "<group>"; };
+		8CB4742230011A9900BB0119 /* WebCompatReportPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportPayloadTests.swift; sourceTree = "<group>"; };
 		8CC033F92BA476840033449E /* FormAutofillHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FormAutofillHelper.js; sourceTree = "<group>"; };
 		8CC617082C35463B001C7688 /* AddressModifiedStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressModifiedStatus.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -11519,7 +11517,6 @@
 		DAAE4D2BB25BB3FB7F927CBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		DAC044248882A2485365F9A2 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Menu.strings; sourceTree = "<group>"; };
 		DACDE995225E537900C8F37F /* VersionSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSettingTests.swift; sourceTree = "<group>"; };
-		FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPairingFromURLSettingTests.swift; sourceTree = "<group>"; };
 		DAD46F3324A1606C001B3967 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		DAD46F3524A1606C001B3967 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		DAE6DF1A29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ZoomPage.swift"; sourceTree = "<group>"; };
@@ -12122,6 +12119,7 @@
 		FB634DAD901C5B1C29FF1E8C /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Intro.strings; sourceTree = "<group>"; };
 		FB6A4855A7905979E7512411 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		FB8A4657AF4354C9EFAAE9F9 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPairingFromURLSettingTests.swift; sourceTree = "<group>"; };
 		FBC14D2DBDDEE2E94CD0E14E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Menu.strings; sourceTree = "<group>"; };
 		FBF24A9ABAABD821F73259BD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportViewControllerTests.swift; sourceTree = "<group>"; };
@@ -12165,7 +12163,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8CF609442EA8D61F00F069B6 /* Exceptions for "ActionExtension" folder in "ActionExtension" target */ = {
+		8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -13827,7 +13825,6 @@
 			children = (
 				61E24E513017BF2A00F27037 /* VPNManager.swift */,
 				61E24E4F3012AD3900F27037 /* VPNGuardian.swift */,
-				61E24E4D3012ACD800F27037 /* VPNServerList.swift */,
 			);
 			path = VPN;
 			sourceTree = "<group>";
@@ -15622,6 +15619,7 @@
 			children = (
 				C2F55C622F9A441B00BE73E7 /* WorldCupCountryPickerView.swift */,
 				C2F55C612F9A441B00BE73E7 /* WorldCupCountry.swift */,
+				630EBE4C301109A10046E9BC /* GradientProgressBarTests.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -16761,7 +16759,6 @@
 		E1AEC16D286E0CF500062E29 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
-				630EBE4B301108DC0046E9BC /* Widgets */,
 				BC129A302E461F8C004A6875 /* Summarizer */,
 				E1AEC173286E0CF500062E29 /* Browser */,
 				8A36BE2A29EDE16700AC1C5C /* ContentContainerTests.swift */,
@@ -20753,7 +20750,6 @@
 				8A9E041B2D4D08350022ED90 /* BookmarkConfiguration.swift in Sources */,
 				8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */,
 				AAD861A82E9E748700F6E0E0 /* TranslationSetting.swift in Sources */,
-				61E24E4E3012ACE400F27037 /* VPNServerList.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
 				0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */,
 				21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */,
