@@ -56,8 +56,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     private var screenshotViewContainerTopConstraint: NSLayoutConstraint?
     private var screenshotViewContainerBottomConstraint: NSLayoutConstraint?
-    private var tabBackgroundHoverTopConstraint: NSLayoutConstraint?
-    private var tabBackgroundHoverBottomConstraint: NSLayoutConstraint?
 
     var previewCardFrame: CGRect {
         return screenshotViewContainer.frame
@@ -92,11 +90,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         addSubviews(tabBackgroundHover, backgroundView, screenshotViewContainer, closeButton)
         screenshotViewContainer.addSubview(screenshotView)
 
-        tabBackgroundHoverTopConstraint = tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor)
-        tabBackgroundHoverBottomConstraint = tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor)
-        tabBackgroundHoverTopConstraint?.isActive = true
-        tabBackgroundHoverBottomConstraint?.isActive = true
-
         screenshotViewContainerTopConstraint = screenshotViewContainer.topAnchor.constraint(equalTo: topAnchor)
         screenshotViewContainerBottomConstraint = screenshotViewContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
         screenshotViewContainerTopConstraint?.isActive = true
@@ -105,6 +98,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             closeButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             closeButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 
+            tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor),
+            tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor),
             tabBackgroundHover.leadingAnchor.constraint(equalTo: leadingAnchor),
             tabBackgroundHover.trailingAnchor.constraint(equalTo: trailingAnchor),
 
@@ -122,8 +117,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     func setInitialTransform(topPadding: CGFloat, bottomPadding: CGFloat) {
         screenshotView.layer.cornerRadius = 0
-        tabBackgroundHoverTopConstraint?.constant = topPadding
-        tabBackgroundHoverBottomConstraint?.constant = -bottomPadding
 
         if swipeGestureFeatureFlagProvider.isCloseTabEnabled {
             closeButton.transform = .identity.translatedBy(x: 0.0, y: -closeButton.bounds.height * 2.0)
@@ -241,7 +234,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         tabBackgroundHover.backgroundColor = theme.colors.layer3
         closeButton.configuration?.baseBackgroundColor = theme.colors.layerCriticalSubdued
-        closeButton.configuration?.baseForegroundColor = .systemRed
+        closeButton.configuration?.baseForegroundColor = theme.colors.layerCritical
         screenshotViewContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
     }
 
