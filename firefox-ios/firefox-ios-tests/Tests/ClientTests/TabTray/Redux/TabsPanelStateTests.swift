@@ -64,9 +64,8 @@ final class TabPanelStateTests: XCTestCase {
     func testTabsState_willAppearTabPanel() throws {
         let tabs = createOneSelectedTab()
         let expectedIndex = tabs.firstIndex(where: \.isSelected)
-        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID,
-                                          isPrivateMode: false,
-                                          tabs: tabs)
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
+            .copy(tabs: tabs)
         let reducer = tabsPanelReducer()
         let action = TabPanelMiddlewareAction(
             windowUUID: .XCTestDefaultUUID,
@@ -104,11 +103,7 @@ final class TabPanelStateTests: XCTestCase {
     func testCreateTabScrollBehavior_forScrollToSelectedTab_noTabs() {
         let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
 
-        let initialState = TabsPanelState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivateMode: false,
-            tabs: []
-        )
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
 
         let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
 
@@ -123,11 +118,8 @@ final class TabPanelStateTests: XCTestCase {
 
         let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
 
-        let initialState = TabsPanelState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivateMode: false,
-            tabs: tabModels
-        )
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
+            .copy(tabs: tabModels)
 
         let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
 
@@ -140,11 +132,8 @@ final class TabPanelStateTests: XCTestCase {
         let tabModels: [TabModel] = createTabs(count: tabCount)
         let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
 
-        let initialState = TabsPanelState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivateMode: false,
-            tabs: tabModels
-        )
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
+            .copy(tabs: tabModels)
 
         let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
 
@@ -155,11 +144,7 @@ final class TabPanelStateTests: XCTestCase {
     func testCreateTabScrollBehavior_forScrollToSelectedTab_noSelectedTab_returnsNil_ifTabsEmpty() {
         let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
 
-        let initialState = TabsPanelState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivateMode: false,
-            tabs: []
-        )
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
 
         let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
 
@@ -169,11 +154,7 @@ final class TabPanelStateTests: XCTestCase {
     func testCreateTabScrollBehavior_forScrollToTab_noTabs() {
         let scrollBehavior: TabScrollBehavior = .scrollToTab(withTabUUID: createTabUUID(), shouldAnimate: false)
 
-        let initialState = TabsPanelState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivateMode: false,
-            tabs: []
-        )
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
 
         let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
 
@@ -189,11 +170,8 @@ final class TabPanelStateTests: XCTestCase {
 
         let scrollBehavior: TabScrollBehavior = .scrollToTab(withTabUUID: testTabUUID, shouldAnimate: false)
 
-        let initialState = TabsPanelState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivateMode: false,
-            tabs: tabModels
-        )
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
+            .copy(tabs: tabModels)
 
         let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
 
@@ -205,11 +183,8 @@ final class TabPanelStateTests: XCTestCase {
         let tabModels = createTabs()
         let scrollBehavior: TabScrollBehavior = .scrollToTab(withTabUUID: createTabUUID(), shouldAnimate: false)
 
-        let initialState = TabsPanelState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivateMode: false,
-            tabs: tabModels
-        )
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
+            .copy(tabs: tabModels)
 
         let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
 
