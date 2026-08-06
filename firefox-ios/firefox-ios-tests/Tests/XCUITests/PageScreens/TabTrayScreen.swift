@@ -202,7 +202,10 @@ final class TabTrayScreen {
     }
 
     func getTabLabel(at index: Int) -> String? {
-        guard let collectionView = getVisibleCollectionView() else { return nil }
+        guard let collectionView = getVisibleCollectionView() else { 
+            XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
+            return
+        }
         return collectionView.cells.element(boundBy: index).label
     }
 
