@@ -106,6 +106,60 @@ class MergeWindowsManagerTests: XCTestCase {
         XCTAssertEqual(targetManager.addedWindowMergeTabData.count, 1)
     }
 
+    // MARK: - Removing window data
+
+    func testMergeAllWindows_doesNotRemoveWindowDataUntilTheSceneCloses() {
+        let windowManager = createWindowManager()
+        let windows = configureTwoWindows(on: windowManager)
+
+        createSubject(windowManager: windowManager,
+                      sceneDestroyer: MockSceneDestroyer()).mergeAllWindows(into: windows.target)
+
+        XCTAssertEqual(windows.targetManager.addTabsFromWindowMergeCalled, 1, "merge must have run")
+        XCTAssertEqual(mockTabDataStore.removeWindowDataCalled, 0)
+    }
+
+    func testWindowDidClose_removesWindowDataForTheMergedWindow() async {
+        let windowManager = createWindowManager()
+        let windows = configureTwoWindows(on: windowManager)
+        let subject = createSubject(windowManager: windowManager, sceneDestroyer: MockSceneDestroyer())
+        subject.mergeAllWindows(into: windows.target)
+
+        let removed = expectation(description: "window data removed")
+        mockTabDataStore.removeWindowDataExpectation = removed
+        subject.windowDidClose(uuid: windows.other)
+        await fulfillment(of: [removed], timeout: 5)
+
+        XCTAssertEqual(mockTabDataStore.removedWindowDataUUIDs, [windows.other])
+    }
+
+    /// A window that iOS refused to close is still on screen, so its stored data must survive.
+    func testWindowDidClose_whenTheSceneFailedToClose_keepsWindowData() {
+        let windowManager = createWindowManager()
+        let windows = configureTwoWindows(on: windowManager)
+        let destroyer = MockSceneDestroyer()
+        destroyer.errorToReport = TestError.sceneDestructionFailed
+        let subject = createSubject(windowManager: windowManager, sceneDestroyer: destroyer)
+        subject.mergeAllWindows(into: windows.target)
+
+        subject.windowDidClose(uuid: windows.other)
+
+        XCTAssertEqual(destroyer.reportedErrorUUIDs, [windows.other], "the close must have failed")
+        XCTAssertEqual(mockTabDataStore.removeWindowDataCalled, 0)
+    }
+
+    func testWindowDidClose_ignoresWindowsThatWereNotMerged() {
+        let windowManager = createWindowManager()
+        let windows = configureTwoWindows(on: windowManager)
+        let subject = createSubject(windowManager: windowManager, sceneDestroyer: MockSceneDestroyer())
+        subject.mergeAllWindows(into: windows.target)
+
+        subject.windowDidClose(uuid: WindowUUID())
+
+        XCTAssertEqual(windows.targetManager.addTabsFromWindowMergeCalled, 1, "merge must have run")
+        XCTAssertEqual(mockTabDataStore.removeWindowDataCalled, 0)
+    }
+
     // MARK: - Quick action
 
     func testQuickAction_addedWhenEnabledAndTwoOrMoreWindowsOpen() {
@@ -151,6 +205,29 @@ class MergeWindowsManagerTests: XCTestCase {
 
     private func createWindowManager() -> WindowManagerImplementation {
         return WindowManagerImplementation(tabDataStore: mockTabDataStore)
+    }
+
+    /// Holds the tab managers as well as the UUIDs: `AppWindowInfo.tabManager` is weak, so a test
+    /// that drops them would silently be exercising a merge that found no windows.
+    private struct MergedWindows {
+        let target: WindowUUID
+        let other: WindowUUID
+        let targetManager: MockTabManager
+        let otherManager: MockTabManager
+    }
+
+    private func configureTwoWindows(on windowManager: WindowManagerImplementation) -> MergedWindows {
+        let target = WindowUUID()
+        let other = WindowUUID()
+        let targetManager = MockTabManager(windowUUID: target)
+        let otherManager = MockTabManager(windowUUID: other)
+        otherManager.tabDataForWindowMergeResult = [makeMergeTabData()]
+        windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: targetManager), uuid: target)
+        windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: otherManager), uuid: other)
+        return MergedWindows(target: target,
+                             other: other,
+                             targetManager: targetManager,
+                             otherManager: otherManager)
     }
 
     private func createSubject(windowManager: WindowManager,
