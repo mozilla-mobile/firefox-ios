@@ -164,7 +164,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         let scale = max((1 - abs(UX.scaleSpeed * translation.y) / bounds.height), UX.minimumTabPreviewScale)
 
         // Gradually dim the preview when it's in the close tab region
-        let previewAlpha = min(1, (1 - UX.closePreviewDimSpeed * (UX.closeReleaseThreshold - (fingerLocation.y / bounds.height))))
+        let previewAlpha = min(1,
+                               1 - UX.closePreviewDimSpeed * (UX.closeReleaseThreshold - (fingerLocation.y / bounds.height)))
         screenshotViewContainer.alpha = previewAlpha
 
         // Transform that places the finger horizontally centered and <fingerCardPositionRatio> down the card.
