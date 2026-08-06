@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 class WaybackService {
     struct Snapshot: Decodable {
@@ -20,10 +21,20 @@ class WaybackService {
         }
     }
 
+    private static let session: URLSession = {
+        let version = AppInfo.appVersion
+        let config = URLSessionConfiguration.default
+        // TODO: FXIOS-16534 Move to shared UserAgent configuration
+        config.httpAdditionalHeaders = [
+            "User-Agent": "firefox-ios-neterr/\(version) (+https://mzl.la/3RNfZFB)"
+        ]
+        return URLSession(configuration: config)
+    }()
+
     /// Returns the archived snapshot for a URL, or nil if none exists.
     static func fetchSnapshot(
         for urlString: String,
-        session: URLSession = .shared
+        session: URLSession = WaybackService.session
     ) async throws -> Snapshot? {
         var components = URLComponents(string: "https://archive.org/wayback/available")!
         components.queryItems = [URLQueryItem(name: "url", value: urlString)]
