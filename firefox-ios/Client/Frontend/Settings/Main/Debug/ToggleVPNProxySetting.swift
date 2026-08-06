@@ -46,7 +46,7 @@ class ToggleVPNProxySetting: HiddenSetting {
             if vpnManager.isRunning {
                 await vpnManager.stop()
             } else {
-                await vpnManager.start(privateOnly: false)
+                await vpnManager.start()
             }
             isToggling = false
             settings.tableView.reloadData()
