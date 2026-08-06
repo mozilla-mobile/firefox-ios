@@ -28,8 +28,18 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let reportBrokenSite = StandardImageIdentifiers.Large.report
     }
 
+    private let profile: Profile
+
+    init(profile: Profile = AppContainer.shared.resolve()) {
+        self.profile = profile
+    }
+
     private var isReportBrokenSiteOn: Bool {
         featureFlagsProvider.isEnabled(.reportBrokenSite)
+    }
+
+    private var canSendTechnicalData: Bool {
+        return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
     }
 
     private var isSummarizerOn: Bool {
@@ -266,8 +276,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             if isSummarizerLanguageExpansionEnabled {
                 options.append(configureReaderViewItem(with: uuid, tabInfo: tabInfo))
             }
+            options.append(configureWebsiteDarkModeItem(with: uuid, and: tabInfo))
+            if let reportBrokenSiteItem = configureReportBrokenSiteItem(with: uuid, tabInfo: tabInfo) {
+                options.append(reportBrokenSiteItem)
+            }
             options.append(contentsOf: [
-                configureWebsiteDarkModeItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
                 MenuElement(
                     title: .MainMenu.Submenus.Save.SaveAsPDF,
@@ -339,9 +352,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     }
                 ),
             ])
-            if let reportBrokenSiteItem = configureReportBrokenSiteItem(with: uuid, tabInfo: tabInfo) {
-                options.append(reportBrokenSiteItem)
-            }
         }
         return MenuSection(isExpanded: isExpanded, options: options)
     }
@@ -351,6 +361,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         tabInfo: MainMenuTabInfo
     ) -> MenuElement? {
         guard isReportBrokenSiteOn,
+              canSendTechnicalData,
               tabInfo.url?.isWebPage(includeDataURIs: false) == true
         else { return nil }
 
@@ -686,5 +697,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 )
             }
         )
+    }
+
+    /// `Equatable` is only here because `MainMenuState` stores a configurator and `StateType`
+    /// requires it. The profile is deliberately left out: this is a stateless helper, not state.
+    static func == (lhs: MainMenuConfigurationUtility, rhs: MainMenuConfigurationUtility) -> Bool {
+        return true
     }
 }

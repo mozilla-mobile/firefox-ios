@@ -27,8 +27,9 @@ final class WebsiteDataScreen {
         BaseTestCase().mozWaitForElementToNotExist(okButton)
 
         // The table clears asynchronously; wait for the rows to be removed before asserting the count.
-        BaseTestCase().mozWaitForElementToNotExist(app.cells.buttons.images.firstMatch)
-        XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
+        let rowImages = sel.websiteDataRowImages(app)
+        BaseTestCase().mozWaitForElementToNotExist(rowImages.firstMatch)
+        XCTAssertEqual(rowImages.count, 0, "The Website data has not cleared correctly")
 
         // Add wait for back button to be enabled
         let backButton = sel.BUTTON_DATA_MANAGEMENT.element(in: app)
@@ -40,8 +41,9 @@ final class WebsiteDataScreen {
 
     func assertAllWebsiteDataCleared() {
         // The table clears asynchronously; wait for the rows to be removed before asserting the count.
-        BaseTestCase().mozWaitForElementToNotExist(app.cells.buttons.images.firstMatch)
-        XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
+        let rowImages = sel.websiteDataRowImages(app)
+        BaseTestCase().mozWaitForElementToNotExist(rowImages.firstMatch)
+        XCTAssertEqual(rowImages.count, 0, "The Website data has not cleared correctly")
     }
 
     func navigateBackToBrowser() {

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import TestKit
 
 @testable import MLPAKit
 
@@ -25,7 +26,7 @@ final class MLPAJWTPayloadTests: XCTestCase {
     }
 
     func test_encode_containsExpectedFields() throws {
-        let subject = createSubject(objectKey: AppAttestTestData.assertionKey)
+        let subject = createSubject(objectKey: MLPATestData.assertionKey)
 
         let jwt = try subject.encode()
         let parts = jwt.split(separator: ".")
@@ -42,7 +43,7 @@ final class MLPAJWTPayloadTests: XCTestCase {
         XCTAssertEqual(json[MLPAConstants.keyIdParam] as? String, AppAttestTestData.keyID)
         XCTAssertEqual(json[MLPAConstants.bundleIDParam] as? String, AppAttestTestData.bundleID)
         XCTAssertNotNil(json[MLPAConstants.challengeParam])
-        XCTAssertNotNil(json[AppAttestTestData.assertionKey])
+        XCTAssertNotNil(json[MLPATestData.assertionKey])
     }
 
     func test_encode_usesCorrectObjectKey() throws {
@@ -77,14 +78,14 @@ final class MLPAJWTPayloadTests: XCTestCase {
 
     func test_encode_base64EncodesObjectData() throws {
         let subject = createSubject(
-            objectKey: AppAttestTestData.attestationKey,
+            objectKey: MLPATestData.attestationKey,
             objectData: AppAttestTestData.attestationBlob
         )
 
         let jwt = try subject.encode()
         let fields = try decodeJWTPayload(jwt)
 
-        let objectB64 = try XCTUnwrap(fields[AppAttestTestData.attestationKey] as? String)
+        let objectB64 = try XCTUnwrap(fields[MLPATestData.attestationKey] as? String)
         let decoded = try XCTUnwrap(Data(base64Encoded: objectB64))
 
         XCTAssertEqual(decoded, AppAttestTestData.attestationBlob)
@@ -93,7 +94,7 @@ final class MLPAJWTPayloadTests: XCTestCase {
     private func createSubject(
         keyId: String = AppAttestTestData.keyID,
         challenge: String = AppAttestTestData.challenge,
-        objectKey: String = AppAttestTestData.attestationKey,
+        objectKey: String = MLPATestData.attestationKey,
         objectData: Data = AppAttestTestData.assertionBlob,
         bundleIdentifier: String = AppAttestTestData.bundleID
     ) -> MLPAJWTPayload {

@@ -171,5 +171,4 @@ xcodebuild test -scheme Fennec -testPlan Smoketest \
 
 - **Edge vs stable Bitrise stack.** The `-edge` stack ships new Xcode versions first but its simulator runtimes are sometimes incomplete. If parallel UI tests hang during the test launch phase (build succeeds, sims boot, but no `Test Case` output ever appears), switch to the non-edge stack.
 - **iOS version trailing Xcode version.** Apple sometimes ships e.g. Xcode 26.5 with an iOS 26.4.1 default simulator runtime. Check `xcrun simctl list runtimes` and pick the latest installed; the iOS version in destinations may lag by a patch.
-- **SwiftLint pinning.** Past upgrades have required a `Pin swiftlint version` workaround step in `bitrise.yml`. Once the toolchain catches up, remove that workaround.
 - **`Initialize CoreSimulator` warm-up steps.** Earlier upgrades added `xcrun simctl list` as a warm-up script before xcodebuild. These are usually safe to remove once the stack is stable.

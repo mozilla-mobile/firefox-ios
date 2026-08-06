@@ -229,7 +229,6 @@
         "MicrosurveyTests\/testURLBorderHiddenWhenMicrosurveyPromptShown()",
         "ModernKitOnboardingTests",
         "ModernOnboardingTests",
-        "ModernOrangeAndBlueOnboardingTests",
         "MultiWindowTests",
         "MultiWindowTests\/testMultiWindowNewTab()",
         "MultiWindowTests\/testMultiWindowSplitView()",

@@ -149,7 +149,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
         let effectView = UIVisualEffectView()
 
         let glassEffect = UIGlassEffect()
-        glassEffect.tintColor = theme.isNova ? theme.colors.layerGlassTintNova : theme.colors.actionPrimary
+        glassEffect.tintColor = theme.isNova ? theme.colors.layerInverse : theme.colors.actionPrimary
         effectView.effect = glassEffect
 
         effectView.layer.cornerRadius = UX.toastCornerRadius

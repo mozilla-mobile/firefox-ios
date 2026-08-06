@@ -145,7 +145,7 @@ final class DefaultImageHandler: ImageHandler {
 
             return image
         } catch {
-            return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+            return UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
         }
     }
 

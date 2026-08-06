@@ -143,7 +143,6 @@
         "MicrosurveyTests",
         "ModernKitOnboardingTests",
         "ModernOnboardingTests",
-        "ModernOrangeAndBlueOnboardingTests",
         "MultiWindowTests",
         "NavigationTest",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowBlankPage_TAE()",

@@ -5,6 +5,7 @@
 #if canImport(WidgetKit)
 import WidgetKit
 import SwiftUI
+import Common
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
@@ -30,6 +31,8 @@ struct SimpleEntry: TimelineEntry {
 }
 
 struct SearchQuickLinksEntryView: View {
+    @Environment(\.theme) private var theme
+
     @ViewBuilder var body: some View {
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
@@ -42,7 +45,7 @@ struct SearchQuickLinksEntryView: View {
             }
         }
         .padding(10.0)
-        .widgetBackground(Color("backgroundColor"))
+        .widgetBackground(Color(uiColor: theme.colors.layer1))
     }
 }
 
@@ -52,6 +55,7 @@ struct SearchQuickLinksWidget: Widget {
     public var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             SearchQuickLinksEntryView()
+                .widgetTheme()
         }
         .contentMarginsDisabled()
         .supportedFamilies([.systemMedium])

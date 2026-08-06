@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import ComponentLibrary
 import XCTest
 @testable import WebCompatReporterKit
 
@@ -123,11 +122,9 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         subject.delegate = delegate
         subject.loadViewIfNeeded()
 
-        let closeButton = try XCTUnwrap(
-            subject.navigationItem.rightBarButtonItem?.customView as? CloseButton,
-            "The close button should be the bar button item's custom view"
-        )
-        fireActions(on: closeButton, for: .touchUpInside)
+        let closeButton = try XCTUnwrap(subject.navigationItem.rightBarButtonItem)
+        let target = try XCTUnwrap(closeButton.target as? NSObject)
+        target.perform(try XCTUnwrap(closeButton.action))
 
         XCTAssertEqual(delegate.didRequestDismissCallCount, 1)
     }
@@ -156,6 +153,8 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
             title: "Report Preview",
             closeAccessibilityLabel: "Close",
             closeA11yIdentifier: "close",
+            screenshotAccessibilityLabel: "Screenshot",
+            screenshotA11yIdentifier: "screenshot",
             sections: sections
         )
     }
@@ -271,4 +270,6 @@ private final class MockWebCompatReportPreviewDelegate: WebCompatReportPreviewDe
     func webCompatReportPreviewDidRequestDismiss() {
         didRequestDismissCallCount += 1
     }
+
+    func webCompatReportPreviewDidTapScreenshot() {}
 }
