@@ -154,6 +154,16 @@ class AppDelegate: UIResponder,
             }
         }
 
+        /// Reclaim disk from data stores stranded by a previous run that was killed while the
+        /// VPN proxy was on. Deliberately not gated on `vpnFeature`, so stores left behind
+        /// while the flag was enabled are still cleaned up after it is turned off again.
+        if #available(iOS 26.0, *) {
+            Task {
+                let vpnManager: VPNManaging = AppContainer.shared.resolve()
+                await vpnManager.removeOrphanedStores()
+            }
+        }
+
         logger.log("didFinishLaunchingWithOptions end",
                    level: .info,
                    category: .lifecycle)

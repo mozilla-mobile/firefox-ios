@@ -31,7 +31,9 @@ final class WebsiteDataManagementViewModel: @unchecked Sendable {
         state = .loading
 
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        DefaultWKEngineConfigurationProvider.defaultStore.fetchDataRecords(ofTypes: types) { [weak self] records in
+        DefaultWKEngineConfigurationProvider.defaultStore.fetchDataRecords(
+            ofTypes: types
+        ) { [weak self] records in
             self?.siteRecords = records.sorted { $0.displayName < $1.displayName }
             self?.state = .displayInitial
             self?.onViewModelChanged()
@@ -70,7 +72,10 @@ final class WebsiteDataManagementViewModel: @unchecked Sendable {
         onViewModelChanged()
 
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        DefaultWKEngineConfigurationProvider.defaultStore.removeData(ofTypes: types, for: Array(selectedRecords)) { [weak self] in
+        DefaultWKEngineConfigurationProvider.defaultStore.removeData(
+            ofTypes: types,
+            for: Array(selectedRecords)
+        ) { [weak self] in
             self?.state = previousState
             self?.siteRecords.removeAll { self?.selectedRecords.contains($0) ?? false }
             self?.selectedRecords = []
@@ -85,7 +90,10 @@ final class WebsiteDataManagementViewModel: @unchecked Sendable {
         onViewModelChanged()
 
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        DefaultWKEngineConfigurationProvider.defaultStore.removeData(ofTypes: types, modifiedSince: .distantPast) { [weak self] in
+        DefaultWKEngineConfigurationProvider.defaultStore.removeData(
+            ofTypes: types,
+            modifiedSince: .distantPast
+        ) { [weak self] in
             self?.siteRecords = []
             self?.selectedRecords = []
             self?.state = previousState

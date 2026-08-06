@@ -1182,19 +1182,38 @@ final class TabManagerImplementation: NSObject,
     }
 
     func cleanupWebViewsForProxyChange() async {
+        // Only the normal (persistent) data store is swapped on a proxy change, so private
+        // tabs still point at a valid store and are left alone.
+        let staleTabs = tabs.filter { !$0.isPrivate && $0.webView != nil && $0 !== selectedTab }
+        logger.log("Rebuilding WebViews for \(staleTabs.count) background tabs after proxy change",
+                   level: .info,
+                   category: .tabs)
+
         // Drop background webviews first — they hold references to the previous data store
         // and will keep its connection pool alive otherwise.
-        await offloadBackgroundWebViews()
+        for tab in staleTabs {
+            await tab.offloadWebView()
+        }
 
-        guard let selectedTab else { return }
+        guard let selectedTab,
+              !selectedTab.isPrivate,
+              let tabUUID = UUID(uuidString: selectedTab.tabUUID)
+        else { return }
+
+        // Flush the live interaction state before tearing the webview down, otherwise the
+        // session below is whatever was last preserved and any navigation made since is lost.
+        saveSessionData(forTab: selectedTab)
+        let session = tabSessionStore.fetchTabSession(tabID: tabUUID)
 
         // Tear down the selected tab's webview and rebuild it against a configuration that
-        // points at the freshly swapped-in data store.
+        // points at the freshly swapped-in data store, restoring the session so the tab keeps
+        // its back/forward list across the swap.
         await selectedTab.close()
-        let configuration = tabConfigurationProvider
-            .configuration(isPrivate: selectedTab.isPrivate)
-            .webViewConfiguration
-        selectedTab.createWebview(configuration: configuration)
+        selectTabWithSession(tab: selectedTab, sessionData: session)
+
+        // The rebuilt store inherits the previous store's HTTP cache, so the restored
+        // navigation can still be served from cache — bypass it explicitly to guarantee the
+        // visible page went over the network through the new store.
         selectedTab.reload(bypassCache: true)
     }
 
