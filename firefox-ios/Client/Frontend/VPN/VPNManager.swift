@@ -14,6 +14,7 @@ protocol VPNManaging {
     var isRunning: Bool { get }
     func start() async
     func stop() async
+    func removeOrphanedStores() async
 }
 
 enum VPNError: Error {
@@ -90,9 +91,16 @@ final class VPNManager: VPNManaging {
     func stop() async {
         self.rotationTask?.cancel()
         self.rotationTask = nil
-        await self.applyProxyAndRebuildWebViews(configs: [])
+        await DefaultWKEngineConfigurationProvider.restoreDefaultStore()
+        await self.rebuildWebViewsAndReclaimStores()
         self.activeServer = nil
         self.isRunning = false
+    }
+
+    /// Discards identified stores stranded by a previous run that was killed with the proxy on.
+    /// The proxy is intentionally not persisted, so nothing points at those stores any more.
+    func removeOrphanedStores() async {
+        await DefaultWKEngineConfigurationProvider.removeOrphanedStores()
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the

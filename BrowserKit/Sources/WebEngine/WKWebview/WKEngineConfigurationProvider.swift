@@ -96,6 +96,39 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         }
     }
 
+    /// Migrates the swapped-in persistent store's data back into `WKWebsiteDataStore.default()`
+    /// and marks the identified store for removal. Call when the proxy is turned off: the app
+    /// always starts on the default store, so returning to it here is what keeps data written
+    /// during a proxy session reachable after the process is killed and relaunched.
+    @available(iOS 26.0, *)
+    public static func restoreDefaultStore() async {
+        guard let currentIdentifier = defaultStoreIdentifier else { return }
+
+        let oldStore = defaultStore
+        let newStore = WKWebsiteDataStore.default()
+        newStore.proxyConfigurations = []
+        await copyData(from: oldStore, to: newStore)
+        await copyCookies(from: oldStore, to: newStore)
+        defaultStore = newStore
+        defaultStoreIdentifier = nil
+        staleStoreIdentifier = currentIdentifier
+    }
+
+    /// Removes identified persistent stores left behind by a previous process that was killed
+    /// while a proxy was applied. Nothing points at them once the app restarts on the default
+    /// store, so they are pure disk cost.
+    @available(iOS 17.0, *)
+    public static func removeOrphanedStores() async {
+        let identifiers = await WKWebsiteDataStore.allDataStoreIdentifiers
+        for identifier in identifiers where identifier != defaultStoreIdentifier {
+            do {
+                try await WKWebsiteDataStore.remove(forIdentifier: identifier)
+            } catch {
+                // log error
+            }
+        }
+    }
+
     @available(iOS 26.0, *)
     public static func copyData(from oldStore: WKWebsiteDataStore, to newStore: WKWebsiteDataStore) async {
         do {
