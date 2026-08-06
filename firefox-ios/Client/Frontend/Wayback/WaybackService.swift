@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 class WaybackService {
     struct Snapshot: Decodable {
@@ -21,7 +22,7 @@ class WaybackService {
     }
 
     private static let session: URLSession = {
-        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+        let version = AppInfo.appVersion
         let config = URLSessionConfiguration.default
         config.httpAdditionalHeaders = [
             "User-Agent": "firefox-ios-neterr/\(version) (+https://mzl.la/3RNfZFB)"
