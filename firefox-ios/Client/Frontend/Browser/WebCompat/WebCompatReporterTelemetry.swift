@@ -20,32 +20,32 @@ struct WebCompatReporterTelemetry {
     }
 
     func opened(source: Source) {
-        let extra = GleanMetrics.BrokenSiteReport.OpenedExtra(source: source.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.opened, extras: extra)
+        let extra = GleanMetrics.BrokenSiteReportInteractions.OpenedExtra(source: source.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReportInteractions.opened, extras: extra)
     }
 
     func reasonSelected(category: WebCompatIssueCategory) {
-        let extra = GleanMetrics.BrokenSiteReport.ReasonSelectedExtra(reason: category.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.reasonSelected, extras: extra)
+        let extra = GleanMetrics.BrokenSiteReportInteractions.ReasonSelectedExtra(reason: category.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReportInteractions.reasonSelected, extras: extra)
     }
 
     func previewed() {
-        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.previewed)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReportInteractions.previewed)
     }
 
     func cancelled() {
-        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.cancelled)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReportInteractions.cancelled)
     }
 
     func created(withBlockedTrackers: Bool, withScreenshot: Bool) {
-        let extra = GleanMetrics.BrokenSiteReport.CreatedExtra(
+        let extra = GleanMetrics.BrokenSiteReportInteractions.CreatedExtra(
             hasBlockedTrackersList: withBlockedTrackers,
             hasScreenshot: withScreenshot
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.created, extras: extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReportInteractions.created, extras: extra)
     }
 
     func learnMoreTapped() {
-        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReport.learnMoreTapped)
+        gleanWrapper.recordEvent(for: GleanMetrics.BrokenSiteReportInteractions.learnMoreTapped)
     }
 }

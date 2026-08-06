@@ -324,7 +324,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         let openedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.compactMap {
-                $0 as? GleanMetrics.BrokenSiteReport.OpenedExtra
+                $0 as? GleanMetrics.BrokenSiteReportInteractions.OpenedExtra
             }.first
         )
 
