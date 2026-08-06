@@ -960,9 +960,12 @@ final class TabManagerImplementation: NSObject,
         selectedIndex = -1
 
         // No Tab.close(), `.didClose` or screenshot/session cleanup: these tabs moved rather than
-        // closed, and the destination window reuses their UUIDs, so their on-disk data must
-        // survive. Nor any persisting, which would race the caller's deletion of this window.
+        // closed, and the destination window reuses their UUIDs, so their on-disk data must survive.
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: nil) }
+
+        // Replaces the tab list any already-scheduled save still holds, which would otherwise be
+        // written after this point and bring the moved tabs back.
+        preserveTabs(forced: true)
     }
 
     private func saveAllTabData() {

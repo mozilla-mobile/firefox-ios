@@ -5,6 +5,7 @@
 import Foundation
 import TabDataStore
 import Common
+import XCTest
 
 final class MockTabDataStore: TabDataStore, @unchecked Sendable {
     var fetchWindowDataCalledCount = 0
@@ -35,8 +36,13 @@ final class MockTabDataStore: TabDataStore, @unchecked Sendable {
         clearAllWindowsDataCalled += 1
     }
 
+    var removedWindowDataUUIDs: [WindowUUID] = []
+    var removeWindowDataExpectation: XCTestExpectation?
+
     func removeWindowData(forUUIDs: [WindowUUID]) async {
         removeWindowDataCalled += 1
+        removedWindowDataUUIDs.append(contentsOf: forUUIDs)
+        removeWindowDataExpectation?.fulfill()
     }
 }
 
