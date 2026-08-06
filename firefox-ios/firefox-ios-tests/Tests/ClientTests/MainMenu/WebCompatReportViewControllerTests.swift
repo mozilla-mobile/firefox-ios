@@ -303,7 +303,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
         // The groups and labels come from the payload, so a metric added there shows up here
         // without the view controller being touched.
-        XCTAssertEqual(viewModel.sections.map(\.id), payload.previewGroups.map(\.id))
+        XCTAssertEqual(viewModel.sections.map(\.id), payload.previewGroups.map(\.id.rawValue))
         let rendered = viewModel.sections.flatMap { section in
             section.rows.map { "\(section.id).\($0.label) = \($0.value.displayText)" }
         }

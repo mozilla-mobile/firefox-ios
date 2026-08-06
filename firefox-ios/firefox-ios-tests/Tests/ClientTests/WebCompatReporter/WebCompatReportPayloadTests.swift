@@ -46,7 +46,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
         // groups is one that leaves the device without ever being shown. Counted off the struct
         // rather than hardcoded, so adding a metric fails here until it's given a line.
         let metricCount = Mirror(reflecting: WebCompatReportPayload()).children.count
-        let keys = groups.flatMap { group in group.fields.map { "\(group.id).\($0.key)" } }
+        let keys = groups.flatMap { group in group.fields.map { "\(group.id.rawValue).\($0.key.rawValue)" } }
         XCTAssertEqual(Set(keys).count, keys.count)
         XCTAssertEqual(keys.count, metricCount)
     }
@@ -55,7 +55,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
         // The sections are labelled with the raw `broken-site-report` keys, so a group named or
         // ordered differently from the schema misdescribes the ping the user is agreeing to send.
         XCTAssertEqual(
-            WebCompatReportPayload().previewGroups.map(\.id),
+            WebCompatReportPayload().previewGroups.map(\.id.rawValue),
             ["basic", "tabInfo", "antiTracking", "frameworks", "app", "system", "graphics"]
         )
     }
@@ -95,7 +95,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
     private func renderedFields(of payload: WebCompatReportPayload) -> [String: String] {
         return Dictionary(
             uniqueKeysWithValues: payload.previewGroups.flatMap { group in
-                group.fields.map { ("\(group.id).\($0.key)", $0.value.displayText) }
+                group.fields.map { ("\(group.id.rawValue).\($0.key.rawValue)", $0.value.displayText) }
             }
         )
     }

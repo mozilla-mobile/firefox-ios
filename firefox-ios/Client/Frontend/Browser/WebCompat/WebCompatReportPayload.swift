@@ -47,12 +47,43 @@ struct WebCompatReportPayload: Equatable {
     }
 
     struct PreviewField {
-        let key: String
+        enum Key: String {
+            case description
+            case reason
+            case url
+            case languages
+            case useragentString
+            case blockList
+            case blockedOrigins
+            case etpCategory
+            case isPrivateBrowsing
+            case fastclick
+            case marfeel
+            case mobify
+            case defaultLocales
+            case defaultUseragentString
+            case isTablet
+            case memory
+            case devicePixelRatio
+            case hasTouchScreen
+        }
+
+        let key: Key
         let value: WebCompatReportPreviewViewModel.PreviewValue
     }
 
     struct PreviewGroup {
-        let id: String
+        enum Identifier: String {
+            case basic
+            case tabInfo
+            case antiTracking
+            case frameworks
+            case app
+            case system
+            case graphics
+        }
+
+        let id: Identifier
         let fields: [PreviewField]
     }
 
@@ -60,37 +91,37 @@ struct WebCompatReportPayload: Equatable {
     /// the report will actually send. Group and field names are the raw `broken-site-report` keys.
     var previewGroups: [PreviewGroup] {
         return [
-            PreviewGroup(id: "basic", fields: [
-                PreviewField(key: "description", value: previewValue(description)),
-                PreviewField(key: "reason", value: previewValue(breakageCategory)),
-                PreviewField(key: "url", value: previewValue(url))
+            PreviewGroup(id: .basic, fields: [
+                PreviewField(key: .description, value: previewValue(description)),
+                PreviewField(key: .reason, value: previewValue(breakageCategory)),
+                PreviewField(key: .url, value: previewValue(url))
             ]),
-            PreviewGroup(id: "tabInfo", fields: [
-                PreviewField(key: "languages", value: previewValue(languages)),
-                PreviewField(key: "useragentString", value: previewValue(userAgentString))
+            PreviewGroup(id: .tabInfo, fields: [
+                PreviewField(key: .languages, value: previewValue(languages)),
+                PreviewField(key: .useragentString, value: previewValue(userAgentString))
             ]),
-            PreviewGroup(id: "antiTracking", fields: [
-                PreviewField(key: "blockList", value: previewValue(blockList)),
-                PreviewField(key: "blockedOrigins", value: previewValue(blockedOrigins)),
-                PreviewField(key: "etpCategory", value: previewValue(etpCategory)),
-                PreviewField(key: "isPrivateBrowsing", value: previewValue(isPrivateBrowsing))
+            PreviewGroup(id: .antiTracking, fields: [
+                PreviewField(key: .blockList, value: previewValue(blockList)),
+                PreviewField(key: .blockedOrigins, value: previewValue(blockedOrigins)),
+                PreviewField(key: .etpCategory, value: previewValue(etpCategory)),
+                PreviewField(key: .isPrivateBrowsing, value: previewValue(isPrivateBrowsing))
             ]),
-            PreviewGroup(id: "frameworks", fields: [
-                PreviewField(key: "fastclick", value: previewValue(fastclick)),
-                PreviewField(key: "marfeel", value: previewValue(marfeel)),
-                PreviewField(key: "mobify", value: previewValue(mobify))
+            PreviewGroup(id: .frameworks, fields: [
+                PreviewField(key: .fastclick, value: previewValue(fastclick)),
+                PreviewField(key: .marfeel, value: previewValue(marfeel)),
+                PreviewField(key: .mobify, value: previewValue(mobify))
             ]),
-            PreviewGroup(id: "app", fields: [
-                PreviewField(key: "defaultLocales", value: previewValue(defaultLocales)),
-                PreviewField(key: "defaultUseragentString", value: previewValue(defaultUserAgentString))
+            PreviewGroup(id: .app, fields: [
+                PreviewField(key: .defaultLocales, value: previewValue(defaultLocales)),
+                PreviewField(key: .defaultUseragentString, value: previewValue(defaultUserAgentString))
             ]),
-            PreviewGroup(id: "system", fields: [
-                PreviewField(key: "isTablet", value: previewValue(isTablet)),
-                PreviewField(key: "memory", value: previewValue(memory))
+            PreviewGroup(id: .system, fields: [
+                PreviewField(key: .isTablet, value: previewValue(isTablet)),
+                PreviewField(key: .memory, value: previewValue(memory))
             ]),
-            PreviewGroup(id: "graphics", fields: [
-                PreviewField(key: "devicePixelRatio", value: previewValue(devicePixelRatio)),
-                PreviewField(key: "hasTouchScreen", value: previewValue(hasTouchScreen))
+            PreviewGroup(id: .graphics, fields: [
+                PreviewField(key: .devicePixelRatio, value: previewValue(devicePixelRatio)),
+                PreviewField(key: .hasTouchScreen, value: previewValue(hasTouchScreen))
             ])
         ]
     }

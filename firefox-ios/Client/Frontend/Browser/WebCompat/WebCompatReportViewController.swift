@@ -326,16 +326,17 @@ final class WebCompatReportViewController: UINavigationController,
             screenshotAccessibilityLabel: "",
             screenshotA11yIdentifier: "",
             sections: payload.previewGroups.map { group in
-                WebCompatReportPreviewViewModel.PreviewSection(
-                    id: group.id,
-                    title: group.id,
-                    a11yIdentifier: "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionHeader).\(group.id)",
+                let groupID = group.id.rawValue
+                return WebCompatReportPreviewViewModel.PreviewSection(
+                    id: groupID,
+                    title: groupID,
+                    a11yIdentifier: "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionHeader).\(groupID)",
                     contentA11yIdentifier:
-                        "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionContent).\(group.id)",
+                        "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionContent).\(groupID)",
                     rows: group.fields.map { field in
                         WebCompatReportPreviewViewModel.PreviewRow(
-                            id: "\(group.id).\(field.key)",
-                            label: field.key,
+                            id: "\(groupID).\(field.key.rawValue)",
+                            label: field.key.rawValue,
                             value: field.value
                         )
                     }
