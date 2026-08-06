@@ -20,10 +20,19 @@ class WaybackService {
         }
     }
 
+    private static let session: URLSession = {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+        let config = URLSessionConfiguration.default
+        config.httpAdditionalHeaders = [
+            "User-Agent": "firefox-ios-neterr/\(version) (+https://mzl.la/3RNfZFB)"
+        ]
+        return URLSession(configuration: config)
+    }()
+
     /// Returns the archived snapshot for a URL, or nil if none exists.
     static func fetchSnapshot(
         for urlString: String,
-        session: URLSession = .shared
+        session: URLSession = WaybackService.session
     ) async throws -> Snapshot? {
         var components = URLComponents(string: "https://archive.org/wayback/available")!
         components.queryItems = [URLQueryItem(name: "url", value: urlString)]
