@@ -118,7 +118,10 @@ final class TabTrayScreen {
     }
 
     func swipeToCloseFirstTab() {
-        guard let collectionView = getVisibleCollectionView() else { return }
+        guard let collectionView = getVisibleCollectionView() else {
+            XCTFail("Neither Top Tabs nor Tab Tray collection view is present")
+            return
+        }
         collectionView.cells.element(boundBy: 0).swipeLeft()
     }
 
@@ -203,8 +206,8 @@ final class TabTrayScreen {
 
     func getTabLabel(at index: Int) -> String? {
         guard let collectionView = getVisibleCollectionView() else {
-            XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
-            return
+            XCTFail("Neither Top Tabs nor Tab Tray collection view is present")
+            return nil
         }
         return collectionView.cells.element(boundBy: index).label
     }
