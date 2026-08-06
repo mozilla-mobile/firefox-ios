@@ -5,18 +5,18 @@
 @testable import Client
 
 final class MockUnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Sendable {
-    private var result: UnifiedTileResult?
+    private var result: SponsoredTileResult?
 
-    init(result: UnifiedTileResult?) {
+    init(result: SponsoredTileResult?) {
         self.result = result
     }
 
-    func fetchTiles(completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
+    func fetchTiles(completion: @escaping @Sendable (SponsoredTileResult) -> Void) {
         guard let result else { return }
 
         switch result {
-        case .success(let unifiedTiles):
-            completion(.success(unifiedTiles))
+        case .success(let sponsoredSites):
+            completion(.success(sponsoredSites))
         case .failure(let error):
             completion(.failure(error))
         }

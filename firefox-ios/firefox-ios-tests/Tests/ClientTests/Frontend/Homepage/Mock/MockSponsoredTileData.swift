@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Shared
+import Storage
 
 @testable import Client
 
@@ -12,36 +12,30 @@ struct MockSponsoredTileData {
         case testError
     }
 
-    static let emptySuccessData: [UnifiedTile] = []
+    static let emptySuccessData: [Site] = []
 
-    static var defaultSuccessData: [UnifiedTile] {
+    static var defaultSuccessData: [Site] {
         return [
-            UnifiedTile(
+            makeSponsoredSite(
                 url: "https://firefox.com",
-                callbacks: UnifiedTileCallback(
-                    click: "https://firefox.com/click",
-                    impression: "https://test.com"
-                ),
-                imageUrl: "https://test.com/image1.jpg",
-                name: "Firefox Sponsored Tile"
+                title: "Firefox Sponsored Tile",
+                clickURL: "https://firefox.com/click",
+                impressionURL: "https://test.com",
+                imageURL: "https://test.com/image1.jpg"
             ),
-            UnifiedTile(
+            makeSponsoredSite(
                 url: "https://mozilla.com",
-                callbacks: UnifiedTileCallback(
-                    click: "https://mozilla.com/click",
-                    impression: "https://example.com"
-                ),
-                imageUrl: "https://test.com/image2.jpg",
-                name: "Mozilla Sponsored Tile"
+                title: "Mozilla Sponsored Tile",
+                clickURL: "https://mozilla.com/click",
+                impressionURL: "https://example.com",
+                imageURL: "https://test.com/image2.jpg"
             ),
-            UnifiedTile(
+            makeSponsoredSite(
                 url: "https://support.mozilla.org/en-US/kb/firefox-focus-ios",
-                callbacks: UnifiedTileCallback(
-                    click: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
-                    impression: "https://another-example.com"
-                ),
-                imageUrl: "https://test.com/image3.jpg",
-                name: "Focus Sponsored Tile"
+                title: "Focus Sponsored Tile",
+                clickURL: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
+                impressionURL: "https://another-example.com",
+                imageURL: "https://test.com/image3.jpg"
             )
         ]
     }
@@ -51,27 +45,38 @@ struct MockSponsoredTileData {
     static let title = "A title %@"
     static let url = "https://www.aurl%@.com"
 
-    static var pinnedDuplicateTile: UnifiedTile {
-        return UnifiedTile(
+    static var pinnedDuplicateTile: Site {
+        return makeSponsoredSite(
             url: String(format: MockSponsoredTileData.pinnedURL, "0"),
-            callbacks: UnifiedTileCallback(
-                click: "https://www.test.com/click",
-                impression: "https://test.com"
-            ),
-            imageUrl: "https://test.com/image0.jpg",
-            name: String(format: MockSponsoredTileData.pinnedTitle, "0")
+            title: String(format: MockSponsoredTileData.pinnedTitle, "0"),
+            clickURL: "https://www.test.com/click",
+            impressionURL: "https://test.com",
+            imageURL: "https://test.com/image0.jpg"
         )
     }
 
-    static var duplicateTile: UnifiedTile {
-        return UnifiedTile(
+    static var duplicateTile: Site {
+        return makeSponsoredSite(
             url: String(format: MockSponsoredTileData.url, "0"),
-            callbacks: UnifiedTileCallback(
-                click: "https://www.test.com/click",
-                impression: "https://test.com"
-            ),
-            imageUrl: "https://test.com/image0.jpg",
-            name: String(format: MockSponsoredTileData.title, "0")
+            title: String(format: MockSponsoredTileData.title, "0"),
+            clickURL: "https://www.test.com/click",
+            impressionURL: "https://test.com",
+            imageURL: "https://test.com/image0.jpg"
         )
+    }
+
+    static func makeSponsoredSite(
+        url: String,
+        title: String,
+        clickURL: String,
+        impressionURL: String,
+        imageURL: String
+    ) -> Site {
+        let siteInfo = SponsoredSiteInfo(
+            impressionURL: impressionURL,
+            clickURL: clickURL,
+            imageURL: imageURL
+        )
+        return Site.createSponsoredSite(url: url, title: title, siteInfo: siteInfo)
     }
 }
