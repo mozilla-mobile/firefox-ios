@@ -14,6 +14,14 @@ protocol WindowMerging {
     /// - Parameter targetWindowUUID: the window that survives and receives all of the merged tabs.
     @MainActor
     func mergeAllWindows(into targetWindowUUID: WindowUUID)
+
+    /// Signals that a window has finished closing, which is when a window emptied by a merge has
+    /// its persisted data removed. `requestSceneSessionDestruction` reports only failures, so a
+    /// disconnecting scene is the only confirmation available that a window actually went away;
+    /// a window that never closes therefore keeps its data.
+    /// - Parameter uuid: the UUID of the window that closed.
+    @MainActor
+    func windowDidClose(uuid: WindowUUID)
 }
 
 final class MergeWindowsManager: WindowMerging {
@@ -21,6 +29,7 @@ final class MergeWindowsManager: WindowMerging {
     private let tabDataStore: TabDataStore
     private let sceneDestroyer: SceneDestroying
     private let logger: Logger
+    @MainActor private var windowUUIDsAwaitingClose: Set<WindowUUID> = []
 
     init(windowManager: WindowManager = AppContainer.shared.resolve(),
          tabDataStore: TabDataStore = DefaultTabDataStore(),
@@ -54,7 +63,12 @@ final class MergeWindowsManager: WindowMerging {
         var mergedTabData: [TabData] = []
         var sourceWindowUUIDs: [WindowUUID] = []
         for windowUUID in otherWindowUUIDs {
-            guard let tabManager = windowManager.tabManager(for: windowUUID) else { continue }
+            guard let tabManager = windowManager.tabManager(for: windowUUID) else {
+                logger.log("Failed to retrieve tabManager for windowUUID \(windowUUID)",
+                           level: .warning,
+                           category: .window)
+                continue
+            }
             mergedTabData.append(contentsOf: tabManager.tabDataForWindowMerge())
             sourceWindowUUIDs.append(windowUUID)
         }
@@ -68,14 +82,15 @@ final class MergeWindowsManager: WindowMerging {
             windowManager.tabManager(for: windowUUID)?.discardTabsMovedToAnotherWindow()
         }
 
-        sceneDestroyer.destroyScenes(for: sourceWindowUUIDs) { [logger] windowUUID, error in
+        // The window data is removed in windowDidClose(uuid:) once each scene has actually gone,
+        // so a window iOS declines to close keeps both its (now empty) tabs and its stored data.
+        windowUUIDsAwaitingClose.formUnion(sourceWindowUUIDs)
+
+        sceneDestroyer.destroyScenes(for: sourceWindowUUIDs) { [weak self, logger] windowUUID, error in
             logger.log("Merge windows could not close window \(windowUUID): \(error)",
                        level: .warning,
                        category: .window)
-        }
-
-        Task { [tabDataStore] in
-            await tabDataStore.removeWindowData(forUUIDs: sourceWindowUUIDs)
+            self?.windowUUIDsAwaitingClose.remove(windowUUID)
         }
 
         logger.log("""
@@ -84,5 +99,14 @@ final class MergeWindowsManager: WindowMerging {
                    """,
                    level: .info,
                    category: .window)
+    }
+
+    @MainActor
+    func windowDidClose(uuid: WindowUUID) {
+        guard windowUUIDsAwaitingClose.remove(uuid) != nil else { return }
+
+        Task { [tabDataStore] in
+            await tabDataStore.removeWindowData(forUUIDs: [uuid])
+        }
     }
 }
