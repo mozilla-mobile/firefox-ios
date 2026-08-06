@@ -7,7 +7,6 @@ import Foundation
 import UIKit
 import WebCompatReporterKit
 
-/// What the report flow needs from the browser, which the flow itself can't reach.
 @MainActor
 protocol WebCompatReportCoordinatorNavigationDelegate: AnyObject {
     func webCompatReportOpenURLInNewTab(_ url: URL)
@@ -24,8 +23,7 @@ final class WebCompatReportCoordinator: BaseCoordinator,
     private weak var navigationDelegate: WebCompatReportCoordinatorNavigationDelegate?
 
     private weak var reportViewController: WebCompatReportViewController?
-    /// The main router presents from the browser, which is already showing the sheet, so the
-    /// preview needs a router rooted at the sheet itself.
+    /// The main router presents from the browser, which already shows the sheet.
     private var previewRouter: Router?
 
     init(
@@ -84,8 +82,6 @@ final class WebCompatReportCoordinator: BaseCoordinator,
             themeManager: themeManager
         )
         previewViewController.delegate = self
-        // The thumbnail is disabled for this integration: never handing the screen a screenshot
-        // keeps the section out of the list entirely.
         let previewNavigationController = UINavigationController(rootViewController: previewViewController)
         if let sheet = previewNavigationController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -105,12 +101,10 @@ final class WebCompatReportCoordinator: BaseCoordinator,
     }
 
     func webCompatReportPreviewDidTapScreenshot() {
-        // Unreachable while the thumbnail is disabled. FXIOS-16186 wires this to
-        // WebCompatFullPageScreenshotViewController once the screenshot ships.
+        // Unreachable while the thumbnail is off; FXIOS-16186 wires up the screenshot viewer.
     }
 
-    /// Dismisses the preview first when it's up, so the sheet underneath isn't pulled out from
-    /// under it.
+    /// Dismisses the preview first, so the sheet isn't pulled out from under it.
     private func dismissReport(completion: (() -> Void)? = nil) {
         previewRouter?.dismiss(animated: false, completion: nil)
         previewRouter = nil

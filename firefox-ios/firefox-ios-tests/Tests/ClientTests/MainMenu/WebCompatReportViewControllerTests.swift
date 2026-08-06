@@ -155,8 +155,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         subject.webCompatReportSheetDidTapPreview()
 
         XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .preview)
-        // The coordinator finishes the payload off the tab and navigates, so it needs the draft
-        // and the toggles, not just the fact that the button was tapped.
+        // The coordinator needs the draft and the toggles, not just the tap.
         XCTAssertEqual(coordinator.didTapPreviewRequests.count, 1)
         let request = try XCTUnwrap(coordinator.didTapPreviewRequests.first)
         XCTAssertEqual(request.payload.url, "https://example.com")
@@ -301,8 +300,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
         let viewModel = WebCompatReportViewController.makePreviewViewModel(payload: payload, screenshot: nil)
 
-        // The groups and labels come from the payload, so a metric added there shows up here
-        // without the view controller being touched.
+        // Groups and labels come from the payload, so a new metric shows up without touching this file.
         XCTAssertEqual(viewModel.sections.map(\.id), payload.previewGroups.map(\.id.rawValue))
         let rendered = viewModel.sections.flatMap { section in
             section.rows.map { "\(section.id).\($0.label) = \($0.value.displayText)" }
@@ -339,8 +337,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
             screenshot: nil
         )
 
-        // UI tests address a group by its header and its card separately, so a shared identifier
-        // would make either one unreachable.
+        // Header and card are addressed separately in UI tests, so they can't share an identifier.
         let identifiers = viewModel.sections.flatMap { [$0.a11yIdentifier, $0.contentA11yIdentifier] }
         XCTAssertEqual(Set(identifiers).count, identifiers.count)
         XCTAssertTrue(identifiers.allSatisfy { $0.hasPrefix("WebCompatReporter.Preview.") })

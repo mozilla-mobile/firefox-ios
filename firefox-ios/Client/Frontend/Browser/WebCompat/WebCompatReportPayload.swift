@@ -87,8 +87,7 @@ struct WebCompatReportPayload: Equatable {
         let fields: [PreviewField]
     }
 
-    /// Projected from this struct rather than from Redux state, so the preview can only show what
-    /// the report will actually send. Group and field names are the raw `broken-site-report` keys.
+    /// Projected from this struct, not from Redux state, so the preview can only show what gets sent.
     var previewGroups: [PreviewGroup] {
         return [
             PreviewGroup(id: .basic, fields: [

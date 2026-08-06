@@ -42,9 +42,8 @@ final class WebCompatReportPayloadTests: XCTestCase {
     func testPreviewGroups_coverEveryMetricExactlyOnce() {
         let groups = WebCompatReportPayload().previewGroups
 
-        // The preview is the user's account of what gets sent, so a metric missing from these
-        // groups is one that leaves the device without ever being shown. Counted off the struct
-        // rather than hardcoded, so adding a metric fails here until it's given a line.
+        // A metric missing here leaves the device without ever being shown. Counted off the struct,
+        // so a new one fails this until it's given a line.
         let metricCount = Mirror(reflecting: WebCompatReportPayload()).children.count
         let keys = groups.flatMap { group in group.fields.map { "\(group.id.rawValue).\($0.key.rawValue)" } }
         XCTAssertEqual(Set(keys).count, keys.count)
@@ -52,8 +51,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
     }
 
     func testPreviewGroups_areNamedAndOrderedLikeTheReportSchema() {
-        // The sections are labelled with the raw `broken-site-report` keys, so a group named or
-        // ordered differently from the schema misdescribes the ping the user is agreeing to send.
+        // Labelled with the raw schema keys, so a renamed or reordered group misdescribes the ping.
         XCTAssertEqual(
             WebCompatReportPayload().previewGroups.map(\.id.rawValue),
             ["basic", "tabInfo", "antiTracking", "frameworks", "app", "system", "graphics"]

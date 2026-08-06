@@ -321,8 +321,7 @@ final class WebCompatReportViewController: UINavigationController,
             title: .WebCompatReporter.Preview.Title,
             closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
-            // The thumbnail is disabled for this integration, so the screen never renders it and
-            // these two go unread. They come back with the screenshot in FXIOS-16450.
+            // Unread while the thumbnail is off; they come back with the screenshot in FXIOS-16450.
             screenshotAccessibilityLabel: "",
             screenshotA11yIdentifier: "",
             sections: payload.previewGroups.map { group in
@@ -361,8 +360,7 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     func webCompatReportSheetDidTapPreview() {
-        // Still dispatched for the telemetry the middleware will attach (FXIOS-16187); the
-        // coordinator is what navigates.
+        // Dispatched for telemetry (FXIOS-16187); the coordinator does the navigating.
         store.dispatch(WebCompatReporterViewAction(
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.preview
