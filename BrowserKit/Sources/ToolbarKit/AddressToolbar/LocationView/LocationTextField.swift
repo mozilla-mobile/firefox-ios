@@ -91,6 +91,17 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         textWithoutSuggestion() ?? text ?? ""
     }
 
+    // Ecosia: Write counterpart to `plainUserText`, for replacing the field's contents from
+    // code — the suggestion list's "append" arrow. Drops any inline autocomplete first so the
+    // appended query can't be spliced onto a stale completion, and parks the caret at the end
+    // so typing continues from the appended text.
+    func setPlainUserText(_ value: String) {
+        removeCompletion()
+        hideCursor = false
+        text = value
+        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
+    }
+
     override var accessibilityCustomActions: [UIAccessibilityCustomAction]? {
         get {
             return accessibilityActionsSource?.accessibilityCustomActionsForView(self)

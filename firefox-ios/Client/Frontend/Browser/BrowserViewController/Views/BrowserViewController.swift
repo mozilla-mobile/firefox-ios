@@ -4826,6 +4826,9 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
         searchViewController.searchTelemetry?.interactionType = .pasted
         setLocationView(text: text, search: false)
+        // Ecosia: `setLocationView` cannot update the address bar while `didStartTyping` is
+        // set, which it always is by the time the append arrow is reachable.
+        applyAppendedSearchTermToAddressBar(text)
     }
 
     func searchViewControllerWillHide(_ searchViewController: SearchViewController) {

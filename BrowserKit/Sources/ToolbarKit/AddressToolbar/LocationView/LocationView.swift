@@ -215,6 +215,20 @@ final class LocationView: UIView,
         applyTheme(theme: theme)
     }
 
+    // Ecosia: Replace the field's contents from code (suggestion "append" arrow).
+    //
+    // This deliberately bypasses Redux. `configureURLTextField` refuses to write the text
+    // field while `didStartTyping` is set — which it always is once the user has typed
+    // enough to surface suggestions — so a state round-trip cannot deliver the appended
+    // query. That same guard is what makes writing directly safe: a later reconfigure
+    // won't clobber what we set here.
+    func setPlainUserText(_ text: String) {
+        urlTextField.setPlainUserText(text)
+        // Keep the cached term in step so a subsequent re-focus reports the appended query
+        // to `locationViewDidBeginEditing` rather than the pre-append one.
+        searchTerm = text
+    }
+
     private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
         var newConstraints: [NSLayoutConstraint] = []
         if isEditing || !isURLTextFieldCentered || isURLTextFieldWiderThanVisibleArea() {

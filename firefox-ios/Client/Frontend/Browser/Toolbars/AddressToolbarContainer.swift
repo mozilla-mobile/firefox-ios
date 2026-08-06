@@ -156,6 +156,12 @@ final class AddressToolbarContainer: UIView,
         toolbar.overlayEditingText
     }
 
+    // Ecosia: Write counterpart to `overlayLocationText`, used by the suggestion list's
+    // "append" arrow to fill the address bar without submitting.
+    func setOverlayLocationText(_ text: String) {
+        toolbar.setOverlayEditingText(text)
+    }
+
     init(isMinimalAddressBarEnabled: Bool, toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.isMinimalAddressBarEnabled = isMinimalAddressBarEnabled
         self.toolbarHelper = toolbarHelper

@@ -139,6 +139,28 @@ extension BrowserViewController {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: themeManager.getCurrentTheme(for: windowUUID))
     }
+
+    /// Pushes text appended from a suggestion's "append" arrow into the address bar.
+    ///
+    /// The Redux round-trip cannot do this. Ecosia's reducer deliberately preserves
+    /// `didStartTyping` on `didSetTextInLocationView` (upstream clears it) so a suggestion
+    /// highlight can't overwrite the field mid-keystroke — and
+    /// `LocationView.configureURLTextField` bails on that same flag before writing the text
+    /// field. By the time the append arrow is reachable the user has necessarily typed, so
+    /// the flag is always set and the appended query never lands, leaving the address bar
+    /// out of sync with the suggestions list (which `appendSearch` updates directly).
+    ///
+    /// Clearing the flag instead is not an option: with the keyboard drag-dismissed it is
+    /// the only thing stopping `LocationView` from resigning first responder (MOB-4580),
+    /// which would tear the overlay down. So write the field directly — the same guard that
+    /// blocks the state update also stops a later reconfigure from clobbering this.
+    func applyAppendedSearchTermToAddressBar(_ text: String) {
+        // The NTP omnibox owns the overlay in that mode and `setLocationView` already
+        // wrote the pill directly.
+        guard !(searchController?.parent is HomepageViewController) else { return }
+
+        addressToolbarContainer.setOverlayLocationText(text)
+    }
 }
 
 // MARK: Present intro

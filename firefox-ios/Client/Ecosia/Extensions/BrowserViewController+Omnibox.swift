@@ -453,13 +453,32 @@ extension BrowserViewController {
 
     @objc fileprivate func handleOmniboxFastTap(_ gesture: UITapGestureRecognizer) {
         guard let tableView = gesture.view as? UITableView,
-              let indexPath = tableView.indexPathForRow(at: gesture.location(in: tableView)),
               let searchController else { return }
+        let location = gesture.location(in: tableView)
+        // The recogniser is attached to the table, so it also fires for touches
+        // that land on a cell's own controls — notably the "append" arrow, whose
+        // whole purpose is to fill the omnibox *without* searching. Selecting the
+        // row here would submit the query instead, and disabling interaction below
+        // would swallow the button's `touchUpInside` on the way out. Bail so the
+        // touch reaches the control untouched.
+        guard !Self.isInsideControl(tableView.hitTest(location, with: nil), upTo: tableView) else { return }
+        guard let indexPath = tableView.indexPathForRow(at: location) else { return }
         // Disable further interaction so the table's own delayed selection
         // gesture doesn't re-fire `didSelectRowAt` after we've handed off to
         // the submit pipeline. Re-enabled on the next omnibox attach.
         tableView.isUserInteractionEnabled = false
         searchController.tableView(tableView, didSelectRowAt: indexPath)
+    }
+
+    /// Whether `view` is a `UIControl` or nested inside one, searching no further
+    /// up than `limit` so the table itself is never considered.
+    private static func isInsideControl(_ view: UIView?, upTo limit: UIView) -> Bool {
+        var current = view
+        while let candidate = current, candidate !== limit {
+            if candidate is UIControl { return true }
+            current = candidate.superview
+        }
+        return false
     }
 
     fileprivate static func nearestViewController(of view: UIView) -> UIViewController? {

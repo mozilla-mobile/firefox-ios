@@ -457,6 +457,12 @@ public class BrowserAddressToolbar: UIView,
         locationView.plainUserText
     }
 
+    // Ecosia: Write counterpart to `overlayEditingText`, used by the suggestion list's
+    // "append" arrow to fill the address bar without submitting.
+    public func setOverlayEditingText(_ text: String) {
+        locationView.setPlainUserText(text)
+    }
+
     // MARK: - LocationViewDelegate
     func locationViewDidEnterText(_ text: String) {
         toolbarDelegate?.searchSuggestions(searchTerm: text)
