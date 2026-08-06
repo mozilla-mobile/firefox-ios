@@ -272,11 +272,11 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         completeFxASignIn()
+        mozWaitForElementToExist(app.staticTexts["Example Domain"])
 
         // Step 11: Tap on a tab from the Synced Tabs section
-        mozWaitForElementToExist(app.staticTexts["Example Domain"])
         app.staticTexts["Example Domain"].waitAndTap()
-        waitForTabsButton()
+        waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "example.com")
     }
 
