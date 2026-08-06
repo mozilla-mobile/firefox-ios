@@ -464,15 +464,13 @@ final class TopSitesManagerTests: XCTestCase {
         var sponsoredSites = [Site]()
         (0..<count).forEach {
             let tile = UnifiedTile(
-                format: "",
                 url: "www.url\($0).com",
                 callbacks: UnifiedTileCallback(
                     click: "www.url\($0).com/click",
                     impression: "www.url\($0).com"
                 ),
                 imageUrl: "www.url\($0).com/image1.jpg",
-                name: "Sponsored Tile \($0)",
-                blockKey: "Block_key_1"
+                name: "Sponsored Tile \($0)"
             )
             sponsoredSites.append(Site.createSponsoredSite(fromUnifiedTile: tile))
         }
