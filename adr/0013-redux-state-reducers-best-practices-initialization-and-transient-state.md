@@ -49,7 +49,7 @@ Redux States should have **precisely three** initializers:
 
 All Redux State types conform to `StateType`, which requires a `defaultState(from:)` implementation. 
 
-A correct `defaultState(from:)` implementaiton should:
+A correct `defaultState(from:)` implementation should:
 
 - Return a new instance of the State using the memberwise `init()`, NOT the `.copy()` methods
 - Copy over persistent properties directly from the `from` argument
@@ -121,7 +121,7 @@ You should then carefully audit each reducer `return` statement as you apply the
 
 ### Neutral Consequences
 
-- N/A
+- Refactoring the Redux State memberwise `init()` to remove default arguments may involve refactoring call sites in unit test files
 
 ### Negative Consequences
 
