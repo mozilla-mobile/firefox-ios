@@ -28,6 +28,25 @@ enum BlocklistCategory: CaseIterable {
             return .fingerprinting
         }
     }
+
+    /// A stable string identifier used to persist per-category stats. Unlike the
+    /// enum case order, this value is guaranteed not to change, so serialized
+    /// stats remain readable even if the enum is reordered or extended.
+    var storageKey: String {
+        switch self {
+        case .advertising: return "advertising"
+        case .analytics: return "analytics"
+        case .social: return "social"
+        case .cryptomining: return "cryptomining"
+        case .fingerprinting: return "fingerprinting"
+        }
+    }
+
+    init?(storageKey: String) {
+        guard let match = BlocklistCategory.allCases.first(where: { $0.storageKey == storageKey })
+        else { return nil }
+        self = match
+    }
 }
 
 enum BlocklistFileName: String, CaseIterable {
@@ -112,7 +131,7 @@ struct NoImageModeDefaults {
 }
 
 @MainActor
-class ContentBlocker {
+class ContentBlocker: Notifiable {
     var safelistedDomains = SafelistedDomains()
     let ruleStore = WKContentRuleListStore.default()
     var blockImagesRule: WKContentRuleList?
@@ -145,6 +164,28 @@ class ContentBlocker {
                     NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
                 }
             }
+        }
+
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [.remoteSettingsDidSync]
+        )
+    }
+
+    nonisolated func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .remoteSettingsDidSync:
+            guard let collections = notification.userInfo?["updatedCollections"] as? [String],
+                  collections.contains(ASRemoteSettingsCollection.trackingProtectionLists.rawValue) else {
+                return
+            }
+            Task { @MainActor [weak self] in
+                await self?.reloadAdBlockerList()
+                self?.prefsChanged()
+            }
+        default:
+            break
         }
     }
 
@@ -391,7 +432,10 @@ extension ContentBlocker {
                 self?.logger.log("Will compile list: \(filename)", level: .info, category: .adblock)
                 self?.loadJsonFromBundle(forResource: filename) { jsonString in
                     ensureMainThread {
-                        var str = jsonString
+                        // Ensure JSON is lowercase only. WebKit rules expect lowercase
+                        // domains (and no other part of the JSON should be uppercase).
+                        // Introduced with FXIOS-16380.
+                        var str = jsonString.lowercased()
 
                         // Here we find the closing array bracket in the JSON string
                         // and append our safelist as a rule to the end of the JSON.

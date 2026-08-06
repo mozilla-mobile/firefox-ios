@@ -93,9 +93,7 @@ extension BrowserViewController {
 
         updateReaderModeBar()
 
-        if !isSnapKitRemovalEnabled {
-            updateViewConstraints()
-        } else if needsConstraintsUpdate, let readerModeBar {
+        if needsConstraintsUpdate, let readerModeBar {
             browserLayoutManager.addReaderModeBarHeight(readerModeBar)
         }
     }
@@ -109,10 +107,6 @@ extension BrowserViewController {
             header.removeArrangedView(readerModeBar)
         }
         self.readerModeBar = nil
-
-        if !isSnapKitRemovalEnabled {
-            updateViewConstraints()
-        }
     }
 
     /// There are two ways we can enable reader mode. In the simplest case we open a URL to our internal reader mode

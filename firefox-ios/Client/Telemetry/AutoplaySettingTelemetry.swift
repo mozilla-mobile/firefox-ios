@@ -11,10 +11,6 @@ class AutoplaySettingTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    enum EventExtraKey: String {
-        case mediaType
-    }
-
     func settingChanged(mediaType: AutoplayAction) {
         let extras = GleanMetrics.Preferences.AutoplaySettingChangedExtra(mediaType: mediaType.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.Preferences.autoplaySettingChanged,

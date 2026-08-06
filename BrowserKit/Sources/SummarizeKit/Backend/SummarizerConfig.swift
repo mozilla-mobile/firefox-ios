@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import LLMKit
+import FoundationModels
 
 /// A configuration container for a summarizer.
 public struct SummarizerConfig: LLMConfig, Equatable, Sendable {
@@ -31,9 +32,6 @@ public struct SummarizerConfig: LLMConfig, Equatable, Sendable {
     }
 }
 
-#if canImport(FoundationModels)
-import FoundationModels
-
 @available(iOS 26, *)
 extension SummarizerConfig {
     func toGenerationOptions() -> GenerationOptions {
@@ -44,4 +42,3 @@ extension SummarizerConfig {
         )
     }
 }
-#endif

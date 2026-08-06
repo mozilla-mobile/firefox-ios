@@ -108,9 +108,14 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript, Featu
         return userPrefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .basic
     }
 
-    init(tab: ContentBlockerTab, prefs: Prefs) {
+    init(
+        tab: ContentBlockerTab,
+        prefs: Prefs,
+        statsRecorder: TrackerBlockStatsStore? = nil
+    ) {
         userPrefs = prefs
         super.init(tab: tab)
+        self.statsRecorder = statsRecorder ?? DefaultTrackerBlockStatsStoreUtility(prefs: prefs)
         setupForTab()
     }
 

@@ -19,4 +19,9 @@ struct NativeErrorPageFeatureFlag: FeatureFlaggable {
     var isBadCertDomainErrorPageEnabled: Bool {
         return featureFlagsProvider.isEnabled(.badCertDomainErrorPage)
     }
+
+    /// Flag for showing Wayback entry point
+    var isWaybackEnabled: Bool {
+        return featureFlagsProvider.isEnabled(.waybackMachine)
+    }
 }

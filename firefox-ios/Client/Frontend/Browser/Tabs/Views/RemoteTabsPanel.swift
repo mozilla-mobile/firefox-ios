@@ -21,7 +21,7 @@ protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
 }
 
-class RemoteTabsPanel: UIViewController,
+final class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemoteTabsEmptyViewDelegate,
@@ -79,7 +79,7 @@ class RemoteTabsPanel: UIViewController,
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
         guard Thread.isMainThread else {
-            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            assertionFailure("TabSwipeGestureHandler was not deallocated on the main thread. Observer was not removed")
             return
         }
 
@@ -291,7 +291,7 @@ class RemoteTabsPanel: UIViewController,
             }
         case .ProfileDidFinishSyncing:
             ensureMainThread {
-                self.refreshTabs()
+                self.refreshTabs(useCache: true)
             }
         default: return
         }

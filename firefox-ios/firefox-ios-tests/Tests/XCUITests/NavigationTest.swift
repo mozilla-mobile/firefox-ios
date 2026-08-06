@@ -107,7 +107,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         navigator.performAction(Action.OpenEmailToSignIn)
         mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
         if #available(iOS 17, *) {
-            mozWaitForElementToExist(app.webViews.staticTexts["Continue to your ⁨Mozilla account⁩"])
+            mozWaitForElementToExist(app.webViews.staticTexts["Continue to your ⁨Mozilla account⁩"], timeout: TIMEOUT_LONG)
         }
     }
 
@@ -642,6 +642,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen.assertWebViewLinkTextExists(text: "Legal")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4221455
     func testLongTapFirefoxIconAppIcon() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")

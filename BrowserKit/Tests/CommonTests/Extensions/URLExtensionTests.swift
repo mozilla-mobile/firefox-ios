@@ -129,6 +129,18 @@ final class URLExtensionTests: XCTestCase {
         urls.forEach { XCTAssertEqual(URL(string: $0.0)!.domainURL.absoluteString, $0.1) }
     }
 
+    func testBaseURLWithPath() {
+        let urls = [
+            ("https://example.com/articles/some-post?token=abc123&ref=email#section2", "https://example.com/articles/some-post"),
+            ("https://user:pass@example.com/path", "https://example.com/path"),
+            ("https://example.com/path", "https://example.com/path"),
+            ("https://example.com", "https://example.com"),
+            ("https://example.com/path?query=1", "https://example.com/path"),
+            ("https://example.com/path#fragment", "https://example.com/path")
+        ]
+        urls.forEach { XCTAssertEqual(URL(string: $0.0)!.baseURLWithPath?.absoluteString, $0.1) }
+    }
+
     func testnormalizedHostAndPath() {
         let goodurls = [
             ("https://www.example.com/index.html", "example.com/index.html"),

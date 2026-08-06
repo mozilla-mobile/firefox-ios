@@ -54,6 +54,7 @@ final class NativeErrorPageViewController: UIViewController,
         static let badCertContentGap: CGFloat = 16
         static let badCertImageSize: CGFloat = 160
         static let badCertGapBetweenImageAndContent: CGFloat = 40
+        static let waybackTopPaddingReduction: CGFloat = 40
     }
 
     private lazy var scrollView: UIScrollView = .build()
@@ -150,11 +151,14 @@ final class NativeErrorPageViewController: UIViewController,
         }
     }
 
+    private let searchEnginesManager: SearchEnginesManagerProvider
+
     init(
         windowUUID: WindowUUID,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         overlayManager: OverlayModeManager,
+        searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         logger: Logger = DefaultLogger.shared
     ) {
@@ -162,6 +166,7 @@ final class NativeErrorPageViewController: UIViewController,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.overlayManager = overlayManager
+        self.searchEnginesManager = searchEnginesManager
         self.notificationCenter = notificationCenter
         self.logger = logger
         nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
@@ -210,6 +215,7 @@ final class NativeErrorPageViewController: UIViewController,
         } else {
             errorDescriptionLabel.text = model.description
         }
+        regularContentView.configure(showWaybackButton: model.isWayback)
         applyTheme()
     }
 
@@ -275,7 +281,7 @@ final class NativeErrorPageViewController: UIViewController,
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
         guard Thread.isMainThread else {
-            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            assertionFailure("TabSwipeGestureHandler was not deallocated on the main thread. Observer was not removed")
             return
         }
 
@@ -355,7 +361,8 @@ final class NativeErrorPageViewController: UIViewController,
 
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
-                constant: isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top
+                constant: (isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top) -
+                          (model?.isWayback == true ? UX.waybackTopPaddingReduction : 0)
             ),
             scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
@@ -416,6 +423,51 @@ final class NativeErrorPageViewController: UIViewController,
 
     func regularContentViewDidTapReload() {
         dispatchBrowserAction(actionType: .reloadWebsite, isNativeErrorPage: true)
+    }
+
+    func regularContentViewDidTapSearchWayback() {
+        guard let failingURL = model?.url?.baseURLWithPath else { return }
+        regularContentView.configureWaybackButton(state: .loading)
+
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let snapshot = try await WaybackService.fetchSnapshot(for: failingURL.absoluteString)
+                guard let snapshot, snapshot.available, let archivedURL = URL(string: snapshot.url) else {
+                    await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed(.notFound)) }
+                    return
+                }
+                await MainActor.run {
+                    store.dispatch(
+                        GeneralBrowserAction(
+                            destinationURL: archivedURL,
+                            isNativeErrorPage: true,
+                            windowUUID: self.windowUUID,
+                            actionType: GeneralBrowserActionType.loadWaybackURL
+                        )
+                    )
+                }
+            } catch {
+                await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed(.networkError)) }
+            }
+        }
+    }
+
+    func regularContentViewDidTapSearchWeb() {
+        guard let failingURL = model?.url?.baseURLWithPath,
+              let defaultEngine = searchEnginesManager.defaultEngine else { return }
+
+        let query = "\"\(failingURL.absoluteString)\""
+        guard let searchURL = defaultEngine.searchURLForQuery(query) else { return }
+
+        store.dispatch(
+            GeneralBrowserAction(
+                destinationURL: searchURL,
+                isNativeErrorPage: true,
+                windowUUID: self.windowUUID,
+                actionType: GeneralBrowserActionType.loadWaybackURL
+            )
+        )
     }
 
     // MARK: - NativeErrorBadCertContentViewDelegate

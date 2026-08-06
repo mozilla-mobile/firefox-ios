@@ -33,9 +33,10 @@ public final class BrowserDB: Sendable {
 
             self.db = SwiftData(filename: self.databasePath, schema: schema, files: files)
         } catch {
-            logger.log("Could not create directory at root path: \(error)",
+            logger.log("Could not create directory at root path",
                        level: .fatal,
-                       category: .storage)
+                       category: .storage,
+                       extra: ["error": "\(error)"])
             fatalError("Could not create directory at root path: \(error)")
         }
     }

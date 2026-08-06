@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import AppAttestKit
 import Foundation
 import LLMKit
-import MLPAKit
 import Shared
 
 public protocol SummarizerServiceFactory {
@@ -36,7 +36,6 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         let maxWords = maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
                                 isHostedSummarizerEnabled: isHostedSummarizerEnabled)
         let config = config ?? SummarizerConfig.defaultConfig
-        #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
             let appleSummarizer = FoundationModelsSummarizer(
                 usesPermissiveGuardrails: usesPermissiveGuardrails,
@@ -64,22 +63,6 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
                 maxWords: maxWords
             )
         }
-        #else
-        guard isHostedSummarizerEnabled,
-              let llmClient = makeLiteLLMClient(
-                config: config,
-                prefs: prefs,
-                isAppAttestAuthEnabled: isAppAttestAuthEnabled
-              ) else {
-            return nil
-        }
-        let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
-        return DefaultSummarizerService(
-            summarizer: llmSummarizer,
-            lifecycleDelegate: lifecycleDelegate,
-            maxWords: maxWords
-        )
-        #endif
     }
 
     public func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int {

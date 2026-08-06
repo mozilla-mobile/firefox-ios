@@ -9,6 +9,7 @@ $(PROJECT_DIR)/Client/Glean/probes/autofill.credit_cards.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.email_mask.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.password_generator.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.passwords.yaml
+$(PROJECT_DIR)/Client/Glean/probes/broken_site_report.yaml
 $(PROJECT_DIR)/Client/Glean/probes/google_lens.yaml
 $(PROJECT_DIR)/Client/Glean/probes/history.yaml
 $(PROJECT_DIR)/Client/Glean/probes/homepage.shortcuts_library.yaml
@@ -23,10 +24,13 @@ $(PROJECT_DIR)/Client/Glean/probes/search.yaml
 $(PROJECT_DIR)/Client/Glean/probes/settings.yaml
 $(PROJECT_DIR)/Client/Glean/probes/share_sheet.yaml
 $(PROJECT_DIR)/Client/Glean/probes/share.open_in_firefox_extension.yaml
+$(PROJECT_DIR)/Client/Glean/probes/system.camera.yaml
+$(PROJECT_DIR)/Client/Glean/probes/system.photo_picker.yaml
 $(PROJECT_DIR)/Client/Glean/probes/tabs_panel.yaml
 $(PROJECT_DIR)/Client/Glean/probes/terms_of_use.yaml
 $(PROJECT_DIR)/Client/Glean/probes/toolbar.yaml
 $(PROJECT_DIR)/Client/Glean/probes/top_sites.yaml
+$(PROJECT_DIR)/Client/Glean/probes/tracker_blocker.yaml
 $(PROJECT_DIR)/Client/Glean/probes/tracking_protection.yaml
 $(PROJECT_DIR)/Client/Glean/probes/user.yaml
 $(PROJECT_DIR)/Client/Glean/probes/world_cup_widget.yaml

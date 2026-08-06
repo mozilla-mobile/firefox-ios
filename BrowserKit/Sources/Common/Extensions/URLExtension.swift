@@ -32,6 +32,21 @@ extension URL {
         return self
     }
 
+    /// Returns just the scheme, host, and path of the URL — stripping query
+    /// parameters, fragment, and any embedded credentials. Used when sending
+    /// the failing URL to external services (e.g. WaybackService) so we don't
+    /// leak query params or tokens.
+    public var baseURLWithPath: URL? {
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
+            return nil
+        }
+        components.user = nil
+        components.password = nil
+        components.query = nil
+        components.fragment = nil
+        return components.url
+    }
+
     /// Creates a short domain version of a link's url
     /// e.g. url: http://www.foosite.com  =>  "foosite"
     public var shortDomain: String? {

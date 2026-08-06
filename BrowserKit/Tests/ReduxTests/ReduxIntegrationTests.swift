@@ -35,6 +35,8 @@ final class ReduxIntegrationTests: XCTestCase {
         fakeReduxViewController = createAndLoadViewController()
     }
 
+    // MARK: Test Legacy Actions
+
     // This test will fail if actions are not completely processed before the next action is fired (i.e. action queuing).
     func testDispatchStore_IncreaseCounter() {
         fakeReduxViewController.increaseCounter()
@@ -60,6 +62,37 @@ final class ReduxIntegrationTests: XCTestCase {
         let expectedResult = false
         fakeReduxViewController.setPrivateMode(to: true)
         fakeReduxViewController.setPrivateMode(to: expectedResult)
+
+        XCTAssertEqual(fakeReduxViewController.isInPrivateMode, expectedResult)
+    }
+
+    // MARK: Test Modern Actions
+
+    // This test will fail if actions are not completely processed before the next action is fired (i.e. action queuing).
+    func testDispatchStore_IncreaseCounter_modernAction() {
+        fakeReduxViewController.increaseCounter_ModernAction()
+
+        XCTAssertEqual(fakeReduxViewController.receivedStateCounterValue, initialCountValue + 1)
+    }
+
+    // This test will fail if actions are not completely processed before the next action is fired (i.e. action queuing).
+    func testDispatchStore_DecreaseCounter_modernAction() {
+        fakeReduxViewController.decreaseCounter_ModernAction()
+
+        XCTAssertEqual(fakeReduxViewController.receivedStateCounterValue, initialCountValue - 1)
+    }
+
+    func testDispatchStore_SetPrivateMode_modernAction() {
+        let expectedResult = true
+        fakeReduxViewController.setPrivateMode_ModernAction(to: expectedResult)
+
+        XCTAssertEqual(fakeReduxViewController.isInPrivateMode, expectedResult)
+    }
+
+    func testDispatchStore_TogglePrivateMode_modernAction() {
+        let expectedResult = false
+        fakeReduxViewController.setPrivateMode_ModernAction(to: true)
+        fakeReduxViewController.setPrivateMode_ModernAction(to: expectedResult)
 
         XCTAssertEqual(fakeReduxViewController.isInPrivateMode, expectedResult)
     }

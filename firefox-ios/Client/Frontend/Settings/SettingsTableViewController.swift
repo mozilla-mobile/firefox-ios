@@ -1067,7 +1067,7 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
                 return ThemedCenteredTableViewCell()
             }
             return cell
-        } else if setting is SendDataSetting {
+        } else if setting is SendDataSetting || setting is AdBlockerSetting {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedLearnMoreTableViewCell.cellIdentifier,
                 for: indexPath

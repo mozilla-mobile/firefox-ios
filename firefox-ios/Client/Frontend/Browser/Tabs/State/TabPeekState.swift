@@ -3,9 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import ModifiedCopy
 import Common
 
+@Copyable
 struct TabPeekState: ScreenState {
+    let windowUUID: WindowUUID
     let showAddToBookmarks: Bool
     let showRemoveBookmark: Bool
     let showSendToDevice: Bool
@@ -13,7 +16,6 @@ struct TabPeekState: ScreenState {
     let showCloseTab: Bool
     let previewAccessibilityLabel: String
     let screenshot: UIImage
-    let windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let tabPeekState = appState.componentState(
@@ -35,14 +37,25 @@ struct TabPeekState: ScreenState {
                   screenshot: tabPeekState.screenshot)
     }
 
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
+        self.showAddToBookmarks = false
+        self.showRemoveBookmark = false
+        self.showSendToDevice = false
+        self.showCopyURL = true
+        self.showCloseTab = true
+        self.previewAccessibilityLabel = ""
+        self.screenshot = UIImage()
+    }
+
     init(windowUUID: WindowUUID,
-         showAddToBookmarks: Bool = false,
-         showRemoveBookmark: Bool = false,
-         showSendToDevice: Bool = false,
-         showCopyURL: Bool = true,
-         showCloseTab: Bool = true,
-         previewAccessibilityLabel: String = "",
-         screenshot: UIImage = UIImage()) {
+         showAddToBookmarks: Bool,
+         showRemoveBookmark: Bool,
+         showSendToDevice: Bool,
+         showCopyURL: Bool,
+         showCloseTab: Bool,
+         previewAccessibilityLabel: String,
+         screenshot: UIImage) {
         self.windowUUID = windowUUID
         self.showAddToBookmarks = showAddToBookmarks
         self.showRemoveBookmark = showRemoveBookmark
@@ -53,24 +66,33 @@ struct TabPeekState: ScreenState {
         self.screenshot = screenshot
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
-              let action = action as? TabPeekAction
-        else { return state }
+              let action = action as? TabPeekAction else {
+            return defaultState(from: state)
+        }
 
         switch action.actionType {
         case TabPeekActionType.loadTabPeek:
-            guard let tabPeekModel = action.tabPeekModel else { return state }
-            return TabPeekState(windowUUID: state.windowUUID,
-                                showAddToBookmarks: tabPeekModel.canTabBeSaved,
-                                showRemoveBookmark: tabPeekModel.canTabBeRemoved,
-                                showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,
-                                showCopyURL: tabPeekModel.canCopyURL,
-                                previewAccessibilityLabel: tabPeekModel.accessiblityLabel,
-                                screenshot: tabPeekModel.screenshot)
-        default:
+            guard let tabPeekModel = action.tabPeekModel else { return defaultState(from: state) }
+
             return state
+                .copy(showAddToBookmarks: tabPeekModel.canTabBeSaved)
+                .copy(showRemoveBookmark: tabPeekModel.canTabBeRemoved)
+                .copy(showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved)
+                .copy(showCopyURL: tabPeekModel.canCopyURL)
+                .copy(previewAccessibilityLabel: tabPeekModel.accessiblityLabel)
+                .copy(screenshot: tabPeekModel.screenshot)
+        default:
+            return defaultState(from: state)
         }
     }
 

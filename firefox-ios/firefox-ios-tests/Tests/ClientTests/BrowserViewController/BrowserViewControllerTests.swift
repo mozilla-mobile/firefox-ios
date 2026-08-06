@@ -361,7 +361,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func test_tapOnHomepageSearchBarAction_withBVCState_triggersGeneralBrowserAction() throws {
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.homepageZeroSearch),
@@ -383,7 +383,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupStoreForSearchBar()
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             ToolbarMiddlewareAction(
                 buttonType: .search,
@@ -405,7 +405,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupStoreForSearchBar()
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             ToolbarMiddlewareAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -429,7 +429,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andSearchButtonType_doesNotTriggersGeneralBrowserAction() {
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             ToolbarMiddlewareAction(
                 buttonType: .search,
@@ -454,7 +454,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andNoSearchButtonType_doesNotTriggersGeneralBrowserAction() {
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             ToolbarMiddlewareAction(
                 windowUUID: .XCTestDefaultUUID,
@@ -478,7 +478,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func testNewState_whenSummarizeDisplayRequested() {
         let subject = createSubject()
 
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             GeneralBrowserAction(
                 summarizerConfig: .defaultConfig,
@@ -580,7 +580,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         let action = GeneralBrowserAction(windowUUID: .XCTestDefaultUUID,
                                           actionType: GeneralBrowserActionType.addNewTab)
-        let newState = BrowserViewControllerState.reducer(
+        let newState = BrowserViewControllerState.reducer.legacyReducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID), action)
         subject.newState(state: newState)
 
@@ -638,7 +638,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         let errorPageURL = URL(
             string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(NSURLErrorTimedOut)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(NSURLErrorBadServerResponse)"
         )!
 
         subject.updateInContentHomePanel(errorPageURL)
@@ -662,6 +662,55 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.updateInContentHomePanel(errorPageURL)
 
         XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
+    // MARK: - rebuildNativeErrorPageStateIfNeeded
+
+    func testRebuildNativeErrorPageStateIfNeeded_validWaybackURL_dispatchesReceivedError() {
+        let subject = createSubject()
+        let waybackCode = Int(CFNetworkErrors.cfurlErrorCannotFindHost.rawValue)
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(waybackCode)"
+        )!
+
+        subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
+
+        guard let dispatchedAction = mockStore.dispatchedActions.last as? NativeErrorPageAction else {
+            XCTFail("Expected a NativeErrorPageAction to be dispatched")
+            return
+        }
+        XCTAssertEqual(dispatchedAction.actionType as? NativeErrorPageActionType, .receivedError)
+        XCTAssertEqual(dispatchedAction.networkError?.code, waybackCode)
+        XCTAssertEqual(
+            dispatchedAction.networkError?.userInfo[NSURLErrorFailingURLErrorKey] as? URL,
+            URL(string: "https://example.com")
+        )
+    }
+
+    func testRebuildNativeErrorPageStateIfNeeded_missingCodeParam_doesNotDispatch() {
+        let subject = createSubject()
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com"
+        )!
+
+        subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+    }
+
+    func testRebuildNativeErrorPageStateIfNeeded_missingURLParam_doesNotDispatch() {
+        let subject = createSubject()
+        let waybackCode = Int(CFNetworkErrors.cfurlErrorCannotFindHost.rawValue)
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?code=\(waybackCode)"
+        )!
+
+        subject.rebuildNativeErrorPageStateIfNeeded(for: errorPageURL)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
     }
 
     // MARK: - ReaderMode
@@ -835,7 +884,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     /// We need to set up the state for the homepage search bar in order to test method that relies on this state.
     func setupStoreForSearchBar() {
         let initialHomepageState = HomepageState
-            .reducer(
+            .reducer.legacyReducer(
                 HomepageState(windowUUID: .XCTestDefaultUUID),
                 HomepageAction(
                     windowUUID: .XCTestDefaultUUID,
@@ -843,7 +892,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 )
             )
         let newHomepageState = HomepageState
-            .reducer(
+            .reducer.legacyReducer(
                 initialHomepageState,
                 HomepageAction(
                     isSearchBarEnabled: true,

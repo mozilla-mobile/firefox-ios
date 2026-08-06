@@ -38,9 +38,10 @@ class FindInPageHelper: TabContentScript {
         didReceiveScriptMessage message: WKScriptMessage
     ) {
         guard let data = message.body as? [String: Int] else {
-            logger.log("Invalid data message body in FindInPageHelper: \(message.body)",
+            logger.log("Invalid data message body in FindInPageHelper",
                        level: .fatal,
-                       category: .library)
+                       category: .library,
+                       extra: ["messageBody": "\(message.body)"])
             return
         }
 

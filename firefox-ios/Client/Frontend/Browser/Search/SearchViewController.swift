@@ -568,18 +568,20 @@ class SearchViewController: SiteTableViewController,
             withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
             for: indexPath
         ) as? TwoLineImageOverlayCell else {
-            logger.log("Failed to dequeue TwoLineImageOverlayCell at indexPath: \(indexPath)",
+            logger.log("Failed to dequeue TwoLineImageOverlayCell",
                        level: .fatal,
-                       category: .lifecycle)
+                       category: .lifecycle,
+                       extra: ["indexPath": "\(indexPath)"])
             return UITableViewCell()
         }
         guard let oneLineTableViewCell = tableView.dequeueReusableCell(
             withIdentifier: OneLineTableViewCell.cellIdentifier,
             for: indexPath
         ) as? OneLineTableViewCell else {
-            logger.log("Failed to dequeue OneLineTableViewCell at indexPath: \(indexPath)",
+            logger.log("Failed to dequeue OneLineTableViewCell",
                        level: .fatal,
-                       category: .lifecycle)
+                       category: .lifecycle,
+                       extra: ["indexPath": "\(indexPath)"])
             return UITableViewCell()
         }
         return getCellForSection(twoLineImageOverlayCell,

@@ -450,11 +450,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         // If we cannot even open the database file, return `nil` to force SwiftData
         // into using a `FailedSQLiteDBConnection` so we can retry opening again later.
         if !doOpen() {
-            let extra = ["filename" : filename]
-            logger.log("Cannot open a database connection.",
+            logger.log("Cannot open a database connection to \(filename).",
                        level: .warning,
-                       category: .storage,
-                       extra: extra)
+                       category: .storage)
             return nil
         }
 
@@ -1098,9 +1096,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         DispatchQueue.global().sync {
             guard !SwiftData.corruptionLogsWritten.contains(dbFilename) else { return }
 
-            logger.log("Corrupt DB detected! DB filename: \(dbFilename)",
+            logger.log("Corrupt DB detected!",
                        level: .fatal,
-                       category: .storage)
+                       category: .storage,
+                       extra: ["dbFilename": dbFilename])
 
             let dbFileSize = ("file://\(dbFilename)".asURL)?.allocatedFileSize() ?? 0
             logger.log("Corrupt DB file size: \(dbFileSize) bytes",

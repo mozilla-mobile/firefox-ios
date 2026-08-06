@@ -9,7 +9,7 @@ import Shared
 
 final class DefaultBookmarksSaverTests: XCTestCase {
     let rootFolderGUID = BookmarkRoots.MobileFolderGUID
-    let testBookmark = Bookmark(title: "test", url: "https://www.test.com")
+    let testBookmark = (title: "test", url: "https://www.test.com")
     var testBookmarkGUID: Guid?
     // the guid is empty since it is assigned by the system
     let testFolder = Folder(title: "test", guid: "", indentation: 0)
@@ -56,7 +56,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
     }
 
     func testSave_updateAlreadyPresentBookmark() async throws {
-        let testBookmark = Bookmark(title: "test", url: "https://www.test.com")
+        let testBookmark = (title: "test", url: "https://www.test.com")
         let subject = createSubject()
 
         let previouslyAddedBookmark = try await unwrapAsync {

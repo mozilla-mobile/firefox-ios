@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ModifiedCopy
 import Redux
 
 enum NavigationBarMiddleButtonType: String, Equatable, CaseIterable {
@@ -28,6 +29,7 @@ enum NavigationBarMiddleButtonType: String, Equatable, CaseIterable {
     }
 }
 
+@Copyable
 struct NavigationBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     var actions: [ToolbarActionConfiguration]
@@ -72,7 +74,14 @@ struct NavigationBarState: StateType, Equatable {
         self.middleButton = middleButton
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
             return defaultState(from: state)
@@ -118,72 +127,45 @@ struct NavigationBarState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return NavigationBarState(
-            windowUUID: state.windowUUID,
-            actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: displayBorder,
-            middleButton: middleButton
-        )
+        return state
+            .copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
+            .copy(displayBorder: displayBorder)
+            .copy(middleButton: middleButton)
     }
 
     @MainActor
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return NavigationBarState(
-            windowUUID: state.windowUUID,
-            actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder,
-            middleButton: state.middleButton
-        )
+        return state.copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
     }
 
     @MainActor
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return NavigationBarState(
-            windowUUID: state.windowUUID,
-            actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder,
-            middleButton: state.middleButton
-        )
+        return state.copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
     }
 
     @MainActor
     private static func handleDidSetTabScreenshotAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return NavigationBarState(
-            windowUUID: state.windowUUID,
-            actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder,
-            middleButton: state.middleButton
-        )
+        return state.copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
     }
 
     @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return NavigationBarState(
-            windowUUID: state.windowUUID,
-            actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder,
-            middleButton: state.middleButton
-        )
+        return state.copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
     }
 
     @MainActor
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return NavigationBarState(
-            windowUUID: state.windowUUID,
-            actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder,
-            middleButton: state.middleButton
-        )
+        return state.copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
     }
 
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
@@ -192,12 +174,7 @@ struct NavigationBarState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return NavigationBarState(
-            windowUUID: state.windowUUID,
-            actions: state.actions,
-            displayBorder: displayBorder,
-            middleButton: state.middleButton
-        )
+        return state.copy(displayBorder: displayBorder)
     }
 
     @MainActor
@@ -206,12 +183,9 @@ struct NavigationBarState: StateType, Equatable {
               let middleButton = toolbarAction.middleButton
         else { return defaultState(from: state) }
 
-        return NavigationBarState(
-            windowUUID: state.windowUUID,
-            actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder,
-            middleButton: middleButton
-        )
+        return state
+            .copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
+            .copy(middleButton: middleButton)
     }
 
     static func defaultState(from state: NavigationBarState) -> NavigationBarState {

@@ -9,9 +9,18 @@ import Common
 struct AppState: StateType, Sendable {
     let presentedComponents: PresentedComponentsState
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
         return AppState(
-            presentedComponents: PresentedComponentsState.reducer(state.presentedComponents, action)
+            presentedComponents: PresentedComponentsState.reducer
+                                 .modernReducer(state.presentedComponents, action, actionWindowUUID)
+        )
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
+        return AppState(
+            presentedComponents: PresentedComponentsState.reducer.legacyReducer(state.presentedComponents, action)
         )
     }
 
@@ -30,7 +39,6 @@ struct AppState: StateType, Sendable {
                 case (.tabPeek(let state), .tabPeek): return state as? S
                 case (.tabsTray(let state), .tabsTray): return state as? S
                 case (.termsOfUse(let state), .termsOfUse): return state as? S
-                case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
                 case (.searchEngineSelection(let state), .searchEngineSelection): return state as? S
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
@@ -85,6 +93,7 @@ let middlewares = [
     WallpaperMiddleware().wallpaperProvider,
     BookmarksMiddleware().bookmarksProvider,
     WorldCupMiddleware().worldCupProvider,
+    TrackerBlockerModuleMiddleware().trackerBlockerModuleProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
     QuickAnswersMiddleware().quickAnswersProvider,
     StartAtHomeMiddleware().startAtHomeProvider,

@@ -14,11 +14,6 @@ final class TranslationsEngine {
         valueOptions: [.strongMemory]
     )
 
-    /// Used only for tests, to test if the bridges weak table releases objects after webviews are destroyed.
-    var bridgeCount: Int {
-        return bridges.objectEnumerator()?.allObjects.count ?? 0
-    }
-
     /// Handler names and JS receive function used by the endpoints.
     /// These are used in `TranslationsEntrypoint.js` and `TranslationsEngine.js`
     /// These will be called from JS to deliver messages.
@@ -79,11 +74,6 @@ final class TranslationsEngine {
         let bridge = Bridge(portA: pageEndpoint, portB: engineEndpoint)
         bridges.setObject(bridge, forKey: pageWebView)
         return bridge
-    }
-
-    func removeBridge(for pageWebView: WKWebView) {
-        bridges.object(forKey: pageWebView)?.teardown()
-        bridges.removeObject(forKey: pageWebView)
     }
 
     /// Load the initial entrypoint for the engine.

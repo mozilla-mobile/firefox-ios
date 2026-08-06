@@ -34,8 +34,35 @@
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Бетбелгіні түзету";
 
+/* Caption shown above the first collapsible folder group in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkAllFoldersLabel.v154" = "Барлық бумалар";
+
+/* Link that expands the collapsed Location summary into the full folder picker in the New/Edit Folder screen. */
+"Bookmarks.Menu.EditBookmarkChangeLocationLabel.v154" = "Орналасуды өзгерту";
+
 /* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
 "Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "ЖҰМЫС ҮСТЕЛІ БЕТБЕЛГІЛЕРІ";
+
+/* Collapsible header for the group of desktop bookmark folders in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkDesktopGroupLabel.v154" = "Жұмыс үстелі";
+
+/* VoiceOver accessibility value read for a collapsed folder group header in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkGroupCollapsedValue.v154" = "Жиналған";
+
+/* VoiceOver accessibility value read for an expanded folder group header in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkGroupExpandedValue.v154" = "Жазық етілген";
+
+/* Caption shown above the collapsed folder summary row in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkLocationLabel.v154" = "Орналасу";
+
+/* Header denoting that the following folders in the parent folder selector table of the Edit Bookmarks Screen are mobile-only folders, shown alongside a 'DESKTOP BOOKMARKS' header so the two categories are clearly separated. */
+"Bookmarks.Menu.EditBookmarkMobileBookmarksLabel.v154" = "МОБИЛЬДІ БЕТБЕЛГІЛЕР";
+
+/* Collapsible header for the group of mobile bookmark folders in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkMobileGroupLabel.v154" = "Мобильді";
+
+/* Breadcrumb shown under a nested folder's title in the New/Edit Folder location picker. %@ is replaced with the immediate parent folder's name. RTL locales might want to use `%@ ↵` instead. */
+"Bookmarks.Menu.EditBookmarkParentFolderBreadcrumbFormat.v154" = "↳ %@";
 
 /* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
 "Bookmarks.Menu.EditBookmarkSave.v135" = "Сақтау";

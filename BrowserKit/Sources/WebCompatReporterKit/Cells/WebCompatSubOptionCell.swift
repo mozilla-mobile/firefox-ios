@@ -6,11 +6,12 @@ import Common
 import UIKit
 
 final class WebCompatSubOptionCell: UICollectionViewListCell {
-    func configure(title: String, isSelected: Bool, theme: Theme) {
+    func configure(title: String, isSelected: Bool, theme: Theme, a11yIdentifier: String) {
         var content = defaultContentConfiguration()
         content.text = title
         content.textProperties.color = theme.colors.textPrimary
         contentConfiguration = content
+        accessibilityIdentifier = a11yIdentifier
         backgroundConfiguration = .listGroupedCell()
         backgroundConfiguration?.backgroundColor = theme.colors.layer5
         accessories = isSelected ? [checkmarkAccessory(theme: theme)] : []

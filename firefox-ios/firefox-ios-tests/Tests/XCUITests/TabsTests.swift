@@ -611,6 +611,28 @@ class TabsTestsIphone: BaseTestCase {
     // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
         if skipPlatform { return }
+
+        // Steps 1-3: Open in New Tab, then Switch.
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+
+        app.webViews.links.firstMatch.press(forDuration: 1)
+        newTabsScreen.pressOpenNewTabButtonExist(duration: 1, timeout: TIMEOUT)
+        newTabsScreen.tapOnSwitchButton()
+
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "iana")
+        browserScreen.assertRFCLinkExist()
+        toolBarScreen.assertTabsButtonExists()
+        toolBarScreen.assertTabsButtonValue(expectedCount: "2")
+
+        // Steps 4-5: Open Tabs Tray, Close All Tabs.
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.goto(CloseTabMenu)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        // Steps 6-8: Open in New Private Tab, then Switch.
         navigator.openURL(urlExample)
         waitUntilPageLoad()
 
@@ -618,12 +640,14 @@ class TabsTestsIphone: BaseTestCase {
         newTabsScreen.pressOpenNewPrivateTabButton(duration: 1, timeout: TIMEOUT)
         newTabsScreen.tapOnSwitchButton()
 
-        // Check that the tab has changed to the new open one and that the user is in private mode
+        // Check that the tab has changed to the new open one and that the user is in private mode.
+        // Open a new tab from private tab tray should open a new tab in private mode.
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "iana")
         waitForTabsButton()
         navigator.goto(TabTray)
-        tabTrayScreen.assertTabButtonEnabled(at: 0)
+        tabTrayScreen.tapOnNewTabButton()
+        browserScreen.assertPrivateModeMessageCardExists()
     }
 }
 

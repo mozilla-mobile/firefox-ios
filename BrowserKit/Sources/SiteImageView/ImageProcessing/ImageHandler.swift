@@ -73,10 +73,9 @@ final class DefaultImageHandler: ImageHandler {
             return try getBundleImage(assetName: assetName)
         } catch {
             logger.log(
-                "Could not get image from bundle",
+                "Could not get image from bundle with asset name \(assetName)",
                 level: .warning,
-                category: .images,
-                extra: ["assetName": assetName]
+                category: .images
             )
             throw error
         }
@@ -146,7 +145,7 @@ final class DefaultImageHandler: ImageHandler {
 
             return image
         } catch {
-            return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+            return UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
         }
     }
 

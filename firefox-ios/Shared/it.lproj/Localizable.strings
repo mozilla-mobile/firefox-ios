@@ -209,7 +209,7 @@
 "ContextualHintsCloseButtonAccessibility.v105" = "Chiudi";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
-"Could not add page to Reading list" = "Impossibile aggiungere la pagina a Elenco lettura.";
+"Could not add page to Reading list" = "Impossibile aggiungere la pagina a Elenco lettura";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
 "Could not add page to Reading List. Maybe it’s already there?" = "Impossibile aggiungere la pagina a Elenco lettura. Forse è già presente?";
@@ -308,7 +308,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Potrebbe trattarsi di una configurazione errata o di un tentativo di attacco. Procedi solo se sei consapevole dei potenziali rischi.";
 
 /* Warning text on the certificate error page. %@ is the domain of the website. */
-"ErrorPages.CertWarning.Description" = "Il gestore di %@ ha configurato il sito in modo non corretto. Per evitare potenziali furti di informazioni Firefox ha interrotto la connessione.";
+"ErrorPages.CertWarning.Description" = "Il gestore di %@ ha configurato il sito in modo non corretto. Per evitare potenziali furti di informazioni Firefox non si è connesso a questo sito.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Questa connessione non è attendibile";
@@ -953,7 +953,7 @@
 "RecentlyClosedTabsPanel.Title" = "Chiuse di recente";
 
 /* More button text for Recently Saved items at the home page. */
-"RecentlySaved.Actions.More" = "Visualizza tutti";
+"RecentlySaved.Actions.More" = "Mostra tutti";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Ricarica";
@@ -1028,7 +1028,7 @@
 "Search.ThirdPartyEngines.DuplicateErrorMessage" = "È già presente un motore di ricerca con questo nome o URL.";
 
 /* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Non riuscito";
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Operazione non riuscita";
 
 /* A title explaining that we failed to add a search engine */
 "Search.ThirdPartyEngines.FailedMessage" = "Impossibile aggiungere il motore di ricerca.";
@@ -1040,7 +1040,7 @@
 "Search.ThirdPartyEngines.FormErrorMessage" = "Compila tutti i campi correttamente.";
 
 /* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.FormErrorTitle" = "Non riuscito";
+"Search.ThirdPartyEngines.FormErrorTitle" = "Operazione non riuscita";
 
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
@@ -1508,7 +1508,7 @@
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Schede inattive";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
-"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "La schede che non visualizzi da due settimane vengono spostate nella sezione Inattive.";
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Le schede che non visualizzi da due settimane vengono spostate nella sezione Inattive.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Gruppi di schede";
@@ -1571,7 +1571,7 @@
 "Settings.TrackingProtectionOption.BasicBlockList.Status" = "Normale";
 
 /* Tracking protection settings option for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrict" = "Protezione massima";
+"Settings.TrackingProtectionOption.BlockListStrict" = "Restrittiva";
 
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Protezione antitracciamento avanzata";
@@ -1643,7 +1643,7 @@
 "Sync.SyncingEllipsis.Label" = "Sincronizzazione…";
 
 /* Title for Sync status message when Sync failed due to being offline */
-"SyncState.Offline.Title" = "Sync è non in linea";
+"SyncState.Offline.Title" = "Sincronizzazione non in linea";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Scheda %1$@ di %2$@";
@@ -1718,7 +1718,7 @@
 "TimeConstants.Yesterday.v106" = "ieri";
 
 /* label for Not Now button */
-"Toasts.NotNow" = "Non ora";
+"Toasts.NotNow" = "Non adesso";
 
 /* Open App Store button */
 "Toasts.OpenAppStore" = "Apri App Store";
@@ -1739,7 +1739,7 @@
 "Toolbar.Menu.CloseAllTabs" = "Chiudi tutte le schede";
 
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
-"TopSites.RemovePage.Button" = "Elimina pagina - %@";
+"TopSites.RemovePage.Button" = "Elimina pagina — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "No";
@@ -1754,7 +1754,7 @@
 "Twitter" = "Twitter";
 
 /* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
-"UIMenuItem.PasteGo" = "Incolla e Vai";
+"UIMenuItem.PasteGo" = "Incolla e vai";
 
 /* Search in New Tab Text selection menu item */
 "UIMenuItem.SearchWithFirefox" = "Cerca con Firefox";

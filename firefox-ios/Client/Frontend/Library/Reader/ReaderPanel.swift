@@ -359,9 +359,10 @@ class ReadingListPanel: UITableViewController,
             withIdentifier: "ReadingListTableViewCell",
             for: indexPath
         ) as? ReadingListTableViewCell else {
-            logger.log("Failed to dequeue ReadingListTableViewCell at indexPath: \(indexPath)",
+            logger.log("Failed to dequeue ReadingListTableViewCell",
                        level: .fatal,
-                       category: .library)
+                       category: .library,
+                       extra: ["indexPath": "\(indexPath)"])
             return UITableViewCell()
         }
         if let record = records?[indexPath.row] {

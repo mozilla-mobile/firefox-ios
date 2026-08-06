@@ -46,7 +46,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
@@ -62,7 +62,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
@@ -81,7 +81,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
@@ -99,7 +99,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
@@ -129,7 +129,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(subject.launchOrder.count, 0)
         XCTAssertEqual(delegate.launchBrowserCalled, 1)
@@ -143,7 +143,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         subject.loadNextLaunchType()
         XCTAssertEqual(delegate.launchBrowserCalled, 2)
@@ -159,7 +159,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = nil
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         subject.loadNextLaunchType()
         XCTAssertEqual(subject.launchOrder.count, 0)
@@ -173,7 +173,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         let subject = createSubject()
         subject.delegate = nil
 
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
         XCTAssertEqual(subject.launchOrder.count, 0)
     }
 
@@ -188,7 +188,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(subject.launchOrder.count, 1)
         if case .intro = subject.launchOrder.first {
@@ -201,7 +201,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(subject.launchOrder.count, 1)
         subject.loadNextLaunchType()
@@ -225,7 +225,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
             introScreenManager: mockIntroManager
         )
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
         XCTAssertEqual(subject.launchOrder.count, 1)
@@ -251,21 +251,9 @@ final class LaunchScreenViewModelTests: XCTestCase {
             introScreenManager: mockIntroManager
         )
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
-
-        XCTAssertEqual(subject.launchOrder.count, 0)
-    }
-
-    // MARK: - App Version Tests
-
-    func testStartLoading_withDefaultAppVersion_usesAppInfoVersion() {
-        profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
-
-        let subject = createSubject()
-        subject.delegate = delegate
         subject.startLoading()
 
-        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
+        XCTAssertEqual(subject.launchOrder.count, 0)
     }
 
     // MARK: - Survey Screen Tests
@@ -278,7 +266,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
@@ -296,7 +284,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = delegate
-        subject.startLoading(appVersion: "112.0")
+        subject.startLoading()
 
         XCTAssertEqual(subject.launchOrder.count, 0)
         XCTAssertEqual(delegate.launchBrowserCalled, 1)

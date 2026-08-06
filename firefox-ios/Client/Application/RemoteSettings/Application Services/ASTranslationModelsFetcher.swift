@@ -23,15 +23,6 @@ struct ModelFieldsRecord: Codable {
     let schema: Int64
 }
 
-struct TranslationRecord: Codable {
-    let fileType: String?
-    let fromLang: String?
-    let name: String
-    let schema: Int64?
-    let toLang: String?
-    let version: String
-}
-
 protocol TranslationModelsFetcherProtocol: Sendable {
     func fetchTranslatorWASM() async -> Data?
     func fetchModels(from sourceLang: String, to targetLang: String) async -> Data?
@@ -98,10 +89,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
         }
 
         logger.log(
-            "Translator record selected",
+            "Translator record selected with record id \(record.id)",
             level: .info,
-            category: .translations,
-            extra: ["recordId": record.id]
+            category: .translations
         )
 
         return try? await getAttachment(record: record)
@@ -302,10 +292,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             }
 
             logger.log(
-                "Model record selected",
+                "Model record selected with record id \(record.id)",
                 level: .info,
-                category: .translations,
-                extra: ["recordId": "\(record.id)"]
+                category: .translations
             )
 
             languageModelFiles[fields.fileType] = [
@@ -383,10 +372,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
 
         guard !buckets.isEmpty else {
             logger.log(
-                "No model records found",
+                "No model records found for source language \(sourceLang) and target language \(targetLang)",
                 level: .warning,
-                category: .translations,
-                extra: ["sourceLang": sourceLang, "targetLang": targetLang]
+                category: .translations
             )
             return []
         }
@@ -396,10 +384,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             else { return [] }
 
         logger.log(
-            "Selected model version",
+            "Selected model version \(bestVersion) for source language \(sourceLang) and target language \(targetLang)",
             level: .info,
-            category: .translations,
-            extra: ["version": bestVersion, "sourceLang": sourceLang, "targetLang": targetLang]
+            category: .translations
         )
 
         return buckets[bestVersion] ?? []

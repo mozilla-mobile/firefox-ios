@@ -104,26 +104,15 @@ class NativeErrorPageHelper {
     }
 
     /// Logs diagnostic details for a certificate error to aid debugging.
-    static func logCertificateErrorDetails(
-        error: NSError,
-        url: URL,
-        errorPageURL: URL,
-        logger: Logger
-    ) {
+    static func logCertificateErrorDetails(error: NSError, logger: Logger) {
         let hasUnderlyingError = error.userInfo[NSUnderlyingErrorKey] != nil
         let underlying = error.userInfo[NSUnderlyingErrorKey] as? NSError
         let hasCertErrorCode = underlying?.userInfo[Constants.cfStreamErrorCodeKey] != nil
         logger.log(
-            "NativeErrorPage: Dispatching certificate error",
+            "NativeErrorPage: Dispatching certificate error with code \(error.code)."
+            + " Has underlying error: \(hasUnderlyingError), has cert error code: \(hasCertErrorCode)",
             level: .debug,
-            category: .webview,
-            extra: [
-                "errorCode": "\(error.code)",
-                "hasUnderlyingError": "\(hasUnderlyingError)",
-                "hasCertErrorCode": "\(hasCertErrorCode)",
-                "url": url.absoluteString,
-                "errorPageURL": errorPageURL.absoluteString
-            ]
+            category: .webview
         )
     }
 
@@ -139,6 +128,8 @@ class NativeErrorPageHelper {
                  NSURLErrorServerCertificateHasUnknownRoot,
                  NSURLErrorServerCertificateNotYetValid:
                 return Self.buildCertificateErrorModel(for: error, url: url)
+            case _ where WaybackCodes.isWaybackCode(error.code):
+                return .wayback(WaybackErrorModel(url: url))
             default:
                 return .generic(GenericErrorModel(url: url))
             }

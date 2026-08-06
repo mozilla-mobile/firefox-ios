@@ -14,7 +14,6 @@ let releaseCheck = ReleaseBranchCheck()
 if releaseCheck.isReleaseBranch {
     releaseCheck.postReleaseBranchComment()
 } else {
-    checkStringsFile()
     checkForFunMetrics()
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
     checkForSpecificFileChange()
@@ -344,6 +343,9 @@ class CodeCoverageGate {
 // swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
+    // Skip size commentary and tech lead heads-up for bot-authored PRs.
+    if danger.github.pullRequest.user.login.hasSuffix("[bot]") { return }
+
     let mediumPRThreshold = 400
     let bigPRThreshold = 800
     let monsterPRThreshold = 2000
@@ -375,6 +377,14 @@ func checkBigPullRequest() {
         markdown("""
         ### 🥇 **Perfect PR size**
         Smaller PRs are easier to review. Thanks for making life easy for reviewers! ✨
+        """)
+    }
+
+    if additionsAndDeletions > bigPRThreshold {
+        markdown("""
+        ### 👀 **Tech lead review**
+        Because this PR is large, the `@mozilla-mobile/firefox-ios-tech-leads` team \
+        will be auto-assigned as reviewer by GitHub Actions.
         """)
     }
 }
@@ -557,6 +567,11 @@ class CodeUsageDetector {
 
     private enum Keywords: CaseIterable {
         static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
+        static let commonOrientationSentence = """
+        Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid interface orientation checks for layout \
+        decisions. In a resizable environment the supported orientation is only a preference and may be ignored \
+        (e.g. iPhone Mirroring on Mac always reports portrait). Use size classes or trait-based layout instead.
+        """
 
         case print
         case nsLog
@@ -567,6 +582,14 @@ class CodeUsageDetector {
         case notifiable
         case unsafe
         case cspHeader
+        case userInterfaceIdiom
+        case uiScreenMain
+        case screenBounds
+        case screenScale
+        case deviceOrientation
+        case isPortrait
+        case isLandscape
+        case interfaceOrientation
 
         var bundledHeader: String {
             switch self {
@@ -589,6 +612,53 @@ class CodeUsageDetector {
                 return "### 🔒 Security: CSP `unsafe-` detected\nPlease request a security review."
             case .cspHeader:
                 return "### 🔒 Security: `Content-Security-Policy` change detected\nPlease request a security review."
+            case .userInterfaceIdiom:
+                return """
+                ### ⚠️ `userInterfaceIdiom` usage detected
+                Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid checking `userInterfaceIdiom` for layout \
+                decisions. iPhone apps running on iPad or in iPhone Mirroring on Mac still report the phone idiom. \
+                Prefer size classes or trait-based layout instead.
+                """
+            case .uiScreenMain:
+                return """
+                ### ⚠️ `UIScreen.main` usage detected
+                Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid referencing `UIScreen.main`. Access the \
+                screen dynamically from a window's window scene, or better, remove screen references altogether and \
+                rely on the view's/window's bounds or trait-based layout.
+                """
+            case .screenBounds:
+                return """
+                ### ⚠️ `UIScreen.main.bounds` usage detected
+                Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid using `UIScreen.main.bounds`. In an \
+                adaptive environment, your scene may not span the full screen. Use the view's or window's bounds, \
+                size classes, or trait-based layout instead.
+                """
+            case .screenScale:
+                return """
+                ### ⚠️ `UIScreen.main.scale` usage detected
+                Per Apple's WWDC 26 "Modernize your UIKit app" guidance, avoid using `UIScreen.main.scale`. \
+                Use the trait collection's `displayScale` instead.
+                """
+            case .deviceOrientation:
+                return """
+                ### ⚠️ `UIDevice.current.orientation` usage detected
+                \(Keywords.commonOrientationSentence)
+                """
+            case .isPortrait:
+                return """
+                ### ⚠️ `.isPortrait` usage detected
+                \(Keywords.commonOrientationSentence)
+                """
+            case .isLandscape:
+                return """
+                ### ⚠️ `.isLandscape` usage detected
+                \(Keywords.commonOrientationSentence)
+                """
+            case .interfaceOrientation:
+                return """
+                ### ⚠️ `interfaceOrientation` usage detected
+                \(Keywords.commonOrientationSentence)
+                """
             }
         }
 
@@ -612,6 +682,22 @@ class CodeUsageDetector {
                 return "unsafe-"
             case .cspHeader:
                 return "Content-Security-Policy"
+            case .userInterfaceIdiom:
+                return "userInterfaceIdiom"
+            case .uiScreenMain:
+                return "UIScreen.main"
+            case .screenBounds:
+                return "UIScreen.main.bounds"
+            case .screenScale:
+                return "UIScreen.main.scale"
+            case .deviceOrientation:
+                return "UIDevice.current.orientation"
+            case .isPortrait:
+                return ".isPortrait"
+            case .isLandscape:
+                return ".isLandscape"
+            case .interfaceOrientation:
+                return "interfaceOrientation"
             }
         }
 
@@ -637,7 +723,8 @@ class CodeUsageDetector {
         // Decide if we want to `warn` instead of `fail` on the pull request.
         var shouldWarn: Bool {
             switch self {
-            case .deferred, .notifiable:
+            case .deferred, .notifiable, .userInterfaceIdiom, .uiScreenMain, .screenBounds, .screenScale,
+                 .deviceOrientation, .isPortrait, .isLandscape, .interfaceOrientation:
                 return true
             default:
                 return false
@@ -649,6 +736,16 @@ class CodeUsageDetector {
             switch self {
             case .cspHeader: return true
             default: return false
+            }
+        }
+
+        // Skip lines already covered by a more specific keyword to avoid double-flagging
+        func isSupersededOnLine(_ line: String) -> Bool {
+            switch self {
+            case .uiScreenMain:
+                return line.contains(Keywords.screenBounds.keyword) || line.contains(Keywords.screenScale.keyword)
+            default:
+                return false
             }
         }
     }
@@ -728,7 +825,9 @@ class CodeUsageDetector {
                 let isRemovedLine = lineStr.starts(with: "-")
                 if isRemovedLine {
                     oldLineCount += 1
-                    if keyword.detectsRemovals && lineStr.contains(keyword.keyword) {
+                    if keyword.detectsRemovals
+                        && lineStr.contains(keyword.keyword)
+                        && !keyword.isSupersededOnLine(lineStr) {
                         let lineNumber = hunk.oldLineStart + oldLineCount - 1
                         detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: true))
                     }
@@ -736,7 +835,9 @@ class CodeUsageDetector {
                     // Context or added line: exists in both old and new file
                     newLineCount += 1
                     oldLineCount += 1
-                    if isAddedLine && lineStr.contains(keyword.keyword) {
+                    if isAddedLine
+                        && lineStr.contains(keyword.keyword)
+                        && !keyword.isSupersededOnLine(lineStr) {
                         let lineNumber = hunk.newLineStart + newLineCount - 1
                         detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: false))
                     }
@@ -753,7 +854,7 @@ class CodeUsageDetector {
     private func collect(keyword: Keywords, inLines lines: [String], file: String) -> [Detection] {
         guard !shouldSkip(keyword, for: file) else { return [] }
         return lines.enumerated().compactMap { index, line in
-            guard line.contains(keyword.keyword) else { return nil }
+            guard line.contains(keyword.keyword), !keyword.isSupersededOnLine(line) else { return nil }
             return Detection(keyword: keyword, file: file, lineNumber: index + 1, isRemoval: false)
         }
     }
@@ -841,22 +942,6 @@ func checkAlphabeticalOrder(inFile filePath: String) {
         }
     } catch {
         warn("Failed to read or process file \(filePath): \(error)")
-    }
-}
-
-// Check if there's String file changes, and if so ask the l10n reviewers
-func checkStringsFile() {
-    let edited = danger.git.modifiedFiles
-    let touchedStrings = edited.filter { path in
-        path.localizedCaseInsensitiveContains("/Strings.swift")
-    }
-
-    if !touchedStrings.isEmpty {
-        markdown("""
-        ### ✍️ **Strings Updated**
-        Detected changes in `Shared/Strings.swift`.
-        To keep strings up to standards, please add a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) as reviewer. 🌍
-        """)
     }
 }
 

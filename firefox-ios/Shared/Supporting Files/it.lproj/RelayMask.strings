@@ -11,7 +11,7 @@
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Alias email inserito";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Nascondi in tuo indirizzo email reale per proteggere la tua casella di posta dallo spam. Alcuni siti non supportano gli alias.";
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Nascondi il tuo indirizzo email reale per proteggere la tua casella di posta dallo spam. Alcuni siti non supportano gli alias.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Ulteriori informazioni";

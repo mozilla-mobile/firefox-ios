@@ -13,9 +13,6 @@ class OnboardingLaunchScreenViewController: UIViewController,
                                            Themeable {
     // MARK: - UX Constants
     private enum UX {
-        static let fadeOutDuration: TimeInterval = 0.24
-        static let fadeOutDelay: TimeInterval = 0
-        static let fadeOutAlpha: CGFloat = 0.0
         static let logoSize: CGFloat = 125.0
     }
 

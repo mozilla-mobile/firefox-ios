@@ -71,6 +71,8 @@ manual:
   # Manually add Down's license so we can correct some run-on text in the generated HTML
   - name: "Down"
     file: "LicenseFiles/Down License.txt"
+  - name: "EasyList"
+    file: "LicenseFiles/EasyList.txt"
 
 # Rename a few packages to more human-readable names
 rename:

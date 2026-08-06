@@ -9,18 +9,25 @@ struct TrackerBlockerModuleAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let isEnabled: Bool?
+    let blockedTrackerCount: Int?
 
     init(
         isEnabled: Bool? = nil,
+        blockedTrackerCount: Int? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isEnabled = isEnabled
+        self.blockedTrackerCount = blockedTrackerCount
     }
 }
 
 enum TrackerBlockerModuleActionType: ActionType {
     case toggleShowSectionSetting
+}
+
+enum TrackerBlockerModuleMiddlewareActionType: ActionType {
+    case updateBlockedCount
 }

@@ -73,13 +73,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .appearanceMenu,
-                titleText: format(string: "Appearance Menu"),
-                statusText: format(string: "Toggle to show the new appearance menu")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .httpsUpgrade,
                 titleText: format(string: "Automatic HTTPS upgrade"),
                 statusText: format(string: "Toggle to enable automatic HTTPS upgrade.")
@@ -111,13 +104,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .deeplinkOptimizationRefactor,
                 titleText: format(string: "Deeplink Optimization Refactor"),
                 statusText: format(string: "Toggle to enable deeplink optimization refactor")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .deeplinkOverlay,
-                titleText: format(string: "Deeplink Overlay"),
-                statusText: format(string: "Toggle to show the background overlay for all tabs")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -200,13 +186,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .needsReloadRefactor,
-                titleText: format(string: "Needs Reload Refactor"),
-                statusText: format(string: "Toggle to enable the needs reload refactor")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .newBookmarkFolderTree,
                 titleText: format(string: "New Bookmarks Folder Tree"),
                 statusText: format(string: "Toggle to use new bookmarks folder tree UI")
@@ -224,6 +203,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .novaDesign,
                 titleText: format(string: "Nova Design"),
                 statusText: format(string: "Toggle to enable Nova design")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .privacyDashboard,
+                titleText: format(string: "Privacy Dashboard"),
+                statusText: format(string: "Toggle Privacy Dashboard")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -343,6 +329,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .unifiedSearch,
                 titleText: format(string: "Unified Search"),
                 statusText: format(string: "Toggle to use unified search within the new toolbar")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .vpnFeature,
+                titleText: format(string: "VPN"),
+                statusText: format(string: "Toggle to enable the VPN feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },

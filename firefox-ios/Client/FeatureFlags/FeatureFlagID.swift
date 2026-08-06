@@ -13,12 +13,10 @@ enum FeatureFlagID: String, CaseIterable {
     case addressBarGestureToOpenTabTrayInteractive
     case addressBarGestureToOpenTabTraySwipe
     case aiKillSwitch
-    case appearanceMenu
     case badCertDomainErrorPage
     case bookmarksSearchFeature
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
-    case deeplinkOverlay
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
@@ -39,10 +37,10 @@ enum FeatureFlagID: String, CaseIterable {
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
-    case needsReloadRefactor
     case newBookmarkFolderTree
     case novaDesign
     case noInternetConnectionErrorPage
+    case privacyDashboard
     case quickAnswers
     case recentSearches
     case relayIntegration
@@ -67,6 +65,7 @@ enum FeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case videoIntroOnboarding
+    case vpnFeature
     case waybackMachine
     case worldCupWidget
 
@@ -100,12 +99,10 @@ enum FeatureFlagID: String, CaseIterable {
                 .addressBarGestureToOpenTabTrayInteractive,
                 .addressBarGestureToOpenTabTraySwipe,
                 .aiKillSwitch,
-                .appearanceMenu,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
-                .deeplinkOverlay,
                 .downloadLiveActivities,
                 .googleLens,
                 .homepageAddShortcutTile,
@@ -118,10 +115,10 @@ enum FeatureFlagID: String, CaseIterable {
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
                 .nativeErrorPage,
-                .needsReloadRefactor,
                 .newBookmarkFolderTree,
                 .novaDesign,
                 .noInternetConnectionErrorPage,
+                .privacyDashboard,
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
@@ -138,6 +135,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
+                .vpnFeature,
                 .waybackMachine,
                 .worldCupWidget:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey

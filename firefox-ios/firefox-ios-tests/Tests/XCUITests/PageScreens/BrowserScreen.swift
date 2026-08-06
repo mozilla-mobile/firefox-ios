@@ -38,6 +38,21 @@ final class BrowserScreen {
         }
     }
 
+    // Reads the adblock-tester.com score banner (e.g. "38 points out of 100 (11 services, 22
+    // checks)") and returns the leading number.
+    func adblockTesterScore(timeout: TimeInterval = TIMEOUT) -> Int {
+        let scoreElement = app.webViews.otherElements.matching(
+            NSPredicate(format: "label CONTAINS[c] 'points out of 100'")
+        ).firstMatch
+        BaseTestCase().mozWaitForElementToExist(scoreElement, timeout: timeout)
+
+        guard let match = scoreElement.label.range(of: #"^\d+"#, options: .regularExpression) else {
+            XCTFail("Could not parse a leading score number from label: \(scoreElement.label)")
+            return 0
+        }
+        return Int(scoreElement.label[match]) ?? 0
+    }
+
     func tapBackButton() {
         let backButton = sel.BACK_BUTTON.element(in: app)
         backButton.waitAndTap()
@@ -79,6 +94,32 @@ final class BrowserScreen {
 
     func assertMobileUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {
         assertUserAgentTextExists("MOBILE_UA", timeout: timeout)
+    }
+
+    enum SiteLayoutMode {
+        case desktop
+        case mobile
+    }
+
+    // No one magic heuristic to determine desktop vs mobile layout, so we hardcode some
+    // known characteristics of the test websites.
+    func assertLayout(_ mode: SiteLayoutMode, timeout: TimeInterval = TIMEOUT) {
+        let currentURL = (addressBar.value as? String) ?? ""
+        let element: XCUIElement
+
+        if mode == .desktop, currentURL.contains("google.com"), !currentURL.contains("news.google.com") {
+            element = app.webViews.buttons["I'm Feeling Lucky"]
+        } else if mode == .mobile, currentURL.contains("amazon.com") {
+            element = app.webViews.buttons["Open All Categories Menu"]
+        } else if mode == .desktop {
+            let pred = NSPredicate(format: "label BEGINSWITH 'Horizontal scroll bar,' AND NOT (label CONTAINS '1 page')")
+            element = app.webViews.descendants(matching: .any).matching(pred).firstMatch
+        } else {
+            element = app.webViews.descendants(matching: .any)
+                .matching(NSPredicate(format: "label == 'Horizontal scroll bar, 1 page'")).firstMatch
+        }
+
+        BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
     }
 
     func tapDownloadsToastButton() {
@@ -303,6 +344,11 @@ final class BrowserScreen {
     func assertWebPageText(with text: String) {
         let text = sel.webPageElement(with: text).element(in: app)
         BaseTestCase().mozWaitForElementToExist(text)
+    }
+
+    func assertWebPageTextDoesNotExist(with text: String) {
+        let text = sel.webPageElement(with: text).element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(text)
     }
 
     func tapWebViewTextIfExists(text: String) {

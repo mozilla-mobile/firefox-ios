@@ -1648,11 +1648,9 @@ open class BrowserSchema: Schema {
             do {
                 try db.executeChange(sql)
             } catch let err as NSError {
-                let extra = ["table": "clients", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
-                logger.log("Error altering clients table",
+                logger.log("Error altering clients table: \(err.localizedDescription), sql: \(sql)",
                            level: .warning,
-                           category: .storage,
-                           extra: extra)
+                           category: .storage)
                 return .failure
             }
         }

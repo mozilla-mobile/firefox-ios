@@ -18,22 +18,29 @@ struct TPPageStats {
     }
 
     private init(
-        domains: [BlocklistCategory: Set<String>],
-        blocklistName: BlocklistCategory,
-        host: String
+        domains: [BlocklistCategory: Set<String>]
     ) {
         self.domains = domains
-        if self.domains[blocklistName] == nil {
-            self.domains[blocklistName] = Set<String>()
-        }
-       self.domains[blocklistName]?.insert(host)
     }
 
     func create(
         matchingBlocklist blocklistName: BlocklistCategory,
         host: String
     ) -> TPPageStats {
-        return TPPageStats(domains: domains, blocklistName: blocklistName, host: host)
+        return adding(matchingBlocklist: blocklistName, host: host).stats
+    }
+
+    /// Returns updated stats with `host` added to `blocklistName`, along with
+    /// whether the host was newly inserted (i.e. not already counted for that
+    /// category on this page). Callers use `inserted` to record each blocked
+    /// tracker exactly once per page view, avoiding double counting.
+    func adding(
+        matchingBlocklist blocklistName: BlocklistCategory,
+        host: String
+    ) -> (stats: TPPageStats, inserted: Bool) {
+        var domains = self.domains
+        let (inserted, _) = domains[blocklistName, default: Set<String>()].insert(host)
+        return (TPPageStats(domains: domains), inserted)
     }
 
     func getTrackersBlockedForCategory(_ category: BlocklistCategory) -> Int {

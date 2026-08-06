@@ -90,14 +90,12 @@ class SceneCoordinator: BaseCoordinator,
 
     private func canShowIntroOnboarding() -> Bool {
         let launchType = LaunchType.intro(manager: introManager)
-        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
-        return launchType.canLaunch(fromType: .SceneCoordinator, isIphone: isIphone)
+        return launchType.canLaunch(fromType: .SceneCoordinator)
     }
 
     private func showIntroOnboardingIfNeeded() {
         let launchType = LaunchType.intro(manager: introManager)
-        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
-        if launchType.canLaunch(fromType: .SceneCoordinator, isIphone: isIphone) {
+        if launchType.canLaunch(fromType: .SceneCoordinator) {
             startLaunch(with: launchType)
         }
     }
@@ -105,8 +103,7 @@ class SceneCoordinator: BaseCoordinator,
     // MARK: - LaunchFinishedLoadingDelegate
 
     func launchWith(launchType: LaunchType) {
-        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
-        guard launchType.canLaunch(fromType: .SceneCoordinator, isIphone: isIphone) else {
+        guard launchType.canLaunch(fromType: .SceneCoordinator) else {
             startBrowser(with: launchType)
             return
         }

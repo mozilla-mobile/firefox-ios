@@ -74,9 +74,6 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Blokkolva";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Blokkolva**: nem fogja látni és nem használhatja a funkciót. Az eszközön lévő MI esetén a letöltött modellek eltávolításra kerülnek.";
-
-/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blokkolva**: nem fogja látni és nem használhatja a funkciót. Az eszközön lévő MI esetén a letöltött modellek eltávolításra kerülnek.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
@@ -269,7 +266,7 @@
 "Settings.Search.GoogleLens.Description.v153" = "Képek küldése a Google-nek keresés céljából.";
 
 /* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
-"Settings.Search.GoogleLens.Footnote.v153" = "Csak akkor érhető el, ha fent engedélyezve van a Google, és az az aktív keresőmotorja böngészés közben.";
+"Settings.Search.GoogleLens.Footnote.v153" = "Csak akkor érhető el, ha fent engedélyezve van a Google, és az az aktív keresőszolgáltatása böngészés során.";
 
 /* In the Search settings, this is the title that describes the Google Lens feature */
 "Settings.Search.GoogleLens.Title.v153" = "Google Lens";
@@ -345,12 +342,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Kézmozdulatok";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Válasszon nyelvet";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "Előnyben részesített alkalmazásnyelv";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "Nyelv";

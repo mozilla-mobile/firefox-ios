@@ -134,6 +134,17 @@ struct AccessibilityIdentifiers {
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
+    struct WebCompatReporter {
+        static let urlField = "WebCompatReporter.URLField"
+        static let categoryMenu = "WebCompatReporter.CategoryMenu"
+        static let subOption = "WebCompatReporter.SubOption"
+        static let additionalDetails = "WebCompatReporter.AdditionalDetails"
+        static let sendButton = "WebCompatReporter.SendButton"
+        static let includeScreenshot = "WebCompatReporter.IncludeScreenshot"
+        static let includeBlockedList = "WebCompatReporter.IncludeBlockedList"
+        static let learnMore = "WebCompatReporter.LearnMore"
+    }
+
     struct UnifiedSearch {
         struct BottomSheetRow {
             static let engine = "UnifiedSearch.BottomSheetRow.Engine"
@@ -305,6 +316,12 @@ struct AccessibilityIdentifiers {
             static let favIconImage = "SyncedTabFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
         }
+
+        struct TrackerBlockerModule {
+            static let containerPill = "TrackerBlockerModule.containerPill"
+            static let shieldIcon = "TrackerBlockerModule.shieldIcon"
+            static let titleLabel = "TrackerBlockerModule.titleLabel"
+        }
     }
 
     struct GeneralizedIdentifiers {
@@ -412,6 +429,8 @@ struct AccessibilityIdentifiers {
             static let titleTextFieldClearButton = "BookmarksDetail.TitleTextFieldClearButton"
             static let urlTextFieldClearButton = "BookmarksDetail.UrlTextFieldClearButton"
             static let bookmarksFolder = "BookmarksDetail.ParentFolderSelector.FolderCell_0"
+            static let folderSectionHeader = "BookmarksDetail.ParentFolderSelector.SectionHeader"
+            static let changeLocationCell = "BookmarksDetail.ParentFolderSelector.ChangeLocationCell"
         }
 
         struct HistoryPanel {
@@ -767,6 +786,8 @@ struct AccessibilityIdentifiers {
             static let blockPopUps = "blockPopups"
             static let autoPlay = "AutoplaySettings"
             static let blockImages = "NoImageModeStatus"
+            static let adBlockerTitle = "AdBlocker"
+            static let adBlockerLearnMore = "AdBlockerLearnMore"
         }
 
         struct Summarize {
@@ -927,6 +948,10 @@ struct AccessibilityIdentifiers {
         static let titleLabel = "NativeErrorPage.titleLabel"
         static let errorDescriptionLabel = "NativeErrorPage.errorDescriptionLabel"
         static let reloadButton = "NativeErrorPage.reloadButton"
+        static let waybackButton = "NativeErrorPage.waybackButton"
+        static let waybackErrorCard = "NativeErrorPage.waybackErrorCard"
+        static let waybackErrorLabel = "NativeErrorPage.waybackErrorLabel"
+        static let waybackErrorButton = "NativeErrorPage.waybackRetryButton"
         static let goBackButton = "NativeErrorPage.goBackButton"
         static let proceedButton = "NativeErrorPage.proceedButton"
         static let advancedSectionHeader = "NativeErrorPage.advancedSectionHeader"

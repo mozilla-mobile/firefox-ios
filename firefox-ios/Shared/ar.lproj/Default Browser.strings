@@ -23,7 +23,7 @@
 "DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox تولّى مسألة الخصوصية";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "بدّل متصفّحك المبدئي";
+"DefaultBrowserCard.Title" = "غيّر متصفحك الافتراضي";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "انتقل إلى الإعدادات";

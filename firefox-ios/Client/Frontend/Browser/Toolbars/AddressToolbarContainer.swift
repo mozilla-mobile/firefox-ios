@@ -690,6 +690,13 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func applyProgressBarTheme(isPrivateMode: Bool, theme: Theme) {
+        if theme.isNova,
+           let startColor = theme.colors.gradientAccent.colors.first,
+           let endColor = theme.colors.gradientAccent.colors.last {
+            progressBar.setGradientColors(startColor: startColor, middleColor: nil, endColor: endColor)
+            return
+        }
+
         let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
         let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
         let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow

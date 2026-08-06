@@ -38,7 +38,14 @@ extension TabContentBlocker {
                 DispatchQueue.main.async {
                     guard let listItem = listItem else { return }
 
-                    self.stats = self.stats.create(matchingBlocklist: listItem, host: url.host ?? "")
+                    let result = self.stats.adding(matchingBlocklist: listItem, host: url.host ?? "")
+                    self.stats = result.stats
+
+                    // Record long-term stats once per newly-blocked host, excluding
+                    // private browsing so those sessions are never persisted.
+                    if result.inserted, self.tab?.isPrivate == false {
+                        self.statsRecorder?.record(category: listItem, count: 1, date: Date())
+                    }
 
                     guard let windowUUID = self.tab?.currentWebView()?.currentWindowUUID else { return }
                     store.dispatch(

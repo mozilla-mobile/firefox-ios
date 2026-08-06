@@ -4,16 +4,27 @@
 
 import PhotosUI
 
+/// Identifies the app flow that prompted showing the system photo picker interface
+enum PhotoPickerReason: String {
+    case googleLens
+}
+
 /// Presents the system photo library picker and owns its delegate conformance.
 final class PhotoPickerCoordinator: BaseCoordinator, PHPickerViewControllerDelegate {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let onComplete: ([PHPickerResult]) -> Void
+    private let photoPickerReason: PhotoPickerReason
+    private let photoPickerTelemetry: SystemPhotoPickerTelemetryProtocol
 
     init(parentCoordinatorDelegate: ParentCoordinatorDelegate?,
          router: Router,
+         photoPickerReason: PhotoPickerReason,
+         photoPickerTelemetry: SystemPhotoPickerTelemetryProtocol = SystemPhotoPickerTelemetry(),
          onComplete: @escaping ([PHPickerResult]) -> Void) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.onComplete = onComplete
+        self.photoPickerReason = photoPickerReason
+        self.photoPickerTelemetry = photoPickerTelemetry
         super.init(router: router)
     }
 
@@ -27,6 +38,7 @@ final class PhotoPickerCoordinator: BaseCoordinator, PHPickerViewControllerDeleg
         router.present(picker, animated: true) { [weak self] in
             self?.finish(with: [])
         }
+        photoPickerTelemetry.shown(reason: photoPickerReason)
     }
 
     // MARK: - PHPickerViewControllerDelegate
@@ -36,6 +48,7 @@ final class PhotoPickerCoordinator: BaseCoordinator, PHPickerViewControllerDeleg
     }
 
     private func finish(with results: [PHPickerResult]) {
+        photoPickerTelemetry.closed(reason: photoPickerReason, photoSelected: !results.isEmpty)
         onComplete(results)
         parentCoordinatorDelegate?.didFinish(from: self)
     }

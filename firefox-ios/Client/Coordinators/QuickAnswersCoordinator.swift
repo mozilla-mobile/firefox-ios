@@ -47,7 +47,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             windowUUID: windowUUID,
             themeManager: themeManager,
             telemetry: DefaultQuickAnswersTelemetry(),
-            configFetcher: DefaultQuickAnswersConfigFetcher(model: nimbusModel()),
+            configFetcher: RemoteQuickAnswersConfigFetcher(model: nimbusModel()),
             learnMoreURL: Self.learnMoreURL,
         )
         router.present(controller, animated: shouldAnimateTransition)

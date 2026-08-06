@@ -258,6 +258,93 @@ class DesktopModeTestsIphone: BaseTestCase {
         browserScreen.assertDesktopUserAgentIsDisplayed()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306850
+    // Smoketest
+    func testRequestDesktopSitePersistsAcrossDomainAndRestart() {
+        if skipPlatform { return }
+
+        // We use localtest.mc and lvh.me instead of news.google.com, google.com and amazon.com
+        // described in TestRail. localtest.me and lvh.me are public "wildcard loopback"
+        // domains that resolve to 127.0.0.1 via DNS.
+        let newsLocaltestURL = "http://news.localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
+        let localtestURL = "http://localtest.me:\(serverPort)/test-fixture/test-user-agent.html"
+        let lvhURL = "http://lvh.me:\(serverPort)/test-fixture/test-user-agent.html"
+
+        // Visit news.google.com
+        browserScreen.navigateToURL(newsLocaltestURL)
+        waitUntilPageLoad()
+        browserScreen.assertMobileUserAgentIsDisplayed()
+
+        // Step 1: Open the hamburger menu -> the dot menu is opened.
+        navigateToBrowserTabMenu()
+        mainMenuScreen.waitForMenuOptionsToExist()
+        mainMenuScreen.assertDesktopSiteExists()
+
+        // Step 2: Tap 'Request Desktop Site' -> the desktop version of the site is loaded.
+        navigator.goto(RequestDesktopSite)
+        waitUntilPageLoad()
+        browserScreen.assertDesktopUserAgentIsDisplayed()
+
+        // Step 3: Visit google.com -> the desktop version is loaded, since this site shares
+        // the same eTLD+1 domain (google.com) as news.google.com.
+        browserScreen.navigateToURL(localtestURL)
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "localtest.me")
+        browserScreen.assertDesktopUserAgentIsDisplayed()
+
+        // Step 4: Visit amazon.com -> different domain, no desktop pref, mobile version loads.
+        // NOTE: Amazon may show a region-redirect interstitial (e.g. "Deliver to Canada") on
+        // top of the mobile page - do not deal with anything locale related here.
+        browserScreen.navigateToURL(lvhURL)
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "lvh.me")
+        browserScreen.assertMobileUserAgentIsDisplayed()
+
+        // Step 5: Tap "Back" -> news.google.com is loaded, desktop version preserved.
+        // Two taps: history is news.google.com -> google.com -> amazon.com, so one tap
+        // only returns to google.com.
+        toolbarScreen.tapBackButton()
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "localtest.me")
+        toolbarScreen.tapBackButton()
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "news.localtest.me")
+        browserScreen.assertDesktopUserAgentIsDisplayed()
+
+        // (Removed real-site "stop loading" workaround: local fixtures load instantly.)
+
+        // Step 6 + 7: Close the app from the app switcher, then re-launch it
+        closeFromAppSwitcherAndRelaunch()
+        browserScreen.addressToolbarContainValue(value: "news.localtest.me")
+        browserScreen.assertDesktopUserAgentIsDisplayed()
+
+        // Step 8: Settings -> Data Management -> Website Data -> "Clear All Website Data",
+        // then return to the news.google.com tab -> desktop version still preserved.
+        navigator.nowAt(BrowserTab)
+        navigator.goto(WebsiteDataSettings)
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
+        navigator.performAction(Action.AcceptClearAllWebsiteData)
+        navigator.goto(BrowserTab)
+        browserScreen.addressToolbarContainValue(value: "news.localtest.me")
+        browserScreen.assertDesktopUserAgentIsDisplayed()
+
+        // Step 9: Long-press "Refresh", tap "Request Desktop Site" ->
+        // the desktop version of news.google.com is open.
+        navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.goto(BrowserTab)
+        browserScreen.assertMobileUserAgentIsDisplayed()
+        switchToDesktopSite()
+
+        // Step 10: Open the hamburger menu -> the menu is open.
+        navigateToBrowserTabMenu()
+        mainMenuScreen.waitForMenuOptionsToExist()
+
+        // Step 11: Tap 'Request Mobile Site' -> the mobile version of the site is loaded.
+        navigator.goto(RequestMobileSite)
+        waitUntilPageLoad()
+        browserScreen.assertMobileUserAgentIsDisplayed()
+    }
+
     // HELPERS
     private func navigateToBrowserTabMenu() {
         navigator.nowAt(BrowserTab)

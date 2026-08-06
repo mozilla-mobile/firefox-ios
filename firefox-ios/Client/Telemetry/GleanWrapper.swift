@@ -17,17 +17,14 @@ protocol GleanWrapper: Sendable {
     func recordEvent<NoExtras>(for metric: EventMetricType<NoExtras>) where NoExtras: EventExtras
     func incrementCounter(for metric: CounterMetricType)
     func recordString(for metric: StringMetricType, value: String)
+    func recordText(for metric: TextMetricType, value: String)
+    func recordStringList(for metric: StringListMetricType, value: [String])
     func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String)
     func setBoolean(for metric: BooleanMetricType, value: Bool)
     func recordQuantity(for metric: QuantityMetricType, value: Int64)
-    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String)
-    func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64)
     func recordUrl(for metric: UrlMetricType, value: URL)
     func recordDatetime(for metric: DatetimeMetricType, value: Date)
     func recordUUID(for metric: UuidMetricType, value: UUID)
-
-    func incrementNumerator(for metric: RateMetricType, amount: Int32)
-    func incrementDenominator(for metric: RateMetricType, amount: Int32)
 
     // MARK: Timing Metrics
     /// You should nullify any references to the timer after stopping it
@@ -87,6 +84,14 @@ struct DefaultGleanWrapper: GleanWrapper {
         metric.set(value)
     }
 
+    func recordText(for metric: TextMetricType, value: String) {
+        metric.set(value)
+    }
+
+    func recordStringList(for metric: StringListMetricType, value: [String]) {
+        metric.set(value)
+    }
+
     func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String) {
         metric[label].add()
     }
@@ -99,14 +104,6 @@ struct DefaultGleanWrapper: GleanWrapper {
         metric.set(value)
     }
 
-    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String) {
-        metric[label].set(value)
-    }
-
-    func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {
-        metric[label].set(value)
-    }
-
     func recordUrl(for metric: UrlMetricType, value: URL) {
         metric.set(url: value)
     }
@@ -117,16 +114,6 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     func recordUUID(for metric: UuidMetricType, value: UUID) {
         metric.set(value)
-    }
-
-    // MARK: RateMetricType
-
-    func incrementNumerator(for metric: RateMetricType, amount: Int32) {
-        metric.addToNumerator(amount)
-    }
-
-    func incrementDenominator(for metric: RateMetricType, amount: Int32) {
-        metric.addToDenominator(amount)
     }
 
     // MARK: MeasurementTelemetry

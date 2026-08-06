@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 import Storage
 import WebKit
 import SummarizeKit
@@ -23,6 +24,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showLibraryCalled = 0
     var showHomepanelSectionCalled = 0
     var showEnhancedTrackingProtectionCalled = 0
+    var showTrackerBlockerSheetCalled = 0
     var showShareSheetCalled = 0
     var showTabTrayCalled = 0
     var showQrCodeCalled = 0
@@ -59,6 +61,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showGoogleLensCameraCalled = 0
     var searchGoogleLensCalled = 0
     var searchGoogleLensSource: GoogleLensTelemetry.Source?
+    var searchGoogleLensTimerId: GleanTimerId?
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -104,6 +107,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showEnhancedTrackingProtectionCalled += 1
+    }
+
+    func showTrackerBlockerSheet() {
+        showTrackerBlockerSheetCalled += 1
     }
 
     func showTabTray(selectedPanel: TabTrayPanelType) {
@@ -194,9 +201,12 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showGoogleLensCameraCalled += 1
     }
 
-    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source) {
+    func searchGoogleLens(with image: UIImage,
+                          source: GoogleLensTelemetry.Source,
+                          searchTimerId: GleanTimerId?) {
         searchGoogleLensCalled += 1
         searchGoogleLensSource = source
+        searchGoogleLensTimerId = searchTimerId
     }
 
     // MARK: - BrowserDelegate

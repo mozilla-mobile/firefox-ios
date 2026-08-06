@@ -16,10 +16,17 @@ struct WebCompatReporterState: ScreenState, Equatable {
     var additionalDetails: String
     var includeScreenshot: Bool
     var includeBlockedList: Bool
+    var shouldDismiss: Bool
 
-    /// Preview and Send stay disabled until the user picks a category.
-    var canSubmit: Bool { selectedCategory != nil }
+    /// Preview stays disabled, and the details field stays hidden, until the user picks a category.
     var canPreview: Bool { selectedCategory != nil }
+    var showsAdditionalDetails: Bool { selectedCategory != nil }
+
+    /// Send needs a sub-option too, except for "Other", which has none.
+    var canSubmit: Bool {
+        guard let selectedCategory else { return false }
+        return selectedCategory.subOptions.isEmpty || selectedSubOptionID != nil
+    }
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let state = appState.componentState(
@@ -37,7 +44,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             selectedSubOptionID: state.selectedSubOptionID,
             additionalDetails: state.additionalDetails,
             includeScreenshot: state.includeScreenshot,
-            includeBlockedList: state.includeBlockedList
+            includeBlockedList: state.includeBlockedList,
+            shouldDismiss: state.shouldDismiss
         )
     }
 
@@ -49,7 +57,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             selectedSubOptionID: nil,
             additionalDetails: "",
             includeScreenshot: true,
-            includeBlockedList: false
+            includeBlockedList: false,
+            shouldDismiss: false
         )
     }
 
@@ -59,7 +68,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
          selectedSubOptionID: String? = nil,
          additionalDetails: String = "",
          includeScreenshot: Bool = true,
-         includeBlockedList: Bool = false) {
+         includeBlockedList: Bool = false,
+         shouldDismiss: Bool = false) {
         self.windowUUID = windowUUID
         self.url = url
         self.selectedCategory = selectedCategory
@@ -67,12 +77,23 @@ struct WebCompatReporterState: ScreenState, Equatable {
         self.additionalDetails = additionalDetails
         self.includeScreenshot = includeScreenshot
         self.includeBlockedList = includeBlockedList
+        self.shouldDismiss = shouldDismiss
     }
 
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return defaultState(from: state)
         }
+
+        // shouldDismiss is a one-shot signal, so it never survives into the next state.
+        let state = state.copy(shouldDismiss: false)
 
         switch action {
         case let action as WebCompatReporterMiddlewareAction:
@@ -93,6 +114,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
         switch action.actionType {
         case WebCompatReporterMiddlewareActionType.didLoadInitialDraft:
             return state.copy(url: action.url ?? state.url)
+        case WebCompatReporterMiddlewareActionType.didSubmit:
+            return state.copy(shouldDismiss: true)
         default:
             return defaultState(from: state)
         }
@@ -140,16 +163,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             selectedSubOptionID: state.selectedSubOptionID,
             additionalDetails: state.additionalDetails,
             includeScreenshot: state.includeScreenshot,
-            includeBlockedList: state.includeBlockedList
+            includeBlockedList: state.includeBlockedList,
+            shouldDismiss: false
         )
-    }
-
-    static func == (lhs: WebCompatReporterState, rhs: WebCompatReporterState) -> Bool {
-        return lhs.url == rhs.url
-            && lhs.selectedCategory == rhs.selectedCategory
-            && lhs.selectedSubOptionID == rhs.selectedSubOptionID
-            && lhs.additionalDetails == rhs.additionalDetails
-            && lhs.includeScreenshot == rhs.includeScreenshot
-            && lhs.includeBlockedList == rhs.includeBlockedList
     }
 }

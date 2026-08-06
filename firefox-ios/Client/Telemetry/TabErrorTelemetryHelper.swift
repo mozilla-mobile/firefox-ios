@@ -104,11 +104,9 @@ final class TabErrorTelemetryHelper {
         guard let tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int],
               let expectedTabCount = tabCounts[window.uuidString] else { return }
         guard let currentTabCount = getTotalTabCount(window: window) else {
-            logger.log("Can't validate tab count. Tab manager unavailable.",
+            logger.log("Can't validate tab count. Tab manager unavailable for window \(window.uuidString).",
                        level: .info,
-                       category: .tabs,
-                       extra: ["uuid": window.uuidString]
-            )
+                       category: .tabs)
             return
         }
 
@@ -172,10 +170,12 @@ final class TabErrorTelemetryHelper {
            ]
 
         if significantLossDetected {
-            logger.log("Tab loss detected \(entryPoint.logInfo).",
+            var logExtras = extras
+            logExtras["entryPoint"] = entryPoint.logInfo
+            logger.log("Tab loss detected.",
                        level: .fatal,
                        category: .tabs,
-                       extra: extras)
+                       extra: logExtras)
         }
 
         // Only send the telemetry event for the foregrounding log so we don't mess with our existing metrics

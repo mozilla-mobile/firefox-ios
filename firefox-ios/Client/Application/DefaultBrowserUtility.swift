@@ -156,13 +156,9 @@ class DefaultBrowserUtility {
         let postAPIStatus = userDefault.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
 
         logger.log(
-            "Performing migration - current status info",
+            "Performing migration - deeplink status: \(preAPIStatus), API or user set status: \(postAPIStatus)",
             level: .info,
-            category: .setup,
-            extra: [
-                "currentDeeplink": "\(preAPIStatus)",
-                "currentAPIOrUserSetToDefaultStatus": "\(postAPIStatus)"
-            ]
+            category: .setup
         )
 
         // If either one of these statuses are true, meaning we have been set to default,

@@ -9,11 +9,6 @@ import Common
 import Shared
 import WebKit
 
-enum SwitchPrivacyModeResult {
-    case createdNewTab
-    case usedExistingTab
-}
-
 final class TabManagerImplementation: NSObject,
                                       TabManager,
                                       FeatureFlaggable,
@@ -676,13 +671,9 @@ final class TabManagerImplementation: NSObject,
         }
 
         if tab.url == nil {
-            logger.log("Tab restored has empty URL",
+            logger.log("Tab restored has empty URL. tabID: \(tabData.id.uuidString), lastUsedTime: \(tabData.lastUsedTime)",
                        level: .debug,
-                       category: .tabs,
-                       extra: [
-                        "tabID": tabData.id.uuidString,
-                        "lastUsedTime": tabData.lastUsedTime.description
-                       ])
+                       category: .tabs)
         }
     }
 
@@ -880,9 +871,18 @@ final class TabManagerImplementation: NSObject,
                            category: .tabs)
             }
 
+            // Never persist a raw internal error-page URL as a tab's restorable siteUrl,
+            // substitute the original failing URL so restoration points at the real site.
+            let persistedUrl: URL?
+            if let tabUrl = tab.url, let internalUrl = InternalURL(tabUrl), internalUrl.isErrorPage {
+                persistedUrl = internalUrl.originalURLFromErrorPage
+            } else {
+                persistedUrl = tab.url
+            }
+
             return TabData(id: tabId,
                            title: tab.lastTitle,
-                           siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
+                           siteUrl: persistedUrl?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
                            lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime),
@@ -1179,25 +1179,6 @@ final class TabManagerImplementation: NSObject,
         for tab in backgroundTabsWithWebViews {
             await tab.offloadWebView()
         }
-    }
-
-    func switchPrivacyMode() -> SwitchPrivacyModeResult {
-        assert(Thread.isMainThread)
-        var result = SwitchPrivacyModeResult.usedExistingTab
-        guard let selectedTab = selectedTab else { return result }
-        let nextSelectedTab: Tab?
-
-        if selectedTab.isPrivate {
-            nextSelectedTab = mostRecentTab(inTabs: normalTabs)
-        } else if privateTabs.isEmpty {
-            nextSelectedTab = addTab(isPrivate: true)
-            result = .createdNewTab
-        } else {
-            nextSelectedTab = mostRecentTab(inTabs: privateTabs)
-        }
-
-        selectTab(nextSelectedTab)
-        return result
     }
 
     func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {

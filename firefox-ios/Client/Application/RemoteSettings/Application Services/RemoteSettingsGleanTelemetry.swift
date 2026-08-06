@@ -27,17 +27,13 @@ final class RemoteSettingsGleanTelemetry: RemoteSettingsTelemetry {
             value: extras.value
         )
         gleanWrapper.recordEvent(for: GleanMetrics.RemoteSettings.uptakeRemotesettings, extras: extra)
+        let uptakeInfo = "value: \(extras.value ?? "nil"), source: \(extras.source ?? "nil"), "
+            + "trigger: \(extras.trigger ?? "nil"), duration: \(extras.duration ?? "nil"), "
+            + "errorName: \(extras.errorName ?? "nil")"
         logger.log(
-            "Remote Settings uptake",
+            "Remote Settings uptake - \(uptakeInfo)",
             level: .debug,
-            category: .remoteSettings,
-            extra: [
-                "value": extras.value ?? "nil",
-                "source": extras.source ?? "nil",
-                "trigger": extras.trigger ?? "nil",
-                "duration": extras.duration ?? "nil",
-                "errorName": extras.errorName ?? "nil",
-            ]
+            category: .remoteSettings
         )
     }
 }

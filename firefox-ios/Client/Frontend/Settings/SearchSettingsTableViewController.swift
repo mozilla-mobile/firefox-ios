@@ -218,9 +218,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
             withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
             for: indexPath
         ) as? ThemedSubtitleTableViewCell else {
-            logger.log("Failed to dequeue ThemedSubtitleTableViewCell at indexPath: \(indexPath)",
+            logger.log("Failed to dequeue ThemedSubtitleTableViewCell",
                        level: .fatal,
-                       category: .lifecycle)
+                       category: .lifecycle,
+                       extra: ["indexPath": "\(indexPath)"])
             return UITableViewCell()
         }
 

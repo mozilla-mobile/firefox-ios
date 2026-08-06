@@ -39,6 +39,9 @@ Autofill:
 BookmarksPanel:
   description: Corresponds to the library screen's bookmarks panel where the user can view and manage their bookmarks.
 
+Camera:
+  description: Corresponds to features that use the device camera.
+
 ContextMenu:
   description: Corresponds to any context menu in the app.
 
@@ -78,6 +81,9 @@ Passwords:
 PasswordGenerator:
   description: Corresponds to the generation of strong passwords for logins and autofill.
 
+PhotoPicker:
+  description: Corresponds to features that use the system photo picker.
+
 QuickAnswers:
   description: Corresponds to the AI-powered Quick Answers feature that returns answers to spoken questions.
 
@@ -114,6 +120,9 @@ ShortcutsLibrary:
 Summarizer:
   description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
 
+System:
+  description: Corresponds to interactions with iOS system functionality.
+
 TabsPanel:
   description: Corresponds to all things related to the tab panel.
 
@@ -130,6 +139,9 @@ TopSites:
   description:
     Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)
     label on GitHub.
+
+TrackerBlocker:
+  description: Corresponds to the tracker blocker module shown on the homepage, which surfaces the lifetime blocked-tracker count.
 
 TrackingProtection:
   description: Corresponds to the enhanced tracking protection bottom sheet which can be displayed over a webpage.

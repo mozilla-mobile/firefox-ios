@@ -46,76 +46,6 @@ class HistoryDeletionUtilityTests: XCTestCase, @unchecked Sendable {
         assertDBStateFor(testSites, with: profile)
     }
 
-    // MARK: - Test url based deletion
-    @MainActor
-    func testDeletingSingleItem() {
-        let profile = profileSetup(named: "hsd_deleteSingleItem")
-        let testSites = [SiteElements(domain: "mozilla")]
-        populateDBHistory(with: testSites, using: profile)
-        let siteEntry = createWebsiteFor(domain: "mozilla", with: "")
-
-        deletionWithExpectation(for: [siteEntry.url], using: profile) { result in
-            XCTAssertTrue(result)
-            self.assertDBIsEmpty(with: profile)
-        }
-    }
-
-    @MainActor
-    func testDeletingMultipleItemsEmptyingDatabase() {
-        let profile = profileSetup(named: "hsd_deleteMultipleItemsEmptyingDB")
-        let sitesToDelete = [SiteElements(domain: "mozilla"),
-                             SiteElements(domain: "amazon"),
-                             SiteElements(domain: "google")]
-        populateDBHistory(with: sitesToDelete, using: profile)
-
-        let siteEntries = sitesToDelete
-            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-            .map { $0.url }
-
-        deletionWithExpectation(for: siteEntries, using: profile) { result in
-            XCTAssertTrue(result)
-            self.assertDBIsEmpty(with: profile)
-        }
-    }
-
-    @MainActor
-    func testDeletingMultipleTopLevelItems() {
-        let profile = profileSetup(named: "hsd_deleteMultipleItemsTopLevelItems")
-        let sitesToRemain = [SiteElements(domain: "cnn")]
-        let sitesToDelete = [SiteElements(domain: "mozilla"),
-                             SiteElements(domain: "google"),
-                             SiteElements(domain: "amazon")]
-        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), using: profile)
-
-        let siteEntries = sitesToDelete
-            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-            .map { $0.url }
-
-        deletionWithExpectation(for: siteEntries, using: profile) { result in
-            XCTAssertTrue(result)
-            self.assertDBStateFor(sitesToRemain, with: profile)
-        }
-    }
-
-    @MainActor
-    func testDeletingMultipleSpecificItems() {
-        let profile = profileSetup(named: "hsd_deleteMultipleSpecificItems")
-        let sitesToRemain = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
-        let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
-                             SiteElements(domain: "cnn", path: "newsOne/test3.html"),
-                             SiteElements(domain: "cnn", path: "newsTwo/test1.html")]
-        populateDBHistory(with: (sitesToRemain + sitesToDelete).shuffled(), using: profile)
-
-        let siteEntries = sitesToDelete
-            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
-            .map { $0.url }
-
-        deletionWithExpectation(for: siteEntries, using: profile) { result in
-            XCTAssertTrue(result)
-            self.assertDBStateFor(sitesToRemain, with: profile)
-        }
-    }
-
     // MARK: - Test time based deletion
     // In these tests, we don't test the deletion of metadata. The assumption
     // is that A-S has its own testing. Furthermore, because we don't have an
@@ -366,26 +296,6 @@ class HistoryDeletionUtilityTests: XCTestCase, @unchecked Sendable {
         emptyDB(with: profile)
 
         return profile
-    }
-
-    @MainActor
-    func deletionWithExpectation(
-        for siteEntries: [String],
-        using profile: MockProfile,
-        file: StaticString = #filePath,
-        line: UInt = #line,
-        completion: @escaping @Sendable (Bool) -> Void
-    ) {
-        let deletionUtility = HistoryDeletionUtility(with: profile)
-        trackForMemoryLeaks(deletionUtility)
-        let expectation = expectation(description: "HistoryDeletionUtilityTest")
-
-        deletionUtility.delete(siteEntries) { result in
-            completion(result)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 5, handler: nil)
     }
 
     @MainActor

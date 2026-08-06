@@ -131,6 +131,14 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         XCTAssertNotNil(subject.parentCoordinator)
     }
 
+    func testGenerateSettings_whenRetainedBySubject_subjectDeallocates() {
+        let subject = createSubject()
+
+        subject.settings = subject.generateSettings()
+
+        XCTAssertFalse(subject.settings.isEmpty)
+    }
+
     // MARK: - Helper
     private func createSubject() -> AppSettingsTableViewController {
         let subject = AppSettingsTableViewController(

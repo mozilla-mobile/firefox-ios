@@ -1,6 +1,9 @@
 /* Title for the cancel button in the remove address alert. */
 "Addresses.EditAddress.Alert.CancelButton.v129" = "ألغِ";
 
+/* Message explaining the consequences of removing an address from all synced devices. */
+"Addresses.EditAddress.Alert.Message.v129" = "سيتم إزالة العنوان من جميع أجهزتك المزامنة.";
+
 /* Title for the remove button in the remove address alert. */
 "Addresses.EditAddress.Alert.RemoveButton.v129" = "أزِل";
 
@@ -28,6 +31,9 @@
 /* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
 "Addresses.EditAddress.AutofillAddressDepartment.v129" = "القِسْم";
 
+/* Label for the district field in the address form, allowing users to specify their district for more precise location identification. This aids in refining address details for accurate autofill. */
+"Addresses.EditAddress.AutofillAddressDistrict.v129" = "الحي";
+
 /* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
 "Addresses.EditAddress.AutofillAddressEmail.v129" = "البريد الإلكتروني";
 
@@ -42,6 +48,9 @@
 
 /* Label for the field where users can input the name of their neighborhood. This detail adds precision to addresses, especially in densely populated areas, improving the accuracy of autofill. */
 "Addresses.EditAddress.AutofillAddressNeighborhood.v129" = "الحي";
+
+/* Label for the input field designated for the organization's name related to the address. Helps in distinguishing addresses used for business or personal purposes in autofill settings. */
+"Addresses.EditAddress.AutofillAddressOrganization.v129" = "المؤسسة";
 
 /* Label for the parish field, significant in places where parishes are used for local administration and addressing. Ensures users can specify parish details for better autofill accuracy. */
 "Addresses.EditAddress.AutofillAddressParish.v129" = "الأبرشيّة";
@@ -61,11 +70,17 @@
 /* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
 "Addresses.EditAddress.AutofillAddressState.v129" = "الولاية";
 
+/* Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality. */
+"Addresses.EditAddress.AutofillAddressSuburb.v129" = "الضاحية";
+
 /* Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly. */
 "Addresses.EditAddress.AutofillAddressTel.v129" = "الهاتف";
 
 /* Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details. */
 "Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "القرية أو البلدة";
+
+/* Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision. */
+"Addresses.EditAddress.AutofillAddressZip.v129" = "الرمز البريدي";
 
 /* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
 "Addresses.EditAddress.AutofillCancelButton.v129" = "ألغِ";
@@ -97,9 +112,18 @@
 /* Toast message confirming that an address has been successfully saved. */
 "Addresses.Toast.AddressSavedConfirmation.v129" = "حُفظ العنوان";
 
+/* Toast message indicating an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveError.v129" = "تعذّر حفظ العنوان";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "تعذّر إزالة العنوان";
+
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "حاول مجددًا";
 
 /* Toast message confirming that an address has been successfully updated. */
 "Addresses.Toast.AddressUpdatedConfirmation.v129" = "تم تحديث معلومات العنوان";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "تم حفظ العنوان";
 

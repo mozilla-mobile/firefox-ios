@@ -43,11 +43,7 @@ class EditFolderViewController: UIViewController,
         view.tableHeaderView = headerSpacerView
         view.keyboardDismissMode = .onDrag
     }, {
-        if #available(iOS 26.0, *) {
-            UITableView(frame: .zero, style: .insetGrouped)
-        } else {
-            UITableView()
-        }
+        UITableView(frame: .zero, style: .insetGrouped)
     })
 
     private lazy var saveBarButton: UIBarButtonItem =  {
@@ -93,7 +89,7 @@ class EditFolderViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         setTheme(theme)
         onViewWillAppear?()
@@ -110,7 +106,7 @@ class EditFolderViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let isDraggingDown = transitionCoordinator?.isInteractive, !isDraggingDown {
-            navigationController?.setNavigationBarHidden(true, animated: true)
+            navigationController?.setNavigationBarHidden(true, animated: false)
         }
         onViewWillDisappear?()
 

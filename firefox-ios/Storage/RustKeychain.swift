@@ -249,10 +249,15 @@ public final class RustKeychain: KeychainProtocol {
         var keyValue: String?
         (keyValue, _) = getCreditCardKeyData()
 
-        guard let key = keyValue else { return nil }
+        guard let keyValue else {
+            logger.log("Credit card decryption failed: encryption key unavailable from keychain.",
+                       level: .warning,
+                       category: .storage)
+            return nil
+        }
 
         do {
-            return try decryptString(key: key, ciphertext: encryptedCCNum)
+            return try decryptString(key: keyValue, ciphertext: encryptedCCNum)
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
                 logAutofillStoreError(err: autofillStoreError,
@@ -323,9 +328,7 @@ public final class RustKeychain: KeychainProtocol {
             // data or querying for key data that hasn't been created yet in the case
             // of a first-time sync sign in for instance.
 
-            logger.log("Failed to get keychain data: \(err)",
-                       level: .debug,
-                       category: .storage)
+            logger.log("Failed to get keychain data: \(err)", level: .warning, category: .storage)
             return nil
         }
     }

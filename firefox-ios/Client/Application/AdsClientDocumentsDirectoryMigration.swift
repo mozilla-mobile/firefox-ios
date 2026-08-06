@@ -48,10 +48,9 @@ struct AdsClientDocumentsDirectoryMigration {
                     try fileManager.removeItem(at: databaseURL)
                     return didFail
                 } catch {
-                    logger.log("Failed to remove legacy ads client database",
+                    logger.log("Failed to remove legacy ads client database: \(error.localizedDescription)",
                                level: .warning,
-                               category: .storage,
-                               extra: ["error": error.localizedDescription])
+                               category: .storage)
                     return true
                 }
             }

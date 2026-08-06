@@ -82,11 +82,20 @@
 /* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "ᱴᱨᱮᱠᱟᱨ ᱠᱚ ᱵᱞᱚᱠ ᱮᱱᱟ: %@";
 
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "ᱥᱟᱦᱴᱟ ᱞᱳᱰᱤᱝ ᱮᱦᱚᱵ ᱛᱟᱭᱚᱢ ᱥᱟᱫᱷᱟᱨᱚᱬ ᱴᱨᱮᱠᱟᱨ ᱠᱚ ᱥᱴᱟᱱᱰᱟᱨᱰ ᱟᱠᱚᱴ ᱠᱚᱣᱟᱭ, ᱚᱱᱟᱛᱮ ᱟᱢ ᱵᱟᱹᱲᱛᱤ ᱴᱨᱮᱠᱟᱨ ᱞᱮᱠᱷᱟ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾ %@";
+
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "ᱥᱟᱦᱴᱟ ᱞᱟᱫᱮ ᱞᱟᱦᱟᱨᱮ ᱵᱟᱹᱲᱛᱤ ᱴᱨᱮᱠᱟᱨ ᱠᱚ ᱥᱴᱨᱤᱠᱴ ᱟᱠᱚᱴ ᱠᱚᱣᱟᱭ, ᱚᱱᱟᱛᱮ ᱟᱢ ᱠᱚᱢ ᱴᱨᱮᱠᱚᱨ ᱧᱮᱞᱧᱟᱢᱮᱫ ᱠᱚᱣᱟᱢ ᱾ %@";
+
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "ᱫᱟᱨᱟᱭ ᱛᱮ ᱧᱮᱞ ᱢᱮᱲᱟᱣ %@";
 
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "ᱯᱚᱨᱢᱟᱱ ᱥᱟᱠᱟᱢ ᱧᱮᱞ ᱢᱮ";
+
+/* Title for a link that explains how current Tracking Protection mode work. */
+"Menu.EnhancedTrackingProtection.Link.LearnMore.v150" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ ᱫᱚ ᱵᱟᱭ ᱠᱟᱹᱢᱤ ᱠᱟᱱᱟᱭ ᱾  ᱟᱞᱮ ᱫᱚ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱠᱚ ᱫᱚᱦᱲᱟ ᱪᱟᱹᱞᱩ ᱞᱟᱹᱜᱤᱫ ᱞᱮ ᱥᱚᱞᱦᱟ ᱮᱫᱟ᱾";

@@ -88,16 +88,12 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     func isAppleSummarizerEnabled() -> Bool {
-        #if canImport(FoundationModels)
-            // if the language expansion is enabled don't check the en locale cause we support multiple locales
-            if isLanguageExpansionEnabled {
-                return appleIntelligenceUtil.isAppleIntelligenceAvailable
-            }
-            let isEngLang = localeProvider.current.languageCode == "en"
-            return isEngLang && appleIntelligenceUtil.isAppleIntelligenceAvailable
-        #else
-            return false
-        #endif
+        // if the language expansion is enabled don't check the en locale cause we support multiple locales
+        if isLanguageExpansionEnabled {
+            return appleIntelligenceUtil.isAppleIntelligenceAvailable
+        }
+        let isEngLang = localeProvider.current.languageCode == "en"
+        return isEngLang && appleIntelligenceUtil.isAppleIntelligenceAvailable
     }
 
     func isHostedSummarizerEnabled() -> Bool {

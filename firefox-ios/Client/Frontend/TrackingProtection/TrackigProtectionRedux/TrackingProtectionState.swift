@@ -90,7 +90,14 @@ struct TrackingProtectionState: ScreenState {
         self.displayView = displayView
     }
 
-    static let reducer: Reducer<TrackingProtectionState> = { state, action in
+    static let reducer: Reducer<TrackingProtectionState> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<TrackingProtectionState> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<TrackingProtectionState> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return defaultState(from: state)
         }

@@ -100,7 +100,7 @@ public enum UserAgentPlatform {
 
 struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
-    private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+    private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/26.4 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
     static let googleDesktopUserAgent = UserAgentBuilder.defaultDesktopUserAgent().clone(
         extensions: "\(UserAgent.uaBitFx) Version/18.6 Safari/605.1.15"
@@ -201,6 +201,6 @@ public struct UserAgentBuilder {
             systemInfo: "(Macintosh; Intel Mac OS X 10_15_7)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
-            extensions: "Version/18.6 Safari/605.1.15")
+            extensions: "Version/26.4 Safari/605.1.15")
     }
 }

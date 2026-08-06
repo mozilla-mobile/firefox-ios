@@ -90,7 +90,10 @@ struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
         // If the user is resetting to the default app icon, we need to set the alternative icon to nil.
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
-                logger.log("Failed to set an alternative app icon [\(appIcon)]", level: .fatal, category: .appIcon)
+                logger.log("Failed to set an alternative app icon",
+                           level: .fatal,
+                           category: .appIcon,
+                           extra: ["appIcon": "\(appIcon)"])
                 ensureMainThread {
                     self.isShowingErrorAlert = true
 

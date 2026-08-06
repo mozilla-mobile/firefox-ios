@@ -5,7 +5,9 @@
 import Foundation
 import Redux
 import Common
+import ModifiedCopy
 
+@Copyable
 struct PasswordGeneratorState: ScreenState {
     var windowUUID: WindowUUID
     var password: String
@@ -38,9 +40,17 @@ struct PasswordGeneratorState: ScreenState {
         self.passwordHidden = passwordHidden
     }
 
-    static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else { return defaultState(from: state) }
+    static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+    static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+        // Does not handle any modern actions
+        return defaultState(from: state)
+    }
+
+    static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+            return defaultState(from: state)
+        }
 
         switch action.actionType {
         case PasswordGeneratorActionType.updateGeneratedPassword:
@@ -48,22 +58,19 @@ struct PasswordGeneratorState: ScreenState {
             else {
                 return defaultState(from: state)
             }
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: password,
-                passwordHidden: state.passwordHidden)
+            return state
+                .copy(windowUUID: action.windowUUID)
+                .copy(password: password)
 
         case PasswordGeneratorActionType.hidePassword:
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: state.password,
-                passwordHidden: true)
+            return state
+                .copy(windowUUID: action.windowUUID)
+                .copy(passwordHidden: true)
 
         case PasswordGeneratorActionType.showPassword:
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: state.password,
-                passwordHidden: false)
+            return state
+                .copy(windowUUID: action.windowUUID)
+                .copy(passwordHidden: false)
 
         default:
             return defaultState(from: state)

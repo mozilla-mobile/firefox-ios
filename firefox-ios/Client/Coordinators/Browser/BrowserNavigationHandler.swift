@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 import Storage
 import UIKit
 import WebKit
@@ -24,6 +25,10 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// enhancedTrackingProtection page or a child page
     @MainActor
     func showEnhancedTrackingProtection(sourceView: UIView)
+
+    /// Presents the tracker blocker modal half sheet from the homepage tracker blocker view.
+    @MainActor
+    func showTrackerBlockerSheet()
 
     /// Shows the specified section of the home panel.
     ///
@@ -133,7 +138,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showGoogleLensCamera()
 
     @MainActor
-    func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source)
+    func searchGoogleLens(with image: UIImage,
+                          source: GoogleLensTelemetry.Source,
+                          searchTimerId: GleanTimerId?)
 
     @MainActor
     func showQuickAnswers(transitionType: QuickAnswersTransitionType)

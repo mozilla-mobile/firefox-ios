@@ -74,9 +74,6 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Geblokkeerd";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Geblokkeerd**: u ziet de functie niet en kunt deze niet gebruiken. Voor AI op het apparaat worden alle gedownloade modellen verwijderd.";
-
-/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Geblokkeerd**: u ziet de functie niet en kunt deze niet gebruiken. Voor AI op het apparaat worden alle gedownloade modellen verwijderd.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
@@ -89,7 +86,7 @@
 "Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Uw spraak, vragen en antwoorden worden nooit opgeslagen.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
-"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Snelle antwoorden";
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "Snelle Antwoorden";
 
 /* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
 "Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "AI-AANGEDREVEN FUNCTIES";
@@ -345,12 +342,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Bewegingen";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Kies een taal";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "Voorkeurstaal voor app";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "Taal";

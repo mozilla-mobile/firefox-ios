@@ -54,11 +54,10 @@ class DownloadsCoordinator: BaseCoordinator,
         if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
             // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
             logger.log(
-                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet",
+                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet."
+                + " Existing coordinator UUID: \(coordinator.windowUUID)",
                 level: .info,
-                category: .shareSheet,
-                extra: ["existing ShareSheetCoordinator UUID": "\(coordinator.windowUUID)",
-                        "DownloadsCoordinator windowUUID": "N/A"]
+                category: .shareSheet
             )
 
             coordinator.dismiss()

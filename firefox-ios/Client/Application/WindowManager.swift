@@ -135,7 +135,10 @@ final class WindowManagerImplementation: WindowManager {
         guard let window = window(for: windowUUID) else {
             if !AppConstants.isRunningUnitTest {
                 assertionFailure("No window for UUID: \(windowUUID). This is a client error. It will return nil in production but querying a non-existent window is always indicative of a bug.")
-                logger.log("No window for UUID: \(windowUUID)", level: .fatal, category: .window)
+                logger.log("No window for UUID",
+                           level: .fatal,
+                           category: .window,
+                           extra: ["windowUUID": "\(windowUUID)"])
             }
             return nil
         }
@@ -143,7 +146,10 @@ final class WindowManagerImplementation: WindowManager {
         guard let manager = window.tabManager else {
             if !AppConstants.isRunningUnitTest {
                 assertionFailure("Valid window but no TabManager for UUID: \(windowUUID). This is a client error. It will return nil in production but is indicative of a bug.")
-                logger.log("Window alive, but no TabManager for UUID: \(windowUUID)", level: .fatal, category: .window)
+                logger.log("Window alive, but no TabManager for UUID",
+                           level: .fatal,
+                           category: .window,
+                           extra: ["windowUUID": "\(windowUUID)"])
             }
             return nil
         }
@@ -219,9 +225,10 @@ final class WindowManagerImplementation: WindowManager {
                     // clean up the UUID(s) that we know won't be used. We expect a certain number of
                     // these fatal errors to be logged for users previously impacted by the above, and
                     // then it should fall to zero.
-                    logger.log("Detected multiple window tab files on iPhone (UUID count: \(uuidCount))",
+                    logger.log("Detected multiple window tab files on iPhone",
                                level: .fatal,
-                               category: .window)
+                               category: .window,
+                               extra: ["uuidCount": "\(uuidCount)"])
                     let uuidsToDelete = Array(onDiskUUIDs.dropFirst())
                     Task { [tabDataStore] in
                         await tabDataStore.removeWindowData(forUUIDs: uuidsToDelete)

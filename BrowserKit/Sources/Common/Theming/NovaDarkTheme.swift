@@ -126,6 +126,9 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
         NovaColors.Purple20
     ])
     var gradientPrivacyMask = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
+    var gradientWidgetSurface = Gradient(colors: [NovaColors.Gray70, NovaColors.Gray90])
+    var gradientWidgetSurfaceStandard = Gradient(colors: [NovaColors.Gray60, NovaColors.Gray65])
+    var gradientWidgetSurfacePrivate = Gradient(colors: [NovaColors.VioletDesaturated70, NovaColors.VioletDesaturated60])
     var gradientAIStrongStop1: UIColor = NovaColors.Violet50
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30
@@ -148,8 +151,7 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     var iconAccentYellow: UIColor = DarkTheme().colors.iconAccentYellow
 
     // MARK: - Deprecated
-    // TODO: Deprecated for Nova; replace call sites with Nova values (FXIOS-16131)
-    var layer5: UIColor = DarkTheme().colors.layer5
+    var layer5: UIColor { layerSurfaceMedium }
     var layerGradientOverlay: Gradient = DarkTheme().colors.layerGradientOverlay
     var layerHomepage: Gradient = DarkTheme().colors.layerHomepage
     var layerAccentNonOpaque: UIColor = DarkTheme().colors.layerAccentNonOpaque

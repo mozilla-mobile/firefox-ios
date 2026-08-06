@@ -133,9 +133,10 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
         guard let iconPopulator = iconDataFetcher, let selector else {
             let logExtra1 = iconDataFetcher == nil ? "nil" : "ok"
             let logExtra2 = selector == nil ? "nil" : "ok"
-            logger.log("[SEC] Icon fetcher and/or selector are nil. (\(logExtra1), \(logExtra2))",
+            logger.log("[SEC] Icon fetcher and/or selector are nil.",
                        level: .fatal,
-                       category: .remoteSettings)
+                       category: .remoteSettings,
+                       extra: ["iconFetcher": logExtra1, "selector": logExtra2])
             completion([])
             return
         }

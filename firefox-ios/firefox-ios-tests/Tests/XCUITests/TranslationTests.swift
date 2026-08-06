@@ -35,9 +35,12 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
         toolBarScreen.tapTranslateButton(with: .inactive)
 
+        // A language picker may appear before translating; select English if it does
+        toolBarScreen.selectTranslationLanguageIfPresented()
+
         // Check that translation icon switches to loading (spinner) and eventually active mode (blue button)
         toolBarScreen.assertTranslateButtonExists(with: .loading)
-        toolBarScreen.assertTranslateButtonExists(with: .active)
+        toolBarScreen.waitForTranslateButtonToBecomeActive()
         browserScreen.assertWebPageText(with: "Example domain")
 
         toolBarScreen.tapTranslateButton(with: .active)
@@ -67,7 +70,12 @@ final class TranslationsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3379185
-    func testTranslationSettingsDoesNotAppear_translationExperimentOff() {
+    func testTranslationSettingsDoesNotAppear_translationExperimentOff() throws {
+        try XCTSkipIf(
+            isFirefoxBeta || isFirefox,
+            "Skipping test because on Firefox and FirefoxBeta addLaunchArgument cannot override the " +
+            "default experiment value, so the translations feature cannot be forced off"
+        )
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "translations-feature")
         app.launch()
         openSettingsFromToolbarMenu()

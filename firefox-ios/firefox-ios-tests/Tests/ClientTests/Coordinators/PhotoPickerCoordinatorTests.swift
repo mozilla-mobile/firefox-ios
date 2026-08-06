@@ -26,17 +26,22 @@ final class PhotoPickerCoordinatorTests: XCTestCase {
     }
 
     func test_start_presentsPhotoPicker() {
-        let subject = createSubject()
+        let photoPickerTelemetry = MockSystemPhotoPickerTelemetry()
+        let subject = createSubject(photoPickerTelemetry: photoPickerTelemetry)
 
         subject.start()
 
         XCTAssertEqual(router.presentCalled, 1)
         XCTAssertTrue(router.presentedViewController is PHPickerViewController)
+        XCTAssertEqual(photoPickerTelemetry.shownCalled, 1)
+        XCTAssertEqual(photoPickerTelemetry.savedShownReason, .googleLens)
     }
 
-    func test_didFinishPicking_callsCompletionAndNotifiesParent() {
+    func test_didFinishPicking_withoutResults_recordsPhotoSelectedFalse() {
         var completionCalled = 0
-        let subject = createSubject(onComplete: { _ in completionCalled += 1 })
+        let photoPickerTelemetry = MockSystemPhotoPickerTelemetry()
+        let subject = createSubject(photoPickerTelemetry: photoPickerTelemetry,
+                                    onComplete: { _ in completionCalled += 1 })
         let picker = PHPickerViewController(configuration: PHPickerConfiguration(photoLibrary: .shared()))
 
         subject.picker(picker, didFinishPicking: [])
@@ -44,25 +49,36 @@ final class PhotoPickerCoordinatorTests: XCTestCase {
         XCTAssertEqual(completionCalled, 1)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
+        XCTAssertEqual(photoPickerTelemetry.closedCalled, 1)
+        XCTAssertEqual(photoPickerTelemetry.savedClosedReason, .googleLens)
+        XCTAssertEqual(photoPickerTelemetry.savedClosedPhotoSelected, false)
     }
 
     func test_interactiveDismissal_callsCompletionAndNotifiesParent() {
         var completionResults: [PHPickerResult]?
-        let subject = createSubject(onComplete: { completionResults = $0 })
+        let photoPickerTelemetry = MockSystemPhotoPickerTelemetry()
+        let subject = createSubject(photoPickerTelemetry: photoPickerTelemetry,
+                                    onComplete: { completionResults = $0 })
 
         subject.start()
         router.savedCompletion?()
 
         XCTAssertEqual(completionResults?.count, 0)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(photoPickerTelemetry.closedCalled, 1)
+        XCTAssertEqual(photoPickerTelemetry.savedClosedReason, .googleLens)
+        XCTAssertEqual(photoPickerTelemetry.savedClosedPhotoSelected, false)
     }
 
     // MARK: - Helper Methods
-    private func createSubject(onComplete: @escaping ([PHPickerResult]) -> Void = { _ in },
+    private func createSubject(photoPickerTelemetry: SystemPhotoPickerTelemetryProtocol = MockSystemPhotoPickerTelemetry(),
+                               onComplete: @escaping ([PHPickerResult]) -> Void = { _ in },
                                file: StaticString = #filePath,
                                line: UInt = #line) -> PhotoPickerCoordinator {
         let subject = PhotoPickerCoordinator(parentCoordinatorDelegate: parentCoordinator,
                                              router: router,
+                                             photoPickerReason: .googleLens,
+                                             photoPickerTelemetry: photoPickerTelemetry,
                                              onComplete: onComplete)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

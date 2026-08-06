@@ -101,45 +101,8 @@ class MockSearchBarLocationSaver: SearchBarLocationSaverProtocol {
 }
 
 class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
-    var sendCardViewTelemetryCalled = false
-    var sendButtonActionTelemetryCalled = false
-    var sendMultipleChoiceButtonActionTelemetryCalled = false
-    var sendDismissOnboardingTelemetryCalled = false
     var sendGoToSettingsButtonTappedTelemetryCalled = false
     var sendDismissButtonTappedTelemetryCalled = false
-
-    var cardName: String?
-    var action: OnboardingActions?
-    var primaryButton: Bool?
-    var multipleChoiceAction: OnboardingMultipleChoiceAction?
-
-    func sendCardViewTelemetry(from cardName: String) {
-        sendCardViewTelemetryCalled = true
-        self.cardName = cardName
-    }
-
-    func sendButtonActionTelemetry(from cardName: String,
-                                   with action: OnboardingActions,
-                                   and primaryButton: Bool) {
-        sendButtonActionTelemetryCalled = true
-        self.cardName = cardName
-        self.action = action
-        self.primaryButton = primaryButton
-    }
-
-    func sendMultipleChoiceButtonActionTelemetry(
-        from cardName: String,
-        with action: OnboardingMultipleChoiceAction
-    ) {
-        sendMultipleChoiceButtonActionTelemetryCalled = true
-        self.cardName = cardName
-        self.multipleChoiceAction = action
-    }
-
-    func sendDismissOnboardingTelemetry(from cardName: String) {
-        sendDismissOnboardingTelemetryCalled = true
-        self.cardName = cardName
-    }
 
     func sendGoToSettingsButtonTappedTelemetry() {
         sendGoToSettingsButtonTappedTelemetryCalled = true
@@ -149,24 +112,9 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         sendDismissButtonTappedTelemetryCalled = true
     }
 
-    var sendOnboardingShownTelemetryCalled = false
-    func sendOnboardingShownTelemetry() {
-        sendOnboardingShownTelemetryCalled = true
-    }
-
-    var sendOnboardingDismissedTelemetryCalled = false
-    var lastDismissedOutcome: OnboardingFlowOutcome?
-    func sendOnboardingDismissedTelemetry(outcome: OnboardingFlowOutcome) {
-        sendOnboardingDismissedTelemetryCalled = true
-        lastDismissedOutcome = outcome
-    }
-
     func sendWallpaperSelectorViewTelemetry() {}
     func sendWallpaperSelectorCloseTelemetry() {}
     func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
-    func sendWallpaperSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
-    func sendEngagementNotificationTappedTelemetry() {}
-    func sendEngagementNotificationCancelTelemetry() {}
 }
 
 class MockActivityEventHelper: ActivityEventHelper {

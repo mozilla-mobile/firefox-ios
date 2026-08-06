@@ -220,11 +220,20 @@ open class FxAccountManager: @unchecked Sendable {
     /// Get the device ID registered for this account.
     /// The device is registered synchronously during `finishAuthentication`, so this is available
     /// immediately after login without waiting for `DeviceConstellation.refreshState()`.
-    public func getCurrentDeviceId() -> Result<String, Error> {
-        do {
-            return try .success(requireAccount().getCurrentDeviceId())
-        } catch {
-            return .failure(error)
+    ///
+    /// This makes a blocking FFI call that acquires the account's internal mutex, so the work is
+    /// dispatched off the calling thread to avoid hanging the caller (e.g. the main thread) when
+    /// another thread is holding that mutex.
+    public func getCurrentDeviceId(
+        completionHandler: @escaping @MainActor @Sendable (Result<String, Error>) -> Void
+    ) {
+        DispatchQueue.global().async {
+            do {
+                let deviceID = try self.requireAccount().getCurrentDeviceId()
+                DispatchQueue.main.async { completionHandler(.success(deviceID)) }
+            } catch {
+                DispatchQueue.main.async { completionHandler(.failure(error)) }
+            }
         }
     }
 

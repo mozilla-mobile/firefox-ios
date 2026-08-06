@@ -64,12 +64,10 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     private lazy var effectView: UIVisualEffectView = .build {
-#if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
             $0.effect = UIGlassEffect()
             $0.layer.cornerRadius = UX.stepperCornerGlassRadius
         }
-#endif
     }
 
     private lazy var zoomOutButton: UIButton = .build { button in

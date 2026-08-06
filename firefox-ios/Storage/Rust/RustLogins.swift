@@ -328,20 +328,27 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
 
             self.getStoredKey { result in
-                switch result {
-                case .success:
-                    do {
-                        try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
-                        completionHandler(true)
-                    } catch let err as NSError {
-                        self.logger.log("Error verifying logins",
-                                        level: .warning,
-                                        category: .storage,
-                                        description: err.localizedDescription)
+                self.queue.async {
+                    guard self.isOpen else {
+                        completionHandler(false)
+                        return
+                    }
+
+                    switch result {
+                    case .success:
+                        do {
+                            try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
+                            completionHandler(true)
+                        } catch let err as NSError {
+                            self.logger.log("Error verifying logins",
+                                            level: .warning,
+                                            category: .storage,
+                                            description: err.localizedDescription)
+                            completionHandler(false)
+                        }
+                    case .failure:
                         completionHandler(false)
                     }
-                case .failure:
-                    completionHandler(false)
                 }
             }
         }
@@ -475,16 +482,24 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
 
             self.getStoredKey { result in
-                switch result {
-                case .success:
-                    do {
-                        let login = try self.storage?.add(login: login)
-                        completionHandler(.success(login))
-                    } catch let err as NSError {
+                self.queue.async {
+                    guard self.isOpen else {
+                        let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                        completionHandler(.failure(error))
+                        return
+                    }
+
+                    switch result {
+                    case .success:
+                        do {
+                            let login = try self.storage?.add(login: login)
+                            completionHandler(.success(login))
+                        } catch let err as NSError {
+                            completionHandler(.failure(err))
+                        }
+                    case .failure(let err):
                         completionHandler(.failure(err))
                     }
-                case .failure(let err):
-                    completionHandler(.failure(err))
                 }
             }
         }
@@ -519,16 +534,24 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
                 }
 
                 self.getStoredKey { result in
-                    switch result {
-                    case .success:
-                        do {
-                            let updatedLogin = try self.storage?.update(id: id, login: login)
-                            completionHandler(.success(updatedLogin))
-                        } catch let error as NSError {
+                    self.queue.async {
+                        guard self.isOpen else {
+                            let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                             completionHandler(.failure(error))
+                            return
                         }
-                    case .failure(let err):
-                        completionHandler(.failure(err))
+
+                        switch result {
+                        case .success:
+                            do {
+                                let updatedLogin = try self.storage?.update(id: id, login: login)
+                                completionHandler(.success(updatedLogin))
+                            } catch let error as NSError {
+                                completionHandler(.failure(error))
+                            }
+                        case .failure(let err):
+                            completionHandler(.failure(err))
+                        }
                     }
                 }
             }
@@ -634,19 +657,25 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
     public func getStoredKey(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
         let (key, encryptedCanaryPhrase) = rustKeychain.getLoginsKeyData()
 
+        let queueCompletion: @Sendable (Result<String, NSError>) -> Void = { result in
+            self.queue.async {
+                completion(result)
+            }
+        }
+
         switch(key, encryptedCanaryPhrase) {
         case (.some(key), .some(encryptedCanaryPhrase)):
                 self.handleExpectedKeyAction(encryptedCanaryPhrase: encryptedCanaryPhrase,
                                              key: key,
-                                             completion: completion)
+                                             completion: queueCompletion)
         case (.some(key), .none):
-            self.handleUnexpectedKeyAction(completion: completion)
+            self.handleUnexpectedKeyAction(completion: queueCompletion)
         case (.none, .some(encryptedCanaryPhrase)):
-            self.handleMissingKeyAction(completion: completion)
+            self.handleMissingKeyAction(completion: queueCompletion)
         case (.none, .none):
-            self.handleFirstTimeCallOrClearedKeychainAction(completion: completion)
+            self.handleFirstTimeCallOrClearedKeychainAction(completion: queueCompletion)
         default:
-            self.handleIllegalStateAction(completion: completion)
+            self.handleIllegalStateAction(completion: queueCompletion)
         }
     }
 
@@ -702,7 +731,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
 
-        self.hasSyncedLogins().upon { result in
+        self.hasSyncedLogins().uponQueue(queue) { result in
             guard result.failureValue == nil else {
                 completion(.failure(result.failureValue! as NSError))
                 return

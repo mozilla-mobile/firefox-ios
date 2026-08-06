@@ -119,7 +119,6 @@ public protocol ThemeColourPalette {
     var iconPrivate: UIColor { get }
     var borderStrong: UIColor { get }
     var borderRadioButtonDefault: UIColor { get }
-    // TODO: FXIOS-16130 - Wire gradient tokens into the UI
     var gradient: Gradient { get }
     var gradientAccent: Gradient { get }
     var gradientAccentSubtle: Gradient { get }
@@ -127,4 +126,7 @@ public protocol ThemeColourPalette {
     var gradientBorder: Gradient { get }
     var gradientPrivacy: Gradient { get }
     var gradientPrivacyMask: Gradient { get }
+    var gradientWidgetSurface: Gradient { get }
+    var gradientWidgetSurfaceStandard: Gradient { get }
+    var gradientWidgetSurfacePrivate: Gradient { get }
 }

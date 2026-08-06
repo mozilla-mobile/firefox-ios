@@ -13,11 +13,9 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
     var startLoadingCalled = 0
     var loadNextLaunchTypeCalled = 0
     var mockLaunchType: LaunchType?
-    var mockAppVersion: String?
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     // MARK: - Call Tracking
-    private var startLoadingCallHistory: [String] = []
     private var loadNextLaunchTypeCallHistory: [Date] = []
 
     override init(
@@ -34,10 +32,8 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
                    introScreenManager: introScreenManager)
     }
 
-    override func startLoading(appVersion: String) {
+    override func startLoading() {
         startLoadingCalled += 1
-        startLoadingCallHistory.append(appVersion)
-        mockAppVersion = appVersion
         if let mockLaunchType = mockLaunchType {
             delegate?.launchWith(launchType: mockLaunchType)
         } else {

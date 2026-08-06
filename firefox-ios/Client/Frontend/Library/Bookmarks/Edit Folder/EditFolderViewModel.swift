@@ -51,10 +51,6 @@ class EditFolderViewModel: @unchecked Sendable {
         selectedFolder = folder
     }
 
-    private func title(for folder: BookmarkFolderData) -> String {
-        return LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
-    }
-
     func shouldShowDisclosureIndicator(isFolderSelected: Bool) -> Bool {
         return isFolderSelected && !isFolderCollapsed
     }
@@ -118,18 +114,5 @@ class EditFolderViewModel: @unchecked Sendable {
 
             onBookmarkSaved?()
         }
-    }
-}
-
-extension BookmarkFolderData {
-    func copy(withTitle title: String) -> BookmarkFolderData {
-        return BookmarkFolderData(guid: guid,
-                                  dateAdded: dateAdded,
-                                  lastModified: lastModified,
-                                  parentGUID: parentGUID,
-                                  position: position,
-                                  title: title,
-                                  childGUIDs: childGUIDs,
-                                  children: children)
     }
 }

@@ -37,7 +37,7 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
             return checkAddressAutofillEditing()
 
         case .addressBarGestureToOpenTabTrayCloseTab:
-                    return checkAddressBarGestureToOpenTabTrayCloseTabFeature()
+            return checkAddressBarGestureToOpenTabTrayCloseTabFeature()
 
         case .addressBarGestureToOpenTabTrayInteractive:
             return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
@@ -47,9 +47,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
-
-        case .appearanceMenu:
-            return checkAppearanceMenuFeature()
 
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
@@ -62,9 +59,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature()
-
-        case .deeplinkOverlay:
-            return checkDeeplinkOverlayFeature()
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature()
@@ -122,9 +116,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .nativeErrorPage:
             return checkNativeErrorPageFeature()
 
-        case .needsReloadRefactor:
-            return checkNeedsReloadRefactorFeature()
-
         case .newBookmarkFolderTree:
             return checkNewBookmarkFolderTreeFeature()
 
@@ -133,6 +124,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
+
+        case .privacyDashboard:
+            return checkPrivacyDashboardFeature()
 
         case .quickAnswers:
             return checkQuickAnswersFeature()
@@ -205,6 +199,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .videoIntroOnboarding:
             return checkVideoIntroOnboardingFeature()
+
+        case .vpnFeature:
+            return checkVPNFeature()
 
         case .waybackMachine:
             return checkWaybackMachineFeature()
@@ -333,18 +330,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return config.status
     }
 
-    private func checkAppearanceMenuFeature() -> Bool {
-        let config = nimbus.features.appearanceMenuFeature.value()
-        return config.status
-    }
-
     private func checkDeeplinkOptimizationRefactorFeature() -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
-    }
-
-    private func checkDeeplinkOverlayFeature() -> Bool {
-        return nimbus.features.deeplinkOverlayFeature.value().enabled
     }
 
     private func checkDownloadLiveActivitiesFeature() -> Bool {
@@ -435,10 +423,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.onboardingFrameworkFeature.value().enableVideoIntro
     }
 
-    private func checkNeedsReloadRefactorFeature() -> Bool {
-        return nimbus.features.needsReloadRefactor.value().enabled
-    }
-
     private func checkNovaDesignFeature() -> Bool {
         return nimbus.features.novaDesignFeature.value().enabled
     }
@@ -493,5 +477,13 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkWaybackMachineFeature() -> Bool {
         return nimbus.features.waybackMachineFeature.value().enabled
+    }
+
+    private func checkVPNFeature() -> Bool {
+        return nimbus.features.vpnFeature.value().enabled
+    }
+
+    private func checkPrivacyDashboardFeature() -> Bool {
+        return nimbus.features.privacyDashboardFeature.value().enabled
     }
 }

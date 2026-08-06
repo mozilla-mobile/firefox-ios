@@ -104,7 +104,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "入力を開始すると、検索候補、よく見るサイト、ブックマーク、履歴、検索エンジンがすべて 1 か所で利用できます。";
 
 /* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "アドレスバーの選択";
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "アドレスバーの配置";
 
 /* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
 "Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "%1$@ を見つけた経緯や使用していることを %2$@ のマーケティングパートナーと共有してください。このデータは決して販売されません。";
@@ -224,7 +224,7 @@
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "アドレスバーの配置場所を選択する";
 
 /* Title for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Title.v145" = "アドレスバーの選択";
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "アドレスバーの配置";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "画面上部";
