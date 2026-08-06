@@ -267,7 +267,6 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     @objc
     private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         if !swipeGestureFeatureFlagProvider.isInteractiveGestureEnabled { return }
-        print("Velocity: ", gesture.velocity(in: nil))
         handleGestureState(gesture)
     }
 

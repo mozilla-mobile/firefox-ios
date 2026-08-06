@@ -23,6 +23,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         // A number used in calculating the size of the tab preview during the animation,
         // larger values shrink the preview faster
         static let scaleSpeed: CGFloat = 1.237
+        static let closePreviewDimSpeed: CGFloat = 5
     }
 
     private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
@@ -163,7 +164,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         let scale = max((1 - abs(UX.scaleSpeed * translation.y) / bounds.height), UX.minimumTabPreviewScale)
 
         // Gradually dim the preview when it's in the close tab region
-        let previewAlpha = min(1, (1 - 5 * (UX.closeReleaseThreshold - (fingerLocation.y / bounds.height))))
+        let previewAlpha = min(1, (1 - UX.closePreviewDimSpeed * (UX.closeReleaseThreshold - (fingerLocation.y / bounds.height))))
         screenshotViewContainer.alpha = previewAlpha
 
         // Transform that places the finger horizontally centered and <fingerCardPositionRatio> down the card.
@@ -233,8 +234,16 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         tabBackgroundHover.backgroundColor = theme.colors.layer3
-        closeButton.configuration?.baseBackgroundColor = theme.colors.layerCriticalSubdued
-        closeButton.configuration?.baseForegroundColor = theme.colors.layerCritical
+        if theme.type == .dark {
+            closeButton.configuration?.baseBackgroundColor = theme.colors.layerCriticalSubdued
+        } else {
+            if #unavailable(iOS 26) {
+                closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+            } else {
+                closeButton.configuration?.baseBackgroundColor = nil
+            }
+        }
+        closeButton.configuration?.baseForegroundColor = theme.colors.actionCritical
         screenshotViewContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
     }
 
