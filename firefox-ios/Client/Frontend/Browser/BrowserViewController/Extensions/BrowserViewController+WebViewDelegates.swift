@@ -974,7 +974,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 filename: filename,
                 request: request,
                 mimeType: MIMEType.PDF,
-                cookies: cookies
+                cookies: cookies,
+                credential: tab?.httpAuthCredential
             )
             tempPDF.onDownloadProgressUpdate = { progress in
                 self?.handleDownloadProgressUpdate(progress: progress, tab: tab)
@@ -1210,6 +1211,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     loginsHelper: loginsHelper,
                 )
 
+                tab.httpAuthCredential = loginEntry.credentials
                 return (.useCredential, loginEntry.credentials)
             } catch {
                 // For example, an error is thrown when the user taps "Cancel" on the authentication prompt
