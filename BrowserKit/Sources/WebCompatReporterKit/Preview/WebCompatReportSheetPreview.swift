@@ -69,6 +69,20 @@ private func previewSubOption(_ id: String, _ title: String, selected: Bool = fa
     return WebCompatReportViewModel.Row(id: id, title: title, kind: .subOption(isSelected: selected), a11yIdentifier: id)
 }
 
+private func previewDetailsSection() -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(id: "details", rows: [
+        WebCompatReportViewModel.Row(
+            id: "details",
+            title: "Describe the issue in detail",
+            kind: .detailsField(
+                text: "The recipe images never load on this page.",
+                placeholder: "Describe the issue in detail (optional)"
+            ),
+            a11yIdentifier: "details"
+        )
+    ])
+}
+
 private func previewSendSection(isEnabled: Bool) -> WebCompatReportViewModel.Section {
     return WebCompatReportViewModel.Section(id: "send", rows: [
         WebCompatReportViewModel.Row(
@@ -135,6 +149,7 @@ private func previewFooterSection() -> WebCompatReportViewModel.Section {
             previewSubOption("missing_items", "Missing items"),
             previewSubOption("buttons_not_working", "Buttons or links not working")
         ]),
+        previewDetailsSection(),
         previewAdvancedSection(includeScreenshot: true, includeBlockedList: true),
         previewSendSection(isEnabled: true)
     ], isPreviewEnabled: true)

@@ -31,7 +31,6 @@ class PasswordManagerViewModelTests: XCTestCase {
         )
         self.mockDelegate = MockLoginViewModelDelegate()
         self.viewModel.delegate = mockDelegate
-        self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
     }
 
     override func tearDown() async throws {

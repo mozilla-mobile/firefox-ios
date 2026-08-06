@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Glean
 import XCTest
 
 @testable import Client
@@ -15,6 +16,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
     private var mockFlags: MockNimbusFeatureFlags!
     private var tabPreview: SwipeUpTabWebViewPreview!
     private var mockStore: MockStoreForMiddleware<AppState>!
+    private var mockGleanWrapper: MockGleanWrapper!
 
     // releaseOutcome thresholds against a 600pt tall preview: close (1/3) y = 200, tabTray (2/3) y = 400.
     private let previewFrame = CGRect(x: 0, y: 0, width: 300, height: 600)
@@ -27,6 +29,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         themeManager = MockThemeManager()
         mockFlags = MockNimbusFeatureFlags()
+        mockGleanWrapper = MockGleanWrapper()
         setupStore()
     }
 
@@ -38,6 +41,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         themeManager = nil
         mockFlags = nil
         tabPreview = nil
+        mockGleanWrapper = nil
         resetStore()
         mockStore = nil
         DependencyHelperMock().reset()
@@ -168,6 +172,8 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         subject.handlePanGestureForTesting(gesture)
 
         XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
     }
 
     func testHandlePanGesture_whenChanged_doesNotDispatch() {
@@ -195,6 +201,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         subject.handlePanGestureForTesting(gesture)
 
         XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
+        assertRecordedEvent(outcome: .cancelled)
     }
 
     func testHandlePanGesture_whenEndedInMiddle_dispatchesShowTabTray() {
@@ -209,6 +216,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
 
         let action = mockStore.dispatchedActions.first { $0 is GeneralBrowserAction } as? GeneralBrowserAction
         XCTAssertEqual(action?.actionType as? GeneralBrowserActionType, .showTabTray)
+        assertRecordedEvent(outcome: .tabTrayOpened)
 
         // The open tab tray path schedules a delayed dismiss that captures self,
         // do this so the memory leak check doesn't yell at me
@@ -229,6 +237,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         subject.handlePanGestureForTesting(gesture)
 
         XCTAssertLessThan(tabPreview.previewCardFrame.midY, previewFrame.midY)
+        assertRecordedEvent(outcome: .tabClosed)
     }
 
     // MARK: - handleSwipeGesture
@@ -259,10 +268,26 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
             tabManager: tabManager,
             themeManager: themeManager,
             windowUUID: .XCTestDefaultUUID,
-            swipeGestureFeatureFlagProvider: provider
+            swipeGestureFeatureFlagProvider: provider,
+            toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper)
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func assertRecordedEvent(outcome: ToolbarTelemetry.PanGestureOutcomes,
+                                     file: StaticString = #filePath,
+                                     line: UInt = #line) {
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1, file: file, line: line)
+        let event = GleanMetrics.ToolbarAddressBar.dragged
+        let savedMetric = mockGleanWrapper.savedEvents.last
+            as? EventMetricType<GleanMetrics.ToolbarAddressBar.DraggedExtra>
+        XCTAssert(savedMetric === event,
+                  "Received \(String(describing: savedMetric)) instead of \(event)",
+                  file: file,
+                  line: line)
+        let savedExtras = mockGleanWrapper.savedExtras.last as? GleanMetrics.ToolbarAddressBar.DraggedExtra
+        XCTAssertEqual(savedExtras?.outcome, outcome.rawValue, file: file, line: line)
     }
 
     /// Spins the run loop long enough for the open-tab-tray dismiss delay (0.4s) to fire,

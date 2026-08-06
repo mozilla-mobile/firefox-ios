@@ -5,6 +5,7 @@
 #if canImport(WidgetKit)
 import SwiftUI
 import WidgetKit
+import Common
 
 struct IntentProvider: IntentTimelineProvider {
     typealias Intent = QuickActionIntent
@@ -40,6 +41,7 @@ struct QuickLinkEntry: TimelineEntry {
 }
 
 struct SmallQuickLinkView: View {
+    @Environment(\.theme) private var theme
     var entry: IntentProvider.Entry
 
     @ViewBuilder var body: some View {
@@ -47,7 +49,7 @@ struct SmallQuickLinkView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .widgetBackground(
                 LinearGradient(
-                    gradient: Gradient(colors: entry.link.backgroundColors),
+                    gradient: entry.link.gradient(for: theme),
                     startPoint: .bottomLeading,
                     endPoint: .topTrailing
                 )
@@ -62,6 +64,7 @@ struct SmallQuickLinkWidget: Widget {
     public var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: QuickActionIntent.self, provider: IntentProvider()) { entry in
             SmallQuickLinkView(entry: entry)
+                .widgetTheme()
         }
         .supportedFamilies([.systemSmall])
         .configurationDisplayName(String.QuickActionsGalleryTitle)

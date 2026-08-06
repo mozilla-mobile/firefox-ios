@@ -184,11 +184,7 @@ public class BottomSheetViewController: UIViewController,
 
         let effectView = UIVisualEffectView()
 
-        #if canImport(FoundationModels)
         effectView.effect = createGlassEffect()
-        #else
-        effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-        #endif
 
         effectView.layer.cornerRadius = viewModel.cornerRadius
         effectView.clipsToBounds = true
@@ -209,23 +205,17 @@ public class BottomSheetViewController: UIViewController,
 
     @available(iOS 26.0, *)
     private func createGlassEffect() -> UIVisualEffect {
-        #if canImport(FoundationModels)
         let glassEffect = UIGlassEffect()
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         glassEffect.tintColor = theme.colors.layer2.withAlphaComponent(UX.glassAlpha)
         glassEffect.isInteractive = true
         return glassEffect
-        #else
-        return UIBlurEffect(style: .systemUltraThinMaterial)
-        #endif
     }
 
     @available(iOS 26.0, *)
     private func updateGlassEffectTint() {
-        #if canImport(FoundationModels)
         guard let effectView = glassEffectView else { return }
         effectView.effect = createGlassEffect()
-        #endif
     }
 
     private func setupView() {

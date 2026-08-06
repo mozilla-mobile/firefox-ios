@@ -8,7 +8,7 @@
 "WorldCup.CountryPicker.Confederation.Asia.v151" = "Asia";
 
 /* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
-"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "Centro America";
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "America centrale";
 
 /* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
 "WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "CONCACAF";
@@ -30,9 +30,6 @@
 
 /* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
 "WorldCup.CountryPicker.Country.Scotland.v151" = "Scozia";
-
-/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Fatto";
 
 /* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
 "WorldCup.CountryPicker.SkipButton.Title.v151" = "Ignora";
@@ -184,9 +181,6 @@
 /* The label for the 'Final' match in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "FINALE";
 
-/* The label indicating the displaying match has ended after penalties. */
-"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Fine partita • Rigori";
-
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "QUARTI DI FINALE";
 
@@ -197,7 +191,7 @@
 "WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "SEDICESIMI DI FINALE";
 
 /* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Scorri per visualizzare le corrispondenze precedenti o successive";
+"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Scorri per visualizzare le partite precedenti o successive";
 
 /* The label for the 'Semi-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "SEMIFINALI";

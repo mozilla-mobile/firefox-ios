@@ -295,12 +295,6 @@
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v144" = "Delen";
 
-/* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "Donkere websitemodus uitschakelen";
-
-/* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Donkere websitemodus inschakelen";
-
 /* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Donkere websitemodus";
 
@@ -358,6 +352,9 @@
 /* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
 "MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "Lezerweergave";
 
+/* On the main menu, the accessibility label for the action that lets the user report that the current website is broken or not working correctly. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v154" = "Niet-werkende website melden";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Opslaan";
 
@@ -405,6 +402,9 @@
 
 /* On the main menu, the label for the action that indicates that Reader view is turned on. */
 "MainMenu.ToolsSection.ReaderViewOn.Title.v150" = "Aan";
+
+/* On the main menu, the title for the action that lets the user report that the current website is broken or not working correctly. */
+"MainMenu.ToolsSection.ReportBrokenSite.Title.v154" = "Niet-werkende website melden";
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Opslaan";

@@ -12,15 +12,18 @@ import XCTest
 @MainActor
 final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
+    private var gleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        gleanWrapper = MockGleanWrapper()
         setupStore()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        gleanWrapper = nil
         resetStore()
         try await super.tearDown()
     }
@@ -48,16 +51,41 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - submit
 
-    func test_submit_doesNotDispatch() {
+    func test_submit_submitsThePingAndDispatchesDidSubmit() throws {
         let subject = createSubject()
-        let action = WebCompatReporterViewAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: WebCompatReporterViewActionType.submit
-        )
 
-        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
+        let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
+        XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didSubmit)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    // MARK: - Tab-specific info
+
+    func test_submit_whenURLStillMatchesTheTab_includesTabFields() {
+        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
+        setReportedURL("https://example.com/page")
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+
+        // is_private_browsing on top of the device's has_touch_screen and is_tablet.
+        XCTAssertEqual(gleanWrapper.setBooleanCalled, 3)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_submit_whenURLNoLongerMatchesTheTab_dropsTabFields() {
+        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
+        setReportedURL("https://different.example/other")
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+
+        XCTAssertEqual(gleanWrapper.setBooleanCalled, 2)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -118,8 +146,41 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
 
-    private func createSubject() -> WebCompatReporterMiddleware {
-        let subject = WebCompatReporterMiddleware()
+    private func submitAction() -> WebCompatReporterViewAction {
+        return WebCompatReporterViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WebCompatReporterViewActionType.submit
+        )
+    }
+
+    private func makeTab(url: String) -> Tab {
+        let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: url)
+        return tab
+    }
+
+    private func setReportedURL(_ url: String) {
+        mockStore.state = AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .webCompatReporter(
+                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: url)
+                    )
+                ]
+            )
+        )
+    }
+
+    private func createSubject(selectedTab: Tab? = nil) -> WebCompatReporterMiddleware {
+        let tabManager = MockTabManager()
+        tabManager.selectedTab = selectedTab
+        let subject = WebCompatReporterMiddleware(
+            windowManager: MockWindowManager(
+                wrappedManager: WindowManagerImplementation(),
+                tabManager: tabManager
+            ),
+            recorder: WebCompatReportRecorder(gleanWrapper: gleanWrapper)
+        )
         trackForMemoryLeaks(subject)
         return subject
     }

@@ -274,14 +274,14 @@ class PhotonActionSheet: UIViewController,
 
         // In a popover the popover provides the blur background
         if viewModel.presentationStyle == .popover {
-            view.backgroundColor = theme.colors.layer1
+            view.backgroundColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer1
         } else if UIAccessibility.isReduceTransparencyEnabled {
             backgroundBlurView?.alpha = 0.0
 
             // Remove the visual effect and the background alpha
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
-            tableView.backgroundView?.backgroundColor = theme.colors.layer1
-            tableView.backgroundColor = theme.colors.layer1
+            tableView.backgroundView?.backgroundColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer1
+            tableView.backgroundColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer1
         } else {
             backgroundBlurView?.alpha = 1.0
 
@@ -294,10 +294,12 @@ class PhotonActionSheet: UIViewController,
                 let blurEffectView = UIVisualEffectView(effect: blurEffect)
                 tableView.backgroundView = blurEffectView
             }
-            tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
+            tableView.backgroundView?.backgroundColor = theme.isNova
+                ? theme.colors.layerSurfaceMedium.withAlphaComponent(0.9)
+                : theme.colors.layer1.withAlphaComponent(0.9)
         }
 
-        closeButton.backgroundColor = theme.colors.layer1
+        closeButton.backgroundColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer1
         closeButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
     }
 

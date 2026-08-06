@@ -2162,6 +2162,16 @@ extension String {
                 tableName: "NativeErrorPage",
                 value: "Retry",
                 comment: "Button label allowing the user to retry searching the Wayback Machine after a failed attempt.")
+            public static let NotFoundLabel = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.NotFound.v155",
+                tableName: "NativeErrorPage",
+                value: "No archived version found",
+                comment: "Label shown when wayback responds and says no snapshot was found.")
+            public static let SearchButton = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.Search.v155",
+                tableName: "NativeErrorPage",
+                value: "Search the web",
+                comment: "Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.")
         }
     }
 }
@@ -2815,6 +2825,54 @@ extension String {
     }
 }
 
+// MARK: - Privacy Dashboard
+extension String {
+    public struct PrivacyDashboard {
+        public static let HeaderLabelForNoTrackersBlocked = MZLocalizedString(
+            key: "PrivacyDashboard.HeaderLabelForNoTrackersBlocked.v155",
+            tableName: "PrivacyDashboard",
+            value: "%@ blocks trackers as you browse, you’ll see them here.",
+            comment: "On the Privacy Dashboard popup, the text for the header of the popup, in the case where we have not yet blocked any trackers yet. The placeholder %@ will be the app name, Firefox."
+        )
+        public static let HeaderLabel = MZLocalizedString(
+            key: "PrivacyDashboard.HeaderLabel.v155",
+            tableName: "PrivacyDashboard",
+            value: "Trackers blocked this week",
+            comment: "On the Privacy Dashboard popup, the text for the header when we have blocked some trackers this week. This is going to have, above it, in bold letters, the number of trackers blocked this week."
+        )
+        public static let CrossSiteTrackers = MZLocalizedString(
+            key: "PrivacyDashboard.CrossSiteTrackers.v155",
+            tableName: "PrivacyDashboard",
+            value: "Cross-Site Tracking Cookies",
+            comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how many cross-site tracking cookies we've blocked."
+        )
+        public static let Fingerprinters = MZLocalizedString(
+            key: "PrivacyDashboard.Fingerprinters.v155",
+            tableName: "PrivacyDashboard",
+            value: "Fingerprinters",
+            comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how many fingerprinter's we've blocked."
+        )
+        public static let TrackingContent = MZLocalizedString(
+            key: "PrivacyDashboard.TrackingContent.v155",
+            tableName: "PrivacyDashboard",
+            value: "Tracking Content",
+            comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how much tracking content we've blocked."
+        )
+        public static let SocialTrackers = MZLocalizedString(
+            key: "PrivacyDashboard.SocialTrackers.v155",
+            tableName: "PrivacyDashboard",
+            value: "Social Media Trackers",
+            comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how many social media trackers we've blocked."
+        )
+        public static let TotalTrackersBlockedSince = MZLocalizedString(
+            key: "PrivacyDashboard.TotalTrackersBlockedSince.v155",
+            tableName: "PrivacyDashboard",
+            value: "%1$@ since %2$@ 🎉",
+            comment: "On the Privacy Dashboard popup, the text for the footer of the page. The first placeholder (%1$@) is the total number of trackers we've blocked, in a localized format (provided by Swift's built in number localization). The second placeholder (%2$@) will be a date in DD/MM/YY format, and will denote the date we've started blocking trackers for the user."
+        )
+    }
+}
+
 // MARK: - Research Surface
 extension String {
     public struct ResearchSurface {
@@ -3346,6 +3404,27 @@ extension String {
                 value: "Block Ads",
                 comment: "Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements."
             )
+
+            public struct AdBlocker {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Title.v155",
+                    tableName: "Settings",
+                    value: "Ad Blocker",
+                    comment: "Title for the Ad Blocker toggle in the Browsing settings page."
+                )
+                public static let Description = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Description.v155",
+                    tableName: "Settings",
+                    value: "Reduces ads and ad-related trackers. If a site looks broken, try turning this off.",
+                    comment: "Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites."
+                )
+                public static let LearnMore = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.LearnMore.v155",
+                    tableName: "Settings",
+                    value: "Learn more",
+                    comment: "Link text below the Ad Blocker toggle description that opens a support page with more information."
+                )
+            }
         }
 
         public struct AIControls {
@@ -4889,6 +4968,14 @@ extension String {
                 tableName: "WebCompatReporter",
                 value: "Close",
                 comment: "Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen."
+            )
+        }
+        public struct Toast {
+            public static let ReportSent = MZLocalizedString(
+                key: "WebCompatReporter.Toast.ReportSent.v155",
+                tableName: "WebCompatReporter",
+                value: "Report sent",
+                comment: "Message of the toast shown after the user successfully submits a website issue report."
             )
         }
     }

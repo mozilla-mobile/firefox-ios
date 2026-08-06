@@ -60,6 +60,7 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
             case categoryMenu(isPlaceholder: Bool, options: [MenuOption])
             case subOption(isSelected: Bool)
             case urlField(text: String, placeholder: String)
+            case detailsField(text: String, placeholder: String)
             case sendButton(isEnabled: Bool)
             case toggle(isOn: Bool)
         }
@@ -79,14 +80,15 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
 
     public let navigationTitle: String
     public let closeButtonAccessibilityLabel: String
-    public let previewButtonTitle: String
+    /// Nil hides the Preview bar button entirely. Preview is parked for v1 (FXIOS-16450).
+    public let previewButtonTitle: String?
     public let isPreviewEnabled: Bool
     public let sections: [Section]
 
     public init(navigationTitle: String,
                 closeButtonAccessibilityLabel: String,
-                previewButtonTitle: String,
-                isPreviewEnabled: Bool,
+                previewButtonTitle: String? = nil,
+                isPreviewEnabled: Bool = false,
                 sections: [Section] = []) {
         self.navigationTitle = navigationTitle
         self.closeButtonAccessibilityLabel = closeButtonAccessibilityLabel

@@ -230,20 +230,12 @@ enum Experiments {
 
     private static func isAppleIntelligenceAvailable() -> Bool {
         guard #available(iOS 26, *) else { return false }
-        #if canImport(FoundationModels)
-            return AppleIntelligenceUtil().isAppleIntelligenceAvailable
-        #else
-            return false
-        #endif
+        return AppleIntelligenceUtil().isAppleIntelligenceAvailable
     }
 
     private static func cannotUseAppleIntelligence() -> Bool {
         guard #available(iOS 26, *) else { return true }
-        #if canImport(FoundationModels)
-            return AppleIntelligenceUtil().cannotUseAppleIntelligence
-        #else
-            return true
-        #endif
+        return AppleIntelligenceUtil().cannotUseAppleIntelligence
     }
 
     private static func buildNimbus(dbPath: String,

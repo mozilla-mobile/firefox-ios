@@ -29,6 +29,7 @@ protocol SettingsSelectorsSet {
     var AUTOMATIC_THEME_BUTTON: Selector { get }
     var DARK_THEME_BUTTON: Selector { get }
     var LIGHT_THEME_BUTTON: Selector { get }
+    var APPEARANCE_NAVIGATION_BAR: Selector { get }
 
     // General
     var NEW_TAB_CELL: Selector { get }
@@ -198,6 +199,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
     let LIGHT_THEME_BUTTON = Selector.buttonId(
         AccessibilityIdentifiers.Settings.Appearance.lightThemeView,
         description: "Light theme selection button",
+        groups: ["settings", "theme"]
+    )
+
+    let APPEARANCE_NAVIGATION_BAR = Selector.navigationBarByIdOrLabel(
+        "Appearance",
+        description: "Appearance settings navigation bar",
         groups: ["settings", "theme"]
     )
 
@@ -393,6 +400,6 @@ struct SettingsSelectors: SettingsSelectorsSet {
          CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, DEFAULT_BROWSER_CELL,
          SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,
-         TRANSLATION_CELL_TITLE, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL]
+         TRANSLATION_CELL_TITLE, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL, APPEARANCE_NAVIGATION_BAR]
     }
 }

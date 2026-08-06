@@ -176,15 +176,17 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
 
             toastView.topAnchor.constraint(equalTo: topBorderView.bottomAnchor, constant: UX.padding.top),
             toastView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: UX.padding.bottom),
-
-            headerView.widthAnchor.constraint(equalTo: toastView.widthAnchor),
-            titleLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor),
         ])
     }
 
     override func updateConstraints() {
         super.updateConstraints()
         updatePadding()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        titleLabel.preferredMaxLayoutWidth = titleLabel.bounds.width
     }
 
     private func updatePadding() {

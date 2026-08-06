@@ -37,7 +37,7 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
             return checkAddressAutofillEditing()
 
         case .addressBarGestureToOpenTabTrayCloseTab:
-                    return checkAddressBarGestureToOpenTabTrayCloseTabFeature()
+            return checkAddressBarGestureToOpenTabTrayCloseTabFeature()
 
         case .addressBarGestureToOpenTabTrayInteractive:
             return checkAddressBarGestureToOpenTabTrayInteractiveFeature()
@@ -124,6 +124,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
+
+        case .privacyDashboard:
+            return checkPrivacyDashboardFeature()
 
         case .quickAnswers:
             return checkQuickAnswersFeature()
@@ -478,5 +481,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkVPNFeature() -> Bool {
         return nimbus.features.vpnFeature.value().enabled
+    }
+
+    private func checkPrivacyDashboardFeature() -> Bool {
+        return nimbus.features.privacyDashboardFeature.value().enabled
     }
 }

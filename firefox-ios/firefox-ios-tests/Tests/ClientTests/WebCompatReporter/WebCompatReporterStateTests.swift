@@ -24,18 +24,24 @@ final class WebCompatReporterStateTests: XCTestCase {
         XCTAssertFalse(subject.includeBlockedList)
     }
 
-    func test_canSubmitAndCanPreview_falseUntilCategorySelected() {
-        let withoutCategory = createSubject()
-        XCTAssertFalse(withoutCategory.canSubmit)
-        XCTAssertFalse(withoutCategory.canPreview)
+    func test_canPreview_falseUntilCategorySelected() {
+        XCTAssertFalse(createSubject().canPreview)
 
         let withCategory = WebCompatReporterState(
             windowUUID: .XCTestDefaultUUID,
             url: "https://example.com",
             selectedCategory: .siteNotUsable
         )
-        XCTAssertTrue(withCategory.canSubmit)
         XCTAssertTrue(withCategory.canPreview)
+    }
+
+    func test_canSubmit_needsASubOptionUnlessTheCategoryHasNone() {
+        XCTAssertFalse(createSubject().canSubmit)
+        XCTAssertFalse(makeState(category: .siteNotUsable).canSubmit)
+        XCTAssertTrue(
+            makeState(category: .siteNotUsable, subOption: .pageNotLoading).canSubmit
+        )
+        XCTAssertTrue(makeState(category: .other).canSubmit)
     }
 
     // MARK: - Reducer - didLoadInitialDraft
@@ -227,6 +233,37 @@ final class WebCompatReporterStateTests: XCTestCase {
         XCTAssertTrue(newState.includeBlockedList)
     }
 
+    // MARK: - didSubmit
+
+    func test_didSubmit_setsShouldDismiss() {
+        let initialState = createSubject()
+        let reducer = WebCompatReporterState.reducer
+
+        let action = WebCompatReporterMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WebCompatReporterMiddlewareActionType.didSubmit
+        )
+
+        let newState = reducer.legacyReducer(initialState, action)
+
+        XCTAssertTrue(newState.shouldDismiss)
+    }
+
+    func test_actionAfterDidSubmit_clearsShouldDismiss() {
+        let reducer = WebCompatReporterState.reducer
+        let submitted = reducer.legacyReducer(createSubject(), WebCompatReporterMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WebCompatReporterMiddlewareActionType.didSubmit
+        ))
+
+        let newState = reducer.legacyReducer(submitted, WebCompatReporterViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WebCompatReporterViewActionType.toggleBlockedList
+        ))
+
+        XCTAssertFalse(newState.shouldDismiss)
+    }
+
     // MARK: - Edge Cases
 
     func test_unknownAction_returnsDefaultState() {
@@ -307,6 +344,18 @@ final class WebCompatReporterStateTests: XCTestCase {
     }
 
     // MARK: - Private Helpers
+
+    private func makeState(
+        category: WebCompatIssueCategory,
+        subOption: WebCompatSubOption? = nil
+    ) -> WebCompatReporterState {
+        return WebCompatReporterState(
+            windowUUID: .XCTestDefaultUUID,
+            url: "https://example.com",
+            selectedCategory: category,
+            selectedSubOptionID: subOption?.rawValue
+        )
+    }
 
     private func createSubject() -> WebCompatReporterState {
         return WebCompatReporterState(windowUUID: .XCTestDefaultUUID)

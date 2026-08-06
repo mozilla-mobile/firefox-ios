@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import OnboardingKit
 import XCTest
 
 @testable import Client
@@ -13,14 +12,8 @@ private class MockWallpaperTelemetryUtility: OnboardingTelemetryProtocol {
     var wallpaperSelectorSelectedName: String?
     var wallpaperSelectorSelectedType: String?
 
-    func sendCardViewTelemetry(from cardName: String) {}
-    func sendButtonActionTelemetry(from cardName: String, with action: OnboardingActions, and primaryButton: Bool) {}
-    func sendMultipleChoiceButtonActionTelemetry(from cardName: String, with action: OnboardingMultipleChoiceAction) {}
-    func sendDismissOnboardingTelemetry(from cardName: String) {}
     func sendGoToSettingsButtonTappedTelemetry() {}
     func sendDismissButtonTappedTelemetry() {}
-    func sendOnboardingShownTelemetry() {}
-    func sendOnboardingDismissedTelemetry(outcome: OnboardingFlowOutcome) {}
 
     func sendWallpaperSelectorViewTelemetry() { wallpaperSelectorViewCalled = true }
     func sendWallpaperSelectorCloseTelemetry() { wallpaperSelectorCloseCalled = true }
@@ -28,9 +21,6 @@ private class MockWallpaperTelemetryUtility: OnboardingTelemetryProtocol {
         wallpaperSelectorSelectedName = wallpaperName
         wallpaperSelectorSelectedType = wallpaperType
     }
-    func sendWallpaperSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
-    func sendEngagementNotificationTappedTelemetry() {}
-    func sendEngagementNotificationCancelTelemetry() {}
 }
 
 @MainActor

@@ -65,8 +65,9 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
         guard let action = action as? WorldCupAction else {
-            return state
+            return defaultState(from: state)
         }
+
         switch action.actionType {
         case WorldCupMiddlewareActionType.didUpdate:
             return WorldCupSectionState(
@@ -81,7 +82,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
                 shouldShowConfetti: action.shouldShowConfetti
             )
         default:
-            return state
+            return defaultState(from: state)
         }
     }
 

@@ -1,0 +1,10 @@
+# The SwiftLint version used by every local and CI lint run in this repo.
+# Installed by scripts/install-swiftlint.sh into .tools/swiftlint/<version>/.
+#
+# To upgrade, bump both fields together. The checksum is the SHA-256 of the
+# release's portable_swiftlint.zip asset:
+#
+#   curl -sL https://github.com/realm/SwiftLint/releases/download/<version>/portable_swiftlint.zip | shasum -a 256
+#
+version=0.65.0
+sha256=d6cb0aa7a2f5f1ef306fc9e37bcb54dc9a26facc8f7784ac0c3dd3eccf5c6ba6

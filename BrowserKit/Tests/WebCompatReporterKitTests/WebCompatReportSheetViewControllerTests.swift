@@ -113,7 +113,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         )
     }
 
-    func testSendButton_whenTapped_notifiesDelegateWithRowID() {
+    func testSendButton_whenTapped_notifiesDelegateWithRowID() throws {
         let delegate = MockWebCompatReportSheetDelegate()
         let subject = createSubject()
         subject.delegate = delegate
@@ -123,7 +123,8 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         subject.view.layoutIfNeeded()
 
         let cell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
-        fireActions(firstSubview(ofType: UIButton.self, in: cell), for: .touchUpInside)
+        let sendButton = try XCTUnwrap(firstSubview(ofType: UIButton.self, in: cell))
+        fireActions(on: sendButton, for: .touchUpInside)
 
         XCTAssertEqual(delegate.tappedButtonIDs, ["send"])
     }
@@ -152,7 +153,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         )
     }
 
-    func testToggleCell_activation_notifiesDelegateWithRowIDAndValue() {
+    func testToggleCell_activation_notifiesDelegateWithRowIDAndValue() throws {
         let delegate = MockWebCompatReportSheetDelegate()
         let subject = createSubject()
         subject.delegate = delegate
@@ -162,9 +163,9 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         subject.view.layoutIfNeeded()
 
         let toggleCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
-        let toggle = firstSubview(ofType: UISwitch.self, in: toggleCell)
-        toggle?.isOn = true
-        fireActions(toggle, for: .valueChanged)
+        let toggle = try XCTUnwrap(firstSubview(ofType: UISwitch.self, in: toggleCell))
+        toggle.isOn = true
+        fireActions(on: toggle, for: .valueChanged)
 
         XCTAssertEqual(delegate.toggles.map(\.id), ["screenshot"])
         XCTAssertEqual(delegate.toggles.map(\.isOn), [true])
@@ -267,24 +268,60 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertTrue(
             collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatURLCell
         )
+        XCTAssertTrue(
+            collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 1)) is WebCompatDetailsCell
+        )
+    }
+
+    func testURLCell_editingEnd_notifiesDelegateWithRowIDAndText() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let urlCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
+        let textField = firstSubview(ofType: UITextField.self, in: urlCell?.contentView)
+        textField?.becomeFirstResponder()
+        textField?.text = "https://changed.example.com"
+        textField?.resignFirstResponder()
+
+        XCTAssertEqual(delegate.editedText.map(\.id), ["url"])
+        XCTAssertEqual(delegate.editedText.map(\.text), ["https://changed.example.com"])
+    }
+
+    func testDetailsCell_editingEnd_notifiesDelegateWithRowIDAndText() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let (subject, window) = hostedFieldSubject(delegate: delegate)
+        defer { window.isHidden = true }
+
+        let detailsCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 1))
+        let textView = firstSubview(ofType: UITextView.self, in: detailsCell?.contentView)
+        textView?.becomeFirstResponder()
+        textView?.text = "The images never load"
+        textView?.resignFirstResponder()
+
+        XCTAssertEqual(delegate.editedText.map(\.id), ["details"])
+        XCTAssertEqual(delegate.editedText.map(\.text), ["The images never load"])
     }
 
     // MARK: - Helpers
 
-    private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
-        return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
+    private func hostedFieldSubject(
+        delegate: MockWebCompatReportSheetDelegate
+    ) -> (WebCompatReportSheetViewController, UIWindow) {
+        let subject = createSubject()
+        subject.delegate = delegate
+        // A tall key window lays out every section and gives text fields a real
+        // editing session for first-responder changes.
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 2000))
+        window.rootViewController = subject
+        window.makeKeyAndVisible()
+        subject.configure(with: makeViewModel(sections: fieldSections()))
+        subject.view.layoutIfNeeded()
+        return (subject, window)
     }
 
-    // UIControl.sendActions needs a running UIApplication, which logic tests lack,
-    // so invoke each registered target/action selector directly.
-    private func fireActions(_ control: UIControl?, for event: UIControl.Event) {
-        guard let control else { return }
-        for target in control.allTargets {
-            let object = target as NSObject
-            control.actions(forTarget: target, forControlEvent: event)?.forEach {
-                object.perform(Selector($0))
-            }
-        }
+    private func collectionView(in subject: WebCompatReportSheetViewController) -> UICollectionView? {
+        return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
     }
 
     private func sendSections(isEnabled: Bool) -> [WebCompatReportViewModel.Section] {
@@ -353,6 +390,14 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                     title: "URL",
                     kind: .urlField(text: "https://example.com", placeholder: "Website address"),
                     a11yIdentifier: "url"
+                )
+            ]),
+            WebCompatReportViewModel.Section(id: "details", rows: [
+                WebCompatReportViewModel.Row(
+                    id: "details",
+                    title: "Additional details",
+                    kind: .detailsField(text: "", placeholder: "Additional Details (optional)"),
+                    a11yIdentifier: "details"
                 )
             ])
         ]

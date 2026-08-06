@@ -6,8 +6,9 @@
 import XCTest
 import Common
 import TestKit
+import FoundationModels
+import Foundation
 
-/// These compile-time checks ensure the app can still be built with pre–iOS 26 SDKs.
 /// The `@available` attribute only guards *runtime execution*; it doesn’t prevent XCTest
 /// from compiling or discovering the test class. As a result, tests would still be run
 /// (and crash) on lower iOS versions.
@@ -17,9 +18,6 @@ import TestKit
 /// The `@available(iOS 26, *)` annotation is now applied only to individual test
 /// methods where needed, so the compiler can validate iOS 26-only APIs without
 /// blocking the entire class on older SDKs.
-#if canImport(FoundationModels)
-import FoundationModels
-import Foundation
 
 final class FoundationModelsSummarizerTests: XCTestCase {
     override func setUpWithError() throws {
@@ -157,4 +155,3 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         )
     }
 }
-#endif

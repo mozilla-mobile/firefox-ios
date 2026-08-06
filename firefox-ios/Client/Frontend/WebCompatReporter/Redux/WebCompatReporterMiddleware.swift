@@ -7,6 +7,15 @@ import Redux
 
 @MainActor
 final class WebCompatReporterMiddleware {
+    private let windowManager: WindowManager
+    private let recorder: WebCompatReportRecorder
+
+    init(windowManager: WindowManager = AppContainer.shared.resolve(),
+         recorder: WebCompatReportRecorder = WebCompatReportRecorder()) {
+        self.windowManager = windowManager
+        self.recorder = recorder
+    }
+
     lazy var webCompatReporterProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
     lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
@@ -21,8 +30,7 @@ final class WebCompatReporterMiddleware {
     private func handleAction(_ action: WebCompatReporterViewAction, state: AppState) {
         switch action.actionType {
         case WebCompatReporterViewActionType.viewDidLoad:
-            // The presenting layer passes the current tab URL. Payload collection
-            // for the Glean ping is FXIOS-16177.
+            // The presenting layer passes the current tab URL.
             store.dispatch(WebCompatReporterMiddlewareAction(
                 url: action.url,
                 windowUUID: action.windowUUID,
@@ -30,11 +38,42 @@ final class WebCompatReporterMiddleware {
             ))
 
         case WebCompatReporterViewActionType.submit:
-            // TODO: FXIOS-16177 collect the payload and send the broken-site-report ping.
-            break
+            submitReport(windowUUID: action.windowUUID, state: state)
 
         default:
             break
         }
+    }
+
+    private func submitReport(windowUUID: WindowUUID, state: AppState) {
+        let reporterState = WebCompatReporterState(appState: state, uuid: windowUUID)
+        var payload = WebCompatReportPayload.make(from: reporterState)
+        if let tab = selectedTab(for: windowUUID) {
+            payload = WebCompatReportDataCollector.enrich(
+                payload,
+                tab: tab,
+                includeBlockedList: reporterState.includeBlockedList,
+                includeTabSpecificInfo: isReporting(reporterState.url, on: tab)
+            )
+        }
+        recorder.submit(payload)
+
+        store.dispatch(WebCompatReporterMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterMiddlewareActionType.didSubmit
+        ))
+    }
+
+    private func selectedTab(for windowUUID: WindowUUID) -> Tab? {
+        return windowManager.tabManager(for: windowUUID)?.selectedTab
+    }
+
+    /// Origin and path, as desktop does.
+    private func isReporting(_ reportedURL: String, on tab: Tab) -> Bool {
+        guard let reported = URL(string: reportedURL), let current = tab.url else { return false }
+        return reported.scheme == current.scheme
+            && reported.host == current.host
+            && reported.port == current.port
+            && reported.path == current.path
     }
 }

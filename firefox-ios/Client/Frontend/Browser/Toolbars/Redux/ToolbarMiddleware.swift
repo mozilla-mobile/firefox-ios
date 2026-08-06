@@ -164,9 +164,7 @@ final class ToolbarMiddleware {
             toolbarTelemetry.dragInteractionStarted()
 
         case ToolbarMiddlewareActionType.didSwipeToOpenTabTray:
-            guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
-            else { return }
-            toolbarTelemetry.tabTrayOpenedViaSwipe(isAtBottom: toolbarState.toolbarPosition == .bottom)
+            toolbarTelemetry.addressBarSwiped()
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabTray)
             store.dispatch(action)

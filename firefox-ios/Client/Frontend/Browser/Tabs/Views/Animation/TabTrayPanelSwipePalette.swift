@@ -174,6 +174,9 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientBorder: Gradient { base.gradientBorder }
     var gradientPrivacy: Gradient { base.gradientPrivacy }
     var gradientPrivacyMask: Gradient { base.gradientPrivacyMask }
+    var gradientWidgetSurface: Gradient { base.gradientWidgetSurface }
+    var gradientWidgetSurfaceStandard: Gradient { base.gradientWidgetSurfaceStandard }
+    var gradientWidgetSurfacePrivate: Gradient { base.gradientWidgetSurfacePrivate }
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base
