@@ -122,8 +122,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
 
     @MainActor
     func configureGoogleLensTip(for button: UIButton) {
-        guard #available(iOS 17.0, *) else { return }
-        guard googleLensTipViewController == nil else { return }
+        guard #available(iOS 17.0, *), googleLensTipViewController == nil else { return }
 
         googleLensTipObservationTask?.cancel()
         let tip = GoogleLensTip()

@@ -736,9 +736,7 @@ final class LocationView: UIView,
         delegate?.locationTextFieldNeedsSearchReset()
     }
 
-    func locationTextField(_ textField: LocationTextField,
-                           didDisplayEditingAccessoryButton button: UIButton,
-                           contextualHintType: String) {
+    func locationTextFieldDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String) {
         delegate?.locationViewDidDisplayEditingAccessoryButton(button, contextualHintType: contextualHintType)
     }
 
