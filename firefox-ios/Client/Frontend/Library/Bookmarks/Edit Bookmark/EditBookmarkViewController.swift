@@ -36,11 +36,7 @@ class EditBookmarkViewController: UIViewController,
         view.tableHeaderView = headerSpacerView
         view.keyboardDismissMode = .onDrag
     }, {
-        if #available(iOS 26.0, *) {
-            UITableView(frame: .zero, style: .insetGrouped)
-        } else {
-            UITableView()
-        }
+        UITableView(frame: .zero, style: .insetGrouped)
     })
 
     private lazy var saveBarButton: UIBarButtonItem =  {
