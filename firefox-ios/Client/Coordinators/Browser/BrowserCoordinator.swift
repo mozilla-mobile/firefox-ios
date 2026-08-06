@@ -48,6 +48,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
+    private weak var reportBrokenSiteViewController: WebCompatReportViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -629,6 +630,7 @@ final class BrowserCoordinator: BaseCoordinator,
     func presentReportBrokenSite(url: URL?) {
         let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
         reportViewController.reportCoordinator = self
+        reportBrokenSiteViewController = reportViewController
         router.present(reportViewController, animated: true, completion: nil)
     }
 
@@ -649,10 +651,16 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func webCompatReportViewControllerDidTapLearnMore(url: URL) {
-        // Dismiss first, otherwise the explainer loads in a tab hidden behind the sheet.
-        router.dismiss(animated: true, completion: { [weak self] in
-            self?.browserViewController.openURLInNewTab(url)
-        })
+        // Dismissing the sheet or opening a tab tears its Redux state down and loses the report.
+        // `TermsOfUseLinkViewController` is a generic in-app web view, reused here despite the name.
+        let linkViewController = TermsOfUseLinkViewController(
+            url: url,
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+        let navigationController = UINavigationController(rootViewController: linkViewController)
+        navigationController.modalPresentationStyle = .pageSheet
+        reportBrokenSiteViewController?.present(navigationController, animated: true)
     }
 
     func presentSavePDFController() {
