@@ -44,16 +44,16 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Limpiar";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. %@ is the currently visited website. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Eliminar cookies y datos del sitio para %@ puede cerrar sesión en los sitios web y limpiar los carritos de compras.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Eliminar las cookies y datos de sitio de %@ puede cerrar tu sesión en algunos sitios y vaciar tu carrito de compras.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Limpiar cookies y datos del sitio";
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Eliminar cookies y datos de sitio";
 
 /* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Limpiar cookies y datos del sitio";
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Eliminar cookies y datos de sitio";
 
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
-"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Cookies y datos del sitio eliminados";
+"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Cookies y datos de sitio eliminados";
 
 /* The accessibility label for the close button in the Enhanced Tracking protection menu. */
 "Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Cerrar menú de privacidad y seguridad";
@@ -86,7 +86,7 @@
 "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "El estándar bloquea los rastreadores comunes después de que una página comienza a cargarse, por lo que es posible que veas un recuento de rastreadores más alto. %@";
 
 /* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
-"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Los bloques estrictos bloquean más rastreadores al detenerlos antes de que se cargue una página, por lo que es posible que veas un recuento de rastreadores menor. %@";
+"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "El nivel estricto bloquea más rastreadores al detenerlos antes de que se cargue la página, por lo que es posible que veas un recuento de rastreadores menor. %@";
 
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Verificado por %@";
@@ -122,7 +122,7 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Protección mejorada contra el rastreo";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Las protecciones están desactivadas. Te sugerimos volver a activarlas.";
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Protección de navegación DESACTIVADA. Te sugerimos reactivarla.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Si algo parece que no funciona en este sitio, intenta desactivarla.";

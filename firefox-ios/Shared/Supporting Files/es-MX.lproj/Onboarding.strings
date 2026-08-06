@@ -20,7 +20,7 @@
 "Onboarding.Customization.Intro.Continue.Action.v123" = "Personalizar %@";
 
 /* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Intro.Description.v123" = "Configura tu tema y barra de herramientas para que coincidan con tu estilo de navegación único.";
+"Onboarding.Customization.Intro.Description.v123" = "Configura el tema y la barra de herramientas para que se adapten a tu estilo de navegación único.";
 
 /* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
 "Onboarding.Customization.Intro.Skip.Action.v123" = "Empieza a navegar";
@@ -89,7 +89,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Oscuro";
 
 /* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Elige tu tema favorito o haz que %@ coincida con tu dispositivo, lo que te permitirá tener el control.";
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Tú tienes el control: elige tu tema favorito o haz que %@ se adapte al tema de tu dispositivo.";
 
 /* Option for the light theme in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "Claro";
@@ -101,7 +101,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "Continuar";
 
 /* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "Comienza a escribir para obtener sugerencias de búsqueda, tus sitios principales, marcadores, historial y motores de búsqueda – todo en un solo lugar.";
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "Al ingresar texto obtendrás sugerencias de búsqueda, sitios favoritos, marcadores, historial y motores de búsqueda. Todo en un solo lugar.";
 
 /* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Elige tu barra de direcciones";
@@ -149,7 +149,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Continuar";
 
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Rápido, seguro y sin agobios. Navegar ahora es mucho mejor.";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Rápido, seguro y confiable. Navega con una experiencia mejorada.";
 
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Administrar ajustes";
@@ -167,7 +167,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "Al continuar, aceptas los %@";
 
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ Términos de uso";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "Términos de uso de %@";
 
 /* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Prepárate para correr con libertad";
@@ -200,7 +200,7 @@
 "Onboarding.Modern.Customization.Theme.Dark.v145" = "Oscuro";
 
 /* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.Customization.Theme.Description.v145" = "Elige tu tema favorito o haz que %@ coincida con tu dispositivo, lo que te permitirá tener el control.";
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Tú tienes el control: elige tu tema favorito o haz que %@ se adapte al tema de tu dispositivo.";
 
 /* Option for the light theme. */
 "Onboarding.Modern.Customization.Theme.Light.v145" = "Claro";
@@ -218,7 +218,7 @@
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Continuar";
 
 /* Description for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Comienza a escribir para obtener sugerencias de búsqueda, tus sitios principales, marcadores, historial y motores de búsqueda, todo en un solo lugar.";
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Al ingresar texto obtendrás sugerencias de búsqueda, sitios favoritos, marcadores, historial y motores de búsqueda. Todo en un solo lugar.";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Elige dónde colocar tu barra de direcciones";
@@ -320,7 +320,7 @@
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Al continuar, aceptas los %@";
 
 /* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "%@ Términos de uso.";
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "Términos de uso de %@.";
 
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "Mejora tu navegación";
@@ -329,7 +329,7 @@
 "Onboarding.Modern.TermsOfService.Title.v145" = "Toma el control de internet";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ Términos de uso.";
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "Términos de uso de %@.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Establecer como navegador predeterminado";
@@ -425,7 +425,7 @@
 "Onboarding.TermsOfService.Title.v135" = "Te damos la bienvenida a %@";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ Términos de uso.";
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "Términos de uso de %@.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Fondo de pantalla clásico";

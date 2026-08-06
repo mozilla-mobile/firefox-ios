@@ -46,6 +46,9 @@
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Iniciar sesión";
 
+/* On the main menu account header, shown transiently while the user is being signed out of their account. */
+"MainMenu.Account.SigningOut.Title.v154" = "Cerrando sesión…";
+
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
 "MainMenu.Account.SyncError.Description.v131" = "Sincronización pausada";
 
@@ -62,7 +65,7 @@
 "MainMenu.DesktopSiteOn.Title.v142" = "Activar";
 
 /* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
-"MainMenu.HeaderBanner.Subtitle.v142" = "Toma segundos. Cámbialo en cualquier momento.";
+"MainMenu.HeaderBanner.Subtitle.v142" = "Toma solo un segundo y puedes cambiar tus preferencias cuando quieras.";
 
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
 "MainMenu.HeaderBanner.Title.v142" = "Establece %@ como predeterminado";
@@ -125,10 +128,10 @@
 "MainMenu.SiteProtection.Protections.Title.v153" = "Protecciones";
 
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
-"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "Las protecciones están desactivadas";
+"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "Protección de navegación DESACTIVADA";
 
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
-"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Las protecciones están activadas";
+"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Protección de navegación ACTIVADA";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Inicio";
@@ -296,7 +299,7 @@
 "MainMenu.Submenus.Tools.Share.Title.v144" = "Compartir";
 
 /* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Modo oscuro del sitio web";
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Ver sitios en modo oscuro";
 
 /* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
 "MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
@@ -352,6 +355,9 @@
 /* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
 "MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "Vista de lectura";
 
+/* On the main menu, the accessibility label for the action that lets the user report that the current website is broken or not working correctly. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v154" = "Reportar un problema en el sitio";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Guardar";
 
@@ -374,7 +380,7 @@
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Herramientas del submenú";
 
 /* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
-"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "Modo oscuro del sitio web";
+"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "Ver sitios en modo oscuro";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
 "MainMenu.ToolsSection.DesktopSite.Title.v141" = "Sitio de escritorio";
@@ -399,6 +405,9 @@
 
 /* On the main menu, the label for the action that indicates that Reader view is turned on. */
 "MainMenu.ToolsSection.ReaderViewOn.Title.v150" = "Activar";
+
+/* On the main menu, the title for the action that lets the user report that the current website is broken or not working correctly. */
+"MainMenu.ToolsSection.ReportBrokenSite.Title.v154" = "Reportar un problema en el sitio";
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Guardar";

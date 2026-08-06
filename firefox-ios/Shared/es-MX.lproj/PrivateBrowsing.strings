@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Abrir en una nueva pestaña privada";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox no recordará nada de tu historial o cookies, pero los nuevos marcadores se guardarán.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox no recordará el historial ni las cookies de esta sesión, pero guardará marcadores que agregues.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Saber más";
@@ -14,7 +14,7 @@
 "Off" = "Apagar";
 
 /* Toggled ON accessibility value */
-"On" = "Encender";
+"On" = "Activado";
 
 /* Title displayed for when there are no open tabs while in private mode */
 "Private Browsing" = "Navegación privada";
@@ -26,8 +26,8 @@
 "PrivateBrowsing.Toggle.A11y.Label.v132" = "Navegación privada";
 
 /* Accessiblity hint for toggling on/off private mode */
-"Turns private mode on or off" = "Encender o apagar el modo privado";
+"Turns private mode on or off" = "Activar o desactivar el modo privado";
 
 /* Will be displayed in Settings under 'Close Private Tabs' */
-"When Leaving Private Browsing" = "Cuando dejes la navegación privada";
+"When Leaving Private Browsing" = "Cuando salgas de navegación privada";
 
