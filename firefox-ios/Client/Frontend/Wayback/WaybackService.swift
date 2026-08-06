@@ -24,7 +24,7 @@ class WaybackService {
     private static let session: URLSession = {
         let version = AppInfo.appVersion
         let config = URLSessionConfiguration.default
-        // TODO: FXIOS-16529 Move to shared UserAgent configuration
+        // TODO: FXIOS-16534 Move to shared UserAgent configuration
         config.httpAdditionalHeaders = [
             "User-Agent": "firefox-ios-neterr/\(version) (+https://mzl.la/3RNfZFB)"
         ]
