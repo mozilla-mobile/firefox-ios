@@ -67,3 +67,15 @@
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "ពេញម៉ោង";
 
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "ចំណាត់ថ្នាក់លេខបី";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "តង់ទីពីរ";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "ចែករំលែក";
+
+/* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "យើងនឹងជូនដំណឹងដល់អ្នកខណៈដែលព្រឹត្តិការណ៍​​ពានបាល់ទាត់ពិភពលោកខិតជិតមកដល់";
+

@@ -169,6 +169,15 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "ਆਪੇ-ਚਲਾਓ";
 
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "ਇਸ਼ਤਿਹਾਰ ਅਤੇ ਇਸ਼ਤਿਹਾਰ-ਰੋਕੂ ਟਰੈਕਰ ਘਟਾਉਂਦਾ ਹੈ। ਜੇ ਸਾਈਟ ਠੀਕ ਤਰ੍ਹਾਂ ਕੰਮ ਨਹੀਂ ਕਰਦੀ ਤਾਂ ਇਸ ਨੂੰ ਬੰਦ ਕਰਕੇ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
+
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "ਹੋਰ ਜਾਣੋ";
+
+/* Title for the Ad Blocker toggle in the Browsing settings page. */
+"Settings.Browsing.AdBlocker.Title.v155" = "ਇਸ਼ਤਿਹਾਰ ਰੋਕੂ";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "ਇਸ਼ਤਿਹਾਰਾਂ 'ਤੇ ਪਾਬੰਦੀ ਲਾਓ";
 

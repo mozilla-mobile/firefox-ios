@@ -43,6 +43,9 @@
 /* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
 "Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "ចំណាំលើតុ";
 
+/* Collapsible header for the group of desktop bookmark folders in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkDesktopGroupLabel.v154" = "កុំព្យូទ័រ";
+
 /* VoiceOver accessibility value read for a collapsed folder group header in the New/Edit Folder location picker. */
 "Bookmarks.Menu.EditBookmarkGroupCollapsedValue.v154" = "បង្រួញហើយ";
 

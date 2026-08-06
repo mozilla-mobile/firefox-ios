@@ -5,7 +5,7 @@
 "New Tab" = "Nauja kortelė";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "„Firefox“ naudoja jūsų kamerą QR kodų nuskaitymui, nuotraukų darymui, ir vaizdo įrašams.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Svetainės gali teirautis jūsų buvimo vietos.";

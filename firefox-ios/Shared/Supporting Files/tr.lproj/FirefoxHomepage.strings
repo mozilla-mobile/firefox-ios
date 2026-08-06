@@ -73,3 +73,6 @@
 /* The numbers of trackers we've blocked since we started tracking. The %@ placeholder is the actual number of trackers blocked. */
 "FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b" = "Engellenen takip kodları: %@";
 
+/* The numbers of trackers we've blocked since we started tracking. The %@ placeholder is the actual number of trackers blocked. */
+"FirefoxHomepage.TrackerBlocker.TrackersBlocked.v155" = "Engellenen takip kodları: %@";
+
