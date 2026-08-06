@@ -12,7 +12,7 @@ import WebEngine
 @MainActor
 protocol VPNManaging {
     var isRunning: Bool { get }
-    func start(privateOnly: Bool) async
+    func start() async
     func stop() async
 }
 
@@ -31,7 +31,6 @@ final class VPNManager: VPNManaging {
 
     private(set) var isRunning = false
     private var activeServer: VPNGuardian.Server?
-    private var activeScope: ProxyScope?
     private var rotationTask: Task<Void, Never>?
 
     init(
@@ -66,7 +65,7 @@ final class VPNManager: VPNManaging {
         return ["secret": secret]
     }
 
-    func start(privateOnly: Bool = false) async {
+    func start() async {
         do {
             let pass = try await self.guardian.getPass()
 
@@ -79,10 +78,8 @@ final class VPNManager: VPNManaging {
                 category: .sync
             )
             let config = self.buildProxyConfig(server: server, pass: pass)
-            let scope: ProxyScope = privateOnly ? .private : .normal
-            await self.applyProxyAndRebuildWebViews(configs: [config], scope: scope)
+            await self.applyProxyAndRebuildWebViews(configs: [config])
             self.activeServer = server
-            self.activeScope = scope
             self.isRunning = true
             self.startPassRotation(after: pass)
         } catch {
@@ -93,9 +90,8 @@ final class VPNManager: VPNManaging {
     func stop() async {
         self.rotationTask?.cancel()
         self.rotationTask = nil
-        await self.applyProxyAndRebuildWebViews(configs: [], scope: .normal)
+        await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
-        self.activeScope = nil
         self.isRunning = false
     }
 
@@ -110,10 +106,9 @@ final class VPNManager: VPNManaging {
             guard let stream = self?.guardian.passRotation(after: initial) else { return }
             for await new in stream {
                 guard let self,
-                      let server = self.activeServer,
-                      let scope = self.activeScope else { return }
+                      let server = self.activeServer else { return }
                 let config = self.buildProxyConfig(server: server, pass: new)
-                DefaultWKEngineConfigurationProvider.applyProxyConfigurations([config], scope: scope)
+                DefaultWKEngineConfigurationProvider.applyProxyConfigurations([config], scope: .normal)
                 self.logger.log(
                     "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
                     level: .info,
@@ -123,20 +118,26 @@ final class VPNManager: VPNManaging {
         }
     }
 
-    /// Swap the WebKit data stores to ones with the new proxy configuration applied, then
-    /// tear down every tab's webview against the old store and reload the visible tab.
+    /// Swap the WebKit data store to one with the new proxy configuration applied, then tear
+    /// down every normal tab's webview against the old store and reload the visible tab.
     /// Assigning `proxyConfigurations` on an existing store does not invalidate WebKit's
     /// connection pool, so without a swap, in-flight or pooled connections bypass the proxy.
-    private func applyProxyAndRebuildWebViews(configs: [ProxyConfiguration], scope: ProxyScope) async {
+    ///
+    /// Deliberately scoped to `.normal`
+    private func applyProxyAndRebuildWebViews(configs: [ProxyConfiguration]) async {
         await DefaultWKEngineConfigurationProvider.rebuildStores(
             applyingProxy: configs,
-            scope: scope
+            scope: .normal
         )
+        await rebuildWebViewsAndReclaimStores()
+    }
+
+    private func rebuildWebViewsAndReclaimStores() async {
         for tabManager in windowManager.allWindowTabManagers() {
             await tabManager.cleanupWebViewsForProxyChange()
         }
-        // Safe to free the displaced stores' disk footprint now that every webview holding
-        // them has been torn down.
+        // Safe to free the displaced store's disk footprint now that every webview holding
+        // it has been torn down.
         await DefaultWKEngineConfigurationProvider.removeStaleStores()
     }
 

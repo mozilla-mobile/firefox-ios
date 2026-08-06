@@ -56,7 +56,7 @@ public protocol WKEngineConfigurationProvider {
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
-    private static var defaultStore = WKWebsiteDataStore.default()
+    public private(set) static var defaultStore = WKWebsiteDataStore.default()
     /// Identifier of the persistent store currently held in `defaultStore`, when we have
     /// swapped away from `WKWebsiteDataStore.default()` (e.g. for a VPN session). Used to
     /// clean up the on-disk footprint via `WKWebsiteDataStore.remove(forIdentifier:)` once
@@ -97,7 +97,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     }
 
     @available(iOS 26.0, *)
-    public static func copyData(from newStore: WKWebsiteDataStore, to oldStore: WKWebsiteDataStore) async {
+    public static func copyData(from oldStore: WKWebsiteDataStore, to newStore: WKWebsiteDataStore) async {
         do {
             let oldData = try await oldStore.fetchData(of: WKWebsiteDataStore.allWebsiteDataTypes())
             try await newStore.restoreData(oldData)
