@@ -19,13 +19,15 @@ In a number of our State types, we have **transient state** (i.e. properties tha
 > [!Note]
 > **Transient State**: One-shot UI signals that must be cleared after use (e.g. after triggering an animation or navigation).
 
-In many cases, this clearing was happening in the memberwise `init` on the State. Default values were assigned to transient properties to clear them implicitly. As a result, it is not obvious what properties are truly transient and which are just conveniently provided a default value.
+Throughout the project, we have inconsistent treatment of transient state. In many places, we cleared transient state using default arguments supplied to the State's memberwise `init`. This clears properties implicitly. As a result, it is not obvious what properties are truly transient and which are just conveniently provided a default value.
 
-Furthermore, there has been inconsistent implementation of the `defaultState()` method. We should prefer to use the memberwise state `init` inside `defaultState()` and explicitly set transient values to their defaults. The added benefit to this is that the compiler will alert us to update this function when a new property is added to the State in the future. If we just use the `.copy()` methods, we will not get this feedback.
+Furthermore, there has been inconsistent implementation of the `defaultState()` method. We should prefer to use the memberwise state `init` inside `defaultState()` and explicitly set transient values to their defaults. The added benefit to this is that the compiler will alert us when a new property is added to the State in the future. That lets us be conscientious about identifying transient state and assigning defaults. If we just use the `.copy()` methods, we will not get this feedback. 
+
+We want `defautState()` to be the single source of truth for transient properties—not default argument values in the `init` or a strange mix between the two.
 
 ## Decision
 
-In order to leverage compiler feedback and explicitly define which State properties are transient, we want to enforce standards around the following:
+In order to leverage compiler feedback and explicitly define a source of truth for transient State properties, we want to enforce standards around the following:
 
 ### 1. Usage of the `@Copyable` Macro
 
@@ -36,12 +38,12 @@ You can read more about the macro in [ADR-0011](0011-redux-state-reducer-initial
 ### 2. Our State `init` Pattern
 
 Redux States should have **precisely three** initializers:
-1. `init(appState: AppState, uuid: WindowUUID)`: Used in state subscription
+1. `init(appState: AppState, uuid: WindowUUID)`: Used for state subscription in the presentation layer
 2. `init(windowUUID: WindowUUID)`: Used when adding a new presented component to the Redux state hierarchy
-3. Memberwise `init(prop1: Type, prop2: Type, ...)` which individually initializes all stored properties
+3. Memberwise `init(prop1: Type, prop2: Type, ...)` used to individually initialize all stored properties
 
 > [!CAUTION]
-> Do not add default values to any of these initializers.
+> Do NOT add default values to any initializer arguments.
 
 ### 3. Correct `StateType` `defaultState(from:)` Implementation
 
@@ -50,11 +52,11 @@ All Redux State types conform to `StateType`, which requires a `defaultState(fro
 A correct `defaultState(from:)` implementaiton should:
 
 - Return a new instance of the State using the memberwise `init()`, NOT the `.copy()` methods
-- Copy over persistent properties directly from the `state` argument
+- Copy over persistent properties directly from the `from` argument
 - Reset all transient properties back to their defaults
 
 > [!CAUTION]
-> Never `return state`. You must always construct a *new* state.
+> Never return the previous state instance with `return state`. You must always construct a *new* state instance for Redux to work correctly.
 
 Example usage:
 ```
@@ -75,11 +77,11 @@ static func defaultState(from state: TabsPanelState) -> TabsPanelState {
 
 ### 4. Correct `StateType` `resetTransientState()` Usage
 
-If your Redux State contains transient properties, you must use the `resetTransientState()` method to clear those properties before leveraging the `@Copyable` macro.
+If your Redux State contains transient properties, you must use the `resetTransientState()` method to clear those properties before leveraging the `@Copyable` macro's `.copy()` methods.
+
+Using `resetTransientState()` ensures all transient state is cleared from your copy of the previous state *before* applying your updates to the state in response to the latest action.
 
 The default implementation for `resetTransientState()` simply calls `defaultState(from:)` on `self`.
-
-Using `resetTransientState()` ensures all transient state is cleared from your copy of the previous state before applying your updates to the state in response to the latest action.
 
 Example usage:
 ```
@@ -99,21 +101,23 @@ func handleSomeAction(...) -> SomeState {
 
 ## Migration Tip
 
-When migrating a State type to use `@Copyable`, first check that State's memberwise `init()` method. 
+When migrating a State type to use `@Copyable`, first review that State's memberwise `init()` method. 
 
-Does it contain default arguments? If it does, you may be dealing with a State which contains transient state.
+Does the `init()` contain default arguments? If yes, you may be dealing with a State which contains transient state.
 
-You should remove the default values from the memberwise `init()` but be considerate of what those values previously cleared.
+You should remove the default values from the memberwise `init()` as part of the migration work. However, you must be thoughtful about which values must be reset. 
 
-You should then carefully audit each reducer return statement as you apply the `.copy()` methods. You want to ensure the *before* and *after* behaviour does not change.
+Update the `defaultState()` method to correctly set these default values for any transient state instead (remembering that transient state is state which should always be cleared by the next action, after having been consumed once).
+
+You should then carefully audit each reducer `return` statement as you apply the `.copy()` methods. You want to ensure the *before* behaviour (`init` with default arguments) and *after* behaviour (`.resetTransientState()` and `.copy()` usage) remains the same.
 
 ## Consequences
 
 ### Positive Consequences
 
 - Consistency across Redux States for intializers, `StateType` `defaultState()` implementation, and `resetTransientState()` usage
-- Ensures developers are conscious about defining and clearing transient state (code becomes self-documenting)
-- Improved compiler feedback
+- Ensures developers are conscientious about defining and clearing transient state (and the code becomes self-documenting)
+- Improved compiler feedback when adding new transient properties
 
 ### Neutral Consequences
 
