@@ -110,6 +110,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4036952
+    // Regression
     func testModernKitOnboardingStartSyncingUseEmailInstead() throws {
         let onboardingScreen = OnboardingScreen(app: app, flowType: .modernKit)
         let firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
@@ -120,16 +121,8 @@ class IntegrationTests: BaseTestCase {
         onboardingScreen.assertTitle()
         onboardingScreen.goToNextScreenViaSecondary()
 
-        if iPad() {
-            // iPad does not show the address bar top/bottom placement card (second screen).
-            // However, the accessibility IDs increase by one.
-            onboardingScreen.currentScreen += 1
-        } else {
-            // Screen 2: Choose address bar - Continue (primary button)
-            onboardingScreen.assertTitle()
-            onboardingScreen.selectAddressBarPosition(position: .bottom)
-            onboardingScreen.goToNextScreenViaPrimary()
-        }
+        // Screen 2 (iPhone only): Choose address bar - Continue (primary button)
+        onboardingScreen.handleAddressBarScreenIfNeeded()
 
         // Step 1 - Screen 3: Choose theme - Continue (primary button)
         onboardingScreen.assertTitle()
