@@ -140,28 +140,50 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(dispatchedViewActions().isEmpty)
     }
 
-    func testDidTapPreview_dispatchesPreviewAndHandsTheDraftToTheCoordinator() throws {
+    func testDidTapPreview_onlyDispatches() {
         let coordinator = MockWebCompatReportCoordinatorDelegate()
         let subject = createSubject(reportedURL: nil)
         subject.reportCoordinator = coordinator
         subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapPreview()
+
+        // Building a payload here is what let preview and submit drift.
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .preview)
+        XCTAssertTrue(coordinator.didTapPreviewPayloads.isEmpty)
+    }
+
+    func testNewState_withPreviewPayload_handsItToTheCoordinator() throws {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+        var payload = WebCompatReportPayload()
+        payload.url = "https://example.com"
+
         subject.newState(state: WebCompatReporterState(
             windowUUID: windowUUID,
             url: "https://example.com",
             selectedCategory: .videoOrAudio,
-            additionalDetails: "audio cuts out"
+            previewPayload: payload
         ))
 
-        subject.webCompatReportSheetDidTapPreview()
+        XCTAssertEqual(coordinator.didTapPreviewPayloads, [payload])
+    }
 
-        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .preview)
-        // The coordinator needs the draft and the toggles, not just the tap.
-        XCTAssertEqual(coordinator.didTapPreviewRequests.count, 1)
-        let request = try XCTUnwrap(coordinator.didTapPreviewRequests.first)
-        XCTAssertEqual(request.payload.url, "https://example.com")
-        XCTAssertEqual(request.payload.description, "audio cuts out")
-        XCTAssertEqual(request.payload.breakageCategory, WebCompatIssueCategory.videoOrAudio.rawValue)
-        XCTAssertFalse(request.includeBlockedList)
+    func testNewState_withoutPreviewPayload_leavesTheCoordinatorAlone() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.newState(state: WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .videoOrAudio
+        ))
+
+        XCTAssertTrue(coordinator.didTapPreviewPayloads.isEmpty)
     }
 
     func testSimpleCreation_hasNoLeaks() {
@@ -298,7 +320,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         payload.memory = 8192
         payload.defaultLocales = ["en-GB", "fr"]
 
-        let viewModel = WebCompatReportViewController.makePreviewViewModel(payload: payload, screenshot: nil)
+        let viewModel = WebCompatReportViewController.makePreviewViewModel(payload: payload)
 
         // Groups and labels come from the payload, so a new metric shows up without touching this file.
         XCTAssertEqual(viewModel.sections.map(\.id), payload.previewGroups.map(\.id.rawValue))
@@ -320,7 +342,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
             selectedCategory: .other
         ))
 
-        let viewModel = WebCompatReportViewController.makePreviewViewModel(payload: payload, screenshot: nil)
+        let viewModel = WebCompatReportViewController.makePreviewViewModel(payload: payload)
 
         let frameworks = try XCTUnwrap(viewModel.sections.first { $0.id == "frameworks" })
         XCTAssertEqual(frameworks.rows.map { $0.value.displayText }, ["null", "null", "null"])
@@ -332,10 +354,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testMakePreviewViewModel_givesEveryGroupItsOwnAccessibilityIdentifiers() {
-        let viewModel = WebCompatReportViewController.makePreviewViewModel(
-            payload: WebCompatReportPayload(),
-            screenshot: nil
-        )
+        let viewModel = WebCompatReportViewController.makePreviewViewModel(payload: WebCompatReportPayload())
 
         // Header and card are addressed separately in UI tests, so they can't share an identifier.
         let identifiers = viewModel.sections.flatMap { [$0.a11yIdentifier, $0.contentA11yIdentifier] }
@@ -381,7 +400,7 @@ private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoord
     var didFinishCallCount = 0
     var didSubmitCallCount = 0
     var didTapLearnMoreURLs: [URL] = []
-    var didTapPreviewRequests: [WebCompatPreviewRequest] = []
+    var didTapPreviewPayloads: [WebCompatReportPayload] = []
 
     func webCompatReportViewControllerDidFinish() {
         didFinishCallCount += 1
@@ -395,7 +414,7 @@ private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoord
         didTapLearnMoreURLs.append(url)
     }
 
-    func webCompatReportViewControllerDidTapPreview(_ request: WebCompatPreviewRequest) {
-        didTapPreviewRequests.append(request)
+    func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload) {
+        didTapPreviewPayloads.append(payload)
     }
 }

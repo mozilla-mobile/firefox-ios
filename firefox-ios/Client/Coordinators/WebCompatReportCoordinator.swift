@@ -18,7 +18,6 @@ final class WebCompatReportCoordinator: BaseCoordinator,
                                         WebCompatReportPreviewDelegate {
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
-    private let tabManager: TabManager
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private weak var navigationDelegate: WebCompatReportCoordinatorNavigationDelegate?
 
@@ -30,13 +29,11 @@ final class WebCompatReportCoordinator: BaseCoordinator,
         router: Router,
         windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        tabManager: TabManager,
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
         navigationDelegate: WebCompatReportCoordinatorNavigationDelegate?
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.tabManager = tabManager
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.navigationDelegate = navigationDelegate
         super.init(router: router)
@@ -69,13 +66,8 @@ final class WebCompatReportCoordinator: BaseCoordinator,
         }
     }
 
-    func webCompatReportViewControllerDidTapPreview(_ request: WebCompatPreviewRequest) {
-        guard let reportViewController, let tab = tabManager.selectedTab else { return }
-        let payload = WebCompatReportDataCollector.enrich(
-            request.payload,
-            tab: tab,
-            includeBlockedList: request.includeBlockedList
-        )
+    func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload) {
+        guard let reportViewController, previewRouter == nil else { return }
         let previewViewController = WebCompatReportPreviewViewController(
             viewModel: WebCompatReportViewController.makePreviewViewModel(payload: payload),
             windowUUID: windowUUID,

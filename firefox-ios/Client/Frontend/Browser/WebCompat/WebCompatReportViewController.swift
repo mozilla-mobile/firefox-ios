@@ -16,13 +16,8 @@ protocol WebCompatReportCoordinatorDelegate: AnyObject {
     func webCompatReportViewControllerDidSubmit()
     /// User tapped the "Learn More…" link; the coordinator dismisses the sheet and opens the explainer page.
     func webCompatReportViewControllerDidTapLearnMore(url: URL)
-    /// The coordinator fills in the device and tab data the form can't reach, then presents.
-    func webCompatReportViewControllerDidTapPreview(_ request: WebCompatPreviewRequest)
-}
-
-struct WebCompatPreviewRequest {
-    let payload: WebCompatReportPayload
-    let includeBlockedList: Bool
+    /// The middleware assembled the report; the coordinator presents it.
+    func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload)
 }
 
 /// Store-connected container that hosts the `WebCompatReporterKit` sheet, maps
@@ -44,8 +39,6 @@ final class WebCompatReportViewController: UINavigationController,
     private let windowUUID: WindowUUID
     private let reportedURL: URL?
     private let sheetViewController: WebCompatReportSheetViewController
-    /// The sheet's view model is a projection, so Preview reads the draft from here instead.
-    private var currentState: WebCompatReporterState
 
     init(
         windowUUID: WindowUUID,
@@ -58,7 +51,6 @@ final class WebCompatReportViewController: UINavigationController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         let initialState = WebCompatReporterState(windowUUID: windowUUID)
-        self.currentState = initialState
         self.sheetViewController = WebCompatReportSheetViewController(
             viewModel: WebCompatReportViewController.makeViewModel(from: initialState),
             theme: themeManager.getCurrentTheme(for: windowUUID)
@@ -119,7 +111,9 @@ final class WebCompatReportViewController: UINavigationController,
             reportCoordinator?.webCompatReportViewControllerDidSubmit()
             return
         }
-        currentState = state
+        if let payload = state.previewPayload {
+            reportCoordinator?.webCompatReportViewControllerDidTapPreview(payload: payload)
+        }
         sheetViewController.configure(with: WebCompatReportViewController.makeViewModel(from: state))
     }
 
@@ -360,17 +354,11 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     func webCompatReportSheetDidTapPreview() {
-        // Dispatched for telemetry (FXIOS-16187); the coordinator does the navigating.
+        // The report comes back through newState, not from here.
         store.dispatch(WebCompatReporterViewAction(
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.preview
         ))
-        reportCoordinator?.webCompatReportViewControllerDidTapPreview(
-            WebCompatPreviewRequest(
-                payload: WebCompatReportPayload.make(from: currentState),
-                includeBlockedList: currentState.includeBlockedList
-            )
-        )
     }
 
     func webCompatReportSheetDidSelectCategory(id: String) {

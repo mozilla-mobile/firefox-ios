@@ -631,7 +631,6 @@ final class BrowserCoordinator: BaseCoordinator,
             router: router,
             windowUUID: windowUUID,
             themeManager: themeManager,
-            tabManager: tabManager,
             parentCoordinatorDelegate: self,
             navigationDelegate: self
         )

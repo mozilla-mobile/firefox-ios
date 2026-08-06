@@ -55,7 +55,7 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         layout(subject)
         try expandFirstSection(in: subject)
 
-        subject.applyTheme(theme: DarkTheme())
+        subject.applyTheme()
         subject.view.layoutIfNeeded()
 
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
@@ -66,7 +66,7 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         let subject = createSubject(sections: sampleSections)
         layout(subject)
 
-        subject.applyTheme(theme: DarkTheme())
+        subject.applyTheme()
         subject.view.layoutIfNeeded()
         try expandFirstSection(in: subject)
 
