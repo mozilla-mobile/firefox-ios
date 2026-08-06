@@ -1437,6 +1437,10 @@ final class BrowserCoordinator: BaseCoordinator,
     func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
         switch event {
         case .windowWillClose:
+            // Runs before the guard below: a merge is driven from the surviving window, so it is
+            // this coordinator that needs to hear about the *other* windows finishing closing.
+            windowMerger.windowDidClose(uuid: uuid)
+
             guard uuid == windowUUID else { return }
             // Additional cleanup performed when the current iPad window is closed.
             // This is necessary in order to ensure the BVC and other memory is freed correctly.
