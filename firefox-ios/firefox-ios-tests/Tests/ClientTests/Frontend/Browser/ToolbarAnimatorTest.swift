@@ -5,7 +5,6 @@
 import Testing
 
 import XCTest
-import SnapKit
 import Common
 import Shared
 

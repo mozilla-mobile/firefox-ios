@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import SnapKit
 
 @testable import Client
 
@@ -31,8 +30,6 @@ final class ConstraintReferenceTests: XCTestCase {
         childView.translatesAutoresizingMaskIntoConstraints = false
         let constraint = childView.topAnchor.constraint(equalTo: parentView.topAnchor)
         let reference = ConstraintReference(native: constraint)
-
-        XCTAssertFalse(reference.isUsingSnapKitConstraints)
         XCTAssertNotNil(reference.layoutConstraint)
     }
 
@@ -53,62 +50,6 @@ final class ConstraintReferenceTests: XCTestCase {
         let retrievedConstraint = reference.layoutConstraint
 
         XCTAssertTrue(constraint === retrievedConstraint)
-    }
-
-    // MARK: - SnapKit Constraint Tests
-
-    func test_snapKitConstraint_initialization() {
-        var snapKitConstraint: Constraint?
-        childView.snp.makeConstraints { make in
-            snapKitConstraint = make.top.equalTo(parentView).constraint
-        }
-
-        guard let constraint = snapKitConstraint else {
-            XCTFail("SnapKit constraint not created")
-            return
-        }
-
-        let reference = ConstraintReference(snapKit: constraint)
-
-        XCTAssertTrue(reference.isUsingSnapKitConstraints)
-        XCTAssertNotNil(reference.layoutConstraint)
-    }
-
-    func test_snapKitConstraint_updateOffset_changesOffset() {
-        var snapKitConstraint: Constraint?
-        childView.snp.makeConstraints { make in
-            snapKitConstraint = make.top.equalTo(parentView).constraint
-        }
-
-        guard let constraint = snapKitConstraint else {
-            XCTFail("SnapKit constraint not created")
-            return
-        }
-
-        let reference = ConstraintReference(snapKit: constraint)
-
-        reference.update(offset: 25)
-        parentView.layoutIfNeeded()
-
-        // Verify the underlying NSLayoutConstraint has the updated offset
-        XCTAssertEqual(reference.layoutConstraint?.constant, 25)
-    }
-
-    func test_snapKitConstraint_layoutConstraint_returnsUnderlyingConstraint() {
-        var snapKitConstraint: Constraint?
-        childView.snp.makeConstraints { make in
-            snapKitConstraint = make.top.equalTo(parentView).constraint
-        }
-
-        guard let constraint = snapKitConstraint else {
-            XCTFail("SnapKit constraint not created")
-            return
-        }
-
-        let reference = ConstraintReference(snapKit: constraint)
-        let layoutConstraint = reference.layoutConstraint
-
-        XCTAssertNotNil(layoutConstraint)
     }
 
     // MARK: - Edge Cases
