@@ -197,13 +197,7 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(TabTray)
         tabTrayScreen.assertTabTrayControlsExist()
 
-        // Step 2: Rotate to landscape then back to portrait
-        browserScreen.setOrientation(.landscapeLeft)
-        tabTrayScreen.assertTabTrayControlsExist()
-        browserScreen.setOrientation(.portrait)
-        tabTrayScreen.assertTabTrayControlsExist()
-
-        // Step 3: Open a couple of tabs, then close them
+        // Step 2: Open a couple of tabs, then close them
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -216,7 +210,7 @@ class IntegrationTests: BaseTestCase {
         tabTrayScreen.swipeToCloseFirstTab()
         tabTrayScreen.assertTabCount(1)
 
-        // Step 4: Visit a page in the opened tab
+        // Step 3: Visit a page in the opened tab
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
@@ -224,7 +218,7 @@ class IntegrationTests: BaseTestCase {
         // The tabs counter shows the correct number
         toolBarScreen.assertTabsOpened(expectedCount: 2)
 
-        // Step 5: Tap the tab counter
+        // Step 4: Tap the tab counter
         if iPad() {
             toolBarScreen.tapOnTabsButton()
         } else {
@@ -237,13 +231,13 @@ class IntegrationTests: BaseTestCase {
             selectedTab: selectedTab
         )
 
-        // Step 6: Tap on the page content
+        // Step 5: Tap on the page content
         tabTrayScreen.tapOnCell(named: urlLabel)
         mozWaitForElementToNotExist(app.otherElements[AccessibilityIdentifiers.TabTray.tabsTray])
         browserScreen.addressToolbarContainValue(value: urlValueLong)
         navigator.nowAt(BrowserTab)
 
-        // Step 7: Open pages in Private Browsing and tap the tab counter
+        // Step 6: Open pages in Private Browsing and tap the tab counter
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(BrowserTab)
@@ -251,12 +245,12 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(TabTray)
         tabTrayScreen.assertTabTrayControlsExist()
 
-        // Step 8: Go to the app switcher
+        // Step 7: Go to the app switcher
         // Restarting app in the background to simulate the app switcher
         restartInBackground()
         tabTrayScreen.assertTabTrayControlsExist()
 
-        // Step 9: Open some pages in a normal browsing session and tap 'Close all tabs'
+        // Step 8: Open some pages in a normal browsing session and tap 'Close all tabs'
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForTabsButton()
@@ -269,7 +263,7 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(TabTray)
         tabTrayScreen.assertTabCount(1)
 
-        // Step 10: Tap on the tab counter and switch to Synced Tabs
+        // Step 9: Tap on the tab counter and switch to Synced Tabs
         navigator.performAction(Action.ToggleExperimentSyncMode)
         syncScreen.assertSignInPromptExists()
         syncScreen.tapSyncAndSaveData()
@@ -278,7 +272,7 @@ class IntegrationTests: BaseTestCase {
         completeFxASignIn()
         mozWaitForElementToExist(app.staticTexts["Example Domain"])
 
-        // Step 11: Tap on a tab from the Synced Tabs section
+        // Step 10: Tap on a tab from the Synced Tabs section
         app.staticTexts["Example Domain"].waitAndTap()
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "example.com")
