@@ -16,7 +16,6 @@ class HomePageSettingViewController: SettingsTableViewController,
     var currentStartAtHomeSetting: StartAtHomeSetting?
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
-    private let worldCupStore: WorldCupStoreProtocol
 
     var isWallpaperSectionEnabled: Bool {
         return wallpaperManager.canSettingsBeShown
@@ -30,11 +29,9 @@ class HomePageSettingViewController: SettingsTableViewController,
     init(prefs: Prefs,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          settingsDelegate: SettingsDelegate? = nil,
-         tabManager: TabManager,
-         worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
+         tabManager: TabManager) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
-        self.worldCupStore = worldCupStore
         super.init(style: .grouped, windowUUID: tabManager.windowUUID)
         super.settingsDelegate = settingsDelegate
         self.tabManager = tabManager
@@ -167,25 +164,6 @@ class HomePageSettingViewController: SettingsTableViewController,
                     )
                 }
                 sectionItems.append(trackerBlockerModuleSetting)
-            }
-
-            if worldCupStore.isFeatureEnabled {
-                let windowUUID = self.windowUUID
-                let worldCupSetting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                    prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
-                    defaultValue: true,
-                    titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
-                ) { _ in
-                    store.dispatch(
-                        WorldCupAction(
-                            windowUUID: windowUUID,
-                            actionType: WorldCupActionType.didChangeHomepageSettings,
-                        )
-                    )
-                }
-                sectionItems.append(worldCupSetting)
             }
 
             let bookmarksSetting = BoolSetting(
