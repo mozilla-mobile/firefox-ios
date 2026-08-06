@@ -19,7 +19,7 @@ This log lists the architectural decisions for MADR.
 - [ADR-0010](0010-offload-background-webviews-on-memory-warning.md) - Offload Background WebViews on Memory Warning
 - [ADR-0011](0011-redux-state-reducer-initializer-cleanup-with-copy-macro.md) - Redux State Reducer Initializer Cleanup with Copy Macro
 - [ADR-0012](0012-redux-action-guidelines.md) - Redux Action Guidelines
-
+- [ADR-0013](0013-redux-state-reducers-best-practices-initialization-and-transient-state) - Redux State Best Practices: Initialization and Transient State
 <!-- adrlogstop -->
 
 For new ADRs, please use [template.md](template.md) as basis.
