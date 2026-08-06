@@ -572,6 +572,29 @@ final class OnboardingScreen {
         XCTAssertTrue(secondaryButton.exists, "Secondary button should exist")
     }
 
+    /// Taps the first card's "Set as Default Browser" primary button, opening the "Switch Your Default
+    /// Browser" bottom sheet. Does not advance the carousel, so `currentScreen` is left unchanged.
+    func tapSetAsDefaultBrowser() {
+        BaseTestCase().mozWaitForElementToExist(primaryButton)
+        primaryButton.waitAndTap()
+    }
+
+    /// Asserts the "Switch Your Default Browser" instructions bottom sheet is displayed, verifying both
+    /// its title and the "Go to Settings" primary button.
+    func assertDefaultBrowserBottomSheet() {
+        let title = sel.DEFAULT_BROWSER_SHEET_TITLE.element(in: app)
+        let goToSettings = sel.DEFAULT_BROWSER_SHEET_GO_TO_SETTINGS_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(goToSettings)
+        XCTAssertTrue(title.exists, "Default browser bottom sheet title should exist")
+        XCTAssertTrue(goToSettings.exists, "Default browser bottom sheet Go to Settings button should exist")
+    }
+
+    /// Taps the "Go to Settings" button on the bottom sheet. This backgrounds the app and opens the iOS
+    /// Settings app on the Firefox page.
+    func tapGoToSettingsOnBottomSheet() {
+        sel.DEFAULT_BROWSER_SHEET_GO_TO_SETTINGS_BUTTON.element(in: app).waitAndTap()
+    }
+
     func assertToolbarCustomizationScreen() {
         let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
         let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)

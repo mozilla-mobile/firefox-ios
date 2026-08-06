@@ -364,6 +364,7 @@
         "ModernKitOnboardingTests\/testModernKitOnboardingLightThemeSelection()",
         "ModernKitOnboardingTests\/testModernKitOnboardingMultipleChoiceUI()",
         "ModernKitOnboardingTests\/testModernKitOnboardingSecondaryNavigation()",
+        "ModernKitOnboardingTests\/testModernKitOnboardingSetAsDefaultBrowser()",
         "ModernKitOnboardingTests\/testModernKitOnboardingSkipButton()",
         "ModernKitOnboardingTests\/testModernKitOnboardingSkipSync()",
         "ModernKitOnboardingTests\/testModernKitOnboardingSyncFlow()",

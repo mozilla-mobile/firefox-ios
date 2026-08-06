@@ -39,6 +39,9 @@ protocol OnboardingSelectorsSet {
     var NAVBAR_SYNC_AND_SAVE: Selector { get }
     var CLOSE_TOUR_BUTTON: Selector { get }
     var PAGE_CONTROL: Selector { get }
+    var DEFAULT_BROWSER_SHEET_TITLE: Selector { get }
+    var DEFAULT_BROWSER_SHEET_GO_TO_SETTINGS_BUTTON: Selector { get }
+    var DEFAULT_BROWSER_SHEET_CLOSE_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -68,6 +71,11 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         static let syncAndSaveData = "Sync and Save Data"
         static let closeTourButton = AccessibilityIdentifiers.Onboarding.closeButton
         static let pageControl = AccessibilityIdentifiers.Onboarding.pageControl
+        // The default-browser instructions popup builds its a11y ids as "\(a11yIdRoot).DefaultBrowserSettings.*".
+        // The popup's a11yIdRoot is empty, so we match by identifier suffix to stay robust to that prefix.
+        static let defaultBrowserSheet_TitleSuffix = ".DefaultBrowserSettings.TitleLabel"
+        static let defaultBrowserSheet_PrimaryButtonSuffix = ".DefaultBrowserSettings.PrimaryButton"
+        static let defaultBrowserSheet_CloseButton = AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
     }
 
     let AGREE_AND_CONTINUE_BUTTON = Selector.buttonId(
@@ -286,12 +294,46 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         groups: ["onboarding"]
     )
 
+    let DEFAULT_BROWSER_SHEET_TITLE = Selector(
+        strategy: .predicate(
+            NSPredicate(
+                format: "elementType == %d AND identifier ENDSWITH %@",
+                XCUIElement.ElementType.staticText.rawValue,
+                IDs.defaultBrowserSheet_TitleSuffix
+            )
+        ),
+        value: IDs.defaultBrowserSheet_TitleSuffix,
+        description: "Title of the Switch Your Default Browser instructions bottom sheet",
+        groups: ["onboarding"]
+    )
+
+    let DEFAULT_BROWSER_SHEET_GO_TO_SETTINGS_BUTTON = Selector(
+        strategy: .predicate(
+            NSPredicate(
+                format: "elementType == %d AND identifier ENDSWITH %@",
+                XCUIElement.ElementType.button.rawValue,
+                IDs.defaultBrowserSheet_PrimaryButtonSuffix
+            )
+        ),
+        value: IDs.defaultBrowserSheet_PrimaryButtonSuffix,
+        description: "Go to Settings button on the Switch Your Default Browser bottom sheet",
+        groups: ["onboarding"]
+    )
+
+    let DEFAULT_BROWSER_SHEET_CLOSE_BUTTON = Selector.buttonId(
+        IDs.defaultBrowserSheet_CloseButton,
+        description: "Close button dismissing the Switch Your Default Browser bottom sheet",
+        groups: ["onboarding"]
+    )
+
     var all: [Selector] {
         [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, MANAGE_TEXT_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
          DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON, PAGE_CONTROL,
          TERMS_OF_USE_LINK, PRIVACY_NOTICE_LINK, MANAGE_LINK, TOS_PAGE_DONE_BUTTON, MANAGE_SHEET_DONE_BUTTON,
          MANAGE_SHEET_TITLE, MANAGE_SHEET_TECHNICAL_DATA_TITLE, MANAGE_SHEET_TECHNICAL_DATA_SWITCH,
          MANAGE_SHEET_TECHNICAL_DATA_DESCRIPTION, MANAGE_SHEET_CRASH_REPORTS_TITLE,
-         MANAGE_SHEET_CRASH_REPORTS_SWITCH, MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION]
+         MANAGE_SHEET_CRASH_REPORTS_SWITCH, MANAGE_SHEET_CRASH_REPORTS_DESCRIPTION,
+         DEFAULT_BROWSER_SHEET_TITLE, DEFAULT_BROWSER_SHEET_GO_TO_SETTINGS_BUTTON,
+         DEFAULT_BROWSER_SHEET_CLOSE_BUTTON]
     }
 }
