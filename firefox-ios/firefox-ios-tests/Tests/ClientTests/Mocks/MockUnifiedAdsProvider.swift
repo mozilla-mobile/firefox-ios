@@ -4,8 +4,6 @@
 
 @testable import Client
 
-import Shared
-
 final class MockUnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Sendable {
     private var result: UnifiedTileResult?
 
@@ -13,7 +11,7 @@ final class MockUnifiedAdsProvider: UnifiedAdsProviderInterface, @unchecked Send
         self.result = result
     }
 
-    func fetchTiles(timestamp: Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
+    func fetchTiles(completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
         guard let result else { return }
 
         switch result {

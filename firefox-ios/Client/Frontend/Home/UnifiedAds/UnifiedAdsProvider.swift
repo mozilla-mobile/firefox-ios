@@ -5,22 +5,13 @@
 import Common
 import Foundation
 import MozillaAppServices
-import Shared
 
 typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
 
 protocol UnifiedAdsProviderInterface: Sendable {
-    /// Fetch unififed ads tiles
-    /// - Parameters:
-    ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
-    ///   - completion: Returns an array of Tiles, can be empty
-    func fetchTiles(timestamp: Shared.Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void)
-}
-
-extension UnifiedAdsProviderInterface {
-    func fetchTiles(timestamp: Shared.Timestamp = Date.now(), completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        fetchTiles(timestamp: timestamp, completion: completion)
-    }
+    /// Fetch unified ads tiles
+    /// - Parameter completion: Returns an array of Tiles, can be empty
+    func fetchTiles(completion: @escaping @Sendable (UnifiedTileResult) -> Void)
 }
 
 final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
@@ -49,13 +40,7 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
         self.logger = logger
     }
 
-    private struct AdPlacement: Codable {
-        let placement: String
-        let count: Int
-    }
-
-    func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
-                    completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
+    func fetchTiles(completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
         logger.log("Fetching tiles with ads client", level: .debug, category: .homepage)
         let mozAdRequests = TileOrder.placementOrder.map {
             MozAdsPlacementRequest(iabContent: nil, placementId: $0)
@@ -67,7 +52,7 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
             )
             let unifiedTiles: [UnifiedTile] = TileOrder.placementOrder.compactMap { placement in
                 guard let mozAdsTile = mozAdsTiles[placement] else { return nil }
-                return UnifiedTile.from(name: placement, mozAdsTile: mozAdsTile)
+                return UnifiedTile.from(mozAdsTile: mozAdsTile)
             }
 
             logger.log("Ads client request successful", level: .info, category: .homepage)

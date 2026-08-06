@@ -140,15 +140,13 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
 
     var tileSite: Site {
         let tile = UnifiedTile(
-            format: "",
             url: "www.test.com",
             callbacks: UnifiedTileCallback(
                 click: "https://www.something1.com",
                 impression: "https://www.something3.com"
             ),
             imageUrl: "https://www.something2.com",
-            name: "Test",
-            blockKey: "Block_key_1"
+            name: "Test"
         )
         return Site.createSponsoredSite(fromUnifiedTile: tile)
     }

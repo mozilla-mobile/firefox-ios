@@ -5,32 +5,28 @@
 import MozillaAppServices
 
 /// Unified tiles are a type of tiles belonging in the Top sites section on the Firefox home page.
-/// See UnifiedAdsProvider and the resource endpoint there for context.
-struct UnifiedTile: Decodable {
-    let format: String
+/// See UnifiedAdsProvider for how they are requested from the ads client.
+struct UnifiedTile {
     let url: String
     let callbacks: UnifiedTileCallback
     let imageUrl: String
     let name: String
-    let blockKey: String
 
-    static func from(name: String, mozAdsTile: MozAdsTile) -> UnifiedTile {
+    static func from(mozAdsTile: MozAdsTile) -> UnifiedTile {
         return UnifiedTile(
-            format: mozAdsTile.format,
             url: mozAdsTile.url,
             callbacks: UnifiedTileCallback(
                 click: mozAdsTile.callbacks.click,
                 impression: mozAdsTile.callbacks.impression
             ),
             imageUrl: mozAdsTile.imageUrl,
-            name: mozAdsTile.name,
-            blockKey: mozAdsTile.blockKey
+            name: mozAdsTile.name
         )
     }
 }
 
 // Callbacks for telemetry events
-struct UnifiedTileCallback: Decodable {
+struct UnifiedTileCallback {
     let click: String
     let impression: String
 }
