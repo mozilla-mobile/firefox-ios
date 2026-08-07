@@ -42,9 +42,19 @@ enum WebCompatReporterUX {
         static let focusPadding: CGFloat = 16
     }
 
+    /// The plain-language Report Preview screen.
+    enum Preview {
+        static let cardScreenInset: CGFloat = 24
+        /// Drawn rather than typed: the `•` glyph renders under half this at footnote size.
+        static let bulletDiameter: CGFloat = 6
+        /// Where the text starts, so wrapped lines hang off it rather than the dot.
+        static let bulletIndent: CGFloat = 24
+        static let thumbnailGap: CGFloat = 32
+    }
+
     /// The tilted page card on the Report Preview screen.
     enum Thumbnail {
-        static let size = CGSize(width: 150, height: 180)
+        static let size = CGSize(width: 115, height: 138)
         static let cornerRadius: CGFloat = 16
         static let borderWidth: CGFloat = 4
         static let tiltDegrees: CGFloat = 1.925
