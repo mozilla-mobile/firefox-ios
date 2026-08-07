@@ -41,3 +41,7 @@ def test_sync_disconnect_connect_fxa(tps, xcodebuild):
 
 def test_sync_china_fxa_server(xcodebuild):
     xcodebuild.test('XCUITests/IntegrationTests/testFxASyncPageUsingChinaFxA')
+
+def test_sync_tabs_firefox_suggest(tps, xcodebuild):
+    tps.run('test_tabs_desktop.js')
+    xcodebuild.test('XCUITests/IntegrationTests/testFxATabsFirefoxSuggest')

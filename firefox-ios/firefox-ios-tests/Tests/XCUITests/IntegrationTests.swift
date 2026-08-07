@@ -14,7 +14,9 @@ private let loginEntry = "https://accounts.google.com"
 private let tabOpenInDesktop = "https://example.com/"
 
 class IntegrationTests: BaseTestCase {
-    let testWithDB = ["testFxASyncHistory"]
+    var browserScreen: BrowserScreen!
+
+    let testWithDB = ["testFxASyncHistory", "testFxAFirefoxSuggest"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
     // This DB contains 1 entry example.com
@@ -43,6 +45,7 @@ class IntegrationTests: BaseTestCase {
         }
         launchArguments.append(LaunchArguments.DisableAnimations)
         try await super.setUp()
+        browserScreen = BrowserScreen(app: app)
     }
 
     func allowNotifications() {
@@ -252,6 +255,27 @@ class IntegrationTests: BaseTestCase {
         app.swipeDown()
         mozWaitForElementToExist(app.tables.otherElements["profile1"])
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2576803
+    // [Config] orientation:portrait, orientation:landscape 
+    // Smoketest
+    func testFxATabsFirefoxSuggest() {
+        // Precondition: Sign into Mozilla Account
+        signInFxAccounts()
+        waitForInitialSyncComplete()
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(HomePanelsScreen)
+
+        // Firefox Suggest and Google Search
+        // Synced tab: example.com/
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: "exam")
+        mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Example Domain"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306822
