@@ -9,7 +9,7 @@ import WebCompatReporterKit
 
 /// Owns the Report Preview sheet for as long as it is on screen. The report sheet is the
 /// presenting context, so this is rooted at a router over it rather than the browser's.
-final class WebCompatReportPreviewCoordinator: BaseCoordinator, WebCompatReportPreviewDelegate {
+final class WebCompatReportPreviewCoordinator: BaseCoordinator, WebCompatTechnicalDataDelegate {
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private weak var parentCoordinator: ParentCoordinatorDelegate?
@@ -27,7 +27,7 @@ final class WebCompatReportPreviewCoordinator: BaseCoordinator, WebCompatReportP
     }
 
     func start(payload: WebCompatReportPayload) {
-        let previewViewController = WebCompatReportPreviewViewController(
+        let previewViewController = WebCompatTechnicalDataViewController(
             viewModel: payload.makePreviewViewModel(),
             windowUUID: windowUUID,
             themeManager: themeManager
@@ -50,13 +50,13 @@ final class WebCompatReportPreviewCoordinator: BaseCoordinator, WebCompatReportP
         didFinish()
     }
 
-    // MARK: - WebCompatReportPreviewDelegate
+    // MARK: - WebCompatTechnicalDataDelegate
 
-    func webCompatReportPreviewDidRequestDismiss() {
+    func webCompatTechnicalDataDidRequestDismiss() {
         dismissPreview(animated: true)
     }
 
-    func webCompatReportPreviewDidTapScreenshot() {
+    func webCompatTechnicalDataDidTapScreenshot() {
         // Unreachable while the thumbnail is off; FXIOS-16450 wires up the screenshot viewer.
     }
 
