@@ -464,6 +464,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2576803
     // [Config] orientation:portrait, orientation:landscape
+    // Smoketest
     func testFirefoxSuggest() {
         app.launch()
 
