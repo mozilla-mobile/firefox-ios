@@ -189,6 +189,26 @@ final class TabTrayViewController: UIViewController,
         return isRegularLayout ? regularLayoutItems : iPhoneItems
     }
 
+    private var isNovaDesignEnabled: Bool {
+        (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.novaDesign)
+    }
+
+    @available(iOS 26.0, *)
+    private func applyToolbarGlassButtonTints(theme: Theme) {
+        guard isNovaDesignEnabled else { return }
+        let glassTint = theme.colors.layerGlassTintNova
+        let buttons: [(item: UIBarButtonItem, imageName: String, background: UIColor, glyph: UIColor)] = [
+            (deleteButton, StandardImageIdentifiers.Large.delete, glassTint, theme.colors.iconPrimary),
+            (newTabButton, StandardImageIdentifiers.Large.plus, glassTint, theme.colors.iconPrimary),
+            (doneButton, StandardImageIdentifiers.Large.checkmark, theme.colors.actionPrimary, theme.colors.iconInverted)
+        ]
+        for button in buttons {
+            button.item.style = .prominent
+            button.item.tintColor = button.background
+            button.item.image = UIImage(named: button.imageName)?.withTintColor(button.glyph, renderingMode: .alwaysOriginal)
+        }
+    }
+
     private lazy var deleteButton: UIBarButtonItem = {
         return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(deleteTabsButtonTapped),
@@ -210,6 +230,15 @@ final class TabTrayViewController: UIViewController,
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
+        if #available(iOS 26.0, *), isNovaDesignEnabled {
+            let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.checkmark),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(doneButtonTapped))
+            button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.doneButton
+            button.accessibilityLabel = .SettingsSearchDoneButton
+            return button
+        }
         let button = UIBarButtonItem(barButtonSystemItem: .done,
                                      target: self,
                                      action: #selector(doneButtonTapped))
@@ -463,7 +492,16 @@ final class TabTrayViewController: UIViewController,
             doneButton.tintColor = theme.colors.iconPrimary
         }
         syncTabButton.tintColor = theme.colors.iconPrimary
-        panelContainer.backgroundColor = theme.colors.layer3
+        panelContainer.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
+        if #available(iOS 26.0, *), isNovaDesignEnabled {
+            applyToolbarGlassButtonTints(theme: theme)
+        }
+        if theme.isNova {
+            segmentedControl.selectedSegmentTintColor = theme.colors.layer2
+            if #unavailable(iOS 26) {
+                segmentedControl.backgroundColor = theme.colors.layerSurfaceLow
+            }
+        }
 
         if shouldUsePrivateOverride {
             activeExperimentSegmentControl.applyTheme(theme: theme)
@@ -493,9 +531,15 @@ final class TabTrayViewController: UIViewController,
             doneButton.tintColor = swipeTheme.colors.iconPrimary
         }
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
-        panelContainer.backgroundColor = swipeTheme.colors.layer3
+        panelContainer.backgroundColor = swipeTheme.isNova ? swipeTheme.colors.layer1 : swipeTheme.colors.layer3
 
         activeExperimentSegmentControl.applyTheme(theme: swipeTheme)
+        if progress >= 1.0, let toTheme = childPanelThemes?[safe: toIndex] {
+            activeExperimentSegmentControl.applyTheme(theme: toTheme)
+            if #available(iOS 26.0, *), isNovaDesignEnabled {
+                applyToolbarGlassButtonTints(theme: toTheme)
+            }
+        }
         setupToolBarAppearance(theme: swipeTheme)
         setupNavigationBarAppearance(theme: swipeTheme)
     }
@@ -508,7 +552,8 @@ final class TabTrayViewController: UIViewController,
         if #available(iOS 26, *), !isReduceTransparencyEnabled { return }
 
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
-        let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+        let color = (theme.isNova ? theme.colors.layerSurfaceLow : theme.colors.layer1)
+            .withAlphaComponent(backgroundAlpha)
 
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
@@ -526,7 +571,8 @@ final class TabTrayViewController: UIViewController,
         guard tabTrayUtils.shouldDisplayExperimentUI() else { return }
 
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
-        let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+        let color = (theme.isNova ? theme.colors.layerSurfaceLow : theme.colors.layer1)
+            .withAlphaComponent(backgroundAlpha)
 
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
@@ -644,7 +690,7 @@ final class TabTrayViewController: UIViewController,
         applyTheme()
 
         if #available(iOS 26, *) { return }
-        blurView.isHidden = !tabTrayUtils.shouldBlur()
+        blurView.isHidden = isNovaDesignEnabled || !tabTrayUtils.shouldBlur()
     }
 
     private func updateTitle() {

@@ -199,7 +199,7 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
     func applyTheme(theme: Theme) {
         backgroundHolder.backgroundColor = theme.colors.layer1
-        closeButtonImageOverlay.tintColor = theme.colors.textOnDark
+        closeButtonImageOverlay.tintColor = theme.isNova ? theme.colors.textOnLight : theme.colors.textOnDark
         screenshotView.backgroundColor = theme.colors.layer1
         smallFaviconView.tintColor = theme.colors.textPrimary
         setupShadow(theme: theme)
