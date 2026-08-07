@@ -127,7 +127,7 @@ final class WallpaperSettingsViewModel: @unchecked Sendable {
         guard let collection = wallpaperCollections[safe: indexPath.section],
               let wallpaper = collection.wallpapers[safe: indexPath.row]
         else {
-            completion(.failure(WallpaperSelectorError.itemNotFound))
+            completion(.failure(WallpaperSettingsError.itemNotFound))
             return
         }
 
