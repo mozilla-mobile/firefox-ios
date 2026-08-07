@@ -7,7 +7,7 @@ import Shared
 import WebKit
 import Common
 
-class WebsiteDataSearchResultsViewController: ThemedTableViewController {
+final class WebsiteDataSearchResultsViewController: ThemedTableViewController {
     private enum Section: Int {
         case sites = 0
         case clearButton = 1
@@ -73,6 +73,36 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         filterContentForSearchText(currentSearchText)
     }
 
+    /// Keeps the selected rows and the clear button in sync with the view model without reloading the tableView.
+    func selectionDidChange() {
+        guard isViewLoaded else { return }
+        syncSelectedRows()
+        updateClearButtonTitle()
+    }
+
+    /// Aligns the tableView's selected rows with the view model, leaving rows that already match untouched.
+    private func syncSelectedRows() {
+        let selectedIndexPaths = Set(tableView.indexPathsForSelectedRows ?? [])
+
+        for (row, record) in filteredSiteRecords.enumerated() {
+            let indexPath = IndexPath(row: row, section: Section.sites.rawValue)
+            let isSelectedInTableView = selectedIndexPaths.contains(indexPath)
+
+            if viewModel.selectedRecords.contains(record) {
+                guard !isSelectedInTableView else { continue }
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            } else if isSelectedInTableView {
+                tableView.deselectRow(at: indexPath, animated: false)
+            }
+        }
+    }
+
+    private func updateClearButtonTitle() {
+        let indexPath = IndexPath(row: 0, section: Section.clearButton.rawValue)
+        guard let cell = tableView.cellForRow(at: indexPath) as? ThemedCenteredTableViewCell else { return }
+        cell.setTitle(to: viewModel.clearButtonTitle)
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count
     }
@@ -95,11 +125,6 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         case .sites:
             if let record = filteredSiteRecords[safe: indexPath.row] {
                 cell.textLabel?.text = record.displayName
-                if viewModel.selectedRecords.contains(record) {
-                    tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-                } else {
-                    tableView.deselectRow(at: indexPath, animated: false)
-                }
             }
             return cell
         case .clearButton:
@@ -182,11 +207,42 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
     }
 
     func filterContentForSearchText(_ searchText: String) {
-        filteredSiteRecords = viewModel.siteRecords.filter({ siteRecord in
+        applyFilteredRecords(viewModel.siteRecords.filter({ siteRecord in
             return siteRecord.displayName.lowercased().contains(searchText.lowercased())
-        })
+        }))
+    }
 
-        tableView.reloadData()
+    private func applyFilteredRecords(_ records: [WKWebsiteDataRecord]) {
+        let difference = records.difference(from: filteredSiteRecords)
+        filteredSiteRecords = records
+
+        guard !difference.isEmpty else { return }
+
+        guard tableView.window != nil else {
+            tableView.reloadData()
+            syncSelectedRows()
+            return
+        }
+
+        let sitesSection = Section.sites.rawValue
+        var removedIndexPaths = [IndexPath]()
+        var insertedIndexPaths = [IndexPath]()
+
+        for change in difference {
+            switch change {
+            case let .remove(offset, _, _):
+                removedIndexPaths.append(IndexPath(row: offset, section: sitesSection))
+            case let .insert(offset, _, _):
+                insertedIndexPaths.append(IndexPath(row: offset, section: sitesSection))
+            }
+        }
+
+        tableView.performBatchUpdates {
+            tableView.deleteRows(at: removedIndexPaths, with: .none)
+            tableView.insertRows(at: insertedIndexPaths, with: .none)
+        }
+        syncSelectedRows()
+        updateClearButtonTitle()
     }
 }
 
