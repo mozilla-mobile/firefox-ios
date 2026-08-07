@@ -16,6 +16,7 @@ private let tabOpenInDesktop = "https://example.com/"
 class IntegrationTests: BaseTestCase {
     let testWithDB = ["testFxASyncHistory"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
+    let testModernKitOnboarding = ["testModernKitOnboardingStartSyncingUseEmailInstead"]
 
     // This DB contains 1 entry example.com
     let historyDB = "exampleURLHistoryBookmark-places.db"
@@ -38,6 +39,11 @@ class IntegrationTests: BaseTestCase {
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
                                LaunchArguments.SkipContextualHints]
+        } else if testModernKitOnboarding.contains(key) {
+            launchArguments = [LaunchArguments.ClearProfile,
+                               LaunchArguments.StageServer,
+                               "\(LaunchArguments.LoadExperiment)modernKitOnboardingOn",
+                               "\(LaunchArguments.ExperimentFeatureName)onboarding-framework-feature"]
         } else {
             launchArguments.append(LaunchArguments.StageServer)
         }
@@ -57,6 +63,11 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
+        completeFxASignIn()
+    }
+
+    /// Completes an FxA sign-in on the email login screen.
+    private func completeFxASignIn() {
         sleep(5)
         mozWaitForElementToExist(
             app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
@@ -92,6 +103,45 @@ class IntegrationTests: BaseTestCase {
         }
         mozWaitForElementToNotExist(app.tables.staticTexts["Syncing…"])
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4036952
+    // Regression
+    func testModernKitOnboardingStartSyncingUseEmailInstead() throws {
+        let onboardingScreen = OnboardingScreen(app: app, flowType: .modernKit)
+        let firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
+
+        onboardingScreen.handleTermsOfService()
+
+        // Step 1 - Screen 1: Default Browser - Skip (secondary button)
+        onboardingScreen.assertTitle()
+        onboardingScreen.goToNextScreenViaSecondary()
+
+        // Screen 2 (iPhone only): Choose address bar - Continue (primary button)
+        onboardingScreen.handleAddressBarScreenIfNeeded()
+
+        // Step 1 - Screen 3: Choose theme - Continue (primary button)
+        onboardingScreen.assertTitle()
+        onboardingScreen.selectThemeButtons()
+        onboardingScreen.goToNextScreenViaPrimary()
+
+        // Step 2: Tap the "Start Syncing" button.
+        onboardingScreen.assertSyncScreen()
+        onboardingScreen.tapSignIn()
+        onboardingScreen.assertSignInScreen()
+
+        // Step 3: Tap "Use Email Instead"
+        navigator.nowAt(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
+
+        // Step 4: Input valid email and valid password
+        completeFxASignIn()
+
+        // User is redirected to homepage
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+
+        // Go to Settings page and see sync is happening
+        waitForInitialSyncComplete()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819
