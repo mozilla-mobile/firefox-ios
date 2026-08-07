@@ -554,6 +554,8 @@ public protocol MozAdsClientProtocol: AnyObject, Sendable {
     
     func requestTileAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?) throws  -> [String: MozAdsTile]
     
+    func shutdown() throws 
+    
 }
 open class MozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
     fileprivate let handle: UInt64
@@ -671,6 +673,13 @@ open func requestTileAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAd
         FfiConverterOptionTypeMozAdsRequestOptions.lower(options),$0
     )
 })
+}
+    
+open func shutdown()throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
+    uniffi_ads_client_fn_method_mozadsclient_shutdown(
+            self.uniffiCloneHandle(),$0
+    )
+}
 }
     
 
@@ -2997,6 +3006,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclient_request_tile_ads() != 10) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadsclient_shutdown() != 49740) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_build() != 36609) {
