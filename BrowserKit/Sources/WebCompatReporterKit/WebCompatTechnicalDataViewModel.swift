@@ -75,23 +75,17 @@ public struct WebCompatTechnicalDataViewModel: Equatable, Sendable {
     public let title: String
     public let closeAccessibilityLabel: String
     public let closeA11yIdentifier: String
-    public let screenshotAccessibilityLabel: String
-    public let screenshotA11yIdentifier: String
     public let sections: [PreviewSection]
 
     public init(
         title: String,
         closeAccessibilityLabel: String,
         closeA11yIdentifier: String,
-        screenshotAccessibilityLabel: String,
-        screenshotA11yIdentifier: String,
         sections: [PreviewSection] = []
     ) {
         self.title = title
         self.closeAccessibilityLabel = closeAccessibilityLabel
         self.closeA11yIdentifier = closeA11yIdentifier
-        self.screenshotAccessibilityLabel = screenshotAccessibilityLabel
-        self.screenshotA11yIdentifier = screenshotA11yIdentifier
         self.sections = sections
     }
 }
