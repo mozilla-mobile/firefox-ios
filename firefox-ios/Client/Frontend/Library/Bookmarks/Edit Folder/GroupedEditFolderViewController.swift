@@ -93,7 +93,7 @@ final class GroupedEditFolderViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         setTheme(theme)
         onViewWillAppear?()
@@ -110,7 +110,7 @@ final class GroupedEditFolderViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let isDraggingDown = transitionCoordinator?.isInteractive, !isDraggingDown {
-            navigationController?.setNavigationBarHidden(true, animated: true)
+            navigationController?.setNavigationBarHidden(true, animated: false)
         }
         onViewWillDisappear?()
 

@@ -99,6 +99,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
                                               siteProtectionHeaderIdentifier: String,
                                               headerBannerCloseButtonA11yIdentifier: String,
                                               headerBannerCloseButtonA11yLabel: String) {
+        tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
         headerBanner.setupAccessibility(closeButtonA11yLabel: headerBannerCloseButtonA11yLabel,
                                         closeButtonA11yId: headerBannerCloseButtonA11yIdentifier)
         siteProtectionHeader.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
@@ -193,11 +194,6 @@ public final class MenuMainView: UIView, ThemeApplicable {
     }
 
     // MARK: - Callbacks
-    @objc
-    private func closeTapped() {
-        closeButtonCallback?()
-    }
-
     @objc
     private func bannerButtonTapped() {
         bannerButtonCallback?()

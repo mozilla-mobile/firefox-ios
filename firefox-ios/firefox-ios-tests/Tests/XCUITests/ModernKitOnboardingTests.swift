@@ -15,6 +15,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     var onboardingScreen: OnboardingScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
     var settingScreen: SettingScreen!
+    var iosSettingsScreen: IOSSettingsAppScreen!
 
     override func setUpExperimentVariables() {
         launchArguments = [
@@ -32,6 +33,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen = OnboardingScreen(app: app, flowType: flowType)
         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
         settingScreen = SettingScreen(app: app)
+        iosSettingsScreen = IOSSettingsAppScreen(firefoxApp: app)
     }
 
     override func tearDown() async throws {
@@ -196,6 +198,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Address bar choice is onboarding flow screen 2
         onboardingScreen.selectAddressBarPosition(position: .top)
+        onboardingScreen.assertAddressBarPositionSelected(position: .top)
         onboardingScreen.goToNextScreenViaPrimary()
         onboardingScreen.assertTitle()
 
@@ -215,7 +218,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/4038428
+    // https://mozilla.testrail.io/index.php?/cases/view/4035645 [Config] nav:bottombar
     func testModernKitOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -233,6 +236,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Address bar choice is onboarding flow screen 2
         onboardingScreen.selectAddressBarPosition(position: .bottom)
+        onboardingScreen.assertAddressBarPositionSelected(position: .bottom)
         onboardingScreen.goToNextScreenViaPrimary()
         onboardingScreen.assertTitle()
 
@@ -482,6 +486,29 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4038425
+    // Regression
+    func testModernKitOnboardingSetAsDefaultBrowser() {
+        launchApp()
+
+        onboardingScreen.handleTermsOfService()
+
+        // Step 1: The Set as Default Browser card (first onboarding card) is available
+        onboardingScreen.assertModernWelcomeScreen()
+
+        // Step 2: Tap "Set as Default Browser" - the Switch Your Default Browser bottom sheet opens
+        onboardingScreen.tapSetAsDefaultBrowser()
+        onboardingScreen.assertDefaultBrowserBottomSheet()
+
+        // Step 3: Tap "Go to Settings" - the iOS Settings app opens
+        onboardingScreen.tapGoToSettingsOnBottomSheet()
+        iosSettingsScreen.assertSettingsAppOpened()
+
+        // Step 4: Set Firefox as the default browser and return to Firefox - the selection is saved
+        iosSettingsScreen.setFirefoxAsDefaultBrowser()
+        iosSettingsScreen.returnToFirefox()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4038427

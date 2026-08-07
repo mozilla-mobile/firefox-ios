@@ -11,7 +11,7 @@
 "Alerts.AddToCalendar.Title.v134" = "¿Agregar al calendario?";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
-"Alerts.FeltDeletion.Body.v122" = "Cierra todas las pestañas privadas y elimina el historial, las cookies y todos los demás datos del sitio.";
+"Alerts.FeltDeletion.Body.v122" = "Cerrar todas las pestañas privadas y eliminar el historial, las cookies y todos los demás datos de sitios web.";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
 "Alerts.FeltDeletion.Button.Cancel.v122" = "Cancelar";

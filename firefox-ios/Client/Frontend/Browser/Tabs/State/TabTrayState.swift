@@ -222,10 +222,11 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     static func defaultState(from state: TabTrayState) -> TabTrayState {
-        return state
-            .copy(shouldDismiss: false)
-            .copy(toastType: nil)
-            .copy(showCloseConfirmation: false)
-            .copy(enableDeleteTabsButton: nil)
+        return TabTrayState(windowUUID: state.windowUUID,
+                            isPrivateMode: state.isPrivateMode,
+                            selectedPanel: state.selectedPanel,
+                            normalTabsCount: state.normalTabsCount,
+                            privateTabsCount: state.privateTabsCount,
+                            hasSyncableAccount: state.hasSyncableAccount)
     }
 }

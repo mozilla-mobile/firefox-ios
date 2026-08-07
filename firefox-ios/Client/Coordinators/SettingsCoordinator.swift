@@ -233,12 +233,6 @@ final class SettingsCoordinator: BaseCoordinator,
             viewController.profile = profile
             return viewController
 
-        case .relayMask:
-            return RelayMaskSettingsViewController(profile: profile,
-                                                   windowUUID: windowUUID,
-                                                   tabManager: tabManager,
-                                                   relayController: relayController)
-
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
@@ -357,7 +351,11 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedRelayMask() {
-        settingsViewController?.handle(route: .relayMask)
+        let viewController = RelayMaskSettingsViewController(profile: profile,
+                                                             windowUUID: windowUUID,
+                                                             tabManager: tabManager,
+                                                             relayController: relayController)
+        router.push(viewController)
     }
 
     func pressedClearPrivateData() {

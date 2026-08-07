@@ -1,3 +1,6 @@
+/* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "Raporttisi auttaa meitä ymmärtämään ja korjaamaan ongelmia %1$@issa, jotta se olisi parempi kaikille. %2$@";
+
 /* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "Lähetä seurannansuojauksen estämien kohteiden luettelo";
 
