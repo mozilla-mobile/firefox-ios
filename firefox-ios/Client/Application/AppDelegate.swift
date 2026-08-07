@@ -8,6 +8,7 @@ import UIKit
 import Common
 import Glean
 import TabDataStore
+import TipKit
 
 import class MozillaAppServices.Viaduct
 import struct MozillaAppServices.RustAdsClient
@@ -151,6 +152,16 @@ class AppDelegate: UIResponder,
         if featureFlagsProvider.isEnabled(.translation) {
             Task(priority: .utility) {
                 await ASTranslationModelsFetcher().prewarmResourcesForStartup()
+            }
+        }
+
+        if #available(iOS 17.0, *) {
+            do {
+                try Tips.configure()
+            } catch {
+                logger.log("Failed to configure TipKit: \(error.localizedDescription)",
+                           level: .warning,
+                           category: .lifecycle)
             }
         }
 

@@ -264,6 +264,8 @@ class BrowserViewController: UIViewController,
     // MARK: Contextual Hints
 
     var navigationHintDoubleTapTimer: Timer?
+    var googleLensTipObservationTask: Task<Void, Never>?
+    weak var googleLensTipViewController: UIViewController?
     private(set) lazy var navigationContextHintVC: ContextualHintViewController = {
         let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
@@ -505,6 +507,7 @@ class BrowserViewController: UIViewController,
             logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
             unsubscribeFromRedux()
             stopObservingAllWebViews()
+            googleLensTipObservationTask?.cancel()
         }
     }
 
@@ -4066,6 +4069,8 @@ class BrowserViewController: UIViewController,
             configureSummarizeToolbarEntryContextualHint(for: button)
         case ContextualHintType.translation.rawValue:
             configureTranslationContextualHint(for: button)
+        case TipKitHintType.googleLens.rawValue:
+            configureGoogleLensTip(for: button)
         default:
             return
         }

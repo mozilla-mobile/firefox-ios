@@ -147,6 +147,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
         XCTAssertEqual(newState.editingAccessoryAction?.iconName, StandardImageIdentifiers.Medium.logoGoogleLens)
+        XCTAssertEqual(newState.editingAccessoryAction?.contextualHintType, TipKitHintType.googleLens.rawValue)
         XCTAssertEqual(newState.editingAccessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
         XCTAssertEqual(newState.editingAccessoryAction?.menuElements, expectedMenuElements)
     }
