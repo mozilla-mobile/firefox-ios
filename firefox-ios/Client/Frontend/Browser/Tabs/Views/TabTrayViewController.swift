@@ -464,9 +464,6 @@ final class TabTrayViewController: UIViewController,
         }
         syncTabButton.tintColor = theme.colors.iconPrimary
         panelContainer.backgroundColor = theme.colors.layer3
-        if theme.isNova {
-            segmentedControl.selectedSegmentTintColor = theme.colors.layer2
-        }
 
         if shouldUsePrivateOverride {
             activeExperimentSegmentControl.applyTheme(theme: theme)
