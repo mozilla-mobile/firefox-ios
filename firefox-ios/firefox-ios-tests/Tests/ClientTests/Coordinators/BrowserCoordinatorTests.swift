@@ -31,7 +31,6 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var browserViewController: MockBrowserViewController!
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
-    private var mockWorldCupStore: MockWorldCupStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -50,7 +49,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
         homepageTabStateStore = HomepageTabStateStore()
-        mockWorldCupStore = MockWorldCupStore()
         setupStore()
     }
 
@@ -66,7 +64,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = nil
         browserViewController = nil
         homepageTabStateStore = nil
-        mockWorldCupStore = nil
         resetStore()
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -768,19 +765,6 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         XCTAssertNotNil(mockRouter.pushedViewController as? ShortcutsLibraryViewController)
         XCTAssertEqual(mockRouter.pushCalled, 1)
-    }
-
-    // MARK: - World Cup Country Picker
-
-    func testShowWorldCupCountryPicker_presentsHostingController() throws {
-        let subject = createSubject()
-
-        subject.showWorldCupCountryPicker()
-
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(
-            mockRouter.presentedViewController is UIHostingController<WorldCupCountryPickerView>
-        )
     }
 
     func testShowPrivacyNoticeLink_showsTermsOfUseLinkView() throws {
@@ -1680,7 +1664,6 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
-                                         worldCupStore: mockWorldCupStore,
                                          googleLensService: googleLensService)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

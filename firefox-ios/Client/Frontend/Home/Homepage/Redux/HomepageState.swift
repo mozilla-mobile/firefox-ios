@@ -18,7 +18,6 @@ struct HomepageState: ScreenState, Equatable {
     let jumpBackInState: JumpBackInSectionState
     let trackerBlockerModuleState: TrackerBlockerModuleState
     let bookmarkState: BookmarksSectionState
-    let worldcupState: WorldCupSectionState
     let merinoState: MerinoState
     let wallpaperState: WallpaperState
 
@@ -67,7 +66,6 @@ struct HomepageState: ScreenState, Equatable {
             jumpBackInState: homepageState.jumpBackInState,
             trackerBlockerModuleState: homepageState.trackerBlockerModuleState,
             bookmarkState: homepageState.bookmarkState,
-            worldcupState: homepageState.worldcupState,
             merinoState: homepageState.merinoState,
             wallpaperState: homepageState.wallpaperState,
             isZeroSearch: homepageState.isZeroSearch,
@@ -88,7 +86,6 @@ struct HomepageState: ScreenState, Equatable {
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             trackerBlockerModuleState: TrackerBlockerModuleState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
-            worldcupState: WorldCupSectionState(windowUUID: windowUUID),
             merinoState: MerinoState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
             isZeroSearch: false,
@@ -108,7 +105,6 @@ struct HomepageState: ScreenState, Equatable {
         jumpBackInState: JumpBackInSectionState,
         trackerBlockerModuleState: TrackerBlockerModuleState,
         bookmarkState: BookmarksSectionState,
-        worldcupState: WorldCupSectionState,
         merinoState: MerinoState,
         wallpaperState: WallpaperState,
         isZeroSearch: Bool,
@@ -125,7 +121,6 @@ struct HomepageState: ScreenState, Equatable {
         self.jumpBackInState = jumpBackInState
         self.trackerBlockerModuleState = trackerBlockerModuleState
         self.bookmarkState = bookmarkState
-        self.worldcupState = worldcupState
         self.merinoState = merinoState
         self.wallpaperState = wallpaperState
         self.isZeroSearch = isZeroSearch
@@ -181,7 +176,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
                                              .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
@@ -200,7 +194,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
                                              .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(isZeroSearch: isZeroSearch)
@@ -226,7 +219,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
                                              .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
@@ -245,7 +237,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
                                              .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
@@ -263,7 +254,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
                                              .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: true)
@@ -280,7 +270,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
                                              .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
@@ -298,7 +287,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
                                              .legacyReducer(state.trackerBlockerModuleState, action))
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(shouldTriggerImpression: false)
@@ -312,7 +300,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState))
             .copy(trackerBlockerModuleState: TrackerBlockerModuleState.defaultState(from: state.trackerBlockerModuleState))
             .copy(bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState))
-            .copy(worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState))
             .copy(merinoState: MerinoState.defaultState(from: state.merinoState))
             .copy(wallpaperState: WallpaperState.defaultState(from: state.wallpaperState))
             .copy(shouldTriggerImpression: false)
