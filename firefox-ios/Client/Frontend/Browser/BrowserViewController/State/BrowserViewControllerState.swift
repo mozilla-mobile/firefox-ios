@@ -171,7 +171,7 @@ struct BrowserViewControllerState: ScreenState {
         } else if let action = action as? SummarizeAction {
             return reduceStateForSummarizeAction(action: action, state: state)
         } else {
-            return defaultState(from: state)
+            return passthroughState(from: state, action: action)
         }
     }
 
