@@ -193,6 +193,11 @@ final class TabTrayViewController: UIViewController,
         (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.novaDesign)
     }
 
+    private var usesNovaGlassToolbarButtons: Bool {
+        guard #available(iOS 26.0, *) else { return false }
+        return isNovaDesignEnabled
+    }
+
     @available(iOS 26.0, *)
     private func applyToolbarGlassButtonTints(theme: Theme) {
         guard isNovaDesignEnabled else { return }
@@ -239,7 +244,7 @@ final class TabTrayViewController: UIViewController,
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
-        if #available(iOS 26.0, *), isNovaDesignEnabled {
+        if usesNovaGlassToolbarButtons {
             let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.checkmark),
                                          style: .plain,
                                          target: self,
@@ -502,7 +507,7 @@ final class TabTrayViewController: UIViewController,
         }
         syncTabButton.tintColor = theme.colors.iconPrimary
         panelContainer.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
-        if #available(iOS 26.0, *), isNovaDesignEnabled {
+        if #available(iOS 26.0, *) {
             applyToolbarGlassButtonTints(theme: theme)
         }
         if theme.isNova {
@@ -532,12 +537,14 @@ final class TabTrayViewController: UIViewController,
 
         view.backgroundColor = swipeTheme.colors.layer1
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
-        deleteButton.tintColor = swipeTheme.colors.iconPrimary
-        newTabButton.tintColor = swipeTheme.colors.iconPrimary
-        if #available(iOS 26, *) {
-            doneButton.tintColor = swipeTheme.isNova ? swipeTheme.colors.iconInverted : swipeTheme.colors.iconPrimary
-        } else {
-            doneButton.tintColor = swipeTheme.colors.iconPrimary
+        if !usesNovaGlassToolbarButtons {
+            deleteButton.tintColor = swipeTheme.colors.iconPrimary
+            newTabButton.tintColor = swipeTheme.colors.iconPrimary
+            if #available(iOS 26, *) {
+                doneButton.tintColor = swipeTheme.isNova ? swipeTheme.colors.iconInverted : swipeTheme.colors.iconPrimary
+            } else {
+                doneButton.tintColor = swipeTheme.colors.iconPrimary
+            }
         }
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
         panelContainer.backgroundColor = swipeTheme.isNova ? swipeTheme.colors.layer1 : swipeTheme.colors.layer3
@@ -545,7 +552,7 @@ final class TabTrayViewController: UIViewController,
         activeExperimentSegmentControl.applyTheme(theme: swipeTheme)
         if progress >= 1.0, let toTheme = childPanelThemes?[safe: toIndex] {
             activeExperimentSegmentControl.applyTheme(theme: toTheme)
-            if #available(iOS 26.0, *), isNovaDesignEnabled {
+            if #available(iOS 26.0, *) {
                 applyToolbarGlassButtonTints(theme: toTheme)
             }
         }
