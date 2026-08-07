@@ -143,6 +143,8 @@ class AppDelegate: UIResponder,
 
         widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
 
+        BackgroundAudioHelper.configure(prefs: profile.prefs)
+
         addObservers()
 
         /// Prewarm translation resources off the main thread

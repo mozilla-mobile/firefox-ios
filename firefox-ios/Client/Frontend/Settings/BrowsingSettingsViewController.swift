@@ -99,6 +99,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 ))
             }
             contentSection += [
+                BackgroundAudioSetting(prefs: profile.prefs),
                 BlockPopupSetting(prefs: profile.prefs),
                 NoImageModeSetting(profile: profile),
                 blockOpeningExternalAppsSettings
