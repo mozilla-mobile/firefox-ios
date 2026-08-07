@@ -23,6 +23,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         // A number used in calculating the size of the tab preview during the animation,
         // larger values shrink the preview faster
         static let scaleSpeed: CGFloat = 1.237
+        static let closePreviewDimSpeed: CGFloat = 5
     }
 
     private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
@@ -56,8 +57,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     private var screenshotViewContainerTopConstraint: NSLayoutConstraint?
     private var screenshotViewContainerBottomConstraint: NSLayoutConstraint?
-    private var tabBackgroundHoverTopConstraint: NSLayoutConstraint?
-    private var tabBackgroundHoverBottomConstraint: NSLayoutConstraint?
 
     var previewCardFrame: CGRect {
         return screenshotViewContainer.frame
@@ -92,11 +91,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         addSubviews(tabBackgroundHover, backgroundView, screenshotViewContainer, closeButton)
         screenshotViewContainer.addSubview(screenshotView)
 
-        tabBackgroundHoverTopConstraint = tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor)
-        tabBackgroundHoverBottomConstraint = tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor)
-        tabBackgroundHoverTopConstraint?.isActive = true
-        tabBackgroundHoverBottomConstraint?.isActive = true
-
         screenshotViewContainerTopConstraint = screenshotViewContainer.topAnchor.constraint(equalTo: topAnchor)
         screenshotViewContainerBottomConstraint = screenshotViewContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
         screenshotViewContainerTopConstraint?.isActive = true
@@ -105,6 +99,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             closeButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             closeButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 
+            tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor),
+            tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor),
             tabBackgroundHover.leadingAnchor.constraint(equalTo: leadingAnchor),
             tabBackgroundHover.trailingAnchor.constraint(equalTo: trailingAnchor),
 
@@ -122,8 +118,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     func setInitialTransform(topPadding: CGFloat, bottomPadding: CGFloat) {
         screenshotView.layer.cornerRadius = 0
-        tabBackgroundHoverTopConstraint?.constant = topPadding
-        tabBackgroundHoverBottomConstraint?.constant = -bottomPadding
 
         if swipeGestureFeatureFlagProvider.isCloseTabEnabled {
             closeButton.transform = .identity.translatedBy(x: 0.0, y: -closeButton.bounds.height * 2.0)
@@ -168,6 +162,11 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
         // Shrink continuously during the gesture
         let scale = max((1 - abs(UX.scaleSpeed * translation.y) / bounds.height), UX.minimumTabPreviewScale)
+
+        // Gradually dim the preview when it's in the close tab region
+        let previewAlpha = min(1,
+                               1 - UX.closePreviewDimSpeed * (UX.closeReleaseThreshold - (fingerLocation.y / bounds.height)))
+        screenshotViewContainer.alpha = previewAlpha
 
         // Transform that places the finger horizontally centered and <fingerCardPositionRatio> down the card.
         let naturalCenter = screenshotViewContainer.center
@@ -237,9 +236,11 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         tabBackgroundHover.backgroundColor = theme.colors.layer3
         if #unavailable(iOS 26) {
-            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+                closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+        } else {
+            closeButton.configuration?.baseBackgroundColor = nil
         }
-        closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
+        closeButton.configuration?.baseForegroundColor = theme.colors.actionCritical
         screenshotViewContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
     }
 

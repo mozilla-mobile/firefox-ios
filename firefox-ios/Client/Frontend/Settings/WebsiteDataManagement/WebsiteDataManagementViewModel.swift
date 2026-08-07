@@ -7,7 +7,7 @@ import WebKit
 
 // TODO: FXIOS-14216 - WebsiteDataManagementViewModel shouldn't be @unchecked Sendable
 final class WebsiteDataManagementViewModel: @unchecked Sendable {
-    enum State {
+    enum State: Equatable {
         case loading
         case displayInitial
         case displayAll
@@ -17,6 +17,8 @@ final class WebsiteDataManagementViewModel: @unchecked Sendable {
     private(set) var siteRecords: [WKWebsiteDataRecord] = []
     private(set) var selectedRecords: Set<WKWebsiteDataRecord> = []
     var onViewModelChanged: () -> Void = {}
+    /// Called when only `selectedRecords` changes, so observers can update in place instead of reloading.
+    var onSelectionChanged: () -> Void = {}
 
     var clearButtonTitle: String {
         switch selectedRecords.count {
@@ -41,12 +43,12 @@ final class WebsiteDataManagementViewModel: @unchecked Sendable {
 
     func selectItem(_ item: WKWebsiteDataRecord) {
         selectedRecords.insert(item)
-        onViewModelChanged()
+        onSelectionChanged()
     }
 
     func deselectItem(_ item: WKWebsiteDataRecord) {
         selectedRecords.remove(item)
-        onViewModelChanged()
+        onSelectionChanged()
     }
 
     @MainActor
