@@ -5,22 +5,14 @@
 import Common
 import Foundation
 import MozillaAppServices
-import Shared
+import Storage
 
-typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
+typealias SponsoredTileResult = Swift.Result<[Site], Error>
 
 protocol UnifiedAdsProviderInterface: Sendable {
-    /// Fetch unififed ads tiles
-    /// - Parameters:
-    ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
-    ///   - completion: Returns an array of Tiles, can be empty
-    func fetchTiles(timestamp: Shared.Timestamp, completion: @escaping @Sendable (UnifiedTileResult) -> Void)
-}
-
-extension UnifiedAdsProviderInterface {
-    func fetchTiles(timestamp: Shared.Timestamp = Date.now(), completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        fetchTiles(timestamp: timestamp, completion: completion)
-    }
+    /// Fetch the sponsored sites shown in the Top sites section
+    /// - Parameter completion: Returns an array of sponsored `Site`s, can be empty
+    func fetchTiles(completion: @escaping @Sendable (SponsoredTileResult) -> Void)
 }
 
 final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
@@ -49,13 +41,7 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
         self.logger = logger
     }
 
-    private struct AdPlacement: Codable {
-        let placement: String
-        let count: Int
-    }
-
-    func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
-                    completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
+    func fetchTiles(completion: @escaping @Sendable (SponsoredTileResult) -> Void) {
         logger.log("Fetching tiles with ads client", level: .debug, category: .homepage)
         let mozAdRequests = TileOrder.placementOrder.map {
             MozAdsPlacementRequest(iabContent: nil, placementId: $0)
@@ -65,16 +51,25 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
                 mozAdRequests: mozAdRequests,
                 options: nil
             )
-            let unifiedTiles: [UnifiedTile] = TileOrder.placementOrder.compactMap { placement in
+            let sponsoredSites: [Site] = TileOrder.placementOrder.compactMap { placement in
                 guard let mozAdsTile = mozAdsTiles[placement] else { return nil }
-                return UnifiedTile.from(name: placement, mozAdsTile: mozAdsTile)
+                return Self.makeSponsoredSite(from: mozAdsTile)
             }
 
             logger.log("Ads client request successful", level: .info, category: .homepage)
-            completion(.success(unifiedTiles))
+            completion(.success(sponsoredSites))
         } catch let error {
             logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
+    }
+
+    private static func makeSponsoredSite(from mozAdsTile: MozAdsTile) -> Site {
+        let siteInfo = SponsoredSiteInfo(
+            impressionURL: mozAdsTile.callbacks.impression,
+            clickURL: mozAdsTile.callbacks.click,
+            imageURL: mozAdsTile.imageUrl
+        )
+        return Site.createSponsoredSite(url: mozAdsTile.url, title: mozAdsTile.name, siteInfo: siteInfo)
     }
 }
