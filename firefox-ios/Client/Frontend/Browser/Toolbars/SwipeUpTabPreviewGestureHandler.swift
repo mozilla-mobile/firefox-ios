@@ -201,7 +201,6 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
                 handleGestureEnded(gesture: gesture)
                 return
             }
-            addHaptics()
         case .changed:
             tabPreview.addTabScreenshot(image: tab.screenshot)
             let translation = gesture.translation(in: gesture.view)

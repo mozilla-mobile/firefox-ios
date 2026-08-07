@@ -235,14 +235,10 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         tabBackgroundHover.backgroundColor = theme.colors.layer3
-        if theme.type == .dark {
-            closeButton.configuration?.baseBackgroundColor = theme.colors.layerCriticalSubdued
-        } else {
-            if #unavailable(iOS 26) {
+        if #unavailable(iOS 26) {
                 closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
-            } else {
-                closeButton.configuration?.baseBackgroundColor = nil
-            }
+        } else {
+            closeButton.configuration?.baseBackgroundColor = nil
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.actionCritical
         screenshotViewContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
