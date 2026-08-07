@@ -269,13 +269,21 @@ class IntegrationTests: BaseTestCase {
 
         // Firefox Suggest and Google Search
         // Synced tab: example.com/
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "exam")
-        mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Example Domain"])
+        let siteTable = app.tables["SiteTable"]
+        for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
+            XCUIDevice.shared.orientation = orientation
+            browserScreen.tapOnAddressBar()
+            browserScreen.tapClearButtonIfExists()
+            browserScreen.typeOnSearchBar(text: "exam")
+            mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+            mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+            // Firefox Suggest is displayed
+            if !siteTable.otherElements["Firefox Suggest"].exists {
+                siteTable.swipeUp()
+            }
+            mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
+            mozWaitForElementToExist(siteTable.staticTexts["Example Domain"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306822

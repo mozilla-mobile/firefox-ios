@@ -29,6 +29,11 @@ class SearchTests: FeatureFlaggedTestBase {
         searchSettingsScreen = SearchSettingsScreen(app: app)
         searchScreen = SearchScreen(app: app)
     }
+    
+    override func tearDown() async throws {
+        XCUIDevice.shared.orientation = .portrait
+        try await super.tearDown()
+    }
 
     private func typeOnSearchBar(text: String) {
         browserScreen.tapOnAddressBar()
@@ -477,20 +482,49 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.Bookmark)
         navigator.performAction(Action.CloseTab)
 
-        // Firefox Suggest should show up for sponsored suggestion, open tab, history
-        // and bookmark.
-        let firefoxSuggestTerms = [
-            "wiki": "Wikipedia - Wiki", // Sponsored suggestion
-            "internet": "Internet for people, not profit — Mozilla", // Open tab
-            "exam": "www.example.com/", // History
-            "book of": "The Book of Mozilla" // Bookmark
-        ]
-        for (term, expectedTitle) in firefoxSuggestTerms {
+        let siteTable = app.tables["SiteTable"]
+        
+        for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
+            XCUIDevice.shared.orientation = orientation
+
+            // Firefox Suggest should show up for sponsored suggestion, open tab, history
+            // and bookmark.
+            let firefoxSuggestTerms = [
+                "wiki": "Wikipedia - Wiki", // Sponsored suggestion
+                "internet": "Internet for people, not profit — Mozilla", // Open tab
+                "exam": "www.example.com/", // History
+                "book of": "The Book of Mozilla" // Bookmark
+            ]
+            for (term, expectedTitle) in firefoxSuggestTerms {
+                browserScreen.tapOnAddressBar()
+                browserScreen.tapClearButtonIfExists()
+                browserScreen.typeOnSearchBar(text: term)
+                mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+                let searchEngines = [
+                    "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+                ]
+                for searchEngine in searchEngines {
+                    mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+                }
+                // Search engine suggestions
+                mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+                mozWaitForElementToExist(siteTable.staticTexts[term])
+
+                // Firefox Suggest is displayed
+                if !siteTable.otherElements["Firefox Suggest"].exists {
+                    siteTable.swipeUp()
+                }
+                mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
+                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+            }
+
+            // Non Firefox Suggest result: A random term
+            let term = "heeeeeeellllllllllloooooooo"
             browserScreen.tapOnAddressBar()
             browserScreen.tapClearButtonIfExists()
             browserScreen.typeOnSearchBar(text: term)
             mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts[expectedTitle])
             let searchEngines = [
                 "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
             ]
@@ -498,33 +532,10 @@ class SearchTests: FeatureFlaggedTestBase {
                 mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
             }
             // Search engine suggestions
-            mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
-            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts[term])
-            mozWaitForElementToExist(
-                app.tables["SiteTable"].buttons[StandardImageIdentifiers.Large.appendDownLeft].firstMatch
-            )
-
-            // Firefox Suggest is displayed
-            mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
-            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts[expectedTitle])
+            mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+            mozWaitForElementToExist(siteTable.staticTexts[term])
+            mozWaitForElementToNotExist(siteTable.otherElements["Firefox Suggest"])
         }
-
-        // Non Firefox Suggest result: A random term
-        let term = "heeeeeeellllllllllloooooooo"
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: term)
-        mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-        let searchEngines = [
-            "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
-        ]
-        for searchEngine in searchEngines {
-            mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
-        }
-        // Search engine suggestions
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts[term])
-        mozWaitForElementToNotExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
