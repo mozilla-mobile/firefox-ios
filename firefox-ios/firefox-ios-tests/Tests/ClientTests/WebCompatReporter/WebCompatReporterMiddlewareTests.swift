@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Glean
 import Redux
 import TestKit
 import XCTest
@@ -96,7 +97,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
         setReportedURL("https://example.com/page")
 
-        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, previewAction())
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
 
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
@@ -113,7 +114,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
         setReportedURL("https://different.example/other")
 
-        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, previewAction())
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
 
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let payload = try XCTUnwrap(dispatched.previewPayload)
@@ -137,6 +138,92 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    // MARK: - Telemetry
+
+    func test_selectCategory_recordsReasonSelectedWithTheCategory() throws {
+        let subject = createSubject()
+        let action = WebCompatReporterViewAction(
+            category: .videoOrAudio,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WebCompatReporterViewActionType.selectCategory
+        )
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, action)
+
+        let event = GleanMetrics.BrokenSiteReportInteractions.reasonSelected
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras.first as? GleanMetrics.BrokenSiteReportInteractions.ReasonSelectedExtra
+        )
+        let savedMetric = try XCTUnwrap(
+            gleanWrapper.savedEvents.first
+                as? EventMetricType<GleanMetrics.BrokenSiteReportInteractions.ReasonSelectedExtra>
+        )
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.reason, WebCompatIssueCategory.videoOrAudio.rawValue)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_preview_recordsPreviewed() {
+        let subject = createSubject()
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
+
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReportInteractions.previewed))
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_cancel_recordsCancelled() {
+        let subject = createSubject()
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.cancel))
+
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReportInteractions.cancelled))
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_learnMore_recordsLearnMoreTapped() {
+        let subject = createSubject()
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.learnMore))
+
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReportInteractions.learnMoreTapped))
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_submit_recordsCreatedCarryingTheBlockedListChoice() throws {
+        let subject = createSubject()
+        setIncludeBlockedList(true)
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+
+        let savedExtras = try XCTUnwrap(createdExtras())
+        XCTAssertEqual(savedExtras.hasBlockedTrackersList, true)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_submit_whenStateWantsAScreenshot_stillRecordsCreatedWithoutOne() throws {
+        let subject = createSubject()
+        XCTAssertTrue(WebCompatReporterState(windowUUID: .XCTestDefaultUUID).includeScreenshot)
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+
+        let savedExtras = try XCTUnwrap(createdExtras())
+        XCTAssertEqual(savedExtras.hasScreenshot, false)
+        XCTAssertEqual(savedExtras.hasBlockedTrackersList, false)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -187,10 +274,33 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    private func previewAction() -> WebCompatReporterViewAction {
-        return WebCompatReporterViewAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: WebCompatReporterViewActionType.preview
+    private func viewAction(_ actionType: WebCompatReporterViewActionType) -> WebCompatReporterViewAction {
+        return WebCompatReporterViewAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    }
+
+    private func savedNoExtraEvent(is event: EventMetricType<NoExtras>) -> Bool {
+        return gleanWrapper.savedEvents.contains { ($0 as? EventMetricType<NoExtras>) === event }
+    }
+
+    private func createdExtras() -> GleanMetrics.BrokenSiteReportInteractions.CreatedExtra? {
+        return gleanWrapper.savedExtras.compactMap {
+            $0 as? GleanMetrics.BrokenSiteReportInteractions.CreatedExtra
+        }.first
+    }
+
+    private func setIncludeBlockedList(_ includeBlockedList: Bool) {
+        mockStore.state = AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .webCompatReporter(
+                        WebCompatReporterState(
+                            windowUUID: .XCTestDefaultUUID,
+                            url: "https://example.com",
+                            includeBlockedList: includeBlockedList
+                        )
+                    )
+                ]
+            )
         )
     }
 
@@ -220,7 +330,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
                 wrappedManager: WindowManagerImplementation(),
                 tabManager: tabManager
             ),
-            recorder: WebCompatReportRecorder(gleanWrapper: gleanWrapper)
+            recorder: WebCompatReportRecorder(gleanWrapper: gleanWrapper),
+            telemetry: WebCompatReporterTelemetry(gleanWrapper: gleanWrapper)
         )
         trackForMemoryLeaks(subject)
         return subject

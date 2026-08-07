@@ -1246,6 +1246,19 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - Report broken site
+
+    func testPresentReportBrokenSite_startsTheReportCoordinator() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.presentReportBrokenSite(url: URL(string: "https://example.com"))
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is WebCompatReportCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
     // MARK: - Sign in route
 
     func testHandleFxaSignIn_returnsTrue() {

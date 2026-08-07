@@ -640,10 +640,6 @@ final class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - WebCompatReportCoordinatorNavigationDelegate
 
-    func webCompatReportOpenURLInNewTab(_ url: URL) {
-        browserViewController.openURLInNewTab(url)
-    }
-
     func webCompatReportDidSubmit() {
         // TODO: FXIOS-16468 swap in the dedicated "Report sent" string once l10n exports it.
         browserViewController.showPlainToast(

@@ -6,9 +6,9 @@ import Common
 import Foundation
 import UIKit
 
+/// What the report flow needs from the browser, which the flow itself can't reach.
 @MainActor
 protocol WebCompatReportCoordinatorNavigationDelegate: AnyObject {
-    func webCompatReportOpenURLInNewTab(_ url: URL)
     func webCompatReportDidSubmit()
 }
 
@@ -19,7 +19,6 @@ final class WebCompatReportCoordinator: BaseCoordinator,
     private let themeManager: ThemeManager
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private weak var navigationDelegate: WebCompatReportCoordinatorNavigationDelegate?
-
     private weak var reportViewController: WebCompatReportViewController?
 
     private var previewCoordinator: WebCompatReportPreviewCoordinator? {
@@ -30,7 +29,7 @@ final class WebCompatReportCoordinator: BaseCoordinator,
     init(
         router: Router,
         windowUUID: WindowUUID,
-        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        themeManager: ThemeManager,
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
         navigationDelegate: WebCompatReportCoordinatorNavigationDelegate?
     ) {
@@ -62,10 +61,16 @@ final class WebCompatReportCoordinator: BaseCoordinator,
     }
 
     func webCompatReportViewControllerDidTapLearnMore(url: URL) {
-        // Dismiss first, otherwise the explainer loads in a tab hidden behind the sheet.
-        dismissReport { [weak self] in
-            self?.navigationDelegate?.webCompatReportOpenURLInNewTab(url)
-        }
+        // Dismissing the sheet or opening a tab tears its Redux state down and loses the report.
+        // `TermsOfUseLinkViewController` is a generic in-app web view, reused here despite the name.
+        let linkViewController = TermsOfUseLinkViewController(
+            url: url,
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+        let navigationController = UINavigationController(rootViewController: linkViewController)
+        navigationController.modalPresentationStyle = .pageSheet
+        reportViewController?.present(navigationController, animated: true)
     }
 
     func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload) {

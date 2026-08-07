@@ -54,9 +54,8 @@ final class TabDisplayPanelTests: XCTestCase {
     private func createSubjectState(isPrivateMode: Bool,
                                     emptyTabs: Bool) -> TabsPanelState {
         let tabs = createTabs(emptyTabs)
-        return TabsPanelState(windowUUID: .XCTestDefaultUUID,
-                              isPrivateMode: isPrivateMode,
-                              tabs: tabs)
+        return TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: isPrivateMode)
+            .copy(tabs: tabs)
     }
 
     private func createTabs(_ emptyTabs: Bool) -> [TabModel] {

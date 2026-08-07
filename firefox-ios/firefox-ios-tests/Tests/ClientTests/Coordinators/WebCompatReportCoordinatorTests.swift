@@ -12,6 +12,7 @@ final class WebCompatReportCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinator!
     private var navigationDelegate: MockWebCompatReportCoordinatorNavigationDelegate!
+    private var themeManager: MockThemeManager!
     private let reportedURL = URL(string: "https://example.com")!
     private let learnMoreURL = URL(string: "https://example.com/learn-more")!
 
@@ -20,6 +21,7 @@ final class WebCompatReportCoordinatorTests: XCTestCase {
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockParentCoordinator()
         navigationDelegate = MockWebCompatReportCoordinatorNavigationDelegate()
+        themeManager = MockThemeManager()
         DependencyHelperMock().bootstrapDependencies()
     }
 
@@ -27,6 +29,7 @@ final class WebCompatReportCoordinatorTests: XCTestCase {
         router = nil
         parentCoordinator = nil
         navigationDelegate = nil
+        themeManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -67,19 +70,15 @@ final class WebCompatReportCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    // The explainer would load in a tab hidden behind the sheet if it opened first.
-    func test_viewControllerDidTapLearnMore_opensURLAfterDismissCompletes() {
+    func test_viewControllerDidTapLearnMore_keepsTheSheetUp() {
         let subject = createSubject()
+        subject.start(reportedURL: reportedURL)
 
         subject.webCompatReportViewControllerDidTapLearnMore(url: learnMoreURL)
 
-        XCTAssertEqual(router.dismissCalled, 1)
-        XCTAssertTrue(navigationDelegate.openedURLs.isEmpty)
-
-        router.savedCompletion?()
-
-        XCTAssertEqual(navigationDelegate.openedURLs, [learnMoreURL])
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        // Dismissing would tear the sheet's Redux state down and lose the in-progress report.
+        XCTAssertEqual(router.dismissCalled, 0)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 0)
     }
 
     func test_didTapPreview_addsThePreviewAsAChild() {
@@ -124,6 +123,7 @@ final class WebCompatReportCoordinatorTests: XCTestCase {
         let subject = WebCompatReportCoordinator(
             router: router,
             windowUUID: .XCTestDefaultUUID,
+            themeManager: themeManager,
             parentCoordinatorDelegate: parentCoordinator,
             navigationDelegate: navigationDelegate
         )
@@ -133,12 +133,7 @@ final class WebCompatReportCoordinatorTests: XCTestCase {
 }
 
 private final class MockWebCompatReportCoordinatorNavigationDelegate: WebCompatReportCoordinatorNavigationDelegate {
-    var openedURLs = [URL]()
     var didSubmitCalled = 0
-
-    func webCompatReportOpenURLInNewTab(_ url: URL) {
-        openedURLs.append(url)
-    }
 
     func webCompatReportDidSubmit() {
         didSubmitCalled += 1

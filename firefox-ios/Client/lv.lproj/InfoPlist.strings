@@ -5,7 +5,7 @@
 "New Tab" = "Jauna cilne";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Šis ļauj uzņemt un augšupielādēt foto.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Lapas, ko apmeklējat var prasīt jūsu atrašanās vietu.";

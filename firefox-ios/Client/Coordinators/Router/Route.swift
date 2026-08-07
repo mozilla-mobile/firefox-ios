@@ -108,7 +108,6 @@ enum Route {
         case mailto
         case newTab = "newtab"
         case search
-        case relayMask
         case browser
         case theme
         case toolbar

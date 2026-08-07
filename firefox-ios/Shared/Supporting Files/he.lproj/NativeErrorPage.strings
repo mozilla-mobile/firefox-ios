@@ -61,11 +61,17 @@
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "ייתכן שהאתר עמוס או לא זמין. נא לנסות שוב מאוחר יותר. אם דפים אחרים אינם נטענים, כדאי לבדוק את חיבור ה־Wi-Fi או הנתונים הסלולריים שלך. %@ יכול גם לחפש ב־Wayback Machine גרסה קודמת של דף זה.";
 
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "לא נמצאה גרסה מאוחסנת";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "ניסיון חוזר";
 
 /* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
 "NativeErrorPage.Wayback.Error.Search.v154" = "חיפוש אחר גרסה קודמת";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "חיפוש ברשת";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "לא ניתן להתחבר";

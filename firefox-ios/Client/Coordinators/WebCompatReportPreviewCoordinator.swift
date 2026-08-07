@@ -17,7 +17,7 @@ final class WebCompatReportPreviewCoordinator: BaseCoordinator, WebCompatReportP
     init(
         router: Router,
         windowUUID: WindowUUID,
-        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        themeManager: ThemeManager,
         parentCoordinator: ParentCoordinatorDelegate?
     ) {
         self.windowUUID = windowUUID

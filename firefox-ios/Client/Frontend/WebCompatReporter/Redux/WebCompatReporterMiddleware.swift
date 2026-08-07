@@ -9,11 +9,14 @@ import Redux
 final class WebCompatReporterMiddleware {
     private let windowManager: WindowManager
     private let recorder: WebCompatReportRecorder
+    private let telemetry: WebCompatReporterTelemetry
 
     init(windowManager: WindowManager = AppContainer.shared.resolve(),
-         recorder: WebCompatReportRecorder = WebCompatReportRecorder()) {
+         recorder: WebCompatReportRecorder = WebCompatReportRecorder(),
+         telemetry: WebCompatReporterTelemetry = WebCompatReporterTelemetry()) {
         self.windowManager = windowManager
         self.recorder = recorder
+        self.telemetry = telemetry
     }
 
     lazy var webCompatReporterProvider: Middleware<AppState> = (legacyProvider, modernProvider)
@@ -37,12 +40,23 @@ final class WebCompatReporterMiddleware {
                 actionType: WebCompatReporterMiddlewareActionType.didLoadInitialDraft
             ))
 
+        case WebCompatReporterViewActionType.selectCategory:
+            guard let category = action.category else { return }
+            telemetry.reasonSelected(category: category)
+
         case WebCompatReporterViewActionType.preview:
+            telemetry.previewed()
             store.dispatch(WebCompatReporterMiddlewareAction(
                 previewPayload: makeReport(windowUUID: action.windowUUID, state: state),
                 windowUUID: action.windowUUID,
                 actionType: WebCompatReporterMiddlewareActionType.didBuildPreview
             ))
+
+        case WebCompatReporterViewActionType.cancel:
+            telemetry.cancelled()
+
+        case WebCompatReporterViewActionType.learnMore:
+            telemetry.learnMoreTapped()
 
         case WebCompatReporterViewActionType.submit:
             submitReport(windowUUID: action.windowUUID, state: state)
@@ -53,7 +67,10 @@ final class WebCompatReporterMiddleware {
     }
 
     private func submitReport(windowUUID: WindowUUID, state: AppState) {
+        let reporterState = WebCompatReporterState(appState: state, uuid: windowUUID)
         recorder.submit(makeReport(windowUUID: windowUUID, state: state))
+        // The screenshot option is parked (FXIOS-16450) and no image is transported yet.
+        telemetry.created(withBlockedTrackers: reporterState.includeBlockedList, withScreenshot: false)
 
         store.dispatch(WebCompatReporterMiddlewareAction(
             windowUUID: windowUUID,

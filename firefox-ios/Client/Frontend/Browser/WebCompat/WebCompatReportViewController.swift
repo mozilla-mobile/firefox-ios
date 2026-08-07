@@ -14,7 +14,7 @@ protocol WebCompatReportCoordinatorDelegate: AnyObject {
     func webCompatReportViewControllerDidFinish()
     /// Report was sent; the coordinator dismisses and confirms it.
     func webCompatReportViewControllerDidSubmit()
-    /// User tapped the "Learn More…" link; the coordinator dismisses the sheet and opens the explainer page.
+    /// User tapped the "Learn More…" link; the coordinator shows the explainer page without dismissing the sheet.
     func webCompatReportViewControllerDidTapLearnMore(url: URL)
     /// The middleware assembled the report; the coordinator presents it.
     func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload)
@@ -26,6 +26,7 @@ protocol WebCompatReportCoordinatorDelegate: AnyObject {
 final class WebCompatReportViewController: UINavigationController,
                                            StoreSubscriber,
                                            Themeable,
+                                           UIAdaptivePresentationControllerDelegate,
                                            WebCompatReportSheetDelegate {
     typealias SubscriberStateType = WebCompatReporterState
 
@@ -68,6 +69,7 @@ final class WebCompatReportViewController: UINavigationController,
         super.viewDidLoad()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        presentationController?.delegate = self
         subscribeToRedux()
         store.dispatch(WebCompatReporterViewAction(
             url: reportedURL?.absoluteString,
@@ -310,6 +312,16 @@ final class WebCompatReportViewController: UINavigationController,
         }
     }
 
+    // MARK: - UIAdaptivePresentationControllerDelegate
+
+    /// UIKit calls this only for the interactive swipe, not for programmatic dismissal.
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.cancel
+        ))
+    }
+
     /// Kept here so the cancel action is dispatched from the one place that talks to the store.
     func finishReport() {
         store.dispatch(WebCompatReporterViewAction(
@@ -398,6 +410,10 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     func webCompatReportSheetDidTapLearnMore(url: URL) {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.learnMore
+        ))
         reportCoordinator?.webCompatReportViewControllerDidTapLearnMore(url: url)
     }
 
