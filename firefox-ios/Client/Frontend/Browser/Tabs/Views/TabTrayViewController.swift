@@ -197,16 +197,16 @@ final class TabTrayViewController: UIViewController,
     private func applyToolbarGlassButtonTints(theme: Theme) {
         guard isNovaDesignEnabled else { return }
         let glassTint = theme.colors.layerGlassTintNova
-        let buttons: [(item: UIBarButtonItem, imageName: String, background: UIColor, glyph: UIColor)] = [
-            (deleteButton, StandardImageIdentifiers.Large.delete, glassTint, theme.colors.iconPrimary),
-            (newTabButton, StandardImageIdentifiers.Large.plus, glassTint, theme.colors.iconPrimary),
-            (doneButton, StandardImageIdentifiers.Large.checkmark, theme.colors.actionPrimary, theme.colors.iconInverted)
-        ]
-        for button in buttons {
-            button.item.style = .prominent
-            button.item.tintColor = button.background
-            button.item.image = UIImage(named: button.imageName)?.withTintColor(button.glyph, renderingMode: .alwaysOriginal)
-        }
+        setProminentGlass(deleteButton, StandardImageIdentifiers.Large.delete, background: glassTint, glyph: theme.colors.iconPrimary)
+        setProminentGlass(newTabButton, StandardImageIdentifiers.Large.plus, background: glassTint, glyph: theme.colors.iconPrimary)
+        setProminentGlass(doneButton, StandardImageIdentifiers.Large.checkmark, background: theme.colors.actionPrimary, glyph: theme.colors.iconInverted)
+    }
+
+    @available(iOS 26.0, *)
+    private func setProminentGlass(_ button: UIBarButtonItem, _ imageName: String, background: UIColor, glyph: UIColor) {
+        button.style = .prominent
+        button.tintColor = background
+        button.image = UIImage(named: imageName)?.withTintColor(glyph, renderingMode: .alwaysOriginal)
     }
 
     private lazy var deleteButton: UIBarButtonItem = {
