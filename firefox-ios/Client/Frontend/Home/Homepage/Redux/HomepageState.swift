@@ -38,16 +38,6 @@ struct HomepageState: ScreenState, Equatable {
     /// new privacy notice is available after a user has already accepted the ToS/ToU
     let shouldShowPrivacyNotice: Bool
 
-    /// `availableContentHeight` represents the height available for the homepage content to occupy when the address is not
-    /// being edited. This is used to keep the homepage layout constant, such that it doesn't shift when the homepage's
-    /// view size changes eg when the address bar is tapped and the keyboard is presented. This value is kept in state
-    /// because it is determined by BVC
-    let availableContentHeight: CGFloat
-
-    /// `availableWallpaperHeight` is the height to apply to the homepage wallpaper background so it can remain pinned to
-    /// the top of the window while still extending to the same visual bottom as the homepage content.
-    let availableWallpaperHeight: CGFloat
-
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = appState.componentState(
             HomepageState.self,
@@ -72,9 +62,7 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: homepageState.wallpaperState,
             isZeroSearch: homepageState.isZeroSearch,
             shouldTriggerImpression: homepageState.shouldTriggerImpression,
-            shouldShowPrivacyNotice: homepageState.shouldShowPrivacyNotice,
-            availableContentHeight: homepageState.availableContentHeight,
-            availableWallpaperHeight: homepageState.availableWallpaperHeight
+            shouldShowPrivacyNotice: homepageState.shouldShowPrivacyNotice
         )
     }
 
@@ -93,9 +81,7 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState(windowUUID: windowUUID),
             isZeroSearch: false,
             shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: false,
-            availableContentHeight: 0,
-            availableWallpaperHeight: 0
+            shouldShowPrivacyNotice: false
         )
     }
 
@@ -113,9 +99,7 @@ struct HomepageState: ScreenState, Equatable {
         wallpaperState: WallpaperState,
         isZeroSearch: Bool,
         shouldTriggerImpression: Bool,
-        shouldShowPrivacyNotice: Bool,
-        availableContentHeight: CGFloat,
-        availableWallpaperHeight: CGFloat
+        shouldShowPrivacyNotice: Bool
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -131,8 +115,6 @@ struct HomepageState: ScreenState, Equatable {
         self.isZeroSearch = isZeroSearch
         self.shouldTriggerImpression = shouldTriggerImpression
         self.shouldShowPrivacyNotice = shouldShowPrivacyNotice
-        self.availableContentHeight = availableContentHeight
-        self.availableWallpaperHeight = availableWallpaperHeight
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -157,8 +139,6 @@ struct HomepageState: ScreenState, Equatable {
             }
 
             return handleEmbeddedHomepageAction(state: state, action: action, isZeroSearch: isZeroSearch)
-        case HomepageActionType.availableContentHeightDidChange:
-            return handleAvailableContentHeightChangeAction(state: state, action: action)
         case HomepageActionType.privacyNoticeCloseButtonTapped:
             return handlePrivacyNoticeCloseButtonTappedAction(state: state, action: action)
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
@@ -205,33 +185,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(isZeroSearch: isZeroSearch)
             .copy(shouldTriggerImpression: false)
-    }
-
-    @MainActor
-    private static func handleAvailableContentHeightChangeAction(state: HomepageState, action: Action) -> HomepageState {
-        guard let homepageAction = action as? HomepageAction else {
-            return defaultState(from: state)
-        }
-
-        // Height updates can arrive with only one field populated; keep the other value stable.
-        let availableContentHeight = homepageAction.availableContentHeight ?? state.availableContentHeight
-        let availableWallpaperHeight = homepageAction.availableWallpaperHeight ?? state.availableWallpaperHeight
-
-        return state
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
-            .copy(availableContentHeight: availableContentHeight)
-            .copy(availableWallpaperHeight: availableWallpaperHeight)
     }
 
     @MainActor
