@@ -899,6 +899,7 @@ final class TabTrayViewController: UIViewController,
             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton
         )
         alert.popoverPresentationController?.barButtonItem = deleteButton
+        alert.applyNovaActionTint(retrieveTheme())
         present(alert, animated: true, completion: nil)
     }
 
@@ -945,6 +946,7 @@ final class TabTrayViewController: UIViewController,
         )
 
         alert.popoverPresentationController?.barButtonItem = deleteButton
+        alert.applyNovaActionTint(retrieveTheme())
         present(alert, animated: true, completion: nil)
     }
 

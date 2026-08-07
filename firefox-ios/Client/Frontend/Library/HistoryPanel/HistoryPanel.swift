@@ -297,7 +297,10 @@ class HistoryPanel: UIViewController,
     }
 
     func showClearRecentHistory() {
-        clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
+        clearHistoryHelper.showClearRecentHistory(
+            onViewController: self,
+            theme: themeManager.getCurrentTheme(for: windowUUID)
+        ) { [weak self] dateOption in
             // Delete groupings that belong to THAT section.
             switch dateOption {
             case .lastHour, .lastTwentyFourHours, .lastSevenDays, .lastFourWeeks:
