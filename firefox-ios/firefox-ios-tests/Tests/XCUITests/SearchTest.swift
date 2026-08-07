@@ -29,7 +29,7 @@ class SearchTests: FeatureFlaggedTestBase {
         searchSettingsScreen = SearchSettingsScreen(app: app)
         searchScreen = SearchScreen(app: app)
     }
-    
+
     override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
         try await super.tearDown()
@@ -483,7 +483,7 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.CloseTab)
 
         let siteTable = app.tables["SiteTable"]
-        
+
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
 
