@@ -516,13 +516,270 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
+/**
+ * The bridged sync engine for addresses. The canonical docs are in
+ * services/interfaces/mozIBridgedSyncEngine.idl.
+ * NOTE: all timestamps here are milliseconds.
+ */
+public protocol AddressesBridgedEngineProtocol: AnyObject, Sendable {
+    
+    func apply() throws  -> [String]
+    
+    func ensureCurrentSyncId(newSyncId: String) throws  -> String
+    
+    func lastSync() throws  -> Int64
+    
+    func prepareForSync(clientData: String) throws 
+    
+    func reset() throws 
+    
+    func resetSyncId() throws  -> String
+    
+    func setLastSync(lastSync: Int64) throws 
+    
+    func setUploaded(newTimestamp: Int64, uploadedIds: [String]) throws 
+    
+    func storeIncoming(incomingEnvelopesAsJson: [String]) throws 
+    
+    func syncFinished() throws 
+    
+    func syncId() throws  -> String?
+    
+    func syncStarted() throws 
+    
+    func wipe() throws 
+    
+}
+/**
+ * The bridged sync engine for addresses. The canonical docs are in
+ * services/interfaces/mozIBridgedSyncEngine.idl.
+ * NOTE: all timestamps here are milliseconds.
+ */
+open class AddressesBridgedEngine: AddressesBridgedEngineProtocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_autofill_fn_clone_addressesbridgedengine(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_autofill_fn_free_addressesbridgedengine(handle, $0) }
+    }
+
+    
+
+    
+open func apply()throws  -> [String]  {
+    return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_apply(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func ensureCurrentSyncId(newSyncId: String)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_ensure_current_sync_id(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(newSyncId),$0
+    )
+})
+}
+    
+open func lastSync()throws  -> Int64  {
+    return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_last_sync(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func prepareForSync(clientData: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_prepare_for_sync(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(clientData),$0
+    )
+}
+}
+    
+open func reset()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_reset(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+open func resetSyncId()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_reset_sync_id(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func setLastSync(lastSync: Int64)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_set_last_sync(
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(lastSync),$0
+    )
+}
+}
+    
+open func setUploaded(newTimestamp: Int64, uploadedIds: [String])throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_set_uploaded(
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(newTimestamp),
+        FfiConverterSequenceString.lower(uploadedIds),$0
+    )
+}
+}
+    
+open func storeIncoming(incomingEnvelopesAsJson: [String])throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_store_incoming(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceString.lower(incomingEnvelopesAsJson),$0
+    )
+}
+}
+    
+open func syncFinished()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_sync_finished(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+open func syncId()throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_sync_id(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+open func syncStarted()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_sync_started(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+open func wipe()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_addressesbridgedengine_wipe(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+
+    
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAddressesBridgedEngine: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = AddressesBridgedEngine
+
+    public static func lift(_ handle: UInt64) throws -> AddressesBridgedEngine {
+        return AddressesBridgedEngine(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: AddressesBridgedEngine) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AddressesBridgedEngine {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: AddressesBridgedEngine, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressesBridgedEngine_lift(_ handle: UInt64) throws -> AddressesBridgedEngine {
+    return try FfiConverterTypeAddressesBridgedEngine.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressesBridgedEngine_lower(_ value: AddressesBridgedEngine) -> UInt64 {
+    return FfiConverterTypeAddressesBridgedEngine.lower(value)
+}
+
+
+
+
+
+
 public protocol StoreProtocol: AnyObject, Sendable {
     
     func addAddress(a: UpdatableAddressFields) throws  -> Address
     
+    func addAddressWithMeta(entryWithMeta: UpdatableAddressFieldsWithMeta) throws  -> Address
+    
     func addCreditCard(cc: UpdatableCreditCardFields) throws  -> CreditCard
     
+    func addManyAddressTombstones(tombstones: [AddressTombstone]) throws  -> [AddressBulkTombstoneResultEntry]
+    
+    func addManyAddressesWithMeta(entriesWithMeta: [UpdatableAddressFieldsWithMeta]) throws  -> [AddressBulkResultEntry]
+    
     func addPassport(p: UpdatablePassportFields) throws  -> Passport
+    
+    /**
+     * Returns a bridged sync engine for addresses, for use by Desktop's Sync
+     * framework. Constructing it only assembles structs and never touches the
+     * DB, so it cannot fail.
+     */
+    func addressesBridgedEngine()  -> AddressesBridgedEngine
     
     func countAllAddresses() throws  -> Int64
     
@@ -531,6 +788,11 @@ public protocol StoreProtocol: AnyObject, Sendable {
     func countAllPassports() throws  -> Int64
     
     func deleteAddress(guid: String) throws  -> Bool
+    
+    /**
+     * Removes every address and every address tombstone.
+     */
+    func deleteAllAddresses() throws 
     
     func deleteCreditCard(guid: String) throws  -> Bool
     
@@ -579,6 +841,8 @@ public protocol StoreProtocol: AnyObject, Sendable {
     func touchPassport(guid: String) throws 
     
     func updateAddress(guid: String, a: UpdatableAddressFields) throws 
+    
+    func updateAddressWithMeta(entryWithMeta: UpdatableAddressFieldsWithMeta) throws 
     
     func updateCreditCard(guid: String, cc: UpdatableCreditCardFields) throws 
     
@@ -655,6 +919,15 @@ open func addAddress(a: UpdatableAddressFields)throws  -> Address  {
 })
 }
     
+open func addAddressWithMeta(entryWithMeta: UpdatableAddressFieldsWithMeta)throws  -> Address  {
+    return try  FfiConverterTypeAddress_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_add_address_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(entryWithMeta),$0
+    )
+})
+}
+    
 open func addCreditCard(cc: UpdatableCreditCardFields)throws  -> CreditCard  {
     return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_add_credit_card(
@@ -664,11 +937,42 @@ open func addCreditCard(cc: UpdatableCreditCardFields)throws  -> CreditCard  {
 })
 }
     
+open func addManyAddressTombstones(tombstones: [AddressTombstone])throws  -> [AddressBulkTombstoneResultEntry]  {
+    return try  FfiConverterSequenceTypeAddressBulkTombstoneResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_add_many_address_tombstones(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeAddressTombstone.lower(tombstones),$0
+    )
+})
+}
+    
+open func addManyAddressesWithMeta(entriesWithMeta: [UpdatableAddressFieldsWithMeta])throws  -> [AddressBulkResultEntry]  {
+    return try  FfiConverterSequenceTypeAddressBulkResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_add_many_addresses_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeUpdatableAddressFieldsWithMeta.lower(entriesWithMeta),$0
+    )
+})
+}
+    
 open func addPassport(p: UpdatablePassportFields)throws  -> Passport  {
     return try  FfiConverterTypePassport_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_add_passport(
             self.uniffiCloneHandle(),
         FfiConverterTypeUpdatablePassportFields_lower(p),$0
+    )
+})
+}
+    
+    /**
+     * Returns a bridged sync engine for addresses, for use by Desktop's Sync
+     * framework. Constructing it only assembles structs and never touches the
+     * DB, so it cannot fail.
+     */
+open func addressesBridgedEngine() -> AddressesBridgedEngine  {
+    return try!  FfiConverterTypeAddressesBridgedEngine_lift(try! rustCall() {
+    uniffi_autofill_fn_method_store_addresses_bridged_engine(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -704,6 +1008,16 @@ open func deleteAddress(guid: String)throws  -> Bool  {
         FfiConverterString.lower(guid),$0
     )
 })
+}
+    
+    /**
+     * Removes every address and every address tombstone.
+     */
+open func deleteAllAddresses()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_delete_all_addresses(
+            self.uniffiCloneHandle(),$0
+    )
+}
 }
     
 open func deleteCreditCard(guid: String)throws  -> Bool  {
@@ -855,6 +1169,14 @@ open func updateAddress(guid: String, a: UpdatableAddressFields)throws   {try ru
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),
         FfiConverterTypeUpdatableAddressFields_lower(a),$0
+    )
+}
+}
+    
+open func updateAddressWithMeta(entryWithMeta: UpdatableAddressFieldsWithMeta)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_update_address_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(entryWithMeta),$0
     )
 }
 }
@@ -1031,6 +1353,141 @@ public func FfiConverterTypeAddress_lift(_ buf: RustBuffer) throws -> Address {
 #endif
 public func FfiConverterTypeAddress_lower(_ value: Address) -> RustBuffer {
     return FfiConverterTypeAddress.lower(value)
+}
+
+
+/**
+ * Metadata fields managed internally by the library: the guid, timestamps and
+ * local sync state. These are automatically set on `add_address` and updated on
+ * operations like `touch` and `update_address`. Not included in
+ * `UpdatableAddressFields`; use `add_address_with_meta` when importing records
+ * that already have metadata.
+ */
+public struct AddressMeta: Equatable, Hashable {
+    public var guid: String
+    public var timeCreated: Int64
+    public var timeLastUsed: Int64?
+    public var timeLastModified: Int64
+    public var timesUsed: Int64
+    public var syncChangeCounter: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(guid: String, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64, syncChangeCounter: Int64) {
+        self.guid = guid
+        self.timeCreated = timeCreated
+        self.timeLastUsed = timeLastUsed
+        self.timeLastModified = timeLastModified
+        self.timesUsed = timesUsed
+        self.syncChangeCounter = syncChangeCounter
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension AddressMeta: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAddressMeta: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AddressMeta {
+        return
+            try AddressMeta(
+                guid: FfiConverterString.read(from: &buf), 
+                timeCreated: FfiConverterInt64.read(from: &buf), 
+                timeLastUsed: FfiConverterOptionInt64.read(from: &buf), 
+                timeLastModified: FfiConverterInt64.read(from: &buf), 
+                timesUsed: FfiConverterInt64.read(from: &buf), 
+                syncChangeCounter: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AddressMeta, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.guid, into: &buf)
+        FfiConverterInt64.write(value.timeCreated, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastUsed, into: &buf)
+        FfiConverterInt64.write(value.timeLastModified, into: &buf)
+        FfiConverterInt64.write(value.timesUsed, into: &buf)
+        FfiConverterInt64.write(value.syncChangeCounter, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressMeta_lift(_ buf: RustBuffer) throws -> AddressMeta {
+    return try FfiConverterTypeAddressMeta.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressMeta_lower(_ value: AddressMeta) -> RustBuffer {
+    return FfiConverterTypeAddressMeta.lower(value)
+}
+
+
+/**
+ * A tombstone for a record deleted locally but not yet uploaded, supplied to
+ * `add_many_address_tombstones` when migrating from another store.
+ */
+public struct AddressTombstone: Equatable, Hashable {
+    public var guid: String
+    public var timeDeleted: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(guid: String, timeDeleted: Int64) {
+        self.guid = guid
+        self.timeDeleted = timeDeleted
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension AddressTombstone: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAddressTombstone: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AddressTombstone {
+        return
+            try AddressTombstone(
+                guid: FfiConverterString.read(from: &buf), 
+                timeDeleted: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AddressTombstone, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.guid, into: &buf)
+        FfiConverterInt64.write(value.timeDeleted, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressTombstone_lift(_ buf: RustBuffer) throws -> AddressTombstone {
+    return try FfiConverterTypeAddressTombstone.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressTombstone_lower(_ value: AddressTombstone) -> RustBuffer {
+    return FfiConverterTypeAddressTombstone.lower(value)
 }
 
 
@@ -1375,6 +1832,64 @@ public func FfiConverterTypeUpdatableAddressFields_lower(_ value: UpdatableAddre
 
 
 /**
+ * An address together with its metadata, passed to `add_address_with_meta` and
+ * `update_address_with_meta` when importing a record from another store.
+ */
+public struct UpdatableAddressFieldsWithMeta: Equatable, Hashable {
+    public var fields: UpdatableAddressFields
+    public var meta: AddressMeta
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(fields: UpdatableAddressFields, meta: AddressMeta) {
+        self.fields = fields
+        self.meta = meta
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension UpdatableAddressFieldsWithMeta: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeUpdatableAddressFieldsWithMeta: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UpdatableAddressFieldsWithMeta {
+        return
+            try UpdatableAddressFieldsWithMeta(
+                fields: FfiConverterTypeUpdatableAddressFields.read(from: &buf), 
+                meta: FfiConverterTypeAddressMeta.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UpdatableAddressFieldsWithMeta, into buf: inout [UInt8]) {
+        FfiConverterTypeUpdatableAddressFields.write(value.fields, into: &buf)
+        FfiConverterTypeAddressMeta.write(value.meta, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUpdatableAddressFieldsWithMeta_lift(_ buf: RustBuffer) throws -> UpdatableAddressFieldsWithMeta {
+    return try FfiConverterTypeUpdatableAddressFieldsWithMeta.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(_ value: UpdatableAddressFieldsWithMeta) -> RustBuffer {
+    return FfiConverterTypeUpdatableAddressFieldsWithMeta.lower(value)
+}
+
+
+/**
  * What you pass to create or update a credit-card.
  */
 public struct UpdatableCreditCardFields: Equatable, Hashable {
@@ -1531,6 +2046,158 @@ public func FfiConverterTypeUpdatablePassportFields_lower(_ value: UpdatablePass
     return FfiConverterTypeUpdatablePassportFields.lower(value)
 }
 
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * A bulk insert result entry, returned per input record by `add_many_addresses_with_meta`
+ */
+
+public enum AddressBulkResultEntry: Equatable, Hashable {
+    
+    case success(address: Address
+    )
+    case error(message: String
+    )
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension AddressBulkResultEntry: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAddressBulkResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = AddressBulkResultEntry
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AddressBulkResultEntry {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .success(address: try FfiConverterTypeAddress.read(from: &buf)
+        )
+        
+        case 2: return .error(message: try FfiConverterString.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: AddressBulkResultEntry, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .success(address):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeAddress.write(address, into: &buf)
+            
+        
+        case let .error(message):
+            writeInt(&buf, Int32(2))
+            FfiConverterString.write(message, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressBulkResultEntry_lift(_ buf: RustBuffer) throws -> AddressBulkResultEntry {
+    return try FfiConverterTypeAddressBulkResultEntry.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressBulkResultEntry_lower(_ value: AddressBulkResultEntry) -> RustBuffer {
+    return FfiConverterTypeAddressBulkResultEntry.lower(value)
+}
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * Per-record result of `add_many_address_tombstones`.
+ */
+
+public enum AddressBulkTombstoneResultEntry: Equatable, Hashable {
+    
+    case success(guid: String
+    )
+    case error(message: String
+    )
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension AddressBulkTombstoneResultEntry: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAddressBulkTombstoneResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = AddressBulkTombstoneResultEntry
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AddressBulkTombstoneResultEntry {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .success(guid: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 2: return .error(message: try FfiConverterString.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: AddressBulkTombstoneResultEntry, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .success(guid):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(guid, into: &buf)
+            
+        
+        case let .error(message):
+            writeInt(&buf, Int32(2))
+            FfiConverterString.write(message, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressBulkTombstoneResultEntry_lift(_ buf: RustBuffer) throws -> AddressBulkTombstoneResultEntry {
+    return try FfiConverterTypeAddressBulkTombstoneResultEntry.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAddressBulkTombstoneResultEntry_lower(_ value: AddressBulkTombstoneResultEntry) -> RustBuffer {
+    return FfiConverterTypeAddressBulkTombstoneResultEntry.lower(value)
+}
+
+
 
 public enum AutofillApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
@@ -1668,6 +2335,55 @@ fileprivate struct FfiConverterOptionInt64: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
+    typealias SwiftType = String?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterString.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterString.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
+    typealias SwiftType = [String]
+
+    public static func write(_ value: [String], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterString.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [String]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterString.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypeAddress: FfiConverterRustBuffer {
     typealias SwiftType = [Address]
 
@@ -1685,6 +2401,31 @@ fileprivate struct FfiConverterSequenceTypeAddress: FfiConverterRustBuffer {
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeAddress.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeAddressTombstone: FfiConverterRustBuffer {
+    typealias SwiftType = [AddressTombstone]
+
+    public static func write(_ value: [AddressTombstone], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeAddressTombstone.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [AddressTombstone] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [AddressTombstone]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeAddressTombstone.read(from: &buf))
         }
         return seq
     }
@@ -1735,6 +2476,81 @@ fileprivate struct FfiConverterSequenceTypePassport: FfiConverterRustBuffer {
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypePassport.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeUpdatableAddressFieldsWithMeta: FfiConverterRustBuffer {
+    typealias SwiftType = [UpdatableAddressFieldsWithMeta]
+
+    public static func write(_ value: [UpdatableAddressFieldsWithMeta], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeUpdatableAddressFieldsWithMeta.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [UpdatableAddressFieldsWithMeta] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [UpdatableAddressFieldsWithMeta]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeUpdatableAddressFieldsWithMeta.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeAddressBulkResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = [AddressBulkResultEntry]
+
+    public static func write(_ value: [AddressBulkResultEntry], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeAddressBulkResultEntry.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [AddressBulkResultEntry] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [AddressBulkResultEntry]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeAddressBulkResultEntry.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeAddressBulkTombstoneResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = [AddressBulkTombstoneResultEntry]
+
+    public static func write(_ value: [AddressBulkTombstoneResultEntry], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeAddressBulkTombstoneResultEntry.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [AddressBulkTombstoneResultEntry] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [AddressBulkTombstoneResultEntry]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeAddressBulkTombstoneResultEntry.read(from: &buf))
         }
         return seq
     }
@@ -1796,13 +2612,64 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_func_encrypt_string() != 64714) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_apply() != 40363) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_ensure_current_sync_id() != 44860) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_last_sync() != 60618) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_prepare_for_sync() != 59348) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_reset() != 32130) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_reset_sync_id() != 61259) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_set_last_sync() != 27786) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_set_uploaded() != 35043) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_store_incoming() != 58340) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_sync_finished() != 34855) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_sync_id() != 3467) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_sync_started() != 54649) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_wipe() != 15663) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_add_address() != 29340) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_add_address_with_meta() != 27061) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_add_credit_card() != 39831) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_store_add_many_address_tombstones() != 63625) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_add_many_addresses_with_meta() != 55046) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_add_passport() != 41691) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_addresses_bridged_engine() != 56264) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_count_all_addresses() != 51483) {
@@ -1815,6 +2682,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_delete_address() != 63199) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_delete_all_addresses() != 25310) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_delete_credit_card() != 33261) {
@@ -1866,6 +2736,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_update_address() != 21288) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_update_address_with_meta() != 17897) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_update_credit_card() != 23488) {
