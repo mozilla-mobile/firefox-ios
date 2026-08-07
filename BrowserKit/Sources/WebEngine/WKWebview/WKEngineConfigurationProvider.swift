@@ -114,21 +114,6 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         staleStoreIdentifier = currentIdentifier
     }
 
-    /// Removes identified persistent stores left behind by a previous process that was killed
-    /// while a proxy was applied. Nothing points at them once the app restarts on the default
-    /// store, so they are pure disk cost.
-    @available(iOS 17.0, *)
-    public static func removeOrphanedStores() async {
-        let identifiers = await WKWebsiteDataStore.allDataStoreIdentifiers
-        for identifier in identifiers where identifier != defaultStoreIdentifier {
-            do {
-                try await WKWebsiteDataStore.remove(forIdentifier: identifier)
-            } catch {
-                // log error
-            }
-        }
-    }
-
     @available(iOS 26.0, *)
     public static func copyData(from oldStore: WKWebsiteDataStore, to newStore: WKWebsiteDataStore) async {
         do {
