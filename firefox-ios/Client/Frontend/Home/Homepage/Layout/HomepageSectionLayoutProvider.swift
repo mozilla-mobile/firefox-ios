@@ -633,7 +633,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         // Ensures we should be showing the privacy notice
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
-              state.shouldShowPrivacyNotice else { return 0 }
+              state.privacyNoticeState.shouldShowPrivacyNotice else { return 0 }
 
         var totalHeight: CGFloat = 0
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
@@ -835,7 +835,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return 0
         }
 
-        let searchState = state.searchState
+        let searchState = state.searchBarState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let measurementKey = HomepageLayoutMeasurementCache.SearchBarMeasurement.Key(
             shouldShowSearchBar: searchState.shouldShowSearchBar,
@@ -930,7 +930,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         let collectionViewHeight = environment.container.contentSize.height
 
-        let availableContentHeight = homepageState?.availableContentHeight ?? 0
+        let availableContentHeight = homepageState?.wallpaperState.availableContentHeight ?? 0
         let height = availableContentHeight > 0 ? availableContentHeight : collectionViewHeight
 
         let headerLogoHeight = getHeaderLogoHeight(environment: environment)
