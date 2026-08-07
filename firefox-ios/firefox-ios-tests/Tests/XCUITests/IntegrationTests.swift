@@ -278,8 +278,8 @@ class IntegrationTests: BaseTestCase {
             mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
             mozWaitForElementToExist(siteTable.otherElements["Google Search"])
             // Firefox Suggest is displayed
-            if !siteTable.otherElements["Firefox Suggest"].exists {
-                siteTable.swipeUp()
+            if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
+                siteTable.cells.firstMatch.swipeUp()
             }
             mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
             mozWaitForElementToExist(siteTable.staticTexts["Example Domain"])

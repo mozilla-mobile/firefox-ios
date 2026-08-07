@@ -481,6 +481,7 @@ class SearchTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         navigator.performAction(Action.Bookmark)
         navigator.performAction(Action.CloseTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
 
         let siteTable = app.tables["SiteTable"]
 
@@ -512,8 +513,8 @@ class SearchTests: FeatureFlaggedTestBase {
                 mozWaitForElementToExist(siteTable.staticTexts[term])
 
                 // Firefox Suggest is displayed
-                if !siteTable.otherElements["Firefox Suggest"].exists {
-                    siteTable.swipeUp()
+                if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
+                    siteTable.cells.firstMatch.swipeUp()
                 }
                 mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
                 mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
