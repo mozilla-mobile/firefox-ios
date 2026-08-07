@@ -57,6 +57,11 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
+        completeFxASignIn()
+        waitForTabsButton()
+    }
+
+    private func completeFxASignIn() {
         sleep(5)
         mozWaitForElementToExist(
             app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
@@ -72,7 +77,6 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.FxATypePasswordExistingAccount)
         navigator.performAction(Action.FxATapOnSignInButton)
         mozWaitForElementToNotExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
-        waitForTabsButton()
         allowNotifications()
     }
 
@@ -173,6 +177,101 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(BrowserTab)
         waitForInitialSyncComplete()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307042
+    // Smoketest
+    func testAddTabFromTabTray() {
+        let toolBarScreen = ToolbarScreen(app: app)
+        let tabTrayScreen = TabTrayScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
+        let syncScreen = SyncScreen(app: app)
+        navigator.nowAt(NewTabScreen)
+        toolBarScreen.assertTabsButtonExists()
+
+        // Step 1: Open the tab tray
+        navigator.goto(TabTray)
+        tabTrayScreen.assertTabTrayControlsExist()
+
+        // Step 2: Open a couple of tabs, then close them
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertTabCount(3)
+        tabTrayScreen.closeFirstTab()
+        tabTrayScreen.assertTabCount(2)
+        tabTrayScreen.swipeToCloseFirstTab()
+        tabTrayScreen.assertTabCount(1)
+
+        // Step 3: Visit a page in the opened tab
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
+        waitUntilPageLoad()
+        toolBarScreen.assertTabsButtonExists()
+        // The tabs counter shows the correct number
+        toolBarScreen.assertTabsOpened(expectedCount: 2)
+
+        // Step 4: Tap the tab counter
+        if iPad() {
+            toolBarScreen.tapOnTabsButton()
+        } else {
+            waitForTabsButton()
+            navigator.goto(TabTray)
+        }
+        tabTrayScreen.assertTabCellVisibleAndHasCorrectLabel(
+            index: 1,
+            urlLabel: urlLabel,
+            selectedTab: selectedTab
+        )
+
+        // Step 5: Tap on the page content
+        tabTrayScreen.tapOnCell(named: urlLabel)
+        mozWaitForElementToNotExist(app.otherElements[AccessibilityIdentifiers.TabTray.tabsTray])
+        browserScreen.addressToolbarContainValue(value: urlValueLong)
+        navigator.nowAt(BrowserTab)
+
+        // Step 6: Open pages in Private Browsing and tap the tab counter
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertTabTrayControlsExist()
+
+        // Step 7: Go to the app switcher
+        // Restarting app in the background to simulate the app switcher
+        restartInBackground()
+        tabTrayScreen.assertTabTrayControlsExist()
+
+        // Step 8: Open some pages in a normal browsing session and tap 'Close all tabs'
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertTabCount(1)
+
+        // Step 9: Tap on the tab counter and switch to Synced Tabs
+        navigator.performAction(Action.ToggleExperimentSyncMode)
+        syncScreen.assertSignInPromptExists()
+        syncScreen.tapSyncAndSaveData()
+        navigator.nowAt(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
+        completeFxASignIn()
+        mozWaitForElementToExist(app.staticTexts["Example Domain"])
+
+        // Step 10: Tap on a tab from the Synced Tabs section
+        app.staticTexts["Example Domain"].waitAndTap()
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "example.com")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819

@@ -25,35 +25,6 @@ class TabsTests: BaseTestCase {
     var newTabsScreen: NewTabsScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2307042
-    // Smoketest
-    func testAddTabFromTabTray() {
-        toolBarScreen = ToolbarScreen(app: app)
-        tabTrayScreen = TabTrayScreen(app: app)
-        navigator.nowAt(NewTabScreen)
-        toolBarScreen.assertTabsButtonExists()
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
-        waitUntilPageLoad()
-        toolBarScreen.assertTabsButtonExists()
-        // The tabs counter shows the correct number
-        toolBarScreen.assertTabsOpened(expectedCount: 2)
-
-        // The tab tray shows the correct tabs
-        if iPad() {
-            toolBarScreen.tapOnTabsButton()
-        } else {
-            waitForTabsButton()
-            navigator.goto(TabTray)
-        }
-        tabTrayScreen.assertTabCellVisibleAndHasCorrectLabel(
-            index: 1,
-            urlLabel: urlLabel,
-            selectedTab: selectedTab
-        )
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2354300
     func testAddTabFromContext() {
         navigator.openURL(urlExample)
