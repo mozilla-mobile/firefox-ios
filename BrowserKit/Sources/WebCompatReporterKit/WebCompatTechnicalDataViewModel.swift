@@ -7,7 +7,7 @@ import Foundation
 /// What the screen renders. The Client maps Redux state and collected device data onto this,
 /// keeping Redux out of the package. Labels and values are the raw Glean `broken_site_report`
 /// keys and their JSON rendering. Plain-language copy comes later.
-public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
+public struct WebCompatTechnicalDataViewModel: Equatable, Sendable {
     /// Typed rather than pre-formatted, so the view decides how to render it. `.null` is a
     /// field we don't collect yet.
     public enum PreviewValue: Hashable, Sendable {

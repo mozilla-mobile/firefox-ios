@@ -7,7 +7,7 @@ import XCTest
 @testable import WebCompatReporterKit
 
 @MainActor
-final class WebCompatPreviewSectionContentCellTests: XCTestCase {
+final class WebCompatTechnicalDataSectionCellTests: XCTestCase {
     // The lines stack tight inside one card, no blank line between.
     func testConfigure_withSeveralRows_joinsThemOnePerLine() {
         let subject = createSubject()
@@ -49,27 +49,27 @@ final class WebCompatPreviewSectionContentCellTests: XCTestCase {
         static let longURL = "https://houseandhome.example.com/recipes/2026/07/croque-monsieur-with-bechamel"
     }
 
-    private func createSubject() -> WebCompatPreviewSectionContentCell {
-        return WebCompatPreviewSectionContentCell(
+    private func createSubject() -> WebCompatTechnicalDataSectionCell {
+        return WebCompatTechnicalDataSectionCell(
             frame: CGRect(x: 0, y: 0, width: UX.cellWidth, height: UX.cellHeight)
         )
     }
 
     private func configure(
-        _ cell: WebCompatPreviewSectionContentCell,
-        rows: [WebCompatReportPreviewViewModel.PreviewRow]
+        _ cell: WebCompatTechnicalDataSectionCell,
+        rows: [WebCompatTechnicalDataViewModel.PreviewRow]
     ) {
         cell.configure(rows: rows, accessibilityIdentifier: UX.identifier)
     }
 
     /// The card is the cell's only content subview; the label lives inside it.
-    private func cardView(in cell: WebCompatPreviewSectionContentCell) -> UIView? {
+    private func cardView(in cell: WebCompatTechnicalDataSectionCell) -> UIView? {
         return cell.contentView.subviews.first
     }
 
     /// `systemLayoutSizeFitting(_:)` alone leaves the width unconstrained, so the label
     /// never wraps and every value measures one line.
-    private func fittingHeight(of cell: WebCompatPreviewSectionContentCell) -> CGFloat {
+    private func fittingHeight(of cell: WebCompatTechnicalDataSectionCell) -> CGFloat {
         return cell.contentView.systemLayoutSizeFitting(
             CGSize(width: UX.cellWidth, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
@@ -79,16 +79,16 @@ final class WebCompatPreviewSectionContentCellTests: XCTestCase {
 
     private func row(
         _ label: String,
-        _ value: WebCompatReportPreviewViewModel.PreviewValue
-    ) -> WebCompatReportPreviewViewModel.PreviewRow {
-        return WebCompatReportPreviewViewModel.PreviewRow(id: label, label: label, value: value)
+        _ value: WebCompatTechnicalDataViewModel.PreviewValue
+    ) -> WebCompatTechnicalDataViewModel.PreviewRow {
+        return WebCompatTechnicalDataViewModel.PreviewRow(id: label, label: label, value: value)
     }
 
-    private func label(in cell: WebCompatPreviewSectionContentCell) -> UILabel? {
+    private func label(in cell: WebCompatTechnicalDataSectionCell) -> UILabel? {
         return firstSubview(ofType: UILabel.self, in: cell)
     }
 
-    private func text(in cell: WebCompatPreviewSectionContentCell) -> String? {
+    private func text(in cell: WebCompatTechnicalDataSectionCell) -> String? {
         return label(in: cell)?.text
     }
 }
