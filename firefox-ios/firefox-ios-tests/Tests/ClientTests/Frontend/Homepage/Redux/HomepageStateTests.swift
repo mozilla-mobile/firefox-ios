@@ -39,8 +39,8 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertFalse(initialState.headerState.isPrivate)
         XCTAssertFalse(initialState.trackerBlockerModuleState.shouldShowSection)
-        XCTAssertFalse(initialState.isZeroSearch)
-        XCTAssertFalse(initialState.shouldTriggerImpression)
+        XCTAssertFalse(initialState.telemetryState.isZeroSearch)
+        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
         XCTAssertEqual(initialState.availableContentHeight, 0)
         XCTAssertEqual(initialState.availableWallpaperHeight, 0)
     }
@@ -60,8 +60,8 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.headerState.isPrivate)
-        XCTAssertFalse(newState.isZeroSearch)
-        XCTAssertFalse(initialState.shouldTriggerImpression)
+        XCTAssertFalse(newState.telemetryState.isZeroSearch)
+        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
         XCTAssertEqual(newState.availableWallpaperHeight, initialState.availableWallpaperHeight)
     }
@@ -81,8 +81,8 @@ final class HomepageStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertTrue(newState.isZeroSearch)
-        XCTAssertFalse(initialState.shouldTriggerImpression)
+        XCTAssertTrue(newState.telemetryState.isZeroSearch)
+        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
         XCTAssertEqual(newState.availableWallpaperHeight, initialState.availableWallpaperHeight)
     }
@@ -102,8 +102,8 @@ final class HomepageStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.isZeroSearch)
-        XCTAssertFalse(initialState.shouldTriggerImpression)
+        XCTAssertFalse(newState.telemetryState.isZeroSearch)
+        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
         XCTAssertEqual(newState.availableWallpaperHeight, initialState.availableWallpaperHeight)
     }
@@ -120,10 +120,10 @@ final class HomepageStateTests: XCTestCase {
                 actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
             )
         )
-        XCTAssertFalse(initialState.shouldTriggerImpression)
+        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.isZeroSearch)
-        XCTAssertTrue(newState.shouldTriggerImpression)
+        XCTAssertFalse(newState.telemetryState.isZeroSearch)
+        XCTAssertTrue(newState.telemetryState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
         XCTAssertEqual(newState.availableWallpaperHeight, initialState.availableWallpaperHeight)
     }
@@ -146,8 +146,8 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.availableContentHeight, 500)
         XCTAssertEqual(newState.availableWallpaperHeight, 525)
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.shouldTriggerImpression)
-        XCTAssertEqual(newState.isZeroSearch, initialState.isZeroSearch)
+        XCTAssertFalse(newState.telemetryState.shouldTriggerImpression)
+        XCTAssertEqual(newState.telemetryState.isZeroSearch, initialState.telemetryState.isZeroSearch)
     }
 
     @MainActor

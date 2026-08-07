@@ -300,7 +300,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.newState(state: newState)
 
-        XCTAssertTrue(newState.shouldTriggerImpression)
+        XCTAssertTrue(newState.telemetryState.shouldTriggerImpression)
         XCTAssertTrue(mockThrottler.didCallThrottle)
         let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction

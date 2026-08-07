@@ -22,17 +22,7 @@ struct HomepageState: ScreenState, Equatable {
     let merinoState: MerinoState
     let wallpaperState: WallpaperState
 
-    /// FXIOS-11504 - This is mainly used for telemetry for top sites and merino and presenting CFRs.
-    /// At this time, we are keeping `isZeroSearch` the same as legacy. However, we should revisit this value
-    /// and confirm what the expectation is, as it seems inconsistent. See more details in ticket.
-    ///
-    /// FXIOS-6203 - Comment from legacy homepage:
-    /// `isZeroSearch` is true when the homepage is created from the tab tray, a long press
-    /// on the tab bar to open a new tab or by pressing the home page button on the tab bar.
-    /// The zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
-    /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
-    let isZeroSearch: Bool
-    let shouldTriggerImpression: Bool
+    let telemetryState: HomepageTelemetryState
 
     /// `shouldShowPrivacyNotice` is true when the homepage should display the privacy notice card. This is the case when a
     /// new privacy notice is available after a user has already accepted the ToS/ToU
@@ -70,8 +60,7 @@ struct HomepageState: ScreenState, Equatable {
             worldcupState: homepageState.worldcupState,
             merinoState: homepageState.merinoState,
             wallpaperState: homepageState.wallpaperState,
-            isZeroSearch: homepageState.isZeroSearch,
-            shouldTriggerImpression: homepageState.shouldTriggerImpression,
+            telemetryState: homepageState.telemetryState,
             shouldShowPrivacyNotice: homepageState.shouldShowPrivacyNotice,
             availableContentHeight: homepageState.availableContentHeight,
             availableWallpaperHeight: homepageState.availableWallpaperHeight
@@ -91,8 +80,7 @@ struct HomepageState: ScreenState, Equatable {
             worldcupState: WorldCupSectionState(windowUUID: windowUUID),
             merinoState: MerinoState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
-            isZeroSearch: false,
-            shouldTriggerImpression: false,
+            telemetryState: HomepageTelemetryState(windowUUID: windowUUID),
             shouldShowPrivacyNotice: false,
             availableContentHeight: 0,
             availableWallpaperHeight: 0
@@ -111,8 +99,7 @@ struct HomepageState: ScreenState, Equatable {
         worldcupState: WorldCupSectionState,
         merinoState: MerinoState,
         wallpaperState: WallpaperState,
-        isZeroSearch: Bool,
-        shouldTriggerImpression: Bool,
+        telemetryState: HomepageTelemetryState,
         shouldShowPrivacyNotice: Bool,
         availableContentHeight: CGFloat,
         availableWallpaperHeight: CGFloat
@@ -128,8 +115,7 @@ struct HomepageState: ScreenState, Equatable {
         self.worldcupState = worldcupState
         self.merinoState = merinoState
         self.wallpaperState = wallpaperState
-        self.isZeroSearch = isZeroSearch
-        self.shouldTriggerImpression = shouldTriggerImpression
+        self.telemetryState = telemetryState
         self.shouldShowPrivacyNotice = shouldShowPrivacyNotice
         self.availableContentHeight = availableContentHeight
         self.availableWallpaperHeight = availableWallpaperHeight
@@ -152,11 +138,11 @@ struct HomepageState: ScreenState, Equatable {
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
             return handleInitializeAndViewWillTransitionAction(state: state, action: action)
         case HomepageActionType.embeddedHomepage:
-            guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
+            guard (action as? HomepageAction)?.isZeroSearch != nil else {
                 return defaultState(from: state)
             }
 
-            return handleEmbeddedHomepageAction(state: state, action: action, isZeroSearch: isZeroSearch)
+            return handleEmbeddedHomepageAction(state: state, action: action)
         case HomepageActionType.availableContentHeightDidChange:
             return handleAvailableContentHeightChangeAction(state: state, action: action)
         case HomepageActionType.privacyNoticeCloseButtonTapped:
@@ -184,13 +170,11 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
+            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
     }
 
     @MainActor
-    private static func handleEmbeddedHomepageAction(state: HomepageState,
-                                                     action: Action,
-                                                     isZeroSearch: Bool) -> HomepageState {
+    private static func handleEmbeddedHomepageAction(state: HomepageState, action: Action) -> HomepageState {
         return state
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
@@ -203,8 +187,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(isZeroSearch: isZeroSearch)
-            .copy(shouldTriggerImpression: false)
+            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
     }
 
     @MainActor
@@ -229,7 +212,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
+            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
             .copy(availableContentHeight: availableContentHeight)
             .copy(availableWallpaperHeight: availableWallpaperHeight)
     }
@@ -248,7 +231,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
+            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
             .copy(shouldShowPrivacyNotice: false)
     }
 
@@ -266,7 +249,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: true)
+            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
     }
 
     @MainActor
@@ -283,7 +266,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
+            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
             .copy(shouldShowPrivacyNotice: true)
     }
 
@@ -301,7 +284,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
+            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
@@ -315,6 +298,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState))
             .copy(merinoState: MerinoState.defaultState(from: state.merinoState))
             .copy(wallpaperState: WallpaperState.defaultState(from: state.wallpaperState))
-            .copy(shouldTriggerImpression: false)
+            .copy(telemetryState: HomepageTelemetryState.defaultState(from: state.telemetryState))
     }
 }
