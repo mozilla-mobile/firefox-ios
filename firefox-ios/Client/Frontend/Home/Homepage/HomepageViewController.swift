@@ -450,7 +450,7 @@ final class HomepageViewController: UIViewController,
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
-        if state.shouldTriggerImpression {
+        if state.telemetryState.shouldTriggerImpression {
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
@@ -1101,7 +1101,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
-        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
+        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.telemetryState.isZeroSearch, position: index)
         store.dispatch(
             MerinoAction(
                 telemetryConfig: config,
@@ -1113,7 +1113,7 @@ final class HomepageViewController: UIViewController,
 
     private func dispatchTopSitesAction(at index: Int, config: TopSiteConfiguration, actionType: ActionType) {
         let config = TopSitesTelemetryConfig(
-            isZeroSearch: homepageState.isZeroSearch,
+            isZeroSearch: homepageState.telemetryState.isZeroSearch,
             position: index,
             topSiteConfiguration: config
         )
@@ -1478,7 +1478,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private var canContextHintBePresented: Bool {
-        return presentedViewController == nil && homepageState.isZeroSearch
+        return presentedViewController == nil && homepageState.telemetryState.isZeroSearch
     }
 
     @objc
