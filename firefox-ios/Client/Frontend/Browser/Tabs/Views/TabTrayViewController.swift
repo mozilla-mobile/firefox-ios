@@ -197,9 +197,18 @@ final class TabTrayViewController: UIViewController,
     private func applyToolbarGlassButtonTints(theme: Theme) {
         guard isNovaDesignEnabled else { return }
         let glassTint = theme.colors.layerGlassTintNova
-        setProminentGlass(deleteButton, StandardImageIdentifiers.Large.delete, background: glassTint, glyph: theme.colors.iconPrimary)
-        setProminentGlass(newTabButton, StandardImageIdentifiers.Large.plus, background: glassTint, glyph: theme.colors.iconPrimary)
-        setProminentGlass(doneButton, StandardImageIdentifiers.Large.checkmark, background: theme.colors.actionPrimary, glyph: theme.colors.iconInverted)
+        setProminentGlass(deleteButton,
+                          StandardImageIdentifiers.Large.delete,
+                          background: glassTint,
+                          glyph: theme.colors.iconPrimary)
+        setProminentGlass(newTabButton,
+                          StandardImageIdentifiers.Large.plus,
+                          background: glassTint,
+                          glyph: theme.colors.iconPrimary)
+        setProminentGlass(doneButton,
+                          StandardImageIdentifiers.Large.checkmark,
+                          background: theme.colors.actionPrimary,
+                          glyph: theme.colors.iconInverted)
     }
 
     @available(iOS 26.0, *)
