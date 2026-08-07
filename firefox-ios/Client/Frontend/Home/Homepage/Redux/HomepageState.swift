@@ -173,6 +173,7 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
         return state
+            .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
@@ -184,7 +185,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
     }
 
     @MainActor
@@ -192,6 +192,7 @@ struct HomepageState: ScreenState, Equatable {
                                                      action: Action,
                                                      isZeroSearch: Bool) -> HomepageState {
         return state
+            .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
@@ -204,7 +205,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(isZeroSearch: isZeroSearch)
-            .copy(shouldTriggerImpression: false)
     }
 
     @MainActor
@@ -218,6 +218,7 @@ struct HomepageState: ScreenState, Equatable {
         let availableWallpaperHeight = homepageAction.availableWallpaperHeight ?? state.availableWallpaperHeight
 
         return state
+            .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
@@ -229,7 +230,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
             .copy(availableContentHeight: availableContentHeight)
             .copy(availableWallpaperHeight: availableWallpaperHeight)
     }
@@ -237,6 +237,7 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handlePrivacyNoticeCloseButtonTappedAction(state: HomepageState, action: Action) -> HomepageState {
         return state
+            .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
@@ -248,13 +249,13 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
             .copy(shouldShowPrivacyNotice: false)
     }
 
     @MainActor
     private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
         return state
+            .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
@@ -272,6 +273,7 @@ struct HomepageState: ScreenState, Equatable {
     @MainActor
     private static func handlePrivacyNoticeInitialization(action: Action, state: Self) -> HomepageState {
         return state
+            .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
@@ -283,13 +285,13 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
             .copy(shouldShowPrivacyNotice: true)
     }
 
     @MainActor
     private static func passthroughState(from state: HomepageState, action: Action) -> HomepageState {
         return state
+            .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
@@ -301,20 +303,26 @@ struct HomepageState: ScreenState, Equatable {
             .copy(worldcupState: WorldCupSectionState.reducer.legacyReducer(state.worldcupState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(shouldTriggerImpression: false)
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
-        return state
-            .copy(messageState: MessageCardState.defaultState(from: state.messageState))
-            .copy(topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState))
-            .copy(searchState: SearchBarState.defaultState(from: state.searchState))
-            .copy(jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.defaultState(from: state.trackerBlockerModuleState))
-            .copy(bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState))
-            .copy(worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState))
-            .copy(merinoState: MerinoState.defaultState(from: state.merinoState))
-            .copy(wallpaperState: WallpaperState.defaultState(from: state.wallpaperState))
-            .copy(shouldTriggerImpression: false)
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.defaultState(from: state.headerState),
+            messageState: MessageCardState.defaultState(from: state.messageState),
+            topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState),
+            searchState: SearchBarState.defaultState(from: state.searchState),
+            jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState),
+            trackerBlockerModuleState: TrackerBlockerModuleState.defaultState(from: state.trackerBlockerModuleState),
+            bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState),
+            worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState),
+            merinoState: MerinoState.defaultState(from: state.merinoState),
+            wallpaperState: WallpaperState.defaultState(from: state.wallpaperState),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: false,
+            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
+        )
     }
 }
