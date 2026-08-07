@@ -768,6 +768,11 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
         updateTopTabs(showTopTabs: showTopTabs)
         updateToolbarDisplay(shouldUpdateBlurViews: shouldUpdateBlurViews)
+
+        // update keyboard's related view constraints if is visible 
+        if keyboardState != nil {
+            updateConstraintsForKeyboard()
+        }
     }
 
     private func updateSwipingTabs() {
@@ -1822,8 +1827,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func getKeyboardSpacerHeight(keyboardHeight: CGFloat) -> CGFloat {
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
+        let toolBarHeight = navigationToolbarContainer.isHidden ? 0 : UIConstants.BottomToolbarHeight
         let spacerHeight = keyboardHeight - toolBarHeight
         return spacerHeight
     }
