@@ -458,38 +458,73 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2576803
+    // [Config] orientation:portrait, orientation:landscape
     func testFirefoxSuggest() {
-        // In history: mozilla.org
         app.launch()
-        navigator.openURL("https://www.mozilla.org/en-US/")
+
+        // Create an open Tab
+        navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
         waitUntilPageLoad()
 
-        // Bookmark The Book of Mozilla (on localhost)
-        navigator.createNewTab()
-        navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
+        // Create some history
+        navigator.openNewURL(urlString: "https://www.example.com")
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        // navigator.goto(SaveBrowserTabMenu)
+        navigator.performAction(Action.CloseTab)
+
+        // Create a bookmark
+        navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
+        waitUntilPageLoad()
         navigator.performAction(Action.Bookmark)
+        navigator.performAction(Action.CloseTab)
 
-        // Close all tabs so that the search result does not include
-        // current tabs.
-        navigator.performAction(Action.AcceptRemovingAllTabs)
+        // Firefox Suggest should show up for sponsored suggestion, open tab, history
+        // and bookmark.
+        let firefoxSuggestTerms = [
+            "wiki": "Wikipedia - Wiki", // Sponsored suggestion
+            "internet": "Internet for people, not profit — Mozilla", // Open tab
+            "exam": "www.example.com/", // History
+            "book of": "The Book of Mozilla" // Bookmark
+        ]
+        for (term, expectedTitle) in firefoxSuggestTerms {
+            browserScreen.tapOnAddressBar()
+            browserScreen.tapClearButtonIfExists()
+            browserScreen.typeOnSearchBar(text: term)
+            mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts[expectedTitle])
+            let searchEngines = [
+                "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+            ]
+            for searchEngine in searchEngines {
+                mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+            }
+            // Search engine suggestions
+            mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
+            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts[term])
+            mozWaitForElementToExist(
+                app.tables["SiteTable"].buttons[StandardImageIdentifiers.Large.appendDownLeft].firstMatch
+            )
 
-        // Type partial match ("mo") of the history and the bookmark
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        navigator.goto(HomePanelsScreen)
-        typeOnSearchBar(text: "mo")
+            // Firefox Suggest is displayed
+            mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
+            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts[expectedTitle])
+        }
 
-        // Google Search appears
+        // Non Firefox Suggest result: A random term
+        let term = "heeeeeeellllllllllloooooooo"
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: term)
+        mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+        let searchEngines = [
+            "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+        ]
+        for searchEngine in searchEngines {
+            mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+        }
+        // Search engine suggestions
         mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
-
-        // Firefox Suggest appears
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["The Book of Mozilla"]) // Bookmark
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["www.mozilla.org/"]) // History
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts[term])
+        mozWaitForElementToNotExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
