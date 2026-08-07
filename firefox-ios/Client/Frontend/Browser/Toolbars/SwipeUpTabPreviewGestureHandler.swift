@@ -11,6 +11,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     private struct UX {
         static let closeTabAnimationsDuration: CGFloat = 0.3
         static let dismissPreviewDelay: CGFloat = 0.4
+        static let swipeUpVelocityThreshold: CGFloat = -1100
     }
 
     private let tabPreview: SwipeUpTabWebViewPreview
@@ -196,7 +197,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
                 topPadding: topBlurView.bounds.height,
                 bottomPadding: bottomBlurView.bounds.height
             )
-            if gesture.velocity(in: nil).y <= -1100 {
+            if gesture.velocity(in: nil).y <= UX.swipeUpVelocityThreshold {
                 handleGestureEnded(gesture: gesture)
                 return
             }
@@ -217,7 +218,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     private func handleGestureEnded(gesture: UIPanGestureRecognizer) {
         let fingerLocation = gesture.location(in: tabPreview)
         var outcome = tabPreview.releaseOutcome(fingerLocation: fingerLocation)
-        if gesture.velocity(in: nil).y <= -1100 {
+        if gesture.velocity(in: nil).y <= -UX.swipeUpVelocityThreshold {
             outcome = SwipeUpTabWebViewPreview.ReleaseOutcome.openTabTray
         }
         switch outcome {
