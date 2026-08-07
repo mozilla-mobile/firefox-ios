@@ -218,7 +218,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     private func handleGestureEnded(gesture: UIPanGestureRecognizer) {
         let fingerLocation = gesture.location(in: tabPreview)
         var outcome = tabPreview.releaseOutcome(fingerLocation: fingerLocation)
-        if gesture.velocity(in: nil).y <= -UX.swipeUpVelocityThreshold {
+        if gesture.velocity(in: nil).y <= UX.swipeUpVelocityThreshold {
             outcome = SwipeUpTabWebViewPreview.ReleaseOutcome.openTabTray
         }
         switch outcome {
