@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import UIKit
-import WebCompatReporterKit
 
 @MainActor
 protocol WebCompatReportCoordinatorNavigationDelegate: AnyObject {
@@ -15,15 +14,18 @@ protocol WebCompatReportCoordinatorNavigationDelegate: AnyObject {
 
 final class WebCompatReportCoordinator: BaseCoordinator,
                                         WebCompatReportCoordinatorDelegate,
-                                        WebCompatReportPreviewDelegate {
+                                        ParentCoordinatorDelegate {
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private weak var navigationDelegate: WebCompatReportCoordinatorNavigationDelegate?
 
     private weak var reportViewController: WebCompatReportViewController?
-    /// The main router presents from the browser, which already shows the sheet.
-    private var previewRouter: Router?
+
+    private var previewCoordinator: WebCompatReportPreviewCoordinator? {
+        return childCoordinators.first { $0 is WebCompatReportPreviewCoordinator }
+            as? WebCompatReportPreviewCoordinator
+    }
 
     init(
         router: Router,
@@ -67,42 +69,28 @@ final class WebCompatReportCoordinator: BaseCoordinator,
     }
 
     func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload) {
-        guard let reportViewController, previewRouter == nil else { return }
-        let previewViewController = WebCompatReportPreviewViewController(
-            viewModel: payload.makePreviewViewModel(),
+        guard let reportViewController, previewCoordinator == nil else { return }
+        // The main router presents from the browser, which already shows the sheet, so the preview
+        // goes up from the sheet itself.
+        let previewCoordinator = WebCompatReportPreviewCoordinator(
+            router: DefaultRouter(navigationController: reportViewController),
             windowUUID: windowUUID,
-            themeManager: themeManager
+            themeManager: themeManager,
+            parentCoordinator: self
         )
-        previewViewController.delegate = self
-        let previewNavigationController = UINavigationController(rootViewController: previewViewController)
-        if let sheet = previewNavigationController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
-        }
-        let previewRouter = DefaultRouter(navigationController: reportViewController)
-        self.previewRouter = previewRouter
-        previewRouter.present(previewNavigationController, animated: true) { [weak self] in
-            // Clears the router when we dismiss through `UIAdaptivePresentationControllerDelegate`
-            self?.previewRouter = nil
-        }
+        add(child: previewCoordinator)
+        previewCoordinator.start(payload: payload)
     }
 
-    // MARK: - WebCompatReportPreviewDelegate
+    // MARK: - ParentCoordinatorDelegate
 
-    func webCompatReportPreviewDidRequestDismiss() {
-        // Only the form's own close abandons the report; this keeps the draft.
-        previewRouter?.dismiss(animated: true, completion: nil)
-        previewRouter = nil
-    }
-
-    func webCompatReportPreviewDidTapScreenshot() {
-        // Unreachable while the thumbnail is off; FXIOS-16186 wires up the screenshot viewer.
+    func didFinish(from childCoordinator: Coordinator) {
+        remove(child: childCoordinator)
     }
 
     /// Dismisses the preview first, so the sheet isn't pulled out from under it.
     private func dismissReport(completion: (() -> Void)? = nil) {
-        previewRouter?.dismiss(animated: false, completion: nil)
-        previewRouter = nil
+        previewCoordinator?.dismissPreview(animated: false)
         router.dismiss(animated: true) { [weak self] in
             completion?()
             guard let self else { return }
