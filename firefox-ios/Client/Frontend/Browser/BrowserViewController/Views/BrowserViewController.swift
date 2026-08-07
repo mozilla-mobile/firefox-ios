@@ -3048,6 +3048,7 @@ class BrowserViewController: UIViewController,
             updateDisplayedPopoverProperties = setupPopover
         }
 
+        alert.applyNovaActionTint(themeManager.getCurrentTheme(for: windowUUID))
         present(alert, animated: true)
     }
 

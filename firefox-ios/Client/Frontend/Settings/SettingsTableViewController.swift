@@ -923,6 +923,9 @@ class PickerSetting<Value: Equatable>: Setting {
         }
         alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel))
 
+        if let theme {
+            alertController.applyNovaActionTint(theme)
+        }
         navigationController?.present(alertController, animated: true)
     }
 }
