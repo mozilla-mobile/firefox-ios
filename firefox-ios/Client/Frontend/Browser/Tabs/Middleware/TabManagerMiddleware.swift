@@ -858,6 +858,14 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
     private func getAccountData() -> AccountData {
         let rustAccount = RustFirefoxAccounts.shared
+
+        switch rustAccount.accountTransition {
+        case .signingOut:
+            return AccountData(title: .MainMenu.Account.SigningOutTitle, subtitle: nil)
+        case .idle:
+            break
+        }
+
         let needsReAuth = rustAccount.accountNeedsReauth()
 
         if let userProfile = rustAccount.userProfile {
