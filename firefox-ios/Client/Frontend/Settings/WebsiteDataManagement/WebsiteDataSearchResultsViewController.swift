@@ -73,14 +73,14 @@ final class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         filterContentForSearchText(currentSearchText)
     }
 
-    /// Keeps the selected rows and the clear button in sync with the view model without reloading the table view.
+    /// Keeps the selected rows and the clear button in sync with the view model without reloading the tableView.
     func selectionDidChange() {
         guard isViewLoaded else { return }
         syncSelectedRows()
         updateClearButtonTitle()
     }
 
-    /// Aligns the table view's selected rows with the view model, leaving rows that already match untouched.
+    /// Aligns the tableView's selected rows with the view model, leaving rows that already match untouched.
     private func syncSelectedRows() {
         let selectedIndexPaths = Set(tableView.indexPathsForSelectedRows ?? [])
 

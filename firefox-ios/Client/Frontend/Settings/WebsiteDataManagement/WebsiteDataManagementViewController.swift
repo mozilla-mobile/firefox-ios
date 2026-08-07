@@ -312,7 +312,7 @@ final class WebsiteDataManagementViewController: UIViewController,
 
         let expandedRowCount = viewModel.siteRecords.count
         guard expandedRowCount > previousRowCount else {
-            // Safeguard: not expected to happen, but if the records shrank since the table view last queried the
+            // Safeguard: not expected to happen, but if the records shrank since the tableView last queried the
             // data source, the range below would trap. Reloading is safe in that case.
             reloadTableView()
             return
@@ -333,14 +333,14 @@ final class WebsiteDataManagementViewController: UIViewController,
         syncSelectedRows()
     }
 
-    /// Aligns the table view's selected rows with the view model.
+    /// Aligns the tableView's selected rows with the view model.
     private func syncSelectedRows() {
         guard let tableView else { return }
         let section = Section.sites.rawValue
         // Snapshot the selection once, so each row below is a lookup instead of a fresh query on the table view.
         let selectedIndexPaths = Set(tableView.indexPathsForSelectedRows ?? [])
 
-        // Only the rows the table view currently knows about, which is fewer than `siteRecords` while truncated.
+        // Only the rows the tableView currently knows about, which is fewer than `siteRecords` while truncated.
         for row in 0..<tableView.numberOfRows(inSection: section) {
             guard let record = viewModel.siteRecords[safe: row] else { continue }
             let indexPath = IndexPath(row: row, section: section)
