@@ -12,6 +12,7 @@ struct HomepageState: ScreenState, Equatable {
 
     // Homepage sections state in the order they appear on the collection view
     let headerState: HeaderState
+    let privacyNoticeState: PrivacyNoticeState
     let messageState: MessageCardState
     let topSitesState: TopSitesSectionState
     let searchState: SearchBarState
@@ -22,10 +23,6 @@ struct HomepageState: ScreenState, Equatable {
     let wallpaperState: WallpaperState
 
     let telemetryState: HomepageTelemetryState
-
-    /// `shouldShowPrivacyNotice` is true when the homepage should display the privacy notice card. This is the case when a
-    /// new privacy notice is available after a user has already accepted the ToS/ToU
-    let shouldShowPrivacyNotice: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = appState.componentState(
@@ -40,6 +37,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: homepageState.windowUUID,
             headerState: homepageState.headerState,
+            privacyNoticeState: homepageState.privacyNoticeState,
             messageState: homepageState.messageState,
             topSitesState: homepageState.topSitesState,
             searchState: homepageState.searchState,
@@ -57,6 +55,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             headerState: HeaderState(windowUUID: windowUUID),
+            privacyNoticeState: PrivacyNoticeState(windowUUID: windowUUID),
             messageState: MessageCardState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
             searchState: SearchBarState(windowUUID: windowUUID),
@@ -65,14 +64,14 @@ struct HomepageState: ScreenState, Equatable {
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
             merinoState: MerinoState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
-            telemetryState: HomepageTelemetryState(windowUUID: windowUUID),
-            shouldShowPrivacyNotice: false,
+            telemetryState: HomepageTelemetryState(windowUUID: windowUUID)
         )
     }
 
     private init(
         windowUUID: WindowUUID,
         headerState: HeaderState,
+        privacyNoticeState: PrivacyNoticeState,
         messageState: MessageCardState,
         topSitesState: TopSitesSectionState,
         searchState: SearchBarState,
@@ -81,11 +80,11 @@ struct HomepageState: ScreenState, Equatable {
         bookmarkState: BookmarksSectionState,
         merinoState: MerinoState,
         wallpaperState: WallpaperState,
-        telemetryState: HomepageTelemetryState,
-        shouldShowPrivacyNotice: Bool
+        telemetryState: HomepageTelemetryState
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
+        self.privacyNoticeState = privacyNoticeState
         self.messageState = messageState
         self.topSitesState = topSitesState
         self.searchState = searchState
@@ -95,7 +94,6 @@ struct HomepageState: ScreenState, Equatable {
         self.merinoState = merinoState
         self.wallpaperState = wallpaperState
         self.telemetryState = telemetryState
-        self.shouldShowPrivacyNotice = shouldShowPrivacyNotice
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -116,12 +114,8 @@ struct HomepageState: ScreenState, Equatable {
             return handleInitializeAndViewWillTransitionAction(state: state, action: action)
         case HomepageActionType.embeddedHomepage:
             return handleEmbeddedHomepageAction(state: state, action: action)
-        case HomepageActionType.privacyNoticeCloseButtonTapped:
-            return handlePrivacyNoticeCloseButtonTappedAction(state: state, action: action)
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             return handleDidTabChangeToHomepageAction(state: state, action: action)
-        case HomepageMiddlewareActionType.configuredPrivacyNotice:
-            return handlePrivacyNoticeInitialization(action: action, state: state)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -132,6 +126,7 @@ struct HomepageState: ScreenState, Equatable {
         return state
             .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
@@ -149,6 +144,7 @@ struct HomepageState: ScreenState, Equatable {
         return state
             .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
@@ -159,24 +155,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
-    }
-
-    @MainActor
-    private static func handlePrivacyNoticeCloseButtonTappedAction(state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .resetTransientState()
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
-            .copy(shouldShowPrivacyNotice: false)
     }
 
     @MainActor
@@ -184,6 +162,7 @@ struct HomepageState: ScreenState, Equatable {
         return state
             .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
@@ -194,24 +173,6 @@ struct HomepageState: ScreenState, Equatable {
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
             .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
-    }
-
-    @MainActor
-    private static func handlePrivacyNoticeInitialization(action: Action, state: Self) -> HomepageState {
-        return state
-            .resetTransientState()
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
-            .copy(shouldShowPrivacyNotice: true)
     }
 
     @MainActor
@@ -219,6 +180,7 @@ struct HomepageState: ScreenState, Equatable {
         return state
             .resetTransientState()
             .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
+            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
             .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
             .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
             .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
@@ -235,6 +197,7 @@ struct HomepageState: ScreenState, Equatable {
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: HeaderState.defaultState(from: state.headerState),
+            privacyNoticeState: PrivacyNoticeState.defaultState(from: state.privacyNoticeState),
             messageState: MessageCardState.defaultState(from: state.messageState),
             topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState),
             searchState: SearchBarState.defaultState(from: state.searchState),
@@ -243,8 +206,7 @@ struct HomepageState: ScreenState, Equatable {
             bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState),
             merinoState: MerinoState.defaultState(from: state.merinoState),
             wallpaperState: WallpaperState.defaultState(from: state.wallpaperState),
-            telemetryState: HomepageTelemetryState.defaultState(from: state.telemetryState),
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice
+            telemetryState: HomepageTelemetryState.defaultState(from: state.telemetryState)
         )
     }
 }
