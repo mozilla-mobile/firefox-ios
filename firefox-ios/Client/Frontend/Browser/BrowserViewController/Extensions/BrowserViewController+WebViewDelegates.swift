@@ -970,11 +970,17 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         tab.getSessionCookies { [weak tab, weak self] cookies in
+            let credential: URLCredential? = {
+                // Avoid passing a stale credential from a previously-authenticated host
+                guard let stored = tab?.httpAuthCredential, stored.host == request.url?.host else { return nil }
+                return stored.credential
+            }()
             let tempPDF = DefaultTemporaryDocument(
                 filename: filename,
                 request: request,
                 mimeType: MIMEType.PDF,
-                cookies: cookies
+                cookies: cookies,
+                credential: credential
             )
             tempPDF.onDownloadProgressUpdate = { progress in
                 self?.handleDownloadProgressUpdate(progress: progress, tab: tab)
@@ -1210,6 +1216,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     loginsHelper: loginsHelper,
                 )
 
+                tab.httpAuthCredential = (challenge.protectionSpace.host, loginEntry.credentials)
                 return (.useCredential, loginEntry.credentials)
             } catch {
                 // For example, an error is thrown when the user taps "Cancel" on the authentication prompt
