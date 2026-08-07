@@ -25,9 +25,11 @@ struct TopSitesProvider: TimelineProvider {
 
     func getSnapshot(in context: Context, completion: @escaping @Sendable (TopSitesEntry) -> Void) {
         let topSites = getStoredTopSites()
-        let siteImageFetcher = DefaultSiteImageHandler.factory()
 
         Task {
+            let siteImageFetcher = await MainActor.run {
+                DefaultSiteImageHandler.factory(themeManager: WidgetKitThemeManager())
+            }
             let tabFaviconDictionary = await withTaskGroup(of: (String, UIImage).self,
                                                            returning: [String: Image].self) { group in
                 for site in topSites {
