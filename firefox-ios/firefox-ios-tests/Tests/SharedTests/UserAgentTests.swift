@@ -6,6 +6,13 @@ import XCTest
 @testable import Shared
 
 final class UserAgentTests: XCTestCase {
+    func testWaybackUserAgent_returnsExpectedUserAgent() {
+        XCTAssertEqual(
+            UserAgent.waybackUserAgent,
+            "firefox-ios-neterr/\(AppInfo.appVersion) (+https://mzl.la/3RNfZFB)"
+        )
+    }
+
     func testGetUserAgentDesktop_withListedDomain_returnProperUserAgent() {
         let domains = CustomUserAgentConstant.customDesktopUAForDomain
         domains.forEach { domain, agent in
