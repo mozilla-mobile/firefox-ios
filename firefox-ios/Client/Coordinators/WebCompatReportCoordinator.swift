@@ -81,7 +81,10 @@ final class WebCompatReportCoordinator: BaseCoordinator,
         }
         let previewRouter = DefaultRouter(navigationController: reportViewController)
         self.previewRouter = previewRouter
-        previewRouter.present(previewNavigationController, animated: true)
+        previewRouter.present(previewNavigationController, animated: true) { [weak self] in
+            // Clears the router when we dismiss through `UIAdaptivePresentationControllerDelegate`
+            self?.previewRouter = nil
+        }
     }
 
     // MARK: - WebCompatReportPreviewDelegate
