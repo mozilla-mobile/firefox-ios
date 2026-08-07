@@ -49,7 +49,6 @@ enum FeatureFlagID: String, CaseIterable {
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
-    case snapkitRemovalRefactor
     case startAtHome
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
@@ -124,7 +123,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .relayIntegration,
                 .reportBrokenSite,
                 .sentFromFirefox,
-                .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
