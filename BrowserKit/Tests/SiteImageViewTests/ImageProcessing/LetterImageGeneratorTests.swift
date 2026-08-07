@@ -3,9 +3,21 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+@testable import Common
 @testable import SiteImageView
 
+@MainActor
 final class LetterImageGeneratorTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
+    }
+
+    override func tearDown() async throws {
+        AppContainer.shared.reset()
+        try await super.tearDown()
+    }
+
     func testEmptyDomain_throws() async {
         let subject = DefaultLetterImageGenerator()
         let siteString = ""
@@ -51,7 +63,7 @@ final class LetterImageGeneratorTests: XCTestCase {
     func testGenerateImageFromLetter_returnsNonEmptyImage() async {
         let subject = DefaultLetterImageGenerator()
 
-        let image = await subject.generateImage(fromLetter: "H", color: .red)
+        let image = subject.generateImage(fromLetter: "H", color: .red)
         XCTAssertNotEqual(image, UIImage())
     }
 
@@ -61,7 +73,7 @@ final class LetterImageGeneratorTests: XCTestCase {
         let backgroundColor = UIColor.red
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
-        let image = await subject.generateImage(fromLetter: letter, color: backgroundColor)
+        let image = subject.generateImage(fromLetter: letter, color: backgroundColor)
         XCTAssertEqual(try? image.cgImage?.getPixelColor(pixelSamplePoint), backgroundColor)
     }
 
@@ -95,7 +107,7 @@ final class LetterImageGeneratorTests: XCTestCase {
         let subject = DefaultLetterImageGenerator()
         let expectedLastPaletteColor = UIColor(red: 1.0, green: 0.655, blue: 0.702, alpha: 1.0)
 
-        let color = subject.generateBackgroundColor(forSite: ",")
+        let color = subject.generateBackgroundColor(forSite: ",", colorSet: StandardFaviconColorSet())
 
         testColor(capturedColor: color, expectedColor: expectedLastPaletteColor)
     }
@@ -104,6 +116,34 @@ final class LetterImageGeneratorTests: XCTestCase {
         let subject = DefaultLetterImageGenerator()
         let siteString = "?$%^"
         let expectedBackgroundColor = UIColor(red: 1.0, green: 0.655, blue: 0.573, alpha: 1.0)
+        let pixelSamplePoint = CGPoint(x: 5, y: 5)
+
+        let image = try await subject.generateLetterImage(siteString: siteString)
+        let capturedColor = try XCTUnwrap(try? image.cgImage?.getPixelColor(pixelSamplePoint))
+
+        testColor(capturedColor: capturedColor, expectedColor: expectedBackgroundColor)
+    }
+
+    func testGenerateBackgroundColor_withNovaPalette_usesNovaColor() {
+        let subject = DefaultLetterImageGenerator()
+        let novaColorSet = NovaFaviconColorSet()
+        let siteString = "mozilla.com"
+        let index = subject.colorIndex(forSite: siteString, colorSet: novaColorSet)
+
+        let color = subject.generateBackgroundColor(forSite: siteString, colorSet: novaColorSet)
+
+        XCTAssertEqual(color, novaColorSet.backgroundColors[index])
+        XCTAssertNotEqual(color, StandardFaviconColorSet().backgroundColors[index])
+    }
+
+    func testGenerateLetterImage_withNovaPalette_returnsImageWithNovaBackgroundColor() async throws {
+        let subject = DefaultLetterImageGenerator(
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: "", isNovaDesignOnClosure: { true })
+        )
+        let novaColorSet = NovaFaviconColorSet()
+        let siteString = "mozilla.com"
+        let index = subject.colorIndex(forSite: siteString, colorSet: novaColorSet)
+        let expectedBackgroundColor = novaColorSet.backgroundColors[index]
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
         let image = try await subject.generateLetterImage(siteString: siteString)
