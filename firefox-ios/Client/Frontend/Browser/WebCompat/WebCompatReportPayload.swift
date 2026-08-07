@@ -125,6 +125,34 @@ struct WebCompatReportPayload: Equatable {
         ]
     }
 
+    func makePreviewViewModel() -> WebCompatReportPreviewViewModel {
+        return WebCompatReportPreviewViewModel(
+            title: .WebCompatReporter.Preview.Title,
+            closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
+            closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
+            // Unread while the thumbnail is off; they come back with the screenshot in FXIOS-16450.
+            screenshotAccessibilityLabel: "",
+            screenshotA11yIdentifier: "",
+            sections: previewGroups.map { group in
+                let groupID = group.id.rawValue
+                return WebCompatReportPreviewViewModel.PreviewSection(
+                    id: groupID,
+                    title: groupID,
+                    a11yIdentifier: "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionHeader).\(groupID)",
+                    contentA11yIdentifier:
+                        "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionContent).\(groupID)",
+                    rows: group.fields.map { field in
+                        WebCompatReportPreviewViewModel.PreviewRow(
+                            id: "\(groupID).\(field.key.rawValue)",
+                            label: field.key.rawValue,
+                            value: field.value
+                        )
+                    }
+                )
+            }
+        )
+    }
+
     private func previewValue(_ text: String?) -> WebCompatReportPreviewViewModel.PreviewValue {
         guard let text, !text.isEmpty else { return .null }
         return .string(text)

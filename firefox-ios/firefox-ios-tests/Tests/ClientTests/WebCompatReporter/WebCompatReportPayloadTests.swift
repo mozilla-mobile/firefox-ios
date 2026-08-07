@@ -88,6 +88,57 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertEqual(renderedFields(of: payload)["antiTracking.blockedOrigins"], "[]")
     }
 
+    // MARK: - makePreviewViewModel
+
+    func testMakePreviewViewModel_showsTheCollectedPayloadNotASecondCopyOfIt() throws {
+        var payload = WebCompatReportPayload()
+        payload.url = "https://example.com"
+        payload.breakageCategory = WebCompatSubOption.pageNotLoading.rawValue
+        payload.description = "video never starts"
+        payload.isPrivateBrowsing = true
+        payload.memory = 8192
+        payload.defaultLocales = ["en-GB", "fr"]
+
+        let viewModel = payload.makePreviewViewModel()
+
+        // Groups and labels come from the payload, so a new metric shows up without touching this file.
+        XCTAssertEqual(viewModel.sections.map(\.id), payload.previewGroups.map(\.id.rawValue))
+        let rendered = viewModel.sections.flatMap { section in
+            section.rows.map { "\(section.id).\($0.label) = \($0.value.displayText)" }
+        }
+        XCTAssertTrue(rendered.contains("basic.url = \"https://example.com\""))
+        XCTAssertTrue(rendered.contains("basic.reason = \"\(WebCompatSubOption.pageNotLoading.rawValue)\""))
+        XCTAssertTrue(rendered.contains("antiTracking.isPrivateBrowsing = true"))
+        XCTAssertTrue(rendered.contains("system.memory = 8192"))
+        XCTAssertTrue(rendered.contains("app.defaultLocales = [\"en-GB\", \"fr\"]"))
+    }
+
+    func testMakePreviewViewModel_uncollectedMetricsReadAsNull() throws {
+        // What the form knows on its own; everything the collector fills in is still missing.
+        let payload = WebCompatReportPayload.make(
+            from: makeState(url: "https://example.com", selectedCategory: .other)
+        )
+
+        let viewModel = payload.makePreviewViewModel()
+
+        let frameworks = try XCTUnwrap(viewModel.sections.first { $0.id == "frameworks" })
+        XCTAssertEqual(frameworks.rows.map { $0.value.displayText }, ["null", "null", "null"])
+        // An empty details field is absent from the report, so it reads `null` rather than `""`.
+        let description = try XCTUnwrap(
+            viewModel.sections.first { $0.id == "basic" }?.rows.first { $0.label == "description" }
+        )
+        XCTAssertEqual(description.value, .null)
+    }
+
+    func testMakePreviewViewModel_givesEveryGroupItsOwnAccessibilityIdentifiers() {
+        let viewModel = WebCompatReportPayload().makePreviewViewModel()
+
+        // Header and card are addressed separately in UI tests, so they can't share an identifier.
+        let identifiers = viewModel.sections.flatMap { [$0.a11yIdentifier, $0.contentA11yIdentifier] }
+        XCTAssertEqual(Set(identifiers).count, identifiers.count)
+        XCTAssertTrue(identifiers.allSatisfy { $0.hasPrefix("WebCompatReporter.Preview.") })
+    }
+
     // MARK: - Helpers
 
     private func renderedFields(of payload: WebCompatReportPayload) -> [String: String] {

@@ -310,34 +310,6 @@ final class WebCompatReportViewController: UINavigationController,
         }
     }
 
-    static func makePreviewViewModel(payload: WebCompatReportPayload) -> WebCompatReportPreviewViewModel {
-        return WebCompatReportPreviewViewModel(
-            title: .WebCompatReporter.Preview.Title,
-            closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
-            closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
-            // Unread while the thumbnail is off; they come back with the screenshot in FXIOS-16450.
-            screenshotAccessibilityLabel: "",
-            screenshotA11yIdentifier: "",
-            sections: payload.previewGroups.map { group in
-                let groupID = group.id.rawValue
-                return WebCompatReportPreviewViewModel.PreviewSection(
-                    id: groupID,
-                    title: groupID,
-                    a11yIdentifier: "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionHeader).\(groupID)",
-                    contentA11yIdentifier:
-                        "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionContent).\(groupID)",
-                    rows: group.fields.map { field in
-                        WebCompatReportPreviewViewModel.PreviewRow(
-                            id: "\(groupID).\(field.key.rawValue)",
-                            label: field.key.rawValue,
-                            value: field.value
-                        )
-                    }
-                )
-            }
-        )
-    }
-
     /// Kept here so the cancel action is dispatched from the one place that talks to the store.
     func finishReport() {
         store.dispatch(WebCompatReporterViewAction(

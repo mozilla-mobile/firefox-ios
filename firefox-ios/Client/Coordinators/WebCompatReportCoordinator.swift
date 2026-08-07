@@ -69,7 +69,7 @@ final class WebCompatReportCoordinator: BaseCoordinator,
     func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload) {
         guard let reportViewController, previewRouter == nil else { return }
         let previewViewController = WebCompatReportPreviewViewController(
-            viewModel: WebCompatReportViewController.makePreviewViewModel(payload: payload),
+            viewModel: payload.makePreviewViewModel(),
             windowUUID: windowUUID,
             themeManager: themeManager
         )
