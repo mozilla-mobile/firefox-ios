@@ -311,6 +311,28 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.option, "default_browser_settings")
     }
 
+    func test_tapNavigateToDestination_reportBrokenSiteAction_sendTelemetryData() throws {
+        let action = getNavigationDestinationAction(for: .reportBrokenSite)
+        let subject = createSubject()
+
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
+
+        let menuExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.compactMap {
+                $0 as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
+            }.first
+        )
+        let openedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.compactMap {
+                $0 as? GleanMetrics.BrokenSiteReportInteractions.OpenedExtra
+            }.first
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
+        XCTAssertEqual(menuExtras.option, "report_broken_site")
+        XCTAssertEqual(openedExtras.source, WebCompatReporterTelemetry.Source.hamburgerMenu.rawValue)
+    }
+
     func test_tapToggleUserAgentAction_sendTelemetryData() throws {
         let action = MainMenuAction(
             windowUUID: .XCTestDefaultUUID,
@@ -659,7 +681,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func createSubject() -> MainMenuMiddleware {
-        return MainMenuMiddleware(telemetry: MainMenuTelemetry(gleanWrapper: mockGleanWrapper))
+        return MainMenuMiddleware(
+            telemetry: MainMenuTelemetry(gleanWrapper: mockGleanWrapper),
+            webCompatTelemetry: WebCompatReporterTelemetry(gleanWrapper: mockGleanWrapper)
+        )
     }
 
     private func getActionInfo(for actionType: MainMenuMiddlewareActionType)
