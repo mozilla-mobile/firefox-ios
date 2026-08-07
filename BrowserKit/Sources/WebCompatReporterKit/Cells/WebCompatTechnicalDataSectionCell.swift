@@ -8,16 +8,10 @@ import UIKit
 /// One expanded section's body: every `key: value` line in a single rounded card. Long values
 /// wrap rather than truncate.
 final class WebCompatTechnicalDataSectionCell: UICollectionViewListCell, ThemeApplicable, ReusableCell {
-    private enum UX {
-        static let horizontalInset: CGFloat = 16
-        static let verticalInset: CGFloat = 14.5
-        static let cardCornerRadius: CGFloat = 26
-    }
-
     /// A view rather than a `backgroundConfiguration`. A list cell masks its background's
     /// corners by group position, which here would only ever round the bottom two.
     private lazy var cardView: UIView = .build { view in
-        view.layer.cornerRadius = UX.cardCornerRadius
+        view.layer.cornerRadius = WebCompatReporterUX.Card.largeCornerRadius
         view.layer.cornerCurve = .continuous
     }
 
@@ -37,6 +31,8 @@ final class WebCompatTechnicalDataSectionCell: UICollectionViewListCell, ThemeAp
     }
 
     private func setupLayout() {
+        let horizontalInset = WebCompatReporterUX.Card.contentInset
+        let verticalInset = WebCompatReporterUX.Card.verticalInset
         contentView.addSubview(cardView)
         cardView.addSubview(keyValueLabel)
         NSLayoutConstraint.activate([
@@ -45,10 +41,10 @@ final class WebCompatTechnicalDataSectionCell: UICollectionViewListCell, ThemeAp
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            keyValueLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.horizontalInset),
-            keyValueLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.horizontalInset),
-            keyValueLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.verticalInset),
-            keyValueLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.verticalInset)
+            keyValueLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: horizontalInset),
+            keyValueLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -horizontalInset),
+            keyValueLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: verticalInset),
+            keyValueLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -verticalInset)
         ])
     }
 
@@ -64,7 +60,7 @@ final class WebCompatTechnicalDataSectionCell: UICollectionViewListCell, ThemeAp
         // Half-height stops a one-line card rounding into a capsule. Zero means constraints
         // haven't resolved, and clamping to it would flatten the corners.
         guard cardView.bounds.height > 0 else { return }
-        let radius = min(UX.cardCornerRadius, cardView.bounds.height / 2)
+        let radius = min(WebCompatReporterUX.Card.largeCornerRadius, cardView.bounds.height / 2)
         guard cardView.layer.cornerRadius != radius else { return }
         cardView.layer.cornerRadius = radius
     }
