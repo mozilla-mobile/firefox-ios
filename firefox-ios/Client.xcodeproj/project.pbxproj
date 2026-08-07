@@ -1375,6 +1375,7 @@
 		8CE1E4382B8C76C80026530B /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4342B8C76C80026530B /* LoginListViewModel.swift */; };
 		8CE1E4392B8C76C80026530B /* LoginCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4352B8C76C80026530B /* LoginCellView.swift */; };
 		8CE1E43A2B8C76C80026530B /* LoginListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4362B8C76C80026530B /* LoginListView.swift */; };
+		8CE71B433025C458006C7828 /* WebCompatReportPreviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE71B423025C458006C7828 /* WebCompatReportPreviewCoordinator.swift */; };
 		8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07D2BFE04B100D2617B /* AddressListViewModelTests.swift */; };
 		8CF40B482DFC22C200DCB7F0 /* OnboardingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF40B472DFC22C200DCB7F0 /* OnboardingServiceTests.swift */; };
 		8CF609272EA8D46E00F069B6 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF609262EA8D46E00F069B6 /* UniformTypeIdentifiers.framework */; };
@@ -10144,6 +10145,7 @@
 		8CE1E4342B8C76C80026530B /* LoginListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
 		8CE1E4352B8C76C80026530B /* LoginCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCellView.swift; sourceTree = "<group>"; };
 		8CE1E4362B8C76C80026530B /* LoginListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListView.swift; sourceTree = "<group>"; };
+		8CE71B423025C458006C7828 /* WebCompatReportPreviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportPreviewCoordinator.swift; sourceTree = "<group>"; };
 		8CEDF07D2BFE04B100D2617B /* AddressListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListViewModelTests.swift; sourceTree = "<group>"; };
 		8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillProvider.swift; sourceTree = "<group>"; };
 		8CF40B472DFC22C200DCB7F0 /* OnboardingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingServiceTests.swift; sourceTree = "<group>"; };
@@ -14749,6 +14751,7 @@
 				FB16062100000000000000A1 /* PhotoPickerCoordinator.swift */,
 				FB16062200000000000000A1 /* CameraCoordinator.swift */,
 				8C76F012302344B700D4BC87 /* WebCompatReportCoordinator.swift */,
+				8CE71B423025C458006C7828 /* WebCompatReportPreviewCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -20617,6 +20620,7 @@
 				2137786529832C8900D01309 /* OverlayModeManager.swift in Sources */,
 				8AF99B4D29EF076800108DEC /* WebviewViewController.swift in Sources */,
 				0B78DC6E2E3C9CE800804872 /* SummarizerNimbusUtils.swift in Sources */,
+				8CE71B433025C458006C7828 /* WebCompatReportPreviewCoordinator.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				B2DFB7E12B619DF60004CEA5 /* AddressListView.swift in Sources */,
 				0AFF7F6D2C7C7BBA00265214 /* CertificatesViewController.swift in Sources */,

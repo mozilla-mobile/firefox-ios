@@ -16,6 +16,8 @@ protocol WebCompatReportCoordinatorDelegate: AnyObject {
     func webCompatReportViewControllerDidSubmit()
     /// User tapped the "Learn More…" link; the coordinator shows the explainer page without dismissing the sheet.
     func webCompatReportViewControllerDidTapLearnMore(url: URL)
+    /// The middleware assembled the report; the coordinator presents it.
+    func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload)
 }
 
 /// Store-connected container that hosts the `WebCompatReporterKit` sheet, maps
@@ -111,6 +113,9 @@ final class WebCompatReportViewController: UINavigationController,
             reportCoordinator?.webCompatReportViewControllerDidSubmit()
             return
         }
+        if let payload = state.previewPayload {
+            reportCoordinator?.webCompatReportViewControllerDidTapPreview(payload: payload)
+        }
         sheetViewController.configure(with: WebCompatReportViewController.makeViewModel(from: state))
     }
 
@@ -120,6 +125,8 @@ final class WebCompatReportViewController: UINavigationController,
         return WebCompatReportViewModel(
             navigationTitle: .MainMenu.ToolsSection.ReportBrokenSite,
             closeButtonAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
+            previewButtonTitle: .WebCompatReporter.Sheet.PreviewButton,
+            isPreviewEnabled: state.canPreview,
             sections: makeSections(from: state)
         )
     }
@@ -315,9 +322,8 @@ final class WebCompatReportViewController: UINavigationController,
         ))
     }
 
-    // MARK: - WebCompatReportSheetDelegate
-
-    func webCompatReportSheetDidTapClose() {
+    /// Kept here so the cancel action is dispatched from the one place that talks to the store.
+    func finishReport() {
         store.dispatch(WebCompatReporterViewAction(
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.cancel
@@ -325,7 +331,14 @@ final class WebCompatReportViewController: UINavigationController,
         reportCoordinator?.webCompatReportViewControllerDidFinish()
     }
 
+    // MARK: - WebCompatReportSheetDelegate
+
+    func webCompatReportSheetDidTapClose() {
+        finishReport()
+    }
+
     func webCompatReportSheetDidTapPreview() {
+        // The report comes back through newState, not from here.
         store.dispatch(WebCompatReporterViewAction(
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.preview

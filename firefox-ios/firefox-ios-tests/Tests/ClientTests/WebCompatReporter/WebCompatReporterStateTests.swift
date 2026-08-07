@@ -300,6 +300,48 @@ final class WebCompatReporterStateTests: XCTestCase {
         XCTAssertEqual(newState, initialState)
     }
 
+    // MARK: - previewPayload
+
+    func test_didBuildPreview_carriesThePayloadIntoState() {
+        var payload = WebCompatReportPayload()
+        payload.url = "https://example.com"
+        let reducer = WebCompatReporterState.reducer
+
+        let newState = reducer.legacyReducer(
+            WebCompatReporterState(windowUUID: .XCTestDefaultUUID),
+            WebCompatReporterMiddlewareAction(
+                previewPayload: payload,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WebCompatReporterMiddlewareActionType.didBuildPreview
+            )
+        )
+
+        XCTAssertEqual(newState.previewPayload, payload)
+    }
+
+    func test_previewPayload_doesNotSurviveTheNextAction() {
+        // Without the clear, previewing twice without editing leaves state unchanged and never reopens.
+        var payload = WebCompatReportPayload()
+        payload.url = "https://example.com"
+        let initialState = WebCompatReporterState(
+            windowUUID: .XCTestDefaultUUID,
+            url: "https://example.com",
+            previewPayload: payload
+        )
+        let reducer = WebCompatReporterState.reducer
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            WebCompatReporterViewAction(
+                url: "https://changed.com",
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WebCompatReporterViewActionType.editURL
+            )
+        )
+
+        XCTAssertNil(newState.previewPayload)
+    }
+
     // MARK: - Equality
 
     func test_equality_sameValues_returnsTrue() {

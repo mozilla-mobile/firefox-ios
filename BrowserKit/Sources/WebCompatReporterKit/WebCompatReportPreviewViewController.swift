@@ -18,7 +18,7 @@ public protocol WebCompatReportPreviewDelegate: AnyObject {
 /// TODO: FXIOS-16432 - Split this into the plain-language Report Preview screen and the pushed
 /// Technical Data screen, renaming the `ReportPreview` types accordingly.
 public final class WebCompatReportPreviewViewController: UIViewController,
-                                                         ThemeApplicable,
+                                                         Themeable,
                                                          UICollectionViewDelegate {
     private enum UX {
         static let headerHorizontalInset: CGFloat = 20
@@ -47,6 +47,11 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     public weak var delegate: WebCompatReportPreviewDelegate?
 
+    public let themeManager: ThemeManager
+    public var themeListenerCancellable: Any?
+    public var currentWindowUUID: WindowUUID?
+    private let notificationCenter: NotificationProtocol
+
     private var viewModel: WebCompatReportPreviewViewModel
     private var screenshot: UIImage?
     private var theme: Theme
@@ -73,9 +78,17 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     private lazy var dataSource = makeDataSource()
 
-    public init(viewModel: WebCompatReportPreviewViewModel, theme: Theme) {
+    public init(
+        viewModel: WebCompatReportPreviewViewModel,
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.viewModel = viewModel
-        self.theme = theme
+        self.currentWindowUUID = windowUUID
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -90,7 +103,8 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         setupNavigationItem()
         setupLayout()
         configure(with: viewModel)
-        applyTheme(theme: theme)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     // MARK: - Configuration
@@ -341,10 +355,10 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         collectionView.deselectItem(at: indexPath, animated: false)
     }
 
-    // MARK: - ThemeApplicable
+    // MARK: - Themeable
 
-    public func applyTheme(theme: Theme) {
-        self.theme = theme
+    public func applyTheme() {
+        theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         guard isViewLoaded else { return }
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
