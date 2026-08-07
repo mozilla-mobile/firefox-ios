@@ -18,6 +18,26 @@ public enum TestTargets {
         ]
     }
 
+    /// Ecosia: settings for a test target hosted by the `Client` app (one that depends on `Client` and
+    /// so links with `-bundle_loader`). Use this instead of `testBaseSettings` for those targets.
+    ///
+    /// Xcode leaves SPM dynamic package products off an app-hosted test bundle's link line, assuming the
+    /// host provides them, and relies on `ld` resolving them transitively through `Client.debug.dylib`.
+    /// That works locally but not on CI, where test code calling package API directly (`Maybe`,
+    /// `Deferred`, `Date.now()`, `SnowplowTracker.Structured`) failed with "Undefined symbols". Declaring
+    /// the dependency does not help — the generated project already lists them correctly.
+    ///
+    /// `-undefined dynamic_lookup` defers those symbols to load time, which is safe because the bundle
+    /// loads into the host process where the frameworks are already loaded. We defer rather than name the
+    /// frameworks explicitly because their names are not stable: Xcode promotes a static package product
+    /// to a hashed dynamic framework based on how many targets link it, so both the name and whether it
+    /// is dynamic at all differ between local and CI. The tradeoff is that a genuinely missing symbol
+    /// fails at bundle load instead of at link time, naming the symbol either way.
+    static let appHostedTestSettings: SettingsDictionary = BuildConfigurations.testBaseSettings
+        .merging([
+            "OTHER_LDFLAGS": .array(["$(inherited)", "-Xlinker", "-undefined", "-Xlinker", "dynamic_lookup"]),
+        ], uniquingKeysWith: { _, new in new })
+
     static func accountTests() -> Target {
         .target(
             name: "AccountTests",
@@ -65,13 +85,14 @@ public enum TestTargets {
                 .package(product: "Shared"),
                 .package(product: "SiteImageView"),
                 .package(product: "TabDataStore"),
-                // Ecosia: ClientTests/Toolbar/ToolbarMiddlewareTests imports ToolbarKit directly.
-                // Xcode 26.5's stricter linker no longer resolves ToolbarKit's Swift type metadata
-                // transitively via the Client host (-bundle_loader), so the test target must link it. (MOB-4384)
+                // Ecosia: ClientTests/Toolbar/ToolbarMiddlewareTests imports ToolbarKit directly and its
+                // type metadata is not resolvable through the Client host. Declaring the dependency is
+                // enough here only because ToolbarKit links statically; see ``appHostedTestSettings``
+                // for why dynamic products need more. (MOB-4384)
                 .package(product: "ToolbarKit"),
                 .sdk(name: "z", type: .library),
             ],
-            settings: .settings(base: BuildConfigurations.testBaseSettings)
+            settings: .settings(base: appHostedTestSettings)
         )
     }
 
@@ -121,8 +142,8 @@ public enum TestTargets {
                 .package(product: "SiteImageView"),
                 .package(product: "TabDataStore"),
             ],
-            settings: .settings(base: BuildConfigurations.testBaseSettings.merging([
-                "SWIFT_OBJC_BRIDGING_HEADER": "$SRCROOT/Storage/Storage-Bridging-Header.h"
+            settings: .settings(base: appHostedTestSettings.merging([
+                "SWIFT_OBJC_BRIDGING_HEADER": "$SRCROOT/Storage/Storage-Bridging-Header.h",
             ], uniquingKeysWith: { _, new in new }))
         )
     }
@@ -144,8 +165,8 @@ public enum TestTargets {
                 .package(product: "Common"),
                 .package(product: "Shared"),
             ],
-            settings: .settings(base: BuildConfigurations.testBaseSettings.merging([
-                "SWIFT_OBJC_BRIDGING_HEADER": "$SRCROOT/Shared/Shared-Bridging-Header.h"
+            settings: .settings(base: appHostedTestSettings.merging([
+                "SWIFT_OBJC_BRIDGING_HEADER": "$SRCROOT/Shared/Shared-Bridging-Header.h",
             ], uniquingKeysWith: { _, new in new }))
         )
     }
@@ -163,7 +184,7 @@ public enum TestTargets {
                 .package(product: "Glean"),
                 .package(product: "Shared"),
             ],
-            settings: .settings(base: BuildConfigurations.testBaseSettings)
+            settings: .settings(base: appHostedTestSettings)
         )
     }
 
@@ -276,7 +297,7 @@ public enum TestTargets {
                 .package(product: "ToolbarKit"),
                 .package(product: "ViewInspector"),
             ],
-            settings: .settings(base: BuildConfigurations.testBaseSettings)
+            settings: .settings(base: appHostedTestSettings)
         )
     }
 }

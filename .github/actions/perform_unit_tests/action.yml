@@ -26,7 +26,7 @@ runs:
           -destination 'platform=iOS Simulator,name=iPhone 17' \
           -clonedSourcePackagesDirPath firefox-ios/SourcePackages \
           -derivedDataPath DerivedData \
-          build-for-testing | xcpretty --color
+          build-for-testing | tee raw_build_for_testing.log | xcpretty --color
 
         set +e
         set -o pipefail && xcodebuild -scheme Ecosia \
@@ -40,6 +40,40 @@ runs:
         TEST_EXIT_CODE=${PIPESTATUS[0]}
         set -e
         echo "TEST_EXIT_CODE=$TEST_EXIT_CODE" >> "$GITHUB_ENV"
+
+    # Ecosia: fails if an app-hosted test target is not deferring package symbol resolution, or if a
+    # target that should link its package products directly is missing one. See
+    # TestTargets.appHostedTestSettings.
+    #
+    # Reads raw_build_for_testing.log, so the build step's tee above is load bearing, not leftover
+    # debugging — removing it silently disables this check.
+    - name: Report test target package product linkage
+      if: always()
+      shell: bash
+      run: |
+        # pipefail so the check's exit status survives the tee — without it this step always passes.
+        set -o pipefail
+        python3 .github/scripts/report_test_target_linkage.py \
+          raw_build_for_testing.log \
+          firefox-ios/Client.xcodeproj/project.pbxproj \
+          | tee test_target_linkage.log
+
+    - name: Upload test target linkage report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-target-linkage-report
+        path: test_target_linkage.log
+
+    # Ecosia: ~23MB, so only kept when something failed, saving a 30-minute re-run to recapture it.
+    # Must stay after the linkage check, otherwise a build that compiled but failed that check would
+    # skip the upload and lose the log exactly when it is needed.
+    - name: Upload raw build-for-testing log
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: raw-build-for-testing-log
+        path: raw_build_for_testing.log
 
     - name: Publish Test Report
       if: always()

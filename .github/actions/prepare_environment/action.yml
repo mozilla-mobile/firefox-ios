@@ -10,13 +10,26 @@ runs:
   using: "composite"
   steps:
 
+    # Ecosia: must run before "Fix-up private GitHub URLs" rewrites the manifests and lockfiles in
+    # place, so it reads the committed files verbatim.
+    - name: Check pinned dependencies match lockfiles
+      shell: bash
+      run: python3 .github/scripts/check_pinned_dependencies.py
+
     - name: Xcode Select Version
       uses: mobiledevops/xcode-select-version-action@v1
       with:
-        # Ecosia (MOB-4384): bumped 26.3 -> 26.5. 26.3's Swift 6 toolchain flagged strict-concurrency errors
-        # ("sending 'self' risks causing data races") not present in 26.5, and had a duplicate SwiftBridging
-        # module bug (worked around by the removed step below). 26.5 builds the whole unit-test scheme cleanly.
-        xcode-select-version: 26.5
+        # Ecosia: pinned so the toolchain is not a moving part. Keep in sync with what developers run
+        # locally, since a mismatch has bitten us before.
+        #
+        # Before bumping to 27, expect work: Xcode 27 statically folds SPM library products into
+        # consumer targets, which makes -ObjC force-load both the folded copies and the standalone
+        # package objects and fails with thousands of duplicate symbols. Our -ObjC lives in
+        # EcosiaDebug.xcconfig and EcosiaBetaDebug.xcconfig, and EcosiaTesting.xcconfig inherits it,
+        # so the Testing configuration CI builds is affected. Upstream version-gates the flag on
+        # XCODE_VERSION_MAJOR: https://github.com/mozilla-mobile/firefox-ios/pull/34592
+        # Also note -ld_classic, set in all five xcconfigs, is deprecated and due for removal.
+        xcode-select-version: 26.6
 
     - name: Check Xcode and Swift Version
       shell: bash
@@ -25,26 +38,7 @@ runs:
         xcodebuild -version
         swift --version
 
-    # Ecosia (MOB-4384): the duplicate-SwiftBridging-module bug also affects the runner's Xcode 26.5
-    # ("redefinition of module 'SwiftBridging'" during Clang dependency scanning), so this workaround is still
-    # required after the 26.3 -> 26.5 bump (path updated to Xcode_26.5).
-    - name: Fix SwiftBridging Module Redefinition
-      shell: bash
-      run: |
-        echo "Checking for duplicate SwiftBridging module"
-        BRIDGING_MODULEMAP="/Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/swift/bridging.modulemap"
-        if [ -f "$BRIDGING_MODULEMAP" ]; then
-          echo "Backing up and fixing bridging.modulemap"
-          sudo cp "$BRIDGING_MODULEMAP" "${BRIDGING_MODULEMAP}.bak"
-          # Comment out the SwiftBridging module definition to prevent redefinition
-          sudo sed -i.tmp 's/^module SwiftBridging {/\/\* module SwiftBridging {/g' "$BRIDGING_MODULEMAP"
-          sudo sed -i.tmp 's/^}/} \*\//g' "$BRIDGING_MODULEMAP"
-          cat "$BRIDGING_MODULEMAP"
-        else
-          echo "bridging.modulemap not found at expected location"
-        fi
-
-    - name: Fix-up private Github URLs
+    - name: Fix-up private GitHub URLs
       shell: bash
       run: find . -type f \( -name '*.pbxproj' -o -name 'Package.swift' -o -name 'Package.resolved' \) -exec sed -i '' "s/https:\/\/github.com\/${GITHUB_REPOSITORY_OWNER}/https:\/\/${GITHUB_ACCESS_TOKEN}@github.com\/${GITHUB_REPOSITORY_OWNER}/g" {} \;
       env:
@@ -69,7 +63,7 @@ runs:
       uses: actions/cache/restore@v4
       with:
         path: firefox-ios/SourcePackages/
-        key: ${{ runner.os }}-spm-cache-${{ hashFiles('firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+        key: ${{ runner.os }}-spm-cache-${{ hashFiles('firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved', 'BrowserKit/Package.swift', 'firefox-ios/Tuist/ProjectDescriptionHelpers/Packages+Ecosia.swift') }}
 
     - name: Install SPM if cache not found
       shell: bash
@@ -81,7 +75,7 @@ runs:
       uses: actions/cache/save@v4
       with:
         path: firefox-ios/SourcePackages/
-        key: ${{ runner.os }}-spm-cache-${{ hashFiles('firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}  
+        key: ${{ runner.os }}-spm-cache-${{ hashFiles('firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved', 'BrowserKit/Package.swift', 'firefox-ios/Tuist/ProjectDescriptionHelpers/Packages+Ecosia.swift') }}  
 
     - name: Extract Staging XCConfig
       shell: bash
