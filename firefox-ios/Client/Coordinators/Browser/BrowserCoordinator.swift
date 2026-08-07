@@ -54,6 +54,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private let windowManager: WindowManager
+    private let windowMerger: WindowMerging
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
@@ -80,6 +81,7 @@ final class BrowserCoordinator: BaseCoordinator,
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         windowMerger: WindowMerging = MergeWindowsManager(),
          worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
          googleLensService: GoogleLensServicing = GoogleLensService()) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
@@ -88,6 +90,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowManager = windowManager
+        self.windowMerger = windowMerger
         self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
         self.homepageTabStateStore = homepageTabStateStore
         self.browserViewController = BrowserViewController(profile: profile,
@@ -337,6 +340,10 @@ final class BrowserCoordinator: BaseCoordinator,
                 handleClosePrivateTabsWidgetAction()
             case .showIntroOnboarding:
                 showIntroOnboarding()
+            case .mergeWindows:
+                // A home screen shortcut can outlive the feature being turned off remotely.
+                guard featureFlagsProvider.isEnabled(.mergeWindows) else { break }
+                windowMerger.mergeAllWindows(into: windowUUID)
             }
 
         case let .fxaSignIn(params):
@@ -1460,6 +1467,10 @@ final class BrowserCoordinator: BaseCoordinator,
     func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
         switch event {
         case .windowWillClose:
+            // Runs before the guard below: a merge is driven from the surviving window, so it is
+            // this coordinator that needs to hear about the *other* windows finishing closing.
+            windowMerger.windowDidClose(uuid: uuid)
+
             guard uuid == windowUUID else { return }
             // Additional cleanup performed when the current iPad window is closed.
             // This is necessary in order to ensure the BVC and other memory is freed correctly.

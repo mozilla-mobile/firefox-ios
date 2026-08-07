@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Common
+import TabDataStore
 import XCTest
 
 @testable import Client
@@ -162,5 +163,24 @@ class MockTabManager: TabManager {
     var restoreScreenshotCalls: [Tab] = []
     func restoreScreenshot(for tab: Tab) {
         restoreScreenshotCalls.append(tab)
+    }
+
+    var tabDataForWindowMergeResult: [TabData] = []
+    var tabDataForWindowMergeCalled = 0
+    func tabDataForWindowMerge() -> [TabData] {
+        tabDataForWindowMergeCalled += 1
+        return tabDataForWindowMergeResult
+    }
+
+    var addedWindowMergeTabData: [TabData] = []
+    var addTabsFromWindowMergeCalled = 0
+    func addTabs(fromWindowMergeData tabDataList: [TabData]) {
+        addTabsFromWindowMergeCalled += 1
+        addedWindowMergeTabData = tabDataList
+    }
+
+    var discardTabsMovedToAnotherWindowCalled = 0
+    func discardTabsMovedToAnotherWindow() {
+        discardTabsMovedToAnotherWindowCalled += 1
     }
 }

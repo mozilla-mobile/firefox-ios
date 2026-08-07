@@ -220,6 +220,7 @@
 		1D6ED1C52EC3C43A0017EC7A /* RelayMaskSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */; };
 		1D6EDA4A2ED65DB40017EC7A /* RelayMaskTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6EDA492ED65DB00017EC7A /* RelayMaskTelemetry.swift */; };
 		1D74FF502B2797EA00FF01D0 /* WindowManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */; };
+		6981DF1D974248D3B2E06E22 /* MergeWindowsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4BA8784CDE4D2EB7E118A6 /* MergeWindowsManagerTests.swift */; };
 		1D7B78972ADF32590011E9F2 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
 		1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
 		1D7B789F2AE088930011E9F2 /* EventQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B789E2AE088930011E9F2 /* EventQueueTests.swift */; };
@@ -844,6 +845,9 @@
 		7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3632D31C2983F000D12AF9 /* L10nSuite2SnapshotTests.swift */; };
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
 		7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFC67F1BFF68C30059C952 /* QuickActions.swift */; };
+		35BD220856D54645BC22CD7C /* MergeWindowsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DC95BA30E84DB19BF67B6B /* MergeWindowsManager.swift */; };
+		174FD060D3F94850AF701680 /* MergeWindowsQuickActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D5A86C71A4185990D0296 /* MergeWindowsQuickActionController.swift */; };
+		9DCE8AADEC094597BC84726B /* SceneDestroyer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED31DA9E44945A19DBF2343 /* SceneDestroyer.swift */; };
 		7DD7D5A7EA71ADAE159578D5 /* XCUIElementHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338510A2D1FFA7548E64224B /* XCUIElementHelpers.swift */; };
 		8015C8B52D0A31FE0093AED0 /* RecordedNimbusContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8015C8B42D0A31FE0093AED0 /* RecordedNimbusContextTests.swift */; };
 		80967F802D0A36890057F0C7 /* RecordedNimbusContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80967F7F2D0A36890057F0C7 /* RecordedNimbusContext.swift */; };
@@ -3126,6 +3130,7 @@
 		1D6ED1C42EC3C4350017EC7A /* RelayMaskSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayMaskSettingsViewController.swift; sourceTree = "<group>"; };
 		1D6EDA492ED65DB00017EC7A /* RelayMaskTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayMaskTelemetry.swift; sourceTree = "<group>"; };
 		1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManagerTests.swift; sourceTree = "<group>"; };
+		8B4BA8784CDE4D2EB7E118A6 /* MergeWindowsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeWindowsManagerTests.swift; sourceTree = "<group>"; };
 		1D774B3D9C6E21B77FB7B38F /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		1D7B78962ADF32590011E9F2 /* EventQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventQueue.swift; sourceTree = "<group>"; };
 		1D7B78982ADF328E0011E9F2 /* AppEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEvent.swift; sourceTree = "<group>"; };
@@ -9505,6 +9510,9 @@
 		7BD94478AB4C7DB2706F7AAF /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = L10nSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BEFC67F1BFF68C30059C952 /* QuickActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickActions.swift; sourceTree = "<group>"; };
+		F9DC95BA30E84DB19BF67B6B /* MergeWindowsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MergeWindowsManager.swift; sourceTree = "<group>"; };
+		AE2D5A86C71A4185990D0296 /* MergeWindowsQuickActionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MergeWindowsQuickActionController.swift; sourceTree = "<group>"; };
+		DED31DA9E44945A19DBF2343 /* SceneDestroyer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDestroyer.swift; sourceTree = "<group>"; };
 		7C0C4902A319FAC7A18682E9 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		7C1043E3AE32A70E1EC5383A /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		7C264248AD1349E9A98D67BD /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/Today.strings; sourceTree = "<group>"; };
@@ -17619,6 +17627,7 @@
 				39230FDB2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift */,
 				8A0727472B4898750071BB9F /* WebviewTelemetryTests.swift */,
 				1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */,
+				8B4BA8784CDE4D2EB7E118A6 /* MergeWindowsManagerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */,
@@ -17659,7 +17668,10 @@
 				8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */,
 				E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */,
 				D3BE7B251B054D4400641031 /* main.swift */,
+				F9DC95BA30E84DB19BF67B6B /* MergeWindowsManager.swift */,
+				AE2D5A86C71A4185990D0296 /* MergeWindowsQuickActionController.swift */,
 				7BEFC67F1BFF68C30059C952 /* QuickActions.swift */,
+				DED31DA9E44945A19DBF2343 /* SceneDestroyer.swift */,
 				E6639F171BF11E17002D0853 /* Settings.bundle */,
 				5A271ABB2860B0BD00471CE4 /* WebServer */,
 				1DA6F6502B48B42900BB5AD6 /* WindowEventCoordinator.swift */,
@@ -20055,6 +20067,9 @@
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
 				8AA0A6652CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
+				35BD220856D54645BC22CD7C /* MergeWindowsManager.swift in Sources */,
+				174FD060D3F94850AF701680 /* MergeWindowsQuickActionController.swift in Sources */,
+				9DCE8AADEC094597BC84726B /* SceneDestroyer.swift in Sources */,
 				8A3EF8132A2FD07A00796E3A /* ResetContextualHints.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
 				94D3DD172D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */,
@@ -21404,6 +21419,7 @@
 				0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */,
 				EDADF77F2D70D35B00C39295 /* AppIconSelectionTelemetryTests.swift in Sources */,
 				1D74FF502B2797EA00FF01D0 /* WindowManagerTests.swift in Sources */,
+				6981DF1D974248D3B2E06E22 /* MergeWindowsManagerTests.swift in Sources */,
 				CA24B53B24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift in Sources */,
 				E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */,
 				C2886E0C2EC60E63007AE6C3 /* TranslationsSchemeHandlerTests.swift in Sources */,
