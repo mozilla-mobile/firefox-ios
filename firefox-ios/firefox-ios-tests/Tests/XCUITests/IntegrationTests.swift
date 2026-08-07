@@ -294,10 +294,15 @@ class IntegrationTests: BaseTestCase {
         app.cells["SignOut"].waitAndTap()
 
         app.buttons["Disconnect"].waitAndTap()
-        sleep(3)
+        mozWaitForElementToNotExist(app.buttons["Disconnect"])
 
-        // Connect same account again
+        // Workaround (FXIOS-15545): Navigate away from the settings screen and back 
+        // so that the settings screen will refresh with "Sign in to Sync".
         navigator.nowAt(SettingsScreen)
+        navigator.goto(TabTray)
+        navigator.goto(SettingsScreen)
+
+        // Connect the same account again
         app.tables.cells["SignInToSync"].waitAndTap()
         app.buttons["EmailSignIn.button"].waitAndTap()
 
@@ -308,7 +313,6 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
 
         navigator.nowAt(SettingsScreen)
-        app.swipeDown()
         mozWaitForElementToExist(app.staticTexts["GENERAL"])
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
