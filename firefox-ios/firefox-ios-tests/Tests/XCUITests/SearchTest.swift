@@ -492,6 +492,17 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["www.mozilla.org/"]) // History
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3209706
+    func testDefaultSearchEngines() {
+        app.launch()
+        navigator.goto(SearchSettings)
+        mozWaitForElementToExist(app.staticTexts["Default Search Engine"])
+        mozWaitForElementToExist(app.staticTexts["Alternative Search Engines"])
+        for searchEngine in ["Google", "Bing", "DuckDuckGo", "Perplexity", "Wikipedia (en)", "eBay"] {
+            mozWaitForElementToExist(app.tables.staticTexts[searchEngine])
+        }
+    }
+
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
         let showSearchSuggestions = app.switches[AccessibilityIdentifiers.Settings.Search.showSearchSuggestions]
         mozWaitForElementToExist(showSearchSuggestions)
