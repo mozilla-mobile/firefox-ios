@@ -164,10 +164,9 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
 
     // MARK: - Rotation and keyboard race
 
-    /// Nothing recomputes the keyboard spacer when the nav toolbar's visibility changes, so if the
-    /// keyboard shows while the nav toolbar is hidden (rotation race), the spacer stays wrong once
-    /// the nav toolbar reappears. Expected to FAIL until the keyboard-handling refactor lands.
-    func test_rotationWhileKeyboardVisible_keyboardSpacerStaysStaleAfterNavToolbarUnhides() {
+    /// The keyboard spacer must track the nav toolbar's actual `isHidden` state, not a separately
+    /// derived guess, and must be recomputed whenever that state changes.
+    func test_rotationWhileKeyboardVisible_keyboardSpacerTracksNavToolbarVisibility() {
         let subject = createSubject()
         selectTabWithFindInPage()
         let keyboardHelper = createKeyboardHelper()
@@ -178,27 +177,29 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
         subject.view.layoutIfNeeded()
         XCTAssertTrue(subject.bottomContainer.frame.height.isZero)
 
-        // Keyboard shows while the nav toolbar is still hidden.
+        // Keyboard shows while the nav toolbar is still hidden — nothing should be subtracted from
+        // the spacer since there's no nav toolbar behind the keyboard yet.
         subject.keyboardHelper(keyboardHelper,
                                keyboardWillShowWithState: createKeyboardState(keyboardHeight: keyboardHeight))
         subject.view.layoutIfNeeded()
-        XCTAssertNotNil(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer))
+        XCTAssertEqual(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer) ?? -1,
+                       keyboardHeight,
+                       accuracy: 0.5)
 
         // Rotation settles and the nav toolbar unhides; nothing else fires.
         subject.updateToolbarStateForTraitCollection(portraitTraitCollection())
         subject.view.layoutIfNeeded()
         XCTAssertFalse(subject.bottomContainer.frame.height.isZero)
 
-        // Spacer should shrink by whatever space the nav toolbar reclaimed, to stay flush above the keyboard.
-        let expectedSpacerHeight = keyboardHeight - subject.bottomContainer.frame.height
-        let actualSpacerHeight = keyboardSpacerHeightConstant(in: subject.overKeyboardContainer) ?? -1
-        // Expected to fail until we fix the keyboard handling
-        XCTAssertNotEqual(actualSpacerHeight,expectedSpacerHeight, accuracy: 0.5)
+        // Spacer should shrink by the nav toolbar's height, to stay flush above the keyboard.
+        XCTAssertEqual(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer) ?? -1,
+                       keyboardHeight - UIConstants.BottomToolbarHeight,
+                       accuracy: 0.5)
     }
 
     /// Hiding the keyboard doesn't depend on the spacer's height, so it should clean up the spacer
     /// even after the race above has left it stale.
-    func test_rotationWhileKeyboardVisible_keyboardSpacerIsRemovedOnHideDespiteStaleness() {
+    func test_rotationWhileKeyboardVisible_keyboardSpacerIsRemovedOnHide() {
         let subject = createSubject()
         selectTabWithFindInPage()
         let keyboardHelper = createKeyboardHelper()
@@ -231,7 +232,8 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
         subject.updateToolbarStateForTraitCollection(landscapeTraitCollection())
         subject.view.layoutIfNeeded()
 
-        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: createKeyboardState(keyboardHeight: keyboardHeight))
+        subject.keyboardHelper(keyboardHelper,
+                               keyboardWillShowWithState: createKeyboardState(keyboardHeight: keyboardHeight))
         subject.view.layoutIfNeeded()
 
         subject.updateToolbarStateForTraitCollection(portraitTraitCollection())
@@ -239,6 +241,44 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
 
         let expectedMaxY = subject.view.frame.height - keyboardHeight
         XCTAssertEqual(subject.bottomContentStackView.frame.maxY, expectedMaxY, accuracy: 0.5)
+    }
+
+    /// A trait change that skips `willTransition` (Dark Mode, Stage Manager resize) only reaches
+    /// `navigationToolbarContainer` via `traitCollectionDidChange`'s deferred `DispatchQueue.main.async`
+    /// update. Confirms the keyboard spacer still ends up correct once that deferred update runs.
+    func test_nonRotationTraitChangeWhileKeyboardVisible_keyboardSpacerRecomputesAfterDeferredUpdate() {
+        let subject = createSubject()
+        selectTabWithFindInPage()
+        let keyboardHelper = createKeyboardHelper()
+        let keyboardHeight: CGFloat = 300
+
+        // Nav toolbar hidden, as if a prior `willTransition` already set this for landscape.
+        subject.updateToolbarStateForTraitCollection(landscapeTraitCollection())
+        subject.view.layoutIfNeeded()
+
+        // Keyboard shows while the nav toolbar is still hidden.
+        subject.keyboardHelper(keyboardHelper,
+                               keyboardWillShowWithState: createKeyboardState(keyboardHeight: keyboardHeight))
+        subject.view.layoutIfNeeded()
+
+        // `self.traitCollection` flips to portrait without going through `willTransition`, nothing
+        // has updated `navigationToolbarContainer` or the spacer yet.
+        let container = UIViewController()
+        container.addChild(subject)
+        container.setOverrideTraitCollection(portraitTraitCollection(), forChild: subject)
+        XCTAssertEqual(subject.traitCollection.verticalSizeClass, .regular)
+
+        // Only `traitCollectionDidChange`'s deferred update is left to fix this.
+        subject.traitCollectionDidChange(landscapeTraitCollection())
+        let expectation = expectation(description: "deferred toolbar state update runs")
+        DispatchQueue.main.async { expectation.fulfill() }
+        wait(for: [expectation], timeout: 1)
+        subject.view.layoutIfNeeded()
+
+        XCTAssertFalse(subject.bottomContainer.frame.height.isZero)
+        XCTAssertEqual(keyboardSpacerHeightConstant(in: subject.overKeyboardContainer) ?? -1,
+                       keyboardHeight - UIConstants.BottomToolbarHeight,
+                       accuracy: 0.5)
     }
 
     // MARK: Private helpers
