@@ -88,7 +88,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertEqual(renderedFields(of: payload)["antiTracking.blockedOrigins"], "[]")
     }
 
-    // MARK: - makePreviewViewModel
+    // MARK: - makeTechnicalDataViewModel
 
     func testMakePreviewViewModel_showsTheCollectedPayloadNotASecondCopyOfIt() throws {
         var payload = WebCompatReportPayload()
@@ -99,7 +99,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
         payload.memory = 8192
         payload.defaultLocales = ["en-GB", "fr"]
 
-        let viewModel = payload.makePreviewViewModel()
+        let viewModel = payload.makeTechnicalDataViewModel()
 
         // Groups and labels come from the payload, so a new metric shows up without touching this file.
         XCTAssertEqual(viewModel.sections.map(\.id), payload.previewGroups.map(\.id.rawValue))
@@ -119,7 +119,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
             from: makeState(url: "https://example.com", selectedCategory: .other)
         )
 
-        let viewModel = payload.makePreviewViewModel()
+        let viewModel = payload.makeTechnicalDataViewModel()
 
         let frameworks = try XCTUnwrap(viewModel.sections.first { $0.id == "frameworks" })
         XCTAssertEqual(frameworks.rows.map { $0.value.displayText }, ["null", "null", "null"])
@@ -131,12 +131,39 @@ final class WebCompatReportPayloadTests: XCTestCase {
     }
 
     func testMakePreviewViewModel_givesEveryGroupItsOwnAccessibilityIdentifiers() {
-        let viewModel = WebCompatReportPayload().makePreviewViewModel()
+        let viewModel = WebCompatReportPayload().makeTechnicalDataViewModel()
 
         // Header and card are addressed separately in UI tests, so they can't share an identifier.
         let identifiers = viewModel.sections.flatMap { [$0.a11yIdentifier, $0.contentA11yIdentifier] }
         XCTAssertEqual(Set(identifiers).count, identifiers.count)
         XCTAssertTrue(identifiers.allSatisfy { $0.hasPrefix("WebCompatReporter.Preview.") })
+    }
+
+    // MARK: - makeReportPreviewViewModel
+
+    // The summary is a privacy claim, so it must not promise data the report doesn't carry.
+    func testMakeReportPreviewViewModel_onlySummarisesGroupsTheReportActuallyCarries() {
+        let payload = WebCompatReportPayload.make(
+            from: makeState(url: "https://example.com", selectedCategory: .other)
+        )
+
+        let bullets = payload.makeReportPreviewViewModel().bullets
+
+        XCTAssertEqual(bullets.map(\.id), ["basic"])
+    }
+
+    func testMakeReportPreviewViewModel_addsABulletOnceAGroupHasAValue() throws {
+        var payload = WebCompatReportPayload()
+        payload.memory = 8192
+
+        let bullets = payload.makeReportPreviewViewModel().bullets
+
+        XCTAssertEqual(bullets.map(\.id), ["system"])
+        XCTAssertFalse(try XCTUnwrap(bullets.first).text.isEmpty)
+    }
+
+    func testMakeReportPreviewViewModel_withNothingCollected_summarisesNothing() {
+        XCTAssertTrue(WebCompatReportPayload().makeReportPreviewViewModel().bullets.isEmpty)
     }
 
     // MARK: - Helpers

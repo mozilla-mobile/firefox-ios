@@ -4969,6 +4969,58 @@ extension String {
                 value: "Close",
                 comment: "Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen."
             )
+            public static let TechnicalData = MZLocalizedString(
+                key: "WebCompatReporter.Preview.TechnicalData.v155",
+                tableName: "WebCompatReporter",
+                value: "Technical Data",
+                comment: "Label of the row on the Report Preview screen that opens the Technical Data screen, and the title of that screen. The Technical Data screen lists the exact values that will be sent with a website issue report."
+            )
+            /// One line per payload group, describing in plain language what that group contributes
+            /// to the report. Shown only for groups the report actually carries.
+            public struct Summary {
+                public static let Basic = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Summary.Basic.v155",
+                    tableName: "WebCompatReporter",
+                    value: "The address of this page, the problem you chose, and any details you typed",
+                    comment: "Bullet on the Report Preview screen summarising the core information sent with a website issue report."
+                )
+                public static let TabInfo = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Summary.TabInfo.v155",
+                    tableName: "WebCompatReporter",
+                    value: "The languages this page was requested in, and how the browser identified itself to it",
+                    comment: "Bullet on the Report Preview screen summarising information about the tab that is sent with a website issue report."
+                )
+                public static let AntiTracking = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Summary.AntiTracking.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Your tracking protection settings, and the hostnames of trackers blocked on this page",
+                    comment: "Bullet on the Report Preview screen summarising tracking protection information that is sent with a website issue report."
+                )
+                public static let Frameworks = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Summary.Frameworks.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Whether this page uses code that is known to cause problems on mobile",
+                    comment: "Bullet on the Report Preview screen summarising detection of web frameworks known to break mobile pages, sent with a website issue report."
+                )
+                public static let App = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Summary.App.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Your app's default languages and browser identification",
+                    comment: "Bullet on the Report Preview screen summarising app-level information sent with a website issue report."
+                )
+                public static let System = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Summary.System.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Whether you are on a tablet, and how much memory your device has",
+                    comment: "Bullet on the Report Preview screen summarising device information sent with a website issue report."
+                )
+                public static let Graphics = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Summary.Graphics.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Your screen's pixel density, and whether it is a touchscreen",
+                    comment: "Bullet on the Report Preview screen summarising display information sent with a website issue report."
+                )
+            }
         }
         public struct Toast {
             public static let ReportSent = MZLocalizedString(

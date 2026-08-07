@@ -81,6 +81,18 @@ struct WebCompatReportPayload: Equatable {
             case app
             case system
             case graphics
+
+            var summary: String {
+                switch self {
+                case .basic: return .WebCompatReporter.Preview.Summary.Basic
+                case .tabInfo: return .WebCompatReporter.Preview.Summary.TabInfo
+                case .antiTracking: return .WebCompatReporter.Preview.Summary.AntiTracking
+                case .frameworks: return .WebCompatReporter.Preview.Summary.Frameworks
+                case .app: return .WebCompatReporter.Preview.Summary.App
+                case .system: return .WebCompatReporter.Preview.Summary.System
+                case .graphics: return .WebCompatReporter.Preview.Summary.Graphics
+                }
+            }
         }
 
         let id: Identifier
@@ -125,14 +137,38 @@ struct WebCompatReportPayload: Equatable {
         ]
     }
 
-    func makePreviewViewModel() -> WebCompatTechnicalDataViewModel {
-        return WebCompatTechnicalDataViewModel(
+    func makeReportPreviewViewModel() -> WebCompatReportPreviewViewModel {
+        return WebCompatReportPreviewViewModel(
             title: .WebCompatReporter.Preview.Title,
             closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
-            // Unread while the thumbnail is off; they come back with the screenshot in FXIOS-16450.
+            // Unread while the thumbnail is off; FXIOS-16450 brings them back.
             screenshotAccessibilityLabel: "",
             screenshotA11yIdentifier: "",
+            bullets: summaryBullets,
+            bulletsA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.summary,
+            technicalDataTitle: .WebCompatReporter.Preview.TechnicalData,
+            technicalDataA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.technicalDataRow
+        )
+    }
+
+    /// Built from `previewGroups`, so the summary can't claim data the report doesn't carry. A group
+    /// with every field absent earns no bullet.
+    private var summaryBullets: [WebCompatReportPreviewViewModel.Bullet] {
+        return previewGroups.compactMap { group in
+            guard group.fields.contains(where: { $0.value != .null }) else { return nil }
+            return WebCompatReportPreviewViewModel.Bullet(
+                id: group.id.rawValue,
+                text: group.id.summary
+            )
+        }
+    }
+
+    func makeTechnicalDataViewModel() -> WebCompatTechnicalDataViewModel {
+        return WebCompatTechnicalDataViewModel(
+            title: .WebCompatReporter.Preview.TechnicalData,
+            closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
+            closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
             sections: previewGroups.map { group in
                 let groupID = group.id.rawValue
                 return WebCompatTechnicalDataViewModel.PreviewSection(
