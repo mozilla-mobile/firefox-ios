@@ -19,6 +19,8 @@ final class WallpaperStateTests: XCTestCase {
         XCTAssertNil(initialState.wallpaperConfiguration.textColor)
         XCTAssertNil(initialState.wallpaperConfiguration.cardColor)
         XCTAssertNil(initialState.wallpaperConfiguration.logoTextColor)
+        XCTAssertEqual(initialState.availableContentHeight, 0)
+        XCTAssertEqual(initialState.availableWallpaperHeight, 0)
     }
 
     @MainActor
@@ -79,6 +81,81 @@ final class WallpaperStateTests: XCTestCase {
         XCTAssertEqual(newState.wallpaperConfiguration.textColor, .black)
         XCTAssertEqual(newState.wallpaperConfiguration.cardColor, .black)
         XCTAssertEqual(newState.wallpaperConfiguration.logoTextColor, .black)
+    }
+
+    @MainActor
+    func test_availableContentHeightDidChange_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = headerReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            HomepageAction(
+                availableContentHeight: 500,
+                availableWallpaperHeight: 525,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.availableContentHeight, 500)
+        XCTAssertEqual(newState.availableWallpaperHeight, 525)
+    }
+
+    @MainActor
+    func test_availableContentHeightDidChange_withPartialHeights_keepsPreviousValues() {
+        let reducer = headerReducer()
+
+        let initialState = reducer.legacyReducer(
+            createSubject(),
+            HomepageAction(
+                availableContentHeight: 500,
+                availableWallpaperHeight: 525,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            HomepageAction(
+                availableWallpaperHeight: 600,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.availableContentHeight, 500)
+        XCTAssertEqual(newState.availableWallpaperHeight, 600)
+    }
+
+    @MainActor
+    func test_wallpaperDidChange_keepsAvailableHeights() {
+        let reducer = headerReducer()
+
+        let initialState = reducer.legacyReducer(
+            createSubject(),
+            HomepageAction(
+                availableContentHeight: 500,
+                availableWallpaperHeight: 525,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            WallpaperAction(
+                wallpaperConfiguration: WallpaperConfiguration(portraitImage: image),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WallpaperMiddlewareActionType.wallpaperDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.wallpaperConfiguration.portraitImage, image)
+        XCTAssertEqual(newState.availableContentHeight, 500)
+        XCTAssertEqual(newState.availableWallpaperHeight, 525)
     }
 
     // MARK: - Private
