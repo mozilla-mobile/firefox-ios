@@ -46,11 +46,7 @@ final class WebCompatReporterMiddleware {
 
         case WebCompatReporterViewActionType.preview:
             telemetry.previewed()
-            store.dispatch(WebCompatReporterMiddlewareAction(
-                previewPayload: makeReport(windowUUID: action.windowUUID, state: state),
-                windowUUID: action.windowUUID,
-                actionType: WebCompatReporterMiddlewareActionType.didBuildPreview
-            ))
+            buildPreview(windowUUID: action.windowUUID, state: state)
 
         case WebCompatReporterViewActionType.cancel:
             telemetry.cancelled()
@@ -66,28 +62,53 @@ final class WebCompatReporterMiddleware {
         }
     }
 
+    /// Reading the page is a round trip through the web view, so the preview lands as a later
+    /// dispatch rather than in the same turn as the action.
+    private func buildPreview(windowUUID: WindowUUID, state: AppState) {
+        Task {
+            let payload = await makeReport(windowUUID: windowUUID, state: state)
+            store.dispatch(WebCompatReporterMiddlewareAction(
+                previewPayload: payload,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterMiddlewareActionType.didBuildPreview
+            ))
+        }
+    }
+
     private func submitReport(windowUUID: WindowUUID, state: AppState) {
         let reporterState = WebCompatReporterState(appState: state, uuid: windowUUID)
-        recorder.submit(makeReport(windowUUID: windowUUID, state: state))
         // The screenshot option is parked (FXIOS-16450) and no image is transported yet.
         telemetry.created(withBlockedTrackers: reporterState.includeBlockedList, withScreenshot: false)
 
+        // Dismiss before collecting: unlike the preview, nobody is waiting to read the result,
+        // and a site broken enough to report is a site that can hang its own JavaScript.
         store.dispatch(WebCompatReporterMiddlewareAction(
             windowUUID: windowUUID,
             actionType: WebCompatReporterMiddlewareActionType.didSubmit
         ))
+
+        Task { [recorder] in
+            recorder.submit(await makeReport(windowUUID: windowUUID, state: state))
+        }
     }
 
     /// The only place a report is assembled, so the preview can't differ from what's sent.
-    private func makeReport(windowUUID: WindowUUID, state: AppState) -> WebCompatReportPayload {
+    private func makeReport(windowUUID: WindowUUID, state: AppState) async -> WebCompatReportPayload {
         let reporterState = WebCompatReporterState(appState: state, uuid: windowUUID)
-        let payload = WebCompatReportPayload.make(from: reporterState)
-        guard let tab = selectedTab(for: windowUUID) else { return payload }
-        return WebCompatReportDataCollector.enrich(
-            payload,
+        let draft = WebCompatReportPayload.make(from: reporterState)
+        guard let tab = selectedTab(for: windowUUID) else { return draft }
+        let includeTabSpecificInfo = isReporting(reporterState.url, on: tab)
+        let payload = WebCompatReportDataCollector.enrich(
+            draft,
             tab: tab,
             includeBlockedList: reporterState.includeBlockedList,
-            includeTabSpecificInfo: isReporting(reporterState.url, on: tab)
+            includeTabSpecificInfo: includeTabSpecificInfo
+        )
+        // Page context is `tab_info`, so it follows the same opt-out as the rest of that group.
+        guard includeTabSpecificInfo, let webView = tab.webView else { return payload }
+        return WebCompatReportDataCollector.enrich(
+            payload,
+            pageContext: await WebCompatPageContextReader.read(from: webView)
         )
     }
 

@@ -38,8 +38,8 @@ struct WebCompatTabSnapshot: Equatable {
     var blockedOrigins: [String]?
 }
 
-/// Fills the `broken-site-report` fields readable natively, plus the page screenshot.
-/// The `fastclick`/`marfeel`/`mobify` flags need JavaScript, so they stay nil until FXIOS-16184.
+/// Fills the `broken-site-report` fields readable natively, plus the page screenshot. The
+/// fields only the page can answer arrive separately, via `WebCompatPageContextReader`.
 enum WebCompatReportDataCollector {
     /// Reads the tab into a snapshot and hands off to the pure mapping below.
     @MainActor
@@ -65,8 +65,8 @@ enum WebCompatReportDataCollector {
         tab: WebCompatTabSnapshot
     ) -> WebCompatReportPayload {
         var payload = payload
-        // `languages` is the page's navigator.languages (FXIOS-16184); only
-        // `defaultLocales` is an app-level list.
+        // `languages` is the page's navigator.languages; only `defaultLocales` is an
+        // app-level list.
         payload.defaultLocales = device.preferredLanguages
         payload.isTablet = device.isTablet
         payload.memory = device.physicalMemoryMegabytes
@@ -84,6 +84,22 @@ enum WebCompatReportDataCollector {
             payload.etpCategory = etpCategory(for: blockingStrength)
             payload.blockedOrigins = tab.blockedOrigins
         }
+        return payload
+    }
+
+    /// Pure mapping for the fields the page supplies. `navigator.userAgent` wins over the
+    /// tab's `customUserAgent`, which is nil unless the tab overrides the default UA, and is
+    /// the app's intent rather than what the page actually saw.
+    static func enrich(
+        _ payload: WebCompatReportPayload,
+        pageContext: WebCompatPageContext
+    ) -> WebCompatReportPayload {
+        var payload = payload
+        payload.languages = pageContext.languages ?? payload.languages
+        payload.userAgentString = pageContext.userAgent ?? payload.userAgentString
+        payload.fastclick = pageContext.fastclick
+        payload.marfeel = pageContext.marfeel
+        payload.mobify = pageContext.mobify
         return payload
     }
 

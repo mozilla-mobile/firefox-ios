@@ -52,27 +52,44 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - submit
 
-    func test_submit_submitsThePingAndDispatchesDidSubmit() throws {
+    // The sheet is dismissed up front, before the page is read.
+    func test_submit_dispatchesDidSubmitBeforeCollectingTheReport() async throws {
         let subject = createSubject()
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
-        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        // The dismissal goes out in the same turn as the action; the ping does not.
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 0)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
         XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didSubmit)
+
+        // The collection task holds the middleware while it runs, so let it finish before the
+        // leak check rather than reporting the in-flight retain as a leak.
+        await waitFor { gleanWrapper.submitPingCalled == 1 }
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_submit_submitsThePing() async {
+        let subject = createSubject()
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+        await waitFor { gleanWrapper.submitPingCalled == 1 }
+
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
     // MARK: - Tab-specific info
 
-    func test_submit_whenURLStillMatchesTheTab_includesTabFields() {
+    func test_submit_whenURLStillMatchesTheTab_includesTabFields() async {
         let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
         setReportedURL("https://example.com/page")
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+        await waitFor { gleanWrapper.submitPingCalled == 1 }
 
         // is_private_browsing on top of the device's has_touch_screen and is_tablet.
         XCTAssertEqual(gleanWrapper.setBooleanCalled, 3)
@@ -80,11 +97,12 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_submit_whenURLNoLongerMatchesTheTab_dropsTabFields() {
+    func test_submit_whenURLNoLongerMatchesTheTab_dropsTabFields() async {
         let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
         setReportedURL("https://different.example/other")
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+        await waitFor { gleanWrapper.submitPingCalled == 1 }
 
         XCTAssertEqual(gleanWrapper.setBooleanCalled, 2)
 
@@ -93,11 +111,12 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - preview
 
-    func test_preview_dispatchesDidBuildPreviewWithTheReport() throws {
+    func test_preview_dispatchesDidBuildPreviewWithTheReport() async throws {
         let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
         setReportedURL("https://example.com/page")
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
+        await waitFor { !mockStore.dispatchedActions.isEmpty }
 
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
@@ -109,18 +128,24 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_preview_whenURLNoLongerMatchesTheTab_dropsTabFieldsLikeSubmit() throws {
+    func test_preview_whenURLNoLongerMatchesTheTab_dropsTabFieldsLikeSubmit() async throws {
         // The preview has to drop exactly what the ping drops.
         let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
         setReportedURL("https://different.example/other")
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
+        await waitFor { !mockStore.dispatchedActions.isEmpty }
 
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let payload = try XCTUnwrap(dispatched.previewPayload)
         XCTAssertNil(payload.isPrivateBrowsing)
         XCTAssertNil(payload.blockList)
+        // Page context is `tab_info`, so reporting a different URL must leave all of it out.
         XCTAssertNil(payload.userAgentString)
+        XCTAssertNil(payload.languages)
+        XCTAssertNil(payload.fastclick)
+        XCTAssertNil(payload.marfeel)
+        XCTAssertNil(payload.mobify)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -170,7 +195,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_preview_recordsPreviewed() {
+    func test_preview_recordsPreviewed() async {
         let subject = createSubject()
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
@@ -178,6 +203,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
         XCTAssertTrue(savedNoExtraEvent(is: GleanMetrics.BrokenSiteReportInteractions.previewed))
 
+        // Building the preview holds the middleware while it runs; let it finish first.
+        await waitFor { !mockStore.dispatchedActions.isEmpty }
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
@@ -203,7 +230,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_submit_recordsCreatedCarryingTheBlockedListChoice() throws {
+    func test_submit_recordsCreatedCarryingTheBlockedListChoice() async throws {
         let subject = createSubject()
         setIncludeBlockedList(true)
 
@@ -212,10 +239,11 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(createdExtras())
         XCTAssertEqual(savedExtras.hasBlockedTrackersList, true)
 
+        await waitFor { gleanWrapper.submitPingCalled == 1 }
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_submit_whenStateWantsAScreenshot_stillRecordsCreatedWithoutOne() throws {
+    func test_submit_whenStateWantsAScreenshot_stillRecordsCreatedWithoutOne() async throws {
         let subject = createSubject()
         XCTAssertTrue(WebCompatReporterState(windowUUID: .XCTestDefaultUUID).includeScreenshot)
 
@@ -225,6 +253,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.hasScreenshot, false)
         XCTAssertEqual(savedExtras.hasBlockedTrackersList, false)
 
+        await waitFor { gleanWrapper.submitPingCalled == 1 }
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
@@ -266,6 +295,14 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
+
+    /// The report is assembled on a task the middleware doesn't hand back, so yield until the
+    /// work lands rather than assuming it finished on the first hop.
+    private func waitFor(_ isDone: () -> Bool, iterations: Int = 100) async {
+        for _ in 0..<iterations where !isDone() {
+            await Task.yield()
+        }
+    }
 
     private func submitAction() -> WebCompatReporterViewAction {
         return WebCompatReporterViewAction(
