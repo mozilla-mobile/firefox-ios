@@ -15,6 +15,7 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
     typealias PreviewValue = WebCompatReportPreviewViewModel.PreviewValue
 
     let screenshot: UIImage?
+    var themeType: ThemeType = .light
 
     func makeUIViewController(context: Context) -> UINavigationController {
         let viewModel = WebCompatReportPreviewViewModel(
@@ -25,10 +26,15 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
             screenshotA11yIdentifier: "WebCompatReporter.Preview.Screenshot",
             sections: Self.sampleSections
         )
+        // The screen reads its colors from the manager, so the canvas appearance alone can't
+        // darken it; the manager has to be told.
+        let themeManager = DefaultThemeManager(sharedContainerIdentifier: "")
+        themeManager.setSystemTheme(isOn: false)
+        themeManager.setManualTheme(to: themeType)
         let controller = WebCompatReportPreviewViewController(
             viewModel: viewModel,
             windowUUID: .DefaultUITestingUUID,
-            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+            themeManager: themeManager
         )
         controller.updateScreenshot(screenshot)
         return UINavigationController(rootViewController: controller)
@@ -121,6 +127,12 @@ private func previewSampleScreenshot() -> UIImage {
 @available(iOS 17.0, *)
 #Preview("Screenshot off") {
     WebCompatReportPreviewHost(screenshot: nil)
+        .ignoresSafeArea()
+}
+
+@available(iOS 17.0, *)
+#Preview("With screenshot (dark)") {
+    WebCompatReportPreviewHost(screenshot: previewSampleScreenshot(), themeType: .dark)
         .ignoresSafeArea()
 }
 #endif
