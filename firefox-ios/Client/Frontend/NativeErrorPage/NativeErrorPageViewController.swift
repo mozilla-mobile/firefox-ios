@@ -152,6 +152,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private let searchEnginesManager: SearchEnginesManagerProvider
+    private let telemetry = WaybackTelemetry()
 
     init(
         windowUUID: WindowUUID,
@@ -426,6 +427,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func regularContentViewDidTapSearchWayback() {
+        telemetry.checkArchiveButtonTapped()
         guard let failingURL = model?.url?.baseURLWithPath else { return }
         regularContentView.configureWaybackButton(state: .loading)
 
@@ -437,6 +439,7 @@ final class NativeErrorPageViewController: UIViewController,
                     await MainActor.run { self.regularContentView.configureWaybackButton(state: .failed(.notFound)) }
                     return
                 }
+                telemetry.foundArchive()
                 await MainActor.run {
                     store.dispatch(
                         GeneralBrowserAction(
@@ -454,6 +457,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func regularContentViewDidTapSearchWeb() {
+        telemetry.searchTheWebButtonTapped()
         guard let failingURL = model?.url?.baseURLWithPath,
               let defaultEngine = searchEnginesManager.defaultEngine else { return }
 
