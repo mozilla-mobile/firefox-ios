@@ -427,7 +427,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func regularContentViewDidTapSearchWayback() {
-        telemetry.searchForArchiveTapped()
+        telemetry.checkArchiveButtonTapped()
         guard let failingURL = model?.url?.baseURLWithPath else { return }
         regularContentView.configureWaybackButton(state: .loading)
 
@@ -457,7 +457,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func regularContentViewDidTapSearchWeb() {
-        telemetry.searchTheWebTapped()
+        telemetry.searchTheWebButtonTapped()
         guard let failingURL = model?.url?.baseURLWithPath,
               let defaultEngine = searchEnginesManager.defaultEngine else { return }
 

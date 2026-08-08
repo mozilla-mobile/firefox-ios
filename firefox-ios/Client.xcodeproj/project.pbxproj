@@ -1567,7 +1567,6 @@
 		BC8E91DC2E32953C00434FD0 /* AppleIntelligenceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */; };
 		BCB769192E4F80650046AA37 /* StylingViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB769182E4F805C0046AA37 /* StylingViewModifiers.swift */; };
 		BCBE058C2E3A8720004B6039 /* SummarizeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */; };
-		D1A0B7C22F00000100000002 /* WebsiteDataManagementViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B7C12F00000100000001 /* WebsiteDataManagementViewModelTests.swift */; };
 		BCBE09BF2E3BAE2A004B6039 /* SummarizeSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBE09BE2E3BAE22004B6039 /* SummarizeSettingsViewControllerTests.swift */; };
 		BCFB141D2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json in Resources */ = {isa = PBXBuildFile; fileRef = BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
@@ -1922,6 +1921,7 @@
 		D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */; };
 		D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8041FE4772D004A7995 /* MainFrameAtDocumentEnd.js */; };
 		D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8051FE4772D004A7995 /* MainFrameAtDocumentStart.js */; };
+		D1A0B7C22F00000100000002 /* WebsiteDataManagementViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B7C12F00000100000001 /* WebsiteDataManagementViewModelTests.swift */; };
 		D308EE561CBF0BF5006843F2 /* CertError.css in Resources */ = {isa = PBXBuildFile; fileRef = D308EE551CBF0BF5006843F2 /* CertError.css */; };
 		D313BE981B2F5096009EF241 /* DomainAutocompleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D313BE971B2F5096009EF241 /* DomainAutocompleteTests.swift */; };
 		D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */; };
@@ -10685,7 +10685,6 @@
 		BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceUtil.swift; sourceTree = "<group>"; };
 		BCB769182E4F805C0046AA37 /* StylingViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StylingViewModifiers.swift; sourceTree = "<group>"; };
 		BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeSetting.swift; sourceTree = "<group>"; };
-		D1A0B7C12F00000100000001 /* WebsiteDataManagementViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewModelTests.swift; sourceTree = "<group>"; };
 		BCBE09BE2E3BAE22004B6039 /* SummarizeSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feltPrivacySimplifiedUIOff.json; sourceTree = "<group>"; };
@@ -11160,6 +11159,7 @@
 		D1504B5491C90F2173E13F4D /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D15D49D4942687A9EAFE3AC5 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D19B43BF89F6A47FDCC5A328 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		D1A0B7C12F00000100000001 /* WebsiteDataManagementViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewModelTests.swift; sourceTree = "<group>"; };
 		D20246EBAE7615F6F0F4703B /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D21443B0B8E223EA80B6BAF0 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		D21F4BB0BB5AA901D1F7C2D7 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Shared.strings; sourceTree = "<group>"; };

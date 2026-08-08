@@ -24,9 +24,9 @@ final class WaybackTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenSearchForArchiveTapped_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.WaybackErrorPage.checkButtonTapped
+        let event = GleanMetrics.WebviewErrorPageWaybackMachine.checkArchiveButtonTapped
 
-        subject?.searchForArchiveTapped()
+        subject?.checkArchiveButtonTapped()
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
 
@@ -35,7 +35,7 @@ final class WaybackTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenFoundArchive_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.WaybackErrorPage.archiveFound
+        let event = GleanMetrics.WebviewErrorPageWaybackMachine.archiveFound
 
         subject?.foundArchive()
 
@@ -46,9 +46,9 @@ final class WaybackTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenSearchTheWebTapped_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.WaybackErrorPage.searchTheWebTapped
+        let event = GleanMetrics.WebviewErrorPageWaybackMachine.searchTheWebButtonTapped
 
-        subject?.searchTheWebTapped()
+        subject?.searchTheWebButtonTapped()
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
 
