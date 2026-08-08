@@ -25,7 +25,7 @@ wayback_error_page:
   check_button_tapped:
     type: event
     description: |
-      Records when the user taps the check for archive button.
+      Recorded when the user taps the button to check for a Wayback Machine archive of a webpage.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
