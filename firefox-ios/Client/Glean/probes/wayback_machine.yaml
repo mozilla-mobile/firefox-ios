@@ -53,7 +53,7 @@ wayback_error_page:
   search_the_web_tapped:
     type: event
     description: |
-      Records when the user hits search the web due to wayback not finding an archive.
+      Recorded when the user taps the button to search the web after the Wayback Machine finds no archive for a webpage.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
