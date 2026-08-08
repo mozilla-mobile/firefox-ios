@@ -27,10 +27,7 @@ wayback_error_page:
     description: |
       Recorded when the user taps the button to check for a Wayback Machine archive of a webpage.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
@@ -41,10 +38,7 @@ wayback_error_page:
     description: |
       Recorded when the Wayback Machine returns a valid archive for a failing URL.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
@@ -55,10 +49,7 @@ wayback_error_page:
     description: |
       Recorded when the user taps the button to search the web after the Wayback Machine finds no archive for a webpage.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16209
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16433
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35045
     notification_emails:
