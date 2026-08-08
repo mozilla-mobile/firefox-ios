@@ -156,7 +156,7 @@ User:
   description: Corresponds to user properties and settings.
 
 WaybackMachine:
-  description: Corresponds to waybackMachine error page interactions
+  description: Corresponds to Wayback Machine error page interactions
 
 WebCompat:
   description: Corresponds to the in-app "Report Broken Site" (WebCompat) reporting tool.
