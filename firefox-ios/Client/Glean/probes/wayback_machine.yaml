@@ -39,7 +39,7 @@ wayback_error_page:
   archive_found:
     type: event
     description: |
-      Records when the wayback machine returns a valid archive for the failing URL.
+      Recorded when the Wayback Machine returns a valid archive for a failing URL.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16191
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16206
