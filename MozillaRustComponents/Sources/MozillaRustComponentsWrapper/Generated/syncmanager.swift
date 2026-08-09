@@ -1234,6 +1234,8 @@ public enum SyncManagerError: Swift.Error, Equatable, Hashable, Foundation.Local
     
     case UnsupportedFeature(message: String)
     
+    case Busy(message: String)
+    
     case Sync15Error(message: String)
     
     case UrlParseError(message: String)
@@ -1285,31 +1287,35 @@ public struct FfiConverterTypeSyncManagerError: FfiConverterRustBuffer {
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 3: return .Sync15Error(
+        case 3: return .Busy(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 4: return .UrlParseError(
+        case 4: return .Sync15Error(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 5: return .InterruptedError(
+        case 5: return .UrlParseError(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 6: return .JsonError(
+        case 6: return .InterruptedError(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 7: return .LoginsError(
+        case 7: return .JsonError(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 8: return .PlacesError(
+        case 8: return .LoginsError(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 9: return .AnyhowError(
+        case 9: return .PlacesError(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 10: return .AnyhowError(
             message: try FfiConverterString.read(from: &buf)
         )
         
@@ -1328,20 +1334,22 @@ public struct FfiConverterTypeSyncManagerError: FfiConverterRustBuffer {
             writeInt(&buf, Int32(1))
         case .UnsupportedFeature(_ /* message is ignored*/):
             writeInt(&buf, Int32(2))
-        case .Sync15Error(_ /* message is ignored*/):
+        case .Busy(_ /* message is ignored*/):
             writeInt(&buf, Int32(3))
-        case .UrlParseError(_ /* message is ignored*/):
+        case .Sync15Error(_ /* message is ignored*/):
             writeInt(&buf, Int32(4))
-        case .InterruptedError(_ /* message is ignored*/):
+        case .UrlParseError(_ /* message is ignored*/):
             writeInt(&buf, Int32(5))
-        case .JsonError(_ /* message is ignored*/):
+        case .InterruptedError(_ /* message is ignored*/):
             writeInt(&buf, Int32(6))
-        case .LoginsError(_ /* message is ignored*/):
+        case .JsonError(_ /* message is ignored*/):
             writeInt(&buf, Int32(7))
-        case .PlacesError(_ /* message is ignored*/):
+        case .LoginsError(_ /* message is ignored*/):
             writeInt(&buf, Int32(8))
-        case .AnyhowError(_ /* message is ignored*/):
+        case .PlacesError(_ /* message is ignored*/):
             writeInt(&buf, Int32(9))
+        case .AnyhowError(_ /* message is ignored*/):
+            writeInt(&buf, Int32(10))
 
         
         }
