@@ -20,6 +20,7 @@ final class MockTabWebView: TabWebView {
     var loadedURL: URL?
     var takeSnapshotWasCalled = false
     var takeSnapshotShouldFail = false
+    var mockSnapshotImage = UIImage.strokedCheckmark
     var mockHasOnlySecureContent = false
     var mockCanGoBack = false
     var mockCanGoForward = false
@@ -115,7 +116,7 @@ final class MockTabWebView: TabWebView {
         if takeSnapshotShouldFail {
             completionHandler(nil, NSError(domain: "", code: 500, userInfo: nil))
         } else {
-            completionHandler(UIImage.strokedCheckmark, nil)
+            completionHandler(mockSnapshotImage, nil)
         }
     }
 }

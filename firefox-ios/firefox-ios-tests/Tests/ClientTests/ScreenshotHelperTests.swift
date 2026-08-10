@@ -95,8 +95,10 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
 
         XCTAssertTrue(mockTabWebView.takeSnapshotWasCalled)
         XCTAssertEqual(screenshotAction.tab, tab)
-        XCTAssertEqual(tab.screenshot, UIImage.strokedCheckmark)
         XCTAssertFalse(tab.hasHomeScreenshot)
+        XCTAssertNotNil(tab.screenshot?.cgImage)
+        XCTAssertEqual(tab.screenshot?.cgImage?.width, mockTabWebView.mockSnapshotImage.cgImage?.width)
+        XCTAssertEqual(tab.screenshot?.cgImage?.height, mockTabWebView.mockSnapshotImage.cgImage?.height)
     }
 
     private func createSubject() -> ScreenshotHelper {

@@ -5,6 +5,43 @@
 import PDFKit
 
 extension UIImage {
+    /// Redraws the image into a bitmap this process owns.
+    ///
+    /// Images vended by `WKWebView.takeSnapshot` are backed by a surface belonging to the web content
+    /// process, and only materialize their pixels the first time something draws them. When that draw is
+    /// deferred to a background actor the surface may already have been recycled or purged, which faults
+    /// inside CoreGraphics rather than failing gracefully. Call this on the main thread, while the source
+    /// is still valid, before handing the image off to be drawn later.
+    ///
+    /// The copy is taken from the source's pixel grid rather than from `size` x `scale`, so it is
+    /// pixel exact and never resampled, even when the point size does not divide evenly.
+    /// - Returns: a copy backed by memory this process owns, or `self` if the image has no `cgImage`
+    /// or no bitmap context can be created for it.
+    func copiedIntoOwnedBitmap() -> UIImage {
+        guard let source = cgImage, source.width > 0, source.height > 0 else { return self }
+
+        // BGRA8 premultiplied is CoreGraphics' fast path. Fall back to a device RGB space when the
+        // source carries one a bitmap context cannot be created with.
+        let bitmapInfo = CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
+        let makeContext = { (space: CGColorSpace) in
+            CGContext(data: nil,
+                      width: source.width,
+                      height: source.height,
+                      bitsPerComponent: 8,
+                      bytesPerRow: 0,
+                      space: space,
+                      bitmapInfo: bitmapInfo)
+        }
+
+        guard let context = source.colorSpace.flatMap(makeContext) ?? makeContext(CGColorSpaceCreateDeviceRGB())
+        else { return self }
+
+        context.draw(source, in: CGRect(x: 0, y: 0, width: source.width, height: source.height))
+        guard let copy = context.makeImage() else { return self }
+
+        return UIImage(cgImage: copy, scale: scale, orientation: imageOrientation)
+    }
+
     /// Renders PDF data as a UIImage.
     /// - Parameters:
     ///   - data: the PDF data.
