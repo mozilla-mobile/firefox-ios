@@ -67,7 +67,7 @@ final class VPNManager: VPNManaging {
         do {
             let pass = try await self.guardian.getPass()
 
-            // Hardcode server to point at staging for this foxfooding
+            // TODO: Hardcode server to point at staging for this foxfooding
             let server = VPNGuardian.Server(hostname: "stage.m1.fastly-masque.net", port: 2499, city: "", countryCode: "")
 
             self.logger.log(
@@ -106,7 +106,7 @@ final class VPNManager: VPNManaging {
                 guard let self,
                       let server = self.activeServer else { return }
                 let config = self.buildProxyConfig(server: server, pass: new)
-                DefaultWKEngineConfigurationProvider.applyProxyConfigurations([config], scope: .normal)
+                DefaultWKEngineConfigurationProvider.applyProxyConfigurations([config])
                 self.logger.log(
                     "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
                     level: .info,
@@ -116,14 +116,14 @@ final class VPNManager: VPNManaging {
         }
     }
 
-    /// Swap the WebKit data store to one with the new proxy configuration applied, then tear
-    /// down every normal tab's webview against the old store and reload the visible tab.
-    /// Assigning `proxyConfigurations` on an existing store does not invalidate WebKit's
-    /// connection pool, so without a swap, in-flight or pooled connections bypass the proxy.
+    /// Apply the new proxy configuration to the active data stores, then tear down every
+    /// normal tab's webview and reload the visible tab. Assigning `proxyConfigurations` does
+    /// not invalidate WebKit's existing connection pool, so pooled connections keep bypassing
+    /// the proxy until the webviews holding them are discarded.
     ///
     /// Deliberately scoped to `.normal`
     private func applyProxyAndRebuildWebViews(configs: [ProxyConfiguration]) async {
-        DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs, scope: .normal)
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs)
         await rebuildWebViews()
     }
 
