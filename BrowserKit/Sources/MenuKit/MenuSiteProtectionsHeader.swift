@@ -230,7 +230,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             glass.tintColor = theme.colors.layer2
             closeButtonBackground.effect = glass
             closeButtonBackground.isHidden = false
-            closeButton.configuration = nil
             closeButton.backgroundColor = .clear
         } else {
             closeButtonBackground.isHidden = true
