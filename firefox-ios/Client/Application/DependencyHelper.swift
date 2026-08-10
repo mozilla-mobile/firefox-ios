@@ -62,8 +62,7 @@ class DependencyHelper {
         // Registered app-wide so a running proxy session, and its pass rotation task, outlive
         // the screen that started it. Only resolve this behind the same availability check.
         if #available(iOS 26.0, *) {
-            let vpnManager = VPNManager(rsService: profile.remoteSettingsService,
-                                        windowManager: windowManager)
+            let vpnManager = VPNManager(windowManager: windowManager)
             AppContainer.shared.register(service: vpnManager as VPNManaging)
         }
 

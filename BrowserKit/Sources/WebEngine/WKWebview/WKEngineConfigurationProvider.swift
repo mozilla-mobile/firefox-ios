@@ -70,60 +70,6 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         self.configuration = configuration
     }
 
-    @available(iOS 26.0, *)
-    public static func rebuildStores(
-        applyingProxy configs: [ProxyConfiguration],
-        scope: ProxyScope
-    ) async {
-        switch scope {
-        case .normal:
-            let oldStore = defaultStore
-            let newIdentifier = UUID()
-            let newStore = WKWebsiteDataStore(forIdentifier: newIdentifier)
-            newStore.proxyConfigurations = configs
-            await copyData(from: oldStore, to: newStore)
-            await copyCookies(from: oldStore, to: newStore)
-            staleStoreIdentifier = defaultStoreIdentifier
-            defaultStore = newStore
-            defaultStoreIdentifier = newIdentifier
-        case .private:
-            let oldStore = nonPersistentStore
-            let newStore = WKWebsiteDataStore.nonPersistent()
-            newStore.proxyConfigurations = configs
-            await copyData(from: oldStore, to: newStore)
-            await copyCookies(from: oldStore, to: newStore)
-            nonPersistentStore = newStore
-        }
-    }
-
-    /// Migrates the swapped-in persistent store's data back into `WKWebsiteDataStore.default()`
-    /// and marks the identified store for removal. Call when the proxy is turned off: the app
-    /// always starts on the default store, so returning to it here is what keeps data written
-    /// during a proxy session reachable after the process is killed and relaunched.
-    @available(iOS 26.0, *)
-    public static func restoreDefaultStore() async {
-        guard let currentIdentifier = defaultStoreIdentifier else { return }
-
-        let oldStore = defaultStore
-        let newStore = WKWebsiteDataStore.default()
-        newStore.proxyConfigurations = []
-        await copyData(from: oldStore, to: newStore)
-        await copyCookies(from: oldStore, to: newStore)
-        defaultStore = newStore
-        defaultStoreIdentifier = nil
-        staleStoreIdentifier = currentIdentifier
-    }
-
-    @available(iOS 26.0, *)
-    public static func copyData(from oldStore: WKWebsiteDataStore, to newStore: WKWebsiteDataStore) async {
-        do {
-            let oldData = try await oldStore.fetchData(of: WKWebsiteDataStore.allWebsiteDataTypes())
-            try await newStore.restoreData(oldData)
-        } catch {
-            // log error
-        }
-    }
-
     /// Assigns `proxyConfigurations` on the active stores without swapping them or copying
     /// cookies. Use this for token rotation, where the proxy endpoint is unchanged and only
     /// the auth header differs: WebKit keeps the existing connection pool so in-flight
@@ -138,32 +84,6 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
             defaultStore.proxyConfigurations = configs
         case .private:
             nonPersistentStore.proxyConfigurations = configs
-        }
-    }
-
-    /// Removes the on-disk footprint of persistent stores previously displaced by
-    /// `rebuildStores(applyingProxy:scope:)`. Call only after webviews referencing those
-    /// stores have been discarded — outstanding requests keep the store alive and removal
-    /// will fail.
-    @available(iOS 17.0, *)
-    public static func removeStaleStores() async {
-        do {
-            if let staleID = Self.staleStoreIdentifier {
-                try await WKWebsiteDataStore.remove(forIdentifier: staleID)
-            }
-        } catch {
-            // log error
-        }
-    }
-
-    @available(iOS 17.0, *)
-    private static func copyCookies(
-        from oldStore: WKWebsiteDataStore,
-        to newStore: WKWebsiteDataStore
-    ) async {
-        let cookies = await oldStore.httpCookieStore.allCookies()
-        for cookie in cookies {
-            await newStore.httpCookieStore.setCookie(cookie)
         }
     }
 
