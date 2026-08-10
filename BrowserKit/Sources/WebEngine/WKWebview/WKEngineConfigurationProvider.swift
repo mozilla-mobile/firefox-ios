@@ -57,12 +57,6 @@ public protocol WKEngineConfigurationProvider {
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
     public private(set) static var defaultStore = WKWebsiteDataStore.default()
-    /// Identifier of the persistent store currently held in `defaultStore`, when we have
-    /// swapped away from `WKWebsiteDataStore.default()` (e.g. for a VPN session). Used to
-    /// clean up the on-disk footprint via `WKWebsiteDataStore.remove(forIdentifier:)` once
-    /// no webviews retain the previous store.
-    private static var defaultStoreIdentifier: UUID?
-    private static var staleStoreIdentifier: UUID?
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
     private let configuration: WKWebViewConfiguration
 
@@ -76,15 +70,10 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     /// requests get their grace period, and future requests are sent with the new header.
     @available(iOS 17.0, *)
     public static func applyProxyConfigurations(
-        _ configs: [ProxyConfiguration],
-        scope: ProxyScope
+        _ configs: [ProxyConfiguration]
     ) {
-        switch scope {
-        case .normal:
-            defaultStore.proxyConfigurations = configs
-        case .private:
-            nonPersistentStore.proxyConfigurations = configs
-        }
+        defaultStore.proxyConfigurations = configs
+        nonPersistentStore.proxyConfigurations = configs
     }
 
     public func endPrivateBrowsingSession() {
