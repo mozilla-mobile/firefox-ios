@@ -21,8 +21,8 @@ public struct StandardImageIdentifiers {
         public static let notificationDotFill = "notificationDotFillSmall"
         public static let shieldCheckmarkFill = "shieldCheckmarkFillSmall"
         public static let shieldCheckmarkFillGradient = "shieldCheckmarkFillGradientSmall"
-        public static let shieldSlashFillMulticolor = "shieldSlashFillMulticolorSmall"
         public static let shieldSlashFillCritical = "shieldSlashFillCriticalSmall"
+        public static let shieldSlashFillMulticolor = "shieldSlashFillMulticolorSmall"
     }
 
     // Icon size 20x20
