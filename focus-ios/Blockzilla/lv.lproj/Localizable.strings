@@ -1,8 +1,17 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Uzzināt vairāk";
 
+/* Label on About screen */
+"About.privateBullet2" = "Liegt izsekotājus (vai atjaunināt iestatījumus, lai atļautu izsekotājus)";
+
 /* Label for row in About screen */
 "About.rowHelp" = "Palīdzība";
+
+/* Label on About screen */
+"About.safariBullet1" = "Liegt izsekotājus uzlabotam privātumam";
+
+/* Label on About screen */
+"About.safariBullet2" = "Liegt tīmekļa fontus, lai samazinātu lapu izmēru";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Manas vietnes";
@@ -54,4 +63,13 @@
 
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Jā";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Liegt satura izsekotājus";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Liegt tīmekļa fontus";
+
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Atļaut attālos uzlabojumus";
 
