@@ -17,6 +17,8 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
     private var navigationToolbarContainer: UIView!
     private var subviews: [UIView]!
     private var mockTabManager: MockTabManager!
+    private var fakeKeyboardGuide: UILayoutGuide!
+    private var fakeKeyboardHeightConstraint: NSLayoutConstraint!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -40,6 +42,8 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         overKeyboardContainer = nil
         bottomContentStackView = nil
         navigationToolbarContainer = nil
+        fakeKeyboardGuide = nil
+        fakeKeyboardHeightConstraint = nil
         try await super.tearDown()
     }
 
@@ -319,6 +323,83 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         XCTAssertTrue(activeHeightConstraints.isEmpty)
     }
 
+    // MARK: - Keyboard Constraint
+
+    func test_setupOverKeyboardContainerConstraints_withoutKeyboardAnchor_doesNotCreateConstraint() {
+        let subject = createSubject()
+        subject.setupBottomContainerConstraints()
+        subject.setupOverKeyboardContainerConstraints()
+        subject.updateOverKeyboardContainerConstraints(isBottomSearchBar: true, hasZoomPageBar: false)
+
+        let avoidanceConstraint = parentView.constraints.first {
+            $0.firstItem === overKeyboardContainer && $0.relation == .lessThanOrEqual
+        }
+        XCTAssertNil(avoidanceConstraint)
+    }
+
+    func test_updateOverKeyboardContainerConstraints_bottomSearchBarWithKeyboardAnchor_activatesConstraint() {
+        setUpFakeKeyboardGuide()
+        let subject = createSubject(keyboardTopAnchor: fakeKeyboardGuide.topAnchor)
+        subject.setupBottomContainerConstraints()
+        subject.setupOverKeyboardContainerConstraints()
+
+        subject.updateOverKeyboardContainerConstraints(isBottomSearchBar: true, hasZoomPageBar: false)
+
+        let avoidanceConstraint = parentView.constraints.first {
+            $0.firstItem === overKeyboardContainer && $0.firstAttribute == .bottom && $0.relation == .lessThanOrEqual
+        }
+        XCTAssertTrue(avoidanceConstraint?.isActive == true)
+    }
+
+    func test_updateOverKeyboardContainerConstraints_topSearchBarWithKeyboardAnchor_deactivatesConstraint() {
+        setUpFakeKeyboardGuide()
+        let subject = createSubject(keyboardTopAnchor: fakeKeyboardGuide.topAnchor)
+        subject.setupBottomContainerConstraints()
+        subject.setupOverKeyboardContainerConstraints()
+        subject.updateOverKeyboardContainerConstraints(isBottomSearchBar: true, hasZoomPageBar: false)
+        let avoidanceConstraint = parentView.constraints.first {
+            $0.firstItem === overKeyboardContainer && $0.firstAttribute == .bottom && $0.relation == .lessThanOrEqual
+        }
+        XCTAssertNotNil(avoidanceConstraint)
+
+        subject.updateOverKeyboardContainerConstraints(isBottomSearchBar: false, hasZoomPageBar: false)
+
+        XCTAssertFalse(avoidanceConstraint?.isActive ?? true)
+    }
+
+    // MARK: - Keyboard Avoidance Layout Behavior
+
+    func test_bottomSearchBar_prefersRestingPositionWhenKeyboardLeavesRoom() {
+        setUpFakeKeyboardGuide()
+        let subject = createSubject(keyboardTopAnchor: fakeKeyboardGuide.topAnchor)
+        subject.setupBottomContainerConstraints()
+        subject.setupOverKeyboardContainerConstraints()
+        subject.updateOverKeyboardContainerConstraints(isBottomSearchBar: true, hasZoomPageBar: false)
+        overKeyboardContainer.heightAnchor.constraint(equalToConstant: 56).isActive = true
+        bottomContainer.heightAnchor.constraint(equalToConstant: 82).isActive = true
+        fakeKeyboardHeightConstraint.constant = 0
+
+        parentView.layoutIfNeeded()
+
+        XCTAssertEqual(overKeyboardContainer.frame.maxY, bottomContainer.frame.minY, accuracy: 0.5)
+    }
+
+    func test_bottomSearchBar_fallsBackToKeyboardTopWhenTighterThanRestingPosition() {
+        setUpFakeKeyboardGuide()
+        let subject = createSubject(keyboardTopAnchor: fakeKeyboardGuide.topAnchor)
+        subject.setupBottomContainerConstraints()
+        subject.setupOverKeyboardContainerConstraints()
+        subject.updateOverKeyboardContainerConstraints(isBottomSearchBar: true, hasZoomPageBar: false)
+        overKeyboardContainer.heightAnchor.constraint(equalToConstant: 56).isActive = true
+        bottomContainer.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        fakeKeyboardHeightConstraint.constant = 300
+
+        parentView.layoutIfNeeded()
+
+        let expectedBottom = parentView.frame.height - fakeKeyboardHeightConstraint.constant
+        XCTAssertEqual(overKeyboardContainer.frame.maxY, expectedBottom, accuracy: 0.5)
+    }
+
     // MARK: - Update BottomContent StackView Constraints
 
     func test_updateBottomContentStackViewConstraints_bottomToolbar_activatesOverKeyboardConstraint() {
@@ -396,7 +477,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
 
     // MARK: - Private helpers
 
-    private func createSubject() -> BrowserViewControllerLayoutManager {
+    private func createSubject(keyboardTopAnchor: NSLayoutYAxisAnchor? = nil) -> BrowserViewControllerLayoutManager {
         subviews.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             parentView.addSubview($0)
@@ -407,7 +488,8 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
                                                          overKeyboardContainer: overKeyboardContainer,
                                                          bottomContentStackView: bottomContentStackView,
                                                          navigationToolbarContainer: navigationToolbarContainer,
-                                                         toolbarHelper: toolbarHelper)
+                                                         toolbarHelper: toolbarHelper,
+                                                         keyboardTopAnchor: keyboardTopAnchor)
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -417,5 +499,19 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
             [.leading, .trailing, .bottom, .height].contains($0.firstAttribute)
         }
         return relevantConstraints.count
+    }
+
+    /// Before integrating `keyboardLayoutGuide` this allows us to have a fully-controllable guide
+    /// so tests don't depend on a real system keyboard.
+    private func setUpFakeKeyboardGuide() {
+        fakeKeyboardGuide = UILayoutGuide()
+        parentView.addLayoutGuide(fakeKeyboardGuide)
+        fakeKeyboardHeightConstraint = fakeKeyboardGuide.heightAnchor.constraint(equalToConstant: 0)
+        NSLayoutConstraint.activate([
+            fakeKeyboardGuide.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            fakeKeyboardGuide.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+            fakeKeyboardGuide.bottomAnchor.constraint(equalTo: parentView.bottomAnchor),
+            fakeKeyboardHeightConstraint
+        ])
     }
 }
