@@ -436,7 +436,8 @@ final class HomepageViewController: UIViewController,
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
-            let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
+            let animatingDifferences = state.wallpaperState.availableContentHeight
+                == homepageState.wallpaperState.availableContentHeight
             self.homepageState = state
 
             refreshHomepageDataSourceSnapshot(
@@ -445,11 +446,11 @@ final class HomepageViewController: UIViewController,
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
-            updateWallpaperConstraints(availableWallpaperHeight: state.availableWallpaperHeight)
+            updateWallpaperConstraints(availableWallpaperHeight: state.wallpaperState.availableWallpaperHeight)
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
-        if state.shouldTriggerImpression {
+        if state.homepageTelemetryState.shouldTriggerImpression {
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
@@ -476,7 +477,7 @@ final class HomepageViewController: UIViewController,
         view.addSubview(wallpaperView)
 
         let heightConstraint = wallpaperView.heightAnchor.constraint(
-            equalToConstant: homepageState.availableWallpaperHeight
+            equalToConstant: homepageState.wallpaperState.availableWallpaperHeight
         )
         let topConstraint = wallpaperView.topAnchor.constraint(equalTo: view.topAnchor)
 
@@ -1115,7 +1116,10 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
-        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
+        let config = OpenPocketTelemetryConfig(
+            isZeroSearch: homepageState.homepageTelemetryState.isZeroSearch,
+            position: index
+        )
         store.dispatch(
             MerinoAction(
                 telemetryConfig: config,
@@ -1127,7 +1131,7 @@ final class HomepageViewController: UIViewController,
 
     private func dispatchTopSitesAction(at index: Int, config: TopSiteConfiguration, actionType: ActionType) {
         let config = TopSitesTelemetryConfig(
-            isZeroSearch: homepageState.isZeroSearch,
+            isZeroSearch: homepageState.homepageTelemetryState.isZeroSearch,
             position: index,
             topSiteConfiguration: config
         )
@@ -1492,7 +1496,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private var canContextHintBePresented: Bool {
-        return presentedViewController == nil && homepageState.isZeroSearch
+        return presentedViewController == nil && homepageState.homepageTelemetryState.isZeroSearch
     }
 
     @objc
