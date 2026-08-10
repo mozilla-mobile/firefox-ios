@@ -411,6 +411,9 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.toolbar.barTintColor = theme.colors.layer1
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
         librarySegmentControl.tintColor = theme.colors.textPrimary
+        if theme.isNova {
+            librarySegmentControl.selectedSegmentTintColor = theme.colors.layer2
+        }
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
