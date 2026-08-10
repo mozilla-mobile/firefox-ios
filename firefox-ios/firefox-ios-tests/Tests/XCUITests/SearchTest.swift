@@ -492,10 +492,10 @@ class SearchTests: FeatureFlaggedTestBase {
             // Firefox Suggest should show up for sponsored suggestion, open tab, history
             // and bookmark.
             let firefoxSuggestTerms = [
-                "wiki": "Wikipedia - Wiki", // Sponsored suggestion
+                "amazon": "Amazon.com - Official Site", // Sponsored suggestion
                 "internet": "Internet for people, not profit — Mozilla", // Open tab
-                "exam": "www.example.com/", // History
-                "book of": "The Book of Mozilla" // Bookmark
+                "example": "www.example.com/", // History
+                "book": "The Book of Mozilla" // Bookmark
             ]
             for (term, expectedTitle) in firefoxSuggestTerms {
                 browserScreen.tapOnAddressBar()
