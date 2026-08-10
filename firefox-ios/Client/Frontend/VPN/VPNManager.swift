@@ -140,8 +140,8 @@ final class VPNManager: VPNManaging {
         components.port = Int(server.port)
         let endpoint = NWEndpoint.url(components.url!)
         let hop = ProxyConfiguration.RelayHop(
+            http3RelayEndpoint: endpoint,
             http2RelayEndpoint: endpoint,
-            // TODO: http3RelayEndpoint bricks it, we get quic errors, need to reach out to fstly
             tlsOptions: NWProtocolTLS.Options(),
             additionalHTTPHeaderFields: [
                 "Proxy-Authorization": "Bearer \(pass.bearerToken)"
