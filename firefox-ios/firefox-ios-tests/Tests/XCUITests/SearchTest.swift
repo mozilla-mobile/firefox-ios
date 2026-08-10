@@ -496,10 +496,10 @@ class SearchTests: FeatureFlaggedTestBase {
     func testDefaultSearchEngines() {
         app.launch()
         navigator.goto(SearchSettings)
-        mozWaitForElementToExist(app.staticTexts["Default Search Engine"])
-        mozWaitForElementToExist(app.staticTexts["Alternative Search Engines"])
+        searchSettingsScreen.assertDefaultSearchEngineSectionExists()
+        searchSettingsScreen.assertAlternativeSearchEnginesSectionExists()
         for searchEngine in ["Google", "Bing", "DuckDuckGo", "Perplexity", "Wikipedia (en)", "eBay"] {
-            mozWaitForElementToExist(app.tables.staticTexts[searchEngine])
+            searchSettingsScreen.assertSearchEngineExists(named: searchEngine)
         }
     }
 
