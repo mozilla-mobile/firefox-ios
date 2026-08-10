@@ -541,6 +541,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3209706
+    // Regression
     func testDefaultSearchEngines() {
         app.launch()
         navigator.goto(SearchSettings)
