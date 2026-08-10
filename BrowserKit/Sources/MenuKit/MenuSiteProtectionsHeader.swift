@@ -213,7 +213,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         closeButton.tintColor = theme.isNova ? theme.colors.iconPrimary : theme.colors.iconSecondary
         if theme.isNova {
             let size = UX.novaCloseButtonSize
-            closeButton.updateButtonSizeForNovaDesign(CGSize(width: size, height: size))
+            closeButton.updateButtonSize(CGSize(width: size, height: size))
             closeButton.layer.cornerRadius = 0.5 * size
             closeButton.configuration = nil
         }
@@ -243,7 +243,10 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     }
 
     private func applyNovaChevronGradient() {
-        guard let theme, theme.isNova, let chevron = chevronBaseImage else { return }
+        guard let theme, theme.isNova,
+              let chevron = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
+                .imageFlippedForRightToLeftLayoutDirection()
+        else { return }
         let colors = theme.colors.gradientPrivacy.colors.map { $0.cgColor }
         siteProtectionsMoreSettingsIcon.image = UIGraphicsImageRenderer(size: chevron.size).image { context in
             chevron.draw(in: CGRect(origin: .zero, size: chevron.size))
@@ -262,11 +265,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             drawVerticalGradient(colors, from: capTop, to: capTop + font.capHeight, in: context.cgContext)
         }
         siteProtectionsLabel.textColor = UIColor(patternImage: textGradient)
-    }
-
-    private var chevronBaseImage: UIImage? {
-        UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
-            .imageFlippedForRightToLeftLayoutDirection()
     }
 
     private func drawVerticalGradient(_ colors: [CGColor], from: CGFloat, to: CGFloat, in context: CGContext) {

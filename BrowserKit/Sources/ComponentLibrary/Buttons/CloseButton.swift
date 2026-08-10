@@ -65,7 +65,7 @@ public class CloseButton: UIButton,
         accessibilityLabel = viewModel.a11yLabel
     }
 
-    public func updateButtonSizeForNovaDesign(_ size: CGSize) {
+    public func updateButtonSize(_ size: CGSize) {
         baseSize = size
         updateButtonSizeForDynamicFont()
     }
