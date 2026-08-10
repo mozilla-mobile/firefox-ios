@@ -3,18 +3,50 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import XCTest
 
 @testable import Client
-final class TabDisplayPanelTests: XCTestCase {
+final class TabDisplayPanelTests: XCTestCase, StoreTestUtility {
+    private var mockStore: MockStoreForMiddleware<AppState>!
+
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
+        await setupStore()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        await resetStore()
         try await super.tearDown()
+    }
+
+    // MARK: - Redux
+    @MainActor
+    func testUnsubscribeFromRedux_unsubscribesFromStore() {
+        let subject = createSubject(isPrivateMode: false, emptyTabs: true)
+
+        subject.unsubscribeFromRedux()
+
+        XCTAssertEqual(mockStore.unsubscribeCallCount, 1)
+    }
+
+    // MARK: - StoreTestUtility
+    @MainActor
+    func setupAppState() -> Client.AppState {
+        return AppState()
+    }
+
+    @MainActor
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    @MainActor
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 
     @MainActor
