@@ -256,13 +256,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .snapkitRemovalRefactor,
-                titleText: format(string: "SnapKit Removal Refactor"),
-                statusText: format(string: "Toggle to enable SnapKit removal refactor")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .summarizerAppAttestAuth,
                 titleText: format(string: "Summarizer App Attest Auth Feature"),
                 statusText: format(string: "Toggle to enable the app attest authentication for the summarizer feature")

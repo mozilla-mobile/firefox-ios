@@ -152,9 +152,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .shouldUseJapanConfiguration:
             return checkShouldUseJapanConfigurationFeature()
 
-        case .snapkitRemovalRefactor:
-            return checkSnapKitRemovalRefactor()
-
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID) != .disabled
 
@@ -249,11 +246,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHomepageStoriesCaterogiesFeature() -> Bool {
         return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
-    }
-
-    private func checkSnapKitRemovalRefactor() -> Bool {
-        let config = nimbus.features.snapkitRemovalRefactor.value()
-        return config.enabled
     }
 
     private func checkTabScrollRefactorFeature() -> Bool {
