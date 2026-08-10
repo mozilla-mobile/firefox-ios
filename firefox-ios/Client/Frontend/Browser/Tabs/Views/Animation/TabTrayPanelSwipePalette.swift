@@ -157,6 +157,8 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientAIStrongStop2: UIColor { base.gradientAIStrongStop2 }
     var gradientAIStrongStop3: UIColor { base.gradientAIStrongStop3 }
 
+    var faviconLetterColorSet: FaviconLetterColorSet { base.faviconLetterColorSet }
+
     // MARK: - Nova only tokens
     var layerAccentSubtle: UIColor { base.layerAccentSubtle }
     var layerInverse: UIColor { base.layerInverse }
