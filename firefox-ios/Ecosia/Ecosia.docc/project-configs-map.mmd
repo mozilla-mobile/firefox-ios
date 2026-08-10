@@ -1,0 +1,35 @@
+graph LR
+  T[Tuist: firefox-ios/Project.swift]
+  B["BuildConfigurations.all\n(Tuist/BuildConfigurations.swift)"]
+
+  T --> B
+
+  B --> D[Debug<br/>EcosiaDebug.xcconfig]
+  B --> BD[BetaDebug<br/>EcosiaBetaDebug.xcconfig]
+  B --> TST[Testing<br/>EcosiaTesting.xcconfig]
+  B --> R[Release<br/>Ecosia.xcconfig]
+  B --> DTF[Development_TestFlight<br/>EcosiaBeta.xcconfig]
+  B --> DF[Development_Firebase<br/>EcosiaBeta.xcconfig]
+
+  %% Debug includes
+  D --> DebugCfg[Client/Configuration/Debug.xcconfig]
+  D --> Staging[Client/Ecosia/BuildSettingsConfigurations/Staging.xcconfig]
+  D --> CommonE[Client/Ecosia/BuildSettingsConfigurations/EcosiaCommon.xcconfig]
+  CommonE --> CommonCfg[Client/Configuration/Common.xcconfig]
+
+  %% BetaDebug includes (same chain)
+  BD --> DebugCfg
+  BD --> Staging
+  BD --> CommonE
+
+  %% Testing includes
+  TST --> BD
+
+  %% Release includes
+  R --> ReleaseCfg[Client/Configuration/Release.xcconfig]
+  R --> Prod[Client/Ecosia/BuildSettingsConfigurations/Production.xcconfig]
+  R --> CommonE
+
+  %% Per-target variant examples
+  W[WidgetKit Variant<br/>EcosiaBetaDebug.WidgetKit.xcconfig] --> BD
+  S[ShareTo Variant<br/>EcosiaTesting.ShareTo.xcconfig] --> TST

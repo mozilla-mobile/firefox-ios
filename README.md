@@ -1,4 +1,4 @@
-Head to our Ecosia's [README](firefox-ios/Ecosia/Ecosia.docc/Ecosia.md) to know more.
+# :deciduous_tree: [Click here for Ecosia's README](firefox-ios/Ecosia/Ecosia.docc/README.md) :deciduous_tree:
 
 # Firefox for iOS and Focus iOS
 
