@@ -41,6 +41,7 @@ struct FolderGroup: Equatable, Identifiable {
     let title: String
     var folders: [GroupedFolder]
     var isExpanded: Bool
+    let blocks: [Block]
 
     static let mobileGroupID = "group.mobile"
     static let desktopGroupID = "group.desktop"
@@ -49,7 +50,15 @@ struct FolderGroup: Equatable, Identifiable {
         let folders: [GroupedFolder]
     }
 
-    var blocks: [Block] {
+    init(id: String, title: String, folders: [GroupedFolder], isExpanded: Bool) {
+        self.id = id
+        self.title = title
+        self.folders = folders
+        self.isExpanded = isExpanded
+        self.blocks = Self.makeBlocks(from: folders)
+    }
+
+    private static func makeBlocks(from folders: [GroupedFolder]) -> [Block] {
         var result: [Block] = []
         var current: [GroupedFolder] = []
         for folder in folders {
