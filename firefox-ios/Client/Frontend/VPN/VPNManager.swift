@@ -35,10 +35,8 @@ final class VPNManager: VPNManaging {
 
     init(
         logger: Logger = DefaultLogger.shared,
-        rsService: RemoteSettingsService = (AppContainer.shared.resolve() as Profile).remoteSettingsService,
         clientConfig: VPNGuardian.Configuration = .staging,
-        windowManager: WindowManager = AppContainer.shared.resolve(),
-        urlSession: URLSessionProtocol = URLSession.shared
+        windowManager: WindowManager = AppContainer.shared.resolve()
     ) {
         self.logger = logger
         self.guardian = VPNGuardian(
@@ -90,8 +88,7 @@ final class VPNManager: VPNManaging {
     func stop() async {
         self.rotationTask?.cancel()
         self.rotationTask = nil
-        await DefaultWKEngineConfigurationProvider.restoreDefaultStore()
-        await self.rebuildWebViewsAndReclaimStores()
+        await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
         self.isRunning = false
     }
@@ -126,20 +123,14 @@ final class VPNManager: VPNManaging {
     ///
     /// Deliberately scoped to `.normal`
     private func applyProxyAndRebuildWebViews(configs: [ProxyConfiguration]) async {
-        await DefaultWKEngineConfigurationProvider.rebuildStores(
-            applyingProxy: configs,
-            scope: .normal
-        )
-        await rebuildWebViewsAndReclaimStores()
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs, scope: .normal)
+        await rebuildWebViews()
     }
 
-    private func rebuildWebViewsAndReclaimStores() async {
+    private func rebuildWebViews() async {
         for tabManager in windowManager.allWindowTabManagers() {
             await tabManager.cleanupWebViewsForProxyChange()
         }
-        // Safe to free the displaced store's disk footprint now that every webview holding
-        // it has been torn down.
-        await DefaultWKEngineConfigurationProvider.removeStaleStores()
     }
 
     private func buildProxyConfig(server: VPNGuardian.Server, pass: VPNGuardian.ProxyPass) -> ProxyConfiguration {
