@@ -177,6 +177,7 @@
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "SearchTests\/testBottomVIewURLBar_TAE()",
+        "SearchTests\/testDefaultSearchEngines()",
         "SearchTests\/testOpenTabsInSearchSuggestions_TAE()",
         "SearchTests\/testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn()",
         "SearchTests\/testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn()",

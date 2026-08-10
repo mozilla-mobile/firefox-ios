@@ -540,6 +540,17 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3209706
+    func testDefaultSearchEngines() {
+        app.launch()
+        navigator.goto(SearchSettings)
+        searchSettingsScreen.assertDefaultSearchEngineSectionExists()
+        searchSettingsScreen.assertAlternativeSearchEnginesSectionExists()
+        for searchEngine in ["Google", "Bing", "DuckDuckGo", "Perplexity", "Wikipedia (en)", "eBay"] {
+            searchSettingsScreen.assertSearchEngineExists(named: searchEngine)
+        }
+    }
+
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
         let showSearchSuggestions = app.switches[AccessibilityIdentifiers.Settings.Search.showSearchSuggestions]
         mozWaitForElementToExist(showSearchSuggestions)
