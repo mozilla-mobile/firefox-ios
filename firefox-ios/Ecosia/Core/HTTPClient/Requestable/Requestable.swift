@@ -8,7 +8,7 @@ public protocol Requestable: Sendable {
 
     var method: HTTPMethod { get }
 
-    var baseURL: URL { get }
+    var baseURL: BaseURL { get }
 
     var path: String { get }
 

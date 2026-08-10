@@ -50,7 +50,7 @@ final class UnleashTests: XCTestCase {
         let context = ["foo": "bar"]
         var request = UnleashTests.stagingUnleashRequest
         request.queryParameters = context
-        let url = request.baseURL
+        let url = request.resolvedBaseURL
 
         XCTAssertTrue(url.absoluteString.hasPrefix(base.absoluteString))
         XCTAssertEqual(URLComponents(string: try request.makeURLRequest().url!.absoluteString)?.queryItems?.count, 1)
@@ -211,8 +211,8 @@ extension UnleashTests {
             .get
         }
 
-        var baseURL: URL {
-            URL(string: "https://ecosia.org")!
+        var baseURL: BaseURL {
+            .custom(URL(string: "https://ecosia.org")!)
         }
 
         var path: String {
@@ -230,7 +230,7 @@ extension UnleashTests {
         var body: Data?
 
         func makeURLRequest() throws -> URLRequest {
-            UnleashTests.mockMakeURLRequest(for: baseURL,
+            UnleashTests.mockMakeURLRequest(for: resolvedBaseURL,
                                             path: path,
                                             queryParameters: queryParameters,
                                             etag: etag,
@@ -250,8 +250,8 @@ extension UnleashTests {
             .get
         }
 
-        var baseURL: URL {
-            URL(string: "https://ecosia.org")!
+        var baseURL: BaseURL {
+            .custom(URL(string: "https://ecosia.org")!)
         }
 
         var path: String {
@@ -269,7 +269,7 @@ extension UnleashTests {
         var body: Data?
 
         func makeURLRequest() throws -> URLRequest {
-            UnleashTests.mockMakeURLRequest(for: baseURL,
+            UnleashTests.mockMakeURLRequest(for: resolvedBaseURL,
                                             path: path,
                                             queryParameters: queryParameters,
                                             etag: etag,

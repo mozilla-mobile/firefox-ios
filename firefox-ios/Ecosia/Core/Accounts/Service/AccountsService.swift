@@ -51,7 +51,7 @@ public final class AccountsService: AccountsServiceProtocol {
     private func performVisitRequest(accessToken: String) async throws -> AccountVisitResponse {
         let request = AccountVisitRequest(accessToken: accessToken)
 
-        EcosiaLogger.network.info("Making accounts visit request to: \(request.baseURL.absoluteString)\(request.path)")
+        EcosiaLogger.network.info("Making accounts visit request to: \(request.resolvedBaseURL.absoluteString)\(request.path)")
 
         let (data, response) = try await client.perform(request)
 

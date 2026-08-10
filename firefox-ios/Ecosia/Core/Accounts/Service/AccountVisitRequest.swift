@@ -20,8 +20,8 @@ struct AccountVisitRequest: BaseRequest {
 
     var body: Data?
 
-    var baseURL: URL {
-        environment.urlProvider.root
+    var baseURL: BaseURL {
+        .web
     }
 
     init(accessToken: String) {

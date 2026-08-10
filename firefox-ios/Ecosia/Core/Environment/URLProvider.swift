@@ -34,12 +34,6 @@ public enum URLProvider {
         URL(string: "https://ac.ecosia.org/autocomplete")!
     }
 
-    /// Endpoint that issues the EAIST Cloudflare WAF protection cookie.
-    /// Must be called before requests to AI Worker endpoints — matches web `refreshToken()`.
-    public var aiChatRefresh: URL {
-        root.appendingPathComponent("ai-chat/refresh")
-    }
-
     public var snowplowMicro: String? {
         switch self {
         case .staging:

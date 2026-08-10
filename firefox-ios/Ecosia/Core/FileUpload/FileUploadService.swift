@@ -172,21 +172,12 @@ public final class FileUploadService: Sendable {
 
     private func refreshEAIST() async throws {
         await ensureCloudflareAccessCookieForStagingAPI()
-        let url = Environment.current.urlProvider.aiChatRefresh
-        log(.info, "Refreshing EAIST cookie url=\(url.absoluteString)")
+        let request = AIChatRefreshRequest()
+        log(.info, "Refreshing EAIST cookie url=\(request.resolvedBaseURL.absoluteString)\(request.path)")
 
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        // Ecosia: identifies this native app call to the Cloudflare WAF rule guarding this
-        // endpoint, which otherwise only allows browser-style requests with a matching Origin.
-        request.setValue("ios", forHTTPHeaderField: "X-Ecosia-App")
-        request.cachePolicy = .reloadIgnoringLocalCacheData
-        request.httpBody = Data("{}".utf8)
-
-        let (_, response) = try await URLSession.shared.data(for: request)
-        let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
-        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+        let (_, response) = try await client.perform(request)
+        let statusCode = response?.statusCode ?? -1
+        guard let http = response, (200..<300).contains(http.statusCode) else {
             log(.error, "EAIST refresh failed status=\(statusCode)")
             throw Error.eaistRefreshFailed(statusCode: statusCode)
         }
