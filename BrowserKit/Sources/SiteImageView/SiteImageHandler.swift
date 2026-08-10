@@ -22,8 +22,11 @@ public final class DefaultSiteImageHandler: SiteImageHandler {
     @MainActor private(set) static var requestQueue: [String: Task<UIImage, Never>] = [:]
 
     public static func factory(themeManager: ThemeManager? = nil) -> DefaultSiteImageHandler {
-        let letterImageGenerator = themeManager.map { DefaultLetterImageGenerator(themeManager: $0) }
-            ?? DefaultLetterImageGenerator()
+        let letterImageGenerator = if let themeManager {
+            DefaultLetterImageGenerator(themeManager: themeManager)
+        } else {
+            DefaultLetterImageGenerator()
+        }
         return DefaultSiteImageHandler(imageHandler: DefaultImageHandler(letterImageGenerator: letterImageGenerator))
     }
 
