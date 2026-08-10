@@ -24,7 +24,7 @@ class GroupedEditBookmarkViewController: UIViewController,
         return themeManager.getCurrentTheme(for: currentWindowUUID)
     }
 
-    private lazy var tableView: UITableView = .build({ view in
+    lazy var tableView: UITableView = .build({ view in
         view.delegate = self
         view.register(cellType: EditBookmarkCell.self)
         view.register(cellType: OneLineTableViewCell.self)
@@ -59,7 +59,7 @@ class GroupedEditBookmarkViewController: UIViewController,
     var onViewWillAppear: (@MainActor () -> Void)?
 
     private let viewModel: GroupedEditBookmarkViewModel
-    private lazy var dataSource: GroupedEditBookmarkDiffableDataSource = {
+    lazy var dataSource: GroupedEditBookmarkDiffableDataSource = {
         return GroupedEditBookmarkDiffableDataSource(tableView: tableView,
                                                      cellProvider: { [weak self] _, indexPath, item in
             return self?.configureCells(at: indexPath, item: item) ?? UITableViewCell()
