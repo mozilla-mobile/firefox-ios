@@ -461,6 +461,10 @@
 		367C100A7ABD4B4585D029D5 /* AutoTranslatePromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137DDFADC6034016BE36E02B /* AutoTranslatePromptView.swift */; };
 		3846234C30231473003B1711 /* WaybackTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3846234B3023146F003B1711 /* WaybackTelemetry.swift */; };
 		3846234E30231F50003B1711 /* WaybackTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3846234D30231F4B003B1711 /* WaybackTelemetryTests.swift */; };
+		384626063023A0F5003B1711 /* GroupedEditBookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384626053023A0EE003B1711 /* GroupedEditBookmarkViewController.swift */; };
+		384626083023A206003B1711 /* GroupedEditBookmarkDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384626073023A1F7003B1711 /* GroupedEditBookmarkDiffableDataSource.swift */; };
+		38BF9252302A306F008582D5 /* GroupedEditBookmarkDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9251302A3064008582D5 /* GroupedEditBookmarkDataSourceTests.swift */; };
+		38BF9254302A308E008582D5 /* GroupedEditBookmarkViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9253302A3087008582D5 /* GroupedEditBookmarkViewControllerTests.swift */; };
 		39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
 		391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		391C28173007C3C500833828 /* TrackerBlockStatsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 391C28163007C3C500833828 /* TrackerBlockStatsModels.swift */; };
@@ -3494,8 +3498,12 @@
 		3840498CB36D14A6131110A0 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		3846234B3023146F003B1711 /* WaybackTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackTelemetry.swift; sourceTree = "<group>"; };
 		3846234D30231F4B003B1711 /* WaybackTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybackTelemetryTests.swift; sourceTree = "<group>"; };
+		384626053023A0EE003B1711 /* GroupedEditBookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditBookmarkViewController.swift; sourceTree = "<group>"; };
+		384626073023A1F7003B1711 /* GroupedEditBookmarkDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditBookmarkDiffableDataSource.swift; sourceTree = "<group>"; };
 		388646D292305C259ACDC38B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Storage.strings; sourceTree = "<group>"; };
 		389B44EEA4AAA49F0D86656C /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		38BF9251302A3064008582D5 /* GroupedEditBookmarkDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditBookmarkDataSourceTests.swift; sourceTree = "<group>"; };
+		38BF9253302A3087008582D5 /* GroupedEditBookmarkViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedEditBookmarkViewControllerTests.swift; sourceTree = "<group>"; };
 		38D94387A7F935DB357BF25F /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		38E342918C832D414886C892 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Shared.strings"; sourceTree = "<group>"; };
 		38FB48A49755FD25FEA9E8DF /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -12522,6 +12530,8 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				38BF9253302A3087008582D5 /* GroupedEditBookmarkViewControllerTests.swift */,
+				38BF9251302A3064008582D5 /* GroupedEditBookmarkDataSourceTests.swift */,
 				ECF75D3D30193E8A008183CA /* GroupedEditBookmarkViewModelTests.swift */,
 				EC82F42C3017AEB200194A83 /* GroupedEditFolderViewControllerTests.swift */,
 				EC407901300AA88F0003DE07 /* GroupedEditFolderViewModelTests.swift */,
@@ -12544,6 +12554,8 @@
 		0B8BF3732CA2EB3300E9812D /* Edit Bookmark */ = {
 			isa = PBXGroup;
 			children = (
+				384626073023A1F7003B1711 /* GroupedEditBookmarkDiffableDataSource.swift */,
+				384626053023A0EE003B1711 /* GroupedEditBookmarkViewController.swift */,
 				EC7BFBF130190EAA00254E9A /* BookmarkItemData+Copy.swift */,
 				EC71F4E030190C8000A84FB9 /* GroupedEditBookmarkViewModel.swift */,
 				0B8BF3712CA2DA4600E9812D /* EditBookmarkViewController.swift */,
@@ -20118,6 +20130,7 @@
 				C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */,
 				1D7B78972ADF32590011E9F2 /* EventQueue.swift in Sources */,
 				0AD3EEAC2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift in Sources */,
+				384626063023A0F5003B1711 /* GroupedEditBookmarkViewController.swift in Sources */,
 				C81B78A4280752A20000C15F /* NimbusFeatureFlagLayer.swift in Sources */,
 				2165B2CC28748CD7004C0786 /* LibraryPanelDescriptor.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
@@ -20626,6 +20639,7 @@
 				8A9E041B2D4D08350022ED90 /* BookmarkConfiguration.swift in Sources */,
 				8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */,
 				AAD861A82E9E748700F6E0E0 /* TranslationSetting.swift in Sources */,
+				384626083023A206003B1711 /* GroupedEditBookmarkDiffableDataSource.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
 				0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */,
 				21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */,
@@ -20699,6 +20713,7 @@
 				FF0005AD2F000004000BBBBB /* MockQuickAnswersStore.swift in Sources */,
 				EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */,
 				E571EE7E28756A130051D9AA /* StoryProviderTests.swift in Sources */,
+				38BF9252302A306F008582D5 /* GroupedEditBookmarkDataSourceTests.swift in Sources */,
 				21219854300962F000E45CE9 /* ThemeableTests.swift in Sources */,
 				21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */,
 				1DDE3DB52AC360EC0039363B /* TabCellTests.swift in Sources */,
@@ -21059,6 +21074,7 @@
 				45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */,
 				5AE371852A4DD6FE0092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */,
 				8A6E8DEB2B275BA9000C4301 /* PrivateHomepageViewControllerTests.swift in Sources */,
+				38BF9254302A308E008582D5 /* GroupedEditBookmarkViewControllerTests.swift in Sources */,
 				8A93F86529D37331004159D9 /* DefaultRouterTests.swift in Sources */,
 				5AD3B6802CF6674F00AFA1FE /* MockUIApplication.swift in Sources */,
 				8AF10D8A29D713F50086351D /* LaunchScreenViewModelTests.swift in Sources */,
