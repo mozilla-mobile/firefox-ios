@@ -468,7 +468,7 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     private func checkWebViewDocumentFetchRefactor() -> Bool {
-        return nimbus.features.webViewDocumentFetchRefactor.value().enabled
+        return nimbus.features.webViewDocumentFetchRefactorFeature.value().enabled
     }
 
     private func checkVPNFeature() -> Bool {
