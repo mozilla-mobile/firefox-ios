@@ -2150,7 +2150,7 @@ extension String {
             public static let CheckingLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Checking.v154",
                 tableName: "NativeErrorPage",
-                value: "Checking the archive...",
+                value: "Checking the archive…",
                 comment: "Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress.")
             public static let CouldNotReachLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.CouldNotReach.v154",
