@@ -456,6 +456,19 @@ final class NativeErrorPageViewController: UIViewController,
         }
     }
 
+    func regularContentViewDidTapWaybackLink() {
+        guard let waybackURL = URL(string: "https://web.archive.org") else { return }
+
+        store.dispatch(
+            GeneralBrowserAction(
+                destinationURL: waybackURL,
+                isNativeErrorPage: true,
+                windowUUID: self.windowUUID,
+                actionType: GeneralBrowserActionType.loadWaybackURL
+            )
+        )
+    }
+
     func regularContentViewDidTapSearchWeb() {
         telemetry.searchTheWebButtonTapped()
         guard let failingURL = model?.url?.baseURLWithPath,

@@ -964,6 +964,7 @@ struct AccessibilityIdentifiers {
         static let advancedSectionHeader = "NativeErrorPage.advancedSectionHeader"
         static let viewCertificateLink = "NativeErrorPage.viewCertificateLink"
         static let learnMoreLink = "NativeErrorPage.learnMoreLink"
+        static let waybackFooterTextView = "NativeErrorPage.waybackFooterTextView"
     }
 
     struct SaveLoginAlert {
