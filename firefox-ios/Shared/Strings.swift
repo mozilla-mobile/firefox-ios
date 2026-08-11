@@ -2155,7 +2155,7 @@ extension String {
             public static let CouldNotReachLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.CouldNotReach.v154",
                 tableName: "NativeErrorPage",
-                value: "Couldn’t reach Wayback Machine",
+                value: "Couldn’t reach Wayback Machine.",
                 comment: "Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page.")
             public static let RetryButton = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Retry.v154",
