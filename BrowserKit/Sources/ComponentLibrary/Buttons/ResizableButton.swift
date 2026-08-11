@@ -43,6 +43,9 @@ open class ResizableButton: UIButton {
             availableWidth = availableWidth - imageWidth - imagePadding
         }
 
+        guard availableWidth > 0 else {
+            return super.intrinsicContentSize
+        }
         let size = title.sizeThatFits(CGSize(width: availableWidth, height: .greatestFiniteMagnitude))
         return CGSize(width: size.width + widthContentInset,
                       height: size.height + heightContentInset)
@@ -51,8 +54,10 @@ open class ResizableButton: UIButton {
     override public func layoutSubviews() {
         super.layoutSubviews()
         guard let title = titleLabel else { return }
-
-        titleLabel?.preferredMaxLayoutWidth = title.frame.size.width
+        let newWidth = title.frame.size.width
+        guard newWidth > 0, title.preferredMaxLayoutWidth != newWidth else { return }
+        title.preferredMaxLayoutWidth = newWidth
+        invalidateIntrinsicContentSize()
     }
 
     private func commonInit() {
