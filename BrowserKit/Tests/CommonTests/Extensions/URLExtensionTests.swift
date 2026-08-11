@@ -517,6 +517,12 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertEqual(url?.faviconUrl(), URL(string: "http://[::1]:8080/favicon.ico")!)
     }
 
+    func testFaviconRootDirectoryURLWithoutHostReturnsNil() {
+        let url = URL(string: "file:///Users/a/b.html")
+
+        XCTAssertNil(url?.faviconUrl())
+    }
+
     // MARK: normalizedHostWithLRI
     func testNormalizedHostWithLRIHandlesRTLDomainAppropriately() throws {
         let testURL = "https://xn--mgb.google.com.xn--mgb.suspicious-domain.abc/download.apk"

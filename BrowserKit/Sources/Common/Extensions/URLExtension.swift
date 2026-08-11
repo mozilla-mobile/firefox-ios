@@ -334,7 +334,8 @@ extension URL {
     /// favicon.ico appended).
     public func faviconUrl() -> URL? {
         guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false),
-              components.host != nil
+              let host = components.host,
+              !host.isEmpty
         else { return nil }
 
         components.scheme = components.scheme ?? "https"
