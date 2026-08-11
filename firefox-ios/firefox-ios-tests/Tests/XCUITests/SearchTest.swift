@@ -577,6 +577,7 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.CloseURLBarOpen)
 
         // Step 4: Trigger a sponsored result in private mode
+        // Sponsored result is NOT displayed
         settingsScreen.rotateDevice(to: .portrait)
         waitForTabsButtonHittable()
         navigator.goto(TabTray)
