@@ -1,0 +1,8 @@
+{
+  "status": true,
+    "available-suggestions-types": {
+    "amp": false,
+    "ampMobile": true,
+    "wikipedia": true
+  }
+}

@@ -535,16 +535,8 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2753076
     // Regresssion
     func testFirefoxSuggestPartialNonSponsored() {
+        // addLaunchArgument(jsonFileName: "crossPlatformSuggestOn", featureName: "firefox-suggest-feature")
         app.launch()
-        // Precondition: Enable enhanced cross-platform suggest experiment
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.goto(ExperimentsScreen)
-        navigator.performAction(Action.ListAllExperiments)
-        navigator.userState.experimentToEnroll = "Enhanced Cross-Platform Suggest [iOS] - Phased Roll out 138+"
-        navigator.performAction(Action.EnrollExperiment)
-        navigator.goto(SettingsScreen)
-        navigator.goto(HomePanelsScreen)
 
         verifySearchSuggestion(searchTerm: "fifa",
                                expectedMatch: "Wikipedia - FIFA Club World Cup",
