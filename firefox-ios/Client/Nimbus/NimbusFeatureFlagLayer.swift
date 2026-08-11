@@ -203,6 +203,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .waybackMachine:
             return checkWaybackMachineFeature()
 
+        case .webViewDocumentFetchRefactor:
+            return checkWebViewDocumentFetchRefactor()
+
         // This feature flag has no Nimbus configuration because it is only tied to a user setting.
         // Requesting Nimbus configuration for it is a developer error.
         case .hntSponsoredShortcuts:
@@ -462,6 +465,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkWaybackMachineFeature() -> Bool {
         return nimbus.features.waybackMachineFeature.value().enabled
+    }
+
+    private func checkWebViewDocumentFetchRefactor() -> Bool {
+        return nimbus.features.webViewDocumentFetchRefactor.value().enabled
     }
 
     private func checkVPNFeature() -> Bool {

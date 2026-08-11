@@ -66,6 +66,13 @@ enum FeatureFlagID: String, CaseIterable {
     case videoIntroOnboarding
     case vpnFeature
     case waybackMachine
+<<<<<<< HEAD
+||||||| parent of a1aa7f5fe3 ([FXIOS-15182] Feature flag)
+    case worldCupWidget
+=======
+    case webViewDocumentFetchRefactor
+    case worldCupWidget
+>>>>>>> a1aa7f5fe3 ([FXIOS-15182] Feature flag)
 
     /// The user preferences key for features that support user-togglable settings.
     /// Returns `nil` for features that are not user-configurable.
@@ -133,7 +140,8 @@ enum FeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .vpnFeature,
-                .waybackMachine:
+                .waybackMachine,
+                .webViewDocumentFetchRefactor,
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
