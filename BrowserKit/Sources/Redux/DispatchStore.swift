@@ -3,14 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 /// Protocol that allows to subscribe to the store and receive dispatched actions to modify the store state
 @MainActor
 public protocol DispatchStore {
     func dispatch(_ action: Action)
-
-    // TODO: FXIOS-16140, FXIOS-16140 (needed for later Client integration)
-    // func dispatch(_ action: ModernAction, forWindowUUID windowUUID: WindowUUID)
+    func dispatch(_ action: ModernAction, forWindowUUID windowUUID: WindowUUID)
 }
 
 public protocol DefaultDispatchStore<State>: DispatchStore where State: StateType {
