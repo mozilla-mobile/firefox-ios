@@ -4574,6 +4574,106 @@ extension String {
                 value: "Close",
                 comment: "Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen."
             )
+            public static let TechnicalData = MZLocalizedString(
+                key: "WebCompatReporter.Preview.TechnicalData.v155",
+                tableName: "WebCompatReporter",
+                value: "Technical Data",
+                comment: "Row on the Report Preview screen that opens the Technical Data screen, and that screen's title."
+            )
+            /// One bullet per field the report can carry, in plain language. A bullet is shown only
+            /// when the report actually carries that field.
+            public struct Data {
+                public static let PageURL = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PageURL.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Page URL",
+                    comment: "Bullet on the Report Preview screen. The reported page's address is shown underneath it."
+                )
+                public static let IssueAndDescription = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.IssueAndDescription.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Issue type you selected and any description you added",
+                    comment: "Bullet on the Report Preview screen, for the problem picked and the details typed."
+                )
+                public static let IsTablet = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.IsTablet.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Whether or not your device is a tablet",
+                    comment: "Bullet on the Report Preview screen. Only tablet or not is sent, no device make or model."
+                )
+                public static let OperatingSystemVersion = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.OperatingSystemVersion.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Operating system version number",
+                    comment: "Bullet on the Report Preview screen. The iOS version is sent inside the user agent."
+                )
+                public static let AppVersion = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.AppVersion.v155",
+                    tableName: "WebCompatReporter",
+                    value: "App version number",
+                    comment: "Bullet on the Report Preview screen. The app version is sent inside the user agent."
+                )
+                public static let BrowserEngineVersion = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.BrowserEngineVersion.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Browser engine version",
+                    comment: "Bullet on the Report Preview screen. The engine version is sent inside the user agent."
+                )
+                public static let TrackingProtectionSetting = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Enhanced Tracking Protection setting for this site",
+                    comment: "Bullet on the Report Preview screen, for the tracking protection strength the user has chosen."
+                )
+                public static let BlockedTrackers = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.BlockedTrackers.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Hostnames of trackers blocked on this page",
+                    comment: "Bullet on the Report Preview screen, for trackers blocked on the reported page."
+                )
+                public static let PrivateBrowsingStatus = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Private browsing status: on or off",
+                    comment: "Bullet on the Report Preview screen, for whether the page was open in private browsing."
+                )
+                public static let AvailableMemory = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.AvailableMemory.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Your device’s available memory",
+                    comment: "Bullet on the Report Preview screen, for the amount of memory the device has."
+                )
+                public static let PixelDensity = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PixelDensity.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Your screen’s pixel density",
+                    comment: "Bullet on the Report Preview screen, for the screen's physical pixels per layout point."
+                )
+                public static let HasTouchscreen = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.HasTouchscreen.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Whether your device has a touchscreen",
+                    comment: "Bullet on the Report Preview screen, for whether the device has a touchscreen."
+                )
+                public static let PageLanguages = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PageLanguages.v155",
+                    tableName: "WebCompatReporter",
+                    value: "The language settings sent with this page",
+                    comment: "Bullet on the Report Preview screen, for the languages the page was requested in."
+                )
+                public static let DeviceLocale = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.DeviceLocale.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Primary language and country of your device",
+                    comment: "Bullet on the Report Preview screen, for the device's own language and region settings."
+                )
+                public static let PageElements = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PageElements.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Information about page elements that have been known to cause site issues",
+                    comment: "Bullet on the Report Preview screen, for web frameworks known to break mobile pages."
+                )
+            }
         }
         public struct Toast {
             public static let ReportSent = MZLocalizedString(
