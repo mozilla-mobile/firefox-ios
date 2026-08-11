@@ -542,7 +542,7 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.goto(ExperimentsScreen)
         navigator.performAction(Action.ListAllExperiments)
         navigator.userState.experimentToEnroll = "Enhanced Cross-Platform Suggest [iOS] - Phased Roll out 138+"
-        navigator.performAction(Action.EnrollExperiment) 
+        navigator.performAction(Action.EnrollExperiment)
         navigator.goto(SettingsScreen)
         navigator.goto(HomePanelsScreen)
 
