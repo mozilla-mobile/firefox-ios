@@ -4,8 +4,9 @@
 
 import Common
 import Redux
-import Account
 import Shared
+
+import class Account.RustFirefoxAccounts
 
 @MainActor
 final class MainMenuMiddleware {
