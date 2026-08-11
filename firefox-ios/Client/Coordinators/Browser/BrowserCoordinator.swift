@@ -1494,14 +1494,66 @@ final class BrowserCoordinator: BaseCoordinator,
         forShareTab tab: ShareTab
     ) async -> ShareType {
         guard let temporaryDocument = tab.temporaryDocument,
-              !temporaryDocument.isDownloading,
-              let fileURL = await temporaryDocument.download() else {
+              !temporaryDocument.isDownloading else {
+            // If no temporary document, share the tab as usual with a web URL
+            return .tab(url: tabURL, tab: tab)
+        }
+
+        // [FXIOS-15182]: Read document data straight from the already-authenticated WebView, instead of re-downloading it.
+        if WebViewDocumentFetch.isEnabled,
+           let fileURL = await documentFileFromWebView(tab, tabURL: tabURL) {
+            return .file(url: fileURL, remoteURL: tabURL)
+        }
+
+        guard let fileURL = await temporaryDocument.download() else {
             // If no file was downloaded, simply share the tab as usual with a web URL
             return .tab(url: tabURL, tab: tab)
         }
 
         // If we successfully got a temp file URL, share it like a downloaded file
         return .file(url: fileURL, remoteURL: tabURL)
+    }
+
+    /// Reads the rendered document from the tab WebView, and writes the data to a temporary file for sharing.
+    /// Because the data is pulled directly from the WebView, any auth already performed is honored.
+    private func documentFileFromWebView(_ tab: ShareTab, tabURL: URL) async -> URL? {
+        guard let webView = tab.webView else { return nil }
+
+        let readDocumentJS = """
+        const embed = document.querySelector('embed');
+        const src = embed ? embed.src : window.location.href;
+        const response = await fetch(src);
+        const blob = await response.blob();
+        return await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(blob);
+        });
+        """
+
+        do {
+            let result = try await webView.callAsyncJavaScript(readDocumentJS, contentWorld: .defaultClient)
+            guard let base64 = result as? String,
+                  let data = Data(base64Encoded: base64) else { return nil }
+            let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                .appendingPathComponent(Self.shareableFilename(for: tabURL))
+            try data.write(to: fileURL)
+            return fileURL
+        } catch {
+            logger.log("WebView document fetch failed: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .shareSheet)
+            return nil
+        }
+    }
+
+    private static func shareableFilename(for url: URL) -> String {
+        let lastComponent = url.lastPathComponent
+        if !lastComponent.isEmpty, !(lastComponent as NSString).pathExtension.isEmpty {
+            return lastComponent
+        }
+        return "document.pdf"
     }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type
