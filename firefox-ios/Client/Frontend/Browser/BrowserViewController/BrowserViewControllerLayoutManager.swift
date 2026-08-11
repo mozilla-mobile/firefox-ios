@@ -18,13 +18,12 @@ final class BrowserViewControllerLayoutManager {
     private weak var scrollController: LegacyTabScrollProvider?
 
     // Constraints to store - header
-    var headerTopConstraintReference: ConstraintReference?
     private var headerTopConstraint: NSLayoutConstraint?
     private var headerHeightConstraint: NSLayoutConstraint?
 
     // Constraints to store - bottom container
-    var overKeyboardContainerConstraint: ConstraintReference?
-    var bottomContainerConstraint: ConstraintReference?
+    var overKeyboardContainerConstraint: NSLayoutConstraint?
+    var bottomContainerConstraint: NSLayoutConstraint?
     private var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
     private var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
     private var bottomContentStackViewOverKeyboardConstraint: NSLayoutConstraint?
@@ -99,10 +98,9 @@ final class BrowserViewControllerLayoutManager {
         ])
         let constraint = bottomContainer.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
         constraint.isActive = true
-        let constraintReference = ConstraintReference(native: constraint)
 
-        scrollController?.bottomContainerConstraint = constraintReference
-        bottomContainerConstraint = constraintReference
+        scrollController?.bottomContainerConstraint = constraint
+        bottomContainerConstraint = constraint
     }
 
     func setupOverKeyboardContainerConstraints() {
@@ -113,10 +111,9 @@ final class BrowserViewControllerLayoutManager {
 
         let constraint = overKeyboardContainer.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
         constraint.isActive = true
-        let constraintReference = ConstraintReference(native: constraint)
 
-        scrollController?.overKeyboardContainerConstraint = constraintReference
-        overKeyboardContainerConstraint = constraintReference
+        scrollController?.overKeyboardContainerConstraint = constraint
+        overKeyboardContainerConstraint = constraint
 
         overKeyboardContainerTopZoomHeightConstraint = overKeyboardContainer.heightAnchor.constraint(
             greaterThanOrEqualToConstant: 0
@@ -250,6 +247,6 @@ final class BrowserViewControllerLayoutManager {
     private func updateScrollControllerHeaderConstraint() {
         guard let scrollController = scrollController,
               let constraint = headerTopConstraint else { return }
-        scrollController.headerTopConstraint = ConstraintReference(native: constraint)
+        scrollController.headerTopConstraint = constraint
     }
 }
