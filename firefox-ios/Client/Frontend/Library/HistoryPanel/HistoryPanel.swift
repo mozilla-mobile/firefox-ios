@@ -121,8 +121,8 @@ class HistoryPanel: UIViewController,
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
 
         tableView.sectionHeaderTopPadding = 0
-    }, { [weak self] in
-        UITableView(frame: .zero, style: self?.tableViewStyle ?? .plain)
+    }, {
+        UITableView(frame: .zero, style: self.tableViewStyle)
     })
 
     private var isNovaDesignEnabled: Bool {
