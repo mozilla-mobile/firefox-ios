@@ -62,13 +62,21 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
 
     private lazy var waybackErrorMessageRow: UIStackView = .build { stackView in
         stackView.axis = .horizontal
-        stackView.alignment = .center
+        stackView.alignment = .top
         stackView.spacing = 6
     }
 
     private lazy var waybackErrorButton: UIButton = .build { button in
         button.contentHorizontalAlignment = .leading
         button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackErrorButton
+    }
+
+    /// Holds the label and button so they share the same leading edge,
+    /// independent of the icon's width.
+    private lazy var waybackErrorTextStack: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.spacing = 2
     }
 
     private lazy var waybackErrorContentStack: UIStackView = .build { stackView in
@@ -103,10 +111,12 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
     }
 
     private func setup() {
+        waybackErrorTextStack.addArrangedSubview(waybackErrorLabel)
+        waybackErrorTextStack.addArrangedSubview(waybackErrorButton)
+
         waybackErrorMessageRow.addArrangedSubview(waybackErrorIcon)
-        waybackErrorMessageRow.addArrangedSubview(waybackErrorLabel)
+        waybackErrorMessageRow.addArrangedSubview(waybackErrorTextStack)
         waybackErrorContentStack.addArrangedSubview(waybackErrorMessageRow)
-        waybackErrorContentStack.addArrangedSubview(waybackErrorButton)
 
         waybackErrorCard.addSubview(waybackErrorContentStack)
         NSLayoutConstraint.activate([
