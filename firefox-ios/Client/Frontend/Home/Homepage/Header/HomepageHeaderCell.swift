@@ -123,20 +123,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         ])
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        cancelQuickAnswersTipObservation()
-    }
-
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        if window == nil {
-            cancelQuickAnswersTipObservation()
-        } else {
-            observeQuickAnswersTip()
-        }
-    }
-
     func configure(headerState: HeaderState,
                    showiPadSetup: Bool = false,
                    logoTextColor: UIColor? = nil,
