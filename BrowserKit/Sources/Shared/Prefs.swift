@@ -155,6 +155,10 @@ public struct PrefsKeys {
         public static let optInCompleted = "quickAnswers.optInCompleted"
     }
 
+    public struct Tips {
+        public static let shouldResetDatastore = "tips.shouldResetDatastore"
+    }
+
     public struct SearchSettings {
         public static let showFirefoxBrowsingHistorySuggestions = "FirefoxSuggestBrowsingHistorySuggestions"
         public static let showFirefoxBookmarksSuggestions = "FirefoxSuggestBookmarksSuggestions"

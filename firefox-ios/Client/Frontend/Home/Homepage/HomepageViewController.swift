@@ -624,7 +624,12 @@ final class HomepageViewController: UIViewController,
         switch item {
         case .header(let state, let logoTextColor, let showiPadSetup):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state, showiPadSetup: showiPadSetup, logoTextColor: logoTextColor)
+                cell.configure(
+                    headerState: state,
+                    showiPadSetup: showiPadSetup,
+                    logoTextColor: logoTextColor,
+                    tipPresenter: self
+                )
                 cell.applyTheme(theme: currentTheme)
             }
         case .privacyNotice:
