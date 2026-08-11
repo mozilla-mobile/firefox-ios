@@ -6,9 +6,9 @@ import Foundation
 import Common
 import MozillaAppServices
 
-class GroupedEditBookmarkViewController: UIViewController,
-                                         UITableViewDelegate,
-                                         Themeable {
+final class GroupedEditBookmarkViewController: UIViewController,
+                                               UITableViewDelegate,
+                                               Themeable {
     private struct UX {
         static let bookmarkCellTopPadding: CGFloat = 25.0
         static let folderHeaderIdentifier = "folderHeaderIdentifier"

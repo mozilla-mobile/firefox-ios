@@ -7,8 +7,8 @@ import Foundation
 typealias GroupedEditBookmarkTableSection = GroupedEditBookmarkDiffableDataSource.TableSection
 typealias GroupedEditBookmarkTableCell = GroupedEditBookmarkDiffableDataSource.TableCell
 
-class GroupedEditBookmarkDiffableDataSource: UITableViewDiffableDataSource<GroupedEditBookmarkTableSection,
-                                                                           GroupedEditBookmarkTableCell> {
+final class GroupedEditBookmarkDiffableDataSource: UITableViewDiffableDataSource<GroupedEditBookmarkTableSection,
+                                                                                 GroupedEditBookmarkTableCell> {
     enum TableSection: Int, CaseIterable {
         case main
         case selectFolder
