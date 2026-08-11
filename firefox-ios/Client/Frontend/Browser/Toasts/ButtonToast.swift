@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ComponentLibrary
 import Foundation
 import Shared
 
@@ -51,15 +52,9 @@ class ButtonToast: Toast {
         label.numberOfLines = 0
     }
 
-    private var roundedButton: UIButton = .build { button in
+    private(set) var roundedButton: ActionButton = .build { button in
         button.layer.cornerRadius = UX.buttonBorderRadius
         button.layer.borderWidth = UX.buttonBorderWidth
-        button.titleLabel?.font = FXFontStyles.Regular.subheadline.scaledFont()
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.numberOfLines = 1
-        button.titleLabel?.lineBreakMode = .byClipping
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.titleLabel?.minimumScaleFactor = 0.1
     }
 
     // Pass themeManager to call on init
@@ -128,7 +123,12 @@ class ButtonToast: Toast {
         guard let buttonText = buttonText else { return }
 
         stackView.addArrangedSubview(roundedButton)
-        roundedButton.setTitle(buttonText, for: [])
+        let viewModel = ActionButtonViewModel(
+            title: buttonText,
+            a11yIdentifier: nil,
+            touchUpAction: { [weak self] _ in self?.buttonPressed() }
+        )
+        roundedButton.configure(viewModel: viewModel)
 
         NSLayoutConstraint.activate([
             roundedButton.heightAnchor.constraint(
@@ -136,8 +136,6 @@ class ButtonToast: Toast {
             roundedButton.widthAnchor.constraint(
                 equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.buttonPadding)
         ])
-
-        roundedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
     }
 
     override func applyTheme(theme: Theme) {
@@ -146,7 +144,7 @@ class ButtonToast: Toast {
         titleLabel.textColor = theme.colors.textInverted
         descriptionLabel.textColor = theme.colors.textInverted
         imageView.tintColor = theme.colors.textInverted
-        roundedButton.setTitleColor(theme.isNova ? theme.colors.textToast : theme.colors.textInverted, for: [])
+        roundedButton.foregroundColorNormal = theme.isNova ? theme.colors.textToast : theme.colors.textInverted
         roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
     }
 
@@ -166,7 +164,6 @@ class ButtonToast: Toast {
     }
 
     // MARK: - Button action
-    @objc
     func buttonPressed() {
         completionHandler?(true)
         dismiss(true)

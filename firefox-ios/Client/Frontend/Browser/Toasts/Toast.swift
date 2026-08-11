@@ -115,14 +115,14 @@ class Toast: UIView, ThemeApplicable, Notifiable {
 
         UIView.animate(
             withDuration: UX.toastAnimationDuration,
-            animations: {
-                self.animationConstraint?.constant = UX.toastHeightWithShadow
-                self.layoutIfNeeded()
+            animations: { [weak self] in
+                self?.animationConstraint?.constant = UX.toastHeightWithShadow
+                self?.layoutIfNeeded()
             }
-        ) { finished in
-            self.removeFromSuperview()
+        ) { [weak self] finished in
+            self?.removeFromSuperview()
             if !buttonPressed {
-                self.completionHandler?(false)
+                self?.completionHandler?(false)
             }
         }
     }
