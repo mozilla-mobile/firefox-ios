@@ -387,9 +387,9 @@ final class BrowserScreen {
     func assertSponsoredResult(title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
         assertWebElements(
             shouldExist: shouldExist,
-            app.scrollViews.buttons["Search Settings"],
+            sel.SEARCH_SETTINGS_BUTTON.element(in: app),
             app.staticTexts[title],
-            app.staticTexts["Sponsored"],
+            sel.SPONSORED_LABEL.element(in: app),
             timeout: timeout
         )
     }
