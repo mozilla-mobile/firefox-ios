@@ -12,6 +12,7 @@ public class CloseButton: UIButton,
     private var viewModel: CloseButtonViewModel?
     private var heightConstraint: NSLayoutConstraint?
     private var widthConstraint: NSLayoutConstraint?
+    private var baseSize = UX.closeButtonSize
     /// Returns the updated size of the button scaled with the current dynamic font size
     var dynamicSize: CGSize {
         updateButtonSizeForDynamicFont()
@@ -64,11 +65,16 @@ public class CloseButton: UIButton,
         accessibilityLabel = viewModel.a11yLabel
     }
 
+    public func updateButtonSize(_ size: CGSize) {
+        baseSize = size
+        updateButtonSizeForDynamicFont()
+    }
+
     private func updateButtonSizeForDynamicFont() {
-        let scaledWidth = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width)
-        let scaledHeight = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height)
-        let dynamicWidth = min(max(scaledWidth, UX.closeButtonSize.width), UX.maxCloseButtonSize.width)
-        let dynamicHeight = min(max(scaledHeight, UX.closeButtonSize.height), UX.maxCloseButtonSize.height)
+        let scaledWidth = UIFontMetrics.default.scaledValue(for: baseSize.width)
+        let scaledHeight = UIFontMetrics.default.scaledValue(for: baseSize.height)
+        let dynamicWidth = min(max(scaledWidth, baseSize.width), UX.maxCloseButtonSize.width)
+        let dynamicHeight = min(max(scaledHeight, baseSize.height), UX.maxCloseButtonSize.height)
         heightConstraint?.constant = dynamicHeight
         widthConstraint?.constant = dynamicWidth
     }

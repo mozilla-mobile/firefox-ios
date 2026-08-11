@@ -7,18 +7,18 @@ import UIKit
 
 /// What the screen reports back. The coordinator owns dismissal.
 @MainActor
-public protocol WebCompatReportPreviewDelegate: AnyObject {
-    func webCompatReportPreviewDidRequestDismiss()
-    func webCompatReportPreviewDidTapScreenshot()
+public protocol WebCompatTechnicalDataDelegate: AnyObject {
+    func webCompatTechnicalDataDidRequestDismiss()
+    func webCompatTechnicalDataDidTapScreenshot()
 }
 
-/// The Report Preview sheet: a tappable page thumbnail above collapsible sections listing the
+/// The Technical Data screen: a tappable page thumbnail above collapsible sections listing the
 /// raw payload as key/value pairs. Store-agnostic, so configure it with a view model.
 ///
-/// TODO: FXIOS-16432 - Split this into the plain-language Report Preview screen and the pushed
-/// Technical Data screen, renaming the `ReportPreview` types accordingly.
-public final class WebCompatReportPreviewViewController: UIViewController,
-                                                         ThemeApplicable,
+/// TODO: FXIOS-16432 - Add the plain-language Report Preview screen that pushes this one, and
+/// move the thumbnail onto it.
+public final class WebCompatTechnicalDataViewController: UIViewController,
+                                                         Themeable,
                                                          UICollectionViewDelegate {
     private enum UX {
         static let headerHorizontalInset: CGFloat = 20
@@ -30,7 +30,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
     private enum ItemKind: Equatable {
         case screenshot(UIImage)
         case header(title: String, a11yIdentifier: String)
-        case content(WebCompatReportPreviewViewModel.PreviewSection)
+        case content(WebCompatTechnicalDataViewModel.PreviewSection)
     }
 
     private static let screenshotDataSourceSectionID = "webcompat.preview.screenshot.section"
@@ -45,9 +45,14 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         return "\(sectionID).content"
     }
 
-    public weak var delegate: WebCompatReportPreviewDelegate?
+    public weak var delegate: WebCompatTechnicalDataDelegate?
 
-    private var viewModel: WebCompatReportPreviewViewModel
+    public let themeManager: ThemeManager
+    public var themeListenerCancellable: Any?
+    public var currentWindowUUID: WindowUUID?
+    private let notificationCenter: NotificationProtocol
+
+    private var viewModel: WebCompatTechnicalDataViewModel
     private var screenshot: UIImage?
     private var theme: Theme
 
@@ -73,9 +78,17 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     private lazy var dataSource = makeDataSource()
 
-    public init(viewModel: WebCompatReportPreviewViewModel, theme: Theme) {
+    public init(
+        viewModel: WebCompatTechnicalDataViewModel,
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.viewModel = viewModel
-        self.theme = theme
+        self.currentWindowUUID = windowUUID
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -90,13 +103,14 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         setupNavigationItem()
         setupLayout()
         configure(with: viewModel)
-        applyTheme(theme: theme)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     // MARK: - Configuration
 
     /// Safe to call before or after the view loads.
-    public func configure(with viewModel: WebCompatReportPreviewViewModel) {
+    public func configure(with viewModel: WebCompatTechnicalDataViewModel) {
         self.viewModel = viewModel
         guard isViewLoaded else { return }
         navigationItem.title = viewModel.title
@@ -159,7 +173,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
                 imageAccessibilityLabel: self.viewModel.screenshotAccessibilityLabel,
                 a11yIdentifier: self.viewModel.screenshotA11yIdentifier
             ) { [weak self] in
-                self?.delegate?.webCompatReportPreviewDidTapScreenshot()
+                self?.delegate?.webCompatTechnicalDataDidTapScreenshot()
             }
             cell.applyTheme(theme: self.theme)
         }
@@ -190,7 +204,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         }
 
         let contentRegistration = UICollectionView.CellRegistration<
-            WebCompatPreviewSectionContentCell, WebCompatReportPreviewViewModel.PreviewSection
+            WebCompatTechnicalDataSectionCell, WebCompatTechnicalDataViewModel.PreviewSection
         > { [weak self] cell, _, section in
             guard let self else { return }
             cell.configure(rows: section.rows, accessibilityIdentifier: section.contentA11yIdentifier)
@@ -223,7 +237,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
                     using: contentRegistration, for: indexPath, item: section
                 )
             case .none:
-                assertionFailure("No Report Preview item registered for id \(itemID)")
+                assertionFailure("No Technical Data item registered for id \(itemID)")
                 return collectionView.dequeueConfiguredReusableCell(
                     using: fallbackRegistration, for: indexPath, item: itemID
                 )
@@ -316,7 +330,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     @objc
     private func didTapClose() {
-        delegate?.webCompatReportPreviewDidRequestDismiss()
+        delegate?.webCompatTechnicalDataDidRequestDismiss()
     }
 
     // MARK: - Accessibility
@@ -331,7 +345,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
     /// The two-finger scrub, otherwise the close button is the only way out.
     override public func accessibilityPerformEscape() -> Bool {
         guard let delegate else { return false }
-        delegate.webCompatReportPreviewDidRequestDismiss()
+        delegate.webCompatTechnicalDataDidRequestDismiss()
         return true
     }
 
@@ -341,10 +355,10 @@ public final class WebCompatReportPreviewViewController: UIViewController,
         collectionView.deselectItem(at: indexPath, animated: false)
     }
 
-    // MARK: - ThemeApplicable
+    // MARK: - Themeable
 
-    public func applyTheme(theme: Theme) {
-        self.theme = theme
+    public func applyTheme() {
+        theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         guard isViewLoaded else { return }
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary

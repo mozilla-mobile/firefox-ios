@@ -7,7 +7,7 @@ import UIKit
 
 /// One expanded section's body: every `key: value` line in a single rounded card. Long values
 /// wrap rather than truncate.
-final class WebCompatPreviewSectionContentCell: UICollectionViewListCell, ThemeApplicable, ReusableCell {
+final class WebCompatTechnicalDataSectionCell: UICollectionViewListCell, ThemeApplicable, ReusableCell {
     private enum UX {
         static let horizontalInset: CGFloat = 16
         static let verticalInset: CGFloat = 14.5
@@ -52,7 +52,7 @@ final class WebCompatPreviewSectionContentCell: UICollectionViewListCell, ThemeA
         ])
     }
 
-    func configure(rows: [WebCompatReportPreviewViewModel.PreviewRow], accessibilityIdentifier: String) {
+    func configure(rows: [WebCompatTechnicalDataViewModel.PreviewRow], accessibilityIdentifier: String) {
         keyValueLabel.text = rows.map { "\($0.label): \($0.value.displayText)" }.joined(separator: "\n")
         self.accessibilityIdentifier = accessibilityIdentifier
         isAccessibilityElement = true

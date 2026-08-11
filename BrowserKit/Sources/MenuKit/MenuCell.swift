@@ -138,7 +138,7 @@ final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             descriptionLabel.textColor = theme.colors.textSecondary
-            iconImageView.tintColor = theme.colors.iconAccentBlue
+            iconImageView.tintColor = theme.isNova ? theme.colors.iconAccent : theme.colors.iconAccentBlue
         } else if !model.isEnabled {
             titleLabel.textColor = theme.colors.textDisabled
             descriptionLabel.textColor = theme.colors.textDisabled

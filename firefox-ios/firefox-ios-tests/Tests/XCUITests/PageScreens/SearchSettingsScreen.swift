@@ -12,6 +12,10 @@ final class SearchSettingsScreen {
     private var navBar: XCUIElement { sel.NAVBAR.element(in: app) }
     private var trendingSearchesToggle: XCUIElement { sel.TRENDING_SEARCH_SWITCH.element(in: app) }
     private var recentSearchesToggle: XCUIElement { sel.RECENT_SEARCH_SWITCH.element(in: app) }
+    private var defaultSearchEngineSectionTitle: XCUIElement { sel.DEFAULT_SEARCH_ENGINE_SECTION_TITLE.element(in: app) }
+    private var alternativeSearchEnginesSectionTitle: XCUIElement {
+        sel.ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE.element(in: app)
+    }
 
     init(app: XCUIApplication, selectors: SearchSettingsSelectorsSet = SearchSettingsSelectors()) {
         self.app = app
@@ -77,5 +81,17 @@ final class SearchSettingsScreen {
     func waitForSearchEngineSelectionComplete(timeout: TimeInterval = TIMEOUT) {
         let defaultSearchEngineNavBar = sel.DEFAULT_SEARCH_ENGINE_NAVBAR.element(in: app)
         BaseTestCase().mozWaitForElementToNotExist(defaultSearchEngineNavBar, timeout: timeout)
+    }
+
+    func assertDefaultSearchEngineSectionExists() {
+        BaseTestCase().mozWaitForElementToExist(defaultSearchEngineSectionTitle)
+    }
+
+    func assertAlternativeSearchEnginesSectionExists() {
+        BaseTestCase().mozWaitForElementToExist(alternativeSearchEnginesSectionTitle)
+    }
+
+    func assertSearchEngineExists(named engineName: String) {
+        BaseTestCase().mozWaitForElementToExist(sel.searchEngineRow(named: engineName).element(in: app))
     }
 }

@@ -46,6 +46,11 @@ final class WebCompatReporterMiddleware {
 
         case WebCompatReporterViewActionType.preview:
             telemetry.previewed()
+            store.dispatch(WebCompatReporterMiddlewareAction(
+                previewPayload: makeReport(windowUUID: action.windowUUID, state: state),
+                windowUUID: action.windowUUID,
+                actionType: WebCompatReporterMiddlewareActionType.didBuildPreview
+            ))
 
         case WebCompatReporterViewActionType.cancel:
             telemetry.cancelled()
@@ -63,16 +68,7 @@ final class WebCompatReporterMiddleware {
 
     private func submitReport(windowUUID: WindowUUID, state: AppState) {
         let reporterState = WebCompatReporterState(appState: state, uuid: windowUUID)
-        var payload = WebCompatReportPayload.make(from: reporterState)
-        if let tab = selectedTab(for: windowUUID) {
-            payload = WebCompatReportDataCollector.enrich(
-                payload,
-                tab: tab,
-                includeBlockedList: reporterState.includeBlockedList,
-                includeTabSpecificInfo: isReporting(reporterState.url, on: tab)
-            )
-        }
-        recorder.submit(payload)
+        recorder.submit(makeReport(windowUUID: windowUUID, state: state))
         // The screenshot option is parked (FXIOS-16450) and no image is transported yet.
         telemetry.created(withBlockedTrackers: reporterState.includeBlockedList, withScreenshot: false)
 
@@ -80,6 +76,19 @@ final class WebCompatReporterMiddleware {
             windowUUID: windowUUID,
             actionType: WebCompatReporterMiddlewareActionType.didSubmit
         ))
+    }
+
+    /// The only place a report is assembled, so the preview can't differ from what's sent.
+    private func makeReport(windowUUID: WindowUUID, state: AppState) -> WebCompatReportPayload {
+        let reporterState = WebCompatReporterState(appState: state, uuid: windowUUID)
+        let payload = WebCompatReportPayload.make(from: reporterState)
+        guard let tab = selectedTab(for: windowUUID) else { return payload }
+        return WebCompatReportDataCollector.enrich(
+            payload,
+            tab: tab,
+            includeBlockedList: reporterState.includeBlockedList,
+            includeTabSpecificInfo: isReporting(reporterState.url, on: tab)
+        )
     }
 
     private func selectedTab(for windowUUID: WindowUUID) -> Tab? {

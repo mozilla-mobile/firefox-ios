@@ -534,6 +534,7 @@
         "SearchTests\/testBottomVIewURLBar_TAE()",
         "SearchTests\/testCopyPasteComplete()",
         "SearchTests\/testDefaultSearchEngine()",
+        "SearchTests\/testDefaultSearchEngines()",
         "SearchTests\/testDismissPromptPresence()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
         "SearchTests\/testFirefoxSuggest()",

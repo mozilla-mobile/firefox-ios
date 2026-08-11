@@ -20,6 +20,8 @@ public struct StandardImageIdentifiers {
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
         public static let shieldCheckmarkFill = "shieldCheckmarkFillSmall"
+        public static let shieldCheckmarkFillGradient = "shieldCheckmarkFillGradientSmall"
+        public static let shieldSlashFillCritical = "shieldSlashFillCriticalSmall"
         public static let shieldSlashFillMulticolor = "shieldSlashFillMulticolorSmall"
     }
 

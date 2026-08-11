@@ -7,7 +7,7 @@ import XCTest
 @testable import WebCompatReporterKit
 
 @MainActor
-final class WebCompatReportPreviewViewControllerTests: XCTestCase {
+final class WebCompatTechnicalDataViewControllerTests: XCTestCase {
     private enum UX {
         static let presentationSize = CGSize(width: 390, height: 844)
     }
@@ -28,7 +28,7 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
 
         let collectionView = collectionView(in: subject)
         XCTAssertEqual(collectionView?.numberOfItems(inSection: 0), 2)
-        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 1, section: 0)) is WebCompatPreviewSectionContentCell)
+        XCTAssertTrue(collectionView?.cellForItem(at: IndexPath(item: 1, section: 0)) is WebCompatTechnicalDataSectionCell)
     }
 
     // The Client re-configures on every state change. An unchanged re-configure must skip the
@@ -51,25 +51,31 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 
     func testApplyTheme_afterExpanding_keepsTheSectionExpanded() throws {
-        let subject = createSubject(sections: sampleSections)
+        let themeManager = MockThemeManager()
+        let subject = createSubject(sections: sampleSections, themeManager: themeManager)
         layout(subject)
         try expandFirstSection(in: subject)
 
-        subject.applyTheme(theme: DarkTheme())
+        themeManager.currentTheme = DarkTheme()
+        subject.applyTheme()
         subject.view.layoutIfNeeded()
 
+        XCTAssertEqual(collectionView(in: subject)?.backgroundColor, DarkTheme().colors.layer1)
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
     }
 
     // If a round-tripped snapshot omitted collapsed children, applying it would delete them.
     func testApplyTheme_whileCollapsed_thenExpanding_stillRevealsRows() throws {
-        let subject = createSubject(sections: sampleSections)
+        let themeManager = MockThemeManager()
+        let subject = createSubject(sections: sampleSections, themeManager: themeManager)
         layout(subject)
 
-        subject.applyTheme(theme: DarkTheme())
+        themeManager.currentTheme = DarkTheme()
+        subject.applyTheme()
         subject.view.layoutIfNeeded()
         try expandFirstSection(in: subject)
 
+        XCTAssertEqual(collectionView(in: subject)?.backgroundColor, DarkTheme().colors.layer1)
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
     }
 
@@ -117,7 +123,7 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 
     func testCloseTap_notifiesDelegate() throws {
-        let delegate = MockWebCompatReportPreviewDelegate()
+        let delegate = MockWebCompatTechnicalDataDelegate()
         let subject = createSubject(sections: sampleSections)
         subject.delegate = delegate
         subject.loadViewIfNeeded()
@@ -147,10 +153,10 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     // MARK: - Helpers
 
     private func makeViewModel(
-        sections: [WebCompatReportPreviewViewModel.PreviewSection] = []
-    ) -> WebCompatReportPreviewViewModel {
-        return WebCompatReportPreviewViewModel(
-            title: "Report Preview",
+        sections: [WebCompatTechnicalDataViewModel.PreviewSection] = []
+    ) -> WebCompatTechnicalDataViewModel {
+        return WebCompatTechnicalDataViewModel(
+            title: "Technical Data",
             closeAccessibilityLabel: "Close",
             closeA11yIdentifier: "close",
             screenshotAccessibilityLabel: "Screenshot",
@@ -160,15 +166,18 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 
     private func createSubject(
-        sections: [WebCompatReportPreviewViewModel.PreviewSection] = []
-    ) -> WebCompatReportPreviewViewController {
-        return WebCompatReportPreviewViewController(
+        sections: [WebCompatTechnicalDataViewModel.PreviewSection] = [],
+        themeManager: ThemeManager = MockThemeManager()
+    ) -> WebCompatTechnicalDataViewController {
+        return WebCompatTechnicalDataViewController(
             viewModel: makeViewModel(sections: sections),
-            theme: LightTheme()
+            windowUUID: .XCTestDefaultUUID,
+            themeManager: themeManager,
+            notificationCenter: NotificationCenter.default
         )
     }
 
-    private func layout(_ subject: WebCompatReportPreviewViewController) {
+    private func layout(_ subject: WebCompatTechnicalDataViewController) {
         subject.view.frame = CGRect(origin: .zero, size: UX.presentationSize)
         subject.loadViewIfNeeded()
         subject.view.layoutIfNeeded()
@@ -176,7 +185,7 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
 
     /// UIKit owns the disclosure gesture, so expand the way that gesture ends up doing. Reached
     /// through the collection view, since the screen keeps its data source private.
-    private func expandFirstSection(in subject: WebCompatReportPreviewViewController) throws {
+    private func expandFirstSection(in subject: WebCompatTechnicalDataViewController) throws {
         let dataSource = try XCTUnwrap(
             collectionView(in: subject)?.dataSource as? UICollectionViewDiffableDataSource<String, String>
         )
@@ -188,42 +197,42 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         subject.view.layoutIfNeeded()
     }
 
-    private let sampleSections: [WebCompatReportPreviewViewModel.PreviewSection] = [
-        WebCompatReportPreviewViewModel.PreviewSection(
+    private let sampleSections: [WebCompatTechnicalDataViewModel.PreviewSection] = [
+        WebCompatTechnicalDataViewModel.PreviewSection(
             id: "basic",
             title: "basic",
             a11yIdentifier: "section.basic",
             contentA11yIdentifier: "section.basic.content",
             rows: [
-                WebCompatReportPreviewViewModel.PreviewRow(
+                WebCompatTechnicalDataViewModel.PreviewRow(
                     id: "basic.url", label: "url", value: .string("https://example.com")
                 ),
-                WebCompatReportPreviewViewModel.PreviewRow(
+                WebCompatTechnicalDataViewModel.PreviewRow(
                     id: "basic.breakage_category", label: "breakage_category", value: .string("no_audio")
                 )
             ]
         ),
-        WebCompatReportPreviewViewModel.PreviewSection(
+        WebCompatTechnicalDataViewModel.PreviewSection(
             id: "system",
             title: "system",
             a11yIdentifier: "section.system",
             contentA11yIdentifier: "section.system.content",
             rows: [
-                WebCompatReportPreviewViewModel.PreviewRow(
+                WebCompatTechnicalDataViewModel.PreviewRow(
                     id: "system.is_tablet", label: "is_tablet", value: .bool(false)
                 )
             ]
         )
     ]
 
-    private var addedSection: WebCompatReportPreviewViewModel.PreviewSection {
-        return WebCompatReportPreviewViewModel.PreviewSection(
+    private var addedSection: WebCompatTechnicalDataViewModel.PreviewSection {
+        return WebCompatTechnicalDataViewModel.PreviewSection(
             id: "graphics",
             title: "graphics",
             a11yIdentifier: "section.graphics",
             contentA11yIdentifier: "section.graphics.content",
             rows: [
-                WebCompatReportPreviewViewModel.PreviewRow(
+                WebCompatTechnicalDataViewModel.PreviewRow(
                     id: "graphics.has_touch_screen", label: "has_touch_screen", value: .bool(true)
                 )
             ]
@@ -231,15 +240,15 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 
     /// `sampleSections[0]` with one value changed and every id the same, which the diff misses.
-    private var changedFirstSection: WebCompatReportPreviewViewModel.PreviewSection {
+    private var changedFirstSection: WebCompatTechnicalDataViewModel.PreviewSection {
         let section = sampleSections[0]
-        return WebCompatReportPreviewViewModel.PreviewSection(
+        return WebCompatTechnicalDataViewModel.PreviewSection(
             id: section.id,
             title: section.title,
             a11yIdentifier: section.a11yIdentifier,
             contentA11yIdentifier: section.contentA11yIdentifier,
             rows: [
-                WebCompatReportPreviewViewModel.PreviewRow(
+                WebCompatTechnicalDataViewModel.PreviewRow(
                     id: "basic.url", label: "url", value: .string("https://changed.example")
                 ),
                 section.rows[1]
@@ -247,14 +256,14 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         )
     }
 
-    private func collectionView(in subject: WebCompatReportPreviewViewController) -> UICollectionView? {
+    private func collectionView(in subject: WebCompatTechnicalDataViewController) -> UICollectionView? {
         return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
     }
 
     /// A section is recognisable from outside by its header cell's identifier.
     private func sectionIndex(
         ofHeader accessibilityIdentifier: String,
-        in subject: WebCompatReportPreviewViewController
+        in subject: WebCompatTechnicalDataViewController
     ) -> Int? {
         guard let collectionView = collectionView(in: subject) else { return nil }
         return (0..<collectionView.numberOfSections).first { section in
@@ -264,12 +273,12 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 }
 
-private final class MockWebCompatReportPreviewDelegate: WebCompatReportPreviewDelegate {
+private final class MockWebCompatTechnicalDataDelegate: WebCompatTechnicalDataDelegate {
     var didRequestDismissCallCount = 0
 
-    func webCompatReportPreviewDidRequestDismiss() {
+    func webCompatTechnicalDataDidRequestDismiss() {
         didRequestDismissCallCount += 1
     }
 
-    func webCompatReportPreviewDidTapScreenshot() {}
+    func webCompatTechnicalDataDidTapScreenshot() {}
 }
