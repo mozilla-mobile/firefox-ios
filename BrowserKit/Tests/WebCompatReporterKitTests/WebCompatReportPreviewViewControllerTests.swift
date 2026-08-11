@@ -51,25 +51,31 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 
     func testApplyTheme_afterExpanding_keepsTheSectionExpanded() throws {
-        let subject = createSubject(sections: sampleSections)
+        let themeManager = MockThemeManager()
+        let subject = createSubject(sections: sampleSections, themeManager: themeManager)
         layout(subject)
         try expandFirstSection(in: subject)
 
-        subject.applyTheme(theme: DarkTheme())
+        themeManager.currentTheme = DarkTheme()
+        subject.applyTheme()
         subject.view.layoutIfNeeded()
 
+        XCTAssertEqual(collectionView(in: subject)?.backgroundColor, DarkTheme().colors.layer1)
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
     }
 
     // If a round-tripped snapshot omitted collapsed children, applying it would delete them.
     func testApplyTheme_whileCollapsed_thenExpanding_stillRevealsRows() throws {
-        let subject = createSubject(sections: sampleSections)
+        let themeManager = MockThemeManager()
+        let subject = createSubject(sections: sampleSections, themeManager: themeManager)
         layout(subject)
 
-        subject.applyTheme(theme: DarkTheme())
+        themeManager.currentTheme = DarkTheme()
+        subject.applyTheme()
         subject.view.layoutIfNeeded()
         try expandFirstSection(in: subject)
 
+        XCTAssertEqual(collectionView(in: subject)?.backgroundColor, DarkTheme().colors.layer1)
         XCTAssertEqual(collectionView(in: subject)?.numberOfItems(inSection: 0), 2)
     }
 
@@ -160,11 +166,14 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
     }
 
     private func createSubject(
-        sections: [WebCompatReportPreviewViewModel.PreviewSection] = []
+        sections: [WebCompatReportPreviewViewModel.PreviewSection] = [],
+        themeManager: ThemeManager = MockThemeManager()
     ) -> WebCompatReportPreviewViewController {
         return WebCompatReportPreviewViewController(
             viewModel: makeViewModel(sections: sections),
-            theme: LightTheme()
+            windowUUID: .XCTestDefaultUUID,
+            themeManager: themeManager,
+            notificationCenter: NotificationCenter.default
         )
     }
 

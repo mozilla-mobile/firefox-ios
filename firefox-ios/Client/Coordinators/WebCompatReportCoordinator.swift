@@ -12,12 +12,19 @@ protocol WebCompatReportCoordinatorNavigationDelegate: AnyObject {
     func webCompatReportDidSubmit()
 }
 
-final class WebCompatReportCoordinator: BaseCoordinator, WebCompatReportCoordinatorDelegate {
+final class WebCompatReportCoordinator: BaseCoordinator,
+                                        WebCompatReportCoordinatorDelegate,
+                                        ParentCoordinatorDelegate {
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private weak var navigationDelegate: WebCompatReportCoordinatorNavigationDelegate?
     private weak var reportViewController: WebCompatReportViewController?
+
+    private var previewCoordinator: WebCompatReportPreviewCoordinator? {
+        return childCoordinators.first { $0 is WebCompatReportPreviewCoordinator }
+            as? WebCompatReportPreviewCoordinator
+    }
 
     init(
         router: Router,
@@ -66,7 +73,29 @@ final class WebCompatReportCoordinator: BaseCoordinator, WebCompatReportCoordina
         reportViewController?.present(navigationController, animated: true)
     }
 
+    func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload) {
+        guard let reportViewController, previewCoordinator == nil else { return }
+        // The main router presents from the browser, which already shows the sheet, so the preview
+        // goes up from the sheet itself.
+        let previewCoordinator = WebCompatReportPreviewCoordinator(
+            router: DefaultRouter(navigationController: reportViewController),
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            parentCoordinator: self
+        )
+        add(child: previewCoordinator)
+        previewCoordinator.start(payload: payload)
+    }
+
+    // MARK: - ParentCoordinatorDelegate
+
+    func didFinish(from childCoordinator: Coordinator) {
+        remove(child: childCoordinator)
+    }
+
+    /// Dismisses the preview first, so the sheet isn't pulled out from under it.
     private func dismissReport(completion: (() -> Void)? = nil) {
+        previewCoordinator?.dismissPreview(animated: false)
         router.dismiss(animated: true) { [weak self] in
             completion?()
             guard let self else { return }
