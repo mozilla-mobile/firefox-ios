@@ -368,7 +368,7 @@ extension BrowserViewController {
         let profileView = EcosiaWebViewModal(
             url: Environment.current.urlProvider.profileURL,
             windowUUID: windowUUID,
-            userAgent: UserAgentBuilder.defaultMobileUserAgent().userAgent(),
+            userAgent: EcosiaInAppWebViewUserAgent.mobileUserAgent(),
             onLoadComplete: {
                 Analytics.shared.accountProfileViewed()
             },

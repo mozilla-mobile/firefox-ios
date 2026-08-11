@@ -19,8 +19,6 @@ final class AuthTests: XCTestCase {
         mockProvider = MockAuth0Provider()
         auth = EcosiaAuthenticationService(auth0Provider: mockProvider)
         auth.skipUserInfoFetch = true
-        mockProvider.reset()
-        mockProvider.hasStoredCredentials = false
     }
 
     override func tearDown() {
@@ -344,6 +342,8 @@ final class AuthTests: XCTestCase {
         mockProvider.mockCredentials = expectedCredentials
         mockProvider.hasStoredCredentials = true  // Simulate stored credentials
 
+        await waitForInitCredentialRetrieval()
+
         // Act
         await auth.retrieveStoredCredentials()
 
@@ -359,6 +359,8 @@ final class AuthTests: XCTestCase {
     func testRetrieveStoredCredentials_withFailure_maintainsLoggedOutState() async {
         // Arrange
         mockProvider.shouldFailRetrieveCredentials = true
+
+        await waitForInitCredentialRetrieval()
 
         // Act
         await auth.retrieveStoredCredentials()
@@ -637,6 +639,24 @@ final class AuthTests: XCTestCase {
         }
 
         return "\(base64URLEncode(header)).\(base64URLEncode(payload)).mock-signature"
+    }
+
+    private func waitForInitCredentialRetrieval(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        let deadline = Date().addingTimeInterval(1)
+        while mockProvider.retrieveCredentialsCallCount < 1 && Date() < deadline {
+            try? await Task.sleep(nanoseconds: 10_000_000)
+        }
+
+        XCTAssertEqual(
+            mockProvider.retrieveCredentialsCallCount,
+            1,
+            "Expected init-time credential retrieval before explicit test call",
+            file: file,
+            line: line
+        )
     }
 }
 // swiftlint:enable implicitly_unwrapped_optional

@@ -4,6 +4,7 @@
 
 import XCTest
 import WebKit
+@testable import Client
 @testable import Ecosia
 // swiftlint:disable implicitly_unwrapped_optional
 
@@ -261,6 +262,45 @@ final class EcosiaWebViewModalTests: XCTestCase, @unchecked Sendable {
         // Then
         wait(for: [expectation], timeout: 1.0)
         XCTAssertTrue(coordinator.blankTargetURLs.isEmpty)
+    }
+
+    // MARK: - User Agent Tests
+
+    func testInit_storesProvidedUserAgent() {
+        // Given
+        let expectedUserAgent = "Mozilla/5.0 (Ecosia ios@test)"
+
+        // When
+        let modal = EcosiaWebViewModal(
+            url: URL(string: "https://example.com/profile")!,
+            windowUUID: .XCTestDefaultUUID,
+            userAgent: expectedUserAgent
+        )
+
+        // Then
+        XCTAssertEqual(
+            mirrorString(from: modal, label: "userAgent"),
+            expectedUserAgent
+        )
+    }
+
+    func testInit_storesInAppMobileUserAgent() {
+        // Given / When
+        let modal = EcosiaWebViewModal(
+            url: EcosiaEnvironment.current.urlProvider.profileURL,
+            windowUUID: .XCTestDefaultUUID,
+            userAgent: EcosiaInAppWebViewUserAgent.mobileUserAgent()
+        )
+
+        // Then
+        XCTAssertEqual(
+            mirrorString(from: modal, label: "userAgent"),
+            EcosiaInAppWebViewUserAgent.mobileUserAgent()
+        )
+    }
+
+    private func mirrorString(from object: Any, label: String) -> String? {
+        Mirror(reflecting: object).children.first { $0.label == label }?.value as? String
     }
 }
 

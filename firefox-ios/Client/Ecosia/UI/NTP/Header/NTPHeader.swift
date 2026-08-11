@@ -179,7 +179,8 @@ struct NTPHeaderView: View {
                                         viewModel.dismissAccountImpact()
                                     }
                                 ),
-                                windowUUID: windowUUID
+                                windowUUID: windowUUID,
+                                webViewUserAgent: EcosiaInAppWebViewUserAgent.mobileUserAgent()
                             )
                             .padding(.horizontal, .ecosia.space._m)
                             .dynamicHeightPresentationDetent()
