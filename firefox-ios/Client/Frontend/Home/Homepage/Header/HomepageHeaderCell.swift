@@ -159,7 +159,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         }
     }
 
-    /// Observes the tip eligibility and presents it from `tipPresenter`, since a cell cannot present itself.
     private func observeQuickAnswersTip() {
         guard #available(iOS 17.0, *),
               tipObservationTask == nil else { return }

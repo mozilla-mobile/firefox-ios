@@ -6,7 +6,6 @@ import Shared
 import XCTest
 @testable import Client
 
-@MainActor
 @available(iOS 17.0, *)
 class ResetTipsSettingTests: XCTestCase {
     private var prefs: MockProfilePrefs!
