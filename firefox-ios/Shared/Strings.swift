@@ -2176,7 +2176,7 @@ extension String {
                 key: "NativeErrorPage.Wayback.Error.FooterDescription.v155",
                 tableName: "NativeErrorPage",
                 value: "%@ can look for an earlier version of this page from the Internet Archive’s %@.",
-                comment: "Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. The first %@ is the app name (e.g. Firefox). The second %@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org.")
+                comment: "Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org.")
             public static let LinkText = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.LinkText.v155",
                 tableName: "NativeErrorPage",
