@@ -18,6 +18,12 @@ final class TabDisplayPanelViewController: UIViewController,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
                                      TabTrayThemeable {
+    private struct UX {
+        static let groupHeaderHeight: CGFloat = 48
+        static let horizontalInset: CGFloat = 16
+        static let addGroupButtonSize: CGFloat = 44
+    }
+
     typealias SubscriberStateType = TabsPanelState
 
     let panelType: TabTrayPanelType
@@ -51,6 +57,26 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     // MARK: UI elements
+    private lazy var groupContextView: UIView = .build()
+    private lazy var selectedGroupColorView: UIView = .build { view in
+        view.layer.cornerRadius = 5
+    }
+    private lazy var selectedGroupButton: UIButton = .build { button in
+        button.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        button.semanticContentAttribute = .forceRightToLeft
+        button.contentHorizontalAlignment = .leading
+        button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont()
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.selectedTabGroupLabel
+        button.accessibilityHint = .TabsTray.ChangeTabGroupAccessibilityLabel
+        button.showsMenuAsPrimaryAction = true
+    }
+    private lazy var addGroupButton: UIButton = .build { button in
+        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.addTabGroupButton
+        button.accessibilityLabel = .TabsTray.AddTabGroupAccessibilityLabel
+        button.addTarget(self, action: #selector(self.addGroupButtonTapped), for: .touchUpInside)
+    }
     lazy var tabDisplayView: TabDisplayView = {
         let view = TabDisplayView(panelType: self.panelType,
                                   state: self.tabsState,
@@ -155,11 +181,15 @@ final class TabDisplayPanelViewController: UIViewController,
 
     private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
+        if panelType == .tabs {
+            setupGroupContextView()
+        }
         view.addSubview(tabDisplayView)
         view.addSubview(backgroundPrivacyOverlay)
 
+        let tabDisplayTopAnchor = panelType == .tabs ? groupContextView.bottomAnchor : view.topAnchor
         NSLayoutConstraint.activate([
-            tabDisplayView.topAnchor.constraint(equalTo: view.topAnchor),
+            tabDisplayView.topAnchor.constraint(equalTo: tabDisplayTopAnchor),
             tabDisplayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tabDisplayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tabDisplayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -173,6 +203,39 @@ final class TabDisplayPanelViewController: UIViewController,
         backgroundPrivacyOverlay.isHidden = true
         setupEmptyView()
         setupFadeView()
+    }
+
+    private func setupGroupContextView() {
+        view.addSubview(groupContextView)
+        groupContextView.addSubview(selectedGroupColorView)
+        groupContextView.addSubview(selectedGroupButton)
+        groupContextView.addSubview(addGroupButton)
+        updateGroupSelector()
+
+        NSLayoutConstraint.activate([
+            groupContextView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            groupContextView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            groupContextView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            groupContextView.heightAnchor.constraint(equalToConstant: UX.groupHeaderHeight),
+
+            selectedGroupColorView.leadingAnchor.constraint(equalTo: groupContextView.leadingAnchor,
+                                                            constant: UX.horizontalInset),
+            selectedGroupColorView.centerYAnchor.constraint(equalTo: groupContextView.centerYAnchor),
+            selectedGroupColorView.widthAnchor.constraint(equalToConstant: 10),
+            selectedGroupColorView.heightAnchor.constraint(equalToConstant: 10),
+
+            selectedGroupButton.leadingAnchor.constraint(equalTo: selectedGroupColorView.trailingAnchor,
+                                                          constant: 8),
+            selectedGroupButton.centerYAnchor.constraint(equalTo: groupContextView.centerYAnchor),
+            selectedGroupButton.trailingAnchor.constraint(lessThanOrEqualTo: addGroupButton.leadingAnchor,
+                                                           constant: -UX.horizontalInset),
+
+            addGroupButton.trailingAnchor.constraint(equalTo: groupContextView.trailingAnchor,
+                                                      constant: -UX.horizontalInset),
+            addGroupButton.centerYAnchor.constraint(equalTo: groupContextView.centerYAnchor),
+            addGroupButton.widthAnchor.constraint(equalToConstant: UX.addGroupButtonSize),
+            addGroupButton.heightAnchor.constraint(equalToConstant: UX.addGroupButtonSize)
+        ])
     }
 
     private func setupEmptyView() {
@@ -209,6 +272,13 @@ final class TabDisplayPanelViewController: UIViewController,
     func applyTheme() {
         let theme = retrieveTheme()
         backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
+        groupContextView.backgroundColor = theme.colors.layer3
+        selectedGroupButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        selectedGroupButton.tintColor = theme.colors.iconPrimary
+        if !tabsState.tabGroups.contains(where: \.isSelected) {
+            selectedGroupColorView.backgroundColor = theme.colors.iconSecondary
+        }
+        addGroupButton.tintColor = theme.colors.iconPrimary
         tabDisplayView.applyTheme(theme: theme)
         emptyPrivateTabsView.applyTheme(theme: theme)
         adjustFadeView(theme: theme)
@@ -310,6 +380,13 @@ final class TabDisplayPanelViewController: UIViewController,
 
     func applyTheme(_ theme: Theme) {
         backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
+        groupContextView.backgroundColor = theme.colors.layer3
+        selectedGroupButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+        selectedGroupButton.tintColor = theme.colors.iconPrimary
+        if !tabsState.tabGroups.contains(where: \.isSelected) {
+            selectedGroupColorView.backgroundColor = theme.colors.iconSecondary
+        }
+        addGroupButton.tintColor = theme.colors.iconPrimary
         tabDisplayView.applyTheme(theme: theme)
         emptyPrivateTabsView.applyTheme(theme: theme)
 
@@ -358,6 +435,7 @@ final class TabDisplayPanelViewController: UIViewController,
         guard state != tabsState else { return }
 
         tabsState = state
+        updateGroupSelector()
         tabDisplayView.newState(state: tabsState)
         if panelType == .privateTabs, tabsState.isPrivateMode {
             // Only adjust the empty view if we are in private mode
@@ -377,6 +455,49 @@ final class TabDisplayPanelViewController: UIViewController,
                                         urlRequest: urlRequest,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.learnMorePrivateMode)
+        store.dispatch(action)
+    }
+
+    private func updateGroupSelector() {
+        selectedGroupButton.setTitle(tabsState.selectedGroupName ?? .TabsTray.AllTabsGroupTitle, for: .normal)
+        selectedGroupColorView.backgroundColor = tabsState.tabGroups.first(where: \.isSelected)?.color.uiColor
+            ?? retrieveTheme().colors.iconSecondary
+        selectedGroupButton.menu = makeTabGroupMenu()
+    }
+
+    private func makeTabGroupMenu() -> UIMenu {
+        let allTabsAction = UIAction(
+            title: .TabsTray.AllTabsGroupTitle,
+            image: UIImage(systemName: "square.grid.2x2"),
+            state: tabsState.tabGroups.contains(where: \.isSelected) ? .off : .on
+        ) { [weak self] _ in
+            self?.selectGroup(nil)
+        }
+        let groupActions = tabsState.tabGroups.map { group in
+            UIAction(title: group.name,
+                     image: UIImage(systemName: "circle.fill")?.withTintColor(group.color.uiColor,
+                                                                               renderingMode: .alwaysOriginal),
+                     state: group.isSelected ? .on : .off) { [weak self] _ in
+                self?.selectGroup(group.id)
+            }
+        }
+        return UIMenu(title: .TabsTray.ChangeTabGroupMenuTitle,
+                      children: [allTabsAction] + groupActions)
+    }
+
+    private func selectGroup(_ groupID: TabGroupID?) {
+        let action = TabPanelViewAction(panelType: panelType,
+                                        tabGroupID: groupID,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.selectTabGroup)
+        store.dispatch(action)
+    }
+
+    @objc
+    private func addGroupButtonTapped() {
+        let action = TabPanelViewAction(panelType: panelType,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.addTabGroup)
         store.dispatch(action)
     }
 }

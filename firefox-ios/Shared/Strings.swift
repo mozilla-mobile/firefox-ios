@@ -4449,6 +4449,31 @@ extension String {
             tableName: nil,
             value: nil,
             comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+        public static let AddTabGroupAccessibilityLabel = MZLocalizedString(
+            key: "TabsTray.AddTabGroup.AccessibilityLabel.v150",
+            tableName: "TabsTray",
+            value: "Add tab group",
+            comment: "Accessibility label for the button that creates a tab group in the normal tabs panel.")
+        public static let ChangeTabGroupAccessibilityLabel = MZLocalizedString(
+            key: "TabsTray.ChangeTabGroup.AccessibilityLabel.v150",
+            tableName: "TabsTray",
+            value: "Change tab group",
+            comment: "Accessibility hint for the button that changes the selected tab group.")
+        public static let ChangeTabGroupMenuTitle = MZLocalizedString(
+            key: "TabsTray.ChangeTabGroup.MenuTitle.v150",
+            tableName: "TabsTray",
+            value: "Tab groups",
+            comment: "Title for the menu used to select a tab group.")
+        public static let AllTabsGroupTitle = MZLocalizedString(
+            key: "TabsTray.TabGroups.AllTabs.Title.v150",
+            tableName: "TabsTray",
+            value: "All tabs",
+            comment: "Label shown above the normal tabs panel when no tab group is selected.")
+        public static let NewTabGroupTitle = MZLocalizedString(
+            key: "TabsTray.TabGroups.NewGroup.Title.v150",
+            tableName: "TabsTray",
+            value: "New group",
+            comment: "Default name assigned to a newly created tab group.")
         public static let TabTrayCloseAccessibilityCustomAction = MZLocalizedString(
             key: "Close",
             tableName: nil,

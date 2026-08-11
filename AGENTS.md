@@ -44,3 +44,5 @@ GitHub ticket number can be found at the bottom of the JIRA ticket.
 ## Runbooks
 
 - **Xcode version upgrade.** When bumping the Xcode version used by CI/local builds, follow [docs/xcode-upgrade.md](docs/xcode-upgrade.md).
+
+@.claude/memory/MEMORY.md

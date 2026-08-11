@@ -145,6 +145,35 @@ class BrowserViewController: UIViewController,
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
         AddressToolbarContainer(toolbarHelper: self.toolbarHelper)
     })
+    private lazy var tabGroupStripView: UIView = {
+        let view: UIView = .build { view in
+            view.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.selectedTabGroupStrip
+            view.isAccessibilityElement = true
+            view.accessibilityTraits = .staticText
+            view.isHidden = true
+        }
+        view.addSubview(tabGroupStripColorView)
+        view.addSubview(tabGroupStripLabel)
+        NSLayoutConstraint.activate([
+            view.heightAnchor.constraint(equalToConstant: 28),
+            tabGroupStripColorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tabGroupStripColorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            tabGroupStripColorView.widthAnchor.constraint(equalToConstant: 10),
+            tabGroupStripColorView.heightAnchor.constraint(equalToConstant: 10),
+            tabGroupStripLabel.leadingAnchor.constraint(equalTo: tabGroupStripColorView.trailingAnchor, constant: 8),
+            tabGroupStripLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16),
+            tabGroupStripLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        return view
+    }()
+    private lazy var tabGroupStripColorView: UIView = .build { view in
+        view.layer.cornerRadius = 5
+    }
+    private lazy var tabGroupStripLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Bold.caption1.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.lineBreakMode = .byTruncatingTail
+    }
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
@@ -531,6 +560,7 @@ class BrowserViewController: UIViewController,
 
     private func didInit() {
         tabManager.addDelegate(self)
+        (tabManager as? TabGroupManaging)?.addGroupDelegate(self)
         tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
         self.searchEnginesManager.delegate = self
@@ -580,6 +610,7 @@ class BrowserViewController: UIViewController,
 
         addressToolbarContainer.removeFromParent()
         addressToolbarContainer.addToParent(parent: newParent, addToTop: !isBottomSearchBar)
+        positionTabGroupStrip(in: newParent)
 
         if isSwipingTabsEnabled {
             webPagePreview.invalidateScreenshotData()
@@ -1339,12 +1370,14 @@ class BrowserViewController: UIViewController,
         guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
             guard addressToolbarContainer.isHidden == true else { return }
             addressToolbarContainer.isHidden = false
+            updateTabGroupStrip()
             store.dispatch(
                 GeneralBrowserAction(windowUUID: windowUUID, actionType: GeneralBrowserActionType.didUnhideToolbar)
             )
             return
         }
         addressToolbarContainer.isHidden = true
+        updateTabGroupStrip()
     }
 
     private func addAddressToolbar() {
@@ -1357,7 +1390,10 @@ class BrowserViewController: UIViewController,
             isBottomSearchBar: isBottomSearchBar
         )
         addressToolbarContainer.applyTheme(theme: currentTheme())
-        addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+        let parent = isBottomSearchBar ? overKeyboardContainer : header
+        addressToolbarContainer.addToParent(parent: parent)
+        positionTabGroupStrip(in: parent)
+        updateTabGroupStrip()
 
         guard isSwipingTabsEnabled else { return }
         tabSwipeGestureHandler = TabSwipeGestureHandler(
@@ -1372,6 +1408,28 @@ class BrowserViewController: UIViewController,
             swipeGestureFeatureFlagProvider: swipeGestureFeatureFlagProvider
         )
         tabSwipeGestureHandler?.delegate = self
+    }
+
+    private func positionTabGroupStrip(in parent: UIStackView) {
+        if let currentParent = tabGroupStripView.superview as? UIStackView {
+            currentParent.removeArrangedSubview(tabGroupStripView)
+            tabGroupStripView.removeFromSuperview()
+        }
+        guard let addressToolbarIndex = parent.arrangedSubviews.firstIndex(of: addressToolbarContainer) else { return }
+        parent.insertArrangedSubview(tabGroupStripView, at: addressToolbarIndex)
+    }
+
+    private func updateTabGroupStrip() {
+        guard isViewLoaded else { return }
+        guard !addressToolbarContainer.isHidden,
+              let selectedGroup = (tabManager as? TabGroupManaging)?.selectedGroup else {
+            tabGroupStripView.isHidden = true
+            return
+        }
+        tabGroupStripLabel.text = selectedGroup.name
+        tabGroupStripColorView.backgroundColor = selectedGroup.color.uiColor
+        tabGroupStripView.accessibilityLabel = selectedGroup.name
+        tabGroupStripView.isHidden = false
     }
 
     func addSubviews() {
@@ -3927,6 +3985,8 @@ class BrowserViewController: UIViewController,
         let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
         let colors = currentTheme.colors
         backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
+        tabGroupStripView.backgroundColor = colors.layer3
+        tabGroupStripLabel.textColor = colors.textSecondary
         if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
             glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
             bottomBlurView.effect = glassEffect
@@ -4702,6 +4762,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateUIAfterTabSelection(selectedTab: selectedTab, previousTab: previousTab)
+        updateTabGroupStrip()
 
         if needsReload {
             selectedTab.reload()
@@ -4904,6 +4965,12 @@ extension BrowserViewController: TabManagerDelegate {
                                    windowUUID: windowUUID,
                                    actionType: ToolbarActionType.numberOfTabsChanged)
         store.dispatch(action)
+    }
+}
+
+extension BrowserViewController: TabGroupManagerDelegate {
+    func tabGroupManagerDidChange(_ tabGroupManager: TabGroupManaging) {
+        updateTabGroupStrip()
     }
 }
 

@@ -138,8 +138,11 @@ class SceneCoordinator: BaseCoordinator,
                    level: .info,
                    category: .coordinator)
 
-        let tabManager = TabManagerImplementation(profile: AppContainer.shared.resolve(),
-                                                  uuid: reservedWindowUUID)
+        let profile: Profile = AppContainer.shared.resolve()
+        let tabManagerImplementation = TabManagerImplementation(profile: profile,
+                                                                uuid: reservedWindowUUID)
+        let tabManager = TabGroupManager(tabManager: tabManagerImplementation,
+                                         prefs: profile.prefs)
         let browserCoordinator = BrowserCoordinator(router: router,
                                                     screenshotService: screenshotService,
                                                     tabManager: tabManager)

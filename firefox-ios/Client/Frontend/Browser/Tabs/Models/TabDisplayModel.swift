@@ -4,9 +4,18 @@
 
 import Foundation
 
+struct TabGroupDisplayModel: Equatable {
+    let id: TabGroupID
+    let name: String
+    let color: TabGroupColor
+    let isSelected: Bool
+}
+
 struct TabDisplayModel: Equatable {
     var isPrivateMode: Bool
     var tabs: [TabModel]
+    var selectedGroupName: String? = nil
+    var tabGroups: [TabGroupDisplayModel] = []
     var normalTabsCount: String
     var privateTabsCount: String
     var undoCloseType: ToastType?

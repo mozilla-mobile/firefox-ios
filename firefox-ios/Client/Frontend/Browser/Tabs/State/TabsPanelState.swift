@@ -17,6 +17,8 @@ struct TabsPanelState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var isPrivateMode: Bool
     var tabs: [TabModel]
+    var selectedGroupName: String?
+    var tabGroups: [TabGroupDisplayModel]
     var scrollState: ScrollState?
     var didTapAddTab: Bool
     var urlRequest: URLRequest?
@@ -39,6 +41,8 @@ struct TabsPanelState: ScreenState, Equatable {
         self.init(windowUUID: panelState.windowUUID,
                   isPrivateMode: panelState.isPrivateMode,
                   tabs: panelState.tabs,
+                  selectedGroupName: panelState.selectedGroupName,
+                  tabGroups: panelState.tabGroups,
                   scrollState: panelState.scrollState,
                   didTapAddTab: panelState.didTapAddTab,
                   urlRequest: panelState.urlRequest)
@@ -49,6 +53,8 @@ struct TabsPanelState: ScreenState, Equatable {
             windowUUID: windowUUID,
             isPrivateMode: isPrivateMode,
             tabs: [TabModel](),
+            selectedGroupName: nil,
+            tabGroups: [],
             toastType: nil,
             scrollState: nil,
             didTapAddTab: false,
@@ -58,12 +64,16 @@ struct TabsPanelState: ScreenState, Equatable {
     init(windowUUID: WindowUUID,
          isPrivateMode: Bool,
          tabs: [TabModel],
+         selectedGroupName: String? = nil,
+         tabGroups: [TabGroupDisplayModel] = [],
          toastType: ToastType? = nil,
          scrollState: ScrollState?,
          didTapAddTab: Bool,
          urlRequest: URLRequest?) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
+        self.selectedGroupName = selectedGroupName
+        self.tabGroups = tabGroups
         self.windowUUID = windowUUID
         self.scrollState = scrollState
         self.didTapAddTab = didTapAddTab
@@ -100,6 +110,8 @@ struct TabsPanelState: ScreenState, Equatable {
                 .resetTransientState()
                 .copy(isPrivateMode: tabsModel.isPrivateMode)
                 .copy(tabs: tabsModel.tabs)
+                .copy(selectedGroupName: tabsModel.selectedGroupName)
+                .copy(tabGroups: tabsModel.tabGroups)
 
         case TabPanelMiddlewareActionType.willAppearTabPanel:
             let scrollModel = createTabScrollBehavior(
@@ -115,6 +127,8 @@ struct TabsPanelState: ScreenState, Equatable {
             return state
                 .resetTransientState()
                 .copy(tabs: tabModel.tabs)
+                .copy(selectedGroupName: tabModel.selectedGroupName)
+                .copy(tabGroups: tabModel.tabGroups)
 
         case TabPanelMiddlewareActionType.scrollToTab:
             guard let scrollBehavior = action.scrollBehavior else { return defaultState(from: state) }
@@ -132,6 +146,8 @@ struct TabsPanelState: ScreenState, Equatable {
         return TabsPanelState(windowUUID: state.windowUUID,
                               isPrivateMode: state.isPrivateMode,
                               tabs: state.tabs,
+                              selectedGroupName: state.selectedGroupName,
+                              tabGroups: state.tabGroups,
                               toastType: nil,
                               scrollState: nil,
                               didTapAddTab: false,

@@ -223,6 +223,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             tabsPanelTelemetry.newTabButtonTapped(mode: action.panelType?.modeForTelemetry ?? .normal)
             addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
             dispatchRecentlyAccessedTabs(action: action)
+
+        case TabPanelViewActionType.addTabGroup:
+            addTabGroup(for: action.windowUUID)
+
+        case TabPanelViewActionType.selectTabGroup:
+            selectTabGroup(action.tabGroupID, for: action.windowUUID)
+
         case TabPanelViewActionType.moveTab:
             guard let moveTabData = action.moveTabData else { return }
             moveTab(state: state, moveTabData: moveTabData, uuid: action.windowUUID)
@@ -344,9 +351,21 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private func getTabsDisplayModel(for isPrivateMode: Bool,
                                      uuid: WindowUUID) -> TabDisplayModel {
         let tabs = refreshTabs(for: isPrivateMode, uuid: uuid)
+        let tabGroupManager = tabManager(for: uuid) as? TabGroupManaging
         let tabDisplayModel = TabDisplayModel(
             isPrivateMode: isPrivateMode,
             tabs: tabs,
+            selectedGroupName: isPrivateMode
+                ? nil
+                : tabGroupManager?.selectedGroup?.name,
+            tabGroups: isPrivateMode
+                ? []
+                : tabGroupManager?.groups.map {
+                    TabGroupDisplayModel(id: $0.id,
+                                         name: $0.name,
+                                         color: $0.color,
+                                         isSelected: $0.id == tabGroupManager?.selectedGroup?.id)
+                } ?? [],
             normalTabsCount: normalTabsCountTextForTabTray(for: uuid),
             privateTabsCount: privateTabsCountTextForTabTray(for: uuid),
             enableDeleteTabsButton: shouldEnableDeleteTabsButton(for: uuid, isPrivateMode: isPrivateMode)
@@ -361,7 +380,12 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         var tabs = [TabModel]()
         guard let tabManager = tabManager(for: uuid) else { return [] }
         let selectedTab = tabManager.selectedTab
-        let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
+        let tabManagerTabs: [Tab]
+        if isPrivateMode {
+            tabManagerTabs = tabManager.privateTabs
+        } else {
+            tabManagerTabs = (tabManager as? TabGroupManaging)?.contextualNormalTabs ?? tabManager.normalTabs
+        }
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: tab.tabUUID == selectedTab?.tabUUID,
@@ -403,6 +427,36 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         }
     }
 
+    private func addTabGroup(for uuid: WindowUUID) {
+        guard let tabManager = tabManager(for: uuid),
+              let tabGroupManager = tabManager as? TabGroupManaging else { return }
+        let baseName = String.TabsTray.NewTabGroupTitle
+        let existingNames = Set(tabGroupManager.groups.map(\.name))
+        var name = baseName
+        var suffix = 2
+        while existingNames.contains(name) {
+            name = "\(baseName) \(suffix)"
+            suffix += 1
+        }
+
+        let selectedTabIDs: [TabUUID]
+        if tabGroupManager.selectedGroup == nil,
+           let selectedTab = tabManager.selectedTab,
+           !selectedTab.isPrivate {
+            selectedTabIDs = [selectedTab.tabUUID]
+        } else {
+            selectedTabIDs = []
+        }
+        tabGroupManager.createGroup(name: name, tabUUIDs: selectedTabIDs)
+        triggerRefresh(uuid: uuid, isPrivate: false)
+    }
+
+    private func selectTabGroup(_ groupID: TabGroupID?, for uuid: WindowUUID) {
+        guard let tabGroupManager = tabManager(for: uuid) as? TabGroupManaging else { return }
+        tabGroupManager.selectGroup(groupID)
+        triggerRefresh(uuid: uuid, isPrivate: false)
+    }
+
     /// Move tab on `TabManager` array to support drag and drop
     ///
     /// - Parameters:
@@ -416,9 +470,16 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                      method: .drop,
                                      object: .tab,
                                      value: .tabTray)
-        tabManager?.reorderTabs(isPrivate: moveTabData.isPrivate,
-                                fromIndex: moveTabData.originIndex,
-                                toIndex: moveTabData.destinationIndex)
+        if !moveTabData.isPrivate,
+           let tabGroupManager = tabManager as? TabGroupManaging,
+           tabGroupManager.selectedGroup != nil {
+            tabGroupManager.reorderContextualTabs(fromIndex: moveTabData.originIndex,
+                                                   toIndex: moveTabData.destinationIndex)
+        } else {
+            tabManager?.reorderTabs(isPrivate: moveTabData.isPrivate,
+                                    fromIndex: moveTabData.originIndex,
+                                    toIndex: moveTabData.destinationIndex)
+        }
 
         let model = getTabsDisplayModel(for: moveTabData.isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
