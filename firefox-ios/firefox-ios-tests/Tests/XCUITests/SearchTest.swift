@@ -519,6 +519,13 @@ class SearchTests: FeatureFlaggedTestBase {
     // Regression
     func testFirefoxSuggestPartialSponsored() {
         app.launch()
+        // Workaround: Sponsored suggestions do not show up intermittently.
+        // Ingesting the new suggestions forces the app to have the sponsored
+        // results for Firefox Suggest consistently.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
         verifySearchSuggestion(searchTerm: "amaz",
                                expectedMatch: "Amazon.com - Official Site",
                                hasFirefoxSuggest: true,
@@ -529,6 +536,16 @@ class SearchTests: FeatureFlaggedTestBase {
     // Regresssion
     func testFirefoxSuggestPartialNonSponsored() {
         app.launch()
+        // Precondition: Enable enhanced cross-platform suggest experiment
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.goto(ExperimentsScreen)
+        navigator.performAction(Action.ListAllExperiments)
+        navigator.userState.experimentToEnroll = "Enhanced Cross-Platform Suggest [iOS] - Phased Roll out 138+"
+        navigator.performAction(Action.EnrollExperiment) 
+        navigator.goto(SettingsScreen)
+        navigator.goto(HomePanelsScreen)
+
         verifySearchSuggestion(searchTerm: "fifa",
                                expectedMatch: "Wikipedia - FIFA Club World Cup",
                                hasFirefoxSuggest: true,
