@@ -261,9 +261,7 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState.defaultState(from: state.wallpaperState),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
-            availableContentHeight: state.availableContentHeight,
-            availableWallpaperHeight: state.availableWallpaperHeight
+            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice
         )
     }
 }
