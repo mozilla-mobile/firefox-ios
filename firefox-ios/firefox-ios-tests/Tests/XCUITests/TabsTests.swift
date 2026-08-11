@@ -394,6 +394,57 @@ class TabsTests: BaseTestCase {
         tabTrayScreen.assertNoTabLeakDetected()
     }
 
+    // Regression
+    // https://mozilla.testrail.io/index.php?/cases/view/2306834
+    func testLongTapOnTabInTabsTray() {
+        toolBarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        let libraryScreen = LibraryScreen(app: app)
+
+        // Launch Firefox and load a page
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+
+        // Open the tabs tray
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertFirstCellVisible()
+
+        // Long press the tab and check the context menu options
+        tabTrayScreen.longPressTabCellAtIndex(0)
+        tabTrayScreen.assertContextMenuOptionsExist()
+
+        // Tap "Add to Bookmarks" and verify the page is added to the Bookmarks panel
+        tabTrayScreen.tapAddToBookmarksFromContextMenu()
+        tabTrayScreen.tapTabAtIndex(index: 0)
+        navigator.nowAt(BrowserTab)
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.assertBookmarkExists(named: urlLabelExample)
+        libraryScreen.tapDoneButton()
+        navigator.nowAt(BrowserTab)
+
+        // Long press the tab again and tap "Copy URL"
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.longPressTabCellAtIndex(0)
+        tabTrayScreen.tapCopyURLFromContextMenu()
+
+        // Verify the URL was copied by pasting it into the URL bar of a new tab
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.goto(URLBarOpen)
+        browserScreen.pasteAndAssertAddressBarContains(urlValueLongExample)
+
+        // Long press the tab again and tap "Close Tab", then verify the tab is closed
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.longPressTabCellAtIndex(0)
+        tabTrayScreen.tapCloseTabFromContextMenu()
+        tabTrayScreen.assertCellDoesNotExist(named: urlLabelExample)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306867
     func testCloseOneTabUndo() throws {
         throw XCTSkip("Undo toast no longer available")
