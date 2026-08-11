@@ -572,12 +572,13 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
 
         // Step 3: Turn the device to landscape and observe the sponsored result
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+        settingsScreen.rotateDevice(to: .landscapeLeft)
         browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
         navigator.performAction(Action.CloseURLBarOpen)
 
         // Step 4: Trigger a sponsored result in private mode
-        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        settingsScreen.rotateDevice(to: .portrait)
+        waitForTabsButtonHittable()
         navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(NewTabScreen)

@@ -404,6 +404,10 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
     }
 
+    func waitForTabsButtonHittable(timeout: Double = TIMEOUT) {
+        mozWaitElementHittable(element: app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: timeout)
+    }
+
     func unlockLoginsView() {
         // Press continue button on the password onboarding if it's shown
         if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
