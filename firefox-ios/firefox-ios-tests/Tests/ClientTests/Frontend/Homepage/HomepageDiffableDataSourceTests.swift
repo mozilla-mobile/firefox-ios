@@ -63,29 +63,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     @MainActor
-    func test_updateSnapshot_withWorldCupSectionEnabled_includesWorldCupSection() throws {
-        let dataSource = try XCTUnwrap(diffableDataSource)
-
-        let state = HomepageState.reducer.legacyReducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
-            WorldCupAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: WorldCupMiddlewareActionType.didUpdate,
-                shouldShowHomepageWorldCupSection: true
-            )
-        )
-
-        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
-
-        let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 3)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .worldcup, .spacer])
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .header), 1)
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .worldcup), 1)
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer), 1)
-    }
-
-    @MainActor
     func test_updateSnapshot_withColorValueOnState() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
         let wallpaperConfig = WallpaperConfiguration(
@@ -538,7 +515,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     @MainActor
-    func test_updateSnapshot_withShortcutsWorldCupTrackerBlockerAndJumpBackIn_ordersTrackerBlockerAfterWorldCup() throws {
+    func test_updateSnapshot_withShortcutsTrackerBlockerAndJumpBackIn_ordersTrackerBlockerAfterShortcuts() throws {
         setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
@@ -574,21 +551,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
                 actionType: JumpBackInActionType.toggleShowSectionSetting
             )
         )
-        state = HomepageState.reducer.legacyReducer(
-            state,
-            WorldCupAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: WorldCupMiddlewareActionType.didUpdate,
-                shouldShowHomepageWorldCupSection: true
-            )
-        )
-
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let expectedSections: [HomepageSection] = [
             .header,
             .topSites(nil, state.topSitesState.numberOfTilesPerRow, true),
-            .worldcup,
             .trackerBlockerModule,
             .jumpBackIn(nil, mockSectionConfig),
             .spacer

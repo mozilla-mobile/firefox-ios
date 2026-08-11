@@ -127,11 +127,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.logoTextColor = logoTextColor
 
         let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
-        let logoAsset = switch (isNovaPrivate, headerState.isWorldCupSectionEnabled) {
-        case (true, _): ImageIdentifiers.homeHeaderLogoPrivate
-        case (false, true): ImageIdentifiers.firefoxLogoSoccer
-        case (false, false): ImageIdentifiers.homeHeaderLogoBall
-        }
+        let logoAsset = isNovaPrivate ? ImageIdentifiers.homeHeaderLogoPrivate : ImageIdentifiers.homeHeaderLogoBall
         logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
         let logoSize = isNovaPrivate ? UX.privateLogoImageSize : UX.firefoxLogoImageSize
