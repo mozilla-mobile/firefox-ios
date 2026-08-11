@@ -384,6 +384,16 @@ final class BrowserScreen {
         }
     }
 
+    func assertSponsoredResult(title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+        assertWebElements(
+            shouldExist: shouldExist,
+            app.scrollViews.buttons["Search Settings"],
+            app.staticTexts[title],
+            app.staticTexts["Sponsored"],
+            timeout: timeout
+        )
+    }
+
     func assertSuggestedLinesNotEmpty() {
         let suggestedLines = app.tables.firstMatch.cells
         XCTAssertNotEqual(suggestedLines.count, 0, "Expected suggestions to appear")

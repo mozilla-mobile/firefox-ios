@@ -551,6 +551,8 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2753092
+    // Regression
     func testFirefoxSuggestionsLandscapePrivate() {
         app.launch()
 
@@ -567,15 +569,11 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.typeOnSearchBar(text: "Amazon")
 
         // Step 2: Sponsored result should be specified
-        mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-        mozWaitForElementToExist(app.staticTexts["Amazon.com - Official Site"])
-        mozWaitForElementToExist(app.staticTexts["Sponsored"])
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
 
         // Step 3: Turn the device to landscape and observe the sponsored result
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-        mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-        mozWaitForElementToExist(app.staticTexts["Amazon.com - Official Site"])
-        mozWaitForElementToExist(app.staticTexts["Sponsored"])
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
         navigator.performAction(Action.CloseURLBarOpen)
 
         // Step 4: Trigger a sponsored result in private mode
@@ -586,9 +584,7 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.tapOnAddressBar()
         browserScreen.tapClearButtonIfExists()
         browserScreen.typeOnSearchBar(text: "Amazon")
-        mozWaitForElementToNotExist(app.scrollViews.buttons["Search Settings"])
-        mozWaitForElementToNotExist(app.staticTexts["Amazon.com - Official Site"])
-        mozWaitForElementToNotExist(app.staticTexts["Sponsored"])
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: false)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
