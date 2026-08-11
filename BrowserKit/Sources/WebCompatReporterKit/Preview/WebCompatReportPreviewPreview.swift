@@ -14,8 +14,8 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
     typealias PreviewSection = WebCompatReportPreviewViewModel.PreviewSection
     typealias PreviewValue = WebCompatReportPreviewViewModel.PreviewValue
 
-    let theme: Theme
     let screenshot: UIImage?
+    var themeType: ThemeType = .light
 
     func makeUIViewController(context: Context) -> UINavigationController {
         let viewModel = WebCompatReportPreviewViewModel(
@@ -26,7 +26,16 @@ private struct WebCompatReportPreviewHost: UIViewControllerRepresentable {
             screenshotA11yIdentifier: "WebCompatReporter.Preview.Screenshot",
             sections: Self.sampleSections
         )
-        let controller = WebCompatReportPreviewViewController(viewModel: viewModel, theme: theme)
+        // The screen reads its colors from the manager, so the canvas appearance alone can't
+        // darken it; the manager has to be told.
+        let themeManager = DefaultThemeManager(sharedContainerIdentifier: "")
+        themeManager.setSystemTheme(isOn: false)
+        themeManager.setManualTheme(to: themeType)
+        let controller = WebCompatReportPreviewViewController(
+            viewModel: viewModel,
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: themeManager
+        )
         controller.updateScreenshot(screenshot)
         return UINavigationController(rootViewController: controller)
     }
@@ -111,19 +120,19 @@ private func previewSampleScreenshot() -> UIImage {
 
 @available(iOS 17.0, *)
 #Preview("With screenshot") {
-    WebCompatReportPreviewHost(theme: LightTheme(), screenshot: previewSampleScreenshot())
+    WebCompatReportPreviewHost(screenshot: previewSampleScreenshot())
         .ignoresSafeArea()
 }
 
 @available(iOS 17.0, *)
 #Preview("Screenshot off") {
-    WebCompatReportPreviewHost(theme: LightTheme(), screenshot: nil)
+    WebCompatReportPreviewHost(screenshot: nil)
         .ignoresSafeArea()
 }
 
 @available(iOS 17.0, *)
 #Preview("With screenshot (dark)") {
-    WebCompatReportPreviewHost(theme: DarkTheme(), screenshot: previewSampleScreenshot())
+    WebCompatReportPreviewHost(screenshot: previewSampleScreenshot(), themeType: .dark)
         .ignoresSafeArea()
 }
 #endif

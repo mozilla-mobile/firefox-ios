@@ -91,6 +91,40 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
+    // MARK: - preview
+
+    func test_preview_dispatchesDidBuildPreviewWithTheReport() throws {
+        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
+        setReportedURL("https://example.com/page")
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
+        let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
+        XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didBuildPreview)
+        let payload = try XCTUnwrap(dispatched.previewPayload)
+        XCTAssertEqual(payload.url, "https://example.com/page")
+        XCTAssertEqual(payload.isPrivateBrowsing, false)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_preview_whenURLNoLongerMatchesTheTab_dropsTabFieldsLikeSubmit() throws {
+        // The preview has to drop exactly what the ping drops.
+        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
+        setReportedURL("https://different.example/other")
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
+        let payload = try XCTUnwrap(dispatched.previewPayload)
+        XCTAssertNil(payload.isPrivateBrowsing)
+        XCTAssertNil(payload.blockList)
+        XCTAssertNil(payload.userAgentString)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
     // MARK: - Pure view actions are not handled by the middleware
 
     func test_selectCategory_doesNotDispatchViaMiddleware() {
