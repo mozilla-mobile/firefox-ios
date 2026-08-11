@@ -6,18 +6,19 @@ import Shared
 import XCTest
 @testable import Client
 
+@MainActor
 @available(iOS 17.0, *)
 class ResetTipsSettingTests: XCTestCase {
     private var prefs: MockProfilePrefs!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         prefs = MockProfilePrefs()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         prefs = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func test_resetDatastoreIfNeeded_whenResetIsNotScheduled_thenLeavesPrefUnset() {
