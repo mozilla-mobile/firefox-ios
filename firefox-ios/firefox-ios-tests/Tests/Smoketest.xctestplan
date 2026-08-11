@@ -609,6 +609,7 @@
         "TabsTests\/testCloseOneTabUndo()",
         "TabsTests\/testCloseOneTabUndo_tabTrayExperimentOff()",
         "TabsTests\/testCloseOneTab_tabTrayExperimentOff()",
+        "TabsTests\/testLongTapOnTabInTabsTray()",
         "TabsTests\/testLongTapTabCounter_TAE()",
         "TabsTests\/testOpenNewTabLandscape_TAE()",
         "TabsTests\/testOpenTabsViewCurrentTabThumbnail()",

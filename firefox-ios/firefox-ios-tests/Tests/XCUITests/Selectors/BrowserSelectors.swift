@@ -26,6 +26,7 @@ protocol BrowserSelectorsSet {
     var SAVE_BUTTON: Selector { get }
     var CLIPBOARD_TOAST: Selector { get }
     var PRIVATE_MODE_HOMEPAGE_TITLE: Selector { get }
+    var PASTE_BUTTON: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -179,6 +180,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "private-mode"]
     )
 
+    let PASTE_BUTTON = Selector.otherElementsButtonByLabel(
+        "Paste",
+        description: "Paste button in the address bar edit callout",
+        groups: ["browser"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -208,6 +215,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
-                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE]
+                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE, PASTE_BUTTON]
     }
 }

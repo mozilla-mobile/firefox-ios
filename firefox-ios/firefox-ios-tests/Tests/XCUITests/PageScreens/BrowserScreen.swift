@@ -216,6 +216,22 @@ final class BrowserScreen {
         urlElement.waitAndTap()
     }
 
+    // Pastes the clipboard contents into the (already focused) address bar and asserts the resulting
+    // value. Used to verify clipboard content in-app, avoiding the iOS 16+ cross-process paste prompt.
+    func pasteAndAssertAddressBarContains(_ value: String) {
+        let pasteButton = sel.PASTE_BUTTON.element(in: app)
+        if BaseTestCase().iPad() {
+            addressBar.waitAndTap()
+        } else {
+            addressBar.press(forDuration: 1)
+        }
+        if !pasteButton.exists {
+            addressBar.press(forDuration: 1)
+        }
+        pasteButton.waitAndTap()
+        BaseTestCase().mozWaitForValueContains(addressBar, value: value)
+    }
+
     func typeOnSearchBar(text: String) {
         addressBar.typeText(text)
     }
