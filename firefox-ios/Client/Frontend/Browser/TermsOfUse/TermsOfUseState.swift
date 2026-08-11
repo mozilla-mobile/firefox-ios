@@ -96,10 +96,8 @@ struct TermsOfUseState: ScreenState {
             return state
                 .copy(wasDismissed: true)
 
-        case .learnMoreLinkTapped,
-             .privacyLinkTapped,
-             .termsLinkTapped:
-            return state
+        default:
+            return defaultState(from: state)
         }
     }
 }
