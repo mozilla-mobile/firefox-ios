@@ -40,11 +40,11 @@ final class WebCompatReportPreviewCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    func test_previewDidRequestDismiss_dismissesAndNotifiesParent() {
+    func test_technicalDataDidRequestDismiss_dismissesAndNotifiesParent() {
         let subject = createSubject()
         subject.start(payload: WebCompatReportPayload())
 
-        subject.webCompatReportPreviewDidRequestDismiss()
+        subject.webCompatTechnicalDataDidRequestDismiss()
 
         XCTAssertEqual(router.dismissCalled, 1)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)

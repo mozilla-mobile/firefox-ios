@@ -69,7 +69,7 @@ struct WebCompatReportPayload: Equatable {
         }
 
         let key: Key
-        let value: WebCompatReportPreviewViewModel.PreviewValue
+        let value: WebCompatTechnicalDataViewModel.PreviewValue
     }
 
     struct PreviewGroup {
@@ -125,8 +125,8 @@ struct WebCompatReportPayload: Equatable {
         ]
     }
 
-    func makePreviewViewModel() -> WebCompatReportPreviewViewModel {
-        return WebCompatReportPreviewViewModel(
+    func makePreviewViewModel() -> WebCompatTechnicalDataViewModel {
+        return WebCompatTechnicalDataViewModel(
             title: .WebCompatReporter.Preview.Title,
             closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
@@ -135,14 +135,14 @@ struct WebCompatReportPayload: Equatable {
             screenshotA11yIdentifier: "",
             sections: previewGroups.map { group in
                 let groupID = group.id.rawValue
-                return WebCompatReportPreviewViewModel.PreviewSection(
+                return WebCompatTechnicalDataViewModel.PreviewSection(
                     id: groupID,
                     title: groupID,
                     a11yIdentifier: "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionHeader).\(groupID)",
                     contentA11yIdentifier:
                         "\(AccessibilityIdentifiers.WebCompatReporter.Preview.sectionContent).\(groupID)",
                     rows: group.fields.map { field in
-                        WebCompatReportPreviewViewModel.PreviewRow(
+                        WebCompatTechnicalDataViewModel.PreviewRow(
                             id: "\(groupID).\(field.key.rawValue)",
                             label: field.key.rawValue,
                             value: field.value
@@ -153,22 +153,22 @@ struct WebCompatReportPayload: Equatable {
         )
     }
 
-    private func previewValue(_ text: String?) -> WebCompatReportPreviewViewModel.PreviewValue {
+    private func previewValue(_ text: String?) -> WebCompatTechnicalDataViewModel.PreviewValue {
         guard let text, !text.isEmpty else { return .null }
         return .string(text)
     }
 
-    private func previewValue(_ values: [String]?) -> WebCompatReportPreviewViewModel.PreviewValue {
+    private func previewValue(_ values: [String]?) -> WebCompatTechnicalDataViewModel.PreviewValue {
         guard let values else { return .null }
         return .list(values)
     }
 
-    private func previewValue(_ flag: Bool?) -> WebCompatReportPreviewViewModel.PreviewValue {
+    private func previewValue(_ flag: Bool?) -> WebCompatTechnicalDataViewModel.PreviewValue {
         guard let flag else { return .null }
         return .bool(flag)
     }
 
-    private func previewValue(_ number: Int?) -> WebCompatReportPreviewViewModel.PreviewValue {
+    private func previewValue(_ number: Int?) -> WebCompatTechnicalDataViewModel.PreviewValue {
         guard let number else { return .null }
         return .quantity(number)
     }
