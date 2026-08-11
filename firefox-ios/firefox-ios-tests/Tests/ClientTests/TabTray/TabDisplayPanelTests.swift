@@ -12,18 +12,17 @@ final class TabDisplayPanelTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
-        await setupStore()
+        DependencyHelperMock().bootstrapDependencies()
+        setupStore()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        await resetStore()
+        resetStore()
         try await super.tearDown()
     }
 
     // MARK: - Redux
-    @MainActor
     func testUnsubscribeFromRedux_unsubscribesFromStore() {
         let subject = createSubject(isPrivateMode: false, emptyTabs: true)
 
@@ -33,18 +32,15 @@ final class TabDisplayPanelTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - StoreTestUtility
-    @MainActor
     func setupAppState() -> Client.AppState {
         return AppState()
     }
 
-    @MainActor
     func setupStore() {
         mockStore = MockStoreForMiddleware(state: setupAppState())
         StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 
-    @MainActor
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
     }
