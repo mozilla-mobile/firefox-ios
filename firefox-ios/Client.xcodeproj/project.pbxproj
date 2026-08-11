@@ -973,7 +973,6 @@
 		8A3EF7FF2A2FCFBB00796E3A /* ChangeToChinaSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7FE2A2FCFBB00796E3A /* ChangeToChinaSetting.swift */; };
 		8A3EF8072A2FCFF700796E3A /* SentryIDSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */; };
 		8A3EF8092A2FD02B00796E3A /* ExperimentsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8082A2FD02B00796E3A /* ExperimentsSettings.swift */; };
-		8A3EF80D2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */; };
 		8A3EF8132A2FD07A00796E3A /* ResetContextualHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */; };
 		8A3EF8152A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */; };
 		8A3EF8172A2FD2B900796E3A /* AdvancedAccountSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8162A2FD2B900796E3A /* AdvancedAccountSettings.swift */; };
@@ -9693,7 +9692,6 @@
 		8A3EF7FE2A2FCFBB00796E3A /* ChangeToChinaSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeToChinaSetting.swift; sourceTree = "<group>"; };
 		8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryIDSetting.swift; sourceTree = "<group>"; };
 		8A3EF8082A2FD02B00796E3A /* ExperimentsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentsSettings.swift; sourceTree = "<group>"; };
-		8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetWallpaperOnboardingPage.swift; sourceTree = "<group>"; };
 		8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetContextualHints.swift; sourceTree = "<group>"; };
 		8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFiftyTabsDebugOption.swift; sourceTree = "<group>"; };
 		8A3EF8162A2FD2B900796E3A /* AdvancedAccountSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAccountSettings.swift; sourceTree = "<group>"; };
@@ -20212,7 +20210,6 @@
 				E1FD75E32E437E3F00C060DC /* TabTrayUtils.swift in Sources */,
 				8A1CBB952BE017D3008BE4D4 /* MicrosurveyPromptAction.swift in Sources */,
 				23ED80FF25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift in Sources */,
-				8A3EF80D2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift in Sources */,
 				E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */,
 				C7B376E32E870173006B2D32 /* StoryCell.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
