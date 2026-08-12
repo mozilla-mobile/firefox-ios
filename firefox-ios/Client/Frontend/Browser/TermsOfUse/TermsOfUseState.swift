@@ -3,8 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ModifiedCopy
 import Redux
 
+@Copyable
 struct TermsOfUseState: ScreenState {
     let windowUUID: WindowUUID
     var hasAccepted: Bool
@@ -61,8 +63,7 @@ struct TermsOfUseState: ScreenState {
 
     private static func handleReducer(state: TermsOfUseState, action: Action) -> TermsOfUseState {
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else {
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return defaultState(from: state)
         }
 
@@ -81,24 +82,22 @@ struct TermsOfUseState: ScreenState {
 
         switch type {
         case .termsShown:
-            return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: false,
-                                   wasDismissed: false)
+            return state
+                .copy(hasAccepted: false)
+                .copy(wasDismissed: false)
+
         case .termsAccepted:
-            return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: true,
-                                   wasDismissed: false)
+            return state
+                .copy(hasAccepted: true)
+                .copy(wasDismissed: false)
+
         case .gestureDismiss,
              .remindMeLaterTapped:
-            return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: state.hasAccepted,
-                                   wasDismissed: true)
-        case .learnMoreLinkTapped,
-             .privacyLinkTapped,
-             .termsLinkTapped:
-            return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: state.hasAccepted,
-                                   wasDismissed: state.wasDismissed)
+            return state
+                .copy(wasDismissed: true)
+
+        default:
+            return defaultState(from: state)
         }
     }
 }

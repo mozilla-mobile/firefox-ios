@@ -450,6 +450,14 @@ extension Selector {
           )
     }
 
+    static func collectionViewButtonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .collectionViewButtonByLabel(label), value: label, description: description, groups: groups)
+    }
+
+    static func otherElementsButtonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .otherElementsButtonByLabel(label), value: label, description: description, groups: groups)
+    }
+
     static func otherElementByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
           Selector(strategy: .predicate(
               NSPredicate(

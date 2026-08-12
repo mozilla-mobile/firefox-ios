@@ -28,6 +28,7 @@ protocol BrowserSelectorsSet {
     var PRIVATE_MODE_HOMEPAGE_TITLE: Selector { get }
     var SEARCH_SETTINGS_BUTTON: Selector { get }
     var SPONSORED_LABEL: Selector { get }
+    var PASTE_BUTTON: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -193,6 +194,10 @@ struct BrowserSelectors: BrowserSelectorsSet {
         IDs.sponsoredLabel,
         description: "'Sponsored' label on a sponsored search suggestion",
         groups: ["browser", "search"]
+    let PASTE_BUTTON = Selector.otherElementsButtonByLabel(
+        "Paste",
+        description: "Paste button in the address bar edit callout",
+        groups: ["browser"]
     )
 
     func linkElement(named name: String) -> Selector {
@@ -225,6 +230,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
                            SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE,
-                           SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL]
+                           PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL]
     }
 }

@@ -17,6 +17,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
     var includeScreenshot: Bool
     var includeBlockedList: Bool
     var shouldDismiss: Bool
+    /// The report as the middleware would send it.
+    var previewPayload: WebCompatReportPayload?
 
     /// Preview stays disabled, and the details field stays hidden, until the user picks a category.
     var canPreview: Bool { selectedCategory != nil }
@@ -45,7 +47,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             additionalDetails: state.additionalDetails,
             includeScreenshot: state.includeScreenshot,
             includeBlockedList: state.includeBlockedList,
-            shouldDismiss: state.shouldDismiss
+            shouldDismiss: state.shouldDismiss,
+            previewPayload: state.previewPayload
         )
     }
 
@@ -58,7 +61,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             additionalDetails: "",
             includeScreenshot: true,
             includeBlockedList: false,
-            shouldDismiss: false
+            shouldDismiss: false,
+            previewPayload: nil
         )
     }
 
@@ -69,7 +73,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
          additionalDetails: String = "",
          includeScreenshot: Bool = true,
          includeBlockedList: Bool = false,
-         shouldDismiss: Bool = false) {
+         shouldDismiss: Bool = false,
+         previewPayload: WebCompatReportPayload? = nil) {
         self.windowUUID = windowUUID
         self.url = url
         self.selectedCategory = selectedCategory
@@ -78,6 +83,7 @@ struct WebCompatReporterState: ScreenState, Equatable {
         self.includeScreenshot = includeScreenshot
         self.includeBlockedList = includeBlockedList
         self.shouldDismiss = shouldDismiss
+        self.previewPayload = previewPayload
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -92,8 +98,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             return defaultState(from: state)
         }
 
-        // shouldDismiss is a one-shot signal, so it never survives into the next state.
-        let state = state.copy(shouldDismiss: false)
+        // shouldDismiss and previewPayload are one-shot, so neither survives into the next state.
+        let state = state.copy(shouldDismiss: false).copy(previewPayload: nil)
 
         switch action {
         case let action as WebCompatReporterMiddlewareAction:
@@ -114,6 +120,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
         switch action.actionType {
         case WebCompatReporterMiddlewareActionType.didLoadInitialDraft:
             return state.copy(url: action.url ?? state.url)
+        case WebCompatReporterMiddlewareActionType.didBuildPreview:
+            return state.copy(previewPayload: action.previewPayload)
         case WebCompatReporterMiddlewareActionType.didSubmit:
             return state.copy(shouldDismiss: true)
         default:
@@ -164,7 +172,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             additionalDetails: state.additionalDetails,
             includeScreenshot: state.includeScreenshot,
             includeBlockedList: state.includeBlockedList,
-            shouldDismiss: false
+            shouldDismiss: false,
+            previewPayload: nil
         )
     }
 }

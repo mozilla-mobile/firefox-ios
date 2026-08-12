@@ -2796,8 +2796,6 @@ class BrowserViewController: UIViewController,
             showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
-        case .worldCupCountryPicker:
-            navigationHandler?.showWorldCupCountryPicker()
         case .quickAnswers(let transitionType):
             navigationHandler?.showQuickAnswers(transitionType: transitionType)
         case .privacyNoticeLink(let url):
@@ -3249,8 +3247,8 @@ class BrowserViewController: UIViewController,
         let availableContentHeight = getAvailableHomepageContentHeight()
         let availableWallpaperHeight = getAvailableHomepageWallpaperHeight(availableContentHeight: availableContentHeight)
 
-        guard homepageState.availableContentHeight != availableContentHeight
-              || homepageState.availableWallpaperHeight != availableWallpaperHeight
+        guard homepageState.wallpaperState.availableContentHeight != availableContentHeight
+              || homepageState.wallpaperState.availableWallpaperHeight != availableWallpaperHeight
         else { return }
 
         store.dispatch(

@@ -81,6 +81,40 @@ final class WebCompatReportCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 0)
     }
 
+    func test_didTapPreview_addsThePreviewAsAChild() {
+        let subject = createSubject()
+        subject.start(reportedURL: reportedURL)
+
+        subject.webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload())
+
+        XCTAssertTrue(subject.childCoordinators.first is WebCompatReportPreviewCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+    }
+
+    func test_didTapPreview_whileOneIsOpen_doesNotStartASecond() {
+        let subject = createSubject()
+        subject.start(reportedURL: reportedURL)
+
+        subject.webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload())
+        subject.webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload())
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+    }
+
+    // A child left behind blocks the guard above, which kept Preview dead for the rest of the form.
+    func test_previewDidFinish_removesItSoPreviewOpensAgain() throws {
+        let subject = createSubject()
+        subject.start(reportedURL: reportedURL)
+        subject.webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload())
+        let previewCoordinator = try XCTUnwrap(subject.childCoordinators.first)
+
+        subject.didFinish(from: previewCoordinator)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+
+        subject.webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload())
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+    }
+
     // MARK: - Helper Methods
     private func createSubject(
         file: StaticString = #filePath,

@@ -232,10 +232,33 @@ final class TabTrayScreen {
         tabCell.press(forDuration: 2)
     }
 
+    // The tab long-press (tab peek) context menu hosts its actions as buttons in a collection view.
+    func assertContextMenuOptionsExist(timeout: TimeInterval = TIMEOUT) {
+        for option in sel.contextMenuOptions {
+            BaseTestCase().mozWaitForElementToExist(option.element(in: app), timeout: timeout)
+        }
+    }
+
+    private func tapContextMenuOption(_ selector: Selector) {
+        let optionButton = selector.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(optionButton)
+        optionButton.waitAndTap()
+    }
+
+    func tapAddToBookmarksFromContextMenu() {
+        tapContextMenuOption(sel.CONTEXT_MENU_ADD_TO_BOOKMARKS)
+    }
+
+    func tapCopyURLFromContextMenu() {
+        tapContextMenuOption(sel.CONTEXT_MENU_COPY_URL)
+    }
+
     func tapCloseTabFromContextMenu() {
-        let closeTabButton = app.collectionViews.buttons["Close Tab"]
-        BaseTestCase().mozWaitForElementToExist(closeTabButton)
-        closeTabButton.waitAndTap()
+        tapContextMenuOption(sel.CONTEXT_MENU_CLOSE_TAB)
+    }
+
+    func assertCellDoesNotExist(named name: String, timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(cell(named: name), timeout: timeout)
     }
 
     func closeFirstTab() {

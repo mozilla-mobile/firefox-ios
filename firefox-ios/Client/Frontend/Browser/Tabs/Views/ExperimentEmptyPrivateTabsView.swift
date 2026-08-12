@@ -133,7 +133,7 @@ class ExperimentEmptyPrivateTabsView: UIView,
     }
 
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer3
+        backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
         learnMoreButton.applyTheme(theme: theme)

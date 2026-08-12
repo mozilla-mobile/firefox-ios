@@ -28,6 +28,8 @@ enum SelectorStrategy {
     case collectionViewLinkById(String)
     case cellButtonById(String)
     case navigationBarButtonById(String)
+    case collectionViewButtonByLabel(String)
+    case otherElementsButtonByLabel(String)
 }
 
 // Selector model (with metadata)
@@ -103,6 +105,10 @@ extension Selector {
             return app.cells.buttons[id]
         case .navigationBarButtonById(let id):
             return app.navigationBars.buttons[id]
+        case .collectionViewButtonByLabel:
+            return app.collectionViews.buttons[value]
+        case .otherElementsButtonByLabel:
+            return app.otherElements.buttons[value]
         }
     }
 
@@ -158,6 +164,10 @@ extension Selector {
             return app.cells.buttons.matching(identifier: id)
         case .navigationBarButtonById(let id):
             return app.navigationBars.buttons.matching(identifier: id)
+        case .collectionViewButtonByLabel:
+            return app.collectionViews.buttons.matching(NSPredicate(format: "label == %@", value))
+        case .otherElementsButtonByLabel:
+            return app.otherElements.buttons.matching(NSPredicate(format: "label == %@", value))
         }
     }
 

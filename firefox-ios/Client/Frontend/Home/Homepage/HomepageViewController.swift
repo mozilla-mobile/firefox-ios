@@ -436,7 +436,8 @@ final class HomepageViewController: UIViewController,
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
-            let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
+            let animatingDifferences = state.wallpaperState.availableContentHeight
+                                        == homepageState.wallpaperState.availableContentHeight
             self.homepageState = state
 
             refreshHomepageDataSourceSnapshot(
@@ -445,7 +446,7 @@ final class HomepageViewController: UIViewController,
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
-            updateWallpaperConstraints(availableWallpaperHeight: state.availableWallpaperHeight)
+            updateWallpaperConstraints(availableWallpaperHeight: state.wallpaperState.availableWallpaperHeight)
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
@@ -476,7 +477,7 @@ final class HomepageViewController: UIViewController,
         view.addSubview(wallpaperView)
 
         let heightConstraint = wallpaperView.heightAnchor.constraint(
-            equalToConstant: homepageState.availableWallpaperHeight
+            equalToConstant: homepageState.wallpaperState.availableWallpaperHeight
         )
         let topConstraint = wallpaperView.topAnchor.constraint(equalTo: view.topAnchor)
 
@@ -676,20 +677,6 @@ final class HomepageViewController: UIViewController,
             }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
-        case .worldcupCard:
-            return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(
-                    with: homepageState.worldcupState,
-                    theme: currentTheme,
-                    onHeightChange: { [weak self] height in
-                        self?.sectionProvider.setWorldCupCellHeight(height)
-                        self?.relayoutForCellHeightChange()
-                    },
-                    isCardImpression: { [weak self] in
-                        return !(self?.alreadyTrackedSections.contains(.worldcup) ?? true)
-                    }
-                )
-            }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
         }
@@ -705,12 +692,6 @@ final class HomepageViewController: UIViewController,
         }
         configure(cell)
         return cell
-    }
-
-    private func relayoutForCellHeightChange() {
-        DispatchQueue.main.async {
-            self.refreshHomepageDataSourceSnapshot()
-        }
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
