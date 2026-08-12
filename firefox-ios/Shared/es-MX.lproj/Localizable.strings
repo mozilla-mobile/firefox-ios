@@ -26,7 +26,7 @@
 "ActivityStream.ContextMenu.UnpinTopsite" = "Desfijar";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
-"ActivityStream.JumpBackIn.SectionTitle" = "Regresar a";
+"ActivityStream.JumpBackIn.SectionTitle" = "Continuar donde estaba";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Pestañas: %d";
@@ -248,7 +248,7 @@
 "Don’t Send" = "No enviar";
 
 /* Done button on left side of the Settings view controller title bar */
-"Done" = "Realizado";
+"Done" = "Cerrar";
 
 /* Panel accessibility label */
 "Downloads" = "Descargas";
@@ -392,13 +392,13 @@
 "fxa.signin.camera-signin" = "Inicia sesión con tu cámara";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "En tu computadora abre Firefox y ve a firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "Abre Firefox en tu computadora y ve a firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Listo para escanear";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "Usar correo electrónico en su lugar";
+"fxa.signin.use-email-instead" = "Prefiero iniciar sesión usando mi correo";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sincronizar ahora";
@@ -449,10 +449,10 @@
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Hoy y ayer";
 
 /* Title for the History Panel empty state. */
-"HistoryPanel.EmptyState.Title" = "Los sitios web que has visitado recientemente se mostrarán aquí.";
+"HistoryPanel.EmptyState.Title" = "Los sitios web que has visitado recientemente aparecerán aquí.";
 
 /* Description for the empty synced tabs null state in the History Panel */
-"HistoryPanel.EmptySyncedTabsNullState.Description" = "Las pestañas de tus otros dispositivos se mostrarán aquí.";
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Las pestañas de tus otros dispositivos aparecerán aquí.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Inicia sesión para ver una lista de pestañas de tus otros dispositivos.";
@@ -533,7 +533,7 @@
 "Increase text size" = "Aumentar tamaño del texto";
 
 /* Relative time for a tab that was visited within the last few moments. */
-"just now" = "apenas";
+"just now" = "hace un instante";
 
 /* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ActualSize" = "Tamaño actual";
@@ -659,7 +659,7 @@
 "Logins.PasscodeRequirement.Warning" = "Para usar la función de AutoFill en Firefox, debes habilitar un código de acceso del dispositivo.";
 
 /* Label displaying welcome view tagline under the title */
-"Logins.WelcomeView.Tagline" = "Llévate las contraseñas a todas partes";
+"Logins.WelcomeView.Tagline" = "Tus contraseñas te acompañan a todas partes";
 
 /* Label displaying welcome view title */
 "Logins.WelcomeView.Title2" = "AutoFill contraseñas de Firefox";
@@ -737,10 +737,10 @@
 "Menu.Downloads.Label" = "Descargas";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Las protecciones están desactivadas para este sitio";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Protección desactivada para este sitio";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Las protecciones están activadas para este sitio";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Protección activada para este sitio";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Ayuda";
@@ -827,25 +827,25 @@
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Rastreadores entre sitios";
 
 /* The title that shows the number of cryptomining scripts blocked */
-"Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominers";
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Criptomineros";
 
 /* Description of content trackers. */
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Los sitios web pueden cargar anuncios externos, videos y otro contenido que contiene rastreadores ocultos. Bloquear esto puede hacer que los sitios web se carguen más rápido, pero algunos botones, formularios y campos de inicio de sesión pueden no funcionar.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Estas cookies te siguen de sitio en sitio para obtener información sobre lo que haces en línea. Están hechas por terceros, las cuales son compañías de publicidad y análisis.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Estas cookies te rastrean de un sitio a otro recopilando información de tu actividad en linea. Son creadas por terceros, incluyendo compañías de publicidad y de analítica de datos.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Los criptomineros utilizan en secreto la potencia informática de tu sistema para extraer dinero digital. Los scripts de criptominería agotan tu batería, ralentizan tu computadora y pueden aumentar tu factura de energía.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Los criptomineros utilizan en secreto la capacidad de procesamiento de tu dispositivo para \"extraer\" dinero digital. Los scripts de criptominería agotan tu batería, ralentizan tu dispositivo y pueden aumentar tu consumo de energía.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "La configuración de tu navegador y computadora es única. Las huellas digitales recopilan una variedad de estas configuraciones únicas para crear un perfil de ti, que puede usarse para rastrearte mientras navegas.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "La configuración de tu navegador y tu dispositivo es única. Los rastreadores de huella digital recopilan muchas de estas configuraciones únicas para crear un perfil de ti, que luego pueden usar para rastrearte mientras navegas.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Las redes sociales colocan rastreadores en otros sitios web para crear un perfil tuyo más completo y específico. El bloqueo de estos rastreadores reduce la cantidad de empresas de redes sociales que pueden ver lo que haces en línea.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Huellas dactilares";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Rastreadores de huella digital";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Qué hay de nuevo";
@@ -1124,7 +1124,7 @@
 "Settings.AddCustomEngine.SaveButtonText" = "Guardar";
 
 /* The title of the  Custom Search Engine view. */
-"Settings.AddCustomEngine.Title" = "Agregar motor de búsqueda";
+"Settings.AddCustomEngine.Title" = "Agregar motor";
 
 /* The title for the field which sets the title for a custom search engine. */
 "Settings.AddCustomEngine.TitleLabel" = "Título";
@@ -1136,7 +1136,7 @@
 "Settings.AddCustomEngine.URLLabel" = "URL";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (Cambia búsqueda con %s)";
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (usa %s para los términos de búsqueda)";
 
 /* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
 "Settings.AddressBar.Bottom.v138" = "Inferior";
@@ -1157,25 +1157,25 @@
 "Settings.Appearance.Title.v137" = "Apariencia";
 
 /* Website Appearance settings section title in Appearance settings */
-"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Apariencia del sitio web";
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Apariencia de sitios web";
 
 /* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
 "Settings.Appearance.WebsiteDarkMode.Description.v137" = "Da a los sitios web una apariencia oscura. Es posible que algunos sitios no se vean bien.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
-"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Modo oscuro del sitio web";
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Ver sitios en modo oscuro";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Bloquear la apertura de aplicaciones externas";
 
 /* Button in Data Management that clears all items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "Borrar todos los datos del sitio";
+"Settings.ClearAllWebsiteData.Clear.Button" = "Eliminar todos los datos de sitios web";
 
 /* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "Limpiar datos privados";
+"Settings.ClearPrivateData.Clear.Button" = "Eliminar datos privados";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.ClearPrivateData.SectionName" = "Limpiar datos privados";
+"Settings.ClearPrivateData.SectionName" = "Eliminar datos privados";
 
 /* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Eliminar elementos: %1$@";
@@ -1268,10 +1268,10 @@
 "Settings.Home.Current.Description.v101" = "Elige que mostrar como página de inicio.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Elige que incluir en tu página de inicio de Firefox.";
+"Settings.Home.Option.Description.v101" = "Elige qué incluir en tu página de inicio de Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
-"Settings.Home.Option.JumpBackIn" = "Saltar hacia atrás";
+"Settings.Home.Option.JumpBackIn" = "Continuar donde estaba";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.Pocket" = "Recomendado por Pocket";
@@ -1292,7 +1292,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Página de inicio";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Escoge lo que ves cuando regresas a Firefox.";
+"Settings.Home.Option.StartAtHome.Description" = "Escoge qué ver cuando regresas a Firefox.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Última pestaña";
@@ -1301,7 +1301,7 @@
 "Settings.Home.Option.StartAtHome.Title" = "Pantalla de apertura";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title.v101" = "Incluido en tu página de inicio";
+"Settings.Home.Option.Title.v101" = "Incluir en la página de inicio";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "Fondo de pantalla";
@@ -1379,7 +1379,7 @@
 "Settings.Homepage.Shortcuts.ToggleOff.v100" = "Apagar";
 
 /* Toggled ON to show the shortcuts section */
-"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Encender";
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Incluir";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Página de inicio actual";
@@ -1400,7 +1400,7 @@
 "Settings.NewTab.Option.Custom" = "Personalizado";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Inicio de Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Página de inicio de Firefox";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Página de inicio";
@@ -1415,7 +1415,7 @@
 "Settings.NewTab.TopSectionName" = "Mostrar";
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "Elegir que cargar al abrir una nueva pestaña";
+"Settings.NewTab.TopSectionNameFooter" = "Elige qué mostrar al abrir una nueva pestaña";
 
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
 "Settings.NoImageModeBlockImages.Label.v99" = "Bloquear imágenes";
@@ -1427,7 +1427,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Al abrir %@";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Title" = "Ofrecer para abrir enlaces copiados";
+"Settings.OfferClipboardBar.Title" = "Ofrecer abrir enlaces copiados";
 
 /* Title for Open With Settings */
 "Settings.OpenWith.PageTitle" = "Abrir enlaces de correo con";
@@ -1451,7 +1451,7 @@
 "Settings.SaveLogins.Title" = "Inicios de sesión guardados";
 
 /* Button displayed at the top of the search settings. */
-"Settings.Search.Done.Button" = "Hecho";
+"Settings.Search.Done.Button" = "Cerrar";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Edit.Button" = "Editar";
@@ -1466,10 +1466,10 @@
 "Settings.SendUsage.Title" = "Enviar datos de uso";
 
 /* Description displayed under the ”Show Link Previews” option */
-"Settings.ShowLinkPreviews.Status" = "Al realizar un toque largo sobre enlaces";
+"Settings.ShowLinkPreviews.Status" = "Al mantener pulsado un enlace";
 
 /* Description displayed under the ”Show Link Previews” option */
-"Settings.ShowLinkPreviews.StatusV2" = "Al realizar un toque largo sobre enlaces";
+"Settings.ShowLinkPreviews.StatusV2" = "Al mantener pulsado un enlace";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "Mostrar vista previa de los enlaces";
@@ -1481,7 +1481,7 @@
 "Settings.Siri.OpenTabShortcut" = "Abrir nueva pestaña";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Usar atajos de Siri para abrir rápidamente Firefox vía Siri";
+"Settings.Siri.SectionDescription" = "Usar atajos de Siri para abrir rápidamente Firefox con Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Atajos de Siri";
@@ -1500,6 +1500,9 @@
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Sincronizar y guardar datos";
+
+/* In the settings account row, shown transiently while the user is being signed out of their account. */
+"Settings.Sync.SigningOut.Title.v154" = "Cerrando sesión…";
 
 /* Title for the page where the user sign in to their Firefox Sync account. */
 "Settings.Sync.SignInView.Title.v103" = "Sincronizar y guardar datos";
@@ -1544,7 +1547,7 @@
 "Settings.TrackingProtection.LearnMore" = "Saber más";
 
 /* Additional information about your Enhanced Tracking Protection */
-"Settings.TrackingProtection.ProtectionCellFooter" = "Reduce la publicidad personalizada y ayuda a detener a los anunciantes para que no te rastreen al navegar.";
+"Settings.TrackingProtection.ProtectionCellFooter" = "Reduce la publicidad personalizada y ayuda a evitar que los anunciantes te rastreen al navegar.";
 
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un sitio no funciona como se esperaba, toca el candado en la barra de direcciones y desactiva la protección mejorada contra el rastreo para esa página.";
@@ -1583,13 +1586,13 @@
 "Settings.WebsiteData.ButtonShowMore" = "Mostrar más";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "Esta acción limpiará todos los datos del sitio web. No se puede deshacer.";
+"Settings.WebsiteData.ConfirmPrompt" = "Esta acción eliminará todos los datos de sitios web. Esta acción no se puede deshacer.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
 "Settings.WebsiteData.SelectedConfirmPrompt" = "Esta acción eliminará todos los elementos seleccionados. No se puede deshacer.";
 
 /* Title displayed in header of the Data Management panel. */
-"Settings.WebsiteData.Title" = "Datos del sitio web";
+"Settings.WebsiteData.Title" = "Datos de sitios web";
 
 /* Action label on share extension to add page to the Firefox reading list. */
 "ShareExtension.AddToReadingListAction.Title" = "Agregar a la lista de lectura";
@@ -1628,7 +1631,7 @@
 "Show Tabs" = "Mostrar pestañas";
 
 /* Show the on-boarding screen again from the settings */
-"Show Tour" = "Dar un paseo";
+"Show Tour" = "Lanzar tutorial de uso";
 
 /* Accessibility Label for the tab toolbar Stop button */
 "Stop" = "Detener";

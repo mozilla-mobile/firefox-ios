@@ -5,7 +5,7 @@
 "New Tab" = "Kanji taaga";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Woo ga naŋ war ma biyey zaa k'i zijandi.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Interneti nungey kaŋ war g'i naaru ga hin ka war gorodogoo hãa.";

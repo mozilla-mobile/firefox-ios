@@ -7,6 +7,7 @@ import WidgetKit
 import UIKit
 import Combine
 import SiteImageView
+import Common
 
 // Tab provider for Widgets
 struct TabProvider: TimelineProvider {
@@ -23,9 +24,11 @@ struct TabProvider: TimelineProvider {
         }
 
         let simpleTabs = SimpleTab.getSimpleTabs()
-        let siteImageFetcher = DefaultSiteImageHandler.factory()
 
         Task {
+            let siteImageFetcher = await MainActor.run {
+                DefaultSiteImageHandler.factory(themeManager: WidgetKitThemeManager())
+            }
             let tabFaviconDictionary = await withTaskGroup(of: (String, UIImage).self,
                                                            returning: [String: Image].self) { group in
                 for (_, tab) in simpleTabs {

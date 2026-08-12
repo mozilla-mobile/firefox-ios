@@ -62,13 +62,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
         actionType: .googleLens,
         iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
         isEnabled: true,
+        contextualHintType: TipKitHintType.googleLens.rawValue,
         a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
         a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton,
         menuElements: [
             ToolbarMenuElementConfiguration(
                 actionType: .googleLensTakePhoto,
                 title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
-                imageName: StandardImageIdentifiers.Large.camera,
+                imageName: StandardImageIdentifiers.Large.screenshot,
                 a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
             ),
             ToolbarMenuElementConfiguration(

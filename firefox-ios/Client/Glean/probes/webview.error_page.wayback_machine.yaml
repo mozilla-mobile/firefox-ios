@@ -1,0 +1,58 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - WaybackMachine
+  - ErrorPage
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+
+webview.error_page.wayback_machine:
+  check_archive_button_tapped:
+    type: event
+    description: |
+      Recorded when the user taps the button to check for a Wayback Machine archive of a webpage.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35045
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  archive_found:
+    type: event
+    description: |
+      Recorded when the Wayback Machine returns a valid archive for a failing URL.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35045
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  search_the_web_button_tapped:
+    type: event
+    description: |
+      Recorded when the user taps the button to search the web after the Wayback Machine finds no archive for a webpage.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16434
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35045
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"

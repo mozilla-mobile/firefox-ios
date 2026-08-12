@@ -153,4 +153,6 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var borderAccentNonOpaque: UIColor = PrivateModeTheme().colors.borderAccentNonOpaque
     var borderAccentPrivate: UIColor = PrivateModeTheme().colors.borderAccentPrivate
     var borderToolbarDivider: UIColor = PrivateModeTheme().colors.borderToolbarDivider
+
+    var faviconLetterColorSet: FaviconLetterColorSet = NovaFaviconColorSet()
 }

@@ -169,6 +169,15 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Пахши худкор";
 
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "Намоиши реклама ва васоити пайгириеро, ки ба реклама дахл дорад, кам мекунад. Агар сомона бо шакли вайроншуда ба назар расад, кӯшиш кунед, ки ин хусусиятро ғайрифаъол созед.";
+
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "Маълумоти бештар";
+
+/* Title for the Ad Blocker toggle in the Browsing settings page. */
+"Settings.Browsing.AdBlocker.Title.v155" = "Манъкунандаи реклама";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Манъ кардани реклама";
 

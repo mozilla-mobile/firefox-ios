@@ -49,7 +49,6 @@ enum FeatureFlagID: String, CaseIterable {
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
-    case snapkitRemovalRefactor
     case startAtHome
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
@@ -67,7 +66,6 @@ enum FeatureFlagID: String, CaseIterable {
     case videoIntroOnboarding
     case vpnFeature
     case waybackMachine
-    case worldCupWidget
 
     /// The user preferences key for features that support user-togglable settings.
     /// Returns `nil` for features that are not user-configurable.
@@ -124,7 +122,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .relayIntegration,
                 .reportBrokenSite,
                 .sentFromFirefox,
-                .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
@@ -136,8 +133,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .vpnFeature,
-                .waybackMachine,
-                .worldCupWidget:
+                .waybackMachine:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil

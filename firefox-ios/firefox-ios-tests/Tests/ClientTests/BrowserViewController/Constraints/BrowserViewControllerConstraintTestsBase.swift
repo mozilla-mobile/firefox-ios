@@ -28,16 +28,13 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     }
 
     // MARK: - Subject Creation
-    func createSubject(isFeatureFlagEnabled: Bool = false, isBottomSearchBar: Bool = true) -> BrowserViewController {
-        // Setup feature flag to disabled by default and override only in the test that need it
-        setupNimbusSnapKitRemovalTesting(isEnabled: isFeatureFlagEnabled)
+    func createSubject(isBottomSearchBar: Bool = true) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager)
         subject.isBottomSearchBar = isBottomSearchBar
         trackForMemoryLeaks(subject)
 
         // Trigger view loading and constraint setup
-        // SnapKit constraints are created in updateViewConstraints(), so we need to explicitly trigger it
         subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
         subject.view.setNeedsUpdateConstraints()
@@ -45,12 +42,6 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
         subject.view.layoutIfNeeded()
 
         return subject
-    }
-
-    func setupNimbusSnapKitRemovalTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.snapkitRemovalRefactor.with { _, _ in
-            return SnapkitRemovalRefactor(enabled: isEnabled)
-        }
     }
 
     func setupNimbusHomepagePinnedHeaderTesting(isEnabled: Bool) {

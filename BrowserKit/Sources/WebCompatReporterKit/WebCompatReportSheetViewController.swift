@@ -331,6 +331,8 @@ public final class WebCompatReportSheetViewController: UIViewController,
                   let sectionID = self.dataSource.sectionIdentifier(for: indexPath.section),
                   let footer = self.sectionsByID[sectionID]?.footer else { return }
             footerView.configure(footer: footer) { [weak self] url in
+                // Text fields report on end-editing, so commit the active one before leaving the form.
+                self?.view.endEditing(true)
                 self?.delegate?.webCompatReportSheetDidTapLearnMore(url: url)
             }
             footerView.applyTheme(theme: self.theme)

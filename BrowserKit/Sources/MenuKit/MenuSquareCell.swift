@@ -9,7 +9,6 @@ final class MenuSquareView: UIView, ThemeApplicable {
     private struct UX {
         static let iconSize: CGFloat = 24
         static let backgroundViewCornerRadius: CGFloat = 12
-        static let horizontalMargin: CGFloat = 6
         static let contentViewSpacing: CGFloat = 4
         static let contentViewTopMargin: CGFloat = 12
         static let contentViewBottomMargin: CGFloat = 8

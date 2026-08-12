@@ -255,7 +255,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         XCTAssertNotNil(subject.overKeyboardContainerConstraint)
     }
 
-    func test_setupOverKeyboardContainerConstraints_storesConstraintReference() {
+    func test_setupOverKeyboardContainerConstraints_storesConstraint() {
         let subject = createSubject()
         subject.setupBottomContainerConstraints()
         subject.setupOverKeyboardContainerConstraints()

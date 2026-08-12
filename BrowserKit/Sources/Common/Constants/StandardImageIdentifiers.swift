@@ -20,6 +20,8 @@ public struct StandardImageIdentifiers {
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
         public static let shieldCheckmarkFill = "shieldCheckmarkFillSmall"
+        public static let shieldCheckmarkFillGradient = "shieldCheckmarkFillGradientSmall"
+        public static let shieldSlashFillCritical = "shieldSlashFillCriticalSmall"
         public static let shieldSlashFillMulticolor = "shieldSlashFillMulticolorSmall"
     }
 
@@ -54,7 +56,6 @@ public struct StandardImageIdentifiers {
         public static let bookmarkSlash = "bookmarkSlashLarge"
         public static let bookmarkTray = "bookmarkTrayLarge"
         public static let bookmarkTrayFill = "bookmarkTrayFillLarge"
-        public static let camera = "cameraLarge"
         public static let checkmark = "checkmarkLarge"
         public static let chevronDown = "chevronDownLarge"
         public static let chevronLeft = "chevronLeftLarge"
@@ -110,6 +111,7 @@ public struct StandardImageIdentifiers {
         public static let readingListAdd = "readingListAddLarge"
         public static let report = "reportLarge"
         public static let saveFile = "saveFileLarge"
+        public static let screenshot = "screenshotLarge"
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"
         public static let shareApple = "shareAppleLarge"

@@ -152,9 +152,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .shouldUseJapanConfiguration:
             return checkShouldUseJapanConfigurationFeature()
 
-        case .snapkitRemovalRefactor:
-            return checkSnapKitRemovalRefactor()
-
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID) != .disabled
 
@@ -206,9 +203,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .waybackMachine:
             return checkWaybackMachineFeature()
 
-        case .worldCupWidget:
-            return checkWorldCupWidgetFeature()
-
         // This feature flag has no Nimbus configuration because it is only tied to a user setting.
         // Requesting Nimbus configuration for it is a developer error.
         case .hntSponsoredShortcuts:
@@ -249,11 +243,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHomepageStoriesCaterogiesFeature() -> Bool {
         return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
-    }
-
-    private func checkSnapKitRemovalRefactor() -> Bool {
-        let config = nimbus.features.snapkitRemovalRefactor.value()
-        return config.enabled
     }
 
     private func checkTabScrollRefactorFeature() -> Bool {
@@ -433,10 +422,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkBookmarksSearchFeature() -> Bool {
         return nimbus.features.bookmarksSearchFeature.value().enabled
-    }
-
-    private func checkWorldCupWidgetFeature() -> Bool {
-        return nimbus.features.worldCupWidgetFeature.value().enabled
     }
 
     private func checkAdBlockerFeature() -> Bool {

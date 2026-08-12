@@ -33,6 +33,9 @@ AppMenu:
 EmailMask:
   description: Corresponds to the the email mask autofill feature for website forms.
 
+ErrorPage:
+  description: Corresponds to user-facing error pages shown during web navigation.
+
 Autofill:
   description: "Corresponds to the website form autofill feature within the app: addresses autofill, credit cards autofill, and passwords autofill."
 
@@ -155,11 +158,11 @@ TrendingSearches:
 User:
   description: Corresponds to user properties and settings.
 
+WaybackMachine:
+  description: Corresponds to Wayback Machine error page interactions
+
 WebCompat:
   description: Corresponds to the in-app "Report Broken Site" (WebCompat) reporting tool.
-
-WorldCupWidget:
-  description: Corresponds to the World Cup widget shown on the homepage.
 
 ZoomBar:
   description: Corresponds to any event around zoom bar. Shown from the app menu.

@@ -58,6 +58,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         subject.webCompatReportSheetDidTapLearnMore(url: learnMoreURL)
 
         XCTAssertEqual(coordinator.didTapLearnMoreURLs, [learnMoreURL])
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .learnMore)
     }
 
     func testDidTapButton_onSendRow_dispatchesSubmit() {
@@ -138,6 +139,52 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         subject.webCompatReportSheetDidEditText(id: "send", text: "ignored")
 
         XCTAssertTrue(dispatchedViewActions().isEmpty)
+    }
+
+    func testDidTapPreview_onlyDispatches() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapPreview()
+
+        // Building a payload here is what let preview and submit drift.
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .preview)
+        XCTAssertTrue(coordinator.didTapPreviewPayloads.isEmpty)
+    }
+
+    func testNewState_withPreviewPayload_handsItToTheCoordinator() throws {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+        var payload = WebCompatReportPayload()
+        payload.url = "https://example.com"
+
+        subject.newState(state: WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .videoOrAudio,
+            previewPayload: payload
+        ))
+
+        XCTAssertEqual(coordinator.didTapPreviewPayloads, [payload])
+    }
+
+    func testNewState_withoutPreviewPayload_leavesTheCoordinatorAlone() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.newState(state: WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .videoOrAudio
+        ))
+
+        XCTAssertTrue(coordinator.didTapPreviewPayloads.isEmpty)
     }
 
     func testSimpleCreation_hasNoLeaks() {
@@ -301,6 +348,7 @@ private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoord
     var didFinishCallCount = 0
     var didSubmitCallCount = 0
     var didTapLearnMoreURLs: [URL] = []
+    var didTapPreviewPayloads: [WebCompatReportPayload] = []
 
     func webCompatReportViewControllerDidFinish() {
         didFinishCallCount += 1
@@ -312,5 +360,9 @@ private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoord
 
     func webCompatReportViewControllerDidTapLearnMore(url: URL) {
         didTapLearnMoreURLs.append(url)
+    }
+
+    func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload) {
+        didTapPreviewPayloads.append(payload)
     }
 }

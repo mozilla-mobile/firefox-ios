@@ -143,6 +143,13 @@ struct AccessibilityIdentifiers {
         static let includeScreenshot = "WebCompatReporter.IncludeScreenshot"
         static let includeBlockedList = "WebCompatReporter.IncludeBlockedList"
         static let learnMore = "WebCompatReporter.LearnMore"
+
+        struct Preview {
+            static let closeButton = "WebCompatReporter.Preview.CloseButton"
+            /// Suffixed with the payload group id, e.g. `…SectionHeader.basic`.
+            static let sectionHeader = "WebCompatReporter.Preview.SectionHeader"
+            static let sectionContent = "WebCompatReporter.Preview.SectionContent"
+        }
     }
 
     struct UnifiedSearch {

@@ -1,3 +1,6 @@
+/* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "ਤੁਹਾਡੀ ਰਿਪੋਰਟ %1$@ ਵਿਚਲੇ ਮਸਲਿਆਂ ਨੂੰ ਸਮਝਣ ਅਤੇ ਠੀਕ ਕਰਨ ਲਈ ਮਦਦ ਕਰਦਾ ਹੈ ਤਾਂ ਹਰ ਕਿਸੇ ਲਈ ਬੇਹਤਰ ਬਣਾਇਆ ਜਾ ਸਕੇ। %2$@";
+
 /* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਵਲੋਂ ਪਾਬੰਦੀ ਲਈਆਂ ਚੀਜ਼ਾਂ ਦੀ ਸੂਚੀ ਭੇਜੋ";
 
@@ -96,4 +99,7 @@
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.PlaybackFails.v154" = "ਵੀਡੀਓ ਜਾਂ ਆਡੀਓ ਚੱਲਦੀ ਨਹੀਂ ਹੈ";
+
+/* Message of the toast shown after the user successfully submits a website issue report. */
+"WebCompatReporter.Toast.ReportSent.v155" = "ਰਿਪੋਰਟ ਭੇਜੀ";
 

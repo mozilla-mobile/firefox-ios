@@ -45,6 +45,24 @@ final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unche
     func urlSession(
         _ session: URLSession,
         task: URLSessionTask,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        guard let delegate else {
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+        delegate.urlSession?(
+            session,
+            task: task,
+            didReceive: challenge,
+            completionHandler: completionHandler
+        )
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
         willPerformHTTPRedirection response: HTTPURLResponse,
         newRequest request: URLRequest,
         completionHandler: @escaping @Sendable (URLRequest?) -> Void
@@ -87,6 +105,7 @@ final class DefaultTemporaryDocument: NSObject,
     private let session: URLSession
     private let request: URLRequest
     private let cookies: [HTTPCookie]
+    private let credential: URLCredential?
     private var currentDownloadTask: URLSessionDownloadTask?
 
     private var onDownload: ((URL?) -> Void)?
@@ -111,11 +130,13 @@ final class DefaultTemporaryDocument: NSObject,
         request: URLRequest,
         mimeType: String? = nil,
         cookies: [HTTPCookie] = [],
+        credential: URLCredential? = nil,
         session: URLSession = .shared,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
         self.cookies = cookies
+        self.credential = credential
         self.filename = filename ?? "unknown"
         self.mimeType = mimeType
         self.session = session
@@ -133,6 +154,7 @@ final class DefaultTemporaryDocument: NSObject,
     ) {
         self.request = request
         self.cookies = []
+        self.credential = nil
         self.filename = preflightResponse.suggestedFilename ?? "unknown"
         self.mimeType = mimeType
         self.session = session
@@ -281,6 +303,23 @@ final class DefaultTemporaryDocument: NSObject,
     }
 
     // MARK: - URLSessionDownloadDelegate
+
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        let method = challenge.protectionSpace.authenticationMethod
+        let isHTTPAuthChallenge = method == NSURLAuthenticationMethodHTTPBasic
+            || method == NSURLAuthenticationMethodHTTPDigest
+            || method == NSURLAuthenticationMethodNTLM
+        if let credential, isHTTPAuthChallenge, challenge.protectionSpace.host == request.url?.host {
+            completionHandler(.useCredential, credential)
+        } else {
+            completionHandler(.performDefaultHandling, nil)
+        }
+    }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         currentDownloadTask = nil

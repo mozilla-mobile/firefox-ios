@@ -38,11 +38,14 @@ struct WebCompatReporterMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let url: String?
+    let previewPayload: WebCompatReportPayload?
 
     init(url: String? = nil,
+         previewPayload: WebCompatReportPayload? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.url = url
+        self.previewPayload = previewPayload
         self.windowUUID = windowUUID
         self.actionType = actionType
     }
@@ -59,9 +62,11 @@ enum WebCompatReporterViewActionType: ActionType {
     case preview
     case submit
     case cancel
+    case learnMore
 }
 
 enum WebCompatReporterMiddlewareActionType: ActionType {
     case didLoadInitialDraft
+    case didBuildPreview
     case didSubmit
 }

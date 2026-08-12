@@ -125,7 +125,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             ToolbarMenuElementConfiguration(
                 actionType: .googleLensTakePhoto,
                 title: .AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle,
-                imageName: StandardImageIdentifiers.Large.camera,
+                imageName: StandardImageIdentifiers.Large.screenshot,
                 a11yIdentifier: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
             ),
             ToolbarMenuElementConfiguration(
@@ -147,6 +147,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.editingAccessoryAction?.actionType, .googleLens)
         XCTAssertEqual(newState.editingAccessoryAction?.iconName, StandardImageIdentifiers.Medium.logoGoogleLens)
+        XCTAssertEqual(newState.editingAccessoryAction?.contextualHintType, TipKitHintType.googleLens.rawValue)
         XCTAssertEqual(newState.editingAccessoryAction?.a11yLabel, .AddressToolbar.GoogleLens.A11yLabel)
         XCTAssertEqual(newState.editingAccessoryAction?.menuElements, expectedMenuElements)
     }

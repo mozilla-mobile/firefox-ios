@@ -166,4 +166,6 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     var borderAccentNonOpaque: UIColor = DarkTheme().colors.borderAccentNonOpaque
     var borderAccentPrivate: UIColor = DarkTheme().colors.borderAccentPrivate
     var borderToolbarDivider: UIColor = DarkTheme().colors.borderToolbarDivider
+
+    var faviconLetterColorSet: FaviconLetterColorSet = NovaFaviconColorSet()
 }

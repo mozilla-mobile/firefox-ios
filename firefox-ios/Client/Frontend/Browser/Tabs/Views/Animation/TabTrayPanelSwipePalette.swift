@@ -62,6 +62,26 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         return partialOverrides.iconDisabled
     }
 
+    var layer2: UIColor {
+        return partialOverrides.layer2
+    }
+
+    var layerSurfaceLow: UIColor {
+        return partialOverrides.layerSurfaceLow
+    }
+
+    var layerGlassTintNova: UIColor {
+        return partialOverrides.layerGlassTintNova
+    }
+
+    var iconInverted: UIColor {
+        return partialOverrides.iconInverted
+    }
+
+    var actionPrimary: UIColor {
+        return partialOverrides.actionPrimary
+    }
+
     struct PartialOverrides {
         var layer1: UIColor
         var iconPrimary: UIColor
@@ -76,9 +96,13 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         var borderAccentPrivate: UIColor
         var shadowDefault: UIColor
         var iconDisabled: UIColor
+        var layer2: UIColor
+        var layerSurfaceLow: UIColor
+        var layerGlassTintNova: UIColor
+        var iconInverted: UIColor
+        var actionPrimary: UIColor
     }
 
-    var layer2: UIColor { base.layer2 }
     var layer4: UIColor { base.layer4 }
     var layer5: UIColor { base.layer5 }
     var layer5Hover: UIColor { base.layer5Hover }
@@ -97,13 +121,11 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerSelectedText: UIColor { base.layerSelectedText }
     var layerAutofillText: UIColor { base.layerAutofillText }
     var layerGradientURL: Gradient { base.layerGradientURL }
-    var layerSurfaceLow: UIColor { base.layerSurfaceLow }
     var layerSurfaceMedium: UIColor { base.layerSurfaceMedium }
     var layerSurfaceMediumAlpha: UIColor { base.layerSurfaceMediumAlpha }
     var layerSurfaceMediumAlt: UIColor { base.layerSurfaceMediumAlt }
     var layerGradientSummary: Gradient { base.layerGradientSummary }
 
-    var actionPrimary: UIColor { base.actionPrimary }
     var actionPrimaryHover: UIColor { base.actionPrimaryHover }
     var actionPrimaryDisabled: UIColor { base.actionPrimaryDisabled }
     var actionSecondaryDisabled: UIColor { base.actionSecondaryDisabled }
@@ -157,12 +179,12 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var gradientAIStrongStop2: UIColor { base.gradientAIStrongStop2 }
     var gradientAIStrongStop3: UIColor { base.gradientAIStrongStop3 }
 
+    var faviconLetterColorSet: FaviconLetterColorSet { base.faviconLetterColorSet }
+
     // MARK: - Nova only tokens
     var layerAccentSubtle: UIColor { base.layerAccentSubtle }
     var layerInverse: UIColor { base.layerInverse }
-    var layerGlassTintNova: UIColor { base.layerGlassTintNova }
     var textToast: UIColor { base.textToast }
-    var iconInverted: UIColor { base.iconInverted }
     var iconOnColorDisabled: UIColor { base.iconOnColorDisabled }
     var iconPrivate: UIColor { base.iconPrivate }
     var borderStrong: UIColor { base.borderStrong }
