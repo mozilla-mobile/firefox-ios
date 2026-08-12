@@ -6,11 +6,6 @@ import Foundation
 import WebKit
 import Common
 
-// TODO [FXIOS-15182]
-enum WebViewDocumentFetch {
-    static let isEnabled = true
-}
-
 private let temporaryDocumentOperationQueue = OperationQueue()
 
 protocol TemporaryDocument: Sendable {

@@ -1500,7 +1500,7 @@ final class BrowserCoordinator: BaseCoordinator,
         }
 
         // [FXIOS-15182]: Read document data straight from the already-authenticated WebView, instead of re-downloading it.
-        if WebViewDocumentFetch.isEnabled,
+        if featureFlagsProvider.isEnabled(.webViewDocumentFetchRefactor),
            let fileURL = await documentFileFromWebView(tab, tabURL: tabURL) {
             return .file(url: fileURL, remoteURL: tabURL)
         }
