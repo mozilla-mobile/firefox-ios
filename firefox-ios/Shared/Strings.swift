@@ -4604,8 +4604,8 @@ extension String {
                 public static let UserAgent = MZLocalizedString(
                     key: "WebCompatReporter.Preview.Data.UserAgent.v155",
                     tableName: "WebCompatReporter",
-                    value: "Your browser’s user agent, which includes your iOS version, Firefox version, and browser engine version",
-                    comment: "Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own."
+                    value: "Your browser’s user agent, which includes your iOS version, %@ version, and browser engine version",
+                    comment: "Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox)."
                 )
                 public static let TrackingProtectionSetting = MZLocalizedString(
                     key: "WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155",
