@@ -74,9 +74,15 @@ Going forward, we must enforce guidelines around creating new actions (naming an
 
 Since Redux actions are such a core aspect of the app, we will have to incrementally migrate our "legacy" actions to the new "modern" actions. The chosen approach for the migration is described later in this document.
 
-### Redux Action Rules & Guidelines
+## Redux Action Rules & Guidelines
 
-#### 1. Action Grouping *(i.e. enum definitions)*
+Recall that actions have two parts:
+1. An action type (the action to fire)
+2. An action payload (metadata about the action)
+
+This section describes rules around naming and grouping actions and defining action payloads.
+
+### 1. Action Grouping *(i.e. enum definitions)*
 
 - Action enum names should be suffixed by `Action` 
 - Action enums should represent a group of similar events, such as those related to one surface in or component in the app
@@ -89,7 +95,7 @@ Since Redux actions are such a core aspect of the app, we will have to increment
 > Example: When a middleware finishes processing a webpage translation, firing a "translation action" makes sense. You would add a new case under the `TranslationAction` enum.
 
 
-#### 2. Action Naming *(i.e. enum cases)*
+### 2. Action Naming *(i.e. enum cases)*
 
 - Action names should describe what happened
 - Action names should be in present tense 
@@ -98,19 +104,10 @@ Since Redux actions are such a core aspect of the app, we will have to increment
 > Examples: `urlDidChange`, `clearSearch`, `didTapButton`
 
 
-#### 4. Payload Struct Naming
+### 3. Action Payloads *(i.e. associated values)*
 
-- Payload struct types should be suffixed by `*Payload`
-
-> [!NOTE]
-> Examples: `MoveTabPayload`, `DidSelectTabPayload`
-
-
-#### 3. Action Payloads *(i.e. associated values)*
-
-- If your payload includes more than 3 discrete values, wrap them in a payload struct instead
+- If your payload includes more than 3 discrete values, wrap them in a payload struct instead (see #4 below for naming)
 - All associated values in your action enums **must** be explicitly labelled
-    - Exception: If you pass a single payload struct, no label is necessary
 - If your associated value contains a payload struct, do not pass any other associated values; put them inside the payload struct instead
 
 > [!NOTE]
@@ -133,11 +130,59 @@ Since Redux actions are such a core aspect of the app, we will have to increment
 > - ❌ case moveTab(MoveTabPayload, isPrivate: Bool)
 > - ❌ case moveTab(MoveTabPayload, Bool, Int)
 
-### Migration Guidelines
 
-For the migration, all middlewares providers should define two providers in a tuple. The first item in the tuple is the old provider which handles the old type of actions (legacy) and the second item in the tuple is the new provider which handles the new type of actions (modern). Likewise, all state reducers will similarly define two reducers in a tuple, a legacy reducer and a modern reducer.
+### 4. Payload Struct Naming
 
-#### Middleware Providers
+- Payload struct types should be suffixed by `*Payload`
+
+> [!NOTE]
+> Examples: `MoveTabPayload`, `DidSelectTabPayload`
+
+
+## Migration Guidelines
+
+For the migration, all state reducers should define two reducers in a tuple. The first item in the tuple is the old reducer which handles the old type of actions (legacy) and the second item in the tuple is the new reducer which handles the new type of actions (modern). 
+
+Likewise, all middleware providers will similarly define two providers in a tuple, a legacy provider and a modern provider.
+
+### State Reducers
+
+Below is an example of a Redux state that is currently undergoing migration. Note that this state supports four actions. The `initialValueLoaded` and `counterIncreased` actions have been migrated to `ModernAction`. The `counterDecreased` and `setPrivateModeTo` actions have not yet been migrated and is of the legacy `Action`.
+
+```swift
+static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
+
+static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
+    // Handles one type of action
+    guard let action = action as? FakeReduxModernAction else { return defaultState(from: state) }
+
+    switch action {
+    case .initialValueLoaded(let counterValue),
+        .counterIncreased(let counterValue):
+        // Implementation...
+
+    default:
+        return defaultState(from: state)
+    }
+}
+
+static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
+    guard let action = action as? FakeReduxAction else { return defaultState(from: state) }
+
+    switch action.actionType {
+    case FakeReduxActionType.counterDecreased:
+        // Implementation...
+
+    case FakeReduxActionType.setPrivateModeTo:
+        // Implementation...
+        
+    default:
+        return defaultState(from: state)
+    }
+}
+```
+
+### Migraging Middleware Providers
 
 Below is an example of a middleware that is currently undergoing migration. Note that this middleware supports three actions. The `requestInitialValue` and `increaseCounter` actions have been migrated to `ModernAction`. The `decreaseCounter` action has not yet been migrated and is of the legacy `Action`.
 
@@ -176,43 +221,6 @@ lazy var legacyProvider: LegacyMiddlewareMethod<FakeReduxState> = { [self] state
 
 A few notes:
 - In the example above, we explicitly capture `[self]` in the provider closure's capture list. This adds convenience so you do not need to refer to `self` in the body of the closure. However, a strong capture of `self` creates a retain cycle in our unit tests when we want to check for memory leaks. See examples of `releaseMiddlewareProvidersFromMemory` in the codebase for how to work around this.
-
-#### State Reducers
-
-Below is an example of a Redux state that is currently undergoing migration. Note that this state supports four actions. The `initialValueLoaded` and `counterIncreased` actions have been migrated to `ModernAction`. The `counterDecreased` and `setPrivateModeTo` actions have not yet been migrated and is of the legacy `Action`.
-
-```swift
-static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
-
-static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
-    // Handles one type of action
-    guard let action = action as? FakeReduxModernAction else { return defaultState(from: state) }
-
-    switch action {
-    case .initialValueLoaded(let counterValue),
-        .counterIncreased(let counterValue):
-        // Implementation...
-
-    default:
-        return defaultState(from: state)
-    }
-}
-
-static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
-    guard let action = action as? FakeReduxAction else { return defaultState(from: state) }
-
-    switch action.actionType {
-    case FakeReduxActionType.counterDecreased:
-        // Implementation...
-
-    case FakeReduxActionType.setPrivateModeTo:
-        // Implementation...
-        
-    default:
-        return defaultState(from: state)
-    }
-}
-```
 
 ## Consequences
 
