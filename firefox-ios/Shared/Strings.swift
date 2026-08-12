@@ -4601,23 +4601,11 @@ extension String {
                     value: "Whether or not your device is a tablet",
                     comment: "Bullet on the Report Preview screen. Only tablet or not is sent, no device make or model."
                 )
-                public static let OperatingSystemVersion = MZLocalizedString(
-                    key: "WebCompatReporter.Preview.Data.OperatingSystemVersion.v155",
+                public static let UserAgent = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.UserAgent.v155",
                     tableName: "WebCompatReporter",
-                    value: "Operating system version number",
-                    comment: "Bullet on the Report Preview screen. The iOS version is sent inside the user agent."
-                )
-                public static let AppVersion = MZLocalizedString(
-                    key: "WebCompatReporter.Preview.Data.AppVersion.v155",
-                    tableName: "WebCompatReporter",
-                    value: "App version number",
-                    comment: "Bullet on the Report Preview screen. The app version is sent inside the user agent."
-                )
-                public static let BrowserEngineVersion = MZLocalizedString(
-                    key: "WebCompatReporter.Preview.Data.BrowserEngineVersion.v155",
-                    tableName: "WebCompatReporter",
-                    value: "Browser engine version",
-                    comment: "Bullet on the Report Preview screen. The engine version is sent inside the user agent."
+                    value: "Your browser’s user agent, which includes your iOS version, Firefox version, and browser engine version",
+                    comment: "Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own."
                 )
                 public static let TrackingProtectionSetting = MZLocalizedString(
                     key: "WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155",
@@ -4659,7 +4647,7 @@ extension String {
                     key: "WebCompatReporter.Preview.Data.PageLanguages.v155",
                     tableName: "WebCompatReporter",
                     value: "The language settings sent with this page",
-                    comment: "Bullet on the Report Preview screen, for the languages the page was requested in."
+                    comment: "Bullet on the Report Preview screen, for the page's navigator.languages, the language list the page itself reads. Distinct from the device's own languages, which have their own bullet."
                 )
                 public static let DeviceLocale = MZLocalizedString(
                     key: "WebCompatReporter.Preview.Data.DeviceLocale.v155",
