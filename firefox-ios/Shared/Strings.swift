@@ -4646,8 +4646,8 @@ extension String {
                 public static let PageLanguages = MZLocalizedString(
                     key: "WebCompatReporter.Preview.Data.PageLanguages.v155",
                     tableName: "WebCompatReporter",
-                    value: "The language settings sent with this page",
-                    comment: "Bullet on the Report Preview screen, for the page's navigator.languages, the language list the page itself reads. Distinct from the device's own languages, which have their own bullet."
+                    value: "Language preferences sent to this page",
+                    comment: "Bullet on the Report Preview screen, for a list of the user's preferred languages for websites as they were communicated by the browser to the page"
                 )
                 public static let DeviceLocale = MZLocalizedString(
                     key: "WebCompatReporter.Preview.Data.DeviceLocale.v155",
