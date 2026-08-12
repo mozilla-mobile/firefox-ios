@@ -2,8 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Redux
 import Foundation
+import Common
+import Redux
 
 /// A mock Store used to test redux middlewares.
 ///
@@ -18,6 +19,7 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     /// Records all actions dispatched to the mock store. Check this property to ensure that your middleware correctly
     /// dispatches the right action(s), and the right count of actions, in response to a given action.
     var dispatchedActions: [Redux.Action] = []
+    var dispatchedModernActions: [Redux.ModernAction] = []
 
     /// Called every time an action is dispatched to the mock store. Used to confirm that a dispatched action completed. This
     /// is useful when the middleware is making an asynchronous call and we want to wait for an expectation to be fulfilled.
@@ -62,6 +64,13 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
         lock.lock()
         defer { lock.unlock() }
         dispatchedActions.append(action)
+        dispatchCalled?()
+    }
+
+    func dispatch(_ action: any Redux.ModernAction, forWindowUUID windowUUID: Common.WindowUUID) {
+        lock.lock()
+        defer { lock.unlock() }
+        dispatchedModernActions.append(action)
         dispatchCalled?()
     }
 }

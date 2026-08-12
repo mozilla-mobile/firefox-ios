@@ -32,7 +32,7 @@ public protocol ModernAction: Sendable {
     var description: String { get }
 }
 
-extension ModernAction {
+public extension ModernAction {
     /// Automatically generates a debug description for enumerated actions with nested associated values.
     var description: String {
         let mirror = Mirror(reflecting: self)
