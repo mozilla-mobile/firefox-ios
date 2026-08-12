@@ -71,7 +71,7 @@ public class CloseButton: UIButton,
     }
 
     @available(iOS 26.0, *)
-    public func applyGlassConfiguration(backgroundColor: UIColor, foregroundColor: UIColor) {
+    public func applyProminentClearGlassConfiguration(backgroundColor: UIColor, foregroundColor: UIColor) {
         var config = UIButton.Configuration.prominentClearGlass()
         config.image = configuration?.image ?? image(for: .normal)
         config.baseBackgroundColor = backgroundColor

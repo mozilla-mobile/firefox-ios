@@ -217,8 +217,8 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             closeButton.layer.cornerRadius = 0.5 * size
         }
         if #available(iOS 26.0, *), theme.isNova {
-            closeButton.applyGlassConfiguration(backgroundColor: theme.colors.layer2,
-                                                foregroundColor: theme.colors.iconPrimary)
+            closeButton.applyProminentClearGlassConfiguration(backgroundColor: theme.colors.layer2,
+                                                              foregroundColor: theme.colors.iconPrimary)
         } else {
             let closeBackground = theme.isNova ? theme.colors.layer2 : theme.colors.actionCloseButton
             closeButton.backgroundColor = closeBackground.withAlphaComponent(mainMenuHelper.backgroundAlpha())
