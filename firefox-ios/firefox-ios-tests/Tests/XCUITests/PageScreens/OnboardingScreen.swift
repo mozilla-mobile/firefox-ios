@@ -287,10 +287,6 @@ final class OnboardingScreen {
         sel.CLOSE_BUTTON.element(in: app).waitAndTap()
     }
 
-    func tapEmailSignIn() {
-        sel.EMAIL_SIGN_IN_BUTTON.element(in: app).waitAndTap()
-    }
-
     func closeTourIfNeeded() {
         let closeButton = sel.CLOSE_TOUR_BUTTON.element(in: app)
         if closeButton.exists {

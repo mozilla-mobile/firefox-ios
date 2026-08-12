@@ -49,5 +49,6 @@ def test_sync_tabs_firefox_suggest(tps, xcodebuild):
     tps.run('test_tabs_desktop.js')
     xcodebuild.test('XCUITests/IntegrationTests/testFxATabsFirefoxSuggest')
 
+# Regression
 def test_modern_kit_onboarding_start_syncing_use_email_instead(xcodebuild):
     xcodebuild.test('XCUITests/IntegrationTests/testModernKitOnboardingStartSyncingUseEmailInstead')
