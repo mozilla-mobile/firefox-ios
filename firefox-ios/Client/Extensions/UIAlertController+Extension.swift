@@ -158,7 +158,7 @@ extension UIAlertController {
 
     func applyNovaActionTint(_ theme: Theme) {
         // The violet action tint only applies below iOS 26
-        if #available(iOS 26.0, *) { return }
+        guard #unavailable(iOS 26.0) else { return }
         let featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()
         guard featureFlagsProvider.isEnabled(.novaDesign) else { return }
         view.tintColor = theme.colors.actionPrimary

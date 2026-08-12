@@ -70,6 +70,15 @@ public class CloseButton: UIButton,
         updateButtonSizeForDynamicFont()
     }
 
+    @available(iOS 26.0, *)
+    public func applyProminentClearGlassConfiguration(backgroundColor: UIColor, foregroundColor: UIColor) {
+        var config = UIButton.Configuration.prominentClearGlass()
+        config.image = configuration?.image ?? image(for: .normal)
+        config.baseBackgroundColor = backgroundColor
+        config.baseForegroundColor = foregroundColor
+        configuration = config
+    }
+
     private func updateButtonSizeForDynamicFont() {
         let scaledWidth = UIFontMetrics.default.scaledValue(for: baseSize.width)
         let scaledHeight = UIFontMetrics.default.scaledValue(for: baseSize.height)
