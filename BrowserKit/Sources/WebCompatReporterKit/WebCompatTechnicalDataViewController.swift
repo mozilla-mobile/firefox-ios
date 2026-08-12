@@ -303,6 +303,10 @@ public final class WebCompatTechnicalDataViewController: UIViewController,
         guard isViewLoaded else { return }
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        // Otherwise the title stays dark-on-dark in the dark theme.
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: theme.colors.textPrimary
+        ]
         collectionView.backgroundColor = theme.colors.layer1
         reconfigureAllItems()
     }
