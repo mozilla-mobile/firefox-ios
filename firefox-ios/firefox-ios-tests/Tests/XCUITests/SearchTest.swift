@@ -552,6 +552,44 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2753092
+    // Regression
+    func testFirefoxSuggestionsLandscapePrivate() {
+        app.launch()
+
+        // Precondition: "Ingest New Suggestions Now" from the
+        // secret settings
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+
+        // Step 1: Type a keyword that trigers a sponsored result
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: "Amazon")
+
+        // Step 2: Sponsored result should be specified
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+
+        // Step 3: Turn the device to landscape and observe the sponsored result
+        settingsScreen.rotateDevice(to: .landscapeLeft)
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+        navigator.performAction(Action.CloseURLBarOpen)
+
+        // Step 4: Trigger a sponsored result in private mode
+        // Sponsored result is NOT displayed
+        settingsScreen.rotateDevice(to: .portrait)
+        waitForTabsButtonHittable()
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.goto(NewTabScreen)
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: "Amazon")
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: false)
+    }
+
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
         let showSearchSuggestions = app.switches[AccessibilityIdentifiers.Settings.Search.showSearchSuggestions]
         mozWaitForElementToExist(showSearchSuggestions)
