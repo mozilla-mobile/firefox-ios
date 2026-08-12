@@ -194,6 +194,8 @@ struct BrowserSelectors: BrowserSelectorsSet {
         IDs.sponsoredLabel,
         description: "'Sponsored' label on a sponsored search suggestion",
         groups: ["browser", "search"]
+    )
+
     let PASTE_BUTTON = Selector.otherElementsButtonByLabel(
         "Paste",
         description: "Paste button in the address bar edit callout",
