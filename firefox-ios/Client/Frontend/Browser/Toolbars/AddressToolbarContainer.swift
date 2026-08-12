@@ -570,6 +570,11 @@ final class AddressToolbarContainer: UIView,
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartTyping)
                 store.dispatch(action)
             }
+
+            let action = ToolbarAction(searchTerm: searchTerm,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.didSetSearchTerm)
+            store.dispatch(action)
         }
         self.searchTerm = searchTerm
         delegate?.searchSuggestions(searchTerm: searchTerm)

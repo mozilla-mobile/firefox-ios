@@ -289,6 +289,27 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertFalse(viewModel.hasAlternativeLocationColor)
     }
 
+    @MainActor
+    func testSearchSuggestions_updatesReduxSearchTerm() {
+        let delegate = MockAddressToolbarContainerDelegate()
+        let subject = AddressToolbarContainer(toolbarHelper: MockToolbarHelper())
+        subject.configure(windowUUID: windowUUID,
+                          profile: mockProfile,
+                          searchEnginesManager: searchEnginesManager,
+                          delegate: delegate,
+                          isUnifiedSearchEnabled: false,
+                          isBottomSearchBar: false)
+
+        subject.searchSuggestions(searchTerm: "fire")
+
+        let toolbarState = store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )
+        XCTAssertEqual(toolbarState?.addressToolbar.searchTerm, "fire")
+    }
+
     // MARK: - Private helpers
 
     @MainActor
@@ -422,4 +443,17 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
         return tab
     }
+}
+
+private final class MockAddressToolbarContainerDelegate: AddressToolbarContainerDelegate {
+    func searchSuggestions(searchTerm: String) { }
+    func openBrowser(searchTerm: String) { }
+    func openSuggestions(searchTerm: String) { }
+    func configureContextualHint(for button: UIButton, with contextualHintType: String) { }
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) { }
+    func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? { nil }
+    func addressToolbarDidEnterOverlayMode(_ view: UIView) { }
+    func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason) { }
+    func addressToolbarDidBeginDragInteraction() { }
+    func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) { }
 }
