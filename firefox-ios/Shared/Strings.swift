@@ -1772,6 +1772,16 @@ extension String {
                 tableName: "NativeErrorPage",
                 value: "Search the web",
                 comment: "Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.")
+            public static let FooterDescription = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.FooterDescription.v155",
+                tableName: "NativeErrorPage",
+                value: "%@ can look for an earlier version of this page from the Internet Archive’s %@.",
+                comment: "Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org.")
+            public static let LinkText = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.LinkText.v155",
+                tableName: "NativeErrorPage",
+                value: "Wayback Machine",
+                comment: "The tappable link text within the Wayback footer description, opens web.archive.org.")
         }
     }
 }
