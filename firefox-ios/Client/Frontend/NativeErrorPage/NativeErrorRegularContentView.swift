@@ -31,6 +31,11 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         static let cardCornerRadius: CGFloat = 12
         static let cardInsets = NSDirectionalEdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12)
         static let cardTopSpacing: CGFloat = 8
+        static let buttonStackSpacing: CGFloat = 8
+        static let waybackErrorMessageRowSpacing: CGFloat = 6
+        static let waybackErrorTextStackSpacing: CGFloat = 2
+        static let waybackErrorContentStackSpacing: CGFloat = 2
+        static let waybackButtonImagePadding: CGFloat = 8
     }
 
     weak var delegate: NativeErrorRegularContentViewDelegate?
@@ -63,7 +68,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
     private lazy var waybackErrorMessageRow: UIStackView = .build { stackView in
         stackView.axis = .horizontal
         stackView.alignment = .top
-        stackView.spacing = 6
+        stackView.spacing = UX.waybackErrorMessageRowSpacing
     }
 
     private lazy var waybackErrorButton: UIButton = .build { button in
@@ -76,13 +81,13 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
     private lazy var waybackErrorTextStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.spacing = 2
+        stackView.spacing = UX.waybackErrorTextStackSpacing
     }
 
     private lazy var waybackErrorContentStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.spacing = 2
+        stackView.spacing = UX.waybackErrorContentStackSpacing
     }
 
     /// Card container that gives the failure state a distinct background,
@@ -95,7 +100,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
 
     private lazy var buttonStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.spacing = 8
+        stackView.spacing = UX.buttonStackSpacing
     }
 
     private var waybackState: WaybackButtonState = .idle
@@ -192,7 +197,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         waybackButton.configure(viewModel: viewModel)
         waybackButton.isEnabled = enabled
         waybackButton.configuration?.showsActivityIndicator = showsSpinner
-        waybackButton.configuration?.imagePadding = 8
+        waybackButton.configuration?.imagePadding = UX.waybackButtonImagePadding
         waybackButton.configuration?.imagePlacement = .leading
         waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Wayback.WaybackButtonA11yHint : nil
     }
