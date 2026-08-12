@@ -5010,21 +5010,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        // Only restore the address bar to fully shown if it wasn't collapsed by scrolling. When the
-        // keyboard is dismissed via scroll and the toolbars are already collapsed, so forcing scrollAlpha
-        // back to 1 here would leave the address bar full while the bottom containers stay collapsed
-        // (inconsistent state).
-        // This is a legacy-only patch (via the `LegacyTabScrollProvider` cast below); the scroll
-        // controller refactor (TabScrollHandler) will address the underlying issue differently
-        let isToolbarStateCollapsed = (scrollController as? LegacyTabScrollProvider)?.isToolbarStateCollapsed ?? false
-        if #available(iOS 26.0, *), isBottomSearchBar, !isToolbarStateCollapsed {
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: 1,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
+        // Only restore the address bar to fully shown if it wasn't collapsed (or mid-collapse) by
+        // scrolling. Forcing it back to shown while a scroll gesture is collapsing/has collapsed the
+        // toolbars would leave the address bar full while the bottom containers stay collapsed
+        // (inconsistent state), or fight an in-flight scroll-to-dismiss-keyboard gesture.
+        if #available(iOS 26.0, *), isBottomSearchBar, scrollController.isToolbarFullyExpanded {
+            store.dispatch(ToolbarModernAction.keyboardDidHide(minimizeAddressBar: false), forWindowUUID: windowUUID)
         }
         keyboardState = nil
         updateConstraintsForKeyboard()
