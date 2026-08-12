@@ -10,6 +10,13 @@ import XCTest
 final class NativeErrorPageHelperTests: XCTestCase {
     // MARK: - Helpers
 
+    private final class MockCellularDataStatusProvider: CellularDataStatusProviding {
+        var isCellularDataRestricted: Bool
+        init(isCellularDataRestricted: Bool = false) {
+            self.isCellularDataRestricted = isCellularDataRestricted
+        }
+    }
+
     private func makeBadCertDomainError(
         code: Int = NSURLErrorServerCertificateUntrusted
     ) -> NSError {
@@ -156,10 +163,14 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
             NSURLErrorFailingURLErrorKey: url
         ])
-        let helper = NativeErrorPageHelper(error: error)
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStatusProvider: MockCellularDataStatusProvider()
+        )
 
         let model = helper.parseErrorDetails()
 
+        XCTAssertEqual(model, .internetConnection)
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertTrue(model.isRegularUI)
@@ -168,12 +179,47 @@ final class NativeErrorPageHelperTests: XCTestCase {
     func testParseErrorDetails_noFailingURL_returnsNoInternetModel() {
         let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
         let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [:])
-        let helper = NativeErrorPageHelper(error: error)
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStatusProvider: MockCellularDataStatusProvider()
+        )
 
         let model = helper.parseErrorDetails()
 
+        XCTAssertEqual(model, .internetConnection)
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
+    }
+
+    func testParseErrorDetails_noInternetError_withRestrictedCellularData_returnsCellularDataRestrictedModel() {
+        let url = URL(string: "https://example.com")!
+        let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
+            NSURLErrorFailingURLErrorKey: url
+        ])
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStatusProvider: MockCellularDataStatusProvider(isCellularDataRestricted: true)
+        )
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model, .cellularDataRestricted)
+        XCTAssertNil(model.url)
+        XCTAssertTrue(model.isRegularUI)
+    }
+
+    func testParseErrorDetails_noFailingURL_withRestrictedCellularData_returnsCellularDataRestrictedModel() {
+        let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [:])
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStatusProvider: MockCellularDataStatusProvider(isCellularDataRestricted: true)
+        )
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model, .cellularDataRestricted)
     }
 
     func testParseErrorDetails_certError_withURL_returnsSecurityModel() {
@@ -303,6 +349,17 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.title, .NativeErrorPage.NoInternetConnection.TitleLabel)
         XCTAssertEqual(model.description, .NativeErrorPage.NoInternetConnection.Description)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
+        XCTAssertNil(model.url)
+        XCTAssertNil(model.advancedSection)
+        XCTAssertTrue(model.isRegularUI)
+    }
+
+    func testCellularDataRestrictedModel_hasCorrectComputedProperties() {
+        let model = ErrorPageModel.cellularDataRestricted
+
+        XCTAssertEqual(model.title, .NativeErrorPage.CellularDataRestricted.TitleLabel)
+        XCTAssertEqual(model.description, .NativeErrorPage.CellularDataRestricted.Description)
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)

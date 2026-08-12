@@ -30,13 +30,15 @@ class NativeErrorPageHelper {
     }
 
     var error: NSError
+    private let cellularDataStatusProvider: CellularDataStatusProviding
 
     var errorDescriptionItem: String {
         return error.localizedDescription
     }
 
-    init(error: NSError) {
+    init(error: NSError, cellularDataStatusProvider: CellularDataStatusProviding = CTCellularDataStatusProvider()) {
         self.error = error
+        self.cellularDataStatusProvider = cellularDataStatusProvider
     }
 
     // MARK: - Static Helpers
@@ -122,7 +124,7 @@ class NativeErrorPageHelper {
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             switch error.code {
             case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
-                return .internetConnection
+                return noConnectionModel
             case NSURLErrorServerCertificateUntrusted,
                  NSURLErrorServerCertificateHasBadDate,
                  NSURLErrorServerCertificateHasUnknownRoot,
@@ -134,8 +136,15 @@ class NativeErrorPageHelper {
                 return .generic(GenericErrorModel(url: url))
             }
         } else {
-            return .internetConnection
+            return noConnectionModel
         }
+    }
+
+    /// Distinguishes a true "no network" state from iOS having blocked this
+    /// app's cellular data access specifically, which surfaces as the same
+    /// NSURLErrorNotConnectedToInternet error but has a distinct fix for the user.
+    private var noConnectionModel: ErrorPageModel {
+        return cellularDataStatusProvider.isCellularDataRestricted ? .cellularDataRestricted : .internetConnection
     }
 
     /// Parses certificate details from the stored error.
