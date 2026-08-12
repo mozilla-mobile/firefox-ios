@@ -272,8 +272,10 @@ struct ToolbarState: ScreenState, Sendable {
               browserAction.toastType == .shakeToSummarizeNotAvailable
         else { return defaultState(from: state) }
 
+        // Update to use isAddressBarMinimized so the address bar is shown and the toast isn't presented a minimized bar.
         return state
             .copy(scrollAlpha: 1)
+            .copy(isAddressBarMinimized: false)
     }
 
     @MainActor
