@@ -72,7 +72,6 @@ class IntegrationTests: BaseTestCase {
 
     /// Completes an FxA sign-in on the email login screen.
     private func completeFxASignIn() {
-        sleep(5)
         mozWaitForElementToExist(
             app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
             timeout: TIMEOUT_LONG
