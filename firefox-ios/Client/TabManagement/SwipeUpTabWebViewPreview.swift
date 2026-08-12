@@ -241,7 +241,7 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             closeButton.configuration?.baseBackgroundColor = nil
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.actionCritical
-        screenshotViewContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
+        screenshotViewContainer.applyShadow(FxShadow.shadow200, theme: theme)
     }
 
     // MARK: - Private Functions
