@@ -29,10 +29,8 @@ struct ToolbarState: ScreenState, Sendable {
     var isTranslationsEnabled: Bool
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
-
-    var isAddressBarMinimized: Bool {
-        return scrollAlpha.isZero
-    }
+    // Will replace scrollAlpha
+    var isAddressBarMinimized: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
@@ -63,7 +61,8 @@ struct ToolbarState: ScreenState, Sendable {
                   isTranslucent: toolbarState.isTranslucent,
                   isTranslationsEnabled: toolbarState.isTranslationsEnabled,
                   previousTabScreenshot: toolbarState.previousTabScreenshot,
-                  nextTabScreenshot: toolbarState.nextTabScreenshot
+                  nextTabScreenshot: toolbarState.nextTabScreenshot,
+                  isAddressBarMinimized: toolbarState.isAddressBarMinimized
         )
     }
 
@@ -88,7 +87,8 @@ struct ToolbarState: ScreenState, Sendable {
             isTranslucent: false,
             isTranslationsEnabled: true,
             previousTabScreenshot: nil,
-            nextTabScreenshot: nil
+            nextTabScreenshot: nil,
+            isAddressBarMinimized: false
         )
     }
 
@@ -112,7 +112,8 @@ struct ToolbarState: ScreenState, Sendable {
         isTranslucent: Bool,
         isTranslationsEnabled: Bool = true,
         previousTabScreenshot: UIImage?,
-        nextTabScreenshot: UIImage?
+        nextTabScreenshot: UIImage?,
+        isAddressBarMinimized: Bool
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
@@ -395,6 +396,7 @@ struct ToolbarState: ScreenState, Sendable {
                             isTranslucent: state.isTranslucent,
                             isTranslationsEnabled: state.isTranslationsEnabled,
                             previousTabScreenshot: state.previousTabScreenshot,
-                            nextTabScreenshot: state.nextTabScreenshot)
+                            nextTabScreenshot: state.nextTabScreenshot,
+                            isAddressBarMinimized: state.isAddressBarMinimized)
     }
 }
