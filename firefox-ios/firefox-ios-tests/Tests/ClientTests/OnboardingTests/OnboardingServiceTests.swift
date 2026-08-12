@@ -111,7 +111,6 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     func sendDismissButtonTappedTelemetry() {
         sendDismissButtonTappedTelemetryCalled = true
     }
-
 }
 
 class MockActivityEventHelper: ActivityEventHelper {

@@ -136,7 +136,6 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         gleanWrapper.submit(ping: GleanMetrics.Pings.shared.onboarding)
     }
 
-
     private struct BaseExtras {
         let cardType: String
         let flowType: String
