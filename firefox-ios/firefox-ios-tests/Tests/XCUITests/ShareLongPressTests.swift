@@ -44,6 +44,15 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         }
     }
 
+    // Regression
+    // https://mozilla.testrail.io/index.php?/cases/view/2864326
+    func testShareNormalWebsitePrintNotAvailable() {
+        app.launch()
+        reachShareSheetFromTopSitesLongPress()
+        // Sharing a website link from the homepage context menu must not offer a Print option
+        assertShareSheetOptionNotAvailable(option: "Print")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2864380
     func testBookmarksShareNormalWebsiteReminders() {
         app.launch()
@@ -261,11 +270,15 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         }
     }
 
-    private func longPressTopSitesAndReachShareOptions(option: String) {
+    private func reachShareSheetFromTopSitesLongPress() {
         navigator.goto(NewTabScreen)
-        // Long tap on the first Pocket element
+        // Long tap on the first homepage element
         app.collectionViews["FxCollectionView"].links.element(boundBy: 0).press(forDuration: 1.5)
         app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
+    }
+
+    private func longPressTopSitesAndReachShareOptions(option: String) {
+        reachShareSheetFromTopSitesLongPress()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
             mozWaitElementHittable(element: app.collectionViews.cells[option], timeout: 10)
@@ -273,5 +286,24 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         } else {
             app.buttons[option].waitAndTap()
         }
+    }
+
+    // Confirms a share-sheet option is not offered. Expands "View More" first (iOS 26) so hidden
+    // actions are included, then asserts the option is absent both as a cell and a button.
+    private func assertShareSheetOptionNotAvailable(option: String) {
+        // Anchor on "Copy", which is always offered when sharing a URL, to know the sheet is loaded.
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT_LONG)
+        } else {
+            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT_LONG)
+        }
+        if #available(iOS 26, *) {
+            let viewMore = app.scrollViews.cells["View More"]
+            if viewMore.exists {
+                viewMore.waitAndTap(timeout: 10)
+            }
+        }
+        mozWaitForElementToNotExist(app.collectionViews.cells[option])
+        mozWaitForElementToNotExist(app.buttons[option])
     }
 }

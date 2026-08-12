@@ -90,13 +90,23 @@ class BookmarksCoordinator: BaseCoordinator,
     }
 
     func start(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
-        let viewModel = EditBookmarkViewModel(parentFolder: parentFolder,
-                                              node: bookmark,
-                                              profile: profile)
-        viewModel.bookmarkCoordinatorDelegate = self
-        let controller = EditBookmarkViewController(viewModel: viewModel,
-                                                    windowUUID: windowUUID)
-        router.setRootViewController(controller)
+        if featureFlagsProvider.isEnabled(.newBookmarkFolderTree) {
+            let viewModel = GroupedEditBookmarkViewModel(parentFolder: parentFolder,
+                                                         node: bookmark,
+                                                         profile: profile)
+            viewModel.bookmarkCoordinatorDelegate = self
+            let controller = GroupedEditBookmarkViewController(viewModel: viewModel,
+                                                               windowUUID: windowUUID)
+            router.setRootViewController(controller)
+        } else {
+            let viewModel = EditBookmarkViewModel(parentFolder: parentFolder,
+                                                  node: bookmark,
+                                                  profile: profile)
+            viewModel.bookmarkCoordinatorDelegate = self
+            let controller = EditBookmarkViewController(viewModel: viewModel,
+                                                        windowUUID: windowUUID)
+            router.setRootViewController(controller)
+        }
     }
 
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode) {
@@ -167,6 +177,9 @@ class BookmarksCoordinator: BaseCoordinator,
                                       parentFolderSelector: ParentFolderSelector?,
                                       groupedParentFolderSelector: GroupedParentFolderSelector?) -> UIViewController {
         if type == .bookmark {
+            if featureFlagsProvider.isEnabled(.newBookmarkFolderTree) {
+                return makeGroupedEditBookmarkController(for: nil, folder: parentFolder)
+            }
             return makeEditBookmarkController(for: nil, folder: parentFolder)
         }
         if type == .folder {
@@ -182,6 +195,9 @@ class BookmarksCoordinator: BaseCoordinator,
 
     private func makeDetailController(for node: FxBookmarkNode, folder: FxBookmarkNode) -> UIViewController {
         if node.type == .bookmark {
+            if featureFlagsProvider.isEnabled(.newBookmarkFolderTree) {
+                return makeGroupedEditBookmarkController(for: node, folder: folder)
+            }
             return makeEditBookmarkController(for: node, folder: folder)
         }
         if node.type == .folder {
@@ -202,6 +218,25 @@ class BookmarksCoordinator: BaseCoordinator,
         setBackBarButtonItemTitle(viewModel.getBackNavigationButtonTitle)
         let controller = EditBookmarkViewController(viewModel: viewModel,
                                                     windowUUID: windowUUID)
+        controller.onViewWillAppear = { [weak self] in
+            self?.libraryNavigationHandler?.setNavigationBarHidden(true)
+        }
+        controller.onViewWillDisappear = { [weak self, weak controller] in
+            guard !(controller?.transitionCoordinator?.isInteractive ?? false) else { return }
+            self?.libraryNavigationHandler?.setNavigationBarHidden(false)
+        }
+        return controller
+    }
+
+    private func makeGroupedEditBookmarkController(for node: FxBookmarkNode?, folder: FxBookmarkNode) -> UIViewController {
+        let viewModel = GroupedEditBookmarkViewModel(parentFolder: folder, node: node, profile: profile)
+        viewModel.onBookmarkSaved = { [weak self] in
+            self?.reloadLastBookmarksController()
+        }
+        viewModel.bookmarkCoordinatorDelegate = self
+        setBackBarButtonItemTitle(viewModel.getBackNavigationButtonTitle)
+        let controller = GroupedEditBookmarkViewController(viewModel: viewModel,
+                                                           windowUUID: windowUUID)
         controller.onViewWillAppear = { [weak self] in
             self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }

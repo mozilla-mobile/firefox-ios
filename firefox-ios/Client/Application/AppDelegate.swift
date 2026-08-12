@@ -156,6 +156,7 @@ class AppDelegate: UIResponder,
         }
 
         if #available(iOS 17.0, *) {
+            ResetTipsSetting.resetDatastoreIfNeeded(prefs: profile.prefs)
             do {
                 try Tips.configure()
             } catch {

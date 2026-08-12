@@ -11,6 +11,10 @@ protocol TabTraySelectorsSet {
     var FIRST_CELL: Selector { get }
     var NEW_TAB_BUTTON: Selector { get }
     var UNDO_BUTTON: Selector { get }
+    var CONTEXT_MENU_ADD_TO_BOOKMARKS: Selector { get }
+    var CONTEXT_MENU_COPY_URL: Selector { get }
+    var CONTEXT_MENU_CLOSE_TAB: Selector { get }
+    var contextMenuOptions: [Selector] { get }
     func cell(named name: String) -> Selector
     func tabCellWithIndex(_ index: Int, _ urlLabel: String, _ selectedTab: String) -> Selector
     func tabCellAtIndex(index: Int) -> Selector
@@ -63,6 +67,29 @@ struct TabTraySelectors: TabTraySelectorsSet {
         groups: ["tabtray"]
     )
 
+    // Long-press (tab peek) context menu actions. Titles come from `String.TabPeek*` in Strings.swift.
+    let CONTEXT_MENU_ADD_TO_BOOKMARKS = Selector.collectionViewButtonByLabel(
+        "Add to Bookmarks",
+        description: "Add to Bookmarks option in the tab long-press context menu",
+        groups: ["tabtray"]
+    )
+
+    let CONTEXT_MENU_COPY_URL = Selector.collectionViewButtonByLabel(
+        "Copy URL",
+        description: "Copy URL option in the tab long-press context menu",
+        groups: ["tabtray"]
+    )
+
+    let CONTEXT_MENU_CLOSE_TAB = Selector.collectionViewButtonByLabel(
+        "Close Tab",
+        description: "Close Tab option in the tab long-press context menu",
+        groups: ["tabtray"]
+    )
+
+    var contextMenuOptions: [Selector] {
+        [CONTEXT_MENU_ADD_TO_BOOKMARKS, CONTEXT_MENU_COPY_URL, CONTEXT_MENU_CLOSE_TAB]
+    }
+
     func cell(named name: String) -> Selector {
         Selector.staticTextByLabel(
             name,
@@ -103,5 +130,6 @@ struct TabTraySelectors: TabTraySelectorsSet {
 
     var all: [Selector] { [TABSTRAY_CONTAINER, COLLECTION_VIEW,
                            IPHONE_TAB_TRAY_COLLECTION_VIEW, FIRST_CELL, NEW_TAB_BUTTON,
-                            UNDO_BUTTON] }
+                            UNDO_BUTTON, CONTEXT_MENU_ADD_TO_BOOKMARKS,
+                            CONTEXT_MENU_COPY_URL, CONTEXT_MENU_CLOSE_TAB] }
 }

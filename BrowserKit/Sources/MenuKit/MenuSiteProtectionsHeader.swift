@@ -60,13 +60,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         button.setImage(UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate) ?? UIImage(), for: .normal)
     }
 
-    private lazy var closeButtonBackground: UIVisualEffectView = .build { view in
-        view.translatesAutoresizingMaskIntoConstraints = true
-        view.clipsToBounds = true
-        view.isUserInteractionEnabled = false
-        view.isHidden = true
-    }
-
     private lazy var siteProtectionsContent: UIStackView = .build { [weak self] stack in
         guard let self else { return }
         stack.isLayoutMarginsRelativeArrangement = true
@@ -122,15 +115,13 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             siteProtectionsContent.layer.borderWidth = UX.siteProtectionsContentBorderWidth
         }
         siteProtectionsContent.layoutIfNeeded()
-        closeButtonBackground.frame = closeButton.frame
-        closeButtonBackground.layer.cornerRadius = closeButtonBackground.frame.height / 2
         applyNovaProtectionsGradient()
     }
 
     private func setupViews() {
         contentLabels.addArrangedSubview(titleLabel)
         contentLabels.addArrangedSubview(subtitleLabel)
-        addSubviews(contentLabels, favicon, closeButtonBackground, closeButton, siteProtectionsContent)
+        addSubviews(contentLabels, favicon, closeButton, siteProtectionsContent)
         siteProtectionsContent.addArrangedSubview(siteProtectionsIcon)
         siteProtectionsContent.addArrangedSubview(siteProtectionsLabel)
         siteProtectionsContent.addArrangedSubview(siteProtectionsMoreSettingsIcon)
@@ -226,13 +217,9 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             closeButton.layer.cornerRadius = 0.5 * size
         }
         if #available(iOS 26.0, *), theme.isNova {
-            let glass = UIGlassEffect(style: .regular)
-            glass.tintColor = theme.colors.layer2
-            closeButtonBackground.effect = glass
-            closeButtonBackground.isHidden = false
-            closeButton.backgroundColor = .clear
+            closeButton.applyProminentClearGlassConfiguration(backgroundColor: theme.colors.layer2,
+                                                              foregroundColor: theme.colors.iconPrimary)
         } else {
-            closeButtonBackground.isHidden = true
             let closeBackground = theme.isNova ? theme.colors.layer2 : theme.colors.actionCloseButton
             closeButton.backgroundColor = closeBackground.withAlphaComponent(mainMenuHelper.backgroundAlpha())
         }

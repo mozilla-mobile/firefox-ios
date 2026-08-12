@@ -256,15 +256,16 @@ final class TabDisplayPanelViewController: UIViewController,
             if statusBarView.superview == nil {
                 view.addSubview(statusBarView)
             }
-            statusBarView.backgroundColor = theme.colors.layer3
+            statusBarView.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
             adjustStatusBarFrameIfNeeded()
         } else {
             gradientLayer.isHidden = false
             statusBarView.removeFromSuperview()
             gradientLayer.locations = [0.0, 0.12]
+            let fadeColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
             gradientLayer.colors = [
-                theme.colors.layer3.cgColor,
-                theme.colors.layer3.withAlphaComponent(0.0).cgColor
+                fadeColor.cgColor,
+                fadeColor.withAlphaComponent(0.0).cgColor
             ]
         }
     }
@@ -343,6 +344,8 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+
         // Skip if a newer panel has already re-subscribed for this window: removing the shared
         // `.tabsPanel` component here would wipe the state the newly-opened tab tray depends on.
         guard Self.latestSubscriptionGeneration[windowUUID] == subscriptionGeneration else { return }
