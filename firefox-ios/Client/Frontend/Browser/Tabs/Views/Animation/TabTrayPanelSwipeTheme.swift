@@ -26,7 +26,12 @@ struct TabTrayPanelSwipeTheme: Theme {
             borderAccent: mixColor(\.borderAccent),
             borderAccentPrivate: mixColor(\.borderAccentPrivate),
             shadowDefault: mixColor(\.shadowDefault),
-            iconDisabled: mixColor(\.iconDisabled)
+            iconDisabled: mixColor(\.iconDisabled),
+            layer2: mixColor(\.layer2),
+            layerSurfaceLow: mixColor(\.layerSurfaceLow),
+            layerGlassTintNova: from.isNova ? mixColor(\.layerGlassTintNova) : .clear,
+            iconInverted: from.isNova ? mixColor(\.iconInverted) : .clear,
+            actionPrimary: mixColor(\.actionPrimary)
         )
 
         self.type = from.type

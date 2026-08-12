@@ -154,7 +154,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
         signInButton.applyTheme(theme: theme)
-        backgroundColor = theme.colors.layer3
+        backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
     }
 
     @objc
