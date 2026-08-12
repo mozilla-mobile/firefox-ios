@@ -246,8 +246,8 @@ struct HomepageState: ScreenState, Equatable {
             bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState),
             merinoState: MerinoState.defaultState(from: state.merinoState),
             wallpaperState: WallpaperState.defaultState(from: state.wallpaperState),
-			telemetryState: HomepageTelemetryState.defaultState(from: state.telemetryState),
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
+            telemetryState: HomepageTelemetryState.defaultState(from: state.telemetryState),
+            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice
         )
     }
 }
