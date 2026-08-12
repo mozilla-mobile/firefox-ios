@@ -2031,7 +2031,7 @@ extension String {
 extension String {
     public struct NativeErrorPage {
         public static let ButtonLabel = MZLocalizedString(
-            key: "NativeErrorPage.ButtonLabel.v154",
+            key: "NativeErrorPage.ButtonLabel.v155",
             tableName: "NativeErrorPage",
             value: "Try Again",
             comment: "On error page, this is the text on a button that will try to load the page again.")
@@ -2138,7 +2138,7 @@ extension String {
                 value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. %@ can also search the Wayback Machine for an earlier version of this page.",
                 comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox).")
             public static let SearchLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Search.v154",
+                key: "NativeErrorPage.Wayback.Error.Search.v155",
                 tableName: "NativeErrorPage",
                 value: "View archived version",
                 comment: "Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine.")
@@ -2148,12 +2148,12 @@ extension String {
                 value: "Searches the Wayback Machine for an archived version of this page.",
                 comment: "Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked.")
             public static let CheckingLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Checking.v154",
+                key: "NativeErrorPage.Wayback.Error.Checking.v155",
                 tableName: "NativeErrorPage",
                 value: "Checking the archive…",
                 comment: "Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress.")
             public static let CouldNotReachLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.CouldNotReach.v154",
+                key: "NativeErrorPage.Wayback.Error.CouldNotReach.v155",
                 tableName: "NativeErrorPage",
                 value: "We couldn’t reach the archive service.",
                 comment: "Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page.")
