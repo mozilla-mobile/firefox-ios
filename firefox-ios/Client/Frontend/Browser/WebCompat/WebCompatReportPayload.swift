@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 import WebCompatReporterKit
 
 /// One property per Glean metric in `broken_site_report.yaml`, so the field names
@@ -130,9 +131,52 @@ struct WebCompatReportPayload: Equatable {
             title: .WebCompatReporter.Preview.Title,
             closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
+            bullets: summaryBullets,
+            bulletsA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.summary,
             technicalDataTitle: .WebCompatReporter.Preview.TechnicalData,
             technicalDataA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.technicalDataRow
         )
+    }
+
+    /// In the design's order, and only for fields the report actually carries, so the summary
+    /// can't claim data we didn't collect.
+    private var summaryBullets: [String] {
+        let collectedKeys = Set(
+            previewGroups
+                .flatMap { $0.fields }
+                .filter { $0.value != .null }
+                .map { $0.key }
+        )
+        let userAgent = String(
+            format: .WebCompatReporter.Preview.Data.UserAgent,
+            AppName.shortName.rawValue
+        )
+        let bullets: [(text: String, keys: [PreviewField.Key])] = [
+            (pageURLBullet, [.url]),
+            (.WebCompatReporter.Preview.Data.IssueAndDescription, [.reason, .description]),
+            (.WebCompatReporter.Preview.Data.IsTablet, [.isTablet]),
+            (userAgent, [.useragentString, .defaultUseragentString]),
+            (.WebCompatReporter.Preview.Data.TrackingProtectionSetting, [.blockList, .etpCategory]),
+            (.WebCompatReporter.Preview.Data.BlockedTrackers, [.blockedOrigins]),
+            (.WebCompatReporter.Preview.Data.PrivateBrowsingStatus, [.isPrivateBrowsing]),
+            (.WebCompatReporter.Preview.Data.AvailableMemory, [.memory]),
+            (.WebCompatReporter.Preview.Data.PixelDensity, [.devicePixelRatio]),
+            (.WebCompatReporter.Preview.Data.HasTouchscreen, [.hasTouchScreen]),
+            (.WebCompatReporter.Preview.Data.PageLanguages, [.languages]),
+            (.WebCompatReporter.Preview.Data.DeviceLocale, [.defaultLocales]),
+            (.WebCompatReporter.Preview.Data.PageElements, [.fastclick, .marfeel, .mobify])
+        ]
+        return bullets
+            .filter { bullet in bullet.keys.contains(where: collectedKeys.contains) }
+            .map { $0.text }
+    }
+
+    /// The address sits under its own bullet. A line separator rather than a newline, so it stays
+    /// in the same paragraph and keeps the bullet's hanging indent instead of earning a dot.
+    private var pageURLBullet: String {
+        let label: String = .WebCompatReporter.Preview.Data.PageURL
+        guard let url else { return label }
+        return "\(label)\u{2028}[\(url)]"
     }
 
     func makeTechnicalDataViewModel() -> WebCompatTechnicalDataViewModel {

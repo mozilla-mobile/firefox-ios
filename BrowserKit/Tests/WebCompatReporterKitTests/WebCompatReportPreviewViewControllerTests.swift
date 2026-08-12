@@ -13,7 +13,8 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         static let presentationSize = CGSize(width: 390, height: 844)
     }
 
-    func testTappingTechnicalDataRow_notifiesDelegate() throws {
+    // Both cards are single-item sections, so a handler keyed on the wrong one still hits a cell.
+    func testTappingTechnicalDataRow_notifiesDelegate_butTappingTheSummaryDoesNot() throws {
         let delegate = MockWebCompatReportPreviewDelegate()
         let subject = createSubject()
         subject.delegate = delegate
@@ -21,7 +22,12 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         let collectionView = try XCTUnwrap(collectionView(in: subject))
 
         subject.collectionView(collectionView, didSelectItemAt: IndexPath(item: 0, section: 0))
+        XCTAssertEqual(delegate.didTapTechnicalDataCallCount, 0)
 
+        subject.collectionView(
+            collectionView,
+            didSelectItemAt: IndexPath(item: 0, section: collectionView.numberOfSections - 1)
+        )
         XCTAssertEqual(delegate.didTapTechnicalDataCallCount, 1)
     }
 
@@ -38,15 +44,28 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         XCTAssertEqual(delegate.didRequestDismissCallCount, 1)
     }
 
+    func testSummaryCard_appearsOnlyWithBullets() {
+        let withoutBullets = createSubject(bullets: [])
+        let withBullets = createSubject(bullets: ["Page URL"])
+        layout(withoutBullets)
+        layout(withBullets)
+
+        XCTAssertEqual(collectionView(in: withoutBullets)?.numberOfSections, 1)
+        XCTAssertEqual(collectionView(in: withBullets)?.numberOfSections, 2)
+    }
+
     // MARK: - Helpers
 
     private func createSubject(
+        bullets: [String] = ["Page URL"],
         themeManager: ThemeManager = MockThemeManager()
     ) -> WebCompatReportPreviewViewController {
         let viewModel = WebCompatReportPreviewViewModel(
             title: "Report Preview",
             closeAccessibilityLabel: "Close",
             closeA11yIdentifier: "close",
+            bullets: bullets,
+            bulletsA11yIdentifier: "bullets",
             technicalDataTitle: "Technical Data",
             technicalDataA11yIdentifier: "technicalData"
         )
