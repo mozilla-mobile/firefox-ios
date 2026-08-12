@@ -344,6 +344,8 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+
         // Skip if a newer panel has already re-subscribed for this window: removing the shared
         // `.tabsPanel` component here would wipe the state the newly-opened tab tray depends on.
         guard Self.latestSubscriptionGeneration[windowUUID] == subscriptionGeneration else { return }
