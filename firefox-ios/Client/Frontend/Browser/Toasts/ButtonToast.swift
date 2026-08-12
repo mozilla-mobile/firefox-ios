@@ -126,16 +126,11 @@ class ButtonToast: Toast {
         let viewModel = ActionButtonViewModel(
             title: buttonText,
             a11yIdentifier: nil,
+            horizontalInset: UX.buttonPadding,
+            verticalInset: UX.buttonPadding,
             touchUpAction: { [weak self] _ in self?.buttonPressed() }
         )
         roundedButton.configure(viewModel: viewModel)
-
-        NSLayoutConstraint.activate([
-            roundedButton.heightAnchor.constraint(
-                equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * UX.buttonPadding),
-            roundedButton.widthAnchor.constraint(
-                equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.buttonPadding)
-        ])
     }
 
     override func applyTheme(theme: Theme) {
