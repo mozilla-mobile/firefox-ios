@@ -134,13 +134,20 @@ struct ToolbarState: ScreenState, Sendable {
         self.isTranslationsEnabled = isTranslationsEnabled
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
+        self.isAddressBarMinimized = isAddressBarMinimized
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
-        // Does not handle any modern actions
-        return defaultState(from: state)
+        guard let action = action as? ToolbarModernAction else { return defaultState(from: state) }
+
+        switch action {
+        case .userDidScroll(let minimizeAddressBar),
+             .accessoryViewDidShow(let minimizeAddressBar),
+             .keyboardDidHide(let minimizeAddressBar):
+            return state.copy(isAddressBarMinimized: minimizeAddressBar)
+        }
     }
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
@@ -169,7 +176,7 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
-            ToolbarActionType.scrollAlphaNeedsUpdate, ToolbarActionType.readerModeStateChanged,
+            ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
             TranslationsActionType.didStartTranslatingPage,
             TranslationsActionType.translationCompleted,

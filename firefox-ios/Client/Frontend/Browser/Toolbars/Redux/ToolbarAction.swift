@@ -107,12 +107,19 @@ struct ToolbarAction: Action {
     }
 }
 
+enum ToolbarModernAction: ModernAction {
+    // Splits the old scrollAlphaNeedsUpdate into three distinct user/system triggers that all
+    // drive the toolbar's minimized state.
+    case userDidScroll(minimizeAddressBar: Bool)
+    case accessoryViewDidShow(minimizeAddressBar: Bool)
+    case keyboardDidHide(minimizeAddressBar: Bool)
+}
+
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
     case urlDidChange
     case lockIconChanged
-    case scrollAlphaNeedsUpdate
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged
