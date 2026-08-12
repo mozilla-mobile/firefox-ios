@@ -152,12 +152,12 @@ final class OnboardingScreen {
     func handleTermsOfService() {
         let continueButton = tosContinueButton
         BaseTestCase().mozWaitForElementToExist(continueButton, timeout: TIMEOUT_LONG)
-        // The ToS is presented over full screen with a cross-dissolve transition, so the button
-        // can exist before it is hittable and an early tap gets absorbed. Wait for it to be
-        // hittable, then tap again if the screen has not advanced past the button.
+        // The ToS is presented full screen with a cross-dissolve, so the button lingers in the tree
+        // during the transition; retry only if it never leaves, else a spurious tap hits the card below.
         BaseTestCase().mozWaitElementHittable(element: continueButton, timeout: TIMEOUT)
         continueButton.tap()
-        if continueButton.exists {
+        let dismissed = BaseTestCase().mozWaitForElementToNotExist(continueButton, failOnTimeout: false)
+        if !dismissed {
             continueButton.tap()
         }
     }
