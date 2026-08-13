@@ -96,9 +96,14 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(mockTabWebView.takeSnapshotWasCalled)
         XCTAssertEqual(screenshotAction.tab, tab)
         XCTAssertFalse(tab.hasHomeScreenshot)
-        XCTAssertNotNil(tab.screenshot?.cgImage)
-        XCTAssertEqual(tab.screenshot?.cgImage?.width, mockTabWebView.mockSnapshotImage.cgImage?.width)
-        XCTAssertEqual(tab.screenshot?.cgImage?.height, mockTabWebView.mockSnapshotImage.cgImage?.height)
+guard let screenshotBacking = tab.screenshot?.cgImage,
+      let sourceBacking = mockTabWebView.mockSnapshotImage.cgImage else {
+    XCTFail("Expected source and copied image backings")
+    return
+}
+XCTAssertFalse(screenshotBacking === sourceBacking)
+XCTAssertEqual(screenshotBacking.width, sourceBacking.width)
+XCTAssertEqual(screenshotBacking.height, sourceBacking.height)
     }
 
     private func createSubject() -> ScreenshotHelper {
