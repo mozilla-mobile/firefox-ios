@@ -5,7 +5,6 @@
 import Common
 import UIKit
 
-/// Every bullet in one card as a single attributed string, so the dots scale and wrap with the text.
 final class WebCompatPreviewBulletListCell: UICollectionViewListCell, ThemeApplicable, ReusableCell, Notifiable {
     private var bullets: [String] = []
     private var theme: Theme?
@@ -44,14 +43,11 @@ final class WebCompatPreviewBulletListCell: UICollectionViewListCell, ThemeAppli
         self.bullets = bullets
         self.accessibilityIdentifier = accessibilityIdentifier
         isAccessibilityElement = true
-        // Otherwise VoiceOver reads the dot attachment before every line.
         accessibilityLabel = bullets.joined(separator: ". ")
         renderBullets()
     }
 
-    /// Attributed text ignores `adjustsFontForContentSizeCategory`, so font and indent are
-    /// re-resolved on every render. `configure` and `applyTheme` both land here; the guard keeps it
-    /// to one render instead of an unthemed pass followed by a coloured one.
+    /// Attributed text ignores `adjustsFontForContentSizeCategory`, so re-resolve font and indent.
     private func renderBullets() {
         guard let theme, !bullets.isEmpty else { return }
         let font = FXFontStyles.Regular.footnote.scaledFont()
@@ -96,8 +92,7 @@ final class WebCompatPreviewBulletListCell: UICollectionViewListCell, ThemeAppli
         }
         attachment.bounds = CGRect(x: 0, y: (font.xHeight - diameter) / 2, width: diameter, height: diameter)
 
-        // TextKit reads paragraph attributes off the paragraph's first character, so the attachment
-        // has to carry the style or the bullet loses its indent and gap.
+        // TextKit reads paragraph attributes off the first character, so the attachment carries them.
         let run = NSMutableAttributedString(attachment: attachment)
         run.addAttributes(attributes, range: NSRange(location: 0, length: run.length))
         return run

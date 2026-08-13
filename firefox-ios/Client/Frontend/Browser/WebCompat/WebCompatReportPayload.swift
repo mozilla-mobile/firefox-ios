@@ -138,8 +138,6 @@ struct WebCompatReportPayload: Equatable {
         )
     }
 
-    /// In the design's order, and only for fields the report actually carries, so the summary
-    /// can't claim data we didn't collect.
     private var summaryBullets: [String] {
         let collectedKeys = Set(
             previewGroups
@@ -171,8 +169,7 @@ struct WebCompatReportPayload: Equatable {
             .map { $0.text }
     }
 
-    /// An empty list is still sent, so Technical Data prints it, but a bullet off it would promise
-    /// hostnames the report doesn't carry.
+    /// An empty list is still sent, so it prints in Technical Data but earns no bullet here.
     private func carriesData(_ value: WebCompatTechnicalDataViewModel.PreviewValue) -> Bool {
         switch value {
         case .null:
@@ -184,8 +181,7 @@ struct WebCompatReportPayload: Equatable {
         }
     }
 
-    /// The address sits under its own bullet. A line separator rather than a newline, so it stays
-    /// in the same paragraph and keeps the bullet's hanging indent instead of earning a dot.
+    /// A line separator, not a newline: same paragraph, so the address keeps the indent and no dot.
     private var pageURLBullet: String {
         let label: String = .WebCompatReporter.Preview.Data.PageURL
         guard let url else { return label }

@@ -148,7 +148,6 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertEqual(viewModel.technicalDataTitle, .WebCompatReporter.Preview.TechnicalData)
     }
 
-    // The summary can't claim data the report doesn't carry, and the order is the design's.
     func testMakeReportPreviewViewModel_bulletsCoverOnlyCollectedFields() {
         var payload = WebCompatReportPayload()
         payload.url = "https://example.com"
@@ -162,8 +161,6 @@ final class WebCompatReportPayloadTests: XCTestCase {
         ])
     }
 
-    // Paired with testPreviewGroups_optedInWithNothingBlocked_showsAnEmptyListNotNull: the field is
-    // still sent and still printed, but it earns no bullet.
     func testMakeReportPreviewViewModel_dropsTheBulletForAnEmptyList() {
         var payload = WebCompatReportPayload()
         payload.blockedOrigins = []

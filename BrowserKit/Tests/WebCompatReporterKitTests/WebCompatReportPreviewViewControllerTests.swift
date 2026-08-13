@@ -13,7 +13,6 @@ final class WebCompatReportPreviewViewControllerTests: XCTestCase {
         static let presentationSize = CGSize(width: 390, height: 844)
     }
 
-    // Both cards are single-item sections, so a handler keyed on the wrong one still hits a cell.
     func testTappingTechnicalDataRow_notifiesDelegate_butTappingTheSummaryDoesNot() throws {
         let delegate = MockWebCompatReportPreviewDelegate()
         let subject = createSubject()
