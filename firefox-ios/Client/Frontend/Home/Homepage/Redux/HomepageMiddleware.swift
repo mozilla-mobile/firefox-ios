@@ -81,7 +81,12 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
               let type = extras.itemType else {
             return
         }
-        self.homepageTelemetry.sendSectionLabeledCounter(for: type)
+        switch type {
+        case .quickAnswersEntryPoint:
+            self.homepageTelemetry.sendQuickAnswersEntryPointImpressionEvent()
+        default:
+            self.homepageTelemetry.sendSectionLabeledCounter(for: type)
+        }
     }
 
     private func dispatchPrivacyNoticeConfigurationAction(action: Action) {

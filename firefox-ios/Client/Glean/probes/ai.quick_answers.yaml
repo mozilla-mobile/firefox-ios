@@ -23,6 +23,19 @@ $tags:
 # Add your new metrics and/or events here.
 
 ai.quick_answers:
+  entry_point_impression:
+    type: event
+    description: |
+      Recorded when the Quick Answers entry point, the button in the homepage header, is visible to the user.
+      Recorded at most once per homepage view, see `homepage.viewed` for more details on what is considered
+      a homepage view.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
   requested:
     type: event
     description: |

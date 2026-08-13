@@ -15,6 +15,7 @@ struct HomepageTelemetry {
         case bookmark = "bookmark"
         case bookmarkShowAll = "bookmarks_show_all_button"
         case story = "story"
+        case quickAnswersEntryPoint = "quick_answers_entry_point"
 
         var sectionName: String {
             switch self {
@@ -26,6 +27,8 @@ struct HomepageTelemetry {
                 return "bookmarks"
             case .story:
                 return "stories"
+            case .quickAnswersEntryPoint:
+                return "header"
             }
         }
     }
@@ -120,5 +123,9 @@ struct HomepageTelemetry {
 
     func sendOpenInPrivateTabEventForPocket() {
         gleanWrapper.recordEvent(for: GleanMetrics.Pocket.openInPrivateTab)
+    }
+
+    func sendQuickAnswersEntryPointImpressionEvent() {
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.entryPointImpression)
     }
 }

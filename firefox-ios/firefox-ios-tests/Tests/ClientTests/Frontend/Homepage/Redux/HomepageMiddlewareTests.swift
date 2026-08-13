@@ -234,6 +234,24 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockGleanWrapper?.savedLabel as? String, "top_sites")
     }
 
+    func test_sectionSeenAction_withQuickAnswersEntryPoint_sendsImpressionEvent() throws {
+        let subject = createSubject()
+        let action = HomepageAction(
+            telemetryExtras: HomepageTelemetryExtras(itemType: .quickAnswersEntryPoint, topSitesTelemetryConfig: nil),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.sectionSeen
+        )
+
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
+        let event = GleanMetrics.AiQuickAnswers.entryPointImpression
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 0)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     // MARK: - Search Bar
     func test_initializeAction_configuresSearchBar() throws {
         setupNimbusSearchBarTesting(isEnabled: true)
