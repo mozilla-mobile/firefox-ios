@@ -159,8 +159,6 @@ final class WebCompatTechnicalDataViewControllerTests: XCTestCase {
             title: "Technical Data",
             closeAccessibilityLabel: "Close",
             closeA11yIdentifier: "close",
-            screenshotAccessibilityLabel: "Screenshot",
-            screenshotA11yIdentifier: "screenshot",
             sections: sections
         )
     }

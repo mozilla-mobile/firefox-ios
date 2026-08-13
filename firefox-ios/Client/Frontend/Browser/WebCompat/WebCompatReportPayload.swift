@@ -130,9 +130,6 @@ struct WebCompatReportPayload: Equatable {
             title: .WebCompatReporter.Preview.Title,
             closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
-            // Unread while the thumbnail is off; they come back with the screenshot in FXIOS-16450.
-            screenshotAccessibilityLabel: "",
-            screenshotA11yIdentifier: "",
             sections: previewGroups.map { group in
                 let groupID = group.id.rawValue
                 return WebCompatTechnicalDataViewModel.PreviewSection(

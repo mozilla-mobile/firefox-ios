@@ -16,6 +16,8 @@ enum WebCompatReporterUX {
     enum Card {
         static let cornerRadius: CGFloat = 16
         static let contentInset: CGFloat = 16
+        static let largeCornerRadius: CGFloat = 26
+        static let verticalInset: CGFloat = 14.5
     }
 
     enum Sheet {
