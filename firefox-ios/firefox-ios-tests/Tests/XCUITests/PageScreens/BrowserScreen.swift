@@ -138,6 +138,16 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForValueContains(urlField, value: "example.com")
     }
 
+    func exampleDomainTextExists(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let exampleDomainText = sel.STATIC_TEXT_EXAMPLE_DOMAIN.element(in: app)
+        return BaseTestCase().mozWaitForElementToExist(exampleDomainText, timeout: timeout, failOnTimeout: false)
+    }
+
+    func bookOfMozillaPageContentExists(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let verseText = sel.BOOK_OF_MOZILLA_VERSE_TEXT.element(in: app)
+        return BaseTestCase().mozWaitForElementToExist(verseText, timeout: timeout, failOnTimeout: false)
+    }
+
     func clearURL() {
         BaseTestCase().mozWaitForElementToExist(clearButton)
         clearButton.waitAndTap()
@@ -460,6 +470,11 @@ final class BrowserScreen {
     func waitForClipboardToastToDisappear(timeout: TimeInterval = TIMEOUT) {
         let clipboardToast = sel.CLIPBOARD_TOAST.element(in: app)
         BaseTestCase().mozWaitForElementToNotExist(clipboardToast, timeout: timeout)
+    }
+
+    func bookmarkSavedToastExists(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let bookmarkToast = sel.BOOKMARK_SAVED_TOAST.element(in: app)
+        return BaseTestCase().mozWaitForElementToExist(bookmarkToast, timeout: timeout, failOnTimeout: false)
     }
 
     func assertLinkExists(named name: String, timeout: TimeInterval = TIMEOUT) {

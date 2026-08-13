@@ -331,6 +331,8 @@
         "JumpBackInTests\/testPrivateTab()",
         "JumpBackInTests\/testPrivateTab_tabTrayExperimentOff()",
         "JumpBackInTests\/testPrivateTab_tabTrayExperimentOn()",
+        "KeyboardShortcutsTests",
+        "KeyboardShortcutsTests\/testOpenAndCloseTabWithKeyboardShortcut()",
         "LegacyOnboardingTests",
         "LibraryTests",
         "LibraryTestsIpad",

@@ -136,6 +136,8 @@
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
         "JumpBackInTests",
+        "KeyboardShortcutsTests",
+        "KeyboardShortcutsTests\/testOpenAndCloseTabWithKeyboardShortcut()",
         "LegacyOnboardingTests",
         "LibraryTests",
         "LibraryTestsIpad",
