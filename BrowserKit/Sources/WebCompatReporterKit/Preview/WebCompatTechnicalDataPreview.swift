@@ -14,7 +14,6 @@ private struct WebCompatTechnicalDataHost: UIViewControllerRepresentable {
     typealias PreviewSection = WebCompatTechnicalDataViewModel.PreviewSection
     typealias PreviewValue = WebCompatTechnicalDataViewModel.PreviewValue
 
-    let screenshot: UIImage?
     var themeType: ThemeType = .light
 
     func makeUIViewController(context: Context) -> UINavigationController {
@@ -22,8 +21,6 @@ private struct WebCompatTechnicalDataHost: UIViewControllerRepresentable {
             title: "Technical Data",
             closeAccessibilityLabel: "Close",
             closeA11yIdentifier: "WebCompatReporter.Preview.Close",
-            screenshotAccessibilityLabel: "Screenshot of the page you are reporting",
-            screenshotA11yIdentifier: "WebCompatReporter.Preview.Screenshot",
             sections: Self.sampleSections
         )
         // The screen reads its colors from the manager, so the canvas appearance alone can't
@@ -36,7 +33,6 @@ private struct WebCompatTechnicalDataHost: UIViewControllerRepresentable {
             windowUUID: .DefaultUITestingUUID,
             themeManager: themeManager
         )
-        controller.updateScreenshot(screenshot)
         return UINavigationController(rootViewController: controller)
     }
 
@@ -88,51 +84,15 @@ private struct WebCompatTechnicalDataHost: UIViewControllerRepresentable {
     ]
 }
 
-private func previewSampleScreenshot() -> UIImage {
-    let size = CGSize(width: 320, height: 1400)
-    let renderer = UIGraphicsImageRenderer(size: size)
-    return renderer.image { context in
-        UIColor.white.setFill()
-        context.fill(CGRect(origin: .zero, size: size))
-
-        "Croque Monsieur".draw(
-            at: CGPoint(x: 16, y: 24),
-            withAttributes: [.font: UIFont.boldSystemFont(ofSize: 28), .foregroundColor: UIColor.black]
-        )
-
-        UIColor(red: 0.72, green: 0.55, blue: 0.36, alpha: 1).setFill()
-        UIBezierPath(
-            roundedRect: CGRect(x: 16, y: 72, width: size.width - 32, height: 180),
-            cornerRadius: 8
-        ).fill()
-
-        UIColor.black.withAlphaComponent(0.12).setFill()
-        var lineY: CGFloat = 280
-        while lineY < size.height - 20 {
-            UIBezierPath(
-                roundedRect: CGRect(x: 16, y: lineY, width: size.width - 32, height: 10),
-                cornerRadius: 3
-            ).fill()
-            lineY += 26
-        }
-    }
-}
-
 @available(iOS 17.0, *)
-#Preview("With screenshot") {
-    WebCompatTechnicalDataHost(screenshot: previewSampleScreenshot())
+#Preview("Technical Data") {
+    WebCompatTechnicalDataHost()
         .ignoresSafeArea()
 }
 
 @available(iOS 17.0, *)
-#Preview("Screenshot off") {
-    WebCompatTechnicalDataHost(screenshot: nil)
-        .ignoresSafeArea()
-}
-
-@available(iOS 17.0, *)
-#Preview("With screenshot (dark)") {
-    WebCompatTechnicalDataHost(screenshot: previewSampleScreenshot(), themeType: .dark)
+#Preview("Technical Data (dark)") {
+    WebCompatTechnicalDataHost(themeType: .dark)
         .ignoresSafeArea()
 }
 #endif
