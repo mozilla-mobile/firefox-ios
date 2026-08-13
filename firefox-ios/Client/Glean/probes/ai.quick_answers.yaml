@@ -30,7 +30,7 @@ ai.quick_answers:
       Recorded at most once per homepage view, see `homepage.viewed` for more details on what is considered
       a homepage view.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16567
+      - https://github.com/mozilla-mobile/firefox-ios/issues/35176
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35175
     notification_emails:
