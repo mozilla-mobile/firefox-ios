@@ -60,15 +60,21 @@ struct MicrosurveyState: ScreenState {
 
         switch action.actionType {
         case MicrosurveyActionType.closeSurvey:
-            return state.copy(shouldDismiss: true, showPrivacy: false)
+            return state
+                .copy(shouldDismiss: true)
+                .copy(showPrivacy: false)
         case MicrosurveyActionType.tapPrivacyNotice:
-            return state.copy(shouldDismiss: false, showPrivacy: true)
+            return state
+                .copy(shouldDismiss: false)
+                .copy(showPrivacy: true)
         default:
             return defaultState(from: state)
         }
     }
 
     static func defaultState(from state: MicrosurveyState) -> MicrosurveyState {
-        return state.copy(shouldDismiss: false, showPrivacy: false)
+        return state
+            .copy(shouldDismiss: false)
+            .copy(showPrivacy: false)
     }
 }
