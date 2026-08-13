@@ -37,12 +37,8 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
-<<<<<<< HEAD
                           WebCompatReportCoordinatorDelegate,
-=======
-                          WebCompatReportCoordinatorNavigationDelegate,
                           BrowsingSettingsDelegate,
->>>>>>> f5447df34 (Add FXIOS-15840 [Ad Blocker] Add ad blocker badge to menu - #33889 (#35180))
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)

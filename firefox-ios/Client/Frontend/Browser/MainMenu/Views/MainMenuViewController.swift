@@ -488,15 +488,6 @@ class MainMenuViewController: UIViewController,
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
         }
 
-<<<<<<< HEAD
-=======
-        if themeManager.getCurrentTheme(for: windowUUID).isNova {
-            stateImage = isProtectionsOn
-                ? StandardImageIdentifiers.Small.shieldCheckmarkFillGradient
-                : StandardImageIdentifiers.Small.shieldSlashFillCritical
-            shouldUseRenderMode = false
-        }
-
         let adBlocker: MenuSiteAdBlockerBadgeData? = {
             guard featureFlagsProvider.isEnabled(.adBlocker),
                   featureFlagsProvider.isEnabled(.adBlockerBadge) else { return nil }
@@ -509,7 +500,6 @@ class MainMenuViewController: UIViewController,
                                               shouldUseRenderMode: true)
         }()
 
->>>>>>> f5447df34 (Add FXIOS-15840 [Ad Blocker] Add ad blocker badge to menu - #33889 (#35180))
         menuContent.siteProtectionHeader.setupDetails(
             title: siteProtectionsData.title,
             subtitle: siteProtectionsData.subtitle,

@@ -100,15 +100,12 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             updateBadgesAxis()
         }
-<<<<<<< HEAD
-=======
     }
 
     private func updateBadgesAxis() {
         let isLarge = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
         badgesStack.axis = isLarge ? .vertical : .horizontal
         badgesStack.alignment = isLarge ? .leading : .center
->>>>>>> f5447df34 (Add FXIOS-15840 [Ad Blocker] Add ad blocker badge to menu - #33889 (#35180))
     }
 
     private func setupViews() {
@@ -147,19 +144,8 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
             badgesStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 
-<<<<<<< HEAD
-            siteProtectionsTopFromLabels,
-            siteProtectionsTopFromFavicon,
-            siteProtectionsContent.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
-            siteProtectionsContent.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            siteProtectionsContent.leadingAnchor.constraint(equalTo: favicon.leadingAnchor)
-=======
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
->>>>>>> f5447df34 (Add FXIOS-15840 [Ad Blocker] Add ad blocker badge to menu - #33889 (#35180))
         ])
 
         closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
@@ -189,11 +175,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         } else {
             adBlockerBadge.removeFromSuperview()
         }
-<<<<<<< HEAD
-        siteProtectionsIcon.image = siteProtectionsImage
-
-=======
->>>>>>> f5447df34 (Add FXIOS-15840 [Ad Blocker] Add ad blocker badge to menu - #33889 (#35180))
         let image = FaviconImageViewModel(siteURLString: image,
                                           faviconCornerRadius: UX.favIconSize / 2)
         favicon.setFavicon(image)
@@ -215,35 +196,9 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
-<<<<<<< HEAD
         closeButton.tintColor = theme.colors.iconSecondary
         closeButton.backgroundColor = theme.colors.actionCloseButton.withAlphaComponent(mainMenuHelper.backgroundAlpha())
-        siteProtectionsLabel.textColor = theme.colors.textSecondary
-        siteProtectionsContent.layer.borderColor = theme.colors.actionSecondaryHover.cgColor
-        if #available(iOS 26.0, *) {
-            let backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper.backgroundAlpha())
-            siteProtectionsContent.backgroundColor = backgroundColor
-        } else {
-            siteProtectionsContent.backgroundColor = .clear
-        }
-        siteProtectionsIcon.tintColor = theme.colors.iconSecondary
-        siteProtectionsMoreSettingsIcon.tintColor = theme.colors.iconSecondary
-=======
-        closeButton.tintColor = theme.isNova ? theme.colors.iconPrimary : theme.colors.iconSecondary
-        if theme.isNova {
-            let size = UX.novaCloseButtonSize
-            closeButton.updateButtonSize(CGSize(width: size, height: size))
-            closeButton.layer.cornerRadius = 0.5 * size
-        }
-        if #available(iOS 26.0, *), theme.isNova {
-            closeButton.applyProminentClearGlassConfiguration(backgroundColor: theme.colors.layer2,
-                                                              foregroundColor: theme.colors.iconPrimary)
-        } else {
-            let closeBackground = theme.isNova ? theme.colors.layer2 : theme.colors.actionCloseButton
-            closeButton.backgroundColor = closeBackground.withAlphaComponent(mainMenuHelper.backgroundAlpha())
-        }
         siteProtectionsBadge.applyTheme(theme: theme)
         adBlockerBadge.applyTheme(theme: theme)
->>>>>>> f5447df34 (Add FXIOS-15840 [Ad Blocker] Add ad blocker badge to menu - #33889 (#35180))
     }
 }
