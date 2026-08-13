@@ -158,7 +158,7 @@ final class MainMenuStateTests: XCTestCase {
 
         XCTAssertNil(newState.navigationDestination)
     }
-    
+
     @MainActor
     func testShouldDismissIsResetAfterNextAction() {
         let initialState = createSubject()
