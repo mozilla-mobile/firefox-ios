@@ -8,6 +8,7 @@ import Shared
 /// Please add new features alphabetically.
 enum FeatureFlagID: String, CaseIterable {
     case adBlocker
+    case adBlockerBadge
     case addressAutofillEdit
     case addressBarGestureToOpenTabTrayCloseTab
     case addressBarGestureToOpenTabTrayInteractive
@@ -95,6 +96,7 @@ enum FeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .adBlocker,
+                .adBlockerBadge,
                 .addressBarGestureToOpenTabTrayCloseTab,
                 .addressBarGestureToOpenTabTrayInteractive,
                 .addressBarGestureToOpenTabTraySwipe,

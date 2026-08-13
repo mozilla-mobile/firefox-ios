@@ -499,7 +499,8 @@ class MainMenuViewController: UIViewController,
         }
 
         let adBlocker: MenuSiteAdBlockerBadgeData? = {
-            guard featureFlagsProvider.isEnabled(.adBlocker) else { return nil }
+            guard featureFlagsProvider.isEnabled(.adBlocker),
+                  featureFlagsProvider.isEnabled(.adBlockerBadge) else { return nil }
             let isAdBlockerOn = profile.prefs.boolForKey(PrefsKeys.BlockAds) ?? false
             let adBlockerImage = isAdBlockerOn
                 ? StandardImageIdentifiers.Medium.adBlockerCheckmark

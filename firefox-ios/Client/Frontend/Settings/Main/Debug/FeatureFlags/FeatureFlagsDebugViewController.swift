@@ -39,6 +39,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .adBlockerBadge,
+                titleText: format(string: "Ad Blocker Badge"),
+                statusText: format(string: "Toggle to show the Ad Blocker badge in the Site Menu.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .addressBarGestureToOpenTabTrayInteractive,
                 titleText: format(string: "Address bar gesture interactive"),
                 statusText: format(string: "Toggle to enable fancier animations for address bar swipe gestures")

@@ -33,6 +33,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .adBlocker:
             return checkAdBlockerFeature()
 
+        case .adBlockerBadge:
+            return checkAdBlockerBadgeFeature()
+
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
@@ -432,6 +435,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkAdBlockerFeature() -> Bool {
         return nimbus.features.adBlockerFeature.value().enabled
+    }
+
+    private func checkAdBlockerBadgeFeature() -> Bool {
+        return nimbus.features.adBlockerFeature.value().badgeEnabled
     }
 
     func checkStartAtHomeConfiguration() -> StartAtHome {
