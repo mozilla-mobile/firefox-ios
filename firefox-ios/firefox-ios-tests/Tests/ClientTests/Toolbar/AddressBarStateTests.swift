@@ -957,18 +957,15 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let initialState = ToolbarState(windowUUID: windowUUID)
         let reducer = ToolbarState.reducer
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                scrollAlpha: 0,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-            )
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.scrollAlpha, 0)
-        XCTAssertNotEqual(initialState.scrollAlpha, newState.scrollAlpha)
+        XCTAssertEqual(newState.isAddressBarMinimized, true)
+        XCTAssertNotEqual(initialState.isAddressBarMinimized, newState.isAddressBarMinimized)
     }
 
     func test_cancelEditOnHomepageAction_withURL_returnsExpectedState() {
@@ -1284,7 +1281,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             shouldAnimate: toolbarState.shouldAnimate,
             isTranslucent: toolbarState.isTranslucent,
             previousTabScreenshot: toolbarState.previousTabScreenshot,
-            nextTabScreenshot: toolbarState.nextTabScreenshot)
+            nextTabScreenshot: toolbarState.nextTabScreenshot,
+            isAddressBarMinimized: toolbarState.isAddressBarMinimized)
     }
 
     // MARK: StoreTestUtility
