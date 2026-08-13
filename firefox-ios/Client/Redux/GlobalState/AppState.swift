@@ -26,10 +26,13 @@ struct AppState: StateType, Sendable {
 
     func componentState<S: ScreenState>(_ s: S.Type,
                                         for component: AppComponent,
-                                        window: WindowUUID?) -> S? {
+                                        window: WindowUUID?,
+                                        screenIdentity: UUID? = nil) -> S? {
         return presentedComponents.components
-            .compactMap {
-                switch ($0, component) {
+            .compactMap { active -> S? in
+                // When an identity is requested, only consider that instance's entry.
+                if let screenIdentity, active.screenIdentity != screenIdentity { return nil }
+                switch (active.state, component) {
                 case (.browserViewController(let state), .browserViewController): return state as? S
                 case (.homepage(let state), .homepage): return state as? S
                 case (.mainMenu(let state), .mainMenu): return state as? S

@@ -153,15 +153,28 @@ enum ComponentState: Sendable, Equatable {
     }
 }
 
+/// Pairs a component's state with the identity of the screen instance that added it, so an instance can
+/// add, remove, and read exactly its own entry. `screenIdentity` is `nil` for screens that don't opt
+/// into per-instance ownership, they keep the original match-by-`(component, window)` behavior.
+struct ActiveComponent: Sendable, Equatable {
+    let screenIdentity: UUID?
+    let state: ComponentState
+}
+
 struct PresentedComponentsState: Sendable, Equatable {
-    let components: [ComponentState]
+    let components: [ActiveComponent]
 
     init() {
         self.components = []
     }
 
-    init(components: [ComponentState]) {
+    init(components: [ActiveComponent]) {
         self.components = components
+    }
+
+    /// Convenience for callers/tests that don't use per-instance identity.
+    init(components: [ComponentState]) {
+        self.components = components.map { ActiveComponent(screenIdentity: nil, state: $0) }
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -169,10 +182,13 @@ struct PresentedComponentsState: Sendable, Equatable {
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
         // This reducer does not handle any modern actions for component state; those are in the legacy reducer, so skip
         // updating active components.
-        var components = state.components
-
         // Reduce each component state (forward the modern action to child reducers which may act on them)
-        components = components.map { ComponentState.reducer.modernReducer($0, action, actionWindowUUID) }
+        let components = state.components.map {
+            ActiveComponent(
+                screenIdentity: $0.screenIdentity,
+                state: ComponentState.reducer.modernReducer($0.state, action, actionWindowUUID)
+            )
+        }
 
         return PresentedComponentsState(components: components)
     }
@@ -181,64 +197,60 @@ struct PresentedComponentsState: Sendable, Equatable {
         // Add or remove components from the active component list as needed
         var components = updateActiveComponents(action: action, components: state.components)
 
-        // Reduce each component state
-        components = components.map { ComponentState.reducer.legacyReducer($0, action) }
+        // Reduce each component state, preserving the identity of the screen that owns it.
+        components = components.map {
+            ActiveComponent(screenIdentity: $0.screenIdentity, state: ComponentState.legacyReducer($0.state, action))
+        }
 
         return PresentedComponentsState(components: components)
     }
 
-    private static func updateActiveComponents(action: Action, components: [ComponentState]) -> [ComponentState] {
+    private static func updateActiveComponents(action: Action, components: [ActiveComponent]) -> [ActiveComponent] {
         guard let action = action as? ComponentAction else { return components }
 
         var components = components
 
         switch action.actionType {
         case ComponentActionType.removeComponent:
-            components = components.filter({
-                return $0.associatedAppComponent != action.component || $0.windowUUID != action.windowUUID
-            })
-        case ComponentActionType.addComponent:
-            let uuid = action.windowUUID
-            switch action.component {
-            case .browserViewController:
-                components.append(.browserViewController(BrowserViewControllerState(windowUUID: uuid)))
-            case .homepage:
-                components.append(.homepage(HomepageState(windowUUID: uuid)))
-            case .mainMenu:
-                components.append(.mainMenu(MainMenuState(windowUUID: uuid)))
-            case .microsurvey:
-                components.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
-            case .remoteTabsPanel:
-                components.append(.remoteTabsPanel(RemoteTabsPanelState(windowUUID: uuid)))
-            case .tabsTray:
-                components.append(.tabsTray(TabTrayState(windowUUID: uuid)))
-            case .tabsPanel:
-                components.append(.tabsPanel(TabsPanelState(windowUUID: uuid)))
-            case .tabPeek:
-                components.append(.tabPeek(TabPeekState(windowUUID: uuid)))
-            case .termsOfUse:
-                components.append(.termsOfUse(TermsOfUseState(windowUUID: uuid)))
-            case .trackingProtection:
-                components.append(.trackingProtection(TrackingProtectionState(windowUUID: uuid)))
-            case .toolbar:
-                components.append(.toolbar(ToolbarState(windowUUID: uuid)))
-            case .searchEngineSelection:
-                components.append(.searchEngineSelection(SearchEngineSelectionState(windowUUID: uuid)))
-            case .passwordGenerator:
-                components.append(.passwordGenerator(PasswordGeneratorState(windowUUID: uuid)))
-            case .nativeErrorPage:
-                components.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
-            case .shortcutsLibrary:
-                components.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
-            case .translationSettings:
-                components.append(.translationSettings(TranslationSettingsState(windowUUID: uuid)))
-            case .webCompatReporter:
-                components.append(.webCompatReporter(WebCompatReporterState(windowUUID: uuid)))
+            components = components.filter {
+                let matches = $0.state.associatedAppComponent == action.component && $0.state.windowUUID == action.windowUUID
+                guard matches else { return true }
+                // With an identity, only remove that instance's entry; without one, remove every
+                // matching `(component, window)` entry (the original behavior).
+                if let identity = action.screenIdentity {
+                    return $0.screenIdentity != identity
+                }
+                return false
             }
+        case ComponentActionType.addComponent:
+            let state = makeComponentState(for: action.component, windowUUID: action.windowUUID)
+            components.append(ActiveComponent(screenIdentity: action.screenIdentity, state: state))
         default:
             return components
         }
 
         return components
+    }
+
+    private static func makeComponentState(for component: AppComponent, windowUUID uuid: WindowUUID) -> ComponentState {
+        switch component {
+        case .browserViewController: return .browserViewController(BrowserViewControllerState(windowUUID: uuid))
+        case .homepage: return .homepage(HomepageState(windowUUID: uuid))
+        case .mainMenu: return .mainMenu(MainMenuState(windowUUID: uuid))
+        case .microsurvey: return .microsurvey(MicrosurveyState(windowUUID: uuid))
+        case .remoteTabsPanel: return .remoteTabsPanel(RemoteTabsPanelState(windowUUID: uuid))
+        case .tabsTray: return .tabsTray(TabTrayState(windowUUID: uuid))
+        case .tabsPanel: return .tabsPanel(TabsPanelState(windowUUID: uuid))
+        case .tabPeek: return .tabPeek(TabPeekState(windowUUID: uuid))
+        case .termsOfUse: return .termsOfUse(TermsOfUseState(windowUUID: uuid))
+        case .trackingProtection: return .trackingProtection(TrackingProtectionState(windowUUID: uuid))
+        case .toolbar: return .toolbar(ToolbarState(windowUUID: uuid))
+        case .searchEngineSelection: return .searchEngineSelection(SearchEngineSelectionState(windowUUID: uuid))
+        case .passwordGenerator: return .passwordGenerator(PasswordGeneratorState(windowUUID: uuid))
+        case .nativeErrorPage: return .nativeErrorPage(NativeErrorPageState(windowUUID: uuid))
+        case .shortcutsLibrary: return .shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid))
+        case .translationSettings: return .translationSettings(TranslationSettingsState(windowUUID: uuid))
+        case .webCompatReporter: return .webCompatReporter(WebCompatReporterState(windowUUID: uuid))
+        }
     }
 }
