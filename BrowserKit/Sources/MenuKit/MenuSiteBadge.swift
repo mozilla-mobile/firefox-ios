@@ -40,7 +40,7 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityTraits = .button
+        label.isAccessibilityElement = false
     }
 
     private var icon: UIImageView = .build { imageView in
@@ -59,6 +59,8 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
     init(mainMenuHelper: MainMenuInterface) {
         self.mainMenuHelper = mainMenuHelper
         super.init(frame: .zero)
+        isAccessibilityElement = true
+        accessibilityTraits = .button
         setupViews()
     }
 
@@ -95,6 +97,7 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
 
     func configure(text: String, iconName: String, useTemplate: Bool) {
         label.text = text
+        accessibilityLabel = text
         let image: UIImage = useTemplate
             ? UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
             : UIImage(named: iconName) ?? UIImage()

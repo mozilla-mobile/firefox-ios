@@ -91,10 +91,24 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     init() {
         super.init(frame: .zero)
         setupViews()
+        updateBadgesAxis()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            updateBadgesAxis()
+        }
+    }
+
+    private func updateBadgesAxis() {
+        let isLarge = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        badgesStack.axis = isLarge ? .vertical : .horizontal
+        badgesStack.alignment = isLarge ? .leading : .center
     }
 
     private func setupViews() {
