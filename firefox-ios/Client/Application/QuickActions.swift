@@ -82,7 +82,7 @@ struct QuickActionsImplementation: QuickActions {
         case .mergeWindows:
             let mergeWindowsShortcut = UIMutableApplicationShortcutItem(
                 type: ShortcutType.mergeWindows.type,
-                localizedTitle: .QuickActionsMergeAllWindowsTitle,
+                localizedTitle: .QuickActionsCombineWindowsTitle,
                 localizedSubtitle: nil,
                 icon: UIApplicationShortcutIcon(templateImageName: StandardImageIdentifiers.Large.tabTray),
                 userInfo: userData as [String: NSSecureCoding]
