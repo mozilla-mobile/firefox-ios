@@ -119,10 +119,15 @@ public final class WebCompatReportPreviewViewController: UIViewController,
             UICollectionViewListCell, SectionID
         > { [weak self] cell, _, _ in
             guard let self else { return }
-            var background = UIBackgroundConfiguration.listGroupedCell()
-            background.backgroundColor = self.theme.colors.layer5
-            background.cornerRadius = WebCompatReporterUX.Card.largeCornerRadius
-            cell.backgroundConfiguration = background
+            cell.configurationUpdateHandler = { [weak self] cell, state in
+                guard let self else { return }
+                var background = UIBackgroundConfiguration.listGroupedCell()
+                background.backgroundColor = state.isHighlighted
+                    ? self.theme.colors.layer5Hover
+                    : self.theme.colors.layer5
+                background.cornerRadius = WebCompatReporterUX.Card.largeCornerRadius
+                cell.backgroundConfiguration = background
+            }
 
             var content = cell.defaultContentConfiguration()
             content.text = self.viewModel.technicalDataTitle
