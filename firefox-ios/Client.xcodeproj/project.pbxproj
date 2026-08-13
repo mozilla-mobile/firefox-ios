@@ -14249,7 +14249,6 @@
 				8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */,
 				1D5A11792EAEC50500DD27F7 /* ResetSearchEnginePrefsSetting.swift */,
 				C2FA00302FFF000100AD1FBD /* ResetTipsSetting.swift */,
-				8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */,
 				5A96FB592D94356C00917B12 /* ScreenshotSetting.swift */,
 				8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */,
 				6894075BBBAF589F845633D0 /* LaunchPairingFromURLSetting.swift */,
