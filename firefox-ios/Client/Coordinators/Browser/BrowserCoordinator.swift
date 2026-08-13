@@ -37,7 +37,12 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
+<<<<<<< HEAD
                           WebCompatReportCoordinatorDelegate,
+=======
+                          WebCompatReportCoordinatorNavigationDelegate,
+                          BrowsingSettingsDelegate,
+>>>>>>> f5447df34 (Add FXIOS-15840 [Ad Blocker] Add ad blocker badge to menu - #33889 (#35180))
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -661,6 +666,40 @@ final class BrowserCoordinator: BaseCoordinator,
         let navigationController = UINavigationController(rootViewController: linkViewController)
         navigationController.modalPresentationStyle = .pageSheet
         reportBrokenSiteViewController?.present(navigationController, animated: true)
+    }
+
+    func presentAdBlockerSettings() {
+        let browsingSettings = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+        browsingSettings.parentCoordinator = self
+        let navigationController = DismissableNavigationViewController(rootViewController: browsingSettings)
+        setupAdBlockerSettingsDetents(for: navigationController)
+        navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        router.present(navigationController, animated: true)
+    }
+
+    private func setupAdBlockerSettingsDetents(for controller: UIViewController) {
+        if #available(iOS 16.0, *) {
+            let customDetent = UISheetPresentationController.Detent.custom(
+                identifier: .init("threeQuarter")
+            ) { context in
+                context.maximumDetentValue * 0.75
+            }
+            controller.sheetPresentationController?.detents = [customDetent, .large()]
+        } else {
+            controller.sheetPresentationController?.detents = [.medium(), .large()]
+        }
+    }
+
+    func pressedMailApp() {
+        guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
+        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        nav.pushViewController(viewController, animated: true)
+    }
+
+    func pressedAutoPlay() {
+        guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
+        let viewController = AutoplaySettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        nav.pushViewController(viewController, animated: true)
     }
 
     func presentSavePDFController() {

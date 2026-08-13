@@ -8,10 +8,13 @@ import Shared
 /// Please add new features alphabetically.
 enum FeatureFlagID: String, CaseIterable {
     case adBlocker
+    case adBlockerBadge
     case addressAutofillEdit
     case addressBarGestureToOpenTabTrayCloseTab
     case addressBarGestureToOpenTabTrayInteractive
     case addressBarGestureToOpenTabTraySwipe
+    case addressBarMenu
+    case adsClient
     case aiKillSwitch
     case badCertDomainErrorPage
     case bookmarksSearchFeature
@@ -95,9 +98,12 @@ enum FeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .adBlocker,
+                .adBlockerBadge,
                 .addressBarGestureToOpenTabTrayCloseTab,
                 .addressBarGestureToOpenTabTrayInteractive,
                 .addressBarGestureToOpenTabTraySwipe,
+                .addressBarMenu,
+                .adsClient,
                 .aiKillSwitch,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
