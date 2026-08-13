@@ -16,6 +16,8 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         }
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
+        static let spinnerSize: CGFloat = 20
+        static let spinnerTitleSpacing: CGFloat = 8
 
         static let contentInsets = NSDirectionalEdgeInsets(
             top: buttonVerticalInset,
@@ -28,6 +30,18 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     private var highlightedBackgroundColor: UIColor?
     private var normalBackgroundColor: UIColor?
     private var foregroundColor: UIColor?
+    private var spinnerTrackColor: UIColor?
+    private var spinnerArcColor: UIColor?
+
+    private lazy var spinnerView: ArcActivityIndicatorView = {
+        let view = ArcActivityIndicatorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        return view
+    }()
+
+    private var didConstrainSpinner = false
+    private var showsSpinner = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,10 +50,26 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         titleLabel?.adjustsFontForContentSizeCategory = true
         isUserInteractionEnabled = true
         isAccessibilityElement = true
+
+        addSubview(spinnerView)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        guard !didConstrainSpinner, let titleLabel else { return }
+        didConstrainSpinner = true
+        NSLayoutConstraint.activate([
+            spinnerView.trailingAnchor.constraint(
+                equalTo: titleLabel.leadingAnchor, constant: -UX.spinnerTitleSpacing
+            ),
+            spinnerView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            spinnerView.widthAnchor.constraint(equalToConstant: UX.spinnerSize),
+            spinnerView.heightAnchor.constraint(equalToConstant: UX.spinnerSize)
+        ])
     }
 
     override public func updateConfiguration() {
@@ -81,6 +111,24 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         accessibilityIdentifier = viewModel.a11yIdentifier
 
         configuration = updatedConfiguration
+    }
+
+    public func setShowsSpinner(_ shows: Bool) {
+        showsSpinner = shows
+        guard var updatedConfiguration = configuration else { return }
+
+        var insets = UX.contentInsets
+        if shows {
+            insets.leading += UX.spinnerSize + UX.spinnerTitleSpacing
+        }
+        updatedConfiguration.contentInsets = insets
+        configuration = updatedConfiguration
+
+        if shows {
+            spinnerView.startAnimating()
+        } else {
+            spinnerView.stopAnimating()
+        }
     }
 
     /// To keep alignment && spacing consistent between the buttons on pages,
@@ -125,5 +173,7 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
 
             setNeedsUpdateConfiguration()
         }
+
+        spinnerView.setColors(track: theme.colors.borderSecondary, arc: theme.colors.actionPrimary)
     }
 }

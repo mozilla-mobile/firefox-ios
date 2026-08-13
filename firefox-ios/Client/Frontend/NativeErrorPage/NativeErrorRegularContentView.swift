@@ -239,10 +239,10 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         )
         waybackButton.configure(viewModel: viewModel)
         waybackButton.isEnabled = enabled
-        waybackButton.configuration?.showsActivityIndicator = showsSpinner
         waybackButton.configuration?.imagePadding = UX.waybackButtonImagePadding
         waybackButton.configuration?.imagePlacement = .leading
         waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Wayback.WaybackButtonA11yHint : nil
+        waybackButton.setShowsSpinner(showsSpinner)
     }
 
     private func configureWaybackErrorCard(reason: WaybackButtonState.Reason) {
