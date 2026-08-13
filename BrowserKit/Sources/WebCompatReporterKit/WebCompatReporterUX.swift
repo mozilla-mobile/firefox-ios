@@ -52,6 +52,7 @@ enum WebCompatReporterUX {
         /// Drawn rather than typed: the `•` glyph renders under half this at footnote size.
         static let bulletDiameter: CGFloat = 6
         static let bulletIndent: CGFloat = 24
+        static let bulletSpacing: CGFloat = 12
     }
 
     /// The tilted page card on the Report Preview screen.

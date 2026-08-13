@@ -162,6 +162,17 @@ final class WebCompatReportPayloadTests: XCTestCase {
         ])
     }
 
+    // Paired with testPreviewGroups_optedInWithNothingBlocked_showsAnEmptyListNotNull: the field is
+    // still sent and still printed, but it earns no bullet.
+    func testMakeReportPreviewViewModel_dropsTheBulletForAnEmptyList() {
+        var payload = WebCompatReportPayload()
+        payload.blockedOrigins = []
+
+        let bullets = payload.makeReportPreviewViewModel().bullets
+
+        XCTAssertFalse(bullets.contains(.WebCompatReporter.Preview.Data.BlockedTrackers))
+    }
+
     // MARK: - Helpers
 
     private func renderedFields(of payload: WebCompatReportPayload) -> [String: String] {

@@ -144,7 +144,7 @@ struct WebCompatReportPayload: Equatable {
         let collectedKeys = Set(
             previewGroups
                 .flatMap { $0.fields }
-                .filter { $0.value != .null }
+                .filter { carriesData($0.value) }
                 .map { $0.key }
         )
         let userAgent = String(
@@ -169,6 +169,19 @@ struct WebCompatReportPayload: Equatable {
         return bullets
             .filter { bullet in bullet.keys.contains(where: collectedKeys.contains) }
             .map { $0.text }
+    }
+
+    /// An empty list is still sent, so Technical Data prints it, but a bullet off it would promise
+    /// hostnames the report doesn't carry.
+    private func carriesData(_ value: WebCompatTechnicalDataViewModel.PreviewValue) -> Bool {
+        switch value {
+        case .null:
+            return false
+        case .list(let values):
+            return !values.isEmpty
+        case .string, .bool, .quantity:
+            return true
+        }
     }
 
     /// The address sits under its own bullet. A line separator rather than a newline, so it stays

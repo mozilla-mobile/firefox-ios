@@ -19,7 +19,7 @@ public struct WebCompatReportPreviewViewModel: Equatable, Sendable {
         title: String,
         closeAccessibilityLabel: String,
         closeA11yIdentifier: String,
-        bullets: [String] = [],
+        bullets: [String],
         bulletsA11yIdentifier: String,
         technicalDataTitle: String,
         technicalDataA11yIdentifier: String
