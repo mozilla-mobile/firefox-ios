@@ -95,13 +95,17 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
         ])
     }
 
-    func configure(text: String, iconName: String, useTemplate: Bool) {
+    private var iconTintOverride: UIColor?
+
+    func configure(text: String, iconName: String, useTemplate: Bool, iconTintColor: UIColor? = nil) {
         label.text = text
         accessibilityLabel = text
         let image: UIImage = useTemplate
             ? UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
             : UIImage(named: iconName) ?? UIImage()
         icon.image = image
+        iconTintOverride = iconTintColor
+        icon.tintColor = iconTintColor ?? icon.tintColor
     }
 
     func applyTheme(theme: Theme) {
@@ -113,7 +117,7 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
         } else {
             stack.backgroundColor = .clear
         }
-        icon.tintColor = theme.colors.iconSecondary
+        icon.tintColor = iconTintOverride ?? theme.colors.iconSecondary
         chevron.tintColor = theme.colors.iconSecondary
     }
 

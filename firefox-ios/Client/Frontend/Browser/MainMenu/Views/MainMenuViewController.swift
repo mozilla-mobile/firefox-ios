@@ -491,12 +491,17 @@ class MainMenuViewController: UIViewController,
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
         }
 
-        if themeManager.getCurrentTheme(for: windowUUID).isNova {
+        let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
+        if currentTheme.isNova {
             stateImage = isProtectionsOn
                 ? StandardImageIdentifiers.Small.shieldCheckmarkFillGradient
                 : StandardImageIdentifiers.Small.shieldSlashFillCritical
             shouldUseRenderMode = false
         }
+
+        let protectionsTintColor = isProtectionsOn
+            ? currentTheme.colors.iconAccentGreen
+            : currentTheme.colors.iconAccentYellow
 
         let adBlocker: MenuSiteAdBlockerBadgeData? = {
             guard featureFlagsProvider.isEnabled(.adBlocker),
@@ -505,9 +510,13 @@ class MainMenuViewController: UIViewController,
             let adBlockerImage = isAdBlockerOn
                 ? StandardImageIdentifiers.Medium.adBlockerCheckmark
                 : StandardImageIdentifiers.Medium.adBlockerCross
+            let adBlockerTintColor = isAdBlockerOn
+                ? currentTheme.colors.iconAccentGreen
+                : currentTheme.colors.iconAccentYellow
             return MenuSiteAdBlockerBadgeData(title: String.MainMenu.SiteProtection.AdBlocker,
                                               image: adBlockerImage,
-                                              shouldUseRenderMode: true)
+                                              shouldUseRenderMode: true,
+                                              iconTintColor: adBlockerTintColor)
         }()
 
         menuContent.siteProtectionHeader.setupDetails(
@@ -517,6 +526,7 @@ class MainMenuViewController: UIViewController,
             state: state,
             stateImage: stateImage,
             shouldUseRenderMode: shouldUseRenderMode,
+            stateIconTintColor: protectionsTintColor,
             adBlocker: adBlocker)
     }
 
