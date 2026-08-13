@@ -73,8 +73,10 @@ struct MicrosurveyState: ScreenState {
     }
 
     static func defaultState(from state: MicrosurveyState) -> MicrosurveyState {
-        return state
-            .copy(shouldDismiss: false)
-            .copy(showPrivacy: false)
+        return MicrosurveyState(
+            windowUUID: state.windowUUID,
+            shouldDismiss: false,
+            showPrivacy: false
+        )
     }
 }
