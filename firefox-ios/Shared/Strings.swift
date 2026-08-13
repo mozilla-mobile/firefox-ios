@@ -5906,12 +5906,12 @@ extension String {
 
         public struct SiteProtection {
             public static let Protections = MZLocalizedString(
-                key: "MainMenu.SiteProtection.Protections.Title.v200",
+                key: "MainMenu.SiteProtection.Protections.Title.v153",
                 tableName: "MainMenu",
                 value: "Protections",
                 comment: "On the main menu, at the top, title for a badge that opens site protection settings.")
             public static let AdBlocker = MZLocalizedString(
-                key: "MainMenu.SiteProtection.AdBlocker.Title.v200",
+                key: "MainMenu.SiteProtection.AdBlocker.Title.v153",
                 tableName: "MainMenu",
                 value: "Ad Blocker",
                 comment: "On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting.")

@@ -296,7 +296,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = getNavigationDestinationAction(for: .adBlocker)
         let subject = createSubject()
 
-        subject.mainMenuProvider(AppState(), action)
+        subject.mainMenuProvider.legacyMiddleware(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
@@ -304,12 +304,10 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let event = GleanMetrics.AppMenu.mainMenuOptionSelected
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.option, "ad_blocker")
     }
 

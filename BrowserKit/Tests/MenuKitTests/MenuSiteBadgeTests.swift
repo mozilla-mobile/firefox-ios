@@ -43,6 +43,34 @@ final class MenuSiteBadgeTests: XCTestCase {
         XCTAssertEqual(label?.text, "Ad Blocker")
     }
 
+    func testAccessibility_viewIsAccessibilityElement() {
+        XCTAssertTrue(badge.isAccessibilityElement)
+    }
+
+    func testAccessibility_viewHasButtonTrait() {
+        XCTAssertTrue(badge.accessibilityTraits.contains(.button))
+    }
+
+    func testAccessibility_labelIsNotAccessibilityElement() {
+        badge.configure(text: "Protections", iconName: "", useTemplate: false)
+
+        let label = firstLabel(in: badge)
+        XCTAssertEqual(label?.isAccessibilityElement, false)
+    }
+
+    func testConfigure_setsAccessibilityLabel() {
+        badge.configure(text: "Protections", iconName: "", useTemplate: false)
+
+        XCTAssertEqual(badge.accessibilityLabel, "Protections")
+    }
+
+    func testConfigure_updatesAccessibilityLabel() {
+        badge.configure(text: "Protections", iconName: "", useTemplate: false)
+        badge.configure(text: "Ad Blocker", iconName: "", useTemplate: false)
+
+        XCTAssertEqual(badge.accessibilityLabel, "Ad Blocker")
+    }
+
     private func firstLabel(in view: UIView) -> UILabel? {
         for subview in view.subviews {
             if let label = subview as? UILabel { return label }
