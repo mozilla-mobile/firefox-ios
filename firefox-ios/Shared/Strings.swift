@@ -2057,12 +2057,15 @@ extension String {
                 key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v155",
                 tableName: "NativeErrorPage",
                 value: "Cellular data is turned off.",
-                comment: "On error page, this is the title shown when the app is offline because iOS has cellular data access turned off for this app specifically.")
+                comment: "On error page, this is the title shown when the app can't connect and iOS has cellular data access turned off for this app specifically.")
             public static let Description = MZLocalizedString(
                 key: "NativeErrorPage.CellularDataRestricted.Description.v155",
                 tableName: "NativeErrorPage",
-                value: "Go to Settings > Cellular Data and turn it on for this app.",
-                comment: "On error page, this is the description shown when the app is offline because iOS has cellular data access turned off for this app specifically, telling the user how to fix it.")
+                value: "This may be why the page won’t load. Go to Settings > Cellular Data and turn it on for this app. " +
+                       "If that doesn’t help, check your Wi-Fi connection.",
+                comment: "On error page, this is the description shown when the app can't connect and iOS has cellular data " +
+                         "access turned off for this app specifically, telling the user how to fix it. Also suggests " +
+                         "checking Wi-Fi in case that isn't the actual cause.")
         }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(

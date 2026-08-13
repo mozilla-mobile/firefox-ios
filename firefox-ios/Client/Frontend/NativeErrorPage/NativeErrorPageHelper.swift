@@ -36,7 +36,7 @@ class NativeErrorPageHelper {
         return error.localizedDescription
     }
 
-    init(error: NSError, cellularDataStatusProvider: CellularDataStatusProviding = CTCellularDataStatusProvider()) {
+    init(error: NSError, cellularDataStatusProvider: CellularDataStatusProviding = CTCellularDataStatusProvider.shared) {
         self.error = error
         self.cellularDataStatusProvider = cellularDataStatusProvider
     }

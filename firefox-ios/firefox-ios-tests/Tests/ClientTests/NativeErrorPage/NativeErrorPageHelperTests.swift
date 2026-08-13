@@ -237,6 +237,24 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertTrue(model.isRegularUI)
     }
 
+    func testParseErrorDetails_certError_withRestrictedCellularData_stillReturnsSecurityModel() {
+        let url = URL(string: "https://example.com")!
+        let error = NSError(
+            domain: NSURLErrorDomain,
+            code: NSURLErrorServerCertificateUntrusted,
+            userInfo: [NSURLErrorFailingURLErrorKey: url]
+        )
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStatusProvider: MockCellularDataStatusProvider(isCellularDataRestricted: true)
+        )
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertTrue(model.isRegularUI)
+    }
+
     func testParseErrorDetails_certErrorBadCertDomain_returnsAdvancedSection() {
         let url = URL(string: "https://example.com")!
         let error = NSError(

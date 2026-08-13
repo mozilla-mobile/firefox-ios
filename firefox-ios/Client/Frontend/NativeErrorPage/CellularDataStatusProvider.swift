@@ -8,10 +8,33 @@ protocol CellularDataStatusProviding {
     var isCellularDataRestricted: Bool { get }
 }
 
-final class CTCellularDataStatusProvider: CellularDataStatusProviding {
+/// `CTCellularData.restrictedState` reports `.restrictedStateUnknown` until the system
+/// resolves it asynchronously after the object is created, so this is kept as a
+/// long-lived singleton (warmed up at app launch) and caches updates from
+/// `cellularDataRestrictionDidUpdateNotifier` rather than doing a single synchronous read.
+final class CTCellularDataStatusProvider: CellularDataStatusProviding, @unchecked Sendable {
+    static let shared = CTCellularDataStatusProvider()
+
     private let cellularData = CTCellularData()
+    private let lock = NSLock()
+    private var cachedState: CTCellularDataRestrictedState
+
+    private init() {
+        cachedState = cellularData.restrictedState
+        cellularData.cellularDataRestrictionDidUpdateNotifier = { [weak self] state in
+            self?.updateCachedState(state)
+        }
+    }
+
+    private func updateCachedState(_ state: CTCellularDataRestrictedState) {
+        lock.lock()
+        cachedState = state
+        lock.unlock()
+    }
 
     var isCellularDataRestricted: Bool {
-        return cellularData.restrictedState == .restricted
+        lock.lock()
+        defer { lock.unlock() }
+        return cachedState == .restricted
     }
 }

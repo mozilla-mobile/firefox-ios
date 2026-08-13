@@ -7,8 +7,15 @@ import XCTest
 @testable import Client
 
 final class CellularDataStatusProviderTests: XCTestCase {
-    func testIsCellularDataRestricted_returnsConsistentValueAcrossReads() {
-        let provider: CellularDataStatusProviding = CTCellularDataStatusProvider()
+    func testShared_returnsSameInstance() {
+        let first = CTCellularDataStatusProvider.shared
+        let second = CTCellularDataStatusProvider.shared
+
+        XCTAssertTrue(first === second)
+    }
+
+    func testIsCellularDataRestricted_doesNotCrash() {
+        let provider: CellularDataStatusProviding = CTCellularDataStatusProvider.shared
 
         let first = provider.isCellularDataRestricted
         let second = provider.isCellularDataRestricted

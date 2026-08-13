@@ -75,6 +75,10 @@ class AppDelegate: UIResponder,
         // before any Application Services component gets used.
         Viaduct.shared.initialize(userAgent: UserAgent.fxaUserAgent)
 
+        // Warm up cellular-restriction state as early as possible; CTCellularData reports
+        // `.restrictedStateUnknown` until it resolves asynchronously after first access.
+        _ = CTCellularDataStatusProvider.shared
+
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,
                    category: .lifecycle)
