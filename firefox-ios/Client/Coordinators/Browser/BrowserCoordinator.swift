@@ -38,6 +38,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
                           WebCompatReportCoordinatorNavigationDelegate,
+                          BrowsingSettingsDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -646,6 +647,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func presentAdBlockerSettings() {
         let browsingSettings = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+        browsingSettings.parentCoordinator = self
         let navigationController = DismissableNavigationViewController(rootViewController: browsingSettings)
         setupAdBlockerSettingsDetents(for: navigationController)
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
@@ -663,6 +665,18 @@ final class BrowserCoordinator: BaseCoordinator,
         } else {
             controller.sheetPresentationController?.detents = [.medium(), .large()]
         }
+    }
+
+    func pressedMailApp() {
+        guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
+        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        nav.pushViewController(viewController, animated: true)
+    }
+
+    func pressedAutoPlay() {
+        guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
+        let viewController = AutoplaySettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        nav.pushViewController(viewController, animated: true)
     }
 
     func presentSavePDFController() {
