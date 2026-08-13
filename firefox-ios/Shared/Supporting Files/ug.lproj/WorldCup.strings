@@ -25,8 +25,53 @@
 /* The title of the Group A group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupA.Title.v151" = "A گۇرۇپپا";
 
+/* The title of the Group B group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupB.Title.v151" = "B گۇرۇپپا";
+
+/* The title of the Group C group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupC.Title.v151" = "C گۇرۇپپا";
+
+/* The title of the Group D group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupD.Title.v151" = "D گۇرۇپپا";
+
+/* The title of the Group E group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupE.Title.v151" = "E گۇرۇپپا";
+
+/* The title of the Group F group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupF.Title.v151" = "F گۇرۇپپا";
+
+/* The title of the Group G group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupG.Title.v151" = "G گۇرۇپپا";
+
+/* The title of the Group H group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupH.Title.v151" = "H گۇرۇپپا";
+
+/* The title of the Group I group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupI.Title.v151" = "I گۇرۇپپا";
+
+/* The title of the Group J group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupJ.Title.v151" = "J گۇرۇپپا";
+
+/* The title of the Group K group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupK.Title.v151" = "K گۇرۇپپا";
+
+/* The title of the Group L group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupL.Title.v151" = "L گۇرۇپپا";
+
+/* The generic label indicating the Group Stage phase in the World Cup widget. */
+"WorldCup.GroupPhase.GroupStageLabel.v151" = "گۇرۇپپا باسقۇچى";
+
 /* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "كوماندا ئالماشتۇر";
+
+/* D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "ك";
+
+/* H is short for Hours. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.HourLabel.v151" = "س";
+
+/* M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "م";
 
 /* Label for the button that takes users to the World Cup schedule website on the countdown section. */
 "WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "كۈنتەرتىپنى كۆرسەت";
@@ -43,8 +88,20 @@
 /* The title of the section in the World Cup widget that shows when the selected team was eliminated. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "ئەگىشىۋېرەمسىز؟";
 
+/* The label indicating that the displaying match is in the first half. */
+"WorldCup.HomepageWidget.FirstHalfLabel.v151" = "ئالدىنقى يېرىم مەيدان";
+
 /* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "كوماندىڭىزغا ئەگىشىڭ";
+
+/* The label indicating that the displaying match has ended. */
+"WorldCup.HomepageWidget.FTLabel.v151" = "(پۈتۈن مەيدان)";
+
+/* The label indicating that the displaying match has ended. */
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "پۈتۈن مەيدان";
+
+/* The label indicating that the displaying match is in the half time. */
+"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "ئوتتۇرا مەيدان دەم ئېلىش";
 
 /* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
 "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "يېڭىلا";
@@ -54,6 +111,21 @@
 
 /* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
 "WorldCup.HomepageWidget.RetryButtonLabel.v151" = "يېڭىلا";
+
+/* The label for the 'Final' match in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "ھەل قىلغۇچ مۇسابىقە";
+
+/* The label for the 'Semi-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "يېرىم ھەل قىلغۇچ مۇسابىقە";
+
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "ئۈچىنچى";
+
+/* The label for the World Cup championship winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026-يىللىق دۇنيا لوڭقىسى چېمپىيونلىرى";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "كېيىنكى يېرىم مەيدان";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
 "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "تېخىمۇ كۆپ تاللانما";

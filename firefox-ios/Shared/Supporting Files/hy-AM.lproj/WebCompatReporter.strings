@@ -100,3 +100,6 @@
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.PlaybackFails.v154" = "Տեսանյութը կամ աուդիոն չեն նվագարկվում";
 
+/* Message of the toast shown after the user successfully submits a website issue report. */
+"WebCompatReporter.Toast.ReportSent.v155" = "Զեկույցն ուղարկվեց";
+

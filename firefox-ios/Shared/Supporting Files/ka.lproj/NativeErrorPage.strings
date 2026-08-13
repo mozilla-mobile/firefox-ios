@@ -61,11 +61,17 @@
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "საიტი შეიძლება დაკავებული ან მიუწვდომელი იყოს. სცადეთ მოგვიანებით. თუ სხვა გვერდებიც ვერ იტვირთება, შეამოწმეთ თქვენი WiFi ან მობილური კავშირი. %@ აგერთვე შეძლებს გამოიყენოს Wayback Machine ამ გვერდის უფრო ადრინდელი ვერსიების მოსანახადაც.";
 
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "დაარქივებული ვერ მოიძებნა";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "ხელახლა";
 
 /* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
 "NativeErrorPage.Wayback.Error.Search.v154" = "უფრო ადრინდელის მოძიება";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "ძიება ინტერნეტში";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "დაკავშირება ვერ მოხერხდა";

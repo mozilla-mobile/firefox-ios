@@ -11,7 +11,7 @@
 "Summarizer.Error.MissingPageContent.Message.v142" = "Страница се још увек учитава. Сачекајте да се заврши, а затим притисните „Сажми“.";
 
 /* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
-"Summarizer.Error.RateLimited.Message.v142" = "Тренутно не можемо ово да обрадимо. Покушајте поново касније!";
+"Summarizer.Error.RateLimited.Message.v142" = "Тренутно не могу ово да обрадим. Покушајте поново касније!";
 
 /* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
 "Summarizer.Error.Unknown.Message.v142" = "Грешка при сажимању странице. Покушајте поново касније.";
@@ -26,7 +26,7 @@
 "Summarizer.Footnote.Label.v144" = "Напомена: Сажимање може да садржи грешке.";
 
 /* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
-"Summarizer.HostedBrand.Label.v142" = "Сажео %@";
+"Summarizer.HostedBrand.Label.v142" = "Сажето помоћу %@";
 
 /* The a11y label for the loading label on the summarize loading screen. */
 "Summarizer.Loading.Accessibility.Label.v145" = "Учитавање сажетка";
@@ -56,7 +56,7 @@
 "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Настави";
 
 /* The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.InfoPanel.Label.v143" = "Погледајте главне тачке у неколико секунди уз %@.";
+"Summarizer.ToS.InfoPanel.Label.v143" = "Видите главне тезе за неколико секунди помоћу %@.";
 
 /* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
 "Summarizer.ToS.InfoPanel.Title.Label.v143" = "Сажети ову страницу?";

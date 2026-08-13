@@ -8,11 +8,11 @@
 "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Label.v133" = "Подешавања претраге";
 
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the title of that sheet. */
-"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v133" = "Овај пут претражи у:";
+"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v133" = "Овај пут претражујте:";
 
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This string is the label for the button at the bottom of the list. When this row is tapped, the app's search settings screen appears. */
 "UnifiedSearch.SearchEngineSelection.SearchSettings.Title.v133" = "Подешавања претраге";
 
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the title for the sheet. */
-"UnifiedSearch.SearchEngineSelection.TopTitle.Title.v133" = "Овај пут претражи у:";
+"UnifiedSearch.SearchEngineSelection.TopTitle.Title.v133" = "Овај пут претражујте:";
 

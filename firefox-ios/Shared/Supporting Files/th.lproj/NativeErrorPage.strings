@@ -55,12 +55,27 @@
 /* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
 "NativeErrorPage.Wayback.Error.Checking.v154" = "กำลังตรวจสอบหน้าเว็บ…";
 
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v154" = "เข้าถึง Wayback Machine ไม่สำเร็จ";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "ไซต์อาจมีผู้ใช้หนาแน่นหรือไม่พร้อมให้บริการ โปรดลองใหม่ภายหลัง หากหน้าเว็บอื่นก็ไม่โหลด ให้ตรวจสอบ Wi-Fi หรือการเชื่อมต่อข้อมูลของคุณ %@ ยังค้นหาหน้านี้เวอร์ชันก่อนหน้าใน Wayback Machine ได้";
+
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "ไม่พบสำเนาที่บันทึกไว้";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "ลองใหม่";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.Search.v154" = "ค้นหาเวอร์ชันก่อนหน้า";
 
 /* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "ค้นหาเว็บ";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "ไม่สามารถเชื่อมต่อ";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "ค้นหาสำเนาหน้านี้ที่บันทึกไว้ใน Wayback Machine";
 

@@ -1,0 +1,21 @@
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how many cross-site tracking cookies we've blocked. */
+"PrivacyDashboard.CrossSiteTrackers.v155" = "Միջակայքին հետևող նշոցիկ։";
+
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how many fingerprinter's we've blocked. */
+"PrivacyDashboard.Fingerprinters.v155" = "Մատնահետքեր";
+
+/* On the Privacy Dashboard popup, the text for the header when we have blocked some trackers this week. This is going to have, above it, in bold letters, the number of trackers blocked this week. */
+"PrivacyDashboard.HeaderLabel.v155" = "Հետագծողներն արգելափակված են այս շաբաթ";
+
+/* On the Privacy Dashboard popup, the text for the header of the popup, in the case where we have not yet blocked any trackers yet. The placeholder %@ will be the app name, Firefox. */
+"PrivacyDashboard.HeaderLabelForNoTrackersBlocked.v155" = "%@-ը արգելափակում է հետևորդներին, երբ դուք զննարկում եք կայքը, դրանք կտեսնեք այստեղ։";
+
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how many social media trackers we've blocked. */
+"PrivacyDashboard.SocialTrackers.v155" = "Սոց մեդիայի հետագծիչներ";
+
+/* On the Privacy Dashboard popup, the text for the footer of the page. The first placeholder (%1$@) is the total number of trackers we've blocked, in a localized format (provided by Swift's built in number localization). The second placeholder (%2$@) will be a date in DD/MM/YY format, and will denote the date we've started blocking trackers for the user. */
+"PrivacyDashboard.TotalTrackersBlockedSince.v155" = "%1$@՝ %2$@-ից սկսած 🎉";
+
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how much tracking content we've blocked. */
+"PrivacyDashboard.TrackingContent.v155" = "Հետագծող բովանդակություն";
+
