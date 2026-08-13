@@ -145,14 +145,14 @@ struct MainMenuState: ScreenState, Sendable {
     private init(
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
-        shouldDismiss: Bool = false,
+        shouldDismiss: Bool,
         accountData: AccountData?,
         accountProfileImage: UIImage?,
         isBrowserDefault: Bool,
         isPhoneLandscape: Bool,
         moreCellTapped: Bool,
         siteProtectionsData: SiteProtectionsData?,
-        navigationDestination: MenuNavigationDestination? = nil,
+        navigationDestination: MenuNavigationDestination?,
         currentTabInfo: MainMenuTabInfo?
     ) {
         self.windowUUID = windowUUID
@@ -223,25 +223,31 @@ struct MainMenuState: ScreenState, Sendable {
     }
 
     static func defaultState(from state: MainMenuState) -> MainMenuState {
-        return state.copy(windowUUID: state.windowUUID)
-            .copy(menuElements: state.menuElements)
-            .copy(currentTabInfo: state.currentTabInfo)
-            .copy(accountData: state.accountData)
-            .copy(accountProfileImage: state.accountProfileImage)
-            .copy(siteProtectionsData: state.siteProtectionsData)
-            .copy(isBrowserDefault: state.isBrowserDefault)
-            .copy(isPhoneLandscape: state.isPhoneLandscape)
-            .copy(moreCellTapped: state.moreCellTapped)
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            shouldDismiss: false,
+            accountData: state.accountData,
+            accountProfileImage: state.accountProfileImage,
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: state.moreCellTapped,
+            siteProtectionsData: state.siteProtectionsData,
+            navigationDestination: nil,
+            currentTabInfo: state.currentTabInfo
+        )
     }
 
     private static func handleViewDidLoadAction(state: MainMenuState) -> MainMenuState {
         return state
+            .resetTransientState()
     }
 
     private static func handleUpdateAccountHeaderAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
         return state
+            .resetTransientState()
             .copy(accountData: action.accountData)
     }
 
@@ -249,6 +255,7 @@ struct MainMenuState: ScreenState, Sendable {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
         return state
+            .resetTransientState()
             .copy(isBrowserDefault: action.isBrowserDefault)
     }
 
@@ -256,6 +263,7 @@ struct MainMenuState: ScreenState, Sendable {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
         return state
+            .resetTransientState()
             .copy(isPhoneLandscape: action.isPhoneLandscape)
     }
 
@@ -263,6 +271,7 @@ struct MainMenuState: ScreenState, Sendable {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
         return state
+            .resetTransientState()
             .copy(siteProtectionsData: action.siteProtectionsData)
     }
 
@@ -273,6 +282,7 @@ struct MainMenuState: ScreenState, Sendable {
         else { return defaultState(from: state) }
 
         return state
+            .resetTransientState()
             .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
@@ -289,6 +299,7 @@ struct MainMenuState: ScreenState, Sendable {
         else { return defaultState(from: state) }
 
         return state
+            .resetTransientState()
             .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
@@ -306,6 +317,7 @@ struct MainMenuState: ScreenState, Sendable {
         else { return defaultState(from: state) }
 
         return state
+            .resetTransientState()
             .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
@@ -319,26 +331,31 @@ struct MainMenuState: ScreenState, Sendable {
         guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
         return state
+            .resetTransientState()
             .copy(navigationDestination: action.navigationDestination)
     }
 
     private static func handleTapToggleUserAgentAndTapCloseMenuAction(state: MainMenuState) -> MainMenuState {
         return state
+            .resetTransientState()
             .copy(shouldDismiss: true)
     }
 
     private static func handleDismissMenuAction(state: MainMenuState) -> MainMenuState {
         return state
+            .resetTransientState()
             .copy(shouldDismiss: true)
     }
 
     private static func handleTapEditBookmarkAction(state: MainMenuState, action: Action) -> MainMenuState {
         return state
+            .resetTransientState()
             .copy(navigationDestination: MenuNavigationDestination(.editBookmark))
     }
 
     private static func handleTapZoomAction(state: MainMenuState) -> MainMenuState {
         return state
+            .resetTransientState()
             .copy(navigationDestination: MenuNavigationDestination(.zoom))
     }
 }

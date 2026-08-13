@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Redux
 import XCTest
 import SummarizeKit
@@ -128,6 +129,61 @@ final class MainMenuStateTests: XCTestCase {
         )
 
         XCTAssertTrue(newState.shouldDismiss)
+    }
+
+    @MainActor
+    func testNavigationDestinationIsResetAfterNextAction() {
+        let initialState = createSubject()
+        let reducer = mainMenuReducer()
+
+        let navigationState = reducer.legacyReducer(
+            initialState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.zoom)
+            )
+        )
+
+        XCTAssertNotNil(navigationState.navigationDestination)
+
+        let newState = reducer.legacyReducer(
+            navigationState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.updateBannerVisibility,
+                isBrowserDefault: true
+            )
+        )
+
+        XCTAssertNil(newState.navigationDestination)
+    }
+    
+    @MainActor
+    func testShouldDismissIsResetAfterNextAction() {
+        let initialState = createSubject()
+        let reducer = mainMenuReducer()
+
+        let dismissState = reducer.legacyReducer(
+            initialState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuActionType.tapCloseMenu
+            )
+        )
+
+        XCTAssertTrue(dismissState.shouldDismiss)
+
+        let newState = reducer.legacyReducer(
+            dismissState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.updateBannerVisibility,
+                isBrowserDefault: true
+            )
+        )
+
+        XCTAssertFalse(newState.shouldDismiss)
     }
 
     // MARK: - Private
