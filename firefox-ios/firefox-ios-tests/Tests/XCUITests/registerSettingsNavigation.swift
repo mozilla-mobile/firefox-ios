@@ -37,6 +37,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         }
         screenState.tap(
             table.cells[AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle], to: AppIconSettings)
+        registerSecretSettingsAccess(on: screenState, table: table, app: app)
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
@@ -229,4 +230,26 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     map.addScreenState(AppIconSettings) { screenState in
         screenState.backAction = navigationControllerBackAction(for: app)
     }
+
+    map.addScreenState(FirefoxSuggestSettings) { screenState in
+        screenState.gesture(forAction: Action.IngestNewSuggestionsNow) { userState in
+            app.cells["Ingest new suggestions now"].waitAndTap()
+        }
+        screenState.backAction = navigationControllerBackAction(for: app)
+    }
+}
+
+@MainActor
+private func registerSecretSettingsAccess(
+    on screenState: MMScreenStateNode<FxUserState>,
+    table: XCUIElement,
+    app: XCUIApplication
+) {
+    screenState.gesture(forAction: Action.OpenSecretSettings) { userState in
+        for _ in 0..<5 {
+            app.cells[AccessibilityIdentifiers.Settings.Version.title].waitAndTap()
+        }
+        userState.secretSettingsRevealed = true
+    }
+    screenState.tap(table.cells["Firefox Suggest"], to: FirefoxSuggestSettings, if: "secretSettingsRevealed == true")
 }

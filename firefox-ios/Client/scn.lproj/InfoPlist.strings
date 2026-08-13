@@ -5,7 +5,7 @@
 "New Tab" = "Nova scheda";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox usa a fotucàmmira pi scanziunari i còdici QR e fari fotu e vidiu.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox abbisogna dû Face ID p’accèdiri ê to chiavi e i furmi di pagamentu sarbati.";

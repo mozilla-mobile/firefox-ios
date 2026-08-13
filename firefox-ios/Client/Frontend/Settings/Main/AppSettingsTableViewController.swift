@@ -537,18 +537,17 @@ class AppSettingsTableViewController: SettingsTableViewController,
             OffloadBackgroundWebViewsSetting(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
             ScreenshotSetting(settings: self),
+            LaunchPairingFromURLSetting(settings: self),
             DeleteLoginsKeysSetting(settings: self),
             DeleteAutofillKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self),
-            MerinoTestDataSetting(settings: self, settingsDelegate: self),
-            WorldCupResetDismissedSetting(settings: self)
+            MerinoTestDataSetting(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
-        hiddenDebugOptions.append(WorldCupBaseHostOverrideSetting(settings: self))
-        hiddenDebugOptions.append(WorldCupPollIntervalOverrideSetting(settings: self))
+        hiddenDebugOptions.append(ResetTipsSetting(settings: self))
         hiddenDebugOptions.append(ChangeMLPAEndpointSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))

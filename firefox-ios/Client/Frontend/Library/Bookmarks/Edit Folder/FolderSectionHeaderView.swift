@@ -18,13 +18,13 @@ final class FolderSectionHeaderView: UITableViewHeaderFooterView {
     }
 
     lazy var captionLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.font = FXFontStyles.Regular.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Bold.callout.scaledFont()
+        label.font = FXFontStyles.Bold.title3.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }

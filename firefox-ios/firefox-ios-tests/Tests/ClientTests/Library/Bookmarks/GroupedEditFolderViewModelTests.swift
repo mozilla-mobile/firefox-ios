@@ -28,14 +28,14 @@ final class GroupedEditFolderViewModelTests: XCTestCase {
     var folderFetcher: MockGroupedFolderHierarchyFetcher!
     var bookmarksSaver: MockBookmarksSaver!
     var profile: MockProfile!
-    var parentFolderSelector: MockParentFolderSelector!
+    var parentFolderSelector: MockGroupedParentFolderSelector!
 
     override func setUp() async throws {
         try await super.setUp()
         folderFetcher = MockGroupedFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
         profile = MockProfile()
-        parentFolderSelector = MockParentFolderSelector()
+        parentFolderSelector = MockGroupedParentFolderSelector()
     }
 
     override func tearDown() async throws {
@@ -192,17 +192,5 @@ final class GroupedEditFolderViewModelTests: XCTestCase {
                                                  folderFetcher: folderFetcher)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
-    }
-}
-
-final class MockGroupedFolderHierarchyFetcher: GroupedFolderHierarchyFetcher, @unchecked Sendable {
-    var mockFolderStructures: [GroupedFolder] = []
-    private(set) var fetchFoldersCalled = 0
-    private(set) var capturedExcludedGuids: [String] = []
-
-    func fetchFolders(excludedGuids: [String]) async -> [GroupedFolder] {
-        fetchFoldersCalled += 1
-        capturedExcludedGuids = excludedGuids
-        return mockFolderStructures
     }
 }

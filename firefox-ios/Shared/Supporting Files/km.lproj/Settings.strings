@@ -70,8 +70,14 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "ទប់ស្កាត់";
 
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "ទំព័រ និង​សេចក្ដីសង្ខេប​មិន​ត្រូវ​បាន​រក្សារ​ទុក​នោះទេ។";
+
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "ទំព័រសេចក្តីសង្ខេប";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "ការបកប្រែមានលក្ខណៈឯកជននៅលើឧបករណ៍របស់អ្នក។";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
 "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "ការបកប្រែ";
@@ -297,12 +303,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "កាយវិការ";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "ជ្រើសរើសភាសាមួយ";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "ភាសាកម្មវិធីដែលពេញចិត្ត";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "ភាសា";

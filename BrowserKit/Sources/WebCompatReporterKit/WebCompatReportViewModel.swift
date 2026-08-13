@@ -8,15 +8,33 @@ import Foundation
 /// The Client maps `WebCompatReporterState` onto this so the package never
 /// imports Redux; previews build one with a mock.
 public struct WebCompatReportViewModel: Equatable, Sendable {
-    /// A list section, optionally preceded by a header title (e.g. "Site Issue").
+    /// Caption shown below a section, with one substring rendered as a tappable
+    /// link (e.g. "Learn More…" under Additional Info).
+    public struct Footer: Hashable, Sendable {
+        public let text: String
+        public let linkText: String
+        public let linkURL: URL?
+        public let linkA11yIdentifier: String
+
+        public init(text: String, linkText: String, linkURL: URL?, linkA11yIdentifier: String) {
+            self.text = text
+            self.linkText = linkText
+            self.linkURL = linkURL
+            self.linkA11yIdentifier = linkA11yIdentifier
+        }
+    }
+
+    /// A list section, with an optional header title (e.g. "Site Issue") and optional `Footer` caption.
     public struct Section: Hashable, Sendable {
         public let id: String
         public let title: String?
+        public let footer: Footer?
         public let rows: [Row]
 
-        public init(id: String, title: String? = nil, rows: [Row]) {
+        public init(id: String, title: String? = nil, footer: Footer? = nil, rows: [Row]) {
             self.id = id
             self.title = title
+            self.footer = footer
             self.rows = rows
         }
     }
@@ -41,6 +59,8 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
             case plain
             case categoryMenu(isPlaceholder: Bool, options: [MenuOption])
             case subOption(isSelected: Bool)
+            case urlField(text: String, placeholder: String)
+            case detailsField(text: String, placeholder: String)
             case sendButton(isEnabled: Bool)
             case toggle(isOn: Bool)
         }
@@ -60,14 +80,15 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
 
     public let navigationTitle: String
     public let closeButtonAccessibilityLabel: String
-    public let previewButtonTitle: String
+    /// Nil hides the Preview bar button entirely. Preview is parked for v1 (FXIOS-16450).
+    public let previewButtonTitle: String?
     public let isPreviewEnabled: Bool
     public let sections: [Section]
 
     public init(navigationTitle: String,
                 closeButtonAccessibilityLabel: String,
-                previewButtonTitle: String,
-                isPreviewEnabled: Bool,
+                previewButtonTitle: String? = nil,
+                isPreviewEnabled: Bool = false,
                 sections: [Section] = []) {
         self.navigationTitle = navigationTitle
         self.closeButtonAccessibilityLabel = closeButtonAccessibilityLabel

@@ -85,18 +85,6 @@ final class TranslationsService: TranslationsServiceProtocol {
         _ = try await firstResponseReceivedJS(on: webView)
     }
 
-    /// Tells the engine to discard translations for a document.
-    func discardTranslations(for windowUUID: WindowUUID) async throws {
-        let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        let supported = await fetchSupportedTargetLanguages()
-        guard let deviceLanguage = deviceLanguageCode(supportedTargetLanguages: supported) else {
-            throw TranslationsServiceError.deviceLanguageUnavailable
-        }
-
-        let webView = try currentWebView(for: windowUUID)
-        try await discardTranslationsJS(on: webView, from: pageLanguage, to: deviceLanguage)
-    }
-
     /// Attempts to detect the language of the currently displayed page.
     /// Returns a BCP-47 language tag (e.g. "en", "fr") on success.
     /// Otherwise throws a typed `TranslationsServiceError`.
@@ -141,20 +129,6 @@ final class TranslationsService: TranslationsServiceProtocol {
         }
     }
 
-    /// Calls the JS `discardTranslations` hook.
-    private func discardTranslationsJS(on webView: WKWebView, from: String, to: String) async throws {
-        let jsArgs = "{from: \"\(from)\", to: \"\(to)\"}"
-        let js = "window.__firefox__.Translations.discardTranslations(\(jsArgs))"
-
-        do {
-            _ = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
-        } catch {
-            /// NOTE: It would be safe to pass in the js string directly here, but it would just add too much noise
-            /// since from and to could be any language code. We only care that discardTranslationsJS failed.
-            throw TranslationsServiceError.jsEvaluationFailed(reason: "JS evaluation failed: discardTranslationsJS")
-        }
-    }
-
     /// Returns the current WebView for a given window, or throws if it is unavailable.
     private func currentWebView(for windowUUID: WindowUUID) throws -> WKWebView {
         guard let tab = windowManager.tabManager(for: windowUUID)?.selectedTab,
@@ -167,21 +141,5 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Returns the unique set of languages that can be used as translation targets.
     func fetchSupportedTargetLanguages() async -> [String] {
         return await modelsFetcher.fetchSupportedTargetLanguages()
-    }
-
-    /// Returns the best device-language code present in `supportedTargetLanguages`.
-    /// Walks `Locale.preferredLanguages` so script subtags (e.g. `zh-Hans`) are preserved
-    /// when they appear in the supported set.
-    private func deviceLanguageCode(supportedTargetLanguages: [String]) -> String? {
-        let supportedSet = Set(supportedTargetLanguages)
-        for tag in Locale.preferredLanguages {
-            if let match = PreferredTranslationLanguagesManager.matchingSupportedCode(
-                for: tag,
-                in: supportedSet
-            ) {
-                return match
-            }
-        }
-        return nil
     }
 }

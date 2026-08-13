@@ -88,6 +88,7 @@ let AutofillPasswordSettings = "AutofillsPasswordsSettings"
 let Shortcuts = "Shortcuts"
 let AutoplaySettings = "AutoplaySettings"
 let AppIconSettings = "AppIconSettings"
+let FirefoxSuggestSettings = "FirefoxSuggestSettings"
 
 let HistoryPanelContextMenu = "HistoryPanelContextMenu"
 let TopSitesPanelContextMenu = "TopSitesPanelContextMenu"
@@ -230,6 +231,8 @@ class Action {
     static let ClickSearchButton = "ClickSearchButton"
 
     static let OpenSiriFromSettings = "OpenSiriFromSettings"
+    static let OpenSecretSettings = "OpenSecretSettings"
+    static let IngestNewSuggestionsNow = "IngestNewSuggestionsNow"
 
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
     static let AcceptClearAllWebsiteData = "AcceptClearAllWebsiteData"

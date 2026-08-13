@@ -65,7 +65,7 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var textOnDark: UIColor = NovaColors.VioletDesaturated0
     var textOnLight: UIColor = NovaColors.VioletDesaturated90
     var textOnColorPrimary: UIColor = NovaColors.VioletDesaturated0
-    var textToast: UIColor = NovaColors.Violet50
+    var textToast: UIColor = NovaColors.Violet30
 
     // MARK: - Icon
 
@@ -113,6 +113,9 @@ private struct NovaLightColourPalette: ThemeColourPalette {
         NovaColors.VioletDesaturated90
     ])
     var gradientPrivacyMask = Gradient(colors: [NovaColors.White, NovaColors.Violet20])
+    var gradientWidgetSurface = Gradient(colors: [NovaColors.Gray0, NovaColors.Gray0])
+    var gradientWidgetSurfaceStandard = Gradient(colors: [NovaColors.Gray15, NovaColors.Gray10])
+    var gradientWidgetSurfacePrivate = Gradient(colors: [NovaColors.VioletDesaturated70, NovaColors.VioletDesaturated60])
     var gradientAIStrongStop1: UIColor = NovaColors.Violet50
     var gradientAIStrongStop2: UIColor = NovaColors.Pink40
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30
@@ -135,7 +138,7 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var iconAccentYellow: UIColor = LightTheme().colors.iconAccentYellow
 
     // MARK: - Deprecated
-    var layer5: UIColor = LightTheme().colors.layer5
+    var layer5: UIColor { layerSurfaceMedium }
     var layerGradientOverlay: Gradient = LightTheme().colors.layerGradientOverlay
     var layerHomepage: Gradient = LightTheme().colors.layerHomepage
     var layerAccentNonOpaque: UIColor = LightTheme().colors.layerAccentNonOpaque
@@ -150,4 +153,6 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var borderAccentNonOpaque: UIColor = LightTheme().colors.borderAccentNonOpaque
     var borderAccentPrivate: UIColor = LightTheme().colors.borderAccentPrivate
     var borderToolbarDivider: UIColor = LightTheme().colors.borderToolbarDivider
+
+    var faviconLetterColorSet: FaviconLetterColorSet = NovaFaviconColorSet()
 }

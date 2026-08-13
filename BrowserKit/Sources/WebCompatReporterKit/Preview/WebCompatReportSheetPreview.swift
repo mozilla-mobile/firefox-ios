@@ -8,16 +8,30 @@ import SwiftUI
 import UIKit
 
 @MainActor
-private func previewSheet(sections: [WebCompatReportViewModel.Section]) -> UIViewController {
+private func previewSheet(
+    sections: [WebCompatReportViewModel.Section],
+    isPreviewEnabled: Bool
+) -> UIViewController {
     let viewModel = WebCompatReportViewModel(
-        navigationTitle: "Report a Website Issue",
+        navigationTitle: "Report Broken Site",
         closeButtonAccessibilityLabel: "Close",
         previewButtonTitle: "Preview",
-        isPreviewEnabled: !sections.isEmpty,
+        isPreviewEnabled: isPreviewEnabled,
         sections: sections
     )
     let sheet = WebCompatReportSheetViewController(viewModel: viewModel, theme: LightTheme())
     return UINavigationController(rootViewController: sheet)
+}
+
+private func previewURLSection() -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(id: "url", rows: [
+        WebCompatReportViewModel.Row(
+            id: "url",
+            title: "URL",
+            kind: .urlField(text: "https://houseandhome.com/recipe/croque-monsieur", placeholder: "Website address"),
+            a11yIdentifier: "url"
+        )
+    ])
 }
 
 private func previewCategoryOptions(selectedID: String?) -> [WebCompatReportViewModel.Row.MenuOption] {
@@ -55,6 +69,20 @@ private func previewSubOption(_ id: String, _ title: String, selected: Bool = fa
     return WebCompatReportViewModel.Row(id: id, title: title, kind: .subOption(isSelected: selected), a11yIdentifier: id)
 }
 
+private func previewDetailsSection() -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(id: "details", rows: [
+        WebCompatReportViewModel.Row(
+            id: "details",
+            title: "Describe the issue in detail",
+            kind: .detailsField(
+                text: "The recipe images never load on this page.",
+                placeholder: "Describe the issue in detail (optional)"
+            ),
+            a11yIdentifier: "details"
+        )
+    ])
+}
+
 private func previewSendSection(isEnabled: Bool) -> WebCompatReportViewModel.Section {
     return WebCompatReportViewModel.Section(id: "send", rows: [
         WebCompatReportViewModel.Row(
@@ -88,17 +116,32 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
     )
 }
 
-@available(iOS 17.0, *)
-#Preview("Placeholder") {
-    previewSheet(sections: [
-        previewCategorySection(selectedTitle: nil),
-        previewSendSection(isEnabled: false)
-    ])
+/// The Additional Info section the footer hangs off; the footer itself is section-agnostic.
+private func previewFooterSection() -> WebCompatReportViewModel.Section {
+    return WebCompatReportViewModel.Section(
+        id: "footer-host",
+        title: "Additional Info",
+        footer: WebCompatReportViewModel.Footer(
+            text: "Firefox needs this info to fix the site. Learn More…",
+            linkText: "Learn More…",
+            linkURL: URL(string: "https://support.mozilla.org/kb/report-site-issues-firefox-ios"),
+            linkA11yIdentifier: "learnMore"
+        ),
+        rows: [
+            WebCompatReportViewModel.Row(
+                id: "screenshot",
+                title: "Automatically include a screenshot to show the problem",
+                kind: .toggle(isOn: true),
+                a11yIdentifier: "screenshot"
+            )
+        ]
+    )
 }
 
 @available(iOS 17.0, *)
-#Preview("Category selected") {
+#Preview("Filled") {
     previewSheet(sections: [
+        previewURLSection(),
         previewCategorySection(selectedTitle: "Site is not usable"),
         WebCompatReportViewModel.Section(id: "issue-suboptions", rows: [
             previewSubOption("browser_blocked", "Browser is blocked or unsupported"),
@@ -106,9 +149,19 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
             previewSubOption("missing_items", "Missing items"),
             previewSubOption("buttons_not_working", "Buttons or links not working")
         ]),
+        previewDetailsSection(),
         previewAdvancedSection(includeScreenshot: true, includeBlockedList: true),
         previewSendSection(isEnabled: true)
-    ])
+    ], isPreviewEnabled: true)
+}
+
+@available(iOS 17.0, *)
+#Preview("Empty / Send disabled") {
+    previewSheet(sections: [
+        previewURLSection(),
+        previewCategorySection(selectedTitle: nil),
+        previewSendSection(isEnabled: false)
+    ], isPreviewEnabled: false)
 }
 
 @available(iOS 17.0, *)
@@ -117,6 +170,14 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
         previewCategorySection(selectedTitle: nil),
         previewAdvancedSection(includeScreenshot: false, includeBlockedList: false),
         previewSendSection(isEnabled: false)
-    ])
+    ], isPreviewEnabled: false)
+}
+
+@available(iOS 17.0, *)
+#Preview("Learn More footer") {
+    previewSheet(sections: [
+        previewCategorySection(selectedTitle: "Site is not usable"),
+        previewFooterSection()
+    ], isPreviewEnabled: false)
 }
 #endif

@@ -8,7 +8,7 @@
 "Copy URL" = "ចម្លង URL";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
-"Menu.SendLinkToDevice" = "ផ្ញើតំណទៅឧបករណ៍";
+"Menu.SendLinkToDevice" = "ផ្ញើបញ្ជាប់ទៅឧបករណ៍";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "បើក​ចំណាំ​ចុងក្រោយ";

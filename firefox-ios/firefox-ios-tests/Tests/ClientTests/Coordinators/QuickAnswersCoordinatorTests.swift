@@ -22,12 +22,14 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockParentCoordinator()
         themeManager = MockThemeManager()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {
         router = nil
         parentCoordinator = nil
         themeManager = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 

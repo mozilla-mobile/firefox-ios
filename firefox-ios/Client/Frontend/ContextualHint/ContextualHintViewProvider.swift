@@ -23,6 +23,10 @@ enum ContextualHintType: String {
     case summarizeToolbarEntry = "SummarizeToolbarEntry"
 }
 
+enum TipKitHintType: String {
+    case googleLens = "GoogleLens"
+}
+
 @MainActor
 class ContextualHintViewProvider: ContextualHintPrefsKeysProvider,
                                   SearchBarLocationProvider,

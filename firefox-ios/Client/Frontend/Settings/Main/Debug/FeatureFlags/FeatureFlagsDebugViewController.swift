@@ -207,6 +207,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .privacyDashboard,
+                titleText: format(string: "Privacy Dashboard"),
+                statusText: format(string: "Toggle Privacy Dashboard")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .quickAnswers,
                 titleText: format(string: "Quick Answers"),
                 statusText: format(string: "Toggle to enable the Quick Answers feature")
@@ -245,13 +252,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .sentFromFirefox,
                 titleText: format(string: "Sent from Firefox"),
                 statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .snapkitRemovalRefactor,
-                titleText: format(string: "SnapKit Removal Refactor"),
-                statusText: format(string: "Toggle to enable SnapKit removal refactor")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -336,13 +336,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .waybackMachine,
                 titleText: format(string: "Wayback Machine"),
                 statusText: format(string: "Toggle to show Wayback Machine fallback on native error pages")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .worldCupWidget,
-                titleText: format(string: "World Cup Widget"),
-                statusText: format(string: "Toggle to enable the World Cup widget feature on the Homepage")
             ) { [weak self] _ in
                 self?.reloadView()
             },

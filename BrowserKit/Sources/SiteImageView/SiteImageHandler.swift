@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 public protocol SiteImageHandler: Sendable {
     func getImage(model: SiteImageModel) async -> UIImage
@@ -20,8 +21,13 @@ public final class DefaultSiteImageHandler: SiteImageHandler {
     /// prevent too many duplicate calls to remotely fetching URLs and images. (FXIOS-9830, revised FXIOS-9427 bugfix)
     @MainActor private(set) static var requestQueue: [String: Task<UIImage, Never>] = [:]
 
-    public static func factory() -> DefaultSiteImageHandler {
-        return DefaultSiteImageHandler()
+    public static func factory(themeManager: ThemeManager? = nil) -> DefaultSiteImageHandler {
+        let letterImageGenerator = if let themeManager {
+            DefaultLetterImageGenerator(themeManager: themeManager)
+        } else {
+            DefaultLetterImageGenerator()
+        }
+        return DefaultSiteImageHandler(imageHandler: DefaultImageHandler(letterImageGenerator: letterImageGenerator))
     }
 
     init(urlHandler: FaviconURLHandler = DefaultFaviconURLHandler(),

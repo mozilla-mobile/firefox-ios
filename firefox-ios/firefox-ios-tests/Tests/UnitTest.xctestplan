@@ -13,6 +13,16 @@
       "targets" : [
         {
           "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "AppAttestKit",
+          "name" : "AppAttestKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "MLPAKit",
+          "name" : "MLPAKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
           "identifier" : "ComponentLibrary",
           "name" : "ComponentLibrary"
         },
@@ -308,6 +318,13 @@
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "ComponentLibraryTests",
         "name" : "ComponentLibraryTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "AppAttestKitTests",
+        "name" : "AppAttestKitTests"
       }
     },
     {

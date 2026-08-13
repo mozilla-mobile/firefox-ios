@@ -37,7 +37,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
-                          WebCompatReportCoordinatorDelegate,
+                          WebCompatReportCoordinatorNavigationDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -61,7 +61,6 @@ final class BrowserCoordinator: BaseCoordinator,
     private let homepageTabStateStore: HomepageTabStateStore
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
-    private let worldCupStore: WorldCupStoreProtocol
     private let googleLensService: GoogleLensServicing
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
@@ -79,7 +78,6 @@ final class BrowserCoordinator: BaseCoordinator,
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
          googleLensService: GoogleLensServicing = GoogleLensService()) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
@@ -94,7 +92,6 @@ final class BrowserCoordinator: BaseCoordinator,
                                                            gleanWrapper: glean)
         self.applicationHelper = applicationHelper
         self.glean = glean
-        self.worldCupStore = worldCupStore
         self.googleLensService = googleLensService
         super.init(router: router)
 
@@ -627,19 +624,24 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentReportBrokenSite(url: URL?) {
-        let reportViewController = WebCompatReportViewController(windowUUID: windowUUID, reportedURL: url)
-        reportViewController.reportCoordinator = self
-        if let sheetPresentationController = reportViewController.sheetPresentationController {
-            sheetPresentationController.detents = [.large()]
-            sheetPresentationController.prefersGrabberVisible = true
-        }
-        router.present(reportViewController, animated: true, completion: nil)
+        let webCompatReportCoordinator = WebCompatReportCoordinator(
+            router: router,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            parentCoordinatorDelegate: self,
+            navigationDelegate: self
+        )
+        add(child: webCompatReportCoordinator)
+        webCompatReportCoordinator.start(reportedURL: url)
     }
 
-    // MARK: - WebCompatReportCoordinatorDelegate
+    // MARK: - WebCompatReportCoordinatorNavigationDelegate
 
-    func webCompatReportViewControllerDidFinish() {
-        router.dismiss(animated: true, completion: nil)
+    func webCompatReportDidSubmit() {
+        // TODO: FXIOS-16468 swap in the dedicated "Report sent" string once l10n exports it.
+        browserViewController.showPlainToast(
+            message: String.Microsurvey.Survey.ConfirmationPage.ConfirmationLabel
+        )
     }
 
     func presentSavePDFController() {
@@ -809,6 +811,17 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showETPMenu(sourceView: sourceView)
+    }
+
+    func showTrackerBlockerSheet() {
+        let viewController = TrackerBlockerSheetViewController(
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+        if let sheet = viewController.sheetPresentationController {
+            sheet.detents = [.medium()]
+        }
+        router.present(viewController, animated: true)
     }
 
     /// Starts the ShareSheetCoordinator, which initiates opening the iOS share sheet using an `UIActivityViewController`.
@@ -1105,17 +1118,6 @@ final class BrowserCoordinator: BaseCoordinator,
     func showShortcutsLibrary() {
         let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
         router.push(shortcutsLibraryViewController)
-    }
-
-    func showWorldCupCountryPicker() {
-        let selectedTeam = worldCupStore.selectedTeam
-        let pickerView = WorldCupCountryPickerView(
-            windowUUID: windowUUID,
-            themeManager: themeManager,
-            selectedTeam: selectedTeam
-        )
-        let viewController = UIHostingController(rootView: pickerView)
-        present(viewController)
     }
 
     func showQuickAnswers(transitionType: QuickAnswersTransitionType) {

@@ -48,6 +48,19 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Delegate intents → Redux actions
 
+    func testDidTapLearnMore_forwardsURLToCoordinator() throws {
+        let learnMoreURL = try XCTUnwrap(URL(string: "https://example.com/learn-more"))
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapLearnMore(url: learnMoreURL)
+
+        XCTAssertEqual(coordinator.didTapLearnMoreURLs, [learnMoreURL])
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .learnMore)
+    }
+
     func testDidTapButton_onSendRow_dispatchesSubmit() {
         let subject = createSubject(reportedURL: nil)
 
@@ -98,6 +111,80 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         subject.webCompatReportSheetDidToggle(id: "unknown", isOn: true)
 
         XCTAssertTrue(dispatchedViewActions().isEmpty)
+    }
+
+    func testDidEditText_onURLRow_dispatchesEditURLWithText() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "url", text: "https://changed.example.com")
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .editURL)
+        XCTAssertEqual(action?.url, "https://changed.example.com")
+    }
+
+    func testDidEditText_onDetailsRow_dispatchesSetAdditionalDetailsWithText() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "additionalDetails", text: "Images never load")
+
+        let action = lastViewAction()
+        XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .setAdditionalDetails)
+        XCTAssertEqual(action?.additionalDetails, "Images never load")
+    }
+
+    func testDidEditText_onNonTextRow_dispatchesNothing() {
+        let subject = createSubject(reportedURL: nil)
+
+        subject.webCompatReportSheetDidEditText(id: "send", text: "ignored")
+
+        XCTAssertTrue(dispatchedViewActions().isEmpty)
+    }
+
+    func testDidTapPreview_onlyDispatches() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.webCompatReportSheetDidTapPreview()
+
+        // Building a payload here is what let preview and submit drift.
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .preview)
+        XCTAssertTrue(coordinator.didTapPreviewPayloads.isEmpty)
+    }
+
+    func testNewState_withPreviewPayload_handsItToTheCoordinator() throws {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+        var payload = WebCompatReportPayload()
+        payload.url = "https://example.com"
+
+        subject.newState(state: WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .videoOrAudio,
+            previewPayload: payload
+        ))
+
+        XCTAssertEqual(coordinator.didTapPreviewPayloads, [payload])
+    }
+
+    func testNewState_withoutPreviewPayload_leavesTheCoordinatorAlone() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+
+        subject.newState(state: WebCompatReporterState(
+            windowUUID: windowUUID,
+            url: "https://example.com",
+            selectedCategory: .videoOrAudio
+        ))
+
+        XCTAssertTrue(coordinator.didTapPreviewPayloads.isEmpty)
     }
 
     func testSimpleCreation_hasNoLeaks() {
@@ -162,36 +249,65 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - makeSections
 
-    func testMakeSections_withoutCategory_showsAdvancedTogglesAndDisabledSendButton() {
+    func testMakeSections_withoutCategory_showsURLCategoryAdvancedAndDisabledSend() {
         let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
-        // Category + advanced + send (no sub-options until a category is picked).
-        XCTAssertEqual(sections.map(\.id), ["issueCategory", "advancedOptions", "send"])
+        // No sub-options and no details until a category is picked.
+        XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "advancedOptions", "send"])
 
         let advanced = sections.first { $0.id == "advancedOptions" }
-        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: true), .toggle(isOn: false)])
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
+
+        guard case let .urlField(text, _) = sections.first?.rows.first?.kind else {
+            return XCTFail("Expected a URL field row")
+        }
+        XCTAssertEqual(text, "https://example.com")
     }
 
-    func testMakeSections_withCategory_keepsAdvancedTogglesBeforeSendButton() {
+    func testMakeSections_withCategory_addsSubOptionsDetailsAndAdvancedWithSendLast() {
         let state = WebCompatReporterState(
             windowUUID: windowUUID,
             url: "https://example.com",
             selectedCategory: .siteNotUsable,
             selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
+            additionalDetails: "Broken images",
             includeScreenshot: false,
             includeBlockedList: true
         )
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
-        XCTAssertEqual(sections.map(\.id), ["issueCategory", "issueSubOptions", "advancedOptions", "send"])
+        XCTAssertEqual(
+            sections.map(\.id),
+            ["url", "issueCategory", "issueSubOptions", "additionalDetails", "advancedOptions", "send"]
+        )
 
         let advanced = sections.first { $0.id == "advancedOptions" }
-        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false), .toggle(isOn: true)])
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: true)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: true)])
+
+        let details = sections.first { $0.id == "additionalDetails" }
+        guard case let .detailsField(text, _) = details?.rows.first?.kind else {
+            return XCTFail("Expected a details field row")
+        }
+        XCTAssertEqual(text, "Broken images")
+    }
+
+    func testMakeSections_attachesLearnMoreFooterWithATappableLink() throws {
+        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        XCTAssertEqual(sections.filter { $0.footer != nil }.map(\.id), ["advancedOptions"])
+
+        // The footer view locates the link by searching `text` for `linkText`; if the
+        // format string and the link string drift apart the link silently stops rendering.
+        let footer = try XCTUnwrap(sections.first { $0.id == "advancedOptions" }?.footer)
+        XCTAssertTrue(footer.text.contains(footer.linkText))
+        XCTAssertNotNil(footer.linkURL)
     }
 
     private func createSubject(reportedURL: URL?) -> WebCompatReportViewController {
@@ -230,8 +346,23 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
 
 private final class MockWebCompatReportCoordinatorDelegate: WebCompatReportCoordinatorDelegate {
     var didFinishCallCount = 0
+    var didSubmitCallCount = 0
+    var didTapLearnMoreURLs: [URL] = []
+    var didTapPreviewPayloads: [WebCompatReportPayload] = []
 
     func webCompatReportViewControllerDidFinish() {
         didFinishCallCount += 1
+    }
+
+    func webCompatReportViewControllerDidSubmit() {
+        didSubmitCallCount += 1
+    }
+
+    func webCompatReportViewControllerDidTapLearnMore(url: URL) {
+        didTapLearnMoreURLs.append(url)
+    }
+
+    func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload) {
+        didTapPreviewPayloads.append(payload)
     }
 }

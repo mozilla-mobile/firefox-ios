@@ -46,6 +46,9 @@
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Logg inn";
 
+/* On the main menu account header, shown transiently while the user is being signed out of their account. */
+"MainMenu.Account.SigningOut.Title.v154" = "Loggar ut…";
+
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
 "MainMenu.Account.SyncError.Description.v131" = "Synkronisering sett på pause";
 
@@ -224,10 +227,10 @@
 "MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "Skriv ut";
 
 /* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "Slå av leservising";
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "Slå av lesevising";
 
 /* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.On.Title.v132" = "Slå på leservising";
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.On.Title.v132" = "Slå på lesevising";
 
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Subtitle.v132" = "Lesevising";
@@ -272,10 +275,10 @@
 "MainMenu.Submenus.Tools.Print.Title.v131" = "Skriv ut";
 
 /* On the main menu, the title for the action that will turn the reader view on for the current website. */
-"MainMenu.Submenus.Tools.ReaderView.Off.Title.v131" = "Slå av leservising";
+"MainMenu.Submenus.Tools.ReaderView.Off.Title.v131" = "Slå av lesevising";
 
 /* On the main menu, the title for the action that will turn the reader view on for the current website. */
-"MainMenu.Submenus.Tools.ReaderView.On.Title.v131" = "Slå på leservising";
+"MainMenu.Submenus.Tools.ReaderView.On.Title.v131" = "Slå på lesevising";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
 "MainMenu.Submenus.Tools.ReaderView.Subtitle.v131" = "Lesevising";
@@ -294,12 +297,6 @@
 
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v144" = "Del";
-
-/* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "Slå av mørk modus for nettstaden";
-
-/* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Slå på mørk modus for nettstaden";
 
 /* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Mørk modus for nettstad";
@@ -358,6 +355,9 @@
 /* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
 "MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "Lesevising";
 
+/* On the main menu, the accessibility label for the action that lets the user report that the current website is broken or not working correctly. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v154" = "Rapporter problem med ein nettstad";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Lagre";
 
@@ -405,6 +405,9 @@
 
 /* On the main menu, the label for the action that indicates that Reader view is turned on. */
 "MainMenu.ToolsSection.ReaderViewOn.Title.v150" = "På";
+
+/* On the main menu, the title for the action that lets the user report that the current website is broken or not working correctly. */
+"MainMenu.ToolsSection.ReportBrokenSite.Title.v154" = "Rapporter problem med ein nettstad";
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Lagre";

@@ -36,9 +36,7 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         DefaultBrowserUtility().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
         DefaultBrowserUtility().migrateDefaultBrowserStatusIfNeeded(isFirstRun: introScreenManager.shouldShowIntroScreen)
         if #available(iOS 26, *) {
-            #if canImport(FoundationModels)
-                AppleIntelligenceUtil().processAvailabilityState()
-            #endif
+            AppleIntelligenceUtil().processAvailabilityState()
         }
 
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
@@ -146,9 +144,7 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         AppEventQueue.signal(event: .preLaunchDependenciesComplete)
 
         if #available(iOS 26, *) {
-            #if canImport(FoundationModels)
-                AppleIntelligenceUtil().processAvailabilityState()
-            #endif
+            AppleIntelligenceUtil().processAvailabilityState()
         }
     }
 

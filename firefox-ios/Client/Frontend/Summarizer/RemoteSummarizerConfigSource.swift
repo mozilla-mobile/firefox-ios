@@ -15,7 +15,7 @@ struct RemoteSummarizerConfigSource: SummarizerConfigSourceProtocol {
     }
 
     func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {
-        return ASSummarizerRemoteConfig()?.fetchSummarizerConfig(
+        return ASAIRemoteConfig().fetchSummarizerConfig(
             summarizer,
             for: contentType,
             useLocalized: summarizerNimbusUtils.isLanguageExpansionEnabled

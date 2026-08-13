@@ -15,6 +15,7 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextFieldDidBeginEditing(_ textField: UITextField)
     func locationTextFieldDidEndEditing()
     func locationTextFieldNeedsSearchReset()
+    func locationTextFieldDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String)
 }
 
 final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
@@ -247,10 +248,21 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     private func updateRightView() {
         let textIsEmpty = textWithoutSuggestion()?.isEmpty ?? true
-        if editingAccessoryAction?.iconName != nil, isEditing, textIsEmpty {
+        let shouldShowEditingAccessory = editingAccessoryAction?.iconName != nil && isEditing && textIsEmpty
+        let wasShowingEditingAccessory = rightView != nil && rightView === editingAccessoryRightView
+
+        if shouldShowEditingAccessory {
             rightView = editingAccessoryRightView
             rightViewMode = .whileEditing
             clearButtonMode = .never
+
+            if !wasShowingEditingAccessory,
+               let contextualHintType = editingAccessoryAction?.contextualHintType {
+                autocompleteDelegate?.locationTextFieldDidDisplayEditingAccessoryButton(
+                    editingAccessoryRightView,
+                    contextualHintType: contextualHintType
+                )
+            }
         } else {
             rightView = nil
             rightViewMode = .never

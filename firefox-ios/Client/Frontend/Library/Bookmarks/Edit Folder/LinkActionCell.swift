@@ -18,6 +18,8 @@ final class LinkActionCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.textAlignment = .center
     }
 
+    private lazy var selectedView: UIView = .build { _ in }
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
@@ -34,6 +36,7 @@ final class LinkActionCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private func setupLayout() {
         selectionStyle = .default
+        selectedBackgroundView = selectedView
         accessibilityTraits = .button
         accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.changeLocationCell
         contentView.addSubview(titleLabel)
@@ -52,5 +55,6 @@ final class LinkActionCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer5
         titleLabel.textColor = theme.colors.actionPrimary
+        selectedView.backgroundColor = theme.colors.layer5Hover
     }
 }

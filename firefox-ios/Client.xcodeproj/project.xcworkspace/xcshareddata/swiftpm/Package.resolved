@@ -1,5 +1,5 @@
 {
-  "originHash" : "11f4c221cb65cc51b27a66e05123e8d93bab966dfb34dd69ac976a0770f80ea5",
+  "originHash" : "995fcab85cbc15a13d8e2966a58d5715849bd751989063a16ad7f309af14688b",
   "pins" : [
     {
       "identity" : "a-star",
@@ -110,15 +110,6 @@
       }
     },
     {
-      "identity" : "snapkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SnapKit/SnapKit.git",
-      "state" : {
-        "revision" : "e74fe2a978d1216c3602b129447c7301573cc2d8",
-        "version" : "5.7.0"
-      }
-    },
-    {
       "identity" : "swift-asn1",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
@@ -150,8 +141,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
-        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
-        "version" : "509.1.1"
+        "revision" : "0687f71944021d616d34d922343dcef086855920",
+        "version" : "600.0.1"
       }
     },
     {

@@ -9,7 +9,7 @@ This script automates the process of fetching, syncing, and organizing Acorn ico
 It performs the following tasks:
 1. Fetches the latest release of the Acorn icons repository from GitHub.
 2. Saves the latest release information locally to detect if a new release needs to be synced.
-3. Downloads the icons from the latest release and synchronizes them with the project's asset folder.
+3. Downloads the icons from the latest release and synchronizes them with the project's asset folders (see `ASSET_FOLDER_PATHS`).
 4. Sorts icons into categories based on their size (e.g., ExtraSmall, Small, Large, etc.).
 5. Generates the StandardImageIdentifiers.swift from BrowserKit's Common package.
 
@@ -37,6 +37,14 @@ TARGET_SIZES = [
     ("20", "Medium"),
     ("24", "Large"),
     ("30", "ExtraLarge")
+]
+
+# Asset catalogs kept in sync with Acorn.
+ASSET_FOLDER_PATHS = [
+    "firefox-ios/Client/Assets/Images.xcassets/",
+    "firefox-ios/CredentialProvider/CredentialAssets.xcassets/",
+    "firefox-ios/Extensions/ShareTo/Images.xcassets/",
+    "firefox-ios/WidgetKit/Assets.xcassets/"
 ]
 
 def fetch_latest_release_from_acorn() -> dict|None:
@@ -87,8 +95,7 @@ def download_icons_and_save_in_assets():
     if clone_response.returncode != 0:
         print(f"Couldn't clone acorn icon repository")
         exit()
-    asset_folder_path = "../firefox-ios/Client/Assets/Images.xcassets/"
-    asset_folder_list = os.listdir(asset_folder_path)
+    asset_folders = [(f"../{path}", os.listdir(f"../{path}")) for path in ASSET_FOLDER_PATHS]
     sizes_to_copy = map(lambda x: x[0], TARGET_SIZES)
     for size in sizes_to_copy:
         icons_dir_path = f"acorn-icons/icons/mobile/{size}/pdf"
@@ -99,15 +106,16 @@ def download_icons_and_save_in_assets():
                 icon_path = os.path.join(dir_object[0], file)
                 folder_name = f"{os.path.splitext(file)[0]}.imageset".replace("Dark", "").replace("Light", "")
 
-                asset_file_path = f"{asset_folder_path}{folder_name}/{file}"
-                # file has to be a pdf and we need the file already present in the images folder
-                # the file need to be already in the asset folder, no different file can be added
-                if file.endswith(".pdf") and folder_name in asset_folder_list and os.path.exists(asset_file_path):
-                    destination_folder = os.path.join(asset_folder_path, folder_name)
-                    os.makedirs(destination_folder, exist_ok=True)
-                    
-                    destination_file = os.path.join(destination_folder, file)
-                    shutil.copy(icon_path, destination_file)
+                for asset_folder_path, asset_folder_list in asset_folders:
+                    asset_file_path = f"{asset_folder_path}{folder_name}/{file}"
+                    # file has to be a pdf and we need the file already present in the images folder
+                    # the file need to be already in the asset folder, no different file can be added
+                    if file.endswith(".pdf") and folder_name in asset_folder_list and os.path.exists(asset_file_path):
+                        destination_folder = os.path.join(asset_folder_path, folder_name)
+                        os.makedirs(destination_folder, exist_ok=True)
+
+                        destination_file = os.path.join(destination_folder, file)
+                        shutil.copy(icon_path, destination_file)
     
     os.chdir("..")
     subprocess.run(["rm", "-rf", temp_dir_folder_name])

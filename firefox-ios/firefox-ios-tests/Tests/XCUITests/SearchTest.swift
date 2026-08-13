@@ -30,6 +30,11 @@ class SearchTests: FeatureFlaggedTestBase {
         searchScreen = SearchScreen(app: app)
     }
 
+    override func tearDown() async throws {
+        XCUIDevice.shared.orientation = .portrait
+        try await super.tearDown()
+    }
+
     private func typeOnSearchBar(text: String) {
         browserScreen.tapOnAddressBar()
         browserScreen.tapClearButtonIfExists()
@@ -458,38 +463,131 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2576803
+    // [Config] orientation:portrait, orientation:landscape
+    // Smoketest
     func testFirefoxSuggest() {
-        // In history: mozilla.org
         app.launch()
-        navigator.openURL("https://www.mozilla.org/en-US/")
+
+        // Create an open Tab
+        navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
         waitUntilPageLoad()
 
-        // Bookmark The Book of Mozilla (on localhost)
-        navigator.createNewTab()
-        navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
+        // Create some history
+        navigator.openNewURL(urlString: "https://www.example.com")
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        // navigator.goto(SaveBrowserTabMenu)
+        navigator.performAction(Action.CloseTab)
+
+        // Create a bookmark
+        navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
+        waitUntilPageLoad()
         navigator.performAction(Action.Bookmark)
+        navigator.performAction(Action.CloseTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        // Close all tabs so that the search result does not include
-        // current tabs.
-        navigator.performAction(Action.AcceptRemovingAllTabs)
+        let siteTable = app.tables["SiteTable"]
 
-        // Type partial match ("mo") of the history and the bookmark
-        waitForTabsButton()
-        navigator.goto(TabTray)
+        for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
+            XCUIDevice.shared.orientation = orientation
+
+            // Firefox Suggest should show up for sponsored suggestion, open tab, history
+            // and bookmark.
+            let firefoxSuggestTerms = [
+                "amazon": "Amazon.com - Official Site", // Sponsored suggestion
+                "internet": "Internet for people, not profit — Mozilla", // Open tab
+                "example": "www.example.com/", // History
+                "book": "The Book of Mozilla" // Bookmark
+            ]
+            for (term, expectedTitle) in firefoxSuggestTerms {
+                browserScreen.tapOnAddressBar()
+                browserScreen.tapClearButtonIfExists()
+                browserScreen.typeOnSearchBar(text: term)
+                mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+                let searchEngines = [
+                    "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+                ]
+                for searchEngine in searchEngines {
+                    mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+                }
+                // Search engine suggestions
+                mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+                mozWaitForElementToExist(siteTable.staticTexts[term])
+
+                // Firefox Suggest is displayed
+                if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
+                    siteTable.cells.firstMatch.swipeUp()
+                }
+                mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
+                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+            }
+
+            // Non Firefox Suggest result: A random term
+            let term = "heeeeeeellllllllllloooooooo"
+            browserScreen.tapOnAddressBar()
+            browserScreen.tapClearButtonIfExists()
+            browserScreen.typeOnSearchBar(text: term)
+            mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+            let searchEngines = [
+                "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+            ]
+            for searchEngine in searchEngines {
+                mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+            }
+            // Search engine suggestions
+            mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+            mozWaitForElementToExist(siteTable.staticTexts[term])
+            mozWaitForElementToNotExist(siteTable.otherElements["Firefox Suggest"])
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3209706
+    // Regression
+    func testDefaultSearchEngines() {
+        app.launch()
+        navigator.goto(SearchSettings)
+        searchSettingsScreen.assertDefaultSearchEngineSectionExists()
+        searchSettingsScreen.assertAlternativeSearchEnginesSectionExists()
+        for searchEngine in ["Google", "Bing", "DuckDuckGo", "Perplexity", "Wikipedia (en)", "eBay"] {
+            searchSettingsScreen.assertSearchEngineExists(named: searchEngine)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753092
+    // Regression
+    func testFirefoxSuggestionsLandscapePrivate() {
+        app.launch()
+
+        // Precondition: "Ingest New Suggestions Now" from the
+        // secret settings
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
         navigator.goto(HomePanelsScreen)
-        typeOnSearchBar(text: "mo")
 
-        // Google Search appears
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
+        // Step 1: Type a keyword that trigers a sponsored result
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: "Amazon")
 
-        // Firefox Suggest appears
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["The Book of Mozilla"]) // Bookmark
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["www.mozilla.org/"]) // History
+        // Step 2: Sponsored result should be specified
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+
+        // Step 3: Turn the device to landscape and observe the sponsored result
+        settingsScreen.rotateDevice(to: .landscapeLeft)
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+        navigator.performAction(Action.CloseURLBarOpen)
+
+        // Step 4: Trigger a sponsored result in private mode
+        // Sponsored result is NOT displayed
+        settingsScreen.rotateDevice(to: .portrait)
+        waitForTabsButtonHittable()
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.goto(NewTabScreen)
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: "Amazon")
+        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: false)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {

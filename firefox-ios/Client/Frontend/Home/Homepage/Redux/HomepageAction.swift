@@ -71,5 +71,4 @@ enum HomepageMiddlewareActionType: ActionType {
     case didEnterBackground
     case configuredPrivacyNotice
     case configuredSearchBar
-    case configuredSpacer
 }

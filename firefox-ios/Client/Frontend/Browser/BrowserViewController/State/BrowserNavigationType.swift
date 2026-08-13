@@ -13,12 +13,12 @@ enum BrowserNavigationDestination: Equatable {
     case contextMenu
     case settings(Route.SettingsSection)
     case trackingProtectionSettings
+    case trackerBlockerSheet
     case tabTray(TabTrayPanelType)
     case bookmarksPanel
     case homepageZeroSearch
     case zeroSearch
     case shortcutsLibrary
-    case worldCupCountryPicker
     case quickAnswers(transitionType: QuickAnswersTransitionType)
     case privacyNoticeLink(URL)
     case summarizer(config: SummarizerConfig, trigger: SummarizerTrigger)

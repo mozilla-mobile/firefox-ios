@@ -8,7 +8,7 @@
 "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Nome comune";
 
 /* The title for the certificate issuer country inside the certificate screen. */
-"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "Nazione";
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "Paese";
 
 /* The title for the certificate issuer name section inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "Nome autorità emittente";

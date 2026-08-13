@@ -155,4 +155,12 @@ extension UIAlertController {
         alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: okayCallback))
         return alert
     }
+
+    func applyNovaActionTint(_ theme: Theme) {
+        // The violet action tint only applies below iOS 26
+        guard #unavailable(iOS 26.0) else { return }
+        let featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()
+        guard featureFlagsProvider.isEnabled(.novaDesign) else { return }
+        view.tintColor = theme.colors.actionPrimary
+    }
 }

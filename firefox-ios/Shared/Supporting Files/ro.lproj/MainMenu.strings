@@ -46,6 +46,9 @@
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Intră în cont";
 
+/* On the main menu account header, shown transiently while the user is being signed out of their account. */
+"MainMenu.Account.SigningOut.Title.v154" = "Ieșire din cont în curs…";
+
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
 "MainMenu.Account.SyncError.Description.v131" = "Sincronizarea a fost întreruptă";
 
@@ -131,7 +134,7 @@
 "MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Protecțiile sunt activate";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Acasă";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Pagină de start";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Adaugă în ecranul de pornire";
@@ -170,7 +173,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "Salvează în lista de lectură";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
-"MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Acasă";
+"MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Pagină de start";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Adaugă în ecranul de pornire";
@@ -295,12 +298,6 @@
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v144" = "Partajează";
 
-/* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "Dezactivează modul întunecat pentru site-urile web";
-
-/* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Activează modul întunecat pentru site-urile web";
-
 /* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Mod întunecat site-uri web";
 
@@ -358,6 +355,9 @@
 /* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
 "MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "Mod de lectură";
 
+/* On the main menu, the accessibility label for the action that lets the user report that the current website is broken or not working correctly. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReportBrokenSite.v154" = "Raportează un site nefuncțional";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Salvează";
 
@@ -405,6 +405,9 @@
 
 /* On the main menu, the label for the action that indicates that Reader view is turned on. */
 "MainMenu.ToolsSection.ReaderViewOn.Title.v150" = "Activat";
+
+/* On the main menu, the title for the action that lets the user report that the current website is broken or not working correctly. */
+"MainMenu.ToolsSection.ReportBrokenSite.Title.v154" = "Raportează un site nefuncțional";
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Salvează";

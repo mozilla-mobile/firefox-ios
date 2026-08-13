@@ -26,6 +26,10 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     @MainActor
     func showEnhancedTrackingProtection(sourceView: UIView)
 
+    /// Presents the tracker blocker modal half sheet from the homepage tracker blocker view.
+    @MainActor
+    func showTrackerBlockerSheet()
+
     /// Shows the specified section of the home panel.
     ///
     /// - Parameter homepanelSection: The section to be displayed.
@@ -123,9 +127,6 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func showShortcutsLibrary()
-
-    @MainActor
-    func showWorldCupCountryPicker()
 
     @MainActor
     func showGoogleLensPhotoPicker()

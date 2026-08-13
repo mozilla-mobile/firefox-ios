@@ -12,6 +12,12 @@ import WebCompatReporterKit
 protocol WebCompatReportCoordinatorDelegate: AnyObject {
     /// Sheet asked to finish; the coordinator owns the dismissal.
     func webCompatReportViewControllerDidFinish()
+    /// Report was sent; the coordinator dismisses and confirms it.
+    func webCompatReportViewControllerDidSubmit()
+    /// User tapped the "Learn More…" link; the coordinator shows the explainer page without dismissing the sheet.
+    func webCompatReportViewControllerDidTapLearnMore(url: URL)
+    /// The middleware assembled the report; the coordinator presents it.
+    func webCompatReportViewControllerDidTapPreview(payload: WebCompatReportPayload)
 }
 
 /// Store-connected container that hosts the `WebCompatReporterKit` sheet, maps
@@ -20,6 +26,7 @@ protocol WebCompatReportCoordinatorDelegate: AnyObject {
 final class WebCompatReportViewController: UINavigationController,
                                            StoreSubscriber,
                                            Themeable,
+                                           UIAdaptivePresentationControllerDelegate,
                                            WebCompatReportSheetDelegate {
     typealias SubscriberStateType = WebCompatReporterState
 
@@ -62,6 +69,7 @@ final class WebCompatReportViewController: UINavigationController,
         super.viewDidLoad()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        presentationController?.delegate = self
         subscribeToRedux()
         store.dispatch(WebCompatReporterViewAction(
             url: reportedURL?.absoluteString,
@@ -101,6 +109,13 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     func newState(state: WebCompatReporterState) {
+        guard !state.shouldDismiss else {
+            reportCoordinator?.webCompatReportViewControllerDidSubmit()
+            return
+        }
+        if let payload = state.previewPayload {
+            reportCoordinator?.webCompatReportViewControllerDidTapPreview(payload: payload)
+        }
         sheetViewController.configure(with: WebCompatReportViewController.makeViewModel(from: state))
     }
 
@@ -117,13 +132,17 @@ final class WebCompatReportViewController: UINavigationController,
     }
 
     private enum SectionID: String {
+        case url
         case issueCategory
         case issueSubOptions
+        case additionalDetails
         case advancedOptions
         case send
     }
 
     private enum RowID: String {
+        case url
+        case additionalDetails
         case includeScreenshot
         case includeBlockedList
         case send
@@ -132,10 +151,45 @@ final class WebCompatReportViewController: UINavigationController,
     static func makeSections(
         from state: WebCompatReporterState
     ) -> [WebCompatReportViewModel.Section] {
-        var sections = makeIssueSections(from: state)
+        var sections = [urlSection(from: state)]
+        sections.append(contentsOf: makeIssueSections(from: state))
+        if state.showsAdditionalDetails {
+            sections.append(detailsSection(from: state))
+        }
         sections.append(advancedOptionsSection(from: state))
         sections.append(sendSection(from: state))
         return sections
+    }
+
+    private static func urlSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.url.rawValue,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.url.rawValue,
+                    title: .WebCompatReporter.Fields.URLLabel,
+                    kind: .urlField(text: state.url, placeholder: .WebCompatReporter.Fields.URLPlaceholder),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.urlField
+                )
+            ]
+        )
+    }
+
+    private static func detailsSection(from state: WebCompatReporterState) -> WebCompatReportViewModel.Section {
+        return WebCompatReportViewModel.Section(
+            id: SectionID.additionalDetails.rawValue,
+            rows: [
+                WebCompatReportViewModel.Row(
+                    id: RowID.additionalDetails.rawValue,
+                    title: .WebCompatReporter.Fields.DetailsAccessibilityLabel,
+                    kind: .detailsField(
+                        text: state.additionalDetails,
+                        placeholder: .WebCompatReporter.Fields.DetailsPlaceholder
+                    ),
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.additionalDetails
+                )
+            ]
+        )
     }
 
     private static func advancedOptionsSection(
@@ -144,13 +198,9 @@ final class WebCompatReportViewController: UINavigationController,
         return WebCompatReportViewModel.Section(
             id: SectionID.advancedOptions.rawValue,
             title: .WebCompatReporter.AdditionalInfo.Title,
+            footer: learnMoreFooter(),
+            // The screenshot row is parked (FXIOS-16450): the image has no transport yet.
             rows: [
-                WebCompatReportViewModel.Row(
-                    id: RowID.includeScreenshot.rawValue,
-                    title: .WebCompatReporter.AdditionalInfo.IncludeScreenshot,
-                    kind: .toggle(isOn: state.includeScreenshot),
-                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeScreenshot
-                ),
                 WebCompatReportViewModel.Row(
                     id: RowID.includeBlockedList.rawValue,
                     title: .WebCompatReporter.AdditionalInfo.IncludeBlockedList,
@@ -158,6 +208,20 @@ final class WebCompatReportViewController: UINavigationController,
                     a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeBlockedList
                 )
             ]
+        )
+    }
+
+    private static func learnMoreFooter() -> WebCompatReportViewModel.Footer {
+        let linkText: String = .WebCompatReporter.AdditionalInfo.LearnMore
+        return WebCompatReportViewModel.Footer(
+            text: String(
+                format: .WebCompatReporter.AdditionalInfo.FooterText,
+                AppName.shortName.rawValue,
+                linkText
+            ),
+            linkText: linkText,
+            linkURL: SupportUtils.URLForTopic("report-broken-site"),
+            linkA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.learnMore
         )
     }
 
@@ -248,9 +312,18 @@ final class WebCompatReportViewController: UINavigationController,
         }
     }
 
-    // MARK: - WebCompatReportSheetDelegate
+    // MARK: - UIAdaptivePresentationControllerDelegate
 
-    func webCompatReportSheetDidTapClose() {
+    /// UIKit calls this only for the interactive swipe, not for programmatic dismissal.
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.cancel
+        ))
+    }
+
+    /// Kept here so the cancel action is dispatched from the one place that talks to the store.
+    func finishReport() {
         store.dispatch(WebCompatReporterViewAction(
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.cancel
@@ -258,7 +331,14 @@ final class WebCompatReportViewController: UINavigationController,
         reportCoordinator?.webCompatReportViewControllerDidFinish()
     }
 
+    // MARK: - WebCompatReportSheetDelegate
+
+    func webCompatReportSheetDidTapClose() {
+        finishReport()
+    }
+
     func webCompatReportSheetDidTapPreview() {
+        // The report comes back through newState, not from here.
         store.dispatch(WebCompatReporterViewAction(
             windowUUID: windowUUID,
             actionType: WebCompatReporterViewActionType.preview
@@ -305,9 +385,36 @@ final class WebCompatReportViewController: UINavigationController,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.toggleBlockedList
             ))
-        case .send, .none:
+        case .url, .additionalDetails, .send, .none:
             break
         }
+    }
+
+    func webCompatReportSheetDidEditText(id: String, text: String) {
+        switch RowID(rawValue: id) {
+        case .url:
+            store.dispatch(WebCompatReporterViewAction(
+                url: text,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.editURL
+            ))
+        case .additionalDetails:
+            store.dispatch(WebCompatReporterViewAction(
+                additionalDetails: text,
+                windowUUID: windowUUID,
+                actionType: WebCompatReporterViewActionType.setAdditionalDetails
+            ))
+        case .includeScreenshot, .includeBlockedList, .send, .none:
+            break
+        }
+    }
+
+    func webCompatReportSheetDidTapLearnMore(url: URL) {
+        store.dispatch(WebCompatReporterViewAction(
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterViewActionType.learnMore
+        ))
+        reportCoordinator?.webCompatReportViewControllerDidTapLearnMore(url: url)
     }
 
     // MARK: - Themeable

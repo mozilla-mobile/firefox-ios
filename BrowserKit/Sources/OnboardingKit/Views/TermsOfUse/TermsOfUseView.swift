@@ -163,6 +163,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                     linkText: link.linkText,
                     action: link.action,
                     textAlignment: UX.CardView.linksTextAlignment(for: viewModel.variant),
+                    accessibilityIdentifier: link.accessibilityIdentifier,
                     linkAction: viewModel.handleEmbededLinkAction(action:)
                 )
             }

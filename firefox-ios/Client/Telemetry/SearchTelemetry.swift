@@ -89,10 +89,6 @@ enum SearchTelemetryValues {
         case persistedSearchTermsRefined = "persisted_search_terms_refined"
     }
 
-    enum Provider: String {
-        case iOS_app
-    }
-
     enum EngagementType: String {
         case tap
         case enter

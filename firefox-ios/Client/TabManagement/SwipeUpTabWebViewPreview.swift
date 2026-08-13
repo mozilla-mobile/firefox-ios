@@ -9,7 +9,7 @@ import SiteImageView
 class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     private struct UX {
         static let triggerBoundsHeightPercentage: CGFloat = 0.25
-        static let fingerCardPositionRatio: CGFloat = 2.0 / 3.0
+        static let fingerCardPositionRatio: CGFloat = 1 // 0 = top of card, 1 = bottom of card
         static let closeReleaseThreshold: CGFloat = 1.0 / 3.0
         static let tabTrayReleaseThreshold: CGFloat = 2.0 / 3.0
         static let previewFadeOutDuration: CGFloat = 0.2
@@ -20,12 +20,16 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         static let minimumTabPreviewScale: CGFloat = 0.33
         static let tossPreviewXScale: CGFloat = 0.6
         static let tossPreviewYScale: CGFloat = 0.6
+        // A number used in calculating the size of the tab preview during the animation,
+        // larger values shrink the preview faster
+        static let scaleSpeed: CGFloat = 1.237
+        static let closePreviewDimSpeed: CGFloat = 5
     }
 
     private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
 
     private let backgroundView: UIVisualEffectView = .build {
-        if #available(iOS 26, *) {
+        if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             $0.effect = UIGlassEffect(style: .regular)
         } else {
             $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
@@ -53,8 +57,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     private var screenshotViewContainerTopConstraint: NSLayoutConstraint?
     private var screenshotViewContainerBottomConstraint: NSLayoutConstraint?
-    private var tabBackgroundHoverTopConstraint: NSLayoutConstraint?
-    private var tabBackgroundHoverBottomConstraint: NSLayoutConstraint?
 
     var previewCardFrame: CGRect {
         return screenshotViewContainer.frame
@@ -89,11 +91,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         addSubviews(tabBackgroundHover, backgroundView, screenshotViewContainer, closeButton)
         screenshotViewContainer.addSubview(screenshotView)
 
-        tabBackgroundHoverTopConstraint = tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor)
-        tabBackgroundHoverBottomConstraint = tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor)
-        tabBackgroundHoverTopConstraint?.isActive = true
-        tabBackgroundHoverBottomConstraint?.isActive = true
-
         screenshotViewContainerTopConstraint = screenshotViewContainer.topAnchor.constraint(equalTo: topAnchor)
         screenshotViewContainerBottomConstraint = screenshotViewContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
         screenshotViewContainerTopConstraint?.isActive = true
@@ -102,6 +99,8 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
             closeButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             closeButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 
+            tabBackgroundHover.topAnchor.constraint(equalTo: topAnchor),
+            tabBackgroundHover.bottomAnchor.constraint(equalTo: bottomAnchor),
             tabBackgroundHover.leadingAnchor.constraint(equalTo: leadingAnchor),
             tabBackgroundHover.trailingAnchor.constraint(equalTo: trailingAnchor),
 
@@ -119,8 +118,6 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
 
     func setInitialTransform(topPadding: CGFloat, bottomPadding: CGFloat) {
         screenshotView.layer.cornerRadius = 0
-        tabBackgroundHoverTopConstraint?.constant = topPadding
-        tabBackgroundHoverBottomConstraint?.constant = -bottomPadding
 
         if swipeGestureFeatureFlagProvider.isCloseTabEnabled {
             closeButton.transform = .identity.translatedBy(x: 0.0, y: -closeButton.bounds.height * 2.0)
@@ -164,7 +161,12 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
         }
 
         // Shrink continuously during the gesture
-        let scale = max((1 - abs(translation.y) / bounds.height), UX.minimumTabPreviewScale)
+        let scale = max((1 - abs(UX.scaleSpeed * translation.y) / bounds.height), UX.minimumTabPreviewScale)
+
+        // Gradually dim the preview when it's in the close tab region
+        let previewAlpha = min(1,
+                               1 - UX.closePreviewDimSpeed * (UX.closeReleaseThreshold - (fingerLocation.y / bounds.height)))
+        screenshotViewContainer.alpha = previewAlpha
 
         // Transform that places the finger horizontally centered and <fingerCardPositionRatio> down the card.
         let naturalCenter = screenshotViewContainer.center
@@ -234,10 +236,12 @@ class SwipeUpTabWebViewPreview: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         tabBackgroundHover.backgroundColor = theme.colors.layer3
         if #unavailable(iOS 26) {
-            closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+                closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
+        } else {
+            closeButton.configuration?.baseBackgroundColor = nil
         }
-        closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
-        screenshotViewContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
+        closeButton.configuration?.baseForegroundColor = theme.colors.actionCritical
+        screenshotViewContainer.applyShadow(FxShadow.shadow200, theme: theme)
     }
 
     // MARK: - Private Functions

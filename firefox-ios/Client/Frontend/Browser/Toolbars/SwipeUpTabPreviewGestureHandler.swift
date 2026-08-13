@@ -11,6 +11,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     private struct UX {
         static let closeTabAnimationsDuration: CGFloat = 0.3
         static let dismissPreviewDelay: CGFloat = 0.4
+        static let swipeUpVelocityThreshold: CGFloat = -1100
     }
 
     private let tabPreview: SwipeUpTabWebViewPreview
@@ -25,6 +26,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     private weak var swipeUpGesture: UISwipeGestureRecognizer?
     private weak var swipeDownGesture: UISwipeGestureRecognizer?
     private let swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider
+    private let toolbarTelemetry: ToolbarTelemetry
 
     var tabAnimationSourceFrame: CGRect {
         tabPreview.previewCardFrame
@@ -46,7 +48,8 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
          tabManager: TabManager,
          themeManager: ThemeManager,
          windowUUID: WindowUUID,
-         swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider) {
+         swipeGestureFeatureFlagProvider: SwipeGestureFeatureFlagProvider,
+         toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry()) {
         self.tabPreview = tabPreview
         self.bottomBlurView = bottomBlurView
         self.topBlurView = topBlurView
@@ -55,6 +58,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.swipeGestureFeatureFlagProvider = swipeGestureFeatureFlagProvider
+        self.toolbarTelemetry = toolbarTelemetry
         super.init()
         subscribeToRedux()
     }
@@ -193,12 +197,16 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
                 topPadding: topBlurView.bounds.height,
                 bottomPadding: bottomBlurView.bounds.height
             )
+            if gesture.velocity(in: nil).y <= UX.swipeUpVelocityThreshold {
+                handleGestureEnded(gesture: gesture)
+                return
+            }
         case .changed:
             tabPreview.addTabScreenshot(image: tab.screenshot)
             let translation = gesture.translation(in: gesture.view)
             let fingerLocation = gesture.location(in: tabPreview)
             tabPreview.translate(translation, fingerLocation: fingerLocation)
-        case .ended:
+        case .ended, .cancelled:
             handleGestureEnded(gesture: gesture)
         default:
             break
@@ -206,12 +214,17 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
     }
 
     @objc
-    private func handleGestureEnded(gesture: UIGestureRecognizer) {
+    private func handleGestureEnded(gesture: UIPanGestureRecognizer) {
         let fingerLocation = gesture.location(in: tabPreview)
-        switch tabPreview.releaseOutcome(fingerLocation: fingerLocation) {
+        var outcome = tabPreview.releaseOutcome(fingerLocation: fingerLocation)
+        if gesture.velocity(in: nil).y <= UX.swipeUpVelocityThreshold {
+            outcome = SwipeUpTabWebViewPreview.ReleaseOutcome.openTabTray
+        }
+        switch outcome {
         case .closeTab:
             // Lock the pan gesture until the close animation finishes so a new gesture can't
             // start mid-animation.
+            toolbarTelemetry.addressBarDragged(outcome: ToolbarTelemetry.PanGestureOutcomes.tabClosed)
             disablePanGestureRecognizerForAnimation()
             UIView.animate(withDuration: UX.closeTabAnimationsDuration) { [self] in
                 tabPreview.tossPreview()
@@ -238,6 +251,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) {
                 self.tabPreview.dismissForTabTray()
             }
+            toolbarTelemetry.addressBarDragged(outcome: ToolbarTelemetry.PanGestureOutcomes.tabTrayOpened)
             store.dispatch(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
@@ -245,6 +259,7 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
                 )
             )
         case .cancel:
+            toolbarTelemetry.addressBarDragged(outcome: ToolbarTelemetry.PanGestureOutcomes.cancelled)
             tabPreview.restore()
         }
     }
@@ -265,8 +280,15 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             return
         }
 
+        addHaptics()
         store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
                                                actionType: ToolbarMiddlewareActionType.didSwipeToOpenTabTray))
+    }
+
+    private func addHaptics() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.prepare()
+        impactFeedback.impactOccurred()
     }
 
     // MARK: - Testing

@@ -56,15 +56,11 @@ class TabTraySelectorView: UIView, ThemeApplicable {
     }
 
     lazy var visualEffectView: UIVisualEffectView = .build { view in
-#if canImport(FoundationModels)
         if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             view.effect = UIGlassEffect(style: .regular)
         } else {
             view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         }
-#else
-        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-#endif
     }
 
     init(selectedIndex: Int,
@@ -384,11 +380,15 @@ class TabTraySelectorView: UIView, ThemeApplicable {
         self.theme = theme
 
         if #unavailable(iOS 26) {
-            let backgroundAlpha: CGFloat = tabTrayUtils.backgroundAlpha()
-            backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+            let trackColor = theme.isNova ? theme.colors.layerSurfaceLow : theme.colors.layer1
+            backgroundColor = trackColor.withAlphaComponent(tabTrayUtils.backgroundAlpha())
+        } else if theme.isNova, !DeviceInfo.isRunningLiquidGlassEarlyBeta, !(theme is TabTrayPanelSwipeTheme) {
+            let glass = UIGlassEffect(style: .regular)
+            glass.tintColor = theme.colors.layerGlassTintNova
+            visualEffectView.effect = glass
         }
 
-        selectionBackgroundView.backgroundColor = theme.colors.layerEmphasis
+        selectionBackgroundView.backgroundColor = theme.isNova ? theme.colors.layer2 : theme.colors.layerEmphasis
 
         for button in buttons {
             button.applyTheme(theme: theme)

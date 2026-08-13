@@ -79,11 +79,7 @@ extension BrowserViewController {
     }
 
     private func updateConstraintsForFindInPageChanges() {
-        if !isSnapKitRemovalEnabled {
-            updateViewConstraints()
-        } else {
-            updateConstraintsForKeyboard()
-        }
+        updateConstraintsForKeyboard()
     }
 }
 

@@ -23,6 +23,11 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
         super.setUp()
         files = MockFiles()
 
+        // MockRustKeychain.shared is a process-wide singleton that otherwise leaks a
+        // cached logins key across test methods, masking the first-time-key-creation
+        // code path that testDeleteMultipleLogins depends on to reproduce FXIOS-14323.
+        MockRustKeychain.shared.removeAllKeys()
+
         if let rootDirectory = try? files.getAndEnsureDirectory() {
             let databasePath = URL(
                 fileURLWithPath: rootDirectory,
@@ -157,23 +162,26 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
     }
 
     func testDeleteMultipleLogins() {
-        // Add three logins to delete, one after another to avoid crashing (FIXME: FXIOS-14323 / Github #31023)
+        logins.rustKeychain.removeLoginsKeysForDebugMenuItem()
+
+        // Add three logins back-to-back without waiting in between, regression test for
+        // a crash caused by concurrent Rust FFI calls (FXIOS-14323 / Github #31023).
+        let addExpectations = (0..<3).map { i in XCTestExpectation(description: "Add login \(i)") }
+
         for i in 0..<3 {
-            let expectation = XCTestExpectation(description: "Add login \(i)")
             let login = RustLoginsTests.loginFactory(number: i)
 
             logins.addLogin(login: login) { result in
                 switch result {
                 case .success(let login):
                     XCTAssertNotNil(login)
-                    expectation.fulfill()
+                    addExpectations[i].fulfill()
                 case .failure:
                     XCTFail("Add login \(i) failed")
                 }
             }
-
-            wait(for: [expectation], timeout: 2)
         }
+        wait(for: addExpectations, timeout: 5)
 
         let deleteExpectation = XCTestExpectation(description: "Deleting all entries")
 

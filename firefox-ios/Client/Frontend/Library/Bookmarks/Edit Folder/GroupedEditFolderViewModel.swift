@@ -28,7 +28,7 @@ class GroupedEditFolderViewModel: @unchecked Sendable {
     var onFolderStatusUpdate: VoidReturnCallback?
     var onGroupExpansionUpdate: ((Int) -> Void)?
     var onBookmarkSaved: VoidReturnCallback?
-    weak var parentFolderSelector: ParentFolderSelector?
+    weak var parentFolderSelector: GroupedParentFolderSelector?
 
     var controllerTitle: String {
         return isNewFolderView ? .BookmarksNewFolder : .BookmarksEditFolder
@@ -128,7 +128,7 @@ class GroupedEditFolderViewModel: @unchecked Sendable {
 
                 // When the folder edit view is a child of the edit bookmark view, the newly created folder
                 // should be selected
-                let folderCreated = Folder(title: folder.title, guid: guid, indentation: 0)
+                let folderCreated = GroupedFolder(title: folder.title, guid: guid, indentation: 0)
                 parentFolderSelector?.selectFolderCreatedFromChild(folder: folderCreated)
             case .failure(let error):
                 self.logger.log("Failed to save folder: \(error)", level: .warning, category: .library)

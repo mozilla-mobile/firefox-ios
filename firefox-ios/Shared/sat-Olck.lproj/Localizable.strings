@@ -302,7 +302,7 @@
 "ErrorPages.Advanced.Button" = "ᱞᱟᱦᱟᱱᱛᱤ";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "ᱦᱳᱥᱤᱭᱟᱨ: ᱟᱞᱮ ᱵᱟᱞᱮ ᱜᱚᱴᱟ ᱫᱟᱲᱤ ᱠᱟᱱᱟ ᱟᱢᱟᱠ ᱡᱚᱱᱚᱲᱟᱣ ᱱᱚᱶᱟ ᱣᱮᱵ ᱥᱟᱤᱴ ᱛᱮ ᱡᱚᱯᱛᱤ ᱢᱮᱱᱟ-ᱟ ᱥᱮ ᱵᱟ᱾";
+"ErrorPages.AdvancedWarning1.Text" = "ᱦᱳᱥᱤᱭᱟᱨ: ᱟᱞᱮ ᱵᱟᱞᱮ ᱜᱚᱴᱟ ᱫᱟᱲᱤ ᱠᱟᱱᱟ ᱟᱢᱟᱠ ᱡᱚᱱᱚᱲᱟᱣ ᱱᱚᱶᱟ ᱣᱮᱵ ᱥᱟᱭᱤᱴ ᱛᱮ ᱡᱚᱯᱛᱤ ᱢᱮᱱᱟ-ᱟ ᱥᱮ ᱵᱟ᱾";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱟᱹᱲᱤᱰᱷᱟᱹᱲᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱨ ᱵᱟᱝ ᱢᱩᱸᱦᱟᱹᱤᱡ ᱨᱮᱭᱟᱜ ᱠᱟᱹᱢᱤ ᱦᱩᱭ ᱠᱚᱜᱼᱟᱭ ᱾ ᱡᱚᱫᱤ ᱟᱢ ᱟᱢᱟᱜ ᱫᱟᱭᱛᱣᱚ ᱤᱫᱤ ᱥᱟᱱᱟᱢ ᱠᱷᱟᱱ ᱢᱟᱲᱟᱝ ᱥᱮᱱ ᱞᱟᱦᱟᱜ ᱢᱮ ᱾";
@@ -317,7 +317,7 @@
 "ErrorPages.GoBack.Button" = "ᱛᱟᱭᱚᱢ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
 
 /* Button label to temporarily continue to the site from the certificate error page */
-"ErrorPages.VisitOnce.Button" = "ᱡᱟᱦᱟ ᱞᱮᱠᱟᱛᱮ ᱥᱟᱤᱴ ᱧᱮᱞ ᱢᱮ";
+"ErrorPages.VisitOnce.Button" = "ᱡᱟᱦᱟ ᱞᱮᱠᱟᱛᱮ ᱥᱟᱭᱤᱴ ᱧᱮᱞ ᱢᱮ";
 
 /* Question shown to user when tapping a link that opens the App Store app */
 "ExternalLink.AppStore.ConfirmationTitle" = "ᱱᱚᱶᱟ ᱞᱤᱝᱠ App ᱜᱚᱫᱟᱢ ᱨᱮ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ?";
@@ -1184,7 +1184,7 @@
 "Settings.CopyAppVersion.Title" = "ᱨᱮᱴᱚᱯ ᱵᱳᱨᱰ ᱨᱮ ᱱᱚᱠᱚᱞᱮᱱᱟ";
 
 /* Default text in search bar for Data Management */
-"Settings.DataManagement.SearchLabel" = "ᱥᱟᱤᱴ ᱠᱚ ᱪᱷᱚᱱᱤ ᱢᱮ";
+"Settings.DataManagement.SearchLabel" = "ᱥᱟᱭᱤᱴ ᱠᱚ ᱪᱷᱚᱱᱤ ᱢᱮ";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.DataManagement.SectionName" = "ᱥᱟᱠᱷᱤᱭᱟᱛ ᱵᱮᱵᱚᱥᱛᱟ";

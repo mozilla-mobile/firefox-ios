@@ -24,6 +24,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showLibraryCalled = 0
     var showHomepanelSectionCalled = 0
     var showEnhancedTrackingProtectionCalled = 0
+    var showTrackerBlockerSheetCalled = 0
     var showShareSheetCalled = 0
     var showTabTrayCalled = 0
     var showQrCodeCalled = 0
@@ -47,7 +48,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
-    var showWorldCupCountryPickerCalled = 0
     var showPrivacyNoticeLink = 0
     var showTermsOfUseCalled = 0
     var showCertificatesFromErrorPageCalled = 0
@@ -106,6 +106,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showEnhancedTrackingProtectionCalled += 1
+    }
+
+    func showTrackerBlockerSheet() {
+        showTrackerBlockerSheetCalled += 1
     }
 
     func showTabTray(selectedPanel: TabTrayPanelType) {
@@ -237,10 +241,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showShortcutsLibrary() {
         showShortcutsLibraryCalled += 1
-    }
-
-    func showWorldCupCountryPicker() {
-        showWorldCupCountryPickerCalled += 1
     }
 
     func showPrivacyNoticeLink(url: URL) {

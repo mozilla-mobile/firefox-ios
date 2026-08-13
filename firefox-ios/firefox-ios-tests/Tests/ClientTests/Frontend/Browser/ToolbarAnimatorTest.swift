@@ -5,7 +5,6 @@
 import Testing
 
 import XCTest
-import SnapKit
 import Common
 import Shared
 
@@ -152,9 +151,9 @@ final class MockToolbarView: ToolbarViewProtocol {
     var bottomBlurView = UIVisualEffectView()
     var overKeyboardContainer = BaseAlphaStackView()
     var isBottomSearchBar = false
-    var headerTopConstraint: ConstraintReference?
-    var bottomContainerConstraint: ConstraintReference?
-    var overKeyboardContainerConstraint: ConstraintReference?
+    var headerTopConstraint: NSLayoutConstraint?
+    var bottomContainerConstraint: NSLayoutConstraint?
+    var overKeyboardContainerConstraint: NSLayoutConstraint?
 }
 
 // MARK: - Mock Delegate

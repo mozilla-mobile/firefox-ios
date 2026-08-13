@@ -524,6 +524,10 @@ public class BrowserAddressToolbar: UIView,
         toolbarDelegate?.addressToolbarNeedsSearchReset()
     }
 
+    func locationViewDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String) {
+        toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
+    }
+
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         let colors = theme.colors

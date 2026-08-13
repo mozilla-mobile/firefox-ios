@@ -31,7 +31,6 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var browserViewController: MockBrowserViewController!
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
-    private var mockWorldCupStore: MockWorldCupStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -50,7 +49,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
         homepageTabStateStore = HomepageTabStateStore()
-        mockWorldCupStore = MockWorldCupStore()
         setupStore()
     }
 
@@ -66,7 +64,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = nil
         browserViewController = nil
         homepageTabStateStore = nil
-        mockWorldCupStore = nil
         resetStore()
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -294,6 +291,14 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UINavigationController)
+    }
+
+    func testShowTrackerBlockerSheet_presentsTrackerBlockerSheet() {
+        let subject = createSubject()
+        subject.showTrackerBlockerSheet()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is TrackerBlockerSheetViewController)
     }
 
     func testStartShareSheetCoordinator_addsShareSheetCoordinator() {
@@ -762,19 +767,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
-    // MARK: - World Cup Country Picker
-
-    func testShowWorldCupCountryPicker_presentsHostingController() throws {
-        let subject = createSubject()
-
-        subject.showWorldCupCountryPicker()
-
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(
-            mockRouter.presentedViewController is UIHostingController<WorldCupCountryPickerView>
-        )
-    }
-
     func testShowPrivacyNoticeLink_showsTermsOfUseLinkView() throws {
         let subject = createSubject()
 
@@ -1143,6 +1135,9 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         subject.handle(route: .settings(section: .appIcon))
 
+        // Wait for a pending main-thread transition settle before asserting
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+
         XCTAssertEqual(presentedViewController.dismissCalled, 1)
         let presentedNavigationController = try XCTUnwrap(
             mockRouter.presentedViewController as? ThemedNavigationController
@@ -1236,6 +1231,19 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    // MARK: - Report broken site
+
+    func testPresentReportBrokenSite_startsTheReportCoordinator() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.presentReportBrokenSite(url: URL(string: "https://example.com"))
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is WebCompatReportCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
     // MARK: - Sign in route
@@ -1657,7 +1665,6 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
-                                         worldCupStore: mockWorldCupStore,
                                          googleLensService: googleLensService)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

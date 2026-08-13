@@ -5,7 +5,7 @@
 "New Tab" = "Tab Anyar";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Ngidinké sampéyan njepret lan ngunggah poto.";
+"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Situs kang sampéyan tiliki njaluk lokasi sampéyan.";

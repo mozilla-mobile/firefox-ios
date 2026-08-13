@@ -47,7 +47,7 @@
 "CreditCard.Settings.Yes.v122" = "Actualizar";
 
 /* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
-"CreditCards.Settings.Done.v114" = "Hecho";
+"CreditCards.Settings.Done.v114" = "Cerrar";
 
 /* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
 "CreditCards.Settings.ManageCards.v112" = "Administrar tarjetas";
@@ -68,19 +68,16 @@
 "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "Disponible";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**Disponible**: La función estará visible y se podrá utilizar.";
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**Disponible**: La función estará visible y podrás utilizarla.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Bloqueado";
-
-/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Bloqueada**: la función no estará visible y no se podrá utilizar. En el caso de la IA en el dispositivo, se eliminarán los modelos descargados.";
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Bloqueada";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Se bloqueó**: No verás ni podrás usar esta función. En el caso de la IA integrada, se eliminarán los modelos descargados.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
-"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Las páginas y los resúmenes nunca se almacenan.";
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "No se almacenarán nunca páginas ni resúmenes.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Resúmenes de páginas";
@@ -101,7 +98,7 @@
 "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "Traducción";
 
 /* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
-"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Al bloquear esta opción, no se mostrarán las mejoras de IA nuevas ni las actuales en %@, ni tampoco los avisos emergentes sobre ellas.";
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Si bloqueas estas funcionalidad, no aparecerán en %@ las mejoras de IA nuevas ni actuales, ni avisos emergentes sobre ese tipo de funcionalidades.";
 
 /* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
 "Settings.AIControls.BlockAIEnhancementsLink.v151" = "Consulta qué se incluye y qué no";
@@ -110,7 +107,7 @@
 "Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Bloquear mejoras de IA";
 
 /* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
-"Settings.AIControls.BlockedInformation.v151" = "Las mejoras de IA nuevas y actuales están bloqueadas por defecto. Desbloquea funciones específicas a continuación.";
+"Settings.AIControls.BlockedInformation.v151" = "Las mejoras de IA nuevas y actuales están bloqueadas por defecto. Puedes desbloquear funciones especificas a continuación.";
 
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "Saber más";
@@ -172,6 +169,15 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Reproducción automática";
 
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "Reduce los anuncios y los rastreadores asociados a anuncios. Si tienes problemas de funcionalidad en algún sitio, intenta desactivar esta funcionalidad.";
+
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "Saber más";
+
+/* Title for the Ad Blocker toggle in the Browsing settings page. */
+"Settings.Browsing.AdBlocker.Title.v155" = "Bloqueo de anuncios";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Bloquear anuncios";
 
@@ -212,7 +218,7 @@
 "Settings.FxA.Title.v119" = "Cuenta";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
-"Settings.Notifications.SyncNotificationsStatus.v112" = "Esto debe estar activado para recibir pestañas y recibir notificaciones cuando inicies sesión en otro dispositivo.";
+"Settings.Notifications.SyncNotificationsStatus.v112" = "Activa esta opción para sincronizar pestañas y recibir notificaciones cuando inicies sesión en otro dispositivo.";
 
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Sincronizar";
@@ -221,10 +227,10 @@
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Deshabilitaste todas las notificaciones de %1$@. Habilítalas ingresando a ajustes del dispositivo > Notificaciones > %2$@$";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
-"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Obtén información sobre funciones útiles y cómo aprovechar al máximo %@.";
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Descubre funcionalidades útiles y cómo aprovechar %@ al máximo.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
-"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Consejos y características";
+"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Consejos y funcionalidades";
 
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Notificaciones";
@@ -275,7 +281,7 @@
 "Settings.Search.GoogleLens.Title.v153" = "Google Lens";
 
 /* Navigation title for search page in the Settings menu. */
-"Settings.Search.PageTitle.v121" = "Buscar";
+"Settings.Search.PageTitle.v121" = "Búsqueda";
 
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "Mostrar sugerencias de buscadores en sesiones privadas";
@@ -293,13 +299,13 @@
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Saber más sobre Firefox Suggest";
 
 /* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
-"Settings.Search.Suggest.PrivateSession.Description.v125" = "Mostrar sugerencias de Firefox Sugerir en sesiones privadas";
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "Mostrar Sugerencias de Firefox en sesiones privadas";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
-"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Buscar historial de navegación";
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Buscar en historial";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
-"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Buscar marcadores";
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Buscar en marcadores";
 
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Buscar pestañas sincronizadas";
@@ -335,7 +341,7 @@
 "Settings.Studies.Title.v148" = "Permitir estudios de funciones";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.FooterTitle.v142" = "Proporciona acceso para resumir páginas.";
+"Settings.Summarize.FooterTitle.v142" = "Habilita el acceso a la funcionalidad para resumir páginas.";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "Agita tu dispositivo de lado a lado para resumir una página.";
@@ -345,12 +351,6 @@
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Gestos";
-
-/* The accessibility label for the language picker button in the Summarize settings. */
-"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Selecciona un idioma";
-
-/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
-"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "Idioma preferido de la aplicación";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "Idioma";

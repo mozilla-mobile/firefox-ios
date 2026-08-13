@@ -78,5 +78,4 @@ enum MainMenuMiddlewareActionType: ActionType {
     case updateAccountHeader
     case updateBannerVisibility
     case updateMenuAppearance
-    case updateMenuCells
 }

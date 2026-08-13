@@ -682,10 +682,12 @@ final class LocationView: UIView,
     }
 
     func menuHelperPasteAndGo() {
-        ensureMainThread {
-            guard let pasteboardContents = UIPasteboard.general.string else { return }
-            self.urlTextField.text = pasteboardContents
-            self.delegate?.locationViewDidSubmitText(pasteboardContents)
+        UIPasteboard.general.asyncString { [weak self] contents in
+            guard let contents else { return }
+            ensureMainThread {
+                self?.urlTextField.text = contents
+                self?.delegate?.locationViewDidSubmitText(contents)
+            }
         }
     }
 
@@ -732,6 +734,10 @@ final class LocationView: UIView,
 
     func locationTextFieldNeedsSearchReset() {
         delegate?.locationTextFieldNeedsSearchReset()
+    }
+
+    func locationTextFieldDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String) {
+        delegate?.locationViewDidDisplayEditingAccessoryButton(button, contextualHintType: contextualHintType)
     }
 
     // MARK: - Accessibility

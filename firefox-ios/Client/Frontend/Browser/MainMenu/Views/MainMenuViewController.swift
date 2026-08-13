@@ -224,13 +224,9 @@ class MainMenuViewController: UIViewController,
         let shouldShowBlur = !mainMenuHelper.isReduceTransparencyEnabled
 
         if shouldShowBlur {
-#if canImport(FoundationModels)
             if #unavailable(iOS 26.0) {
                 view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
             }
-#else
-            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
-#endif
         } else {
             view.removeVisualEffectView()
         }
@@ -291,13 +287,9 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupView() {
-        #if canImport(FoundationModels)
         if #unavailable(iOS 26.0) {
             view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
         }
-        #else
-            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
-        #endif
         view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([
@@ -462,7 +454,8 @@ class MainMenuViewController: UIViewController,
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(mainMenuHelper.backgroundAlpha())
+        let menuBackground = theme.isNova ? theme.colors.layer1 : theme.colors.layerSurfaceLow
+        view.backgroundColor = menuBackground.withAlphaComponent(mainMenuHelper.backgroundAlpha())
         menuContent.applyTheme(theme: theme)
     }
 
@@ -470,6 +463,7 @@ class MainMenuViewController: UIViewController,
         var state = String.MainMenu.SiteProtection.ProtectionsOn
         var stateImage = StandardImageIdentifiers.Small.shieldCheckmarkFill
         var shouldUseRenderMode = false
+        var isProtectionsOn = false
 
         switch siteProtectionsData.state {
         case .notSecure:
@@ -477,9 +471,17 @@ class MainMenuViewController: UIViewController,
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
         case .on:
             shouldUseRenderMode = true
+            isProtectionsOn = true
         case .off:
             state = String.MainMenu.SiteProtection.ProtectionsOff
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+        }
+
+        if themeManager.getCurrentTheme(for: windowUUID).isNova {
+            stateImage = isProtectionsOn
+                ? StandardImageIdentifiers.Small.shieldCheckmarkFillGradient
+                : StandardImageIdentifiers.Small.shieldSlashFillCritical
+            shouldUseRenderMode = false
         }
 
         menuContent.siteProtectionHeader.setupDetails(

@@ -24,6 +24,7 @@ final class MainMenuMiddleware {
         static let readerView = "reader_view"
         static let print = "print"
         static let removeFromShortcuts = "remove_from_shortcuts"
+        static let reportBrokenSite = "report_broken_site"
         static let saveAsPDF = "save_as_PDF"
         static let settings = "settings"
         static let share = "share"
@@ -38,9 +39,13 @@ final class MainMenuMiddleware {
 
     private let logger: Logger
     private let telemetry: MainMenuTelemetry
+    private let webCompatTelemetry: WebCompatReporterTelemetry
 
-    init(telemetry: MainMenuTelemetry = MainMenuTelemetry(), logger: Logger = DefaultLogger.shared) {
+    init(telemetry: MainMenuTelemetry = MainMenuTelemetry(),
+         webCompatTelemetry: WebCompatReporterTelemetry = WebCompatReporterTelemetry(),
+         logger: Logger = DefaultLogger.shared) {
         self.telemetry = telemetry
+        self.webCompatTelemetry = webCompatTelemetry
         self.logger = logger
     }
 
@@ -220,8 +225,8 @@ final class MainMenuMiddleware {
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
 
         case .reportBrokenSite:
-            // Telemetry for the WebCompat reporter is added with the full sheet in FXIOS-16180.
-            break
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.reportBrokenSite)
+            webCompatTelemetry.opened(source: .hamburgerMenu)
 
         case .shareSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.share)

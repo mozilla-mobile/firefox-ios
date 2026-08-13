@@ -248,7 +248,7 @@ final class TabDisplayView: UIView,
 
     func applyTheme(theme: Theme) {
         self.theme = theme
-        collectionView.backgroundColor = theme.colors.layer3
+        collectionView.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
         collectionView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
         collectionView.visibleSupplementaryViews(ofKind: TabTitleSupplementaryView.cellIdentifier)
             .compactMap { $0 as? TabTitleSupplementaryView }

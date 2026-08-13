@@ -134,6 +134,8 @@ private struct DarkColourPalette: ThemeColourPalette {
 
     var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
 
+    var faviconLetterColorSet: FaviconLetterColorSet = StandardFaviconColorSet()
+
     // MARK: - Nova tokens
     var layerAccentSubtle: UIColor { NovaMissingToken.color("layerAccentSubtle") }
     var layerInverse: UIColor { NovaMissingToken.color("layerInverse") }
@@ -151,4 +153,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var gradientBorder: Gradient { NovaMissingToken.gradient("gradientBorder") }
     var gradientPrivacy: Gradient { NovaMissingToken.gradient("gradientPrivacy") }
     var gradientPrivacyMask: Gradient { NovaMissingToken.gradient("gradientPrivacyMask") }
+    var gradientWidgetSurface: Gradient { NovaMissingToken.gradient("gradientWidgetSurface") }
+    var gradientWidgetSurfaceStandard: Gradient { NovaMissingToken.gradient("gradientWidgetSurfaceStandard") }
+    var gradientWidgetSurfacePrivate: Gradient { NovaMissingToken.gradient("gradientWidgetSurfacePrivate") }
 }
