@@ -489,13 +489,10 @@ class SearchTests: FeatureFlaggedTestBase {
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
 
-            // Firefox Suggest should show up for sponsored suggestion, open tab, history
-            // and bookmark.
+            // Firefox Suggest should show up for sponsored suggestion without Firefox Accounts
+            // https://github.com/mozilla-mobile/firefox-ios/issues/35171
             let firefoxSuggestTerms = [
                 "amazon": "Amazon.com - Official Site", // Sponsored suggestion
-                "internet": "Internet for people, not profit — Mozilla", // Open tab
-                "example": "www.example.com/", // History
-                "book": "The Book of Mozilla" // Bookmark
             ]
             for (term, expectedTitle) in firefoxSuggestTerms {
                 browserScreen.tapOnAddressBar()
