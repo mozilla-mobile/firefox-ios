@@ -115,13 +115,11 @@ enum ToolbarModernAction: ModernAction {
     /// scrolls down; `false` restores it when scrolling back up.
     case userDidScroll(minimizeAddressBar: Bool)
 
-    /// A web form's keyboard accessory view appeared. `true` shrinks the address bar to
-    /// make room for it; not currently dispatched with `false` (see `keyboardDidHide`).
-    case accessoryViewDidShow(minimizeAddressBar: Bool)
+    /// A web form's keyboard accessory view appeared. that shrinks the address bar to the pill shape
+    case accessoryViewDidShow
 
-    /// The keyboard was dismissed. Dispatched with `false` to restore the address bar
-    /// after it was minimized by `accessoryViewDidShow`
-    case keyboardDidHide(minimizeAddressBar: Bool)
+    /// The keyboard was dismissed. Dispatched to restore the address bar after it was minimized by `accessoryViewDidShow`
+    case keyboardDidHide
 }
 
 enum ToolbarActionType: ActionType {

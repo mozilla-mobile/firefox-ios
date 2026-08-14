@@ -245,7 +245,7 @@ final class AddressToolbarContainer: UIView,
             accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
             // Dispatch action to change address bar to minimized state
-            store.dispatch(ToolbarModernAction.accessoryViewDidShow(minimizeAddressBar: true), forWindowUUID: windowUUID)
+            store.dispatch(ToolbarModernAction.accessoryViewDidShow, forWindowUUID: windowUUID)
         }
         return accessoryViewOffset
     }

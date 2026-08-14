@@ -952,7 +952,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.lockIconNeedsTheming, true)
     }
 
-    func test_scrollAlphaNeedsUpdateAction_returnsExpectedState() {
+    func test_userDidScrollAction_returnsExpectedState() {
         setupStore()
         let initialState = ToolbarState(windowUUID: windowUUID)
         let reducer = ToolbarState.reducer
@@ -960,6 +960,46 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer.modernReducer(
             initialState,
             ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.isAddressBarMinimized, true)
+        XCTAssertNotEqual(initialState.isAddressBarMinimized, newState.isAddressBarMinimized)
+    }
+
+    func test_keyboardDidHideAction_returnsExpectedState() {
+        setupStore()
+        var initialState = ToolbarState(windowUUID: windowUUID)
+        let reducer = ToolbarState.reducer
+
+        // Minimize toolbar first
+        initialState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+        XCTAssertEqual(initialState.isAddressBarMinimized, true)
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.keyboardDidHide,
+            windowUUID
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.isAddressBarMinimized, false)
+        XCTAssertNotEqual(initialState.isAddressBarMinimized, newState.isAddressBarMinimized)
+    }
+
+    func test_accessoryViewDidShowAction_returnsExpectedState() {
+        setupStore()
+        let initialState = ToolbarState(windowUUID: windowUUID)
+        let reducer = ToolbarState.reducer
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.accessoryViewDidShow,
             windowUUID
         )
 

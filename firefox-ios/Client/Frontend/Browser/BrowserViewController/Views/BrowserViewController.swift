@@ -5016,7 +5016,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // user has scrolled previously, restore the address back here would leave the
         // address bar full while the bottom containers stay collapsed (inconsistent state).
         if #available(iOS 26.0, *), isBottomSearchBar, scrollController.isToolbarFullyExpanded {
-            store.dispatch(ToolbarModernAction.keyboardDidHide(minimizeAddressBar: false), forWindowUUID: windowUUID)
+            store.dispatch(ToolbarModernAction.keyboardDidHide, forWindowUUID: windowUUID)
         }
         keyboardState = nil
         updateConstraintsForKeyboard()

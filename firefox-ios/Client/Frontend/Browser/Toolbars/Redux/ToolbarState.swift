@@ -144,10 +144,12 @@ struct ToolbarState: ScreenState, Sendable {
         guard let action = action as? ToolbarModernAction else { return defaultState(from: state) }
 
         switch action {
-        case .userDidScroll(let minimizeAddressBar),
-             .accessoryViewDidShow(let minimizeAddressBar),
-             .keyboardDidHide(let minimizeAddressBar):
+        case .userDidScroll(let minimizeAddressBar):
             return state.copy(isAddressBarMinimized: minimizeAddressBar)
+        case .accessoryViewDidShow:
+            return state.copy(isAddressBarMinimized: true)
+        case .keyboardDidHide:
+            return state.copy(isAddressBarMinimized: false)
         }
     }
 
