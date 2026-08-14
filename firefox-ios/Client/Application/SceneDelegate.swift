@@ -81,7 +81,7 @@ class SceneDelegate: UIResponder,
         self.sceneCoordinator?.removeAllChildren()
         self.sceneCoordinator = nil
 
-        // The set of open windows changed; only offer the "Merge All Windows" Quick Action when 2+ remain.
+        // The set of open windows changed; only offer the "Combine Windows" Quick Action when 2+ remain.
         MergeWindowsQuickActionController().update()
     }
 
@@ -104,7 +104,7 @@ class SceneDelegate: UIResponder,
             }
         }
 
-        // The set of open windows may have changed; only offer the "Merge All Windows" Quick Action
+        // The set of open windows may have changed; only offer the "Combine Windows" Quick Action
         // when 2+ windows are open.
         MergeWindowsQuickActionController().update()
     }
