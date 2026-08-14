@@ -30,18 +30,12 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     private var highlightedBackgroundColor: UIColor?
     private var normalBackgroundColor: UIColor?
     private var foregroundColor: UIColor?
-    private var spinnerTrackColor: UIColor?
-    private var spinnerArcColor: UIColor?
 
-    private lazy var spinnerView: ArcActivityIndicatorView = {
-        let view = ArcActivityIndicatorView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.isHidden = true
-        return view
-    }()
+    private lazy var spinnerView: ArcActivityIndicatorView = .build { view in
+            view.isHidden = true
+    }
 
     private var didConstrainSpinner = false
-    private var showsSpinner = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -114,7 +108,6 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     }
 
     public func setShowsSpinner(_ shows: Bool) {
-        showsSpinner = shows
         guard var updatedConfiguration = configuration else { return }
 
         var insets = UX.contentInsets
@@ -174,6 +167,6 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
             setNeedsUpdateConfiguration()
         }
 
-        spinnerView.setColors(track: theme.colors.borderSecondary, arc: theme.colors.actionPrimary)
+        spinnerView.applyTheme(theme: theme)
     }
 }

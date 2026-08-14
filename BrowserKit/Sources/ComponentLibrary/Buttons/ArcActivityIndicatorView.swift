@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
-final class ArcActivityIndicatorView: UIView {
+final class ArcActivityIndicatorView: UIView, ThemeApplicable {
     private struct UX {
         static let lineWidth: CGFloat = 2
         static let rotationDuration: CFTimeInterval = 0.8
@@ -18,21 +19,21 @@ final class ArcActivityIndicatorView: UIView {
         super.init(frame: frame)
         isUserInteractionEnabled = false
         backgroundColor = .clear
-
-        trackLayer.fillColor = UIColor.clear.cgColor
-        trackLayer.lineWidth = UX.lineWidth
-
-        arcLayer.fillColor = UIColor.clear.cgColor
-        arcLayer.lineWidth = UX.lineWidth
-        arcLayer.lineCap = .round
-
-        layer.addSublayer(trackLayer)
-        layer.addSublayer(arcLayer)
+        setupLayers()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    private func setupLayers() {
+            for shape in [trackLayer, arcLayer] {
+                shape.fillColor = UIColor.clear.cgColor
+                shape.lineWidth = UX.lineWidth
+                layer.addSublayer(shape)
+            }
+            arcLayer.lineCap = .round
+        }
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -60,24 +61,32 @@ final class ArcActivityIndicatorView: UIView {
         arcLayer.frame = bounds
     }
 
-    func setColors(track: UIColor, arc: UIColor) {
-        trackLayer.strokeColor = track.cgColor
-        arcLayer.strokeColor = arc.cgColor
-    }
-
     func startAnimating() {
+        let isNewSpinner = layer.animation(forKey: "rotation") == nil
         isHidden = false
-        guard layer.animation(forKey: "rotation") == nil else { return }
+        guard isNewSpinner else { return }
         let animation = CABasicAnimation(keyPath: "transform.rotation.z")
         animation.fromValue = 0
         animation.toValue = CGFloat.pi * 2
         animation.duration = UX.rotationDuration
         animation.repeatCount = .infinity
         layer.add(animation, forKey: "rotation")
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: self)
+        }
     }
 
     func stopAnimating() {
+        let hadSpinner = layer.animation(forKey: "rotation") != nil
         isHidden = true
         layer.removeAnimation(forKey: "rotation")
+        if hadSpinner && UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: self)
+        }
     }
+
+    func applyTheme(theme: any Theme) {
+            trackLayer.strokeColor = theme.colors.borderSecondary.cgColor
+            arcLayer.strokeColor = theme.colors.actionPrimary.cgColor
+        }
 }
