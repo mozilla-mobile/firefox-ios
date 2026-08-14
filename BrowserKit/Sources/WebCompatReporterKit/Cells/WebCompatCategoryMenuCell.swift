@@ -10,13 +10,22 @@ import UIKit
 final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
     private var selectionHandler: ((String) -> Void)?
     private var chevronSizeConstraints: [NSLayoutConstraint] = []
+    private var chevronUpBottomConstraint: NSLayoutConstraint?
+    private var chevronDownTopConstraint: NSLayoutConstraint?
 
     private var scaledChevronSize: CGFloat {
         return UIFontMetrics.default.scaledValue(for: WebCompatReporterUX.Chevron.size)
     }
 
+    private var scaledChevronVerticalOverlap: CGFloat {
+        return UIFontMetrics.default.scaledValue(for: WebCompatReporterUX.Chevron.verticalOverlap)
+    }
+
     private lazy var menuButton: UIButton = {
-        let button = UIButton(configuration: UIButton.Configuration.plain())
+        var configuration = UIButton.Configuration.plain()
+        // `plain()`'s 12pt leading inset would stack on the cell's own layout margin.
+        configuration.contentInsets.leading = 0
+        let button = UIButton(configuration: configuration)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.contentHorizontalAlignment = .leading
         button.showsMenuAsPrimaryAction = true
@@ -75,6 +84,10 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
         let bottomConstraint = menuButton.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
         topConstraint.priority = .defaultHigh
         bottomConstraint.priority = .defaultHigh
+        let chevronUpBottom = chevronUpView.bottomAnchor.constraint(equalTo: contentView.centerYAnchor)
+        let chevronDownTop = chevronDownView.topAnchor.constraint(equalTo: contentView.centerYAnchor)
+        chevronUpBottomConstraint = chevronUpBottom
+        chevronDownTopConstraint = chevronDownTop
         NSLayoutConstraint.activate(chevronSizeConstraints + [
             menuButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             topConstraint,
@@ -85,10 +98,10 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
             ),
 
             chevronUpView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
-            chevronUpView.bottomAnchor.constraint(equalTo: contentView.centerYAnchor),
+            chevronUpBottom,
 
             chevronDownView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
-            chevronDownView.topAnchor.constraint(equalTo: contentView.centerYAnchor)
+            chevronDownTop
         ])
         applyScaledMetrics()
     }
@@ -102,10 +115,13 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
         }
     }
 
-    /// Keeps the chevron and the button's reserved trailing space in step with
+    /// Keeps the chevron metrics and the button's reserved trailing space in step with
     /// the current Dynamic Type size.
     private func applyScaledMetrics() {
         chevronSizeConstraints.forEach { $0.constant = scaledChevronSize }
+        let halfOverlap = scaledChevronVerticalOverlap / 2
+        chevronUpBottomConstraint?.constant = halfOverlap
+        chevronDownTopConstraint?.constant = -halfOverlap
         menuButton.configuration?.contentInsets.trailing = scaledChevronSize + WebCompatReporterUX.Spacing.interItem
     }
 
