@@ -55,6 +55,7 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
         imageView.image = image
         imageView.contentMode = .scaleAspectFit
     }
+    private var iconTintOverride: UIColor?
 
     init(mainMenuHelper: MainMenuInterface) {
         self.mainMenuHelper = mainMenuHelper
@@ -94,8 +95,6 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
             chevron.widthAnchor.constraint(equalToConstant: UX.chevronSize)
         ])
     }
-
-    private var iconTintOverride: UIColor?
 
     func configure(text: String, iconName: String, useTemplate: Bool, iconTintColor: UIColor? = nil) {
         label.text = text
