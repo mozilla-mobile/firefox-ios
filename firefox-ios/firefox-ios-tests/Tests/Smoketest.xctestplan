@@ -58,6 +58,7 @@
         "A11yTabTrayTests",
         "A11yTabTrayTests\/testAccessibility()",
         "A11yUtils",
+        "AIControlsTests",
         "ActivityStreamTest\/testContextMenuInLandscape()",
         "ActivityStreamTest\/testDefaultSitesTAE()",
         "ActivityStreamTest\/testDefaultSites_TAE()",

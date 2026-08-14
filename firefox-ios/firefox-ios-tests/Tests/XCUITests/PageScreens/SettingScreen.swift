@@ -293,6 +293,18 @@ final class SettingScreen {
         translationCell.waitAndTap()
     }
 
+    func openAIControlsSettings() {
+        let cell = app.tables.cells[AccessibilityIdentifiers.Settings.AIControls.title]
+        BaseTestCase().scrollToElement(cell)
+        cell.waitAndTap()
+    }
+
+    func openSummarizeSettings() {
+        let cell = app.tables.cells[AccessibilityIdentifiers.Settings.Summarize.title]
+        BaseTestCase().scrollToElement(cell)
+        cell.waitAndTap()
+    }
+
     func assertTranslationSettingsDoesNotExist() {
         BaseTestCase().mozWaitForElementToNotExist(translationCell)
     }

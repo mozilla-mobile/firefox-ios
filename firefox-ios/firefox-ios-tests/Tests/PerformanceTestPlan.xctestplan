@@ -55,6 +55,7 @@
         "A11yTabTrayTests",
         "A11yTabTrayTests\/testAccessibility()",
         "A11yUtils",
+        "AIControlsTests",
         "ActivityStreamTest",
         "AddressesTests",
         "AddressesTests\/testAddNewAddressAllFieldsFilled()",

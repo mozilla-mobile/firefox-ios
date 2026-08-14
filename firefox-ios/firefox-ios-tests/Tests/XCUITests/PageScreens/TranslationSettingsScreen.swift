@@ -41,6 +41,13 @@ final class TranslationSettingsScreen {
         translationToggle.waitAndTap()
     }
 
+    func setTranslationSwitch(on: Bool) {
+        BaseTestCase().mozWaitForElementToExist(translationToggle)
+        if (translationToggle.value as? String) != (on ? "1" : "0") {
+            translationToggle.waitAndTap()
+        }
+    }
+
     func assertTranslationSwitchIsOff() {
         BaseTestCase().mozWaitForElementToExist(translationToggle)
 
