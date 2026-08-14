@@ -458,14 +458,11 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             presentedComponents: PresentedComponentsState(
                 components: [
                     .translationSettings(
-                        TranslationSettingsState(
-                            windowUUID: .XCTestDefaultUUID,
-                            isTranslationsEnabled: true,
-                            isEditing: isEditing,
-                            pendingLanguages: pendingLanguages,
-                            preferredLanguages: preferredLanguages,
-                            supportedLanguages: ["en", "fr", "de"]
-                        )
+                        TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
+                            .copy(isEditing: isEditing)
+                            .copy(pendingLanguages: pendingLanguages)
+                            .copy(preferredLanguages: preferredLanguages)
+                            .copy(supportedLanguages: ["en", "fr", "de"])
                     )
                 ]
             )
