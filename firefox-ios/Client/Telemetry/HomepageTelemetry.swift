@@ -125,7 +125,7 @@ struct HomepageTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Pocket.openInPrivateTab)
     }
 
-    func sendQuickAnswersEntryPointImpressionEvent() {
-        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.entryPointImpression)
+    func sendQuickAnswersButtonViewedEvent() {
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.buttonViewed)
     }
 }

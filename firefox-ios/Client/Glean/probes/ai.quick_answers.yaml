@@ -23,7 +23,7 @@ $tags:
 # Add your new metrics and/or events here.
 
 ai.quick_answers:
-  entry_point_impression:
+  button_viewed:
     type: event
     description: |
       Recorded when the Quick Answers entry point, the button in the homepage header, is visible to the user.
@@ -36,6 +36,9 @@ ai.quick_answers:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
+    metadata:
+      tags:
+        - Homepage
   requested:
     type: event
     description: |

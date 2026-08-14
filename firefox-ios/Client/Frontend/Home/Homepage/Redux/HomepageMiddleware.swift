@@ -83,7 +83,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         }
         switch type {
         case .quickAnswersEntryPoint:
-            self.homepageTelemetry.sendQuickAnswersEntryPointImpressionEvent()
+            self.homepageTelemetry.sendQuickAnswersButtonViewedEvent()
         default:
             self.homepageTelemetry.sendSectionLabeledCounter(for: type)
         }
