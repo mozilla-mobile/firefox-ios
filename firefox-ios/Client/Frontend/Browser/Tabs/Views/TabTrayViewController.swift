@@ -445,7 +445,6 @@ final class TabTrayViewController: UIViewController,
                                            actionType: ComponentActionType.removeComponent,
                                            component: .tabsTray)
         store.dispatch(screenAction)
-        store.unsubscribe(self)
     }
 
     func newState(state: TabTrayState) {
