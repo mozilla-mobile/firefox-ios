@@ -103,13 +103,13 @@ private func previewAdvancedSection(includeScreenshot: Bool, includeBlockedList:
             WebCompatReportViewModel.Row(
                 id: "screenshot",
                 title: "Automatically include a screenshot to show the problem",
-                kind: .toggle(isOn: includeScreenshot),
+                kind: .checkbox(isChecked: includeScreenshot),
                 a11yIdentifier: "screenshot"
             ),
             WebCompatReportViewModel.Row(
                 id: "blocklist",
                 title: "Send list of items blocked by tracking protection",
-                kind: .toggle(isOn: includeBlockedList),
+                kind: .checkbox(isChecked: includeBlockedList),
                 a11yIdentifier: "blocklist"
             )
         ]
@@ -131,7 +131,7 @@ private func previewFooterSection() -> WebCompatReportViewModel.Section {
             WebCompatReportViewModel.Row(
                 id: "screenshot",
                 title: "Automatically include a screenshot to show the problem",
-                kind: .toggle(isOn: true),
+                kind: .checkbox(isChecked: true),
                 a11yIdentifier: "screenshot"
             )
         ]

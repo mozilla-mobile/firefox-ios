@@ -60,7 +60,7 @@ struct WebCompatReporterState: ScreenState, Equatable {
             selectedSubOptionID: nil,
             additionalDetails: "",
             includeScreenshot: true,
-            includeBlockedList: false,
+            includeBlockedList: true,
             shouldDismiss: false,
             previewPayload: nil
         )

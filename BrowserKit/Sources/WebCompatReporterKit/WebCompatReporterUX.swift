@@ -34,6 +34,12 @@ enum WebCompatReporterUX {
         static let minimumTapTarget: CGFloat = 44
     }
 
+    enum Checkbox {
+        static let size: CGFloat = 24
+        static let checkmarkSize: CGFloat = 12
+        static let borderWidth: CGFloat = 1.5
+    }
+
     enum Chevron {
         /// Frame, not arrow: the Acorn PDFs centre a 15 x 7.6pt arrow on a 24pt canvas.
         static let size: CGFloat = 16

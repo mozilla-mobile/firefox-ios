@@ -140,51 +140,55 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(firstSubview(ofType: UIButton.self, in: cell)?.isEnabled, false)
     }
 
-    func testConfigure_withToggleSection_dequeuesToggleCell() {
+    func testConfigure_withCheckboxSection_dequeuesCheckboxCell() {
         let subject = createSubject()
         subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
 
-        subject.configure(with: makeViewModel(sections: toggleSections()))
+        subject.configure(with: makeViewModel(sections: checkboxSections()))
         subject.view.layoutIfNeeded()
 
         XCTAssertTrue(
-            collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatToggleCell
+            collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0)) is WebCompatCheckboxCell
         )
     }
 
-    func testToggleCell_activation_notifiesDelegateWithRowIDAndValue() throws {
+    func testCheckboxRowSelection_whenUnchecked_reportsCheckedToDelegate() {
         let delegate = MockWebCompatReportSheetDelegate()
-        let subject = createSubject()
-        subject.delegate = delegate
-        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
-        subject.loadViewIfNeeded()
-        subject.configure(with: makeViewModel(sections: toggleSections()))
-        subject.view.layoutIfNeeded()
+        let subject = hostedCheckboxSubject(delegate: delegate)
 
-        let toggleCell = collectionView(in: subject)?.cellForItem(at: IndexPath(item: 0, section: 0))
-        let toggle = try XCTUnwrap(firstSubview(ofType: UISwitch.self, in: toggleCell))
-        toggle.isOn = true
-        fireActions(on: toggle, for: .valueChanged)
+        selectItem(in: subject, at: IndexPath(item: 0, section: 0))
 
-        XCTAssertEqual(delegate.toggles.map(\.id), ["screenshot"])
-        XCTAssertEqual(delegate.toggles.map(\.isOn), [true])
+        XCTAssertEqual(delegate.checkboxes.map(\.id), ["screenshot"])
+        XCTAssertEqual(delegate.checkboxes.map(\.isChecked), [true])
+        XCTAssertTrue(delegate.selectedSubOptionIDs.isEmpty)
     }
 
-    // A toggle flip re-renders the whole view model. Rows that didn't change must not
+    func testCheckboxRowSelection_whenChecked_reportsUncheckedToDelegate() {
+        let delegate = MockWebCompatReportSheetDelegate()
+        let subject = hostedCheckboxSubject(delegate: delegate)
+
+        selectItem(in: subject, at: IndexPath(item: 1, section: 0))
+
+        XCTAssertEqual(delegate.checkboxes.map(\.id), ["blocklist"])
+        XCTAssertEqual(delegate.checkboxes.map(\.isChecked), [false])
+        XCTAssertTrue(delegate.selectedSubOptionIDs.isEmpty)
+    }
+
+    // A checkbox flip re-renders the whole view model. Rows that didn't change must not
     // be reconfigured: sub-option cells rebuild their checkmark accessory on configure,
     // and the list animates that as a remove+insert, so the checkmark visibly flickers.
-    func testConfigure_whenOnlyAToggleChanges_doesNotRebuildTheSubOptionCheckmark() {
+    func testConfigure_whenOnlyACheckboxChanges_doesNotRebuildTheSubOptionCheckmark() {
         let subject = createSubject()
         subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
-        subject.configure(with: makeViewModel(sections: subOptionAndToggleSections(isOn: false)))
+        subject.configure(with: makeViewModel(sections: subOptionAndCheckboxSections(isChecked: false)))
         subject.view.layoutIfNeeded()
 
         let subOptionIndexPath = IndexPath(item: 0, section: 0)
         let checkmarkBefore = checkmarkView(in: subject, at: subOptionIndexPath)
 
-        subject.configure(with: makeViewModel(sections: subOptionAndToggleSections(isOn: true)))
+        subject.configure(with: makeViewModel(sections: subOptionAndCheckboxSections(isChecked: true)))
         subject.view.layoutIfNeeded()
 
         XCTAssertNotNil(checkmarkBefore)
@@ -195,14 +199,14 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         let subject = createSubject()
         subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
-        subject.configure(with: makeViewModel(sections: subOptionAndToggleSections(isOn: false)))
+        subject.configure(with: makeViewModel(sections: subOptionAndCheckboxSections(isChecked: false)))
         subject.view.layoutIfNeeded()
 
         let subOptionIndexPath = IndexPath(item: 0, section: 0)
         XCTAssertEqual(accessoryCount(in: subject, at: subOptionIndexPath), 1)
 
         subject.configure(
-            with: makeViewModel(sections: subOptionAndToggleSections(isOn: false, isSubOptionSelected: false))
+            with: makeViewModel(sections: subOptionAndCheckboxSections(isChecked: false, isSubOptionSelected: false))
         )
         subject.view.layoutIfNeeded()
 
@@ -324,6 +328,18 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         return subject.view.subviews.compactMap { $0 as? UICollectionView }.first
     }
 
+    private func hostedCheckboxSubject(
+        delegate: MockWebCompatReportSheetDelegate
+    ) -> WebCompatReportSheetViewController {
+        let subject = createSubject()
+        subject.delegate = delegate
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.configure(with: makeViewModel(sections: checkboxSections()))
+        subject.view.layoutIfNeeded()
+        return subject
+    }
+
     private func sendSections(isEnabled: Bool) -> [WebCompatReportViewModel.Section] {
         return [
             WebCompatReportViewModel.Section(id: "send", rows: [
@@ -358,8 +374,8 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         return cell?.accessories.count
     }
 
-    private func subOptionAndToggleSections(
-        isOn: Bool,
+    private func subOptionAndCheckboxSections(
+        isChecked: Bool,
         isSubOptionSelected: Bool = true
     ) -> [WebCompatReportViewModel.Section] {
         return [
@@ -375,7 +391,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                 WebCompatReportViewModel.Row(
                     id: "screenshot",
                     title: "Include screenshot",
-                    kind: .toggle(isOn: isOn),
+                    kind: .checkbox(isChecked: isChecked),
                     a11yIdentifier: "screenshot"
                 )
             ])
@@ -403,7 +419,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
         ]
     }
 
-    private func toggleSections() -> [WebCompatReportViewModel.Section] {
+    private func checkboxSections() -> [WebCompatReportViewModel.Section] {
         return [
             WebCompatReportViewModel.Section(
                 id: "advanced",
@@ -412,13 +428,13 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                     WebCompatReportViewModel.Row(
                         id: "screenshot",
                         title: "Include screenshot",
-                        kind: .toggle(isOn: false),
+                        kind: .checkbox(isChecked: false),
                         a11yIdentifier: "screenshot"
                     ),
                     WebCompatReportViewModel.Row(
                         id: "blocklist",
                         title: "Include blocked list",
-                        kind: .toggle(isOn: true),
+                        kind: .checkbox(isChecked: true),
                         a11yIdentifier: "blocklist"
                     )
                 ]
@@ -556,7 +572,7 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
     var selectedCategoryIDs: [String] = []
     var selectedSubOptionIDs: [String] = []
     var tappedButtonIDs: [String] = []
-    var toggles: [(id: String, isOn: Bool)] = []
+    var checkboxes: [(id: String, isChecked: Bool)] = []
     var learnMoreURLs: [URL] = []
     var editedText: [(id: String, text: String)] = []
 
@@ -580,8 +596,8 @@ private final class MockWebCompatReportSheetDelegate: WebCompatReportSheetDelega
         tappedButtonIDs.append(id)
     }
 
-    func webCompatReportSheetDidToggle(id: String, isOn: Bool) {
-        toggles.append((id, isOn))
+    func webCompatReportSheetDidToggleCheckbox(id: String, isChecked: Bool) {
+        checkboxes.append((id, isChecked))
     }
 
     func webCompatReportSheetDidTapLearnMore(url: URL) {
