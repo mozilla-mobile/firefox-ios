@@ -5,5 +5,5 @@
 "CreditCard.ErrorState.CardNumberSublabel.v112" = "Унесите важећи број картице";
 
 /* Sub label error string that gets shown when user enters incorrect input for their name printed on their credit card in the text box. */
-"CreditCard.ErrorState.NameOnCardSublabel.v112" = "Додајте име";
+"CreditCard.ErrorState.NameOnCardSublabel.v112" = "Додај име";
 

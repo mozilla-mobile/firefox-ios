@@ -61,11 +61,17 @@
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "Server může být zaneprázdněn nebo nedostupný. Zkuste to znovu později. Pokud ostatní stránky nejdou načíst, zkontrolujte Wi-Fi nebo datové připojení. %@ může také vyhledat dřívější verze této stránky pomocí služby Wayback Machine.";
 
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "Nebyla nalezena žádná archivovaná verze";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "Zkusit znovu";
 
 /* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
 "NativeErrorPage.Wayback.Error.Search.v154" = "Zkontrolovat dostupnost starší verze";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "Vyhledat na webu";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "Nepodařilo se připojit";

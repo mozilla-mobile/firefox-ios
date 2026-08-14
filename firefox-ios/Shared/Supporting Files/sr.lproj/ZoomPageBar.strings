@@ -1,5 +1,5 @@
 /* Accessibility label for closing the zoom panel in Zoom Page Bar */
-"Menu.ZoomPage.Close.AccessibilityLabel.v113" = "Затвори панел за увећање";
+"Menu.ZoomPage.Close.AccessibilityLabel.v113" = "Затвори траку за увећање";
 
 /* Accessibility label for current zoom level in Zoom Page Bar. %@ represents the zoom level */
 "Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113" = "Тренутни ниво увећања: %@";

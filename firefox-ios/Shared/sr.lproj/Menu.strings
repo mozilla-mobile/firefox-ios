@@ -32,13 +32,13 @@
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Списак за читање";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
-"Menu.OpenSettingsAction.Title" = "Поставке";
+"Menu.OpenSettingsAction.Title" = "Подешавања";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Усклађени језичци";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
-"Menu.ReportSiteIssueAction.Title" = "Пријави проблем са сајтом";
+"Menu.ReportSiteIssueAction.Title" = "Пријави проблем на страници";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "Види све";
@@ -47,10 +47,10 @@
 "Menu.SharePageAction.Title" = "Подели страницу са…";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Захтевај веб-сајт за стоне рачунаре";
+"Menu.ViewDekstopSiteAction.Title" = "Захтевај страницу у стоном приказу";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "Захтевај мобилни веб-сајт";
+"Menu.ViewMobileSiteAction.Title" = "Захтевај мобилну страницу";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "SettingsMenu.OpenHomePageAction.Title" = "Почетна страница";

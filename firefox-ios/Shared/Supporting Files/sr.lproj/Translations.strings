@@ -5,7 +5,7 @@
 "Translations.AutoTranslatePrompt.Message.v151" = "Да ли да се странице аутоматски преводе када је то могуће?";
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
-"Translations.Banner.Close.Button.AccessibilityLabel.v145" = "Затвори панел за превођење";
+"Translations.Banner.Close.Button.AccessibilityLabel.v145" = "Затвори траку за превод";
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that the page has been translated to another language. %1$@ is the original language and %2$@ is the language that the page was translated to. */
 "Translations.Banner.ConfirmationTitleLabel.v145" = "Преведено са језика %1$@ на %2$@";
@@ -23,7 +23,7 @@
 "Translations.Banner.RetryButton.v145" = "Покушај поново";
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they can translate the page to another language. %@ is the other language (e.g. English). */
-"Translations.Banner.TitleLabel.v145" = "Преведи страницу на %@?";
+"Translations.Banner.TitleLabel.v145" = "Превести страницу на %@?";
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage. */
 "Translations.Banner.TranslateButton.v145" = "Преведи";
@@ -44,7 +44,7 @@
 "Translations.Sheet.Button.v145" = "Преведи";
 
 /* This is the text for the cell that indicates that a user can choose a language to translate from, as part of the bottom sheet view for the translations feature. */
-"Translations.Sheet.ChooseLanguage.v145" = "Изаберите језик";
+"Translations.Sheet.ChooseLanguage.v145" = "Изабери језик";
 
 /* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
 "Translations.Sheet.Error.GeneralSubtitle.v145" = "Покушајте поново.";
@@ -56,10 +56,10 @@
 "Translations.Sheet.Error.RetryButton.v145" = "Покушај поново";
 
 /* On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page. */
-"Translations.Sheet.Error.SubtitleLabel.v145" = "Проверите интернет везу и покушајте поново.";
+"Translations.Sheet.Error.SubtitleLabel.v145" = "Проверите своју интернет везу и покушајте поново.";
 
 /* On the translation feature bottom sheet, this is the text for the error message that appears when a user has no internet connection when trying to translate a page. */
-"Translations.Sheet.Error.TitleLabel.v145" = "Не могу да учитам језике";
+"Translations.Sheet.Error.TitleLabel.v145" = "Није могуће учитати језике";
 
 /* This is a less descriptive text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
 "Translations.Sheet.FromLabel.v145" = "Са";

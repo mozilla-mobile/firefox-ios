@@ -1,5 +1,5 @@
 /* Prompt title when deleting logins */
-"Are you sure?" = "Vai tiešām vēlaties?";
+"Are you sure?" = "Vai tiešām?";
 
 /* Prompt option for cancelling out of deletion */
 "Cancel" = "Atcelt";

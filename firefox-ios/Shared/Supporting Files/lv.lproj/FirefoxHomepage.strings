@@ -1,0 +1,6 @@
+/* The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2" = "Pievienot saīsni";
+
+/* The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut. */
+"FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153" = "Pievienot saīsni";
+

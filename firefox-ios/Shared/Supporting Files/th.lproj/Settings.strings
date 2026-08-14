@@ -169,6 +169,9 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "เล่นอัตโนมัติ";
 
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "ลดโฆษณาและตัวติดตามที่เกี่ยวข้องกับโฆษณา หากไซต์แสดงผลผิดปกติ ให้ลองปิดคุณสมบัตินี้";
+
 /* Link text below the Ad Blocker toggle description that opens a support page with more information. */
 "Settings.Browsing.AdBlocker.LearnMore.v155" = "เรียนรู้เพิ่มเติม";
 

@@ -23,7 +23,7 @@
 "Addresses.EditAddress.AutofillAddressCountryOnly.v129" = "Држава";
 
 /* Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders. */
-"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "Држава или регион";
+"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "Држава или покрајина";
 
 /* Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information. */
 "Addresses.EditAddress.AutofillAddressCounty.v129" = "Округ";
@@ -80,7 +80,7 @@
 "Addresses.EditAddress.AutofillAddressProvince.v129" = "Општина";
 
 /* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
-"Addresses.EditAddress.AutofillAddressState.v129" = "Савезна држава";
+"Addresses.EditAddress.AutofillAddressState.v129" = "Држава";
 
 /* Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality. */
 "Addresses.EditAddress.AutofillAddressSuburb.v129" = "Предграђе";
@@ -95,7 +95,7 @@
 "Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Село или општина";
 
 /* Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision. */
-"Addresses.EditAddress.AutofillAddressZip.v129" = "ЗИП код";
+"Addresses.EditAddress.AutofillAddressZip.v129" = "Поштански број";
 
 /* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
 "Addresses.EditAddress.AutofillCancelButton.v129" = "Откажи";
@@ -128,16 +128,16 @@
 "Addresses.Toast.AddressSavedConfirmation.v129" = "Адреса је сачувана";
 
 /* Toast message indicating an error occurred while trying to save an address. */
-"Addresses.Toast.AddressSaveError.v129" = "Адреса не може бити сачувана";
+"Addresses.Toast.AddressSaveError.v129" = "Нисам успео да сачувам адресу";
 
 /* Toast message indicating an error occurred while trying to remove an address. */
-"Addresses.Toast.AddressSaveError.v130" = "Адреса не може бити уклоњена";
+"Addresses.Toast.AddressSaveError.v130" = "Нисам успео да уклоним адресу";
 
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Покушај поново";
 
 /* Toast message confirming that an address has been successfully updated. */
-"Addresses.Toast.AddressUpdatedConfirmation.v129" = "Информације о адреси су ажуриране";
+"Addresses.Toast.AddressUpdatedConfirmation.v129" = "Подаци о адреси су ажурирани";
 
 /* Toast message confirming that an address has been successfully updated. */
 "Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "Адреса је сачувана";

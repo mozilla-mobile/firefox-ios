@@ -8,7 +8,7 @@
 "Clear Search" = "Очисти претрагу";
 
 /* Copy password text selection menu item */
-"Copy" = "Умножи";
+"Copy" = "Копирај";
 
 /* Label describing when the current login was created. %@ is the timestamp. */
 "Created %@" = "Направљено %@";
@@ -32,7 +32,7 @@
 "DeleteLoginsAlert.Title.v122" = "Уклонити лозинку?";
 
 /* Label for the button used to deselect all logins. */
-"Deselect All" = "Поништи избор свега";
+"Deselect All" = "Поништи избор";
 
 /* Accessibility label for entering search mode for logins */
 "Enter Search Mode" = "Уђи у режим претраге";
@@ -83,5 +83,5 @@
 "Username" = "Корисничко име";
 
 /* Label displayed above the website row in Login Detail View. */
-"Website" = "Веб-сајт";
+"Website" = "Веб страница";
 

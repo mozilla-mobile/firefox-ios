@@ -1,0 +1,3 @@
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Kļūdas kods: %@";
+

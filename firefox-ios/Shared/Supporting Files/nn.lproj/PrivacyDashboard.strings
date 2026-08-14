@@ -8,7 +8,7 @@
 "PrivacyDashboard.HeaderLabel.v155" = "Sporarar blokkerte denne veka";
 
 /* On the Privacy Dashboard popup, the text for the header of the popup, in the case where we have not yet blocked any trackers yet. The placeholder %@ will be the app name, Firefox. */
-"PrivacyDashboard.HeaderLabelForNoTrackersBlocked.v155" = "%@ blokkerer sporingsverktøy medan du surfar, du vil sjå dei her.";
+"PrivacyDashboard.HeaderLabelForNoTrackersBlocked.v155" = "%@ blokkerer sporarar medan du surfar, du vil sjå dei her.";
 
 /* On the Privacy Dashboard popup, the title text for the bar & label showing how many social media trackers we've blocked. */
 "PrivacyDashboard.SocialTrackers.v155" = "Sporing via sosiale medium";

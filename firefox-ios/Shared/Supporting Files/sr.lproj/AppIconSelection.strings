@@ -83,7 +83,7 @@
 "Settings.AppIconSelection.AppIconNames.Retro2017.Title.v139" = "Ретро 2017";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to yellow. */
-"Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137" = "Рађање сунца";
+"Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137" = "Излазак сунца";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of purple fading to pink. */
 "Settings.AppIconSelection.AppIconNames.Sunset.Title.v137" = "Залазак сунца";
@@ -119,7 +119,7 @@
 "Settings.AppIconSelection.SectionNames.Gradients.Title.v139" = "Преливи";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for all other miscellaneous variants of the app icon (like hand drawn or retro versions). */
-"Settings.AppIconSelection.SectionNames.More.Title.v139" = "Још";
+"Settings.AppIconSelection.SectionNames.More.Title.v139" = "Више";
 
 /* On the Settings screen, the name of the row that opens app icon selection options. */
 "Settings.AppIconSelection.SettingsOptionName.v136" = "Иконица апликације";

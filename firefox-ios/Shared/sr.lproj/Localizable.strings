@@ -5,10 +5,10 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. %@ is the hostname of the site. */
-"A username and password are being requested by %@." = "%@ захтева корисничко име и лозинку.";
+"A username and password are being requested by %@." = "Корисничко име и лозинка су захтевани од стране %@.";
 
 /* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
-"A username and password are being requested by %@. The site says: %@" = "%1$@ захтева корисничко име и лозинку. Веб страница каже: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "Корисничко име и лозинка су захтевани од стране %1$@. Веб страница каже: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Аа";
@@ -74,7 +74,7 @@
 "Amazon" = "Amazon";
 
 /* Authentication prompt title */
-"Authentication required" = "Потребна је пријава";
+"Authentication required" = "Потребно је потврђивање идентитета";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Назад";
@@ -104,7 +104,7 @@
 "Bookmarks.Folder.Label" = "Фасцикла";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "Обележивачи на рачунару";
+"Bookmarks.Menu.DesktopBookmarks" = "Обележивачи радне површине";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Нови обележивач";
@@ -122,7 +122,7 @@
 "BreachAlerts.BreachDate" = "Ова повреда се догодила";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Лозинке су процуреле или су украдене од када сте последњи пут променили лозинку. Да бисте заштитили овај налог, пријавите се на сајт и промените лозинку.";
+"BreachAlerts.Description" = "Лозинке су процуреле или су украдене од када сте последњи пут променили лозинку. Да бисте заштитили овај налог, пријавите се на страницу и промените лозинку.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Сазнај више";
@@ -131,7 +131,7 @@
 "BreachAlerts.Link" = "Иди на";
 
 /* Title for the Breached Login Detail View. */
-"BreachAlerts.Title" = "Повреда веб сајта";
+"BreachAlerts.Title" = "Страница са процурелим подацима";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Осветљење";
@@ -161,7 +161,7 @@
 "ContextMenu.BookmarkLinkButtonTitle" = "Обележи везу";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Отворен је нови приватни језичак";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Отворен нови приватни језичак";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Отворен нови приватни језичак";
@@ -194,13 +194,13 @@
 "ContextMenu.SaveImageButtonTitle" = "Сачувај слику";
 
 /* Context menu item for sharing a link URL */
-"ContextMenu.ShareLinkButtonTitle" = "Дели везу";
+"ContextMenu.ShareLinkButtonTitle" = "Подели везу";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Подешавања траке алата";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
-"ContextualHints.TabTray.InactiveTabs" = "Језичци које нисте погледали две недеље се премештају овде.";
+"ContextualHints.TabTray.InactiveTabs" = "Језичци које нисте погледали више од две недеље су премештени овде.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Искључи у подешавањима";
@@ -302,13 +302,13 @@
 "ErrorPages.Advanced.Button" = "Напредно";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Упозорење: не можемо да потврдимо да је ваша веза са овим веб сајтом безбедна.";
+"ErrorPages.AdvancedWarning1.Text" = "Упозорење: не можемо да потврдимо да је ваша веза са овом веб страницом безбедна.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Могуће је да је у питању погрешно подешавање или неовлашћена измена од стране нападача. Наставите ако прихватате потенцијални ризик.";
 
 /* Warning text on the certificate error page. %@ is the domain of the website. */
-"ErrorPages.CertWarning.Description" = "Власник веб сајта %@ га је неправилно подесио. Да би заштитио ваше податке од крађе, Firefox се није повезао са овим веб сајтом.";
+"ErrorPages.CertWarning.Description" = "Власник веб странице %@ ју је неправилно подесио. Да би заштитио ваше податке од крађе, Firefox се није повезао са овом веб страницом.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Ова веза није поверљива";
@@ -317,7 +317,7 @@
 "ErrorPages.GoBack.Button" = "Иди назад";
 
 /* Button label to temporarily continue to the site from the certificate error page */
-"ErrorPages.VisitOnce.Button" = "Ипак посети сајт";
+"ErrorPages.VisitOnce.Button" = "Ипак посети страницу";
 
 /* Question shown to user when tapping a link that opens the App Store app */
 "ExternalLink.AppStore.ConfirmationTitle" = "Отворити ову везу у App Store-у?";
@@ -335,7 +335,7 @@
 "FirefoxHome.CustomizeHomeButton.Title" = "Прилагоди почетну страницу";
 
 /* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
-"FirefoxHome.Pocket.DiscoverMore" = "Откријте више";
+"FirefoxHome.Pocket.DiscoverMore" = "Откриј више";
 
 /* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
 "FirefoxHome.Pocket.Minutes.v99" = "%d мин";
@@ -362,7 +362,7 @@
 "FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Отвори усклађени језичак";
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
-"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Види све усклађене језичке";
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Погледај све усклађене језичке";
 
 /* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
 "FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Преузимање језичка";
@@ -392,7 +392,7 @@
 "fxa.signin.camera-signin" = "Пријавите се помоћу камере";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "На рачунару отворите Firefox и идите на firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "На рачунару отворите Firefox и посетите firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Спремно за скенирање";
@@ -434,7 +434,7 @@
 "History" = "Историјат";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "Очисти скорашњи историјат…";
+"HistoryPanel.ClearHistoryButtonTitle" = "Обриши недавну историју…";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "Све";
@@ -470,10 +470,10 @@
 "Home" = "Почетна";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.Bookmark" = "Обележи";
+"HomePanel.ContextMenu.Bookmark" = "Забележи";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.DeleteFromHistory" = "Обриши из историјата";
+"HomePanel.ContextMenu.DeleteFromHistory" = "Избриши из историје";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Отвори у приватном језичку";
@@ -542,7 +542,7 @@
 "Keyboard.Shortcuts.AddBookmark" = "Додај обележивач";
 
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ClearRecentHistory" = "Очисти недавни историјат";
+"Keyboard.Shortcuts.ClearRecentHistory" = "Очисти недавну историју";
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Пронађи поново";
@@ -554,7 +554,7 @@
 "Keyboard.Shortcuts.Section.Bookmark" = "Обележивачи";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Section.History" = "Историјат";
+"Keyboard.Shortcuts.Section.History" = "Историја";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Tools" = "Алати";
@@ -563,7 +563,7 @@
 "Keyboard.Shortcuts.Section.Window" = "Прозор";
 
 /* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Settings" = "Поставке";
+"Keyboard.Shortcuts.Settings" = "Подешавања";
 
 /* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowBookmarks" = "Прикажи обележиваче";
@@ -575,7 +575,7 @@
 "Keyboard.Shortcuts.ShowFirstTab" = "Прикажи први језичак";
 
 /* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowHistory" = "Прикажи историјат";
+"Keyboard.Shortcuts.ShowHistory" = "Прикажи историју";
 
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "Прикажи последњи језичак";
@@ -596,7 +596,7 @@
 "LibraryPanel.Accessibility.Bookmarks.v106" = "Обележивачи";
 
 /* Panel accessibility label */
-"LibraryPanel.Accessibility.History.v106" = "Историјат";
+"LibraryPanel.Accessibility.History.v106" = "Историја";
 
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Откажи";
@@ -605,130 +605,130 @@
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Обриши";
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
-"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Обрисати све сајтове у %@?";
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Обрисати све странице у %@?";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Уклања историјат (укључујући историјат усклађен са других уређаја), колачиће и остале податке прегледања.";
 
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
-"LibraryPanel.History.DeleteGroupedItem.v104" = "TRANSLATION";
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Обриши";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
-"LibraryPanel.History.NoHistoryFound.v99" = "TRANSLATION";
+"LibraryPanel.History.NoHistoryFound.v99" = "Није пронађен историјат";
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
-"LibraryPanel.History.RecentlyClosedTabs.v99" = "TRANSLATION";
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Недавно затворени језичци";
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
-"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "TRANSLATION";
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Унеси појмове за претрагу";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
-"LibraryPanel.History.SyncedHistory.v100" = "TRANSLATION";
+"LibraryPanel.History.SyncedHistory.v100" = "Усклађени историјат";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
-"LibraryPanel.Section.Older" = "TRANSLATION";
+"LibraryPanel.Section.Older" = "Старије";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
-"Licenses" = "TRANSLATION";
+"Licenses" = "Дозволе";
 
 /* Light theme setting in Reading View settings */
-"Light" = "TRANSLATION";
+"Light" = "Светло";
 
 /* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"Load original page" = "TRANSLATION";
+"Load original page" = "Учитај изворну страницу";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "TRANSLATION";
+"Loading content…" = "Учитавам садржај…";
 
 /* Authentication prompt log in button */
-"Log in" = "TRANSLATION";
+"Log in" = "Пријави се";
 
 /* Toggle logins syncing setting */
-"Logins" = "TRANSLATION";
+"Logins" = "Пријаве";
 
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
-"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "TRANSLATION";
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Сазнајте више";
 
 /* Title of the Continue button. */
-"Logins.Onboarding.ContinueButtonTitle" = "TRANSLATION";
+"Logins.Onboarding.ContinueButtonTitle" = "Настави";
 
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
-"Logins.Onboarding.LearnMoreButtonTitle" = "TRANSLATION";
+"Logins.Onboarding.LearnMoreButtonTitle" = "Сазнајте више";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "TRANSLATION";
+"Logins.PasscodeRequirement.Warning" = "Да бисте користили функцију самосталног попуњавања у Firefox-у, морате имати омогућену шифру за уређај.";
 
 /* Label displaying welcome view tagline under the title */
-"Logins.WelcomeView.Tagline" = "TRANSLATION";
+"Logins.WelcomeView.Tagline" = "Понесите ваше лозинке свугде";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "TRANSLATION";
+"Logins.WelcomeView.Title2" = "Самостално попуњавање Firefox лозинки";
 
 /* Title of the big blue button to enable AutoFill */
-"Logins.WelcomeView.TurnOnAutoFill" = "TRANSLATION";
+"Logins.WelcomeView.TurnOnAutoFill" = "Укључи самостално попуњавање";
 
 /* Button to not save the user's password */
-"LoginsHelper.DontSave.Button" = "TRANSLATION";
+"LoginsHelper.DontSave.Button" = "Не чувај";
 
 /* Button to not update the user's password */
-"LoginsHelper.DontUpdate.Button" = "Don’t Update";
+"LoginsHelper.DontUpdate.Button" = "Не ажурирај";
 
 /* Button to save the user's password */
-"LoginsHelper.SaveLogin.Button" = "Save Login";
+"LoginsHelper.SaveLogin.Button" = "Сачувај пријаву";
 
 /* Button to update the user's password */
-"LoginsHelper.Update.Button" = "Update";
+"LoginsHelper.Update.Button" = "Ажурирај";
 
 /* Placeholder test for search box in logins list view. */
-"LoginsList.LoginsListSearchPlaceholder" = "Filter";
+"LoginsList.LoginsListSearchPlaceholder" = "Филтер";
 
 /* Label that appears after the search if there are no logins matching the search */
-"LoginsList.NoMatchingResult.Subtitle" = "There are no results matching your search.";
+"LoginsList.NoMatchingResult.Subtitle" = "Нема резултата који одговарају вашој претрази.";
 
 /* Title for cancel button for user to stop searching for a particular login */
-"LoginsList.Search.Cancel" = "Cancel";
+"LoginsList.Search.Cancel" = "Откажи";
 
 /* Label displaying select a password to fill instruction */
-"LoginsList.SelectPassword.Title" = "Select a password to fill";
+"LoginsList.SelectPassword.Title" = "Изаберите лозинку за попуњавање";
 
 /* Title for the list of logins */
-"LoginsList.Title" = "SAVED LOGINS";
+"LoginsList.Title" = "САЧУВАНЕ ПРИЈАВЕ";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Looks like Firefox crashed previously. Would you like to restore your tabs?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Чини се да је Firefox раније пао. Желите ли да повратите језичке?";
 
 /* Title for the button that marks a reading list item as read */
-"Mark as Read" = "Mark as Read";
+"Mark as Read" = "Означи као прочитано";
 
 /* Title for the button that marks a reading list item as unread */
-"Mark as Unread" = "Mark as Unread";
+"Mark as Unread" = "Означи као непрочитано";
 
 /* Toast displayed to the user after a bookmark has been added. */
-"Menu.AddBookmark.Confirm" = "Bookmark Added";
+"Menu.AddBookmark.Confirm" = "Обележивач је додат";
 
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
-"Menu.AddBookmark.Label.v99" = "Add";
+"Menu.AddBookmark.Label.v99" = "Додај";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"Menu.AddPin.Confirm2" = "Added to Shortcuts";
+"Menu.AddPin.Confirm2" = "Додато у пречице";
 
 /* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
-"Menu.AddReadingList.Label.v99" = "Add";
+"Menu.AddReadingList.Label.v99" = "Додај";
 
 /* Toast displayed to the user after adding the item to their reading list. */
-"Menu.AddToReadingList.Confirm" = "Added To Reading List";
+"Menu.AddToReadingList.Confirm" = "Додато у списак за читање";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
-"Menu.AddToShortcuts.v99" = "Add to Shortcuts";
+"Menu.AddToShortcuts.v99" = "Додај у пречице";
 
 /* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
-"Menu.Bookmarks.Label" = "Bookmarks";
+"Menu.Bookmarks.Label" = "Обележивачи";
 
 /* The title for the button that lets you copy the url from the location bar. */
-"Menu.Copy.Title" = "Copy Address";
+"Menu.Copy.Title" = "Копирај адресу";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "URL Copied To Clipboard";
+"Menu.CopyURL.Confirm" = "Адреса је копирана у привремену меморију";
 
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Прилагоди почетну страну";
@@ -737,10 +737,10 @@
 "Menu.Downloads.Label" = "Преузимања";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Заштите су ИСКЉУЧЕНЕ за овај сајт";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Заштите су ИСКЉУЧЕНЕ за ову страницу";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Заштите су УКЉУЧЕНЕ за овај сајт";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Заштите су УКЉУЧЕНЕ за ову страницу";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Помоћ";
@@ -764,10 +764,10 @@
 "Menu.Passwords.Label" = "Лозинке";
 
 /* The title for the button that lets you paste into the location bar */
-"Menu.Paste.Title" = "Налепи";
+"Menu.Paste.Title" = "Убаци";
 
 /* The title for the button that lets you paste and go to a URL */
-"Menu.PasteAndGo.Title" = "Налепи и иди";
+"Menu.PasteAndGo.Title" = "Убаци и иди";
 
 /* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "Листа за читање";
@@ -812,34 +812,34 @@
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Почетна";
 
 /* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
-"Menu.TrackingProtection.Details.Verifier" = "Потврдио %@";
+"Menu.TrackingProtection.Details.Verifier" = "Потврђено: %@";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Подешавања заштите";
 
 /* The title that shows the number of content cookies blocked */
-"Menu.TrackingProtectionBlockedContent.Title" = "Садржај за праћење";
+"Menu.TrackingProtectionBlockedContent.Title" = "Садржај са елементима за праћење";
 
 /* The title that shows the number of social URLs blocked */
-"Menu.TrackingProtectionBlockedSocial.Title" = "Друштвени пратиоци";
+"Menu.TrackingProtectionBlockedSocial.Title" = "Колачићи за праћење";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Пратиоци између сајтова";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Није блокиран никакав садржај са елементима за праћење";
 
 /* The title that shows the number of cryptomining scripts blocked */
-"Menu.TrackingProtectionCryptominersBlocked.Title" = "Крипторудари";
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Нису блокирани никакви колачићи за праћење";
 
 /* Description of content trackers. */
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Веб сајтови могу учитавати спољне огласе, видео снимке и други садржај који садржи скривене пратиоце. Блокирање овога може убрзати учитавање веб сајтова, али нека дугмад, обрасци и поља за пријаву можда неће радити.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Ови колачићи вас прате са сајта на сајт како би прикупили податке о томе шта радите на мрежи. Постављају их треће стране, као што су оглашивачи и компаније за аналитику.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Ови колачићи вас прате са странице на страницу како би прикупили податке о томе шта радите на мрежи. Постављају их треће стране, као што су оглашивачи и компаније за аналитику.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Крипторудари тајно користе рачунарску снагу вашег система за рударење дигиталног новца. Скрипте за крипторударење троше вашу батерију, успоравају ваш рачунар и могу повећати ваш рачун за струју.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Веб страница коју посећујете може имати сопствену заштиту од праћења.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Подешавања вашег прегледача и рачунара су јединствена. Сакупљачи дигиталних отисака прикупљају низ ових јединствених подешавања како би направили ваш профил, који се може користити за ваше праћење док прегледате мрежу.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Подешавања вашег прегледача и рачунара су јединствена. Сакупљачи дигиталних отисака прикупљају низ ових јединствених подешавања како би направили ваш профил, који се може користити за праћење вас док прегледате мрежу.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Друштвене мреже постављају пратиоце на друге веб сајтове како би изградиле потпунији и циљанији профил о вама. Блокирање ових пратилаца смањује колико компаније друштвених медија могу да виде шта радите на мрежи.";
@@ -851,16 +851,16 @@
 "Menu.WhatsNew.Title" = "Шта је ново";
 
 /* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
-"Menu.ZoomPage.Title.v113" = "Увећај (%@)";
+"Menu.ZoomPage.Title.v113" = "Увећање (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "мобилни уређај";
 
 /* Relative date for dates older than a month and less than two months. */
-"more than a month ago" = "пре више од месец дана";
+"more than a month ago" = "пре више од месеца дана";
 
 /* Description for a date more than a week ago, but less than a month ago. */
-"more than a week ago" = "пре више од недељу дана";
+"more than a week ago" = "пре више од недеље дана";
 
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
 "Navigation Toolbar" = "Трака за навигацију";
@@ -899,13 +899,13 @@
 "OpenURL.Error.Message" = "Firefox не може да отвори страницу јер има неисправну адресу.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
-"OpenURL.Error.Title" = "Не могу да отворим страницу";
+"OpenURL.Error.Title" = "Немогуће отворити страницу";
 
 /* Password textbox in Authentication prompt */
 "Password" = "Лозинка";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ово вам омогућава да сачувате слику у вашу галерију камера.";
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ово вам омогућава да сачувате слику у галерију фотографија.";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox жели да приступи вашим фотографијама";
@@ -977,7 +977,7 @@
 "ReopenAlert.Title" = "Поново отвори последњи затворени језичак";
 
 /* Accessibility label for button resetting font size in display settings of reader mode */
-"Reset text size" = "Ресетуј величину текста";
+"Reset text size" = "Врати величину текста";
 
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Бесерифни";
@@ -998,7 +998,7 @@
 "ScanQRCode.PermissionError.Message.v100" = "Идите у „Подешавања“ уређаја > „Firefox“. Дозволите Firefox-у приступ камери.";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "Скенирај КР код";
+"ScanQRCode.View.Title" = "Скенирање КР кода";
 
 /* Open search section of settings */
 "Search" = "Претрага";
@@ -1019,7 +1019,7 @@
 "Search.ThirdPartyEngines.AddSuccess" = "Претраживач је додат!";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Додати добављача претраге?";
+"Search.ThirdPartyEngines.AddTitle" = "Додати пружаоца претраге?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Откажи";
@@ -1028,85 +1028,85 @@
 "Search.ThirdPartyEngines.DuplicateErrorMessage" = "Претраживач са овим насловом или адресом је већ додат.";
 
 /* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Није успело";
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Неуспешно";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedMessage" = "Добављач претраге није могао бити додат.";
+"Search.ThirdPartyEngines.FailedMessage" = "Пружалац претраге није могао да се дода.";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedTitle" = "Није успело";
+"Search.ThirdPartyEngines.FailedTitle" = "Неуспело";
 
 /* A message explaining fault in custom search engine form. */
 "Search.ThirdPartyEngines.FormErrorMessage" = "Попуните сва поља исправно.";
 
 /* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.FormErrorTitle" = "Није успело";
+"Search.ThirdPartyEngines.FormErrorTitle" = "Неуспело";
 
 /* The confirmation button */
-"Search.ThirdPartyEngines.OK" = "OK";
+"Search.ThirdPartyEngines.OK" = "У реду";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Send a crash report so Mozilla can fix the problem?";
+"Send a crash report so Mozilla can fix the problem?" = "Пошаљите извештај о паду како би Mozilla могла да поправи проблем?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
-"Send Feedback" = "Send Feedback";
+"Send Feedback" = "Пошаљи утиске";
 
 /* Used as a button label for crash dialog prompt */
-"Send Report" = "Send Report";
+"Send Report" = "Пошаљи извештај";
 
 /* Button title for cancelling share screen */
-"SendTo.Cancel.Button" = "Cancel";
+"SendTo.Cancel.Button" = "Откажи";
 
 /* Close button in top navigation bar */
-"SendTo.Close.Button" = "Close";
+"SendTo.Close.Button" = "Затвори";
 
 /* Header for the list of devices table */
-"SendTo.DeviceList.Text" = "Available devices:";
+"SendTo.DeviceList.Text" = "Доступни уређаји:";
 
 /* Message in error prompt explaining why the URL is invalid. */
-"SendTo.Error.Message" = "Only HTTP and HTTPS links can be shared.";
+"SendTo.Error.Message" = "Могу се делити само HTTP и HTTPS везе.";
 
 /* OK button to dismiss the error prompt. */
-"SendTo.Error.OK.Button" = "OK";
+"SendTo.Error.OK.Button" = "У реду";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "The link you are trying to share cannot be shared.";
+"SendTo.Error.Title" = "Веза коју покушавате да поделите не може да се подели.";
 
 /* Title of the dialog that allows you to send a tab to a different device */
-"SendTo.NavBar.Title" = "Send Tab";
+"SendTo.NavBar.Title" = "Пошаљи језичак";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "You don’t have any other devices connected to this Firefox Account available to sync.";
+"SendTo.NoDevicesFound.Message" = "Немате других уређаја повезаних са овим Firefox налогом који су доступни за усклађивање.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Please open Firefox, go to Settings and sign in to continue.";
+"SendTo.NotSignedIn.Message" = "Отворите Firefox, идите у Подешавања и пријавите се да бисте наставили.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "You are not signed in to your Firefox Account.";
+"SendTo.NotSignedIn.Title" = "Нисте пријављени на свој Firefox налог.";
 
 /* Navigation bar button to Send the current page to a device */
-"SendTo.SendAction.Text" = "Send";
+"SendTo.SendAction.Text" = "Пошаљи";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_body" = "New tab arrived from another device.";
+"SentTab_TabArrivingNotification_NoDevice_body" = "Стигао је нови језичак са другог уређаја.";
 
 /* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_title" = "Tab received";
+"SentTab_TabArrivingNotification_NoDevice_title" = "Примљен језичак";
 
 /* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
 "SentTab_TabArrivingNotification_WithDevice_body" = "Нови језичак је стигао у %@";
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
-"SentTab_TabArrivingNotification_WithDevice_title" = "Језичак је примљен са %@";
+"SentTab_TabArrivingNotification_WithDevice_title" = "Примљен језичак са %@";
 
 /* Body of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.body" = "Tap to begin";
+"SentTab.NoTabArrivingNotification.body" = "Додирните да започнете";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Firefox усклађивање";
 
 /* Label for an action used to view one or more tabs from a notification. */
-"SentTab.ViewAction.title" = "View";
+"SentTab.ViewAction.title" = "Погледај";
 
 /* Sepia theme setting in Reading View settings */
 "Sepia" = "Сепија";
@@ -1124,7 +1124,7 @@
 "Settings.AddCustomEngine.SaveButtonText" = "Сачувај";
 
 /* The title of the  Custom Search Engine view. */
-"Settings.AddCustomEngine.Title" = "Додај претраживач";
+"Settings.AddCustomEngine.Title" = "Додавање претраживача";
 
 /* The title for the field which sets the title for a custom search engine. */
 "Settings.AddCustomEngine.TitleLabel" = "Наслов";
@@ -1145,10 +1145,10 @@
 "Settings.AddressBar.SectionTitle.v138" = "Положај траке адресе";
 
 /* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
-"Settings.AddressBar.SettingsTitle.v138" = "Трака адреса";
+"Settings.AddressBar.SettingsTitle.v138" = "Трака адресе";
 
 /* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
-"Settings.AddressBar.Top.v138" = "Врх";
+"Settings.AddressBar.Top.v138" = "Горе";
 
 /* Browser theme settings section title in Appearance settings */
 "Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Тема прегледача";
@@ -1160,19 +1160,19 @@
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Изглед веб странице";
 
 /* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
-"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Омогућава веб сајтовима тамни изглед. Неки сајтови можда неће изгледати исправно.";
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Омогућава веб страницама тамни изглед. Неке странице можда неће изгледати исправно.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
-"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Тамни режим веб сајта";
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Тамни режим веб странице";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Блокирај отварање спољних апликација";
 
 /* Button in Data Management that clears all items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "Обриши све податке веб страница";
+"Settings.ClearAllWebsiteData.Clear.Button" = "Очисти све податке веб страница";
 
 /* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "Обриши приватне податке";
+"Settings.ClearPrivateData.Clear.Button" = "Очисти приватне податке";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Очисти приватне податке";
@@ -1184,7 +1184,7 @@
 "Settings.CopyAppVersion.Title" = "Копирано у оставу";
 
 /* Default text in search bar for Data Management */
-"Settings.DataManagement.SearchLabel" = "Филтрирај сајтове";
+"Settings.DataManagement.SearchLabel" = "Филтрирај странице";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.DataManagement.SectionName" = "Управљање подацима";
@@ -1226,19 +1226,19 @@
 "Settings.DisplayTheme.OptionLight" = "Светла";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
-"Settings.DisplayTheme.SectionFooter" = "Тема ће се аутоматски променити на основу осветљености вашег екрана. Можете поставити праг када се тема мења. Кружић означава тренутну осветљеност вашег екрана.";
+"Settings.DisplayTheme.SectionFooter" = "Тема ће се самостално променити на основу осветљености вашег екрана. Можете поставити праг на којем се тема мења. Кружић означава тренутну осветљеност вашег екрана.";
 
 /* Display (theme) settings label to show if automatically switch theme is enabled. */
-"Settings.DisplayTheme.StatusTitle" = "Аутоматски";
+"Settings.DisplayTheme.StatusTitle" = "Самостално";
 
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Начин промене";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
-"Settings.DisplayTheme.SwitchSubtitle" = "Промени аутоматски на основу осветљености екрана";
+"Settings.DisplayTheme.SwitchSubtitle" = "Промена се врши самостално на основу осветљености екрана";
 
 /* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
-"Settings.DisplayTheme.SwitchTitle" = "Аутоматски";
+"Settings.DisplayTheme.SwitchTitle" = "Самостално";
 
 /* System theme settings section title */
 "Settings.DisplayTheme.SystemTheme.SectionHeader" = "Системска тема";
@@ -1286,7 +1286,7 @@
 "Settings.Home.Option.Shortcuts" = "Пречице";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
-"Settings.Home.Option.StartAtHome.AfterFourHours" = "Почетна страница након четири сата неактивности";
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Почетна страна након четири сата мировања";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Always" = "Почетна страница";
@@ -1307,16 +1307,16 @@
 "Settings.Home.Option.Wallpaper" = "Позадина";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox позадина, аметист шара.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox позадина, шара аметиста.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox позадина, пешчана брда шара.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox позадина, шара пешчаних брда.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox позадина, плаветна шара.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Подразумевана чиста позадина.";
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Подразумевана прозирна позадина.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox позадина, шара изласка сунца.";
@@ -1337,10 +1337,10 @@
 "Settings.Home.Option.Wallpaper.LearnMore.v106" = "Сазнај више";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
-"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Испробајте нову колекцију.";
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Испробајте нову збирку.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
-"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Нова колекција „Независни гласови“.";
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Нова збирка „Независни гласови“.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Ограничено издање";
@@ -1400,7 +1400,7 @@
 "Settings.NewTab.Option.Custom" = "Прилагођено";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
+"Settings.NewTab.Option.FirefoxHome" = "Почетна страница Firefox-а";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Матична страница";
@@ -1427,7 +1427,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "При отварању %@";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Title" = "Понуди отварање умножених веза";
+"Settings.OfferClipboardBar.Title" = "Понуди отварање копираних веза";
 
 /* Title for Open With Settings */
 "Settings.OpenWith.PageTitle" = "Отвори везе е-поште помоћу";
@@ -1501,6 +1501,9 @@
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Усклади и сачувај податке";
 
+/* In the settings account row, shown transiently while the user is being signed out of their account. */
+"Settings.Sync.SigningOut.Title.v154" = "Одјављујем се…";
+
 /* Title for the page where the user sign in to their Firefox Sync account. */
 "Settings.Sync.SignInView.Title.v103" = "Усклади и сачувај податке";
 
@@ -1526,13 +1529,13 @@
 "Settings.Toolbar.SettingsTitle" = "Алатна трака";
 
 /* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
-"Settings.Toolbar.Top" = "На врху";
+"Settings.Toolbar.Top" = "Горе";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "У реду, разумем";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Ако веб сајт не ради како је очекивано, додирните катанац у траци адреса и искључите побољшану заштиту од праћења за ту страницу.";
+"Settings.TrackingProtection.Alert.Description" = "Ако веб страница не ради како је очекивано, додирните катанац у траци адресе и искључите побољшану заштиту од праћења за ту страницу.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Пажња!";
@@ -1541,19 +1544,19 @@
 "Settings.TrackingProtection.Info.BlocksTitle" = "БЛОКОВИ";
 
 /* 'Learn more' info link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.LearnMore" = "Сазнај више";
+"Settings.TrackingProtection.LearnMore" = "Сазнајте више";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Смањује циљане огласе и помаже у спречавању оглашивача да прате ваше прегледање.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ако веб сајт не ради како је очекивано, додирните катанац у траци адреса и искључите побољшану заштиту од праћења за ту страницу.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ако веб страница не ради како је очекивано, додирните катанац у траци адресе и искључите побољшану заштиту од праћења за ту страницу.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ако веб сајт не ради како је очекивано, додирните катанац у траци адреса и искључите побољшану заштиту од праћења за ту страницу.";
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ако веб страница не ради како је очекивано, додирните катанац у траци адресе и искључите побољшану заштиту од праћења за ту страницу.";
 
 /* Description for standard level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Дозвољава неко праћење огласа како би веб сајтови функционисали исправно.";
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Дозвољава одређено праћење огласа како би веб странице функционисале исправно.";
 
 /* Description for strict level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блокира више пратилаца, огласа и искачућих прозора. Странице се учитавају брже, али неке функционалности можда неће радити.";
@@ -1583,10 +1586,10 @@
 "Settings.WebsiteData.ButtonShowMore" = "Прикажи више";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "Ова радња ће обрисати све ваше податке веб страница. То се не може опозвати.";
+"Settings.WebsiteData.ConfirmPrompt" = "Ова радња ће очистити све ваше податке веб страница. То се не може опозвати.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
-"Settings.WebsiteData.SelectedConfirmPrompt" = "Ова радња ће обрисати изабране ставке. То се не може опозвати.";
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Ова радња ће очистити изабране ставке. То се не може опозвати.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Подаци веб страница";
@@ -1616,7 +1619,7 @@
 "ShareExtension.SeachInFirefoxAction.Title" = "Претражи у Firefox-у";
 
 /* Button in share sheet to copy the url of the current tab. */
-"ShareSheet.Copy.Title.v108" = "Умножи";
+"ShareSheet.Copy.Title.v108" = "Копирај";
 
 /* Button in the share sheet to send the current link to another device. */
 "ShareSheet.SendToDevice.Title.v108" = "Пошаљи везу на уређај";
@@ -1640,7 +1643,7 @@
 "Swipe right or left with three fingers to close the tab." = "Превлачите десно или лево са три прста да бисте затворили језичак.";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "Усклађивање…";
+"Sync.SyncingEllipsis.Label" = "Усклађујем…";
 
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Усклађивање је ван мреже";
@@ -1667,7 +1670,7 @@
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Сакриј неактивне језичке";
 
 /* Accessibility Label for the tab toolbar Search button */
-"TabToolbar.Accessibility.Search.v106" = "Претрага";
+"TabToolbar.Accessibility.Search.v106" = "Претражи";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Додај језичак";
@@ -1703,10 +1706,10 @@
 "TabTrayButtons.Accessibility.ShowTabs.v106" = "Прикажи језичке";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"The page could not be displayed in Reader View." = "Страница не може бити приказана у приказу за читање.";
+"The page could not be displayed in Reader View." = "Не могу да прикажем страницу у приказу за читање.";
 
 /* Error message in the remote tabs panel */
-"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Дошло је до проблема при приступу језичцима са ваших осталих уређаја. Покушајте поново за неколико тренутака.";
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Не могу да приступим језичцима са ваших осталих уређаја. Покушајте поново за неколико тренутака.";
 
 /* Error displayed when reader mode cannot be enabled */
 "There was an error converting the page" = "Дошло је до грешке при претварању странице";
@@ -1739,7 +1742,7 @@
 "Toolbar.Menu.CloseAllTabs" = "Затвори све језичке";
 
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
-"TopSites.RemovePage.Button" = "Уклони страницу — %@";
+"TopSites.RemovePage.Button" = "Уклони страницу - %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "Не";
@@ -1754,7 +1757,7 @@
 "Twitter" = "Twitter";
 
 /* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
-"UIMenuItem.PasteGo" = "Налепи и иди";
+"UIMenuItem.PasteGo" = "Убаци и иди";
 
 /* Search in New Tab Text selection menu item */
 "UIMenuItem.SearchWithFirefox" = "Претражи помоћу Firefox-а";
@@ -1772,13 +1775,13 @@
 "Wallpaper.Change.Error.Body.v106" = "Нешто није у реду са овом позадином.";
 
 /* The title of the error displayed when changing wallpaper fails. */
-"Wallpaper.Change.Error.Title.v106" = "Не могу да променим позадину";
+"Wallpaper.Change.Error.Title.v106" = "Није могуће променити позадину";
 
 /* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
 "Wallpaper.Download.Error.Body.v106" = "Нешто није у реду са вашим преузимањем.";
 
 /* The title of the error displayed if download fails when changing a wallpaper. */
-"Wallpaper.Download.Error.Title.v106" = "Не могу да преузмем позадину";
+"Wallpaper.Download.Error.Title.v106" = "Није могуће преузети позадину";
 
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "Откажи";
@@ -1805,7 +1808,7 @@
 "Yesterday" = "Јуче";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "Немате отворених језичака у Firefox-у на вашим осталим уређајима.";
+"You don’t have any tabs open in Firefox on your other devices." = "Немате отворених Firefox језичака на вашим другим уређајима.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Ваша права";

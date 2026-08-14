@@ -53,7 +53,7 @@
 "MainMenu.Account.SyncError.Description.v131" = "Synchronisation paused";
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
-"MainMenu.Account.SyncError.Title.v131" = "Sign back in to synchroise";
+"MainMenu.Account.SyncError.Title.v131" = "Sign back in to synchronise";
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.BookmarkPage.Title.v141" = "Bookmark Page";

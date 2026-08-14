@@ -1,0 +1,9 @@
+/* Text to let users know that the current website is secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Drošs savienojums";
+
+/* Text to let users know that the current website is not secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Savienojums nav drošs";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Savienojums nav drošs.";
+

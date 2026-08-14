@@ -2,22 +2,22 @@
 "NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Напредно";
 
 /* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
-"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ не верује овом сајту јер пронађени сертификат није важећи за %2$@.";
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ не верује овој страници јер пронађени сертификат није исправан за %2$@.";
 
 /* On certificate error page, this is the security information shown in the advanced section. */
-"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Овај сајт не дозвољава везе које нису безбедне.";
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Ова страница не дозвољава везе које нису безбедне.";
 
 /* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
-"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Можда ћете морати да се пријавите на своју Wi-Fi мрежу или да проверите своја VPN подешавања.";
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Можда ћете морати да се пријавите на своју бежичну мрежу или да проверите своја ВПН подешавања.";
 
 /* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
 "NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Ако сте на корпоративној мрежи, ваш тим за подршку можда има више информација.";
 
 /* On certificate error page, this is the description explaining the security risk. */
-"NativeErrorPage.BadCertDomain.Description.v149" = "Неко ко се представља као овај сајт би могао покушати да украде ваше личне податке. Ваша подешавања везе су такође можда погрешно постављена.";
+"NativeErrorPage.BadCertDomain.Description.v149" = "Неко ко се представља као ова страница би могао покушати да украде ваше личне податке. Ваша подешавања везе су такође можда погрешно постављена.";
 
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
-"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Кôд грешке: %@";
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Код грешке: %@";
 
 /* On certificate error page, this is the text on a button that will hide the advanced information section. */
 "NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Сакриј напредно";
@@ -32,23 +32,50 @@
 "NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Будите опрезни. Нешто није у реду.";
 
 /* On certificate error page, this is a link that will show the site’s certificate details. */
-"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Погледајте сертификат сајта";
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Погледајте сертификат странице";
 
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Поново учитај";
 
 /* On error page, this is the description for a generic error. %@ is the site url. */
-"NativeErrorPage.GenericError.Description.v134" = "Власник веб сајта %@ га није исправно подесио и није могуће успоставити безбедну везу.";
+"NativeErrorPage.GenericError.Description.v134" = "Власник веб-странице %@ га није исправно подесио и није могуће успоставити безбедну везу.";
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Будите опрезни. Нешто није у реду.";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
-"NativeErrorPage.GoBackButton.v149" = "Идите назад (препоручено)";
+"NativeErrorPage.GoBackButton.v149" = "Врати се назад (препоручено)";
 
 /* On error page, this is the description for no internet connection. */
-"NativeErrorPage.NoInternetConnection.Description.v131" = "Пробајте да се повежете преко другог уређаја. Проверите свој модем или усмеривач. Прекините и поново успоставите везу са Wi-Fi мрежом.";
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Пробајте да се повежете преко другог уређаја. Проверите свој модем или рутер. Прекините и поново успоставите везу са бежичном мрежом.";
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Изгледа да постоји проблем са вашом интернет везом.";
+
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v154" = "Проверавам страницу…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v154" = "Не могу се чути са Wayback Machine";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "Страница је можда заузета или недоступна. Покушајте поново касније. Ако се друге странице не учитавају, проверите своју бежичну или мобилну везу. %@ такође може да претражи Wayback Machine како би пронашао раније издање ове странице.";
+
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "Архивирано издање није пронађено";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "Покушај поново";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.Search.v154" = "Провери раније издање";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "Претражи веб";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "Неуспешно повезивање";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Претражује Wayback Machine у потрази за архивираним издањем ове странице.";
 

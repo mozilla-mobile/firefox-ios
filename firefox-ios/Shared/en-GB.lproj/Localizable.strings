@@ -212,7 +212,7 @@
 "Could not add page to Reading list" = "Could not add page to Reading list";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Could not add page to Reading List. Maybe it's already there?";
+"Could not add page to Reading List. Maybe it’s already there?" = "Could not add page to Reading List. Maybe it’s already there?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Could not load page.";
@@ -245,7 +245,7 @@
 "Display Settings" = "Display Settings";
 
 /* Used as a button label for crash dialog prompt */
-"Don’t Send" = "Don't Send";
+"Don’t Send" = "Don’t Send";
 
 /* Done button on left side of the Settings view controller title bar */
 "Done" = "Done";
@@ -302,7 +302,7 @@
 "ErrorPages.Advanced.Button" = "Advanced";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Warning: we can't confirm your connection to this web site is secure.";
+"ErrorPages.AdvancedWarning1.Text" = "Warning: we can’t confirm your connection to this web site is secure.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "It may be a misconfiguration or tampering by an attacker. Proceed if you accept the potential risk.";
@@ -449,7 +449,7 @@
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Today and Yesterday";
 
 /* Title for the History Panel empty state. */
-"HistoryPanel.EmptyState.Title" = "Web sites you've visited recently will show up here.";
+"HistoryPanel.EmptyState.Title" = "Web sites you’ve visited recently will show up here.";
 
 /* Description for the empty synced tabs null state in the History Panel */
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "Your tabs from other devices show up here.";
@@ -848,7 +848,7 @@
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinters";
 
 /* The title for the option to view the What's new page. */
-"Menu.WhatsNew.Title" = "What's New";
+"Menu.WhatsNew.Title" = "What’s New";
 
 /* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
 "Menu.ZoomPage.Title.v113" = "Zoom (%@)";
@@ -1226,7 +1226,7 @@
 "Settings.DisplayTheme.OptionLight" = "Light";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
-"Settings.DisplayTheme.SectionFooter" = "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.";
+"Settings.DisplayTheme.SectionFooter" = "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display’s current brightness.";
 
 /* Display (theme) settings label to show if automatically switch theme is enabled. */
 "Settings.DisplayTheme.StatusTitle" = "Automatic";
@@ -1742,7 +1742,7 @@
 "Toolbar.Menu.CloseAllTabs" = "Close All Tabs";
 
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
-"TopSites.RemovePage.Button" = "Remove page - %@";
+"TopSites.RemovePage.Button" = "Remove page — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "No";
@@ -1808,7 +1808,7 @@
 "Yesterday" = "Yesterday";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "You don't have any tabs open in Firefox on your other devices.";
+"You don’t have any tabs open in Firefox on your other devices." = "You don’t have any tabs open in Firefox on your other devices.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Your Rights";

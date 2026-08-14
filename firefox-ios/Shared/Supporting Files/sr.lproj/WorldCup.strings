@@ -98,13 +98,13 @@
 "WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Онемогући обавештења";
 
 /* The label for the button in the eliminated section that takes the user back to the team selection screen. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Изаберите тим";
+"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Изабери тим";
 
 /* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Изаберите други тим како бисте пратили Светско првенство.";
 
 /* The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Уклоните елемент Светског првенства";
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Уклони елемент Светског првенства";
 
 /* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Уклони";
@@ -113,10 +113,10 @@
 "WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "Да ли и даље желите да пратите дешавања?";
 
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
-"WorldCup.HomepageWidget.ErrorLabel.v151" = "Нисмо могли да учитамо податке о утакмицама. Освежите.";
+"WorldCup.HomepageWidget.ErrorLabel.v151" = "Не могу да учитам податке о утакмицама. Освежите.";
 
 /* The label indicating that the displaying match is in the extra time part of the game. */
-"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "Додатно време";
+"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "Продужетак";
 
 /* The label indicating that the displaying match is in the first half. */
 "WorldCup.HomepageWidget.FirstHalfLabel.v151" = "Прво полувреме";
@@ -137,7 +137,7 @@
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Пратите тим";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTLabel.v151" = "(крај)";
+"WorldCup.HomepageWidget.FTLabel.v151" = "(Крај)";
 
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Крај";
@@ -203,7 +203,7 @@
 "WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Предстојећи";
 
 /* The label for the World Cup championship winner in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "ШАМПИОНИ СВЕТСКОГ ПРВЕНСТВА 2026.";
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "ШАМПИОНИ СВЕТСКОГ ПРВЕНСТВА 2026";
 
 /* The label indicating that the displaying match is in the second half. */
 "WorldCup.HomepageWidget.SecondHalfLabel.v151" = "Друго полувреме";
@@ -215,5 +215,5 @@
 "WorldCup.HomepageWidget.ShareLabel.v151" = "Подели";
 
 /* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
-"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Обавештаваћемо вас како се Светско првенство приближава.";
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Обавештаваћемо вас како се Светско првенство приближава";
 

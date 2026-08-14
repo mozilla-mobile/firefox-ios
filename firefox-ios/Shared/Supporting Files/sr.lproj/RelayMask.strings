@@ -11,7 +11,7 @@
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Маска е-поште је уметнута";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Сакријте своју праву адресу е-поште да бисте заштитили своје пријемно сандуче од непожељних порука. Неки сајтови не подржавају маске е-поште.";
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Сакријте своју праву адресу е-поште да бисте заштитили своје пријемно сандуче од непожељних порука. Неке веб-странице не подржавају маске е-поште.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Сазнајте више";

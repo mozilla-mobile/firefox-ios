@@ -169,6 +169,15 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Автовідтворення";
 
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "Зменшення кількості реклами та пов'язаних з нею елементів стеження. Якщо сайт виглядає несправним, спробуйте вимкнути цю функцію.";
+
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "Докладніше";
+
+/* Title for the Ad Blocker toggle in the Browsing settings page. */
+"Settings.Browsing.AdBlocker.Title.v155" = "Блокувальник реклами";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Блокування реклами";
 

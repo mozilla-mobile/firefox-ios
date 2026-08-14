@@ -8,5 +8,5 @@
 "Bookmarks.DeleteFolderWarning.Description" = "Are you sure you want to delete it and its contents?";
 
 /* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
-"Bookmarks.DeleteFolderWarning.Title" = "This folder isn't empty.";
+"Bookmarks.DeleteFolderWarning.Title" = "This folder isn’t empty.";
 

@@ -2,7 +2,7 @@
 "Done" = "Готово";
 
 /* Text selection menu item */
-"Find in Page" = "Пронађи на страници";
+"Find in Page" = "Нађи на страници";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
 "Next in-page result" = "Следећи резултат на страници";

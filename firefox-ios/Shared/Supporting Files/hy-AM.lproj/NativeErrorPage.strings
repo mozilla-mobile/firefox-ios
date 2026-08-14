@@ -61,11 +61,17 @@
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "Կայքը կարող է զբաղված լինել կամ անհասանելի լինել։ Փորձեք կրկին ավելի ուշ։ Եթե մյուս էջերը չեն բեռնվում, ստուգեք ձեր Wi-Fi-ը կամ տվյալների կապը։ %@-ը կարող է նաև որոնել Wayback Machine-ում՝ այս էջի ավելի վաղ տարբերակը գտնելու համար։";
 
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "Արխիվացված տարբերակ չի գտնվել";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "Կրկնել";
 
 /* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
 "NativeErrorPage.Wayback.Error.Search.v154" = "Ստուգեք ավելի վաղ տարբերակը";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "Որոնել համացանցում";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "Չհաջողվեց կապ հաստատել";
