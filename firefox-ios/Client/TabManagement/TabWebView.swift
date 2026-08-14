@@ -4,7 +4,8 @@
 
 import Common
 import WebKit
-import Storage
+
+import class Storage.CertStore
 
 protocol TabWebViewDelegate: AnyObject {
     @MainActor

@@ -5,12 +5,14 @@
 import Common
 import Redux
 import Shared
-import Storage
 import Account
 import SiteImageView
 import SummarizeKit
 
 import enum MozillaAppServices.BookmarkRoots
+import protocol Storage.BookmarksHandler
+import struct Storage.ShareItem
+import struct Storage.Site
 
 @MainActor
 final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark {

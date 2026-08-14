@@ -4,10 +4,11 @@
 
 import Foundation
 import TabDataStore
-import Storage
 import Common
 import Shared
 import WebKit
+
+import protocol Storage.DiskImageStore
 
 final class TabManagerImplementation: NSObject,
                                       TabManager,

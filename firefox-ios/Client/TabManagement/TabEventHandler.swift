@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Storage
 import Common
 import WebEngine
+
+import struct Storage.PageMetadata
 
 /// A handler can be a plain old swift object. It does not need to extend any
 /// other object, but can.

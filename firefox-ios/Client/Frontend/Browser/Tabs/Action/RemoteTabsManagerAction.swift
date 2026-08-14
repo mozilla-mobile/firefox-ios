@@ -4,7 +4,9 @@
 
 import Common
 import Redux
-import Storage
+
+import struct Storage.RemoteClient
+import struct Storage.RemoteTab
 
 struct RemoteTabConfiguration {
     let client: RemoteClient
