@@ -11,11 +11,13 @@ public struct MenuSiteAdBlockerBadgeData {
     public let title: String
     public let image: String
     public let shouldUseRenderMode: Bool
+    public let iconTintColor: UIColor?
 
-    public init(title: String, image: String, shouldUseRenderMode: Bool) {
+    public init(title: String, image: String, shouldUseRenderMode: Bool, iconTintColor: UIColor? = nil) {
         self.title = title
         self.image = image
         self.shouldUseRenderMode = shouldUseRenderMode
+        self.iconTintColor = iconTintColor
     }
 }
 
@@ -161,20 +163,23 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         state: String,
         stateImage: String,
         shouldUseRenderMode: Bool,
+        stateIconTintColor: UIColor? = nil,
         adBlocker: MenuSiteAdBlockerBadgeData? = nil
     ) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
         siteProtectionsBadge.configure(text: state,
                                        iconName: stateImage,
-                                       useTemplate: shouldUseRenderMode)
+                                       useTemplate: shouldUseRenderMode,
+                                       iconTintColor: stateIconTintColor)
         if let adBlocker {
             if adBlockerBadge.superview == nil {
                 badgesStack.addArrangedSubview(adBlockerBadge)
             }
             adBlockerBadge.configure(text: adBlocker.title,
                                      iconName: adBlocker.image,
-                                     useTemplate: adBlocker.shouldUseRenderMode)
+                                     useTemplate: adBlocker.shouldUseRenderMode,
+                                     iconTintColor: adBlocker.iconTintColor)
         } else {
             adBlockerBadge.removeFromSuperview()
         }
