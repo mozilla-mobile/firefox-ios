@@ -524,7 +524,7 @@ class SearchTests: FeatureFlaggedTestBase {
                 }
                 mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
                 mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
-            }ß
+            }
         }
     }
 
