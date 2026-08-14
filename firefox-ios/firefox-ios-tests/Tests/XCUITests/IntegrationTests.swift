@@ -321,7 +321,6 @@ class IntegrationTests: BaseTestCase {
                 browserScreen.tapClearButtonIfExists()
                 browserScreen.typeOnSearchBar(text: term)
                 mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-                print(app.debugDescription)
                 mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
                 let searchEngines = [
                     "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
