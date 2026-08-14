@@ -101,6 +101,10 @@ final class LegacyTabScrollController: NSObject,
         return toolbarState == .collapsed
     }
 
+    var isToolbarFullyExpanded: Bool {
+        return toolbarState == .visible
+    }
+
     private let windowUUID: WindowUUID
     private let logger: Logger
 
@@ -673,13 +677,8 @@ private extension LegacyTabScrollController {
             self.bottomContainerOffset = bottomContainerOffset
 
             if tab?.isFindInPageMode == false && tab?.url?.isReaderModeURL == false {
-                store.dispatch(
-                    ToolbarAction(
-                        scrollAlpha: Float(alpha),
-                        windowUUID: windowUUID,
-                        actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                    )
-                )
+                let isMinimized = alpha.isZero
+                store.dispatch(ToolbarModernAction.userDidScroll(minimizeAddressBar: isMinimized), forWindowUUID: windowUUID)
             }
 
             overKeyboardContainerOffset = overKeyboardOffset

@@ -387,7 +387,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             shouldAnimate: false,
                             isTranslucent: false,
                             previousTabScreenshot: nil,
-                            nextTabScreenshot: nil)
+                            nextTabScreenshot: nil,
+                            isAddressBarMinimized: false)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
@@ -409,7 +410,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             shouldAnimate: false,
                             isTranslucent: false,
                             previousTabScreenshot: nil,
-                            nextTabScreenshot: nil)
+                            nextTabScreenshot: nil,
+                            isAddressBarMinimized: false)
     }
 
     @MainActor

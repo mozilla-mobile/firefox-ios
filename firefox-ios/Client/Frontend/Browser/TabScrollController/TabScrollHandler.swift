@@ -11,6 +11,11 @@ protocol TabScrollHandlerProtocol: AnyObject {
     var tabProvider: TabProviderProtocol? { get set }
     var contentOffset: CGPoint { get }
 
+    /// `true` only when the toolbar is fully expanded and settled, `false` while collapsed
+    /// or mid-transition from a user scroll gesture. Callers that want to restore the address
+    /// bar (keyboard dismissal) should check this value since a scroll gesture may still be resolving.
+    var isToolbarFullyExpanded: Bool { get }
+
     func showToolbars(animated: Bool)
     func hideToolbars(animated: Bool)
     func configureRefreshControl()
@@ -85,6 +90,7 @@ final class TabScrollHandler: NSObject,
     private var scrollDirection: ScrollDirection = .down
     var toolbarDisplayState = ToolbarDisplayState()
     var lastValidState: ToolbarDisplayState = .expanded
+    var isToolbarFullyExpanded: Bool { toolbarDisplayState.isExpanded }
     private var isStatusBarScrollToTop = false
     var didTapChangePreventScrollToTop = false
 
