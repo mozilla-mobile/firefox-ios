@@ -37,7 +37,6 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         static let waybackErrorMessageRowSpacing: CGFloat = 6
         static let waybackErrorTextStackSpacing: CGFloat = 2
         static let waybackErrorContentStackSpacing: CGFloat = 2
-        static let waybackButtonImagePadding: CGFloat = 8
     }
 
     private static let waybackLinkURL = URL(string: "https://web.archive.org")!
@@ -228,7 +227,11 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         case .failed(let reason):
             waybackButton.isHidden = true
             waybackErrorCard.isHidden = false
+            waybackButton.setShowsSpinner(false, announcesChange: false)
             configureWaybackErrorCard(reason: reason)
+            if UIAccessibility.isVoiceOverRunning {
+                UIAccessibility.post(notification: .layoutChanged, argument: waybackErrorLabel)
+            }
         }
     }
 
@@ -239,10 +242,8 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         )
         waybackButton.configure(viewModel: viewModel)
         waybackButton.isEnabled = enabled
-        waybackButton.configuration?.showsActivityIndicator = showsSpinner
-        waybackButton.configuration?.imagePadding = UX.waybackButtonImagePadding
-        waybackButton.configuration?.imagePlacement = .leading
         waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Wayback.WaybackButtonA11yHint : nil
+        waybackButton.setShowsSpinner(showsSpinner)
     }
 
     private func configureWaybackErrorCard(reason: WaybackButtonState.Reason) {
