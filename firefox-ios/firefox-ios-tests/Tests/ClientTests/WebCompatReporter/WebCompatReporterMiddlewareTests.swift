@@ -293,11 +293,9 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
             presentedComponents: PresentedComponentsState(
                 components: [
                     .webCompatReporter(
-                        WebCompatReporterState(
-                            windowUUID: .XCTestDefaultUUID,
-                            url: "https://example.com",
-                            includeBlockedList: includeBlockedList
-                        )
+                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+                            .copy(url: "https://example.com")
+                            .copy(includeBlockedList: includeBlockedList)
                     )
                 ]
             )
@@ -315,7 +313,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
             presentedComponents: PresentedComponentsState(
                 components: [
                     .webCompatReporter(
-                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: url)
+                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID).copy(url: url)
                     )
                 ]
             )

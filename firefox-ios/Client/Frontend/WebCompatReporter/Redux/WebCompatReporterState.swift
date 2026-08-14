@@ -68,13 +68,13 @@ struct WebCompatReporterState: ScreenState, Equatable {
 
     init(windowUUID: WindowUUID,
          url: String,
-         selectedCategory: WebCompatIssueCategory? = nil,
-         selectedSubOptionID: String? = nil,
-         additionalDetails: String = "",
-         includeScreenshot: Bool = true,
-         includeBlockedList: Bool = false,
-         shouldDismiss: Bool = false,
-         previewPayload: WebCompatReportPayload? = nil) {
+         selectedCategory: WebCompatIssueCategory?,
+         selectedSubOptionID: String?,
+         additionalDetails: String,
+         includeScreenshot: Bool,
+         includeBlockedList: Bool,
+         shouldDismiss: Bool,
+         previewPayload: WebCompatReportPayload?) {
         self.windowUUID = windowUUID
         self.url = url
         self.selectedCategory = selectedCategory
@@ -99,7 +99,7 @@ struct WebCompatReporterState: ScreenState, Equatable {
         }
 
         // shouldDismiss and previewPayload are one-shot, so neither survives into the next state.
-        let state = state.copy(shouldDismiss: false).copy(previewPayload: nil)
+        let state = state.resetTransientState()
 
         switch action {
         case let action as WebCompatReporterMiddlewareAction:

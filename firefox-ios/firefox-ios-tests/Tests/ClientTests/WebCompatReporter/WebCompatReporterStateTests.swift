@@ -27,11 +27,9 @@ final class WebCompatReporterStateTests: XCTestCase {
     func test_canPreview_falseUntilCategorySelected() {
         XCTAssertFalse(createSubject().canPreview)
 
-        let withCategory = WebCompatReporterState(
-            windowUUID: .XCTestDefaultUUID,
-            url: "https://example.com",
-            selectedCategory: .siteNotUsable
-        )
+        let withCategory = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: .siteNotUsable)
         XCTAssertTrue(withCategory.canPreview)
     }
 
@@ -62,7 +60,8 @@ final class WebCompatReporterStateTests: XCTestCase {
     }
 
     func test_didLoadInitialDraft_withNilURL_preservesExistingURL() {
-        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: "https://existing.com")
+        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(url: "https://existing.com")
         let reducer = WebCompatReporterState.reducer
 
         let action = WebCompatReporterMiddlewareAction(
@@ -110,12 +109,9 @@ final class WebCompatReporterStateTests: XCTestCase {
     }
 
     func test_selectCategory_clearsPreviousSubOption() {
-        let initialState = WebCompatReporterState(
-            windowUUID: .XCTestDefaultUUID,
-            url: "",
-            selectedCategory: .siteNotUsable,
-            selectedSubOptionID: "page_not_loading"
-        )
+        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(selectedCategory: .siteNotUsable)
+            .copy(selectedSubOptionID: "page_not_loading")
         let reducer = WebCompatReporterState.reducer
 
         let action = WebCompatReporterViewAction(
@@ -131,12 +127,9 @@ final class WebCompatReporterStateTests: XCTestCase {
     }
 
     func test_selectCategory_sameCategory_keepsSubOption() {
-        let initialState = WebCompatReporterState(
-            windowUUID: .XCTestDefaultUUID,
-            url: "",
-            selectedCategory: .siteNotUsable,
-            selectedSubOptionID: "page_not_loading"
-        )
+        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(selectedCategory: .siteNotUsable)
+            .copy(selectedSubOptionID: "page_not_loading")
         let reducer = WebCompatReporterState.reducer
 
         let action = WebCompatReporterViewAction(
@@ -153,11 +146,8 @@ final class WebCompatReporterStateTests: XCTestCase {
     // MARK: - Reducer - selectSubOption
 
     func test_selectSubOption_setsSubOption() {
-        let initialState = WebCompatReporterState(
-            windowUUID: .XCTestDefaultUUID,
-            url: "",
-            selectedCategory: .siteNotUsable
-        )
+        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(selectedCategory: .siteNotUsable)
         let reducer = WebCompatReporterState.reducer
 
         let action = WebCompatReporterViewAction(
@@ -286,7 +276,8 @@ final class WebCompatReporterStateTests: XCTestCase {
     }
 
     func test_actionWithDifferentWindowUUID_returnsDefaultState() {
-        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: "https://example.com")
+        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(url: "https://example.com")
         let reducer = WebCompatReporterState.reducer
 
         let action = WebCompatReporterViewAction(
@@ -323,11 +314,9 @@ final class WebCompatReporterStateTests: XCTestCase {
         // Without the clear, previewing twice without editing leaves state unchanged and never reopens.
         var payload = WebCompatReportPayload()
         payload.url = "https://example.com"
-        let initialState = WebCompatReporterState(
-            windowUUID: .XCTestDefaultUUID,
-            url: "https://example.com",
-            previewPayload: payload
-        )
+        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(url: "https://example.com")
+            .copy(previewPayload: payload)
         let reducer = WebCompatReporterState.reducer
 
         let newState = reducer.legacyReducer(
@@ -345,15 +334,15 @@ final class WebCompatReporterStateTests: XCTestCase {
     // MARK: - Equality
 
     func test_equality_sameValues_returnsTrue() {
-        let state1 = WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: "https://example.com")
-        let state2 = WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: "https://example.com")
+        let state1 = WebCompatReporterState(windowUUID: .XCTestDefaultUUID).copy(url: "https://example.com")
+        let state2 = WebCompatReporterState(windowUUID: .XCTestDefaultUUID).copy(url: "https://example.com")
 
         XCTAssertEqual(state1, state2)
     }
 
     func test_equality_differentURL_returnsFalse() {
-        let state1 = WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: "https://a.com")
-        let state2 = WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: "https://b.com")
+        let state1 = WebCompatReporterState(windowUUID: .XCTestDefaultUUID).copy(url: "https://a.com")
+        let state2 = WebCompatReporterState(windowUUID: .XCTestDefaultUUID).copy(url: "https://b.com")
 
         XCTAssertNotEqual(state1, state2)
     }
@@ -391,12 +380,10 @@ final class WebCompatReporterStateTests: XCTestCase {
         category: WebCompatIssueCategory,
         subOption: WebCompatSubOption? = nil
     ) -> WebCompatReporterState {
-        return WebCompatReporterState(
-            windowUUID: .XCTestDefaultUUID,
-            url: "https://example.com",
-            selectedCategory: category,
-            selectedSubOptionID: subOption?.rawValue
-        )
+        return WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: category)
+            .copy(selectedSubOptionID: subOption?.rawValue)
     }
 
     private func createSubject() -> WebCompatReporterState {
