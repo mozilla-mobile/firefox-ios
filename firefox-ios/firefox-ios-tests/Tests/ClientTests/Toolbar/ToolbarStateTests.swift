@@ -570,6 +570,29 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
+    func test_showToastAction_forShakeToSummarizeNotAvailable_restoresMinimizedAddressBar() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let minimizedState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+        XCTAssertTrue(minimizedState.isAddressBarMinimized)
+
+        let newState = reducer.legacyReducer(
+            minimizedState,
+            GeneralBrowserAction(
+                toastType: .shakeToSummarizeNotAvailable,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showToast
+            )
+        )
+
+        XCTAssertFalse(newState.isAddressBarMinimized)
+    }
+
     // MARK: - Private
     private func createSubject() -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID)

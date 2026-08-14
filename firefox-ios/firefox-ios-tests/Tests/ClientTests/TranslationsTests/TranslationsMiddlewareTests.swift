@@ -1541,7 +1541,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
                             shouldAnimate: true,
                             isTranslucent: false,
                             previousTabScreenshot: nil,
-                            nextTabScreenshot: nil
+                            nextTabScreenshot: nil,
+                            isAddressBarMinimized: false
                         )
                     )
                 ]
