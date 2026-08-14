@@ -5010,8 +5010,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        // minimizeAddressBar: false restores the address bar from its minimized "pill" shape back to
-        // its full toolbar. This undoes the minimization applied for the keyboard accessory view
+        // Restores the address bar from its minimized "pill" shape back to its full toolbar.
+        // This undoes the minimization applied for the keyboard accessory view
         // Only dispatch the action if the toolbar isn't currently collapsed by scrolling, if the
         // user has scrolled previously, restore the address back here would leave the
         // address bar full while the bottom containers stay collapsed (inconsistent state).
