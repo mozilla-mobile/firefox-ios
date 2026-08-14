@@ -9,11 +9,12 @@
 // increased startup times which may lead to termination by the OS.
 
 import Common
-import Account
 import Shared
 import Storage
 import AuthenticationServices
 
+import class Account.Autopush
+import class Account.RustFirefoxAccounts
 import class MozillaAppServices.RemoteSettingsService
 import struct MozillaAppServices.RemoteSettingsContext
 import enum MozillaAppServices.Level

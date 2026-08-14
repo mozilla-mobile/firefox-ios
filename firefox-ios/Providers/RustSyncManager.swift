@@ -2,13 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Account
 import Shared
 import Storage
 import Sync
 import AuthenticationServices
 import Common
 
+import class Account.RustFirefoxAccounts
 import enum MozillaAppServices.OAuthScope
 import enum MozillaAppServices.ServiceStatus
 import enum MozillaAppServices.SyncEngineSelection

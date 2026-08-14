@@ -5,8 +5,9 @@
 import UIKit
 import Shared
 import UserNotifications
-import Account
 
+import class Account.Autopush
+import class Account.RustFirefoxAccounts
 import struct MozillaAppServices.ConstellationState
 
 /**

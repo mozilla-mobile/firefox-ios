@@ -8,7 +8,6 @@ import UIKit
 import WebKit
 import Shared
 import Storage
-import Account
 import MobileCoreServices
 import Common
 import Redux
@@ -19,6 +18,7 @@ import ActivityKit
 import Glean
 import QuickAnswersKit
 
+import class Account.RustFirefoxAccounts
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import struct MozillaAppServices.Login

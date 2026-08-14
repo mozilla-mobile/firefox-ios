@@ -5,9 +5,10 @@
 import UIKit
 import Shared
 import Storage
-import Account
 import SwiftUI
 import Common
+
+import class Account.RustFirefoxAccounts
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
     @MainActor
