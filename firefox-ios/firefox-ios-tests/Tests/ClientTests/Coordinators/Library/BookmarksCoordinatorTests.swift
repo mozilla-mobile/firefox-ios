@@ -42,6 +42,29 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.pushCalled, 1)
     }
 
+    func testBookmarksAppearanceEnablesInteractivePopGestureAndRestoresItsDelegate() throws {
+        let navigationController = UINavigationController(rootViewController: UIViewController())
+        let originalGestureDelegate = MockInteractivePopGestureDelegate()
+        navigationController.interactivePopGestureRecognizer?.delegate = originalGestureDelegate
+        router = MockRouter(navigationController: navigationController)
+        let subject = createSubject()
+
+        subject.start(from: LocalDesktopFolder())
+        let controller = try XCTUnwrap(router.pushedViewController as? BookmarksViewController)
+        navigationController.interactivePopGestureRecognizer?.isEnabled = false
+
+        controller.beginAppearanceTransition(true, animated: false)
+        controller.endAppearanceTransition()
+
+        XCTAssertEqual(navigationController.interactivePopGestureRecognizer?.isEnabled, true)
+        XCTAssertTrue(navigationController.interactivePopGestureRecognizer?.delegate === controller)
+
+        controller.beginAppearanceTransition(false, animated: false)
+        controller.endAppearanceTransition()
+
+        XCTAssertTrue(navigationController.interactivePopGestureRecognizer?.delegate === originalGestureDelegate)
+    }
+
     func testShowBookmarksDetail_forFolder() {
         let subject = createSubject()
         let folder = LocalDesktopFolder()
@@ -163,3 +186,5 @@ final class BookmarksCoordinatorTests: XCTestCase {
         return subject
     }
 }
+
+private final class MockInteractivePopGestureDelegate: NSObject, UIGestureRecognizerDelegate { }
