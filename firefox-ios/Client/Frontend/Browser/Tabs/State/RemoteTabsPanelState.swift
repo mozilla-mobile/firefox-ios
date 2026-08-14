@@ -5,9 +5,9 @@
 import Common
 import ModifiedCopy
 import Redux
-import Storage
 
 import struct MozillaAppServices.Device
+import struct Storage.ClientAndTabs
 
 /// Status of Sync tab refresh.
 enum RemoteTabsPanelRefreshState {
