@@ -585,6 +585,25 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    // MARK: - telemetryItemType
+    func test_telemetryItemType_withQuickAnswersButtonShown_returnsQuickAnswersEntryPoint() {
+        let item = HomepageItem.header(headerState(showQuickAnswersButton: true), nil, false)
+
+        XCTAssertEqual(item.telemetryItemType, .quickAnswersEntryPoint)
+    }
+
+    func test_telemetryItemType_withQuickAnswersButtonHidden_returnsNil() {
+        let item = HomepageItem.header(headerState(showQuickAnswersButton: false), nil, false)
+
+        XCTAssertNil(item.telemetryItemType)
+    }
+
+    private func headerState(showQuickAnswersButton: Bool) -> HeaderState {
+        let quickAnswersStore = MockQuickAnswersStore()
+        quickAnswersStore.isQuickAnswersEnabled = showQuickAnswersButton
+        return HeaderState(windowUUID: .XCTestDefaultUUID, quickAnswersStore: quickAnswersStore)
+    }
+
     private func createSites(count: Int = 30) -> [TopSiteConfiguration] {
         var sites = [TopSiteConfiguration]()
         (0..<count).forEach {

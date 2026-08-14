@@ -81,6 +81,8 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 
         var telemetryItemType: HomepageTelemetry.ItemType? {
             switch self {
+            case .header(let headerState, _, _):
+                return headerState.showQuickAnswersButton ? .quickAnswersEntryPoint : nil
             case .topSite:
                 return .topSite
             case .jumpBackIn:
