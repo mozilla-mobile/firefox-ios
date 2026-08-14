@@ -78,4 +78,20 @@ final class MainMenuScreen {
         BaseTestCase().mozWaitForElementToExist(history)
         history.waitAndTap()
     }
+
+    func assertTranslatePageItemDoesNotExist() {
+        assertMenuItemDoesNotExist(AccessibilityIdentifiers.MainMenu.translatePage)
+    }
+
+    func assertSummarizePageItemDoesNotExist() {
+        assertMenuItemDoesNotExist(AccessibilityIdentifiers.MainMenu.summarizePage)
+    }
+
+    private func assertMenuItemDoesNotExist(_ identifier: String) {
+        // Wait for a stable Main Menu element to render first, otherwise the absence
+        // check can pass simply because the menu hasn't finished loading yet.
+        BaseTestCase().mozWaitForElementToExist(sel.SETTINGS_CELL.element(in: app))
+        let item = app.descendants(matching: .any).matching(identifier: identifier).firstMatch
+        BaseTestCase().mozWaitForElementToNotExist(item)
+    }
 }
