@@ -2,11 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Account
 import Common
 import Foundation
 import Shared
 import ComponentLibrary
+
+import class Account.RustFirefoxAccounts
 
 class ChinaSyncServiceSetting: Setting {
     private weak var settingsDelegate: SharedSettingsDelegate?

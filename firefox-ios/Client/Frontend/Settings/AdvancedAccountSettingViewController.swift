@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-import Account
+import class Account.RustFirefoxAccounts
 
 private class CustomFxAContentServerEnableSetting: BoolSetting {
       init(prefs: Prefs, settingDidChange: (@MainActor  (Bool?) -> Void)? = nil) {
