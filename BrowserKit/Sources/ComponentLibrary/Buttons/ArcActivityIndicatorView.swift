@@ -61,28 +61,26 @@ final class ArcActivityIndicatorView: UIView, ThemeApplicable {
         arcLayer.frame = bounds
     }
 
-    func startAnimating() {
+    @discardableResult
+    func startAnimating() -> Bool {
         let isNewSpinner = layer.animation(forKey: "rotation") == nil
         isHidden = false
-        guard isNewSpinner else { return }
+        guard isNewSpinner else { return false }
         let animation = CABasicAnimation(keyPath: "transform.rotation.z")
         animation.fromValue = 0
         animation.toValue = CGFloat.pi * 2
         animation.duration = UX.rotationDuration
         animation.repeatCount = .infinity
         layer.add(animation, forKey: "rotation")
-        if UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .layoutChanged, argument: self)
-        }
+        return true
     }
 
-    func stopAnimating() {
+    @discardableResult
+    func stopAnimating() -> Bool {
         let hadSpinner = layer.animation(forKey: "rotation") != nil
         isHidden = true
         layer.removeAnimation(forKey: "rotation")
-        if hadSpinner && UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .layoutChanged, argument: self)
-        }
+        return hadSpinner
     }
 
     func applyTheme(theme: any Theme) {

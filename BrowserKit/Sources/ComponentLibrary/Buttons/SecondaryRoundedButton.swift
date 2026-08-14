@@ -117,10 +117,14 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.contentInsets = insets
         configuration = updatedConfiguration
 
+        let didChange: Bool
         if shows {
-            spinnerView.startAnimating()
+            didChange = spinnerView.startAnimating()
         } else {
-            spinnerView.stopAnimating()
+            didChange = spinnerView.stopAnimating()
+        }
+        if didChange && UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: self)
         }
     }
 
