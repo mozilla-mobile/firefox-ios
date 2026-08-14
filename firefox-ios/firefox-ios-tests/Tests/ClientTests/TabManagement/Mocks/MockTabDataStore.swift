@@ -15,6 +15,7 @@ final class MockTabDataStore: TabDataStore, @unchecked Sendable {
     var saveWindowData: WindowData?
     var clearAllWindowsDataCalled = 0
     var removeWindowDataCalled = 0
+    var removedWindowDataUUIDs: [WindowUUID] = []
     private var persistedTabWindowUUIDs: [UUID] = []
 
     func fetchWindowDataUUIDs() -> [UUID] {
@@ -36,13 +37,20 @@ final class MockTabDataStore: TabDataStore, @unchecked Sendable {
         clearAllWindowsDataCalled += 1
     }
 
-    var removedWindowDataUUIDs: [WindowUUID] = []
     var removeWindowDataExpectation: XCTestExpectation?
 
+    /// Reached from unstructured `Task`s (see `WindowManager` and `MergeWindowsManager`), so the
+    /// recording is hopped to the main actor that the tests read it from. Mutating these
+    /// concurrently traps inside the standard library's Array buffer copy.
     func removeWindowData(forUUIDs: [WindowUUID]) async {
-        removeWindowDataCalled += 1
-        removedWindowDataUUIDs.append(contentsOf: forUUIDs)
-        removeWindowDataExpectation?.fulfill()
+        await MainActor.run {
+            removeWindowDataCalled += 1
+            removedWindowDataUUIDs.append(contentsOf: forUUIDs)
+            // Cleared before fulfilling so a late Task cannot over-fulfil an expectation, which traps.
+            let expectation = removeWindowDataExpectation
+            removeWindowDataExpectation = nil
+            expectation?.fulfill()
+        }
     }
 }
 
