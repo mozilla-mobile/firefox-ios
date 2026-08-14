@@ -10,9 +10,9 @@ import Common
 protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     var tab: Tab? { get set }
     var zoomPageBar: ZoomPageBar? { get set }
-    var headerTopConstraint: ConstraintReference? { get set }
-    var overKeyboardContainerConstraint: ConstraintReference? { get set }
-    var bottomContainerConstraint: ConstraintReference? { get set }
+    var headerTopConstraint: NSLayoutConstraint? { get set }
+    var overKeyboardContainerConstraint: NSLayoutConstraint? { get set }
+    var bottomContainerConstraint: NSLayoutConstraint? { get set }
 
     /// `true` when the toolbars are collapsed because the user scrolled the page (not when the
     /// address bar was minimized for the keyboard accessory). Lets the keyboard-dismiss path keep
@@ -85,9 +85,9 @@ final class LegacyTabScrollController: NSObject,
     private weak var bottomContainer: BaseAlphaStackView?
 
     // Toolbar Constraints
-    var headerTopConstraint: ConstraintReference?
-    var overKeyboardContainerConstraint: ConstraintReference?
-    var bottomContainerConstraint: ConstraintReference?
+    var headerTopConstraint: NSLayoutConstraint?
+    var overKeyboardContainerConstraint: NSLayoutConstraint?
+    var bottomContainerConstraint: NSLayoutConstraint?
 
     weak var zoomPageBar: ZoomPageBar?
     private var observedScrollViews = WeakList<UIScrollView>()
@@ -118,7 +118,7 @@ final class LegacyTabScrollController: NSObject,
     // Top Toolbar offset updates related constraints
     private var headerTopOffset: CGFloat = 0 {
         didSet {
-            headerTopConstraint?.update(offset: headerTopOffset)
+            headerTopConstraint?.constant = headerTopOffset
             headerContainer?.superview?.setNeedsLayout()
         }
     }
@@ -153,14 +153,14 @@ final class LegacyTabScrollController: NSObject,
     // Bottom toolbar offset updates related constraints
     private var overKeyboardContainerOffset: CGFloat = 0 {
         didSet {
-            overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
+            overKeyboardContainerConstraint?.constant = overKeyboardContainerOffset
             overKeyboardContainer?.superview?.setNeedsLayout()
         }
     }
 
     private var bottomContainerOffset: CGFloat = 0 {
         didSet {
-            bottomContainerConstraint?.update(offset: bottomContainerOffset)
+            bottomContainerConstraint?.constant = bottomContainerOffset
             bottomContainer?.superview?.setNeedsLayout()
         }
     }

@@ -160,9 +160,9 @@ class BrowserViewController: UIViewController,
     }
 
     // Constraints used to show/hide toolbars
-    var headerTopConstraint: ConstraintReference?
-    var overKeyboardContainerConstraint: ConstraintReference?
-    var bottomContainerConstraint: ConstraintReference?
+    var headerTopConstraint: NSLayoutConstraint?
+    var overKeyboardContainerConstraint: NSLayoutConstraint?
+    var bottomContainerConstraint: NSLayoutConstraint?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
     private var contentContainerTopConstraint: NSLayoutConstraint?
     private var isContentContainerPinnedToScreenTop: Bool?
@@ -1664,7 +1664,6 @@ class BrowserViewController: UIViewController,
         browserLayoutManager.setupBottomContainerConstraints()
         browserLayoutManager.setupBottomContentStackViewConstraints()
         browserLayoutManager.setupOverKeyboardContainerConstraints()
-        headerTopConstraint = browserLayoutManager.headerTopConstraintReference
         overKeyboardContainerConstraint = browserLayoutManager.overKeyboardContainerConstraint
         bottomContainerConstraint = browserLayoutManager.bottomContainerConstraint
         setupBlurViews()
@@ -3247,8 +3246,8 @@ class BrowserViewController: UIViewController,
         let availableContentHeight = getAvailableHomepageContentHeight()
         let availableWallpaperHeight = getAvailableHomepageWallpaperHeight(availableContentHeight: availableContentHeight)
 
-        guard homepageState.availableContentHeight != availableContentHeight
-              || homepageState.availableWallpaperHeight != availableWallpaperHeight
+        guard homepageState.wallpaperState.availableContentHeight != availableContentHeight
+              || homepageState.wallpaperState.availableWallpaperHeight != availableWallpaperHeight
         else { return }
 
         store.dispatch(

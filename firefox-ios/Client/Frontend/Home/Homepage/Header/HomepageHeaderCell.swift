@@ -7,6 +7,7 @@ import UIKit
 import Common
 import Shared
 import QuickAnswersKit
+import TipKit
 
 // Header for the homepage in both normal and private mode
 // Contains the firefox logo, and optionally the Quick Answers button
@@ -28,6 +29,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     private var headerState: HeaderState?
     private var logoTextColor: UIColor?
     private var showiPadSetup = false
+    private weak var tipPresenter: UIViewController?
+    private weak var tipPopoverController: UIViewController?
+    private var tipObservationTask: Task<Void, Never>?
     private lazy var logoContainerView: UIView = .build()
 
     private lazy var logoStackView: UIStackView = .build { view in
@@ -121,10 +125,12 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     func configure(headerState: HeaderState,
                    showiPadSetup: Bool = false,
-                   logoTextColor: UIColor? = nil) {
+                   logoTextColor: UIColor? = nil,
+                   tipPresenter: UIViewController? = nil) {
         self.headerState = headerState
         self.showiPadSetup = showiPadSetup
         self.logoTextColor = logoTextColor
+        self.tipPresenter = tipPresenter
 
         let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
         let logoAsset = isNovaPrivate ? ImageIdentifiers.homeHeaderLogoPrivate : ImageIdentifiers.homeHeaderLogoBall
@@ -141,6 +147,61 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         let alignLogoToLeading = headerState.showQuickAnswersButton && !showiPadSetup
         logoCenterConstraint.isActive = !alignLogoToLeading
         logoLeadingConstraint.isActive = alignLogoToLeading
+
+        if headerState.showQuickAnswersButton {
+            observeQuickAnswersTip()
+        } else {
+            cancelQuickAnswersTipObservation()
+        }
+    }
+
+    private func observeQuickAnswersTip() {
+        guard #available(iOS 17.0, *),
+              tipObservationTask == nil else { return }
+
+        tipObservationTask = Task { @MainActor [weak self] in
+            let tip = QuickAnswersTip()
+
+            for await status in tip.statusUpdates {
+                guard !Task.isCancelled else { return }
+
+                switch status {
+                // Wait for TipKit to finish evaluating the tip's display eligibility.
+                case .pending:
+                    continue
+
+                case .available:
+                    guard let tipPresenter = self?.tipPresenter,
+                          tipPresenter.presentedViewController == nil,
+                          let sourceItem = self?.quickAnswersButton
+                    else { return }
+
+                    let popover = TipUIPopoverViewController(tip, sourceItem: sourceItem)
+                    popover.popoverPresentationController?.permittedArrowDirections = .up
+                    self?.tipPopoverController = popover
+                    tipPresenter.present(popover, animated: true)
+
+                // Dismiss the presented tip when TipKit marks it as closed or otherwise invalid.
+                case .invalidated:
+                    guard let tipPresenter = self?.tipPresenter,
+                          let popover = self?.tipPopoverController,
+                          tipPresenter.presentedViewController === popover
+                    else { return }
+
+                    tipPresenter.dismiss(animated: true)
+                    self?.tipPopoverController = nil
+                    return
+
+                @unknown default:
+                    break
+                }
+            }
+        }
+    }
+
+    private func cancelQuickAnswersTipObservation() {
+        tipObservationTask?.cancel()
+        tipObservationTask = nil
     }
 
     private func quickAnswerButtonTapped() {

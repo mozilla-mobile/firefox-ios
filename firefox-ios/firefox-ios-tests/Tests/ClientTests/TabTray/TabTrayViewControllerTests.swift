@@ -3,21 +3,24 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import XCTest
 
 @testable import Client
 
 @MainActor
-final class TabTrayViewControllerTests: XCTestCase {
+final class TabTrayViewControllerTests: XCTestCase, StoreTestUtility {
     var delegate: MockTabTrayViewControllerDelegate!
     var navigationController: DismissableNavigationViewController!
     private var tabManager: MockTabManager!
+    private var mockStore: MockStoreForMiddleware<AppState>!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
         try await super.setUp()
         let mockTabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
+        setupStore()
         delegate = MockTabTrayViewControllerDelegate()
         navigationController = DismissableNavigationViewController()
         tabManager = mockTabManager
@@ -27,8 +30,32 @@ final class TabTrayViewControllerTests: XCTestCase {
         delegate = nil
         navigationController = nil
         DependencyHelperMock().reset()
+        resetStore()
 
         try await super.tearDown()
+    }
+
+    // MARK: - Redux
+    func testUnsubscribeFromRedux_unsubscribesFromStore() {
+        let viewController = createSubject()
+
+        viewController.unsubscribeFromRedux()
+
+        XCTAssertEqual(mockStore.unsubscribeCallCount, 1)
+    }
+
+    // MARK: - StoreTestUtility
+    func setupAppState() -> Client.AppState {
+        return AppState()
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 
     // MARK: Compact layout

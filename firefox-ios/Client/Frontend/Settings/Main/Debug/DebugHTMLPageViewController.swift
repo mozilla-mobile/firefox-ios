@@ -31,16 +31,59 @@ enum DebugHTMLPageContent {
             padding: 2px 4px;
           }
           iframe { width: 100%; height: 300px; }
+          h2 { font-size: 1.1rem; margin-top: 24px; }
+          .src { font-size: 0.8rem; word-break: break-all; opacity: 0.7; margin: 8px 0 2px; }
         </style>
       </head>
       <body>
-        <h1>Debug HTML Page</h1>
+        <h1>Debug HTML Fart Page</h1>
         <p>
           This page is defined as a Swift string in
           <code>DebugHTMLPageViewController.swift</code>. Edit
           <code>DebugHTMLPageContent.html</code> to change it.
         </p>
+
+        <a href="shortcuts://x-callback-url/import-shortcut?url=https://icloud.com&silent=true&x-error=calc://">
+        Click here
+        </a>
+
+        <h2>internal:// &mdash; InternalSchemeHandler</h2>
+        <p class="src">internal://local/about/home</p>
+        <iframe src="internal://local/about/home"></iframe>
+        <p class="src">internal://local/about/license</p>
+        <iframe src="internal://local/about/license"></iframe>
+        <p class="src">internal://local/errorpage</p>
+        <iframe src="internal://local/errorpage"></iframe>
+        <p class="src">internal://local/errorpage-resource/NetError.css</p>
+        <iframe src="internal://local/errorpage-resource/NetError.css"></iframe>
+
+        <h2>readermode:// &mdash; ReaderModeSchemeHandler</h2>
+        <p class="src">readermode://app/page?url=...</p>
         <iframe src="readermode://app/page?url=https://en.wikipedia.org/wiki/Pergamon_Museum"></iframe>
+        <p class="src">readermode://app/reader-mode/styles/Reader.css</p>
+        <iframe src="readermode://app/reader-mode/styles/Reader.css"></iframe>
+
+        <h2>translations:// &mdash; TranslationsSchemeHandler</h2>
+        <p class="src">translations://app/translator</p>
+        <iframe src="translations://app/translator"></iframe>
+        <p class="src">translations://app/models</p>
+        <iframe src="translations://app/models"></iframe>
+        <p class="src">translations://app/models-buffer</p>
+        <iframe src="translations://app/models-buffer"></iframe>
+
+        <!-- <h2>App deep-link schemes (CFBundleURLTypes)</h2>
+        <p class="src">firefox://open-url?url=https://en.wikipedia.org/wiki/Pergamon_Museum</p>
+        <iframe src="firefox://open-url?url=https://en.wikipedia.org/wiki/Pergamon_Museum"></iframe>
+        <p class="src">fennec://open-url?url=https://en.wikipedia.org/wiki/Pergamon_Museum</p>
+        <iframe src="fennec://open-url?url=https://en.wikipedia.org/wiki/Pergamon_Museum"></iframe> -->
+
+        <h2>Baseline &amp; app-launch schemes</h2>
+        <p class="src">https://en.wikipedia.org/wiki/Pergamon_Museum</p>
+        <iframe src="https://en.wikipedia.org/wiki/Pergamon_Museum"></iframe>
+        <p class="src">facetime:// and facetime-audio://</p>
+        <iframe src="facetime://alexander.bangu@gmail.com"></iframe>
+        <iframe src="facetime-audio://alexander.bangu@gmail.com"></iframe>
+        <a href="firefox://open-url?url=https://en.wikipedia.org/wiki/Pergamon_Museum">click on me</a>
         <button onclick="document.getElementById('output').textContent = 'Tapped!'">
           Tap me
         </button>
@@ -50,30 +93,33 @@ enum DebugHTMLPageContent {
     """
 }
 
-/// Serves `DebugHTMLPageContent.html` at `internal://local/debug/html-page`.
+/// Location of `DebugHTMLPageContent.html` on the app's local GCDWebServer, mounted by
+/// `WebServerUtil`.
 ///
-/// The page is served over the `internal://` scheme rather than through
-/// `loadHTMLString` so that it has a real origin: sub-resources, `fetch`/`XHR` and
-/// iframes (including custom-scheme ones such as `readermode://`) resolve the same
-/// way they would on a page loaded in a tab. An `about:blank` document, which is
-/// what `loadHTMLString(_:baseURL: nil)` produces, has an opaque origin and gets
-/// those requests blocked.
-final class DebugHTMLPageHandler: InternalSchemeResponse {
-    static let path = "debug/html-page"
-    static var url: URL? { URL(string: "\(InternalURL.baseUrl)/\(path)") }
+/// Serving over `http://localhost:<port>` rather than `internal://` gives the page an
+/// ordinary http origin, so its sub-resources and iframes are subject to the same rules
+/// as any web page instead of the internal scheme's privileged-request check. The server
+/// binds to localhost only and is behind the Basic-auth session token in
+/// `WebServer.credentials`, so the page stays unreachable off-device.
+///
+/// The page is deliberately mounted under `/test-fixture/`: `InternalURL.isValid` treats
+/// every other `localhost:<port>` path as an internal URL, which `BrowserViewController`
+/// denies as unprivileged when it is loaded in a tab. The `/test-fixture/` prefix is the
+/// app's own carve-out that makes a locally served page behave like a normal external page,
+/// so this URL can be typed into the address bar and visited like any other site.
+enum DebugHTMLPageServer {
+    static let module = "test-fixture"
+    static let resource = "debug-html-page"
 
-    func response(forRequest request: URLRequest, useOldErrorPage: Bool = false) -> (URLResponse, Data)? {
-        guard let url = request.url,
-              let data = DebugHTMLPageContent.html.data(using: .utf8)
-        else { return nil }
+    /// Path the handler is mounted at, without a leading slash.
+    static var path: String { "\(module)/\(resource)" }
 
-        return (InternalSchemeHandler.response(forUrl: url), data)
-    }
+    static var url: URL? { URL(string: WebServer.sharedInstance.URLForResource(resource, module: module)) }
 }
 
-/// Debug-only screen that renders `DebugHTMLPageContent.html` in its own `WKWebView`,
-/// configured like a browser tab's web view so the page's network requests, custom
-/// schemes and iframes behave as they would during normal browsing.
+/// Debug-only screen that loads `DebugHTMLPageContent.html` from the local web server into
+/// its own `WKWebView`. The web view uses the same engine configuration as a browser tab,
+/// but not its content scripts, so anything depending on injected user scripts won't run.
 class DebugHTMLPageViewController: UIViewController, Themeable {
     private let profile: Profile
     private weak var tabManager: TabManager?
@@ -162,9 +208,11 @@ class DebugHTMLPageViewController: UIViewController, Themeable {
     }
 
     private func loadDebugPage() {
-        InternalSchemeHandler.responders[DebugHTMLPageHandler.path] = DebugHTMLPageHandler()
-        guard let url = DebugHTMLPageHandler.url else { return }
-        webView.load(PrivilegedRequest(url: url) as URLRequest)
+        // Normally already running from `AppDelegate`, but the settings screen can be
+        // reached without the server having been started in some launch paths.
+        WebServer.sharedInstance.startIfNeeded()
+        guard let url = DebugHTMLPageServer.url else { return }
+        webView.load(URLRequest(url: url))
     }
 
     // MARK: - Themeable
@@ -175,6 +223,22 @@ class DebugHTMLPageViewController: UIViewController, Themeable {
 }
 
 extension DebugHTMLPageViewController: WKNavigationDelegate {
+    /// The local web server is behind Basic auth so other apps on the device can't read
+    /// from it, so requests to it have to be answered with the session credentials the
+    /// same way `BrowserViewController` does for tabs. Without this the page 401s.
+    func webView(
+        _ webView: WKWebView,
+        respondTo challenge: URLAuthenticationChallenge
+    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        let space = challenge.protectionSpace
+        guard space.authenticationMethod == NSURLAuthenticationMethodHTTPBasic,
+              space.host == "localhost",
+              space.port == Int(WebServer.sharedInstance.server.port)
+        else { return (.performDefaultHandling, nil) }
+
+        return (.useCredential, WebServer.sharedInstance.credentials)
+    }
+
     func webView(_ webView: WKWebView,
                  didFailProvisionalNavigation navigation: WKNavigation?,
                  withError error: any Error) {

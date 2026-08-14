@@ -548,6 +548,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(ResetTipsSetting(settings: self))
         hiddenDebugOptions.append(ChangeMLPAEndpointSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))

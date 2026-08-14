@@ -12,9 +12,9 @@ protocol ToolbarViewProtocol: AnyObject {
     var bottomBlurView: UIVisualEffectView { get }
     var overKeyboardContainer: BaseAlphaStackView { get }
     var isBottomSearchBar: Bool { get }
-    var headerTopConstraint: ConstraintReference? { get }
-    var bottomContainerConstraint: ConstraintReference? { get }
-    var overKeyboardContainerConstraint: ConstraintReference? { get }
+    var headerTopConstraint: NSLayoutConstraint? { get }
+    var bottomContainerConstraint: NSLayoutConstraint? { get }
+    var overKeyboardContainerConstraint: NSLayoutConstraint? { get }
 }
 
 struct ToolbarContext {
@@ -116,7 +116,7 @@ final class ToolbarAnimator {
     private func updateTopToolbarConstraints(topContainerOffset: CGFloat) {
         guard let view else { return }
 
-        view.headerTopConstraint?.update(offset: topContainerOffset)
+        view.headerTopConstraint?.constant = topContainerOffset
         view.header.superview?.setNeedsLayout()
     }
 
@@ -142,8 +142,8 @@ final class ToolbarAnimator {
                                                 overKeyboardContainerOffset: CGFloat) {
         guard let view else { return }
 
-        view.overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
-        view.bottomContainerConstraint?.update(offset: bottomContainerOffset)
+        view.overKeyboardContainerConstraint?.constant = overKeyboardContainerOffset
+        view.bottomContainerConstraint?.constant = bottomContainerOffset
         // Both view shared the same parent so layoutIfNeeded is called only once
         view.overKeyboardContainer.superview?.layoutIfNeeded()
     }

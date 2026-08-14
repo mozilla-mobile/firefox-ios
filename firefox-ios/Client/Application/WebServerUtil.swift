@@ -45,11 +45,24 @@ final class WebServerUtil {
             InternalSchemeHandler.responders[path] = responder
         }
 
+        registerDebugHTMLPageHandler(server: webServer.server)
+
         if AppConstants.isRunningTest {
             registerHandlersForTestMethods(server: webServer.server)
         }
 
         hasRegisteredHandlers = true
+    }
+
+    /// Serves the debug HTML page (also reached from Settings > Debug) over http so it can be
+    /// loaded in a normal tab by typing its URL, exercising real web-origin behavior instead of
+    /// the privileged `internal://` scheme. Mounted under `/test-fixture/`. See `DebugHTMLPageServer`.
+    private func registerDebugHTMLPageHandler(server: GCDWebServer) {
+        server.addHandler(forMethod: "GET",
+                          path: "/\(DebugHTMLPageServer.path)",
+                          request: GCDWebServerRequest.self) { (_: GCDWebServerRequest?) in
+            return GCDWebServerDataResponse(html: DebugHTMLPageContent.html)
+        }
     }
 
     private func registerHandlersForTestMethods(server: GCDWebServer) {
