@@ -301,8 +301,8 @@ class IntegrationTests: BaseTestCase {
         let siteTable = app.tables["SiteTable"]
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
-            sleep(1)
-            waitForTabsButton()
+            waitForRotation(to: orientation)
+            waitForTabsButtonHittable()
 
             // Firefox Suggest should show up for sponsored suggestion, open tab, history
             // and bookmark.
