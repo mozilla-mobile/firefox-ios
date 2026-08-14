@@ -33,7 +33,10 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
             logger.copyLogsToDocuments()
         }
 
-        DefaultBrowserUtility().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
+        // Tests can force a deterministic default-browser state; skip the system API so it isn't overwritten.
+        if !ProcessInfo.processInfo.arguments.contains(LaunchArguments.ResetDefaultBrowserStatus) {
+            DefaultBrowserUtility().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
+        }
         DefaultBrowserUtility().migrateDefaultBrowserStatusIfNeeded(isFirstRun: introScreenManager.shouldShowIntroScreen)
         if #available(iOS 26, *) {
             AppleIntelligenceUtil().processAvailabilityState()

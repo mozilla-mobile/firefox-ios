@@ -13,7 +13,8 @@ class A11yOnboardingTests: BaseTestCase {
 
     override func setUp() async throws {
         launchArguments = [LaunchArguments.ClearProfile,
-                           LaunchArguments.DisableAnimations]
+                           LaunchArguments.DisableAnimations,
+                           LaunchArguments.ResetDefaultBrowserStatus]
         try await super.setUp()
         onboardingScreen = OnboardingScreen(app: app, flowType: .legacy)
         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)

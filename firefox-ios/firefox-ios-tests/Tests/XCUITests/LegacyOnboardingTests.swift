@@ -19,7 +19,8 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
         launchArguments = [
             LaunchArguments.ClearProfile,
-            LaunchArguments.DisableAnimations
+            LaunchArguments.DisableAnimations,
+            LaunchArguments.ResetDefaultBrowserStatus
         ]
     }
 

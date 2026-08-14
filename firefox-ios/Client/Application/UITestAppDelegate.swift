@@ -235,6 +235,12 @@ class UITestAppDelegate: AppDelegate {
             resetApplication()
         }
 
+        // ClearProfile does not reset UserDefaults.standard, so the default-browser flag leaks across
+        // tests on a shared simulator. Force it false here so the default-browser onboarding card renders.
+        if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ResetDefaultBrowserStatus) {
+            UserDefaults.standard.set(false, forKey: DefaultBrowserUtility.UserDefaultsKey.isBrowserDefault)
+        }
+
         // Opt-in: WKWebView cookies/site data live in WKWebsiteDataStore, which ClearProfile does not
         // clear. Only cleared when this argument is present so it doesn't reset web state for every test.
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearWebData) {

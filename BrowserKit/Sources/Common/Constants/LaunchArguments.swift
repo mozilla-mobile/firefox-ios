@@ -23,6 +23,9 @@ public struct LaunchArguments {
     public static let ServerPort = "GCDWEBSERVER_PORT:"
     public static let SkipAddingGoogleTopSite = "SKIP_ADDING_GOOGLE_TOP_SITE"
     public static let SkipDefaultBrowserOnboarding = "SKIP_DEFAULT_BROWSER_ONBOARDING"
+    /// Forces the "is default browser" state to false and prevents the iOS 18.2+ system API from
+    /// re-querying it at launch, so the default-browser onboarding card renders deterministically.
+    public static let ResetDefaultBrowserStatus = "RESET_DEFAULT_BROWSER_STATUS"
     public static let LoadExperiment = "LOAD_EXPERIMENT"
     public static let ExperimentFeatureName = "EXPERIMENT_FEATURE_NAME"
     public static let DisableAnimations = "DISABLE_ANIMATIONS"

@@ -20,7 +20,8 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     override func setUpExperimentVariables() {
         launchArguments = [
             LaunchArguments.ClearProfile,
-            LaunchArguments.DisableAnimations
+            LaunchArguments.DisableAnimations,
+            LaunchArguments.ResetDefaultBrowserStatus
         ]
 
         jsonFileName = flowType.jsonFeatureOverrideFileName
