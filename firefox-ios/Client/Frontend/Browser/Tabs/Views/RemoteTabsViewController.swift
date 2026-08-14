@@ -3,10 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Storage
 import SiteImageView
 
 import enum MozillaAppServices.VisitType
+import struct Storage.ClientAndTabs
+import struct Storage.RemoteTab
+import struct Storage.Site
 
 protocol CollapsibleTableViewSection: AnyObject {
     @MainActor
