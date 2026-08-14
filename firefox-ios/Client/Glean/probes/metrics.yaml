@@ -2761,7 +2761,6 @@ nimbus_system:
 remote_settings:
   uptake_remotesettings:
     type: event
-    disabled: true # To be controlled by server knobs due to expected high volume
     description: >
       Was the remote content successfully pulled? This uptake telemetry
       allows to monitor the behaviour of our clients when it comes to
