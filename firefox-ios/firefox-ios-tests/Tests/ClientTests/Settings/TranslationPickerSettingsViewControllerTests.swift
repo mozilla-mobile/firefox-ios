@@ -36,26 +36,19 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
     func test_newState_withTranslationsEnabled_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
-        subject.newState(state: TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: true,
-            preferredLanguages: [
+        subject.newState(state: TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
+            .copy(preferredLanguages: [
                 PreferredLanguageDetails(code: "en", mainText: "English", subtitleText: "Device Language"),
                 PreferredLanguageDetails(code: "fr", mainText: "français", subtitleText: "French")
-            ],
-            supportedLanguages: ["en", "fr", "de"]
-        ))
+            ])
+            .copy(supportedLanguages: ["en", "fr", "de"]))
     }
 
     func test_newState_withTranslationsDisabled_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
-        subject.newState(state: TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: false,
-            preferredLanguages: [],
-            supportedLanguages: []
-        ))
+        subject.newState(state: TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
+            .copy(isTranslationsEnabled: false))
     }
 
     // MARK: - collectionView delegate

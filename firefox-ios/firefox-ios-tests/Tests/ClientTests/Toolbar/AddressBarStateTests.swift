@@ -1283,6 +1283,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             canShowNavigationHint: toolbarState.canShowNavigationHint,
             shouldAnimate: toolbarState.shouldAnimate,
             isTranslucent: toolbarState.isTranslucent,
+            isTranslationsEnabled: toolbarState.isTranslationsEnabled,
             previousTabScreenshot: toolbarState.previousTabScreenshot,
             nextTabScreenshot: toolbarState.nextTabScreenshot)
     }

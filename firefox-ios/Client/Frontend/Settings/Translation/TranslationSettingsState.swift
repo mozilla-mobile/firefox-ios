@@ -67,12 +67,12 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
     init(windowUUID: WindowUUID,
          isTranslationsEnabled: Bool,
-         isAutoTranslateEnabled: Bool = false,
-         isEditing: Bool = false,
-         pendingLanguages: [PreferredLanguageDetails]? = nil,
+         isAutoTranslateEnabled: Bool,
+         isEditing: Bool,
+         pendingLanguages: [PreferredLanguageDetails]?,
          preferredLanguages: [PreferredLanguageDetails],
          supportedLanguages: [String],
-         availableLanguages: [String] = []) {
+         availableLanguages: [String]) {
         self.windowUUID = windowUUID
         self.isTranslationsEnabled = isTranslationsEnabled
         self.isAutoTranslateEnabled = isAutoTranslateEnabled

@@ -1540,6 +1540,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
                             canShowNavigationHint: false,
                             shouldAnimate: true,
                             isTranslucent: false,
+                            isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil
                         )

@@ -386,6 +386,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             canShowNavigationHint: false,
                             shouldAnimate: false,
                             isTranslucent: false,
+                            isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil)
     }
@@ -408,6 +409,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             canShowNavigationHint: false,
                             shouldAnimate: false,
                             isTranslucent: false,
+                            isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil)
     }

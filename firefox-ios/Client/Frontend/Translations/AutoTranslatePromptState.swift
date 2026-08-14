@@ -5,7 +5,9 @@
 import Foundation
 import Redux
 import Common
+import ModifiedCopy
 
+@Copyable
 struct AutoTranslatePromptState: StateType, Equatable {
     var windowUUID: WindowUUID
     var showPrompt: Bool
@@ -33,10 +35,10 @@ struct AutoTranslatePromptState: StateType, Equatable {
 
         switch action.actionType {
         case TranslationsActionType.showAutoTranslatePrompt:
-            return AutoTranslatePromptState(windowUUID: state.windowUUID, showPrompt: true)
+            return state.copy(showPrompt: true)
         case TranslationsActionType.didTapEnableAutoTranslate,
              TranslationsActionType.didDismissAutoTranslatePrompt:
-            return AutoTranslatePromptState(windowUUID: state.windowUUID, showPrompt: false)
+            return state.copy(showPrompt: false)
         default:
             return defaultState(from: state)
         }
