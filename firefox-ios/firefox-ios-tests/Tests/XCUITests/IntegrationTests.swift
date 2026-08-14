@@ -262,11 +262,18 @@ class IntegrationTests: BaseTestCase {
     // [Config] orientation:portrait, orientation:landscape 
     // Smoketest
     func testFxATabsFirefoxSuggest() {
+        // Workaround: "Ingest New Suggestions Now" from the
+        // secret settings may force the suggestions to be
+        // loaded.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+
         // Precondition: Sign into Mozilla Account
         signInFxAccounts()
         waitForInitialSyncComplete()
         navigator.nowAt(SettingsScreen)
-        // navigator.goto(HomePanelsScreen)
 
         // Create an open Tab
         navigator.goto(TabTray)

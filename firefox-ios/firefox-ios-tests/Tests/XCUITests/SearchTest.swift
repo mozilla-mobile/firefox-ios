@@ -468,6 +468,14 @@ class SearchTests: FeatureFlaggedTestBase {
     func testFirefoxSuggest() {
         app.launch()
 
+        // Workaround: "Ingest New Suggestions Now" from the
+        // secret settings may force the suggestions to be
+        // loaded.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+
         // Create an open Tab
         navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
         waitUntilPageLoad()
