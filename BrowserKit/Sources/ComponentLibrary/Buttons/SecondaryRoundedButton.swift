@@ -150,6 +150,17 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         setNeedsUpdateConfiguration()
     }
 
+    /// Explicitly reverses whatever `makeButtonInvisible()` previously set. Not called
+    /// automatically from `configure(viewModel:)` or `applyTheme(theme:)`, since some
+    /// callers may intentionally configure a button with no title and expect it to stay
+    /// invisible. Callers that know their button should be visible/interactive again
+    /// must call this explicitly.
+    public func makeButtonVisible() {
+        isUserInteractionEnabled = true
+        isAccessibilityElement = true
+        accessibilityElementsHidden = false
+    }
+
     func addCornerRadiusForVisualEffectView(radiusSize: CGFloat) {
         // Note: changing the corner radius for the subview, in this case UIVisualEffectView
         // is required for certain cases where UIVisualEffectView doesn't update with super view radius change
