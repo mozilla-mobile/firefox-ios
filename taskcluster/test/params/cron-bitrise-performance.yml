@@ -26,4 +26,4 @@ pushlog_id: '0'
 repository_type: git
 target_tasks_method: bitrise_performance_test
 tasks_for: cron
-version: null
+version: '154.0'

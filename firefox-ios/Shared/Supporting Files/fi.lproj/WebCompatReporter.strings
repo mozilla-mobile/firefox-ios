@@ -10,6 +10,12 @@
 /* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Lue lisää";
 
+/* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.Title.v154" = "Lisätiedot";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "Sivussa on jotain vikaa";
+
 /* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
 "WebCompatReporter.Category.Other.v154" = "Muu";
 
@@ -24,6 +30,12 @@
 
 /* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Kuvaile ongelmaa yksityiskohtaisesti (valinnainen)";
+
+/* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLLabel.v154" = "URL-osoite";
+
+/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLPlaceholder.v154" = "URL-osoite";
 
 /* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
 "WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "Valitse ongelman tyyppi…";
@@ -55,11 +67,26 @@
 /* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "Painikkeet tai linkit eivät toimi";
 
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Tekstitykset puuttuvat";
+
 /* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "Kuvat eivät lataudu";
 
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Kohteet ovat väärässä kohdassa";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "Kohteet eivät näy kokonaan";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Kohteet ovat päällekkäin";
+
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.MediaControlsBroken.v154" = "Mediaohjaimet ovat rikki tai puuttuvat";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "Kohteita puuttuu";
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.NoAudio.v154" = "Ääntä ei ole";
@@ -72,4 +99,7 @@
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.PlaybackFails.v154" = "Video tai ääni ei toistu";
+
+/* Message of the toast shown after the user successfully submits a website issue report. */
+"WebCompatReporter.Toast.ReportSent.v155" = "Ilmoitus lähetetty";
 

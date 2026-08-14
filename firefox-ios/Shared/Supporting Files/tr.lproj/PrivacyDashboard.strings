@@ -1,0 +1,15 @@
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how many cross-site tracking cookies we've blocked. */
+"PrivacyDashboard.CrossSiteTrackers.v155" = "Siteler arası takip çerezleri";
+
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how many fingerprinter's we've blocked. */
+"PrivacyDashboard.Fingerprinters.v155" = "Parmak izi toplayıcılar";
+
+/* On the Privacy Dashboard popup, the text for the header when we have blocked some trackers this week. This is going to have, above it, in bold letters, the number of trackers blocked this week. */
+"PrivacyDashboard.HeaderLabel.v155" = "Bu hafta engellenen takip kodları";
+
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how many social media trackers we've blocked. */
+"PrivacyDashboard.SocialTrackers.v155" = "Sosyal medya takip kodları";
+
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how much tracking content we've blocked. */
+"PrivacyDashboard.TrackingContent.v155" = "Takip amaçlı içerikler";
+

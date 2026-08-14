@@ -28,9 +28,6 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     /// Called when subscriber calls subscribe to the mock store.
     var subscribeCallCount = 0
 
-    /// Called when subscriber calls unsubscribe from the mock store.
-    var unsubscribeCallCount = 0
-
     init(state: State) {
         self.state = state
     }
@@ -51,11 +48,11 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     }
 
     func unsubscribe<S>(_ subscriber: S) where S: Redux.StoreSubscriber, State == S.SubscriberStateType {
-        unsubscribeCallCount += 1
+        // TODO: if you need it
     }
 
     func unsubscribe(_ subscriber: any Redux.StoreSubscriber) {
-        unsubscribeCallCount += 1
+        // TODO: if you need it
     }
 
     /// We implemented the lock to ensure that this is thread safe

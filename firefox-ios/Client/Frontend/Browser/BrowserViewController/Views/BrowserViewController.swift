@@ -817,7 +817,10 @@ class BrowserViewController: UIViewController,
             self.displayedPopoverController = nil
         }
         if self.presentedViewController is PhotonActionSheet {
-            self.presentedViewController?.dismiss(animated: true, completion: nil)
+            // Must not be animated: the app can suspend mid-transition, which leaves the sheet's
+            // container view in the window swallowing all touches once we come back to foreground,
+            // making the screen unresponsive.
+            self.presentedViewController?.dismiss(animated: false)
         }
 
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have

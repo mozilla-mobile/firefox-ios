@@ -58,6 +58,9 @@
 /* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
 "NativeErrorPage.Wayback.Error.CouldNotReach.v154" = "Wayback Machineen ei saatu yhteyttä";
 
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "Sivu saattaa olla kiireinen tai saavuttamattomissa. Yritä uudestaan myöhemmin. Jos muutkaan sivut eivät lataudu, tarkista Wi-Fi- tai data-yhteytesi. %@ voi myös etsiä Wayback Machinesta tämän sivun aikaisempaa versiota.";
+
 /* Label shown when wayback responds and says no snapshot was found. */
 "NativeErrorPage.Wayback.Error.NotFound.v155" = "Arkistoitua versiota ei löytynyt";
 

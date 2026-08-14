@@ -4,12 +4,13 @@
 
 import Common
 import Foundation
-import Storage
 import Shared
 import SiteImageView
 import WebKit
 import WebEngine
 import TabDataStore
+
+import struct Storage.PageMetadata
 
 #if DEBUG
 private var debugTabCount = 0

@@ -29,7 +29,11 @@ enum WebCompatReporterUX {
     }
 
     enum Chevron {
-        static let size: CGFloat = 10
+        /// Frame, not arrow: the Acorn PDFs centre a 15 x 7.6pt arrow on a 24pt canvas.
+        static let size: CGFloat = 16
+
+        /// Cancels the canvas padding that would otherwise hold the two arrows apart.
+        static let verticalOverlap: CGFloat = 5
     }
 
     enum DetailsField {

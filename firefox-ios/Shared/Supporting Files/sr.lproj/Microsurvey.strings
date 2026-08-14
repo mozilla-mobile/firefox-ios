@@ -5,7 +5,7 @@
 "Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "Затвори";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the logo image that appears on the prompt to inform the prompt is coming from the app specifically. %@ is the app name (e.g. Firefox). */
-"Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129" = "%@ лого";
+"Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129" = "%@ Логотип";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. %@ is the app name (e.g. Firefox). */
 "Microsurvey.Prompt.TitleLabel.v127" = "Помозите нам да учинимо %@ бољим. Потребан је само минут.";
@@ -26,7 +26,7 @@
 "Microsurvey.Survey.HeaderLabel.v129" = "Попуните анкету";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. %@ is the app name (e.g. Firefox). */
-"Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "%@ лого";
+"Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "%@ Логотип";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
 "Microsurvey.Survey.Options.Dissatisfied.v132" = "Незадовољан/а";
@@ -35,7 +35,7 @@
 "Microsurvey.Survey.Options.Neutral.v132" = "Неутралан/а";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about. */
-"Microsurvey.Survey.Options.NotApplicable.v132" = "Не користим ово";
+"Microsurvey.Survey.Options.NotApplicable.v132" = "Не користим га";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
 "Microsurvey.Survey.Options.Satisfied.v132" = "Задовољан/а";

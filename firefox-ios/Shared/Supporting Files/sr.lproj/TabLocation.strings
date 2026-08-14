@@ -1,5 +1,5 @@
 /* Accessibility hint for the reload button */
-"Address.Bar.Reload.A11y.Hint.v124" = "Двапут тапните и задржите за више опција";
+"Address.Bar.Reload.A11y.Hint.v124" = "Двоструко тапните и задржите за више опција";
 
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Веза није безбедна. Побољшана заштита од праћења је искључена.";

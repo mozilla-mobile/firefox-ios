@@ -10,10 +10,17 @@ features:
           Whether or not this feature is enabled
         type: Boolean
         default: false
+      badge-enabled:
+        description: >
+          Whether or not the Ad Blocker badge is shown in the Site Menu
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: true
+          badge-enabled: true
       - channel: developer
         value:
           enabled: true
+          badge-enabled: true
