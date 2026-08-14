@@ -146,6 +146,7 @@ final class GleanUsageReportingMetricsService {
     }
 
     func start() {
+        Glean.shared.registerPings(GleanMetrics.Pings.shared)
         lifecycleObserver.gleanUsageReportingApi.setEnabled(true)
         lifecycleObserver.profileIdentifier.checkAndSetProfileId()
         lifecycleObserver.startObserving()
