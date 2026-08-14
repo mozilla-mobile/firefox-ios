@@ -32,7 +32,7 @@
 "Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "Валидност";
 
 /* The title for the certificate validity not after date inside the certificate screen. */
-"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "Није после";
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "Није након";
 
 /* The title for the certificate validity not before date inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "Није пре";
@@ -41,19 +41,19 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Откажи";
 
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Обриши";
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Очисти";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. %@ is the currently visited website. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Уклањање колачића и података веб сајтова за %@ може вас одјавити са веб сајтова и испразнити корпе за куповину.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Уклањање колачића и података веб страница за %@ може вас одјавити са веб страница и испразнити корпе за куповину.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Обриши колачиће и податке веб сајтова";
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Обриши колачиће и податке веб страница";
 
 /* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Обриши колачиће и податке веб сајтова";
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Очисти колачиће и податке веб страница";
 
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
-"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Колачићи и подаци веб сајтова су уклоњени";
+"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Колачићи и подаци веб страница су уклоњени";
 
 /* The accessibility label for the close button in the Enhanced Tracking protection menu. */
 "Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Затвори мени приватности и безбедности";
@@ -65,7 +65,7 @@
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Веза није безбедна";
 
 /* Text to let users know that no trackers were found on the current website. */
-"Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "Нису пронађени пратиоци";
+"Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "Није пронађен ниједан пратилац";
 
 /* Text to let users know how many analytics trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "Садржај за праћење: %@";
@@ -83,10 +83,10 @@
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Блокирани пратиоци: %@";
 
 /* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
-"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Стандардна блокира уобичајене пратиоце након што страница почне да се учитава, па можете видети већи број пратилаца. %@";
+"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Стандардни режим блокира уобичајене пратиоце након што страница почне да се учитава, па можете видети већи број пратилаца. %@";
 
 /* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
-"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Строга блокира више пратилаца тако што их зауставља пре него што се страница учита, па можете видети мањи број пратилаца. %@";
+"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Строги режим блокира више пратилаца тако што их зауставља пре него што се страница учита, па можете видети мањи број пратилаца. %@";
 
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Оверио %@";
@@ -110,7 +110,7 @@
 "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Ваша веза није безбедна.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
-"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Будите пажљиви на овом сајту";
+"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Будите пажљиви на овој страници";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ је на стражи";
@@ -125,5 +125,5 @@
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Заштите су ИСКЉУЧЕНЕ. Предлажемо да их поново укључите.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Ако нешто изгледа неисправно на овом сајту, покушајте да их искључите.";
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Ако нешто изгледа неисправно на овој страници, покушајте да их искључите.";
 

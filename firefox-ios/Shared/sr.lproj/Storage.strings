@@ -2,7 +2,7 @@
 "Bookmarks" = "Обележивачи";
 
 /* The name of the folder that contains desktop bookmarks in the menu. */
-"Bookmarks Menu" = "Мени обележивача";
+"Bookmarks Menu" = "Мени са обележивачима";
 
 /* The name of the folder that contains desktop bookmarks in the toolbar. */
 "Bookmarks Toolbar" = "Трака са обележивачима";

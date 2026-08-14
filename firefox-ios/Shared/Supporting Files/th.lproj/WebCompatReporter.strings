@@ -4,11 +4,17 @@
 /* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "ส่งรายการที่ถูกปิดกั้นโดยระบบป้องกันการติดตาม";
 
+/* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "ส่งภาพหน้าจอไปพร้อมรายงานโดยอัตโนมัติ";
+
 /* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.LearnMore.v154" = "เรียนรู้เพิ่มเติม";
 
 /* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.Title.v154" = "ข้อมูลเพิ่มเติม";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "หน้าเว็บแสดงผลผิดปกติ";
 
 /* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
 "WebCompatReporter.Category.Other.v154" = "อื่น ๆ";
@@ -37,6 +43,9 @@
 /* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
 "WebCompatReporter.IssueSection.Title.v154" = "ปัญหาเว็บไซต์";
 
+/* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "ภาพหน้าจอของเพจที่รายงานอยู่ แตะสองครั้งเพื่อขยายเต็มหน้าจอ";
+
 /* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "ปิด";
 
@@ -63,6 +72,21 @@
 
 /* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "รูปภาพไม่โหลด";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "เนื้อหาวางผิดตำแหน่ง";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "เนื้อหาบางส่วนมองไม่เห็น";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "เนื้อหาทับซ้อนกัน";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "ปุ่มควบคุมสื่อทำงานผิดปกติหรือไม่แสดง";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "เนื้อหาขาดหาย";
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.NoAudio.v154" = "ไม่มีเสียง";

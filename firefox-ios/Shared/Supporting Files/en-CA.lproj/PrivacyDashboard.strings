@@ -1,0 +1,6 @@
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how many cross-site tracking cookies we've blocked. */
+"PrivacyDashboard.CrossSiteTrackers.v155" = "Cross-Site Tracking Cookies";
+
+/* On the Privacy Dashboard popup, the title text for the bar & label showing how many fingerprinter's we've blocked. */
+"PrivacyDashboard.Fingerprinters.v155" = "Fingerprinters";
+

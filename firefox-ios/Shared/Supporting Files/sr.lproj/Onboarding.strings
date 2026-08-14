@@ -14,19 +14,19 @@
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. Изаберите *%@*";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
-"DefaultBrowserPopup.Title.v114" = "Промените свој подразумевани прегледач";
+"DefaultBrowserPopup.Title.v114" = "Промена подразумеваног прегледача";
 
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Customization.Intro.Continue.Action.v123" = "Прилагодите %@";
+"Onboarding.Customization.Intro.Continue.Action.v123" = "Прилагоди %@";
 
 /* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Intro.Description.v123" = "Поставите своју тему и траку алатки тако да одговарају вашем јединственом стилу прегледања.";
+"Onboarding.Customization.Intro.Description.v123" = "Поставите своју тему и алатну траку тако да одговарају вашем јединственом стилу прегледања.";
 
 /* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
-"Onboarding.Customization.Intro.Skip.Action.v123" = "Почните са прегледањем";
+"Onboarding.Customization.Intro.Skip.Action.v123" = "Почни прегледање";
 
 /* String used to describe the title of the customization onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Customization.Intro.Title.v123" = "%@ вам даје контролу";
+"Onboarding.Customization.Intro.Title.v123" = "%@ вам даје управљање";
 
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Continue.Action.v123" = "Сачувај и настави";
@@ -35,7 +35,7 @@
 "Onboarding.Customization.Theme.Dark.Action.v123" = "Тамна";
 
 /* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Theme.Description.v123" = "Видите веб у најбољем светлу.";
+"Onboarding.Customization.Theme.Description.v123" = "Гледајте веб у најбољем светлу.";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
 "Onboarding.Customization.Theme.Light.Action.v123" = "Светла";
@@ -44,7 +44,7 @@
 "Onboarding.Customization.Theme.Skip.Action.v123" = "Прескочи";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
-"Onboarding.Customization.Theme.System.Action.v123" = "Системски аутоматски";
+"Onboarding.Customization.Theme.System.Action.v123" = "Системски самостално";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "Изаберите тему";
@@ -56,19 +56,19 @@
 "Onboarding.Customization.Toolbar.Bottom.Action.v123" = "Доле";
 
 /* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
-"Onboarding.Customization.Toolbar.Continue.Action.v123" = "Сачувај и почни са прегледањем";
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "Сачувај и почни прегледање";
 
 /* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Toolbar.Description.v123" = "Нека вам претраге буду надохват руке.";
+"Onboarding.Customization.Toolbar.Description.v123" = "Нека претраге буду надохват руке.";
 
 /* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
 "Onboarding.Customization.Toolbar.Skip.Action.v123" = "Прескочи";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Toolbar.Title.v123" = "Изаберите положај траке алата";
+"Onboarding.Customization.Toolbar.Title.v123" = "Изаберите положај алатне траке";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
-"Onboarding.Customization.Toolbar.Top.Action.v123" = "На врху";
+"Onboarding.Customization.Toolbar.Top.Action.v123" = "Горе";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v114" = "Независан. Непрофитан. За добро.";
@@ -80,7 +80,7 @@
 "Onboarding.LaterAction.v115" = "Прескочи";
 
 /* Option for the automatic theme in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "Аутоматски";
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Automatic.v148" = "Самостално";
 
 /* Continue button on the theme selection card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Continue.Action.v148" = "Настави";
@@ -89,7 +89,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Тамна";
 
 /* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Изаберите своју омиљену тему или подесите да %@ одговара вашем уређају, дајући вам контролу.";
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Изаберите своју омиљену тему или подесите да %@ одговара вашем уређају, како бисте ви управљали.";
 
 /* Option for the light theme in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "Светла";
@@ -101,13 +101,13 @@
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "Настави";
 
 /* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "Започните куцање да бисте добили предлоге за претрагу, ваше најпосећеније сајтове, обележиваче, историјат и претраживаче – све на једном месту.";
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "Започните куцање да бисте добили предлоге за претрагу, ваше најпосећеније странице, обележиваче, историјат и претраживаче - све на једном месту.";
 
 /* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Изаберите своју траку адреса";
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Изаберите своју траку са адресама";
 
 /* Description for the marketing data sharing card in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Поделите како сте открили %1$@, и да га користите, са %2$@ маркетиншким партнерима. Ови подаци се никада не продају.";
+"Onboarding.Modern.BrandRefresh.Marketing.Description.v148" = "Поделите како сте открили %1$@, и то што га користите, са маркетиншким партнерима %2$@. Ови подаци се никада не продају.";
 
 /* Link text for learning more about how marketing data is used in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Marketing.LearnMoreLink.v148" = "Како користимо податке";
@@ -125,7 +125,7 @@
 "Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "Не сада";
 
 /* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Обавештења вам помажу да останете безбеднији уз %@";
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Обавештења вам помажу да останете безбеднији помоћу %@\"";
 
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Укључи обавештења";
@@ -149,13 +149,13 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Настави";
 
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Брз, безбедан и неће вас продати. Прегледање је управо постало боље.";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Брз, безбедан и неће вас продати. Прегледање је сада боље.";
 
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Управљај подешавањима";
 
 /* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "Да би помогла у побољшању прегледача, апликација %1$@ шаље дијагностичке податке и податке о интеракцији организацији %2$@. %3$@";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "Како би помогла у побољшању прегледача, апликација %1$@ шаље дијагностичке податке и податке о интеракцији организацији %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ брине о вашој приватности. Прочитајте више у нашем %2$@";
@@ -167,7 +167,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "Настављањем се слажете са %@";
 
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ услови коришћења";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "%@ Услови коришћења";
 
 /* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Спремите се за слободно сурфовање";
@@ -176,22 +176,22 @@
 "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Постави за подразумевани прегледач";
 
 /* Description for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Штитимо ваше податке и аутоматски блокирамо компаније које покушавају да шпијунирају ваше кликове.";
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Штитимо ваше податке и аутоматски блокирамо компаније које шпијунирају ваше кликове.";
 
 /* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "Не сада";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Реците збогом језивим пратиоцима";
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Реците збогом наметљивим пратиоцима";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Отварајте своје везе уз уграђену приватност";
 
 /* Title for the welcome card in the v149 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Отварајте све своје везе уз уграђену приватност";
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Отворите све ваше везе уз уграђену приватност";
 
 /* Option for the automatic theme. */
-"Onboarding.Modern.Customization.Theme.Automatic.v145" = "Аутоматски";
+"Onboarding.Modern.Customization.Theme.Automatic.v145" = "Самостално";
 
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
 "Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "Настави";
@@ -200,7 +200,7 @@
 "Onboarding.Modern.Customization.Theme.Dark.v145" = "Тамна";
 
 /* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.Customization.Theme.Description.v145" = "Изаберите своју омиљену тему или нека се %@ прилагоди вашем уређају, дајући вам контролу.";
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Изаберите своју омиљену тему или нека се %@ прилагоди вашем уређају, да вам омогући управљање.";
 
 /* Option for the light theme. */
 "Onboarding.Modern.Customization.Theme.Light.v145" = "Светла";
@@ -209,7 +209,7 @@
 "Onboarding.Modern.Customization.Theme.Title.v145" = "Изаберите своју тему";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
-"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "На дну";
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "Доле";
 
 /* Action to set the toolbar to the bottom. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "Доле";
@@ -218,25 +218,25 @@
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Настави";
 
 /* Description for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Започните куцање да бисте добили предлоге за претрагу, ваше најпосећеније сајтове, обележиваче, историјат и претраживаче – све на једном месту.";
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Започните куцање да бисте добили предлоге за претрагу, ваше најпосећеније странице, обележиваче, историјат и претраживаче – све на једном месту.";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Изаберите где да поставите траку адреса";
 
 /* Title for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Title.v145" = "Изаберите своју траку адреса";
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "Изаберите своју траку са адресама";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
-"Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "На врху";
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Горе";
 
 /* Action to set the toolbar to the top. */
-"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "Врх";
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "Горе";
 
 /* Button to skip the entire onboarding flow. */
 "Onboarding.Modern.General.Skip.v145" = "Прескочи";
 
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
-"Onboarding.Modern.Sync.Description.v140" = "Преузмите своје обележиваче, историјат и лозинке на било ком уређају.";
+"Onboarding.Modern.Sync.Description.v140" = "Приступите својим обележивачима, историјату и лозинкама на било ком уређају.";
 
 /* Description for the Sync card in the v2 onboarding flow. */
 "Onboarding.Modern.Sync.Description.v145" = "Ваши обележивачи, лозинке и остало се усклађују на било ком уређају. Све је заштићено шифровањем, тако да само ви можете да му приступите.";
@@ -266,7 +266,7 @@
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Настави";
 
 /* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
-"Onboarding.Modern.TermsOfService.Description.v145" = "Аутоматска заштита ваших личних података\nБрзо учитавајте сајтове и претражујте паметније\nДоноси вам непрофитна организација %@, којој се верује већ више од 20 година";
+"Onboarding.Modern.TermsOfService.Description.v145" = "Самостална заштита ваших личних података\nБрзо учитавајте странице и претражујте паметније\nДоноси вам непрофитна организација %@, поуздана већ више од 20 година";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Управљај";
@@ -278,7 +278,7 @@
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Да бисмо побољшали прегледач, %1$@ шаље дијагностичке податке и податке о интеракцији компанији %2$@. %3$@";
 
 /* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
-"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "Да би помогла у побољшању прегледача, апликација %1$@ шаље дијагностичке податке и податке о интеракцији организацији %2$@. %3$@";
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "Да бисмо побољшали прегледач, %1$@ шаље дијагностичке податке и податке о интеракцији организацији %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ брине о вашој приватности. Прочитајте више у нашем %2$@";
@@ -287,7 +287,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "%1$@ брине о вашој приватности. Прочитајте више у нашем %2$@";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "Обавештењу о приватности.";
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "Обавештење о приватности.";
 
 /* The text for the Privacy Notice link button. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "Обавештење о приватности.";
@@ -296,31 +296,31 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Сазнај више";
 
 /* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Извештаји о рушењу нам омогућавају да дијагностикујемо и исправимо проблеме са прегледачем. %@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Извештаји о падовима нам омогућавају да дијагностикујемо и исправимо проблеме са прегледачем. %@";
 
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Аутоматски шаљи извештаје о рушењу";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Самостално шаљи извештаје о падовима";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Подаци о вашем уређају, хардверској конфигурацији и начину на који користите %1$@ помажу у побољшању функција, перформанси и стабилности за све. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Пошаљите техничке податке и податке о интеракцији апликацији %@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Пошаљи техничке податке и податке о интеракцији организацији %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Помозите нам да учинимо %@ бољим";
 
 /* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
-"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Учитавајте сајтове муњевито брзо\nАутоматска заштита од праћења\nУсклађивање на свим вашим уређајима";
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Учитај странице муњевито брзо\nСамостална заштита од праћења\nСинхронизуј на свим својим уређајима";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Наставком се слажете са %@";
 
 /* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
-"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Настављањем се слажете са %@";
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Наставком се слажете са %@";
 
 /* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "%@ услови коришћења.";
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "%@ Услови коришћења.";
 
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "Унапредите своје прегледање";
@@ -329,7 +329,7 @@
 "Onboarding.Modern.TermsOfService.Title.v145" = "Преузмите контролу над интернетом";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ услови коришћења.";
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ Услови коришћења.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Постави као подразумевани прегледач";
@@ -353,7 +353,7 @@
 "Onboarding.Modern.Welcome.Title.v140" = "Реците збогом језивим огласима";
 
 /* Title for the welcome card in the v2 onboarding flow. */
-"Onboarding.Modern.Welcome.Title.v145" = "Реците збогом језивим пратиоцима";
+"Onboarding.Modern.Welcome.Title.v145" = "Реците збогом наметљивим пратиоцима";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Настави";
@@ -380,7 +380,7 @@
 "Onboarding.Sync.Skip.Action.v114" = "Прескочи";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v120" = "Останите шифровани док прелазите са уређаја на уређај";
+"Onboarding.Sync.Title.v120" = "Останите заштићени шифровањем када мењате уређаје";
 
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.TermsOfService.AgreementButtonTitle.v140" = "Настави";
@@ -389,10 +389,10 @@
 "Onboarding.TermsOfService.ManageLink.v135" = "Управљај";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
-"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Да би помогао у побољшању прегледача, %1$@ шаље дијагностичке податке и податке о интеракцији компанији %2$@. %3$@";
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Ради побољшања прегледача, %1$@ шаље дијагностичке податке и податке о интеракцији компанији %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ брине о вашој приватности. Прочитајте више у нашем %2$@";
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ поштује вашу приватност. Прочитајте више у нашем %2$@";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "Обавештење о приватности.";
@@ -401,19 +401,19 @@
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Сазнај више";
 
 /* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Извештаји о рушењу нам омогућавају да дијагностикујемо и исправимо проблеме са прегледачем. %@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Извештаји о падовима нам омогућавају да дијагностикујемо и исправимо проблеме са прегледачем. %@";
 
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Аутоматски шаљи извештаје о рушењу";
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Самостално шаљи извештаје о падовима";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Подаци о вашем уређају, хардверској конфигурацији и начину на који користите %1$@ помажу у побољшању функција, перформанси и стабилности за све. %2$@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Подаци о вашем уређају, хардверској конфигурацији и начину на који користите %1$@ помажу у побољшању могућности, перформанси и стабилности за све. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Шаљи техничке податке и податке о интеракцији компанији %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "Помозите нам да учинимо %@ бољим";
+"Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "Помозите нам да побољшамо %@";
 
 /* Subtitle for the Terms of Service screen in the onboarding process. */
 "Onboarding.TermsOfService.Subtitle.v136" = "Брзо и безбедно прегледање веба";
@@ -425,7 +425,7 @@
 "Onboarding.TermsOfService.Title.v135" = "Добро дошли у %@";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ услови коришћења.";
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ Услови коришћења.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Класична позадина";
@@ -437,10 +437,10 @@
 "Onboarding.Wallpaper.Action.v114" = "Постави позадину";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.Description.v114" = "Изаберите позадину која вам одговара.";
+"Onboarding.Wallpaper.Description.v114" = "Изаберите позадину у свом стилу.";
 
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
-"Onboarding.Wallpaper.SelectorTitle.v114" = "Испробајте дашак боје";
+"Onboarding.Wallpaper.SelectorTitle.v114" = "Пробајте нове боје";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox). */
 "Onboarding.Wallpaper.Title.v114" = "Изаберите %@ позадину";
@@ -455,19 +455,19 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Затвори и изађи из %@ упознавања са апликацијом";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "Наш непрофитни прегледач помаже у заустављању компанија да вас тајно прате широм веба.";
+"Onboarding.Welcome.Description.TreatementA.v120" = "Наш непрофитни прегледач помаже у спречавању да вас компаније тајно прате широм веба.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Welcome.Description.v120" = "Наш непрофитни прегледач помаже у заустављању компанија да вас тајно прате широм веба.";
+"Onboarding.Welcome.Description.v120" = "Наш непрофитни прегледач помаже у спречавању да вас компаније тајно прате широм веба.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Link.Action.v114" = "Сазнајте више у нашој напомени о приватности";
+"Onboarding.Welcome.Link.Action.v114" = "Сазнајте више у нашем обавештењу о приватности";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "Прескочи";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Title.TreatementA.v120" = "Волимо да вас чувамо";
+"Onboarding.Welcome.Title.TreatementA.v120" = "Бринемо о вашој безбедности";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Добро дошли у независни интернет";

@@ -1,20 +1,20 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
-"Bookmarks.EmptyState.Nested.Body.v135" = "Додајте обележиваче док прегледате како бисте касније могли да пронађете своје омиљене сајтове.";
+"Bookmarks.EmptyState.Nested.Body.v135" = "Додајте обележиваче док прегледате да би касније нашли ваше омиљене странице.";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Title.v135" = "Ова фасцикла је празна";
 
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
-"Bookmarks.EmptyState.Root.Body.v135" = "Сачувајте сајтове док прегледате. Такође ћемо преузети обележиваче са других усклађених уређаја.";
+"Bookmarks.EmptyState.Root.Body.v135" = "Сачувајте странице док прегледате. Такође ћемо преузети обележиваче са других усклађених уређаја.";
 
 /* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
-"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "Сачувајте сајтове док прегледате. Пријавите се да бисте преузели обележиваче са других усклађених уређаја.";
+"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "Сачувајте странице док прегледате. Пријавите се да бисте преузели обележиваче са других усклађених уређаја.";
 
 /* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
 "Bookmarks.EmptyState.Root.ButtonTitle.v136" = "Пријавите се на Sync";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
-"Bookmarks.EmptyState.Root.Title.v135" = "Још увек нема обележивача";
+"Bookmarks.EmptyState.Root.Title.v135" = "Још нема обележивача";
 
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Све";
@@ -44,16 +44,16 @@
 "Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "ОБЕЛЕЖИВАЧИ СА РАЧУНАРА";
 
 /* Collapsible header for the group of desktop bookmark folders in the New/Edit Folder location picker. */
-"Bookmarks.Menu.EditBookmarkDesktopGroupLabel.v154" = "Радна површ";
+"Bookmarks.Menu.EditBookmarkDesktopGroupLabel.v154" = "Радна површина";
 
 /* VoiceOver accessibility value read for a collapsed folder group header in the New/Edit Folder location picker. */
 "Bookmarks.Menu.EditBookmarkGroupCollapsedValue.v154" = "Скупљена";
 
 /* VoiceOver accessibility value read for an expanded folder group header in the New/Edit Folder location picker. */
-"Bookmarks.Menu.EditBookmarkGroupExpandedValue.v154" = "Проширена";
+"Bookmarks.Menu.EditBookmarkGroupExpandedValue.v154" = "Раширена";
 
 /* Caption shown above the collapsed folder summary row in the New/Edit Folder location picker. */
-"Bookmarks.Menu.EditBookmarkLocationLabel.v154" = "Локација";
+"Bookmarks.Menu.EditBookmarkLocationLabel.v154" = "Место";
 
 /* Header denoting that the following folders in the parent folder selector table of the Edit Bookmarks Screen are mobile-only folders, shown alongside a 'DESKTOP BOOKMARKS' header so the two categories are clearly separated. */
 "Bookmarks.Menu.EditBookmarkMobileBookmarksLabel.v154" = "МОБИЛНИ ОБЕЛЕЖИВАЧИ";
@@ -71,13 +71,13 @@
 "Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Сачувај у";
 
 /* Label on the top of the `Edit Bookmarks` screen. */
-"Bookmarks.Menu.EditBookmarkTitle.v131" = "Уреди обележивач";
+"Bookmarks.Menu.EditBookmarkTitle.v131" = "Уређивање обележивача";
 
 /* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
 "Bookmarks.Menu.EditFolder.v131" = "Уреди фасциклу";
 
 /* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
-"Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Више опција";
+"Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Више могућности";
 
 /* The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button */
 "Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "Уклони из пречица";

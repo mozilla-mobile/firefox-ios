@@ -11,7 +11,7 @@
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Vložená e‑mailová maska";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Skryte svoj skutočný e-mail, aby ste ochránili svoju schránku pred nevyžiadanou poštou. Niektoré stránky nepodporujú e‑mailové masky.";
+"RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Skryte svoj skutočný e‑mail, aby ste ochránili svoju schránku pred nevyžiadanou poštou. Niektoré stránky nepodporujú e‑mailové masky.";
 
 /* Website link title that takes users to a website to learn additional information about the Relay email mask feature. */
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Ďalšie informácie";

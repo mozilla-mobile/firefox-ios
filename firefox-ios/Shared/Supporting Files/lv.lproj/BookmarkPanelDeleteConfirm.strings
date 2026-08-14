@@ -1,0 +1,3 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Bookmarks.DeleteFolderWarning.Description" = "Vai tiešām izdzēst šo mapi un tās saturu?";
+
