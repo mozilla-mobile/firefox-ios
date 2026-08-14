@@ -6,7 +6,7 @@ import Common
 import Foundation
 import UIKit
 
-/// Keeps the "Merge All Windows" home screen Quick Action in sync with the number of open iPad
+/// Keeps the "Combine Windows" home screen Quick Action in sync with the number of open iPad
 /// windows: the action is only offered while the feature is enabled and two or more windows are
 /// open. Call `update()` whenever the set of open windows changes (a scene becoming active or
 /// disconnecting).
