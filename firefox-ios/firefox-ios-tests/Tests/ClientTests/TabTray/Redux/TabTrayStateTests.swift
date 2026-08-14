@@ -289,34 +289,23 @@ final class TabTrayStateTests: XCTestCase {
 
     // MARK: - Computed Properties
     func test_navigationTitle_forTabsPanel() {
-        let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
-                                 isPrivateMode: false,
-                                 selectedPanel: .tabs,
-                                 normalTabsCount: "5",
-                                 privateTabsCount: "0",
-                                 hasSyncableAccount: false)
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .tabs)
+            .copy(normalTabsCount: "5")
 
         XCTAssertEqual(state.navigationTitle, TabTrayPanelType.tabs.navTitle)
     }
 
     func test_navigationTitle_forPrivateTabsPanel() {
-        let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
-                                 isPrivateMode: true,
-                                 selectedPanel: .privateTabs,
-                                 normalTabsCount: "0",
-                                 privateTabsCount: "3",
-                                 hasSyncableAccount: false)
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .privateTabs)
+            .copy(privateTabsCount: "3")
 
         XCTAssertEqual(state.navigationTitle, TabTrayPanelType.privateTabs.navTitle)
     }
 
     func test_navigationTitle_forSyncedTabsPanel() {
-        let state = TabTrayState(windowUUID: .XCTestDefaultUUID,
-                                 isPrivateMode: false,
-                                 selectedPanel: .syncedTabs,
-                                 normalTabsCount: "5",
-                                 privateTabsCount: "0",
-                                 hasSyncableAccount: true)
+        let state = TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: .syncedTabs)
+            .copy(normalTabsCount: "5")
+            .copy(hasSyncableAccount: true)
 
         XCTAssertEqual(state.navigationTitle, TabTrayPanelType.syncedTabs.navTitle)
     }
