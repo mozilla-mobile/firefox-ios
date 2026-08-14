@@ -6,6 +6,7 @@ loader: taskgraph.loader.transform:loader
 
 transforms:
     - ffios_taskgraph.transforms.mark_as_merged:transforms
+    - taskgraph.transforms.task_context:transforms
     - taskgraph.transforms.task:transforms
 
 kind-dependencies:
@@ -29,3 +30,18 @@ tasks:
                 default:
                     - project:mobile:releng:ship-it:server:staging
                     - project:mobile:releng:ship-it:action:mark-as-merged
+        slack-channel:
+            by-level:
+                '3': C03PKCHHSSD  # firefox-ios-releases
+                default: null
+        task-context:
+            from-parameters:
+                version: version
+                next_version: next_version
+            substitution-fields:
+                - extra.notify.slackText
+        extra:
+            notify:
+                slackText: >-
+                    firefox-ios release/v{version} branch has been created
+                    and the version has been bumped to {next_version} on main

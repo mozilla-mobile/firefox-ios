@@ -2,6 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from mozilla_version.ios import MobileIosVersion
 from taskgraph.parameters import Parameters
 
 from taskgraph.actions.registry import register_callback_action
@@ -45,11 +46,20 @@ def merge_automation_action(parameters, graph_config, input, task_group_id, task
     # make parameters read-write
     parameters = dict(parameters)
 
+    behavior = input.get("behavior", "major")
+
     parameters["target_tasks_method"] = "merge_automation"
     parameters["merge_config"] = {
         "force-dry-run": input.get("force-dry-run", False),
-        "behavior": input.get("behavior", "major"),
+        "behavior": behavior,
     }
+    version = MobileIosVersion.parse(parameters["version"])
+    if behavior == "major":
+        parameters["next_version"] = str(version.bump("major_number"))
+    elif behavior == "minor":
+        parameters["next_version"] = str(version.bump("minor_number"))
+    else:
+        raise Exception(f"Unknown merge-automation behavior: {behavior}")
 
     for field in [
         "merge-automation-id",

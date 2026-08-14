@@ -5,32 +5,21 @@
 Add the right git branch configuration to the worker definition
 """
 
-from pathlib import Path
-from taskgraph.transforms.base import TransformSequence
 from mozilla_version.ios import MobileIosVersion
+from taskgraph.transforms.base import TransformSequence
 
 transforms = TransformSequence()
 
 @transforms.add
 def version_bump_task(config, tasks):
     for task in tasks:
-        versionfile = Path(__file__).parent.parent.parent.parent / "version.txt"
-        with open(versionfile) as fd:
-            version = MobileIosVersion.parse(fd.readline())
-
         if "create-branch-info" in task["worker"]:
-            # We need to default to major here so taskgraph full can produce a valid task
-            behavior = config.params.get("merge_config", {}).get("behavior", "major")
-            branch_name = f"release/v{version.major_number}.{version.minor_number}"
-            task["worker"]["create-branch-info"]["branch-name"] = branch_name
-            if behavior == "major":
-                version = version.bump("major_number")
-            elif behavior == "minor":
-                version = version.bump("minor_number")
-            else:
-                raise Exception(f"Unknown merge-automation behavior: {behavior}")
+            version = MobileIosVersion.parse(config.params["version"])
+            task["worker"]["create-branch-info"]["branch-name"] = (
+                f"release/v{version.major_number}.{version.minor_number}"
+            )
 
-        task["worker"]["next-version"] = str(version)
+        task["worker"]["next-version"] = config.params["next_version"] or config.params["version"]
         task["worker"].update(branch=config.params["head_ref"])
 
         if config.params.get("merge_config", {}).get("force-dry-run"):

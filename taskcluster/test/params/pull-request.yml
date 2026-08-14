@@ -27,4 +27,4 @@ pushlog_id: '0'
 repository_type: git
 target_tasks_method: default
 tasks_for: github-pull-request
-version: null
+version: '154.0'
