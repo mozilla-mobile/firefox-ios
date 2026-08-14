@@ -107,7 +107,7 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         configuration = updatedConfiguration
     }
 
-    public func setShowsSpinner(_ shows: Bool) {
+    public func setShowsSpinner(_ shows: Bool, announcesChange: Bool = true) {
         guard var updatedConfiguration = configuration else { return }
 
         var insets = UX.contentInsets
@@ -123,7 +123,7 @@ public final class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         } else {
             didChange = spinnerView.stopAnimating()
         }
-        if didChange && UIAccessibility.isVoiceOverRunning {
+        if announcesChange && didChange && UIAccessibility.isVoiceOverRunning {
             UIAccessibility.post(notification: .layoutChanged, argument: self)
         }
     }
