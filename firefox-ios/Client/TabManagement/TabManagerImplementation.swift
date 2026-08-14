@@ -7,6 +7,7 @@ import TabDataStore
 import Storage
 import Common
 import Shared
+import UIKit
 import WebKit
 
 final class TabManagerImplementation: NSObject,
@@ -1066,20 +1067,18 @@ final class TabManagerImplementation: NSObject,
     }
 
     // MARK: - TabEventHandler
-    func tabDidSetScreenshot(_ tab: Tab) {
-        guard tab.screenshot != nil else {
+    func tabDidSetScreenshot(_ tab: Tab, screenshotToPersist: UIImage?) {
+        guard let screenshot = tab.screenshot else {
             // Remove screenshot from image store so we can use favicon
             // when a screenshot isn't available for the associated tab url
             removeScreenshot(tab: tab)
             return
         }
 
-        storeScreenshot(tab: tab)
+        storeScreenshot(tab: tab, screenshot: screenshotToPersist ?? screenshot)
     }
 
-    func storeScreenshot(tab: Tab) {
-        guard let screenshot = tab.screenshot else { return }
-
+    func storeScreenshot(tab: Tab, screenshot: UIImage) {
         let tabUUID = tab.tabUUID
         Task {
             do {

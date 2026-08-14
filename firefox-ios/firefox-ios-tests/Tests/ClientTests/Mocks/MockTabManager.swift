@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 import WebKit
 import Common
 import XCTest
@@ -154,8 +155,10 @@ class MockTabManager: TabManager {
     }
 
     var tabDidSetScreenshotCalls = 0
-    func tabDidSetScreenshot(_ tab: Client.Tab) {
+    var tabDidSetScreenshotToPersist: [UIImage?] = []
+    func tabDidSetScreenshot(_ tab: Client.Tab, screenshotToPersist: UIImage?) {
         tabDidSetScreenshotCalls += 1
+        tabDidSetScreenshotToPersist.append(screenshotToPersist)
     }
     func offloadBackgroundWebViews() async {}
 

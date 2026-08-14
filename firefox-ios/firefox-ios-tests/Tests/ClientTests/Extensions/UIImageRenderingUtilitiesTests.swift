@@ -82,15 +82,20 @@ final class UIImageRenderingUtilitiesTests: XCTestCase {
         guard let cgImage = image.cgImage else { return nil }
 
         var pixel = [UInt8](repeating: 0, count: 4)
-        guard let context = CGContext(data: &pixel,
-                                      width: 1,
-                                      height: 1,
-                                      bitsPerComponent: 8,
-                                      bytesPerRow: 4,
-                                      space: CGColorSpaceCreateDeviceRGB(),
-                                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+        let didDraw = pixel.withUnsafeMutableBytes { buffer -> Bool in
+            guard let context = CGContext(data: buffer.baseAddress,
+                                          width: 1,
+                                          height: 1,
+                                          bitsPerComponent: 8,
+                                          bytesPerRow: 4,
+                                          space: CGColorSpaceCreateDeviceRGB(),
+                                          bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return false }
 
-        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: 1, height: 1))
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: 1, height: 1))
+            return true
+        }
+        guard didDraw else { return nil }
+
         return Pixel(red: pixel[0], green: pixel[1], blue: pixel[2], alpha: pixel[3])
     }
 }

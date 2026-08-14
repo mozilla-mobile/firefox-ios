@@ -70,6 +70,32 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, TabPanelMiddlewareActionType.refreshTabs)
     }
 
+    func test_screenshotTakenAction_forwardsTheImageToPersistToTabManager() throws {
+        let subject = createSubject()
+        let imageToPersist = UIImage()
+        let action = ScreenshotAction(
+            windowUUID: .XCTestDefaultUUID,
+            tab: Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID),
+            screenshotToPersist: imageToPersist,
+            actionType: ScreenshotActionType.screenshotTaken
+        )
+
+        let expectation = XCTestExpectation(description: "Refresh dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        mockWindowManager.overrideWindows = true
+
+        subject.tabsPanelProvider.legacyMiddleware(appState, action)
+        wait(for: [expectation])
+
+        XCTAssertEqual(mockTabManager.tabDidSetScreenshotCalls, 1)
+        let forwardedImage = try XCTUnwrap(mockTabManager.tabDidSetScreenshotToPersist.first)
+        XCTAssertIdentical(forwardedImage, imageToPersist)
+    }
+
     func test_screenshotAction_returnsEarlyIfTabManagerDoesNotExistForWindow() {
         let subject = createSubject()
         let action = ScreenshotAction(

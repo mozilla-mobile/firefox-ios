@@ -4,6 +4,7 @@
 
 import Redux
 import Common
+import UIKit
 
 struct MoveTabData {
     let originIndex: Int
@@ -96,11 +97,15 @@ struct ScreenshotAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let tab: Tab
+    /// The image to write to disk, for capture sites whose screenshot is backed by memory this
+    /// process does not own. `nil` persists `tab.screenshot` instead.
+    let screenshotToPersist: UIImage?
 
-    init(windowUUID: WindowUUID, tab: Tab, actionType: any ActionType) {
+    init(windowUUID: WindowUUID, tab: Tab, screenshotToPersist: UIImage? = nil, actionType: any ActionType) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.tab = tab
+        self.screenshotToPersist = screenshotToPersist
     }
 }
 

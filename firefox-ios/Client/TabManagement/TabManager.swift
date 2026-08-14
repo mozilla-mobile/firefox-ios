@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import UIKit
 import WebKit
 
 enum TabManagerConstants {
@@ -115,7 +116,11 @@ protocol TabManager: AnyObject {
     func expireLoginAlerts()
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
-    func tabDidSetScreenshot(_ tab: Tab)
+    /// Persists `tab`'s screenshot, or removes the stored one when the tab no longer has a screenshot.
+    /// - Parameter screenshotToPersist: the image to write to disk, when it must differ from
+    /// `tab.screenshot` because the latter is backed by memory this process does not own. Pass `nil`
+    /// to persist `tab.screenshot` itself.
+    func tabDidSetScreenshot(_ tab: Tab, screenshotToPersist: UIImage?)
     func offloadBackgroundWebViews() async
 
     /// ADR 0008: load `tab`'s screenshot from disk if it isn't already in memory. Intended for

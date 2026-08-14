@@ -116,13 +116,15 @@ class ScreenshotHelper {
                 webView.setPullRefreshVisibility(isVisible: true)
                 if let image, let tab {
                     tab.hasHomeScreenshot = false
-                    // The snapshot is drawn again off the main actor when it gets persisted, long after the
-                    // web content process may have reclaimed the surface backing it, so take a copy now.
-                    tab.setScreenshot(image.copiedIntoOwnedBitmap())
+                    tab.setScreenshot(image)
                     store.dispatch(
                         ScreenshotAction(
                             windowUUID: windowUUID,
                             tab: tab,
+                            // Persisting draws the snapshot again off the main actor, long after the web
+                            // content process may have reclaimed the surface backing its pixels, so send a
+                            // copy this process owns down that path instead of retaining one on the tab.
+                            screenshotToPersist: image.copiedIntoOwnedBitmap(),
                             actionType:
                                 ScreenshotActionType.screenshotTaken
                         )

@@ -130,9 +130,23 @@ final class TabManagerPreserveTabsTests: TabManagerTestsBase {
             return
         }
 
-        subject.tabDidSetScreenshot(tab)
+        subject.tabDidSetScreenshot(tab, screenshotToPersist: nil)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
+    }
+
+    @MainActor
+    func testSaveScreenshotWithNoImage_ignoresTheImageToPersist() async throws {
+        let subject = createSubject(tabs: generateTabs(count: 5))
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
+        }
+
+        subject.tabDidSetScreenshot(tab, screenshotToPersist: UIImage())
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
+        XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
     }
 
     @MainActor
@@ -142,9 +156,31 @@ final class TabManagerPreserveTabsTests: TabManagerTestsBase {
             XCTFail("First tab was expected to be found")
             return
         }
-        tab.setScreenshot(UIImage())
-        subject.tabDidSetScreenshot(tab)
+        let screenshot = UIImage()
+        tab.setScreenshot(screenshot)
+        subject.tabDidSetScreenshot(tab, screenshotToPersist: nil)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
+        XCTAssertIdentical(mockDiskImageStore.savedImages[tab.tabUUID], screenshot)
+    }
+
+    @MainActor
+    func testSaveScreenshotWithImageToPersist_savesThatImageAndLeavesTheTabsScreenshotAlone() async throws {
+        let subject = createSubject(tabs: generateTabs(count: 5))
+        guard let tab = subject.tabs.first else {
+            XCTFail("First tab was expected to be found")
+            return
+        }
+        let screenshot = UIImage()
+        let imageToPersist = UIImage()
+        tab.setScreenshot(screenshot)
+
+        subject.tabDidSetScreenshot(tab, screenshotToPersist: imageToPersist)
+
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertIdentical(mockDiskImageStore.savedImages[tab.tabUUID], imageToPersist)
+        XCTAssertIdentical(tab.screenshot,
+                           screenshot,
+                           "The tab keeps the image it was given, so no copy is retained for its lifetime.")
     }
 }

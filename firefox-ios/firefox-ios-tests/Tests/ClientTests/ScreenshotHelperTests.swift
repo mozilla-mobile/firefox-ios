@@ -51,6 +51,8 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(tab.screenshot, UIImage.checkmark)
         XCTAssertTrue(tab.hasHomeScreenshot)
         XCTAssertEqual(screenshotAction.tab, tab)
+        XCTAssertNil(screenshotAction.screenshotToPersist,
+                     "Homepage screenshots are already backed by memory this process owns, so no copy is needed.")
     }
 
     func testTakeScreenshotFromErrorPage() {
@@ -74,9 +76,11 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(screenshotAction.tab, tab)
         XCTAssertEqual(tab.screenshot, UIImage.checkmark)
         XCTAssertFalse(tab.hasHomeScreenshot)
+        XCTAssertNil(screenshotAction.screenshotToPersist,
+                     "Error page screenshots are already backed by memory this process owns, so no copy is needed.")
     }
 
-    func testTakeScreenshotFromWebView() {
+    func testTakeScreenshotFromWebView() throws {
         let subject = createSubject()
         let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
         let homeURL = URL(string: "https://example.com")
@@ -88,22 +92,42 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
 
         subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID, screenshotBounds: .zero)
 
-        guard let screenshotAction = mockStore.dispatchedActions.first as? ScreenshotAction else {
-            XCTFail("fired action was not of the expected type")
-            return
-        }
+        let screenshotAction = try XCTUnwrap(
+            mockStore.dispatchedActions.first as? ScreenshotAction,
+            "fired action was not of the expected type"
+        )
 
         XCTAssertTrue(mockTabWebView.takeSnapshotWasCalled)
         XCTAssertEqual(screenshotAction.tab, tab)
         XCTAssertFalse(tab.hasHomeScreenshot)
-guard let screenshotBacking = tab.screenshot?.cgImage,
-      let sourceBacking = mockTabWebView.mockSnapshotImage.cgImage else {
-    XCTFail("Expected source and copied image backings")
-    return
-}
-XCTAssertFalse(screenshotBacking === sourceBacking)
-XCTAssertEqual(screenshotBacking.width, sourceBacking.width)
-XCTAssertEqual(screenshotBacking.height, sourceBacking.height)
+        XCTAssertIdentical(tab.screenshot,
+                           mockTabWebView.mockSnapshotImage,
+                           "The tab keeps the snapshot itself, so no full size copy is retained for its lifetime.")
+    }
+
+    func testTakeScreenshotFromWebView_persistsACopyTheProcessOwns() throws {
+        let subject = createSubject()
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let homeURL = URL(string: "https://example.com")
+        let mockTabWebView = MockTabWebView(tab: tab)
+
+        mockTabWebView.loadedURL = homeURL
+        tab.webView = mockTabWebView
+        tab.url = homeURL
+
+        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID, screenshotBounds: .zero)
+
+        let screenshotAction = try XCTUnwrap(
+            mockStore.dispatchedActions.first as? ScreenshotAction,
+            "fired action was not of the expected type"
+        )
+        let persistedBacking = try XCTUnwrap(screenshotAction.screenshotToPersist?.cgImage)
+        let sourceBacking = try XCTUnwrap(mockTabWebView.mockSnapshotImage.cgImage)
+
+        XCTAssertFalse(persistedBacking === sourceBacking,
+                       "Persisting draws the image off the main actor, so it must get a bitmap we own.")
+        XCTAssertEqual(persistedBacking.width, sourceBacking.width)
+        XCTAssertEqual(persistedBacking.height, sourceBacking.height)
     }
 
     private func createSubject() -> ScreenshotHelper {

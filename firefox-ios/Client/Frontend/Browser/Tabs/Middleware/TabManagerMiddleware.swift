@@ -99,7 +99,10 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
         switch action.actionType {
         case ScreenshotActionType.screenshotTaken:
-            tabManager(for: action.windowUUID)?.tabDidSetScreenshot(action.tab)
+            tabManager(for: action.windowUUID)?.tabDidSetScreenshot(
+                action.tab,
+                screenshotToPersist: action.screenshotToPersist
+            )
         case ScreenshotActionType.screenshotRestored:
             // The screenshot was just loaded from disk, so we only need to refresh the tab tray
             break
