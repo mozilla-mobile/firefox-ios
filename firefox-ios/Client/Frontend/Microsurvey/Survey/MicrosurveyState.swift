@@ -4,7 +4,9 @@
 
 import Redux
 import Common
+import ModifiedCopy
 
+@Copyable
 struct MicrosurveyState: ScreenState {
     var windowUUID: WindowUUID
     var shouldDismiss: Bool
@@ -58,17 +60,13 @@ struct MicrosurveyState: ScreenState {
 
         switch action.actionType {
         case MicrosurveyActionType.closeSurvey:
-            return MicrosurveyState(
-                windowUUID: state.windowUUID,
-                shouldDismiss: true,
-                showPrivacy: false
-            )
+            return state
+                .resetTransientState()
+                .copy(shouldDismiss: true)
         case MicrosurveyActionType.tapPrivacyNotice:
-            return MicrosurveyState(
-                windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showPrivacy: true
-            )
+            return state
+                .resetTransientState()
+                .copy(showPrivacy: true)
         default:
             return defaultState(from: state)
         }
