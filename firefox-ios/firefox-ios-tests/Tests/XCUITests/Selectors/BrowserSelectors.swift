@@ -28,6 +28,8 @@ protocol BrowserSelectorsSet {
     var CLIPBOARD_TOAST: Selector { get }
     var BOOKMARK_SAVED_TOAST: Selector { get }
     var PRIVATE_MODE_HOMEPAGE_TITLE: Selector { get }
+    var SEARCH_SETTINGS_BUTTON: Selector { get }
+    var SPONSORED_LABEL: Selector { get }
     var PASTE_BUTTON: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
@@ -57,6 +59,8 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let privateModeHomepageTitle = "PrivateMode.Homepage.Title"
         static let bookOfMozilla = "The Book of Mozilla"
         static let bookOfMozillaVerseText = "And the beast shall come forth"
+        static let searchSettingsButton = "Search Settings"
+        static let sponsoredLabel = "Sponsored"
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -199,6 +203,18 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "private-mode"]
     )
 
+    let SEARCH_SETTINGS_BUTTON = Selector.buttonByLabel(
+        IDs.searchSettingsButton,
+        description: "'Search Settings' button in the search suggestions scroll view",
+        groups: ["browser", "search"]
+    )
+
+    let SPONSORED_LABEL = Selector.staticTextId(
+        IDs.sponsoredLabel,
+        description: "'Sponsored' label on a sponsored search suggestion",
+        groups: ["browser", "search"]
+    )
+
     let PASTE_BUTTON = Selector.otherElementsButtonByLabel(
         "Paste",
         description: "Paste button in the address bar edit callout",
@@ -236,6 +252,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
                            SAVE_BUTTON, CLIPBOARD_TOAST, BOOKMARK_SAVED_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE,
-                           PASTE_BUTTON]
+                           PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL]
     }
 }

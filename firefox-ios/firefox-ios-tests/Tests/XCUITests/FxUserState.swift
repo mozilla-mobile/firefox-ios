@@ -38,4 +38,6 @@ class FxUserState: MMUserState {
     var trackingProtectionSettingOnPrivateMode = true
 
     var localeIsExpectedDifferent = false
+
+    var secretSettingsRevealed = false
 }

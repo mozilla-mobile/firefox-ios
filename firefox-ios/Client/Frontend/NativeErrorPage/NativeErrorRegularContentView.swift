@@ -11,6 +11,7 @@ protocol NativeErrorRegularContentViewDelegate: AnyObject {
     func regularContentViewDidTapReload()
     func regularContentViewDidTapSearchWayback()
     func regularContentViewDidTapSearchWeb()
+    func regularContentViewDidTapWaybackLink()
 }
 
 enum WaybackButtonState: Equatable {
@@ -26,12 +27,20 @@ enum WaybackButtonState: Equatable {
 
 /// Encapsulates the "no internet / generic error" action area: a reload button,
 /// and optionally a secondary wayback area (button, loading state, or a failure card).
-final class NativeErrorRegularContentView: UIView, ThemeApplicable {
+final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDelegate {
     private struct UX {
         static let cardCornerRadius: CGFloat = 12
         static let cardInsets = NSDirectionalEdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12)
         static let cardTopSpacing: CGFloat = 8
+        static let footerTopSpacing: CGFloat = 12
+        static let buttonStackSpacing: CGFloat = 8
+        static let waybackErrorMessageRowSpacing: CGFloat = 6
+        static let waybackErrorTextStackSpacing: CGFloat = 2
+        static let waybackErrorContentStackSpacing: CGFloat = 2
+        static let waybackButtonImagePadding: CGFloat = 8
     }
+
+    private static let waybackLinkURL = URL(string: "https://web.archive.org")!
 
     weak var delegate: NativeErrorRegularContentViewDelegate?
 
@@ -62,8 +71,8 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
 
     private lazy var waybackErrorMessageRow: UIStackView = .build { stackView in
         stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.spacing = 6
+        stackView.alignment = .top
+        stackView.spacing = UX.waybackErrorMessageRowSpacing
     }
 
     private lazy var waybackErrorButton: UIButton = .build { button in
@@ -71,10 +80,18 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackErrorButton
     }
 
+    /// Holds the label and button so they share the same leading edge,
+    /// independent of the icon's width.
+    private lazy var waybackErrorTextStack: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.spacing = UX.waybackErrorTextStackSpacing
+    }
+
     private lazy var waybackErrorContentStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.spacing = 2
+        stackView.spacing = UX.waybackErrorContentStackSpacing
     }
 
     /// Card container that gives the failure state a distinct background,
@@ -87,7 +104,19 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
 
     private lazy var buttonStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.spacing = 8
+        stackView.spacing = UX.buttonStackSpacing
+    }
+
+    private lazy var waybackFooterTextView: UITextView = .build { textView in
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.isSelectable = true
+        textView.backgroundColor = .clear
+        textView.textContainerInset = .zero
+        textView.textContainer.lineFragmentPadding = 0
+        textView.adjustsFontForContentSizeCategory = true
+        textView.isHidden = true
+        textView.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.waybackFooterTextView
     }
 
     private var waybackState: WaybackButtonState = .idle
@@ -103,10 +132,12 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
     }
 
     private func setup() {
+        waybackErrorTextStack.addArrangedSubview(waybackErrorLabel)
+        waybackErrorTextStack.addArrangedSubview(waybackErrorButton)
+
         waybackErrorMessageRow.addArrangedSubview(waybackErrorIcon)
-        waybackErrorMessageRow.addArrangedSubview(waybackErrorLabel)
+        waybackErrorMessageRow.addArrangedSubview(waybackErrorTextStack)
         waybackErrorContentStack.addArrangedSubview(waybackErrorMessageRow)
-        waybackErrorContentStack.addArrangedSubview(waybackErrorButton)
 
         waybackErrorCard.addSubview(waybackErrorContentStack)
         NSLayoutConstraint.activate([
@@ -124,10 +155,14 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
             )
         ])
 
+        waybackFooterTextView.delegate = self
+
         buttonStack.addArrangedSubview(reloadButton)
         buttonStack.addArrangedSubview(waybackButton)
         buttonStack.addArrangedSubview(waybackErrorCard)
+        buttonStack.addArrangedSubview(waybackFooterTextView)
         buttonStack.setCustomSpacing(UX.cardTopSpacing, after: waybackButton)
+        buttonStack.setCustomSpacing(UX.footerTopSpacing, after: waybackErrorCard)
 
         addSubview(buttonStack)
         NSLayoutConstraint.activate([
@@ -139,14 +174,37 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
     }
 
     func configure(showWaybackButton: Bool = false) {
+        showsWayback = showWaybackButton
+
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .NativeErrorPage.ButtonLabel,
             a11yIdentifier: AccessibilityIdentifiers.NativeErrorPage.reloadButton
         )
         reloadButton.configure(viewModel: viewModel)
-
-        showsWayback = showWaybackButton
+        configureWaybackFooter()
         configureWaybackButton(state: .idle)
+    }
+
+    private func configureWaybackFooter() {
+        guard showsWayback else {
+            waybackFooterTextView.isHidden = true
+            return
+        }
+        waybackFooterTextView.isHidden = false
+        let linkText = String.NativeErrorPage.Wayback.LinkText
+        let fullText = String(format: String.NativeErrorPage.Wayback.FooterDescription, AppName.shortName.rawValue, linkText)
+
+        let attributedString = NSMutableAttributedString(
+            string: fullText,
+            attributes: [.font: FXFontStyles.Regular.footnote.scaledFont()]
+        )
+
+        if let linkRange = fullText.range(of: linkText) {
+            attributedString.addAttribute(.link, value: Self.waybackLinkURL, range: NSRange(linkRange, in: fullText))
+        }
+
+        waybackFooterTextView.attributedText = attributedString
+        waybackFooterTextView.accessibilityLabel = fullText
     }
 
     /// Updates the wayback area to reflect idle, loading, or failed state.
@@ -182,7 +240,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         waybackButton.configure(viewModel: viewModel)
         waybackButton.isEnabled = enabled
         waybackButton.configuration?.showsActivityIndicator = showsSpinner
-        waybackButton.configuration?.imagePadding = 8
+        waybackButton.configuration?.imagePadding = UX.waybackButtonImagePadding
         waybackButton.configuration?.imagePlacement = .leading
         waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Wayback.WaybackButtonA11yHint : nil
     }
@@ -221,6 +279,17 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         delegate?.regularContentViewDidTapSearchWeb()
     }
 
+    func textView(
+        _ textView: UITextView,
+        shouldInteractWith URL: URL,
+        in characterRange: NSRange,
+        interaction: UITextItemInteraction
+    ) -> Bool {
+        guard URL == Self.waybackLinkURL else { return false }
+        delegate?.regularContentViewDidTapWaybackLink()
+        return false
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         reloadButton.applyTheme(theme: theme)
@@ -229,5 +298,11 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable {
         waybackErrorLabel.textColor = theme.colors.textPrimary
         waybackErrorIcon.tintColor = theme.colors.actionWarning
         waybackErrorButton.setTitleColor(theme.colors.textPrimary, for: .normal)
+
+        waybackFooterTextView.textColor = theme.colors.textPrimary
+        waybackFooterTextView.linkTextAttributes = [
+            .foregroundColor: theme.colors.textAccent,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
     }
 }
