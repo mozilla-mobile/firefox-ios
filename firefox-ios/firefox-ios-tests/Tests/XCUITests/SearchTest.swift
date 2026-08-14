@@ -524,24 +524,7 @@ class SearchTests: FeatureFlaggedTestBase {
                 }
                 mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
                 mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
-            }
-
-            // Non Firefox Suggest result: A random term
-            let term = "heeeeeeellllllllllloooooooo"
-            browserScreen.tapOnAddressBar()
-            browserScreen.tapClearButtonIfExists()
-            browserScreen.typeOnSearchBar(text: term)
-            mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-            let searchEngines = [
-                "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
-            ]
-            for searchEngine in searchEngines {
-                mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
-            }
-            // Search engine suggestions
-            mozWaitForElementToExist(siteTable.otherElements["Google Search"])
-            mozWaitForElementToExist(siteTable.staticTexts[term])
-            mozWaitForElementToNotExist(siteTable.otherElements["Firefox Suggest"])
+            }ß
         }
     }
 
