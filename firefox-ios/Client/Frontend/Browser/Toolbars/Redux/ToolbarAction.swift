@@ -108,10 +108,19 @@ struct ToolbarAction: Action {
 }
 
 enum ToolbarModernAction: ModernAction {
-    // Splits the old scrollAlphaNeedsUpdate into three distinct user/system triggers that all
-    // drive the toolbar's minimized state.
+    // Three distinct user/system triggers drive `ToolbarState.isAddressBarMinimized`
+    // (renders the address bar as its full toolbar vs. its minimized "pill" shape).
+
+    /// The user scrolled the page. `true` collapses the toolbar to the pill as the page
+    /// scrolls down; `false` restores it when scrolling back up.
     case userDidScroll(minimizeAddressBar: Bool)
+
+    /// A web form's keyboard accessory view appeared. `true` shrinks the address bar to
+    /// make room for it; not currently dispatched with `false` (see `keyboardDidHide`).
     case accessoryViewDidShow(minimizeAddressBar: Bool)
+
+    /// The keyboard was dismissed. Dispatched with `false` to restore the address bar
+    /// after it was minimized by `accessoryViewDidShow`
     case keyboardDidHide(minimizeAddressBar: Bool)
 }
 

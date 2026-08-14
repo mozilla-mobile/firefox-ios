@@ -29,7 +29,7 @@ struct ToolbarState: ScreenState, Sendable {
     var isTranslationsEnabled: Bool
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
-    // Will replace scrollAlpha
+    // Whether the address bar renders as its full toolbar or its minimized "pill" shape
     var isAddressBarMinimized: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
