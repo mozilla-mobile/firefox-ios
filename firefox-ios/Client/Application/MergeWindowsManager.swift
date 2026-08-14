@@ -7,7 +7,7 @@ import Foundation
 import TabDataStore
 
 /// Merges the tabs from every other open iPad window into a single destination window and closes the
-/// emptied windows. Triggered by the "Merge All Windows" home screen Quick Action (issue #25356).
+/// emptied windows. Triggered by the "Combine Windows" home screen Quick Action (issue #25356).
 protocol WindowMerging {
     /// Moves every tab from all other open windows into the destination window (preserving each
     /// tab's history), then closes the other windows and removes their persisted window data.

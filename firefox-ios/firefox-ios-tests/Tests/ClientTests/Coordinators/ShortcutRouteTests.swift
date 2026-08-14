@@ -80,7 +80,7 @@ final class ShortcutRouteTests: XCTestCase {
     func testMergeWindowsShortcut() {
         let subject = createSubject()
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.MergeWindows",
-                                                     localizedTitle: "Merge All Windows")
+                                                     localizedTitle: "Combine Windows")
 
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
 
