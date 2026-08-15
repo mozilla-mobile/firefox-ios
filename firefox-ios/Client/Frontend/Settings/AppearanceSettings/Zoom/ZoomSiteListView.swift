@@ -9,6 +9,7 @@ import Storage
 struct ZoomSiteListView: View {
     let theme: Theme
     @Binding var domainZoomLevels: [DomainZoomLevel]
+    @State private var measuredListHeight: CGFloat = 0
     private let onDelete: (IndexSet) -> Void
     private let resetDomain: () -> Void
 
@@ -21,6 +22,17 @@ struct ZoomSiteListView: View {
         static let dividerHeight: CGFloat = 0.5
         static let cornerRadius: CGFloat = 24
     }
+
+    private struct ListHeightPreferenceKey: PreferenceKey {
+        static let defaultValue: CGFloat = 0
+
+        static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+            value += nextValue()
+        }
+    }
+
+    @ScaledMetric(relativeTo: .body)
+    private var fallbackRowHeight: CGFloat = UX.cellHeight + UX.listPadding
 
     var cellBackground: Color {
         return theme.colors.layer5.color
@@ -38,13 +50,12 @@ struct ZoomSiteListView: View {
         }
     }
 
-    // Calculate list height to avoid scroll in inner list view
-    // Base height calculation with cell height and extra padding
     var listViewHeight: CGFloat {
-        let baseHeight = CGFloat(domainZoomLevels.count) * UX.cellHeight
-        let extraPadding = CGFloat(domainZoomLevels.count) * UX.listPadding
+        if measuredListHeight > 0 {
+            return measuredListHeight
+        }
 
-        return baseHeight + extraPadding
+        return CGFloat(domainZoomLevels.count) * fallbackRowHeight
     }
 
     init(theme: Theme,
@@ -107,6 +118,15 @@ struct ZoomSiteListView: View {
             ForEach(domainZoomLevels, id: \.host) { zoomItem in
                 ZoomLevelCellView(domainZoomLevel: zoomItem,
                                   textColor: theme.colors.textPrimary.color)
+                .background {
+                    GeometryReader { geometry in
+                        Color.clear
+                            .preference(
+                                key: ListHeightPreferenceKey.self,
+                                value: geometry.size.height
+                            )
+                    }
+                }
                 .listRowBackground(cellBackground)
                 .listRowInsets(EdgeInsets())
                 .modifier(CellStyle(theme: theme))
@@ -116,6 +136,11 @@ struct ZoomSiteListView: View {
         .frame(height: listViewHeight)
         .listStyle(.plain)
         .modifier(ListStyle(theme: theme, cellBackground: cellBackground))
+        .onPreferenceChange(ListHeightPreferenceKey.self) { height in
+            guard height > 0 else { return }
+
+            measuredListHeight = height
+        }
     }
 
     private struct CellStyle: ViewModifier {
@@ -138,7 +163,12 @@ struct ZoomSiteListView: View {
         func body(content: Content) -> some View {
             if #available(iOS 26.0, *) {
                 content
-                    .modifier(SectionStyle(theme: theme, cornerRadius: UX.cornerRadius))
+                    .modifier(
+                        SectionStyle(
+                            theme: theme,
+                            cornerRadius: UX.cornerRadius
+                        )
+                    )
             } else {
                 content
                     .background(cellBackground)
@@ -153,7 +183,12 @@ struct ZoomSiteListView: View {
             if #available(iOS 26.0, *) {
                 content
                     .frame(maxWidth: .infinity)
-                    .modifier(SectionStyle(theme: theme, cornerRadius: UX.cornerRadius))
+                    .modifier(
+                        SectionStyle(
+                            theme: theme,
+                            cornerRadius: UX.cornerRadius
+                        )
+                    )
             } else {
                 content
                     .background(theme?.colors.layer5.color)
