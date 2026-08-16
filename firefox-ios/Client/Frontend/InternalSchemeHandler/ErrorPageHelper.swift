@@ -264,7 +264,8 @@ final class ErrorPageHandler: InternalSchemeResponse {
             ]
 
         let offlineErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
-        let isCellularDataRestricted = errCode == offlineErrorCode
+        let isCellularDataRestricted = NativeErrorPageFeatureFlag().isNICErrorPageEnabled
+            && errCode == offlineErrorCode
             && components.valueForQuery(ErrorPageCellularDataRestrictedParam) == "true"
         if isCellularDataRestricted {
             variables["error_title"] = .NativeErrorPage.CellularDataRestricted.TitleLabel

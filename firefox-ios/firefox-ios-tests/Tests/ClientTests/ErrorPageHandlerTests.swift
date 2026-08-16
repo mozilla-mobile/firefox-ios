@@ -79,6 +79,7 @@ final class ErrorPageHandlerTests: XCTestCase {
 
     @MainActor
     func testLoadPage_withOfflineErrorAndRestrictedCellularData_showsCellularDataGuidance() throws {
+        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
         let subject = ErrorPageHelper(
             certStore: nil,
             cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
@@ -109,6 +110,20 @@ final class ErrorPageHandlerTests: XCTestCase {
         let html = try XCTUnwrap(response.flatMap { String(data: $0.1, encoding: .utf8) })
         XCTAssertTrue(html.contains(String.NativeErrorPage.CellularDataRestricted.TitleLabel))
         XCTAssertTrue(html.contains(String.NativeErrorPage.CellularDataRestricted.Description))
+    }
+
+    @MainActor
+    func testResponseForErrorWebPage_withRestrictedCellularDataAndFeatureDisabled_usesDefaultContent() throws {
+        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: false)
+        let errorURL = try XCTUnwrap(URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)" +
+            "?url=https%3A%2F%2Fexample.com%2F&code=\(NSURLErrorNotConnectedToInternet)" +
+            "&description=Offline&domain=NSURLErrorDomain&cellularDataRestricted=true"))
+
+        let response = ErrorPageHandler().responseForErrorWebPage(request: URLRequest(url: errorURL))
+        let html = try XCTUnwrap(response.flatMap { String(data: $0.1, encoding: .utf8) })
+
+        XCTAssertFalse(html.contains(String.NativeErrorPage.CellularDataRestricted.TitleLabel))
+        XCTAssertFalse(html.contains(String.NativeErrorPage.CellularDataRestricted.Description))
     }
 
     @MainActor
@@ -169,5 +184,17 @@ private extension ErrorPageHandlerTests {
             urlString += "&\(certErrorQueryParam)=\(certErrorQuery)"
         }
         return URL(string: urlString)!
+    }
+
+    func setupNimbusNativeErrorPageTesting(
+        isEnabled: Bool,
+        noInternetConnectionErrorIsEnabled: Bool
+    ) {
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+            return NativeErrorPageFeature(
+                enabled: isEnabled,
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled
+            )
+        }
     }
 }

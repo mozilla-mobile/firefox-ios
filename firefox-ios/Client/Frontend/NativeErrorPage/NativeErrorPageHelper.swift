@@ -124,7 +124,8 @@ class NativeErrorPageHelper {
     // MARK: - Instance Methods
 
     func parseErrorDetails() -> ErrorPageModel {
-        if cellularDataStateProvider.isRestrictedOfflineError(error) {
+        if NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
+            cellularDataStateProvider.isRestrictedOfflineError(error) {
             return .cellularDataRestricted
         }
 
