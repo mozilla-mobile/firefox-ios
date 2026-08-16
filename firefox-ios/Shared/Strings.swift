@@ -2049,12 +2049,12 @@ extension String {
         }
         public struct CellularDataRestricted {
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v154",
+                key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v155",
                 tableName: "NativeErrorPage",
                 value: "Cellular data is turned off for Firefox.",
                 comment: "On the error page, this title explains that iOS is preventing Firefox from using cellular data.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.CellularDataRestricted.Description.v154",
+                key: "NativeErrorPage.CellularDataRestricted.Description.v155",
                 tableName: "NativeErrorPage",
                 value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for Firefox.",
                 comment: "On the error page, this description tells users how to browse after iOS has prevented Firefox from using cellular data.")

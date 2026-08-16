@@ -12,6 +12,16 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let isRestricted: Bool
     }
 
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
+    }
+
     // MARK: - Helpers
 
     private func makeBadCertDomainError(
@@ -187,6 +197,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
     }
 
     func testParseErrorDetails_noInternetError_whenCellularDataRestricted_returnsRestrictedModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
         let url = URL(string: "https://example.com")!
         let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
         let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
@@ -202,6 +213,23 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertEqual(model, .cellularDataRestricted)
     }
 
+    func testParseErrorDetails_noInternetError_whenCellularDataRestrictionFeatureDisabled_returnsNoInternetModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: false)
+        let url = URL(string: "https://example.com")!
+        let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
+            NSURLErrorFailingURLErrorKey: url
+        ])
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
+        )
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model, .internetConnection)
+    }
+
     func testParseErrorDetails_otherError_whenCellularDataRestricted_returnsGenericModel() {
         let url = URL(string: "https://example.com")!
         let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [
@@ -215,6 +243,18 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = helper.parseErrorDetails()
 
         XCTAssertEqual(model, .generic(GenericErrorModel(url: url)))
+    }
+
+    private func setupNimbusNativeErrorPageTesting(
+        isEnabled: Bool,
+        noInternetConnectionErrorIsEnabled: Bool
+    ) {
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+            return NativeErrorPageFeature(
+                enabled: isEnabled,
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled
+            )
+        }
     }
 
     func testParseErrorDetails_certError_withURL_returnsSecurityModel() {
