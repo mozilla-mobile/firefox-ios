@@ -352,6 +352,7 @@ workflows:
             #!/usr/bin/env bash
             set -euxo pipefail
             cd firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests
+            pip install pipenv
             pipenv install --python 3.12
             pipenv run pytest -m smoketest
     - deploy-to-bitrise-io@2:
