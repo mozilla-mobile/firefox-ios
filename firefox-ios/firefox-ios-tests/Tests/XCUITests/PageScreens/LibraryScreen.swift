@@ -43,6 +43,11 @@ final class LibraryScreen {
         BaseTestCase().mozWaitForElementToExist(bookmarksTable)
     }
 
+    func bookmarkListExists(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
+        return BaseTestCase().mozWaitForElementToExist(bookmarksTable, timeout: timeout, failOnTimeout: false)
+    }
+
     func assertBookmarkListCount(numberOfEntries: Int) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
         XCTAssertEqual(bookmarksTable.cells.count, numberOfEntries)
