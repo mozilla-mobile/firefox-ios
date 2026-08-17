@@ -422,7 +422,7 @@ func checkForSpecificFileChange() {
                 file.contains("firefox-ios/Client/Glean/") && (file.hasSuffix(".yaml"))
             },
             message: "Detected telemetry changes in:",
-            contacts: "(cc @ih-codes @adudenamedruby)"
+            contacts: "(cc @ih-codes @Foxbolts @adudenamedruby)"
         )
     ]
 
