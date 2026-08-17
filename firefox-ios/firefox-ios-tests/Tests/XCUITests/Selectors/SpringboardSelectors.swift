@@ -11,6 +11,9 @@ protocol SpringboardSelectorsSet {
     var NEW_PRIVATE_TAB_BUTTON: Selector { get }
     var OPEN_LAST_BOOKMARK_BUTTON: Selector { get }
     var APP_ICON_BUTTON: Selector { get }
+    var NOTIFICATIONS_PERMISSION_ALERT: Selector { get }
+    var ALLOW_NOTIFICATIONS_BUTTON: Selector { get }
+    var DONT_ALLOW_NOTIFICATIONS_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -24,6 +27,10 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         // (org.mozilla.ios.Fennec / .Firefox / .FirefoxBeta).
         static let openLastBookmarkSuffix = ".OpenLastBookmark"
         static let appIconButton = "App Icon"
+        // The alert title is prefixed by the app name, so only the invariant part is matched.
+        static let notificationsPermissionAlert = "Would Like to Send You Notifications"
+        static let allowNotificationsButton = "Allow"
+        static let dontAllowNotificationsButton = "Don’t Allow"
     }
 
     let FENNEC_ICONS = Selector(
@@ -75,6 +82,24 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         groups: ["springboard", "context-menu"]
     )
 
+    let NOTIFICATIONS_PERMISSION_ALERT = Selector.alertByTitle(
+        IDs.notificationsPermissionAlert,
+        description: "System alert asking for permission to send notifications",
+        groups: ["springboard", "notifications"]
+    )
+
+    let ALLOW_NOTIFICATIONS_BUTTON = Selector.buttonId(
+        IDs.allowNotificationsButton,
+        description: "Allow button in the system notifications permission alert",
+        groups: ["springboard", "notifications"]
+    )
+
+    let DONT_ALLOW_NOTIFICATIONS_BUTTON = Selector.buttonId(
+        IDs.dontAllowNotificationsButton,
+        description: "Don't Allow button in the system notifications permission alert",
+        groups: ["springboard", "notifications"]
+    )
+
     var all: [Selector] {
         [
             FENNEC_ICONS,
@@ -82,7 +107,10 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
             APP_ICON_BUTTON,
             NEW_TAB_BUTTON,
             NEW_PRIVATE_TAB_BUTTON,
-            OPEN_LAST_BOOKMARK_BUTTON
+            OPEN_LAST_BOOKMARK_BUTTON,
+            NOTIFICATIONS_PERMISSION_ALERT,
+            ALLOW_NOTIFICATIONS_BUTTON,
+            DONT_ALLOW_NOTIFICATIONS_BUTTON
         ]
     }
 }

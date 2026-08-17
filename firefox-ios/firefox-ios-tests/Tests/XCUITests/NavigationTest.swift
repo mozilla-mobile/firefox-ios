@@ -473,6 +473,28 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.links["link-created-by-parent"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3904118
+    // Regression
+    func testTapElementOpensDesignatedURLInNewTab() {
+        let browserScreen = BrowserScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+
+        // The page holding the element that triggers the navigation loads properly
+        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: TestPages.windowOpenOnTap))
+        waitUntilPageLoad()
+        browserScreen.assertOpenDesignatedURLButtonExists()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "1")
+
+        // Tapping it opens the designated URL in a new tab
+        browserScreen.tapOpenDesignatedURLButton()
+        waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2")
+        browserScreen.assertExampleDomainTextExists()
+        browserScreen.addressToolbarContainValue(value: "localhost")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {

@@ -31,6 +31,7 @@ protocol BrowserSelectorsSet {
     var SEARCH_SETTINGS_BUTTON: Selector { get }
     var SPONSORED_LABEL: Selector { get }
     var PASTE_BUTTON: Selector { get }
+    var OPEN_DESIGNATED_URL_BUTTON: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -61,6 +62,8 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let bookOfMozillaVerseText = "And the beast shall come forth"
         static let searchSettingsButton = "Search Settings"
         static let sponsoredLabel = "Sponsored"
+        // In-page button of the test-window-open-on-tap fixture
+        static let openDesignatedURLButton = "Open designated URL"
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -215,6 +218,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "search"]
     )
 
+    let OPEN_DESIGNATED_URL_BUTTON = Selector.buttonByLabel(
+        IDs.openDesignatedURLButton,
+        description: "In-page button that opens the designated URL in a new tab",
+        groups: ["browser", "webview"]
+    )
+
     let PASTE_BUTTON = Selector.otherElementsButtonByLabel(
         "Paste",
         description: "Paste button in the address bar edit callout",
@@ -251,7 +260,8 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, BOOK_OF_MOZILLA_VERSE_TEXT,
                            ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
-                           SAVE_BUTTON, CLIPBOARD_TOAST, BOOKMARK_SAVED_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE,
-                           PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL]
+                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE,
+                           PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL,
+                           OPEN_DESIGNATED_URL_BUTTON]
     }
 }

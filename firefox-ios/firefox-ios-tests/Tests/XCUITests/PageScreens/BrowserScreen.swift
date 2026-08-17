@@ -20,6 +20,7 @@ final class BrowserScreen {
     private var bookText: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT.element(in: app) }
     private var bookTextInTable: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT_IN_TABLE.element(in: app) }
     private var clearButton: XCUIElement { sel.CLEAR_TEXT_BUTTON.element(in: app) }
+    private var openDesignatedURLButton: XCUIElement { sel.OPEN_DESIGNATED_URL_BUTTON.element(in: app) }
 
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
@@ -146,6 +147,18 @@ final class BrowserScreen {
     func bookOfMozillaPageContentExists(timeout: TimeInterval = TIMEOUT) -> Bool {
         let verseText = sel.BOOK_OF_MOZILLA_VERSE_TEXT.element(in: app)
         return BaseTestCase().mozWaitForElementToExist(verseText, timeout: timeout, failOnTimeout: false)
+    }
+
+    func assertExampleDomainTextExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.STATIC_TEXT_EXAMPLE_DOMAIN.element(in: app), timeout: timeout)
+    }
+
+    func assertOpenDesignatedURLButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(openDesignatedURLButton, timeout: timeout)
+    }
+
+    func tapOpenDesignatedURLButton() {
+        openDesignatedURLButton.waitAndTap()
     }
 
     func clearURL() {

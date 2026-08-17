@@ -422,6 +422,7 @@
         "NavigationTest\/testShareLink()",
         "NavigationTest\/testShareLinkPrivateMode()",
         "NavigationTest\/testShareLinkPrivateMode_tabTrayExperimentOff()",
+        "NavigationTest\/testTapElementOpensDesignatedURLInNewTab()",
         "NavigationTest\/testTapSignInShowsFxAFromRemoteTabPanel()",
         "NavigationTest\/testTapSignInShowsFxAFromRemoteTabPanel_tabTrayExperimentOff()",
         "NavigationTest\/testTapSignInShowsFxAFromRemoteTabPanel_tabTrayExperimentOn()",
