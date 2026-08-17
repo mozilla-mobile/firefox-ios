@@ -253,10 +253,32 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(advanced?.rows.map(\.kind), [.checkbox(isChecked: true)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
 
-        guard case let .urlField(text) = sections.first?.rows.first?.kind else {
+        guard case let .urlField(text, errorMessage) = sections.first?.rows.first?.kind else {
             return XCTFail("Expected a URL field row")
         }
         XCTAssertEqual(text, "https://example.com")
+        XCTAssertNil(errorMessage)
+    }
+
+    func testMakeSections_withAnUnreportableURL_carriesTheErrorAndDisablesSend() throws {
+        let state = WebCompatReporterState(windowUUID: windowUUID, url: " .com", selectedCategory: .other)
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        guard case let .urlField(text, errorMessage) = sections.first?.rows.first?.kind else {
+            return XCTFail("Expected a URL field row")
+        }
+        XCTAssertEqual(text, " .com")
+        XCTAssertEqual(errorMessage, .WebCompatReporter.Fields.URLError)
+        XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
+
+        let cleared = WebCompatReportViewController.makeSections(
+            from: WebCompatReporterState(windowUUID: windowUUID, url: "", selectedCategory: .other)
+        )
+        guard case let .urlField(_, clearedError) = cleared.first?.rows.first?.kind else {
+            return XCTFail("Expected a URL field row")
+        }
+        XCTAssertNil(clearedError)
     }
 
     func testMakeSections_withCategory_addsSubOptionsDetailsAndAdvancedWithSendLast() {

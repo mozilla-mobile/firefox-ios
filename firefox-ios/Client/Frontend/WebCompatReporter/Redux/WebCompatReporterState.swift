@@ -20,13 +20,18 @@ struct WebCompatReporterState: ScreenState, Equatable {
     /// The report as the middleware would send it.
     var previewPayload: WebCompatReportPayload?
 
-    /// Preview stays disabled, and the details field stays hidden, until the user picks a category.
-    var canPreview: Bool { selectedCategory != nil }
     var showsAdditionalDetails: Bool { selectedCategory != nil }
+    var isURLValid: Bool { WebCompatURLValidator.reportableURL(from: url) != nil }
 
-    /// Send needs an address to report against and a sub-option, except for "Other", which has none.
+    var canPreview: Bool { selectedCategory != nil && isURLValid }
+
+    var showsURLError: Bool {
+        return !url.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isURLValid
+    }
+
+    /// Send needs a reportable address and a sub-option, except for "Other", which has none.
     var canSubmit: Bool {
-        guard let selectedCategory, !url.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return false }
+        guard let selectedCategory, isURLValid else { return false }
         return selectedCategory.subOptions.isEmpty || selectedSubOptionID != nil
     }
 

@@ -31,9 +31,40 @@ final class WebCompatURLCell: UICollectionViewListCell,
         field.delegate = self
     }
 
-    private lazy var stackView: UIStackView = .build { stack in
+    private lazy var errorLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+    }
+
+    private lazy var errorIcon: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.warning)?.withRenderingMode(.alwaysTemplate)
+        imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
+    }
+
+    private lazy var errorStackView: UIStackView = .build { stack in
+        stack.axis = .horizontal
+        stack.alignment = .top
+        stack.spacing = WebCompatReporterUX.Spacing.interItem
+        stack.isHidden = true
+    }
+
+    private lazy var fieldStackView: UIStackView = .build { stack in
         stack.spacing = WebCompatReporterUX.Spacing.interItem
     }
+
+    private lazy var containerStackView: UIStackView = .build { stack in
+        stack.axis = .vertical
+        stack.spacing = WebCompatReporterUX.Spacing.interItem
+    }
+
+    private var scaledIconSize: CGFloat {
+        return UIFontMetrics.default.scaledValue(for: WebCompatReporterUX.ErrorMessage.iconSize)
+    }
+
+    private lazy var iconWidthConstraint = errorIcon.widthAnchor.constraint(equalToConstant: scaledIconSize)
+    private lazy var iconHeightConstraint = errorIcon.heightAnchor.constraint(equalToConstant: scaledIconSize)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,23 +81,29 @@ final class WebCompatURLCell: UICollectionViewListCell,
     }
 
     private func setupLayout() {
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(textField)
-        contentView.addSubview(stackView)
+        fieldStackView.addArrangedSubview(titleLabel)
+        fieldStackView.addArrangedSubview(textField)
+        errorStackView.addArrangedSubview(errorIcon)
+        errorStackView.addArrangedSubview(errorLabel)
+        containerStackView.addArrangedSubview(fieldStackView)
+        containerStackView.addArrangedSubview(errorStackView)
+        contentView.addSubview(containerStackView)
         let margins = contentView.layoutMarginsGuide
         // .defaultHigh avoids conflicting with the self-sizing pass.
-        let topConstraint = stackView.topAnchor.constraint(equalTo: margins.topAnchor)
-        let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
+        let topConstraint = containerStackView.topAnchor.constraint(equalTo: margins.topAnchor)
+        let bottomConstraint = containerStackView.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
         topConstraint.priority = .defaultHigh
         bottomConstraint.priority = .defaultHigh
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             topConstraint,
             bottomConstraint,
-            stackView.heightAnchor.constraint(
+            fieldStackView.heightAnchor.constraint(
                 greaterThanOrEqualToConstant: WebCompatReporterUX.Control.minimumTapTarget
-            )
+            ),
+            iconWidthConstraint,
+            iconHeightConstraint
         ])
         updateStackAxis()
     }
@@ -76,13 +113,14 @@ final class WebCompatURLCell: UICollectionViewListCell,
     }
 
     func applyStackLayout(isAccessibilityCategory: Bool) {
-        stackView.axis = isAccessibilityCategory ? .vertical : .horizontal
-        stackView.alignment = isAccessibilityCategory ? .fill : .center
+        fieldStackView.axis = isAccessibilityCategory ? .vertical : .horizontal
+        fieldStackView.alignment = isAccessibilityCategory ? .fill : .center
     }
 
     func configure(
         title: String,
         text: String,
+        errorMessage: String?,
         a11yIdentifier: String,
         onEditingEnded: @escaping (String) -> Void
     ) {
@@ -91,9 +129,20 @@ final class WebCompatURLCell: UICollectionViewListCell,
         textField.accessibilityIdentifier = a11yIdentifier
         titleLabel.isAccessibilityElement = false
         textField.accessibilityLabel = title
+        errorLabel.text = errorMessage
+        setErrorRowHidden(errorMessage == nil)
         // The value round-trips on editing-end, so don't overwrite mid-edit.
         if !textField.isFirstResponder {
             textField.text = text
+        }
+    }
+
+    /// Outside the list's reconfigure animation, or the stack squashes against the animating height.
+    private func setErrorRowHidden(_ isHidden: Bool) {
+        guard errorStackView.isHidden != isHidden else { return }
+        UIView.performWithoutAnimation {
+            errorStackView.isHidden = isHidden
+            contentView.layoutIfNeeded()
         }
     }
 
@@ -105,6 +154,8 @@ final class WebCompatURLCell: UICollectionViewListCell,
         titleLabel.textColor = theme.colors.textSecondary
         textField.textColor = theme.colors.textPrimary
         textField.tintColor = theme.colors.actionPrimary
+        errorLabel.textColor = theme.colors.textCritical
+        errorIcon.tintColor = theme.colors.textCritical
     }
 
     // MARK: - Notifiable
@@ -112,7 +163,10 @@ final class WebCompatURLCell: UICollectionViewListCell,
     nonisolated func handleNotifications(_ notification: Notification) {
         guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
         ensureMainThread { [weak self] in
-            self?.updateStackAxis()
+            guard let self else { return }
+            self.updateStackAxis()
+            self.iconWidthConstraint.constant = self.scaledIconSize
+            self.iconHeightConstraint.constant = self.scaledIconSize
         }
     }
 

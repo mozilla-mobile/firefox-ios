@@ -45,12 +45,7 @@ final class WebCompatReporterMiddleware {
             telemetry.reasonSelected(category: category)
 
         case WebCompatReporterViewActionType.preview:
-            telemetry.previewed()
-            store.dispatch(WebCompatReporterMiddlewareAction(
-                previewPayload: makeReport(windowUUID: action.windowUUID, state: state),
-                windowUUID: action.windowUUID,
-                actionType: WebCompatReporterMiddlewareActionType.didBuildPreview
-            ))
+            previewReport(windowUUID: action.windowUUID, state: state)
 
         case WebCompatReporterViewActionType.cancel:
             telemetry.cancelled()
@@ -66,8 +61,20 @@ final class WebCompatReporterMiddleware {
         }
     }
 
+    /// Preview and Send commit the field's edit before firing, so a rejected address can still arrive.
+    private func previewReport(windowUUID: WindowUUID, state: AppState) {
+        guard WebCompatReporterState(appState: state, uuid: windowUUID).isURLValid else { return }
+        telemetry.previewed()
+        store.dispatch(WebCompatReporterMiddlewareAction(
+            previewPayload: makeReport(windowUUID: windowUUID, state: state),
+            windowUUID: windowUUID,
+            actionType: WebCompatReporterMiddlewareActionType.didBuildPreview
+        ))
+    }
+
     private func submitReport(windowUUID: WindowUUID, state: AppState) {
         let reporterState = WebCompatReporterState(appState: state, uuid: windowUUID)
+        guard reporterState.isURLValid else { return }
         recorder.submit(makeReport(windowUUID: windowUUID, state: state))
         // The screenshot option is parked (FXIOS-16450) and no image is transported yet.
         telemetry.created(withBlockedTrackers: reporterState.includeBlockedList, withScreenshot: false)
