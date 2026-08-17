@@ -354,7 +354,7 @@ workflows:
             cd firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests
             pip install pipenv
             pipenv install --python 3.12
-            pipenv run pytest -m smoketest
+            CI_WAF_TOKEN="$CI_WAF_TOKEN" pipenv run pytest -m smoketest
     - deploy-to-bitrise-io@2:
         is_always_run: true
         inputs:
