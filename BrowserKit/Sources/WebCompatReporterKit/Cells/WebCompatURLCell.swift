@@ -13,7 +13,6 @@ final class WebCompatURLCell: UICollectionViewListCell,
                               UITextFieldDelegate,
                               Notifiable {
     private var editingEndedHandler: ((String) -> Void)?
-    private var placeholder = ""
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
@@ -83,18 +82,15 @@ final class WebCompatURLCell: UICollectionViewListCell,
     func applyStackLayout(isAccessibilityCategory: Bool) {
         stackView.axis = isAccessibilityCategory ? .vertical : .horizontal
         stackView.alignment = isAccessibilityCategory ? .fill : .center
-        textField.textAlignment = isAccessibilityCategory ? .natural : .right
     }
 
     func configure(
         title: String,
         text: String,
-        placeholder: String,
         a11yIdentifier: String,
         onEditingEnded: @escaping (String) -> Void
     ) {
         editingEndedHandler = onEditingEnded
-        self.placeholder = placeholder
         titleLabel.text = title
         textField.accessibilityIdentifier = a11yIdentifier
         // The field is the accessibility element; carry the label onto it so
@@ -115,10 +111,6 @@ final class WebCompatURLCell: UICollectionViewListCell,
         titleLabel.textColor = theme.colors.textSecondary
         textField.textColor = theme.colors.textPrimary
         textField.tintColor = theme.colors.actionPrimary
-        textField.attributedPlaceholder = NSAttributedString(
-            string: placeholder,
-            attributes: [.foregroundColor: theme.colors.textSecondary]
-        )
     }
 
     // MARK: - Notifiable
