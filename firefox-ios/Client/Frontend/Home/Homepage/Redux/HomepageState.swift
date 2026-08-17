@@ -228,6 +228,7 @@ struct HomepageState: ScreenState, Equatable {
             .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
             .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
             .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
+            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
