@@ -44,6 +44,8 @@ class MockBrowserViewController: BrowserViewController {
     var frontEmbeddedContentCalled = 0
     var saveEmbeddedContent: ContentContainable?
 
+    var refreshStatusBarOverlayCalled = 0
+
     var didRequestToOpenInNewTabCalled = false
     var didSelectURLCalled = false
     var lastOpenedURL: URL?
@@ -145,6 +147,10 @@ class MockBrowserViewController: BrowserViewController {
     override func frontEmbeddedContent(_ viewController: ContentContainable) {
         frontEmbeddedContentCalled += 1
         saveEmbeddedContent = viewController
+    }
+
+    override func refreshStatusBarOverlay() {
+        refreshStatusBarOverlayCalled += 1
     }
 
     override func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {

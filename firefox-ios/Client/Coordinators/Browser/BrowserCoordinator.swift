@@ -563,6 +563,10 @@ final class BrowserCoordinator: BaseCoordinator,
         mainMenuCoordinator.startWithNavController()
     }
 
+    func mainMenuDidDismiss() {
+        browserViewController.refreshStatusBarOverlay()
+    }
+
     func openURLInNewTab(_ url: URL?) {
         if let url {
             browserViewController.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false)
