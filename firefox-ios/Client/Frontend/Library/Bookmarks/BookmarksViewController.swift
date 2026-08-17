@@ -14,6 +14,7 @@ final class BookmarksViewController: SiteTableViewController,
                                      LibraryPanel,
                                      CanRemoveQuickActionBookmark,
                                      UITableViewDropDelegate,
+                                     UIGestureRecognizerDelegate,
                                      Notifiable,
                                      FeatureFlaggable {
     struct UX {
@@ -32,6 +33,7 @@ final class BookmarksViewController: SiteTableViewController,
     let viewModel: BookmarksPanelViewModelProtocol
     private var logger: Logger
     private let bookmarksTelemetry = BookmarksTelemetry()
+    private weak var previousInteractivePopGestureDelegate: (any UIGestureRecognizerDelegate)?
 
     // MARK: - Search Properties
     var keyboardState: KeyboardState?
@@ -227,9 +229,23 @@ final class BookmarksViewController: SiteTableViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if let popGesture = navigationController?.interactivePopGestureRecognizer {
+            previousInteractivePopGestureDelegate = popGesture.delegate
+            popGesture.delegate = self
+            popGesture.isEnabled = true
+        }
 
         // Clear any `isTransitioning` state once the user is back on this panel fully
         isTransitioning = false
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if let popGesture = navigationController?.interactivePopGestureRecognizer,
+           popGesture.delegate === self {
+            popGesture.delegate = previousInteractivePopGestureDelegate
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -239,6 +255,11 @@ final class BookmarksViewController: SiteTableViewController,
         if state == .bookmarks(state: .search) && (isMovingFromParent || isBeingDismissed) {
             exitSearchState()
         }
+    }
+
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard gestureRecognizer === navigationController?.interactivePopGestureRecognizer else { return true }
+        return (navigationController?.viewControllers.count ?? 0) > 1 && !isTransitioning
     }
 
     // MARK: - Data
