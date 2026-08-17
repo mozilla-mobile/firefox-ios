@@ -85,6 +85,7 @@ struct TabPeekState: ScreenState {
             guard let tabPeekModel = action.tabPeekModel else { return defaultState(from: state) }
 
             return state
+                .resetTransientState()
                 .copy(showAddToBookmarks: tabPeekModel.canTabBeSaved)
                 .copy(showRemoveBookmark: tabPeekModel.canTabBeRemoved)
                 .copy(showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved)
@@ -97,6 +98,15 @@ struct TabPeekState: ScreenState {
     }
 
     static func defaultState(from state: TabPeekState) -> TabPeekState {
-        return TabPeekState(windowUUID: state.windowUUID)
+        return TabPeekState(
+            windowUUID: state.windowUUID,
+            showAddToBookmarks: false,
+            showRemoveBookmark: false,
+            showSendToDevice: false,
+            showCopyURL: true,
+            showCloseTab: true,
+            previewAccessibilityLabel: "",
+            screenshot: UIImage()
+        )
     }
 }
