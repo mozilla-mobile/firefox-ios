@@ -156,10 +156,10 @@ final class RemoteTabsPanel: UIViewController,
 
     func applyTheme() {
         let theme = retrieveTheme()
-        view.backgroundColor = theme.colors.layer4
-        tabsDisplayViewController.tableView.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer4
+        tabsDisplayViewController.tableView.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
         tabsDisplayViewController.tableView.separatorColor = theme.colors.borderPrimary
-        statusBarBackground.backgroundColor = theme.colors.layer3
+        statusBarBackground.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
     }
 
     var shouldUsePrivateOverride: Bool {
@@ -181,10 +181,10 @@ final class RemoteTabsPanel: UIViewController,
     }
 
     func applyTheme(_ theme: Theme) {
-        view.backgroundColor = theme.colors.layer4
-        tabsDisplayViewController.tableView.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer4
+        tabsDisplayViewController.tableView.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
         tabsDisplayViewController.tableView.separatorColor = theme.colors.borderPrimary
-        statusBarBackground.backgroundColor = theme.colors.layer3
+        statusBarBackground.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
     }
 
     // MARK: - Redux
