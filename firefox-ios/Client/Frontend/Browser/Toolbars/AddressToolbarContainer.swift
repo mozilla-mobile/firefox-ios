@@ -355,7 +355,7 @@ final class AddressToolbarContainer: UIView,
         }
 
         let isMinimizedAddressBar = alpha.isZero
-        updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: isMinimizedAddressBar)
+        updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: isMinimizedAddressBar)
     }
 
     private func updateModel(toolbarState: ToolbarState) {
@@ -367,7 +367,7 @@ final class AddressToolbarContainer: UIView,
         shouldDisplayCompact = newModel.shouldDisplayCompact
 
         guard self.model != newModel else { return }
-        updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: newModel.isAddressBarMinimized)
+        updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: newModel.isAddressBarMinimized)
         if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.isAddressBarMinimized {
             accessoryViewGradient.opacity = 0
         }
@@ -419,10 +419,10 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton
     }
 
-    private func updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: Bool) {
+    private func updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: Bool) {
         guard toolbarHelper.isSwipingTabsEnabled else { return }
 
-        let alpha: CGFloat = isMinimizedAddressBar ? 0 : 1
+        let alpha: CGFloat = forMinimizedAddressBar ? 0 : 1
         leftSkeletonAddressBar.alpha = alpha
         rightSkeletonAddressBar.alpha = alpha
     }
