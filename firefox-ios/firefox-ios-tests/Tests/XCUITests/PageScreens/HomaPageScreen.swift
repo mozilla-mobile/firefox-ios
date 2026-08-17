@@ -48,6 +48,10 @@ final class HomePageScreen {
         BaseTestCase().mozWaitForElementToExist(privHomepageTitle)
     }
 
+    func privateHomeTitleExists(timeout: TimeInterval = TIMEOUT) -> Bool {
+        BaseTestCase().mozWaitForElementToExist(privHomepageTitle, timeout: timeout, failOnTimeout: false)
+    }
+
     func validateHomeLogoPosition(isPrivate: Bool = false) {
         if !isPrivate {
             XCTAssertTrue(homeLogo.isAbove(
