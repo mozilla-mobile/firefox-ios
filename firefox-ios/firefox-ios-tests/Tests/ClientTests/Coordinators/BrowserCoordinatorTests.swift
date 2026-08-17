@@ -1481,6 +1481,22 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    func testMainMenuDidDismiss_refreshesStatusBarOverlay() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+
+        subject.showMainMenu()
+        guard let menuCoordinator = subject.childCoordinators[0] as? MainMenuCoordinator else {
+            XCTFail("Main menu coordinator was expected to be resolved")
+            return
+        }
+
+        menuCoordinator.dismissMenuModal(animated: false)
+
+        XCTAssertEqual(browserViewController.refreshStatusBarOverlayCalled, 1)
+    }
+
     // MARK: - Search Engine Selection
     func testShowSearchEngineSelection_addsSearchEngineSelectionCoordinator() {
         let subject = createSubject()
