@@ -511,7 +511,7 @@ final class TabTrayViewController: UIViewController,
             applyToolbarGlassButtonTints(theme: theme)
         }
         if theme.isNova {
-            segmentedControl.selectedSegmentTintColor = theme.type == .light ? UIColor.clear : theme.colors.layer2
+            segmentedControl.selectedSegmentTintColor = theme.colors.layer2
             if #unavailable(iOS 26) {
                 segmentedControl.backgroundColor = theme.colors.layerSurfaceLow
             }
