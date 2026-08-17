@@ -2140,7 +2140,7 @@ extension String {
             public static let SearchLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Search.v155",
                 tableName: "NativeErrorPage",
-                value: "View archived version",
+                value: "View Archived Version",
                 comment: "Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine.")
             public static let WaybackButtonA11yHint = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154",
