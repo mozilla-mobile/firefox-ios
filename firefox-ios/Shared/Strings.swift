@@ -9356,6 +9356,13 @@ extension String {
                 value: "Theme",
                 comment: "Title in main app settings for Theme settings")
         }
+        struct v156 {
+            public static let WebCompatReporterFieldsURLPlaceholder = MZLocalizedString(
+                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
+                tableName: "WebCompatReporter",
+                value: "URL",
+                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
+        }
     }
 }
 

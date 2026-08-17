@@ -38,8 +38,6 @@ final class WebCompatURLCellTests: XCTestCase {
         XCTAssertEqual(stack.alignment, .fill)
     }
 
-    /// The leading label already reads "URL", so a cleared field must not repeat it, and a
-    /// short address has to read from the leading edge instead of jumping to the trailing one.
     func testConfigure_clearedFieldShowsNoPlaceholderAndReadsFromTheLeadingEdge() throws {
         let subject = createSubject()
 

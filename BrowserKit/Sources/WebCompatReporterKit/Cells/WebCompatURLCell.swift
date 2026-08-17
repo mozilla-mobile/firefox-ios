@@ -5,8 +5,6 @@
 import Common
 import UIKit
 
-/// Editable URL row: leading label + single-line field, stacking vertically at
-/// accessibility sizes. Reports the typed value on editing-end, not per keystroke.
 final class WebCompatURLCell: UICollectionViewListCell,
                               ThemeApplicable,
                               ReusableCell,
@@ -28,7 +26,6 @@ final class WebCompatURLCell: UICollectionViewListCell,
         field.keyboardType = .URL
         field.autocapitalizationType = .none
         field.autocorrectionType = .no
-        // Native clear button carries a system-localized accessibility label for free.
         field.clearButtonMode = .whileEditing
         field.returnKeyType = .done
         field.delegate = self
@@ -57,7 +54,7 @@ final class WebCompatURLCell: UICollectionViewListCell,
         stackView.addArrangedSubview(textField)
         contentView.addSubview(stackView)
         let margins = contentView.layoutMarginsGuide
-        // .defaultHigh (not required) avoids the self-sizing vs. min-height constraint conflict.
+        // .defaultHigh avoids conflicting with the self-sizing pass.
         let topConstraint = stackView.topAnchor.constraint(equalTo: margins.topAnchor)
         let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
         topConstraint.priority = .defaultHigh
@@ -78,7 +75,6 @@ final class WebCompatURLCell: UICollectionViewListCell,
         applyStackLayout(isAccessibilityCategory: traitCollection.preferredContentSizeCategory.isAccessibilityCategory)
     }
 
-    /// Horizontal at standard sizes; vertical (field below the label) at accessibility sizes.
     func applyStackLayout(isAccessibilityCategory: Bool) {
         stackView.axis = isAccessibilityCategory ? .vertical : .horizontal
         stackView.alignment = isAccessibilityCategory ? .fill : .center
@@ -93,11 +89,9 @@ final class WebCompatURLCell: UICollectionViewListCell,
         editingEndedHandler = onEditingEnded
         titleLabel.text = title
         textField.accessibilityIdentifier = a11yIdentifier
-        // The field is the accessibility element; carry the label onto it so
-        // VoiceOver announces "<title>, text field" instead of a bare field.
         titleLabel.isAccessibilityElement = false
         textField.accessibilityLabel = title
-        // Don't overwrite the field mid-edit; the value round-trips on end.
+        // The value round-trips on editing-end, so don't overwrite mid-edit.
         if !textField.isFirstResponder {
             textField.text = text
         }
