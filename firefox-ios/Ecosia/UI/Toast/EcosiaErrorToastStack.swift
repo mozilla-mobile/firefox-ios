@@ -126,13 +126,20 @@ public struct EcosiaErrorToastStack: View {
                 sizingPass
 
                 ZStack(alignment: .top) {
+                    // Both layouts stay mounted so the expand/collapse transition can
+                    // cross-fade, but only the visible one belongs in the accessibility
+                    // tree — otherwise VoiceOver (and UI automation) sees every card twice.
                     collapsedStack
                         .opacity(isExpanded ? 0 : 1)
                         .allowsHitTesting(!isExpanded)
+                        .accessibilityHidden(isExpanded)
+                        .accessibilityIdentifier(EcosiaAccessibilityIdentifiers.ErrorToast.collapsedStack)
 
                     expandedStack
                         .opacity(isExpanded ? 1 : 0)
                         .allowsHitTesting(isExpanded)
+                        .accessibilityHidden(!isExpanded)
+                        .accessibilityIdentifier(EcosiaAccessibilityIdentifiers.ErrorToast.expandedStack)
                 }
                 .frame(height: containerHeight, alignment: .top)
                 .animation(expandAnimation, value: isExpanded)
@@ -141,6 +148,7 @@ public struct EcosiaErrorToastStack: View {
             .contentShape(Rectangle())
             .onTapGesture(perform: toggleExpanded)
             .accessibilityAddTraits(.isButton)
+            .accessibilityIdentifier(EcosiaAccessibilityIdentifiers.ErrorToast.container)
             .offset(y: isVisible ? 0 : -(frontCardHeight + .ecosia.space._1l))
             .opacity(isVisible ? 1 : 0)
             .animation(entranceAnimation, value: isVisible)
@@ -276,6 +284,9 @@ public struct EcosiaErrorToastStack: View {
                 content
             }
         }
+        // Repeats once per message. The hidden sizing pass renders these too, but it is
+        // `.accessibilityHidden(true)`, so its copies never reach the query tree.
+        .accessibilityIdentifier(EcosiaAccessibilityIdentifiers.ErrorToast.card)
         .shadow(
             color: showsShadow ? Color.black.opacity(0.12) : .clear,
             radius: showsShadow ? 8 : 0,

@@ -117,6 +117,7 @@ final class OmniboxAttachmentTileView: UIView, ThemeApplicable {
         removeButtonContainer.addSubviews(removeGlassBlur, removeGlassTint, removeIconView)
         removeButton.accessibilityLabel = String.localized(.cancel)
         removeButton.addTarget(self, action: #selector(removeTapped), for: .touchUpInside)
+        configureAccessibility()
 
         widthConstraint = widthAnchor.constraint(equalToConstant: UX.fileSize.width)
         heightConstraint = heightAnchor.constraint(equalToConstant: UX.fileSize.height)
@@ -191,6 +192,29 @@ final class OmniboxAttachmentTileView: UIView, ThemeApplicable {
             widthConstraint,
             heightConstraint
         ].compactMap { $0 })
+    }
+
+    /// Identifiers for the tile and its state-bearing subviews. The spinner and the
+    /// preview image are otherwise invisible to UI automation: a plain `UIView` and a
+    /// `UIImageView` are not accessibility elements by default, so neither would appear
+    /// in the query tree. Promoting them also gives VoiceOver something to announce for
+    /// an upload that is still in flight.
+    private func configureAccessibility() {
+        accessibilityIdentifier = EcosiaAccessibilityIdentifiers.OmniboxUpload.attachmentTile
+
+        loader.accessibilityIdentifier = EcosiaAccessibilityIdentifiers.OmniboxUpload.attachmentSpinner
+        loader.isAccessibilityElement = true
+        loader.accessibilityLabel = String.localized(.uploadAttachmentUploadingAccessibilityLabel)
+        loader.accessibilityTraits = .updatesFrequently
+
+        imageView.accessibilityIdentifier = EcosiaAccessibilityIdentifiers.OmniboxUpload.attachmentImage
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityLabel = String.localized(.uploadAttachmentImageAccessibilityLabel)
+        imageView.accessibilityTraits = .image
+
+        fileNameLabel.accessibilityIdentifier = EcosiaAccessibilityIdentifiers.OmniboxUpload.attachmentFileName
+        fileSizeLabel.accessibilityIdentifier = EcosiaAccessibilityIdentifiers.OmniboxUpload.attachmentFileSize
+        removeButton.accessibilityIdentifier = EcosiaAccessibilityIdentifiers.OmniboxUpload.attachmentRemoveButton
     }
 
     func configure(attachment: OmniboxAttachment, previewImage: UIImage?) {

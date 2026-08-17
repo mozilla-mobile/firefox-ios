@@ -337,3 +337,7 @@
 "Real change\nat your fingertips" = "Real change\nat your fingertips";
 "Join 20 million people making a difference every day" = "Join 20 million people making a difference every day";
 "Next" = "Next";
+
+// Accessiblity Strings for File Uploads
+"Uploading attachment" = "Uploading attachment";
+"Attached image" = "Attached image";

@@ -50,6 +50,7 @@ final class OmniboxAttachmentsStripView: UIView, ThemeApplicable, UIScrollViewDe
 
     private func setup() {
         clipsToBounds = true
+        accessibilityIdentifier = EcosiaAccessibilityIdentifiers.OmniboxUpload.attachmentsStrip
         addSubview(scrollView)
         scrollView.delegate = self
         scrollView.addSubview(stackView)

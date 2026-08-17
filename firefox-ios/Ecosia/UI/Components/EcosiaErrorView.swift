@@ -56,7 +56,7 @@ public struct EcosiaErrorView: View {
                 .frame(width: .ecosia.space._1l, height: .ecosia.space._1l)
                 .foregroundColor(theme.iconColor)
                 .accessibilityLabel(String.localized(.ecosiaErrorViewAccessibilityImageLabel))
-                .accessibilityIdentifier("error_view_image")
+                .accessibilityIdentifier(EcosiaAccessibilityIdentifiers.ErrorView.image)
 
             textContent
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -100,6 +100,7 @@ public struct EcosiaErrorView: View {
         .accessibilityHidden(onCloseTapped == nil)
         .accessibilityLabel(String.localized(.close))
         .accessibilityAddTraits(.isButton)
+        .accessibilityIdentifier(EcosiaAccessibilityIdentifiers.ErrorView.closeButton)
     }
 
     private var cardBackground: some View {

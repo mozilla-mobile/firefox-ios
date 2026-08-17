@@ -321,6 +321,8 @@ extension String {
 
         // Omnibox file upload (attachment strip)
         case uploadAttachmentFailed = "Upload failed"
+        case uploadAttachmentUploadingAccessibilityLabel = "Uploading attachment"
+        case uploadAttachmentImageAccessibilityLabel = "Attached image"
         case uploadSubmitWaitingForUpload = "Waiting for the attachment to finish uploading"
         case uploadSubmitUploadFailed = "Remove the failed attachment or try uploading again"
         case chatModeChipRemoveAccessibilityLabel = "Remove chat mode"
