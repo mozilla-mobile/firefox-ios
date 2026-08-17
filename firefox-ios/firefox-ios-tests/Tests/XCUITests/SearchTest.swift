@@ -21,13 +21,16 @@ class SearchTests: FeatureFlaggedTestBase {
     var searchScreen: SearchScreen!
     var searchSettingsScreen: SearchSettingsScreen!
     var settingsScreen: SettingScreen!
+    var tabTrayScreen: TabTrayScreen!
 
     override func setUp() async throws {
         try await super.setUp()
+        toolbarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         settingsScreen = SettingScreen(app: app)
         searchSettingsScreen = SearchSettingsScreen(app: app)
         searchScreen = SearchScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -475,14 +478,21 @@ class SearchTests: FeatureFlaggedTestBase {
         // Create some history
         navigator.openNewURL(urlString: "https://www.example.com")
         waitUntilPageLoad()
-        navigator.performAction(Action.CloseTab)
+        waitForTabsButton()
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.closeTab(title: TestLabels.exampleDomain)
+        tabTrayScreen.assertNewTabButtonExist()
+        tabTrayScreen.tapOnNewTabButton()
 
         // Create a bookmark
         navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
         waitUntilPageLoad()
         navigator.performAction(Action.Bookmark)
-        navigator.performAction(Action.CloseTab)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.closeTab(title: TestLabels.mozillaBook)
+        tabTrayScreen.assertNewTabButtonExist()
+        tabTrayScreen.tapOnNewTabButton()
 
         let siteTable = app.tables["SiteTable"]
 
@@ -491,12 +501,17 @@ class SearchTests: FeatureFlaggedTestBase {
 
             // Firefox Suggest should show up for sponsored suggestion, open tab, history
             // and bookmark.
-            let firefoxSuggestTerms = [
+            var firefoxSuggestTerms = [
                 "amazon": "Amazon.com - Official Site", // Sponsored suggestion
                 "internet": "Internet for people, not profit — Mozilla", // Open tab
                 "example": "www.example.com/", // History
                 "book": "The Book of Mozilla" // Bookmark
             ]
+            // Bug: Sponsored suggest does not show up on iPad
+            // https://github.com/mozilla-mobile/firefox-ios/issues/35243
+            if iPad() {
+                firefoxSuggestTerms.removeValue(forKey: "amazon")
+            }
             for (term, expectedTitle) in firefoxSuggestTerms {
                 browserScreen.tapOnAddressBar()
                 browserScreen.tapClearButtonIfExists()
