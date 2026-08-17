@@ -21,7 +21,6 @@ struct ToolbarState: ScreenState, Sendable {
     let canGoBack: Bool
     let canGoForward: Bool
     var numberOfTabs: Int
-    let scrollAlpha: Float
     var showMenuWarningBadge: Bool
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
@@ -54,7 +53,6 @@ struct ToolbarState: ScreenState, Sendable {
                   canGoBack: toolbarState.canGoBack,
                   canGoForward: toolbarState.canGoForward,
                   numberOfTabs: toolbarState.numberOfTabs,
-                  scrollAlpha: toolbarState.scrollAlpha,
                   showMenuWarningBadge: toolbarState.showMenuWarningBadge,
                   canShowNavigationHint: toolbarState.canShowNavigationHint,
                   shouldAnimate: toolbarState.shouldAnimate,
@@ -80,7 +78,6 @@ struct ToolbarState: ScreenState, Sendable {
             canGoBack: false,
             canGoForward: false,
             numberOfTabs: 1,
-            scrollAlpha: 1,
             showMenuWarningBadge: false,
             canShowNavigationHint: false,
             shouldAnimate: true,
@@ -105,7 +102,6 @@ struct ToolbarState: ScreenState, Sendable {
         canGoBack: Bool,
         canGoForward: Bool,
         numberOfTabs: Int,
-        scrollAlpha: Float,
         showMenuWarningBadge: Bool,
         canShowNavigationHint: Bool,
         shouldAnimate: Bool,
@@ -127,7 +123,6 @@ struct ToolbarState: ScreenState, Sendable {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.numberOfTabs = numberOfTabs
-        self.scrollAlpha = scrollAlpha
         self.showMenuWarningBadge = showMenuWarningBadge
         self.canShowNavigationHint = canShowNavigationHint
         self.shouldAnimate = shouldAnimate
@@ -262,7 +257,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(isShowingTopTabs: toolbarAction?.isShowingTopTabs ?? state.isShowingTopTabs)
             .copy(canGoBack: toolbarAction?.canGoBack ?? state.canGoBack)
             .copy(canGoForward: toolbarAction?.canGoForward ?? state.canGoForward)
-            .copy(scrollAlpha: toolbarAction?.scrollAlpha ?? state.scrollAlpha)
             .copy(shouldAnimate: toolbarAction?.shouldAnimate ?? state.shouldAnimate)
             .copy(isTranslucent: toolbarAction?.isTranslucent ?? state.isTranslucent)
             .copy(isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled)
@@ -276,7 +270,6 @@ struct ToolbarState: ScreenState, Sendable {
 
         // Update to use isAddressBarMinimized so the address bar is shown and the toast isn't presented a minimized bar.
         return state
-            .copy(scrollAlpha: 1)
             .copy(isAddressBarMinimized: false)
     }
 
@@ -393,7 +386,6 @@ struct ToolbarState: ScreenState, Sendable {
                             canGoBack: state.canGoBack,
                             canGoForward: state.canGoForward,
                             numberOfTabs: state.numberOfTabs,
-                            scrollAlpha: state.scrollAlpha,
                             showMenuWarningBadge: state.showMenuWarningBadge,
                             canShowNavigationHint: state.canShowNavigationHint,
                             shouldAnimate: state.shouldAnimate,

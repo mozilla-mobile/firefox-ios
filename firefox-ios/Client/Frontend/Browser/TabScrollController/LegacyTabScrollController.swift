@@ -526,17 +526,6 @@ private extension LegacyTabScrollController {
         return contentOffset.y + scrollViewHeight > contentSize.height
     }
 
-    // Scroll alpha is only for header views since status bar has an overlay
-    // Bottom content doesn't have alpha since it's completely hidden
-    // Besides the zoom bar, to hide the gradient
-    var scrollAlpha: CGFloat {
-        if zoomPageBar != nil,
-           isBottomSearchBar {
-            return 1 - abs(overKeyboardContainerOffset / overKeyboardScrollHeight)
-        }
-        return 1 - abs(headerTopOffset / headerHeight)
-    }
-
     @objc
     func reload() {
         guard let tab = tab else { return }
