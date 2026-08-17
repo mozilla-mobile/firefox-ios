@@ -172,14 +172,4 @@ struct TranslationSettingsState: ScreenState, Equatable {
             availableLanguages: state.availableLanguages
         )
     }
-
-    static func == (lhs: TranslationSettingsState, rhs: TranslationSettingsState) -> Bool {
-        return lhs.isTranslationsEnabled == rhs.isTranslationsEnabled
-            && lhs.isAutoTranslateEnabled == rhs.isAutoTranslateEnabled
-            && lhs.isEditing == rhs.isEditing
-            && lhs.pendingLanguages == rhs.pendingLanguages
-            && lhs.preferredLanguages == rhs.preferredLanguages
-            && lhs.supportedLanguages == rhs.supportedLanguages
-            && lhs.availableLanguages == rhs.availableLanguages
-    }
 }
