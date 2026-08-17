@@ -35,7 +35,6 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldDisplayCompact: Bool
     let canShowNavigationHint: Bool
     let shouldAnimate: Bool
-    let scrollAlpha: Float
     let hasAlternativeLocationColor: Bool
     let isAddressBarMinimized: Bool
 
@@ -251,7 +250,6 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
-        self.scrollAlpha = state.scrollAlpha
         self.isAddressBarMinimized = state.isAddressBarMinimized
         self.hasAlternativeLocationColor = hasAlternativeLocationColor
         self.toolbarLayoutStyle = state.toolbarLayout
@@ -387,7 +385,6 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
         lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
         lhs.shouldAnimate == rhs.shouldAnimate &&
-        lhs.scrollAlpha == rhs.scrollAlpha &&
         lhs.isAddressBarMinimized == rhs.isAddressBarMinimized &&
         lhs.hasAlternativeLocationColor == rhs.hasAlternativeLocationColor &&
 

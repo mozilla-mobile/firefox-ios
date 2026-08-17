@@ -14,7 +14,6 @@ struct ToolbarAction: Action {
     let tabTrayButtonStyle: TabTrayButtonStyle?
     let isTranslucent: Bool?
     let numberOfTabs: Int?
-    let scrollAlpha: Float?
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
@@ -45,7 +44,6 @@ struct ToolbarAction: Action {
          tabTrayButtonStyle: TabTrayButtonStyle? = nil,
          isTranslucent: Bool? = nil,
          numberOfTabs: Int? = nil,
-         scrollAlpha: Float? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
@@ -79,7 +77,6 @@ struct ToolbarAction: Action {
         self.tabTrayButtonStyle = tabTrayButtonStyle
         self.isTranslucent = isTranslucent
         self.numberOfTabs = numberOfTabs
-        self.scrollAlpha = scrollAlpha
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate

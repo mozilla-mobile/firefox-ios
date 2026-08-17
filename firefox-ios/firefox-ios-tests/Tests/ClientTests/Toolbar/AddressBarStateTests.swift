@@ -1315,7 +1315,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             canGoBack: toolbarState.canGoBack,
             canGoForward: toolbarState.canGoForward,
             numberOfTabs: toolbarState.numberOfTabs,
-            scrollAlpha: toolbarState.scrollAlpha,
             showMenuWarningBadge: toolbarState.showMenuWarningBadge,
             canShowNavigationHint: toolbarState.canShowNavigationHint,
             shouldAnimate: toolbarState.shouldAnimate,
