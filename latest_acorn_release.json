@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/361849538",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/361849538/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/361849538/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.104.0",
-    "id": 361849538,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/370730629",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/370730629/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/370730629/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.109.0",
+    "id": 370730629,
     "author": {
         "login": "maggie-atkinson",
         "id": 175737951,
@@ -25,18 +25,18 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84VkWLC",
-    "tag_name": "v1.104.0",
+    "node_id": "RE_kwDOI1CID84WGOaF",
+    "tag_name": "v1.109.0",
     "target_commitish": "main",
-    "name": "v1.104.0",
+    "name": "v1.109.0",
     "draft": false,
     "immutable": false,
     "prerelease": false,
-    "created_at": "2026-07-29T15:11:43Z",
-    "updated_at": "2026-07-29T15:13:09Z",
-    "published_at": "2026-07-29T15:13:09Z",
+    "created_at": "2026-08-14T17:39:55Z",
+    "updated_at": "2026-08-14T17:42:39Z",
+    "published_at": "2026-08-14T17:42:39Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.104.0",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.104.0",
-    "body": "# [Changelog]\r\n### [1.104.0]\r\n### Added\r\n#### Mobile\r\n\r\n- SVG\r\n  - screenshot-24.svg\r\n\r\n- XML\r\n  - ic_screenshot_24.xml\r\n\r\n- PDF\r\n  - screenshotLarge.pdf"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.109.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.109.0",
+    "body": "# [Changelog]\r\n### [1.109.0]\r\n### Added\r\n#### Mobile\r\n\r\n- PDF\r\n  - infiniteTabsFillLarge.pdf\r\n  - infiniteTabsLarge.pdf\r\n- SVG\r\n  - infinite-tabs-24.svg\r\n  - infinite-tabs-fill-24.svg\r\n- XML\r\n  - ic_infinite_tabs_24.xml\r\n  - ic_infinite_tabs_fill_24.xml"
 }
