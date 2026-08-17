@@ -30,7 +30,7 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     // MARK: - Layer
 
     var layer1: UIColor = NovaColors.Gray75
-    var layer2: UIColor = NovaColors.Gray60
+    var layer2: UIColor = NovaColors.Gray55
     var layer3: UIColor = NovaColors.Gray55
     var layer4: UIColor = NovaColors.Gray65
     var layerSurfaceLow = NovaColors.Gray75
