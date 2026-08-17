@@ -360,6 +360,7 @@ workflows:
         is_always_run: true
         inputs:
         - deploy_path: firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/results
+        - is_compress: "true"
   firefox_scheme_build_for_test:
     description: Build Firefox scheme and shard XCUITests for parallel execution
     before_run:
