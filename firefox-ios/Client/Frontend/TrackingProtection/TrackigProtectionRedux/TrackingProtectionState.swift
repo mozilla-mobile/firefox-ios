@@ -77,8 +77,8 @@ struct TrackingProtectionState: ScreenState {
         shouldClearCookies: Bool,
         shouldUpdateBlockedTrackerStats: Bool,
         shouldUpdateConnectionStatus: Bool,
-        navigateTo: NavType? = nil,
-        displayView: DisplayType? = nil
+        navigateTo: NavType?,
+        displayView: DisplayType?
     ) {
         self.windowUUID = windowUUID
         self.trackingProtectionEnabled = trackingProtectionEnabled
@@ -130,31 +130,23 @@ struct TrackingProtectionState: ScreenState {
 
     private static func handleClearCookiesAction(from state: TrackingProtectionState) -> TrackingProtectionState {
         return state
+            .resetTransientState()
             .copy(trackingProtectionEnabled: !state.trackingProtectionEnabled)
             .copy(shouldClearCookies: true)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
             .copy(navigateTo: .home)
-            .copy(displayView: nil)
     }
 
     private static func handleNavigateToSettingsAction(from state: TrackingProtectionState) -> TrackingProtectionState {
         return state
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
+            .resetTransientState()
             .copy(navigateTo: .settings)
-            .copy(displayView: nil)
     }
 
     private static func handleShowTrackingProtectionDetailsAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
         return state
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
-            .copy(navigateTo: nil)
+            .resetTransientState()
             .copy(displayView: .trackingProtectionDetails)
     }
 
@@ -162,47 +154,33 @@ struct TrackingProtectionState: ScreenState {
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
         return state
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
-            .copy(navigateTo: nil)
+            .resetTransientState()
             .copy(displayView: .blockedTrackersDetails)
     }
 
     private static func handleGoBackAction(from state: TrackingProtectionState) -> TrackingProtectionState {
         return state
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
+            .resetTransientState()
             .copy(navigateTo: .back)
-            .copy(displayView: nil)
     }
 
     private static func handleUpdateBlockedTrackerStatsAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
         return state
+            .resetTransientState()
             .copy(shouldUpdateBlockedTrackerStats: true)
-            .copy(shouldUpdateConnectionStatus: false)
-            .copy(navigateTo: nil)
-            .copy(displayView: nil)
     }
 
     private static func handleUpdateConnectionStatusAction(from state: TrackingProtectionState) -> TrackingProtectionState {
         return state
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
+            .resetTransientState()
             .copy(shouldUpdateConnectionStatus: true)
-            .copy(navigateTo: nil)
-            .copy(displayView: nil)
     }
 
     private static func handleShowAlertAction(from state: TrackingProtectionState) -> TrackingProtectionState {
         return state
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
-            .copy(navigateTo: nil)
+            .resetTransientState()
             .copy(displayView: .clearCookiesAlert)
     }
 
@@ -210,31 +188,28 @@ struct TrackingProtectionState: ScreenState {
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
         return state
+            .resetTransientState()
             .copy(trackingProtectionEnabled: !state.trackingProtectionEnabled)
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
-            .copy(navigateTo: nil)
-            .copy(displayView: nil)
     }
 
     private static func handleDismissTrackingProtectionAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
         return state
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
+            .resetTransientState()
             .copy(navigateTo: .close)
-            .copy(displayView: nil)
     }
 
     static func defaultState(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return state
-            .copy(shouldClearCookies: false)
-            .copy(shouldUpdateBlockedTrackerStats: false)
-            .copy(shouldUpdateConnectionStatus: false)
-            .copy(navigateTo: nil)
-            .copy(displayView: nil)
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: nil,
+            displayView: nil
+        )
     }
 }
