@@ -241,6 +241,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
             a11yIdentifier: AccessibilityIdentifiers.NativeErrorPage.waybackButton
         )
         waybackButton.configure(viewModel: viewModel)
+        waybackButton.makeButtonVisible()
         waybackButton.isEnabled = enabled
         waybackButton.accessibilityHint = enabled ? .NativeErrorPage.Wayback.WaybackButtonA11yHint : nil
         waybackButton.setShowsSpinner(showsSpinner)
