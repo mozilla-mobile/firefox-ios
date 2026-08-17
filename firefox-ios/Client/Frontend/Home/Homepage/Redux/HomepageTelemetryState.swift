@@ -74,6 +74,7 @@ struct HomepageTelemetryState: StateType, Equatable {
         }
 
         return state
+            .resetTransientState()
             .copy(isZeroSearch: isZeroSearch)
             .copy(shouldTriggerImpression: false)
     }
