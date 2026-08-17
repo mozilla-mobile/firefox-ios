@@ -351,10 +351,11 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -euxo pipefail
+            : "${CI_WAF_TOKEN:?CI_WAF_TOKEN is not set - check it is exposed for this build's trigger type (e.g. Pull Requests) in Bitrise Secrets}"
             cd firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests
             pip install pipenv
             pipenv install --python 3.12
-            CI_WAF_TOKEN="$CI_WAF_TOKEN" pipenv run pytest -m smoketest
+            pipenv run pytest -m smoketest
     - deploy-to-bitrise-io@2:
         is_always_run: true
         inputs:
