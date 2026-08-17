@@ -698,6 +698,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.assertIdenticalFoldersNamesCreated(identifier: folderName, nrOfFolders: 2)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4313009
     func testSwipeBackFromBookmarkFolder() {
         app.launch()
         let folderName = "Swipe Back Folder"
@@ -708,12 +709,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.tapOnFolder(folderName: folderName)
         libraryScreen.assertSelectedFolderOpens(folderName: folderName)
 
-        let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.01, dy: 0.5))
-        let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5))
-        swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
+        libraryScreen.swipeToGoBackFromFolder()
 
-        mozWaitForElementToExist(app.navigationBars["Bookmarks"])
-        XCTAssertFalse(app.navigationBars[folderName].exists)
+        libraryScreen.assertBookmarksMainScreen()
+        libraryScreen.assertFolderDoesNotExist(folderName: folderName)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168590

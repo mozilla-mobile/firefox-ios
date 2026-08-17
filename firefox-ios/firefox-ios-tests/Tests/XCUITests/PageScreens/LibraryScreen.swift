@@ -216,6 +216,16 @@ final class LibraryScreen {
         BaseTestCase().mozWaitForElementToExist(app.navigationBars[folderName])
     }
 
+    func assertFolderDoesNotExist(folderName: String) {
+        BaseTestCase().mozWaitForElementToNotExist(app.navigationBars[folderName])
+    }
+
+    func swipeToGoBackFromFolder() {
+        let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.01, dy: 0.5))
+        let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5))
+        swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
+    }
+
     func deleteFolder(folderName: String) {
         app.tables.cells.buttons["Remove \(folderName)"].waitAndTap()
         deleteButton.waitAndTap()
@@ -223,6 +233,10 @@ final class LibraryScreen {
 
     func assertNewFolderScreen() {
         BaseTestCase().mozWaitForElementToExist(app.navigationBars["New Folder"])
+    }
+
+    func assertBookmarksMainScreen() {
+        BaseTestCase().mozWaitForElementToExist(app.navigationBars["Bookmarks"])
     }
 
     func assertParentFolder(parentFolderName: String) {
