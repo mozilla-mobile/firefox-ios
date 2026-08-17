@@ -539,6 +539,7 @@
         "SearchTests\/testDismissPromptPresence()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
         "SearchTests\/testFirefoxSuggest()",
+        "SearchTests\/testFirefoxSuggestionsLandscapePrivate()",
         "SearchTests\/testOpenTabsInSearchSuggestions_TAE()",
         "SearchTests\/testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff()",
         "SearchTests\/testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn()",
