@@ -118,6 +118,26 @@ class OverlayModeManagerTests: XCTestCase {
         XCTAssertEqual(subject.leaveOverlayModeCallCount, 1)
     }
 
+    @MainActor
+    func testCancelEditing_WhenNotInOverlayMode_DoesNotLeaveOverlayMode() {
+        subject.setURLBar(urlBarView: urlBar)
+
+        subject.cancelEditing(shouldCancelLoading: true)
+
+        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 0)
+    }
+
+    @MainActor
+    func testCancelEditing_WhenInOverlayMode_LeavesOverlayMode() {
+        subject.setURLBar(urlBarView: urlBar)
+        subject.openSearch(with: "")
+
+        subject.cancelEditing(shouldCancelLoading: true)
+
+        XCTAssertFalse(subject.inOverlayMode)
+        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
+    }
+
     // MARK: - Test EnterOverlay for Tab change
     @MainActor
     func testLeaveOverlayMode_ForSwitchTab() {
