@@ -115,10 +115,6 @@ struct HomepageState: ScreenState, Equatable {
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
             return handleInitializeAndViewWillTransitionAction(state: state, action: action)
         case HomepageActionType.embeddedHomepage:
-            guard (action as? HomepageAction)?.isZeroSearch != nil else {
-                return defaultState(from: state)
-            }
-
             return handleEmbeddedHomepageAction(state: state, action: action)
         case HomepageActionType.privacyNoticeCloseButtonTapped:
             return handlePrivacyNoticeCloseButtonTappedAction(state: state, action: action)
