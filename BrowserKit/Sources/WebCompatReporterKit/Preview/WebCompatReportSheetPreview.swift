@@ -28,7 +28,7 @@ private func previewURLSection() -> WebCompatReportViewModel.Section {
         WebCompatReportViewModel.Row(
             id: "url",
             title: "URL",
-            kind: .urlField(text: "https://houseandhome.com/recipe/croque-monsieur", placeholder: "Website address"),
+            kind: .urlField(text: "https://houseandhome.com/recipe/croque-monsieur"),
             a11yIdentifier: "url"
         )
     ])

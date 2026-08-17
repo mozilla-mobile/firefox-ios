@@ -4496,12 +4496,6 @@ extension String {
                 value: "URL",
                 comment: "Leading label of the editable row showing the web address being reported, in the Report a Website Issue form."
             )
-            public static let URLPlaceholder = MZLocalizedString(
-                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
-                tableName: "WebCompatReporter",
-                value: "URL",
-                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form."
-            )
             public static let DetailsPlaceholder = MZLocalizedString(
                 key: "WebCompatReporter.Fields.DetailsPlaceholder.v154",
                 tableName: "WebCompatReporter",
@@ -9361,6 +9355,13 @@ extension String {
                 tableName: nil,
                 value: "Theme",
                 comment: "Title in main app settings for Theme settings")
+        }
+        struct v156 {
+            public static let WebCompatReporterFieldsURLPlaceholder = MZLocalizedString(
+                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
+                tableName: "WebCompatReporter",
+                value: "URL",
+                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
         }
     }
 }

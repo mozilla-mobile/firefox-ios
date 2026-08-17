@@ -168,7 +168,7 @@ final class WebCompatReportViewController: UINavigationController,
                 WebCompatReportViewModel.Row(
                     id: RowID.url.rawValue,
                     title: .WebCompatReporter.Fields.URLLabel,
-                    kind: .urlField(text: state.url, placeholder: .WebCompatReporter.Fields.URLPlaceholder),
+                    kind: .urlField(text: state.url),
                     a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.urlField
                 )
             ]

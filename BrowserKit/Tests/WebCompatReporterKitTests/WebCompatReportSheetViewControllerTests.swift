@@ -388,7 +388,7 @@ final class WebCompatReportSheetViewControllerTests: XCTestCase {
                 WebCompatReportViewModel.Row(
                     id: "url",
                     title: "URL",
-                    kind: .urlField(text: "https://example.com", placeholder: "Website address"),
+                    kind: .urlField(text: "https://example.com"),
                     a11yIdentifier: "url"
                 )
             ]),
