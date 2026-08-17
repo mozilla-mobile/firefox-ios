@@ -13,6 +13,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
     @Environment(\.themeManager)
     var themeManager
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
+    @State private var isNova = false
 
     private struct UX {
         static let cornerRadius: CGFloat = 32
@@ -39,7 +40,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                             .underline()
                             .multilineTextAlignment(.leading)
                             .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
-                            .foregroundStyle(themeColors.layerSelectedText.color)
+                            .foregroundStyle(isNova ? themeColors.textAccent.color : themeColors.layerSelectedText.color)
                     }
                     .padding(.leading, UX.padding)
                 }
@@ -86,7 +87,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                                 .underline()
                                 .multilineTextAlignment(.leading)
                                 .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                                .foregroundStyle(themeColors.layerSelectedText.color)
+                                .foregroundStyle(isNova ? themeColors.textAccent.color : themeColors.layerSelectedText.color)
                         }
                     }
                 }
@@ -123,7 +124,13 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             padding: UX.padding
         ) {
             HStack(alignment: .top) {
-                Image(StandardImageIdentifiers.Large.information)
+                if isNova {
+                    Image(StandardImageIdentifiers.Large.information)
+                        .renderingMode(.template)
+                        .foregroundStyle(themeColors.iconPrimary.color)
+                } else {
+                    Image(StandardImageIdentifiers.Large.information)
+                }
                 Text(verbatim: .Settings.AIControls.BlockedInformation)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textPrimary.color)
@@ -239,7 +246,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
     func aiFeatureToggleStatus(isEnabled: Bool) -> some View {
         if isEnabled {
             Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus)
-                .foregroundStyle(themeColors.layerSelectedText.color)
+                .foregroundStyle(isNova ? themeColors.textSecondary.color : themeColors.layerSelectedText.color)
                 .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
         } else {
             Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus)
@@ -250,6 +257,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
 
     func applyTheme(theme: any Common.Theme) {
         self.themeColors = theme.colors
+        self.isNova = theme.isNova
     }
 }
 
