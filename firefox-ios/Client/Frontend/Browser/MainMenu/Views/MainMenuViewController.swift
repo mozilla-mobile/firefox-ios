@@ -495,7 +495,7 @@ class MainMenuViewController: UIViewController,
         if currentTheme.isNova {
             stateImage = isProtectionsOn
                 ? StandardImageIdentifiers.Small.shieldCheckmarkFillGradient
-                : StandardImageIdentifiers.Small.shieldSlashFillCritical
+                : StandardImageIdentifiers.Small.shieldSlashFillMulticolor
             shouldUseRenderMode = false
         }
 
@@ -527,6 +527,8 @@ class MainMenuViewController: UIViewController,
             stateImage: stateImage,
             shouldUseRenderMode: shouldUseRenderMode,
             stateIconTintColor: protectionsTintColor,
+            stateTextColor: currentTheme.isNova ? currentTheme.colors.textPrimary : nil,
+            stateChevronTintColor: currentTheme.isNova ? currentTheme.colors.iconPrimary : nil,
             adBlocker: adBlocker)
     }
 
