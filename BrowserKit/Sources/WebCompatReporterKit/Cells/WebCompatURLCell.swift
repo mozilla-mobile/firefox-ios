@@ -128,7 +128,7 @@ final class WebCompatURLCell: UICollectionViewListCell,
         titleLabel.text = title
         textField.accessibilityIdentifier = a11yIdentifier
         titleLabel.isAccessibilityElement = false
-        textField.accessibilityLabel = title
+        textField.accessibilityLabel = [title, errorMessage].compactMap { $0 }.joined(separator: ", ")
         errorLabel.text = errorMessage
         setErrorRowHidden(errorMessage == nil)
         // The value round-trips on editing-end, so don't overwrite mid-edit.
@@ -144,6 +144,8 @@ final class WebCompatURLCell: UICollectionViewListCell,
             errorStackView.isHidden = isHidden
             contentView.layoutIfNeeded()
         }
+        guard !isHidden, let message = errorLabel.text else { return }
+        UIAccessibility.post(notification: .announcement, argument: message)
     }
 
     // MARK: - ThemeApplicable

@@ -21,7 +21,7 @@ struct WebCompatReporterState: ScreenState, Equatable {
     var previewPayload: WebCompatReportPayload?
 
     var showsAdditionalDetails: Bool { selectedCategory != nil }
-    var isURLValid: Bool { WebCompatURLValidator.reportableURL(from: url) != nil }
+    var isURLValid: Bool { WebCompatURLValidator.isReportable(url) }
 
     var canPreview: Bool { selectedCategory != nil && isURLValid }
 

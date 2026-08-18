@@ -170,7 +170,7 @@ private func previewFooterSection() -> WebCompatReportViewModel.Section {
 @available(iOS 17.0, *)
 #Preview("Invalid URL") {
     previewSheet(sections: [
-        previewURLSection(text: " .com", errorMessage: "Enter a valid URL"),
+        previewURLSection(text: ".com", errorMessage: "Enter a valid URL"),
         previewCategorySection(selectedTitle: "Site is not usable"),
         previewSendSection(isEnabled: false)
     ], isPreviewEnabled: false)

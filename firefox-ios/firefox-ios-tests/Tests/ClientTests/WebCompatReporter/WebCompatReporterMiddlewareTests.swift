@@ -68,7 +68,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_submit_withAnUnreportableURL_sendsNothing() {
         let subject = createSubject()
-        setReportedURL(" .com")
+        setReportedURL(".com")
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
@@ -80,7 +80,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_preview_withAnUnreportableURL_buildsNothing() {
         let subject = createSubject()
-        setReportedURL(" .com")
+        setReportedURL(".com")
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
 

@@ -6,13 +6,14 @@ import Common
 import Foundation
 
 enum WebCompatURLValidator {
-    /// `URIFixup` alone turns " .com" into `http://.com`, so empty host labels are rejected too.
-    static func reportableURL(from text: String) -> URL? {
+    /// `URIFixup` alone turns `.com` into `http://.com` and escapes inner spaces instead of
+    /// rejecting them, so hosts carrying an empty or whitespaced label are turned down too.
+    static func isReportable(_ text: String) -> Bool {
         guard let url = URIFixup.getURL(text),
               url.isWebPage(includeDataURIs: false),
-              let host = url.host,
-              host.split(separator: ".", omittingEmptySubsequences: false).allSatisfy({ !$0.isEmpty })
-        else { return nil }
-        return url
+              let host = url.host
+        else { return false }
+        return host.split(separator: ".", omittingEmptySubsequences: false)
+            .allSatisfy { !$0.isEmpty && !$0.contains(where: \.isWhitespace) }
     }
 }

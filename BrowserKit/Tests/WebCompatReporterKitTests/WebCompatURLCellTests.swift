@@ -56,16 +56,17 @@ final class WebCompatURLCellTests: XCTestCase {
 
         subject.configure(
             title: "URL",
-            text: " .com",
+            text: ".com",
             errorMessage: "Enter a valid URL",
             a11yIdentifier: "url",
             onEditingEnded: { _ in }
         )
 
         let field = try XCTUnwrap(firstSubview(ofType: UITextField.self, in: subject.contentView))
-        XCTAssertEqual(field.text, " .com")
+        XCTAssertEqual(field.text, ".com")
         XCTAssertEqual(try errorLabel(in: subject).text, "Enter a valid URL")
         XCTAssertFalse(try errorStackView(in: subject).isHidden)
+        XCTAssertEqual(field.accessibilityLabel, "URL, Enter a valid URL")
 
         subject.configure(
             title: "URL",
@@ -76,6 +77,7 @@ final class WebCompatURLCellTests: XCTestCase {
         )
 
         XCTAssertTrue(try errorStackView(in: subject).isHidden)
+        XCTAssertEqual(field.accessibilityLabel, "URL")
     }
 
     // MARK: - Helpers
