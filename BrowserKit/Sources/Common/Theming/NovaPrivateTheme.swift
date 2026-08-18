@@ -17,7 +17,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     // MARK: - Layer
 
     var layer1: UIColor = NovaColors.VioletDesaturated90
-    var layer2: UIColor = NovaColors.VioletDesaturated70
+    var layer2: UIColor = NovaColors.VioletDesaturated60
     var layer3: UIColor = NovaColors.VioletDesaturated70
     var layer4: UIColor = NovaColors.VioletDesaturated80
     var layerSurfaceLow = NovaColors.VioletDesaturated90
