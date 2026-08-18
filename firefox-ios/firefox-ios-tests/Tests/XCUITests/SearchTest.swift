@@ -494,6 +494,8 @@ class SearchTests: FeatureFlaggedTestBase {
 
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
+            waitForRotation(to: orientation)
+            waitForTabsButtonHittable()
 
             // Bug: Sponsored suggest may not show up on iPad
             // https://github.com/mozilla-mobile/firefox-ios/issues/35243
