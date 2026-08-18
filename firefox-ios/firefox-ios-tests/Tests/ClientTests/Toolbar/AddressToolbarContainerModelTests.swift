@@ -381,13 +381,14 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             canGoBack: true,
                             canGoForward: true,
                             numberOfTabs: 1,
-                            scrollAlpha: 1,
                             showMenuWarningBadge: false,
                             canShowNavigationHint: false,
                             shouldAnimate: false,
                             isTranslucent: false,
+                            isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
-                            nextTabScreenshot: nil)
+                            nextTabScreenshot: nil,
+                            isAddressBarMinimized: false)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
@@ -403,13 +404,14 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             canGoBack: true,
                             canGoForward: true,
                             numberOfTabs: 1,
-                            scrollAlpha: 1,
                             showMenuWarningBadge: false,
                             canShowNavigationHint: false,
                             shouldAnimate: false,
                             isTranslucent: false,
+                            isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
-                            nextTabScreenshot: nil)
+                            nextTabScreenshot: nil,
+                            isAddressBarMinimized: false)
     }
 
     @MainActor

@@ -117,7 +117,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper?.backgroundAlpha() ?? 1.0)
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
-            infoLabelView.textColor = theme.colors.textPrimary
+            infoLabelView.textColor = theme.isNova ? theme.colors.textInverted : theme.colors.textPrimary
             infoLabelView.backgroundColor = theme.isNova ? theme.colors.actionPrimary : theme.colors.layerInformation
         } else if !model.isEnabled {
             titleLabel.textColor = theme.colors.textDisabled

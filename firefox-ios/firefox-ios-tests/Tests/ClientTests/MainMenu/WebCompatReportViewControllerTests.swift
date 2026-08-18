@@ -253,7 +253,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
 
-        guard case let .urlField(text, _) = sections.first?.rows.first?.kind else {
+        guard case let .urlField(text) = sections.first?.rows.first?.kind else {
             return XCTFail("Expected a URL field row")
         }
         XCTAssertEqual(text, "https://example.com")

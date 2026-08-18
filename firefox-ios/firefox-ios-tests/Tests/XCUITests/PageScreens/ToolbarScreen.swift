@@ -83,6 +83,16 @@ final class ToolbarScreen {
         XCTAssertEqual(expectedCount, tabsButtonValue, "Expected \(expectedCount) open tabs after switching")
     }
 
+    func tabsButtonHasValue(_ expectedCount: String, timeout: TimeInterval = TIMEOUT) -> Bool {
+        guard BaseTestCase().mozWaitForElementToExist(tabsButton, timeout: timeout, failOnTimeout: false)
+        else { return false }
+        let expectation = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "value == %@", expectedCount),
+            object: tabsButton
+        )
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
     func pressBackButton(duration: TimeInterval) {
         BaseTestCase().mozWaitForElementToExist(backButton)
         backButton.press(forDuration: duration)

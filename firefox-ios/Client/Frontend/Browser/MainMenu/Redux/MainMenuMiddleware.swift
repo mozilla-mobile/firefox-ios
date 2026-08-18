@@ -4,8 +4,9 @@
 
 import Common
 import Redux
-import Account
 import Shared
+
+import class Account.RustFirefoxAccounts
 
 @MainActor
 final class MainMenuMiddleware {
@@ -169,32 +170,6 @@ final class MainMenuMiddleware {
         guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
         let option = isActionOn ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
         telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
-    }
-
-    private func getAccountData() -> AccountData? {
-        let rustAccount = RustFirefoxAccounts.shared
-        let needsReAuth = rustAccount.accountNeedsReauth()
-
-        guard let userProfile = rustAccount.userProfile else { return nil }
-
-        let title: String = {
-            if needsReAuth { return .MainMenu.Account.SyncErrorTitle }
-            return userProfile.displayName ?? userProfile.email
-        }()
-
-        let subtitle: String? = needsReAuth ? .MainMenu.Account.SyncErrorDescription : nil
-        let warningIcon: String? = needsReAuth ? StandardImageIdentifiers.Large.warningFill : nil
-
-        var iconURL: URL?
-        if let str = rustAccount.userProfile?.avatarUrl,
-           let url = URL(string: str) {
-            iconURL = url
-        }
-
-        return AccountData(title: title,
-                           subtitle: subtitle,
-                           warningIcon: warningIcon,
-                           iconURL: iconURL)
     }
 
     private func handleTelemetryFor(for navigationDestination: MainMenuNavigationDestination,

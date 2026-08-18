@@ -35,12 +35,8 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldDisplayCompact: Bool
     let canShowNavigationHint: Bool
     let shouldAnimate: Bool
-    let scrollAlpha: Float
     let hasAlternativeLocationColor: Bool
-
-    var isAddressBarMinimized: Bool {
-        return scrollAlpha.isZero
-    }
+    let isAddressBarMinimized: Bool
 
     let windowUUID: UUID
 
@@ -51,7 +47,7 @@ final class AddressToolbarContainerModel: Equatable {
         let shouldBlur = toolbarHelper.shouldBlur()
         let uxConfiguration: AddressToolbarUXConfiguration = .experiment(
             backgroundAlpha: backgroundAlpha,
-            scrollAlpha: CGFloat(scrollAlpha),
+            isAddressBarMinimized: isAddressBarMinimized,
             shouldBlur: shouldBlur,
             hasAlternativeLocationColor: hasAlternativeLocationColor)
 
@@ -254,7 +250,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
-        self.scrollAlpha = state.scrollAlpha
+        self.isAddressBarMinimized = state.isAddressBarMinimized
         self.hasAlternativeLocationColor = hasAlternativeLocationColor
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
@@ -389,7 +385,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
         lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
         lhs.shouldAnimate == rhs.shouldAnimate &&
-        lhs.scrollAlpha == rhs.scrollAlpha &&
+        lhs.isAddressBarMinimized == rhs.isAddressBarMinimized &&
         lhs.hasAlternativeLocationColor == rhs.hasAlternativeLocationColor &&
 
         lhs.windowUUID == rhs.windowUUID

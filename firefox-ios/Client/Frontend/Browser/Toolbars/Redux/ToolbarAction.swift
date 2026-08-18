@@ -14,7 +14,6 @@ struct ToolbarAction: Action {
     let tabTrayButtonStyle: TabTrayButtonStyle?
     let isTranslucent: Bool?
     let numberOfTabs: Int?
-    let scrollAlpha: Float?
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
@@ -45,7 +44,6 @@ struct ToolbarAction: Action {
          tabTrayButtonStyle: TabTrayButtonStyle? = nil,
          isTranslucent: Bool? = nil,
          numberOfTabs: Int? = nil,
-         scrollAlpha: Float? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
@@ -79,7 +77,6 @@ struct ToolbarAction: Action {
         self.tabTrayButtonStyle = tabTrayButtonStyle
         self.isTranslucent = isTranslucent
         self.numberOfTabs = numberOfTabs
-        self.scrollAlpha = scrollAlpha
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
@@ -107,12 +104,26 @@ struct ToolbarAction: Action {
     }
 }
 
+enum ToolbarModernAction: ModernAction {
+    // Three distinct user/system triggers drive `ToolbarState.isAddressBarMinimized`
+    // (renders the address bar as its full toolbar vs. its minimized "pill" shape).
+
+    /// The user scrolled the page. `true` collapses the toolbar to the pill as the page
+    /// scrolls down; `false` restores it when scrolling back up.
+    case userDidScroll(minimizeAddressBar: Bool)
+
+    /// A web form's keyboard accessory view appeared. that shrinks the address bar to the pill shape
+    case accessoryViewDidShow
+
+    /// The keyboard was dismissed. Dispatched to restore the address bar after it was minimized by `accessoryViewDidShow`
+    case keyboardDidHide
+}
+
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
     case urlDidChange
     case lockIconChanged
-    case scrollAlphaNeedsUpdate
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged

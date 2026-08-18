@@ -48,6 +48,18 @@ final class SpringboardScreen {
         sel.APP_ICON_BUTTON.element(in: springboard)
     }
 
+    private var notificationsPermissionAlert: XCUIElement {
+        sel.NOTIFICATIONS_PERMISSION_ALERT.element(in: springboard)
+    }
+
+    private var allowNotificationsButton: XCUIElement {
+        sel.ALLOW_NOTIFICATIONS_BUTTON.element(in: springboard)
+    }
+
+    private var dontAllowNotificationsButton: XCUIElement {
+        sel.DONT_ALLOW_NOTIFICATIONS_BUTTON.element(in: springboard)
+    }
+
     // MARK: - System Actions
 
     func pressHomeButton() {
@@ -91,7 +103,21 @@ final class SpringboardScreen {
         appIconButton.waitAndTap()
     }
 
+    // MARK: - Notifications Permission Actions
+
+    func tapAllowNotifications() {
+        allowNotificationsButton.waitAndTap()
+    }
+
+    func tapDontAllowNotifications() {
+        dontAllowNotificationsButton.waitAndTap()
+    }
+
     // MARK: - Assertions
+
+    func assertNotificationsPermissionAlertExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(notificationsPermissionAlert, timeout: timeout)
+    }
 
     func assertFennecIconExists(at index: Int = 0, timeout: TimeInterval = TIMEOUT) {
         let icon = fennecIconsQuery.element(boundBy: index)

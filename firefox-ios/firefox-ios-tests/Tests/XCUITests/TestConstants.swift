@@ -10,8 +10,10 @@ enum TestPages {
     static let findInPage = "find-in-page-test.html"
     static let mozillaBook = "test-mozilla-book.html"
     static let cookieStore = "test-cookie-store.html"
+    static let windowOpenOnTap = "test-window-open-on-tap.html"
 }
 
 enum TestLabels {
     static let exampleDomain = "Example Domain"
+    static let mozillaBook = "The Book of Mozilla"
 }

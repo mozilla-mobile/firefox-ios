@@ -21,13 +21,16 @@ class SearchTests: FeatureFlaggedTestBase {
     var searchScreen: SearchScreen!
     var searchSettingsScreen: SearchSettingsScreen!
     var settingsScreen: SettingScreen!
+    var tabTrayScreen: TabTrayScreen!
 
     override func setUp() async throws {
         try await super.setUp()
+        toolbarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         settingsScreen = SettingScreen(app: app)
         searchSettingsScreen = SearchSettingsScreen(app: app)
         searchScreen = SearchScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -468,6 +471,14 @@ class SearchTests: FeatureFlaggedTestBase {
     func testFirefoxSuggest() {
         app.launch()
 
+        // Workaround: "Ingest New Suggestions Now" from the
+        // secret settings may force the suggestions to be
+        // loaded.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+
         // Create an open Tab
         navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
         waitUntilPageLoad()
@@ -475,68 +486,109 @@ class SearchTests: FeatureFlaggedTestBase {
         // Create some history
         navigator.openNewURL(urlString: "https://www.example.com")
         waitUntilPageLoad()
-        navigator.performAction(Action.CloseTab)
+        waitForTabsButton()
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.closeTab(title: TestLabels.exampleDomain)
+        tabTrayScreen.assertNewTabButtonExist()
+        tabTrayScreen.tapOnNewTabButton()
 
         // Create a bookmark
         navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
         waitUntilPageLoad()
         navigator.performAction(Action.Bookmark)
-        navigator.performAction(Action.CloseTab)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        let siteTable = app.tables["SiteTable"]
+        waitForTabsButton()
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.closeTab(title: TestLabels.mozillaBook)
+        tabTrayScreen.assertNewTabButtonExist()
+        tabTrayScreen.tapOnNewTabButton()
 
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
+            waitForRotation(to: orientation)
+            waitForTabsButtonHittable()
 
-            // Firefox Suggest should show up for sponsored suggestion, open tab, history
-            // and bookmark.
-            let firefoxSuggestTerms = [
-                "amazon": "Amazon.com - Official Site", // Sponsored suggestion
-                "internet": "Internet for people, not profit — Mozilla", // Open tab
-                "example": "www.example.com/", // History
-                "book": "The Book of Mozilla" // Bookmark
-            ]
-            for (term, expectedTitle) in firefoxSuggestTerms {
-                browserScreen.tapOnAddressBar()
-                browserScreen.tapClearButtonIfExists()
-                browserScreen.typeOnSearchBar(text: term)
-                mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
-                let searchEngines = [
-                    "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
-                ]
-                for searchEngine in searchEngines {
-                    mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
-                }
-                // Search engine suggestions
-                mozWaitForElementToExist(siteTable.otherElements["Google Search"])
-                mozWaitForElementToExist(siteTable.staticTexts[term])
-
-                // Firefox Suggest is displayed
-                if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-                    siteTable.cells.firstMatch.swipeUp()
-                }
-                mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
-                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+            // Bug: Sponsored suggest may not show up on iPad
+            // https://github.com/mozilla-mobile/firefox-ios/issues/35243
+            if !iPad() {
+                verifySearchSuggestion(searchTerm: "amazon",
+                                       expectedMatch: "Amazon.com - Official Site",
+                                       hasFirefoxSuggest: true,
+                                       isSponsored: true)
             }
+        }
+    }
 
-            // Non Firefox Suggest result: A random term
-            let term = "heeeeeeellllllllllloooooooo"
-            browserScreen.tapOnAddressBar()
-            browserScreen.tapClearButtonIfExists()
-            browserScreen.typeOnSearchBar(text: term)
-            mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-            let searchEngines = [
-                "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
-            ]
-            for searchEngine in searchEngines {
-                mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
-            }
-            // Search engine suggestions
-            mozWaitForElementToExist(siteTable.otherElements["Google Search"])
-            mozWaitForElementToExist(siteTable.staticTexts[term])
+    // https://mozilla.testrail.io/index.php?/cases/view/2753093
+    // Regression
+    func testFirefoxSuggestPartialSponsored() {
+        app.launch()
+        // Workaround: Sponsored suggestions do not show up intermittently.
+        // Ingesting the new suggestions forces the app to have the sponsored
+        // results for Firefox Suggest consistently.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+        verifySearchSuggestion(searchTerm: "amaz",
+                               expectedMatch: "Amazon.com - Official Site",
+                               hasFirefoxSuggest: true,
+                               isSponsored: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753076
+    // Regresssion
+    func testFirefoxSuggestPartialNonSponsored() {
+        app.launch()
+        // Precondition: Enable enhanced cross-platform suggest experiment
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.goto(ExperimentsScreen)
+        navigator.performAction(Action.ListAllExperiments)
+        navigator.userState.experimentToEnroll = "Enhanced Cross-Platform Suggest [iOS] - Phased Roll out 138+"
+        navigator.performAction(Action.EnrollExperiment)
+        navigator.goto(SettingsScreen)
+        navigator.goto(HomePanelsScreen)
+
+        verifySearchSuggestion(searchTerm: "fifa",
+                               expectedMatch: "Wikipedia - FIFA Club World Cup",
+                               hasFirefoxSuggest: true,
+                               isSponsored: false)
+    }
+
+    private func verifySearchSuggestion(searchTerm: String,
+                                        expectedMatch: String = "",
+                                        hasFirefoxSuggest: Bool = false,
+                                        isSponsored: Bool = false) {
+        let siteTable = app.tables["SiteTable"]
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: searchTerm)
+
+        for searchEngine in [
+            "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+        ] {
+            mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+        }
+
+        // Search engine suggestions
+        mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+        mozWaitForElementToExist(siteTable.staticTexts[searchTerm])
+
+        // Firefox Suggest is displayed
+        if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
+            siteTable.cells.firstMatch.swipeUp()
+        }
+        if hasFirefoxSuggest {
+            mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
+            mozWaitForElementToExist(app.tables.staticTexts[expectedMatch])
+        } else {
             mozWaitForElementToNotExist(siteTable.otherElements["Firefox Suggest"])
+        }
+
+        if isSponsored {
+            mozWaitForElementToExist(siteTable.staticTexts["Sponsored"])
+        } else {
+            mozWaitForElementToNotExist(siteTable.staticTexts["Sponsored"])
         }
     }
 

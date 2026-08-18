@@ -27,10 +27,11 @@ struct NativeErrorPageState: ScreenState {
         )
     }
 
-    init(
-        windowUUID: WindowUUID,
-        model: ErrorPageModel? = nil
-    ) {
+    init(windowUUID: WindowUUID) {
+        self.init(windowUUID: windowUUID, model: nil)
+    }
+
+    init(windowUUID: WindowUUID, model: ErrorPageModel?) {
         self.windowUUID = windowUUID
         self.model = model
     }

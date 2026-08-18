@@ -42,6 +42,11 @@ final class WebCompatReporterStateTests: XCTestCase {
         XCTAssertTrue(makeState(category: .other).canSubmit)
     }
 
+    func test_canSubmit_falseWhenTheURLHasBeenClearedOrIsBlank() {
+        XCTAssertFalse(makeState(category: .other, url: "").canSubmit)
+        XCTAssertFalse(makeState(category: .other, url: "   ").canSubmit)
+    }
+
     // MARK: - Reducer - didLoadInitialDraft
 
     func test_didLoadInitialDraft_seedsURL() {
@@ -378,10 +383,11 @@ final class WebCompatReporterStateTests: XCTestCase {
 
     private func makeState(
         category: WebCompatIssueCategory,
-        subOption: WebCompatSubOption? = nil
+        subOption: WebCompatSubOption? = nil,
+        url: String = "https://example.com"
     ) -> WebCompatReporterState {
         return WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
-            .copy(url: "https://example.com")
+            .copy(url: url)
             .copy(selectedCategory: category)
             .copy(selectedSubOptionID: subOption?.rawValue)
     }

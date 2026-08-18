@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import CoreGraphics
+import UIKit
 
 /// Layout constants for the WebCompat "Report a Website Issue" bottom sheet.
 enum WebCompatReporterUX {
@@ -18,6 +18,12 @@ enum WebCompatReporterUX {
         static let contentInset: CGFloat = 16
         static let largeCornerRadius: CGFloat = 26
         static let verticalInset: CGFloat = 14.5
+        static let edgeInsets = NSDirectionalEdgeInsets(
+            top: verticalInset,
+            leading: contentInset,
+            bottom: verticalInset,
+            trailing: contentInset
+        )
     }
 
     enum Sheet {
@@ -44,6 +50,14 @@ enum WebCompatReporterUX {
 
     enum Keyboard {
         static let focusPadding: CGFloat = 16
+    }
+
+    /// The Report Preview screen.
+    enum Preview {
+        static let cardHorizontalInset: CGFloat = 24
+        static let bulletRowSpacing: CGFloat = 18
+        static let bulletDotSpacing: CGFloat = 16
+        static let bulletDotFontSize: CGFloat = 7
     }
 
     /// The tilted page card on the Report Preview screen.

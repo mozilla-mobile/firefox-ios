@@ -4,9 +4,10 @@
 
 import Common
 import MozillaAppServices
-import Account
 import Shared
 import WebKit
+
+import class Account.RustFirefoxAccounts
 
 /// Default RelayControllerProtocol implementation.
 /// Handles account status updates and logic for Relay.

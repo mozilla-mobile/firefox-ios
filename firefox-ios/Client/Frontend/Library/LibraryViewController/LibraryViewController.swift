@@ -412,6 +412,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
         librarySegmentControl.tintColor = theme.colors.textPrimary
         if theme.isNova {
+            librarySegmentControl.backgroundColor = theme.colors.layer4
             librarySegmentControl.selectedSegmentTintColor = theme.colors.layer2
         }
 

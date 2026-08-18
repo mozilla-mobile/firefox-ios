@@ -77,6 +77,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         super.viewDidLoad()
         setupNavigationItem()
         setupCollectionView()
+        setupDismissKeyboardGesture()
         configure(with: viewModel)
         applyTheme(theme: theme)
         startObservingNotifications(
@@ -119,6 +120,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+
+    private func setupDismissKeyboardGesture() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
     }
 
     // MARK: - Keyboard
@@ -252,11 +259,10 @@ public final class WebCompatReportSheetViewController: UIViewController,
     private func urlCellRegistration()
     -> UICollectionView.CellRegistration<WebCompatURLCell, WebCompatReportViewModel.Row> {
         return UICollectionView.CellRegistration { [weak self] cell, _, row in
-            guard let self, case let .urlField(text, placeholder) = row.kind else { return }
+            guard let self, case let .urlField(text) = row.kind else { return }
             cell.configure(
                 title: row.title,
                 text: text,
-                placeholder: placeholder,
                 a11yIdentifier: row.a11yIdentifier
             ) { [weak self] text in
                 self?.delegate?.webCompatReportSheetDidEditText(id: row.id, text: text)
@@ -391,6 +397,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
     private func didTapPreview() {
         view.endEditing(true)
         delegate?.webCompatReportSheetDidTapPreview()
+    }
+
+    @objc
+    private func dismissKeyboard() {
+        view.endEditing(true)
     }
 
     // MARK: - Notifiable

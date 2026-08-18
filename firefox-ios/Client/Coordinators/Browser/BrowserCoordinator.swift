@@ -639,10 +639,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - WebCompatReportCoordinatorNavigationDelegate
 
     func webCompatReportDidSubmit() {
-        // TODO: FXIOS-16468 swap in the dedicated "Report sent" string once l10n exports it.
-        browserViewController.showPlainToast(
-            message: String.Microsurvey.Survey.ConfirmationPage.ConfirmationLabel
-        )
+        browserViewController.showPlainToast(message: .WebCompatReporter.Toast.ReportSent)
     }
 
     func presentAdBlockerSettings() {

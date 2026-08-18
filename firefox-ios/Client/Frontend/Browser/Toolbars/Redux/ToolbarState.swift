@@ -21,7 +21,6 @@ struct ToolbarState: ScreenState, Sendable {
     let canGoBack: Bool
     let canGoForward: Bool
     var numberOfTabs: Int
-    let scrollAlpha: Float
     var showMenuWarningBadge: Bool
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
@@ -29,10 +28,8 @@ struct ToolbarState: ScreenState, Sendable {
     var isTranslationsEnabled: Bool
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
-
-    var isAddressBarMinimized: Bool {
-        return scrollAlpha.isZero
-    }
+    // Whether the address bar renders as its full toolbar or its minimized "pill" shape
+    var isAddressBarMinimized: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
@@ -56,14 +53,14 @@ struct ToolbarState: ScreenState, Sendable {
                   canGoBack: toolbarState.canGoBack,
                   canGoForward: toolbarState.canGoForward,
                   numberOfTabs: toolbarState.numberOfTabs,
-                  scrollAlpha: toolbarState.scrollAlpha,
                   showMenuWarningBadge: toolbarState.showMenuWarningBadge,
                   canShowNavigationHint: toolbarState.canShowNavigationHint,
                   shouldAnimate: toolbarState.shouldAnimate,
                   isTranslucent: toolbarState.isTranslucent,
                   isTranslationsEnabled: toolbarState.isTranslationsEnabled,
                   previousTabScreenshot: toolbarState.previousTabScreenshot,
-                  nextTabScreenshot: toolbarState.nextTabScreenshot
+                  nextTabScreenshot: toolbarState.nextTabScreenshot,
+                  isAddressBarMinimized: toolbarState.isAddressBarMinimized
         )
     }
 
@@ -81,14 +78,14 @@ struct ToolbarState: ScreenState, Sendable {
             canGoBack: false,
             canGoForward: false,
             numberOfTabs: 1,
-            scrollAlpha: 1,
             showMenuWarningBadge: false,
             canShowNavigationHint: false,
             shouldAnimate: true,
             isTranslucent: false,
             isTranslationsEnabled: true,
             previousTabScreenshot: nil,
-            nextTabScreenshot: nil
+            nextTabScreenshot: nil,
+            isAddressBarMinimized: false
         )
     }
 
@@ -105,14 +102,14 @@ struct ToolbarState: ScreenState, Sendable {
         canGoBack: Bool,
         canGoForward: Bool,
         numberOfTabs: Int,
-        scrollAlpha: Float,
         showMenuWarningBadge: Bool,
         canShowNavigationHint: Bool,
         shouldAnimate: Bool,
         isTranslucent: Bool,
-        isTranslationsEnabled: Bool = true,
+        isTranslationsEnabled: Bool,
         previousTabScreenshot: UIImage?,
-        nextTabScreenshot: UIImage?
+        nextTabScreenshot: UIImage?,
+        isAddressBarMinimized: Bool
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
@@ -126,7 +123,6 @@ struct ToolbarState: ScreenState, Sendable {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.numberOfTabs = numberOfTabs
-        self.scrollAlpha = scrollAlpha
         self.showMenuWarningBadge = showMenuWarningBadge
         self.canShowNavigationHint = canShowNavigationHint
         self.shouldAnimate = shouldAnimate
@@ -134,13 +130,22 @@ struct ToolbarState: ScreenState, Sendable {
         self.isTranslationsEnabled = isTranslationsEnabled
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
+        self.isAddressBarMinimized = isAddressBarMinimized
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
-        // Does not handle any modern actions
-        return defaultState(from: state)
+        guard let action = action as? ToolbarModernAction else { return defaultState(from: state) }
+
+        switch action {
+        case .userDidScroll(let minimizeAddressBar):
+            return state.copy(isAddressBarMinimized: minimizeAddressBar)
+        case .accessoryViewDidShow:
+            return state.copy(isAddressBarMinimized: true)
+        case .keyboardDidHide:
+            return state.copy(isAddressBarMinimized: false)
+        }
     }
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
@@ -169,7 +174,7 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
-            ToolbarActionType.scrollAlphaNeedsUpdate, ToolbarActionType.readerModeStateChanged,
+            ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
             TranslationsActionType.didStartTranslatingPage,
             TranslationsActionType.translationCompleted,
@@ -252,7 +257,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(isShowingTopTabs: toolbarAction?.isShowingTopTabs ?? state.isShowingTopTabs)
             .copy(canGoBack: toolbarAction?.canGoBack ?? state.canGoBack)
             .copy(canGoForward: toolbarAction?.canGoForward ?? state.canGoForward)
-            .copy(scrollAlpha: toolbarAction?.scrollAlpha ?? state.scrollAlpha)
             .copy(shouldAnimate: toolbarAction?.shouldAnimate ?? state.shouldAnimate)
             .copy(isTranslucent: toolbarAction?.isTranslucent ?? state.isTranslucent)
             .copy(isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled)
@@ -264,8 +268,9 @@ struct ToolbarState: ScreenState, Sendable {
               browserAction.toastType == .shakeToSummarizeNotAvailable
         else { return defaultState(from: state) }
 
+        // Update to use isAddressBarMinimized so the address bar is shown and the toast isn't presented a minimized bar.
         return state
-            .copy(scrollAlpha: 1)
+            .copy(isAddressBarMinimized: false)
     }
 
     @MainActor
@@ -381,13 +386,13 @@ struct ToolbarState: ScreenState, Sendable {
                             canGoBack: state.canGoBack,
                             canGoForward: state.canGoForward,
                             numberOfTabs: state.numberOfTabs,
-                            scrollAlpha: state.scrollAlpha,
                             showMenuWarningBadge: state.showMenuWarningBadge,
                             canShowNavigationHint: state.canShowNavigationHint,
                             shouldAnimate: state.shouldAnimate,
                             isTranslucent: state.isTranslucent,
                             isTranslationsEnabled: state.isTranslationsEnabled,
                             previousTabScreenshot: state.previousTabScreenshot,
-                            nextTabScreenshot: state.nextTabScreenshot)
+                            nextTabScreenshot: state.nextTabScreenshot,
+                            isAddressBarMinimized: state.isAddressBarMinimized)
     }
 }

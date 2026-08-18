@@ -146,6 +146,8 @@ struct AccessibilityIdentifiers {
 
         struct Preview {
             static let closeButton = "WebCompatReporter.Preview.CloseButton"
+            static let summary = "WebCompatReporter.Preview.Summary"
+            static let technicalDataRow = "WebCompatReporter.Preview.TechnicalDataRow"
             /// Suffixed with the payload group id, e.g. `…SectionHeader.basic`.
             static let sectionHeader = "WebCompatReporter.Preview.SectionHeader"
             static let sectionContent = "WebCompatReporter.Preview.SectionContent"
