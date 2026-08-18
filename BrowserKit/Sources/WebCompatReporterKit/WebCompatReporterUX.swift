@@ -49,9 +49,9 @@ enum WebCompatReporterUX {
     /// The Report Preview screen.
     enum Preview {
         static let cardHorizontalInset: CGFloat = 24
-        static let bulletDiameter: CGFloat = 6
-        static let bulletIndent: CGFloat = 24
-        static let bulletSpacing: CGFloat = 12
+        static let bulletRowSpacing: CGFloat = 18
+        static let bulletDotSpacing: CGFloat = 16
+        static let bulletDotFontSize: CGFloat = 7
     }
 
     /// The tilted page card on the Report Preview screen.
