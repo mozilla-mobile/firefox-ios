@@ -21,13 +21,16 @@ class SearchTests: FeatureFlaggedTestBase {
     var searchScreen: SearchScreen!
     var searchSettingsScreen: SearchSettingsScreen!
     var settingsScreen: SettingScreen!
+    var tabTrayScreen: TabTrayScreen!
 
     override func setUp() async throws {
         try await super.setUp()
+        toolbarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         settingsScreen = SettingScreen(app: app)
         searchSettingsScreen = SearchSettingsScreen(app: app)
         searchScreen = SearchScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -483,14 +486,21 @@ class SearchTests: FeatureFlaggedTestBase {
         // Create some history
         navigator.openNewURL(urlString: "https://www.example.com")
         waitUntilPageLoad()
-        navigator.performAction(Action.CloseTab)
+        waitForTabsButton()
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.closeTab(title: TestLabels.exampleDomain)
+        tabTrayScreen.assertNewTabButtonExist()
+        tabTrayScreen.tapOnNewTabButton()
 
         // Create a bookmark
         navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
         waitUntilPageLoad()
         navigator.performAction(Action.Bookmark)
-        navigator.performAction(Action.CloseTab)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.closeTab(title: TestLabels.mozillaBook)
+        tabTrayScreen.assertNewTabButtonExist()
+        tabTrayScreen.tapOnNewTabButton()
 
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
