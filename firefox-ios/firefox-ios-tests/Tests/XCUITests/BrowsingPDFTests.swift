@@ -14,7 +14,7 @@ let PDF_website = [
 ]
 
 let largePDF1 = [
-    "url": "https://storage.googleapis.com/mobile_test_assets/public/10MB-TESTFILE.ORG.pdf",
+    "url": "https://storage.googleapis.com/mobile_test_assets/public/50MB-TESTFILE.ORG.pdf",
     "pdfValue": "storage.googleapis.com"
 ]
 let largePDF2 = [
@@ -195,19 +195,19 @@ class BrowsingPDFTests: BaseTestCase {
     // Regression
     func testSwitchTabsWhileDownloadingPDF() {
         // Step 1: Open a large PDF in a tab. The PDF starts downloading.
-        navigator.openURL(largePDF2["url"]!)
+        navigator.openURL(largePDF1["url"]!)
         waitUntilDownloadStarts()
 
         // Step 2: Switch to another tab and open another large PDF. All PDF files load properly.
-        navigator.openNewURL(urlString: largePDF1["url"]!)
+        navigator.openNewURL(urlString: largePDF2["url"]!)
         waitUntilPageLoad()
-        browser.assertAddressBarContains(value: largePDF1["pdfValue"]!)
+        browser.assertAddressBarContains(value: largePDF2["pdfValue"]!)
 
         // Step 3: Return to the first PDF tab. It should be loading or loaded.
         navigator.goto(TabTray)
         tabTrayScreen.tapTabAtIndex(index: 0)
         waitUntilPageLoad()
-        browser.assertAddressBarContains(value: largePDF2["pdfValue"]!)
+        browser.assertAddressBarContains(value: largePDF1["pdfValue"]!)
     }
 
     private func longPressOnPdfLink() {
