@@ -494,64 +494,113 @@ class SearchTests: FeatureFlaggedTestBase {
         tabTrayScreen.assertNewTabButtonExist()
         tabTrayScreen.tapOnNewTabButton()
 
-        let siteTable = app.tables["SiteTable"]
-
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
 
             // Firefox Suggest should show up for sponsored suggestion, open tab, history
-            // and bookmark.
-            var firefoxSuggestTerms = [
-                "amazon": "Amazon.com - Official Site", // Sponsored suggestion
+            // and bookmark
+
+            // Sponsored suggestion
+            // Bug: Sponsored suggest may not show up on iPad
+            // https://github.com/mozilla-mobile/firefox-ios/issues/35243
+            if !iPad() {
+                verifySearchSuggestion(searchTerm: "amazon",
+                                   expectedMatch: "Amazon.com - Official Site",
+                                   hasFirefoxSuggest: true,
+                                   isSponsored: true)
+            }
+            // Non-sponsored suggestions
+            for (term, expectedTitle) in [
                 "internet": "Internet for people, not profit — Mozilla", // Open tab
                 "example": "www.example.com/", // History
-                "book": "The Book of Mozilla" // Bookmark
-            ]
-            // Bug: Sponsored suggest does not show up on iPad
-            // https://github.com/mozilla-mobile/firefox-ios/issues/35243
-            if iPad() {
-                firefoxSuggestTerms.removeValue(forKey: "amazon")
-            }
-            for (term, expectedTitle) in firefoxSuggestTerms {
-                browserScreen.tapOnAddressBar()
-                browserScreen.tapClearButtonIfExists()
-                browserScreen.typeOnSearchBar(text: term)
-                mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
-                let searchEngines = [
-                    "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
-                ]
-                for searchEngine in searchEngines {
-                    mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
-                }
-                // Search engine suggestions
-                mozWaitForElementToExist(siteTable.otherElements["Google Search"])
-                mozWaitForElementToExist(siteTable.staticTexts[term])
-
-                // Firefox Suggest is displayed
-                if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-                    siteTable.cells.firstMatch.swipeUp()
-                }
-                mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
-                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+                "book of mozilla": "The Book of Mozilla" // Bookmark
+            ] {
+                verifySearchSuggestion(searchTerm: term,
+                                       expectedMatch: expectedTitle,
+                                       hasFirefoxSuggest: true,
+                                       isSponsored: false)
             }
 
             // Non Firefox Suggest result: A random term
             let term = "heeeeeeellllllllllloooooooo"
-            browserScreen.tapOnAddressBar()
-            browserScreen.tapClearButtonIfExists()
-            browserScreen.typeOnSearchBar(text: term)
-            mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-            let searchEngines = [
-                "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
-            ]
-            for searchEngine in searchEngines {
-                mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
-            }
-            // Search engine suggestions
-            mozWaitForElementToExist(siteTable.otherElements["Google Search"])
-            mozWaitForElementToExist(siteTable.staticTexts[term])
+            verifySearchSuggestion(searchTerm: term,
+                                   expectedMatch: "",
+                                   hasFirefoxSuggest: false,
+                                   isSponsored: false)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753093
+    // Regression
+    func testFirefoxSuggestPartialSponsored() {
+        app.launch()
+        // Workaround: Sponsored suggestions do not show up intermittently.
+        // Ingesting the new suggestions forces the app to have the sponsored
+        // results for Firefox Suggest consistently.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+        verifySearchSuggestion(searchTerm: "amaz",
+                               expectedMatch: "Amazon.com - Official Site",
+                               hasFirefoxSuggest: true,
+                               isSponsored: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753076
+    // Regresssion
+    func testFirefoxSuggestPartialNonSponsored() {
+        app.launch()
+        // Precondition: Enable enhanced cross-platform suggest experiment
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.goto(ExperimentsScreen)
+        navigator.performAction(Action.ListAllExperiments)
+        navigator.userState.experimentToEnroll = "Enhanced Cross-Platform Suggest [iOS] - Phased Roll out 138+"
+        navigator.performAction(Action.EnrollExperiment)
+        navigator.goto(SettingsScreen)
+        navigator.goto(HomePanelsScreen)
+
+        verifySearchSuggestion(searchTerm: "fifa",
+                               expectedMatch: "Wikipedia - FIFA Club World Cup",
+                               hasFirefoxSuggest: true,
+                               isSponsored: false)
+    }
+
+    private func verifySearchSuggestion(searchTerm: String,
+                                        expectedMatch: String = "",
+                                        hasFirefoxSuggest: Bool = false,
+                                        isSponsored: Bool = false) {
+        let siteTable = app.tables["SiteTable"]
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: searchTerm)
+
+        for searchEngine in [
+            "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+        ] {
+            mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+        }
+
+        // Search engine suggestions
+        mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+        mozWaitForElementToExist(siteTable.staticTexts[searchTerm])
+
+        // Firefox Suggest is displayed
+        if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
+            siteTable.cells.firstMatch.swipeUp()
+        }
+        if hasFirefoxSuggest {
+            mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
+            mozWaitForElementToExist(app.tables.staticTexts[expectedMatch])
+        } else {
             mozWaitForElementToNotExist(siteTable.otherElements["Firefox Suggest"])
+        }
+
+        if isSponsored {
+            mozWaitForElementToExist(siteTable.staticTexts["Sponsored"])
+        } else {
+            mozWaitForElementToNotExist(siteTable.staticTexts["Sponsored"])
         }
     }
 
