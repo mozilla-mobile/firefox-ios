@@ -7,7 +7,8 @@ import Common
 
 /// A view that represents a selectable theme option.
 struct ThemeOptionView: View {
-    let theme: ThemeSelectionView.ThemeOption
+    let themeOption: ThemeSelectionView.ThemeOption
+    let theme: Theme?
     /// A flag indicating whether this option is currently selected.
     let isSelected: Bool
     /// Callback executed when a new theme option is selected.
@@ -15,11 +16,12 @@ struct ThemeOptionView: View {
 
     var body: some View {
         GenericImageOption(
+            theme: theme,
             isSelected: isSelected,
             onSelected: onSelected,
-            label: theme.rawValue,
-            imageName: imageName(for: theme),
-            a11yIdentifier: identifierName(for: theme)
+            label: themeOption.rawValue,
+            imageName: imageName(for: themeOption),
+            a11yIdentifier: identifierName(for: themeOption)
         )
     }
 
