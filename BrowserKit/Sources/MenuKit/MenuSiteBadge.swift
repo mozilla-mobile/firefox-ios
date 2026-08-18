@@ -56,6 +56,8 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
         imageView.contentMode = .scaleAspectFit
     }
     private var iconTintOverride: UIColor?
+    private var textColorOverride: UIColor?
+    private var chevronTintOverride: UIColor?
 
     init(mainMenuHelper: MainMenuInterface) {
         self.mainMenuHelper = mainMenuHelper
@@ -96,7 +98,12 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
         ])
     }
 
-    func configure(text: String, iconName: String, useTemplate: Bool, iconTintColor: UIColor? = nil) {
+    func configure(text: String,
+                   iconName: String,
+                   useTemplate: Bool,
+                   iconTintColor: UIColor? = nil,
+                   textColor: UIColor? = nil,
+                   chevronTintColor: UIColor? = nil) {
         label.text = text
         accessibilityLabel = text
         let image: UIImage = useTemplate
@@ -105,10 +112,12 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
         icon.image = image
         iconTintOverride = iconTintColor
         icon.tintColor = iconTintColor ?? icon.tintColor
+        textColorOverride = textColor
+        chevronTintOverride = chevronTintColor
     }
 
     func applyTheme(theme: Theme) {
-        label.textColor = theme.colors.textSecondary
+        label.textColor = textColorOverride ?? theme.colors.textSecondary
         stack.layer.borderColor = theme.colors.actionSecondaryHover.cgColor
         if #available(iOS 26.0, *) {
             stack.backgroundColor = theme.colors.layerSurfaceMedium
@@ -117,7 +126,7 @@ final class MenuSiteBadge: UIView, ThemeApplicable {
             stack.backgroundColor = .clear
         }
         icon.tintColor = iconTintOverride ?? theme.colors.iconSecondary
-        chevron.tintColor = theme.colors.iconSecondary
+        chevron.tintColor = chevronTintOverride ?? theme.colors.iconSecondary
     }
 
     @objc
