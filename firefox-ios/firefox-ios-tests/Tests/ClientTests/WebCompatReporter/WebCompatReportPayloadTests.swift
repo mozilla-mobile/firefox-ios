@@ -148,6 +148,28 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertEqual(viewModel.technicalDataTitle, .WebCompatReporter.Preview.TechnicalData)
     }
 
+    func testMakeReportPreviewViewModel_bulletsCoverOnlyCollectedFields() {
+        var payload = WebCompatReportPayload()
+        payload.url = "https://example.com"
+        payload.breakageCategory = WebCompatSubOption.pageNotLoading.rawValue
+
+        let bullets = payload.makeReportPreviewViewModel().bullets
+
+        XCTAssertEqual(bullets, [
+            "\(String.WebCompatReporter.Preview.Data.PageURL)\u{2028}[https://example.com]",
+            .WebCompatReporter.Preview.Data.IssueAndDescription
+        ])
+    }
+
+    func testMakeReportPreviewViewModel_dropsTheBulletForAnEmptyList() {
+        var payload = WebCompatReportPayload()
+        payload.blockedOrigins = []
+
+        let bullets = payload.makeReportPreviewViewModel().bullets
+
+        XCTAssertFalse(bullets.contains(.WebCompatReporter.Preview.Data.BlockedTrackers))
+    }
+
     // MARK: - Helpers
 
     private func renderedFields(of payload: WebCompatReportPayload) -> [String: String] {
