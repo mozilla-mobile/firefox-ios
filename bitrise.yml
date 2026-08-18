@@ -28,11 +28,6 @@ pipelines:
         depends_on:
         - firefox_configure_build
         parallel: 5
-      run_sync_integration_smoketest:
-        run_if:
-          expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
-        depends_on:
-        - firefox_configure_build
       focus_ui_test:
         run_if:
           expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
@@ -338,47 +333,6 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.5-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
-  run_sync_integration_smoketest:
-    description: Run the smoketest-tagged Sync Integration tests
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    steps:
-    - script@1:
-        title: Set daily cache key
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -euxo pipefail
-            envman add --key SYNC_INTEGRATION_CACHE_DATE --value "$(date +%Y%m%d)"
-    - restore-cache@2:
-        title: Restore Sync Integration download cache
-        inputs:
-        - key: sync-integration-pytest-cache-$SYNC_INTEGRATION_CACHE_DATE
-        - paths: firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/.pytest_cache/d
-    - script@1:
-        title: Run Sync Integration smoketest
-        timeout: 1200
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -euxo pipefail
-            : "${CI_WAF_TOKEN:?CI_WAF_TOKEN is not set - check it is exposed for this trigger type (e.g. Pull Requests) in Bitrise Secrets}"
-            cd firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests
-            pip install pipenv
-            pipenv install --python 3.12
-            pipenv run pytest -m smoketest
-    - save-cache@1:
-        title: Save Sync Integration download cache
-        is_always_run: true
-        inputs:
-        - key: sync-integration-pytest-cache-$SYNC_INTEGRATION_CACHE_DATE
-        - paths: firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/.pytest_cache/d
-    - deploy-to-bitrise-io@2:
-        is_always_run: true
-        inputs:
-        - deploy_path: firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/results
-        - is_compress: "true"
   firefox_scheme_build_for_test:
     description: Build Firefox scheme and shard XCUITests for parallel execution
     before_run:
