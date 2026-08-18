@@ -30,6 +30,8 @@ struct ToolbarState: ScreenState, Sendable {
     var nextTabScreenshot: UIImage?
     // Whether the address bar renders as its full toolbar or its minimized "pill" shape
     var isAddressBarMinimized: Bool
+    // When a web form's keyboard accessory view is visible on a bottom-positioned address bar.
+    var isAccessoryViewVisible: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
@@ -60,7 +62,8 @@ struct ToolbarState: ScreenState, Sendable {
                   isTranslationsEnabled: toolbarState.isTranslationsEnabled,
                   previousTabScreenshot: toolbarState.previousTabScreenshot,
                   nextTabScreenshot: toolbarState.nextTabScreenshot,
-                  isAddressBarMinimized: toolbarState.isAddressBarMinimized
+                  isAddressBarMinimized: toolbarState.isAddressBarMinimized,
+                  isAccessoryViewVisible: toolbarState.isAccessoryViewVisible
         )
     }
 
@@ -85,7 +88,8 @@ struct ToolbarState: ScreenState, Sendable {
             isTranslationsEnabled: true,
             previousTabScreenshot: nil,
             nextTabScreenshot: nil,
-            isAddressBarMinimized: false
+            isAddressBarMinimized: false,
+            isAccessoryViewVisible: false
         )
     }
 
@@ -109,7 +113,8 @@ struct ToolbarState: ScreenState, Sendable {
         isTranslationsEnabled: Bool,
         previousTabScreenshot: UIImage?,
         nextTabScreenshot: UIImage?,
-        isAddressBarMinimized: Bool
+        isAddressBarMinimized: Bool,
+        isAccessoryViewVisible: Bool
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
@@ -131,6 +136,7 @@ struct ToolbarState: ScreenState, Sendable {
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
         self.isAddressBarMinimized = isAddressBarMinimized
+        self.isAccessoryViewVisible = isAccessoryViewVisible
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -141,8 +147,14 @@ struct ToolbarState: ScreenState, Sendable {
         switch action {
         case .userDidScroll(let minimizeAddressBar):
             return state.copy(isAddressBarMinimized: minimizeAddressBar)
-        case .accessoryViewDidShow:
-            return state.copy(isAddressBarMinimized: true)
+
+        case .accessoryViewVisibilityChanged(let isVisible):
+            let newState = state.copy(isAccessoryViewVisible: isVisible)
+            // Don't force-minimize while the user is editing the address bar — editing shows its
+            // own overlay UI, and minimizing here would visibly shrink the bar mid-edit.
+            guard isVisible, !state.addressToolbar.isEditing else { return newState }
+            return newState.copy(isAddressBarMinimized: true)
+
         case .keyboardDidHide:
             return state.copy(isAddressBarMinimized: false)
         }
@@ -393,6 +405,7 @@ struct ToolbarState: ScreenState, Sendable {
                             isTranslationsEnabled: state.isTranslationsEnabled,
                             previousTabScreenshot: state.previousTabScreenshot,
                             nextTabScreenshot: state.nextTabScreenshot,
-                            isAddressBarMinimized: state.isAddressBarMinimized)
+                            isAddressBarMinimized: state.isAddressBarMinimized,
+                            isAccessoryViewVisible: state.isAccessoryViewVisible)
     }
 }

@@ -221,7 +221,7 @@ final class AddressToolbarContainer: UIView,
         guard #available(iOS 26.0, *), let windowUUID else { return 0 }
 
         let isEditingAddress = state?.addressToolbar.isEditing == true
-        let shouldShowKeyboard = state?.addressToolbar.shouldShowKeyboard
+        let isAccessoryViewVisible = state?.isAccessoryViewVisible ?? false
         let isBottomToolbar = state?.toolbarPosition == .bottom
         let shouldAdjustForAccessory = hasAccessoryView &&
                                        !isEditingAddress &&
@@ -231,21 +231,15 @@ final class AddressToolbarContainer: UIView,
 
         /// We want to check here if the keyboard accessory view state has changed
         /// To avoid spamming redux actions.
-        guard hasAccessoryView != shouldShowKeyboard else { return accessoryViewOffset }
-        store.dispatch(
-            ToolbarAction(
-                shouldShowKeyboard: hasAccessoryView,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
-        )
+        guard hasAccessoryView != isAccessoryViewVisible else { return accessoryViewOffset }
+        // Dispatch action to change address bar to minimized state
+        store.dispatch(ToolbarModernAction.accessoryViewVisibilityChanged(isVisible: hasAccessoryView),
+                       forWindowUUID: windowUUID)
 
         if shouldAdjustForAccessory {
             let height = frame.height + UX.accessoryViewGradientOffset
             accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
-            // Dispatch action to change address bar to minimized state
-            store.dispatch(ToolbarModernAction.accessoryViewDidShow, forWindowUUID: windowUUID)
         }
         return accessoryViewOffset
     }
