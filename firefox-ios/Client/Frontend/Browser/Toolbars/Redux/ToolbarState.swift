@@ -106,7 +106,7 @@ struct ToolbarState: ScreenState, Sendable {
         canShowNavigationHint: Bool,
         shouldAnimate: Bool,
         isTranslucent: Bool,
-        isTranslationsEnabled: Bool = true,
+        isTranslationsEnabled: Bool,
         previousTabScreenshot: UIImage?,
         nextTabScreenshot: UIImage?,
         isAddressBarMinimized: Bool

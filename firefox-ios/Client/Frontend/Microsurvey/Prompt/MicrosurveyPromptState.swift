@@ -68,19 +68,20 @@ struct MicrosurveyPromptState: StateType, Equatable {
     private static func handleInitializeAction(state: Self, action: Action) -> Self {
         let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
         return state
+            .resetTransientState()
             .copy(showPrompt: true)
-            .copy(showSurvey: false)
             .copy(model: model)
     }
 
     private static func handleClosePromptAction(state: Self) -> Self {
         return state
+            .resetTransientState()
             .copy(showPrompt: false)
-            .copy(showSurvey: false)
     }
 
     private static func handleContinueToSurveyAction(state: Self) -> Self {
         return state
+            .resetTransientState()
             .copy(showPrompt: true)
             .copy(showSurvey: true)
     }
